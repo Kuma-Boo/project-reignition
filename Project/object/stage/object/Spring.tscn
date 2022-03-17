@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://object/stage/object/resource/script/Spring.cs" type="Script" id=1]
+[ext_resource path="res://object/stage/object/resource/model/Spring.gltf" type="PackedScene" id=2]
+
+[sub_resource type="SphereShape" id=3]
+radius = 0.8
+
+[sub_resource type="Animation" id=1]
+resource_name = "Loop"
+loop = true
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+
+[node name="Spring" type="Area"]
+collision_layer = 48
+collision_mask = 0
+monitoring = false
+script = ExtResource( 1 )
+travelDistance = 5.0
+travelTime = 0.3
+
+[node name="Spring" parent="." instance=ExtResource( 2 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0 )
+shape = SubResource( 3 )
+
+[node name="Animator" type="AnimationPlayer" parent="."]
+autoplay = "Loop"
+anims/Loop = SubResource( 1 )
+anims/RESET = SubResource( 2 )

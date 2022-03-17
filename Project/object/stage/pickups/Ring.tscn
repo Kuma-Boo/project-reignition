@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://object/stage/pickups/resource/script/Ring.cs" type="Script" id=1]
+[ext_resource path="res://object/stage/pickups/resource/model/Ring.gltf" type="PackedScene" id=2]
+
+[sub_resource type="Animation" id=4]
+resource_name = "Loop"
+length = 1.5
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Ring:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Ring:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="SphereShape" id=3]
+radius = 0.5
+
+[node name="Ring" type="Area"]
+collision_layer = 16
+collision_mask = 0
+monitoring = false
+script = ExtResource( 1 )
+
+[node name="Ring" parent="." instance=ExtResource( 2 )]
+
+[node name="Ring" parent="Ring" index="0"]
+layers = 32
+
+[node name="Animator" type="AnimationPlayer" parent="."]
+autoplay = "Loop"
+anims/Loop = SubResource( 4 )
+anims/RESET = SubResource( 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 3 )
+
+[editable path="Ring"]

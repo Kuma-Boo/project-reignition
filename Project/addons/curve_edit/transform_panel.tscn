@@ -1,0 +1,137 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://addons/curve_edit/transform_panel.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_bottom = 7.0
+bg_color = Color( 0.12549, 0.145098, 0.192157, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 12.0
+content_margin_right = 4.0
+content_margin_top = 7.0
+content_margin_bottom = 7.0
+bg_color = Color( 0.12549, 0.145098, 0.192157, 1 )
+
+[sub_resource type="Theme" id=2]
+LineEdit/constants/minimum_spaces = 16
+LineEdit/styles/normal = SubResource( 1 )
+OptionButton/styles/hover = SubResource( 3 )
+OptionButton/styles/normal = SubResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 7.0
+content_margin_bottom = 7.0
+bg_color = Color( 0.0980392, 0.113725, 0.156863, 1 )
+expand_margin_right = 10.0
+
+[sub_resource type="Theme" id=5]
+Label/colors/font_color = Color( 0.701961, 0.6, 0.243137, 1 )
+Label/styles/normal = SubResource( 4 )
+
+[node name="TransformPanel" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_right = 1920.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+text = "Edit curve point"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+margin_top = 18.0
+margin_right = 1920.0
+margin_bottom = 46.0
+
+[node name="point_selector" type="OptionButton" parent="HBoxContainer2"]
+margin_right = 958.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+text = "0"
+
+[node name="point_part" type="OptionButton" parent="HBoxContainer2"]
+margin_left = 962.0
+margin_right = 1920.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+text = "Position"
+items = [ "Position", null, false, 0, null, "In", null, false, 1, null, "Out", null, false, 2, null ]
+selected = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 78.0
+theme = SubResource( 5 )
+custom_constants/separation = 0
+
+[node name="x" type="Label" parent="HBoxContainer"]
+margin_right = 27.0
+margin_bottom = 28.0
+text = "x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="x_edit" type="LineEdit" parent="HBoxContainer"]
+margin_left = 27.0
+margin_right = 640.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+
+[node name="y" type="Label" parent="HBoxContainer"]
+margin_left = 640.0
+margin_right = 667.0
+margin_bottom = 28.0
+text = "y"
+
+[node name="y_edit" type="LineEdit" parent="HBoxContainer"]
+margin_left = 667.0
+margin_right = 1280.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+
+[node name="z" type="Label" parent="HBoxContainer"]
+margin_left = 1280.0
+margin_right = 1307.0
+margin_bottom = 28.0
+text = "z"
+
+[node name="z_edit" type="LineEdit" parent="HBoxContainer"]
+margin_left = 1307.0
+margin_right = 1920.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="HBoxContainer"]
+margin_left = 1920.0
+margin_right = 1920.0
+margin_bottom = 28.0
+
+[node name="HSeparator" type="HSeparator" parent="."]
+margin_top = 82.0
+margin_right = 1920.0
+margin_bottom = 97.0
+rect_min_size = Vector2( 0, 15 )
+
+[connection signal="item_selected" from="HBoxContainer2/point_selector" to="." method="_on_point_selector_item_selected"]
+[connection signal="item_selected" from="HBoxContainer2/point_part" to="." method="_on_point_selector_item_selected"]
+[connection signal="focus_entered" from="HBoxContainer/x_edit" to="." method="_on_x_edit_focus_entered"]
+[connection signal="focus_exited" from="HBoxContainer/x_edit" to="." method="_on_edit_focus_exited"]
+[connection signal="gui_input" from="HBoxContainer/x_edit" to="." method="_on_x_edit_gui_input"]
+[connection signal="focus_entered" from="HBoxContainer/y_edit" to="." method="_on_y_edit_focus_entered"]
+[connection signal="focus_exited" from="HBoxContainer/y_edit" to="." method="_on_edit_focus_exited"]
+[connection signal="gui_input" from="HBoxContainer/y_edit" to="." method="_on_y_edit_gui_input"]
+[connection signal="focus_entered" from="HBoxContainer/z_edit" to="." method="_on_z_edit_focus_entered"]
+[connection signal="focus_exited" from="HBoxContainer/z_edit" to="." method="_on_edit_focus_exited"]
+[connection signal="gui_input" from="HBoxContainer/z_edit" to="." method="_on_z_edit_gui_input"]

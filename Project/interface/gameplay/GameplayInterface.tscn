@@ -1,0 +1,1805 @@
+[gd_scene load_steps=70 format=2]
+
+[ext_resource path="res://interface/gameplay/hud/Reference.png" type="Texture" id=1]
+[ext_resource path="res://interface/gameplay/countdown/Countdown.png" type="Texture" id=2]
+[ext_resource path="res://interface/gameplay/countdown/Sparkle.png" type="Texture" id=3]
+[ext_resource path="res://interface/gameplay/hud/soul gauge/Sprites.png" type="Texture" id=4]
+[ext_resource path="res://interface/gameplay/countdown/Flare.png" type="Texture" id=5]
+[ext_resource path="res://interface/gameplay/countdown/Bloom.png" type="Texture" id=6]
+[ext_resource path="res://interface/font/HUDNumber.tres" type="BitmapFont" id=7]
+[ext_resource path="res://interface/gameplay/hud/Rings.png" type="Texture" id=8]
+[ext_resource path="res://interface/gameplay/GameplayInterface.cs" type="Script" id=9]
+[ext_resource path="res://interface/gameplay/hud/soul gauge/blue/fill/AnimatedTexture.tres" type="Texture" id=10]
+[ext_resource path="res://interface/gameplay/hud/soul gauge/blue/surface/AnimatedTexture.tres" type="Texture" id=11]
+[ext_resource path="res://interface/gameplay/hud/soul gauge/orange/surface/AnimatedTexture.tres" type="Texture" id=12]
+[ext_resource path="res://interface/gameplay/hud/soul gauge/Background.png" type="Texture" id=13]
+[ext_resource path="res://interface/gameplay/hud/soul gauge/orange/fill/AnimatedTexture.tres" type="Texture" id=14]
+[ext_resource path="res://sound/sfx/objects/ring.wav" type="AudioStream" id=15]
+[ext_resource path="res://interface/gameplay/SFXLibrary.cs" type="Script" id=16]
+[ext_resource path="res://sound/sfx/objects/pearls (10).wav" type="AudioStream" id=17]
+[ext_resource path="res://sound/sfx/objects/pearls (9).wav" type="AudioStream" id=18]
+[ext_resource path="res://sound/sfx/objects/pearls (3).wav" type="AudioStream" id=19]
+[ext_resource path="res://sound/sfx/objects/pearls (5).wav" type="AudioStream" id=20]
+[ext_resource path="res://sound/sfx/objects/pearls (1).wav" type="AudioStream" id=21]
+[ext_resource path="res://sound/sfx/objects/pearls (2).wav" type="AudioStream" id=22]
+[ext_resource path="res://sound/sfx/objects/pearls (4).wav" type="AudioStream" id=23]
+[ext_resource path="res://sound/sfx/objects/pearls (6).wav" type="AudioStream" id=24]
+[ext_resource path="res://sound/sfx/objects/pearls (7).wav" type="AudioStream" id=25]
+[ext_resource path="res://sound/sfx/objects/pearls (8).wav" type="AudioStream" id=26]
+[ext_resource path="res://interface/gameplay/pause/Paper.png" type="Texture" id=27]
+[ext_resource path="res://interface/gameplay/pause/Flame.png" type="Texture" id=28]
+[ext_resource path="res://interface/gameplay/pause/PauseOptionFont.tres" type="DynamicFontData" id=29]
+[ext_resource path="res://shaders/MenuText.shader" type="Shader" id=30]
+
+[sub_resource type="Animation" id=75]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("CameraTransition:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=76]
+resource_name = "Transition"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CameraTransition:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1.5, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="CanvasItemMaterial" id=49]
+blend_mode = 1
+
+[sub_resource type="Animation" id=50]
+length = 4.26666
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/path = NodePath("Go/Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 3.5, 3.83333, 4.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Go/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 3.5, 3.56667, 3.66667, 3.76667, 3.83333, 4.1 ),
+"transitions": PoolRealArray( 1, 1, 1.41421, 0.554785, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 0.5, 1.2 ), Vector2( 2, 0.8 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 3, 3 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Go/Sprite/Bloom:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.5, 3.5, 3.66667, 3.83333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.470588 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Go/Sparkle:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.5, 3.5, 3.66667, 3.83333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.470588 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Go/Flare:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.5, 3.5, 3.66667, 3.96667 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.0784314 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath("..")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 3.66667 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "OnCountdownCompleted"
+} ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Ticks:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("Ticks:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 2, 2 ), Vector2( 2, 2 ), Vector2( 1, 1 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("3:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 0.5, 0.566667, 0.633333, 0.766667, 1.43333 ),
+"transitions": PoolRealArray( 1, 1, 1.46409, 0.554785, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 0.5, 1 ), Vector2( 1.5, 0.7 ), Vector2( 1, 1 ), Vector2( 1.5, 1.5 ) ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("Ticks:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0, 0.5, 1.5, 1.53333, 2.5, 2.53333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1464, 736 ), Vector2( 1464, 736 ), Vector2( 1464, 736 ), Vector2( 440, 736 ), Vector2( 440, 736 ), Vector2( 1472, 736 ) ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("3:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 0.5, 0.766667, 1.43333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("2:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0, 0.5, 1.5, 1.56667, 1.63333, 1.76667, 2.43333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1.46409, 0.554785, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 0.5, 1 ), Vector2( 1.5, 0.7 ), Vector2( 1, 1 ), Vector2( 1.5, 1.5 ) ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("2:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0, 0.5, 1.5, 1.76667, 2.43333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("3/Bloom:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 0, 0.5, 0.6, 0.666667, 0.833333, 1.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.196078 ), Color( 1, 0.588235, 1, 0.392157 ), Color( 1, 1, 1, 0.392157 ), Color( 1, 0.588235, 1, 0 ) ]
+}
+tracks/14/type = "value"
+tracks/14/path = NodePath("2/Bloom:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0, 0.5, 1.5, 1.6, 1.66667, 1.83333, 2.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.196078 ), Color( 1, 0.588235, 1, 0.392157 ), Color( 1, 1, 1, 0.392157 ), Color( 1, 0.588235, 1, 0 ) ]
+}
+tracks/15/type = "value"
+tracks/15/path = NodePath("1:scale")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0, 0.5, 2.5, 2.56667, 2.63333, 2.76667, 3.43333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1.46409, 0.554785, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 1e-05, 1e-05 ), Vector2( 0.5, 1 ), Vector2( 1.5, 0.7 ), Vector2( 1, 1 ), Vector2( 1.5, 1.5 ) ]
+}
+tracks/16/type = "value"
+tracks/16/path = NodePath("1:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/keys = {
+"times": PoolRealArray( 0, 0.5, 2.5, 2.76667, 3.43333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/17/type = "value"
+tracks/17/path = NodePath("1/Bloom:modulate")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/keys = {
+"times": PoolRealArray( 0, 0.5, 2.5, 2.6, 2.66667, 2.83333, 3.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.196078 ), Color( 1, 0.588235, 1, 0.392157 ), Color( 1, 1, 1, 0.392157 ), Color( 1, 0.588235, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=51]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Go/Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Go/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Go/Sprite/Bloom:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Go/Sparkle:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Go/Flare:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath("..")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"values": [  ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Ticks:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("Ticks:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 2, 2 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("3:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("Ticks:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1464, 744 ) ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("3:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("2:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("2:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("3/Bloom:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/14/type = "value"
+tracks/14/path = NodePath("2/Bloom:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/15/type = "value"
+tracks/15/path = NodePath("1:scale")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/16/type = "value"
+tracks/16/path = NodePath("1:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/17/type = "value"
+tracks/17/path = NodePath("1/Bloom:modulate")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/18/type = "value"
+tracks/18/path = NodePath("../HUD:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 64, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 128, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 192, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 256, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 320, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 384, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 448, 0, 64, 64 )
+
+[sub_resource type="SpriteFrames" id=44]
+animations = [ {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 24.0
+}, {
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"loop": true,
+"name": "spin",
+"speed": 24.0
+} ]
+
+[sub_resource type="Animation" id=1]
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0833333, 0.166667 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.5, 1.5 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Amount:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Ring:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.0416667 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Ring:speed_scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.541667 ),
+"transitions": PoolRealArray( 2, 1 ),
+"update": 0,
+"values": [ 2.0, 0.0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Ring:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Amount:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Ring:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Ring:playing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Ring:speed_scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("..:rect_position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 128, 64 ) ]
+}
+
+[sub_resource type="Animation" id=45]
+loop = true
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Amount:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 0.5, 0.5, 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0, 1 ), Color( 1, 0, 0, 0.588235 ), Color( 1, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=46]
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0833333, 0.166667, 0.25, 0.291667 ),
+"transitions": PoolRealArray( 2, 0.428709, 0.4, 0.4, 1 ),
+"update": 0,
+"values": [ Vector2( 128, 64 ), Vector2( 128, 32 ), Vector2( 136, 56 ), Vector2( 116, 72 ), Vector2( 128, 64 ) ]
+}
+
+[sub_resource type="CanvasItemMaterial" id=57]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=54]
+blend_mode = 1
+
+[sub_resource type="Animation" id=55]
+resource_name = "Charged"
+length = 0.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/path = NodePath("SoulGauge/Background/Fill:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ ExtResource( 14 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ ExtResource( 12 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("SoulGauge/Background/Fill/SurfaceGlow:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 12 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("SoulGauge/Glow:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.0666667, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("SparkleBottom:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.0666667, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=56]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("SoulGauge/Background/Fill:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ ExtResource( 10 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ ExtResource( 11 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("SoulGauge/Background/Fill/SurfaceGlow:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ ExtResource( 11 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("SoulGauge/Glow:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("SparkleBottom:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="CanvasItemMaterial" id=61]
+blend_mode = 1
+
+[sub_resource type="AtlasTexture" id=62]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=63]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=64]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 0, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=65]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 128, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=66]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 256, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=67]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 384, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=68]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=69]
+flags = 4
+atlas = ExtResource( 28 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=70]
+animations = [ {
+"frames": [ SubResource( 62 ), SubResource( 63 ), SubResource( 64 ), SubResource( 65 ), SubResource( 66 ), SubResource( 67 ), SubResource( 68 ), SubResource( 69 ) ],
+"loop": true,
+"name": "default",
+"speed": 24.0
+} ]
+
+[sub_resource type="ShaderMaterial" id=74]
+shader = ExtResource( 30 )
+shader_param/main_color = Color( 0.803922, 0.682353, 0.454902, 1 )
+shader_param/highlight_color = Color( 1, 0.933333, 0, 1 )
+shader_param/highlight_intensity = 3.0
+shader_param/blur_sampling = 2
+shader_param/highlight_blur = Vector2( 1, 1 )
+
+[sub_resource type="DynamicFont" id=72]
+size = 74
+use_filter = true
+font_data = ExtResource( 29 )
+
+[sub_resource type="DynamicFont" id=71]
+size = 64
+use_filter = true
+font_data = ExtResource( 29 )
+
+[sub_resource type="Animation" id=58]
+resource_name = "Pause"
+length = 0.416667
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Paper:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0833333, 0.125 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1 ), Vector2( 1.1, 1 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.125 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.705882 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Cursor:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Cursor:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.0833333, 0.166667, 0.208333 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0.8, 2 ), Vector2( 1.4, 1 ), Vector2( 1.2, 1.2 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("../PauseLabel:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.125 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/6/type = "method"
+tracks/6/path = NodePath("../..")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0.42 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "OnPauseToggled"
+} ]
+}
+
+[sub_resource type="Animation" id=59]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Paper:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0.705882 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Cursor:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Cursor:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1.2, 1.2 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("../PauseLabel:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=60]
+resource_name = "Unpause"
+length = 0.333333
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.333333 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0.705882 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.333333 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "OnPauseToggled"
+} ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.333333 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../PauseLabel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.333334 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[node name="GameplayInterface" type="CanvasLayer"]
+pause_mode = 2
+layer = 64
+script = ExtResource( 9 )
+skipCountdown = true
+countdownTickParent = NodePath("Countdown/Ticks")
+countdownAnimator = NodePath("Countdown/Animator")
+hud = NodePath("HUD")
+ringLabel = NodePath("HUD/RingCounter/CurrentRing/Amount")
+maxRingLabel = NodePath("HUD/RingCounter/RingMax")
+ringAnimator = NodePath("HUD/RingCounter/CurrentRing/Animator")
+soulGauge = NodePath("HUD/SoulGauge/SoulGauge")
+soulGaugeFill = NodePath("HUD/SoulGauge/SoulGauge/Background/Fill")
+soulGaugeAnimator = NodePath("HUD/SoulGauge/Animator")
+pauseAnimator = NodePath("Pause/Animator")
+pauseCursor = NodePath("Pause/Pause/Cursor")
+cameraTransition = NodePath("CameraTransition")
+cameraTransitionAnimator = NodePath("CameraTransition/Animator")
+
+[node name="Reference" type="TextureRect" parent="."]
+visible = false
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 1 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CameraTransition" type="TextureRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch_mode = 1
+flip_v = true
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Animator" type="AnimationPlayer" parent="CameraTransition"]
+root_node = NodePath("../..")
+anims/RESET = SubResource( 75 )
+anims/Transition = SubResource( 76 )
+
+[node name="Countdown" type="Control" parent="."]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Go" type="Node2D" parent="Countdown"]
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Countdown/Go"]
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 960, 540 )
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 256, 440, 224 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Bloom" type="Sprite" parent="Countdown/Go/Sprite"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 49 )
+scale = Vector2( 5.5, 5.5 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 16, 68, 92, 52 )
+
+[node name="Sparkle" type="Sprite" parent="Countdown/Go"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 49 )
+position = Vector2( 948, 560 )
+scale = Vector2( 8, 8 )
+texture = ExtResource( 3 )
+
+[node name="Flare" type="Sprite" parent="Countdown/Go"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 49 )
+position = Vector2( 948, 560 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 5 )
+
+[node name="1" type="Sprite" parent="Countdown"]
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 1472, 736 )
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 368, 0, 144, 216 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Bloom" type="Sprite" parent="Countdown/1"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 49 )
+position = Vector2( 8, 0 )
+scale = Vector2( 5.5, 5.5 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 84, 12, 36, 48 )
+
+[node name="2" type="Sprite" parent="Countdown"]
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 440, 736 )
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 176, 0, 176, 216 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Bloom" type="Sprite" parent="Countdown/2"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 49 )
+position = Vector2( 6.99707, 0 )
+scale = Vector2( 5.5, 5.5 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 44, 12, 40, 48 )
+
+[node name="3" type="Sprite" parent="Countdown"]
+position = Vector2( 1464, 736 )
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 8, 168, 200 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Bloom" type="Sprite" parent="Countdown/3"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 49 )
+scale = Vector2( 5.5, 5.5 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 4, 12, 40, 48 )
+
+[node name="Ticks" type="Node2D" parent="Countdown"]
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 1464, 744 )
+scale = Vector2( 2, 2 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="1" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 0, -200 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="2" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 81.3475, -182.709 )
+rotation = 0.418879
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="3" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 148.629, -133.826 )
+rotation = 0.837758
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="4" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 190.211, -61.8035 )
+rotation = 1.25664
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="5" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 198.904, 20.9058 )
+rotation = 1.67552
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="6" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 173.205, 100 )
+rotation = 2.0944
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="7" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 117.557, 161.803 )
+rotation = 2.51327
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="8" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( 41.5822, 195.63 )
+rotation = 2.93215
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="9" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( -41.5823, 195.63 )
+rotation = -2.93215
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="10" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( -117.557, 161.803 )
+rotation = -2.51327
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="11" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( -173.205, 99.9999 )
+rotation = -2.09439
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="12" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( -198.904, 20.9057 )
+rotation = -1.67552
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="13" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( -190.211, -61.8035 )
+rotation = -1.25664
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="14" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( -148.629, -133.826 )
+rotation = -0.837758
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="15" type="Sprite" parent="Countdown/Ticks"]
+position = Vector2( -81.3473, -182.709 )
+rotation = -0.418879
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 448, 256, 48, 96 )
+
+[node name="Animator" type="AnimationPlayer" parent="Countdown"]
+anims/Countdown = SubResource( 50 )
+anims/RESET = SubResource( 51 )
+
+[node name="HUD" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="RingCounter" type="Control" parent="HUD"]
+margin_left = 128.0
+margin_top = 64.0
+margin_right = 640.0
+margin_bottom = 192.0
+rect_min_size = Vector2( 280, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RingMax" type="Label" parent="HUD/RingCounter"]
+margin_left = 320.0
+margin_top = 48.0
+margin_right = 452.0
+margin_bottom = 112.0
+rect_scale = Vector2( 0.85, 0.85 )
+custom_fonts/font = ExtResource( 7 )
+text = "100"
+valign = 1
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Divider" type="Sprite" parent="HUD/RingCounter"]
+position = Vector2( 304, 64 )
+scale = Vector2( 1.2, 1.2 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 120, 168, 64, 104 )
+
+[node name="CurrentRing" type="Node2D" parent="HUD/RingCounter"]
+position = Vector2( 192, 64 )
+
+[node name="Ring" type="AnimatedSprite" parent="HUD/RingCounter/CurrentRing"]
+position = Vector2( -88, 0 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 44 )
+animation = "spin"
+
+[node name="Amount" type="Label" parent="HUD/RingCounter/CurrentRing"]
+margin_left = -48.0
+margin_top = -40.0
+margin_right = 79.0
+margin_bottom = 27.0
+rect_scale = Vector2( 1.2, 1.2 )
+custom_fonts/font = ExtResource( 7 )
+text = "000"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Animator" type="AnimationPlayer" parent="HUD/RingCounter/CurrentRing"]
+anims/CollectRing = SubResource( 1 )
+anims/RESET = SubResource( 2 )
+anims/Ringless = SubResource( 45 )
+anims/TakeDamage = SubResource( 46 )
+
+[node name="SoulGauge" type="Control" parent="HUD"]
+anchor_left = 0.867
+anchor_top = 0.119
+anchor_right = 0.933
+anchor_bottom = 0.889
+margin_left = -0.640137
+margin_top = -0.520004
+margin_right = 0.639893
+margin_bottom = -0.120056
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="BurstPoint" type="Sprite" parent="HUD/SoulGauge"]
+position = Vector2( 64.0001, 680 )
+scale = Vector2( 1.25, 1.25 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 112, 120, 88, 24 )
+
+[node name="SoulGauge" type="NinePatchRect" parent="HUD/SoulGauge"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 504.0
+margin_right = -0.00012207
+margin_bottom = 6.10352e-05
+rect_min_size = Vector2( 128, 328 )
+texture = ExtResource( 4 )
+region_rect = Rect2( 8, 10, 96, 326 )
+patch_margin_top = 82
+patch_margin_bottom = 176
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Glow" type="Control" parent="HUD/SoulGauge/SoulGauge"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 57 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Glow" type="NinePatchRect" parent="HUD/SoulGauge/SoulGauge/Glow"]
+use_parent_material = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 128, 328 )
+texture = ExtResource( 4 )
+region_rect = Rect2( 8, 10, 96, 326 )
+patch_margin_top = 82
+patch_margin_bottom = 176
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SparkleTop1" type="Sprite" parent="HUD/SoulGauge/SoulGauge/Glow"]
+use_parent_material = true
+position = Vector2( 88.0001, 16 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 120, 8, 72, 72 )
+
+[node name="SparkleTop2" type="Sprite" parent="HUD/SoulGauge/SoulGauge/Glow"]
+use_parent_material = true
+position = Vector2( 24.0001, 64 )
+rotation = -1.309
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 120, 8, 72, 72 )
+
+[node name="Background" type="TextureRect" parent="HUD/SoulGauge/SoulGauge"]
+show_behind_parent = true
+anchor_top = 0.024
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 48.0
+margin_top = 48.128
+margin_right = -48.0
+margin_bottom = -48.0
+rect_clip_content = true
+texture = ExtResource( 13 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Fill" type="TextureRect" parent="HUD/SoulGauge/SoulGauge/Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -16.0
+rect_scale = Vector2( 2, 2 )
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Surface" type="TextureRect" parent="HUD/SoulGauge/SoulGauge/Background/Fill"]
+material = SubResource( 54 )
+anchor_right = 1.0
+margin_left = -8.0
+margin_top = -16.0
+margin_right = 8.00002
+margin_bottom = 16.0
+rect_min_size = Vector2( 32, 32 )
+rect_scale = Vector2( 0.8, 0.4 )
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 11 )
+stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SurfaceGlow" type="TextureRect" parent="HUD/SoulGauge/SoulGauge/Background/Fill"]
+material = SubResource( 54 )
+anchor_right = 1.0
+margin_left = -8.0
+margin_top = -16.0
+margin_right = 8.00002
+margin_bottom = 16.0
+rect_min_size = Vector2( 32, 32 )
+rect_scale = Vector2( 0.8, 0.4 )
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 11 )
+stretch_mode = 3
+flip_v = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SparkleBottom" type="Node2D" parent="HUD/SoulGauge"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 57 )
+position = Vector2( 64.0001, 832 )
+
+[node name="SparkleBottom1" type="Sprite" parent="HUD/SoulGauge/SparkleBottom"]
+use_parent_material = true
+position = Vector2( -48, -88 )
+rotation = -1.309
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 120, 8, 72, 72 )
+
+[node name="SparkleBottom2" type="Sprite" parent="HUD/SoulGauge/SparkleBottom"]
+use_parent_material = true
+position = Vector2( -40, -39.9999 )
+rotation = -1.83259
+scale = Vector2( 1.69211, 1.69211 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 120, 8, 72, 72 )
+
+[node name="SparkleBottom3" type="Sprite" parent="HUD/SoulGauge/SparkleBottom"]
+use_parent_material = true
+position = Vector2( 32, -24 )
+rotation = -1.15572
+scale = Vector2( 1.96274, 1.96274 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 120, 8, 72, 72 )
+
+[node name="BurstPoint2" type="Sprite" parent="HUD/SoulGauge/SparkleBottom"]
+modulate = Color( 1, 1, 1, 0 )
+use_parent_material = true
+position = Vector2( 0, -152 )
+scale = Vector2( 1.25, 1.25 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 112, 120, 88, 24 )
+
+[node name="Animator" type="AnimationPlayer" parent="HUD/SoulGauge"]
+anims/Charged = SubResource( 55 )
+anims/RESET = SubResource( 56 )
+
+[node name="Pause" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="Pause" type="ColorRect" parent="Pause"]
+visible = false
+modulate = Color( 1, 1, 1, 0.705882 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Paper" type="TextureRect" parent="Pause/Pause"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_scale = Vector2( 1e-05, 1 )
+rect_pivot_offset = Vector2( 960, 540 )
+texture = ExtResource( 27 )
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cursor" type="AnimatedSprite" parent="Pause/Pause"]
+material = SubResource( 61 )
+position = Vector2( 216, 816 )
+scale = Vector2( 1.2, 1.2 )
+frames = SubResource( 70 )
+frame = 3
+offset = Vector2( 0, -64 )
+
+[node name="PauseLabel" type="Label" parent="Pause"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 74 )
+margin_right = 1920.0
+margin_bottom = 1080.0
+custom_fonts/font = SubResource( 72 )
+text = "pause"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Options" type="Control" parent="Pause"]
+visible = false
+margin_left = 264.0
+margin_top = 760.0
+margin_right = 768.0
+margin_bottom = 992.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Continue" type="Label" parent="Pause/Options"]
+margin_right = 504.0
+margin_bottom = 47.0
+custom_fonts/font = SubResource( 71 )
+text = "continue"
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Restart" type="Label" parent="Pause/Options"]
+margin_left = 29.0
+margin_top = 55.0
+margin_right = 533.0
+margin_bottom = 102.0
+custom_fonts/font = SubResource( 71 )
+text = "restart"
+valign = 1
+uppercase = true
+
+[node name="Status" type="Label" parent="Pause/Options"]
+margin_left = 29.0
+margin_top = 110.0
+margin_right = 533.0
+margin_bottom = 157.0
+custom_fonts/font = SubResource( 71 )
+text = "status"
+valign = 1
+uppercase = true
+
+[node name="Quit" type="Label" parent="Pause/Options"]
+margin_left = 29.0
+margin_top = 165.0
+margin_right = 533.0
+margin_bottom = 212.0
+custom_fonts/font = SubResource( 71 )
+text = "quit"
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Animator" type="AnimationPlayer" parent="Pause"]
+root_node = NodePath("../Pause")
+anims/Pause = SubResource( 58 )
+anims/RESET = SubResource( 59 )
+anims/Unpause = SubResource( 60 )
+
+[node name="SoundLibrary" type="Node2D" parent="."]
+script = ExtResource( 16 )
+ringSoundEffect = NodePath("RingSFX")
+pearlStreams = [ ExtResource( 21 ), ExtResource( 22 ), ExtResource( 19 ), ExtResource( 23 ), ExtResource( 20 ), ExtResource( 24 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 18 ), ExtResource( 17 ) ]
+pearlSoundEffect = NodePath("PearlSFX")
+
+[node name="RingSFX" type="AudioStreamPlayer" parent="SoundLibrary"]
+stream = ExtResource( 15 )
+bus = "SFX"
+
+[node name="PearlSFX" type="AudioStreamPlayer" parent="SoundLibrary"]
+bus = "SFX"

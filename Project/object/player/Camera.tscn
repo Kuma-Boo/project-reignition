@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://object/player/resource/DefaultCamera.tres" type="Resource" id=1]
+[ext_resource path="res://object/player/resource/CameraController.cs" type="Script" id=2]
+
+[node name="Camera" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.4 )
+script = ExtResource( 2 )
+defaultCameraData = ExtResource( 1 )
+camera = NodePath("Gimbal/Camera")
+gimbal = NodePath("Gimbal")
+idleDistance = 1.4
+idleHeight = 1.0
+runDistance = 1.4
+runHeight = 1.15
+strafeSmoothing = 14.0
+
+[node name="Gimbal" type="Spatial" parent="."]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+
+[node name="Camera" type="Camera" parent="Gimbal"]
+cull_mask = 524287
+fov = 80.0
+far = 8192.0

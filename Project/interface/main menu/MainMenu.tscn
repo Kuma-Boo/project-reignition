@@ -1,0 +1,322 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://interface/font/Greco Std DB.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://interface/main menu/TitleFlames.png" type="Texture" id=2]
+[ext_resource path="res://interface/main menu/Reference.png" type="Texture" id=3]
+[ext_resource path="res://interface/main menu/Background.png" type="Texture" id=4]
+[ext_resource path="res://interface/main menu/Decal.png" type="Texture" id=5]
+[ext_resource path="res://sound/BGMPlayer.cs" type="Script" id=6]
+[ext_resource path="res://sound/ost/treasure disc/2 Sandstorm.mp3" type="AudioStream" id=7]
+[ext_resource path="res://interface/sprites/Logos.png" type="Texture" id=8]
+
+[sub_resource type="DynamicFont" id=5]
+size = 24
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 54
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="CanvasItemMaterial" id=4]
+blend_mode = 1
+
+[sub_resource type="Animation" id=2]
+resource_name = "Loop"
+length = 0.444444
+loop = true
+step = 0.0555556
+tracks/0/type = "value"
+tracks/0/path = NodePath(":frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.388889 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 7 ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../Flames:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "Loop"
+length = 2.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Press Start:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.2, 2.4 ),
+"transitions": PoolRealArray( 1.5, 0.8, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("FlamesRoot:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Press Start:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "TitleSpawn"
+length = 1.5
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/path = NodePath("FlamesRoot:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.75, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 0 ), Vector2( 1, 0 ), Vector2( 1, 0 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Press Start:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.666667 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="MainMenu" type="Control"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="BG" type="TextureRect" parent="Title"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 4 )
+expand = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Footer" type="VBoxContainer" parent="Title"]
+margin_left = 40.0
+margin_top = 998.0
+margin_right = 371.0
+margin_bottom = 1052.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Version Number" type="Label" parent="Title/Footer"]
+margin_right = 331.0
+margin_bottom = 25.0
+custom_colors/font_color = Color( 0.976471, 0.847059, 0.752941, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0.588235 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 5 )
+text = "Version 0.0.1a"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Copyright Text" type="Label" parent="Title/Footer"]
+margin_top = 29.0
+margin_right = 331.0
+margin_bottom = 54.0
+custom_colors/font_color = Color( 0.976471, 0.847059, 0.752941, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0.588235 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 5 )
+text = "Original Game © 2007 SEGA™"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Press Start" type="Node2D" parent="Title"]
+
+[node name="Label" type="Label" parent="Title/Press Start"]
+margin_left = 704.0
+margin_top = 760.0
+margin_right = 1216.0
+margin_bottom = 888.0
+rect_pivot_offset = Vector2( 256, 64 )
+custom_colors/font_color = Color( 0.976471, 0.847059, 0.752941, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 1 )
+text = "PRESS START"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="DecalL" type="TextureRect" parent="Title/Press Start"]
+margin_left = 448.0
+margin_top = 760.0
+margin_right = 704.0
+margin_bottom = 888.0
+texture = ExtResource( 5 )
+stretch_mode = 4
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Shadow" type="TextureRect" parent="Title/Press Start/DecalL"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+margin_top = 4.0
+margin_right = 256.0
+margin_bottom = 132.0
+texture = ExtResource( 5 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DecalR" type="TextureRect" parent="Title/Press Start"]
+margin_left = 1216.0
+margin_top = 760.0
+margin_right = 1472.0
+margin_bottom = 888.0
+texture = ExtResource( 5 )
+stretch_mode = 4
+flip_h = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Shadow" type="TextureRect" parent="Title/Press Start/DecalR"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+margin_top = 4.0
+margin_right = 256.0
+margin_bottom = 132.0
+texture = ExtResource( 5 )
+stretch_mode = 4
+flip_h = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FlamesRoot" type="Node2D" parent="Title"]
+position = Vector2( 960, 1080 )
+
+[node name="Flames" type="Sprite" parent="Title/FlamesRoot"]
+material = SubResource( 4 )
+position = Vector2( 0, -160 )
+scale = Vector2( 2.5, 2.5 )
+texture = ExtResource( 2 )
+vframes = 8
+
+[node name="Animator" type="AnimationPlayer" parent="Title/FlamesRoot/Flames"]
+autoplay = "Loop"
+anims/Loop = SubResource( 2 )
+anims/RESET = SubResource( 3 )
+
+[node name="Logo" type="Sprite" parent="Title"]
+position = Vector2( 960, 385 )
+texture = ExtResource( 8 )
+hframes = 3
+vframes = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Reference" type="TextureRect" parent="Title"]
+visible = false
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Animator" type="AnimationPlayer" parent="Title"]
+autoplay = "TitleSpawn"
+anims/Loop = SubResource( 10 )
+anims/RESET = SubResource( 9 )
+anims/TitleSpawn = SubResource( 8 )
+next/TitleSpawn = "Loop"
+
+[node name="Menu" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+bus = "BGM"
+script = ExtResource( 6 )
+loopStartPosition = 39.68
+loopEndPosition = 103.68

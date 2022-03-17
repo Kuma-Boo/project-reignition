@@ -1,0 +1,96 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://area/DefaultSky.tres" type="ProceduralSky" id=1]
+[ext_resource path="res://sound/BGMPlayer.cs" type="Script" id=2]
+[ext_resource path="res://sound/ost/adventure disc/3 Let The Speed Mend It.mp3" type="AudioStream" id=3]
+[ext_resource path="res://area/stage/2 sand oasis/resource/models/Black.tres" type="Material" id=4]
+[ext_resource path="res://area/stage/2 sand oasis/resource/Skybox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://area/stage/2 sand oasis/act 1/data/Chunk1.tscn" type="PackedScene" id=6]
+[ext_resource path="res://area/stage/2 sand oasis/act 1/data/Chunk2.tscn" type="PackedScene" id=7]
+[ext_resource path="res://area/stage/2 sand oasis/act 1/data/lighting/Opening.tscn" type="PackedScene" id=8]
+[ext_resource path="res://area/stage/2 sand oasis/act 1/data/Opening.tscn" type="PackedScene" id=9]
+[ext_resource path="res://area/stage/2 sand oasis/resource/BGM.tscn" type="PackedScene" id=10]
+[ext_resource path="res://area/stage/2 sand oasis/act 1/data/Chunk3.tscn" type="PackedScene" id=11]
+
+[sub_resource type="Environment" id=57]
+background_mode = 2
+background_sky = ExtResource( 1 )
+ambient_light_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+ambient_light_sky_contribution = 0.2
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 8.0
+
+[sub_resource type="QuadMesh" id=58]
+material = ExtResource( 4 )
+
+[node name="RemoveWhenDebugging" type="Spatial"]
+
+[node name="Lighting" type="Spatial" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = SubResource( 57 )
+
+[node name="Sun" type="DirectionalLight" parent="Lighting"]
+transform = Transform( 0.965926, 0.258819, -2.86772e-07, 0.0449437, -0.167731, 0.984808, 0.254887, -0.951251, -0.173648, -33.5958, 102.767, -67.8999 )
+visible = false
+light_color = Color( 1, 0.768627, 0.407843, 1 )
+light_bake_mode = 0
+shadow_enabled = true
+shadow_reverse_cull_face = true
+directional_shadow_blend_splits = true
+directional_shadow_normal_bias = 0.0
+directional_shadow_max_distance = 256.0
+
+[node name="Opening" type="Spatial" parent="Lighting" instance=ExtResource( 8 )]
+
+[node name="LightPartitions" type="Spatial" parent="Lighting"]
+
+[node name="LightBlocker" type="MeshInstance" parent="Lighting/LightPartitions"]
+transform = Transform( -4.37114e-07, 0, 1, 0, 15, 0, -10, 0, -4.37114e-08, 4, 115.4, -61.9 )
+layers = 524288
+use_in_baked_light = true
+generate_lightmap = false
+mesh = SubResource( 58 )
+skeleton = NodePath("")
+
+[node name="LightBlocker2" type="MeshInstance" parent="Lighting/LightPartitions"]
+transform = Transform( -4.52413e-06, -45.825, -4.37114e-08, 0, -2.00307e-06, 1, -103.5, 2.00307e-06, 1.91069e-15, 78.51, 96.6, -18.43 )
+layers = 524288
+use_in_baked_light = true
+generate_lightmap = false
+mesh = SubResource( 58 )
+skeleton = NodePath("")
+
+[node name="LightBlocker3" type="MeshInstance" parent="Lighting/LightPartitions"]
+transform = Transform( 21.4557, 0, 0.686241, 0, 29.7862, 0, -20.2424, 0, 0.727375, 47.6283, 84.4, 25.7255 )
+layers = 524288
+use_in_baked_light = true
+generate_lightmap = false
+mesh = SubResource( 58 )
+skeleton = NodePath("")
+
+[node name="Environment" type="Spatial" parent="."]
+
+[node name="Opening" type="Spatial" parent="Environment" instance=ExtResource( 9 )]
+
+[node name="Chunk1" type="Spatial" parent="Environment" instance=ExtResource( 6 )]
+visible = false
+
+[node name="Chunk2" type="Spatial" parent="Environment" instance=ExtResource( 7 )]
+visible = false
+
+[node name="Chunk3" type="Spatial" parent="Environment" instance=ExtResource( 11 )]
+visible = false
+
+[node name="Skybox" type="Spatial" parent="Environment" instance=ExtResource( 5 )]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="BGM" type="AudioStreamPlayer" parent="." instance=ExtResource( 10 )]
+stream = ExtResource( 3 )
+bus = "BGM"
+script = ExtResource( 2 )
+loopStartPosition = 15.869
+loopEndPosition = 205.12
