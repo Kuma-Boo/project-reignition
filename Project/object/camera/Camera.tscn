@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://object/camera/presets/DefaultCamera.tres" type="Resource" id=1]
+[ext_resource path="res://object/camera/CameraController.cs" type="Script" id=2]
+[ext_resource path="res://object/camera/presets/BackstepCamera.tres" type="Resource" id=3]
+
+[node name="Camera" type="Spatial"]
+script = ExtResource( 2 )
+cameraPathFollower = NodePath("PathFollower")
+gimbal = NodePath("Gimbal")
+camera = NodePath("Gimbal/Camera")
+defaultCameraSettings = ExtResource( 1 )
+backstepCameraSettings = ExtResource( 3 )
+idleDistance = 1.4
+idleHeight = 1.0
+runDistance = 1.4
+runHeight = 1.15
+strafeSmoothing = 14.0
+
+[node name="Gimbal" type="Spatial" parent="."]
+
+[node name="Camera" type="Camera" parent="Gimbal"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+cull_mask = 524287
+fov = 80.0
+near = 0.01
+far = 8192.0
+
+[node name="PathFollower" type="PathFollow" parent="."]
+rotation_mode = 4
+cubic_interp = false
+loop = false

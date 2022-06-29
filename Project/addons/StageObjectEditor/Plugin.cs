@@ -8,26 +8,13 @@ namespace Project.Editor
 	public class Plugin : EditorPlugin
 	{
 		public Plugin plugin;
-		public GrindRailInspector GrindInspector { get; private set; }
 
 		private Spatial target;
 		private Camera editorCam;
 
-		public override void _EnterTree()
-		{
-			GrindInspector = new GrindRailInspector();
-			GrindInspector.plugin = this;
-			AddInspectorPlugin(GrindInspector);
-		}
-
-		public override void _ExitTree()
-		{
-			RemoveInspectorPlugin(GrindInspector);
-		}
-
 		public override bool Handles(Object obj)
 		{
-			return obj is Launcher || obj is DriftCorner;
+			return obj is Launcher || obj is DriftTrigger || obj is Majin;
 		}
 		public override void Edit(Object obj) => target = obj as Spatial;
 
@@ -38,58 +25,64 @@ namespace Project.Editor
 			return base.ForwardSpatialGuiInput(cam, e);
 		}
 
-		private const int PREVIEW_RESOLUTION = 15;
+		private const int PREVIEW_RESOLUTION = 32;
 
 		public override void ForwardSpatialDrawOverViewport(Control overlay)
 		{
 			if (editorCam == null || !target.Visible) return;
 
 			if (target is Launcher)
-			{
-				Array<Vector2> points = new Array<Vector2>();
-
-				for (int i = 0; i < PREVIEW_RESOLUTION; i++)
-				{
-					Vector3 point = (target as Launcher).CalculatePosition(i / (float)PREVIEW_RESOLUTION);
-					if (!editorCam.IsPositionBehind(point))
-						points.Add(editorCam.UnprojectPosition(point));
-				}
-
-				Vector2[] pointsList = new Vector2[points.Count];
-				points.CopyTo(pointsList, 0);
-				overlay.DrawPolyline(pointsList, Colors.Blue, 1, true);
-			}
-			else if (target is DriftCorner)
-			{
-				if (editorCam.IsPositionBehind((target as DriftCorner).GlobalTransform.origin) ||
-				editorCam.IsPositionBehind((target as DriftCorner).MiddlePosition))
-					return;
-
-				Vector2 start = editorCam.UnprojectPosition((target as DriftCorner).GlobalTransform.origin);
-				Vector2 middle = editorCam.UnprojectPosition((target as DriftCorner).MiddlePosition);
-				overlay.DrawLine(start, middle, Colors.Blue, 1, true);
-
-				if (editorCam.IsPositionBehind((target as DriftCorner).EndPosition)) return;
-
-				Vector2 end = editorCam.UnprojectPosition((target as DriftCorner).EndPosition);
-				overlay.DrawLine(middle, end, Colors.Blue, 1, true);
-			}
+				UpdateLauncher(overlay);
+			else if (target is DriftTrigger)
+				UpdateDriftCorner(overlay);
+			else if (target is Majin)
+				UpdateMajinPath(overlay);
 		}
 
-		public bool IsEditable(Node node)
+		private void UpdateLauncher(Control overlay)
 		{
-			Node root = node.GetTree().EditedSceneRoot;
-			if (root == null)
-				return false;
-			string rootPath = root.Filename;
-			if (rootPath.Empty())
-				return false;
+			Array<Vector2> points = new Array<Vector2>();
 
-			PackedScene rootScene = ResourceLoader.Load<PackedScene>(rootPath);
-			Dictionary state = rootScene._Bundled;
+			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
+			{
+				Vector3 point = (target as Launcher).InterpolatePosition(i / (float)PREVIEW_RESOLUTION);
+				if (!editorCam.IsPositionBehind(point))
+					points.Add(editorCam.UnprojectPosition(point));
+			}
 
-			Array array = state["editable_instances"] as Array;
-			return array.Contains(root.GetPathTo(node));
+			Vector2[] pointsList = new Vector2[points.Count];
+			points.CopyTo(pointsList, 0);
+			overlay.DrawPolyline(pointsList, Colors.Blue, 1, true);
+		}
+
+		private void UpdateDriftCorner(Control overlay)
+		{
+			if (editorCam.IsPositionBehind((target as DriftTrigger).GlobalTransform.origin) ||
+			editorCam.IsPositionBehind((target as DriftTrigger).MiddlePosition))
+				return;
+
+			Vector2 start = editorCam.UnprojectPosition((target as DriftTrigger).GlobalTransform.origin);
+			Vector2 middle = editorCam.UnprojectPosition((target as DriftTrigger).MiddlePosition);
+			overlay.DrawLine(start, middle, Colors.Blue, 1, true);
+
+			if (editorCam.IsPositionBehind((target as DriftTrigger).EndPosition)) return;
+
+			Vector2 end = editorCam.UnprojectPosition((target as DriftTrigger).EndPosition);
+			overlay.DrawLine(middle, end, Colors.Blue, 1, true);
+		}
+
+		private void UpdateMajinPath(Control overlay)
+		{
+			Majin t = target as Majin;
+			if (t.spawnOffset == Vector3.Zero) return;
+
+			Vector3 s = t.GlobalTransform.origin;
+			Vector3 e = s + t.spawnOffset;
+			if (editorCam.IsPositionBehind(s) ||
+			editorCam.IsPositionBehind(e))
+				return;
+
+			overlay.DrawLine(editorCam.UnprojectPosition(s), editorCam.UnprojectPosition(e), Colors.Blue, 1, true);
 		}
 	}
 }

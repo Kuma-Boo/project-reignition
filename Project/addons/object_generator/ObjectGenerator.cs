@@ -24,7 +24,7 @@ namespace Project.Editor
 			Path //Spawn linearly along a path
 		}
 
-		[Export(PropertyHint.Range, "0, 5")]
+		[Export(PropertyHint.Range, "0, 12")]
 		public float spacing;
 		[Export(PropertyHint.Range, "0, 1")]
 		public float ringRatio = 1f;
@@ -62,7 +62,10 @@ namespace Project.Editor
 						break;
 					case GenerationType.Line:
 						for (int i = 0; i < amount; i++)
-							Spawn(Vector3.Forward * i * spacing);
+						{
+							Vector3 offset = new Vector3(pathHInterpolationCurve.Interpolate((float)i / (amount - 1)), pathVInterpolationCurve.Interpolate((float)i / (amount - 1)), 0);
+							Spawn(Vector3.Forward * i * spacing + offset);
+						}
 						break;
 					case GenerationType.Path:
 						if (path.IsEmpty())
@@ -72,15 +75,17 @@ namespace Project.Editor
 						}
 
 						Path _path = GetNode<Path>(path);
-						PathFollow _follow = new PathFollow();
-						_follow.RotationMode = PathFollow.RotationModeEnum.Oriented;
+						PathFollow _follow = new PathFollow
+						{
+							RotationMode = PathFollow.RotationModeEnum.Oriented
+						};
 						_path.AddChild(_follow);
 						_follow.Offset = _path.Curve.GetClosestOffset(GlobalTransform.origin - _path.GlobalTransform.origin);
 
 						for (int i = 0; i < amount; i++)
 						{
-							_follow.HOffset = pathHInterpolationCurve.Interpolate((float)i / amount);
-							_follow.VOffset = pathVInterpolationCurve.Interpolate((float)i / amount);
+							_follow.HOffset = pathHInterpolationCurve.Interpolate((float)i / (amount - 1));
+							_follow.VOffset = pathVInterpolationCurve.Interpolate((float)i / (amount - 1));
 							Spawn(_follow.GlobalTransform.origin, true);
 							_follow.Offset += spacing;
 						}

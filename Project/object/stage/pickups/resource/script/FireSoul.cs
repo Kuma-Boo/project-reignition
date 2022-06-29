@@ -2,30 +2,21 @@ using Godot;
 
 namespace Project.Gameplay
 {
-	public class FireSoul : StageObject
+	public class FireSoul : RespawnableObject
 	{
-		[Export]
-		public Material collectedMaterial;
-		[Export]
-		public NodePath mesh;
-		private MeshInstance _mesh;
-
 		[Export]
 		public bool isCollected; //Determined by save data
 
-		public override bool IsRespawnable() => true;
+		public override bool IsRespawnable() => false;
 		public override void SetUp()
 		{
-			base.SetUp();
-
-			_mesh = GetNode<MeshInstance>(mesh);
-
 			if (isCollected)
-				_mesh.MaterialOverride = collectedMaterial;
+				Despawn();
 		}
 
-		public override void OnEnter()
+		public override void OnEntered(Area _)
 		{
+			//TODO Write save data
 			//ActiveCharacter.AddScore(1000);
 			Despawn();
 		}

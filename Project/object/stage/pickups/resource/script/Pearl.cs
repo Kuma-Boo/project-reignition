@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
-	public class Pearl : StageObject
+	public class Pearl : RespawnableObject
 	{
 		[Export]
 		public NodePath collider;
@@ -11,27 +11,37 @@ namespace Project.Gameplay
 		public bool isRichPearl;
 
 		private bool isCollected;
+		private bool isReparenting;
 		private Tween tween;
 
 		public override bool IsRespawnable() => true;
 		public override void SetUp()
 		{
 			base.SetUp();
-			GetNode<CollisionShape>(collider).Shape = isRichPearl ? StageManager.instance.richPearlCollisionShape : StageManager.instance.pearlCollisionShape;
+			GetNode<CollisionShape>(collider).Shape = isRichPearl ? StageManager.instance.RichPearlCollisionShape : StageManager.instance.PearlCollisionShape;
+		}
+
+		public override void _Process(float _)
+		{
+			if(isReparenting)
+				Collect();
 		}
 
 		public override void Spawn()
 		{
-			isCollected = false;
 			base.Spawn();
+			isCollected = false;
 		}
 
-		public override void OnEnter()
+		public override void OnEntered(Area _)
 		{
 			if (isCollected) return;
+			isReparenting = true;
+		}
 
-			isCollected = true;
-
+		//Godot doesn't allow reparenting from signals, so a separate function is needed.
+		private void Collect()
+		{
 			Transform t = GlobalTransform;
 			GetParent().RemoveChild(this);
 			Character.AddChild(this);
@@ -52,7 +62,7 @@ namespace Project.Gameplay
 
 			//Collection tween
 			int travelDirection = StageManager.instance.randomNumberGenerator.RandiRange(-1, 1);
-			bool reverseDirection = Mathf.Sign(Character.Back().Dot(Transform.origin)) < 0; //True when collecting a pearl behind us
+			bool reverseDirection = Mathf.Sign(Character.Forward().Dot(Transform.origin)) < 0; //True when collecting a pearl behind us
 			if (travelDirection == 0)
 			{
 				tween.InterpolateProperty(this, "translation", Transform.origin, new Vector3(0, .5f, (reverseDirection ? -1 : 1) * .8f), .2f, Tween.TransitionType.Sine, Tween.EaseType.InOut);
@@ -78,9 +88,12 @@ namespace Project.Gameplay
 				tween.InterpolateProperty(this, "scale", Vector3.One, Vector3.One * .6f, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
 			}
 
-			tween.InterpolateCallback(GameplayInterface.instance, .1f, nameof(GameplayInterface.instance.CollectSoulPearl), isRichPearl ? 20 : 1);
+			tween.InterpolateCallback(GameplayInterface.instance, .1f, nameof(GameplayInterface.instance.ModifySoulPearl), isRichPearl ? 20 : 1);
 			tween.InterpolateCallback(this, .3f, nameof(Despawn));
 			tween.Start();
+
+			isReparenting = false;
+			isCollected = true;
 		}
 	}
 }

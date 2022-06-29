@@ -2,18 +2,14 @@ using Godot;
 
 namespace Project.Gameplay
 {
-	public class Ring : StageObject
+	public class Ring : RespawnableObject
 	{
 		[Export]
 		public bool isRichRing;
 
 		public override bool IsRespawnable() => true;
-		public override void SetUp()
-		{
-			base.SetUp();
-		}
 
-		public override void OnEnter()
+		public override void OnEntered(Area _)
 		{
 			GameplayInterface.instance.CollectRing(isRichRing ? 20 : 1);
 			SFXLibrary.instance.PlayRingSoundEffect();

@@ -7,7 +7,7 @@ namespace Project.Core
 	{
 		public static bool saveDataInitialized; //Has the initial save data check been completed?
 
-		public override void _Ready()
+		public override void _EnterTree()
 		{
 			LoadSettings();
 			LoadGame();
@@ -23,7 +23,11 @@ namespace Project.Core
 		{
 			English,
 			Japanese,
-			Korean
+			Korean,
+			German,
+			Italian,
+			French,
+			Spanish
 		}
 		private enum AudioBuses
 		{

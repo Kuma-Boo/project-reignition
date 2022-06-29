@@ -52,14 +52,13 @@ namespace Project.Core
 			public Vector2 MovementAxis => new Vector2(horizontalAxis.value, verticalAxis.value);
 
 			public Button jumpButton;
-			public Button combatButton;
 			public Button actionButton;
-			public Button shieldButton;
+			public Button breakButton;
+			public Button boostButton;
 
 			public Button pauseButton;
 			public Mapping mapping;
 
-			public bool isMobile; //True if using touch controls
 			public bool isUsingGamepad => mapping.activeGamepad != -1; //True if the player is using a gamepad.
 
 			public void Update(float delta)
@@ -76,7 +75,8 @@ namespace Project.Core
 					verticalAxis.Update(DigitalAxisHeld(mapping.upBinding, mapping.downBinding), delta);
 
 				jumpButton.Update(ButtonHeld(mapping.jumpBinding));
-				combatButton.Update(ButtonHeld(mapping.combatBinding));
+				boostButton.Update(ButtonHeld(mapping.boostBinding));
+				breakButton.Update(ButtonHeld(mapping.breakBinding));
 				actionButton.Update(ButtonHeld(mapping.actionBinding));
 
 				pauseButton.Update(ButtonHeld(mapping.pauseBinding));
@@ -113,9 +113,10 @@ namespace Project.Core
 					leftBinding = (int)KeyList.Left,
 					rightBinding = (int)KeyList.Right,
 
-					jumpBinding = (int)KeyList.C,
-					actionBinding = (int)KeyList.X,
-					combatBinding = (int)KeyList.Z,
+					jumpBinding = (int)KeyList.V,
+					actionBinding = (int)KeyList.C,
+					breakBinding = (int)KeyList.Z,
+					boostBinding = (int)KeyList.X,
 					pauseBinding = (int)KeyList.Enter
 				};
 			}
@@ -139,24 +140,27 @@ namespace Project.Core
 		{
 			public int sign;
 			public float value;
-			public bool tapped;
-			public float tapTimer;
+			public bool wasTapped;
+			public bool WasTapBuffered => tapBuffer > 0;
+			public float tapBuffer;
 
-			private const float TAP_INTERVAL = .2f;
+			private const float TAP_BUFFER_LENGTH = .2f;
 
 			public void Update(float currentValue, float timeDelta)
 			{
 				int oldDirection = sign;
 				sign = Mathf.Sign(currentValue);
-				tapped = sign != 0 && (oldDirection != sign || tapTimer == 0);
+				wasTapped = sign != 0 && oldDirection != sign;
+				if (wasTapped)
+					tapBuffer = TAP_BUFFER_LENGTH;
 
-				if (tapped)
-					tapTimer = TAP_INTERVAL;
-				else if (tapTimer != 0)
-					tapTimer = Mathf.MoveToward(tapTimer, 0, timeDelta);
+				if (tapBuffer != 0)
+					tapBuffer = Mathf.MoveToward(tapBuffer, 0, timeDelta);
 
 				value = currentValue;
 			}
+
+			public void ResetTap() => tapBuffer = 0;
 		}
 
 		[System.Serializable]
@@ -173,7 +177,8 @@ namespace Project.Core
 			public int verticalBinding; //For analog inputs, -1 if unused
 			public int jumpBinding;
 			public int actionBinding;
-			public int combatBinding;
+			public int breakBinding;
+			public int boostBinding;
 			public int pauseBinding;
 
 			public struct Binding

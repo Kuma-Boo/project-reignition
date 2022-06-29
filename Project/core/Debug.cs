@@ -6,9 +6,10 @@ namespace Project.Core
 	public class Debug : Node2D
 	{
 		public static Debug Instance;
-		private bool drawRaycasts = true;
 		private bool isAdvancingFrame;
 		private bool IsPaused => GetTree().Paused;
+
+		private readonly bool drawRaycasts = true;
 
 		private enum Properties
 		{
@@ -18,8 +19,6 @@ namespace Project.Core
 			Charge,
 			PropertyCount
 		}
-
-		private Label[] labels;
 
 		public override void _Ready()
 		{
@@ -71,6 +70,8 @@ namespace Project.Core
 
 			Camera cam = GetViewport().GetCamera();
 
+			if (cam == null) return; //NO CAMERA
+
 			for (int i = lines.Count - 1; i >= 0; i--)
 			{
 				if (cam.IsPositionBehind(lines[i].start) || cam.IsPositionBehind(lines[i].end))
@@ -84,7 +85,7 @@ namespace Project.Core
 		}
 
 		#region Line Drawer
-		public class Line
+		public struct Line
 		{
 			public Vector3 start;
 			public Vector3 end;
@@ -98,7 +99,7 @@ namespace Project.Core
 			}
 		}
 
-		private static List<Line> lines = new List<Line>();
+		private static readonly List<Line> lines = new List<Line>();
 
 		public static void DrawLn(Vector3 s, Vector3 e, Color c) => lines.Add(new Line(s, e, c));
 		public static void DrawRay(Vector3 s, Vector3 r, Color c) => lines.Add(new Line(s, s + r, c));

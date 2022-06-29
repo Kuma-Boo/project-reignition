@@ -1,17 +1,24 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=49 format=2]
 
-[ext_resource path="res://object/player/resource/Model.tscn" type="PackedScene" id=1]
+[ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=1]
 [ext_resource path="res://object/player/resource/CharacterController.cs" type="Script" id=2]
 [ext_resource path="res://object/stage/pickups/resource/model/ring particle.png" type="Texture" id=3]
+[ext_resource path="res://object/player/resource/movement settings/AirRunSettings.tres" type="Resource" id=4]
+[ext_resource path="res://object/player/resource/movement settings/RunSettings.tres" type="Resource" id=5]
+[ext_resource path="res://object/player/resource/movement settings/AirStrafeSettings.tres" type="Resource" id=6]
+[ext_resource path="res://object/player/resource/movement settings/BackstepSettings.tres" type="Resource" id=7]
+[ext_resource path="res://object/player/resource/movement settings/StrafeSettings.tres" type="Resource" id=8]
+[ext_resource path="res://object/player/resource/movement settings/GrindSettings.tres" type="Resource" id=9]
+[ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=10]
+[ext_resource path="res://object/player/resource/GrindStepLockout.tres" type="Resource" id=11]
+[ext_resource path="res://object/player/resource/movement settings/AttackSettings.tres" type="Resource" id=12]
 
-[sub_resource type="CapsuleShape" id=16]
+[sub_resource type="CapsuleShape" id=34]
 radius = 0.3
-height = 0.38
-
-[sub_resource type="SphereShape" id=9]
-radius = 0.5
+height = 0.2
 
 [sub_resource type="BoxShape" id=19]
+extents = Vector3( 7, 4, 10 )
 
 [sub_resource type="Gradient" id=11]
 offsets = PoolRealArray( 0, 0.715686, 1 )
@@ -44,70 +51,224 @@ albedo_texture = ExtResource( 3 )
 [sub_resource type="QuadMesh" id=15]
 material = SubResource( 14 )
 
-[node name="Sonic" type="KinematicBody"]
-collision_layer = 16
-collision_mask = 3
+[sub_resource type="AnimationNodeAnimation" id=38]
+animation = "balance-left-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=39]
+animation = "balance-left-in-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=40]
+animation = "balance-left-out-loop"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=41]
+blend_point_0/node = SubResource( 38 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 39 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 40 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeAnimation" id=42]
+animation = "balance-right-out-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=43]
+animation = "balance-right-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=44]
+animation = "balance-right-in-loop"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=45]
+blend_point_0/node = SubResource( 42 )
+blend_point_0/pos = 1.0
+blend_point_1/node = SubResource( 43 )
+blend_point_1/pos = 0.0
+blend_point_2/node = SubResource( 44 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeAnimation" id=46]
+animation = "shuffle-left"
+
+[sub_resource type="AnimationNodeAnimation" id=47]
+animation = "shuffle-right"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=48]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=49]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=50]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=51]
+
+[sub_resource type="AnimationNodeStateMachine" id=52]
+states/balance_left/node = SubResource( 41 )
+states/balance_left/position = Vector2( 632.6, 98.6224 )
+states/balance_right/node = SubResource( 45 )
+states/balance_right/position = Vector2( 151, 98.328 )
+states/shuffle-left/node = SubResource( 46 )
+states/shuffle-left/position = Vector2( 388.293, 63.8 )
+states/shuffle-right/node = SubResource( 47 )
+states/shuffle-right/position = Vector2( 388.105, 160.6 )
+transitions = [ "shuffle-left", "balance_left", SubResource( 48 ), "shuffle-right", "balance_right", SubResource( 49 ), "balance_right", "shuffle-left", SubResource( 50 ), "balance_left", "shuffle-right", SubResource( 51 ) ]
+start_node = "shuffle-left"
+
+[sub_resource type="AnimationNodeTransition" id=70]
+input_count = 2
+xfade_time = 0.16
+input_0/name = "Normal"
+input_0/auto_advance = false
+input_1/name = "Balancing"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeOneShot" id=65]
+fadein_time = 0.0
+fadeout_time = 0.15
+
+[sub_resource type="AnimationNodeAnimation" id=66]
+animation = "countdown"
+
+[sub_resource type="AnimationNodeAnimation" id=72]
+animation = "RESET"
+
+[sub_resource type="AnimationNodeAnimation" id=73]
+animation = "gait-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=74]
+animation = "jog-loop"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=75]
+blend_point_0/node = SubResource( 73 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 74 )
+blend_point_1/pos = 1.0
+min_space = 0.0
+snap = 0.2
+
+[sub_resource type="AnimationNodeTransition" id=76]
+input_count = 2
+input_0/name = "Idle"
+input_0/auto_advance = false
+input_1/name = "Moving"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=77]
+animation = "run-loop"
+
+[sub_resource type="AnimationNodeTimeScale" id=79]
+
+[sub_resource type="AnimationNodeTransition" id=78]
+input_count = 2
+xfade_time = 0.1
+input_0/name = "Jogging"
+input_0/auto_advance = false
+input_1/name = "Running"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeBlendTree" id=71]
+graph_offset = Vector2( -391.651, 45.1933 )
+nodes/Idle/node = SubResource( 72 )
+nodes/Idle/position = Vector2( -224, 112 )
+nodes/Jogging/node = SubResource( 75 )
+nodes/Jogging/position = Vector2( -560, 240 )
+nodes/MovementState/node = SubResource( 76 )
+nodes/MovementState/position = Vector2( 64, 128 )
+nodes/Run/node = SubResource( 77 )
+nodes/Run/position = Vector2( -544, 368 )
+nodes/RunSpeed/node = SubResource( 79 )
+nodes/RunSpeed/position = Vector2( -96, 224 )
+nodes/RunState/node = SubResource( 78 )
+nodes/RunState/position = Vector2( -288, 288 )
+node_connections = [ "output", 0, "MovementState", "RunSpeed", 0, "RunState", "RunState", 0, "Jogging", "RunState", 1, "Run", "MovementState", 0, "Idle", "MovementState", 1, "RunSpeed" ]
+
+[sub_resource type="AnimationNodeTransition" id=55]
+input_count = 2
+input_0/name = "Grounded"
+input_0/auto_advance = false
+input_1/name = "Airborne"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeBlendTree" id=37]
+graph_offset = Vector2( -1282.4, 91.2 )
+nodes/balance_state/node = SubResource( 52 )
+nodes/balance_state/position = Vector2( -1232, 192 )
+nodes/balancing/node = SubResource( 70 )
+nodes/balancing/position = Vector2( -896, 128 )
+nodes/countdown/node = SubResource( 65 )
+nodes/countdown/position = Vector2( 112, 160 )
+nodes/countdown_anim/node = SubResource( 66 )
+nodes/countdown_anim/position = Vector2( -144, 288 )
+nodes/ground_state/node = SubResource( 71 )
+nodes/ground_state/position = Vector2( -1408, -128 )
+nodes/grounded/node = SubResource( 55 )
+nodes/grounded/position = Vector2( -1104, -144 )
+node_connections = [ "output", 0, "countdown", "grounded", 0, "ground_state", "balancing", 0, "grounded", "balancing", 1, "balance_state", "countdown", 0, "balancing", "countdown", 1, "countdown_anim" ]
+
+[node name="Sonic" type="KinematicBody" groups=["player"]]
+collision_layer = 2
+collision/safe_margin = 0.01
 script = ExtResource( 2 )
 pathFollower = NodePath("PathFollower")
-objectArea = NodePath("ObjectTrigger")
-targetArea = NodePath("TargetTrigger")
+animator = NodePath("AnimationTree")
+collisionWidth = 0.4
 root = NodePath("Sonic")
-runSpeed = 28.0
-traction = 14.0
-friction = 48.0
-brakes = 100.0
-airSpeed = 20.0
-airTraction = 12.0
-airFriction = 4.0
-airBrakes = 6.0
-strafeSpeed = 18.0
-strafeTraction = 72.0
-strafeFriction = 86.0
-strafeBrakes = 140.0
-airStrafeSpeed = 8.0
-airStrafeTraction = 32.0
-airStrafeFriction = 48.0
-airStrafeBrakes = 64.0
-backstepSpeed = -12.0
-backstepTraction = 54.0
-backstepFriction = 96.0
-accelerationJumpSpeed = 24.0
-jumpPower = 18.0
-stompSpeed = -80.0
+moveSettings = ExtResource( 5 )
+airMoveSettings = ExtResource( 4 )
+strafeSettings = ExtResource( 8 )
+airStrafeSettings = ExtResource( 6 )
+backstepSettings = ExtResource( 7 )
 gravity = 32.0
 maxGravity = -48.0
-environmentMask = 3
-oneWayMask = 7
-oneWayCollisionMode = 1
+landingBoost = 18.0
+accelerationJumpSpeed = 24.0
+jumpPower = 18.0
+jumpDashSpeed = 18.0
+jumpDashPower = 4.0
+jumpDashGravity = 18.0
+jumpDashMaxGravity = -24.0
+homingAttackSpeed = 32.0
+stompSpeed = -64.0
+backflipSpeed = 20.0
+speedBreakSpeed = 54.0
+attackLockoutSettings = ExtResource( 12 )
+enemyBouncePower = 12.0
+enemyBounceGravity = 18.0
+grindingSettings = ExtResource( 9 )
+grindStepLockoutSettings = ExtResource( 11 )
+grindShuffleSpeed = 28
+grindStepSpeed = 14
+grindStepHeight = 12
+environmentMask = 1
 ringParticleEffect = NodePath("VFX/RingParticle")
 
 [node name="Sonic" parent="." instance=ExtResource( 1 )]
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.52, 0 )
-shape = SubResource( 16 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.42, 0 )
+shape = SubResource( 34 )
 
-[node name="ObjectTrigger" type="Area" parent="."]
-collision_layer = 0
-collision_mask = 16
-monitorable = false
+[node name="ObjectTrigger" type="Area" parent="CollisionShape" groups=["player"]]
+collision_layer = 2
+collision_mask = 8
 
-[node name="Trigger" type="CollisionShape" parent="ObjectTrigger"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
-shape = SubResource( 9 )
+[node name="Trigger" type="CollisionShape" parent="CollisionShape/ObjectTrigger"]
+shape = SubResource( 34 )
 
 [node name="TargetTrigger" type="Area" parent="."]
 collision_layer = 0
-collision_mask = 32
+collision_mask = 4
 monitorable = false
 
 [node name="Trigger" type="CollisionShape" parent="TargetTrigger"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 9.9 )
 shape = SubResource( 19 )
 
 [node name="PathFollower" type="PathFollow" parent="."]
 rotation_mode = 4
 cubic_interp = false
+loop = false
 
 [node name="VFX" type="Spatial" parent="."]
 
@@ -122,3 +283,27 @@ visibility_aabb = AABB( -1, -1, -1, 2, 2, 2 )
 local_coords = false
 process_material = SubResource( 13 )
 draw_pass_1 = SubResource( 15 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 37 )
+anim_player = NodePath("../Sonic/AnimationPlayer")
+active = true
+parameters/balance_state/playback = ExtResource( 10 )
+parameters/balance_state/balance_left/blend_position = -0.00141644
+parameters/balance_state/balance_right/blend_position = -0.00914633
+parameters/balancing/current = 0
+parameters/countdown/active = false
+parameters/ground_state/Jogging/blend_position = 0.0
+parameters/ground_state/MovementState/current = 0
+parameters/ground_state/RunSpeed/scale = 1.0
+parameters/ground_state/RunState/current = 0
+parameters/grounded/current = 0
+
+[connection signal="area_entered" from="CollisionShape/ObjectTrigger" to="." method="OnObjectTriggerEnter"]
+[connection signal="area_exited" from="CollisionShape/ObjectTrigger" to="." method="OnObjectTriggerExit"]
+[connection signal="body_entered" from="CollisionShape/ObjectTrigger" to="." method="OnCollisionObjectEnter"]
+[connection signal="body_exited" from="CollisionShape/ObjectTrigger" to="." method="OnCollisionObjectExit"]
+[connection signal="area_entered" from="TargetTrigger" to="." method="OnTargetTriggerEnter"]
+[connection signal="area_exited" from="TargetTrigger" to="." method="OnTargetTriggerExit"]
+
+[editable path="Sonic"]

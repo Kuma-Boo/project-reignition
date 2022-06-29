@@ -20,6 +20,7 @@ namespace Project.Gameplay
 			StartCountdown();
 			InitializeRingCounter();
 			InitializeSoulGauge();
+			InitializeHomingAttack();
 			InitializePauseMenu();
 		}
 
@@ -45,6 +46,7 @@ namespace Project.Gameplay
 			_hud.Visible = true;
 			IsCountDownComplete = true;
 			canInteractWithPauseMenu = true; //Enable Pausing
+			CharacterController.instance.OnCountdownCompleted(); //Enables the player
 		}
 
 		private void StartCountdown()
@@ -57,8 +59,11 @@ namespace Project.Gameplay
 				OnCountdownCompleted();
 			else
 			{
-				_countdownAnimator = GetNode<AnimationPlayer>(countdownAnimator);
+				if (_countdownAnimator == null)
+					_countdownAnimator = GetNode<AnimationPlayer>(countdownAnimator);
+
 				_countdownAnimator.Play("Countdown");
+				CharacterController.instance.OnCountdownStarted(); //Enables the player
 			}
 
 			TweenCountdownTicks();
@@ -106,7 +111,20 @@ namespace Project.Gameplay
 		private AnimationPlayer _ringAnimator;
 
 		public int Score { get; private set; }
-		private int ringCount;
+
+		public enum BonusTypes
+		{
+			Drift,
+			Grinding,
+			GrindStep,
+		}
+
+		public void AddBonus(BonusTypes bonusType)
+		{
+			//TODO Play point bonus animation, similar to Black Knight
+		}
+
+		public int RingCount { get; private set; }
 		private int maxRingCount;
 
 		private void InitializeRingCounter()
@@ -119,20 +137,20 @@ namespace Project.Gameplay
 			maxRingCount = StageManager.instance.maxRingCount;
 			_maxRingLabel.Text = maxRingCount.ToString("000");
 
-			_ringLabel.Text = ringCount.ToString("000");
+			_ringLabel.Text = RingCount.ToString("000");
 
-			if (ringCount == 0)
+			if (RingCount == 0)
 				_ringAnimator.Play("Ringless");
 		}
 
 		public void CollectRing(int amount)
 		{
 			//Play animation
-			if (ringCount != maxRingCount)
+			if (RingCount != maxRingCount)
 				_ringAnimator.Play("CollectRing");
 
-			ringCount += amount;
-			ringCount = Mathf.Clamp(ringCount, 0, maxRingCount);
+			RingCount += amount;
+			RingCount = Mathf.Clamp(RingCount, 0, maxRingCount);
 
 			if (amount > 0)
 			{
@@ -140,19 +158,19 @@ namespace Project.Gameplay
 				CharacterController.instance.PlayRingParticleEffect();
 			}
 
-			_ringLabel.Text = ringCount.ToString("000");
+			_ringLabel.Text = RingCount.ToString("000");
 		}
 
 		public void LoseRings(int amount)
 		{
-			ringCount -= amount;
-			if (ringCount <= 0)
-				ringCount = 0;
+			RingCount -= amount;
+			if (RingCount <= 0)
+				RingCount = 0;
 
-			_ringLabel.Text = ringCount.ToString("000");
+			_ringLabel.Text = RingCount.ToString("000");
 
 			_ringAnimator.Play("LoseRing");
-			_ringAnimator.AnimationSetNext("LoseRing", ringCount == 0 ? "Ringless" : "RESET");
+			_ringAnimator.AnimationSetNext("LoseRing", RingCount == 0 ? "Ringless" : "RESET");
 		}
 
 		[Export]
@@ -169,8 +187,8 @@ namespace Project.Gameplay
 		private Tween _soulGaugeTweener;
 
 		public bool IsSoulGaugeFull => soulPower == maxSoulPower;
-
-		private bool isSoulGaugeCharged;
+		public bool IsSoulGaugeCharged { get; private set; }
+		public bool IsSoulGaugeEmpty => soulPower == 0;
 		private int soulPower;
 		private int maxSoulPower;
 
@@ -202,23 +220,29 @@ namespace Project.Gameplay
 			UpdateSoulFill(0f);
 		}
 
-		public void CollectSoulPearl(int amount)
+		public void ModifySoulPearl(int amount)
 		{
 			soulPower += amount;
 			soulPower = Mathf.Clamp(soulPower, 0, maxSoulPower);
 			currentSoulPowerLength = soulPower / 60f;
 			UpdateSoulFill((float)soulPower / maxSoulPower);
 
-			if (!isSoulGaugeCharged && soulPower >= MINIMUM_SOUL_POWER)
+			if (amount > 0)
+				UpdateSoulGaugeColor();
+		}
+
+		public void UpdateSoulGaugeColor()
+		{
+			if (!IsSoulGaugeCharged && soulPower >= MINIMUM_SOUL_POWER)
 			{
-				//Play animation & sfx
-				isSoulGaugeCharged = true;
+				//Play animation
+				IsSoulGaugeCharged = true;
 				_soulGaugeAnimator.Play("Charged");
 			}
-			else if (isSoulGaugeCharged && soulPower < MINIMUM_SOUL_POWER)
+			else if (IsSoulGaugeCharged && soulPower < MINIMUM_SOUL_POWER)
 			{
 				//Lost charge
-				isSoulGaugeCharged = false;
+				IsSoulGaugeCharged = false;
 				_soulGaugeAnimator.Play("RESET"); //Revert to blue
 			}
 		}
@@ -230,6 +254,30 @@ namespace Project.Gameplay
 			Vector2 end = Vector2.Down * Mathf.Lerp(_soulGaugeBackground.RectSize.y + SOUL_GAUGE_FILL_OFFSET, 0, t);
 			_soulGaugeTweener.InterpolateProperty(_soulGaugeFill, "rect_position", _soulGaugeFill.RectPosition, end, .08f, Tween.TransitionType.Sine, Tween.EaseType.Out);
 			_soulGaugeTweener.Start();
+		}
+		#endregion
+
+		#region Homing Attack Reticle
+		[Export]
+		public NodePath homingReticle;
+		private Node2D _homingReticle;
+		[Export]
+		public NodePath homingAnimator;
+		private AnimationPlayer _homingAnimator;
+
+		private void InitializeHomingAttack()
+		{
+			_homingReticle = GetNode<Node2D>(homingReticle);
+			_homingAnimator = GetNode<AnimationPlayer>(homingAnimator);
+		}
+
+		public void DisableHomingReticle() => _homingAnimator.Play("disable");
+
+		public void UpdateHomingReticle(Vector2 screenPosition, bool newTarget)
+		{
+			_homingReticle.Position = screenPosition;
+			if (newTarget)
+				_homingAnimator.Play("enable");
 		}
 		#endregion
 
@@ -254,6 +302,9 @@ namespace Project.Gameplay
 			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
 			GetTree().Paused = !GetTree().Paused;
 			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
+
+			if (CharacterController.instance.IsTimeBreakActive)//Fix speed break
+				Engine.TimeScale = GetTree().Paused ? 1f : CharacterController.TIME_BREAK_RATIO;
 		}
 
 		public void OnPauseToggled() //Called after the pause animation is completed
@@ -269,11 +320,6 @@ namespace Project.Gameplay
 			{
 				TogglePause();
 				return;
-			}
-
-			if (!GetTree().Paused)
-			{
-
 			}
 		}
 		#endregion
