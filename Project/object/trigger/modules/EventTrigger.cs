@@ -3,7 +3,7 @@ using Godot;
 namespace Project.Gameplay
 {
 	//Triggers an event (cutscene)
-	public class EventTrigger : StageTriggerObject
+	public class EventTrigger : StageTriggerModule
 	{
 		[Export]
 		public NodePath animator;

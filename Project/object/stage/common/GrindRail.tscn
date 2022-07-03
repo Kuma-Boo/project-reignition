@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://object/stage/common/resource/script/GrindRail.cs" type="Script" id=1]
+[ext_resource path="res://object/stage/common/resource/material/grind rails/Grind Rail End.tres" type="Material" id=2]
+[ext_resource path="res://object/stage/common/resource/material/grind rails/Grind Rail Brick.tres" type="Material" id=3]
+
+[sub_resource type="Curve3D" id=1]
+_data = {
+"points": PoolVector3Array(  ),
+"tilts": PoolRealArray(  )
+}
+
+[sub_resource type="ArrayMesh" id=2]
+resource_name = "GrindRailEnd_GrindPathEnd"
+surfaces/0 = {
+"aabb": AABB( -0.0750014, -0.15, -0.422504, 0.150011, 0.3, 0.845014 ),
+"array_data": PoolByteArray( 153, 153, 153, 61, 155, 153, 25, 190, 254, 81, 216, 62, 58, 24, 215, 115, 72, 56, 0, 60, 153, 153, 153, 61, 155, 153, 25, 190, 254, 81, 216, 62, 58, 24, 109, 151, 104, 56, 56, 58, 153, 153, 153, 61, 155, 153, 25, 190, 254, 81, 216, 62, 58, 24, 215, 115, 216, 57, 0, 32, 153, 153, 153, 61, 151, 153, 25, 62, 0, 82, 216, 62, 43, 232, 207, 179, 120, 58, 56, 58, 153, 153, 153, 61, 151, 153, 25, 62, 0, 82, 216, 62, 43, 232, 17, 106, 136, 58, 0, 60, 153, 153, 153, 61, 151, 153, 25, 62, 0, 82, 216, 62, 43, 232, 17, 106, 32, 60, 0, 32, 153, 153, 153, 189, 151, 153, 25, 62, 0, 82, 216, 62, 206, 231, 42, 10, 216, 57, 0, 32, 153, 153, 153, 189, 151, 153, 25, 62, 0, 82, 216, 62, 206, 231, 46, 181, 120, 58, 160, 58, 153, 153, 153, 189, 151, 153, 25, 62, 0, 82, 216, 62, 206, 231, 235, 105, 136, 58, 8, 58, 12, 154, 153, 61, 148, 153, 25, 190, 0, 82, 216, 190, 126, 255, 0, 126, 216, 57, 8, 58, 12, 154, 153, 61, 148, 153, 25, 190, 0, 82, 216, 190, 126, 255, 130, 126, 120, 58, 56, 58, 12, 154, 153, 61, 156, 153, 25, 62, 254, 81, 216, 190, 2, 126, 0, 64, 104, 56, 56, 58, 12, 154, 153, 61, 156, 153, 25, 62, 254, 81, 216, 190, 2, 126, 255, 64, 32, 60, 8, 58, 89, 154, 153, 189, 157, 153, 25, 62, 152, 81, 216, 190, 248, 126, 0, 67, 104, 56, 160, 58, 89, 154, 153, 189, 157, 153, 25, 62, 152, 81, 216, 190, 248, 126, 138, 2, 216, 57, 8, 58, 191, 153, 153, 189, 148, 153, 25, 190, 103, 82, 216, 190, 180, 155, 81, 115, 120, 58, 160, 58, 191, 153, 153, 189, 148, 153, 25, 190, 103, 82, 216, 190, 180, 155, 23, 34, 32, 60, 8, 58, 153, 153, 153, 189, 155, 153, 25, 190, 254, 81, 216, 62, 210, 25, 41, 117, 72, 56, 8, 58, 153, 153, 153, 189, 155, 153, 25, 190, 254, 81, 216, 62, 210, 25, 156, 154, 104, 56, 160, 58, 153, 153, 153, 189, 155, 153, 25, 190, 254, 81, 216, 62, 210, 25, 237, 20, 32, 60, 0, 32 ),
+"array_index_data": PoolByteArray( 4, 0, 17, 0, 8, 0, 4, 0, 0, 0, 17, 0, 18, 0, 10, 0, 15, 0, 18, 0, 1, 0, 10, 0, 14, 0, 19, 0, 16, 0, 14, 0, 6, 0, 19, 0, 11, 0, 7, 0, 13, 0, 11, 0, 3, 0, 7, 0, 9, 0, 5, 0, 12, 0, 9, 0, 2, 0, 5, 0 ),
+"blend_shape_data": [  ],
+"format": 2194711,
+"index_count": 30,
+"material": ExtResource( 2 ),
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 20
+}
+
+[node name="GrindRail" type="Area"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource( 1 )
+path = NodePath("Path")
+
+[node name="Rail" type="CSGPolygon" parent="."]
+material_override = ExtResource( 3 )
+polygon = PoolVector2Array( -0.07, -0.145, -0.07, 0.145, 0.07, 0.145, 0.07, -0.145 )
+mode = 2
+path_node = NodePath("../Path")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 10.0
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="Path" type="Path" parent="."]
+curve = SubResource( 1 )
+
+[node name="Start" type="MeshInstance" parent="."]
+mesh = SubResource( 2 )
+skeleton = NodePath("")
+material/0 = null
+
+[node name="End" type="MeshInstance" parent="."]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+mesh = SubResource( 2 )
+skeleton = NodePath("")
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_exited" from="." to="." method="OnExited"]

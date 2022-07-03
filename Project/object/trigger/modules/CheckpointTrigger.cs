@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay
 {
-	public class CheckpointTrigger : StageTriggerObject
+	public class CheckpointTrigger : StageTriggerModule
 	{
 		public static CheckpointTrigger activeCheckpoint;
 

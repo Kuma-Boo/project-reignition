@@ -27,6 +27,9 @@ namespace Project.Gameplay
 		private readonly Array<Transform> _piecesOriginTransforms = new Array<Transform>();
 		private Tween pieceCleanupTweener;
 
+		[Signal]
+		public delegate void OnShattered();
+
 		[Export]
 		public float explosionForce;
 
@@ -74,7 +77,6 @@ namespace Project.Gameplay
 			base.Spawn();
 
 			wasShattered = false;
-			_collider.Disabled = false;
 			_originalMesh.Visible = true;
 
 			if (IsRigidbody)
@@ -82,6 +84,9 @@ namespace Project.Gameplay
 				rb.AngularVelocity = rb.LinearVelocity = Vector3.Zero;
 				rb.GravityScale = 1f;
 				rb.Sleeping = true;
+
+				foreach (Node e in rb.GetCollisionExceptions())
+					rb.RemoveCollisionExceptionWith(e);
 			}
 
 			for (int i = 0; i < _pieces.Count; i++)
@@ -98,7 +103,6 @@ namespace Project.Gameplay
 		{
 			//Disable the pieces
 			if (!_pieceParent.IsInsideTree()) return;
-
 			_pieceParent.GetParent().RemoveChild(_pieceParent);
 		}
 
@@ -110,8 +114,8 @@ namespace Project.Gameplay
 			_collider.Disabled = true;
 			_originalMesh.Visible = false;
 
-			AddChild(_pieceParent);
-			_pieceParent.Transform = Transform.Identity;
+			GetParent().AddChild(_pieceParent);
+			_pieceParent.GlobalTransform = GlobalTransform;
 			_pieceParent.Visible = true;
 			for (int i = 0; i < _pieces.Count; i++)
 			{
@@ -120,10 +124,12 @@ namespace Project.Gameplay
 			}
 
 			if (UseOverrideMaterial)
-				pieceCleanupTweener.InterpolateProperty(overrideMaterial, "albedo_color", Colors.White, Colors.Transparent, 1f);
+				pieceCleanupTweener.InterpolateProperty(overrideMaterial, "albedo_color", Colors.White, Colors.Transparent, 2f, Tween.TransitionType.Expo, Tween.EaseType.In);
 
 			pieceCleanupTweener.InterpolateCallback(this, 3f, nameof(DisablePieces));
 			pieceCleanupTweener.Start();
+
+			EmitSignal(nameof(OnShattered));
 		}
 
 		public override void _ExitTree()
@@ -132,8 +138,9 @@ namespace Project.Gameplay
 			_pieceParent.QueueFree();
 		}
 
-		//Collided with an object
-		public void OnEntered(PhysicsBody b) => Shatter(b.GlobalTransform.origin);
-		public override void OnEntered(Area a) => Shatter(a.GlobalTransform.origin);
+		public override void OnEntered(Area a)
+		{
+			Shatter(a.GlobalTransform.origin);
+		}
 	}
 }

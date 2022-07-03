@@ -3,11 +3,11 @@ render_mode unshaded, cull_back;
 //Unlit shader that supports scrolling, rotation and scaling.
 
 uniform sampler2D albedo;
-uniform vec2 scale = vec2(1f);
-uniform vec2 scrollSpeed = vec2(0f);
-uniform vec2 offset = vec2(0f);
-uniform float rotationSpeed = 0f;
-uniform float rotation : hint_range(-360, 360) = 0f;
+uniform vec2 scale = vec2(1);
+uniform vec2 scrollSpeed = vec2(0);
+uniform vec2 offset = vec2(0);
+uniform float rotationSpeed = 0;
+uniform float rotation : hint_range(-360, 360) = 0;
 
 uniform vec2 uvRotationPivot = vec2(0.5);
 

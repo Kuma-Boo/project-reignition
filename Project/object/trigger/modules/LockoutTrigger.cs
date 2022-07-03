@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay
 {
-	public class LockoutTrigger : StageTriggerObject
+	public class LockoutTrigger : StageTriggerModule
 	{
 		[Export]
 		public ControlLockoutResource lockoutData; //Leave empty to make this a RESET trigger.

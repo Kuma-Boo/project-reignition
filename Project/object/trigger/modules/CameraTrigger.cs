@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay
 {
-    public class CameraTrigger : StageTriggerObject
+    public class CameraTrigger : StageTriggerModule
     {
         [Export]
         public CameraSettingsResource cameraData; //Leave empty to make this a RESET trigger.

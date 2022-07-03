@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay
 {
-	public class CullingTrigger : StageTriggerObject
+	public class CullingTrigger : StageTriggerModule
 	{
 		/*
 		May become obsolete when Godot 4.0 comes out with built-in Occlusion Culling,

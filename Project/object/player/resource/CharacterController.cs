@@ -187,8 +187,6 @@ namespace Project.Gameplay
 		public enum MovementStates
 		{
 			Normal, //Standard on rails movement
-			Damaged, //Being knocked back by damage
-			Respawning,
 			Automation,  //Cutscene? Cinematics? May be replaced with input lockout.
 			Launcher, //Springs, Ramps, etc.
 			Drift, //Sharp 90 degree corner. Press jump at the right moment to get a burst of speed?
@@ -206,11 +204,13 @@ namespace Project.Gameplay
 		public enum ActionStates //Actions that can happen in the Normal MovementState
 		{
 			Normal,
+			Crouching, //Sliding included
+			Damaged, //Being knocked back by damage
+			Respawning, //Idle until respawn timer reaches zero
 			JumpDashing, //Also includes homing attack
 			EnemyBounce, //Struck an enemy with an attack
-			Stomping,
+			Stomping, //Jump cancel
 			Backflip,
-			Damage,
 		}
 		private bool customPhysicsEnabled;
 
@@ -220,26 +220,29 @@ namespace Project.Gameplay
 			UpdateInputBuffers();
 
 			customPhysicsEnabled = false;
-			switch (MovementState)
+
+			if (IsBeingDamaged) //Damage action overrides all other states
+				UpdateDamage();
+			else
 			{
-				case MovementStates.Normal:
-					UpdateNormalState();
-					break;
-				case MovementStates.Damaged:
-					UpdateDamage();
-					break;
-				case MovementStates.Launcher:
-					UpdateLauncher();
-					break;
-				case MovementStates.Drift:
-					UpdateDrift();
-					break;
-				case MovementStates.Grinding:
-					UpdateGrinding();
-					break;
-				case MovementStates.Automation:
-					UpdateAutomation();
-					break;
+				switch (MovementState)
+				{
+					case MovementStates.Normal:
+						UpdateNormalState();
+						break;
+					case MovementStates.Launcher:
+						UpdateLauncher();
+						break;
+					case MovementStates.Drift:
+						UpdateDrift();
+						break;
+					case MovementStates.Grinding:
+						UpdateGrinding();
+						break;
+					case MovementStates.Automation:
+						UpdateAutomation();
+						break;
+				}
 			}
 
 			UpdateControlLockTimer();
@@ -268,6 +271,7 @@ namespace Project.Gameplay
 
 		private void UpdateMoveSpeed()
 		{
+			if (IsCrouching) return;
 			if (IsSpeedBreakActive) return; //Overridden
 
 			if (isControlsLocked && !Mathf.IsZeroApprox(ControlLockoutData.speedRatio))
@@ -297,31 +301,13 @@ namespace Project.Gameplay
 
 		private void UpdateStrafeSpeed()
 		{
+			if (MoveSpeed == 0 && IsCrouching) return;			
+			if(isSideScroller) return; //No strafing in a sidescroller.
+
 			if (isControlsLocked && ControlLockoutData.strafeSettings != ControlLockoutResource.StrafeSettings.Default)
 			{
 				if (ControlLockoutData.strafeSettings == ControlLockoutResource.StrafeSettings.Recenter)
-				{
-					//Calculate distance along the plane defined by StrafeDirection
-					Vector3 calculationPoint = GlobalTransform.origin - PathFollower.GlobalTransform.origin;
-					Vector3 rotationAxis = StrafeDirection.Cross(Vector3.Right).Normalized();
-					if (rotationAxis.IsNormalized())
-						calculationPoint = calculationPoint.Rotated(rotationAxis, StrafeDirection.AngleTo(Vector3.Right));
-
-					float distanceFromCenter = calculationPoint.x;
-
-					if (MoveSpeed != 0)
-					{
-						StrafeSpeed = Mathf.MoveToward(StrafeSpeed, -distanceFromCenter / PhysicsManager.physicsDelta, strafeSettings.traction * PhysicsManager.physicsDelta);
-
-						//Speed clamp
-						//Center Smoothing
-						StrafeSpeed = Mathf.Clamp(StrafeSpeed, -Mathf.Abs(MoveSpeed), Mathf.Abs(MoveSpeed));
-						float speedClamp = (Mathf.Abs(distanceFromCenter) - collisionWidth) / STRAFE_SMOOTHING_LENGTH;
-						StrafeSpeed = Mathf.Clamp(StrafeSpeed, -speedClamp, speedClamp);
-					}
-					else
-						StrafeSpeed = strafeSettings.Interpolate(StrafeSpeed, 0);
-				}
+					RecenterStrafe();
 				else if (ControlLockoutData.strafeSettings == ControlLockoutResource.StrafeSettings.KeepPosition)
 					StrafeSpeed = 0f;
 
@@ -332,6 +318,35 @@ namespace Project.Gameplay
 				StrafeSpeed = strafeSettings.Interpolate(StrafeSpeed, GetStrafeInputDirection());
 			else
 				StrafeSpeed = airStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputDirection());
+		}
+
+		private void RecenterStrafe()
+		{
+			//Calculate distance along the plane defined by StrafeDirection
+			Vector3 calculationPoint = GlobalTransform.origin - PathFollower.GlobalTransform.origin;
+			Vector3 rotationAxis = StrafeDirection.Cross(Vector3.Right).Normalized();
+			if (rotationAxis.IsNormalized())
+				calculationPoint = calculationPoint.Rotated(rotationAxis, StrafeDirection.AngleTo(Vector3.Right));
+
+			float distanceFromCenter = calculationPoint.x;
+
+			if(isSideScroller)
+			{
+				GlobalTranslate(-StrafeDirection * distanceFromCenter); //Instantly snap when sidescrolling
+				return;
+			}
+
+			if (MoveSpeed != 0)
+			{
+				StrafeSpeed = Mathf.MoveToward(StrafeSpeed, -distanceFromCenter / PhysicsManager.physicsDelta, strafeSettings.traction * PhysicsManager.physicsDelta);
+
+				//Center Smoothing
+				StrafeSpeed = Mathf.Clamp(StrafeSpeed, -Mathf.Abs(MoveSpeed), Mathf.Abs(MoveSpeed));
+				float speedClamp = (Mathf.Abs(distanceFromCenter) - collisionWidth) / STRAFE_SMOOTHING_LENGTH;
+				StrafeSpeed = Mathf.Clamp(StrafeSpeed, -speedClamp, speedClamp);
+			}
+			else
+				StrafeSpeed = strafeSettings.Interpolate(StrafeSpeed, 0);
 		}
 
 		#region Actions
@@ -382,6 +397,14 @@ namespace Project.Gameplay
 			UpdateSpeedBreak();
 			if (IsSpeedBreakActive) return;
 
+			if (IsCrouching)
+				UpdateCrouching();
+			else if (actionBufferTimer != 0)
+			{
+				StartCrouching();
+				actionBufferTimer = 0;
+			}
+
 			if (jumpBufferTimer != 0)
 			{
 				jumpBufferTimer = 0;
@@ -409,7 +432,7 @@ namespace Project.Gameplay
 		{
 			isJumping = false;
 			IsAttacking = false;
-			canJumpDash = true;
+			canJumpDash = false;
 			isGrindStepping = false;
 			jumpedFromGround = false;
 			isAccelerationJump = false;
@@ -444,6 +467,7 @@ namespace Project.Gameplay
 		{
 			isJumping = true;
 			IsOnGround = false;
+			canJumpDash = true;
 			jumpedFromGround = true;
 			ActionState = ActionStates.Normal;
 			jumpGroundNormal = ForwardDirection.y;
@@ -540,6 +564,26 @@ namespace Project.Gameplay
 			}
 
 			CheckStomp();
+		}
+		#endregion
+
+		#region Crouch
+		private bool IsCrouching => ActionState == ActionStates.Crouching;
+		private const float SLIDE_FRICTION = 8f;
+		private void StartCrouching()
+		{
+			ActionState = ActionStates.Crouching;
+		}
+
+		private void UpdateCrouching()
+		{
+			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, SLIDE_FRICTION * PhysicsManager.physicsDelta);
+
+			if(MoveSpeed == 0)
+				StrafeSpeed = Mathf.MoveToward(StrafeSpeed, 0, strafeSettings.friction * PhysicsManager.physicsDelta);
+
+			if (Controller.actionButton.wasReleased)
+				ActionState = ActionStates.Normal;
 		}
 		#endregion
 
@@ -705,11 +749,11 @@ namespace Project.Gameplay
 		#region Damage
 		[Export]
 		public ControlLockoutResource attackLockoutSettings;
-		public bool IsDamaged => MovementState == MovementStates.Damaged;
+		public bool IsBeingDamaged => ActionState == ActionStates.Damaged;
 		private void UpdateDamage()
 		{
 			if (IsOnGround)
-				MovementState = MovementStates.Normal;
+				ActionState = ActionStates.Normal;
 
 			VerticalSpeed -= gravity * PhysicsManager.physicsDelta;
 		}
@@ -718,14 +762,14 @@ namespace Project.Gameplay
 		{
 			if (MovementState == MovementStates.Normal)
 			{
+				//Bonk~
 				MoveSpeed = -4f;
 				StrafeSpeed = 0f;
 				VerticalSpeed = 8f;
 				IsOnGround = false;
-				ActionState = ActionStates.Normal;
 			}
 
-			MovementState = MovementStates.Damaged;
+			ActionState = ActionStates.Damaged;
 		}
 
 		public void Kill()
@@ -1030,7 +1074,7 @@ namespace Project.Gameplay
 		{
 			//Drift finished
 			ResyncPathFollower();
-			activeDriftCorner.Deactivate(true);
+			activeDriftCorner.CompleteDrift(true);
 			MovementState = MovementStates.Normal;
 		}
 		#endregion
@@ -1109,14 +1153,14 @@ namespace Project.Gameplay
 			}
 		}
 
-		private bool IsTargetInvalid(Spatial t) => !activeTargets.Contains(t) || !t.IsVisibleInTree() || IsOnGround || IsDamaged;
+		private bool IsTargetInvalid(Spatial t) => !activeTargets.Contains(t) || !t.IsVisibleInTree() || IsOnGround || IsBeingDamaged;
 
 		public void OnCollisionObjectEnter(PhysicsBody body)
 		{
 			if (body.IsInGroup("crusher"))
 			{
 				//Check whether we're being crushed
-				RaycastHit hit = this.CastRay(CenterPosition, worldDirection * collisionHeight * 2f, environmentMask, false);
+				RaycastHit hit = this.CastRay(CenterPosition, worldDirection * 5f, environmentMask, false);
 				if (hit.collidedObject == body)
 				{
 					GD.Print($"Crushed by {body.Name}");
@@ -1230,9 +1274,12 @@ namespace Project.Gameplay
 
 			StrafeDirection = ForwardDirection.Cross(worldDirection).Normalized();
 			strafeCollision = StrafeCollisions.None;
+
 			CheckStrafeWall(1);
 			CheckStrafeWall(-1);
 
+			if (!IsOnGround)
+				movementDirection = movementDirection.Flatten().Normalized();
 			MoveAndSlide(movementDirection * MoveSpeed + StrafeDirection * StrafeSpeed + worldDirection * VerticalSpeed);
 			CheckCeiling();
 
@@ -1349,7 +1396,7 @@ namespace Project.Gameplay
 
 			RaycastHit centerHit = this.CastRay(CenterPosition, castVector * castLength, environmentMask, false, GetCollisionExceptions());
 			Debug.DrawRay(CenterPosition, castVector * castLength, centerHit ? Colors.Red : Colors.White);
-			if (centerHit && Mathf.Abs(CompareNormal2D(centerHit.normal, castVector)) < .5f)
+			if (!IsValidWallCast(centerHit))
 				centerHit = new RaycastHit();
 
 			if (!centerHit)
@@ -1361,9 +1408,9 @@ namespace Project.Gameplay
 				Debug.DrawRay(CenterPosition + sidewaysOffset, castVector * castLength, rightHit ? Colors.Red : Colors.White);
 
 				//Ignore collisions that are "side walls"
-				if (leftHit && Mathf.Abs(CompareNormal2D(leftHit.normal, castVector)) < .5f)
+				if (!IsValidWallCast(leftHit))
 					leftHit = new RaycastHit();
-				if (rightHit && Mathf.Abs(CompareNormal2D(rightHit.normal, castVector)) < .5f)
+				if (!IsValidWallCast(rightHit))
 					rightHit = new RaycastHit();
 
 				if (leftHit || rightHit)
@@ -1398,6 +1445,8 @@ namespace Project.Gameplay
 			}
 		}
 
+		private bool IsValidWallCast(RaycastHit hit) => hit && (Mathf.Abs(CompareNormal2D(hit.normal, hit.direction)) >= .5f && !hit.collidedObject.IsInGroup("ignore raycast"));
+
 		private StrafeCollisions strafeCollision;
 		private enum StrafeCollisions
 		{
@@ -1411,6 +1460,8 @@ namespace Project.Gameplay
 		//Checks for wall collision side to side. (Always active)
 		private void CheckStrafeWall(int direction)
 		{
+			if (isSideScroller) return; //No wall checks when sidescrolling.
+
 			bool isActiveDirection = Mathf.Sign(StrafeSpeed) == direction;
 			Vector3 castOrigin = CenterPosition;
 			float castLength = (collisionWidth + STRAFE_SMOOTHING_LENGTH + COLLISION_PADDING);
@@ -1525,6 +1576,9 @@ namespace Project.Gameplay
 			if (ActivePath == null || pathFollowerOffset != 0) return;
 
 			PathFollower.Offset = ActivePath.Curve.GetClosestOffset(GlobalTransform.origin - ActivePath.GlobalTransform.origin);
+
+			if (isSideScroller)
+				RecenterStrafe();
 		}
 		#endregion
 	}

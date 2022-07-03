@@ -12,7 +12,7 @@ namespace Project.Editor
 		[Export]
 		public bool generate;
 
-		[Export(PropertyHint.Range, "0, 32")]
+		[Export(PropertyHint.Range, "0, 64")]
 		public int amount;
 
 		[Export]

@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay
 {
@@ -46,6 +47,8 @@ namespace Project.Gameplay
 			_animationTree.Active = true;
 
 			_hurtbox = GetNode<CollisionShape>(hurtbox);
+			_hurtbox.Disabled = true;
+
 			_lockonArea = GetNode<CollisionShape>(lockonArea);
 
 			if (!activationTrigger.IsEmpty())
@@ -74,12 +77,11 @@ namespace Project.Gameplay
 		{
 			if (Character.IsAttacking)
 			{
-				Vector3 travelOffset = (_lockonArea.GlobalTransform.origin - Character.CenterPosition).Normalized() * 10f * Character.MoveSpeed / Character.homingAttackSpeed;
-				movementTween.InterpolateProperty(this, "global_transform:origin", GlobalTransform.origin, GlobalTransform.origin + travelOffset, .2f);
-				movementTween.InterpolateCallback(this, .2f, nameof(Despawn));
+				Vector3 travelOffset = (_lockonArea.GlobalTransform.origin - Character.CenterPosition).Flatten().Normalized() * 10f * Character.MoveSpeed / Character.homingAttackSpeed;
+				movementTween.InterpolateProperty(this, "global_transform:origin", GlobalTransform.origin, GlobalTransform.origin + travelOffset, .5f);
+				movementTween.InterpolateCallback(this, .5f, nameof(Despawn));
 				movementTween.Start();
 
-				_hurtbox.Disabled = true;
 				_lockonArea.Disabled = true;
 				Character.HitEnemy(_lockonArea.GlobalTransform.origin);
 

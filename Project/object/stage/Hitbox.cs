@@ -7,5 +7,12 @@ namespace Project.Gameplay
 	{
 		[Export]
 		public bool isActive; //Is this hitbox active?
+
+		private CharacterController Character => CharacterController.instance;
+
+		public void OnEntered(Area _)
+		{
+			Character.TakeDamage();
+		}
 	}
 }

@@ -1,6 +1,6 @@
 shader_type spatial;
 
-uniform float flowSpeed : hint_range(0f, 2f);
+uniform float flowSpeed : hint_range(0, 2);
 uniform sampler2D albedo : hint_albedo;
 uniform sampler2D mask : hint_albedo;
 

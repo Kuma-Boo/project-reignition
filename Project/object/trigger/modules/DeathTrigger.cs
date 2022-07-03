@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay
 {
-    public class DeathTrigger : StageTriggerObject
+    public class DeathTrigger : StageTriggerModule
     {
 		[Export]
 		public TriggerType triggerType;

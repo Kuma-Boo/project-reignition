@@ -55,10 +55,10 @@ namespace Project.Gameplay
 			if (freeCamRotating)
 			{
 				freeCamEnabled = true;
-				Input.SetMouseMode(Input.MouseMode.Captured);
+				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 			else
-				Input.SetMouseMode(Input.MouseMode.Visible);
+				Input.MouseMode = Input.MouseModeEnum.Visible;
 
 			UpdateFreeCam();
 		}
