@@ -1,18 +1,22 @@
 using Godot;
-using System;
 
 namespace Project.Gameplay
 {
-	public class Hitbox : Area
+	public class Hitbox : Spatial
 	{
 		[Export]
 		public bool isActive; //Is this hitbox active?
 
-		private CharacterController Character => CharacterController.instance;
+		protected CharacterController Character => CharacterController.instance;
 
 		public void OnEntered(Area _)
 		{
-			Character.TakeDamage();
+			Character.TakeDamage(this);
+		}
+
+		public void OnExited(Area _)
+		{
+			Character.CancelDamage(this);
 		}
 	}
 }

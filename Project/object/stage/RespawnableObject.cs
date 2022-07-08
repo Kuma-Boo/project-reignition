@@ -54,5 +54,6 @@ namespace Project.Gameplay
 		public virtual void OnExit() { }
 
 		public virtual void OnEntered(Area a) { }
+		public virtual void OnExited(Area a) { }
 	}
 }

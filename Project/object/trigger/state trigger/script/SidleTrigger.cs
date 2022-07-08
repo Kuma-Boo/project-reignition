@@ -2,26 +2,31 @@ using Godot;
 
 namespace Project.Gameplay
 {
-    public class SidleTrigger : StageTriggerModule
-    {
-		[Export]
-		public CharacterController.MovementStates targetState;
-		private bool isStateChanged;
+	public class SidleTrigger : Area
+	{
+		private CharacterController Character => CharacterController.instance;
 
-		public override void Activate()
+		public void OnEntered(Area a)
 		{
-			if (isStateChanged) return; //State change already applied
+			if (!a.IsInGroup("player")) return;
 
-			isStateChanged = true;
 			//Apply state
+			Character.StartSidle();
 		}
 
-		public override void Deactivate(bool isMovingForward)
+		public void OnExited(Area a)
 		{
-			GD.Print(isMovingForward);
+			if (!a.IsInGroup("player")) return;
+
+			Path activePath = CharacterController.instance.ActivePath;
+			Curve3D pathCurve = activePath.Curve;
+			float characterOffset = pathCurve.GetClosestOffset(CharacterController.instance.GlobalTransform.origin - activePath.GlobalTransform.origin);
+			float triggerOffset = pathCurve.GetClosestOffset(GlobalTransform.origin - activePath.GlobalTransform.origin);
+
+			bool isMovingForward = Mathf.Sign(characterOffset - triggerOffset) > 0;
 			if (isMovingForward) return; //Keep state change
 
-			isStateChanged = false;
+			Character.StopSidle();
 		}
 	}
 }

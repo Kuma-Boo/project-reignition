@@ -31,36 +31,36 @@ namespace Project.Gameplay
 			friction = 0;
 		}
 
-		public float Interpolate(float spd, int sign, bool inverted = default)
+		public float Interpolate(float spd, float signedValue, bool inverted = default)
 		{
 			if (inverted)
 				spd *= -1;
 
-			float targetSpeed = speed;
+			float targetSpeed = speed * Mathf.Abs(signedValue);
 			float delta = traction;
 
 			if (Mathf.Abs(spd) > speed)
 				delta = overspeedFriction;
 
-			if (sign == 0)
+			if (signedValue == 0)
 			{
 				targetSpeed = 0;
 				delta = friction;
 			}
-			else if (sign < 0 && !isTwoWay) //Turning around
+			else if (signedValue < 0 && !isTwoWay) //Turning around
 			{
 				delta = turnaround;
 				targetSpeed = clampTurnaround ? 0 : -Mathf.Inf;
 			}
 
 			if (isTwoWay)
-				targetSpeed *= sign;
+				targetSpeed *= Mathf.Sign(signedValue);
 
 			spd = Mathf.MoveToward(spd, targetSpeed, delta * PhysicsManager.physicsDelta);
 			return inverted ? -spd : spd;
 		}
 
 		public float GetSpeedRatio(float spd) => spd / speed;
-		public float GetSpeedRatioClamped(float spd) => Mathf.Clamp(GetSpeedRatio(spd), 0f, 1f);
+		public float GetSpeedRatioClamped(float spd) => Mathf.Clamp(GetSpeedRatio(spd), -1f, 1f);
 	}
 }

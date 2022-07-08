@@ -21,35 +21,35 @@ namespace Project.Gameplay
 		private float pathFollowerOffset; //Offset used when a non-looping path ends.
 		[Export]
 		public NodePath animator;
-		private AnimationTree _animator;
+		public CharacterAnimator Animator { get; private set; }
 		[Export(PropertyHint.Range, "0, .5")]
 		public float collisionHeight = .4f;
 		[Export(PropertyHint.Range, "0, .5")]
 		public float collisionWidth = .3f;
-		[Export]
-		public NodePath root;
-		private Spatial _root;
 
 		#region Controls
 		public InputManager.Controller Controller => InputManager.controller;
 
 		public bool isSideScroller; //Are we in a 2D section?
 		public bool isFacingRight; //Determines which way on the controller is back (Only in sidescroller)
-		private int GetMovementInputDirection()
+		public float GetMovementInputValue()
 		{
-			//Returns 1 for moving forward, -1 for moving backwards
 			if (!isSideScroller)
-				return Controller.verticalAxis.sign;
+			{
+				if (MoveSpeed >= 0 && Controller.verticalAxis.value > -.2f && Controller.verticalAxis.value < 0)
+					return 0;
+				return Controller.verticalAxis.value;
+			}
 
-			return isFacingRight ? Controller.horizontalAxis.sign : -Controller.horizontalAxis.sign;
+			return isFacingRight ? Controller.horizontalAxis.value : -Controller.horizontalAxis.value;
 		}
-		private int GetStrafeInputDirection()
+		public float GetStrafeInputValue()
 		{
 			//Returns 1 for moving right, -1 for moving left
 			if (!isSideScroller)
-				return Controller.horizontalAxis.sign;
+				return Controller.horizontalAxis.value;
 
-			return isFacingRight ? Controller.verticalAxis.sign : -Controller.verticalAxis.sign;
+			return 0; //No strafe when sidescrolling
 		}
 
 		private float jumpBufferTimer;
@@ -91,6 +91,8 @@ namespace Project.Gameplay
 			isControlsLocked = true;
 			ControlLockoutData = data;
 			controlLockoutTimer = data.length;
+
+			ActionState = ActionStates.Normal;
 		}
 
 		private void UpdateControlLockTimer()
@@ -106,7 +108,7 @@ namespace Project.Gameplay
 		public void OnCountdownStarted()
 		{
 			isCountdownActive = true;
-			_animator.Set("parameters/countdown/active", true);
+			Animator.Countdown();
 		}
 
 		public void OnCountdownCompleted()
@@ -136,10 +138,10 @@ namespace Project.Gameplay
 
 			customPhysicsEnabled = true;
 			automationDifference = automationDifference.MoveToward(Vector3.Zero, MoveSpeed * PhysicsManager.physicsDelta);
-			Transform t = GlobalTransform;
-			t.basis = PathFollower.GlobalTransform.basis;
-			t.origin = PathFollower.GlobalTransform.origin + automationDifference;
-			GlobalTransform = t;
+
+			Transform t = PathFollower.GlobalTransform;
+			t.origin += automationDifference;
+			GlobalTransform = PathFollower.GlobalTransform;
 		}
 
 		public void StopAutomation()
@@ -154,11 +156,7 @@ namespace Project.Gameplay
 			instance = this;
 
 			PathFollower = GetNode<PathFollow>(pathFollower);
-
-			_animator = GetNode<AnimationTree>(animator);
-			_animator.Active = true;
-
-			_root = GetNode<Spatial>(root);
+			Animator = GetNode<CharacterAnimator>(animator);
 		}
 
 		public override void _PhysicsProcess(float _)
@@ -173,7 +171,7 @@ namespace Project.Gameplay
 			}
 
 			UpdatePhysics();
-			UpdateAnimation();
+			Animator.UpdateAnimation();
 		}
 
 		public override void _ExitTree()
@@ -188,22 +186,23 @@ namespace Project.Gameplay
 		{
 			Normal, //Standard on rails movement
 			Automation,  //Cutscene? Cinematics? May be replaced with input lockout.
+			Sidle, //Scooting along the wall
 			Launcher, //Springs, Ramps, etc.
 			Drift, //Sharp 90 degree corner. Press jump at the right moment to get a burst of speed?
 			Grinding, //Grinding on rails
 			Catapult, //Aiming a catapult
 			FlyingPot, //A flying pot -_-
-			AirLauncher, //Pressing jump at the right time will move to a launcher state. May have this state combined into LAUNCHER.
+			AirLauncher, //Pressing jump at the right time will move to a launcher state.
 			Rope, //A swinging rope
 			ZipLine, //Swinging zip line
-			Surfing, //Left and right movement
-			FlyingCarpet //4 way air movement
+			Surfing, //Left and right movement. (Set OnGround to false for a flying carpet)
 		}
 
 		public ActionStates ActionState { get; private set; }
 		public enum ActionStates //Actions that can happen in the Normal MovementState
 		{
 			Normal,
+			Jumping,
 			Crouching, //Sliding included
 			Damaged, //Being knocked back by damage
 			Respawning, //Idle until respawn timer reaches zero
@@ -211,7 +210,10 @@ namespace Project.Gameplay
 			EnemyBounce, //Struck an enemy with an attack
 			Stomping, //Jump cancel
 			Backflip,
+
+			Hanging, //Hanging from a ledge (In Sidle Mode)
 		}
+
 		private bool customPhysicsEnabled;
 
 		private void ProcessStateMachine()
@@ -221,30 +223,29 @@ namespace Project.Gameplay
 
 			customPhysicsEnabled = false;
 
-			if (IsBeingDamaged) //Damage action overrides all other states
-				UpdateDamage();
-			else
+			switch (MovementState)
 			{
-				switch (MovementState)
-				{
-					case MovementStates.Normal:
-						UpdateNormalState();
-						break;
-					case MovementStates.Launcher:
-						UpdateLauncher();
-						break;
-					case MovementStates.Drift:
-						UpdateDrift();
-						break;
-					case MovementStates.Grinding:
-						UpdateGrinding();
-						break;
-					case MovementStates.Automation:
-						UpdateAutomation();
-						break;
-				}
+				case MovementStates.Normal:
+					UpdateNormalState();
+					break;
+				case MovementStates.Sidle:
+					UpdateSidle();
+					break;
+				case MovementStates.Launcher:
+					UpdateLauncher();
+					break;
+				case MovementStates.Drift:
+					UpdateDrift();
+					break;
+				case MovementStates.Grinding:
+					UpdateGrinding();
+					break;
+				case MovementStates.Automation:
+					UpdateAutomation();
+					break;
 			}
 
+			UpdateInvincibility();
 			UpdateControlLockTimer();
 			UpdateBreakTimer();
 		}
@@ -253,6 +254,12 @@ namespace Project.Gameplay
 		#region Normal State
 		private void UpdateNormalState()
 		{
+			if (IsBeingDamaged) //Damage action overrides all other states
+			{
+				UpdateDamage();
+				return;
+			}
+
 			UpdateMoveSpeed();
 			UpdateStrafeSpeed();
 			UpdateActions();
@@ -291,12 +298,22 @@ namespace Project.Gameplay
 			if (IsOnGround)
 			{
 				if (MoveSpeed >= 0)
-					MoveSpeed = moveSettings.Interpolate(MoveSpeed, GetMovementInputDirection());
+				{
+					if (GetMovementInputValue() > .5f && SpeedRatio > .8f) //Fix slowing down when turning at high speeds
+						MoveSpeed = moveSettings.Interpolate(MoveSpeed, 1f);
+					else
+					{
+						if (Mathf.Abs(StrafeSpeed) > MoveSpeed) //Slow speed turning
+							MoveSpeed = Mathf.MoveToward(MoveSpeed, Mathf.Abs(StrafeSpeed), strafeSettings.traction * .5f * GetMovementInputValue() * PhysicsManager.physicsDelta);
+
+						MoveSpeed = moveSettings.Interpolate(MoveSpeed, GetMovementInputValue());
+					}
+				}
 				else
-					MoveSpeed = backstepSettings.Interpolate(MoveSpeed, -GetMovementInputDirection(), true); //Input direction needs to be inverted for negative movement
+					MoveSpeed = backstepSettings.Interpolate(MoveSpeed, -GetMovementInputValue(), true); //Input direction needs to be inverted for negative movement
 			}
 			else
-				MoveSpeed = airMoveSettings.Interpolate(MoveSpeed, GetMovementInputDirection());
+				MoveSpeed = airMoveSettings.Interpolate(MoveSpeed, GetMovementInputValue());
 		}
 
 		private void UpdateStrafeSpeed()
@@ -315,9 +332,9 @@ namespace Project.Gameplay
 			}
 
 			if (IsOnGround)
-				StrafeSpeed = strafeSettings.Interpolate(StrafeSpeed, GetStrafeInputDirection());
+				StrafeSpeed = strafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
 			else
-				StrafeSpeed = airStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputDirection());
+				StrafeSpeed = airStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
 		}
 
 		private void RecenterStrafe()
@@ -357,7 +374,10 @@ namespace Project.Gameplay
 		private void UpdateActions()
 		{
 			if (IsStomping)
+			{
+				UpdateStomp();
 				return;
+			}
 
 			if (IsBackflipping)
 			{
@@ -408,7 +428,7 @@ namespace Project.Gameplay
 			if (jumpBufferTimer != 0)
 			{
 				jumpBufferTimer = 0;
-				if (GetMovementInputDirection() < 0)
+				if (GetMovementInputValue() < 0)
 					StartBackflip();
 				else
 					Jump();
@@ -420,9 +440,14 @@ namespace Project.Gameplay
 			CheckStomp();
 			CheckJumpDash();
 
-			if (jumpedFromGround)
+			if (IsJumping)
 				UpdateJump();
 
+			ApplyGravity();
+		}
+
+		private void ApplyGravity()
+		{
 			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, maxGravity, gravity * PhysicsManager.physicsDelta); //Apply Gravity
 		}
 
@@ -430,21 +455,20 @@ namespace Project.Gameplay
 		public float landingBoost; //Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster.
 		private void LandOnGround()
 		{
-			isJumping = false;
+			isJumpClamped = false;
 			IsAttacking = false;
 			canJumpDash = false;
 			isGrindStepping = false;
-			jumpedFromGround = false;
 			isAccelerationJump = false;
 			currentJumpLength = 0;
 
 			ActionState = ActionStates.Normal;
 
-			if (GetMovementInputDirection() > 0)
+			if (MovementState == MovementStates.Normal && GetMovementInputValue() > 0.5f)
 			{
+				//Landing boost when holding forward (See Sonic and the Black Knight)
 				if (MoveSpeed < landingBoost)
 					MoveSpeed = landingBoost;
-				//Boost forwards slightly when holding forward (See Sonic and the Black Knight)
 				//Always Play VFX
 			}
 		}
@@ -456,56 +480,56 @@ namespace Project.Gameplay
 		public float jumpPower;
 		[Export]
 		public float jumpCurve = .95f;
-		private bool isJumping;
+		private bool IsJumping => ActionState == ActionStates.Jumping;
+		private bool isJumpClamped; //True after the player releases the jump button
 		private bool canJumpDash;
-		private bool jumpedFromGround;
 		private bool isAccelerationJump;
 		private float jumpGroundNormal;
 		private float currentJumpLength; //Amount of time the jump button was held
-		private const float ACCELERATION_JUMP_LENGTH = .06f; //How fast the jump button needs to be pressed for an "acceleration jump"
+		private const float ACCELERATION_JUMP_LENGTH = .06f; //How fast the jump button needs to be released for an "acceleration jump"
 		private void Jump()
 		{
-			isJumping = true;
+			isJumpClamped = false;
 			IsOnGround = false;
 			canJumpDash = true;
-			jumpedFromGround = true;
-			ActionState = ActionStates.Normal;
+			ActionState = ActionStates.Jumping;
 			jumpGroundNormal = ForwardDirection.y;
 
 			VerticalSpeed = jumpPower;
 			if (MoveSpeed < 0) //Disallow jumping backwards
 				MoveSpeed = 0;
+
+			Animator.Jump();
 		}
 
 		private void UpdateJump()
 		{
-			bool checkForAccelerationJump = currentJumpLength < ACCELERATION_JUMP_LENGTH;
-			currentJumpLength += PhysicsManager.physicsDelta;
-			if (checkForAccelerationJump && currentJumpLength >= ACCELERATION_JUMP_LENGTH)
+			if (isAccelerationJump && currentJumpLength >= ACCELERATION_JUMP_LENGTH)
 			{
-				if (isAccelerationJump)
+				//Acceleration jump dash?
+				if (Controller.verticalAxis.value > 0 && MoveSpeed < accelerationJumpSpeed)
 				{
-					//Acceleration jump dash
-					if (Controller.verticalAxis.value > 0 && MoveSpeed < accelerationJumpSpeed)
-						MoveSpeed = accelerationJumpSpeed;
-					VerticalSpeed = 5f;
-					isAccelerationJump = false;
+					ActionState = ActionStates.JumpDashing;
+					MoveSpeed = accelerationJumpSpeed;
+					Animator.JumpAccel();
 				}
-				else
-					IsAttacking = true; //Spin Attack
+				VerticalSpeed = 5f;
+				isAccelerationJump = false;
 			}
 
-			if (isJumping)
+			if (!isJumpClamped)
 			{
 				if (!Controller.jumpButton.isHeld)
 				{
-					isJumping = false;
+					isJumpClamped = true;
 					if (currentJumpLength <= ACCELERATION_JUMP_LENGTH)
 						isAccelerationJump = true;
 				}
 			}
 			else if (IsRising)
 				VerticalSpeed *= jumpCurve;
+
+			currentJumpLength += PhysicsManager.physicsDelta;
 		}
 
 		public void ResetJumpDash() => canJumpDash = true;
@@ -522,7 +546,7 @@ namespace Project.Gameplay
 		public float jumpDashMaxGravity;
 		[Export]
 		public float homingAttackSpeed;
-		private bool IsJumpDashing => ActionState == ActionStates.JumpDashing;
+		public bool IsJumpDashing => ActionState == ActionStates.JumpDashing;
 		public bool IsAttacking { get; private set; } //Should the player damage enemies?
 
 		private void CheckJumpDash()
@@ -549,7 +573,7 @@ namespace Project.Gameplay
 
 		private void UpdateJumpDash()
 		{
-			if (activeTarget != null)
+			if (activeTarget != null && IsAttacking)
 			{
 				MoveSpeed = homingAttackSpeed;
 				StrafeSpeed = VerticalSpeed = 0;
@@ -568,7 +592,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Crouch
-		private bool IsCrouching => ActionState == ActionStates.Crouching;
+		public bool IsCrouching => ActionState == ActionStates.Crouching;
 		private const float SLIDE_FRICTION = 8f;
 		private void StartCrouching()
 		{
@@ -588,15 +612,21 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Stomp
-		[Export]
-		public float stompSpeed;
-		private bool IsStomping => ActionState == ActionStates.Stomping;
+		private const int STOMP_SPEED = -32;
+		private const int STOMP_GRAVITY = 108;
+		public bool IsStomping => ActionState == ActionStates.Stomping;
 		private void StartStomping()
 		{
 			MoveSpeed = 0;
-			VerticalSpeed = stompSpeed;
+			VerticalSpeed = 0;
 			actionBufferTimer = 0;
 			ActionState = ActionStates.Stomping;
+			Animator.Stomp();
+		}
+
+		private void UpdateStomp()
+		{
+			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
 		}
 
 		private void CheckStomp()
@@ -747,9 +777,26 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Damage
+		private bool IsInvincible => invincibliltyTimer != 0;
+		private float invincibliltyTimer;
+		private const float INVINCIBILITY_LENGTH = 5f;
+
+		private void UpdateInvincibility()
+		{
+			if (IsInvincible)
+			{
+				invincibliltyTimer = Mathf.MoveToward(invincibliltyTimer, 0, PhysicsManager.physicsDelta);
+
+				if (!IsInvincible && queuedDamage.Count != 0)
+					TakeDamage(); //Do it again!
+			}
+		}
+
 		[Export]
 		public ControlLockoutResource attackLockoutSettings;
 		public bool IsBeingDamaged => ActionState == ActionStates.Damaged;
+		private readonly Array<Node> queuedDamage = new Array<Node>();
+
 		private void UpdateDamage()
 		{
 			if (IsOnGround)
@@ -758,18 +805,37 @@ namespace Project.Gameplay
 			VerticalSpeed -= gravity * PhysicsManager.physicsDelta;
 		}
 
-		public void TakeDamage()
+		public void TakeDamage(Node s = null)
 		{
+			if(IsInvincible && s != null)
+			{
+				queuedDamage.Add(s);
+				return;
+			}
+
 			if (MovementState == MovementStates.Normal)
 			{
 				//Bonk~
-				MoveSpeed = -4f;
-				StrafeSpeed = 0f;
-				VerticalSpeed = 8f;
+				MoveSpeed = -4;
+				StrafeSpeed = 0;
+				VerticalSpeed = 8;
 				IsOnGround = false;
 			}
+			else if(MovementState == MovementStates.Sidle)
+			{
+				sidleTimer = SIDLE_DAMAGE_LENGTH;
+				MoveSpeed = 0;
+				VerticalSpeed = 0;
+			}
 
+			invincibliltyTimer = INVINCIBILITY_LENGTH;
 			ActionState = ActionStates.Damaged;
+		}
+
+		public void CancelDamage(Node n)
+		{
+			if (queuedDamage.Contains(n))
+				queuedDamage.Remove(n);
 		}
 
 		public void Kill()
@@ -783,6 +849,7 @@ namespace Project.Gameplay
 			MoveSpeed = 0;
 			StrafeSpeed = 0;
 			VerticalSpeed = 0;
+			PathFollower.HOffset = PathFollower.VOffset = 0;
 
 			//TODO Play death animation depending on the result
 			Respawn();
@@ -809,15 +876,14 @@ namespace Project.Gameplay
 		public float enemyBounceGravity;
 		private bool IsBouncingOffEnemy => ActionState == ActionStates.EnemyBounce;
 		private float bounceTimer;
-		private const float BOUNCE_LOCKOUT_TIME = .32f;
+		private const float BOUNCE_LOCKOUT_TIME = .2f;
 		private void UpdateEnemyBounce()
 		{
 			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
 			if (bounceTimer == 0) //Bouncing off an enemy
-			{
-				CheckStomp();
 				CheckJumpDash();
-			}
+
+			CheckStomp();
 
 			MoveSpeed = StrafeSpeed = 0;
 			VerticalSpeed -= enemyBounceGravity * PhysicsManager.physicsDelta;
@@ -846,6 +912,87 @@ namespace Project.Gameplay
 		}
 		#endregion
 
+		#region Sidle
+		[Export]
+		public MovementResource sidleSettings;
+		private Spatial currentRailing;
+		private float sidleTimer;
+		private readonly float SIDLE_DAMAGE_LENGTH = .5f;
+		private readonly float SIDLE_RAIL_FALL_SPEED = 4f;
+		private readonly float SIDLE_HORIZONTAL_SPEED = .25f;
+
+		public void StartSidle()
+		{
+			MovementState = MovementStates.Sidle;
+		}
+
+		private void UpdateSidle()
+		{
+			switch (ActionState)
+			{
+				case ActionStates.Normal:
+					break;
+				case ActionStates.Damaged: //Fall
+					sidleTimer = Mathf.MoveToward(sidleTimer, 0, PhysicsManager.physicsDelta);
+
+					if (sidleTimer == 0)
+					{
+						PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, -1, SIDLE_HORIZONTAL_SPEED);
+
+						if (currentRailing != null)
+						{
+							float targetY = currentRailing.GlobalTransform.origin.y;
+							Transform t = GlobalTransform;
+							t.origin.y = Mathf.MoveToward(t.origin.y, targetY, SIDLE_RAIL_FALL_SPEED * PhysicsManager.physicsDelta); //Snap to railing
+							GlobalTransform = t;
+
+							if (Mathf.IsEqualApprox(t.origin.y, targetY))
+							{
+								ActionState = ActionStates.Hanging;
+								sidleTimer = 5f;
+								PathFollower.HOffset = -1f; //All railings MUST be 1 unit away from the wall.
+							}
+						}
+						else
+							ApplyGravity();
+					}
+					return;
+				case ActionStates.Hanging:
+					sidleTimer = Mathf.MoveToward(sidleTimer, 0, PhysicsManager.physicsDelta);
+
+					if (sidleTimer == 0)
+					{
+						if (IsRising)
+							PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, 0, SIDLE_HORIZONTAL_SPEED);
+						else if (IsOnGround)
+							PathFollower.HOffset = 0;
+
+						ApplyGravity();
+					}
+					else if (jumpBufferTimer != 0)
+					{
+						//Sidle Recovery
+						jumpBufferTimer = 0;
+						VerticalSpeed = 8;
+						sidleTimer = 0;
+					}
+
+					return;
+				default:
+					UpdateNormalState(); //Busy with a previous action
+					return;
+			}
+
+			MoveSpeed = sidleSettings.Interpolate(MoveSpeed, GetMovementInputValue());
+		}
+
+		public void StopSidle()
+		{
+			MovementState = MovementStates.Normal;
+		}
+
+		#endregion
+
 		#region Launcher
 		private Launcher activeLauncher;
 		private Vector3 launcherMovementDelta;
@@ -860,7 +1007,6 @@ namespace Project.Gameplay
 			StrafeSpeed = 0;
 
 			IsOnGround = false;
-			jumpedFromGround = false;
 			launcherMovementDelta = Vector3.Zero;
 		}
 
@@ -937,19 +1083,16 @@ namespace Project.Gameplay
 			GlobalTransform = t;
 
 			balanceLeaning = Vector2.Zero;
-			_animator.Set("parameters/balancing/current", 1); //Turn on grinding animations
-			_animator.Set("parameters/balance_state/active", true);
-			_animator.Set("parameters/balance_state/balance_left/blend_position", 0);
-			_animator.Set("parameters/balance_state/balance_right/blend_position", 0);
+			Animator.StartGrinding();
 		}
 
 		private void UpdateGrinding()
 		{
 			customPhysicsEnabled = true;
-			MoveSpeed = grindingSettings.Interpolate(MoveSpeed, GetMovementInputDirection());
-			
+			MoveSpeed = grindingSettings.Interpolate(MoveSpeed, GetMovementInputValue());
+
 			//Update Shuffle
-			AnimationNodeStateMachinePlayback grindState = _animator.Get("parameters/balance_state/playback") as AnimationNodeStateMachinePlayback;
+			AnimationNodeStateMachinePlayback grindState = Animator.GrindingState;
 			string currentAnimation = grindState.GetCurrentNode();
 
 			if (jumpBufferTimer != 0)
@@ -957,7 +1100,7 @@ namespace Project.Gameplay
 				StopGrinding();
 				jumpBufferTimer = 0;
 
-				int direction = GetStrafeInputDirection();
+				int direction = Controller.horizontalAxis.sign;
 				if (direction == 0)
 				{
 					Jump();
@@ -1009,7 +1152,7 @@ namespace Project.Gameplay
 		public void StopGrinding()
 		{
 			grindRail = null;
-			_animator.Set("parameters/balancing/current", 0); //Turn off grinding animations
+			Animator.StopGrinding();
 			MovementState = MovementStates.Normal;
 		}
 		#endregion
@@ -1102,8 +1245,9 @@ namespace Project.Gameplay
 		private Vector3 velocity; //x -> strafe, y -> jump/fall, z -> speed
 		public Vector3 Velocity => velocity.Rotated(Vector3.Up, ForwardDirection.RemoveVertical().AngleTo(Vector2.Up));
 
-		private bool IsFalling => VerticalSpeed < 0;
-		private bool IsRising => VerticalSpeed > 0;
+		public bool IsFalling => VerticalSpeed < 0;
+		public bool IsRising => VerticalSpeed > 0;
+		public bool IsIdling => Mathf.Abs(StrafeSpeed) < .1f && Mathf.Abs(MoveSpeed) < .1f;
 
 		public Vector3 CenterPosition => GlobalTransform.origin + worldDirection * collisionHeight; //Center of collision calculations
 
@@ -1176,12 +1320,19 @@ namespace Project.Gameplay
 			{
 				GD.Print($"Stopped ignoring {body.Name}");
 				RemoveCollisionExceptionWith(body);
+				CancelDamage(body);
 			}
 		}
 
 		public void OnObjectTriggerEnter(Area area)
 		{
-			if (!((Node)area is RespawnableObject)) return;
+			if (!((Node)area is RespawnableObject))
+			{
+				if (area.IsInGroup("railing"))
+					currentRailing = area;
+
+				return;
+			}
 
 			RespawnableObject target = (Node)area as RespawnableObject;
 			target.OnEnter();
@@ -1192,7 +1343,13 @@ namespace Project.Gameplay
 
 		public void OnObjectTriggerExit(Area area)
 		{
-			if (!((Node)area is RespawnableObject)) return;
+			if (!((Node)area is RespawnableObject))
+			{
+				if (area.IsInGroup("railing"))
+					currentRailing = null;
+
+				return;
+			}
 
 			RespawnableObject target = (Node)area as RespawnableObject;
 			target.OnExit();
@@ -1261,7 +1418,7 @@ namespace Project.Gameplay
 			//Increases accuracy around turns.
 			movementDirection = movementDirection.LinearInterpolate(ForwardDirection, .5f);
 			//FIX Smooths "bumping" that occours when jumping up a surface that has a sudden change in steepness.
-			if (jumpedFromGround && movementDirection.y > jumpGroundNormal)
+			if (IsJumping && movementDirection.y > jumpGroundNormal)
 			{
 				jumpGroundNormal = Mathf.Lerp(jumpGroundNormal, movementDirection.y, .1f);
 				movementDirection.y = jumpGroundNormal;
@@ -1351,6 +1508,9 @@ namespace Project.Gameplay
 			}
 			else
 			{
+				if (IsOnGround && !IsBackflipping)
+					Animator.LeaveGround();
+				
 				IsOnGround = false;
 
 				if (IsBackflipping) return;
@@ -1508,45 +1668,6 @@ namespace Project.Gameplay
 
 		//Returns the absolute dot product of a normal relative to an axis ignoring Y values.
 		private float CompareNormal2D(Vector3 normal, Vector3 axis) => normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized());
-		#endregion
-
-		#region Animation
-		private void UpdateAnimation()
-		{
-			if (ringParticleTimer != 0)
-			{
-				ringParticleTimer = Mathf.MoveToward(ringParticleTimer, 0, PhysicsManager.physicsDelta);
-
-				if (ringParticleTimer == 0)
-					_ringParticleEffect.Emitting = false;
-			}
-
-			if(MovementState != MovementStates.Automation)
-			{
-				Transform t = GlobalTransform;
-				t.basis.z = ForwardDirection;
-				t.basis.y = worldDirection;
-				t.basis.x = -t.basis.z.Cross(t.basis.y);
-				t.basis = t.basis.Orthonormalized();
-				GlobalTransform = t;
-			}
-		}
-
-		#region VFX
-		[Export]
-		public NodePath ringParticleEffect;
-		private Particles _ringParticleEffect;
-		private float ringParticleTimer;
-
-		public void PlayRingParticleEffect()
-		{
-			if (_ringParticleEffect == null)
-				_ringParticleEffect = GetNode<Particles>(ringParticleEffect);
-
-			ringParticleTimer = .2f;
-			_ringParticleEffect.Emitting = true;
-		}
-		#endregion
 		#endregion
 
 		#region Paths

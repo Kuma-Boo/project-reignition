@@ -39,6 +39,14 @@ namespace Project.Core
 			debugRestart.Update(Input.IsKeyPressed((int)KeyList.F5));
 		}
 
+		public override void _Input(InputEvent e)
+		{
+			if (e is InputEventJoypadButton && !controller.IsUsingGamepad)
+				controller.activeGamepad = e.Device;
+			else if (e is InputEventKey && controller.IsUsingGamepad)
+				controller.activeGamepad = -1;
+		}
+
 		public static void DefaultControls()
 		{
 			controller = new Controller();
@@ -57,33 +65,36 @@ namespace Project.Core
 			public Button boostButton;
 
 			public Button pauseButton;
-			public Mapping mapping;
+			public Mapping keyboardMapping;
+			public Mapping gamepadMapping;
 
-			public bool isUsingGamepad => mapping.activeGamepad != -1; //True if the player is using a gamepad.
+			public int activeGamepad; //The current gamepad being used. -1 for keyboard, indexing starts at 0.
+			public Mapping ActiveMapping => IsUsingGamepad ? gamepadMapping : keyboardMapping;
+			public bool IsUsingGamepad => activeGamepad != -1; //-1 if the player is using a keyboard.
 
 			public void Update(float delta)
 			{
 				//Update all inputs.
-				if (isUsingGamepad && mapping.horizontalBinding != -1)
-					horizontalAxis.Update(AnalogAxisHeld(mapping.horizontalBinding), delta);
+				if (IsUsingGamepad && ActiveMapping.horizontalBinding != -1)
+					horizontalAxis.Update(AnalogAxisHeld(ActiveMapping.horizontalBinding), delta);
 				else
-					horizontalAxis.Update(DigitalAxisHeld(mapping.rightBinding, mapping.leftBinding), delta);
+					horizontalAxis.Update(DigitalAxisHeld(ActiveMapping.rightBinding, ActiveMapping.leftBinding), delta);
 
-				if (isUsingGamepad && mapping.verticalBinding != -1)
-					verticalAxis.Update(AnalogAxisHeld(mapping.verticalBinding), delta);
+				if (IsUsingGamepad && ActiveMapping.verticalBinding != -1)
+					verticalAxis.Update(-AnalogAxisHeld(ActiveMapping.verticalBinding), delta);
 				else
-					verticalAxis.Update(DigitalAxisHeld(mapping.upBinding, mapping.downBinding), delta);
+					verticalAxis.Update(-DigitalAxisHeld(ActiveMapping.downBinding, ActiveMapping.upBinding), delta);
 
-				jumpButton.Update(ButtonHeld(mapping.jumpBinding));
-				boostButton.Update(ButtonHeld(mapping.boostBinding));
-				breakButton.Update(ButtonHeld(mapping.breakBinding));
-				actionButton.Update(ButtonHeld(mapping.actionBinding));
+				jumpButton.Update(ButtonHeld(ActiveMapping.jumpBinding));
+				boostButton.Update(ButtonHeld(ActiveMapping.boostBinding));
+				breakButton.Update(ButtonHeld(ActiveMapping.breakBinding));
+				actionButton.Update(ButtonHeld(ActiveMapping.actionBinding));
 
-				pauseButton.Update(ButtonHeld(mapping.pauseBinding));
+				pauseButton.Update(ButtonHeld(ActiveMapping.pauseBinding));
 			}
 
 			//Returns the current physical value of an analog axis (Gamepad Only)
-			private float AnalogAxisHeld(int axisCode) => Input.GetJoyAxis(mapping.activeGamepad, axisCode);
+			private float AnalogAxisHeld(int axisCode) => Input.GetJoyAxis(activeGamepad, axisCode);
 			//Combines two buttons as a single axis
 			private float DigitalAxisHeld(int p, int n)
 			{
@@ -96,18 +107,21 @@ namespace Project.Core
 			}
 			//Returns the physical state of a button
 			private bool ButtonHeld(int buttonCode) =>
-			isUsingGamepad ? Input.IsJoyButtonPressed(mapping.activeGamepad, buttonCode) :
+			IsUsingGamepad ? Input.IsJoyButtonPressed(activeGamepad, buttonCode) :
 			Input.IsKeyPressed(buttonCode);
 
 			//TODO Consoles will require default controls for gamepads
-			public void DefaultControls() => DefaultKeyboardControls();
+			public void DefaultControls()
+			{
+				DefaultKeyboardControls();
+				DefaultGamepadControls();
+			}
+
 			public void DefaultKeyboardControls()
 			{
 				//Default to keyboard
-				mapping = new Mapping()
+				keyboardMapping = new Mapping()
 				{
-					activeGamepad = -1,
-
 					upBinding = (int)KeyList.Up,
 					downBinding = (int)KeyList.Down,
 					leftBinding = (int)KeyList.Left,
@@ -118,6 +132,22 @@ namespace Project.Core
 					breakBinding = (int)KeyList.Z,
 					boostBinding = (int)KeyList.X,
 					pauseBinding = (int)KeyList.Enter
+				};
+			}
+
+			public void DefaultGamepadControls()
+			{
+				//Default to keyboard
+				gamepadMapping = new Mapping()
+				{
+					horizontalBinding = (int)JoystickList.Axis0,
+					verticalBinding = (int)JoystickList.Axis1,
+					
+					jumpBinding = (int)JoystickList.SonyX,
+					actionBinding = (int)JoystickList.SonyCircle,
+					breakBinding = (int)JoystickList.SonySquare,
+					boostBinding = (int)JoystickList.SonyTriangle,
+					pauseBinding = (int)JoystickList.Start
 				};
 			}
 		}
@@ -144,10 +174,14 @@ namespace Project.Core
 			public bool WasTapBuffered => tapBuffer > 0;
 			public float tapBuffer;
 
+			private const float DEADZONE = .1f;
 			private const float TAP_BUFFER_LENGTH = .2f;
 
 			public void Update(float currentValue, float timeDelta)
 			{
+				if (Mathf.Abs(currentValue) < DEADZONE)
+					currentValue = 0;
+
 				int oldDirection = sign;
 				sign = Mathf.Sign(currentValue);
 				wasTapped = sign != 0 && oldDirection != sign;
@@ -167,8 +201,6 @@ namespace Project.Core
 		public struct Mapping
 		{
 			//Contains a list of all the input bindings.
-			public int activeGamepad; //The current gamepad being used. -1 for keyboard, indexing starts at 0.
-
 			public int leftBinding;
 			public int rightBinding;
 			public int horizontalBinding; //For analog inputs, -1 if unused

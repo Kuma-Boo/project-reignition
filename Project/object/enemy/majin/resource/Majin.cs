@@ -88,8 +88,10 @@ namespace Project.Gameplay
 				EmitSignal(nameof(OnDefeated));
 			}
 			else
-				Character.TakeDamage();
+				Character.TakeDamage(this);
 		}
+
+		public override void OnExit() => Character.CancelDamage(this);
 
 		public override void _PhysicsProcess(float _)
 		{

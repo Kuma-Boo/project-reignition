@@ -1,32 +1,14 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://object/stage/StageManager.cs" type="Script" id=1]
 [ext_resource path="res://area/stage/2 sand oasis/resource/BGM.tscn" type="PackedScene" id=2]
 [ext_resource path="res://object/player/CharacterSpawn.tscn" type="PackedScene" id=3]
-[ext_resource path="res://area/stage/2 sand oasis/act 2/data/Environment.tscn" type="PackedScene" id=4]
 [ext_resource path="res://area/stage/2 sand oasis/act 2/data/MainPath.tres" type="Curve3D" id=5]
 [ext_resource path="res://object/trigger/modules/PathTrigger.cs" type="Script" id=6]
-[ext_resource path="res://area/stage/2 sand oasis/act 2/data/Geometry.tscn" type="PackedScene" id=7]
 [ext_resource path="res://object/trigger/StageTrigger.tscn" type="PackedScene" id=8]
-[ext_resource path="res://area/DefaultSky.tres" type="ProceduralSky" id=9]
 
 [sub_resource type="SphereShape" id=4]
 radius = 5.0
-
-[sub_resource type="Environment" id=32]
-background_mode = 3
-background_sky = ExtResource( 9 )
-background_color = Color( 0.27451, 0.27451, 0.27451, 1 )
-ambient_light_color = Color( 0.352941, 0.352941, 0.352941, 1 )
-ambient_light_sky_contribution = 0.0
-tonemap_mode = 3
-tonemap_white = 2.0
-ssao_radius = 2.0
-ssao_intensity = 4.0
-ssao_radius2 = 5.0
-ssao_intensity2 = 2.0
-ssao_quality = 2
-ssao_edge_sharpness = 5.58
 
 [sub_resource type="ArrayMesh" id=30]
 surfaces/0 = {
@@ -63,30 +45,18 @@ shape = SubResource( 4 )
 [node name="PathSwitcher" type="Spatial" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
 script = ExtResource( 6 )
 path = NodePath("../../../../../Path/MainPath")
+targetObject = 2
 
 [node name="Object" type="Spatial" parent="MainAct"]
 
 [node name="BGM" parent="." instance=ExtResource( 2 )]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 32 )
-
-[node name="Mesh" type="Spatial" parent="."]
-
-[node name="Act2Environment" parent="Mesh" instance=ExtResource( 4 )]
-
-[node name="Act2Geometry" parent="Mesh" instance=ExtResource( 7 )]
-
 [node name="Collision" type="Spatial" parent="."]
-visible = false
 
 [node name="Collision" type="MeshInstance" parent="Collision"]
 mesh = SubResource( 30 )
-material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="Collision/Collision"]
-collision_layer = 2
-collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="Collision/Collision/StaticBody"]
 shape = SubResource( 31 )

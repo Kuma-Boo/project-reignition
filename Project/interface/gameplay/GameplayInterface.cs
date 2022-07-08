@@ -155,7 +155,7 @@ namespace Project.Gameplay
 			if (amount > 0)
 			{
 				//Play SFX and particle effect
-				CharacterController.instance.PlayRingParticleEffect();
+				CharacterController.instance.Animator.PlayRingParticleEffect();
 			}
 
 			_ringLabel.Text = RingCount.ToString("000");

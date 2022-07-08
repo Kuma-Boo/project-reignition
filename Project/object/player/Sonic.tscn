@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=80 format=2]
 
 [ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=1]
 [ext_resource path="res://object/player/resource/CharacterController.cs" type="Script" id=2]
@@ -12,6 +12,8 @@
 [ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=10]
 [ext_resource path="res://object/player/resource/GrindStepLockout.tres" type="Resource" id=11]
 [ext_resource path="res://object/player/resource/movement settings/AttackSettings.tres" type="Resource" id=12]
+[ext_resource path="res://object/player/resource/movement settings/SidleSettings.tres" type="Resource" id=13]
+[ext_resource path="res://object/player/resource/CharacterAnimator.cs" type="Script" id=14]
 
 [sub_resource type="SphereShape" id=80]
 radius = 0.3
@@ -53,6 +55,87 @@ albedo_texture = ExtResource( 3 )
 
 [sub_resource type="QuadMesh" id=15]
 material = SubResource( 14 )
+
+[sub_resource type="AnimationNodeTransition" id=55]
+input_count = 2
+input_0/name = "Grounded"
+input_0/auto_advance = false
+input_1/name = "Airborne"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeTransition" id=111]
+input_count = 2
+xfade_time = 0.1
+input_0/name = "Normal"
+input_0/auto_advance = false
+input_1/name = "Jumpdashing"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeTransition" id=103]
+input_count = 2
+xfade_time = 0.05
+input_0/name = "Falling"
+input_0/auto_advance = false
+input_1/name = "Jumping"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=102]
+animation = "fall-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=105]
+animation = "fall-start"
+
+[sub_resource type="AnimationNodeOneShot" id=104]
+fadein_time = 0.0
+fadeout_time = 0.02
+
+[sub_resource type="AnimationNodeAnimation" id=107]
+animation = "jump-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=108]
+animation = "jump-start"
+
+[sub_resource type="AnimationNodeOneShot" id=106]
+fadein_time = 0.0
+
+[sub_resource type="AnimationNodeTimeScale" id=122]
+
+[sub_resource type="AnimationNodeAnimation" id=120]
+animation = "jump-accel-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=121]
+animation = "jump-dash-loop"
+
+[sub_resource type="AnimationNodeStateMachine" id=112]
+states/jump-accel-loop/node = SubResource( 120 )
+states/jump-accel-loop/position = Vector2( 257.464, 91.48 )
+states/jump-dash-loop/node = SubResource( 121 )
+states/jump-dash-loop/position = Vector2( 609.4, 91.8 )
+start_node = "jump-accel-loop"
+
+[sub_resource type="AnimationNodeBlendTree" id=109]
+graph_offset = Vector2( -1032.14, 8.31979 )
+nodes/IsJumpDashing/node = SubResource( 111 )
+nodes/IsJumpDashing/position = Vector2( -16, 144 )
+nodes/IsJumping/node = SubResource( 103 )
+nodes/IsJumping/position = Vector2( -704, 64 )
+nodes/fall/node = SubResource( 104 )
+nodes/fall/position = Vector2( -1072, -48 )
+nodes/fall-loop/node = SubResource( 102 )
+nodes/fall-loop/position = Vector2( -1328, -48 )
+nodes/fall-start/node = SubResource( 105 )
+nodes/fall-start/position = Vector2( -1472, 128 )
+nodes/jump/node = SubResource( 106 )
+nodes/jump/position = Vector2( -480, 144 )
+nodes/jump-loop/node = SubResource( 107 )
+nodes/jump-loop/position = Vector2( -1040, 208 )
+nodes/jump-start/node = SubResource( 108 )
+nodes/jump-start/position = Vector2( -720, 288 )
+nodes/jump_cancel_time/node = SubResource( 122 )
+nodes/jump_cancel_time/position = Vector2( -1296, 96 )
+nodes/jump_dash_state/node = SubResource( 112 )
+nodes/jump_dash_state/position = Vector2( -256, 320 )
+node_connections = [ "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "fall", 0, "fall-loop", "fall", 1, "jump_cancel_time", "jump", 0, "IsJumping", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start", "output", 0, "IsJumpDashing" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -136,87 +219,153 @@ animation = "countdown"
 [sub_resource type="AnimationNodeAnimation" id=72]
 animation = "RESET"
 
-[sub_resource type="AnimationNodeAnimation" id=73]
-animation = "gait-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=74]
-animation = "jog-loop"
-
-[sub_resource type="AnimationNodeBlendSpace1D" id=75]
-blend_point_0/node = SubResource( 73 )
-blend_point_0/pos = 0.0
-blend_point_1/node = SubResource( 74 )
-blend_point_1/pos = 1.0
-min_space = 0.0
-snap = 0.2
+[sub_resource type="AnimationNodeTransition" id=114]
+input_count = 2
+xfade_time = 0.1
+input_0/name = "Standing"
+input_0/auto_advance = false
+input_1/name = "Crouching"
+input_1/auto_advance = false
 
 [sub_resource type="AnimationNodeTransition" id=76]
 input_count = 2
+xfade_time = 0.1
 input_0/name = "Idle"
 input_0/auto_advance = false
 input_1/name = "Moving"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeAnimation" id=77]
-animation = "run-loop"
-
-[sub_resource type="AnimationNodeTimeScale" id=79]
-
 [sub_resource type="AnimationNodeTransition" id=78]
 input_count = 2
-xfade_time = 0.1
+xfade_time = 0.3
 input_0/name = "Jogging"
 input_0/auto_advance = false
 input_1/name = "Running"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeBlendTree" id=71]
-graph_offset = Vector2( -391.651, 45.1933 )
-nodes/Idle/node = SubResource( 72 )
-nodes/Idle/position = Vector2( -224, 112 )
-nodes/Jogging/node = SubResource( 75 )
-nodes/Jogging/position = Vector2( -560, 240 )
-nodes/MovementState/node = SubResource( 76 )
-nodes/MovementState/position = Vector2( 64, 128 )
-nodes/Run/node = SubResource( 77 )
-nodes/Run/position = Vector2( -544, 368 )
-nodes/RunSpeed/node = SubResource( 79 )
-nodes/RunSpeed/position = Vector2( -96, 224 )
-nodes/RunState/node = SubResource( 78 )
-nodes/RunState/position = Vector2( -288, 288 )
-node_connections = [ "output", 0, "MovementState", "MovementState", 0, "Idle", "MovementState", 1, "RunSpeed", "RunSpeed", 0, "RunState", "RunState", 0, "Jogging", "RunState", 1, "Run" ]
+[sub_resource type="AnimationNodeAnimation" id=88]
+animation = "gait-loop"
 
-[sub_resource type="AnimationNodeTransition" id=55]
-input_count = 2
-input_0/name = "Grounded"
-input_0/auto_advance = false
-input_1/name = "Airborne"
-input_1/auto_advance = false
+[sub_resource type="AnimationNodeAnimation" id=89]
+animation = "jog-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=90]
+animation = "jog-left-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=91]
+animation = "gait-left-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=92]
+animation = "jog-right-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=93]
+animation = "gait-right-loop"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id=94]
+blend_point_0/node = SubResource( 88 )
+blend_point_0/pos = Vector2( 0, 0 )
+blend_point_1/node = SubResource( 89 )
+blend_point_1/pos = Vector2( 0, 0.8 )
+blend_point_2/node = SubResource( 90 )
+blend_point_2/pos = Vector2( -1, 0.8 )
+blend_point_3/node = SubResource( 91 )
+blend_point_3/pos = Vector2( -1, 0 )
+blend_point_4/node = SubResource( 92 )
+blend_point_4/pos = Vector2( 1, 0.8 )
+blend_point_5/node = SubResource( 93 )
+blend_point_5/pos = Vector2( 1, 0 )
+min_space = Vector2( -1, 0 )
+
+[sub_resource type="AnimationNodeTimeSeek" id=101]
+
+[sub_resource type="AnimationNodeAnimation" id=85]
+animation = "run-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=86]
+animation = "run-left-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=87]
+animation = "run-right-loop"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=84]
+blend_point_0/node = SubResource( 85 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 86 )
+blend_point_1/pos = -1.0
+blend_point_2/node = SubResource( 87 )
+blend_point_2/pos = 1.0
+
+[sub_resource type="AnimationNodeTimeScale" id=79]
+
+[sub_resource type="AnimationNodeAnimation" id=115]
+animation = "crouch-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=116]
+animation = "crouch-start"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=117]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachine" id=118]
+states/crouch-loop/node = SubResource( 115 )
+states/crouch-loop/position = Vector2( 539, 85.56 )
+states/crouch-start/node = SubResource( 116 )
+states/crouch-start/position = Vector2( 255.8, 85.688 )
+transitions = [ "crouch-start", "crouch-loop", SubResource( 117 ) ]
+start_node = "crouch-start"
+
+[sub_resource type="AnimationNodeBlendTree" id=71]
+graph_offset = Vector2( -908.592, 118.303 )
+nodes/Idle/node = SubResource( 72 )
+nodes/Idle/position = Vector2( -496, 80 )
+nodes/IsCrouching/node = SubResource( 114 )
+nodes/IsCrouching/position = Vector2( 96, 160 )
+nodes/IsMoving/node = SubResource( 76 )
+nodes/IsMoving/position = Vector2( -320, 128 )
+nodes/IsRunning/node = SubResource( 78 )
+nodes/IsRunning/position = Vector2( -880, 320 )
+nodes/Jog/node = SubResource( 94 )
+nodes/Jog/position = Vector2( -1152, 240 )
+nodes/MovementReset/node = SubResource( 101 )
+nodes/MovementReset/position = Vector2( -528, 240 )
+nodes/Run/node = SubResource( 84 )
+nodes/Run/position = Vector2( -1152, 416 )
+nodes/RunSpeed/node = SubResource( 79 )
+nodes/RunSpeed/position = Vector2( -704, 256 )
+nodes/crouch_state/node = SubResource( 118 )
+nodes/crouch_state/position = Vector2( -144, 336 )
+node_connections = [ "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state", "RunSpeed", 0, "IsRunning", "MovementReset", 0, "RunSpeed", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "output", 0, "IsCrouching" ]
 
 [sub_resource type="AnimationNodeBlendTree" id=37]
-graph_offset = Vector2( -1282.4, 91.2 )
+graph_offset = Vector2( -1373.9, 135.07 )
+nodes/IsGrounded/node = SubResource( 55 )
+nodes/IsGrounded/position = Vector2( -992, 192 )
+nodes/air_state/node = SubResource( 109 )
+nodes/air_state/position = Vector2( -1312, 288 )
 nodes/balance_state/node = SubResource( 52 )
-nodes/balance_state/position = Vector2( -1232, 192 )
+nodes/balance_state/position = Vector2( -704, 272 )
 nodes/balancing/node = SubResource( 70 )
-nodes/balancing/position = Vector2( -896, 128 )
+nodes/balancing/position = Vector2( -464, 176 )
 nodes/countdown/node = SubResource( 65 )
 nodes/countdown/position = Vector2( 112, 160 )
 nodes/countdown_anim/node = SubResource( 66 )
 nodes/countdown_anim/position = Vector2( -144, 288 )
 nodes/ground_state/node = SubResource( 71 )
-nodes/ground_state/position = Vector2( -1408, -128 )
-nodes/grounded/node = SubResource( 55 )
-nodes/grounded/position = Vector2( -1104, -144 )
-node_connections = [ "output", 0, "countdown", "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "grounded", 0, "ground_state", "balancing", 0, "grounded", "balancing", 1, "balance_state" ]
+nodes/ground_state/position = Vector2( -1312, 160 )
+node_connections = [ "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "output", 0, "countdown" ]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=113]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=119]
 
 [node name="Sonic" type="KinematicBody" groups=["player"]]
 collision_layer = 2
 collision/safe_margin = 0.01
 script = ExtResource( 2 )
 pathFollower = NodePath("PathFollower")
-animator = NodePath("AnimationTree")
+animator = NodePath("Sonic")
 collisionWidth = 0.4
-root = NodePath("Sonic")
 moveSettings = ExtResource( 5 )
 airMoveSettings = ExtResource( 4 )
 strafeSettings = ExtResource( 8 )
@@ -232,21 +381,24 @@ jumpDashPower = 4.0
 jumpDashGravity = 18.0
 jumpDashMaxGravity = -24.0
 homingAttackSpeed = 32.0
-stompSpeed = -64.0
 backflipSpeed = 20.0
 speedBreakSpeed = 54.0
 attackLockoutSettings = ExtResource( 12 )
 enemyBouncePower = 12.0
 enemyBounceGravity = 18.0
+sidleSettings = ExtResource( 13 )
 grindingSettings = ExtResource( 9 )
 grindStepLockoutSettings = ExtResource( 11 )
 grindShuffleSpeed = 28
 grindStepSpeed = 14
 grindStepHeight = 12
 environmentMask = 1
-ringParticleEffect = NodePath("VFX/RingParticle")
 
 [node name="Sonic" parent="." instance=ExtResource( 1 )]
+script = ExtResource( 14 )
+animator = NodePath("../AnimationTree")
+root = NodePath("..")
+ringParticleEffect = NodePath("../VFX/RingParticle")
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.32, 0 )
@@ -273,7 +425,6 @@ shape = SubResource( 19 )
 
 [node name="PathFollower" type="PathFollow" parent="."]
 rotation_mode = 4
-cubic_interp = false
 loop = false
 
 [node name="VFX" type="Spatial" parent="."]
@@ -294,16 +445,26 @@ draw_pass_1 = SubResource( 15 )
 tree_root = SubResource( 37 )
 anim_player = NodePath("../Sonic/AnimationPlayer")
 active = true
+parameters/IsGrounded/current = 0
+parameters/air_state/IsJumpDashing/current = 0
+parameters/air_state/IsJumping/current = 1
+parameters/air_state/fall/active = false
+parameters/air_state/jump/active = false
+parameters/air_state/jump_cancel_time/scale = 1.0
+parameters/air_state/jump_dash_state/playback = SubResource( 113 )
 parameters/balance_state/playback = ExtResource( 10 )
 parameters/balance_state/balance_left/blend_position = -0.00141644
 parameters/balance_state/balance_right/blend_position = -0.00914633
 parameters/balancing/current = 0
 parameters/countdown/active = false
-parameters/ground_state/Jogging/blend_position = 0.0
-parameters/ground_state/MovementState/current = 0
+parameters/ground_state/IsCrouching/current = 0
+parameters/ground_state/IsMoving/current = 0
+parameters/ground_state/IsRunning/current = 0
+parameters/ground_state/Jog/blend_position = Vector2( 0, 0 )
+parameters/ground_state/MovementReset/seek_position = -1.0
+parameters/ground_state/Run/blend_position = 0.0
 parameters/ground_state/RunSpeed/scale = 1.0
-parameters/ground_state/RunState/current = 0
-parameters/grounded/current = 0
+parameters/ground_state/crouch_state/playback = SubResource( 119 )
 
 [connection signal="area_entered" from="ObjectTrigger" to="." method="OnObjectTriggerEnter"]
 [connection signal="area_exited" from="ObjectTrigger" to="." method="OnObjectTriggerExit"]
