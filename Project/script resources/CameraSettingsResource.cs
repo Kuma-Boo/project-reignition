@@ -17,6 +17,15 @@ namespace Project.Gameplay
 		public float heightTrackingStrength; //How much to follow the player's height
 
 		[Export]
+		public RotationMode rotationMode;
+		public enum RotationMode
+		{
+			FollowPath,
+			FollowY,
+			Ignore,
+		}
+
+		[Export]
 		public Vector3 constantOffset; //Leave at Zero to follow the active path.
 		[Export]
 		public bool useCrossfade; //Use a crossfade transition?

@@ -44,7 +44,6 @@ namespace Project.Gameplay
 		private bool IsActivationValid()
 		{
 			if (!Character.IsOnGround || Character.SpeedRatio < minimumSpeedRatio) return false;
-
 			return true;
 		}
 

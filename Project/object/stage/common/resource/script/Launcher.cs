@@ -7,67 +7,65 @@ namespace Project.Gameplay
 	public class Launcher : Area
 	{
 		[Export]
-		public float travelDistance; //How far to travel
-		[Export(PropertyHint.Range, ".2f, 5f")]
-		public float travelTime = .5f; //How long to travel
+		public float startingHeight; //Height at the beginning of the arc
 		[Export]
-		public float launchOffset = .25f; //Vertical position offset
+		public float middleHeight; //Height at the highest point of the arc
 		[Export]
-		public Curve travelCurve; //Optional curve to control speed
+		public float finalHeight; //Height at the end of the arc
+		[Export]
+		public float distance; //How far to travel
 
 		[Export]
-		public int characterRecenterSpeed; //How fast to center the character
+		public LaunchDirection launchDirection;
+		public enum LaunchDirection
+		{
+			Forward,
+			Up,
+		}
+		public Vector3 GetLaunchDirection()
+		{
+			if(launchDirection == LaunchDirection.Forward)
+				return this.Forward();
 
-		[Export(PropertyHint.Range, "0, 1")]
-		public float momentumMultiplier = 1f; //How much momentum to keep when the launch ends?
+			return this.Up();
+		}
 
-		public bool IsCharacterCentered { get; private set; }
+		public Vector3 InitialVelocity => GetLaunchDirection().Flatten().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
 
-		private float launcherTime; //Current launcher time, used for position calculations
+		public float InitialHorizontalVelocity => distance / TotalTravelTime;
+		public float InitialVerticalVelocity => Mathf.Sqrt(-2 * GRAVITY * (middleHeight - startingHeight));
+		public float FinalVerticalVelocity => GRAVITY * SecondHalfTime;
+		public float FirstHalfTime => Mathf.Sqrt((-2 * middleHeight) / GRAVITY);
+		public float SecondHalfTime => Mathf.Sqrt((-2 * (middleHeight - finalHeight)) / GRAVITY);
+		public float TotalTravelTime => FirstHalfTime + SecondHalfTime;
+		public Vector3 StartingPoint => GlobalTransform.origin + Vector3.Up * startingHeight;
 
-		protected CharacterController Character => CharacterController.instance;
+		public const float GRAVITY = -24.0f;
+
+		public Vector3 InterpolatePosition(float t)
+		{
+			Vector3 displacement = InitialVelocity * t + Vector3.Up * GRAVITY * t * t / 2f;
+			return StartingPoint + displacement;
+		}
 
 		public virtual void Activate(Area a)
 		{
-			launcherTime = 0; //Reset launcher time
-
-			IsCharacterCentered = characterRecenterSpeed == 0;
+			IsCharacterCentered = recenterSpeed == 0;
 			Character.StartLauncher(this);
 		}
 
-		public bool IsLaunchFinished => launcherTime + PhysicsManager.physicsDelta >= travelTime;
+		[Export]
+		public int recenterSpeed; //How fast to recenter the character
+		public bool IsCharacterCentered { get; private set; }
+		private CharacterController Character => CharacterController.instance;
 
-		public Vector3 CenterCharacter()
+		public Vector3 RecenterCharacter()
 		{
-			Vector3 pos = Character.GlobalTransform.origin.MoveToward(GetStartingPoint(), characterRecenterSpeed * PhysicsManager.physicsDelta);
-			IsCharacterCentered = pos.IsEqualApprox(GetStartingPoint());
+			Vector3 pos = Character.GlobalTransform.origin.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
+			IsCharacterCentered = pos.IsEqualApprox(StartingPoint);
 			return pos;
 		}
 
-		public virtual Vector3 InterpolatePosition(float t)
-		{
-			t = GetInterpolationRatio(t);
-			Vector3 position = GetEndPoint() * t;
-			return GetStartingPoint() + position;
-		}
-
-		public Vector3 CalculateMovementDelta()
-		{
-			Vector3 startingPosition = InterpolatePosition(launcherTime);
-			launcherTime += PhysicsManager.physicsDelta;
-			Vector3 targetPosition = InterpolatePosition(launcherTime);
-			return (targetPosition - startingPosition) / PhysicsManager.physicsDelta;
-		}
-
-		protected float GetInterpolationRatio(float t)
-		{
-			t = Mathf.Clamp(t / travelTime, 0, 1f);
-			if (travelCurve != null)
-				t = travelCurve.InterpolateBaked(t);
-			return t;
-		}
-
-		protected virtual Vector3 GetStartingPoint() => GlobalTransform.origin + this.Up() * launchOffset;
-		protected virtual Vector3 GetEndPoint() => this.Up() * travelDistance;
+		public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
 	}
 }

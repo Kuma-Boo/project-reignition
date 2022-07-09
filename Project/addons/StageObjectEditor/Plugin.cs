@@ -14,7 +14,7 @@ namespace Project.Editor
 
 		public override bool Handles(Object obj)
 		{
-			return obj is Launcher || obj is DriftTrigger || obj is Majin;
+			return obj is DriftTrigger || obj is Majin || obj is Launcher;
 		}
 		public override void Edit(Object obj) => target = obj as Spatial;
 
@@ -42,12 +42,14 @@ namespace Project.Editor
 		private void UpdateLauncher(Control overlay)
 		{
 			Array<Vector2> points = new Array<Vector2>();
+			Launcher launcher = (target as Launcher);
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
-				Vector3 point = (target as Launcher).InterpolatePosition(i / (float)PREVIEW_RESOLUTION);
-				if (!editorCam.IsPositionBehind(point))
-					points.Add(editorCam.UnprojectPosition(point));
+				float simulationTime = (i / (float)PREVIEW_RESOLUTION) * launcher.TotalTravelTime;
+				Vector3 position = launcher.InterpolatePosition(simulationTime);
+				if (!editorCam.IsPositionBehind(position))
+					points.Add(editorCam.UnprojectPosition(position));
 			}
 
 			Vector2[] pointsList = new Vector2[points.Count];

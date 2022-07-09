@@ -163,13 +163,6 @@ namespace Project.Gameplay
 		{
 			ProcessStateMachine();
 
-			if (JustLandedOnGround)
-			{
-				landingResetTimer--;
-				if(landingResetTimer == 0)
-					LandOnGround();
-			}
-
 			UpdatePhysics();
 			Animator.UpdateAnimation();
 		}
@@ -455,12 +448,16 @@ namespace Project.Gameplay
 		public float landingBoost; //Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster.
 		private void LandOnGround()
 		{
+			IsOnGround = true;
+			VerticalSpeed = 0;
+
 			isJumpClamped = false;
 			IsAttacking = false;
 			canJumpDash = false;
 			isGrindStepping = false;
 			isAccelerationJump = false;
-			currentJumpLength = 0;
+
+			landingTimer = 2;
 
 			ActionState = ActionStates.Normal;
 
@@ -484,16 +481,15 @@ namespace Project.Gameplay
 		private bool isJumpClamped; //True after the player releases the jump button
 		private bool canJumpDash;
 		private bool isAccelerationJump;
-		private float jumpGroundNormal;
 		private float currentJumpLength; //Amount of time the jump button was held
 		private const float ACCELERATION_JUMP_LENGTH = .06f; //How fast the jump button needs to be released for an "acceleration jump"
 		private void Jump()
 		{
+			currentJumpLength = 0;
 			isJumpClamped = false;
 			IsOnGround = false;
 			canJumpDash = true;
 			ActionState = ActionStates.Jumping;
-			jumpGroundNormal = ForwardDirection.y;
 
 			VerticalSpeed = jumpPower;
 			if (MoveSpeed < 0) //Disallow jumping backwards
@@ -507,7 +503,7 @@ namespace Project.Gameplay
 			if (isAccelerationJump && currentJumpLength >= ACCELERATION_JUMP_LENGTH)
 			{
 				//Acceleration jump dash?
-				if (Controller.verticalAxis.value > 0 && MoveSpeed < accelerationJumpSpeed)
+				if (Controller.verticalAxis.value > 0)
 				{
 					ActionState = ActionStates.JumpDashing;
 					MoveSpeed = accelerationJumpSpeed;
@@ -650,12 +646,6 @@ namespace Project.Gameplay
 
 			StrafeSpeed = 0;
 			MoveSpeed = -backflipSpeed;
-
-			Vector3 castVector = -worldDirection * 10f;
-			RaycastHit hit = this.CastRay(CenterPosition, castVector, environmentMask);
-			Debug.DrawRay(CenterPosition, castVector, hit ? Colors.Red : Colors.White);
-			if (hit)
-				worldDirection = worldDirection.LinearInterpolate(hit.normal, .2f).Normalized();
 		}
 
 		private void StartBackflip()
@@ -876,19 +866,20 @@ namespace Project.Gameplay
 		public float enemyBounceGravity;
 		private bool IsBouncingOffEnemy => ActionState == ActionStates.EnemyBounce;
 		private float bounceTimer;
-		private const float BOUNCE_LOCKOUT_TIME = .2f;
+		private const float BOUNCE_LOCKOUT_TIME = .1f;
 		private void UpdateEnemyBounce()
 		{
-			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
-			if (bounceTimer == 0) //Bouncing off an enemy
-				CheckJumpDash();
-
-			CheckStomp();
-
 			MoveSpeed = StrafeSpeed = 0;
 			VerticalSpeed -= enemyBounceGravity * PhysicsManager.physicsDelta;
 			if (VerticalSpeed < 0)
 				ActionState = ActionStates.Normal;
+
+			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
+			if (bounceTimer == 0) //Bouncing off an enemy
+			{
+				CheckJumpDash();
+				CheckStomp();
+			}
 		}
 
 		public void HitEnemy(Vector3 enemyPos) //Called when defeating an enemy
@@ -994,6 +985,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Launcher
+		private float launcherTime;
 		private Launcher activeLauncher;
 		private Vector3 launcherMovementDelta;
 		public void StartLauncher(Launcher newLauncher)
@@ -1007,37 +999,29 @@ namespace Project.Gameplay
 			StrafeSpeed = 0;
 
 			IsOnGround = false;
+			launcherTime = 0;
 			launcherMovementDelta = Vector3.Zero;
 		}
 
 		private void UpdateLauncher()
 		{
 			customPhysicsEnabled = true;
+			Transform t = GlobalTransform;
 			if (!activeLauncher.IsCharacterCentered)
+				t.origin = activeLauncher.RecenterCharacter();
+			else
 			{
-				Transform t = GlobalTransform;
-				t.origin = activeLauncher.CenterCharacter();
-				GlobalTransform = t;
-				return;
+				t.origin = activeLauncher.InterpolatePosition(launcherTime);
+				if (activeLauncher.IsLauncherFinished(launcherTime)) //Revert to normal state
+				{
+					MovementState = MovementStates.Normal;
+					MoveSpeed = activeLauncher.InitialHorizontalVelocity;
+					VerticalSpeed = activeLauncher.FinalVerticalVelocity;
+				}
+
+				launcherTime += PhysicsManager.physicsDelta;
 			}
-
-			Vector3 movementDelta = activeLauncher.CalculateMovementDelta();
-			MoveAndSlide(movementDelta);
-			if (movementDelta != Vector3.Zero)
-				launcherMovementDelta = movementDelta;
-
-			if (activeLauncher.IsLaunchFinished) //Revert to normal state
-			{
-				MovementState = MovementStates.Normal;
-
-				//Calculate velocity to carry through based on the launch direction
-				float exitSpeed = launcherMovementDelta.Length() * activeLauncher.momentumMultiplier;  //"True" exit speed
-				Vector3 exitNormal = launcherMovementDelta.Normalized();
-				VerticalSpeed = exitSpeed * exitNormal.y;
-				float forwardDotProd = exitNormal.RemoveVertical().Normalized().Dot(ForwardDirection.RemoveVertical().Normalized());
-				MoveSpeed = exitSpeed * forwardDotProd;
-				StrafeSpeed = exitSpeed * (1 - Mathf.Abs(forwardDotProd)) * Mathf.Sign(forwardDotProd);
-			}
+			GlobalTransform = t;
 		}
 		#endregion
 
@@ -1146,8 +1130,6 @@ namespace Project.Gameplay
 				StopGrinding();
 			}
 		}
-
-		public bool CanGrind() =>  MovementState != MovementStates.Grinding && !IsRising && (!IsOnGround || JustLandedOnGround);
 
 		public void StopGrinding()
 		{
@@ -1376,9 +1358,9 @@ namespace Project.Gameplay
 			if (customPhysicsEnabled) return; //When physics are handled in the state machine
 
 			/*Movement method
-			Move path follower first,
-			Perform all nessecary collision checks
-			Then move character controller to follow
+			Move path follower
+			Perform collision checks
+			Move character
 			Resync
 			*/
 			float movementDelta = MoveSpeed * PhysicsManager.physicsDelta;
@@ -1414,17 +1396,9 @@ namespace Project.Gameplay
 				}
 			}
 
-			//Get the average direction of the pathfollow before changing the offset, AND after.
+			//Use the average direction sampled from before and after changing the offset.
 			//Increases accuracy around turns.
-			movementDirection = movementDirection.LinearInterpolate(ForwardDirection, .5f);
-			//FIX Smooths "bumping" that occours when jumping up a surface that has a sudden change in steepness.
-			if (IsJumping && movementDirection.y > jumpGroundNormal)
-			{
-				jumpGroundNormal = Mathf.Lerp(jumpGroundNormal, movementDirection.y, .1f);
-				movementDirection.y = jumpGroundNormal;
-			}
-
-			movementDirection = movementDirection.Normalized();
+			movementDirection = movementDirection.LinearInterpolate(ForwardDirection, .5f).Normalized();
 
 			CheckMainWall(movementDirection);
 			CheckGround();
@@ -1435,7 +1409,7 @@ namespace Project.Gameplay
 			CheckStrafeWall(1);
 			CheckStrafeWall(-1);
 
-			if (!IsOnGround)
+			if (!IsOnGround && ActionState == ActionStates.JumpDashing)
 				movementDirection = movementDirection.Flatten().Normalized();
 			MoveAndSlide(movementDirection * MoveSpeed + StrafeDirection * StrafeSpeed + worldDirection * VerticalSpeed);
 			CheckCeiling();
@@ -1444,20 +1418,22 @@ namespace Project.Gameplay
 		}
 
 		public Vector3 worldDirection = Vector3.Up;
-		private const float COLLISION_PADDING = .01f;
 
 		public bool IsOnGround { get; private set; }
-		private bool JustLandedOnGround => landingResetTimer != 0; //Flag for doing stuff on land
-		private int landingResetTimer;
+		public bool JustLandedOnGround => landingTimer > 0; //Flag for doing stuff on land
+		private int landingTimer;
 		private const float GROUND_SNAP_LENGTH = .2f;
-		private const float MAX_ANGLE_CHANGE = 60f;
+		private const float MAX_ANGLE_CHANGE = 80f;
 
 		private void CheckGround()
 		{
+			if (JustLandedOnGround) //RESET FLAG
+				landingTimer--;
+
 			Vector3 castOrigin = CenterPosition;
 			float castLength = collisionHeight;
 
-			if (IsOnGround || IsStomping) //FIX allow interaction with grind rails
+			if (IsOnGround)
 				castLength += GROUND_SNAP_LENGTH;
 			else if (IsFalling)
 				castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
@@ -1487,20 +1463,15 @@ namespace Project.Gameplay
 
 			if (groundHit && !groundHit.collidedObject.IsInGroup("wall")) //Don't count walls as the ground
 			{
-				//Fix don't allow 90 degree angle changes in a single frame
+				//FIX don't allow 90 degree angle changes in a single frame
 				if (Mathf.Rad2Deg(groundHit.normal.AngleTo(Vector3.Up) - worldDirection.AngleTo(Vector3.Up)) > MAX_ANGLE_CHANGE)
 					return;
 
-				//Fix microscopic jittering on flat surfaces
-				Vector3 newNormal = (groundHit.normal * 100).Round() * .01f; //Round to nearest hundredth
+				Vector3 newNormal = (groundHit.normal * 100).Round() * .01f; //FIX Round to nearest hundredth to reduce jittering
 				worldDirection = newNormal.Normalized();
 
 				if(!IsOnGround)
-				{
-					landingResetTimer = 2;
-					IsOnGround = true;
-					VerticalSpeed = 0;
-				}
+					LandOnGround();
 
 				Transform t = GlobalTransform;
 				t.origin = groundHit.point;
@@ -1509,18 +1480,20 @@ namespace Project.Gameplay
 			else
 			{
 				if (IsOnGround && !IsBackflipping)
-					Animator.LeaveGround();
+					Animator.FallAnimation();
 				
 				IsOnGround = false;
 
 				if (IsBackflipping) return;
 
+				Debug.DrawRay(CenterPosition, worldDirection * 5, Colors.Blue);
+
 				worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .1f, 0f, 1f)).Normalized();
 				/*
 				if (!jumpedFromGround || IsFalling)
 				else //Stay aligned with the path (Somewhat)
-					worldDirection = worldDirection.LinearInterpolate(-ForwardDirection.Cross(StrafeDirection), .05f).Normalized();
 				*/
+				//worldDirection = worldDirection.LinearInterpolate(-ForwardDirection.Cross(StrafeDirection), .05f).Normalized();
 			}
 		}
 
@@ -1615,7 +1588,7 @@ namespace Project.Gameplay
 			Right,
 			Both
 		}
-		private const float STRAFE_SMOOTHING_LENGTH = .08f; //At what distance to apply smoothing to strafe (To avoid "Bumpy Corners")
+		private const float STRAFE_SMOOTHING_LENGTH = .1f; //At what distance to apply smoothing to strafe (To avoid "Bumpy Corners")
 
 		//Checks for wall collision side to side. (Always active)
 		private void CheckStrafeWall(int direction)
@@ -1624,7 +1597,7 @@ namespace Project.Gameplay
 
 			bool isActiveDirection = Mathf.Sign(StrafeSpeed) == direction;
 			Vector3 castOrigin = CenterPosition;
-			float castLength = (collisionWidth + STRAFE_SMOOTHING_LENGTH + COLLISION_PADDING);
+			float castLength = (collisionWidth + STRAFE_SMOOTHING_LENGTH);
 			castLength += Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
 
 			Vector3 castVector = StrafeDirection * castLength * direction;

@@ -15,6 +15,7 @@ namespace Project.Core
 		public static Button debugPause;
 		public static Button debugAdvance;
 		public static Button debugRestart;
+		public static Button debugTurbo;
 
 		public static bool ignoreInputs; //Flag to ignore inputs until the next frame
 		public static Controller controller;
@@ -37,6 +38,7 @@ namespace Project.Core
 			debugPause.Update(Input.IsKeyPressed((int)KeyList.P));
 			debugAdvance.Update(Input.IsKeyPressed((int)KeyList.F1));
 			debugRestart.Update(Input.IsKeyPressed((int)KeyList.F5));
+			debugTurbo.Update(Input.IsKeyPressed((int)KeyList.Tab));
 		}
 
 		public override void _Input(InputEvent e)

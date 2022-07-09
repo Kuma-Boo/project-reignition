@@ -45,7 +45,7 @@ namespace Project.Gameplay
 				for (int i = 0; i < nodes.Count; i++)
 				{
 					if (!(nodes[i] is GrindRail)) continue;
-					(nodes[i] as GrindRail).generate = true;
+					(nodes[i] as GrindRail).GenerateRail();
 				}
 
 				generateAll = false;
@@ -92,7 +92,7 @@ namespace Project.Gameplay
 
 			_collider.Shape = new BoxShape()
 			{
-				Extents = new Vector3(.1f, .2f, length * .5f + .42f)
+				Extents = new Vector3(.4f, .2f, length * .5f + .42f)
 			};
 			Transform t = _collider.Transform;
 			t.origin = Vector3.Forward * length * .5f;
@@ -119,7 +119,7 @@ namespace Project.Gameplay
 
 		public void OnEntered(Area _)
 		{
-			if (!Character.CanGrind()) return;
+			if (!CanGrind) return;
 
 			//Calculate connection point
 			Vector3 delta = Character.GlobalTransform.origin - GlobalTransform.origin;
@@ -134,5 +134,7 @@ namespace Project.Gameplay
 			if (Character.MovementState != CharacterController.MovementStates.Grinding) return;
 			Character.StopGrinding();
 		}
+
+		private bool CanGrind => Character.MovementState != CharacterController.MovementStates.Grinding && !Character.IsRising && (!Character.IsOnGround || Character.JustLandedOnGround);
 	}
 }

@@ -72,14 +72,6 @@ namespace Project.Core
 		}
 		public static Vector2 RotateSmooth(this Vector2 v, Vector2 t, float spd) => v.Rotated(v.AngleTo(t) * spd);
 
-		//Rotates a vector to align to a transform
-		public static Vector3 AlignVectorToTransform(this Vector3 v, Transform t)
-		{
-			v = v.Rotated(t.Up(), t.Forward().SignedAngleTo(Vector3.Forward, t.Up()));
-			v = v.Rotated(t.Right(), t.Up().SignedAngleTo(Vector3.Up, t.Right()));
-			return v;
-		}
-
 		public static void AddExplosionForce(this RigidBody body, Vector3 explosionPoint, float power)
 		{
 			Vector3 blastDir = body.GlobalTransform.origin - explosionPoint;

@@ -9,10 +9,21 @@ namespace Project.Gameplay
 		[Export]
 		public float length; //How long for the boost pad to last
 
+		private bool isQueued;
+
 		private CharacterController Character => CharacterController.instance;
 
-		public void OnEntered(Area _)
+		public override void _PhysicsProcess(float _)
 		{
+			if (isQueued && Character.IsOnGround)
+				Activate();
+		}
+
+		public void OnEntered(Area _) => isQueued = true;
+
+		private void Activate()
+		{
+			isQueued = false;
 			Character.CancelBackflip();
 			Character.SetControlLockout(new ControlLockoutResource()
 			{

@@ -37,6 +37,11 @@ namespace Project.Core
 				isAdvancingFrame = false;
 			}
 
+			if (InputManager.debugTurbo.wasPressed)
+				Engine.TimeScale = 2.5f;
+			else if (InputManager.debugTurbo.wasReleased)
+				Engine.TimeScale = 1f;
+
 			if (InputManager.debugPause.wasPressed)
 				GetTree().Paused = !IsPaused;
 

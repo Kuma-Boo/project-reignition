@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://object/stage/common/resource/material/JumpPanelBelt.tres" type="Material" id=1]
-[ext_resource path="res://object/stage/common/resource/script/JumpPanel.cs" type="Script" id=2]
+[ext_resource path="res://object/stage/common/resource/script/Launcher.cs" type="Script" id=2]
 [ext_resource path="res://object/stage/common/resource/material/Panel.tres" type="Material" id=3]
 
 [sub_resource type="ArrayMesh" id=1]
@@ -71,21 +71,16 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource( 2 )
-travelDistance = 20.0
-travelTime = 1.5
-launchOffset = 1.0
-characterRecenterSpeed = 108
-momentumMultiplier = 0.5
-travelHeight = 8.0
+startingHeight = 1.0
+recenterSpeed = 64
 
 [node name="Mesh" type="MeshInstance" parent="."]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 mesh = SubResource( 1 )
 skeleton = NodePath("")
-material/0 = null
-material/1 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 0, 0.7, 0 )
+transform = Transform( -1, -2.99004e-08, -8.21506e-08, 0, 0.939693, -0.34202, 8.74228e-08, -0.34202, -0.939693, 0, 0.7, 0 )
 shape = SubResource( 3 )
 
 [node name="Animator" type="AnimationPlayer" parent="."]

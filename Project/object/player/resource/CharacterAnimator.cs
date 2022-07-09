@@ -59,12 +59,13 @@ namespace Project.Gameplay
 		private const string JUMPING_PARAMETER = "parameters/air_state/IsJumping/current";
 		private const string JUMPDASH_PARAMETER = "parameters/air_state/IsJumpDashing/current";
 		private const string FALL_TRIGGER_PARAMETER = "parameters/air_state/fall/active";
+		private const string FALL_RESET_PARAMETER = "parameters/air_state/fall_reset/seek_position";
 		private const string JUMP_CANCEL_TIME_PARAMETER = "parameters/air_state/jump_cancel_time/scale";
 
 		public void Jump()
 		{
+			_animator.Set(JUMPING_PARAMETER, 1);
 			_animator.Set(JUMP_TRIGGER_PARAMETER, true);
-			LeaveGround();
 		}
 
 		public void JumpAccel()
@@ -74,14 +75,16 @@ namespace Project.Gameplay
 
 		public void Stomp()
 		{
-			_animator.Set(JUMP_CANCEL_TIME_PARAMETER, 2f);
-			_animator.Set(FALL_TRIGGER_PARAMETER, true);
+			FallAnimation();
+			_animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
 		}
 
-		public void LeaveGround()
+		public void FallAnimation()
 		{
+			_animator.Set(JUMPING_PARAMETER, 0);
 			_animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1f);
 			_animator.Set(FALL_TRIGGER_PARAMETER, true);
+			_animator.Set(FALL_RESET_PARAMETER, 0);
 		}
 
 		public void UpdateAnimation()
@@ -133,7 +136,7 @@ namespace Project.Gameplay
 				if (InputManager.controller.MovementAxis != Vector2.Zero)
 				{
 					float targetDirection = new Vector2(_character.GetStrafeInputValue(), -Mathf.Abs(_character.GetMovementInputValue())).AngleTo(Vector2.Up);
-					targetStrafeTilt = -Mathf.Clamp((targetDirection - _root.Rotation.y) / Mathf.Deg2Rad(90), -1, 1);
+					targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Deg2Rad(90), -1, 1);
 				}
 
 				if (_character.SpeedRatio > .8f)
@@ -145,7 +148,7 @@ namespace Project.Gameplay
 
 				strafeTilt = Mathf.Lerp(strafeTilt, targetStrafeTilt, .2f);
 			}
-
+			
 			float runSpeed = Mathf.Max(_character.SpeedRatio, Mathf.Abs(_character.strafeSettings.GetSpeedRatioClamped(_character.StrafeSpeed)));
 			_animator.Set("parameters/ground_state/Jog/blend_position", new Vector2(strafeTilt, runSpeed));
 			_animator.Set("parameters/ground_state/Run/blend_position", strafeTilt);
@@ -157,10 +160,11 @@ namespace Project.Gameplay
 		{
 			_animator.Set(JUMPDASH_PARAMETER, _character.IsJumpDashing ? 1 : 0);
 
-			if(_character.ActionState == CharacterController.ActionStates.Jumping && _character.VerticalSpeed > 5f)
-				_animator.Set(JUMPING_PARAMETER, 1);
-			else
-				_animator.Set(JUMPING_PARAMETER, 0);
+			if ((int)_animator.Get(JUMPING_PARAMETER) == 1)
+			{
+				if (_character.ActionState != CharacterController.ActionStates.Jumping || _character.VerticalSpeed <= 5f)
+					FallAnimation();
+			}
 		}
 
 		#region VFX

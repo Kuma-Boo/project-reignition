@@ -30,6 +30,8 @@ namespace Project.Gameplay
 		public CameraSettingsResource backstepCameraSettings;
 		public CameraSettingsResource overrideCameraSettings; //Override this for more specific camera control
 
+		private CameraSettingsResource activeSettings;
+
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
@@ -79,6 +81,11 @@ namespace Project.Gameplay
 		[Export]
 		public float strafeSmoothing;
 
+		private const float positionSmoothing = .8f;
+		private const float rotationSmoothing = .2f;
+		private Vector3 playerLocalPosition;
+		private bool resetFlag = true; //Set to true to skip smoothing
+
 		#region Backstep Camera
 		private float backstepTimer;
 		private bool IsBackStepping => backstepTimer >= BACKSTEP_CAMERA_DELAY;
@@ -104,22 +111,10 @@ namespace Project.Gameplay
 
 		private void UpdateGameplayCamera()
 		{
-			if (freeCamEnabled) return;
+			UpdateActiveSettings();
 
-			//Calculate the active camera settings
-			CameraSettingsResource activeSettings = overrideCameraSettings;
-			if (activeSettings == null)
-			{
-				UpdateBackstep();
-
-				if (IsBackStepping)
-					activeSettings = backstepCameraSettings;
-				else
-					activeSettings = defaultCameraSettings;
-			}
-
-			Vector3 playerLocalPosition = _player.GlobalTransform.origin - PlayerPathFollower.GlobalTransform.origin;
-			playerLocalPosition = playerLocalPosition.AlignVectorToTransform(PlayerPathFollower.GlobalTransform);
+			playerLocalPosition = _player.GlobalTransform.origin - PlayerPathFollower.GlobalTransform.origin;
+			playerLocalPosition = PlayerPathFollower.GlobalTransform.basis.Inverse().Xform(playerLocalPosition);
 
 			Vector3 targetPosition = _player.CenterPosition;
 			Basis targetBasis = GlobalTransform.basis;
@@ -129,12 +124,14 @@ namespace Project.Gameplay
 				Vector3 offset = activeSettings.constantOffset;
 				targetPosition += offset;
 			}
-			else if(activePath != null)
+			else if (activePath != null)
 			{
-				//Resync position
-				float offset = activePath.Curve.GetClosestOffset(PlayerPathFollower.GlobalTransform.origin - activePath.GlobalTransform.origin) - activeSettings.distance;
-				_cameraPathFollower.VOffset = activeSettings.height;
+				//Calculate Rotation
+				_cameraPathFollower.Offset = PlayerPathFollower.Offset + _player.MoveSpeed * .1f * PhysicsManager.physicsDelta;
+				targetBasis = _cameraPathFollower.GlobalTransform.basis;
 
+				//Calculate position
+				float offset = _cameraPathFollower.Offset - activeSettings.distance;
 				if (offset < 0)
 				{
 					_cameraPathFollower.VOffset += Mathf.Abs(offset);
@@ -142,29 +139,55 @@ namespace Project.Gameplay
 				}
 				_cameraPathFollower.Offset = offset;
 
+				_cameraPathFollower.VOffset = activeSettings.height;
 				targetPosition = _cameraPathFollower.GlobalTransform.origin;
-				targetBasis = _cameraPathFollower.GlobalTransform.basis;
 
 				//Track height
 				targetPosition += PlayerPathFollower.Up() * playerLocalPosition.y * activeSettings.heightTrackingStrength;
 			}
 
+			if (freeCamEnabled) return;
+
+			UpdatePitch();
+
 			Transform t = GlobalTransform;
-			t.origin = targetPosition;
-			t.basis = targetBasis;
+			if (resetFlag)
+			{
+				resetFlag = false;
+				t.origin = targetPosition;
+				t.basis = targetBasis;
+			}
+			else
+			{
+				float smoothing = Mathf.Abs(_player.SpeedRatio);
+				t.origin = t.origin.LinearInterpolate(targetPosition, smoothing * positionSmoothing);
+				t.basis = t.basis.Slerp(targetBasis.Orthonormalized(), smoothing * rotationSmoothing).Orthonormalized();
+			}
 			GlobalTransform = t;
+		}
 
-			/*
-			//TODO Look at player. Currently broken.
-			Vector3 playerToCameraLocalPosition = _player.CenterPosition - GlobalTransform.origin;
-			playerToCameraLocalPosition = playerToCameraLocalPosition.AlignVectorToTransform(_cameraPathFollower.GlobalTransform);
+		private void UpdateActiveSettings()
+		{
+			//Calculate the active camera settings
+			activeSettings = overrideCameraSettings;
+			if (activeSettings == null)
+			{
+				UpdateBackstep();
 
-			Vector2 playerDirection = new Vector2(playerToCameraLocalPosition.y, playerToCameraLocalPosition.z).Normalized();
-			_gimbal.Rotation = Vector3.Right * playerDirection.AngleTo(Vector2.Up);
+				if (IsBackStepping)
+					activeSettings = backstepCameraSettings;
+				else
+					activeSettings = defaultCameraSettings;
+			}
+		}
 
-			if(_camera.GlobalTransform.origin != _player.CenterPosition)
-				_camera.LookAt(_player.CenterPosition, Vector3.Up);
-			*/
+		private void UpdatePitch()
+		{
+			if (activeSettings.constantOffset != Vector3.Zero) return;
+
+			float factor = Mathf.Clamp((1 - activeSettings.heightTrackingStrength) * 2f, 0, 1);
+			float angle = new Vector2(activeSettings.distance, playerLocalPosition.y).AngleTo(Vector2.Right);
+			_gimbal.Rotation = Vector3.Right * angle * factor;
 		}
 
 		public void SetActivePath(Path newPath)
