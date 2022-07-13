@@ -30,7 +30,7 @@ namespace Project.Gameplay
 			if (!IsRespawnable()) return;
 
 			spawnData.UpdateSpawnData(this);
-			StageManager.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.RegisterRespawnableObject(this);
 			Spawn();
 		}
 

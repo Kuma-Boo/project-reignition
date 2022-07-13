@@ -7,6 +7,15 @@ namespace Project.Gameplay
 	public class Launcher : Area
 	{
 		[Export]
+		public LauncherType launcherType;
+		public enum LauncherType
+		{
+			Spring,
+			JumpPanel,
+			Jump, //Use this to channel the power of Mario.
+		}
+
+		[Export]
 		public float startingHeight; //Height at the beginning of the arc
 		[Export]
 		public float middleHeight; //Height at the highest point of the arc

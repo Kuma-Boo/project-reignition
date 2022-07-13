@@ -118,11 +118,25 @@ namespace Project.Gameplay
 
 		#endregion
 
-		#region Automation
+		#region Automation & Events
 		private Vector3 automationDifference;
+		private Spatial automationParent;
+
+		public void StartFollowingEventObject(Spatial obj)
+		{
+			automationParent = obj;
+
+			MoveSpeed = 0;
+			StrafeSpeed = 0;
+			VerticalSpeed = 0;
+
+			MovementState = MovementStates.Automation;
+		}
+
 		public void StartAutomation()
 		{
 			MovementState = MovementStates.Automation;
+			ActionState = ActionStates.Normal;
 			automationDifference = GlobalTransform.origin - PathFollower.GlobalTransform.origin;
 			MoveSpeed = 0;
 			StrafeSpeed = 0;
@@ -133,20 +147,31 @@ namespace Project.Gameplay
 
 		private void UpdateAutomation()
 		{
-			MoveSpeed = moveSettings.speed;
-			PathFollower.Offset += MoveSpeed * PhysicsManager.physicsDelta;
-
 			customPhysicsEnabled = true;
-			automationDifference = automationDifference.MoveToward(Vector3.Zero, MoveSpeed * PhysicsManager.physicsDelta);
+			automationDifference = automationDifference.LinearInterpolate(Vector3.Zero, .2f); //Smooth out entry
 
-			Transform t = PathFollower.GlobalTransform;
+			Transform t;
+
+			if (automationParent != null)
+				t = automationParent.GlobalTransform;
+			else
+			{
+				MoveSpeed = moveSettings.speed;
+				PathFollower.Offset += MoveSpeed * PhysicsManager.physicsDelta;
+
+				t = PathFollower.GlobalTransform;
+			}
+			
 			t.origin += automationDifference;
-			GlobalTransform = PathFollower.GlobalTransform;
+			GlobalTransform = t;
 		}
 
-		public void StopAutomation()
+		public void CancelAutomation()
 		{
-			MovementState = MovementStates.Normal;
+			automationParent = null;
+			
+			if (MovementState == MovementStates.Automation)
+				MovementState = MovementStates.Normal;
 		}
 		#endregion
 		#endregion
@@ -165,6 +190,7 @@ namespace Project.Gameplay
 
 			UpdatePhysics();
 			Animator.UpdateAnimation();
+			CameraController.instance.UpdateCamera();
 		}
 
 		public override void _ExitTree()
@@ -196,6 +222,7 @@ namespace Project.Gameplay
 		{
 			Normal,
 			Jumping,
+			AccelJump,
 			Crouching, //Sliding included
 			Damaged, //Being knocked back by damage
 			Respawning, //Idle until respawn timer reaches zero
@@ -204,6 +231,7 @@ namespace Project.Gameplay
 			Stomping, //Jump cancel
 			Backflip,
 
+			//State specific
 			Hanging, //Hanging from a ledge (In Sidle Mode)
 		}
 
@@ -454,7 +482,7 @@ namespace Project.Gameplay
 			isJumpClamped = false;
 			IsAttacking = false;
 			canJumpDash = false;
-			isGrindStepping = false;
+			IsGrindStepping = false;
 			isAccelerationJump = false;
 
 			landingTimer = 2;
@@ -477,7 +505,8 @@ namespace Project.Gameplay
 		public float jumpPower;
 		[Export]
 		public float jumpCurve = .95f;
-		private bool IsJumping => ActionState == ActionStates.Jumping;
+		public bool IsJumping => ActionState == ActionStates.Jumping;
+		public bool IsAccelerationJumping => ActionState == ActionStates.AccelJump;
 		private bool isJumpClamped; //True after the player releases the jump button
 		private bool canJumpDash;
 		private bool isAccelerationJump;
@@ -505,7 +534,7 @@ namespace Project.Gameplay
 				//Acceleration jump dash?
 				if (Controller.verticalAxis.value > 0)
 				{
-					ActionState = ActionStates.JumpDashing;
+					ActionState = ActionStates.AccelJump;
 					MoveSpeed = accelerationJumpSpeed;
 					Animator.JumpAccel();
 				}
@@ -614,6 +643,7 @@ namespace Project.Gameplay
 		private void StartStomping()
 		{
 			MoveSpeed = 0;
+			StrafeSpeed = 0;
 			VerticalSpeed = 0;
 			actionBufferTimer = 0;
 			ActionState = ActionStates.Stomping;
@@ -830,7 +860,7 @@ namespace Project.Gameplay
 
 		public void Kill()
 		{
-			if (StageManager.instance.missionModifier == StageManager.MissionModifier.Deathless)
+			if (StageSettings.instance.missionModifier == StageSettings.MissionModifier.Deathless)
 			{
 				//Stage over
 				return;
@@ -850,12 +880,12 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
-			if (CheckpointTrigger.activeCheckpoint != null)
-				GlobalTransform = CheckpointTrigger.activeCheckpoint.GlobalTransform;
+			if (Triggers.CheckpointTrigger.activeCheckpoint != null)
+				GlobalTransform = Triggers.CheckpointTrigger.activeCheckpoint.RespawnTransform;
 			else
 				Transform = Transform.Identity;
 
-			StageManager.instance.RespawnObjects();
+			StageSettings.instance.RespawnObjects();
 		}
 		#endregion
 
@@ -987,7 +1017,6 @@ namespace Project.Gameplay
 		#region Launcher
 		private float launcherTime;
 		private Launcher activeLauncher;
-		private Vector3 launcherMovementDelta;
 		public void StartLauncher(Launcher newLauncher)
 		{
 			ActionState = ActionStates.Normal;
@@ -1000,7 +1029,6 @@ namespace Project.Gameplay
 
 			IsOnGround = false;
 			launcherTime = 0;
-			launcherMovementDelta = Vector3.Zero;
 		}
 
 		private void UpdateLauncher()
@@ -1044,16 +1072,16 @@ namespace Project.Gameplay
 		public int grindStepSpeed;
 		[Export]
 		public int grindStepHeight;
-		private bool isGrindStepping;
+		public bool IsGrindStepping { get; private set; }
 		private GrindRail grindRail;
 		private const float MINIMUM_GRIND_SPEED = 2f;
 
 		public void StartGrinding(GrindRail newRail, Vector3 railPosition)
 		{
-			if (isGrindStepping)
+			if (IsGrindStepping)
 				GameplayInterface.instance.AddBonus(GameplayInterface.BonusTypes.GrindStep);
 
-			isGrindStepping = false;
+			IsGrindStepping = false;
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Grinding;
 			grindRail = newRail;
@@ -1096,7 +1124,7 @@ namespace Project.Gameplay
 					SetControlLockout(grindStepLockoutSettings);
 					StrafeSpeed = grindStepSpeed * direction;
 					VerticalSpeed = grindStepHeight;
-					isGrindStepping = true;
+					IsGrindStepping = true;
 				}
 
 				return;
@@ -1141,12 +1169,13 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Drift
-		private DriftTrigger activeDriftCorner;
-		public void StartDrift(DriftTrigger corner)
+		private Triggers.DriftTrigger activeDriftCorner;
+		public void StartDrift(Triggers.DriftTrigger corner)
 		{
 			activeDriftCorner = corner;
 			MovementState = MovementStates.Drift;
 
+			MoveSpeed = 0;
 			StrafeSpeed = 0;
 			VerticalSpeed = 0;
 		}
@@ -1161,44 +1190,39 @@ namespace Project.Gameplay
 
 			if (activeDriftCorner.cornerCleared)
 			{
-				MoveSpeed = moveSettings.speed;
+				MoveSpeed = moveSettings.speed * Triggers.DriftTrigger.SPEED_RATIO;
 				t.origin = t.origin.MoveToward(targetPosition, MoveSpeed * PhysicsManager.physicsDelta);
 
-				if (distance < activeDriftCorner.slideDistance * .2f)
+				if (distance < activeDriftCorner.slideDistance * .1f)
 					StopDrift();
 			}
 			else
 			{
-				//Arbitrary, but it works.
-				float distanceRatio = (distance - MoveSpeed * PhysicsManager.physicsDelta) / activeDriftCorner.slideDistance;
-				distanceRatio = Mathf.Clamp(distanceRatio * 2f + .1f, 0f, 1f);
-				MoveSpeed = activeDriftCorner.entrySpeed * distanceRatio;
+				t.origin = activeDriftCorner.Interpolate(t.origin);
 
-				if (distance < 1f)
+				if (distance < .5f)
 				{
 					if (jumpBufferTimer != 0)
 					{
 						jumpBufferTimer = 0;
 						activeDriftCorner.cornerCleared = true;
-					}
-					else
-						StopDrift();
 
-					t.origin = new Vector3(targetPosition.x, t.origin.y, targetPosition.z); //Snap to target position
+						t.origin = new Vector3(targetPosition.x, t.origin.y, targetPosition.z); //Snap to target position
+					}
+					else if(distance < .1f)
+						StopDrift();
 				}
-				else
-					t.origin = t.origin.MoveToward(targetPosition, MoveSpeed * PhysicsManager.physicsDelta);
 
 				UpdateTimeBreak();
 			}
 
 			GlobalTransform = t;
+			ResyncPathFollower();
 		}
 
 		private void StopDrift()
 		{
 			//Drift finished
-			ResyncPathFollower();
 			activeDriftCorner.CompleteDrift(true);
 			MovementState = MovementStates.Normal;
 		}
@@ -1225,7 +1249,7 @@ namespace Project.Gameplay
 		}
 		public float SpeedRatio => moveSettings.GetSpeedRatio(MoveSpeed);
 		private Vector3 velocity; //x -> strafe, y -> jump/fall, z -> speed
-		public Vector3 Velocity => velocity.Rotated(Vector3.Up, ForwardDirection.RemoveVertical().AngleTo(Vector2.Up));
+		public Vector3 Velocity => isPathMovingForward ? PathFollower.GlobalTransform.basis.Xform(velocity) : PathFollower.GlobalTransform.basis.XformInv(velocity);
 
 		public bool IsFalling => VerticalSpeed < 0;
 		public bool IsRising => VerticalSpeed > 0;

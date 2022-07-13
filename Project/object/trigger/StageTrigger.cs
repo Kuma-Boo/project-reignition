@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Triggers
 {
 	public class StageTrigger : Area
 	{

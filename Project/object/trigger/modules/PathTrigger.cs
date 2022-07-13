@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Triggers
 {
 	public class PathTrigger : StageTriggerModule
 	{

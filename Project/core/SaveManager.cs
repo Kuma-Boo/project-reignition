@@ -23,7 +23,6 @@ namespace Project.Core
 		{
 			English,
 			Japanese,
-			Korean,
 			German,
 			Italian,
 			French,
@@ -39,6 +38,7 @@ namespace Project.Core
 		}
 
 		public static SettingsData settings;
+		public static bool UseEnglishVoices => settings.voiceLanguage == VoiceLanguage.English;
 
 		public class SettingsData
 		{
@@ -67,7 +67,10 @@ namespace Project.Core
 		{
 			//Attempt to load.
 			if (settings == null)
-				settings = new SettingsData(); //Default settings
+				settings = new SettingsData()
+				{
+					voiceLanguage = VoiceLanguage.Japanese
+				};//Default settings
 
 			//TODO Attempt to load control configuration. for now, default controls
 			InputManager.DefaultControls();

@@ -18,7 +18,7 @@ namespace Project.Gameplay
 		public override void SetUp()
 		{
 			base.SetUp();
-			GetNode<CollisionShape>(collider).Shape = isRichPearl ? StageManager.instance.RichPearlCollisionShape : StageManager.instance.PearlCollisionShape;
+			GetNode<CollisionShape>(collider).Shape = isRichPearl ? StageSettings.instance.RichPearlCollisionShape : StageSettings.instance.PearlCollisionShape;
 		}
 
 		public override void _Process(float _)
@@ -58,10 +58,10 @@ namespace Project.Gameplay
 			else
 				tween.StopAll();
 
-			SFXLibrary.instance.PlayPearlSoundEffect();
+			SoundManager.instance.PlayPearlSoundEffect();
 
 			//Collection tween
-			int travelDirection = StageManager.instance.randomNumberGenerator.RandiRange(-1, 1);
+			int travelDirection = StageSettings.instance.randomNumberGenerator.RandiRange(-1, 1);
 			bool reverseDirection = Mathf.Sign(Character.Forward().Dot(Transform.origin)) < 0; //True when collecting a pearl behind us
 			if (travelDirection == 0)
 			{

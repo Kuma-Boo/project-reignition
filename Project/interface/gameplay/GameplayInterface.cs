@@ -13,87 +13,11 @@ namespace Project.Gameplay
 
 			_hud = GetNode<Control>(hud);
 
-			_countdownTweener = new Tween();
-			AddChild(_countdownTweener);
-			_countdownTickParent = GetNode<Node2D>(countdownTickParent);
-
-			StartCountdown();
 			InitializeRingCounter();
 			InitializeSoulGauge();
 			InitializeHomingAttack();
-			InitializePauseMenu();
 		}
 
-		public override void _Process(float _)
-		{
-			UpdatePauseMenu();
-		}
-
-		#region Countdown
-		[Export]
-		public bool skipCountdown;
-		[Export]
-		public NodePath countdownTickParent;
-		private Node2D _countdownTickParent;
-		[Export]
-		public NodePath countdownAnimator;
-		private AnimationPlayer _countdownAnimator;
-		private Tween _countdownTweener;
-
-		public bool IsCountDownComplete { get; private set; }
-		public void OnCountdownCompleted()
-		{
-			_hud.Visible = true;
-			IsCountDownComplete = true;
-			canInteractWithPauseMenu = true; //Enable Pausing
-			CharacterController.instance.OnCountdownCompleted(); //Enables the player
-		}
-
-		private void StartCountdown()
-		{
-			_hud.Visible = false;
-			IsCountDownComplete = false;
-			canInteractWithPauseMenu = false; //Disable Pausing
-
-			if (skipCountdown)
-				OnCountdownCompleted();
-			else
-			{
-				if (_countdownAnimator == null)
-					_countdownAnimator = GetNode<AnimationPlayer>(countdownAnimator);
-
-				_countdownAnimator.Play("Countdown");
-				CharacterController.instance.OnCountdownStarted(); //Enables the player
-			}
-
-			TweenCountdownTicks();
-		}
-
-		//The ring animation is too tedious to animate by hand, so I'm using a tween instead.
-		private void TweenCountdownTicks()
-		{
-			_countdownTweener.ResetAll();
-
-			for (int i = 0; i < _countdownTickParent.GetChildCount(); i++)
-			{
-				Node2D tick = _countdownTickParent.GetChild<Node2D>(i);
-
-				float delay = i * .04f + .6f;
-				_countdownTweener.InterpolateProperty(tick, "position", tick.Position, tick.Position + (tick.Position.Normalized() * 48f), .2f, Tween.TransitionType.Linear, Tween.EaseType.InOut, delay);
-				_countdownTweener.InterpolateProperty(tick, "modulate", Colors.White, Colors.Transparent, .2f, Tween.TransitionType.Linear, Tween.EaseType.InOut, delay);
-
-				delay += 1;
-				_countdownTweener.InterpolateProperty(tick, "position", tick.Position + (tick.Position.Normalized() * 48f), tick.Position, .2f, Tween.TransitionType.Linear, Tween.EaseType.InOut, delay);
-				_countdownTweener.InterpolateProperty(tick, "modulate", Colors.Transparent, Colors.White, .2f, Tween.TransitionType.Linear, Tween.EaseType.InOut, delay);
-
-				delay += 1;
-				_countdownTweener.InterpolateProperty(tick, "position", tick.Position, tick.Position + (tick.Position.Normalized() * 48f), .2f, Tween.TransitionType.Linear, Tween.EaseType.InOut, delay);
-				_countdownTweener.InterpolateProperty(tick, "modulate", Colors.White, Colors.Transparent, .2f, Tween.TransitionType.Linear, Tween.EaseType.InOut, delay);
-			}
-
-			_countdownTweener.Start();
-		}
-		#endregion
 
 		#region Heads up display
 		[Export]
@@ -134,7 +58,7 @@ namespace Project.Gameplay
 			_ringAnimator = GetNode<AnimationPlayer>(ringAnimator);
 
 			//TODO set ring count based on skills
-			maxRingCount = StageManager.instance.maxRingCount;
+			maxRingCount = StageSettings.instance.maxRingCount;
 			_maxRingLabel.Text = maxRingCount.ToString("000");
 
 			_ringLabel.Text = RingCount.ToString("000");
@@ -278,49 +202,6 @@ namespace Project.Gameplay
 			_homingReticle.Position = screenPosition;
 			if (newTarget)
 				_homingAnimator.Play("enable");
-		}
-		#endregion
-
-		#region Pause
-		[Export]
-		public NodePath pauseAnimator;
-		private AnimationPlayer _pauseAnimator;
-
-		[Export]
-		public NodePath pauseCursor;
-		private Node2D _pauseCursor;
-
-		private bool canInteractWithPauseMenu;
-		private void InitializePauseMenu()
-		{
-			_pauseAnimator = GetNode<AnimationPlayer>(pauseAnimator);
-			_pauseCursor = GetNode<Node2D>(pauseCursor);
-		}
-
-		private void TogglePause()
-		{
-			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
-			GetTree().Paused = !GetTree().Paused;
-			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
-
-			if (CharacterController.instance.IsTimeBreakActive)//Fix speed break
-				Engine.TimeScale = GetTree().Paused ? 1f : CharacterController.TIME_BREAK_RATIO;
-		}
-
-		public void OnPauseToggled() //Called after the pause animation is completed
-		{
-			canInteractWithPauseMenu = true;
-		}
-
-		private void UpdatePauseMenu()
-		{
-			if (!canInteractWithPauseMenu) return;
-
-			if (InputManager.controller.pauseButton.wasPressed)
-			{
-				TogglePause();
-				return;
-			}
 		}
 		#endregion
 

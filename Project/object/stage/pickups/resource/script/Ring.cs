@@ -12,7 +12,7 @@ namespace Project.Gameplay
 		public override void OnEntered(Area _)
 		{
 			GameplayInterface.instance.CollectRing(isRichRing ? 20 : 1);
-			SFXLibrary.instance.PlayRingSoundEffect();
+			SoundManager.instance.PlayRingSoundEffect();
 			Despawn();
 		}
 	}

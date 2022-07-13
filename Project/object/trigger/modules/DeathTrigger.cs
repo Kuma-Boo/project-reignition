@@ -1,9 +1,9 @@
 using Godot;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Triggers
 {
-    public class DeathTrigger : StageTriggerModule
-    {
+	public class DeathTrigger : StageTriggerModule
+	{
 		[Export]
 		public TriggerType triggerType;
 		public enum TriggerType

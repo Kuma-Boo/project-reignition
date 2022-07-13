@@ -1,13 +1,12 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://interface/font/Greco Std DB.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://interface/main menu/TitleFlames.png" type="Texture" id=2]
-[ext_resource path="res://interface/main menu/Reference.png" type="Texture" id=3]
+[ext_resource path="res://interface/main menu/flames/TitleFlames.png" type="Texture" id=2]
 [ext_resource path="res://interface/main menu/Background.png" type="Texture" id=4]
 [ext_resource path="res://interface/main menu/Decal.png" type="Texture" id=5]
 [ext_resource path="res://sound/BGMPlayer.cs" type="Script" id=6]
 [ext_resource path="res://sound/ost/treasure disc/2 Sandstorm.mp3" type="AudioStream" id=7]
-[ext_resource path="res://interface/sprites/Logos.png" type="Texture" id=8]
+[ext_resource path="res://interface/main menu/logos/logo en.png" type="Texture" id=8]
 
 [sub_resource type="DynamicFont" id=5]
 size = 24
@@ -26,38 +25,45 @@ font_data = ExtResource( 1 )
 [sub_resource type="CanvasItemMaterial" id=4]
 blend_mode = 1
 
-[sub_resource type="Animation" id=2]
-resource_name = "Loop"
-length = 0.444444
-loop = true
-step = 0.0555556
-tracks/0/type = "value"
-tracks/0/path = NodePath(":frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = false
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.388889 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0, 7 ]
-}
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 1024, 128 )
 
-[sub_resource type="Animation" id=3]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("../Flames:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0 ]
-}
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 128, 1024, 128 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 256, 1024, 128 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 384, 1024, 128 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 512, 1024, 128 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 640, 1024, 128 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 768, 1024, 128 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 896, 1024, 128 )
+
+[sub_resource type="SpriteFrames" id=19]
+animations = [ {
+"frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
+"loop": true,
+"name": "default",
+"speed": 24.0
+} ]
 
 [sub_resource type="Animation" id=10]
 resource_name = "Loop"
@@ -161,12 +167,9 @@ __meta__ = {
 
 [node name="Footer" type="VBoxContainer" parent="Title"]
 margin_left = 40.0
-margin_top = 998.0
+margin_top = 968.0
 margin_right = 371.0
-margin_bottom = 1052.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_bottom = 1051.0
 
 [node name="Version Number" type="Label" parent="Title/Footer"]
 margin_right = 331.0
@@ -195,6 +198,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Remake" type="Label" parent="Title/Footer"]
+margin_top = 58.0
+margin_right = 331.0
+margin_bottom = 83.0
+custom_colors/font_color = Color( 0.976471, 0.847059, 0.752941, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0.588235 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 5 )
+text = " Remake by PauZ"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Press Start" type="Node2D" parent="Title"]
 
 [node name="Label" type="Label" parent="Title/Press Start"]
@@ -207,9 +224,10 @@ custom_colors/font_color = Color( 0.976471, 0.847059, 0.752941, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_y = 4
 custom_fonts/font = SubResource( 1 )
-text = "PRESS START"
+text = "sys_press_start"
 align = 1
 valign = 1
+uppercase = true
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
@@ -268,36 +286,18 @@ __meta__ = {
 [node name="FlamesRoot" type="Node2D" parent="Title"]
 position = Vector2( 960, 1080 )
 
-[node name="Flames" type="Sprite" parent="Title/FlamesRoot"]
+[node name="Flames" type="AnimatedSprite" parent="Title/FlamesRoot"]
 material = SubResource( 4 )
-position = Vector2( 0, -160 )
-scale = Vector2( 2.5, 2.5 )
-texture = ExtResource( 2 )
-vframes = 8
-
-[node name="Animator" type="AnimationPlayer" parent="Title/FlamesRoot/Flames"]
-autoplay = "Loop"
-anims/Loop = SubResource( 2 )
-anims/RESET = SubResource( 3 )
+position = Vector2( -3.05176e-05, -120 )
+scale = Vector2( 1.875, 1.875 )
+frames = SubResource( 19 )
+frame = 7
+playing = true
 
 [node name="Logo" type="Sprite" parent="Title"]
-position = Vector2( 960, 385 )
+position = Vector2( 960, 360 )
+scale = Vector2( 1.1, 1.1 )
 texture = ExtResource( 8 )
-hframes = 3
-vframes = 2
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="Reference" type="TextureRect" parent="Title"]
-visible = false
-margin_right = 1920.0
-margin_bottom = 1080.0
-texture = ExtResource( 3 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Animator" type="AnimationPlayer" parent="Title"]
 autoplay = "TitleSpawn"

@@ -28,6 +28,11 @@ namespace Project.Gameplay
             _animator.Set(COUNTDOWN_PARAMETER, true);
         }
 
+		public void PlayAnimation(string anim) //Play a specific animation
+		{
+			
+		}
+
 		#region Grinding Animation
 		public void StartGrinding()
 		{
@@ -158,7 +163,7 @@ namespace Project.Gameplay
 
 		private void AirAnimations()
 		{
-			_animator.Set(JUMPDASH_PARAMETER, _character.IsJumpDashing ? 1 : 0);
+			_animator.Set(JUMPDASH_PARAMETER, _character.IsJumpDashing || _character.IsAccelerationJumping ? 1 : 0);
 
 			if ((int)_animator.Get(JUMPING_PARAMETER) == 1)
 			{

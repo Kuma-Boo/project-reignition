@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Triggers
 {
 	public class AutomationTrigger : Area
 	{
@@ -59,7 +59,7 @@ namespace Project.Gameplay
 		private void Deactivate()
 		{
 			isActive = false;
-			Character.StopAutomation();
+			Character.CancelAutomation();
 		}
 
 		public void OnEntered(Area _) => isEntered = true;

@@ -1,19 +1,19 @@
 [gd_scene load_steps=81 format=2]
 
-[ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=1]
-[ext_resource path="res://object/player/resource/CharacterController.cs" type="Script" id=2]
-[ext_resource path="res://object/stage/pickups/resource/model/ring particle.png" type="Texture" id=3]
+[ext_resource path="res://object/player/resource/movement settings/RunSettings.tres" type="Resource" id=1]
+[ext_resource path="res://object/player/resource/movement settings/BackstepSettings.tres" type="Resource" id=2]
+[ext_resource path="res://object/player/resource/movement settings/StrafeSettings.tres" type="Resource" id=3]
 [ext_resource path="res://object/player/resource/movement settings/AirRunSettings.tres" type="Resource" id=4]
-[ext_resource path="res://object/player/resource/movement settings/RunSettings.tres" type="Resource" id=5]
-[ext_resource path="res://object/player/resource/movement settings/AirStrafeSettings.tres" type="Resource" id=6]
-[ext_resource path="res://object/player/resource/movement settings/BackstepSettings.tres" type="Resource" id=7]
-[ext_resource path="res://object/player/resource/movement settings/StrafeSettings.tres" type="Resource" id=8]
+[ext_resource path="res://object/player/resource/movement settings/AirStrafeSettings.tres" type="Resource" id=5]
+[ext_resource path="res://object/player/resource/GrindStepLockout.tres" type="Resource" id=6]
+[ext_resource path="res://object/player/resource/movement settings/AttackSettings.tres" type="Resource" id=7]
+[ext_resource path="res://object/player/resource/movement settings/SidleSettings.tres" type="Resource" id=8]
 [ext_resource path="res://object/player/resource/movement settings/GrindSettings.tres" type="Resource" id=9]
-[ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=10]
-[ext_resource path="res://object/player/resource/GrindStepLockout.tres" type="Resource" id=11]
-[ext_resource path="res://object/player/resource/movement settings/AttackSettings.tres" type="Resource" id=12]
-[ext_resource path="res://object/player/resource/movement settings/SidleSettings.tres" type="Resource" id=13]
-[ext_resource path="res://object/player/resource/CharacterAnimator.cs" type="Script" id=14]
+[ext_resource path="res://object/player/resource/CharacterController.cs" type="Script" id=10]
+[ext_resource path="res://object/player/resource/CharacterAnimator.cs" type="Script" id=11]
+[ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=12]
+[ext_resource path="res://object/stage/pickups/resource/model/ring particle.png" type="Texture" id=13]
+[ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=14]
 
 [sub_resource type="SphereShape" id=80]
 radius = 0.3
@@ -51,7 +51,7 @@ params_billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
-albedo_texture = ExtResource( 3 )
+albedo_texture = ExtResource( 13 )
 
 [sub_resource type="QuadMesh" id=15]
 material = SubResource( 14 )
@@ -139,7 +139,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1552, 128 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -256, 320 )
-node_connections = [ "output", 0, "IsJumpDashing", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "jump_cancel_time", 0, "fall-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump", 0, "IsJumping", "jump", 1, "jump-start", "fall_reset", 0, "jump_cancel_time" ]
+node_connections = [ "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "jump_cancel_time", 0, "fall-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "fall_reset", 0, "jump_cancel_time", "jump", 0, "IsJumping", "jump", 1, "jump-start", "output", 0, "IsJumpDashing" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -339,7 +339,7 @@ nodes/RunSpeed/node = SubResource( 79 )
 nodes/RunSpeed/position = Vector2( -704, 256 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "output", 0, "IsCrouching", "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "RunSpeed", 0, "IsRunning", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "MovementReset", 0, "RunSpeed" ]
+node_connections = [ "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "RunSpeed", 0, "IsRunning", "MovementReset", 0, "RunSpeed", "output", 0, "IsCrouching" ]
 
 [sub_resource type="AnimationNodeBlendTree" id=37]
 graph_offset = Vector2( -1007.84, 46.8564 )
@@ -357,7 +357,7 @@ nodes/countdown_anim/node = SubResource( 66 )
 nodes/countdown_anim/position = Vector2( -144, 288 )
 nodes/ground_state/node = SubResource( 71 )
 nodes/ground_state/position = Vector2( -1312, 160 )
-node_connections = [ "output", 0, "countdown", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state" ]
+node_connections = [ "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "output", 0, "countdown" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
@@ -366,15 +366,15 @@ node_connections = [ "output", 0, "countdown", "balancing", 0, "IsGrounded", "ba
 [node name="Sonic" type="KinematicBody" groups=["player"]]
 collision_layer = 2
 collision/safe_margin = 0.01
-script = ExtResource( 2 )
+script = ExtResource( 10 )
 pathFollower = NodePath("PathFollower")
 animator = NodePath("Sonic")
 collisionWidth = 0.4
-moveSettings = ExtResource( 5 )
+moveSettings = ExtResource( 1 )
 airMoveSettings = ExtResource( 4 )
-strafeSettings = ExtResource( 8 )
-airStrafeSettings = ExtResource( 6 )
-backstepSettings = ExtResource( 7 )
+strafeSettings = ExtResource( 3 )
+airStrafeSettings = ExtResource( 5 )
+backstepSettings = ExtResource( 2 )
 gravity = 32.0
 maxGravity = -48.0
 landingBoost = 18.0
@@ -387,19 +387,19 @@ jumpDashMaxGravity = -24.0
 homingAttackSpeed = 32.0
 backflipSpeed = 20.0
 speedBreakSpeed = 54.0
-attackLockoutSettings = ExtResource( 12 )
+attackLockoutSettings = ExtResource( 7 )
 enemyBouncePower = 12.0
 enemyBounceGravity = 18.0
-sidleSettings = ExtResource( 13 )
+sidleSettings = ExtResource( 8 )
 grindingSettings = ExtResource( 9 )
-grindStepLockoutSettings = ExtResource( 11 )
+grindStepLockoutSettings = ExtResource( 6 )
 grindShuffleSpeed = 28
-grindStepSpeed = 14
+grindStepSpeed = 15
 grindStepHeight = 12
 environmentMask = 1
 
-[node name="Sonic" parent="." instance=ExtResource( 1 )]
-script = ExtResource( 14 )
+[node name="Sonic" parent="." instance=ExtResource( 12 )]
+script = ExtResource( 11 )
 animator = NodePath("../AnimationTree")
 root = NodePath("..")
 ringParticleEffect = NodePath("../VFX/RingParticle")
@@ -457,7 +457,7 @@ parameters/air_state/fall_reset/seek_position = -1.0
 parameters/air_state/jump/active = false
 parameters/air_state/jump_cancel_time/scale = 1.0
 parameters/air_state/jump_dash_state/playback = SubResource( 113 )
-parameters/balance_state/playback = ExtResource( 10 )
+parameters/balance_state/playback = ExtResource( 14 )
 parameters/balance_state/balance_left/blend_position = -0.00141644
 parameters/balance_state/balance_right/blend_position = -0.00914633
 parameters/balancing/current = 0

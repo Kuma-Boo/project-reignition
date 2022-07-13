@@ -9,16 +9,16 @@ namespace Project.Gameplay
 		private AnimationPlayer _buttonAnimator;
 		[Export]
 		public NodePath eventTrigger;
-		public EventTrigger _eventTrigger;
+		public Triggers.EventTrigger _eventTrigger;
 
 		private bool isActive;
 
 		public override void SetUp()
 		{
 			_buttonAnimator = GetNode<AnimationPlayer>(buttonAnimator);
-			_eventTrigger = GetNode<EventTrigger>(eventTrigger);
+			_eventTrigger = GetNode<Triggers.EventTrigger>(eventTrigger);
 
-			StageManager.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.RegisterRespawnableObject(this);
 			Spawn();
 		}
 

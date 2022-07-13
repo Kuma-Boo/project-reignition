@@ -111,15 +111,8 @@ namespace Project.Core
 		public static bool IsLoopingPath(this Curve3D c) => c.GetPointPosition(0).IsEqualApprox(c.GetPointPosition(c.GetPointCount() - 1));
 
 		//In Radians
-		public static float DeltaAngleRad(float firstAngle, float secondAngle)
-		{
-			return Mathf.Deg2Rad(DeltaAngleDegrees(Mathf.Rad2Deg(firstAngle), Mathf.Rad2Deg(secondAngle)));
-		}
-
-		public static float MoveTowardAngleRad(float firstAngle, float secondAngle, float delta)
-		{
-			return Mathf.Deg2Rad(MoveTowardAngleDegrees(Mathf.Rad2Deg(firstAngle), Mathf.Rad2Deg(secondAngle), delta));
-		}
+		public static float DeltaAngleRad(float firstAngle, float secondAngle) => Mathf.Deg2Rad(DeltaAngleDegrees(Mathf.Rad2Deg(firstAngle), Mathf.Rad2Deg(secondAngle)));
+		public static float MoveTowardAngleRad(float firstAngle, float secondAngle, float delta) => Mathf.Deg2Rad(MoveTowardAngleDegrees(Mathf.Rad2Deg(firstAngle), Mathf.Rad2Deg(secondAngle), delta));
 
 		//For Flags
 		public static bool IsSet<T>(this T flags, T flag) where T : struct
@@ -144,6 +137,51 @@ namespace Project.Core
 			int flagValue = (int)(object)flag;
 
 			flags = (T)(object)(flagsValue & (~flagValue));
+		}
+
+		public static float SmoothDamp(float current, float target, ref float currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
+		{
+			float deltaTime = PhysicsManager.physicsDelta;
+			smoothTime = Mathf.Max(0.0001f, smoothTime);
+			float omega = 2f / smoothTime;
+
+			float x = omega * deltaTime;
+			float exp = 1f / (1f + x + 0.48f * x * x + 0.235f * x * x * x);
+			float change = current - target;
+			float originalTo = target;
+
+			// Clamp maximum speed
+			float maxChange = maxSpeed * smoothTime;
+			change = Mathf.Clamp(change, -maxChange, maxChange);
+			target = current - change;
+
+			float temp = (currentVelocity + omega * change) * deltaTime;
+			currentVelocity = (currentVelocity - omega * temp) * exp;
+			float output = target + (change + temp) * exp;
+
+			// Prevent overshooting
+			if (originalTo - current > 0.0f == output > originalTo)
+			{
+				output = originalTo;
+				currentVelocity = (output - originalTo) / deltaTime;
+			}
+
+			return output;
+		}
+
+		public static Vector2 SmoothDamp(this Vector2 current, Vector2 target, ref Vector2 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
+		{
+			Vector2 output = new Vector2(SmoothDamp(current.x, target.x, ref currentVelocity.x, smoothTime, maxSpeed),
+				SmoothDamp(current.y, target.y, ref currentVelocity.y, smoothTime, maxSpeed));
+			return output;
+		}
+
+		public static Vector3 SmoothDamp(this Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
+		{
+			Vector3 output = new Vector3(SmoothDamp(current.x, target.x, ref currentVelocity.x, smoothTime, maxSpeed),
+				SmoothDamp(current.y, target.y, ref currentVelocity.y, smoothTime, maxSpeed),
+				SmoothDamp(current.z, target.z, ref currentVelocity.z, smoothTime, maxSpeed));
+			return output;
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace Project.Gameplay
 			targetPosition = GlobalTransform.origin;
 			spawnData.UpdateSpawnData(this);
 			spawnData.spawnTransform.origin = GlobalTransform.origin + spawnOffset;
-			StageManager.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.RegisterRespawnableObject(this);
 
 			_animationTree = GetNode<AnimationTree>(animationTree);
 			_animationTree.Active = true;

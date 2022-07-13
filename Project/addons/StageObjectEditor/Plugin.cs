@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
+using Project.Gameplay.Triggers;
 
 namespace Project.Editor
 {

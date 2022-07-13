@@ -1,9 +1,9 @@
 using Godot;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Triggers
 {
     //Parent class of all stage trigger objects. Always loaded.
-    public abstract class StageTriggerModule : Spatial
+    public abstract class StageTriggerModule : Node
     {
         public CharacterController Character => CharacterController.instance; //Reference to the character controller
 

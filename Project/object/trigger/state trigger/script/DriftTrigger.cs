@@ -1,18 +1,21 @@
 using Godot;
 using Project.Core;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Triggers
 {
 	[Tool]
 	//When the player enters this trigger, they will skid to a stop before dashing in a 90 degree angle
 	public class DriftTrigger : Area
 	{
+		public const float SPEED_RATIO = 1.5f; //Speed ratio for a successful drift
+
 		[Export]
 		public float slideDistance = 10;
 		[Export]
 		public bool isRightTurn;
 
-		public float entrySpeed;
+		private float entrySpeed;
+		private Vector3 driftVelocity;
 		public bool cornerCleared;
 		private bool bonusObtained;
 
@@ -20,6 +23,7 @@ namespace Project.Gameplay
 		public Vector3 EndPosition => MiddlePosition + this.Right() * (isRightTurn ? 1 : -1) * slideDistance;
 		public Vector3 MiddlePosition => GlobalTransform.origin + this.Back() * slideDistance;
 		private const float MINIMUM_ENTRANCE_SPEED_RATIO = .8f;
+		private const float DRIFT_SMOOTHING = .25f;
 
 		private CameraTrigger _cameraTrigger;
 		private CharacterController Character => CharacterController.instance;
@@ -41,8 +45,11 @@ namespace Project.Gameplay
 
 			cornerCleared = false;
 			entrySpeed = Character.MoveSpeed;
+			driftVelocity = Character.Velocity;
 			Character.StartDrift(this);
 		}
+
+		public Vector3 Interpolate(Vector3 playerPosition) => playerPosition.SmoothDamp(TargetPosition, ref driftVelocity, DRIFT_SMOOTHING, entrySpeed);
 
 		public void CompleteDrift(bool wasSuccessful)
 		{
@@ -50,7 +57,7 @@ namespace Project.Gameplay
 			{
 				bonusObtained = true;
 				if (wasSuccessful)
-					GameplayInterface.instance.AddBonus(GameplayInterface.BonusTypes.Drift);
+					 GameplayInterface.instance.AddBonus(GameplayInterface.BonusTypes.Drift);
 			}
 
 			if (_cameraTrigger != null)
