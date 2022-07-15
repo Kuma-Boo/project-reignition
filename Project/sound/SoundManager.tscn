@@ -1,17 +1,17 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://sound/SoundManager.cs" type="Script" id=1]
-[ext_resource path="res://sound/sfx/objects/pearls (9).wav" type="AudioStream" id=2]
-[ext_resource path="res://sound/sfx/objects/ring.wav" type="AudioStream" id=3]
-[ext_resource path="res://sound/sfx/objects/pearls (5).wav" type="AudioStream" id=4]
-[ext_resource path="res://sound/sfx/objects/pearls (3).wav" type="AudioStream" id=5]
-[ext_resource path="res://sound/sfx/objects/pearls (1).wav" type="AudioStream" id=6]
-[ext_resource path="res://sound/sfx/objects/pearls (6).wav" type="AudioStream" id=7]
-[ext_resource path="res://sound/sfx/objects/pearls (8).wav" type="AudioStream" id=8]
-[ext_resource path="res://sound/sfx/objects/pearls (4).wav" type="AudioStream" id=9]
-[ext_resource path="res://sound/sfx/objects/pearls (7).wav" type="AudioStream" id=10]
-[ext_resource path="res://sound/sfx/objects/pearls (2).wav" type="AudioStream" id=11]
-[ext_resource path="res://sound/sfx/objects/pearls (10).wav" type="AudioStream" id=12]
+[ext_resource path="res://sound/scripts/SoundManager.cs" type="Script" id=1]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_37.wav" type="AudioStream" id=2]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_1.wav" type="AudioStream" id=3]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_39.wav" type="AudioStream" id=4]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_41.wav" type="AudioStream" id=5]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_44.wav" type="AudioStream" id=6]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_43.wav" type="AudioStream" id=7]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_36.wav" type="AudioStream" id=8]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_40.wav" type="AudioStream" id=9]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_42.wav" type="AudioStream" id=10]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_38.wav" type="AudioStream" id=11]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_45.wav" type="AudioStream" id=12]
 [ext_resource path="res://interface/font/Chiaro Std B.otf" type="DynamicFontData" id=13]
 
 [sub_resource type="DynamicFont" id=1]
@@ -28,8 +28,9 @@ __meta__ = {
 }
 subtitleLabel = NodePath("Subtitles")
 dialogChannel = NodePath("DialogChannel")
+delayTimer = NodePath("DialogChannel/DelayTimer")
 ringSoundEffect = NodePath("Objects/RingSFX")
-pearlStreams = [ ExtResource( 6 ), ExtResource( 11 ), ExtResource( 5 ), ExtResource( 9 ), ExtResource( 4 ), ExtResource( 7 ), ExtResource( 10 ), ExtResource( 8 ), ExtResource( 2 ), ExtResource( 12 ) ]
+pearlStreams = [ ExtResource( 8 ), ExtResource( 2 ), ExtResource( 11 ), ExtResource( 4 ), ExtResource( 9 ), ExtResource( 5 ), ExtResource( 10 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 12 ) ]
 pearlSoundEffect = NodePath("Objects/PearlSFX")
 
 [node name="Subtitles" type="Label" parent="."]
@@ -44,6 +45,10 @@ align = 1
 
 [node name="DialogChannel" type="AudioStreamPlayer" parent="."]
 bus = "VOICE"
+
+[node name="DelayTimer" type="Timer" parent="DialogChannel"]
+process_mode = 0
+one_shot = true
 
 [node name="Objects" type="Node" parent="."]
 
@@ -60,3 +65,4 @@ bus = "SFX"
 bus = "VOICE"
 
 [connection signal="finished" from="DialogChannel" to="." method="OnDialogFinished"]
+[connection signal="timeout" from="DialogChannel/DelayTimer" to="." method="OnDialogDelayComplete"]

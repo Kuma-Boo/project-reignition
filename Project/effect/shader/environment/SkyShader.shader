@@ -2,7 +2,7 @@ shader_type spatial;
 render_mode unshaded, cull_back;
 //Unlit shader that supports scrolling, rotation and scaling.
 
-uniform sampler2D albedo;
+uniform sampler2D albedo : hint_albedo;
 uniform vec2 scale = vec2(1);
 uniform vec2 scrollSpeed = vec2(0);
 uniform vec2 offset = vec2(0);

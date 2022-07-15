@@ -5,7 +5,7 @@
 [ext_resource path="res://object/player/resource/movement settings/StrafeSettings.tres" type="Resource" id=3]
 [ext_resource path="res://object/player/resource/movement settings/AirRunSettings.tres" type="Resource" id=4]
 [ext_resource path="res://object/player/resource/movement settings/AirStrafeSettings.tres" type="Resource" id=5]
-[ext_resource path="res://object/player/resource/GrindStepLockout.tres" type="Resource" id=6]
+[ext_resource path="res://object/player/resource/movement settings/GrindStepLockout.tres" type="Resource" id=6]
 [ext_resource path="res://object/player/resource/movement settings/AttackSettings.tres" type="Resource" id=7]
 [ext_resource path="res://object/player/resource/movement settings/SidleSettings.tres" type="Resource" id=8]
 [ext_resource path="res://object/player/resource/movement settings/GrindSettings.tres" type="Resource" id=9]
@@ -139,7 +139,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1552, 128 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -256, 320 )
-node_connections = [ "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "jump_cancel_time", 0, "fall-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "fall_reset", 0, "jump_cancel_time", "jump", 0, "IsJumping", "jump", 1, "jump-start", "output", 0, "IsJumpDashing" ]
+node_connections = [ "output", 0, "IsJumpDashing", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump", 0, "IsJumping", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start", "fall_reset", 0, "jump_cancel_time", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -339,7 +339,7 @@ nodes/RunSpeed/node = SubResource( 79 )
 nodes/RunSpeed/position = Vector2( -704, 256 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "RunSpeed", 0, "IsRunning", "MovementReset", 0, "RunSpeed", "output", 0, "IsCrouching" ]
+node_connections = [ "output", 0, "IsCrouching", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "MovementReset", 0, "RunSpeed", "RunSpeed", 0, "IsRunning", "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state" ]
 
 [sub_resource type="AnimationNodeBlendTree" id=37]
 graph_offset = Vector2( -1007.84, 46.8564 )
@@ -357,7 +357,7 @@ nodes/countdown_anim/node = SubResource( 66 )
 nodes/countdown_anim/position = Vector2( -144, 288 )
 nodes/ground_state/node = SubResource( 71 )
 nodes/ground_state/position = Vector2( -1312, 160 )
-node_connections = [ "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "output", 0, "countdown" ]
+node_connections = [ "output", 0, "countdown", "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 

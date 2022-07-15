@@ -9,11 +9,9 @@ namespace Project.Gameplay
 		[Export]
 		public bool isTwoWay; //Allow negative values
 		[Export]
-		public bool isInverted; //Flips speed to be negative.
-		[Export]
 		public bool clampTurnaround; //Don't allow reversing into negative numbers
 
-		[Export(PropertyHint.Range, "0, 256")]
+		[Export(PropertyHint.Range, "-256, 256")]
 		public int speed;
 		[Export(PropertyHint.Range, "0, 256")]
 		public int traction; //Speed up rate
@@ -31,33 +29,28 @@ namespace Project.Gameplay
 			friction = 0;
 		}
 
-		public float Interpolate(float spd, float signedValue, bool inverted = default)
+		public float Interpolate(float spd, float signedValue)
 		{
-			if (inverted)
-				spd *= -1;
-
-			float targetSpeed = speed * Mathf.Abs(signedValue);
+			float targetSpeed = speed * signedValue;
 			float delta = traction;
 
 			if (Mathf.Abs(spd) > speed)
 				delta = overspeedFriction;
 
-			if (signedValue == 0)
+			if (signedValue == 0) //Deccelerate
 			{
 				targetSpeed = 0;
 				delta = friction;
 			}
-			else if (signedValue < 0 && !isTwoWay) //Turning around
+			else if(Mathf.Sign(signedValue) != Mathf.Sign(spd)) //Turnaround
 			{
 				delta = turnaround;
-				targetSpeed = clampTurnaround ? 0 : -Mathf.Inf;
+				if (clampTurnaround)
+					targetSpeed = 0;
 			}
 
-			if (isTwoWay)
-				targetSpeed *= Mathf.Sign(signedValue);
-
 			spd = Mathf.MoveToward(spd, targetSpeed, delta * PhysicsManager.physicsDelta);
-			return inverted ? -spd : spd;
+			return spd;
 		}
 
 		public float GetSpeedRatio(float spd) => spd / speed;

@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://object/stage/common/resource/script/Launcher.cs" type="Script" id=1]
 [ext_resource path="res://object/stage/common/resource/material/Panel.tres" type="Material" id=2]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_7.wav" type="AudioStream" id=3]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Spring_Spring"
@@ -31,6 +32,11 @@ loop = true
 collision_layer = 4
 collision_mask = 2
 script = ExtResource( 1 )
+sfxPlayer = NodePath("SFX")
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+bus = "SFX"
 
 [node name="Mesh" type="MeshInstance" parent="."]
 transform = Transform( 0.1, 0, 0, 0, 0, -0.1, 0, 0.1, 0, 0, -0.5, 0 )

@@ -177,6 +177,8 @@ namespace Project.Gameplay
 
 		public void RespawnObjects()
 		{
+			SoundManager.instance.CancelDialog(); //Cancel any active dialog
+
 			for (int i = 0; i < respawnableObjects.Count; i++)
 				respawnableObjects[i].Spawn();
 		}

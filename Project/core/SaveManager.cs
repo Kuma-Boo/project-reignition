@@ -67,10 +67,7 @@ namespace Project.Core
 		{
 			//Attempt to load.
 			if (settings == null)
-				settings = new SettingsData()
-				{
-					voiceLanguage = VoiceLanguage.Japanese
-				};//Default settings
+				settings = new SettingsData(); //Default settings
 
 			//TODO Attempt to load control configuration. for now, default controls
 			InputManager.DefaultControls();

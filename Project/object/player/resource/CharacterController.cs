@@ -138,6 +138,7 @@ namespace Project.Gameplay
 			MovementState = MovementStates.Automation;
 			ActionState = ActionStates.Normal;
 			automationDifference = GlobalTransform.origin - PathFollower.GlobalTransform.origin;
+
 			MoveSpeed = 0;
 			StrafeSpeed = 0;
 			VerticalSpeed = 0;
@@ -328,13 +329,34 @@ namespace Project.Gameplay
 							MoveSpeed = Mathf.MoveToward(MoveSpeed, Mathf.Abs(StrafeSpeed), strafeSettings.traction * .5f * GetMovementInputValue() * PhysicsManager.physicsDelta);
 
 						MoveSpeed = moveSettings.Interpolate(MoveSpeed, GetMovementInputValue());
+						//UpdateSlopeMoveSpeed();
 					}
 				}
 				else
-					MoveSpeed = backstepSettings.Interpolate(MoveSpeed, -GetMovementInputValue(), true); //Input direction needs to be inverted for negative movement
+					MoveSpeed = backstepSettings.Interpolate(MoveSpeed, -GetMovementInputValue()); //Input direction needs to be inverted for negative movement
 			}
 			else
 				MoveSpeed = airMoveSettings.Interpolate(MoveSpeed, GetMovementInputValue());
+		}
+
+		private void UpdateSlopeMoveSpeed()
+		{
+			if (Mathf.Abs(slopeInfluence) < SLOPE_DEADZONE) return; //Slope is too shallow
+
+			if (GetMovementInputValue() > 0f) //Accelerating
+			{
+				if (slopeInfluence < 0f) //Downhill
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, moveSettings.speed, moveSettings.traction * Mathf.Abs(slopeInfluence) * PhysicsManager.physicsDelta);
+				else if (SpeedRatio < 1f) //Uphill; Reduce acceleration
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, moveSettings.traction * slopeInfluence * PhysicsManager.physicsDelta);
+			}
+			else if (MoveSpeed > 0f)
+			{
+				if (slopeInfluence < 0f) //Re-apply some speed when moving downhill
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, moveSettings.speed, moveSettings.friction * Mathf.Abs(slopeInfluence) * PhysicsManager.physicsDelta);
+				else //Increase friction when moving uphill
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, moveSettings.friction * slopeInfluence * PhysicsManager.physicsDelta);
+			}
 		}
 
 		private void UpdateStrafeSpeed()
@@ -1109,7 +1131,6 @@ namespace Project.Gameplay
 
 			if (jumpBufferTimer != 0)
 			{
-				StopGrinding();
 				jumpBufferTimer = 0;
 
 				int direction = Controller.horizontalAxis.sign;
@@ -1127,6 +1148,7 @@ namespace Project.Gameplay
 					IsGrindStepping = true;
 				}
 
+				StopGrinding();
 				return;
 			}
 			else if (currentAnimation == "balance_left" || currentAnimation == "balance_right")
@@ -1443,6 +1465,10 @@ namespace Project.Gameplay
 
 		public Vector3 worldDirection = Vector3.Up;
 
+		private float slopeInfluence;
+		private const float SLOPE_DEADZONE = .1f; //Ignore slope influence when less than this value
+		private const float SLOPE_INFLUENCE = .8f;
+
 		public bool IsOnGround { get; private set; }
 		public bool JustLandedOnGround => landingTimer > 0; //Flag for doing stuff on land
 		private int landingTimer;
@@ -1497,20 +1523,23 @@ namespace Project.Gameplay
 				if(!IsOnGround)
 					LandOnGround();
 
+				float rotationAmount = PathFollower.GlobalTransform.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
+				Vector3 slopeDirection = groundHit.normal.Rotated(Vector3.Up, rotationAmount).Normalized();
+				slopeInfluence = slopeDirection.z * SLOPE_INFLUENCE;
+
 				Transform t = GlobalTransform;
 				t.origin = groundHit.point;
 				GlobalTransform = t;
 			}
 			else
 			{
+				slopeInfluence = 0f;
 				if (IsOnGround && !IsBackflipping)
 					Animator.FallAnimation();
 				
 				IsOnGround = false;
 
 				if (IsBackflipping) return;
-
-				Debug.DrawRay(CenterPosition, worldDirection * 5, Colors.Blue);
 
 				worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .1f, 0f, 1f)).Normalized();
 				/*

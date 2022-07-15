@@ -7,13 +7,8 @@ namespace Project.Gameplay
 	public class Launcher : Area
 	{
 		[Export]
-		public LauncherType launcherType;
-		public enum LauncherType
-		{
-			Spring,
-			JumpPanel,
-			Jump, //Use this to channel the power of Mario.
-		}
+		public NodePath sfxPlayer; //Height at the beginning of the arc
+		private AudioStreamPlayer _sfxPlayer; //Height at the beginning of the arc
 
 		[Export]
 		public float startingHeight; //Height at the beginning of the arc
@@ -57,8 +52,17 @@ namespace Project.Gameplay
 			return StartingPoint + displacement;
 		}
 
+		public override void _Ready()
+		{
+			if (sfxPlayer != null && !sfxPlayer.IsEmpty())
+				_sfxPlayer = GetNode<AudioStreamPlayer>(sfxPlayer);
+		}
+
 		public virtual void Activate(Area a)
 		{
+			if(_sfxPlayer != null)
+				_sfxPlayer.Play();
+
 			IsCharacterCentered = recenterSpeed == 0;
 			Character.StartLauncher(this);
 		}

@@ -9,6 +9,8 @@ namespace Project.Gameplay.Triggers
 
         public int DialogCount => textKeys.Count;
 
+        [Export(PropertyHint.Range, "0, 10")]
+        public Array<float> delays;
         [Export]
         public Array<string> textKeys;
         [Export]

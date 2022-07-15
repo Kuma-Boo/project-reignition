@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://object/stage/common/resource/script/DashPanel.cs" type="Script" id=1]
 [ext_resource path="res://object/stage/common/resource/material/Panel.tres" type="Material" id=2]
 [ext_resource path="res://object/stage/common/resource/material/DashPanelBelt.tres" type="Material" id=3]
+[ext_resource path="res://sound/sfx/objects/OBJECTS_53.wav" type="AudioStream" id=4]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "DashPanel_DashPanel"
@@ -70,6 +71,7 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource( 1 )
+sfxPlayer = NodePath("SFX")
 speedRatio = 1.0
 length = 1.0
 
@@ -85,5 +87,9 @@ shape = SubResource( 3 )
 autoplay = "Loop"
 anims/Loop = SubResource( 4 )
 anims/RESET = SubResource( 2 )
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+bus = "SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
