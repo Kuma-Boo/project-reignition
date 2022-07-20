@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://object/stage/common/resource/script/DashPanel.cs" type="Script" id=1]
 [ext_resource path="res://object/stage/common/resource/material/Panel.tres" type="Material" id=2]
@@ -35,37 +35,6 @@ surfaces/1 = {
 [sub_resource type="BoxShape" id=3]
 extents = Vector3( 0.9, 0.2, 1.5 )
 
-[sub_resource type="Animation" id=4]
-length = 0.2
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Mesh:mesh:surface_2/material:uv1_offset")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=2]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("Mesh:mesh:surface_2/material:uv1_offset")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ) ]
-}
-
 [node name="DashPanel" type="Area"]
 collision_layer = 0
 collision_mask = 2
@@ -82,11 +51,6 @@ skeleton = NodePath("")
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
 shape = SubResource( 3 )
-
-[node name="Animator" type="AnimationPlayer" parent="."]
-autoplay = "Loop"
-anims/Loop = SubResource( 4 )
-anims/RESET = SubResource( 2 )
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )

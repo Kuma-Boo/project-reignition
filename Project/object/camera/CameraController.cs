@@ -6,35 +6,25 @@ namespace Project.Gameplay
 	public class CameraController : Spatial
 	{
 		public static CameraController instance;
+
+		private PathFollow PlayerPathFollower => Player.PathFollower;
 		[Export]
-		public NodePath cameraPathFollower;
-		private PathFollow CameraPathFollower;
-		private PathFollow PlayerPathFollower => _character.PathFollower;
-		private Path activePath;
-		public void SetActivePath(Path newPath)
-		{
-			if (activePath == null)
-				resetFlag = true;
-
-			activePath = newPath;
-
-			if (CameraPathFollower.IsInsideTree())
-				CameraPathFollower.GetParent().RemoveChild(CameraPathFollower);
-
-			CameraPathFollower.Loop = activePath.Curve.IsLoopingPath();
-			activePath.AddChild(CameraPathFollower);
-		}
-
+		public NodePath calculationRoot;
+		private Spatial _calculationRoot; //Responsible for pitch rotation
 		[Export]
-		public NodePath gimbal;
-		private Spatial _gimbal; //Responsible for pitch rotation
+		public NodePath calculationGimbal;
+		private Spatial _calculationGimbal; //Responsible for yaw rotation
+		[Export]
+		public NodePath cameraRoot;
+		private Spatial _cameraRoot;
+		[Export]
+		public NodePath cameraGimbal;
+		private Spatial _cameraGimbal;
 		[Export]
 		public NodePath camera;
-		private Camera _camera; //Responsible for yaw rotation
+		private Camera _camera;
 
-		[Export]
-		public NodePath character;
-		private CharacterController _character;
+		private CharacterController Player => CharacterController.instance;
 
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
 
@@ -42,17 +32,16 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
-			_character = GetNode<CharacterController>(character);
-			_gimbal = GetNode<Spatial>(gimbal);
+			_calculationRoot = GetNode<Spatial>(calculationRoot);
+			_calculationGimbal = GetNode<Spatial>(calculationGimbal);
+
+			_cameraRoot = GetNode<Spatial>(cameraRoot);
+			_cameraGimbal = GetNode<Spatial>(cameraGimbal);
 			_camera = GetNode<Camera>(camera);
-			CameraPathFollower = GetNode<PathFollow>(cameraPathFollower);
 		}
 
 		public void UpdateCamera()
 		{
-			if (activePath == null)
-				return;
-
 			UpdateGameplayCamera();
 
 			if (!OS.IsDebugBuild())
@@ -67,47 +56,56 @@ namespace Project.Gameplay
 		[Export]
 		public CameraSettingsResource backstepCameraSettings;
 		[Export]
-		public CameraSettingsResource overrideCameraSettings;
-		private CameraSettingsResource activeSettings;
-
+		public CameraSettingsResource targetSettings; //Target
+		private readonly CameraSettingsResource previousSettings = new CameraSettingsResource(); //Start lerping here
+		private readonly CameraSettingsResource currentSettings = new CameraSettingsResource(); //Apply transforms based on this
 		public void SetCameraData(CameraSettingsResource data, bool useCrossfade)
 		{
-			CameraSettingsResource previousData = overrideCameraSettings;
-			overrideCameraSettings = data;
+			transitionTime = transitionTimeStepped = 0f; //Reset transition timers
+			previousSettings.CopyFrom(currentSettings);
 
-			if (overrideCameraSettings != null) //Apply
-			{
-				if (overrideCameraSettings.IsOverridingPosition)
-					positionOffset = CameraPathFollower.GlobalTransform.origin - PlayerPathFollower.GlobalTransform.origin;
-			}
+				previousSettings.viewAngle.x = _calculationGimbal.Rotation.x;
+				previousSettings.viewAngle.y = -_calculationRoot.Rotation.y;
+			//if((data != null && data.overridePitch) || (targetSettings != null && targetSettings.overridePitch))
 
-			if (previousData != null) //Revert
-			{
-				if (previousData.IsOverridingPosition)
-					positionOffset += PlayerPathFollower.GlobalTransform.origin - CameraPathFollower.GlobalTransform.origin;
-			}
+			//if ((data != null && data.overrideYaw) || (targetSettings != null && targetSettings.overrideYaw))
+
+			targetSettings = data;
 
 			if (useCrossfade) //Crossfade transition
 			{
-				Image img = _gimbal.GetViewport().GetTexture().GetData();
+				Image img = _calculationGimbal.GetViewport().GetTexture().GetData();
 				var tex = new ImageTexture();
 				tex.CreateFromImage(img);
 				GameplayInterface.instance.PlayCameraTransition(tex);
 			}
 		}
 
+		private float transitionTime; //Ratio (from 0 -> 1) of transition that has been completed
+		private float transitionTimeStepped; //Smoothstepped transition time
 		private void UpdateActiveSettings() //Calculate the active camera settings
 		{
-			activeSettings = overrideCameraSettings;
-			if (activeSettings == null)
+			if (targetSettings == null)
 			{
-				//UpdateBackstep();
+				/*
+				UpdateBackstep();
 
 				if (IsBackStepping)
-					activeSettings = backstepCameraSettings;
-				else
-					activeSettings = defaultCameraSettings;
+					currentSettings = backstepCameraSettings;
+				*/
+				SetCameraData(defaultCameraSettings, false);
 			}
+
+			float transitionSpeed = Mathf.IsZeroApprox(targetSettings.transitionSpeed) ? previousSettings.transitionSpeed : targetSettings.transitionSpeed;
+			if (resetFlag || Mathf.IsZeroApprox(transitionSpeed))
+				transitionTime = 1f;
+			else
+				transitionTime = Mathf.MoveToward(transitionTime, 1f, (1f / transitionSpeed) * PhysicsManager.physicsDelta);
+			transitionTimeStepped = Mathf.SmoothStep(0, 1f, transitionTime);
+
+			currentSettings.distance = Mathf.Lerp(previousSettings.distance, targetSettings.distance, transitionTime);
+			currentSettings.height = Mathf.Lerp(previousSettings.height, targetSettings.height, transitionTime);
+			currentSettings.heightTrackingStrength = Mathf.Lerp(previousSettings.heightTrackingStrength, targetSettings.heightTrackingStrength, transitionTime);
 		}
 		#endregion
 
@@ -119,9 +117,9 @@ namespace Project.Gameplay
 		private void UpdateBackstep()
 		{
 			//Backstep camera
-			if (_character.MoveSpeed < 0)
+			if (Player.MoveSpeed < 0)
 				backstepTimer = Mathf.MoveToward(backstepTimer, BACKSTEP_CAMERA_DELAY, PhysicsManager.physicsDelta);
-			else if (backstepTimer < BACKSTEP_CAMERA_DELAY || _character.MoveSpeed > 0)
+			else if (backstepTimer < BACKSTEP_CAMERA_DELAY || Player.MoveSpeed > 0)
 				backstepTimer = Mathf.MoveToward(backstepTimer, 0f, PhysicsManager.physicsDelta);
 		}
 		#endregion
@@ -130,137 +128,138 @@ namespace Project.Gameplay
 		private Vector3 localPlayerPosition; //Player's local position, relative to it's path follower
 		private void CalculateLocalPlayerPosition()
 		{
-			localPlayerPosition = _character.GlobalTransform.origin - PlayerPathFollower.GlobalTransform.origin;
+			localPlayerPosition = Player.GlobalTransform.origin - PlayerPathFollower.GlobalTransform.origin;
 			localPlayerPosition = PlayerPathFollower.GlobalTransform.basis.XformInv(localPlayerPosition);
 		}
 
-		private bool resetFlag; //Set to true to skip smoothing
-		private const float POSITION_SMOOTHING = .6f;
-		private const float ROTATION_SMOOTHING = .2f;
-		private const float OFFSET_SMOOTHING = .25f;
+		private bool resetFlag = true; //Set to true to skip smoothing
 
 		private void UpdateGameplayCamera()
 		{
-			if (freeCamEnabled) return;
+			if (Player.ActivePath == null) return; //Uninitialized
 
 			CalculateLocalPlayerPosition();
 			UpdateActiveSettings();
-			ResyncPathFollower();
 			UpdateBasePosition();
-			UpdateStrafe();
-			UpdateHeight();
-			UpdatePitch();
+
+			if (!freeCamEnabled) //Apply transform
+			{
+				_cameraRoot.GlobalTransform = _calculationRoot.GlobalTransform;
+				_cameraGimbal.GlobalTransform = _calculationGimbal.GlobalTransform;
+			}
 
 			if (resetFlag) //Reset flag
 				resetFlag = false;
 		}
 
-		private Vector3 positionOffset;
-		private Vector3 positionVelocity;
 		private float currentDistance;
-		private void UpdateBasePosition() //Align view to path at floor level
+		private float currentHeight;
+		private float heightVelocity;
+		private float distanceVelocity;
+		private Vector2 currentRotation;
+		private Vector2 rotationVelocity;
+		private const float POSITION_SMOOTHING = .2f;
+		private const float ROTATION_SMOOTHING = .06f;
+		private void UpdateBasePosition()
 		{
-			Transform t = GlobalTransform;
-			Vector3 targetPosition = CameraPathFollower.GlobalTransform.origin;
-			Basis targetBasis = GlobalTransform.basis;
+			UpdateOffsets(); //Height, distance & strafe
 
-			if (activeSettings.positionOffset.IsEqualApprox(Vector3.Zero))
+			Vector2 targetRotation = GetTargetRotation(); //Update Rotation
+			if (resetFlag)
+				currentRotation = targetRotation;
+			else //Smooth out rotations
 			{
-				targetBasis = CameraPathFollower.GlobalTransform.basis;
-				CameraPathFollower.VOffset = activeSettings.height;
-				currentDistance = Mathf.Lerp(currentDistance, activeSettings.distance, POSITION_SMOOTHING);
-
-				positionOffset = positionOffset.SmoothDamp(Vector3.Zero, ref positionVelocity, OFFSET_SMOOTHING); //Reset position offset
-			}
-			else
-			{
-				targetPosition = PlayerPathFollower.GlobalTransform.origin;
-				positionOffset = positionOffset.SmoothDamp(activeSettings.positionOffset, ref positionVelocity, OFFSET_SMOOTHING);
+				currentRotation = new Vector2(ExtensionMethods.SmoothDampAngle(currentRotation.x, targetRotation.x, ref rotationVelocity.x, ROTATION_SMOOTHING),
+					ExtensionMethods.SmoothDampAngle(currentRotation.y, targetRotation.y, ref rotationVelocity.y, ROTATION_SMOOTHING));
 			}
 
-			targetPosition += positionOffset;
-
-			if (resetFlag) //Snap values
-			{
-				t.origin = targetPosition;
-				t.basis = targetBasis.Orthonormalized();
-			}
-			else
-			{
-				t.origin = t.origin.LinearInterpolate(targetPosition, POSITION_SMOOTHING);
-				t.basis = t.basis.Slerp(targetBasis.Orthonormalized(), ROTATION_SMOOTHING).Orthonormalized();
-			}
-			GlobalTransform = t;
-		}
-
-		private void ResyncPathFollower()
-		{
-			float offset = PlayerPathFollower.Offset + _character.MoveSpeed * .1f * PhysicsManager.physicsDelta - currentDistance;
-			if (offset < 0)
-			{
-				CameraPathFollower.VOffset += Mathf.Abs(offset);
-				offset = 0;
-			}
-			CameraPathFollower.Offset = offset;
-		}
-
-		public bool IsRecenteringStrafe { get; set; }
-		private float currentStrafe;
-		private float strafeVelocity;
-		private const float STRAFE_SMOOTHING = .2f;
-		private const float STRAFE_RESET_SPEED = 14f;
-		private const float STRAFE_SMOOTHING_POINT = 1.2f;
-		private const float STRAFE_SNAP_DISTANCE = 1.5f;
-		private const float STRAFE_LEAD_AMOUNT = 1.5f;
-		private void UpdateStrafe()
-		{
-			Transform t = _gimbal.Transform;
-
-			float delta = localPlayerPosition.x - currentStrafe;
-			float sign = Mathf.Sign(delta);
-			delta = Mathf.Abs(delta);
-
-			if (_character.IsGrindStepping)
-			{
-				//Make switching rails easier
-				currentStrafe = ExtensionMethods.SmoothDamp(currentStrafe, currentStrafe + delta * sign, ref strafeVelocity, STRAFE_SMOOTHING);
-			}
-			else
-			{
-				if (activeSettings.IsOverridingPosition || IsRecenteringStrafe)
-					currentStrafe = Mathf.MoveToward(currentStrafe, 0, STRAFE_RESET_SPEED * _character.SpeedRatio * PhysicsManager.physicsDelta);
-
-				if (delta > STRAFE_SMOOTHING_POINT)
-				{
-					if (delta > STRAFE_SNAP_DISTANCE)
-						currentStrafe = ExtensionMethods.SmoothDamp(currentStrafe, currentStrafe + (delta - STRAFE_SNAP_DISTANCE) * sign, ref strafeVelocity, 0f);
-					else
-						currentStrafe = ExtensionMethods.SmoothDamp(currentStrafe, currentStrafe - STRAFE_LEAD_AMOUNT * _character.strafeSettings.GetSpeedRatio(_character.StrafeSpeed), ref strafeVelocity, STRAFE_SMOOTHING);
-				}
-			}
-
-			t.origin.x = currentStrafe;
-			_gimbal.Transform = t;
-		}
-
-		private void UpdateHeight()
-		{
 			//Track height
-			Transform t = _gimbal.Transform;
-			t.origin.y = localPlayerPosition.y * activeSettings.heightTrackingStrength;
-			_gimbal.Transform = t;
+			float heightTracking = localPlayerPosition.y * currentSettings.heightTrackingStrength;
+
+			//Calculate positions
+			Vector3 targetPosition = GetTargetPosition(previousSettings.followMode).LinearInterpolate(GetTargetPosition(targetSettings.followMode), transitionTimeStepped);
+			Vector3 offsetDirection = _calculationRoot.Forward().Rotated(_calculationRoot.Right(), currentRotation.x);
+			targetPosition += offsetDirection * currentDistance;
+			offsetDirection = offsetDirection.Rotated(_calculationRoot.Right(), Mathf.Pi * .5f - Mathf.Deg2Rad(currentSettings.viewAngle.x));
+			targetPosition -= offsetDirection * currentHeight;
+			targetPosition += GetHeightTracking(previousSettings.heightMode, offsetDirection).LinearInterpolate(GetHeightTracking(targetSettings.heightMode, offsetDirection), transitionTimeStepped) * heightTracking;
+
+			//Update Pitch
+			float pitchTracking = new Vector2(currentDistance, localPlayerPosition.y).AngleTo(Vector2.Right) * (1 - currentSettings.heightTrackingStrength);
+			pitchTracking *= -1;
+
+			//Apply changes
+			_calculationRoot.Rotation = Vector3.Down * currentRotation.y;
+			_calculationGimbal.Rotation = Vector3.Right * (currentRotation.x + pitchTracking);
+			Transform t = _calculationRoot.GlobalTransform;
+			t.origin = targetPosition;
+			_calculationRoot.GlobalTransform = t;
+
 		}
 
-		private float pitchVelocity;
-		private const float PITCH_SMOOTHING = .05f;
-		private void UpdatePitch()
+		private Vector3 GetTargetPosition(CameraSettingsResource.FollowMode mode)
 		{
-			if (activeSettings.positionOffset != Vector3.Zero) return;
+			if (mode == CameraSettingsResource.FollowMode.Pathfollower)
+				return PlayerPathFollower.GlobalTransform.origin;
+			else
+				return Player.GlobalTransform.origin - Vector3.Up * localPlayerPosition.y;
+		}
 
-			float factor = Mathf.Clamp((1 - activeSettings.heightTrackingStrength) * 2f, 0, 1);
-			float targetAngle = new Vector2(activeSettings.distance, localPlayerPosition.y + _character.VerticalSpeed * PhysicsManager.physicsDelta).AngleTo(Vector2.Right);
-			float angle = ExtensionMethods.SmoothDamp(_gimbal.Rotation.x, targetAngle, ref pitchVelocity, PITCH_SMOOTHING);
-			_gimbal.Rotation = Vector3.Right * angle * factor;
+		private Vector2 GetTargetRotation()
+		{
+			Vector3 forwardDirection = PlayerPathFollower.Forward().Flatten().Normalized();
+			if (Mathf.Abs(PlayerPathFollower.Forward().y) > .8f) //Case of running up a wall
+				forwardDirection = Mathf.Sign(PlayerPathFollower.Forward().y) * PlayerPathFollower.Down().Flatten().Normalized();
+			Vector3 rightDirection = forwardDirection.Cross(Vector3.Up);
+
+			Debug.DrawRay(_calculationRoot.GlobalTransform.origin, forwardDirection * 10, Colors.Blue);
+			Debug.DrawRay(_calculationRoot.GlobalTransform.origin, rightDirection * 10, Colors.Green);
+			Vector2 targetRotation;
+			if (targetSettings.overrideYaw)
+				targetRotation.y = Mathf.LerpAngle(previousSettings.viewAngle.y, Mathf.Deg2Rad(targetSettings.viewAngle.y), transitionTime);
+			else
+				targetRotation.y = forwardDirection.SignedAngleTo(Vector3.Forward, Vector3.Up);
+			
+			if (targetSettings.overridePitch)
+				targetRotation.x = Mathf.LerpAngle(previousSettings.viewAngle.x, Mathf.Deg2Rad(targetSettings.viewAngle.x), transitionTime);
+			else
+			{
+				float cachedRotation = _calculationRoot.Rotation.y;
+				_calculationRoot.Rotation = Vector3.Down * targetRotation.y; //Temporarily apply the rotation so pitch calculation can be correct
+				targetRotation.x = forwardDirection.SignedAngleTo(PlayerPathFollower.Forward(), rightDirection);
+
+				//Reset rotation
+				_calculationRoot.Rotation = Vector3.Up * cachedRotation;
+			}
+
+			targetRotation.x = Mathf.LerpAngle(previousSettings.viewAngle.x, targetRotation.x, transitionTimeStepped);
+			targetRotation.y = Mathf.LerpAngle(previousSettings.viewAngle.y, targetRotation.y, transitionTimeStepped);
+			return targetRotation;
+		}
+
+		private Vector3 GetHeightTracking(CameraSettingsResource.HeightMode heightMode, Vector3 cameraVector)
+		{
+			if (heightMode == CameraSettingsResource.HeightMode.Camera)
+				return -cameraVector;
+			else if (heightMode == CameraSettingsResource.HeightMode.Character)
+				return Player.worldDirection;
+			else
+				return Vector3.Up;
+		}
+
+		private void UpdateOffsets()
+		{
+			if (resetFlag)
+			{
+				currentHeight = currentSettings.height;
+				currentDistance = currentSettings.distance;
+				heightVelocity = distanceVelocity = 0f;
+			}
+			else
+			{
+				currentHeight = ExtensionMethods.SmoothDamp(currentHeight, currentSettings.height, ref heightVelocity, POSITION_SMOOTHING);
+				currentDistance = ExtensionMethods.SmoothDamp(currentDistance, currentSettings.distance, ref distanceVelocity, POSITION_SMOOTHING);
+			}
 		}
 		#endregion
 
@@ -276,6 +275,7 @@ namespace Project.Gameplay
 			if (Input.IsKeyPressed((int)KeyList.R))
 			{
 				freeCamEnabled = freeCamRotating = false;
+				_calculationRoot.Visible = false;
 				resetFlag = true;
 			}
 
@@ -283,6 +283,7 @@ namespace Project.Gameplay
 			if (freeCamRotating)
 			{
 				freeCamEnabled = true;
+				_calculationRoot.Visible = true;
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 			else
@@ -298,17 +299,17 @@ namespace Project.Gameplay
 				targetMoveSpeed *= .5f;
 
 			if (Input.IsKeyPressed((int)KeyList.E))
-				GlobalTranslate(_gimbal.Up() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				_cameraRoot.GlobalTranslate(_camera.Up() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed((int)KeyList.Q))
-				GlobalTranslate(_gimbal.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				_cameraRoot.GlobalTranslate(_camera.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed((int)KeyList.W))
-				GlobalTranslate(_gimbal.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				_cameraRoot.GlobalTranslate(_camera.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed((int)KeyList.S))
-				GlobalTranslate(_gimbal.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				_cameraRoot.GlobalTranslate(_camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed((int)KeyList.D))
-				GlobalTranslate(_gimbal.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				_cameraRoot.GlobalTranslate(_camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed((int)KeyList.A))
-				GlobalTranslate(_gimbal.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				_cameraRoot.GlobalTranslate(_camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
 		}
 
 		public override void _Input(InputEvent e)
@@ -321,9 +322,9 @@ namespace Project.Gameplay
 
 			if (e is InputEventMouseMotion)
 			{
-				RotateY(Mathf.Deg2Rad(-(e as InputEventMouseMotion).Relative.x) * MOUSE_SENSITIVITY);
-				_gimbal.RotateX(Mathf.Deg2Rad((e as InputEventMouseMotion).Relative.y) * MOUSE_SENSITIVITY);
-				_gimbal.RotationDegrees = Vector3.Right * Mathf.Clamp(_gimbal.RotationDegrees.x, -90, 90);
+				_cameraRoot.RotateY(Mathf.Deg2Rad(-(e as InputEventMouseMotion).Relative.x) * MOUSE_SENSITIVITY);
+				_cameraGimbal.RotateX(Mathf.Deg2Rad(-(e as InputEventMouseMotion).Relative.y) * MOUSE_SENSITIVITY);
+				_cameraGimbal.RotationDegrees = Vector3.Right * Mathf.Clamp(_cameraGimbal.RotationDegrees.x, -90, 90);
 			}
 			else if (e is InputEventMouseButton emb)
 			{

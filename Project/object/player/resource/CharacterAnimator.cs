@@ -138,7 +138,7 @@ namespace Project.Gameplay
 				//Match movement direction when moving slowly
 				float targetStrafeTilt = 0;
 
-				if (InputManager.controller.MovementAxis != Vector2.Zero)
+				if (InputManager.controller.MovementAxis != Vector2.Zero && _character.ControlLockoutData == null)
 				{
 					float targetDirection = new Vector2(_character.GetStrafeInputValue(), -Mathf.Abs(_character.GetMovementInputValue())).AngleTo(Vector2.Up);
 					targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Deg2Rad(90), -1, 1);

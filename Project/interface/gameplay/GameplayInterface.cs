@@ -11,19 +11,12 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
-			_hud = GetNode<Control>(hud);
-
 			InitializeRingCounter();
 			InitializeSoulGauge();
 			InitializeHomingAttack();
 		}
 
-
 		#region Heads up display
-		[Export]
-		public NodePath hud;
-		private Control _hud;
-
 		[Export]
 		public NodePath ringLabel;
 		private Label _ringLabel;
@@ -116,8 +109,6 @@ namespace Project.Gameplay
 		private int soulPower;
 		private int maxSoulPower;
 
-		private float currentSoulPowerLength; //The length (in seconds) of soul skill
-
 		private const int SOUL_GAUGE_BASE = 100; //Base size of soul gauge
 		private const int SOUL_GAUGE_MAX = 300; //Max size of soul gauge
 		private const int MINIMUM_SOUL_POWER = 50; //Minimum amount of soul power needed to use soul skills.
@@ -144,11 +135,10 @@ namespace Project.Gameplay
 			UpdateSoulFill(0f);
 		}
 
-		public void ModifySoulPearl(int amount)
+		public void ModifySoulGauge(int amount)
 		{
 			soulPower += amount;
 			soulPower = Mathf.Clamp(soulPower, 0, maxSoulPower);
-			currentSoulPowerLength = soulPower / 60f;
 			UpdateSoulFill((float)soulPower / maxSoulPower);
 
 			if (amount > 0)

@@ -14,7 +14,7 @@ namespace Project.Interface
 		public NodePath pauseCursor;
 		private Node2D _pauseCursor;
 
-		private bool canInteractWithPauseMenu;
+		private bool canInteractWithPauseMenu = true;
 		public void EnablePausing() => canInteractWithPauseMenu = true;
 		public void DisablePausing() => canInteractWithPauseMenu = false;
 
@@ -28,15 +28,11 @@ namespace Project.Interface
 		{
 			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
 			GetTree().Paused = !GetTree().Paused;
+			BGMPlayer.instance.StreamPaused = GetTree().Paused;
 			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
 
 			if (CharacterController.instance.IsTimeBreakActive)//Fix speed break
 				Engine.TimeScale = GetTree().Paused ? 1f : CharacterController.TIME_BREAK_RATIO;
-		}
-
-		public void OnPauseToggled() //Called after the pause animation is completed
-		{
-			canInteractWithPauseMenu = true;
 		}
 
 		public override void _Process(float _)

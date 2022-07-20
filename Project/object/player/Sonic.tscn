@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://object/player/resource/movement settings/RunSettings.tres" type="Resource" id=1]
 [ext_resource path="res://object/player/resource/movement settings/BackstepSettings.tres" type="Resource" id=2]
@@ -14,6 +14,13 @@
 [ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=12]
 [ext_resource path="res://object/stage/pickups/resource/model/ring particle.png" type="Texture" id=13]
 [ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=14]
+[ext_resource path="res://object/player/resource/CharacterSound.cs" type="Script" id=15]
+[ext_resource path="res://sound/sfx/player/en/VOICE_E_2.wav" type="AudioStream" id=16]
+[ext_resource path="res://sound/sfx/player/en/VOICE_E_24.wav" type="AudioStream" id=17]
+[ext_resource path="res://sound/sfx/player/ja/VOICE_J_24.wav" type="AudioStream" id=18]
+[ext_resource path="res://sound/sfx/player/ja/VOICE_J_2.wav" type="AudioStream" id=19]
+[ext_resource path="res://sound/sfx/player/PLAYER_5.wav" type="AudioStream" id=20]
+[ext_resource path="res://sound/sfx/player/PLAYER_75.wav" type="AudioStream" id=21]
 
 [sub_resource type="SphereShape" id=80]
 radius = 0.3
@@ -139,7 +146,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1552, 128 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -256, 320 )
-node_connections = [ "output", 0, "IsJumpDashing", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump", 0, "IsJumping", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start", "fall_reset", 0, "jump_cancel_time", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state" ]
+node_connections = [ "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "fall_reset", 0, "jump_cancel_time", "jump", 0, "IsJumping", "jump", 1, "jump-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump_cancel_time", 0, "fall-start", "output", 0, "IsJumpDashing" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -339,7 +346,7 @@ nodes/RunSpeed/node = SubResource( 79 )
 nodes/RunSpeed/position = Vector2( -704, 256 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "output", 0, "IsCrouching", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "MovementReset", 0, "RunSpeed", "RunSpeed", 0, "IsRunning", "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state" ]
+node_connections = [ "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state", "RunSpeed", 0, "IsRunning", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "MovementReset", 0, "RunSpeed", "output", 0, "IsCrouching" ]
 
 [sub_resource type="AnimationNodeBlendTree" id=37]
 graph_offset = Vector2( -1007.84, 46.8564 )
@@ -357,7 +364,7 @@ nodes/countdown_anim/node = SubResource( 66 )
 nodes/countdown_anim/position = Vector2( -144, 288 )
 nodes/ground_state/node = SubResource( 71 )
 nodes/ground_state/position = Vector2( -1312, 160 )
-node_connections = [ "output", 0, "countdown", "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state" ]
+node_connections = [ "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "output", 0, "countdown" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
@@ -369,6 +376,7 @@ collision/safe_margin = 0.01
 script = ExtResource( 10 )
 pathFollower = NodePath("PathFollower")
 animator = NodePath("Sonic")
+sound = NodePath("Sound")
 collisionWidth = 0.4
 moveSettings = ExtResource( 1 )
 airMoveSettings = ExtResource( 4 )
@@ -384,7 +392,7 @@ jumpDashSpeed = 18.0
 jumpDashPower = 4.0
 jumpDashGravity = 18.0
 jumpDashMaxGravity = -24.0
-homingAttackSpeed = 32.0
+homingAttackSpeed = 48.0
 backflipSpeed = 20.0
 speedBreakSpeed = 54.0
 attackLockoutSettings = ExtResource( 7 )
@@ -470,6 +478,27 @@ parameters/ground_state/MovementReset/seek_position = -1.0
 parameters/ground_state/Run/blend_position = 0.0
 parameters/ground_state/RunSpeed/scale = 1.0
 parameters/ground_state/crouch_state/playback = SubResource( 119 )
+
+[node name="Sound" type="Node" parent="."]
+script = ExtResource( 15 )
+enClips = [ ExtResource( 16 ), ExtResource( 17 ) ]
+jaClips = [ ExtResource( 19 ), ExtResource( 18 ) ]
+actionClips = [ ExtResource( 20 ), ExtResource( 21 ) ]
+voiceChannel = NodePath("VoiceChannel")
+sfxChannels = [ NodePath("ActionChannel"), NodePath("FootstepChannel"), NodePath("FootstepChannel2") ]
+
+[node name="VoiceChannel" type="AudioStreamPlayer" parent="Sound"]
+stream = ExtResource( 16 )
+bus = "VOICE"
+
+[node name="ActionChannel" type="AudioStreamPlayer" parent="Sound"]
+bus = "SFX"
+
+[node name="FootstepChannel" type="AudioStreamPlayer" parent="Sound"]
+bus = "SFX"
+
+[node name="FootstepChannel2" type="AudioStreamPlayer" parent="Sound"]
+bus = "SFX"
 
 [connection signal="area_entered" from="ObjectTrigger" to="." method="OnObjectTriggerEnter"]
 [connection signal="area_exited" from="ObjectTrigger" to="." method="OnObjectTriggerExit"]

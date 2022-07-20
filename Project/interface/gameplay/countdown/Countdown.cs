@@ -1,12 +1,11 @@
 using Godot;
 using Project.Gameplay;
+using Project.Core;
 
 namespace Project.Interface
 {
     public class Countdown : Node
 	{
-		[Export]
-		public bool skipCountdown;
 		[Export]
 		public NodePath countdownTickParent;
 		private Node2D _countdownTickParent;
@@ -35,7 +34,7 @@ namespace Project.Interface
 		{
 			IsCountDownComplete = false;
 
-			if (skipCountdown)
+			if (CheatManager.SkipCountdown)
 				OnCountdownCompleted();
 			else
 			{

@@ -14,13 +14,16 @@ namespace Project.Gameplay
 		[Export]
 		public bool resetOnLand;
 
+		//On -> Reset any action the player may be doing
+		[Export]
+		public bool resetActionState;
+
 		//ON -> Defeats any enemy that happens to be in the way.
 		//Off -> Allow damage.
 		[Export]
 		public bool invincible;
 
 		//ON -> Ignore any jumping inputs
-		//TODO add an option for jumping to a point.
 		[Export]
 		public bool disableJumping;
 

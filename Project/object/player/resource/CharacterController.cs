@@ -22,6 +22,9 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath animator;
 		public CharacterAnimator Animator { get; private set; }
+		[Export]
+		public NodePath sound;
+		public CharacterSound Sound { get; private set; }
 		[Export(PropertyHint.Range, "0, .5")]
 		public float collisionHeight = .4f;
 		[Export(PropertyHint.Range, "0, .5")]
@@ -88,11 +91,13 @@ namespace Project.Gameplay
 				return;
 			}
 
+			isRecentered = false; //Just in case
 			isControlsLocked = true;
 			ControlLockoutData = data;
 			controlLockoutTimer = data.length;
 
-			ActionState = ActionStates.Normal;
+			if(ControlLockoutData.resetActionState)
+				ActionState = ActionStates.Normal;
 		}
 
 		private void UpdateControlLockTimer()
@@ -183,6 +188,7 @@ namespace Project.Gameplay
 
 			PathFollower = GetNode<PathFollow>(pathFollower);
 			Animator = GetNode<CharacterAnimator>(animator);
+			Sound = GetNode<CharacterSound>(sound);
 		}
 
 		public override void _PhysicsProcess(float _)
@@ -329,7 +335,7 @@ namespace Project.Gameplay
 							MoveSpeed = Mathf.MoveToward(MoveSpeed, Mathf.Abs(StrafeSpeed), strafeSettings.traction * .5f * GetMovementInputValue() * PhysicsManager.physicsDelta);
 
 						MoveSpeed = moveSettings.Interpolate(MoveSpeed, GetMovementInputValue());
-						//UpdateSlopeMoveSpeed();
+						UpdateSlopeMoveSpeed();
 					}
 				}
 				else
@@ -380,33 +386,26 @@ namespace Project.Gameplay
 				StrafeSpeed = airStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
 		}
 
+		private bool isRecentered;
+		private const float RECENTER_SMOOTHING = .2f;
 		private void RecenterStrafe()
 		{
 			//Calculate distance along the plane defined by StrafeDirection
-			Vector3 calculationPoint = GlobalTransform.origin - PathFollower.GlobalTransform.origin;
-			Vector3 rotationAxis = StrafeDirection.Cross(Vector3.Right).Normalized();
-			if (rotationAxis.IsNormalized())
-				calculationPoint = calculationPoint.Rotated(rotationAxis, StrafeDirection.AngleTo(Vector3.Right));
+			Vector3 calculationPoint = PathFollower.GlobalTransform.basis.XformInv(GlobalTransform.origin - PathFollower.GlobalTransform.origin);
 
-			float distanceFromCenter = calculationPoint.x;
-
-			if(isSideScroller)
+			if(isSideScroller || isRecentered)
 			{
-				GlobalTranslate(-StrafeDirection * distanceFromCenter); //Instantly snap when sidescrolling
+				GlobalTranslate(StrafeDirection * calculationPoint.x); //Instantly snap when sidescrolling
 				return;
 			}
 
-			if (MoveSpeed != 0)
-			{
-				StrafeSpeed = Mathf.MoveToward(StrafeSpeed, -distanceFromCenter / PhysicsManager.physicsDelta, strafeSettings.traction * PhysicsManager.physicsDelta);
+			calculationPoint.x = Mathf.MoveToward(calculationPoint.x, 0, strafeSettings.speed * PhysicsManager.physicsDelta * Mathf.Abs(SpeedRatio) * RECENTER_SMOOTHING);
+			Transform t = GlobalTransform;
+			t.origin = PathFollower.GlobalTransform.basis.Xform(calculationPoint) + PathFollower.GlobalTransform.origin;
+			GlobalTransform = t;
 
-				//Center Smoothing
-				StrafeSpeed = Mathf.Clamp(StrafeSpeed, -Mathf.Abs(MoveSpeed), Mathf.Abs(MoveSpeed));
-				float speedClamp = (Mathf.Abs(distanceFromCenter) - collisionWidth) / STRAFE_SMOOTHING_LENGTH;
-				StrafeSpeed = Mathf.Clamp(StrafeSpeed, -speedClamp, speedClamp);
-			}
-			else
-				StrafeSpeed = strafeSettings.Interpolate(StrafeSpeed, 0);
+			if (Mathf.IsZeroApprox(calculationPoint.x))
+				isRecentered = true;
 		}
 
 		#region Actions
@@ -456,8 +455,6 @@ namespace Project.Gameplay
 					return;
 			}
 
-			UpdateTimeBreak();
-			UpdateSpeedBreak();
 			if (IsSpeedBreakActive) return;
 
 			if (IsCrouching)
@@ -533,7 +530,7 @@ namespace Project.Gameplay
 		private bool canJumpDash;
 		private bool isAccelerationJump;
 		private float currentJumpLength; //Amount of time the jump button was held
-		private const float ACCELERATION_JUMP_LENGTH = .06f; //How fast the jump button needs to be released for an "acceleration jump"
+		private const float ACCELERATION_JUMP_LENGTH = .04f; //How fast the jump button needs to be released for an "acceleration jump"
 		private void Jump()
 		{
 			currentJumpLength = 0;
@@ -735,8 +732,16 @@ namespace Project.Gameplay
 
 			if (Controller.breakButton.wasPressed && !IsSpeedBreakActive)
 			{
-				if (GameplayInterface.instance.IsSoulGaugeCharged)
+				if (IsTimeBreakActive)
+				{
 					ToggleTimeBreak();
+					return;
+				}
+
+				if (!GameplayInterface.instance.IsSoulGaugeCharged) return;
+				if (MovementState == MovementStates.Automation || MovementState == MovementStates.Launcher) return;
+
+				ToggleTimeBreak();
 			}
 		}
 
@@ -746,8 +751,17 @@ namespace Project.Gameplay
 
 			if (Controller.boostButton.wasPressed && !IsTimeBreakActive)
 			{
-				if (GameplayInterface.instance.IsSoulGaugeCharged)
+				if (IsSpeedBreakActive)
+				{
 					ToggleSpeedBreak();
+					return;
+				}
+
+				if (!GameplayInterface.instance.IsSoulGaugeCharged) return;
+				if (!IsOnGround) return;
+				if (MovementState != MovementStates.Normal) return;
+
+				ToggleSpeedBreak();
 			}
 
 			if (IsSpeedBreakActive)
@@ -769,20 +783,29 @@ namespace Project.Gameplay
 			IsTimeBreakActive = !IsTimeBreakActive;
 			Engine.TimeScale = IsTimeBreakActive ? TIME_BREAK_RATIO : 1f;
 
-			if (!IsTimeBreakActive)
+			if (IsTimeBreakActive)
+			{
+				Sound.PlayVoice(1);
+				BGMPlayer.instance.VolumeDb = -80f;
+			}
+			else
 			{
 				breakTimer = BREAK_SKILLS_COOLDOWN;
+				BGMPlayer.instance.VolumeDb = 0f;
 				GameplayInterface.instance.UpdateSoulGaugeColor();
 			}
 		}
 
 		public void ToggleSpeedBreak()
 		{
-			if (IsSpeedBreakActive)
-				MoveSpeed = moveSettings.speed;
-
 			IsSpeedBreakActive = !IsSpeedBreakActive;
 			breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
+
+			if(IsSpeedBreakActive)
+				Sound.PlayVoice(0);
+			else
+				MoveSpeed = moveSettings.speed;
+			
 			GameplayInterface.instance.UpdateSoulGaugeColor();
 		}
 
@@ -791,13 +814,19 @@ namespace Project.Gameplay
 
 		private void UpdateBreakTimer()
 		{
+			if (CheatManager.InfiniteSoulGauge)
+				GameplayInterface.instance.ModifySoulGauge(300);
+
+			UpdateTimeBreak();
+			UpdateSpeedBreak();
+
 			if (!IsUsingBreakSkills)
 				breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
 			else if (breakTimer == 0)
 			{
 				if (IsSpeedBreakActive)
 				{
-					GameplayInterface.instance.ModifySoulPearl(-1);
+					GameplayInterface.instance.ModifySoulGauge(-1);
 					if (GameplayInterface.instance.IsSoulGaugeEmpty)
 						ToggleSpeedBreak();
 				}
@@ -805,7 +834,7 @@ namespace Project.Gameplay
 				{
 					if (soulGaugeDrainTimer == 0)
 					{
-						GameplayInterface.instance.ModifySoulPearl(-1);
+						GameplayInterface.instance.ModifySoulGauge(-1);
 						soulGaugeDrainTimer = TIME_BREAK_SOUL_DRAIN_INTERVAL;
 
 						if (GameplayInterface.instance.IsSoulGaugeEmpty)
@@ -1234,8 +1263,6 @@ namespace Project.Gameplay
 					else if(distance < .1f)
 						StopDrift();
 				}
-
-				UpdateTimeBreak();
 			}
 
 			GlobalTransform = t;
@@ -1407,7 +1434,7 @@ namespace Project.Gameplay
 			Move path follower
 			Perform collision checks
 			Move character
-			Resync
+			Resync path follower
 			*/
 			float movementDelta = MoveSpeed * PhysicsManager.physicsDelta;
 			Vector3 movementDirection = ForwardDirection;
@@ -1577,7 +1604,7 @@ namespace Project.Gameplay
 			if (MoveSpeed == 0) return; //No movement.
 
 			castVector *= Mathf.Sign(MoveSpeed);
-			float castLength = collisionHeight + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
+			float castLength = collisionHeight + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
 			Vector3 sidewaysOffset = StrafeDirection * collisionWidth * .5f;
 
 			RaycastHit centerHit = this.CastRay(CenterPosition, castVector * castLength, environmentMask, false, GetCollisionExceptions());
@@ -1620,18 +1647,19 @@ namespace Project.Gameplay
 
 			if (centerHit)
 			{
-				float wallRatio = Mathf.Abs(CompareNormal2D(centerHit.normal, ForwardDirection));
+				float wallRatio = DotProd2D(centerHit.normal, ForwardDirection);
 				if (wallRatio > .9f)
 				{
 					if (IsSpeedBreakActive && breakTimer == 0) //Cancel speed break
 						ToggleSpeedBreak();
 
 					MoveSpeed = 0;
+					GlobalTranslate(castVector * (centerHit.distance - collisionWidth)); //Snap to wall
 				}
 			}
 		}
 
-		private bool IsValidWallCast(RaycastHit hit) => hit && (Mathf.Abs(CompareNormal2D(hit.normal, hit.direction)) >= .5f && !hit.collidedObject.IsInGroup("ignore raycast"));
+		private bool IsValidWallCast(RaycastHit hit) => hit && (DotProd2D(hit.normal, hit.direction) >= .5f && !hit.collidedObject.IsInGroup("ignore raycast"));
 
 		private StrafeCollisions strafeCollision;
 		private enum StrafeCollisions
@@ -1641,7 +1669,7 @@ namespace Project.Gameplay
 			Right,
 			Both
 		}
-		private const float STRAFE_SMOOTHING_LENGTH = .1f; //At what distance to apply smoothing to strafe (To avoid "Bumpy Corners")
+		private const float COLLISION_PADDING = .1f; //At what distance to apply smoothing to strafe (To avoid "Bumpy Corners")
 
 		//Checks for wall collision side to side. (Always active)
 		private void CheckStrafeWall(int direction)
@@ -1649,31 +1677,22 @@ namespace Project.Gameplay
 			if (isSideScroller) return; //No wall checks when sidescrolling.
 
 			bool isActiveDirection = Mathf.Sign(StrafeSpeed) == direction;
-			Vector3 castOrigin = CenterPosition;
-			float castLength = (collisionWidth + STRAFE_SMOOTHING_LENGTH);
-			castLength += Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
-
+			float castLength = collisionWidth + COLLISION_PADDING + Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
 			Vector3 castVector = StrafeDirection * castLength * direction;
-			RaycastHit hit = this.CastRay(castOrigin, castVector, environmentMask, false, GetCollisionExceptions());
-			Debug.DrawRay(castOrigin, castVector, hit ? Colors.Red : Colors.White);
+			RaycastHit hit = this.CastRay(CenterPosition, castVector, environmentMask, false, GetCollisionExceptions());
+			Debug.DrawRay(CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 
 			if (hit)
 			{
+				//Only process active collision
 				if (isActiveDirection)
 				{
-					//Only process active collision
-					float dot = Mathf.Abs(CompareNormal2D(hit.normal, StrafeDirection));
+					float dot = DotProd2D(hit.normal, StrafeDirection);
 
 					if (dot > .8f)
 					{
-						if (hit.distance > collisionWidth)
-						{
-							//Smooth out wall collision
-							float speedClamp = (hit.distance - collisionWidth) / STRAFE_SMOOTHING_LENGTH;
-							StrafeSpeed = Mathf.Clamp(StrafeSpeed, -speedClamp, speedClamp);
-						}
-						else
-							StrafeSpeed = 0;
+						GlobalTranslate(hit.direction * (hit.distance - collisionWidth));
+						StrafeSpeed = 0;
 					}
 					else
 					{
@@ -1682,6 +1701,7 @@ namespace Project.Gameplay
 					}
 				}
 
+				//Always update strafe collisions
 				if (hit.distance <= collisionWidth)
 				{
 					if (strafeCollision == StrafeCollisions.None)
@@ -1693,7 +1713,7 @@ namespace Project.Gameplay
 		}
 
 		//Returns the absolute dot product of a normal relative to an axis ignoring Y values.
-		private float CompareNormal2D(Vector3 normal, Vector3 axis) => normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized());
+		private float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized()));
 		#endregion
 
 		#region Paths

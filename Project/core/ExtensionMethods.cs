@@ -169,6 +169,20 @@ namespace Project.Core
 			return output;
 		}
 
+		//Probably broken -_-
+		public static float SmoothDampAngle(float current, float target, ref float currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
+		{
+			if (Mathf.Abs(target - current) > Mathf.Pi)
+			{
+				if (target > current)
+					current += Mathf.Tau;
+				else
+					target += Mathf.Tau;
+			}
+
+			return SmoothDamp(current, target, ref currentVelocity, smoothTime, maxSpeed);
+		}
+
 		public static Vector2 SmoothDamp(this Vector2 current, Vector2 target, ref Vector2 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
 			Vector2 output = new Vector2(SmoothDamp(current.x, target.x, ref currentVelocity.x, smoothTime, maxSpeed),

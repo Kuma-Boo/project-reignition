@@ -50,6 +50,12 @@ namespace Project.Gameplay
 			{
 				_dialogChannel.Stop();
 				_subtitleLabel.Visible = false;
+
+				if (isSonicSpeaking)
+				{
+					EmitSignal(nameof(OnSonicFinishedSpeaking));
+					isSonicSpeaking = false;
+				}
 			}
 		}
 		public void OnDialogDelayComplete() => UpdateDialog(false);
@@ -79,6 +85,24 @@ namespace Project.Gameplay
 			_subtitleLabel.Text = Tr(currentDialog.textKeys[currentDialogIndex]);
 			_subtitleLabel.Visible = true;
 			_dialogChannel.Play();
+
+			UpdateSonicDialog();
+		}
+
+		private bool isSonicSpeaking;
+		[Signal]
+		public delegate void OnSonicStartedSpeaking();
+		[Signal]
+		public delegate void OnSonicFinishedSpeaking();
+		private const string SONIC_VOICE_SUFFIX = "so"; //Any dialog key that ends with this will be Sonic speaking
+		private void UpdateSonicDialog() //Checks whether Sonic is the one speaking, and mutes his gameplay audio.
+		{
+			bool wasSonicSpeaking = isSonicSpeaking;
+			isSonicSpeaking = currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
+			if (isSonicSpeaking && !wasSonicSpeaking)
+				EmitSignal(nameof(OnSonicStartedSpeaking));
+			else if (!isSonicSpeaking && wasSonicSpeaking)
+				EmitSignal(nameof(OnSonicFinishedSpeaking));
 		}
 		#endregion
 

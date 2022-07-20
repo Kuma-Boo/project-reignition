@@ -7,14 +7,6 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		public NodePath path;
 		private Path _path;
-		public enum TargetObject
-		{
-			Player,
-			Camera,
-			Both
-		}
-		[Export]
-		public TargetObject targetObject;
 		[Export]
 		public bool isSideScrollingPath;
 		[Export]
@@ -27,11 +19,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
-			if (targetObject != TargetObject.Camera)
-				Character.SetActivePath(_path);
-			if (targetObject != TargetObject.Player)
-				CameraController.instance.SetActivePath(_path);
-
+			Character.SetActivePath(_path);
 			Character.isSideScroller = isSideScrollingPath;
 			Character.isFacingRight = isFacingRight;
 		}

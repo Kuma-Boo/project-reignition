@@ -12,20 +12,41 @@ namespace Project.Gameplay
 
 		[Export(PropertyHint.Range, "0f, 1f")]
 		public float heightTrackingStrength; //How much to follow the player's height
-		[Export(PropertyHint.Range, "0, 1")]
-		public float heightTrackingSmoothness = 1f;
 
 		[Export]
-		public RotationMode rotationMode;
-		public enum RotationMode
+		public FollowMode followMode;
+		public enum FollowMode
 		{
-			FollowPath,
-			FollowY,
-			Ignore,
+			Pathfollower,
+			Character,
+		}
+		[Export]
+		public HeightMode heightMode;
+		public enum HeightMode
+		{
+			Character,
+			Camera,
+			GlobalUp
 		}
 
 		[Export]
-		public Vector3 positionOffset; //IMPORTANT offset to the player's center position.
-		public bool IsOverridingPosition => !positionOffset.IsEqualApprox(Vector3.Zero);
+		public float transitionSpeed = 1f;
+
+		[Export]
+		public bool overridePitch;
+		[Export]
+		public bool overrideYaw;
+		[Export]
+		public Vector2 viewAngle; //View angle, in degrees
+
+		public void CopyFrom(CameraSettingsResource from) //For runtime camera data
+		{
+			distance = from.distance;
+			height = from.height;
+			heightTrackingStrength = from.heightTrackingStrength;
+
+			followMode = from.followMode;
+			transitionSpeed = from.transitionSpeed;
+		}
 	}
 }

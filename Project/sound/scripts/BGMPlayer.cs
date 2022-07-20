@@ -2,6 +2,7 @@ using Godot;
 
 public class BGMPlayer : AudioStreamPlayer
 {
+	public static BGMPlayer instance;
 	[Export]
 	public float loopStartPosition;
 	[Export]
@@ -10,6 +11,8 @@ public class BGMPlayer : AudioStreamPlayer
 
 	public override void _Ready()
 	{
+		instance = this;
+
 		if (loopEndPosition > loopStartPosition)
 			Play();
 	}

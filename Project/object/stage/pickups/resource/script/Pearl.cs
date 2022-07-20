@@ -88,7 +88,7 @@ namespace Project.Gameplay
 				tween.InterpolateProperty(this, "scale", Vector3.One, Vector3.One * .6f, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
 			}
 
-			tween.InterpolateCallback(GameplayInterface.instance, .1f, nameof(GameplayInterface.instance.ModifySoulPearl), isRichPearl ? 20 : 1);
+			tween.InterpolateCallback(GameplayInterface.instance, .1f, nameof(GameplayInterface.instance.ModifySoulGauge), isRichPearl ? 20 : 1);
 			tween.InterpolateCallback(this, .3f, nameof(Despawn));
 			tween.Start();
 
