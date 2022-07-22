@@ -10,14 +10,28 @@ namespace Project.Gameplay.Triggers
 		private bool isTriggered;
 
 		[Export]
+		public float entryTransitionSpeed = 1f;
+		[Export]
+		public float exitTransitionSpeed;
+
+
+		[Export]
 		public TriggerMode triggerMode;
 		public enum TriggerMode
 		{
 			OnEnter, //Activate on enter
 			OnExit, //Activate on exit
 
-			//NOTE that these are calculated using the character's current travel direction. This can be disabled using "useAbsoluteDirection"
 			DisableOnExit, //Enable on enter, disable on exit.
+		}
+
+		[Export]
+		public ExitMode exitMode;
+		public enum ExitMode
+		{
+			DeactivateBothWays,
+			DeactivateMovingForward,
+			DeactivateMovingBackward,
 		}
 
 		private readonly Array<StageTriggerModule> _stageTriggerObjects = new Array<StageTriggerModule>();
@@ -62,7 +76,15 @@ namespace Project.Gameplay.Triggers
 				case TriggerMode.OnEnter: //Do Nothing
 					break;
 				default:
-					Deactivate(Mathf.Sign(characterOffset - triggerOffset) > 0);
+					bool isExitingForward = Mathf.Sign(characterOffset - triggerOffset) > 0;
+
+					if (exitMode == ExitMode.DeactivateMovingForward && !isExitingForward)
+						break;
+					
+					if (exitMode == ExitMode.DeactivateMovingBackward && isExitingForward)
+						break;
+
+					Deactivate(isExitingForward);
 					break;
 			}
 		}

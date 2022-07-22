@@ -1,8 +1,8 @@
-[gd_scene load_steps=88 format=2]
+[gd_scene load_steps=89 format=2]
 
 [ext_resource path="res://object/player/resource/movement settings/RunSettings.tres" type="Resource" id=1]
 [ext_resource path="res://object/player/resource/movement settings/BackstepSettings.tres" type="Resource" id=2]
-[ext_resource path="res://object/player/resource/movement settings/StrafeSettings.tres" type="Resource" id=3]
+[ext_resource path="res://object/player/resource/movement settings/RunningStrafeSettings.tres" type="Resource" id=3]
 [ext_resource path="res://object/player/resource/movement settings/AirRunSettings.tres" type="Resource" id=4]
 [ext_resource path="res://object/player/resource/movement settings/AirStrafeSettings.tres" type="Resource" id=5]
 [ext_resource path="res://object/player/resource/movement settings/GrindStepLockout.tres" type="Resource" id=6]
@@ -21,6 +21,7 @@
 [ext_resource path="res://sound/sfx/player/ja/VOICE_J_2.wav" type="AudioStream" id=19]
 [ext_resource path="res://sound/sfx/player/PLAYER_5.wav" type="AudioStream" id=20]
 [ext_resource path="res://sound/sfx/player/PLAYER_75.wav" type="AudioStream" id=21]
+[ext_resource path="res://object/player/resource/movement settings/StandingStrafeSettings.tres" type="Resource" id=22]
 
 [sub_resource type="SphereShape" id=80]
 radius = 0.3
@@ -146,7 +147,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1552, 128 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -256, 320 )
-node_connections = [ "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "fall_reset", 0, "jump_cancel_time", "jump", 0, "IsJumping", "jump", 1, "jump-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump_cancel_time", 0, "fall-start", "output", 0, "IsJumpDashing" ]
+node_connections = [ "output", 0, "IsJumpDashing", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "fall_reset", 0, "jump_cancel_time", "jump", 0, "IsJumping", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -346,7 +347,7 @@ nodes/RunSpeed/node = SubResource( 79 )
 nodes/RunSpeed/position = Vector2( -704, 256 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state", "RunSpeed", 0, "IsRunning", "IsRunning", 0, "Jog", "IsRunning", 1, "Run", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "MovementReset", 0, "RunSpeed", "output", 0, "IsCrouching" ]
+node_connections = [ "output", 0, "IsCrouching", "IsCrouching", 0, "IsMoving", "IsCrouching", 1, "crouch_state", "MovementReset", 0, "RunSpeed", "RunSpeed", 0, "IsRunning", "IsMoving", 0, "Idle", "IsMoving", 1, "MovementReset", "IsRunning", 0, "Jog", "IsRunning", 1, "Run" ]
 
 [sub_resource type="AnimationNodeBlendTree" id=37]
 graph_offset = Vector2( -1007.84, 46.8564 )
@@ -364,7 +365,7 @@ nodes/countdown_anim/node = SubResource( 66 )
 nodes/countdown_anim/position = Vector2( -144, 288 )
 nodes/ground_state/node = SubResource( 71 )
 nodes/ground_state/position = Vector2( -1312, 160 )
-node_connections = [ "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "output", 0, "countdown" ]
+node_connections = [ "output", 0, "countdown", "countdown", 0, "balancing", "countdown", 1, "countdown_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "balancing", 0, "IsGrounded", "balancing", 1, "balance_state" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
@@ -380,7 +381,8 @@ sound = NodePath("Sound")
 collisionWidth = 0.4
 moveSettings = ExtResource( 1 )
 airMoveSettings = ExtResource( 4 )
-strafeSettings = ExtResource( 3 )
+runningStrafeSettings = ExtResource( 3 )
+standingStrafeSettings = ExtResource( 22 )
 airStrafeSettings = ExtResource( 5 )
 backstepSettings = ExtResource( 2 )
 gravity = 32.0

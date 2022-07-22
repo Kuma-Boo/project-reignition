@@ -122,8 +122,8 @@ namespace Project.Gameplay
 			{
 				float targetRotation = 0;
 				if (_character.SpeedRatio <= .8f)
-					targetRotation = _character.MoveSpeed >= 0 ? new Vector2(_character.StrafeSpeed, -_character.MoveSpeed).Normalized().AngleTo(Vector2.Up) : 0;
-				Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .15f);
+					targetRotation = _character.MoveSpeed >= 0 ? new Vector2(_character.StrafeSpeed, -_character.MoveSpeed).Normalized().AngleTo(Vector2.Up) * .8f : 0;
+				Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .2f);
 			}
 		}
 
@@ -141,12 +141,12 @@ namespace Project.Gameplay
 				if (InputManager.controller.MovementAxis != Vector2.Zero && _character.ControlLockoutData == null)
 				{
 					float targetDirection = new Vector2(_character.GetStrafeInputValue(), -Mathf.Abs(_character.GetMovementInputValue())).AngleTo(Vector2.Up);
-					targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Deg2Rad(90), -1, 1);
+					targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Pi * .5f, -1, 1);
 				}
 
 				if (_character.SpeedRatio > .8f)
 				{
-					float strafeRatio = _character.strafeSettings.GetSpeedRatio(_character.StrafeSpeed * 5f);
+					float strafeRatio = _character.runningStrafeSettings.GetSpeedRatio(_character.StrafeSpeed * 5f);
 					if (Mathf.Abs(strafeRatio) > targetStrafeTilt)
 						targetStrafeTilt = strafeRatio;
 				}
@@ -154,7 +154,7 @@ namespace Project.Gameplay
 				strafeTilt = Mathf.Lerp(strafeTilt, targetStrafeTilt, .2f);
 			}
 			
-			float runSpeed = Mathf.Max(_character.SpeedRatio, Mathf.Abs(_character.strafeSettings.GetSpeedRatioClamped(_character.StrafeSpeed)));
+			float runSpeed = Mathf.Max(_character.SpeedRatio, Mathf.Abs(_character.runningStrafeSettings.GetSpeedRatioClamped(_character.StrafeSpeed)));
 			_animator.Set("parameters/ground_state/Jog/blend_position", new Vector2(strafeTilt, runSpeed));
 			_animator.Set("parameters/ground_state/Run/blend_position", strafeTilt);
 

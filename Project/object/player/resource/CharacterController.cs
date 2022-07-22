@@ -298,7 +298,9 @@ namespace Project.Gameplay
 		[Export]
 		public MovementResource airMoveSettings;
 		[Export]
-		public MovementResource strafeSettings;
+		public MovementResource runningStrafeSettings;
+		[Export]
+		public MovementResource standingStrafeSettings;
 		[Export]
 		public MovementResource airStrafeSettings;
 		[Export]
@@ -332,7 +334,7 @@ namespace Project.Gameplay
 					else
 					{
 						if (Mathf.Abs(StrafeSpeed) > MoveSpeed) //Slow speed turning
-							MoveSpeed = Mathf.MoveToward(MoveSpeed, Mathf.Abs(StrafeSpeed), strafeSettings.traction * .5f * GetMovementInputValue() * PhysicsManager.physicsDelta);
+							MoveSpeed = Mathf.MoveToward(MoveSpeed, Mathf.Abs(StrafeSpeed), runningStrafeSettings.traction * .5f * GetMovementInputValue() * PhysicsManager.physicsDelta);
 
 						MoveSpeed = moveSettings.Interpolate(MoveSpeed, GetMovementInputValue());
 						UpdateSlopeMoveSpeed();
@@ -381,7 +383,11 @@ namespace Project.Gameplay
 			}
 
 			if (IsOnGround)
-				StrafeSpeed = strafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
+			{
+				float standingStrafe = standingStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
+				float runningStrafe = runningStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
+				StrafeSpeed = Mathf.Lerp(standingStrafe, runningStrafe, Mathf.Abs(SpeedRatio));
+			}
 			else
 				StrafeSpeed = airStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
 		}
@@ -399,7 +405,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			calculationPoint.x = Mathf.MoveToward(calculationPoint.x, 0, strafeSettings.speed * PhysicsManager.physicsDelta * Mathf.Abs(SpeedRatio) * RECENTER_SMOOTHING);
+			calculationPoint.x = Mathf.MoveToward(calculationPoint.x, 0, runningStrafeSettings.speed * PhysicsManager.physicsDelta * Mathf.Abs(SpeedRatio) * RECENTER_SMOOTHING);
 			Transform t = GlobalTransform;
 			t.origin = PathFollower.GlobalTransform.basis.Xform(calculationPoint) + PathFollower.GlobalTransform.origin;
 			GlobalTransform = t;
@@ -592,6 +598,7 @@ namespace Project.Gameplay
 		public float homingAttackSpeed;
 		public bool IsJumpDashing => ActionState == ActionStates.JumpDashing;
 		public bool IsAttacking { get; private set; } //Should the player damage enemies?
+		public Spatial LockonTarget { get; private set; } //Active homing attack target
 
 		private void CheckJumpDash()
 		{
@@ -608,7 +615,7 @@ namespace Project.Gameplay
 			IsAttacking = true;
 			ActionState = ActionStates.JumpDashing;
 
-			if (activeTarget == null)
+			if (LockonTarget == null)
 			{
 				MoveSpeed = jumpDashSpeed;
 				VerticalSpeed = jumpDashPower;
@@ -617,12 +624,12 @@ namespace Project.Gameplay
 
 		private void UpdateJumpDash()
 		{
-			if (activeTarget != null && IsAttacking)
+			if (LockonTarget != null && IsAttacking)
 			{
 				MoveSpeed = homingAttackSpeed;
 				StrafeSpeed = VerticalSpeed = 0;
 				customPhysicsEnabled = true;
-				Vector3 travelDirection = (activeTarget.GlobalTransform.origin - GlobalTransform.origin).Normalized();
+				Vector3 travelDirection = (LockonTarget.GlobalTransform.origin - GlobalTransform.origin).Normalized();
 				MoveAndCollide(travelDirection * MoveSpeed * PhysicsManager.physicsDelta);
 			}
 			else
@@ -648,9 +655,15 @@ namespace Project.Gameplay
 			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, SLIDE_FRICTION * PhysicsManager.physicsDelta);
 
 			if(MoveSpeed == 0)
-				StrafeSpeed = Mathf.MoveToward(StrafeSpeed, 0, strafeSettings.friction * PhysicsManager.physicsDelta);
+				StrafeSpeed = Mathf.MoveToward(StrafeSpeed, 0, runningStrafeSettings.friction * PhysicsManager.physicsDelta);
 
 			if (Controller.actionButton.wasReleased)
+				CancelCrouching();
+		}
+
+		private void CancelCrouching()
+		{
+			if(IsCrouching)
 				ActionState = ActionStates.Normal;
 		}
 		#endregion
@@ -798,6 +811,8 @@ namespace Project.Gameplay
 
 		public void ToggleSpeedBreak()
 		{
+			CancelCrouching();
+
 			IsSpeedBreakActive = !IsSpeedBreakActive;
 			breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
 
@@ -970,9 +985,9 @@ namespace Project.Gameplay
 			GlobalTransform = t;
 			bounceTimer = BOUNCE_LOCKOUT_TIME;
 
-			if (activeTarget != null) //Reset Active Target
+			if (LockonTarget != null) //Reset Active Target
 			{
-				activeTarget = null;
+				LockonTarget = null;
 				GameplayInterface.instance.DisableHomingReticle();
 			}
 
@@ -995,6 +1010,9 @@ namespace Project.Gameplay
 
 		public void StartSidle()
 		{
+			if (IsSpeedBreakActive) //Disable speed break
+				ToggleSpeedBreak();
+
 			MovementState = MovementStates.Sidle;
 		}
 
@@ -1070,6 +1088,9 @@ namespace Project.Gameplay
 		private Launcher activeLauncher;
 		public void StartLauncher(Launcher newLauncher)
 		{
+			if(IsGrinding)
+				StopGrinding();
+
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Launcher;
 			activeLauncher = newLauncher;
@@ -1123,6 +1144,7 @@ namespace Project.Gameplay
 		public int grindStepSpeed;
 		[Export]
 		public int grindStepHeight;
+		public bool IsGrinding => MovementState == MovementStates.Grinding;
 		public bool IsGrindStepping { get; private set; }
 		private GrindRail grindRail;
 		private const float MINIMUM_GRIND_SPEED = 2f;
@@ -1311,20 +1333,19 @@ namespace Project.Gameplay
 
 		private readonly Array<RespawnableObject> activeTriggers = new Array<RespawnableObject>();
 		private readonly Array<Spatial> activeTargets = new Array<Spatial>(); //List of targetable objects
-		private Spatial activeTarget; //Active homing attack target
 		private void UpdateTriggers()
 		{
 			//Stage objects
 			for (int i = 0; i < activeTriggers.Count; i++)
 				activeTriggers[i].OnStay();
 
-			bool isLockedOn = activeTarget != null;
+			bool isLockedOn = LockonTarget != null;
 			//Validate current lockon target
-			if (isLockedOn && IsTargetInvalid(activeTarget))
-				activeTarget = null;
+			if (isLockedOn && IsTargetInvalid(LockonTarget))
+				LockonTarget = null;
 
 			//Update homing attack
-			if (activeTarget == null)
+			if (LockonTarget == null)
 			{
 				float closestDistance = Mathf.Inf;
 				//Pick new target
@@ -1338,16 +1359,16 @@ namespace Project.Gameplay
 						continue;
 
 					closestDistance = dst;
-					activeTarget = activeTargets[i];
+					LockonTarget = activeTargets[i];
 				}
 			}
 
 			//Disable Homing Attack
-			if (activeTarget == null && isLockedOn)
+			if (LockonTarget == null && isLockedOn)
 				GameplayInterface.instance.DisableHomingReticle();
-			else if (activeTarget != null)
+			else if (LockonTarget != null)
 			{
-				Vector2 screenPos = CameraController.instance.ConvertToScreenSpace(activeTarget.GlobalTransform.origin);
+				Vector2 screenPos = CameraController.instance.ConvertToScreenSpace(LockonTarget.GlobalTransform.origin);
 				GameplayInterface.instance.UpdateHomingReticle(screenPos, !isLockedOn);
 			}
 		}
@@ -1568,12 +1589,10 @@ namespace Project.Gameplay
 
 				if (IsBackflipping) return;
 
-				worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .1f, 0f, 1f)).Normalized();
-				/*
-				if (!jumpedFromGround || IsFalling)
-				else //Stay aligned with the path (Somewhat)
-				*/
-				//worldDirection = worldDirection.LinearInterpolate(-ForwardDirection.Cross(StrafeDirection), .05f).Normalized();
+				if (ControlLockoutData != null && ControlLockoutData.strafeSettings == ControlLockoutResource.StrafeSettings.Recenter)
+					worldDirection = PathFollower.Up(); //Follow path
+				else
+					worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .1f, 0f, 1f)).Normalized();
 			}
 		}
 
@@ -1696,7 +1715,7 @@ namespace Project.Gameplay
 					}
 					else
 					{
-						float maxSpeed = strafeSettings.speed * (1 - dot);
+						float maxSpeed = runningStrafeSettings.speed * (1 - dot);
 						StrafeSpeed = Mathf.Clamp(StrafeSpeed, -maxSpeed, maxSpeed);
 					}
 				}

@@ -9,11 +9,12 @@ namespace Project.Gameplay.Triggers
 		public bool crossfade;
 		[Export]
 		public CameraSettingsResource cameraData; //Leave empty to make this a RESET trigger.
-		private CameraSettingsResource previousData;
+		[Export]
+		public CameraSettingsResource previousData; //Leave empty to automatically assign
 		private CameraController CameraController => CameraController.instance;
 		public override void Activate()
 		{
-			if (CameraController.targetSettings != null) //Cache settings
+			if (previousData == null) //Cache settings on the first time
 				previousData = CameraController.targetSettings;
 
 			CameraController.SetCameraData(cameraData, crossfade);
@@ -22,7 +23,7 @@ namespace Project.Gameplay.Triggers
 		public override void Deactivate(bool isMovingForward)
 		{
 			if (CameraController.targetSettings != cameraData) return; //Already overriden by a differnt trigger
-			CameraController.SetCameraData(isMovingForward ? null : previousData, false);
+			CameraController.SetCameraData(previousData, false);
 		}
 	}
 }

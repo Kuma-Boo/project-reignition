@@ -189,7 +189,7 @@ namespace Project.Gameplay
 
 		public void UpdateHomingReticle(Vector2 screenPosition, bool newTarget)
 		{
-			_homingReticle.Position = screenPosition;
+			_homingReticle.SetDeferred("position", screenPosition);
 			if (newTarget)
 				_homingAnimator.Play("enable");
 		}
