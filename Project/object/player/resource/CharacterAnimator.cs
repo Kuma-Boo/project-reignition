@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
-    public class CharacterAnimator : Spatial
+	public class CharacterAnimator : Spatial
 	{
 		[Export]
 		public NodePath animator;
@@ -14,9 +14,9 @@ namespace Project.Gameplay
 		private CharacterController _character;
 
 		public override void _Ready()
-        {
-            _animator = GetNode<AnimationTree>(animator);
-            _animator.Active = true;
+		{
+			_animator = GetNode<AnimationTree>(animator);
+			_animator.Active = true;
 			_root = GetNode<Spatial>(root);
 
 			_character = GetParent() as CharacterController;
@@ -25,8 +25,8 @@ namespace Project.Gameplay
 		private const string COUNTDOWN_PARAMETER = "parameters/countdown/active";
 		public void Countdown()
 		{
-            _animator.Set(COUNTDOWN_PARAMETER, true);
-        }
+			_animator.Set(COUNTDOWN_PARAMETER, true);
+		}
 
 		public void PlayAnimation(string anim) //Play a specific animation
 		{
@@ -34,12 +34,16 @@ namespace Project.Gameplay
 		}
 
 		#region Grinding Animation
+		private const string IS_BALANCING_STATE = "parameters/balancing/current";
+		private const string BALANCE_STATE_PARAMETER = "parameters/balance_state/active";
+		private const string BALANCE_LEFT_STATE_PARAMETER = "parameters/balance_state/balance_left/blend_position";
+		private const string BALANCE_RIGHT_STATE_PARAMETER = "parameters/balance_state/balance_right/blend_position";
 		public void StartGrinding()
 		{
-			_animator.Set("parameters/balancing/current", 1); //Turn on grinding animations
-			_animator.Set("parameters/balance_state/active", true);
-			_animator.Set("parameters/balance_state/balance_left/blend_position", 0);
-			_animator.Set("parameters/balance_state/balance_right/blend_position", 0);
+			_animator.Set(IS_BALANCING_STATE, 1); //Turn on grinding animations
+			_animator.Set(BALANCE_STATE_PARAMETER, true);
+			_animator.Set(BALANCE_LEFT_STATE_PARAMETER, 0);
+			_animator.Set(BALANCE_RIGHT_STATE_PARAMETER, 0);
 		}
 
 		public AnimationNodeStateMachinePlayback GrindingState => _animator.Get("parameters/balance_state/playback") as AnimationNodeStateMachinePlayback;
@@ -52,11 +56,6 @@ namespace Project.Gameplay
 
 		#region Normal Animation
 		private float strafeTilt;
-
-		private const string GROUND_PARAMETER = "parameters/IsGrounded/current";
-
-		private const string MOVING_PARAMETER = "parameters/ground_state/IsMoving/current";
-		private const string RUNNING_PARAMETER = "parameters/ground_state/IsRunning/current";
 
 		private const string CROUCH_PARAMETER = "parameters/ground_state/IsCrouching/current";
 
@@ -71,6 +70,15 @@ namespace Project.Gameplay
 		{
 			_animator.Set(JUMPING_PARAMETER, 1);
 			_animator.Set(JUMP_TRIGGER_PARAMETER, true);
+		}
+
+		private const string BACKFLIP_TRIGGER_PARAMETER = "parameters/air_state/backflip/active";
+		public void Backflip()
+		{
+			_animator.Set(BACKFLIP_TRIGGER_PARAMETER, true);
+			_animator.Set(FALL_TRIGGER_PARAMETER, false);
+			_animator.Set(FALL_RESET_PARAMETER, 0);
+			Rotation = Vector3.Zero; //Reset Rotation
 		}
 
 		public void JumpAccel()
@@ -92,6 +100,8 @@ namespace Project.Gameplay
 			_animator.Set(FALL_RESET_PARAMETER, 0);
 		}
 
+
+		private const string GROUND_PARAMETER = "parameters/IsGrounded/current";
 		public void UpdateAnimation()
 		{
 			if (ringParticleTimer != 0)
@@ -127,38 +137,44 @@ namespace Project.Gameplay
 			}
 		}
 
+		private float strafeVelocity;
+		private const string MOVEMENT_STATE_PARAMETER = "parameters/ground_state/MoveState/current";
 		private void GroundAnimations()
 		{
-			_animator.Set(MOVING_PARAMETER, _character.IsIdling ? 0 : 1);
-			_animator.Set(RUNNING_PARAMETER, _character.SpeedRatio >= 1 ? 1 : 0);
+			int transition = 1; //Idle
+			if (_character.SpeedRatio < 0) //Backstep
+				transition = 0;
+			else if (_character.SpeedRatio >= 1) //Running
+				transition = 3;
+			else if(!_character.IsIdling) //Walk -> Jog
+				transition = 2;
+
+			_animator.Set(MOVEMENT_STATE_PARAMETER, transition);
 			_animator.Set(CROUCH_PARAMETER, _character.IsCrouching ? 1 : 0);
 
-			if (!_character.IsIdling)
-			{
-				//Match movement direction when moving slowly
-				float targetStrafeTilt = 0;
+			float targetStrafeTilt = 0;
 
-				if (InputManager.controller.MovementAxis != Vector2.Zero && _character.ControlLockoutData == null)
+			if (!_character.IsIdling && _character.ControlLockoutData == null)
+			{
+				if (InputManager.controller.MovementAxis != Vector2.Zero)
 				{
 					float targetDirection = new Vector2(_character.GetStrafeInputValue(), -Mathf.Abs(_character.GetMovementInputValue())).AngleTo(Vector2.Up);
 					targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Pi * .5f, -1, 1);
 				}
-
-				if (_character.SpeedRatio > .8f)
-				{
-					float strafeRatio = _character.runningStrafeSettings.GetSpeedRatio(_character.StrafeSpeed * 5f);
-					if (Mathf.Abs(strafeRatio) > targetStrafeTilt)
-						targetStrafeTilt = strafeRatio;
-				}
-
-				strafeTilt = Mathf.Lerp(strafeTilt, targetStrafeTilt, .2f);
 			}
+			strafeTilt = ExtensionMethods.SmoothDamp(strafeTilt, targetStrafeTilt, ref strafeVelocity, .2f);
+
+			float moveAnimationSpeed = 1f;
 			
-			float runSpeed = Mathf.Max(_character.SpeedRatio, Mathf.Abs(_character.runningStrafeSettings.GetSpeedRatioClamped(_character.StrafeSpeed)));
-			_animator.Set("parameters/ground_state/Jog/blend_position", new Vector2(strafeTilt, runSpeed));
+			if(_character.SpeedRatio < 0)
+				moveAnimationSpeed = .8f * Mathf.Abs(_character.backstepSettings.GetSpeedRatio(_character.MoveSpeed));
+			else if(!_character.IsIdling)
+				moveAnimationSpeed = Mathf.Max(_character.SpeedRatio, Mathf.Abs(_character.runningStrafeSettings.GetSpeedRatioClamped(_character.StrafeSpeed)));
+
+			_animator.Set("parameters/ground_state/Jog/blend_position", new Vector2(strafeTilt, moveAnimationSpeed));
 			_animator.Set("parameters/ground_state/Run/blend_position", strafeTilt);
 
-			_animator.Set("parameters/ground_state/RunSpeed/scale", Mathf.Lerp(1f, 2.5f, runSpeed));
+			_animator.Set("parameters/ground_state/MoveSpeed/scale", Mathf.Lerp(1f, 2.5f, moveAnimationSpeed));
 		}
 
 		private void AirAnimations()

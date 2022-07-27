@@ -33,7 +33,7 @@ namespace Project.Core
 			//Debug keys
 			if (!OS.IsDebugBuild())
 				return;
-
+			
 			debugHud.Update(Input.IsKeyPressed((int)KeyList.Tab));
 			debugPause.Update(Input.IsKeyPressed((int)KeyList.P));
 			debugAdvance.Update(Input.IsKeyPressed((int)KeyList.F1));
@@ -47,6 +47,8 @@ namespace Project.Core
 				controller.activeGamepad = e.Device;
 			else if (e is InputEventKey && controller.IsUsingGamepad)
 				controller.activeGamepad = -1;
+
+			e.Dispose();
 		}
 
 		public static void DefaultControls()

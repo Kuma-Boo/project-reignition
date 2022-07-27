@@ -113,7 +113,7 @@ namespace Project.Gameplay
 		public float GetClosestOffset(Vector3 globalPosition)
 		{
 			//Associate's position local to path position
-			Vector3 localPosition = globalPosition - GrindPath.GlobalTransform.origin;
+			Vector3 localPosition = globalPosition - GrindPath.GlobalTranslation;
 			return GrindPath.Curve.GetClosestOffset(localPosition);
 		}
 
@@ -122,10 +122,10 @@ namespace Project.Gameplay
 			if (!CanGrind) return;
 
 			//Calculate connection point
-			Vector3 delta = Character.GlobalTransform.origin - GlobalTransform.origin;
+			Vector3 delta = Character.GlobalTranslation - GlobalTranslation;
 			delta = GlobalTransform.basis.RotationQuat().Inverse().Xform(delta);
 			float dst = Mathf.Abs(delta.z);
-			Vector3 connectionPoint = GlobalTransform.origin + this.Up() * RAIL_HEIGHT - this.Forward() * dst;
+			Vector3 connectionPoint = GlobalTranslation + this.Up() * RAIL_HEIGHT - this.Forward() * dst;
 			Character.StartGrinding(this, connectionPoint);
 		}
 

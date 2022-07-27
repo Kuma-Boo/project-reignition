@@ -50,9 +50,6 @@ namespace Project.Gameplay
 		}
 
 		[Export]
-		public float transitionSpeed = 1f;
-
-		[Export]
 		public bool overridePitch;
 		[Export]
 		public bool overrideYaw;
@@ -75,8 +72,6 @@ namespace Project.Gameplay
 			strafeMode = from.strafeMode;
 
 			tiltMode = from.tiltMode;
-
-			transitionSpeed = from.transitionSpeed;
 
 			viewPosition = from.viewPosition;
 		}

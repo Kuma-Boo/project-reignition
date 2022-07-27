@@ -10,12 +10,6 @@ namespace Project.Gameplay.Triggers
 		private bool isTriggered;
 
 		[Export]
-		public float entryTransitionSpeed = 1f;
-		[Export]
-		public float exitTransitionSpeed;
-
-
-		[Export]
 		public TriggerMode triggerMode;
 		public enum TriggerMode
 		{
@@ -65,8 +59,8 @@ namespace Project.Gameplay.Triggers
 
 			Path activePath = CharacterController.instance.ActivePath;
 			Curve3D pathCurve = activePath.Curve;
-			float characterOffset = pathCurve.GetClosestOffset(CharacterController.instance.GlobalTransform.origin - activePath.GlobalTransform.origin);
-			float triggerOffset = pathCurve.GetClosestOffset(GlobalTransform.origin - activePath.GlobalTransform.origin);
+			float characterOffset = pathCurve.GetClosestOffset(CharacterController.instance.GlobalTranslation - activePath.GlobalTranslation);
+			float triggerOffset = pathCurve.GetClosestOffset(GlobalTranslation - activePath.GlobalTranslation);
 
 			switch (triggerMode)
 			{

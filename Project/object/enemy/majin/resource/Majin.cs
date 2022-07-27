@@ -38,9 +38,9 @@ namespace Project.Gameplay
 		{
 			if (Engine.EditorHint) return; //In Editor
 
-			targetPosition = GlobalTransform.origin;
+			targetPosition = GlobalTranslation;
 			spawnData.UpdateSpawnData(this);
-			spawnData.spawnTransform.origin = GlobalTransform.origin + spawnOffset;
+			spawnData.spawnTransform.origin = GlobalTranslation + spawnOffset;
 			StageSettings.instance.RegisterRespawnableObject(this);
 
 			_animationTree = GetNode<AnimationTree>(animationTree);
@@ -77,13 +77,13 @@ namespace Project.Gameplay
 		{
 			if (Character.IsAttacking)
 			{
-				Vector3 travelOffset = (_lockonArea.GlobalTransform.origin - Character.CenterPosition).Flatten().Normalized() * 10f * Character.MoveSpeed / Character.homingAttackSpeed;
-				movementTween.InterpolateProperty(this, "global_transform:origin", GlobalTransform.origin, GlobalTransform.origin + travelOffset, .5f);
+				Vector3 travelOffset = (_lockonArea.GlobalTranslation - Character.CenterPosition).Flatten().Normalized() * 10f * Character.MoveSpeed / Character.homingAttackSpeed;
+				movementTween.InterpolateProperty(this, "global_transform:origin", GlobalTranslation, GlobalTranslation + travelOffset, .5f);
 				movementTween.InterpolateCallback(this, .5f, nameof(Despawn));
 				movementTween.Start();
 
 				_lockonArea.Disabled = true;
-				Character.HitEnemy(_lockonArea.GlobalTransform.origin);
+				Character.HitEnemy(_lockonArea.GlobalTranslation);
 
 				EmitSignal(nameof(OnDefeated));
 			}

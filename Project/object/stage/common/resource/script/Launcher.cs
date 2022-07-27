@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay
 {
@@ -42,9 +43,9 @@ namespace Project.Gameplay
 		public float FirstHalfTime => Mathf.Sqrt((-2 * middleHeight) / GRAVITY);
 		public float SecondHalfTime => Mathf.Sqrt((-2 * (middleHeight - finalHeight)) / GRAVITY);
 		public float TotalTravelTime => FirstHalfTime + SecondHalfTime;
-		public Vector3 StartingPoint => GlobalTransform.origin + Vector3.Up * startingHeight;
+		public Vector3 StartingPoint => GlobalTranslation + Vector3.Up * startingHeight;
 
-		public const float GRAVITY = -24.0f;
+		public const float GRAVITY = -18.0f;
 
 		public Vector3 InterpolatePosition(float t)
 		{
@@ -74,7 +75,7 @@ namespace Project.Gameplay
 
 		public Vector3 RecenterCharacter()
 		{
-			Vector3 pos = Character.GlobalTransform.origin.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
+			Vector3 pos = Character.GlobalTranslation.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
 			IsCharacterCentered = pos.IsEqualApprox(StartingPoint);
 			return pos;
 		}

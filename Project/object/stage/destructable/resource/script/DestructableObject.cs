@@ -140,7 +140,7 @@ namespace Project.Gameplay
 
 		public override void OnEntered(Area a)
 		{
-			Shatter(a.GlobalTransform.origin);
+			Shatter(a.GlobalTranslation);
 		}
 	}
 }

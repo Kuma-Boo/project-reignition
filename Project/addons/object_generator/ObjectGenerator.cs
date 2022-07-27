@@ -80,13 +80,13 @@ namespace Project.Editor
 							RotationMode = PathFollow.RotationModeEnum.Oriented
 						};
 						_path.AddChild(_follow);
-						_follow.Offset = _path.Curve.GetClosestOffset(GlobalTransform.origin - _path.GlobalTransform.origin);
+						_follow.Offset = _path.Curve.GetClosestOffset(GlobalTranslation - _path.GlobalTranslation);
 
 						for (int i = 0; i < amount; i++)
 						{
 							_follow.HOffset = pathHInterpolationCurve.Interpolate((float)i / (amount - 1));
 							_follow.VOffset = pathVInterpolationCurve.Interpolate((float)i / (amount - 1));
-							Spawn(_follow.GlobalTransform.origin, true);
+							Spawn(_follow.GlobalTranslation, true);
 							_follow.Offset += spacing;
 						}
 

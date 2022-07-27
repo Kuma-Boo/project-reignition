@@ -20,10 +20,6 @@ namespace Project.Core
 			UpdatePhysicsState();
 		}
 
-		public const float GRAVITY = 400; //Gravity for generic objects
-		public const float MAX_GRAVITY = 80; //Gravity for generic objects
-		public static float AddGravity(float i) => Mathf.Clamp(i + GRAVITY * physicsDelta, -Mathf.Inf, MAX_GRAVITY);
-
 		public const string PLAYER_GROUP = "player";
 		public const string ENEMY_TAG = "enemy";
 

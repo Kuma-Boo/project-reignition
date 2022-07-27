@@ -74,7 +74,7 @@ namespace Project.Core
 
 		public static void AddExplosionForce(this RigidBody body, Vector3 explosionPoint, float power)
 		{
-			Vector3 blastDir = body.GlobalTransform.origin - explosionPoint;
+			Vector3 blastDir = body.GlobalTranslation - explosionPoint;
 			float distance = blastDir.Length();
 
 			if (Mathf.IsZeroApprox(distance)) return;

@@ -20,8 +20,8 @@ namespace Project.Gameplay.Triggers
 
 			Path activePath = CharacterController.instance.ActivePath;
 			Curve3D pathCurve = activePath.Curve;
-			float characterOffset = pathCurve.GetClosestOffset(CharacterController.instance.GlobalTransform.origin - activePath.GlobalTransform.origin);
-			float triggerOffset = pathCurve.GetClosestOffset(GlobalTransform.origin - activePath.GlobalTransform.origin);
+			float characterOffset = pathCurve.GetClosestOffset(CharacterController.instance.GlobalTranslation - activePath.GlobalTranslation);
+			float triggerOffset = pathCurve.GetClosestOffset(GlobalTranslation - activePath.GlobalTranslation);
 
 			bool isMovingForward = Mathf.Sign(characterOffset - triggerOffset) > 0;
 			if (isMovingForward) return; //Keep state change

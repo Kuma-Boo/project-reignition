@@ -11,6 +11,10 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		public NodePath automationPath;
 		private Path _automationPath;
+		[Export]
+		public CameraSettingsResource cameraSettings;
+		[Export]
+		public float cameraBlend;
 
 		private bool isEntered;
 		private bool isActive;
@@ -54,6 +58,14 @@ namespace Project.Gameplay.Triggers
 			
 			startingOffset = Character.PathFollower.Offset;
 			isActive = true;
+
+			UpdateCamera();
+		}
+
+		public void UpdateCamera()
+		{
+			if (cameraSettings != null)
+				CameraController.instance.SetCameraData(cameraSettings, cameraBlend, false);
 		}
 
 		private void Deactivate()

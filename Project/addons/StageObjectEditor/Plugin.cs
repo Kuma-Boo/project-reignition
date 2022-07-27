@@ -60,11 +60,11 @@ namespace Project.Editor
 
 		private void UpdateDriftCorner(Control overlay)
 		{
-			if (editorCam.IsPositionBehind((target as DriftTrigger).GlobalTransform.origin) ||
+			if (editorCam.IsPositionBehind((target as DriftTrigger).GlobalTranslation) ||
 			editorCam.IsPositionBehind((target as DriftTrigger).MiddlePosition))
 				return;
 
-			Vector2 start = editorCam.UnprojectPosition((target as DriftTrigger).GlobalTransform.origin);
+			Vector2 start = editorCam.UnprojectPosition((target as DriftTrigger).GlobalTranslation);
 			Vector2 middle = editorCam.UnprojectPosition((target as DriftTrigger).MiddlePosition);
 			overlay.DrawLine(start, middle, Colors.Blue, 1, true);
 
@@ -79,7 +79,7 @@ namespace Project.Editor
 			Majin t = target as Majin;
 			if (t.spawnOffset == Vector3.Zero) return;
 
-			Vector3 s = t.GlobalTransform.origin;
+			Vector3 s = t.GlobalTranslation;
 			Vector3 e = s + t.spawnOffset;
 			if (editorCam.IsPositionBehind(s) ||
 			editorCam.IsPositionBehind(e))

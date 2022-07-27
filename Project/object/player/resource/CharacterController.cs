@@ -25,9 +25,9 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath sound;
 		public CharacterSound Sound { get; private set; }
-		[Export(PropertyHint.Range, "0, .5")]
+		[Export(PropertyHint.Range, "0, 1")]
 		public float collisionHeight = .4f;
-		[Export(PropertyHint.Range, "0, .5")]
+		[Export(PropertyHint.Range, "0, 1")]
 		public float collisionWidth = .3f;
 
 		#region Controls
@@ -142,9 +142,8 @@ namespace Project.Gameplay
 		{
 			MovementState = MovementStates.Automation;
 			ActionState = ActionStates.Normal;
-			automationDifference = GlobalTransform.origin - PathFollower.GlobalTransform.origin;
+			automationDifference = GlobalTranslation - PathFollower.GlobalTranslation;
 
-			MoveSpeed = 0;
 			StrafeSpeed = 0;
 			VerticalSpeed = 0;
 
@@ -156,20 +155,18 @@ namespace Project.Gameplay
 			customPhysicsEnabled = true;
 			automationDifference = automationDifference.LinearInterpolate(Vector3.Zero, .2f); //Smooth out entry
 
-			Transform t;
-
 			if (automationParent != null)
-				t = automationParent.GlobalTransform;
+				GlobalTransform = automationParent.GlobalTransform;
 			else
 			{
-				MoveSpeed = moveSettings.speed;
+				if(MoveSpeed < moveSettings.speed)
+					MoveSpeed = moveSettings.speed;
 				PathFollower.Offset += MoveSpeed * PhysicsManager.physicsDelta;
 
-				t = PathFollower.GlobalTransform;
+				GlobalTransform = PathFollower.GlobalTransform;
 			}
-			
-			t.origin += automationDifference;
-			GlobalTransform = t;
+
+			GlobalTranslation += automationDifference;
 		}
 
 		public void CancelAutomation()
@@ -397,7 +394,7 @@ namespace Project.Gameplay
 		private void RecenterStrafe()
 		{
 			//Calculate distance along the plane defined by StrafeDirection
-			Vector3 calculationPoint = PathFollower.GlobalTransform.basis.XformInv(GlobalTransform.origin - PathFollower.GlobalTransform.origin);
+			Vector3 calculationPoint = PathFollower.GlobalTransform.basis.XformInv(GlobalTranslation - PathFollower.GlobalTranslation);
 
 			if(isSideScroller || isRecentered)
 			{
@@ -406,9 +403,7 @@ namespace Project.Gameplay
 			}
 
 			calculationPoint.x = Mathf.MoveToward(calculationPoint.x, 0, runningStrafeSettings.speed * PhysicsManager.physicsDelta * Mathf.Abs(SpeedRatio) * RECENTER_SMOOTHING);
-			Transform t = GlobalTransform;
-			t.origin = PathFollower.GlobalTransform.basis.Xform(calculationPoint) + PathFollower.GlobalTransform.origin;
-			GlobalTransform = t;
+			GlobalTranslation = PathFollower.GlobalTransform.basis.Xform(calculationPoint) + PathFollower.GlobalTranslation;
 
 			if (Mathf.IsZeroApprox(calculationPoint.x))
 				isRecentered = true;
@@ -527,7 +522,10 @@ namespace Project.Gameplay
 		[Export]
 		public float accelerationJumpSpeed;
 		[Export]
+		public float jumpHeight;
+		[Export]
 		public float jumpPower;
+		public float JumpPower => Mathf.Sqrt(2 * gravity * jumpHeight);
 		[Export]
 		public float jumpCurve = .95f;
 		public bool IsJumping => ActionState == ActionStates.Jumping;
@@ -545,7 +543,7 @@ namespace Project.Gameplay
 			canJumpDash = true;
 			ActionState = ActionStates.Jumping;
 
-			VerticalSpeed = jumpPower;
+			VerticalSpeed = JumpPower;
 			if (MoveSpeed < 0) //Disallow jumping backwards
 				MoveSpeed = 0;
 
@@ -581,8 +579,6 @@ namespace Project.Gameplay
 
 			currentJumpLength += PhysicsManager.physicsDelta;
 		}
-
-		public void ResetJumpDash() => canJumpDash = true;
 		#endregion
 
 		#region Jump Dash & Homing Attack
@@ -629,7 +625,7 @@ namespace Project.Gameplay
 				MoveSpeed = homingAttackSpeed;
 				StrafeSpeed = VerticalSpeed = 0;
 				customPhysicsEnabled = true;
-				Vector3 travelDirection = (LockonTarget.GlobalTransform.origin - GlobalTransform.origin).Normalized();
+				Vector3 travelDirection = (LockonTarget.GlobalTranslation - GlobalTranslation).Normalized();
 				MoveAndCollide(travelDirection * MoveSpeed * PhysicsManager.physicsDelta);
 			}
 			else
@@ -697,6 +693,9 @@ namespace Project.Gameplay
 		#region Backflip
 		[Export]
 		public float backflipSpeed;
+		[Export]
+		public float backflipHeight;
+		private float BackflipPower => Mathf.Sqrt(2 * gravity * backflipHeight);
 		private bool IsBackflipping => ActionState == ActionStates.Backflip;
 		private float backflipTimer;
 		private const float BACKFLIP_LENGTH = .4f;
@@ -708,6 +707,9 @@ namespace Project.Gameplay
 
 			StrafeSpeed = 0;
 			MoveSpeed = -backflipSpeed;
+			CheckStomp();
+			CheckJumpDash();
+			ApplyGravity();
 		}
 
 		private void StartBackflip()
@@ -715,8 +717,13 @@ namespace Project.Gameplay
 			backflipTimer = 0;
 			StrafeSpeed = 0;
 			MoveSpeed = -backflipSpeed;
+			VerticalSpeed = BackflipPower;
+			canJumpDash = true;
+
+			IsOnGround = false;
 
 			ActionState = ActionStates.Backflip;
+			Animator.Backflip();
 		}
 
 		public void CancelBackflip()
@@ -952,6 +959,7 @@ namespace Project.Gameplay
 				Transform = Transform.Identity;
 
 			StageSettings.instance.RespawnObjects();
+			CameraController.instance.ResetFlag = true;
 		}
 		#endregion
 
@@ -980,9 +988,7 @@ namespace Project.Gameplay
 
 		public void HitEnemy(Vector3 enemyPos) //Called when defeating an enemy
 		{
-			Transform t = GlobalTransform;
-			t.origin = enemyPos;
-			GlobalTransform = t;
+			GlobalTranslation = enemyPos;
 			bounceTimer = BOUNCE_LOCKOUT_TIME;
 
 			if (LockonTarget != null) //Reset Active Target
@@ -1031,12 +1037,10 @@ namespace Project.Gameplay
 
 						if (currentRailing != null)
 						{
-							float targetY = currentRailing.GlobalTransform.origin.y;
-							Transform t = GlobalTransform;
-							t.origin.y = Mathf.MoveToward(t.origin.y, targetY, SIDLE_RAIL_FALL_SPEED * PhysicsManager.physicsDelta); //Snap to railing
-							GlobalTransform = t;
+							float targetY = currentRailing.GlobalTranslation.y;
+							GlobalTranslation = new Vector3(GlobalTranslation.x, Mathf.MoveToward(GlobalTranslation.y, targetY, SIDLE_RAIL_FALL_SPEED * PhysicsManager.physicsDelta), GlobalTranslation.z); //Snap to railing
 
-							if (Mathf.IsEqualApprox(t.origin.y, targetY))
+							if (Mathf.IsEqualApprox(GlobalTranslation.y, targetY))
 							{
 								ActionState = ActionStates.Hanging;
 								sidleTimer = 5f;
@@ -1106,12 +1110,11 @@ namespace Project.Gameplay
 		private void UpdateLauncher()
 		{
 			customPhysicsEnabled = true;
-			Transform t = GlobalTransform;
 			if (!activeLauncher.IsCharacterCentered)
-				t.origin = activeLauncher.RecenterCharacter();
+				GlobalTranslation = activeLauncher.RecenterCharacter();
 			else
 			{
-				t.origin = activeLauncher.InterpolatePosition(launcherTime);
+				GlobalTranslation = activeLauncher.InterpolatePosition(launcherTime);
 				if (activeLauncher.IsLauncherFinished(launcherTime)) //Revert to normal state
 				{
 					MovementState = MovementStates.Normal;
@@ -1121,7 +1124,8 @@ namespace Project.Gameplay
 
 				launcherTime += PhysicsManager.physicsDelta;
 			}
-			GlobalTransform = t;
+
+			ResyncPathFollower();
 		}
 		#endregion
 
@@ -1163,9 +1167,7 @@ namespace Project.Gameplay
 			VerticalSpeed = 0;
 
 			MoveSpeed = grindShuffleSpeed;
-			Transform t = GlobalTransform;
-			t.origin = railPosition;
-			GlobalTransform = t;
+			GlobalTranslation = railPosition;
 
 			balanceLeaning = Vector2.Zero;
 			Animator.StartGrinding();
@@ -1258,20 +1260,19 @@ namespace Project.Gameplay
 			customPhysicsEnabled = true;
 
 			Vector3 targetPosition = activeDriftCorner.TargetPosition;
-			Transform t = GlobalTransform;
-			float distance = t.origin.RemoveVertical().DistanceTo(targetPosition.RemoveVertical());
+			float distance = GlobalTranslation.RemoveVertical().DistanceTo(targetPosition.RemoveVertical());
 
 			if (activeDriftCorner.cornerCleared)
 			{
 				MoveSpeed = moveSettings.speed * Triggers.DriftTrigger.SPEED_RATIO;
-				t.origin = t.origin.MoveToward(targetPosition, MoveSpeed * PhysicsManager.physicsDelta);
+				GlobalTranslation = GlobalTranslation.MoveToward(targetPosition, MoveSpeed * PhysicsManager.physicsDelta);
 
 				if (distance < activeDriftCorner.slideDistance * .1f)
 					StopDrift();
 			}
 			else
 			{
-				t.origin = activeDriftCorner.Interpolate(t.origin);
+				GlobalTranslation = activeDriftCorner.Interpolate(GlobalTranslation);
 
 				if (distance < .5f)
 				{
@@ -1280,14 +1281,13 @@ namespace Project.Gameplay
 						jumpBufferTimer = 0;
 						activeDriftCorner.cornerCleared = true;
 
-						t.origin = new Vector3(targetPosition.x, t.origin.y, targetPosition.z); //Snap to target position
+						GlobalTranslation = new Vector3(targetPosition.x, GlobalTranslation.y, targetPosition.z); //Snap to target position
 					}
 					else if(distance < .1f)
 						StopDrift();
 				}
 			}
 
-			GlobalTransform = t;
 			ResyncPathFollower();
 		}
 
@@ -1326,7 +1326,7 @@ namespace Project.Gameplay
 		public bool IsRising => VerticalSpeed > 0;
 		public bool IsIdling => Mathf.Abs(StrafeSpeed) < .1f && Mathf.Abs(MoveSpeed) < .1f;
 
-		public Vector3 CenterPosition => GlobalTransform.origin + worldDirection * collisionHeight; //Center of collision calculations
+		public Vector3 CenterPosition => GlobalTranslation + worldDirection * collisionHeight; //Center of collision calculations
 
 		public Vector3 ForwardDirection => PathFollower.Forward() * PathTravelDirection;
 		public Vector3 StrafeDirection { get; private set; }
@@ -1354,7 +1354,7 @@ namespace Project.Gameplay
 					if (IsTargetInvalid(activeTargets[i]) || !canJumpDash)
 						continue;
 
-					float dst = activeTargets[i].GlobalTransform.origin.RemoveVertical().DistanceSquaredTo(GlobalTransform.origin.RemoveVertical());
+					float dst = activeTargets[i].GlobalTranslation.RemoveVertical().DistanceSquaredTo(GlobalTranslation.RemoveVertical());
 					if (dst > closestDistance)
 						continue;
 
@@ -1368,7 +1368,7 @@ namespace Project.Gameplay
 				GameplayInterface.instance.DisableHomingReticle();
 			else if (LockonTarget != null)
 			{
-				Vector2 screenPos = CameraController.instance.ConvertToScreenSpace(LockonTarget.GlobalTransform.origin);
+				Vector2 screenPos = CameraController.instance.ConvertToScreenSpace(LockonTarget.GlobalTranslation);
 				GameplayInterface.instance.UpdateHomingReticle(screenPos, !isLockedOn);
 			}
 		}
@@ -1575,9 +1575,7 @@ namespace Project.Gameplay
 				Vector3 slopeDirection = groundHit.normal.Rotated(Vector3.Up, rotationAmount).Normalized();
 				slopeInfluence = slopeDirection.z * SLOPE_INFLUENCE;
 
-				Transform t = GlobalTransform;
-				t.origin = groundHit.point;
-				GlobalTransform = t;
+				GlobalTranslation = groundHit.point;
 			}
 			else
 			{
@@ -1761,7 +1759,7 @@ namespace Project.Gameplay
 			if (!PathFollower.IsInsideTree()) return;
 			if (ActivePath == null || pathFollowerOffset != 0) return;
 
-			PathFollower.Offset = ActivePath.Curve.GetClosestOffset(GlobalTransform.origin - ActivePath.GlobalTransform.origin);
+			PathFollower.Offset = ActivePath.Curve.GetClosestOffset(GlobalTranslation - ActivePath.GlobalTranslation);
 
 			if (isSideScroller)
 				RecenterStrafe();

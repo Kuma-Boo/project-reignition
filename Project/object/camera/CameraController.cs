@@ -32,6 +32,8 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
+			ResetFlag = true;
+
 			_calculationRoot = GetNode<Spatial>(calculationRoot);
 			_calculationGimbal = GetNode<Spatial>(calculationGimbal);
 
@@ -57,8 +59,9 @@ namespace Project.Gameplay
 		public CameraSettingsResource targetSettings; //End lerp here
 		private readonly CameraSettingsResource previousSettings = new CameraSettingsResource(); //Start lerping here
 		private readonly CameraSettingsResource currentSettings = new CameraSettingsResource(); //Apply transforms based on this
-		public void SetCameraData(CameraSettingsResource data, bool useCrossfade)
+		public void SetCameraData(CameraSettingsResource data, float blendTime, bool useCrossfade)
 		{
+			transitionSpeed = blendTime;
 			transitionTime = transitionTimeStepped = 0f; //Reset transition timers
 			previousSettings.CopyFrom(currentSettings);
 
@@ -67,6 +70,7 @@ namespace Project.Gameplay
 			previousTilt = currentTilt;
 			previousStrafe = currentStrafe;
 			previousYawTracking = currentYawTracking;
+			previousPitchTracking = currentPitchTracking;
 
 			targetSettings = data;
 
@@ -88,6 +92,7 @@ namespace Project.Gameplay
 
 		private float transitionTime; //Ratio (from 0 -> 1) of transition that has been completed
 		private float transitionTimeStepped; //Smoothstepped transition time
+		private float transitionSpeed; //Speed of transition
 		private void UpdateActiveSettings() //Calculate the active camera settings
 		{
 			if (targetSettings == null) return; //ERROR! No data set.
@@ -99,11 +104,10 @@ namespace Project.Gameplay
 				currentSettings = backstepCameraSettings;
 			*/
 
-			float transitionSpeed = targetSettings.transitionSpeed;
 			if (Mathf.IsZeroApprox(transitionSpeed))
-				resetFlag = true;
+				ResetFlag = true;
 
-			if (resetFlag)
+			if (ResetFlag)
 				transitionTime = 1f;
 			else
 				transitionTime = Mathf.MoveToward(transitionTime, 1f, (1f / transitionSpeed) * PhysicsManager.physicsDelta);
@@ -134,11 +138,11 @@ namespace Project.Gameplay
 		private Vector3 localPlayerPosition; //Player's local position, relative to it's path follower
 		private void CalculateLocalPlayerPosition()
 		{
-			localPlayerPosition = Player.GlobalTransform.origin - PlayerPathFollower.GlobalTransform.origin;
+			localPlayerPosition = Player.GlobalTranslation- PlayerPathFollower.GlobalTranslation;
 			localPlayerPosition = PlayerPathFollower.GlobalTransform.basis.XformInv(localPlayerPosition);
 		}
 
-		private bool resetFlag = true; //Set to true to skip smoothing
+		public bool ResetFlag { get; set; } //Set to true to skip smoothing
 
 		private void UpdateGameplayCamera()
 		{
@@ -154,8 +158,8 @@ namespace Project.Gameplay
 				_cameraGimbal.GlobalTransform = _calculationGimbal.GlobalTransform;
 			}
 
-			if (resetFlag) //Reset flag
-				resetFlag = false;
+			if (ResetFlag) //Reset flag
+				ResetFlag = false;
 		}
 
 		private float currentDistance;
@@ -178,9 +182,9 @@ namespace Project.Gameplay
 			if (resource.followMode == CameraSettingsResource.FollowMode.Static)
 				return resource.viewPosition;
 			else if (resource.followMode == CameraSettingsResource.FollowMode.Pathfollower)
-				return PlayerPathFollower.GlobalTransform.origin;
+				return PlayerPathFollower.GlobalTranslation;
 			else
-				return Player.GlobalTransform.origin - PlayerPathFollower.Up() * localPlayerPosition.y;
+				return Player.GlobalTranslation - GetHeightDirection(resource.heightMode) * localPlayerPosition.y;
 		}
 
 		private Vector3 GetStrafeOffset(CameraSettingsResource resource)
@@ -194,20 +198,22 @@ namespace Project.Gameplay
 			return Vector3.Zero;
 		}
 
-		private Vector3 GetHeightOffset(CameraSettingsResource resource)
+		private Vector3 GetHeightDirection(CameraSettingsResource.HeightMode mode)
 		{
 			Vector3 vector = Vector3.Up;
-			if (resource.heightMode == CameraSettingsResource.HeightMode.PathFollower)
+			if (mode == CameraSettingsResource.HeightMode.PathFollower)
 				vector = PlayerPathFollower.Up();
-			else if (resource.heightMode == CameraSettingsResource.HeightMode.Camera)
+			else if (mode == CameraSettingsResource.HeightMode.Camera)
 				vector = _calculationGimbal.Up();
 
-			return vector * localPlayerPosition.y * resource.heightTrackingStrength;
+			return vector;
 		}
+
+		private Vector3 GetHeightOffset(CameraSettingsResource resource) => GetHeightDirection(resource.heightMode) * localPlayerPosition.y * resource.heightTrackingStrength;
 
 		private void UpdateOffsets()
 		{
-			if (resetFlag)
+			if (ResetFlag)
 			{
 				currentHeight = currentSettings.height;
 				currentDistance = currentSettings.distance;
@@ -229,14 +235,20 @@ namespace Project.Gameplay
 		private float currentTilt;
 		private float previousYawTracking;
 		private float currentYawTracking;
+		private float previousPitchTracking;
+		private float currentPitchTracking;
 		private void UpdateRotation()
 		{
-			Vector3 forwardDirection = PlayerPathFollower.Forward();
-			if (Mathf.Abs(PlayerPathFollower.Forward().y) > .8f) //Case of running up a wall
-				forwardDirection = Mathf.Sign(PlayerPathFollower.Forward().y) * PlayerPathFollower.Down();
-
+			Vector3 forwardDirection;
 			if (targetSettings.IsStaticCamera)
-				forwardDirection = (PlayerPathFollower.GlobalTransform.origin - _calculationRoot.GlobalTransform.origin).Normalized();
+				forwardDirection = Player.CenterPosition - targetSettings.viewPosition;
+			else
+			{
+				forwardDirection = PlayerPathFollower.Forward();
+
+				if (Mathf.Abs(PlayerPathFollower.Forward().y) > .9f) //Fix for running up walls
+					forwardDirection = Mathf.Sign(PlayerPathFollower.Forward().y) * PlayerPathFollower.Down();
+			}
 
 			Vector3 forwardFlattened = forwardDirection.Flatten().Normalized();
 			Vector3 rightDirection = forwardFlattened.Cross(Vector3.Up);
@@ -245,24 +257,24 @@ namespace Project.Gameplay
 			if (targetSettings.overrideYaw)
 				targetRotation.y = Mathf.LerpAngle(previousSettings.viewAngle.y, Mathf.Deg2Rad(targetSettings.viewAngle.y), transitionTime);
 			else
-				targetRotation.y = forwardFlattened.SignedAngleTo(Vector3.Forward, Vector3.Up);
+				targetRotation.y = forwardFlattened.SignedAngleTo(Vector3.Forward, Vector3.Up) + Mathf.Deg2Rad(targetSettings.viewAngle.y);
 
 			if (targetSettings.overridePitch)
 				targetRotation.x = Mathf.LerpAngle(previousSettings.viewAngle.x, Mathf.Deg2Rad(targetSettings.viewAngle.x), transitionTime);
 			else if (!targetSettings.IsStaticCamera)
 			{
-				float cachedRotation = _calculationRoot.Rotation.y;
-				_calculationRoot.Rotation = Vector3.Down * targetRotation.y; //Temporarily apply the rotation so pitch calculation can be correct
-				targetRotation.x = forwardFlattened.SignedAngleTo(PlayerPathFollower.Forward(), rightDirection);
+				float cachedRotation = _calculationRoot.GlobalRotation.y;
+				_calculationRoot.GlobalRotation = Vector3.Down * targetRotation.y; //Temporarily apply the rotation so pitch calculation can be correct
+				targetRotation.x = forwardFlattened.SignedAngleTo(PlayerPathFollower.Forward(), rightDirection) + Mathf.Deg2Rad(targetSettings.viewAngle.x);
 
 				//Reset rotation
-				_calculationRoot.Rotation = Vector3.Up * cachedRotation;
+				_calculationRoot.GlobalRotation = Vector3.Up * cachedRotation;
 			}
 
 			targetRotation.x = Mathf.LerpAngle(previousSettings.viewAngle.x, targetRotation.x, transitionTimeStepped);
 			targetRotation.y = Mathf.LerpAngle(previousSettings.viewAngle.y, targetRotation.y, transitionTimeStepped);
 
-			if (resetFlag)
+			if (ResetFlag)
 				currentRotation = targetRotation;
 			else //Smooth out rotations
 			{
@@ -270,13 +282,16 @@ namespace Project.Gameplay
 					ExtensionMethods.SmoothDampAngle(currentRotation.y, targetRotation.y, ref rotationVelocity.y, ROTATION_SMOOTHING));
 			}
 
-			//Update Pitch
-			float pitchTracking = 0;
-			if (!targetSettings.IsStaticCamera)
-				pitchTracking = -new Vector2(currentDistance, localPlayerPosition.y).AngleTo(Vector2.Right) * (1 - currentSettings.heightTrackingStrength);
+			Vector2 pitchVector = new Vector2(currentDistance, -localPlayerPosition.y);
+			if (targetSettings.IsStaticCamera)
+			{
+				pitchVector.x = forwardDirection.RemoveVertical().Length();
+				pitchVector.y = -forwardDirection.y;
+			}
+			currentPitchTracking = Mathf.Lerp(previousPitchTracking, pitchVector.AngleTo(Vector2.Right) * (1 - currentSettings.heightTrackingStrength), transitionTimeStepped);
 
 			//Apply Rotation
-			_calculationRoot.Rotation = Vector3.Down * currentRotation.y;
+			_calculationRoot.GlobalRotation = Vector3.Down * currentRotation.y;
 			_calculationGimbal.Rotation = Vector3.Zero;
 
 			//Calculate tilt
@@ -296,7 +311,7 @@ namespace Project.Gameplay
 			currentYawTracking = Mathf.LerpAngle(currentYawTracking, targetYawTracking, .2f);
 
 			_calculationGimbal.RotateObjectLocal(Vector3.Up, Mathf.Lerp(previousYawTracking, currentYawTracking, transitionTimeStepped));
-			_calculationGimbal.RotateObjectLocal(Vector3.Right, currentRotation.x + pitchTracking);
+			_calculationGimbal.RotateObjectLocal(Vector3.Right, currentRotation.x + currentPitchTracking);
 		}
 
 		private Vector3 previousStrafe;
@@ -321,9 +336,7 @@ namespace Project.Gameplay
 			currentStrafe = previousStrafe.LinearInterpolate(GetStrafeOffset(targetSettings), transitionTimeStepped); //Update Strafe
 			targetPosition += currentStrafe;
 
-			Transform t = _calculationRoot.GlobalTransform;
-			t.origin = targetPosition;
-			_calculationRoot.GlobalTransform = t;
+			_calculationRoot.GlobalTranslation = targetPosition;
 		}
 		#endregion
 
@@ -340,7 +353,7 @@ namespace Project.Gameplay
 			{
 				freeCamEnabled = freeCamRotating = false;
 				_calculationRoot.Visible = false;
-				resetFlag = true;
+				ResetFlag = true;
 			}
 
 			freeCamRotating = Input.IsMouseButtonPressed((int)ButtonList.Left);
