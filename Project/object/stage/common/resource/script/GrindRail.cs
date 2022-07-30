@@ -8,14 +8,6 @@ namespace Project.Gameplay
 	public class GrindRail : Area
 	{
 		[Export]
-		public NodePath path;
-		public Path GrindPath { get; private set; }
-		public Curve3D Curve => GrindPath.Curve;
-		private Spatial _endCap;
-		private CSGPolygon _rail;
-		private CollisionShape _collider;
-
-		[Export]
 		public bool generate;
 		[Export]
 		public bool generateAll; //Regenerates every single rail in this scene. (SLOW!)
@@ -24,7 +16,29 @@ namespace Project.Gameplay
 		[Export]
 		public bool isInvisibleRail;
 		[Export]
-		public Material railMaterial; //Only applied when isInvisibleRail is set to FALSE.
+		public Material railMaterial;
+		[Export]
+		public Material capMaterial;
+		
+		/*
+		[Export]
+		public NodePath overridePath; //For BK styled rails?
+		*/
+		public Path GrindPath { get; private set; }
+		public Curve3D Curve => GrindPath.Curve;
+		[Export]
+		public Mesh capMeshData;
+		private readonly Vector2[] railPolygon = {
+			new Vector2(-0.07f, -0.145f),
+			new Vector2(-0.07f, 0.145f),
+			new Vector2(0.07f, 0.145f),
+			new Vector2(0.07f, -0.145f),
+		};
+
+		private MeshInstance _startCap;
+		private MeshInstance _endCap;
+		private CSGPolygon _polygon;
+		private CollisionShape _collider;
 
 		private CharacterController Character => CharacterController.instance;
 		private const float RAIL_HEIGHT = .15f;
@@ -32,7 +46,8 @@ namespace Project.Gameplay
 		public override void _Ready()
 		{
 			if (Engine.EditorHint) return;
-			GrindPath = GetNode<Path>(path);
+
+			GrindPath = GetNode<Path>("Components/RailPath");
 		}
 
 		public override void _Process(float _)
@@ -60,53 +75,93 @@ namespace Project.Gameplay
 		//Reset
 		private void GenerateRail()
 		{
-			GrindPath = null;
-			_rail = null;
-			_collider = null;
-			_endCap = null;
-
-			for (int i = 0; i < GetChildCount(); i++)
-			{
-				Node child = GetChild<Node>(i);
-
-				if (GrindPath == null && child is Path)
-					GrindPath = child as Path;
-
-				if (_collider == null && child is CollisionShape)
-					_collider = child as CollisionShape;
-
-				if (_rail == null && child is CSGPolygon)
-					_rail = child as CSGPolygon;
-
-				if (!isInvisibleRail && _endCap == null && child.Name.Equals("End"))
-					_endCap = child as Spatial;
-
-				if (GrindPath != null && _collider != null && (isInvisibleRail || _endCap != null) && _rail != null) break;
-			}
-
-			GrindPath.Transform = Transform.Identity;
-			GrindPath.Translate(Vector3.Up * RAIL_HEIGHT);
+			UpdateVariables();
+			
+			GrindPath.Translation = Vector3.Up * RAIL_HEIGHT;
 			GrindPath.Curve = new Curve3D();
 			Curve.AddPoint(Vector3.Zero);
 			Curve.AddPoint(Vector3.Forward * length);
 
-			_collider.Shape = new BoxShape()
-			{
-				Extents = new Vector3(.4f, .2f, length * .5f + .42f)
-			};
-			Transform t = _collider.Transform;
-			t.origin = Vector3.Forward * length * .5f;
-			_collider.Transform = t;
+
+			_polygon.Depth = length;
+
+			_collider.Shape = new BoxShape() { Extents = new Vector3(.4f, .2f, length * .5f + .42f) };
+			_collider.Translation = Vector3.Forward * length * .5f;
 
 			if (!isInvisibleRail)
 			{
-				_rail.MaterialOverride = railMaterial;
-				if (_endCap != null)
+				_polygon.MaterialOverride = railMaterial;
+
+				_startCap.MaterialOverride = _endCap.MaterialOverride = capMaterial;
+				_endCap.Translation = Vector3.Forward * length;
+			}
+		}
+
+		private void UpdateVariables()
+		{
+			Spatial componentParent = GetNodeOrNull<Spatial>("Components");
+			if (componentParent == null)
+			{
+				componentParent = new Spatial() { Name = "Components" };
+				AddChild(componentParent);
+				componentParent.Owner = GetTree().EditedSceneRoot;
+			}
+
+			_polygon = GetNodeOrNull<CSGPolygon>("Components/RailMesh");
+			if(_polygon == null)
+			{
+				_polygon = new CSGPolygon() { Name = "RailMesh" };
+				componentParent.AddChild(_polygon);
+				_polygon.Owner = GetTree().EditedSceneRoot;
+			}
+
+			_polygon.Polygon = railPolygon;
+			_polygon.Mode = CSGPolygon.ModeEnum.Depth;
+
+			GrindPath = GetNodeOrNull<Path>("Components/RailPath");
+			if (GrindPath == null)
+			{
+				GrindPath = new Path() { Name = "RailPath" };
+				componentParent.AddChild(GrindPath);
+				GrindPath.Owner = GetTree().EditedSceneRoot;
+			}
+
+			_collider = GetNodeOrNull<CollisionShape>("RailCollision");
+			if (_collider == null)
+			{
+				_collider = new CollisionShape() { Name = "RailCollision" };
+				AddChild(_collider);
+				_collider.Owner = GetTree().EditedSceneRoot;
+			}
+
+			_startCap = GetNodeOrNull<MeshInstance>("Components/StartCap");
+			_endCap = GetNodeOrNull<MeshInstance>("Components/EndCap");
+			if (isInvisibleRail) //Remove unnecessary objects 
+			{
+				if (_startCap != null)
+					_startCap.QueueFree();
+
+				if(_endCap != null)
+					_endCap.QueueFree();
+			}
+			else //Create caps
+			{
+				if (_startCap == null)
 				{
-					t = _endCap.Transform;
-					t.origin = Vector3.Forward * length;
-					_endCap.Transform = t;
+					_startCap = new MeshInstance() { Name = "StartCap" };
+					componentParent.AddChild(_startCap);
+					_startCap.Owner = GetTree().EditedSceneRoot;
 				}
+
+				if (_endCap == null)
+				{
+					_endCap = new MeshInstance() { Name = "EndCap" };
+					componentParent.AddChild(_endCap);
+					_endCap.Owner = GetTree().EditedSceneRoot;
+				}
+
+				_startCap.Mesh = _endCap.Mesh = capMeshData;
+				_endCap.RotationDegrees = Vector3.Up * 180;
 			}
 		}
 

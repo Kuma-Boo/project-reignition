@@ -1,11 +1,10 @@
 using Godot;
 using Project.Core;
-using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay
 {
 	[Tool]
-	public class Launcher : Area
+	public class Launcher : Area //Similar to Character.JumpTo(), but jumps between static points w/ custom sfx support
 	{
 		[Export]
 		public NodePath sfxPlayer; //Height at the beginning of the arc
@@ -19,6 +18,25 @@ namespace Project.Gameplay
 		public float finalHeight; //Height at the end of the arc
 		[Export]
 		public float distance; //How far to travel
+
+		public LaunchData GetData()
+		{
+			LaunchData data = new LaunchData
+			{
+				//gravity = GRAVITY,
+				launchDirection = GetLaunchDirection(),
+
+				startPosition = GlobalTranslation + Vector3.Up * startingHeight,
+				startingHeight = startingHeight,
+				middleHeight = middleHeight,
+				finalHeight = finalHeight,
+
+				distance = distance,
+			};
+			
+			data.Calculate();
+			return data;
+		}
 
 		[Export]
 		public LaunchDirection launchDirection;
@@ -35,23 +53,8 @@ namespace Project.Gameplay
 			return this.Up();
 		}
 
-		public Vector3 InitialVelocity => GetLaunchDirection().Flatten().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
-
-		public float InitialHorizontalVelocity => distance / TotalTravelTime;
-		public float InitialVerticalVelocity => Mathf.Sqrt(-2 * GRAVITY * (middleHeight - startingHeight));
-		public float FinalVerticalVelocity => GRAVITY * SecondHalfTime;
-		public float FirstHalfTime => Mathf.Sqrt((-2 * middleHeight) / GRAVITY);
-		public float SecondHalfTime => Mathf.Sqrt((-2 * (middleHeight - finalHeight)) / GRAVITY);
-		public float TotalTravelTime => FirstHalfTime + SecondHalfTime;
 		public Vector3 StartingPoint => GlobalTranslation + Vector3.Up * startingHeight;
-
 		public const float GRAVITY = -18.0f;
-
-		public Vector3 InterpolatePosition(float t)
-		{
-			Vector3 displacement = InitialVelocity * t + Vector3.Up * GRAVITY * t * t / 2f;
-			return StartingPoint + displacement;
-		}
 
 		public override void _Ready()
 		{
@@ -65,7 +68,7 @@ namespace Project.Gameplay
 				_sfxPlayer.Play();
 
 			IsCharacterCentered = recenterSpeed == 0;
-			Character.StartLauncher(this);
+			Character.StartLauncher(GetData(), this);
 		}
 
 		[Export]
@@ -80,6 +83,46 @@ namespace Project.Gameplay
 			return pos;
 		}
 
-		public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
+		public struct LaunchData
+		{
+			public Vector3 launchDirection;
+			public Vector3 startPosition;
+			public const float gravity = -18.0f;
+
+			public float distance;
+			public float startingHeight;
+			public float middleHeight;
+			public float finalHeight;
+
+			public Vector3 InitialVelocity { get; private set; }
+			public float InitialHorizontalVelocity { get; private set; }
+			public float InitialVerticalVelocity { get; private set; }
+			public float FinalVerticalVelocity { get; private set; }
+
+			public float FirstHalfTime { get; private set; }
+			public float SecondHalfTime { get; private set; }
+			public float TotalTravelTime { get; private set; }
+
+			public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
+
+			public Vector3 InterpolatePosition(float t)
+			{
+				Vector3 displacement = InitialVelocity * t + Vector3.Up * gravity * t * t / 2f;
+				return startPosition + displacement;
+			}
+
+			public void Calculate()
+			{
+				FirstHalfTime = Mathf.Sqrt((-2 * middleHeight) / gravity);
+				SecondHalfTime = Mathf.Sqrt((-2 * (middleHeight - finalHeight)) / gravity);
+				TotalTravelTime = FirstHalfTime + SecondHalfTime;
+
+				InitialHorizontalVelocity = distance / TotalTravelTime;
+				InitialVerticalVelocity = Mathf.Sqrt(-2 * gravity * (middleHeight - startingHeight));
+				FinalVerticalVelocity = gravity * SecondHalfTime;
+
+				InitialVelocity = launchDirection.Flatten().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
+			}
+		}
 	}
 }

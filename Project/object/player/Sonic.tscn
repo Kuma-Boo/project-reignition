@@ -166,7 +166,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1808, 160 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -368, 400 )
-node_connections = [ "output", 0, "IsJumpDashing", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "jump", 0, "backflip", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "fall_reset", 0, "jump_cancel_time" ]
+node_connections = [ "output", 0, "IsJumpDashing", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "fall_reset", 0, "jump_cancel_time", "jump", 0, "backflip", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "fall", 0, "fall-loop", "fall", 1, "fall_reset" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -358,7 +358,7 @@ nodes/backstep/node = SubResource( 124 )
 nodes/backstep/position = Vector2( -944, 128 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "output", 0, "IsCrouching", "MoveSpeed", 0, "MoveState", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "MovementReset", 0, "MoveSpeed" ]
+node_connections = [ "output", 0, "IsCrouching", "MoveSpeed", 0, "MoveState", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MovementReset", 0, "MoveSpeed", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run" ]
 
 [sub_resource type="AnimationNodeAnimation" id=127]
 animation = "sidle-fast-loop"
@@ -436,15 +436,19 @@ root = NodePath("..")
 ringParticleEffect = NodePath("../VFX/RingParticle")
 
 [node name="Body" parent="Sonic/Sonic/Skeleton" index="0"]
+portal_mode = 4
 use_in_baked_light = true
 
 [node name="EyeL" parent="Sonic/Sonic/Skeleton" index="1"]
+portal_mode = 4
 use_in_baked_light = true
 
 [node name="EyeR" parent="Sonic/Sonic/Skeleton" index="2"]
+portal_mode = 4
 use_in_baked_light = true
 
 [node name="Metal" parent="Sonic/Sonic/Skeleton" index="3"]
+portal_mode = 4
 use_in_baked_light = true
 
 [node name="CollisionShape" type="CollisionShape" parent="."]

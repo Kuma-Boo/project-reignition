@@ -210,15 +210,10 @@ namespace Project.Gameplay
 			Normal, //Standard on rails movement
 			Automation,  //Cutscene? Cinematics? May be replaced with input lockout.
 			Sidle, //Scooting along the wall
-			Launcher, //Springs, Ramps, etc.
 			Drift, //Sharp 90 degree corner. Press jump at the right moment to get a burst of speed?
 			Grinding, //Grinding on rails
-			Catapult, //Aiming a catapult
-			FlyingPot, //A flying pot -_-
-			AirLauncher, //Pressing jump at the right time will move to a launcher state.
-			Rope, //A swinging rope
-			ZipLine, //Swinging zip line
-			Surfing, //Left and right movement. (Set OnGround to false for a flying carpet)
+			Launcher, //Springs, Ramps, etc.
+			External, //Whenever external objects take control over the character
 		}
 
 		public ActionStates ActionState { get; private set; }
@@ -267,6 +262,9 @@ namespace Project.Gameplay
 					break;
 				case MovementStates.Automation:
 					UpdateAutomation();
+					break;
+				case MovementStates.External:
+					UpdateExternal();
 					break;
 			}
 
@@ -991,17 +989,22 @@ namespace Project.Gameplay
 			GlobalTranslation = enemyPos;
 			bounceTimer = BOUNCE_LOCKOUT_TIME;
 
-			if (LockonTarget != null) //Reset Active Target
-			{
-				LockonTarget = null;
-				GameplayInterface.instance.DisableHomingReticle();
-			}
+			ResetLockonTarget();
 
 			MoveSpeed = 0;
 			canJumpDash = true;
 			VerticalSpeed = enemyBouncePower;
 			SetControlLockout(attackLockoutSettings);
 			ActionState = ActionStates.EnemyBounce;
+		}
+
+		public void ResetLockonTarget()
+		{
+			if (LockonTarget != null) //Reset Active Target
+			{
+				LockonTarget = null;
+				GameplayInterface.instance.DisableHomingReticle();
+			}
 		}
 		#endregion
 
@@ -1087,10 +1090,14 @@ namespace Project.Gameplay
 
 		#endregion
 
-		#region Launcher
+		#region Launchers and Jumps
+		[Signal]
+		public delegate void OnLauncherFinished();
+		
 		private float launcherTime;
 		private Launcher activeLauncher;
-		public void StartLauncher(Launcher newLauncher)
+		private Launcher.LaunchData launchData;
+		public void StartLauncher(Launcher.LaunchData data, Launcher newLauncher = null)
 		{
 			if(IsGrinding)
 				StopGrinding();
@@ -1098,6 +1105,7 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Launcher;
 			activeLauncher = newLauncher;
+			launchData = data;
 
 			MoveSpeed = 0;
 			VerticalSpeed = 0;
@@ -1110,22 +1118,43 @@ namespace Project.Gameplay
 		private void UpdateLauncher()
 		{
 			customPhysicsEnabled = true;
-			if (!activeLauncher.IsCharacterCentered)
+			if (activeLauncher != null && !activeLauncher.IsCharacterCentered)
 				GlobalTranslation = activeLauncher.RecenterCharacter();
 			else
 			{
-				GlobalTranslation = activeLauncher.InterpolatePosition(launcherTime);
-				if (activeLauncher.IsLauncherFinished(launcherTime)) //Revert to normal state
+				GlobalTranslation = launchData.InterpolatePosition(launcherTime);
+				if (launchData.IsLauncherFinished(launcherTime)) //Revert to normal state
 				{
 					MovementState = MovementStates.Normal;
-					MoveSpeed = activeLauncher.InitialHorizontalVelocity;
-					VerticalSpeed = activeLauncher.FinalVerticalVelocity;
+					MoveSpeed = launchData.InitialHorizontalVelocity;
+					VerticalSpeed = launchData.FinalVerticalVelocity;
+
+					EmitSignal(nameof(OnLauncherFinished));
 				}
 
 				launcherTime += PhysicsManager.physicsDelta;
 			}
 
 			ResyncPathFollower();
+		}
+
+		public void JumpTo(Vector3 destination, float midHeight = 0f) //Generic JumpTo. midHeight is relative to the destination
+		{
+			Vector3 delta = destination - GlobalTranslation;
+
+			Launcher.LaunchData data = new Launcher.LaunchData()
+			{
+				startPosition = GlobalTranslation,
+				launchDirection = delta.Normalized(),
+
+				distance = delta.RemoveVertical().Length(),
+				startingHeight = 0f,
+				middleHeight = delta.y + midHeight,
+				finalHeight = delta.y,
+			};
+
+			data.Calculate();
+			StartLauncher(data);
 		}
 		#endregion
 
@@ -1241,6 +1270,19 @@ namespace Project.Gameplay
 			MovementState = MovementStates.Normal;
 		}
 		#endregion
+		#endregion
+
+		#region Eternal Control
+		public void StartExternalControl()
+		{
+			MovementState = MovementStates.External;
+			MoveSpeed = VerticalSpeed = StrafeSpeed = 0;
+		}
+
+		private void UpdateExternal() //Remove all control
+		{
+			customPhysicsEnabled = true;
+		}
 		#endregion
 
 		#region Drift

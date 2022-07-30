@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 using Project.Gameplay;
 using Project.Gameplay.Triggers;
 
@@ -15,7 +16,7 @@ namespace Project.Editor
 
 		public override bool Handles(Object obj)
 		{
-			return obj is DriftTrigger || obj is Majin || obj is Launcher;
+			return obj is DriftTrigger || obj is Majin || obj is Launcher || obj is FlyingPot;
 		}
 		public override void Edit(Object obj) => target = obj as Spatial;
 
@@ -34,6 +35,8 @@ namespace Project.Editor
 
 			if (target is Launcher)
 				UpdateLauncher(overlay);
+			else if (target is FlyingPot)
+				UpdatePot(overlay);
 			else if (target is DriftTrigger)
 				UpdateDriftCorner(overlay);
 			else if (target is Majin)
@@ -43,18 +46,39 @@ namespace Project.Editor
 		private void UpdateLauncher(Control overlay)
 		{
 			Array<Vector2> points = new Array<Vector2>();
-			Launcher launcher = (target as Launcher);
+			Launcher.LaunchData launchData = (target as Launcher).GetData();
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
-				float simulationTime = (i / (float)PREVIEW_RESOLUTION) * launcher.TotalTravelTime;
-				Vector3 position = launcher.InterpolatePosition(simulationTime);
+				float simulationTime = (i / (float)PREVIEW_RESOLUTION) * launchData.TotalTravelTime;
+				Vector3 position = launchData.InterpolatePosition(simulationTime);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
 			}
 
 			Vector2[] pointsList = new Vector2[points.Count];
 			points.CopyTo(pointsList, 0);
+			overlay.DrawPolyline(pointsList, Colors.Blue, 1, true);
+		}
+
+		private void UpdatePot(Control overlay)
+		{
+			Array<Vector3> points = new Array<Vector3>();
+			FlyingPot pot = (target as FlyingPot);
+
+			Vector3 bottomRight = pot.GlobalTranslation + pot.Right() * pot.travelBounds.x;
+			Vector3 bottomLeft = pot.GlobalTranslation + pot.Left() * pot.travelBounds.x;
+			points.Add(bottomRight);
+			points.Add(bottomRight + Vector3.Up * pot.travelBounds.y);
+			points.Add(bottomLeft + Vector3.Up * pot.travelBounds.y);
+			points.Add(bottomLeft);
+
+			Vector2[] pointsList = new Vector2[points.Count];
+			for (int i = 0; i < points.Count; i++)
+			{
+				if (!editorCam.IsPositionBehind(points[i]))
+					pointsList[i] = editorCam.UnprojectPosition(points[i]);
+			}
 			overlay.DrawPolyline(pointsList, Colors.Blue, 1, true);
 		}
 

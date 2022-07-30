@@ -64,7 +64,10 @@ namespace Project.Gameplay
 		{
 			//Play animation
 			if (RingCount != maxRingCount)
+			{
 				_ringAnimator.Play("CollectRing");
+				_ringAnimator.Seek(0.0f, true);
+			}
 
 			RingCount += amount;
 			RingCount = Mathf.Clamp(RingCount, 0, maxRingCount);

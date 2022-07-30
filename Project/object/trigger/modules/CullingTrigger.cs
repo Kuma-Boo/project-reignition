@@ -5,9 +5,6 @@ namespace Project.Gameplay.Triggers
 	public class CullingTrigger : StageTriggerModule
 	{
 		[Export]
-		public bool isExit; //Determines which way is an unload, exiting forward or backwards.
-
-		[Export]
 		public NodePath targetNode;
 		private Spatial _targetNode;
 
@@ -15,6 +12,7 @@ namespace Project.Gameplay.Triggers
 		{
 			//Disable target node completely
 			_targetNode = GetNode<Spatial>(targetNode);
+
 			DeactivateNode();
 		}
 

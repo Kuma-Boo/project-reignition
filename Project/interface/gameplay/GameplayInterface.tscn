@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://effect/shader/screen/Timebreak.shader" type="Shader" id=1]
 [ext_resource path="res://interface/gameplay/pause/PauseMenu.cs" type="Script" id=2]
@@ -7,7 +7,7 @@
 [ext_resource path="res://interface/gameplay/countdown/Bloom.png" type="Texture" id=5]
 [ext_resource path="res://interface/gameplay/countdown/Flare.png" type="Texture" id=6]
 [ext_resource path="res://interface/font/HUDNumber.tres" type="BitmapFont" id=7]
-[ext_resource path="res://interface/gameplay/hud/Rings.png" type="Texture" id=8]
+[ext_resource path="res://interface/gameplay/hud/rings/RingTexture.tres" type="Texture" id=8]
 [ext_resource path="res://interface/gameplay/GameplayInterface.cs" type="Script" id=9]
 [ext_resource path="res://interface/gameplay/hud/soul gauge/blue/fill/AnimatedTexture.tres" type="Texture" id=10]
 [ext_resource path="res://interface/gameplay/hud/soul gauge/blue/surface/AnimatedTexture.tres" type="Texture" id=11]
@@ -21,7 +21,6 @@
 [ext_resource path="res://interface/gameplay/pause/Paper.png" type="Texture" id=20]
 [ext_resource path="res://sound/sfx/system/SYSTEM_28.wav" type="AudioStream" id=21]
 [ext_resource path="res://interface/gameplay/TimebreakEffect.png" type="Texture" id=22]
-[ext_resource path="res://interface/gameplay/hud/Reference.png" type="Texture" id=23]
 [ext_resource path="res://interface/gameplay/hud/Lockon.png" type="Texture" id=31]
 
 [sub_resource type="ShaderMaterial" id=81]
@@ -533,64 +532,6 @@ tracks/17/keys = {
 "values": [ true ]
 }
 
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 0, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 64, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=6]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 128, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=7]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 192, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=8]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 256, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=9]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 320, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=10]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 384, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=11]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 448, 0, 64, 64 )
-
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 0, 0, 64, 64 )
-
-[sub_resource type="SpriteFrames" id=44]
-animations = [ {
-"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
-"loop": true,
-"name": "spin",
-"speed": 24.0
-}, {
-"frames": [ SubResource( 3 ) ],
-"loop": true,
-"name": "default",
-"speed": 24.0
-} ]
-
 [sub_resource type="Animation" id=1]
 step = 0.0416667
 tracks/0/type = "value"
@@ -618,40 +559,28 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("Ring:playing")
+tracks/2/path = NodePath("Ring:texture:oneshot")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.0416667 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ false, true ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("Ring:speed_scale")
+tracks/3/path = NodePath("Ring:texture:fps")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 0.541667 ),
-"transitions": PoolRealArray( 2, 1 ),
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1.5, 1 ),
 "update": 0,
-"values": [ 2.0, 0.0 ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Ring:frame")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 0 ]
+"values": [ 90.0, 30.0 ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -681,7 +610,7 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("Ring:frame")
+tracks/2/path = NodePath("..:rect_position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -689,11 +618,11 @@ tracks/2/enabled = true
 tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 0 ]
+"update": 0,
+"values": [ Vector2( 128, 64 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("Ring:playing")
+tracks/3/path = NodePath("Ring:texture:oneshot")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -701,11 +630,11 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
+"update": 0,
+"values": [ true ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("Ring:speed_scale")
+tracks/4/path = NodePath("Ring:texture:fps")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -714,19 +643,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 1.0 ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("..:rect_position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 128, 64 ) ]
+"values": [ 60.0 ]
 }
 
 [sub_resource type="Animation" id=45]
@@ -1432,14 +1349,11 @@ homingAnimator = NodePath("HUD/HomingAttackReticle/Animator")
 cameraTransition = NodePath("ScreenEffects/CameraTransition")
 cameraTransitionAnimator = NodePath("ScreenEffects/CameraTransition/Animator")
 
-[node name="Reference" type="TextureRect" parent="."]
-visible = false
-margin_right = 1920.0
-margin_bottom = 1080.0
-texture = ExtResource( 23 )
-stretch_mode = 1
-
-[node name="ScreenEffects" type="Node" parent="."]
+[node name="ScreenEffects" type="Control" parent="."]
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
 
 [node name="TimebreakEffect" type="ColorRect" parent="ScreenEffects"]
 material = SubResource( 81 )
@@ -1728,11 +1642,14 @@ region_rect = Rect2( 120, 168, 64, 104 )
 [node name="CurrentRing" type="Node2D" parent="HUD/RingCounter"]
 position = Vector2( 192, 64 )
 
-[node name="Ring" type="AnimatedSprite" parent="HUD/RingCounter/CurrentRing"]
-position = Vector2( -88, 0 )
-scale = Vector2( 1.5, 1.5 )
-frames = SubResource( 44 )
-animation = "spin"
+[node name="Ring" type="TextureRect" parent="HUD/RingCounter/CurrentRing"]
+margin_left = -136.0
+margin_top = -48.0
+margin_right = -40.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 48, 48 )
+texture = ExtResource( 8 )
+stretch_mode = 1
 
 [node name="Amount" type="Label" parent="HUD/RingCounter/CurrentRing"]
 margin_left = -48.0
