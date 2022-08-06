@@ -104,18 +104,10 @@ namespace Project.Gameplay
 		private const string GROUND_PARAMETER = "parameters/IsGrounded/current";
 		public void UpdateAnimation()
 		{
-			if (ringParticleTimer != 0)
-			{
-				ringParticleTimer = Mathf.MoveToward(ringParticleTimer, 0, PhysicsManager.physicsDelta);
-
-				if (ringParticleTimer == 0)
-					_ringParticleEffect.Emitting = false;
-			}
-
-			if (_character.MovementState != CharacterController.MovementStates.Automation)
+			if (_character.MovementState != CharacterController.MovementStates.External)
 			{
 				Transform t = _root.GlobalTransform;
-				t.basis.z = _character.ForwardDirection;
+				t.basis.z = _character.PathFollower.MovementDirection;
 				t.basis.y = _character.worldDirection;
 				t.basis.x = -t.basis.z.Cross(t.basis.y);
 				t.basis = t.basis.Orthonormalized();
@@ -187,22 +179,6 @@ namespace Project.Gameplay
 					FallAnimation();
 			}
 		}
-
-		#region VFX
-		[Export]
-		public NodePath ringParticleEffect;
-		private Particles _ringParticleEffect;
-		private float ringParticleTimer;
-
-		public void PlayRingParticleEffect()
-		{
-			if (_ringParticleEffect == null)
-				_ringParticleEffect = GetNode<Particles>(ringParticleEffect);
-
-			ringParticleTimer = .2f;
-			_ringParticleEffect.Emitting = true;
-		}
-		#endregion
 		#endregion
 	}
 }

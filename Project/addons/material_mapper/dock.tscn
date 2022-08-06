@@ -1,0 +1,114 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/material_mapper/dock.gd" type="Script" id=1]
+
+[node name="Material Mapper" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Texture" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 144.0
+margin_bottom = 40.0
+text = "Texture Path"
+valign = 1
+
+[node name="Path" type="LineEdit" parent="Texture"]
+anchor_right = 14.5
+margin_left = 128.0
+margin_right = -1552.0
+margin_bottom = 24.0
+
+[node name="Material" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 56.0
+margin_right = 144.0
+margin_bottom = 80.0
+text = "Material Path"
+valign = 1
+
+[node name="Path" type="LineEdit" parent="Material"]
+anchor_right = 14.5
+margin_left = 128.0
+margin_right = -1552.0
+margin_bottom = 24.0
+
+[node name="TextureNameFormat" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 96.0
+margin_right = 144.0
+margin_bottom = 120.0
+text = "Tex Search Mode"
+valign = 1
+
+[node name="Format" type="OptionButton" parent="TextureNameFormat"]
+margin_left = 128.0
+margin_right = 304.0
+margin_bottom = 24.0
+pressed = true
+text = "Lowercase"
+icon_align = 2
+items = [ "Keep", null, false, 0, null, "Lowercase", null, false, 1, null, "Uppercase", null, false, 2, null ]
+selected = 1
+
+[node name="Toggles" type="VBoxContainer" parent="."]
+margin_left = 16.0
+margin_top = 128.0
+margin_right = 320.0
+margin_bottom = 348.0
+custom_constants/separation = -4
+
+[node name="ImportAlbedo" type="CheckButton" parent="Toggles"]
+margin_right = 304.0
+margin_bottom = 40.0
+hint_tooltip = "Imports the ALBEDO map."
+pressed = true
+text = "Import Albedo"
+
+[node name="UseDiffuse" type="CheckButton" parent="Toggles"]
+margin_top = 36.0
+margin_right = 304.0
+margin_bottom = 76.0
+hint_tooltip = "Replaces \"ALBEDO\" with \"DIFFUSE\"."
+pressed = true
+text = "Use Diffuse"
+
+[node name="ApplySuffix" type="CheckButton" parent="Toggles"]
+margin_top = 72.0
+margin_right = 304.0
+margin_bottom = 112.0
+hint_tooltip = "Disable this if the base texture has the same name as the material."
+text = "Apply Suffix on Main Texture"
+
+[node name="ImportNormal" type="CheckButton" parent="Toggles"]
+margin_top = 108.0
+margin_right = 304.0
+margin_bottom = 148.0
+hint_tooltip = "Replaces \"ALBEDO\" with \"DIFFUSE\"."
+text = "Import Normal"
+
+[node name="ImportRoughness" type="CheckButton" parent="Toggles"]
+margin_top = 144.0
+margin_right = 304.0
+margin_bottom = 184.0
+hint_tooltip = "Replaces \"ALBEDO\" with \"DIFFUSE\"."
+text = "Import Roughness"
+
+[node name="ClearMissingTextures" type="CheckButton" parent="Toggles"]
+margin_top = 180.0
+margin_right = 304.0
+margin_bottom = 220.0
+hint_tooltip = "Resets any missing textures to NULL. Only affects maps that are toggled on."
+pressed = true
+text = "Clear Missing Textures"
+
+[node name="Update" type="Button" parent="."]
+margin_left = 96.0
+margin_top = 368.0
+margin_right = 217.0
+margin_bottom = 400.0
+text = "Update Materials"
+
+[connection signal="pressed" from="Update" to="." method="_on_update_pressed"]

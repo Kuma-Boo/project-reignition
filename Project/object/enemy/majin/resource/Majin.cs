@@ -41,7 +41,7 @@ namespace Project.Gameplay
 			targetPosition = GlobalTranslation;
 			spawnData.UpdateSpawnData(this);
 			spawnData.spawnTransform.origin = GlobalTranslation + spawnOffset;
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.RegisterRespawnableObject(this, nameof(Spawn));
 
 			_animationTree = GetNode<AnimationTree>(animationTree);
 			_animationTree.Active = true;

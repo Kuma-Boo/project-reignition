@@ -21,7 +21,7 @@ namespace Project.Gameplay.Triggers
 
 		private float startingOffset;
 		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Offset - startingOffset);
-		private bool IsFinished => (!Mathf.IsZeroApprox(distanceToTravel) && DistanceTraveled >= distanceToTravel) || (_automationPath != null && Character.ActivePath != _automationPath);
+		private bool IsFinished => (!Mathf.IsZeroApprox(distanceToTravel) && DistanceTraveled >= distanceToTravel) || (_automationPath != null && Character.PathFollower.ActivePath != _automationPath);
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _Ready()
@@ -53,8 +53,8 @@ namespace Project.Gameplay.Triggers
 
 		private void Activate()
 		{
-			Character.SetActivePath(_automationPath);
-			Character.StartAutomation();
+			Character.PathFollower.SetActivePath(_automationPath);
+			Character.StartExternal();
 			
 			startingOffset = Character.PathFollower.Offset;
 			isActive = true;
@@ -65,13 +65,13 @@ namespace Project.Gameplay.Triggers
 		public void UpdateCamera()
 		{
 			if (cameraSettings != null)
-				CameraController.instance.SetCameraData(cameraSettings, cameraBlend, false);
+				Character.Camera.SetCameraData(cameraSettings, cameraBlend);
 		}
 
 		private void Deactivate()
 		{
 			isActive = false;
-			Character.CancelAutomation();
+			Character.CancelMovementState(CharacterController.MovementStates.External);
 		}
 
 		public void OnEntered(Area _) => isEntered = true;

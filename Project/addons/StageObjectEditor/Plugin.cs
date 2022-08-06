@@ -11,14 +11,14 @@ namespace Project.Editor
 	{
 		public Plugin plugin;
 
-		private Spatial target;
+		private Node target;
 		private Camera editorCam;
 
 		public override bool Handles(Object obj)
 		{
-			return obj is DriftTrigger || obj is Majin || obj is Launcher || obj is FlyingPot;
+			return obj is DriftTrigger || obj is Majin || obj is Launcher || obj is FlyingPot || obj is JumpTrigger;
 		}
-		public override void Edit(Object obj) => target = obj as Spatial;
+		public override void Edit(Object obj) => target = obj as Node;
 
 		public override bool ForwardSpatialGuiInput(Camera cam, InputEvent e)
 		{
@@ -31,10 +31,12 @@ namespace Project.Editor
 
 		public override void ForwardSpatialDrawOverViewport(Control overlay)
 		{
-			if (editorCam == null || !target.Visible) return;
+			if (editorCam == null) return;
 
 			if (target is Launcher)
-				UpdateLauncher(overlay);
+				DrawLaunchData(overlay, (target as Launcher).GetData());
+			else if (target is JumpTrigger)
+				DrawLaunchData(overlay, (target as JumpTrigger).GetData());
 			else if (target is FlyingPot)
 				UpdatePot(overlay);
 			else if (target is DriftTrigger)
@@ -43,10 +45,9 @@ namespace Project.Editor
 				UpdateMajinPath(overlay);
 		}
 
-		private void UpdateLauncher(Control overlay)
+		private void DrawLaunchData(Control overlay, Launcher.LaunchData launchData)
 		{
 			Array<Vector2> points = new Array<Vector2>();
-			Launcher.LaunchData launchData = (target as Launcher).GetData();
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{

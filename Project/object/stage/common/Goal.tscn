@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://object/stage/common/resource/material/goal/GoalText.tres" type="Material" id=1]
 [ext_resource path="res://object/stage/common/resource/material/goal/GoalPaper.tres" type="Material" id=2]
+[ext_resource path="res://object/stage/common/resource/script/Goal.cs" type="Script" id=3]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Goal_Goal"
@@ -53,16 +54,17 @@ length = 0.001
 collision_layer = 0
 collision_mask = 2
 monitorable = false
+script = ExtResource( 3 )
 
 [node name="Mesh" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.180774, 0 )
 mesh = SubResource( 1 )
 skeleton = NodePath("")
-material/0 = null
-material/1 = null
 
 [node name="Animator" type="AnimationPlayer" parent="."]
 autoplay = "Loop"
 playback_speed = 1.2
 anims/Loop = SubResource( 3 )
 anims/RESET = SubResource( 2 )
+
+[connection signal="area_entered" from="." to="." method="OnPlayerEntered"]

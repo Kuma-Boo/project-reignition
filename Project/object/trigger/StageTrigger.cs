@@ -15,19 +15,20 @@ namespace Project.Gameplay.Triggers
 		{
 			OnEnter, //Activate on enter
 			OnExit, //Activate on exit
+			OnStay, //Enable on enter, disable on exit.
+		}
 
-			DisableOnExit, //Enable on enter, disable on exit.
+		public enum InteractionMode
+		{
+			BothWays,
+			MovingForward,
+			MovingBackward,
 		}
 
 		[Export]
-		public ExitMode exitMode;
-		public enum ExitMode
-		{
-			DeactivateBothWays,
-			DeactivateMovingForward,
-			DeactivateMovingBackward,
-		}
-
+		public InteractionMode enterMode;
+		[Export]
+		public InteractionMode exitMode;
 		private readonly Array<StageTriggerModule> _stageTriggerObjects = new Array<StageTriggerModule>();
 
 		public override void _Ready()
@@ -50,17 +51,24 @@ namespace Project.Gameplay.Triggers
 			if (triggerMode == TriggerMode.OnExit)
 				return;
 
+			if (enterMode != InteractionMode.BothWays)
+			{
+				bool isEnteringForward = !CharacterController.instance.PathFollower.IsAheadOfPoint(GlobalTranslation);
+				if (enterMode == InteractionMode.MovingForward && !isEnteringForward)
+					return;
+
+				if (enterMode == InteractionMode.MovingBackward && isEnteringForward)
+					return;
+			}
+
 			Activate();
 		}
 
 		public void OnExited(Area a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player") || !CharacterController.instance.PathFollower.IsInsideTree()) return;
 
-			Path activePath = CharacterController.instance.ActivePath;
-			Curve3D pathCurve = activePath.Curve;
-			float characterOffset = pathCurve.GetClosestOffset(CharacterController.instance.GlobalTranslation - activePath.GlobalTranslation);
-			float triggerOffset = pathCurve.GetClosestOffset(GlobalTranslation - activePath.GlobalTranslation);
+			bool isExitingForward = CharacterController.instance.PathFollower.IsAheadOfPoint(GlobalTranslation);
 
 			switch (triggerMode)
 			{
@@ -70,12 +78,10 @@ namespace Project.Gameplay.Triggers
 				case TriggerMode.OnEnter: //Do Nothing
 					break;
 				default:
-					bool isExitingForward = Mathf.Sign(characterOffset - triggerOffset) > 0;
-
-					if (exitMode == ExitMode.DeactivateMovingForward && !isExitingForward)
+					if (exitMode == InteractionMode.MovingForward && !isExitingForward)
 						break;
 					
-					if (exitMode == ExitMode.DeactivateMovingBackward && isExitingForward)
+					if (exitMode == InteractionMode.MovingBackward && isExitingForward)
 						break;
 
 					Deactivate(isExitingForward);

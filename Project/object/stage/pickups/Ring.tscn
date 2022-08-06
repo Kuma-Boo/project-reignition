@@ -1,7 +1,64 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://object/stage/pickups/resource/script/Ring.cs" type="Script" id=1]
 [ext_resource path="res://object/stage/pickups/resource/model/Ring.gltf" type="PackedScene" id=2]
+[ext_resource path="res://object/stage/pickups/resource/model/ring particle.png" type="Texture" id=3]
+
+[sub_resource type="SphereShape" id=3]
+radius = 0.5
+
+[sub_resource type="Animation" id=15]
+resource_name = "Collect"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CollisionShape:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Ring:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "Despawn"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("RingParticle:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
 
 [sub_resource type="Animation" id=4]
 resource_name = "Loop"
@@ -35,28 +92,105 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ) ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("CollisionShape:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Ring:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("RingParticle:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
 
-[sub_resource type="SphereShape" id=3]
-radius = 0.5
+[sub_resource type="Gradient" id=16]
+offsets = PoolRealArray( 0, 0.715686, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=12]
+gradient = SubResource( 16 )
+width = 128
+
+[sub_resource type="ParticlesMaterial" id=17]
+lifetime_randomness = 0.2
+emission_shape = 1
+emission_sphere_radius = 0.5
+gravity = Vector3( 0, 0, 0 )
+scale = 0.1
+scale_random = 0.4
+color_ramp = SubResource( 12 )
+
+[sub_resource type="SpatialMaterial" id=14]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_specular_mode = 4
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="QuadMesh" id=18]
+material = SubResource( 14 )
 
 [node name="Ring" type="Area"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource( 1 )
+animator = NodePath("Animator")
 
 [node name="Ring" parent="." instance=ExtResource( 2 )]
 
 [node name="Ring" parent="Ring" index="0"]
 layers = 32
 
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 3 )
+
 [node name="Animator" type="AnimationPlayer" parent="."]
 autoplay = "Loop"
+anims/Collect = SubResource( 15 )
 anims/Loop = SubResource( 4 )
 anims/RESET = SubResource( 5 )
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
-shape = SubResource( 3 )
+[node name="RingParticle" type="Particles" parent="."]
+emitting = false
+amount = 4
+lifetime = 0.2
+speed_scale = 1.2
+explosiveness = 0.6
+visibility_aabb = AABB( -1, -1, -1, 2, 2, 2 )
+local_coords = false
+process_material = SubResource( 17 )
+draw_pass_1 = SubResource( 18 )
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 

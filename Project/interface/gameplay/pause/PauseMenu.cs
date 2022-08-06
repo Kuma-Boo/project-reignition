@@ -26,6 +26,7 @@ namespace Project.Interface
 
 		private void TogglePause()
 		{
+			//TODO Pause all shaders
 			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
 			GetTree().Paused = !GetTree().Paused;
 			BGMPlayer.instance.StreamPaused = GetTree().Paused;

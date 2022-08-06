@@ -1,29 +1,22 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://object/player/resource/model/texture/sonic_diffuse.png" type="Texture" id=1]
+[ext_resource path="res://object/player/resource/model/texture/sonic_detail.png" type="Texture" id=2]
 
 [sub_resource type="Shader" id=3]
 code = "shader_type spatial;
-uniform sampler2D albedo_tex : hint_albedo;
-uniform float fresnel_amount : hint_range(0, 64.0);
-uniform vec4 fresnel_color : hint_color;
 
-float fresnel(float amount, vec3 n, vec3 v)
-{
-	return pow((1.0 - clamp(dot(normalize(n), normalize(v)), 0.0, 1.0 )), amount);
-}
+uniform sampler2D albedo : hint_albedo;
+uniform sampler2D detail : hint_albedo;
 
 void fragment() {
-	vec4 a = texture(albedo_tex, UV) * COLOR;
-	ALBEDO = a.rgb + fresnel(fresnel_amount, NORMAL, VIEW) * fresnel_color.rgb;
+	vec4 col = texture(albedo, UV);
+	ALBEDO = col.rgb;
 }
 "
-
-[sub_resource type="StreamTexture" id=4]
-flags = 23
-load_path = "res://.import/sonic_diffuse.png-330c62209573924985bbe0df1e43f9ff.s3tc.stex"
 
 [resource]
 resource_name = "Body"
 shader = SubResource( 3 )
-shader_param/fresnel_amount = 2.5
-shader_param/fresnel_color = Color( 0.313726, 0.313726, 0.313726, 1 )
-shader_param/albedo_tex = SubResource( 4 )
+shader_param/albedo = ExtResource( 1 )
+shader_param/detail = ExtResource( 2 )

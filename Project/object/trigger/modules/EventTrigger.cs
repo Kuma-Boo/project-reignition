@@ -36,7 +36,7 @@ namespace Project.Gameplay.Triggers
 			_animator.Play("Event");
 
 			if(playerStandin != null)
-				Character.StartFollowingEventObject(GetNode<Spatial>(playerStandin));
+				Character.StartExternal(GetNode<Spatial>(playerStandin), true);
 		}
 
 		public void PlayCharacterAnimation(string anim) //Call this from the animator to play a specific animation on the player
@@ -44,9 +44,6 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.PlayAnimation(anim);
 		}
 
-		public void FinishEvent()
-		{
-			Character.CancelAutomation();
-		}
+		public void FinishEvent() => Character.CancelMovementState(CharacterController.MovementStates.External);
 	}
 }

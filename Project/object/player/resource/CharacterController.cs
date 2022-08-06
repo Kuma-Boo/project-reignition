@@ -4,31 +4,130 @@ using Godot.Collections;
 
 namespace Project.Gameplay
 {
-	/* Function Prefixes
-	 * Start - Begins an action
-	 * Stop - Ends an action
-	 * Update - Process an action
-	 * Cancel - Ends an action, but only when the current action is the same
-	 */
-
 	public class CharacterController : KinematicBody
 	{
 		public static CharacterController instance;
 
 		[Export]
 		public NodePath pathFollower;
-		public PathFollow PathFollower { get; private set; }
-		private float pathFollowerOffset; //Offset used when a non-looping path ends.
+		public CharacterPathFollower PathFollower { get; private set; }
 		[Export]
 		public NodePath animator;
 		public CharacterAnimator Animator { get; private set; }
 		[Export]
 		public NodePath sound;
 		public CharacterSound Sound { get; private set; }
-		[Export(PropertyHint.Range, "0, 1")]
-		public float collisionHeight = .4f;
-		[Export(PropertyHint.Range, "0, 1")]
-		public float collisionWidth = .3f;
+		public CameraController Camera { get; set; }
+
+		public override void _Ready()
+		{
+			instance = this;
+
+			PathFollower = GetNode<CharacterPathFollower>(pathFollower);
+			Animator = GetNode<CharacterAnimator>(animator);
+			Sound = GetNode<CharacterSound>(sound);
+		}
+
+		public override void _PhysicsProcess(float _)
+		{
+			ProcessStateMachine();
+
+			UpdatePhysics();
+			Animator.UpdateAnimation();
+			Camera.UpdateCamera();
+		}
+
+		public override void _ExitTree()
+		{
+			if (IsTimeBreakActive) //Just in case
+				ToggleTimeBreak();
+		}
+
+		#region State Machine
+		public MovementStates MovementState { get; private set; }
+		public enum MovementStates
+		{
+			Normal, //Standard on rails movement
+			External, //Cutscenes, Cinematics, and stage objects that override player control
+			Sidle, //Scooting along the wall
+			Drift, //Sharp 90 degree corner. Press jump at the right moment to get a burst of speed?
+			Grinding, //Grinding on rails
+			Launcher, //Springs, Ramps, etc.
+		}
+
+		public ActionStates ActionState { get; private set; }
+		public enum ActionStates //Actions that can happen in the Normal MovementState
+		{
+			Normal,
+			Jumping,
+			AccelJump,
+			Crouching, //Sliding included
+			Damaged, //Being knocked back by damage
+			Respawning, //Idle until respawn timer reaches zero
+			JumpDashing, //Also includes homing attack
+			EnemyBounce, //Struck an enemy with an attack
+			Stomping, //Jump cancel
+			Backflip,
+
+			//State specific
+			Hanging, //Hanging from a ledge (In Sidle Mode)
+		}
+
+		public void ResetMovementState()
+		{
+			switch (MovementState)
+			{
+				case MovementStates.Grinding:
+					StopGrinding();
+					break;
+				case MovementStates.External:
+					EmitSignal(nameof(OnExternalControlFinished));
+					break;
+			}
+
+			CancelMovementState(MovementState);
+		}
+
+		public void CancelMovementState(MovementStates fromState) //Reset state to Normal
+		{
+			if (MovementState == fromState)
+				MovementState = MovementStates.Normal;
+		}
+
+		private void ProcessStateMachine()
+		{
+			if (isCountdownActive) return;
+			UpdateInputBuffers();
+
+			customPhysicsEnabled = false;
+
+			switch (MovementState)
+			{
+				case MovementStates.Normal:
+					UpdateNormalState();
+					break;
+				case MovementStates.External:
+					UpdateExternalControl();
+					break;
+				case MovementStates.Sidle:
+					UpdateSidle();
+					break;
+				case MovementStates.Launcher:
+					UpdateLauncher();
+					break;
+				case MovementStates.Drift:
+					UpdateDrift();
+					break;
+				case MovementStates.Grinding:
+					UpdateGrinding();
+					break;
+			}
+
+			UpdateInvincibility();
+			UpdateControlLockTimer();
+			UpdateBreakTimer();
+		}
+		#endregion
 
 		#region Controls
 		public InputManager.Controller Controller => InputManager.controller;
@@ -120,158 +219,49 @@ namespace Project.Gameplay
 		{
 			isCountdownActive = false;
 		}
-
 		#endregion
 
-		#region Automation & Events
-		private Vector3 automationDifference;
-		private Spatial automationParent;
+		#region External Control, Automation and Events
+		private Vector3 automationOffset;
+		private Spatial externalParent;
 
-		public void StartFollowingEventObject(Spatial obj)
+		[Signal]
+		public delegate void OnExternalControlFinished();
+		public void StartExternal(Spatial followObject = null, bool snap = false)
 		{
-			automationParent = obj;
-
-			MoveSpeed = 0;
-			StrafeSpeed = 0;
-			VerticalSpeed = 0;
-
-			MovementState = MovementStates.Automation;
-		}
-
-		public void StartAutomation()
-		{
-			MovementState = MovementStates.Automation;
+			ResetMovementState();
+			MovementState = MovementStates.External;
 			ActionState = ActionStates.Normal;
-			automationDifference = GlobalTranslation - PathFollower.GlobalTranslation;
 
+			externalParent = followObject;
+			if (externalParent != null)
+				MoveSpeed = 0;
+			
 			StrafeSpeed = 0;
 			VerticalSpeed = 0;
+			automationOffset = snap ? Vector3.Zero : GlobalTranslation - PathFollower.GlobalTranslation;
 
-			UpdateAutomation();
+			UpdateExternalControl();
 		}
 
-		private void UpdateAutomation()
+		public void UpdateExternalControl()
 		{
 			customPhysicsEnabled = true;
-			automationDifference = automationDifference.LinearInterpolate(Vector3.Zero, .2f); //Smooth out entry
+			automationOffset = automationOffset.LinearInterpolate(Vector3.Zero, .2f); //Smooth out entry
 
-			if (automationParent != null)
-				GlobalTransform = automationParent.GlobalTransform;
+			if (externalParent != null)
+				GlobalTransform = externalParent.GlobalTransform;
 			else
 			{
 				if(MoveSpeed < moveSettings.speed)
 					MoveSpeed = moveSettings.speed;
 				PathFollower.Offset += MoveSpeed * PhysicsManager.physicsDelta;
-
 				GlobalTransform = PathFollower.GlobalTransform;
 			}
 
-			GlobalTranslation += automationDifference;
-		}
-
-		public void CancelAutomation()
-		{
-			automationParent = null;
-			
-			if (MovementState == MovementStates.Automation)
-				MovementState = MovementStates.Normal;
+			GlobalTranslation += automationOffset;
 		}
 		#endregion
-		#endregion
-
-		public override void _Ready()
-		{
-			instance = this;
-
-			PathFollower = GetNode<PathFollow>(pathFollower);
-			Animator = GetNode<CharacterAnimator>(animator);
-			Sound = GetNode<CharacterSound>(sound);
-		}
-
-		public override void _PhysicsProcess(float _)
-		{
-			ProcessStateMachine();
-
-			UpdatePhysics();
-			Animator.UpdateAnimation();
-			CameraController.instance.UpdateCamera();
-		}
-
-		public override void _ExitTree()
-		{
-			if (IsTimeBreakActive) //Just in case
-				ToggleTimeBreak();
-		}
-
-		#region State Machine
-		public MovementStates MovementState { get; private set; }
-		public enum MovementStates
-		{
-			Normal, //Standard on rails movement
-			Automation,  //Cutscene? Cinematics? May be replaced with input lockout.
-			Sidle, //Scooting along the wall
-			Drift, //Sharp 90 degree corner. Press jump at the right moment to get a burst of speed?
-			Grinding, //Grinding on rails
-			Launcher, //Springs, Ramps, etc.
-			External, //Whenever external objects take control over the character
-		}
-
-		public ActionStates ActionState { get; private set; }
-		public enum ActionStates //Actions that can happen in the Normal MovementState
-		{
-			Normal,
-			Jumping,
-			AccelJump,
-			Crouching, //Sliding included
-			Damaged, //Being knocked back by damage
-			Respawning, //Idle until respawn timer reaches zero
-			JumpDashing, //Also includes homing attack
-			EnemyBounce, //Struck an enemy with an attack
-			Stomping, //Jump cancel
-			Backflip,
-
-			//State specific
-			Hanging, //Hanging from a ledge (In Sidle Mode)
-		}
-
-		private bool customPhysicsEnabled;
-
-		private void ProcessStateMachine()
-		{
-			if (isCountdownActive) return;
-			UpdateInputBuffers();
-
-			customPhysicsEnabled = false;
-
-			switch (MovementState)
-			{
-				case MovementStates.Normal:
-					UpdateNormalState();
-					break;
-				case MovementStates.Sidle:
-					UpdateSidle();
-					break;
-				case MovementStates.Launcher:
-					UpdateLauncher();
-					break;
-				case MovementStates.Drift:
-					UpdateDrift();
-					break;
-				case MovementStates.Grinding:
-					UpdateGrinding();
-					break;
-				case MovementStates.Automation:
-					UpdateAutomation();
-					break;
-				case MovementStates.External:
-					UpdateExternal();
-					break;
-			}
-
-			UpdateInvincibility();
-			UpdateControlLockTimer();
-			UpdateBreakTimer();
-		}
 		#endregion
 
 		#region Normal State
@@ -389,7 +379,7 @@ namespace Project.Gameplay
 
 		private bool isRecentered;
 		private const float RECENTER_SMOOTHING = .2f;
-		private void RecenterStrafe()
+		public void RecenterStrafe()
 		{
 			//Calculate distance along the plane defined by StrafeDirection
 			Vector3 calculationPoint = PathFollower.GlobalTransform.basis.XformInv(GlobalTranslation - PathFollower.GlobalTranslation);
@@ -408,8 +398,7 @@ namespace Project.Gameplay
 		}
 
 		#region Actions
-		[Export]
-		public float gravity;
+		public const float GRAVITY = 28.0f;
 		[Export]
 		public float maxGravity;
 		private void UpdateActions()
@@ -487,7 +476,7 @@ namespace Project.Gameplay
 
 		private void ApplyGravity()
 		{
-			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, maxGravity, gravity * PhysicsManager.physicsDelta); //Apply Gravity
+			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, maxGravity, GRAVITY * PhysicsManager.physicsDelta); //Apply Gravity
 		}
 
 		[Export]
@@ -499,7 +488,7 @@ namespace Project.Gameplay
 
 			isJumpClamped = false;
 			IsAttacking = false;
-			canJumpDash = false;
+			CanJumpDash = false;
 			IsGrindStepping = false;
 			isAccelerationJump = false;
 
@@ -512,7 +501,6 @@ namespace Project.Gameplay
 				//Landing boost when holding forward (See Sonic and the Black Knight)
 				if (MoveSpeed < landingBoost)
 					MoveSpeed = landingBoost;
-				//Always Play VFX
 			}
 		}
 
@@ -523,13 +511,12 @@ namespace Project.Gameplay
 		public float jumpHeight;
 		[Export]
 		public float jumpPower;
-		public float JumpPower => Mathf.Sqrt(2 * gravity * jumpHeight);
+		public float JumpPower => Mathf.Sqrt(2 * GRAVITY * jumpHeight);
 		[Export]
 		public float jumpCurve = .95f;
 		public bool IsJumping => ActionState == ActionStates.Jumping;
 		public bool IsAccelerationJumping => ActionState == ActionStates.AccelJump;
 		private bool isJumpClamped; //True after the player releases the jump button
-		private bool canJumpDash;
 		private bool isAccelerationJump;
 		private float currentJumpLength; //Amount of time the jump button was held
 		private const float ACCELERATION_JUMP_LENGTH = .04f; //How fast the jump button needs to be released for an "acceleration jump"
@@ -538,7 +525,7 @@ namespace Project.Gameplay
 			currentJumpLength = 0;
 			isJumpClamped = false;
 			IsOnGround = false;
-			canJumpDash = true;
+			CanJumpDash = true;
 			ActionState = ActionStates.Jumping;
 
 			VerticalSpeed = JumpPower;
@@ -590,13 +577,14 @@ namespace Project.Gameplay
 		public float jumpDashMaxGravity;
 		[Export]
 		public float homingAttackSpeed;
+		public bool CanJumpDash { get; set; }
 		public bool IsJumpDashing => ActionState == ActionStates.JumpDashing;
 		public bool IsAttacking { get; private set; } //Should the player damage enemies?
 		public Spatial LockonTarget { get; private set; } //Active homing attack target
 
 		private void CheckJumpDash()
 		{
-			if (canJumpDash && jumpBufferTimer != 0)
+			if (CanJumpDash && jumpBufferTimer != 0)
 			{
 				StartJumpDash();
 				jumpBufferTimer = 0;
@@ -605,7 +593,7 @@ namespace Project.Gameplay
 
 		private void StartJumpDash()
 		{
-			canJumpDash = false;
+			CanJumpDash = false;
 			IsAttacking = true;
 			ActionState = ActionStates.JumpDashing;
 
@@ -693,7 +681,7 @@ namespace Project.Gameplay
 		public float backflipSpeed;
 		[Export]
 		public float backflipHeight;
-		private float BackflipPower => Mathf.Sqrt(2 * gravity * backflipHeight);
+		private float BackflipPower => Mathf.Sqrt(2 * GRAVITY * backflipHeight);
 		private bool IsBackflipping => ActionState == ActionStates.Backflip;
 		private float backflipTimer;
 		private const float BACKFLIP_LENGTH = .4f;
@@ -716,7 +704,7 @@ namespace Project.Gameplay
 			StrafeSpeed = 0;
 			MoveSpeed = -backflipSpeed;
 			VerticalSpeed = BackflipPower;
-			canJumpDash = true;
+			CanJumpDash = true;
 
 			IsOnGround = false;
 
@@ -757,7 +745,7 @@ namespace Project.Gameplay
 				}
 
 				if (!GameplayInterface.instance.IsSoulGaugeCharged) return;
-				if (MovementState == MovementStates.Automation || MovementState == MovementStates.Launcher) return;
+				if (MovementState == MovementStates.External || MovementState == MovementStates.Launcher) return;
 
 				ToggleTimeBreak();
 			}
@@ -893,7 +881,7 @@ namespace Project.Gameplay
 			if (IsOnGround)
 				ActionState = ActionStates.Normal;
 
-			VerticalSpeed -= gravity * PhysicsManager.physicsDelta;
+			VerticalSpeed -= GRAVITY * PhysicsManager.physicsDelta;
 		}
 
 		public void TakeDamage(Node s = null)
@@ -931,18 +919,13 @@ namespace Project.Gameplay
 
 		public void Kill()
 		{
-			if (StageSettings.instance.missionModifier == StageSettings.MissionModifier.Deathless)
-			{
-				//Stage over
-				return;
-			}
-
 			MoveSpeed = 0;
 			StrafeSpeed = 0;
 			VerticalSpeed = 0;
 			PathFollower.HOffset = PathFollower.VOffset = 0;
 
-			//TODO Play death animation depending on the result
+			//TODO Check deathless mission modifier/Play death animation
+
 			Respawn();
 		}
 
@@ -951,13 +934,11 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
-			if (Triggers.CheckpointTrigger.activeCheckpoint != null)
-				GlobalTransform = Triggers.CheckpointTrigger.activeCheckpoint.RespawnTransform;
-			else
-				Transform = Transform.Identity;
+			GlobalTransform = Triggers.CheckpointTrigger.activeCheckpoint.GlobalTransform;
 
+			PathFollower.pathFollowerOffset = 0f; //Reset excess offset
 			StageSettings.instance.RespawnObjects();
-			CameraController.instance.ResetFlag = true;
+			Camera.ResetFlag = true;
 		}
 		#endregion
 
@@ -992,7 +973,7 @@ namespace Project.Gameplay
 			ResetLockonTarget();
 
 			MoveSpeed = 0;
-			canJumpDash = true;
+			CanJumpDash = true;
 			VerticalSpeed = enemyBouncePower;
 			SetControlLockout(attackLockoutSettings);
 			ActionState = ActionStates.EnemyBounce;
@@ -1027,53 +1008,17 @@ namespace Project.Gameplay
 
 		private void UpdateSidle()
 		{
+			sidleTimer = Mathf.MoveToward(sidleTimer, 0, PhysicsManager.physicsDelta);
+
 			switch (ActionState)
 			{
 				case ActionStates.Normal:
 					break;
 				case ActionStates.Damaged: //Fall
-					sidleTimer = Mathf.MoveToward(sidleTimer, 0, PhysicsManager.physicsDelta);
-
-					if (sidleTimer == 0)
-					{
-						PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, -1, SIDLE_HORIZONTAL_SPEED);
-
-						if (currentRailing != null)
-						{
-							float targetY = currentRailing.GlobalTranslation.y;
-							GlobalTranslation = new Vector3(GlobalTranslation.x, Mathf.MoveToward(GlobalTranslation.y, targetY, SIDLE_RAIL_FALL_SPEED * PhysicsManager.physicsDelta), GlobalTranslation.z); //Snap to railing
-
-							if (Mathf.IsEqualApprox(GlobalTranslation.y, targetY))
-							{
-								ActionState = ActionStates.Hanging;
-								sidleTimer = 5f;
-								PathFollower.HOffset = -1f; //All railings MUST be 1 unit away from the wall.
-							}
-						}
-						else
-							ApplyGravity();
-					}
+					UpdateSidleDamage();
 					return;
 				case ActionStates.Hanging:
-					sidleTimer = Mathf.MoveToward(sidleTimer, 0, PhysicsManager.physicsDelta);
-
-					if (sidleTimer == 0)
-					{
-						if (IsRising)
-							PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, 0, SIDLE_HORIZONTAL_SPEED);
-						else if (IsOnGround)
-							PathFollower.HOffset = 0;
-
-						ApplyGravity();
-					}
-					else if (jumpBufferTimer != 0)
-					{
-						//Sidle Recovery
-						jumpBufferTimer = 0;
-						VerticalSpeed = 8;
-						sidleTimer = 0;
-					}
-
+					UpdateSidleHang();
 					return;
 				default:
 					UpdateNormalState(); //Busy with a previous action
@@ -1083,11 +1028,48 @@ namespace Project.Gameplay
 			MoveSpeed = sidleSettings.Interpolate(MoveSpeed, GetMovementInputValue());
 		}
 
-		public void StopSidle()
+		private void UpdateSidleDamage()
 		{
-			MovementState = MovementStates.Normal;
+			if (sidleTimer == 0)
+			{
+				PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, -1, SIDLE_HORIZONTAL_SPEED);
+
+				if (currentRailing != null)
+				{
+					float targetY = currentRailing.GlobalTranslation.y;
+					GlobalTranslation = new Vector3(GlobalTranslation.x, Mathf.MoveToward(GlobalTranslation.y, targetY, SIDLE_RAIL_FALL_SPEED * PhysicsManager.physicsDelta), GlobalTranslation.z); //Snap to railing
+
+					if (Mathf.IsEqualApprox(GlobalTranslation.y, targetY))
+					{
+						ActionState = ActionStates.Hanging;
+						sidleTimer = 5f;
+						PathFollower.HOffset = -1f; //All railings MUST be 1 unit away from the wall.
+					}
+				}
+				else
+					ApplyGravity();
+			}
 		}
 
+		private void UpdateSidleHang()
+		{
+			if (sidleTimer == 0)
+			{
+				if (IsRising)
+					PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, 0, SIDLE_HORIZONTAL_SPEED);
+				else if (IsOnGround)
+					PathFollower.HOffset = 0;
+
+				ApplyGravity();
+			}
+			else if (jumpBufferTimer != 0)
+			{
+				//Sidle Recovery
+				jumpBufferTimer = 0;
+				VerticalSpeed = 8;
+				sidleTimer = 0;
+			}
+		}
 		#endregion
 
 		#region Launchers and Jumps
@@ -1099,11 +1081,11 @@ namespace Project.Gameplay
 		private Launcher.LaunchData launchData;
 		public void StartLauncher(Launcher.LaunchData data, Launcher newLauncher = null)
 		{
-			if(IsGrinding)
-				StopGrinding();
+			ResetMovementState();
 
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Launcher;
+
 			activeLauncher = newLauncher;
 			launchData = data;
 
@@ -1125,7 +1107,7 @@ namespace Project.Gameplay
 				GlobalTranslation = launchData.InterpolatePosition(launcherTime);
 				if (launchData.IsLauncherFinished(launcherTime)) //Revert to normal state
 				{
-					MovementState = MovementStates.Normal;
+					CancelMovementState(MovementStates.Launcher);
 					MoveSpeed = launchData.InitialHorizontalVelocity;
 					VerticalSpeed = launchData.FinalVerticalVelocity;
 
@@ -1135,25 +1117,12 @@ namespace Project.Gameplay
 				launcherTime += PhysicsManager.physicsDelta;
 			}
 
-			ResyncPathFollower();
+			PathFollower.ResyncPathFollower();
 		}
 
-		public void JumpTo(Vector3 destination, float midHeight = 0f) //Generic JumpTo. midHeight is relative to the destination
+		public void JumpTo(Vector3 destination, float midHeight = 0f, bool relativeToDst = false) //Generic JumpTo
 		{
-			Vector3 delta = destination - GlobalTranslation;
-
-			Launcher.LaunchData data = new Launcher.LaunchData()
-			{
-				startPosition = GlobalTranslation,
-				launchDirection = delta.Normalized(),
-
-				distance = delta.RemoveVertical().Length(),
-				startingHeight = 0f,
-				middleHeight = delta.y + midHeight,
-				finalHeight = delta.y,
-			};
-
-			data.Calculate();
+			Launcher.LaunchData data = Launcher.CreateData(GlobalTranslation, destination, midHeight, relativeToDst);
 			StartLauncher(data);
 		}
 		#endregion
@@ -1254,7 +1223,7 @@ namespace Project.Gameplay
 			}
 
 			MoveAndSlide(-grindRail.Forward() * MoveSpeed);
-			ResyncPathFollower();
+			PathFollower.ResyncPathFollower();
 
 			if (MoveSpeed <= MINIMUM_GRIND_SPEED)
 			{
@@ -1267,22 +1236,9 @@ namespace Project.Gameplay
 		{
 			grindRail = null;
 			Animator.StopGrinding();
-			MovementState = MovementStates.Normal;
+			CancelMovementState(MovementStates.Grinding);
 		}
 		#endregion
-		#endregion
-
-		#region Eternal Control
-		public void StartExternalControl()
-		{
-			MovementState = MovementStates.External;
-			MoveSpeed = VerticalSpeed = StrafeSpeed = 0;
-		}
-
-		private void UpdateExternal() //Remove all control
-		{
-			customPhysicsEnabled = true;
-		}
 		#endregion
 
 		#region Drift
@@ -1310,7 +1266,7 @@ namespace Project.Gameplay
 				GlobalTranslation = GlobalTranslation.MoveToward(targetPosition, MoveSpeed * PhysicsManager.physicsDelta);
 
 				if (distance < activeDriftCorner.slideDistance * .1f)
-					StopDrift();
+					activeDriftCorner.CompleteDrift(true);
 			}
 			else
 			{
@@ -1325,19 +1281,12 @@ namespace Project.Gameplay
 
 						GlobalTranslation = new Vector3(targetPosition.x, GlobalTranslation.y, targetPosition.z); //Snap to target position
 					}
-					else if(distance < .1f)
-						StopDrift();
+					else if (distance < .1f)
+						activeDriftCorner.CompleteDrift(false);
 				}
 			}
 
-			ResyncPathFollower();
-		}
-
-		private void StopDrift()
-		{
-			//Drift finished
-			activeDriftCorner.CompleteDrift(true);
-			MovementState = MovementStates.Normal;
+			PathFollower.ResyncPathFollower();
 		}
 		#endregion
 
@@ -1362,16 +1311,273 @@ namespace Project.Gameplay
 		}
 		public float SpeedRatio => moveSettings.GetSpeedRatio(MoveSpeed);
 		private Vector3 velocity; //x -> strafe, y -> jump/fall, z -> speed
-		public Vector3 Velocity => isPathMovingForward ? PathFollower.GlobalTransform.basis.Xform(velocity) : PathFollower.GlobalTransform.basis.XformInv(velocity);
+		public Vector3 Velocity => PathFollower.Xform(velocity);
 
 		public bool IsFalling => VerticalSpeed < 0;
 		public bool IsRising => VerticalSpeed > 0;
 		public bool IsIdling => Mathf.Abs(StrafeSpeed) < .1f && Mathf.Abs(MoveSpeed) < .1f;
 
-		public Vector3 CenterPosition => GlobalTranslation + worldDirection * collisionHeight; //Center of collision calculations
+		public Vector3 CenterPosition => GlobalTranslation + worldDirection * COLLISION_RADIUS; //Center of collision calculations
+		public Vector3 StrafeDirection => PathFollower.MovementDirection.Cross(worldDirection).Normalized();
 
-		public Vector3 ForwardDirection => PathFollower.Forward() * PathTravelDirection;
-		public Vector3 StrafeDirection { get; private set; }
+		private bool customPhysicsEnabled;
+		private const float COLLISION_RADIUS = .4f;
+		private void UpdatePhysics()
+		{
+			UpdateTriggers();
+			if (customPhysicsEnabled) return; //When physics are handled in the state machine
+
+			/*Movement method
+			Move path follower
+			Perform collision checks
+			Move character
+			Resync path follower
+			*/
+			float movementDelta = MoveSpeed * PhysicsManager.physicsDelta;
+			Vector3 movementDirection = PathFollower.MovementDirection;
+
+			PathFollower.UpdateOffset(movementDelta);
+
+			//Use the average direction sampled from before and after changing the offset.
+			//Increases accuracy around turns.
+			movementDirection = movementDirection.LinearInterpolate(movementDirection, .5f).Normalized();
+
+			CheckMainWall(movementDirection);
+			CheckGround();
+
+			strafeCollision = StrafeCollisions.None;
+
+			CheckStrafeWall(1);
+			CheckStrafeWall(-1);
+
+			if (!IsOnGround && ActionState == ActionStates.JumpDashing)
+				movementDirection = movementDirection.Flatten().Normalized();
+			MoveAndSlide(movementDirection * MoveSpeed + StrafeDirection * StrafeSpeed + worldDirection * VerticalSpeed);
+			CheckCeiling();
+
+			PathFollower.ResyncPathFollower();
+		}
+
+		public Vector3 worldDirection = Vector3.Up;
+
+		private float slopeInfluence;
+		private const float SLOPE_DEADZONE = .1f; //Ignore slope influence when less than this value
+		private const float SLOPE_INFLUENCE = .8f;
+
+		public bool IsOnGround { get; private set; }
+		public bool JustLandedOnGround => landingTimer > 0; //Flag for doing stuff on land
+		private int landingTimer;
+		private const float GROUND_SNAP_LENGTH = .2f;
+		private const float MAX_ANGLE_CHANGE = 80f;
+
+		private void CheckGround()
+		{
+			if (JustLandedOnGround) //RESET FLAG
+				landingTimer--;
+
+			Vector3 castOrigin = CenterPosition;
+			float castLength = COLLISION_RADIUS;
+
+			if (IsOnGround)
+				castLength += GROUND_SNAP_LENGTH;
+			else if (IsFalling)
+				castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
+			else if (IsRising)
+				castLength = -.1f; //Fix allow jumping
+
+			Vector3 castVector = -worldDirection * castLength;
+			RaycastHit groundHit = this.CastRay(castOrigin, castVector, environmentMask, false, GetCollisionExceptions());
+			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
+
+			if (!groundHit || groundHit.collidedObject.IsInGroup("wall")) //Whisker casts
+			{
+				Vector3 startingDirection = (PathFollower.MovementDirection.y > 0 ? 1 : -1) * PathFollower.MovementDirection; //Fix weird snapping
+				for (int i = 0; i < 8; i++)
+				{
+					Vector3 castOffset = startingDirection.Rotated(worldDirection, Mathf.Tau * .125f * i) * COLLISION_RADIUS * .5f;
+					RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, environmentMask, false, GetCollisionExceptions());
+					Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
+					if (hit && !hit.collidedObject.IsInGroup("wall"))
+					{
+						groundHit = hit;
+						groundHit.point -= castOffset;
+						break;
+					}
+				}
+			}
+
+			if (groundHit && !groundHit.collidedObject.IsInGroup("wall")) //Don't count walls as the ground
+			{
+				//FIX don't allow 90 degree angle changes in a single frame
+				if (Mathf.Rad2Deg(groundHit.normal.AngleTo(Vector3.Up) - worldDirection.AngleTo(Vector3.Up)) > MAX_ANGLE_CHANGE)
+					return;
+
+				Vector3 newNormal = (groundHit.normal * 100).Round() * .01f; //FIX Round to nearest hundredth to reduce jittering
+				worldDirection = newNormal.Normalized();
+
+				if(!IsOnGround)
+					LandOnGround();
+
+				float rotationAmount = PathFollower.GlobalTransform.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
+				Vector3 slopeDirection = groundHit.normal.Rotated(Vector3.Up, rotationAmount).Normalized();
+				slopeInfluence = slopeDirection.z * SLOPE_INFLUENCE;
+
+				GlobalTranslation = groundHit.point;
+			}
+			else
+			{
+				slopeInfluence = 0f;
+				if (IsOnGround && !IsBackflipping)
+					Animator.FallAnimation();
+				
+				IsOnGround = false;
+
+				if (IsBackflipping) return;
+
+				if (ControlLockoutData != null && ControlLockoutData.strafeSettings == ControlLockoutResource.StrafeSettings.Recenter)
+					worldDirection = PathFollower.Up(); //Follow path
+				else
+					worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .1f, 0f, 1f)).Normalized();
+			}
+		}
+
+		private void CheckCeiling() //Checks the ceiling.
+		{
+			Vector3 castOrigin = CenterPosition;
+			float castLength = COLLISION_RADIUS;
+
+			Vector3 castVector = worldDirection * castLength;
+			if (IsRising)
+				castVector.y += VerticalSpeed * PhysicsManager.physicsDelta;
+
+			RaycastHit ceilingHit = this.CastRay(castOrigin, castVector, environmentMask, false, GetCollisionExceptions());
+			Debug.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
+
+			if (ceilingHit)
+			{
+				GlobalTranslate(ceilingHit.point - (CenterPosition + worldDirection * COLLISION_RADIUS));
+
+				if (IsRising)
+					VerticalSpeed = 0;
+			}
+		}
+
+		//Checks for walls forward and backwards (only in the direction the player is moving).
+		private void CheckMainWall(Vector3 castVector)
+		{
+			if (MoveSpeed == 0) return; //No movement.
+
+			castVector *= Mathf.Sign(MoveSpeed);
+			float castLength = COLLISION_RADIUS + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
+			Vector3 sidewaysOffset = StrafeDirection * COLLISION_RADIUS * .5f;
+
+			RaycastHit centerHit = this.CastRay(CenterPosition, castVector * castLength, environmentMask, false, GetCollisionExceptions());
+			Debug.DrawRay(CenterPosition, castVector * castLength, centerHit ? Colors.Red : Colors.White);
+			if (!IsValidWallCast(centerHit))
+				centerHit = new RaycastHit();
+
+			if (!centerHit)
+			{
+				//Whiskers
+				RaycastHit leftHit = this.CastRay(CenterPosition - sidewaysOffset, castVector * castLength, environmentMask, false, GetCollisionExceptions());
+				RaycastHit rightHit = this.CastRay(CenterPosition + sidewaysOffset, castVector * castLength, environmentMask, false, GetCollisionExceptions());
+				Debug.DrawRay(CenterPosition - sidewaysOffset, castVector * castLength, leftHit ? Colors.Red : Colors.White);
+				Debug.DrawRay(CenterPosition + sidewaysOffset, castVector * castLength, rightHit ? Colors.Red : Colors.White);
+
+				//Ignore collisions that are "side walls"
+				if (!IsValidWallCast(leftHit))
+					leftHit = new RaycastHit();
+				if (!IsValidWallCast(rightHit))
+					rightHit = new RaycastHit();
+
+				if (leftHit || rightHit)
+				{
+					bool useRightRaycast = rightHit;
+					bool isInCorner = (strafeCollision == StrafeCollisions.Left && rightHit) || (strafeCollision == StrafeCollisions.Right && leftHit);
+					if (rightHit && leftHit)
+					{
+						useRightRaycast = rightHit.distance <= leftHit.distance;
+
+						if (!isInCorner) //True when both raycasts are hit and the signs of the dot products aren't equal
+							isInCorner = Mathf.Sign(rightHit.normal.Dot(StrafeDirection)) != Mathf.Sign(leftHit.normal.Dot(StrafeDirection));
+					}
+
+					centerHit = useRightRaycast ? rightHit : leftHit;
+
+					if (isInCorner)
+						MoveSpeed = 0;
+				}
+			}
+
+			if (centerHit)
+			{
+				float wallRatio = DotProd2D(centerHit.normal, PathFollower.MovementDirection);
+				if (wallRatio > .9f)
+				{
+					if (IsSpeedBreakActive && breakTimer == 0) //Cancel speed break
+						ToggleSpeedBreak();
+
+					MoveSpeed = 0;
+					GlobalTranslate(castVector * (centerHit.distance - COLLISION_RADIUS)); //Snap to wall
+				}
+			}
+		}
+
+		private bool IsValidWallCast(RaycastHit hit) => hit && (DotProd2D(hit.normal, hit.direction) >= .5f && !hit.collidedObject.IsInGroup("ignore raycast"));
+
+		private StrafeCollisions strafeCollision;
+		private enum StrafeCollisions
+		{
+			None,
+			Left,
+			Right,
+			Both
+		}
+		private const float COLLISION_PADDING = .1f; //At what distance to apply smoothing to strafe (To avoid "Bumpy Corners")
+
+		//Checks for wall collision side to side. (Always active)
+		private void CheckStrafeWall(int direction)
+		{
+			if (isSideScroller) return; //No wall checks when sidescrolling.
+
+			bool isActiveDirection = Mathf.Sign(StrafeSpeed) == direction;
+			float castLength = COLLISION_RADIUS + COLLISION_PADDING + Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
+			Vector3 castVector = StrafeDirection * castLength * direction;
+			RaycastHit hit = this.CastRay(CenterPosition, castVector, environmentMask, false, GetCollisionExceptions());
+			Debug.DrawRay(CenterPosition, castVector, hit ? Colors.Red : Colors.White);
+
+			if (hit)
+			{
+				//Only process active collision
+				if (isActiveDirection)
+				{
+					float dot = DotProd2D(hit.normal, StrafeDirection);
+
+					if (dot > .8f)
+					{
+						GlobalTranslate(hit.direction * (hit.distance - COLLISION_RADIUS));
+						StrafeSpeed = 0;
+					}
+					else
+					{
+						float maxSpeed = runningStrafeSettings.speed * (1 - dot);
+						StrafeSpeed = Mathf.Clamp(StrafeSpeed, -maxSpeed, maxSpeed);
+					}
+				}
+
+				//Always update strafe collisions
+				if (hit.distance <= COLLISION_RADIUS)
+				{
+					if (strafeCollision == StrafeCollisions.None)
+						strafeCollision = direction > 0 ? StrafeCollisions.Right : StrafeCollisions.Left;
+					else
+						strafeCollision = StrafeCollisions.Both;
+				}
+			}
+		}
+
+		//Returns the absolute dot product of a normal relative to an axis ignoring Y values.
+		private float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized()));
 
 		private readonly Array<RespawnableObject> activeTriggers = new Array<RespawnableObject>();
 		private readonly Array<Spatial> activeTargets = new Array<Spatial>(); //List of targetable objects
@@ -1393,7 +1599,7 @@ namespace Project.Gameplay
 				//Pick new target
 				for (int i = 0; i < activeTargets.Count; i++)
 				{
-					if (IsTargetInvalid(activeTargets[i]) || !canJumpDash)
+					if (IsTargetInvalid(activeTargets[i]) || !CanJumpDash)
 						continue;
 
 					float dst = activeTargets[i].GlobalTranslation.RemoveVertical().DistanceSquaredTo(GlobalTranslation.RemoveVertical());
@@ -1410,7 +1616,7 @@ namespace Project.Gameplay
 				GameplayInterface.instance.DisableHomingReticle();
 			else if (LockonTarget != null)
 			{
-				Vector2 screenPos = CameraController.instance.ConvertToScreenSpace(LockonTarget.GlobalTranslation);
+				Vector2 screenPos = Camera.ConvertToScreenSpace(LockonTarget.GlobalTranslation);
 				GameplayInterface.instance.UpdateHomingReticle(screenPos, !isLockedOn);
 			}
 		}
@@ -1419,10 +1625,15 @@ namespace Project.Gameplay
 
 		public void OnCollisionObjectEnter(PhysicsBody body)
 		{
+			/*
+			Note for when I come back wondering why the player is being pushed through the floor
+			Ensure all crushers' animationplayers are using the PHYSICS update mode
+			If this is true, then proceed to panic.
+			*/
 			if (body.IsInGroup("crusher"))
 			{
-				//Check whether we're being crushed
-				RaycastHit hit = this.CastRay(CenterPosition, worldDirection * 5f, environmentMask, false);
+				//Check whether we're ACTUALLy being crushed and not running into the side of the crusher
+				RaycastHit hit = this.CastRay(CenterPosition, worldDirection * COLLISION_RADIUS * 2f, environmentMask, false);
 				if (hit.collidedObject == body)
 				{
 					GD.Print($"Crushed by {body.Name}");
@@ -1486,325 +1697,6 @@ namespace Project.Gameplay
 		{
 			if (activeTargets.Contains(area))
 				activeTargets.Remove(area);
-		}
-
-		private void UpdatePhysics()
-		{
-			UpdateTriggers();
-			if (customPhysicsEnabled) return; //When physics are handled in the state machine
-
-			/*Movement method
-			Move path follower
-			Perform collision checks
-			Move character
-			Resync path follower
-			*/
-			float movementDelta = MoveSpeed * PhysicsManager.physicsDelta;
-			Vector3 movementDirection = ForwardDirection;
-
-			if (PathFollower.Loop)
-				PathFollower.Offset += movementDelta * PathTravelDirection;
-			else
-			{
-				if (Mathf.IsZeroApprox(pathFollowerOffset))
-				{
-					float oldOffset = PathFollower.Offset;
-					PathFollower.Offset += movementDelta * PathTravelDirection;
-
-					if (PathFollower.UnitOffset >= 1f || PathFollower.UnitOffset <= 0)
-					{
-						//Extrapolate path
-						float extra = Mathf.Abs(movementDelta) - Mathf.Abs(oldOffset - PathFollower.Offset);
-						pathFollowerOffset += Mathf.Sign(movementDelta) * extra;
-					}
-				}
-				else
-				{
-					int oldSign = Mathf.Sign(pathFollowerOffset);
-					pathFollowerOffset += movementDelta;
-
-					//Merge back onto the path
-					if (Mathf.Sign(pathFollowerOffset) != oldSign)
-					{
-						PathFollower.Offset += pathFollowerOffset;
-						pathFollowerOffset = 0;
-					}
-				}
-			}
-
-			//Use the average direction sampled from before and after changing the offset.
-			//Increases accuracy around turns.
-			movementDirection = movementDirection.LinearInterpolate(ForwardDirection, .5f).Normalized();
-
-			CheckMainWall(movementDirection);
-			CheckGround();
-
-			StrafeDirection = ForwardDirection.Cross(worldDirection).Normalized();
-			strafeCollision = StrafeCollisions.None;
-
-			CheckStrafeWall(1);
-			CheckStrafeWall(-1);
-
-			if (!IsOnGround && ActionState == ActionStates.JumpDashing)
-				movementDirection = movementDirection.Flatten().Normalized();
-			MoveAndSlide(movementDirection * MoveSpeed + StrafeDirection * StrafeSpeed + worldDirection * VerticalSpeed);
-			CheckCeiling();
-
-			ResyncPathFollower();
-		}
-
-		public Vector3 worldDirection = Vector3.Up;
-
-		private float slopeInfluence;
-		private const float SLOPE_DEADZONE = .1f; //Ignore slope influence when less than this value
-		private const float SLOPE_INFLUENCE = .8f;
-
-		public bool IsOnGround { get; private set; }
-		public bool JustLandedOnGround => landingTimer > 0; //Flag for doing stuff on land
-		private int landingTimer;
-		private const float GROUND_SNAP_LENGTH = .2f;
-		private const float MAX_ANGLE_CHANGE = 80f;
-
-		private void CheckGround()
-		{
-			if (JustLandedOnGround) //RESET FLAG
-				landingTimer--;
-
-			Vector3 castOrigin = CenterPosition;
-			float castLength = collisionHeight;
-
-			if (IsOnGround)
-				castLength += GROUND_SNAP_LENGTH;
-			else if (IsFalling)
-				castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
-			else if (IsRising)
-				castLength = -.1f; //Fix allow jumping
-
-			Vector3 castVector = -worldDirection * castLength;
-			RaycastHit groundHit = this.CastRay(castOrigin, castVector, environmentMask, false, GetCollisionExceptions());
-			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
-
-			if (!groundHit || groundHit.collidedObject.IsInGroup("wall")) //Whisker casts
-			{
-				Vector3 startingDirection = (ForwardDirection.y > 0 ? 1 : -1) * ForwardDirection; //Fix weird snapping
-				for (int i = 0; i < 8; i++)
-				{
-					Vector3 castOffset = startingDirection.Rotated(worldDirection, Mathf.Tau * .125f * i) * collisionWidth * .5f;
-					RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, environmentMask, false, GetCollisionExceptions());
-					Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
-					if (hit && !hit.collidedObject.IsInGroup("wall"))
-					{
-						groundHit = hit;
-						groundHit.point -= castOffset;
-						break;
-					}
-				}
-			}
-
-			if (groundHit && !groundHit.collidedObject.IsInGroup("wall")) //Don't count walls as the ground
-			{
-				//FIX don't allow 90 degree angle changes in a single frame
-				if (Mathf.Rad2Deg(groundHit.normal.AngleTo(Vector3.Up) - worldDirection.AngleTo(Vector3.Up)) > MAX_ANGLE_CHANGE)
-					return;
-
-				Vector3 newNormal = (groundHit.normal * 100).Round() * .01f; //FIX Round to nearest hundredth to reduce jittering
-				worldDirection = newNormal.Normalized();
-
-				if(!IsOnGround)
-					LandOnGround();
-
-				float rotationAmount = PathFollower.GlobalTransform.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
-				Vector3 slopeDirection = groundHit.normal.Rotated(Vector3.Up, rotationAmount).Normalized();
-				slopeInfluence = slopeDirection.z * SLOPE_INFLUENCE;
-
-				GlobalTranslation = groundHit.point;
-			}
-			else
-			{
-				slopeInfluence = 0f;
-				if (IsOnGround && !IsBackflipping)
-					Animator.FallAnimation();
-				
-				IsOnGround = false;
-
-				if (IsBackflipping) return;
-
-				if (ControlLockoutData != null && ControlLockoutData.strafeSettings == ControlLockoutResource.StrafeSettings.Recenter)
-					worldDirection = PathFollower.Up(); //Follow path
-				else
-					worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .1f, 0f, 1f)).Normalized();
-			}
-		}
-
-		private void CheckCeiling() //Checks the ceiling.
-		{
-			Vector3 castOrigin = CenterPosition;
-			float castLength = collisionHeight;
-
-			Vector3 castVector = worldDirection * castLength;
-			if (IsRising)
-				castVector.y += VerticalSpeed * PhysicsManager.physicsDelta;
-
-			RaycastHit ceilingHit = this.CastRay(castOrigin, castVector, environmentMask, false, GetCollisionExceptions());
-			Debug.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
-
-			if (ceilingHit)
-			{
-				GlobalTranslate(ceilingHit.point - (CenterPosition + worldDirection * collisionHeight));
-
-				if (IsRising)
-					VerticalSpeed = 0;
-			}
-		}
-
-		//Checks for walls forward and backwards (only in the direction the player is moving).
-		private void CheckMainWall(Vector3 castVector)
-		{
-			if (MoveSpeed == 0) return; //No movement.
-
-			castVector *= Mathf.Sign(MoveSpeed);
-			float castLength = collisionHeight + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
-			Vector3 sidewaysOffset = StrafeDirection * collisionWidth * .5f;
-
-			RaycastHit centerHit = this.CastRay(CenterPosition, castVector * castLength, environmentMask, false, GetCollisionExceptions());
-			Debug.DrawRay(CenterPosition, castVector * castLength, centerHit ? Colors.Red : Colors.White);
-			if (!IsValidWallCast(centerHit))
-				centerHit = new RaycastHit();
-
-			if (!centerHit)
-			{
-				//Whiskers
-				RaycastHit leftHit = this.CastRay(CenterPosition - sidewaysOffset, castVector * castLength, environmentMask, false, GetCollisionExceptions());
-				RaycastHit rightHit = this.CastRay(CenterPosition + sidewaysOffset, castVector * castLength, environmentMask, false, GetCollisionExceptions());
-				Debug.DrawRay(CenterPosition - sidewaysOffset, castVector * castLength, leftHit ? Colors.Red : Colors.White);
-				Debug.DrawRay(CenterPosition + sidewaysOffset, castVector * castLength, rightHit ? Colors.Red : Colors.White);
-
-				//Ignore collisions that are "side walls"
-				if (!IsValidWallCast(leftHit))
-					leftHit = new RaycastHit();
-				if (!IsValidWallCast(rightHit))
-					rightHit = new RaycastHit();
-
-				if (leftHit || rightHit)
-				{
-					bool useRightRaycast = rightHit;
-					bool isInCorner = (strafeCollision == StrafeCollisions.Left && rightHit) || (strafeCollision == StrafeCollisions.Right && leftHit);
-					if (rightHit && leftHit)
-					{
-						useRightRaycast = rightHit.distance <= leftHit.distance;
-
-						if (!isInCorner) //True when both raycasts are hit and the signs of the dot products aren't equal
-							isInCorner = Mathf.Sign(rightHit.normal.Dot(StrafeDirection)) != Mathf.Sign(leftHit.normal.Dot(StrafeDirection));
-					}
-
-					centerHit = useRightRaycast ? rightHit : leftHit;
-
-					if (isInCorner)
-						MoveSpeed = 0;
-				}
-			}
-
-			if (centerHit)
-			{
-				float wallRatio = DotProd2D(centerHit.normal, ForwardDirection);
-				if (wallRatio > .9f)
-				{
-					if (IsSpeedBreakActive && breakTimer == 0) //Cancel speed break
-						ToggleSpeedBreak();
-
-					MoveSpeed = 0;
-					GlobalTranslate(castVector * (centerHit.distance - collisionWidth)); //Snap to wall
-				}
-			}
-		}
-
-		private bool IsValidWallCast(RaycastHit hit) => hit && (DotProd2D(hit.normal, hit.direction) >= .5f && !hit.collidedObject.IsInGroup("ignore raycast"));
-
-		private StrafeCollisions strafeCollision;
-		private enum StrafeCollisions
-		{
-			None,
-			Left,
-			Right,
-			Both
-		}
-		private const float COLLISION_PADDING = .1f; //At what distance to apply smoothing to strafe (To avoid "Bumpy Corners")
-
-		//Checks for wall collision side to side. (Always active)
-		private void CheckStrafeWall(int direction)
-		{
-			if (isSideScroller) return; //No wall checks when sidescrolling.
-
-			bool isActiveDirection = Mathf.Sign(StrafeSpeed) == direction;
-			float castLength = collisionWidth + COLLISION_PADDING + Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
-			Vector3 castVector = StrafeDirection * castLength * direction;
-			RaycastHit hit = this.CastRay(CenterPosition, castVector, environmentMask, false, GetCollisionExceptions());
-			Debug.DrawRay(CenterPosition, castVector, hit ? Colors.Red : Colors.White);
-
-			if (hit)
-			{
-				//Only process active collision
-				if (isActiveDirection)
-				{
-					float dot = DotProd2D(hit.normal, StrafeDirection);
-
-					if (dot > .8f)
-					{
-						GlobalTranslate(hit.direction * (hit.distance - collisionWidth));
-						StrafeSpeed = 0;
-					}
-					else
-					{
-						float maxSpeed = runningStrafeSettings.speed * (1 - dot);
-						StrafeSpeed = Mathf.Clamp(StrafeSpeed, -maxSpeed, maxSpeed);
-					}
-				}
-
-				//Always update strafe collisions
-				if (hit.distance <= collisionWidth)
-				{
-					if (strafeCollision == StrafeCollisions.None)
-						strafeCollision = direction > 0 ? StrafeCollisions.Right : StrafeCollisions.Left;
-					else
-						strafeCollision = StrafeCollisions.Both;
-				}
-			}
-		}
-
-		//Returns the absolute dot product of a normal relative to an axis ignoring Y values.
-		private float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized()));
-		#endregion
-
-		#region Paths
-		public Path ActivePath { get; private set; }
-		public bool isPathMovingForward = true; //Set this to false to move backwards along the path (Useful for reverse acts and stuff)
-		public int PathTravelDirection => isPathMovingForward ? 1 : -1;
-		public void SetActivePath(Path newPath)
-		{
-			if (newPath == null) return;
-
-			if (PathFollower.IsInsideTree())
-				PathFollower.GetParent().RemoveChild(PathFollower);
-
-			ActivePath = newPath;
-			PathFollower.Loop = newPath.Curve.IsLoopingPath();
-
-			//Reset offset transform
-			pathFollowerOffset = 0;
-
-			newPath.AddChild(PathFollower);
-			ResyncPathFollower();
-		}
-
-		private void ResyncPathFollower()
-		{
-			if (!PathFollower.IsInsideTree()) return;
-			if (ActivePath == null || pathFollowerOffset != 0) return;
-
-			PathFollower.Offset = ActivePath.Curve.GetClosestOffset(GlobalTranslation - ActivePath.GlobalTranslation);
-
-			if (isSideScroller)
-				RecenterStrafe();
 		}
 		#endregion
 	}

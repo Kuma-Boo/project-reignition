@@ -18,5 +18,5 @@ void fragment()
 	float scrollAmount = TIME * flowSpeed * direction;
 	
 	ALBEDO = texture(albedo, vec2(UV.x + scrollAmount, UV.y)).rgb;
-	ALPHA = texture(mask, vec2(UV.x + scrollAmount, min(UV.y, .95))).a;
+	ALPHA = texture(mask, vec2(UV.x + scrollAmount, clamp(UV.y, .1, .9))).a;
 }

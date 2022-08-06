@@ -34,6 +34,8 @@ namespace Project.Gameplay
 		public float strafeTrackingStrength; //How much to follow the player's strafe
 		[Export]
 		public StrafeMode strafeMode;
+		[Export]
+		public float strafeDeadzone;
 		public enum StrafeMode
 		{
 			Rotate,
@@ -50,11 +52,18 @@ namespace Project.Gameplay
 		}
 
 		[Export]
-		public bool overridePitch;
+		public OverrideMode pitchMode;
 		[Export]
-		public bool overrideYaw;
+		public OverrideMode yawMode;
 		[Export]
 		public Vector2 viewAngle; //View angle, in degrees
+
+		public enum OverrideMode
+		{
+			Disabled,
+			Override,
+			Add
+		}
 
 		[Export]
 		public Vector3 viewPosition;
@@ -68,6 +77,7 @@ namespace Project.Gameplay
 			heightTrackingStrength = from.heightTrackingStrength;
 			heightMode = from.heightMode;
 
+			strafeDeadzone = from.strafeDeadzone;
 			strafeTrackingStrength = from.strafeTrackingStrength;
 			strafeMode = from.strafeMode;
 

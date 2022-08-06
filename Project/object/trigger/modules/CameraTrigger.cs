@@ -16,20 +16,19 @@ namespace Project.Gameplay.Triggers
 		public CameraSettingsResource cameraData; //Leave empty to make this a RESET trigger.
 		[Export]
 		public CameraSettingsResource previousData; //Leave empty to automatically assign
-		private CameraController CameraController => CameraController.instance;
 
 		public override void Activate()
 		{
 			if (previousData == null) //Cache settings on the first time
-				previousData = CameraController.targetSettings;
+				previousData = Character.Camera.targetSettings;
 
-			CameraController.SetCameraData(cameraData, entryTransitionSpeed, crossfade);
+			Character.Camera.SetCameraData(cameraData, entryTransitionSpeed, crossfade);
 		}
 
 		public override void Deactivate(bool isMovingForward)
 		{
-			if (CameraController.targetSettings != cameraData) return; //Already overriden by a differnt trigger
-			CameraController.SetCameraData(previousData, exitTransitionSpeed >= 0 ? exitTransitionSpeed : entryTransitionSpeed, false);
+			if (Character.Camera.targetSettings != cameraData) return; //Already overriden by a differnt trigger
+			Character.Camera.SetCameraData(previousData, exitTransitionSpeed >= 0 ? exitTransitionSpeed : entryTransitionSpeed);
 		}
 	}
 }

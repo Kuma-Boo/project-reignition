@@ -7,17 +7,23 @@ namespace Project.Gameplay
 	public class FlyingPot : Spatial
 	{
 		[Export]
+		public Vector2 travelBounds;
+		[Export]
 		public NodePath root;
 		private Spatial _root;
 		[Export]
 		public NodePath environmentCollider;
 		private CollisionShape _environmentCollider;
 		[Export]
-		public Vector2 travelBounds;
+		public NodePath lockonArea;
+		private Area _lockonArea;
+		[Export]
+		public CameraSettingsResource cameraSettings;
 		
 		private bool isControllingPlayer;
 		private bool interactingWithPlayer;
-		private bool enteredPot;
+		private bool isLeavingPot;
+		private bool isEnteringPot;
 
 		private float angle;
 		private Vector2 position;
@@ -28,6 +34,7 @@ namespace Project.Gameplay
 		private const float WING_POWER = 12.0f;
 		private const float HORIZONTAL_DRAG = .1f;
 		private const float ROTATION_SPEED = .1f;
+		private const float MAX_ANGLE = Mathf.Pi * .2f;
 
 		public CharacterController Character => CharacterController.instance;
 		public InputManager.Controller Controller => Character.Controller;
@@ -38,28 +45,51 @@ namespace Project.Gameplay
 
 			startPosition = GlobalTranslation;
 			_root = GetNode<Spatial>(root);
+			_lockonArea = GetNode<Area>(lockonArea);
 			_environmentCollider = GetNode<CollisionShape>(environmentCollider);
+
+			StageSettings.instance.RegisterRespawnableObject(this, nameof(Respawn));
+		}
+
+		private void Respawn()
+		{
+			angle = 0f;
+			position = Vector2.Zero;
+			velocity = Vector2.Zero;
+			GlobalTranslation = startPosition;
+
+			_lockonArea.Monitorable = true;
 		}
 
 		public override void _PhysicsProcess(float _)
 		{
 			if (Engine.EditorHint) return;
 
-			if(interactingWithPlayer)
+			if (interactingWithPlayer)
 			{
 				if (isControllingPlayer)
 					ProcessMovement();
-				else if (!enteredPot && !Character.IsOnGround)
+				else if (!isEnteringPot && !Character.IsOnGround)
 				{
-					enteredPot = true;
+					isEnteringPot = true;
 					_environmentCollider.Disabled = true;
+
+					if (Character.GlobalTranslation.y > GlobalTranslation.y)
+						Character.JumpTo(GlobalTranslation);
+					else
+						Character.JumpTo(GlobalTranslation, 2f, true);
+
+					_lockonArea.Monitorable = false;
+
+					Character.CanJumpDash = false;
 					Character.ResetLockonTarget();
-					Character.JumpTo(GlobalTranslation, 2f);
 					Character.Connect(nameof(CharacterController.OnLauncherFinished), this, nameof(OnEnteredPot), null, (uint)ConnectFlags.Oneshot);
 				}
 			}
+			else if (!_lockonArea.Monitorable) //Re-enable lockon
+				_lockonArea.Monitorable = Character.IsFalling;
 
-			if(!isControllingPlayer)
+			if (!isControllingPlayer)
 				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
 
 			ApplyMovement();
@@ -69,14 +99,26 @@ namespace Project.Gameplay
 		{
 			power = 1f; //Reset power
 			isControllingPlayer = true;
-			Character.StartExternalControl();
+			Character.StartExternal(this, true);
+			Character.Visible = false;
+		}
+
+		private void EjectPlayer()
+		{
+			isLeavingPot = true;
+			isControllingPlayer = false;
+
+			Character.VerticalSpeed = Character.JumpPower;
+			Character.StrafeSpeed = Character.airStrafeSettings.speed * (angle / MAX_ANGLE);
+			Character.ResetMovementState();
+			Character.Visible = true;
 		}
 
 		public float power;
 		private const float POWER_RESET_SPEED = 2f;
 		private void ProcessMovement()
 		{
-			float targetRotation = Controller.horizontalAxis.value * Mathf.Pi * .25f;
+			float targetRotation = Controller.horizontalAxis.value * MAX_ANGLE;
 			angle = Mathf.Lerp(angle, targetRotation, ROTATION_SPEED);
 
 			if (Controller.jumpButton.wasPressed)
@@ -105,7 +147,6 @@ namespace Project.Gameplay
 			if(Mathf.IsZeroApprox(position.y))
 				velocity.y = 0;
 
-
 			GlobalTranslation = startPosition + Vector3.Up * position.y + this.Right() * position.x;
 			_root.Rotation = Vector3.Forward * angle;
 
@@ -113,27 +154,32 @@ namespace Project.Gameplay
 			velocity.y -= GRAVITY * PhysicsManager.physicsDelta;
 			
 			if(isControllingPlayer)
-				Character.GlobalTranslation = GlobalTranslation;
-		}
-
-		private void EjectPlayer()
-		{
-			isControllingPlayer = false;
-			Character.JumpTo(Character.GlobalTranslation + _root.Up() * Character.jumpHeight);
+				Character.UpdateExternalControl();
 		}
 
 		public void PlayerEntered(Area a)
 		{
 			if (!a.IsInGroup("player")) return;
 
-			enteredPot = false;
 			interactingWithPlayer = true;
+			isLeavingPot = false;
+
+			cameraSettings.viewAngle.y = 360f - RotationDegrees.y; //Sync viewAngle to current flying pot's rotation
+			cameraSettings.viewPosition = startPosition;
+			cameraSettings.viewPosition.y = 0f; //Since heightTracking is enabled, this is unneeded.
+			Character.Camera.SetCameraData(cameraSettings, CameraController.DefaultBlendTime);
 		}
 
 		public void PlayerExited(Area a)
 		{
 			if (!a.IsInGroup("player")) return;
-			
+
+			if (isLeavingPot)
+			{
+				Character.CanJumpDash = true; //So the player isn't completely helpless
+				isEnteringPot = false;
+			}
+
 			interactingWithPlayer = false;
 			_environmentCollider.Disabled = false;
 		}

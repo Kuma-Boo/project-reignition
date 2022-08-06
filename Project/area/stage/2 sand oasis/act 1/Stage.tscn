@@ -1208,13 +1208,13 @@ _data = [ Vector2( 0, 0.5 ), 0.0, -0.2, 0, 1 ]
 
 [sub_resource type="Curve" id=40]
 
-[sub_resource type="Curve3D" id=403]
+[sub_resource type="Curve3D" id=443]
 _data = {
 "points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -64 ),
 "tilts": PoolRealArray( 0, 0 )
 }
 
-[sub_resource type="BoxShape" id=404]
+[sub_resource type="BoxShape" id=444]
 extents = Vector3( 0.4, 0.2, 32.42 )
 
 [sub_resource type="Curve" id=41]
@@ -1251,7 +1251,7 @@ _data = [ Vector2( 0, 0 ), 0.0, 2.61533, 0, 0, Vector2( 0.767621, 0.913357 ), 0.
 [sub_resource type="Curve" id=166]
 
 [sub_resource type="Curve" id=152]
-_data = [ Vector2( 0, 0.767148 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.810469 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="BoxShape" id=160]
 extents = Vector3( 1, 5, 10 )
@@ -1510,8 +1510,6 @@ _data = [ Vector2( 0, -0.463899 ), 0.0, 0.0, 0, 0 ]
 [sub_resource type="BoxShape" id=255]
 extents = Vector3( 0.7, 1, 1 )
 
-[sub_resource type="SphereShape" id=306]
-
 [sub_resource type="SphereShape" id=325]
 radius = 2.0
 
@@ -1586,6 +1584,8 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ) ]
 }
+
+[sub_resource type="SphereShape" id=306]
 
 [sub_resource type="Curve" id=204]
 
@@ -1752,7 +1752,6 @@ data = PoolVector3Array( -1.0164, 118.467, -60.5899, -48.9997, 46.4999, -63.657,
 
 [node name="MainAct" type="Node" parent="."]
 script = ExtResource( 38 )
-goalNode = NodePath("Objects/Town/Goal")
 
 [node name="SpawnPosition" type="Spatial" parent="MainAct"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, 2.4 )
@@ -1761,233 +1760,233 @@ __meta__ = {
 }
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -615.1, -107.8, -621.4 )
 
 [node name="StageTrigger" parent="MainAct/SpawnPosition/CharacterSpawn" instance=ExtResource( 33 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[node name="PathSwitcher" type="Node" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
+[node name="PathSwitcher" type="Spatial" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
 script = ExtResource( 7 )
-path = NodePath("../../../../../Static/Path/MainPath")
+path = NodePath("../../../../../Static/Path/MainPath3")
 
-[node name="CameraTrigger" type="Node" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
+[node name="CameraTrigger" type="Spatial" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
 script = ExtResource( 21 )
 cameraData = ExtResource( 113 )
 
 [node name="CollisionShape" type="CollisionShape" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
 shape = SubResource( 6 )
 
-[node name="Objects" type="Node" parent="MainAct"]
-
-[node name="VisibilitySet" type="Spatial" parent="MainAct/Objects"]
+[node name="VisibilitySet" type="Spatial" parent="MainAct"]
 visible = false
 
-[node name="Start" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Start" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, 2.4 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Start"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Start"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Start")
+targetNode = NodePath("../../../Objects/Start")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Start"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Start"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -32 )
 shape = SubResource( 308 )
 
-[node name="Descent" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Descent" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 35, -62 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Descent"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Descent"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Descent")
+targetNode = NodePath("../../../Objects/Descent")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Descent"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Descent"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
 shape = SubResource( 307 )
 
-[node name="Zipper" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Zipper" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -173, -45, -99 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Zipper"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Zipper"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Zipper")
+targetNode = NodePath("../../../Objects/Zipper")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Zipper"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Zipper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 43, 9 )
 shape = SubResource( 309 )
 
-[node name="DoublePond" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="DoublePond" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -232, -44, -116 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/DoublePond"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/DoublePond"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../DoublePond")
+targetNode = NodePath("../../../Objects/DoublePond")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/DoublePond"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/DoublePond"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6, -1 )
 shape = SubResource( 310 )
 
-[node name="Roundabout" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Roundabout" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Roundabout"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Roundabout"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Roundabout")
+targetNode = NodePath("../../../Objects/Roundabout")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Roundabout"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Roundabout"]
 transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.70709, 6, -2.22473 )
 shape = SubResource( 311 )
 
-[node name="Plain" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Plain" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -179, -40.999, -226 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Plain"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Plain"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Plain")
+targetNode = NodePath("../../../Objects/Plain")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Plain"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Plain"]
 transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 4.24033, 0 )
 shape = SubResource( 312 )
 
-[node name="Forest" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Forest" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -40, -156 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Forest"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Forest"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Forest")
+targetNode = NodePath("../../../Objects/Forest")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Forest"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Forest"]
 transform = Transform( 0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -29.4021, 0, -16.1142 )
 shape = SubResource( 313 )
 
-[node name="Island" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Island" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80, -40, -325 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Island"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Island"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Island")
+targetNode = NodePath("../../../Objects/Island")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Island"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Island"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.4021, -1, 25.8858 )
 shape = SubResource( 314 )
 
-[node name="Hallway" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Hallway" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -65.1, -45, -359 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Hallway"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Hallway"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Hallway")
+targetNode = NodePath("../../../Objects/Hallway")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Hallway"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Hallway"]
 transform = Transform( 0.990483, 0, -0.137635, 0, 1, 0, 0.137635, 0, 0.990483, 16.0042, -1, -11.4168 )
 shape = SubResource( 315 )
 
-[node name="CollisionShape2" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Hallway"]
+[node name="CollisionShape2" type="CollisionShape" parent="MainAct/VisibilitySet/Hallway"]
 transform = Transform( 7.54979e-08, 0, 1, 0, 1, 0, -1, 0, 7.54979e-08, 91.5824, -1, -68.8318 )
 shape = SubResource( 315 )
 
-[node name="UTurn" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="UTurn" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106, -45, -334 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/UTurn"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/UTurn"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../UTurn")
+targetNode = NodePath("../../../Objects/UTurn")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/UTurn"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/UTurn"]
 transform = Transform( 0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.5743, 0, 3.84076 )
 shape = SubResource( 316 )
 
-[node name="Interior" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Interior" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -220, -65, -435 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Interior"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Interior"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Interior")
+targetNode = NodePath("../../../Objects/Interior")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Interior"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Interior"]
 transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2.97711, 11, 58.9559 )
 shape = SubResource( 317 )
 
-[node name="Beach" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Beach" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -410, -50, -540 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Beach"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Beach"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Beach")
+targetNode = NodePath("../../../Objects/Beach")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Beach"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Beach"]
 transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 16.2635, 2, 16.2635 )
 shape = SubResource( 318 )
 
-[node name="WallClimb" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="WallClimb" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -593.948, -40, -632.193 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/WallClimb"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/WallClimb"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../WallClimb")
+targetNode = NodePath("../../../Objects/WallClimb")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/WallClimb"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/WallClimb"]
 transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 35.7393, 19, 9.57629 )
 shape = SubResource( 319 )
 
-[node name="WallSidle" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="WallSidle" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -664, 10, -705 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/WallSidle"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/WallSidle"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../WallSidle")
+targetNode = NodePath("../../../Objects/WallSidle")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/WallSidle"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/WallSidle"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -18, 0 )
 shape = SubResource( 320 )
 
-[node name="Landing" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Landing" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -575, -30, -790 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Landing"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Landing"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Landing")
+targetNode = NodePath("../../../Objects/Landing")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Landing"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Landing"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 17, 0 )
 shape = SubResource( 321 )
 
-[node name="Bridge" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Bridge" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -415, -50, -820 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Bridge"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Bridge"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Bridge")
+targetNode = NodePath("../../../Objects/Bridge")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Bridge"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Bridge"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 17, 30 )
 shape = SubResource( 322 )
 
-[node name="Town" parent="MainAct/Objects/VisibilitySet" instance=ExtResource( 33 )]
+[node name="Town" parent="MainAct/VisibilitySet" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -230, -46, -747 )
 triggerMode = 2
 
-[node name="Node" type="Node" parent="MainAct/Objects/VisibilitySet/Town"]
+[node name="Node" type="Spatial" parent="MainAct/VisibilitySet/Town"]
 script = ExtResource( 39 )
-targetNode = NodePath("../../../Town")
+targetNode = NodePath("../../../Objects/Town")
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/VisibilitySet/Town"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/VisibilitySet/Town"]
 transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -36.5359, 17, -9.41156 )
 shape = SubResource( 323 )
+
+[node name="Objects" type="Node" parent="MainAct"]
 
 [node name="Start" type="Spatial" parent="MainAct/Objects"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, 2.4 )
@@ -2003,7 +2002,7 @@ shape = SubResource( 1 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0400009, 0, -28.61 )
 isOneShot = true
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/Start/DialogTrigger"]
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/Start/DialogTrigger"]
 script = ExtResource( 40 )
 delays = [ 0.0, 0.1 ]
 textKeys = [ "oas_opening_so", "oas_opening_sh" ]
@@ -2773,7 +2772,7 @@ isOneShot = true
 transform = Transform( 1, 3.72529e-09, 0, 1.11759e-08, 1, 0, -7.45058e-09, 5.96046e-08, 1, 0, 0, 0 )
 shape = SubResource( 66 )
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/Roundabout/DialogTrigger"]
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/Roundabout/DialogTrigger"]
 script = ExtResource( 40 )
 delays = [ 0.1 ]
 textKeys = [ "oas_pillar_sh" ]
@@ -2920,6 +2919,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
 shape = SubResource( 178 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Objects/Roundabout/FallingPillars/Event"]
+playback_process_mode = 0
 anims/Event = SubResource( 101 )
 anims/RESET = SubResource( 102 )
 
@@ -3400,6 +3400,7 @@ transform = Transform( 0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939692, 3.0
 transform = Transform( 0.939692, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939692, -3.09814, 1, -14.0982 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Objects/Plain/FallingPillars/Event"]
+playback_process_mode = 0
 anims/Event = SubResource( 140 )
 anims/RESET = SubResource( 141 )
 
@@ -3802,11 +3803,11 @@ distance = 32.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80, -40, -325 )
 
 [node name="GrindRail" parent="MainAct/Objects/Island" instance=ExtResource( 59 )]
-transform = Transform( 1, 0, 0, 0, 0.996164, -0.0875035, 0, 0.0875035, 0.996164, -19.8859, -3.73391, 91.2887 )
+transform = Transform( 1, 0, 0, 0, 0.996164, -0.0875035, 0, 0.0875035, 0.996164, -19.886, -3.7, 91.289 )
 length = 64
 
 [node name="ObjectGenerator" type="Spatial" parent="MainAct/Objects/Island/GrindRail"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00002, -29.1 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -29.1 )
 script = ExtResource( 34 )
 targetScene = ExtResource( 71 )
 amount = 4
@@ -3828,7 +3829,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9 )
 
 [node name="ObjectGenerator2" type="Spatial" parent="MainAct/Objects/Island/GrindRail"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -52.1 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -52.1 )
 script = ExtResource( 34 )
 targetScene = ExtResource( 71 )
 amount = 4
@@ -3858,7 +3859,7 @@ depth = 64.0
 
 [node name="RailPath" type="Path" parent="MainAct/Objects/Island/GrindRail/Components"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0 )
-curve = SubResource( 403 )
+curve = SubResource( 443 )
 
 [node name="StartCap" type="MeshInstance" parent="MainAct/Objects/Island/GrindRail/Components"]
 material_override = ExtResource( 116 )
@@ -3871,7 +3872,7 @@ mesh = ExtResource( 119 )
 
 [node name="RailCollision" type="CollisionShape" parent="MainAct/Objects/Island/GrindRail"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32 )
-shape = SubResource( 404 )
+shape = SubResource( 444 )
 
 [node name="JumpPanel2" parent="MainAct/Objects/Island" instance=ExtResource( 62 )]
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -19.9859, 2, 22.889 )
@@ -3880,11 +3881,11 @@ finalHeight = -6.0
 distance = 56.0
 
 [node name="GrindRail2" parent="MainAct/Objects/Island" instance=ExtResource( 59 )]
-transform = Transform( 0.803857, 0.0539104, -0.592375, 0, 0.995884, 0.0906326, 0.594823, -0.0728556, 0.800549, -16.5669, -5.84518, -37.5522 )
+transform = Transform( 0.803857, 0.0539104, -0.592375, 0, 0.995884, 0.0906326, 0.594823, -0.0728556, 0.800549, -16.5596, -5.71117, -37.562 )
 length = 40
 
 [node name="ObjectGenerator" type="Spatial" parent="MainAct/Objects/Island/GrindRail2"]
-transform = Transform( 0.999999, 0, 0, 1.11759e-08, 1, 2.23517e-08, -1.78814e-07, 0, 0.999999, 6.10352e-05, 1.00001, -15.9999 )
+transform = Transform( 0.999999, -3.72529e-09, 0, 7.45058e-09, 1, 7.45058e-09, -1.19209e-07, 7.45058e-09, 0.999999, 3.05176e-05, 0.700016, -15.9999 )
 script = ExtResource( 34 )
 targetScene = ExtResource( 70 )
 amount = 30
@@ -4018,7 +4019,6 @@ transform = Transform( 0.207912, -0.944819, 0.253163, 0, 0.258819, 0.965926, -0.
 middleHeight = 1.0
 finalHeight = -10.5
 distance = 28.0
-launchDirection = 1
 
 [node name="Rings" type="Spatial" parent="MainAct/Objects/Island/Spring"]
 transform = Transform( 0.999958, 0.00127777, 0.00903156, -0.0012763, 0.999999, -0.000165355, -0.00903251, 0.000152492, 0.99996, -0.000762939, -0.5, -7.62939e-05 )
@@ -4042,11 +4042,11 @@ transform = Transform( 1, 7.43234e-07, 4.32134e-07, 5.96046e-08, 0.25882, -0.965
 transform = Transform( 1, 7.43234e-07, 4.32134e-07, 5.96046e-08, 0.25882, -0.965925, -7.45058e-09, 0.965927, 0.258819, 0.00012207, 14.3378, -3.8439 )
 
 [node name="GrindRail3" parent="MainAct/Objects/Island" instance=ExtResource( 59 )]
-transform = Transform( -4.37114e-08, 0.0515516, 0.99867, 0, 0.99867, -0.0515516, -1, -2.25339e-09, -4.36533e-08, 5.2639, -7.7499, -111.062 )
+transform = Transform( -4.37114e-08, 0.0515516, 0.99867, 0, 0.99867, -0.0515516, -1, -2.25339e-09, -4.36533e-08, 5.27198, -7.59341, -111.062 )
 length = 37
 
 [node name="ObjectGenerator" type="Spatial" parent="MainAct/Objects/Island/GrindRail3"]
-transform = Transform( 0.999999, -4.44089e-16, -3.55271e-15, 1.11759e-08, 1, 1.86265e-08, -1.78814e-07, 9.83679e-17, 0.999999, 0, 1, -13 )
+transform = Transform( 0.999999, -4.44089e-16, -3.55271e-15, 1.11759e-08, 1, 1.86265e-08, -1.78814e-07, 9.83679e-17, 0.999999, 0, 1.25, -13 )
 script = ExtResource( 34 )
 targetScene = ExtResource( 71 )
 amount = 10
@@ -4387,54 +4387,54 @@ targetScene = ExtResource( 71 )
 amount = 15
 type = 2
 spacing = 2.1
-path = NodePath("../../../../Static/Path/MainPath")
+path = NodePath("../../../../Static/Path/MainPath2")
 pathHInterpolationCurve = SubResource( 166 )
 pathVInterpolationCurve = SubResource( 152 )
 
 [node name="Ring16" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.151798, 0.786186, -0.307983 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.342606, 0.830734, -0.279541 )
 
 [node name="Ring17" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11885, 0.785744, 1.5596 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6962, 0.830338, 1.32709 )
 
 [node name="Ring18" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24116, 0.785316, 3.33002 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15044, 0.830002, 2.8457 )
 
 [node name="Ring19" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.68245, 0.784958, 4.83856 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.74755, 0.829742, 4.19415 )
 
 [node name="Ring20" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.47978, 0.784691, 5.88785 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.51206, 0.829571, 5.34045 )
 
 [node name="Ring21" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.49464, 0.784554, 6.41641 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.40332, 0.829483, 6.25922 )
 
 [node name="Ring22" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.58681, 0.784508, 6.54178 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3603, 0.82946, 7.01181 )
 
 [node name="Ring23" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.667, 0.784508, 6.89783 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2879, 0.829445, 7.84579 )
 
 [node name="Ring24" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.6168, 0.784485, 7.68234 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.1597, 0.829433, 8.8017 )
 
 [node name="Ring25" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4239, 0.784485, 8.76703 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.9543, 0.829426, 9.88699 )
 
 [node name="Ring26" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0917, 0.784492, 10.0505 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.656, 0.829426, 11.105 )
 
 [node name="Ring27" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.6481, 0.784485, 11.4751 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.2579, 0.829426, 12.4548 )
 
 [node name="Ring28" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.0999, 0.784485, 12.9882 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.7479, 0.82943, 13.9163 )
 
 [node name="Ring29" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.4743, 0.7845, 14.5734 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.1447, 0.829433, 15.4841 )
 
 [node name="Ring30" parent="MainAct/Objects/Hallway/Rings" instance=ExtResource( 71 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.7787, 0.7845, 16.2053 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -23.4543, 0.829441, 17.1307 )
 
 [node name="SpikeBallTrigger" parent="MainAct/Objects/Hallway" instance=ExtResource( 33 )]
 transform = Transform( 0.766045, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766045, 29.5761, 5, -60.5752 )
@@ -4467,7 +4467,7 @@ transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -14, -
 transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 11, -3.05176e-05 )
 triggerMode = 2
 
-[node name="Platform" type="Node" parent="MainAct/Objects/Hallway/Button/EventTrigger/SquarePillarShort/StageTrigger"]
+[node name="Platform" type="Spatial" parent="MainAct/Objects/Hallway/Button/EventTrigger/SquarePillarShort/StageTrigger"]
 script = ExtResource( 41 )
 calculationOffset = -1.0
 
@@ -4624,7 +4624,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106, -45, -334 )
 transform = Transform( 0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 38.7559, 0, -9.05072 )
 isOneShot = true
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/UTurn/DialogTrigger"]
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/UTurn/DialogTrigger"]
 script = ExtResource( 40 )
 delays = [ 0.0, 0.1 ]
 textKeys = [ "oas_uturn_sh", "oas_uturn_so" ]
@@ -4759,7 +4759,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -220, -65, -435 )
 transform = Transform( 0.707106, 0, 0.707106, 0, 1, 0, -0.707106, 0, 0.707106, 77.1686, -1.4, 78.1058 )
 isOneShot = true
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/Interior/DialogTrigger"]
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/Interior/DialogTrigger"]
 script = ExtResource( 40 )
 delays = [ 0.0, 0.0 ]
 textKeys = [ "oas_interior_sh", "oas_interior_so" ]
@@ -5609,7 +5609,7 @@ transform = Transform( 0.292372, 0, 0.956305, 0, 1, 0, -0.956305, 0, 0.292372, -
 transform = Transform( 0.956303, 0, 0.292371, 0, 1, 0, -0.292371, 0, 0.956303, -11.6177, 0, -61.386 )
 isOneShot = true
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/WallClimb/DialogTrigger"]
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/WallClimb/DialogTrigger"]
 script = ExtResource( 40 )
 delays = [  ]
 textKeys = [ "oas_sandfall_so", "oas_sandfall_sh" ]
@@ -6519,10 +6519,7 @@ transform = Transform( 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 0, 0, 1, 2
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -666, 8.5, -765 )
 
 [node name="SandfallEvent" parent="MainAct/Objects/Sandfall" instance=ExtResource( 33 )]
-
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/Sandfall/SandfallEvent"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 0 )
-shape = SubResource( 306 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.039978, 0, -0.0100098 )
 
 [node name="Event" type="Spatial" parent="MainAct/Objects/Sandfall/SandfallEvent"]
 script = ExtResource( 42 )
@@ -6534,6 +6531,7 @@ cameraStandin = NodePath("CameraStandin")
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26, -32, 0 )
 collision_layer = 4
 collision_mask = 2
+monitorable = false
 script = ExtResource( 31 )
 sfxPlayer = NodePath("")
 middleHeight = 5.0
@@ -6551,7 +6549,7 @@ transform = Transform( 0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0 )
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.29999, 1.5, 0 )
 
 [node name="MeshInstance" type="MeshInstance" parent="MainAct/Objects/Sandfall/SandfallEvent/Event/EventBlock/PlayerStandin"]
-transform = Transform( 1, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, 0, 0 )
+transform = Transform( 1, 0, -1.77636e-15, 0, 0.5, 0, 3.55271e-15, 0, 0.5, 0, 0, 0 )
 mesh = SubResource( 326 )
 
 [node name="CameraStandin" type="Spatial" parent="MainAct/Objects/Sandfall/SandfallEvent/Event"]
@@ -6561,7 +6559,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.29999, 1.6, 0 )
 anims/Event = SubResource( 302 )
 anims/RESET = SubResource( 304 )
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/Sandfall/SandfallEvent"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/Objects/Sandfall/SandfallEvent"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 0 )
+shape = SubResource( 306 )
+
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/Sandfall/SandfallEvent"]
 script = ExtResource( 40 )
 delays = [ 0.0 ]
 textKeys = [ "oas_event_sh" ]
@@ -6575,7 +6577,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -575, -30, -790 )
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -56, -10, 25 )
 isOneShot = true
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/Landing/DialogTrigger"]
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/Landing/DialogTrigger"]
 script = ExtResource( 40 )
 delays = [  ]
 textKeys = [ "oas_shoes_so", "oas_pier_sh", "oas_town_so" ]
@@ -6913,7 +6915,6 @@ transform = Transform( 1, 0, 0, 0, 0.999048, 0.0436194, 0, -0.0436194, 0.999048,
 middleHeight = 14.0
 finalHeight = 2.0
 distance = 5.0
-launchDirection = 1
 
 [node name="Pearls" type="Spatial" parent="MainAct/Objects/Bridge/Jar5/Spring"]
 transform = Transform( 1, -4.37114e-08, -4.37114e-08, 4.55765e-08, 0.0436194, 0.999048, -4.17631e-08, -0.999048, 0.0436194, 0, 11.9564, -1.00095 )
@@ -7104,7 +7105,6 @@ length = 40
 transform = Transform( 0.305472, 0.353298, -0.884232, -0.31273, 0.914332, 0.257287, 0.899381, 0.197932, 0.38979, 0.0999756, 0.400013, -40 )
 middleHeight = 4.0
 distance = 10.0
-launchDirection = 1
 
 [node name="Components" type="Spatial" parent="MainAct/Objects/Bridge/GrindRail5"]
 
@@ -7138,7 +7138,6 @@ length = 29
 transform = Transform( 0.992066, 0.0670337, -0.106356, 0, 0.845986, 0.533206, 0.125718, -0.528975, 0.839274, 0, 0.299999, -29.4 )
 middleHeight = 4.0
 distance = 12.5
-launchDirection = 1
 
 [node name="Components" type="Spatial" parent="MainAct/Objects/Bridge/GrindRail6"]
 
@@ -7285,7 +7284,6 @@ transform = Transform( 1, 0, -2.98023e-08, 0, 0.967579, 0.25257, 0, -0.25257, 0.
 middleHeight = 12.0
 finalHeight = 10.0
 distance = 8.0
-launchDirection = 1
 
 [node name="Components" type="Spatial" parent="MainAct/Objects/Bridge/GrindRail10"]
 
@@ -7549,7 +7547,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 51.9641, -4.0073, 4.76331 )
 transform = Transform( -0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 0, 5.9, 26 )
 isOneShot = true
 
-[node name="Dialog" type="Node" parent="MainAct/Objects/Town/DialogTrigger"]
+[node name="Dialog" type="Spatial" parent="MainAct/Objects/Town/DialogTrigger"]
 script = ExtResource( 40 )
 delays = [  ]
 textKeys = [ "oas_palace_so", "oas_palace_sh" ]
@@ -7685,7 +7683,7 @@ visible = false
 [node name="Path1" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.175, -37, -161.5 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/Path1"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/Path1"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/MainPath")
 
@@ -7695,7 +7693,7 @@ shape = SubResource( 395 )
 [node name="Path2" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -73.625, -41.1, -301.7 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/Path2"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/Path2"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/MainPath2")
 
@@ -7709,7 +7707,7 @@ shape = SubResource( 395 )
 [node name="Path3" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -86.425, -38, -304.4 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/Path3"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/Path3"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/MainPath3")
 
@@ -7724,7 +7722,7 @@ shape = SubResource( 395 )
 [node name="Path4" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -664.303, 15.1, -643.158 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/Path4"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/Path4"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/MainPath4")
 isSideScrollingPath = true
@@ -7736,7 +7734,7 @@ shape = SubResource( 396 )
 [node name="Path5" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -626.525, -37.9, -765.3 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/Path5"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/Path5"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/MainPath5")
 
@@ -7746,7 +7744,7 @@ shape = SubResource( 395 )
 [node name="IslandPath1" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.175, -37, -187.7 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/IslandPath1"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/IslandPath1"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/IslandPath")
 
@@ -7756,7 +7754,7 @@ shape = SubResource( 395 )
 [node name="IslandPath2" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.075, -37, -358.7 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/IslandPath2"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/IslandPath2"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/IslandPath2")
 
@@ -7767,7 +7765,7 @@ shape = SubResource( 395 )
 [node name="IslandPath3" parent="Common (Forward Direction)/PathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 116.075, -36.6, -430.3 )
 
-[node name="PathSwitcher" type="Node" parent="Common (Forward Direction)/PathTriggers/IslandPath3"]
+[node name="PathSwitcher" type="Spatial" parent="Common (Forward Direction)/PathTriggers/IslandPath3"]
 script = ExtResource( 7 )
 path = NodePath("../../../../Static/Path/IslandPath3")
 
@@ -7782,7 +7780,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -135.705, -44.562, -62.8862 )
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/SlopeEnd"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/SlopeEnd"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 cameraData = ExtResource( 30 )
@@ -7795,7 +7793,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -148.705, -44.562, -88.8862 )
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Zipper"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Zipper"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.75
 cameraData = ExtResource( 35 )
@@ -7808,7 +7806,7 @@ transform = Transform( 0.390133, 0, 0.920759, 0, 1, 0, -0.920759, 0, 0.390133, -
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Roundabout"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Roundabout"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 cameraData = ExtResource( 113 )
@@ -7820,7 +7818,7 @@ shape = SubResource( 395 )
 transform = Transform( 0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -276.521, -41.2, -264.25 )
 triggerMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Overhead"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Overhead"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 cameraData = ExtResource( 32 )
@@ -7833,7 +7831,7 @@ shape = SubResource( 332 )
 transform = Transform( 0.919492, 0, -0.39311, 0, 1, 0, 0.39311, 0, 0.919492, -266.455, -41.2, -259.571 )
 triggerMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Overhead2"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Overhead2"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 cameraData = ExtResource( 103 )
@@ -7847,7 +7845,7 @@ transform = Transform( 0.959823, 0, -0.280604, 0, 1, 0, 0.280604, 0, 0.959823, -
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Plain"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Plain"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 cameraData = ExtResource( 101 )
@@ -7861,7 +7859,7 @@ transform = Transform( 0.911695, 0, -0.410866, 0, 1, 0, 0.410866, 0, 0.911695, -
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Forest"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Forest"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 cameraData = ExtResource( 104 )
@@ -7875,7 +7873,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 49.256, -32.5, -155.6 )
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/ForestDrift"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/ForestDrift"]
 script = ExtResource( 21 )
 exitTransitionSpeed = 0.0
 cameraData = ExtResource( 102 )
@@ -7889,7 +7887,7 @@ transform = Transform( -4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.3711
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/IslandStart"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/IslandStart"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 exitTransitionSpeed = 0.0
@@ -7902,7 +7900,7 @@ shape = SubResource( 336 )
 [node name="IslandJump1" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -191.8 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/IslandJump1"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/IslandJump1"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.1
 exitTransitionSpeed = 0.0
@@ -7915,7 +7913,7 @@ shape = SubResource( 336 )
 [node name="Island1" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -216.8 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Island1"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Island1"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 exitTransitionSpeed = 0.0
@@ -7928,7 +7926,7 @@ shape = SubResource( 336 )
 [node name="IslandJump2" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -300.8 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/IslandJump2"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/IslandJump2"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.1
 exitTransitionSpeed = 0.0
@@ -7941,7 +7939,7 @@ shape = SubResource( 336 )
 [node name="Island2" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -349.8 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Island2"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Island2"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 exitTransitionSpeed = 0.0
@@ -7954,7 +7952,7 @@ shape = SubResource( 336 )
 [node name="IslandJump3" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( 0.594564, 0, 0.804047, 0, 1, 0, -0.804047, 0, 0.594564, 90.2136, -39.5, -398.345 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/IslandJump3"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/IslandJump3"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.1
 exitTransitionSpeed = 0.0
@@ -7967,7 +7965,7 @@ shape = SubResource( 336 )
 [node name="IslandJumpSpring" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 116.041, -36.6, -430.339 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/IslandJumpSpring"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/IslandJumpSpring"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.4
 exitTransitionSpeed = 0.0
@@ -7979,7 +7977,7 @@ shape = SubResource( 343 )
 [node name="Island3" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -0.999999, 0, -4.20411e-06, 0, 1, 0, 4.20411e-06, 0, -0.999999, 95.856, -32.5, -435.9 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Island3"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Island3"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 exitTransitionSpeed = 0.0
@@ -7992,7 +7990,7 @@ shape = SubResource( 336 )
 [node name="IslandJump4" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 44.4679, -39.5, -436.138 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/IslandJump4"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/IslandJump4"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.1
 exitTransitionSpeed = 0.0
@@ -8005,7 +8003,7 @@ shape = SubResource( 336 )
 [node name="Mainland" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -0.999999, 0, -4.20411e-06, 0, 1, 0, 4.20411e-06, 0, -0.999999, -1.94402, -32.5, -435.9 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Mainland"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Mainland"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 exitTransitionSpeed = 0.0
@@ -8018,7 +8016,7 @@ shape = SubResource( 341 )
 [node name="InteriorZipper" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -87.4756, -32.5, -317.103 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/InteriorZipper"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/InteriorZipper"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 exitTransitionSpeed = 0.0
@@ -8031,7 +8029,7 @@ shape = SubResource( 350 )
 [node name="InteriorStatic" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -131.377, -61.5, -345.586 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/InteriorStatic"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/InteriorStatic"]
 script = ExtResource( 21 )
 cameraData = ExtResource( 112 )
 
@@ -8042,7 +8040,7 @@ shape = SubResource( 336 )
 [node name="InteriorNormal" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( 0.686242, 0, -0.727374, 0, 1, 0, 0.727374, 0, 0.686242, -138.862, -58.5, -352.588 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/InteriorNormal"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/InteriorNormal"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 exitTransitionSpeed = 0.0
@@ -8055,7 +8053,7 @@ shape = SubResource( 336 )
 [node name="Beach" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( 0.642788, 0, -0.766045, 0, 1, 0, 0.766045, 0, 0.642788, -339.262, -44.5, -449.893 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/Beach"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/Beach"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 exitTransitionSpeed = 0.0
@@ -8068,7 +8066,7 @@ shape = SubResource( 336 )
 [node name="WallRunEntry" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( 0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, -495.732, -32.5, -592.759 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/WallRunEntry"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/WallRunEntry"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.5
 exitTransitionSpeed = 0.0
@@ -8087,7 +8085,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -661.762, 10.5, -640.177 )
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/WallRunTop"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/WallRunTop"]
 script = ExtResource( 21 )
 cameraData = ExtResource( 115 )
 
@@ -8098,7 +8096,7 @@ shape = SubResource( 351 )
 [node name="SidleWall" parent="Common (Forward Direction)/Cameras" instance=ExtResource( 33 )]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.722, 16.5, -648.462 )
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/SidleWall"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/SidleWall"]
 script = ExtResource( 21 )
 cameraData = ExtResource( 117 )
 
@@ -8111,7 +8109,7 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.72
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/SidleCorner"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/SidleCorner"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 cameraData = ExtResource( 118 )
@@ -8125,7 +8123,7 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.72
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/SidleWall2"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/SidleWall2"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 cameraData = ExtResource( 117 )
@@ -8139,7 +8137,7 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.72
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/SidleCorner2"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/SidleCorner2"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 cameraData = ExtResource( 118 )
@@ -8153,7 +8151,7 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.72
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera" type="Node" parent="Common (Forward Direction)/Cameras/SidleWall3"]
+[node name="Camera" type="Spatial" parent="Common (Forward Direction)/Cameras/SidleWall3"]
 script = ExtResource( 21 )
 entryTransitionSpeed = 0.2
 cameraData = ExtResource( 117 )
@@ -8167,7 +8165,7 @@ visible = false
 
 [node name="WaterTrigger" parent="Common (Forward Direction)/DeathTriggers" instance=ExtResource( 33 )]
 
-[node name="DeathTrigger" type="Node" parent="Common (Forward Direction)/DeathTriggers/WaterTrigger"]
+[node name="DeathTrigger" type="Spatial" parent="Common (Forward Direction)/DeathTriggers/WaterTrigger"]
 script = ExtResource( 50 )
 triggerType = 1
 
@@ -8182,7 +8180,7 @@ shape = SubResource( 165 )
 [node name="FallTrigger" parent="Common (Forward Direction)/DeathTriggers" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -658.04, 6, -702.61 )
 
-[node name="DeathTrigger" type="Node" parent="Common (Forward Direction)/DeathTriggers/FallTrigger"]
+[node name="DeathTrigger" type="Spatial" parent="Common (Forward Direction)/DeathTriggers/FallTrigger"]
 script = ExtResource( 50 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/DeathTriggers/FallTrigger"]
@@ -8194,7 +8192,7 @@ visible = false
 [node name="Checkpoint1" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( 0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -248.74, -40, -252.31 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint1"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint1"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint1"]
@@ -8204,7 +8202,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint2" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 60.15, -40, -162.3 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint2"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint2"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint2"]
@@ -8214,7 +8212,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint3" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( 7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, -2.42635, -45, -435.95 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint3"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint3"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint3"]
@@ -8224,7 +8222,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint4" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -135.628, -65, -349.434 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint4"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint4"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint4"]
@@ -8234,7 +8232,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint5" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( 1.94707e-07, 3.09086e-08, -1, 1.28028e-08, 1, 3.09086e-08, 1, -1.28028e-08, 1.94707e-07, -225.552, -65, -435.001 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint5"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint5"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint5"]
@@ -8244,7 +8242,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint6" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( -0.766044, 3.09086e-08, -0.642788, 3.19068e-08, 1, 1.00602e-08, 0.642788, -1.28028e-08, -0.766044, -338.723, -50.2, -449.587 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint6"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint6"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint6"]
@@ -8254,7 +8252,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint7" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( -0.5, 3.09086e-08, -0.866026, 2.65418e-08, 1, 2.03663e-08, 0.866026, -1.28028e-08, -0.5, -515.901, -40, -601.083 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint7"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint7"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint7"]
@@ -8264,7 +8262,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint8" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( -1, 3.78552e-08, -1.50996e-07, 3.78552e-08, 1, -2.18557e-08, 1.50996e-07, -2.18557e-08, -1, -663.601, 10, -649.432 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint8"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint8"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint8"]
@@ -8274,7 +8272,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint9" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( -2.8213e-07, 3.09086e-08, 1, -1.28028e-08, 1, -3.09086e-08, -1, -1.28028e-08, -2.8213e-07, -625.501, -40, -765.032 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint9"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint9"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint9"]
@@ -8284,7 +8282,7 @@ shape = SubResource( 144 )
 [node name="Checkpoint10" parent="Common (Forward Direction)/Checkpoints" instance=ExtResource( 33 )]
 transform = Transform( 0.707013, -0.0186227, 0.706955, 0.0109648, 0.999822, 0.0153718, -0.707116, -0.00311647, 0.707091, -316.701, -30, -721.732 )
 
-[node name="Checkpoint" type="Node" parent="Common (Forward Direction)/Checkpoints/Checkpoint10"]
+[node name="Checkpoint" type="Spatial" parent="Common (Forward Direction)/Checkpoints/Checkpoint10"]
 script = ExtResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Common (Forward Direction)/Checkpoints/Checkpoint10"]

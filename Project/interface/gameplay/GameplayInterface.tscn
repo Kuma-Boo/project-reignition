@@ -1340,6 +1340,7 @@ layer = 64
 script = ExtResource( 9 )
 ringLabel = NodePath("HUD/RingCounter/CurrentRing/Amount")
 maxRingLabel = NodePath("HUD/RingCounter/RingMax")
+ringDividerSprite = NodePath("HUD/RingCounter/Divider")
 ringAnimator = NodePath("HUD/RingCounter/CurrentRing/Animator")
 soulGauge = NodePath("HUD/SoulGauge/SoulGauge")
 soulGaugeFill = NodePath("HUD/SoulGauge/SoulGauge/Background/Fill")
@@ -1364,6 +1365,9 @@ margin_bottom = 1080.0
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = 886.0
+margin_bottom = 476.0
+rect_min_size = Vector2( 1920, 1080 )
 stretch_mode = 1
 flip_v = true
 __meta__ = {
@@ -1611,36 +1615,35 @@ __meta__ = {
 [node name="RingCounter" type="Control" parent="HUD"]
 margin_left = 128.0
 margin_top = 64.0
-margin_right = 640.0
+margin_right = 512.0
 margin_bottom = 192.0
 rect_min_size = Vector2( 280, 0 )
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_lock_": true
 }
 
 [node name="RingMax" type="Label" parent="HUD/RingCounter"]
-margin_left = 320.0
+visible = false
+margin_left = 256.0
 margin_top = 48.0
-margin_right = 452.0
+margin_right = 388.0
 margin_bottom = 112.0
 rect_scale = Vector2( 0.85, 0.85 )
 custom_fonts/font = ExtResource( 7 )
 text = "100"
 valign = 1
 clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Divider" type="Sprite" parent="HUD/RingCounter"]
-position = Vector2( 304, 64 )
+visible = false
+position = Vector2( 240, 64 )
 scale = Vector2( 1.2, 1.2 )
 texture = ExtResource( 4 )
 region_enabled = true
 region_rect = Rect2( 120, 168, 64, 104 )
 
 [node name="CurrentRing" type="Node2D" parent="HUD/RingCounter"]
-position = Vector2( 192, 64 )
+position = Vector2( 128, 64 )
 
 [node name="Ring" type="TextureRect" parent="HUD/RingCounter/CurrentRing"]
 margin_left = -136.0
@@ -1703,9 +1706,6 @@ texture = ExtResource( 4 )
 region_rect = Rect2( 8, 10, 96, 326 )
 patch_margin_top = 82
 patch_margin_bottom = 176
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Glow" type="Control" parent="HUD/SoulGauge/SoulGauge"]
 modulate = Color( 1, 1, 1, 0 )

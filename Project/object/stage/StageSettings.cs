@@ -16,48 +16,17 @@ namespace Project.Gameplay
 			Goal, //Head for the goal
 			Rings, //Collect a certain amount of rings
 			Rampage, //Destroy a certain amount of enemies
-			Special, //TODO, Special Challenges
 		}
-
-		[Export]
-		public MissionModifier missionModifier;
-		public enum MissionModifier
-		{
-			None,
-			Deathless, //Dying fails instantly
-			Ringless, //Ending with rings fails the mission
-			Pacifist, //Defeating any enemy fails the mission instantly
-			Timed, //Level must be completed within a set time
-		}
-
-		[Export]
-		public NodePath goalNode;
-		private Area _goalNode;
 
 		public override void _EnterTree()
 		{
 			instance = this; //Always override previous instance
-
-			//Some stages don't have a goal
-			if (goalNode != null && !goalNode.IsEmpty())
-			{
-				_goalNode = GetNode<Area>(goalNode);
-				_goalNode.Connect("area_entered", this, nameof(OnGoalTouched));
-			}
-
 			SetUpSkills();
-		}
-
-		public override void _ExitTree()
-		{
-			//Prevent memory leaking; Remove all stage objects
-			for (int i = 0; i < respawnableObjects.Count; i++)
-				respawnableObjects[i].QueueFree();
 		}
 
 		#region Stage Settings
 		[Export]
-		public int maxRingCount = 100; //Maximum amount of collectable rings for this stage
+		public int objectiveCount;
 
 		/*
 		Ranking system
@@ -106,28 +75,9 @@ namespace Project.Gameplay
 		[Export]
 		public int goldRankScore;
 
-		private void OnGoalTouched(Area area)
+		public void FinishStage(bool isSuccess)
 		{
-			if (!area.IsInGroup("player")) return;
-
-			if (missionType != MissionType.Goal)
-				FinishStage(true);
-
-			switch (missionModifier)
-			{
-				case MissionModifier.Ringless:
-					FinishStage(GameplayInterface.instance.RingCount != 0);
-					break;
-				default:
-					FinishStage(false);
-					break;
-			}
-			//FinishStage(((MissionType)failureStates).IsSet(MissionType.Goal));
-		}
-
-		private void FinishStage(bool isStageFailed)
-		{
-			if (isStageFailed)
+			if (isSuccess)
 			{
 				return;
 			}
@@ -167,20 +117,19 @@ namespace Project.Gameplay
 		}
 
 		#region Object Spawning
-		private readonly Array<RespawnableObject> respawnableObjects = new Array<RespawnableObject>();
+		[Signal]
+		public delegate void OnRespawned();
 
-		public void RegisterRespawnableObject(RespawnableObject o)
+		public void RegisterRespawnableObject(Node o, string respawnFunctionName)
 		{
-			if (!respawnableObjects.Contains(o))
-				respawnableObjects.Add(o);
+			if (IsConnected(nameof(OnRespawned), o, respawnFunctionName)) return;
+			Connect(nameof(OnRespawned), o, respawnFunctionName);
 		}
 
 		public void RespawnObjects()
 		{
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
-
-			for (int i = 0; i < respawnableObjects.Count; i++)
-				respawnableObjects[i].Spawn();
+			EmitSignal(nameof(OnRespawned));
 		}
 		#endregion
 	}

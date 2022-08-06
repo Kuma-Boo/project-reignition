@@ -18,7 +18,7 @@ namespace Project.Gameplay
 			_buttonAnimator = GetNode<AnimationPlayer>(buttonAnimator);
 			_eventTrigger = GetNode<Triggers.EventTrigger>(eventTrigger);
 
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.RegisterRespawnableObject(this, nameof(Spawn));
 			Spawn();
 		}
 

@@ -39,6 +39,9 @@ namespace Project.Gameplay
 		}
 
 		[Export]
+		public bool allowJumpDashing;
+
+		[Export]
 		public LaunchDirection launchDirection;
 		public enum LaunchDirection
 		{
@@ -54,7 +57,6 @@ namespace Project.Gameplay
 		}
 
 		public Vector3 StartingPoint => GlobalTranslation + Vector3.Up * startingHeight;
-		public const float GRAVITY = -18.0f;
 
 		public override void _Ready()
 		{
@@ -64,11 +66,13 @@ namespace Project.Gameplay
 
 		public virtual void Activate(Area a)
 		{
+			GD.Print("activated spring");
 			if(_sfxPlayer != null)
 				_sfxPlayer.Play();
 
 			IsCharacterCentered = recenterSpeed == 0;
 			Character.StartLauncher(GetData(), this);
+			Character.CanJumpDash = allowJumpDashing; //For springs and stuff
 		}
 
 		[Export]
@@ -83,11 +87,31 @@ namespace Project.Gameplay
 			return pos;
 		}
 
+		public static LaunchData CreateData(Vector3 s, Vector3 e, float h, bool relativeToEnd = false)
+		{
+			Vector3 delta = e - s;
+			LaunchData data = new LaunchData()
+			{
+				startPosition = s,
+				launchDirection = delta.Normalized(),
+
+				distance = delta.RemoveVertical().Length(),
+				startingHeight = 0f,
+				middleHeight = h,
+				finalHeight = delta.y
+			};
+
+			if (relativeToEnd)
+				data.middleHeight += delta.y;
+
+			data.Calculate();
+			return data;
+		}
+
 		public struct LaunchData
 		{
 			public Vector3 launchDirection;
 			public Vector3 startPosition;
-			public const float gravity = -18.0f;
 
 			public float distance;
 			public float startingHeight;
@@ -104,22 +128,26 @@ namespace Project.Gameplay
 			public float TotalTravelTime { get; private set; }
 
 			public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
+			private float GRAVITY => -CharacterController.GRAVITY; //Use the same gravity as the character controller
 
 			public Vector3 InterpolatePosition(float t)
 			{
-				Vector3 displacement = InitialVelocity * t + Vector3.Up * gravity * t * t / 2f;
+				Vector3 displacement = InitialVelocity * t + Vector3.Up * GRAVITY * t * t / 2f;
 				return startPosition + displacement;
 			}
 
 			public void Calculate()
 			{
-				FirstHalfTime = Mathf.Sqrt((-2 * middleHeight) / gravity);
-				SecondHalfTime = Mathf.Sqrt((-2 * (middleHeight - finalHeight)) / gravity);
+				if (middleHeight < finalHeight || middleHeight < startingHeight) //Ignore middle
+					middleHeight = Mathf.Max(startingHeight, finalHeight);
+
+				FirstHalfTime = Mathf.Sqrt((-2 * middleHeight) / GRAVITY);
+				SecondHalfTime = Mathf.Sqrt((-2 * (middleHeight - finalHeight)) / GRAVITY);
 				TotalTravelTime = FirstHalfTime + SecondHalfTime;
 
 				InitialHorizontalVelocity = distance / TotalTravelTime;
-				InitialVerticalVelocity = Mathf.Sqrt(-2 * gravity * (middleHeight - startingHeight));
-				FinalVerticalVelocity = gravity * SecondHalfTime;
+				InitialVerticalVelocity = Mathf.Sqrt(-2 * GRAVITY * (middleHeight - startingHeight));
+				FinalVerticalVelocity = GRAVITY * SecondHalfTime;
 
 				InitialVelocity = launchDirection.Flatten().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
 			}

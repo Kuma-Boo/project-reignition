@@ -30,7 +30,6 @@ namespace Project.Gameplay.Triggers
 		public void OnEntered(Area _)
 		{
 			if (Character.IsUsingBreakSkills) return; //Can't drift during speed/time break :\
-
 			if (!Character.IsOnGround || Character.SpeedRatio < MINIMUM_ENTRANCE_SPEED_RATIO) return;
 
 			cornerCleared = false;
@@ -46,9 +45,12 @@ namespace Project.Gameplay.Triggers
 			if (!bonusObtained)
 			{
 				bonusObtained = true;
+
 				if (wasSuccessful)
-					 GameplayInterface.instance.AddBonus(GameplayInterface.BonusTypes.Drift);
+					GameplayInterface.instance.AddBonus(GameplayInterface.BonusTypes.Drift);
 			}
+
+			Character.CancelMovementState(CharacterController.MovementStates.Drift);
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace Project.Gameplay.Triggers
 		public bool isSideScrollingPath;
 		[Export]
 		public bool isFacingRight;
-
+		
 		public override void _Ready()
 		{
 			_path = GetNode<Path>(path);
@@ -19,7 +19,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
-			Character.SetActivePath(_path);
+			Character.PathFollower.SetActivePath(_path);
 			Character.isSideScroller = isSideScrollingPath;
 			Character.isFacingRight = isFacingRight;
 		}

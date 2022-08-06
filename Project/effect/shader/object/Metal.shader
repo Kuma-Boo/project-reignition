@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_back, specular_disabled;
+render_mode specular_disabled;
 
 uniform sampler2D albedo;
 

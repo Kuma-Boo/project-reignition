@@ -24,6 +24,9 @@ namespace Project.Gameplay
 		public NodePath maxRingLabel;
 		private Label _maxRingLabel;
 		[Export]
+		public NodePath ringDividerSprite;
+		private Sprite _ringDividerSprite;
+		[Export]
 		public NodePath ringAnimator;
 		private AnimationPlayer _ringAnimator;
 
@@ -48,11 +51,21 @@ namespace Project.Gameplay
 		{
 			_ringLabel = GetNode<Label>(ringLabel);
 			_maxRingLabel = GetNode<Label>(maxRingLabel);
+			_ringDividerSprite = GetNode<Sprite>(ringDividerSprite);
 			_ringAnimator = GetNode<AnimationPlayer>(ringAnimator);
 
 			//TODO set ring count based on skills
-			maxRingCount = StageSettings.instance.maxRingCount;
-			_maxRingLabel.Text = maxRingCount.ToString("000");
+
+			bool limitRingCount = StageSettings.instance.missionType == StageSettings.MissionType.Rings;
+			_maxRingLabel.Visible = _ringDividerSprite.Visible = limitRingCount;
+
+			if (limitRingCount)
+			{
+				maxRingCount = StageSettings.instance.objectiveCount;
+				_maxRingLabel.Text = maxRingCount.ToString("000");
+			}
+			else
+				maxRingCount = int.MaxValue;
 
 			_ringLabel.Text = RingCount.ToString("000");
 
@@ -71,13 +84,6 @@ namespace Project.Gameplay
 
 			RingCount += amount;
 			RingCount = Mathf.Clamp(RingCount, 0, maxRingCount);
-
-			if (amount > 0)
-			{
-				//Play SFX and particle effect
-				CharacterController.instance.Animator.PlayRingParticleEffect();
-			}
-
 			_ringLabel.Text = RingCount.ToString("000");
 		}
 

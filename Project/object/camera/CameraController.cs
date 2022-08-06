@@ -5,9 +5,7 @@ namespace Project.Gameplay
 {
 	public class CameraController : Spatial
 	{
-		public static CameraController instance;
-
-		private PathFollow PlayerPathFollower => Player.PathFollower;
+		private PathFollow PlayerPathFollower => Character.PathFollower;
 		[Export]
 		public NodePath calculationRoot;
 		private Spatial _calculationRoot; //Responsible for pitch rotation
@@ -24,14 +22,13 @@ namespace Project.Gameplay
 		public NodePath camera;
 		private Camera _camera;
 
-		private CharacterController Player => CharacterController.instance;
+		private CharacterController Character => CharacterController.instance;
+		public const float DefaultBlendTime = .2f;
 
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
 
 		public override void _Ready()
 		{
-			instance = this;
-
 			ResetFlag = true;
 
 			_calculationRoot = GetNode<Spatial>(calculationRoot);
@@ -40,6 +37,8 @@ namespace Project.Gameplay
 			_cameraRoot = GetNode<Spatial>(cameraRoot);
 			_cameraGimbal = GetNode<Spatial>(cameraGimbal);
 			_camera = GetNode<Camera>(camera);
+
+			Character.Camera = this;
 		}
 
 		public void UpdateCamera()
@@ -59,7 +58,7 @@ namespace Project.Gameplay
 		public CameraSettingsResource targetSettings; //End lerp here
 		private readonly CameraSettingsResource previousSettings = new CameraSettingsResource(); //Start lerping here
 		private readonly CameraSettingsResource currentSettings = new CameraSettingsResource(); //Apply transforms based on this
-		public void SetCameraData(CameraSettingsResource data, float blendTime, bool useCrossfade)
+		public void SetCameraData(CameraSettingsResource data, float blendTime, bool useCrossfade = false)
 		{
 			transitionSpeed = blendTime;
 			transitionTime = transitionTimeStepped = 0f; //Reset transition timers
@@ -127,9 +126,9 @@ namespace Project.Gameplay
 		private void UpdateBackstep()
 		{
 			//Backstep camera
-			if (Player.MoveSpeed < 0)
+			if (Character.MoveSpeed < 0)
 				backstepTimer = Mathf.MoveToward(backstepTimer, BACKSTEP_CAMERA_DELAY, PhysicsManager.physicsDelta);
-			else if (backstepTimer < BACKSTEP_CAMERA_DELAY || Player.MoveSpeed > 0)
+			else if (backstepTimer < BACKSTEP_CAMERA_DELAY || Character.MoveSpeed > 0)
 				backstepTimer = Mathf.MoveToward(backstepTimer, 0f, PhysicsManager.physicsDelta);
 		}
 		#endregion
@@ -138,7 +137,7 @@ namespace Project.Gameplay
 		private Vector3 localPlayerPosition; //Player's local position, relative to it's path follower
 		private void CalculateLocalPlayerPosition()
 		{
-			localPlayerPosition = Player.GlobalTranslation- PlayerPathFollower.GlobalTranslation;
+			localPlayerPosition = Character.GlobalTranslation- PlayerPathFollower.GlobalTranslation;
 			localPlayerPosition = PlayerPathFollower.GlobalTransform.basis.XformInv(localPlayerPosition);
 		}
 
@@ -146,7 +145,7 @@ namespace Project.Gameplay
 
 		private void UpdateGameplayCamera()
 		{
-			if (Player.ActivePath == null) return; //Uninitialized
+			if (Character.PathFollower.ActivePath == null) return; //Uninitialized
 
 			CalculateLocalPlayerPosition();
 			UpdateActiveSettings();
@@ -184,14 +183,20 @@ namespace Project.Gameplay
 			else if (resource.followMode == CameraSettingsResource.FollowMode.Pathfollower)
 				return PlayerPathFollower.GlobalTranslation;
 			else
-				return Player.GlobalTranslation - GetHeightDirection(resource.heightMode) * localPlayerPosition.y;
+				return Character.GlobalTranslation - GetHeightDirection(resource.heightMode) * localPlayerPosition.y;
 		}
 
 		private Vector3 GetStrafeOffset(CameraSettingsResource resource)
 		{
 			if (resource.strafeMode == CameraSettingsResource.StrafeMode.Move)
 			{
-				Vector3 strafeOffset = Player.StrafeDirection * -localPlayerPosition.x * resource.strafeTrackingStrength;
+				float playerOffset = localPlayerPosition.x;
+				if (Mathf.Abs(playerOffset) < resource.strafeDeadzone)
+					playerOffset = 0f;
+				else
+					playerOffset = (Mathf.Abs(playerOffset) - resource.strafeDeadzone) * Mathf.Sign(playerOffset);
+
+				Vector3 strafeOffset = Character.StrafeDirection * -playerOffset * resource.strafeTrackingStrength;
 				return strafeOffset;
 			}
 
@@ -219,11 +224,6 @@ namespace Project.Gameplay
 				currentDistance = currentSettings.distance;
 				heightVelocity = distanceVelocity = 0f;
 			}
-			else if(targetSettings.IsStaticCamera)
-			{
-				currentDistance = 0f;
-				currentHeight = 0f;
-			}
 			else
 			{
 				currentHeight = ExtensionMethods.SmoothDamp(currentHeight, currentSettings.height, ref heightVelocity, POSITION_SMOOTHING);
@@ -241,7 +241,7 @@ namespace Project.Gameplay
 		{
 			Vector3 forwardDirection;
 			if (targetSettings.IsStaticCamera)
-				forwardDirection = Player.CenterPosition - targetSettings.viewPosition;
+				forwardDirection = Character.CenterPosition - targetSettings.viewPosition;
 			else
 			{
 				forwardDirection = PlayerPathFollower.Forward();
@@ -254,14 +254,19 @@ namespace Project.Gameplay
 			Vector3 rightDirection = forwardFlattened.Cross(Vector3.Up);
 
 			Vector2 targetRotation = Vector2.Zero;
-			if (targetSettings.overrideYaw)
+			if (targetSettings.yawMode == CameraSettingsResource.OverrideMode.Override)
 				targetRotation.y = Mathf.LerpAngle(previousSettings.viewAngle.y, Mathf.Deg2Rad(targetSettings.viewAngle.y), transitionTime);
 			else
+			{
 				targetRotation.y = forwardFlattened.SignedAngleTo(Vector3.Forward, Vector3.Up) + Mathf.Deg2Rad(targetSettings.viewAngle.y);
 
-			if (targetSettings.overridePitch)
+				if (targetSettings.yawMode == CameraSettingsResource.OverrideMode.Add)
+					targetRotation.y += Mathf.Deg2Rad(targetSettings.viewAngle.y);
+			}
+
+			if (targetSettings.pitchMode == CameraSettingsResource.OverrideMode.Override)
 				targetRotation.x = Mathf.LerpAngle(previousSettings.viewAngle.x, Mathf.Deg2Rad(targetSettings.viewAngle.x), transitionTime);
-			else if (!targetSettings.IsStaticCamera)
+			else
 			{
 				float cachedRotation = _calculationRoot.GlobalRotation.y;
 				_calculationRoot.GlobalRotation = Vector3.Down * targetRotation.y; //Temporarily apply the rotation so pitch calculation can be correct
@@ -269,6 +274,8 @@ namespace Project.Gameplay
 
 				//Reset rotation
 				_calculationRoot.GlobalRotation = Vector3.Up * cachedRotation;
+				if (targetSettings.pitchMode == CameraSettingsResource.OverrideMode.Add)
+					targetRotation.x += Mathf.Deg2Rad(targetSettings.viewAngle.x);
 			}
 
 			targetRotation.x = Mathf.LerpAngle(previousSettings.viewAngle.x, targetRotation.x, transitionTimeStepped);
@@ -316,6 +323,8 @@ namespace Project.Gameplay
 
 		private Vector3 previousStrafe;
 		private Vector3 currentStrafe;
+		private Vector3 strafeVelocity;
+		private const float STRAFE_SMOOTHING = .1f;
 		private void UpdatePosition()
 		{
 			//Calculate positions
@@ -333,7 +342,8 @@ namespace Project.Gameplay
 			offset = GetHeightOffset(previousSettings).LinearInterpolate(GetHeightOffset(targetSettings), transitionTimeStepped);
 			targetPosition += offset;
 
-			currentStrafe = previousStrafe.LinearInterpolate(GetStrafeOffset(targetSettings), transitionTimeStepped); //Update Strafe
+			//Update Strafe
+			currentStrafe = currentStrafe.SmoothDamp(previousStrafe.LinearInterpolate(GetStrafeOffset(targetSettings), transitionTimeStepped), ref strafeVelocity, STRAFE_SMOOTHING);
 			targetPosition += currentStrafe;
 
 			_calculationRoot.GlobalTranslation = targetPosition;
