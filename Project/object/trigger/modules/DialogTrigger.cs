@@ -3,6 +3,9 @@ using Godot.Collections;
 
 namespace Project.Gameplay.Triggers
 {
+    /// <summary>
+    /// Activates a dialog, with EN/JA support
+    /// </summary>
     public class DialogTrigger : StageTriggerModule
     {
         public override void Activate() => SoundManager.instance.PlayDialog(this);

@@ -5,7 +5,7 @@ namespace Project.Gameplay
 {
 	public class CameraController : Spatial
 	{
-		private PathFollow PlayerPathFollower => Character.PathFollower;
+		private CharacterPathFollower PlayerPathFollower => Character.PathFollower;
 		[Export]
 		public NodePath calculationRoot;
 		private Spatial _calculationRoot; //Responsible for pitch rotation
@@ -23,7 +23,6 @@ namespace Project.Gameplay
 		private Camera _camera;
 
 		private CharacterController Character => CharacterController.instance;
-		public const float DefaultBlendTime = .2f;
 
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
 
@@ -58,7 +57,7 @@ namespace Project.Gameplay
 		public CameraSettingsResource targetSettings; //End lerp here
 		private readonly CameraSettingsResource previousSettings = new CameraSettingsResource(); //Start lerping here
 		private readonly CameraSettingsResource currentSettings = new CameraSettingsResource(); //Apply transforms based on this
-		public void SetCameraData(CameraSettingsResource data, float blendTime, bool useCrossfade = false)
+		public void SetCameraData(CameraSettingsResource data, float blendTime = .2f, bool useCrossfade = false)
 		{
 			transitionSpeed = blendTime;
 			transitionTime = transitionTimeStepped = 0f; //Reset transition timers
@@ -134,20 +133,12 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Gameplay Camera
-		private Vector3 localPlayerPosition; //Player's local position, relative to it's path follower
-		private void CalculateLocalPlayerPosition()
-		{
-			localPlayerPosition = Character.GlobalTranslation- PlayerPathFollower.GlobalTranslation;
-			localPlayerPosition = PlayerPathFollower.GlobalTransform.basis.XformInv(localPlayerPosition);
-		}
-
 		public bool ResetFlag { get; set; } //Set to true to skip smoothing
 
 		private void UpdateGameplayCamera()
 		{
 			if (Character.PathFollower.ActivePath == null) return; //Uninitialized
 
-			CalculateLocalPlayerPosition();
 			UpdateActiveSettings();
 			UpdateBasePosition();
 
@@ -183,14 +174,14 @@ namespace Project.Gameplay
 			else if (resource.followMode == CameraSettingsResource.FollowMode.Pathfollower)
 				return PlayerPathFollower.GlobalTranslation;
 			else
-				return Character.GlobalTranslation - GetHeightDirection(resource.heightMode) * localPlayerPosition.y;
+				return Character.GlobalTranslation - GetHeightDirection(resource.heightMode) * PlayerPathFollower.LocalPlayerPosition.y;
 		}
 
 		private Vector3 GetStrafeOffset(CameraSettingsResource resource)
 		{
 			if (resource.strafeMode == CameraSettingsResource.StrafeMode.Move)
 			{
-				float playerOffset = localPlayerPosition.x;
+				float playerOffset = PlayerPathFollower.LocalPlayerPosition.x;
 				if (Mathf.Abs(playerOffset) < resource.strafeDeadzone)
 					playerOffset = 0f;
 				else
@@ -214,7 +205,7 @@ namespace Project.Gameplay
 			return vector;
 		}
 
-		private Vector3 GetHeightOffset(CameraSettingsResource resource) => GetHeightDirection(resource.heightMode) * localPlayerPosition.y * resource.heightTrackingStrength;
+		private Vector3 GetHeightOffset(CameraSettingsResource resource) => GetHeightDirection(resource.heightMode) * PlayerPathFollower.LocalPlayerPosition.y * resource.heightTrackingStrength;
 
 		private void UpdateOffsets()
 		{
@@ -289,7 +280,7 @@ namespace Project.Gameplay
 					ExtensionMethods.SmoothDampAngle(currentRotation.y, targetRotation.y, ref rotationVelocity.y, ROTATION_SMOOTHING));
 			}
 
-			Vector2 pitchVector = new Vector2(currentDistance, -localPlayerPosition.y);
+			Vector2 pitchVector = new Vector2(currentDistance, -PlayerPathFollower.LocalPlayerPosition.y);
 			if (targetSettings.IsStaticCamera)
 			{
 				pitchVector.x = forwardDirection.RemoveVertical().Length();
@@ -309,9 +300,9 @@ namespace Project.Gameplay
 			_calculationGimbal.RotateObjectLocal(Vector3.Back, currentTilt);
 
 			float targetYawTracking = 0f;
-			if (targetSettings.strafeMode == CameraSettingsResource.StrafeMode.Rotate && Mathf.Abs(localPlayerPosition.x) > 1f) //Track left/right
+			if (targetSettings.strafeMode == CameraSettingsResource.StrafeMode.Rotate && Mathf.Abs(PlayerPathFollower.LocalPlayerPosition.x) > 1f) //Track left/right
 			{
-				Vector2 v = new Vector2((Mathf.Abs(localPlayerPosition.x) - 1f) * Mathf.Sign(localPlayerPosition.x), currentDistance);
+				Vector2 v = new Vector2((Mathf.Abs(PlayerPathFollower.LocalPlayerPosition.x) - 1f) * Mathf.Sign(PlayerPathFollower.LocalPlayerPosition.x), currentDistance);
 				targetYawTracking = v.AngleTo(Vector2.Down);
 			}
 

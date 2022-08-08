@@ -2,6 +2,9 @@ using Godot;
 
 namespace Project.Gameplay.Triggers
 {
+	/// <summary>
+	/// Starts a sidle.
+	/// </summary>
 	public class SidleTrigger : Area
 	{
 		private CharacterController Character => CharacterController.instance;

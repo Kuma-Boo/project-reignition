@@ -60,9 +60,8 @@ namespace Project.Gameplay
 
 		public enum OverrideMode
 		{
-			Disabled,
+			Add,
 			Override,
-			Add
 		}
 
 		[Export]

@@ -8,6 +8,7 @@ namespace Project.Gameplay
 	{
 		public static CharacterController instance;
 
+		//Component controllers
 		[Export]
 		public NodePath pathFollower;
 		public CharacterPathFollower PathFollower { get; private set; }
@@ -17,7 +18,13 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath sound;
 		public CharacterSound Sound { get; private set; }
-		public CameraController Camera { get; set; }
+		[Export]
+		public NodePath soul;
+		public CharacterSoulSkill Soul { get; private set; }
+		[Export]
+		public NodePath lockon;
+		public CharacterLockon Lockon { get; private set; }
+		public CameraController Camera { get; set; } //Camera is set externally
 
 		public override void _Ready()
 		{
@@ -26,6 +33,8 @@ namespace Project.Gameplay
 			PathFollower = GetNode<CharacterPathFollower>(pathFollower);
 			Animator = GetNode<CharacterAnimator>(animator);
 			Sound = GetNode<CharacterSound>(sound);
+			Soul = GetNode<CharacterSoulSkill>(soul);
+			Lockon = GetNode<CharacterLockon>(lockon);
 		}
 
 		public override void _PhysicsProcess(float _)
@@ -35,12 +44,7 @@ namespace Project.Gameplay
 			UpdatePhysics();
 			Animator.UpdateAnimation();
 			Camera.UpdateCamera();
-		}
-
-		public override void _ExitTree()
-		{
-			if (IsTimeBreakActive) //Just in case
-				ToggleTimeBreak();
+			Soul.UpdateSoulSkills();
 		}
 
 		#region State Machine
@@ -55,6 +59,28 @@ namespace Project.Gameplay
 			Launcher, //Springs, Ramps, etc.
 		}
 
+		public void ResetMovementState()
+		{
+			switch (MovementState)
+			{
+				case MovementStates.Grinding:
+					StopGrinding();
+					break;
+				case MovementStates.External:
+					EmitSignal(nameof(ExternalControlCompleted));
+					break;
+			}
+
+			CancelMovementState(MovementState);
+			Soul.IsSpeedBreakEnabled = Soul.IsTimeBreakEnabled = true; //Reenable soul skills
+		}
+
+		public void CancelMovementState(MovementStates fromState) //Reset state to Normal
+		{
+			if (MovementState == fromState)
+				MovementState = MovementStates.Normal;
+		}
+
 		public ActionStates ActionState { get; private set; }
 		public enum ActionStates //Actions that can happen in the Normal MovementState
 		{
@@ -65,7 +91,6 @@ namespace Project.Gameplay
 			Damaged, //Being knocked back by damage
 			Respawning, //Idle until respawn timer reaches zero
 			JumpDashing, //Also includes homing attack
-			EnemyBounce, //Struck an enemy with an attack
 			Stomping, //Jump cancel
 			Backflip,
 
@@ -73,25 +98,15 @@ namespace Project.Gameplay
 			Hanging, //Hanging from a ledge (In Sidle Mode)
 		}
 
-		public void ResetMovementState()
+		public void ResetActionState() //Reset action state
 		{
-			switch (MovementState)
+			switch (ActionState)
 			{
-				case MovementStates.Grinding:
-					StopGrinding();
-					break;
-				case MovementStates.External:
-					EmitSignal(nameof(OnExternalControlFinished));
+				default:
 					break;
 			}
 
-			CancelMovementState(MovementState);
-		}
-
-		public void CancelMovementState(MovementStates fromState) //Reset state to Normal
-		{
-			if (MovementState == fromState)
-				MovementState = MovementStates.Normal;
+			ActionState = ActionStates.Normal;
 		}
 
 		private void ProcessStateMachine()
@@ -125,7 +140,6 @@ namespace Project.Gameplay
 
 			UpdateInvincibility();
 			UpdateControlLockTimer();
-			UpdateBreakTimer();
 		}
 		#endregion
 
@@ -138,7 +152,7 @@ namespace Project.Gameplay
 		{
 			if (!isSideScroller)
 			{
-				if (MoveSpeed >= 0 && Controller.verticalAxis.value > -.2f && Controller.verticalAxis.value < 0)
+				if (MoveSpeed >= 0 && Controller.verticalAxis.value < -.2f && Controller.verticalAxis.value > 0)
 					return 0;
 				return Controller.verticalAxis.value;
 			}
@@ -161,6 +175,13 @@ namespace Project.Gameplay
 
 		private void UpdateInputBuffers()
 		{
+			if (MovementState == MovementStates.External) //Ignore inputs
+			{
+				jumpBufferTimer = 0;
+				actionBufferTimer = 0;
+				return;
+			}
+			
 			actionBufferTimer = Mathf.MoveToward(actionBufferTimer, 0, PhysicsManager.physicsDelta);
 			jumpBufferTimer = Mathf.MoveToward(jumpBufferTimer, 0, PhysicsManager.physicsDelta);
 
@@ -195,8 +216,8 @@ namespace Project.Gameplay
 			ControlLockoutData = data;
 			controlLockoutTimer = data.length;
 
-			if(ControlLockoutData.resetActionState)
-				ActionState = ActionStates.Normal;
+			if (ControlLockoutData.resetActionState)
+				ResetActionState();
 		}
 
 		private void UpdateControlLockTimer()
@@ -226,7 +247,7 @@ namespace Project.Gameplay
 		private Spatial externalParent;
 
 		[Signal]
-		public delegate void OnExternalControlFinished();
+		public delegate void ExternalControlCompleted();
 		public void StartExternal(Spatial followObject = null, bool snap = false)
 		{
 			ResetMovementState();
@@ -294,7 +315,7 @@ namespace Project.Gameplay
 		private void UpdateMoveSpeed()
 		{
 			if (IsCrouching) return;
-			if (IsSpeedBreakActive) return; //Overridden
+			if (Soul.IsSpeedBreakActive) return; //Overridden to max speed
 
 			if (isControlsLocked && !Mathf.IsZeroApprox(ControlLockoutData.speedRatio))
 			{
@@ -382,18 +403,19 @@ namespace Project.Gameplay
 		public void RecenterStrafe()
 		{
 			//Calculate distance along the plane defined by StrafeDirection
-			Vector3 calculationPoint = PathFollower.GlobalTransform.basis.XformInv(GlobalTranslation - PathFollower.GlobalTranslation);
+			Vector3 localOffset = PathFollower.LocalPlayerPosition;
 
 			if(isSideScroller || isRecentered)
 			{
-				GlobalTranslate(StrafeDirection * calculationPoint.x); //Instantly snap when sidescrolling
+				GlobalTranslate(StrafeDirection * localOffset.x); //Instantly snap when sidescrolling
 				return;
 			}
 
-			calculationPoint.x = Mathf.MoveToward(calculationPoint.x, 0, runningStrafeSettings.speed * PhysicsManager.physicsDelta * Mathf.Abs(SpeedRatio) * RECENTER_SMOOTHING);
-			GlobalTranslation = PathFollower.GlobalTransform.basis.Xform(calculationPoint) + PathFollower.GlobalTranslation;
+			float recenterSmoothing = runningStrafeSettings.speed * Mathf.Abs(SpeedRatio) * RECENTER_SMOOTHING;
+			localOffset.x = Mathf.MoveToward(localOffset.x, 0, recenterSmoothing * PhysicsManager.physicsDelta);
+			GlobalTranslation = PathFollower.Xform(localOffset) + PathFollower.GlobalTranslation;
 
-			if (Mathf.IsZeroApprox(calculationPoint.x))
+			if (Mathf.IsZeroApprox(localOffset.x))
 				isRecentered = true;
 		}
 
@@ -415,15 +437,15 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (IsJumpDashing)
+			if (Lockon.IsBouncing)
 			{
-				UpdateJumpDash();
+				Lockon.UpdateBounce();
 				return;
 			}
 
-			if (IsBouncingOffEnemy)
+			if (ActionState == ActionStates.JumpDashing)
 			{
-				UpdateEnemyBounce();
+				UpdateJumpDash();
 				return;
 			}
 
@@ -443,7 +465,7 @@ namespace Project.Gameplay
 					return;
 			}
 
-			if (IsSpeedBreakActive) return;
+			if (Soul.IsSpeedBreakActive) return;
 
 			if (IsCrouching)
 				UpdateCrouching();
@@ -493,7 +515,6 @@ namespace Project.Gameplay
 			isAccelerationJump = false;
 
 			landingTimer = 2;
-
 			ActionState = ActionStates.Normal;
 
 			if (MovementState == MovementStates.Normal && GetMovementInputValue() > 0.5f)
@@ -502,6 +523,8 @@ namespace Project.Gameplay
 				if (MoveSpeed < landingBoost)
 					MoveSpeed = landingBoost;
 			}
+
+			Lockon.ResetLockonTarget();
 		}
 
 		#region Jump
@@ -515,7 +538,6 @@ namespace Project.Gameplay
 		[Export]
 		public float jumpCurve = .95f;
 		public bool IsJumping => ActionState == ActionStates.Jumping;
-		public bool IsAccelerationJumping => ActionState == ActionStates.AccelJump;
 		private bool isJumpClamped; //True after the player releases the jump button
 		private bool isAccelerationJump;
 		private float currentJumpLength; //Amount of time the jump button was held
@@ -540,10 +562,12 @@ namespace Project.Gameplay
 			if (isAccelerationJump && currentJumpLength >= ACCELERATION_JUMP_LENGTH)
 			{
 				//Acceleration jump dash?
-				if (Controller.verticalAxis.value > 0)
+				if (Controller.verticalAxis.value > 0 || Controller.horizontalAxis.value != 0)
 				{
 					ActionState = ActionStates.AccelJump;
-					MoveSpeed = accelerationJumpSpeed;
+					Vector2 accelJumpDirection = Vector2.Down.Rotated(Animator.Rotation.y); //Allow accel jumping sideways (For those rare wide fields)
+					StrafeSpeed = accelerationJumpSpeed * accelJumpDirection.x;
+					MoveSpeed = accelerationJumpSpeed * accelJumpDirection.y;
 					Animator.JumpAccel();
 				}
 				VerticalSpeed = 5f;
@@ -575,12 +599,17 @@ namespace Project.Gameplay
 		public float jumpDashGravity;
 		[Export]
 		public float jumpDashMaxGravity;
-		[Export]
-		public float homingAttackSpeed;
-		public bool CanJumpDash { get; set; }
-		public bool IsJumpDashing => ActionState == ActionStates.JumpDashing;
+		public bool CanJumpDash
+		{
+			get => canJumpDash;
+			set
+			{
+				canJumpDash = value;
+				Lockon.IsMonitoring = value;
+			}
+		}
+		private bool canJumpDash;
 		public bool IsAttacking { get; private set; } //Should the player damage enemies?
-		public Spatial LockonTarget { get; private set; } //Active homing attack target
 
 		private void CheckJumpDash()
 		{
@@ -593,25 +622,27 @@ namespace Project.Gameplay
 
 		private void StartJumpDash()
 		{
-			CanJumpDash = false;
 			IsAttacking = true;
+			CanJumpDash = false; //Don't use get/set so we keep our target monitoring.
 			ActionState = ActionStates.JumpDashing;
 
-			if (LockonTarget == null)
+			if (Lockon.LockonTarget == null) //Normal jumpdash
 			{
 				MoveSpeed = jumpDashSpeed;
 				VerticalSpeed = jumpDashPower;
 			}
+			else
+				Lockon.HomingAttack(); //Start Homing attack
 		}
 
 		private void UpdateJumpDash()
 		{
-			if (LockonTarget != null && IsAttacking)
+			if (Lockon.LockonTarget != null && IsAttacking)
 			{
-				MoveSpeed = homingAttackSpeed;
+				MoveSpeed = Lockon.homingAttackSpeed;
 				StrafeSpeed = VerticalSpeed = 0;
 				customPhysicsEnabled = true;
-				Vector3 travelDirection = (LockonTarget.GlobalTranslation - GlobalTranslation).Normalized();
+				Vector3 travelDirection = (Lockon.LockonTarget.GlobalTranslation - GlobalTranslation).Normalized();
 				MoveAndCollide(travelDirection * MoveSpeed * PhysicsManager.physicsDelta);
 			}
 			else
@@ -640,13 +671,7 @@ namespace Project.Gameplay
 				StrafeSpeed = Mathf.MoveToward(StrafeSpeed, 0, runningStrafeSettings.friction * PhysicsManager.physicsDelta);
 
 			if (Controller.actionButton.wasReleased)
-				CancelCrouching();
-		}
-
-		private void CancelCrouching()
-		{
-			if(IsCrouching)
-				ActionState = ActionStates.Normal;
+				ResetActionState();
 		}
 		#endregion
 
@@ -720,139 +745,6 @@ namespace Project.Gameplay
 		#endregion
 		#endregion
 
-		#region Break Skills
-		[Export]
-		public float speedBreakSpeed; //Movement speed during speed break
-		public bool IsTimeBreakActive { get; private set; }
-		public bool IsSpeedBreakActive { get; private set; }
-		public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
-		private float breakTimer = 0; //Timer for break skills
-		private const float SPEEDBREAK_DELAY = 0.32f;
-		private const float BREAK_SKILLS_COOLDOWN = 1f; //Prevent skill spam
-
-		public const float TIME_BREAK_RATIO = .5f; //Time scale
-
-		private void UpdateTimeBreak()
-		{
-			if (!IsTimeBreakActive && breakTimer != 0) return; //Cooldown
-
-			if (Controller.breakButton.wasPressed && !IsSpeedBreakActive)
-			{
-				if (IsTimeBreakActive)
-				{
-					ToggleTimeBreak();
-					return;
-				}
-
-				if (!GameplayInterface.instance.IsSoulGaugeCharged) return;
-				if (MovementState == MovementStates.External || MovementState == MovementStates.Launcher) return;
-
-				ToggleTimeBreak();
-			}
-		}
-
-		private void UpdateSpeedBreak()
-		{
-			if (!IsSpeedBreakActive && breakTimer != 0) return; //Cooldown
-
-			if (Controller.boostButton.wasPressed && !IsTimeBreakActive)
-			{
-				if (IsSpeedBreakActive)
-				{
-					ToggleSpeedBreak();
-					return;
-				}
-
-				if (!GameplayInterface.instance.IsSoulGaugeCharged) return;
-				if (!IsOnGround) return;
-				if (MovementState != MovementStates.Normal) return;
-
-				ToggleSpeedBreak();
-			}
-
-			if (IsSpeedBreakActive)
-			{
-				if (breakTimer == 0)
-					MoveSpeed = speedBreakSpeed;
-				else
-				{
-					MoveSpeed *= .8f;
-					StrafeSpeed = 0;
-					breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
-				}
-			}
-		}
-
-		public void ToggleTimeBreak()
-		{
-			soulGaugeDrainTimer = 0;
-			IsTimeBreakActive = !IsTimeBreakActive;
-			Engine.TimeScale = IsTimeBreakActive ? TIME_BREAK_RATIO : 1f;
-
-			if (IsTimeBreakActive)
-			{
-				Sound.PlayVoice(1);
-				BGMPlayer.instance.VolumeDb = -80f;
-			}
-			else
-			{
-				breakTimer = BREAK_SKILLS_COOLDOWN;
-				BGMPlayer.instance.VolumeDb = 0f;
-				GameplayInterface.instance.UpdateSoulGaugeColor();
-			}
-		}
-
-		public void ToggleSpeedBreak()
-		{
-			CancelCrouching();
-
-			IsSpeedBreakActive = !IsSpeedBreakActive;
-			breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
-
-			if(IsSpeedBreakActive)
-				Sound.PlayVoice(0);
-			else
-				MoveSpeed = moveSettings.speed;
-			
-			GameplayInterface.instance.UpdateSoulGaugeColor();
-		}
-
-		private int soulGaugeDrainTimer;
-		private const int TIME_BREAK_SOUL_DRAIN_INTERVAL = 3; //Drain 1 point every x frames
-
-		private void UpdateBreakTimer()
-		{
-			if (CheatManager.InfiniteSoulGauge)
-				GameplayInterface.instance.ModifySoulGauge(300);
-
-			UpdateTimeBreak();
-			UpdateSpeedBreak();
-
-			if (!IsUsingBreakSkills)
-				breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
-			else if (breakTimer == 0)
-			{
-				if (IsSpeedBreakActive)
-				{
-					GameplayInterface.instance.ModifySoulGauge(-1);
-					if (GameplayInterface.instance.IsSoulGaugeEmpty)
-						ToggleSpeedBreak();
-				}
-				else
-				{
-					if (soulGaugeDrainTimer == 0)
-					{
-						GameplayInterface.instance.ModifySoulGauge(-1);
-						soulGaugeDrainTimer = TIME_BREAK_SOUL_DRAIN_INTERVAL;
-
-						if (GameplayInterface.instance.IsSoulGaugeEmpty)
-							ToggleTimeBreak();
-					}
-					soulGaugeDrainTimer--;
-				}
-			}
-		}
-		#endregion
 		#endregion
 
 		#region Damage
@@ -871,8 +763,6 @@ namespace Project.Gameplay
 			}
 		}
 
-		[Export]
-		public ControlLockoutResource attackLockoutSettings;
 		public bool IsBeingDamaged => ActionState == ActionStates.Damaged;
 		private readonly Array<Node> queuedDamage = new Array<Node>();
 
@@ -942,53 +832,6 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		#region Enemy Interaction
-		[Export]
-		public float enemyBouncePower;
-		[Export]
-		public float enemyBounceGravity;
-		private bool IsBouncingOffEnemy => ActionState == ActionStates.EnemyBounce;
-		private float bounceTimer;
-		private const float BOUNCE_LOCKOUT_TIME = .1f;
-		private void UpdateEnemyBounce()
-		{
-			MoveSpeed = StrafeSpeed = 0;
-			VerticalSpeed -= enemyBounceGravity * PhysicsManager.physicsDelta;
-			if (VerticalSpeed < 0)
-				ActionState = ActionStates.Normal;
-
-			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
-			if (bounceTimer == 0) //Bouncing off an enemy
-			{
-				CheckJumpDash();
-				CheckStomp();
-			}
-		}
-
-		public void HitEnemy(Vector3 enemyPos) //Called when defeating an enemy
-		{
-			GlobalTranslation = enemyPos;
-			bounceTimer = BOUNCE_LOCKOUT_TIME;
-
-			ResetLockonTarget();
-
-			MoveSpeed = 0;
-			CanJumpDash = true;
-			VerticalSpeed = enemyBouncePower;
-			SetControlLockout(attackLockoutSettings);
-			ActionState = ActionStates.EnemyBounce;
-		}
-
-		public void ResetLockonTarget()
-		{
-			if (LockonTarget != null) //Reset Active Target
-			{
-				LockonTarget = null;
-				GameplayInterface.instance.DisableHomingReticle();
-			}
-		}
-		#endregion
-
 		#region Sidle
 		[Export]
 		public MovementResource sidleSettings;
@@ -1000,9 +843,9 @@ namespace Project.Gameplay
 
 		public void StartSidle()
 		{
-			if (IsSpeedBreakActive) //Disable speed break
-				ToggleSpeedBreak();
+			Soul.IsSpeedBreakEnabled = false;
 
+			ControlLockoutData.disableJumping = true;
 			MovementState = MovementStates.Sidle;
 		}
 
@@ -1081,6 +924,8 @@ namespace Project.Gameplay
 		private Launcher.LaunchData launchData;
 		public void StartLauncher(Launcher.LaunchData data, Launcher newLauncher = null)
 		{
+			if (activeLauncher != null && activeLauncher == newLauncher) return; //Already launching that!
+
 			ResetMovementState();
 
 			ActionState = ActionStates.Normal;
@@ -1095,6 +940,9 @@ namespace Project.Gameplay
 
 			IsOnGround = false;
 			launcherTime = 0;
+
+			CanJumpDash = false;
+			Lockon.ResetLockonTarget();
 		}
 
 		private void UpdateLauncher()
@@ -1104,20 +952,37 @@ namespace Project.Gameplay
 				GlobalTranslation = activeLauncher.RecenterCharacter();
 			else
 			{
-				GlobalTranslation = launchData.InterpolatePosition(launcherTime);
-				if (launchData.IsLauncherFinished(launcherTime)) //Revert to normal state
-				{
-					CancelMovementState(MovementStates.Launcher);
-					MoveSpeed = launchData.InitialHorizontalVelocity;
-					VerticalSpeed = launchData.FinalVerticalVelocity;
+				Vector3 targetPosition = launchData.InterpolatePosition(launcherTime);
+				float heightDelta = targetPosition.y - GlobalTranslation.y;
+				GlobalTranslation = targetPosition;
 
-					EmitSignal(nameof(OnLauncherFinished));
+				if (heightDelta < 0) //Only check ground when falling
+					CheckGround();
+
+				if (IsOnGround || launchData.IsLauncherFinished(launcherTime)) //Revert to normal state
+				{
+					FinishLauncher();
+					if (!IsOnGround)
+					{
+						MoveSpeed = launchData.InitialHorizontalVelocity;
+						VerticalSpeed = launchData.FinalVerticalVelocity;
+					}
 				}
 
 				launcherTime += PhysicsManager.physicsDelta;
 			}
 
-			PathFollower.ResyncPathFollower();
+			PathFollower.Resync();
+		}
+
+		private void FinishLauncher()
+		{
+			if(activeLauncher != null)
+				CanJumpDash = activeLauncher.allowJumpDashing;
+				
+			ResetMovementState();
+			activeLauncher = null;
+			EmitSignal(nameof(OnLauncherFinished));
 		}
 
 		public void JumpTo(Vector3 destination, float midHeight = 0f, bool relativeToDst = false) //Generic JumpTo
@@ -1223,7 +1088,7 @@ namespace Project.Gameplay
 			}
 
 			MoveAndSlide(-grindRail.Forward() * MoveSpeed);
-			PathFollower.ResyncPathFollower();
+			PathFollower.Resync();
 
 			if (MoveSpeed <= MINIMUM_GRIND_SPEED)
 			{
@@ -1286,7 +1151,7 @@ namespace Project.Gameplay
 				}
 			}
 
-			PathFollower.ResyncPathFollower();
+			PathFollower.Resync();
 		}
 		#endregion
 
@@ -1309,7 +1174,7 @@ namespace Project.Gameplay
 			get => velocity.z;
 			set => velocity.z = value;
 		}
-		public float SpeedRatio => moveSettings.GetSpeedRatio(MoveSpeed);
+		public float SpeedRatio => MoveSpeed < 0 ? backstepSettings.GetSpeedRatio(MoveSpeed) : moveSettings.GetSpeedRatio(MoveSpeed);
 		private Vector3 velocity; //x -> strafe, y -> jump/fall, z -> speed
 		public Vector3 Velocity => PathFollower.Xform(velocity);
 
@@ -1355,7 +1220,7 @@ namespace Project.Gameplay
 			MoveAndSlide(movementDirection * MoveSpeed + StrafeDirection * StrafeSpeed + worldDirection * VerticalSpeed);
 			CheckCeiling();
 
-			PathFollower.ResyncPathFollower();
+			PathFollower.Resync();
 		}
 
 		public Vector3 worldDirection = Vector3.Up;
@@ -1385,6 +1250,9 @@ namespace Project.Gameplay
 			else if (IsRising)
 				castLength = -.1f; //Fix allow jumping
 
+			if(Soul.IsSpeedBreakActive)
+				castLength += GROUND_SNAP_LENGTH;
+
 			Vector3 castVector = -worldDirection * castLength;
 			RaycastHit groundHit = this.CastRay(castOrigin, castVector, environmentMask, false, GetCollisionExceptions());
 			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
@@ -1412,11 +1280,14 @@ namespace Project.Gameplay
 				if (Mathf.Rad2Deg(groundHit.normal.AngleTo(Vector3.Up) - worldDirection.AngleTo(Vector3.Up)) > MAX_ANGLE_CHANGE)
 					return;
 
-				Vector3 newNormal = (groundHit.normal * 100).Round() * .01f; //FIX Round to nearest hundredth to reduce jittering
-				worldDirection = newNormal.Normalized();
-
+				Vector3 newNormal = ((groundHit.normal * 100).Round() * .01f).Normalized(); //FIX Round to nearest hundredth to reduce jittering
 				if(!IsOnGround)
+				{
 					LandOnGround();
+					worldDirection = newNormal;
+				}
+				else
+					worldDirection = worldDirection.LinearInterpolate(newNormal, .2f).Normalized();
 
 				float rotationAmount = PathFollower.GlobalTransform.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
 				Vector3 slopeDirection = groundHit.normal.Rotated(Vector3.Up, rotationAmount).Normalized();
@@ -1514,8 +1385,8 @@ namespace Project.Gameplay
 				float wallRatio = DotProd2D(centerHit.normal, PathFollower.MovementDirection);
 				if (wallRatio > .9f)
 				{
-					if (IsSpeedBreakActive && breakTimer == 0) //Cancel speed break
-						ToggleSpeedBreak();
+					if (Soul.IsSpeedBreakActive) //Cancel speed break
+						Soul.ToggleSpeedBreak();
 
 					MoveSpeed = 0;
 					GlobalTranslate(castVector * (centerHit.distance - COLLISION_RADIUS)); //Snap to wall
@@ -1523,7 +1394,7 @@ namespace Project.Gameplay
 			}
 		}
 
-		private bool IsValidWallCast(RaycastHit hit) => hit && (DotProd2D(hit.normal, hit.direction) >= .5f && !hit.collidedObject.IsInGroup("ignore raycast"));
+		private bool IsValidWallCast(RaycastHit hit) => hit && (DotProd2D(hit.normal, hit.direction) >= .5f && !hit.collidedObject.IsInGroup("floor"));
 
 		private StrafeCollisions strafeCollision;
 		private enum StrafeCollisions
@@ -1556,7 +1427,9 @@ namespace Project.Gameplay
 					if (dot > .8f)
 					{
 						GlobalTranslate(hit.direction * (hit.distance - COLLISION_RADIUS));
-						StrafeSpeed = 0;
+
+						if(ActionState != ActionStates.AccelJump) //Maintain speed when accel jumping
+							StrafeSpeed = 0;
 					}
 					else
 					{
@@ -1580,50 +1453,16 @@ namespace Project.Gameplay
 		private float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized()));
 
 		private readonly Array<RespawnableObject> activeTriggers = new Array<RespawnableObject>();
-		private readonly Array<Spatial> activeTargets = new Array<Spatial>(); //List of targetable objects
 		private void UpdateTriggers()
 		{
 			//Stage objects
 			for (int i = 0; i < activeTriggers.Count; i++)
 				activeTriggers[i].OnStay();
 
-			bool isLockedOn = LockonTarget != null;
-			//Validate current lockon target
-			if (isLockedOn && IsTargetInvalid(LockonTarget))
-				LockonTarget = null;
-
-			//Update homing attack
-			if (LockonTarget == null)
-			{
-				float closestDistance = Mathf.Inf;
-				//Pick new target
-				for (int i = 0; i < activeTargets.Count; i++)
-				{
-					if (IsTargetInvalid(activeTargets[i]) || !CanJumpDash)
-						continue;
-
-					float dst = activeTargets[i].GlobalTranslation.RemoveVertical().DistanceSquaredTo(GlobalTranslation.RemoveVertical());
-					if (dst > closestDistance)
-						continue;
-
-					closestDistance = dst;
-					LockonTarget = activeTargets[i];
-				}
-			}
-
-			//Disable Homing Attack
-			if (LockonTarget == null && isLockedOn)
-				GameplayInterface.instance.DisableHomingReticle();
-			else if (LockonTarget != null)
-			{
-				Vector2 screenPos = Camera.ConvertToScreenSpace(LockonTarget.GlobalTranslation);
-				GameplayInterface.instance.UpdateHomingReticle(screenPos, !isLockedOn);
-			}
+			Lockon.ProcessLockonTargets();
 		}
 
-		private bool IsTargetInvalid(Spatial t) => !activeTargets.Contains(t) || !t.IsVisibleInTree() || IsOnGround || IsBeingDamaged;
-
-		public void OnCollisionObjectEnter(PhysicsBody body)
+		public void OnObjectCollisionEnter(PhysicsBody body)
 		{
 			/*
 			Note for when I come back wondering why the player is being pushed through the floor
@@ -1641,9 +1480,12 @@ namespace Project.Gameplay
 					TakeDamage();
 				}
 			}
+
+			if (Lockon.IsHomingAttacking)
+				Lockon.StartBounce();
 		}
 
-		public void OnCollisionObjectExit(PhysicsBody body)
+		public void OnObjectCollisionExit(PhysicsBody body)
 		{
 			if (body.IsInGroup("crusher") && GetCollisionExceptions().Contains(body))
 			{
@@ -1655,7 +1497,7 @@ namespace Project.Gameplay
 
 		public void OnObjectTriggerEnter(Area area)
 		{
-			if (!((Node)area is RespawnableObject))
+			if((Node)area is RespawnableObject == false)
 			{
 				if (area.IsInGroup("railing"))
 					currentRailing = area;
@@ -1672,7 +1514,7 @@ namespace Project.Gameplay
 
 		public void OnObjectTriggerExit(Area area)
 		{
-			if (!((Node)area is RespawnableObject))
+			if ((Node)area is RespawnableObject == false)
 			{
 				if (area.IsInGroup("railing"))
 					currentRailing = null;
@@ -1685,18 +1527,6 @@ namespace Project.Gameplay
 
 			if (activeTriggers.Contains(target))
 				activeTriggers.Remove(target);
-		}
-
-		public void OnTargetTriggerEnter(Area area)
-		{
-			if (!activeTargets.Contains(area))
-				activeTargets.Add(area);
-		}
-
-		public void OnTargetTriggerExit(Area area)
-		{
-			if (activeTargets.Contains(area))
-				activeTargets.Remove(area);
 		}
 		#endregion
 	}

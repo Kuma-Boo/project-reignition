@@ -41,7 +41,7 @@ namespace Project.Gameplay
 			targetPosition = GlobalTranslation;
 			spawnData.UpdateSpawnData(this);
 			spawnData.spawnTransform.origin = GlobalTranslation + spawnOffset;
-			StageSettings.instance.RegisterRespawnableObject(this, nameof(Spawn));
+			StageSettings.instance.RegisterRespawnableObject(this);
 
 			_animationTree = GetNode<AnimationTree>(animationTree);
 			_animationTree.Active = true;
@@ -60,12 +60,12 @@ namespace Project.Gameplay
 			movementTween = new Tween();
 			AddChild(movementTween);
 
-			Spawn();
+			Respawn();
 		}
 
-		public override void Spawn()
+		public override void Respawn()
 		{
-			base.Spawn();
+			base.Respawn();
 
 			if (activationTrigger.IsEmpty()) //No activation trigger. Activate immediately.
 				Activate();
@@ -77,14 +77,13 @@ namespace Project.Gameplay
 		{
 			if (Character.IsAttacking)
 			{
-				Vector3 travelOffset = (_lockonArea.GlobalTranslation - Character.CenterPosition).Flatten().Normalized() * 10f * Character.MoveSpeed / Character.homingAttackSpeed;
+				Vector3 travelOffset = (_lockonArea.GlobalTranslation - Character.CenterPosition).Flatten().Normalized() * 10f * Character.MoveSpeed / Character.Lockon.homingAttackSpeed;
 				movementTween.InterpolateProperty(this, "global_transform:origin", GlobalTranslation, GlobalTranslation + travelOffset, .5f);
 				movementTween.InterpolateCallback(this, .5f, nameof(Despawn));
 				movementTween.Start();
 
 				_lockonArea.Disabled = true;
-				Character.HitEnemy(_lockonArea.GlobalTranslation);
-
+				Character.Lockon.StartBounce();
 				EmitSignal(nameof(OnDefeated));
 			}
 			else

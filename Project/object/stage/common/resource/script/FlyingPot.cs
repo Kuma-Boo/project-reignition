@@ -3,6 +3,9 @@ using Godot;
 
 namespace Project.Gameplay
 {
+	/// <summary>
+	/// Mash the action button for maximum speed.
+	/// </summary>
 	[Tool]
 	public class FlyingPot : Spatial
 	{
@@ -30,8 +33,9 @@ namespace Project.Gameplay
 		private Vector2 velocity;
 		private Vector3 startPosition;
 
-		private const float GRAVITY = 24.0f;
-		private const float WING_POWER = 12.0f;
+		private const float GRAVITY = 16.0f;
+		private const float WING_POWER = 4.0f;
+		private const float MAX_SPEED = 12.0f;
 		private const float HORIZONTAL_DRAG = .1f;
 		private const float ROTATION_SPEED = .1f;
 		private const float MAX_ANGLE = Mathf.Pi * .2f;
@@ -48,7 +52,7 @@ namespace Project.Gameplay
 			_lockonArea = GetNode<Area>(lockonArea);
 			_environmentCollider = GetNode<CollisionShape>(environmentCollider);
 
-			StageSettings.instance.RegisterRespawnableObject(this, nameof(Respawn));
+			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
 		private void Respawn()
@@ -82,7 +86,7 @@ namespace Project.Gameplay
 					_lockonArea.Monitorable = false;
 
 					Character.CanJumpDash = false;
-					Character.ResetLockonTarget();
+					Character.Lockon.ResetLockonTarget();
 					Character.Connect(nameof(CharacterController.OnLauncherFinished), this, nameof(OnEnteredPot), null, (uint)ConnectFlags.Oneshot);
 				}
 			}
@@ -97,7 +101,6 @@ namespace Project.Gameplay
 
 		private void OnEnteredPot()
 		{
-			power = 1f; //Reset power
 			isControllingPlayer = true;
 			Character.StartExternal(this, true);
 			Character.Visible = false;
@@ -108,14 +111,14 @@ namespace Project.Gameplay
 			isLeavingPot = true;
 			isControllingPlayer = false;
 
+			velocity.y = 0f; //Kill all vertical velocity
+
 			Character.VerticalSpeed = Character.JumpPower;
 			Character.StrafeSpeed = Character.airStrafeSettings.speed * (angle / MAX_ANGLE);
 			Character.ResetMovementState();
 			Character.Visible = true;
 		}
 
-		public float power;
-		private const float POWER_RESET_SPEED = 2f;
 		private void ProcessMovement()
 		{
 			float targetRotation = Controller.horizontalAxis.value * MAX_ANGLE;
@@ -127,15 +130,11 @@ namespace Project.Gameplay
 				return;
 			}
 
-			power = Mathf.MoveToward(power, 1f, POWER_RESET_SPEED * PhysicsManager.physicsDelta);
 			if (Controller.actionButton.wasPressed) //Move upwards
 			{
-				if (power > .5f) //Prevent spamming
-					velocity = Vector2.Down.Rotated(-angle) * WING_POWER * power;
-				else if (velocity.y < 0f)
-					velocity.y *= power;
-
-				power = 0f;
+				velocity += Vector2.Down.Rotated(angle) * WING_POWER;
+				if (velocity.y > 0)
+					velocity = velocity.LimitLength(MAX_SPEED);
 			}
 		}
 
@@ -148,7 +147,7 @@ namespace Project.Gameplay
 				velocity.y = 0;
 
 			GlobalTranslation = startPosition + Vector3.Up * position.y + this.Right() * position.x;
-			_root.Rotation = Vector3.Forward * angle;
+			_root.Rotation = Vector3.Back * angle;
 
 			velocity.x = Mathf.Lerp(velocity.x, 0f, HORIZONTAL_DRAG);
 			velocity.y -= GRAVITY * PhysicsManager.physicsDelta;
@@ -164,10 +163,12 @@ namespace Project.Gameplay
 			interactingWithPlayer = true;
 			isLeavingPot = false;
 
-			cameraSettings.viewAngle.y = 360f - RotationDegrees.y; //Sync viewAngle to current flying pot's rotation
+			Character.Soul.IsSpeedBreakEnabled = false;
+			
+			cameraSettings.viewAngle.y = 180f - Mathf.Rad2Deg(GlobalRotation.y); //Sync viewAngle to current flying pot's rotation
 			cameraSettings.viewPosition = startPosition;
 			cameraSettings.viewPosition.y = 0f; //Since heightTracking is enabled, this is unneeded.
-			Character.Camera.SetCameraData(cameraSettings, CameraController.DefaultBlendTime);
+			Character.Camera.SetCameraData(cameraSettings);
 		}
 
 		public void PlayerExited(Area a)

@@ -3,21 +3,29 @@ using Godot.Collections;
 
 namespace Project.Gameplay.Triggers
 {
+	/// <summary>
+	/// Extended Area node that can determine the direction the player enters.
+	/// Automatically sets up signals for children that inherit from StageTriggerModule.
+	/// </summary>
 	public class StageTrigger : Area
 	{
 		[Export]
-		public bool isOneShot; //Only trigger once?
-		private bool isTriggered;
+		public bool isOneShot; //Disables this trigger after being activated (Trigger mode must be set to OnEnter to function properly)
+		private bool isTriggered; //For isOneShot
 
 		[Export]
-		public TriggerMode triggerMode;
+		public TriggerMode triggerMode; //How should this area be activated?
 		public enum TriggerMode
 		{
 			OnEnter, //Activate on enter
 			OnExit, //Activate on exit
-			OnStay, //Enable on enter, disable on exit.
+			OnStay, //Activate on enter, Deactivate on exit.
 		}
 
+		[Export]
+		public InteractionMode enterMode;
+		[Export]
+		public InteractionMode exitMode;
 		public enum InteractionMode
 		{
 			BothWays,
@@ -25,22 +33,30 @@ namespace Project.Gameplay.Triggers
 			MovingBackward,
 		}
 
-		[Export]
-		public InteractionMode enterMode;
-		[Export]
-		public InteractionMode exitMode;
-		private readonly Array<StageTriggerModule> _stageTriggerObjects = new Array<StageTriggerModule>();
+		[Signal]
+		public delegate void Activated();
+		[Signal]
+		public delegate void Deactivated();
+		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
 
 		public override void _Ready()
 		{
-			//TODO reset oneshot triggers when the stage is reloaded.
-
-			//Get all stage trigger objects that are children of this node
+			//Connect child modules
 			Array children = GetChildren();
 			for (int i = 0; i < children.Count; i++)
 			{
 				if (children[i] is StageTriggerModule)
-					_stageTriggerObjects.Add(children[i] as StageTriggerModule);
+				{
+					StageTriggerModule module = children[i] as StageTriggerModule;
+
+					//Connect signals
+					Connect(nameof(Activated), module, nameof(StageTriggerModule.Activate));
+					Connect(nameof(Deactivated), module, nameof(StageTriggerModule.Deactivate));
+
+					//Register respawnable modules
+					if (module.IsRespawnable())
+						StageSettings.instance.RegisterRespawnableObject(module);
+				}
 			}
 		}
 
@@ -48,16 +64,14 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!a.IsInGroup("player")) return;
 
+			//Determine whether activation is successful
 			if (triggerMode == TriggerMode.OnExit)
 				return;
 
 			if (enterMode != InteractionMode.BothWays)
 			{
-				bool isEnteringForward = !CharacterController.instance.PathFollower.IsAheadOfPoint(GlobalTranslation);
-				if (enterMode == InteractionMode.MovingForward && !isEnteringForward)
-					return;
-
-				if (enterMode == InteractionMode.MovingBackward && isEnteringForward)
+				bool isEnteringForward = !PathFollower.IsAheadOfPoint(GlobalTranslation) || CharacterController.instance.MoveSpeed > 0;
+				if ((enterMode == InteractionMode.MovingForward && !isEnteringForward) || (enterMode == InteractionMode.MovingBackward && isEnteringForward))
 					return;
 			}
 
@@ -66,27 +80,20 @@ namespace Project.Gameplay.Triggers
 
 		public void OnExited(Area a)
 		{
-			if (!a.IsInGroup("player") || !CharacterController.instance.PathFollower.IsInsideTree()) return;
+			if (!a.IsInGroup("player") || !PathFollower.IsInsideTree()) return;
 
-			bool isExitingForward = CharacterController.instance.PathFollower.IsAheadOfPoint(GlobalTranslation);
+			//Determine whether deactivation is successful
+			if (triggerMode == TriggerMode.OnEnter)
+				return;
 
-			switch (triggerMode)
+			if (exitMode != InteractionMode.BothWays)
 			{
-				case TriggerMode.OnExit:
-					Activate();
-					break;
-				case TriggerMode.OnEnter: //Do Nothing
-					break;
-				default:
-					if (exitMode == InteractionMode.MovingForward && !isExitingForward)
-						break;
-					
-					if (exitMode == InteractionMode.MovingBackward && isExitingForward)
-						break;
-
-					Deactivate(isExitingForward);
-					break;
+				bool isExitingForward = PathFollower.IsAheadOfPoint(GlobalTranslation) || CharacterController.instance.MoveSpeed > 0;
+				if ((exitMode == InteractionMode.MovingForward && !isExitingForward) || (exitMode == InteractionMode.MovingBackward && isExitingForward))
+					return;
 			}
+
+			Deactivate();
 		}
 
 		private void Activate()
@@ -94,14 +101,12 @@ namespace Project.Gameplay.Triggers
 			if (isTriggered) return;
 			isTriggered = isOneShot;
 
-			for (int i = 0; i < _stageTriggerObjects.Count; i++)
-				_stageTriggerObjects[i].Activate();
+			EmitSignal(nameof(Activated));
 		}
 
-		private void Deactivate(bool isMovingForward)
+		private void Deactivate()
 		{
-			for (int i = 0; i < _stageTriggerObjects.Count; i++)
-				_stageTriggerObjects[i].Deactivate(isMovingForward);
+			EmitSignal(nameof(Deactivated));
 		}
 	}
 }

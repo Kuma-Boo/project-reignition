@@ -27,9 +27,9 @@ namespace Project.Gameplay
 				Collect();
 		}
 
-		public override void Spawn()
+		public override void Respawn()
 		{
-			base.Spawn();
+			base.Respawn();
 			isCollected = false;
 		}
 

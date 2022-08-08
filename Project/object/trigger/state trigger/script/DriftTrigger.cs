@@ -3,8 +3,10 @@ using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
+	/// <summary>
+	/// Makes the player do a 90 degree turn when entering fast enough.
+	/// </summary>
 	[Tool]
-	//When the player enters this trigger, they will skid to a stop before dashing in a 90 degree angle
 	public class DriftTrigger : Area
 	{
 		public const float SPEED_RATIO = 1.5f; //Speed ratio for a successful drift
@@ -29,7 +31,7 @@ namespace Project.Gameplay.Triggers
 
 		public void OnEntered(Area _)
 		{
-			if (Character.IsUsingBreakSkills) return; //Can't drift during speed/time break :\
+			if (Character.Soul.IsUsingBreakSkills) return; //Can't drift during speed/time break :\
 			if (!Character.IsOnGround || Character.SpeedRatio < MINIMUM_ENTRANCE_SPEED_RATIO) return;
 
 			cornerCleared = false;

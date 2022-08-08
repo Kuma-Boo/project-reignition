@@ -32,8 +32,8 @@ namespace Project.Interface
 			BGMPlayer.instance.StreamPaused = GetTree().Paused;
 			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
 
-			if (CharacterController.instance.IsTimeBreakActive)//Fix speed break
-				Engine.TimeScale = GetTree().Paused ? 1f : CharacterController.TIME_BREAK_RATIO;
+			if (CharacterController.instance.Soul.IsTimeBreakActive)//Fix speed break
+				Engine.TimeScale = GetTree().Paused ? 1f : CharacterSoulSkill.TIME_BREAK_RATIO;
 		}
 
 		public override void _Process(float _)

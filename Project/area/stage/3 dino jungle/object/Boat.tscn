@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Boat Wave.tres" type="Material" id=1]
 [ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Boat Interior.tres" type="Material" id=2]
@@ -54,11 +54,108 @@ surfaces/1 = {
 "vertex_count": 918
 }
 
+[sub_resource type="Animation" id=5]
+resource_name = "Despawn"
+tracks/0/type = "method"
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "Respawn"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Boat:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.5 ),
+"transitions": PoolRealArray( 1, 1.4, 1 ),
+"update": 0,
+"values": [ Vector3( 1, 1, 1 ), Vector3( 1.1, 1.1, 1.1 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Boat:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.5 ),
+"transitions": PoolRealArray( 1, 1.5, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, -1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Boat:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Boat:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Spawn"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("Boat:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0.05, 0 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Boat:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1.4, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 1, 1, 1 ) ]
+}
+
 [node name="Boat" type="KinematicBody"]
 collision_layer = 8
 script = ExtResource( 4 )
 cameraSettings = ExtResource( 5 )
 acceleration = 40.0
+animator = NodePath("Boat/AnimationPlayer")
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0 )
@@ -83,5 +180,8 @@ mesh = SubResource( 1 )
 mesh = SubResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Boat"]
+anims/Despawn = SubResource( 5 )
+anims/RESET = SubResource( 7 )
+anims/Spawn = SubResource( 6 )
 
 [connection signal="area_entered" from="Area" to="." method="OnPlayerEntered"]

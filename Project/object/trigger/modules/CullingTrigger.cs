@@ -2,15 +2,21 @@ using Godot;
 
 namespace Project.Gameplay.Triggers
 {
-	public class CullingTrigger : StageTriggerModule //Also disables nodes.
+	/// <summary>
+	/// Hides/Shows nodes.
+	/// Use <see cref="modifyTree"/> to enable/disable objects completely. (i.e. one way collisions)
+	/// </summary>
+	public class CullingTrigger : StageTriggerModule 
 	{
 		[Export]
 		public NodePath targetNode;
 		private Spatial _targetNode;
 		[Export]
-		public bool modifyTree; //Modifies the tree instead of just hiding/showing the node. Useful for one way collisions.
+		public bool modifyTree; //Can cause stuttering for larger objects. Primary use is for one-way collisions
 		private Node originalParent; //Data for tree modification
 		private Transform originalTransform;
+		[Export]
+		public bool startEnabled; //Generally things should start culled
 
 		public override void _Ready()
 		{
@@ -22,13 +28,10 @@ namespace Project.Gameplay.Triggers
 				originalTransform = _targetNode.GlobalTransform;
 			}
 
-			//Start disabled. Use a StageTrigger set to "OnStay" if you need this enabled at the start of the level.
-			CallDeferred(nameof(DeactivateNode));
+			//Disable the node on startup?
+			if(!startEnabled)
+				CallDeferred(nameof(DeactivateNode));
 		}
-
-		public override void Activate() => ActivateNode();
-		public override void Deactivate(bool isMovingForward) => DeactivateNode();
-
 
 		public override void _ExitTree()
 		{

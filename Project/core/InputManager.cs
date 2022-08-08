@@ -41,7 +41,8 @@ namespace Project.Core
 			debugTurbo.Update(Input.IsKeyPressed((int)KeyList.Tab));
 		}
 
-		public override void _Input(InputEvent e)
+		/*
+		public override void _Input(InputEvent e) //For Controller/Keyboard hotswitching
 		{
 			if (e is InputEventJoypadButton && !controller.IsUsingGamepad)
 				controller.activeGamepad = e.Device;
@@ -50,6 +51,7 @@ namespace Project.Core
 
 			e.Dispose();
 		}
+		*/
 
 		public static void DefaultControls()
 		{
@@ -85,9 +87,9 @@ namespace Project.Core
 					horizontalAxis.Update(DigitalAxisHeld(ActiveMapping.rightBinding, ActiveMapping.leftBinding), delta);
 
 				if (IsUsingGamepad && ActiveMapping.verticalBinding != -1)
-					verticalAxis.Update(-AnalogAxisHeld(ActiveMapping.verticalBinding), delta);
+					verticalAxis.Update(AnalogAxisHeld(ActiveMapping.verticalBinding), delta);
 				else
-					verticalAxis.Update(-DigitalAxisHeld(ActiveMapping.downBinding, ActiveMapping.upBinding), delta);
+					verticalAxis.Update(DigitalAxisHeld(ActiveMapping.upBinding, ActiveMapping.downBinding), delta);
 
 				jumpButton.Update(ButtonHeld(ActiveMapping.jumpBinding));
 				boostButton.Update(ButtonHeld(ActiveMapping.boostBinding));
@@ -117,6 +119,7 @@ namespace Project.Core
 			//TODO Consoles will require default controls for gamepads
 			public void DefaultControls()
 			{
+				activeGamepad = -1; //Default to keyboard
 				DefaultKeyboardControls();
 				DefaultGamepadControls();
 			}

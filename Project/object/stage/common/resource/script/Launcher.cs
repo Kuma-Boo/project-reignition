@@ -3,12 +3,18 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
+	/// <summary>
+	/// Launches the player. Use <see cref="CreateData(Vector3, Vector3, float, bool)"/> to bypass needing a Launcher node.
+	/// </summary>
 	[Tool]
 	public class Launcher : Area //Similar to Character.JumpTo(), but jumps between static points w/ custom sfx support
 	{
 		[Export]
 		public NodePath sfxPlayer; //Height at the beginning of the arc
 		private AudioStreamPlayer _sfxPlayer; //Height at the beginning of the arc
+
+		[Signal]
+		public delegate void Activated();
 
 		[Export]
 		public float startingHeight; //Height at the beginning of the arc
@@ -18,6 +24,8 @@ namespace Project.Gameplay
 		public float finalHeight; //Height at the end of the arc
 		[Export]
 		public float distance; //How far to travel
+
+		public Vector3 travelDirection; //Direction the player should face when being launched
 
 		public LaunchData GetData()
 		{
@@ -66,13 +74,22 @@ namespace Project.Gameplay
 
 		public virtual void Activate(Area a)
 		{
-			GD.Print("activated spring");
 			if(_sfxPlayer != null)
 				_sfxPlayer.Play();
 
 			IsCharacterCentered = recenterSpeed == 0;
-			Character.StartLauncher(GetData(), this);
-			Character.CanJumpDash = allowJumpDashing; //For springs and stuff
+
+			LaunchData launchData = GetData();
+			Character.StartLauncher(launchData, this);
+
+			Vector3 direction = launchData.launchDirection.Flatten().Normalized();
+			if (!direction.IsNormalized()) //Direction parallel with Vector3.Up! Use object's forward direction instead.
+				direction = this.Forward().Flatten().Normalized();
+
+			Character.Animator.SetForwardDirection(direction);
+			Character.Animator.ResetLocalRotation();
+
+			EmitSignal(nameof(Activated));
 		}
 
 		[Export]
@@ -98,7 +115,7 @@ namespace Project.Gameplay
 				distance = delta.RemoveVertical().Length(),
 				startingHeight = 0f,
 				middleHeight = h,
-				finalHeight = delta.y
+				finalHeight = delta.y,
 			};
 
 			if (relativeToEnd)

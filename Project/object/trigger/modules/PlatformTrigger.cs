@@ -2,15 +2,16 @@ using Godot;
 
 namespace Project.Gameplay.Triggers
 {
-	public class PlatformTrigger : StageTriggerModule //Trigger that carries player on moving platforms
+	/// <summary>
+	/// Moves player with moving platforms.
+	/// </summary>
+	public class PlatformTrigger : StageTriggerModule
 	{
 		[Export]
 		public float calculationOffset;
 
-		public override void _Ready()
-		{
-			SetProcess(false); //Sleep
-		}
+		//Sleep
+		public override void _Ready() => SetProcess(false);
 
 		public override void _Process(float _)
 		{
@@ -19,14 +20,7 @@ namespace Project.Gameplay.Triggers
 				Character.GlobalTranslate(Vector3.Up * (targetYPosition - Character.GlobalTranslation.y));
 		}
 
-		public override void Activate()
-		{
-			SetProcess(true);
-		}
-
-		public override void Deactivate(bool _)
-		{
-			SetProcess(false);
-		}
+		public override void Activate() => SetProcess(true); //Start Processing
+		public override void Deactivate() => SetProcess(false); //Stop Processing
 	}
 }

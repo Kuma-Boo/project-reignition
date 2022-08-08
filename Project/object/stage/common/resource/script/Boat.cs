@@ -23,6 +23,10 @@ namespace Project.Gameplay
 		private readonly float turnaround = 60f;
 		private readonly float strafeSpeed = 12f;
 
+		[Export]
+		public NodePath animator;
+		private AnimationPlayer _animator;
+
 		private Vector2 velocity;
 		private CharacterController Character => CharacterController.instance;
 
@@ -32,8 +36,9 @@ namespace Project.Gameplay
 				_overridePath = GetNodeOrNull<Path>(overridePath);
 
 			startingTransform = GlobalTransform;
+			StageSettings.instance.RegisterRespawnableObject(this);
 
-			StageSettings.instance.RegisterRespawnableObject(this, nameof(Respawn));
+			_animator = GetNode<AnimationPlayer>(animator);
 		}
 
 		public override void _PhysicsProcess(float _)
@@ -53,7 +58,7 @@ namespace Project.Gameplay
 			Vector3 moveDirection = Character.PathFollower.Forward().Flatten().Normalized();
 			MoveAndSlide(this.Left() * velocity.x + moveDirection * velocity.y);
 
-			Character.PathFollower.ResyncPathFollower();
+			Character.PathFollower.Resync();
 			Character.UpdateExternalControl();
 			GlobalRotation = Vector3.Up * (moveDirection.RemoveVertical().AngleTo(Vector2.Up) + Mathf.Pi);
 		}
@@ -64,14 +69,13 @@ namespace Project.Gameplay
 
 			isActive = true;
 			Character.StartExternal(this, true);
+			Character.Soul.IsSpeedBreakEnabled = false;
 
 			if(_overridePath != null)
 				Character.PathFollower.SetActivePath(_overridePath);
 
-			Character.Connect(nameof(CharacterController.OnExternalControlFinished), this, nameof(Deactivate), null, (uint)ConnectFlags.Oneshot);
-
-			if(cameraSettings != null)
-				Character.Camera.SetCameraData(cameraSettings, CameraController.DefaultBlendTime);
+			Character.Connect(nameof(CharacterController.ExternalControlCompleted), this, nameof(Deactivate), null, (uint)ConnectFlags.Oneshot);
+			Character.Camera.SetCameraData(cameraSettings);
 		}
 
 		public void Respawn() //Called from "Despawn" animation
@@ -79,13 +83,15 @@ namespace Project.Gameplay
 			isActive = false;
 			velocity = Vector2.Zero;
 			GlobalTransform = startingTransform;
-			//Play Animation "Spawn"
+			//Play spawn animation
+			_animator.Play("Spawn");
 		}
 
 		private void Deactivate()
 		{
 			//Play despawn animation
 			isActive = false;
+			_animator.Play("Despawn");
 		}
 	}
 }

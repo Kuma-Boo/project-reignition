@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=2]
+[gd_scene load_steps=91 format=2]
 
 [ext_resource path="res://object/player/resource/movement settings/RunSettings.tres" type="Resource" id=1]
 [ext_resource path="res://object/player/resource/movement settings/BackstepSettings.tres" type="Resource" id=2]
@@ -6,12 +6,13 @@
 [ext_resource path="res://object/player/resource/movement settings/AirRunSettings.tres" type="Resource" id=4]
 [ext_resource path="res://object/player/resource/movement settings/AirStrafeSettings.tres" type="Resource" id=5]
 [ext_resource path="res://object/player/resource/movement settings/GrindStepLockout.tres" type="Resource" id=6]
-[ext_resource path="res://object/player/resource/movement settings/AttackSettings.tres" type="Resource" id=7]
+[ext_resource path="res://object/player/resource/movement settings/BounceLockout.tres" type="Resource" id=7]
 [ext_resource path="res://object/player/resource/movement settings/SidleSettings.tres" type="Resource" id=8]
 [ext_resource path="res://object/player/resource/movement settings/GrindSettings.tres" type="Resource" id=9]
 [ext_resource path="res://object/player/resource/CharacterController.cs" type="Script" id=10]
 [ext_resource path="res://object/player/resource/CharacterAnimator.cs" type="Script" id=11]
 [ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=12]
+[ext_resource path="res://object/player/resource/CharacterSoulSkill.cs" type="Script" id=13]
 [ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=14]
 [ext_resource path="res://object/player/resource/CharacterSound.cs" type="Script" id=15]
 [ext_resource path="res://sound/sfx/player/en/VOICE_E_2.wav" type="AudioStream" id=16]
@@ -22,16 +23,19 @@
 [ext_resource path="res://sound/sfx/player/PLAYER_75.wav" type="AudioStream" id=21]
 [ext_resource path="res://object/player/resource/movement settings/StandingStrafeSettings.tres" type="Resource" id=22]
 [ext_resource path="res://object/player/resource/CharacterPathFollower.cs" type="Script" id=23]
+[ext_resource path="res://object/player/resource/CharacterLockon.cs" type="Script" id=24]
+
+[sub_resource type="BoxShape" id=19]
+extents = Vector3( 10, 4, 10 )
+
+[sub_resource type="BoxShape" id=130]
+extents = Vector3( 5, 4, 2 )
+
+[sub_resource type="SphereShape" id=129]
+radius = 0.5
 
 [sub_resource type="SphereShape" id=80]
 radius = 0.3
-
-[sub_resource type="CapsuleShape" id=34]
-radius = 0.3
-height = 0.2
-
-[sub_resource type="BoxShape" id=19]
-extents = Vector3( 7, 4, 10 )
 
 [sub_resource type="AnimationNodeTransition" id=70]
 input_count = 3
@@ -135,7 +139,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1808, 160 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -368, 400 )
-node_connections = [ "output", 0, "IsJumpDashing", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump", 0, "backflip", "jump", 1, "jump-start", "fall_reset", 0, "jump_cancel_time", "jump_cancel_time", 0, "fall-start", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim" ]
+node_connections = [ "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "jump_cancel_time", 0, "fall-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump", 0, "backflip", "jump", 1, "jump-start", "fall_reset", 0, "jump_cancel_time", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "output", 0, "IsJumpDashing" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -327,7 +331,7 @@ nodes/backstep/node = SubResource( 124 )
 nodes/backstep/position = Vector2( -944, 128 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "output", 0, "IsCrouching", "MoveSpeed", 0, "MoveState", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "MovementReset", 0, "MoveSpeed" ]
+node_connections = [ "MoveSpeed", 0, "MoveState", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MovementReset", 0, "MoveSpeed", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "output", 0, "IsCrouching" ]
 
 [sub_resource type="AnimationNodeAnimation" id=127]
 animation = "sidle-fast-loop"
@@ -354,7 +358,7 @@ nodes/sidle_anim/node = SubResource( 127 )
 nodes/sidle_anim/position = Vector2( -880, 464 )
 nodes/sidle_speed/node = SubResource( 128 )
 nodes/sidle_speed/position = Vector2( -672, 432 )
-node_connections = [ "output", 0, "countdown", "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "countdown", 0, "ActionState", "countdown", 1, "countdown_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "sidle_speed", 0, "sidle_anim" ]
+node_connections = [ "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "countdown", 0, "ActionState", "countdown", 1, "countdown_anim", "sidle_speed", 0, "sidle_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "output", 0, "countdown" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
@@ -363,9 +367,11 @@ node_connections = [ "output", 0, "countdown", "ActionState", 0, "IsGrounded", "
 [node name="Sonic" type="KinematicBody" groups=["player"]]
 collision_layer = 2
 script = ExtResource( 10 )
-pathFollower = NodePath("PathFollower")
-animator = NodePath("Sonic")
-sound = NodePath("Sound")
+pathFollower = NodePath("Components/PathFollower")
+animator = NodePath("Components/Animator")
+sound = NodePath("Components/Sound")
+soul = NodePath("Components/SoulSkills")
+lockon = NodePath("Components/Animator/LockonTrigger")
 moveSettings = ExtResource( 1 )
 airMoveSettings = ExtResource( 4 )
 runningStrafeSettings = ExtResource( 3 )
@@ -381,13 +387,8 @@ jumpDashSpeed = 18.0
 jumpDashPower = 4.0
 jumpDashGravity = 18.0
 jumpDashMaxGravity = -24.0
-homingAttackSpeed = 48.0
 backflipSpeed = 20.0
 backflipHeight = 1.4
-speedBreakSpeed = 54.0
-attackLockoutSettings = ExtResource( 7 )
-enemyBouncePower = 12.0
-enemyBounceGravity = 18.0
 sidleSettings = ExtResource( 8 )
 grindingSettings = ExtResource( 9 )
 grindStepLockoutSettings = ExtResource( 6 )
@@ -396,62 +397,96 @@ grindStepSpeed = 15
 grindStepHeight = 12
 environmentMask = 1
 
-[node name="Sonic" parent="." instance=ExtResource( 12 )]
+[node name="Components" type="Spatial" parent="."]
+
+[node name="PathFollower" type="PathFollow" parent="Components"]
+rotation_mode = 4
+loop = false
+script = ExtResource( 23 )
+character = NodePath("../..")
+
+[node name="Animator" parent="Components" instance=ExtResource( 12 )]
 script = ExtResource( 11 )
-animator = NodePath("../AnimationTree")
-root = NodePath("..")
+animator = NodePath("../../AnimationTree")
+root = NodePath("../..")
 
-[node name="Body" parent="Sonic/Sonic/Skeleton" index="0"]
+[node name="Body" parent="Components/Animator/Sonic/Skeleton" index="0"]
 portal_mode = 4
 use_in_baked_light = true
 
-[node name="EyeL" parent="Sonic/Sonic/Skeleton" index="1"]
+[node name="EyeL" parent="Components/Animator/Sonic/Skeleton" index="1"]
 portal_mode = 4
 use_in_baked_light = true
 
-[node name="EyeR" parent="Sonic/Sonic/Skeleton" index="2"]
+[node name="EyeR" parent="Components/Animator/Sonic/Skeleton" index="2"]
 portal_mode = 4
 use_in_baked_light = true
 
-[node name="Metal" parent="Sonic/Sonic/Skeleton" index="3"]
+[node name="Metal" parent="Components/Animator/Sonic/Skeleton" index="3"]
 portal_mode = 4
 use_in_baked_light = true
+
+[node name="VFX" type="Spatial" parent="Components/Animator"]
+
+[node name="LockonTrigger" type="Area" parent="Components/Animator"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+script = ExtResource( 24 )
+homingAttackSpeed = 48.0
+bounceLockoutSettings = ExtResource( 7 )
+bouncePower = 14.0
+
+[node name="Collision" type="CollisionShape" parent="Components/Animator/LockonTrigger"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 14 )
+shape = SubResource( 19 )
+
+[node name="CollisionClose" type="CollisionShape" parent="Components/Animator/LockonTrigger"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 2 )
+shape = SubResource( 130 )
+
+[node name="Sound" type="Node" parent="Components"]
+script = ExtResource( 15 )
+enClips = [ ExtResource( 16 ), ExtResource( 17 ) ]
+jaClips = [ ExtResource( 19 ), ExtResource( 18 ) ]
+actionClips = [ ExtResource( 20 ), ExtResource( 21 ) ]
+voiceChannel = NodePath("VoiceChannel")
+sfxChannels = [ NodePath("ActionChannel"), NodePath("FootstepChannel"), NodePath("FootstepChannel2") ]
+
+[node name="VoiceChannel" type="AudioStreamPlayer" parent="Components/Sound"]
+stream = ExtResource( 16 )
+bus = "VOICE"
+
+[node name="ActionChannel" type="AudioStreamPlayer" parent="Components/Sound"]
+bus = "SFX"
+
+[node name="FootstepChannel" type="AudioStreamPlayer" parent="Components/Sound"]
+bus = "SFX"
+
+[node name="FootstepChannel2" type="AudioStreamPlayer" parent="Components/Sound"]
+bus = "SFX"
+
+[node name="SoulSkills" type="Node" parent="Components"]
+script = ExtResource( 13 )
+isSpeedBreakEnabled = true
+isTimeBreakEnabled = true
+
+[node name="ObjectTrigger" type="Area" parent="Components" groups=["player"]]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.42, 0 )
+collision_layer = 2
+collision_mask = 9
+
+[node name="Trigger" type="CollisionShape" parent="Components/ObjectTrigger"]
+shape = SubResource( 129 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.32, 0 )
 shape = SubResource( 80 )
 
-[node name="ObjectTrigger" type="Area" parent="." groups=["player"]]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.42, 0 )
-visible = false
-collision_layer = 2
-collision_mask = 9
-
-[node name="Trigger" type="CollisionShape" parent="ObjectTrigger"]
-shape = SubResource( 34 )
-
-[node name="TargetTrigger" type="Area" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
-visible = false
-collision_layer = 0
-collision_mask = 4
-monitorable = false
-
-[node name="Trigger" type="CollisionShape" parent="TargetTrigger"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 9.9 )
-shape = SubResource( 19 )
-
-[node name="PathFollower" type="PathFollow" parent="."]
-rotation_mode = 4
-loop = false
-script = ExtResource( 23 )
-character = NodePath("..")
-
-[node name="VFX" type="Spatial" parent="."]
-
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 37 )
-anim_player = NodePath("../Sonic/AnimationPlayer")
+anim_player = NodePath("../Components/Animator/AnimationPlayer")
 active = true
 parameters/ActionState/current = 0
 parameters/IsGrounded/current = 0
@@ -476,32 +511,13 @@ parameters/ground_state/Run/blend_position = 0.0
 parameters/ground_state/crouch_state/playback = SubResource( 119 )
 parameters/sidle_speed/scale = 1.5
 
-[node name="Sound" type="Node" parent="."]
-script = ExtResource( 15 )
-enClips = [ ExtResource( 16 ), ExtResource( 17 ) ]
-jaClips = [ ExtResource( 19 ), ExtResource( 18 ) ]
-actionClips = [ ExtResource( 20 ), ExtResource( 21 ) ]
-voiceChannel = NodePath("VoiceChannel")
-sfxChannels = [ NodePath("ActionChannel"), NodePath("FootstepChannel"), NodePath("FootstepChannel2") ]
+[connection signal="area_entered" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetTriggerEnter"]
+[connection signal="area_exited" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetTriggerExit"]
+[connection signal="body_entered" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetBodyEnter"]
+[connection signal="body_exited" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetBodyExit"]
+[connection signal="area_entered" from="Components/ObjectTrigger" to="." method="OnObjectTriggerEnter"]
+[connection signal="area_exited" from="Components/ObjectTrigger" to="." method="OnObjectTriggerExit"]
+[connection signal="body_entered" from="Components/ObjectTrigger" to="." method="OnObjectCollisionEnter"]
+[connection signal="body_exited" from="Components/ObjectTrigger" to="." method="OnObjectCollisionExit"]
 
-[node name="VoiceChannel" type="AudioStreamPlayer" parent="Sound"]
-stream = ExtResource( 16 )
-bus = "VOICE"
-
-[node name="ActionChannel" type="AudioStreamPlayer" parent="Sound"]
-bus = "SFX"
-
-[node name="FootstepChannel" type="AudioStreamPlayer" parent="Sound"]
-bus = "SFX"
-
-[node name="FootstepChannel2" type="AudioStreamPlayer" parent="Sound"]
-bus = "SFX"
-
-[connection signal="area_entered" from="ObjectTrigger" to="." method="OnObjectTriggerEnter"]
-[connection signal="area_exited" from="ObjectTrigger" to="." method="OnObjectTriggerExit"]
-[connection signal="body_entered" from="ObjectTrigger" to="." method="OnCollisionObjectEnter"]
-[connection signal="body_exited" from="ObjectTrigger" to="." method="OnCollisionObjectExit"]
-[connection signal="area_entered" from="TargetTrigger" to="." method="OnTargetTriggerEnter"]
-[connection signal="area_exited" from="TargetTrigger" to="." method="OnTargetTriggerExit"]
-
-[editable path="Sonic"]
+[editable path="Components/Animator"]

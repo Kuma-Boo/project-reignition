@@ -2,15 +2,16 @@ using Godot;
 
 namespace Project.Gameplay.Triggers
 {
-    //Parent class of all stage trigger objects. Always loaded.
-    public abstract class StageTriggerModule : Spatial
+    /// <summary>
+    /// Parent class for all stage trigger modules.
+    /// Connect a signal to Activate() or Deactivate(), or use a StageTrigger to automatically assign signals at runtime.
+    /// </summary>
+    public class StageTriggerModule : Spatial
     {
-        public CharacterController Character => CharacterController.instance; //Reference to the character controller
+        protected CharacterController Character => CharacterController.instance;
+        public virtual bool IsRespawnable() => false; //Most triggers don't need to be respawned
 
-        public virtual void Respawn() { }
         public virtual void Activate() { }
-        public virtual void Deactivate(bool isMovingForward) { } //Normally unused. isMovingForward is which way the trigger was left.
-
-        public virtual bool IsRespawnable() => false;
+        public virtual void Deactivate() { }
     }
 }

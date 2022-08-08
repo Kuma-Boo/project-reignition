@@ -4,29 +4,53 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
-	//Manager responsible for spawning/despawning objects
+	/// <summary>
+	/// Manager responsible for stage setup.
+	/// This is the first thing that gets loaded in a stage.
+	/// </summary>
 	public class StageSettings : Node
 	{
 		public static StageSettings instance;
 
-		[Export]
-		public MissionType missionType; //Type of mission
-		public enum MissionType
-		{
-			Goal, //Head for the goal
-			Rings, //Collect a certain amount of rings
-			Rampage, //Destroy a certain amount of enemies
-		}
-
 		public override void _EnterTree()
 		{
 			instance = this; //Always override previous instance
+			SetUpMission();
 			SetUpSkills();
 		}
 
 		#region Stage Settings
 		[Export]
+		public MissionType missionType; //Type of mission
+		public enum MissionType
+		{
+			Objective, //For Get to the Goal stages, add a goal node and set the objective count to 0.
+			Ring, //Collect a certain amount of rings
+			Enemy, //Destroy a certain amount of enemies
+		}
+
+		[Export]
 		public int objectiveCount;
+		private int currentObjectiveCount;
+
+		private void SetUpMission()
+		{
+			switch (missionType)
+			{
+				case MissionType.Ring:
+					GD.Print(GameplayInterface.instance);
+					break;
+				case MissionType.Enemy:
+					Array rings = GetTree().GetNodesInGroup("enemy");
+					break;
+			}
+		}
+
+		public void IncrementObjective(int amount = 1)
+		{
+			currentObjectiveCount += amount;
+			GD.Print("Objective is now " + currentObjectiveCount);
+		}
 
 		/*
 		Ranking system
@@ -119,11 +143,18 @@ namespace Project.Gameplay
 		#region Object Spawning
 		[Signal]
 		public delegate void OnRespawned();
+		private const string RESPAWN_FUNCTION = "Respawn";
 
-		public void RegisterRespawnableObject(Node o, string respawnFunctionName)
+		public void RegisterRespawnableObject(Node o)
 		{
-			if (IsConnected(nameof(OnRespawned), o, respawnFunctionName)) return;
-			Connect(nameof(OnRespawned), o, respawnFunctionName);
+			if (!o.HasMethod(RESPAWN_FUNCTION))
+			{
+				GD.PrintErr($"Node {o.Name} doesn't have a function 'Respawn!'");
+				return;
+			}
+
+			if (IsConnected(nameof(OnRespawned), o, RESPAWN_FUNCTION)) return;
+			Connect(nameof(OnRespawned), o, RESPAWN_FUNCTION);
 		}
 
 		public void RespawnObjects()

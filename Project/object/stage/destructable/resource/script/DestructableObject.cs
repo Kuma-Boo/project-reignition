@@ -4,6 +4,9 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
+	/// <summary>
+	/// Object that shatters when destroyed
+	/// </summary>
 	public class DestructableObject : RespawnableObject
 	{
 		[Export]
@@ -25,10 +28,21 @@ namespace Project.Gameplay
 
 		private readonly Array<RigidBody> _pieces = new Array<RigidBody>();
 		private readonly Array<Transform> _piecesOriginTransforms = new Array<Transform>();
-		private Tween pieceCleanupTweener;
 
+		[Export]
+		public ShatterType shatterType;
+		public enum ShatterType
+		{
+			Disabled,
+			OnTouch,
+			OnAttack
+		}
+		[Export]
+		public int maxHealth; //How much health does this object have?
+		private int health;
+		
 		[Signal]
-		public delegate void OnShattered();
+		public delegate void Shattered();
 
 		[Export]
 		public float explosionForce;
@@ -66,16 +80,15 @@ namespace Project.Gameplay
 			if (((Node)this) is RigidBody)
 				rb = ((Node)this) as RigidBody;
 
-			pieceCleanupTweener = new Tween();
-			AddChild(pieceCleanupTweener);
-
+			health = maxHealth;
 			base.SetUp();
 		}
 
-		public override void Spawn()
+		public override void Respawn()
 		{
-			base.Spawn();
+			base.Respawn();
 
+			health = maxHealth;
 			wasShattered = false;
 			_originalMesh.Visible = true;
 
@@ -123,13 +136,15 @@ namespace Project.Gameplay
 				_pieces[i].Sleeping = false;
 			}
 
+			SceneTreeTween tween = CreateTween();
 			if (UseOverrideMaterial)
-				pieceCleanupTweener.InterpolateProperty(overrideMaterial, "albedo_color", Colors.White, Colors.Transparent, 2f, Tween.TransitionType.Expo, Tween.EaseType.In);
+			{
+				overrideMaterial.Set("albedo_color", Colors.White);
+				tween.TweenProperty(overrideMaterial, "albedo_color", Colors.Transparent, 2f).SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
+			}
+			tween.TweenCallback(this, nameof(DisablePieces)).SetDelay(3f);
 
-			pieceCleanupTweener.InterpolateCallback(this, 3f, nameof(DisablePieces));
-			pieceCleanupTweener.Start();
-
-			EmitSignal(nameof(OnShattered));
+			EmitSignal(nameof(Shattered));
 		}
 
 		public override void _ExitTree()
@@ -140,7 +155,14 @@ namespace Project.Gameplay
 
 		public override void OnEntered(Area a)
 		{
-			Shatter(a.GlobalTranslation);
+			if(a.IsInGroup("player"))
+			{
+				if (CharacterController.instance.IsAttacking)
+					health--;
+			}
+			
+			if(health <= 0)
+				Shatter(a.GlobalTranslation);
 		}
 	}
 }

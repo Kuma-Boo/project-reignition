@@ -7,34 +7,35 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath buttonAnimator;
 		private AnimationPlayer _buttonAnimator;
-		[Export]
-		public NodePath eventTrigger;
-		public Triggers.EventTrigger _eventTrigger;
+
+		[Signal]
+		public delegate void Activated();
 
 		private bool isActive;
 
 		public override void SetUp()
 		{
 			_buttonAnimator = GetNode<AnimationPlayer>(buttonAnimator);
-			_eventTrigger = GetNode<Triggers.EventTrigger>(eventTrigger);
 
-			StageSettings.instance.RegisterRespawnableObject(this, nameof(Spawn));
-			Spawn();
+			StageSettings.instance.RegisterRespawnableObject(this);
+			Respawn();
 		}
 
-		public override void Spawn()
+		public override void Respawn()
 		{
 			isActive = false;
 			_buttonAnimator.Play("RESET");
 		}
 
-		public override void OnEntered(Area _)
+		public override void OnEntered(Area _) => Activate();
+
+		public void Activate()
 		{
 			if (isActive) return;
 
 			isActive = true;
 			_buttonAnimator.Play("activate");
-			_eventTrigger.Activate();
+			EmitSignal(nameof(Activated));
 		}
 	}
 }

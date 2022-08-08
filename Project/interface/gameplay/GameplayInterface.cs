@@ -56,7 +56,7 @@ namespace Project.Gameplay
 
 			//TODO set ring count based on skills
 
-			bool limitRingCount = StageSettings.instance.missionType == StageSettings.MissionType.Rings;
+			bool limitRingCount = StageSettings.instance.missionType == StageSettings.MissionType.Ring;
 			_maxRingLabel.Visible = _ringDividerSprite.Visible = limitRingCount;
 
 			if (limitRingCount)
@@ -73,6 +73,8 @@ namespace Project.Gameplay
 				_ringAnimator.Play("Ringless");
 		}
 
+		[Signal]
+		public delegate void RingCountChanged();
 		public void CollectRing(int amount)
 		{
 			//Play animation
@@ -85,6 +87,8 @@ namespace Project.Gameplay
 			RingCount += amount;
 			RingCount = Mathf.Clamp(RingCount, 0, maxRingCount);
 			_ringLabel.Text = RingCount.ToString("000");
+
+			EmitSignal(nameof(RingCountChanged));
 		}
 
 		public void LoseRings(int amount)
@@ -182,25 +186,34 @@ namespace Project.Gameplay
 
 		#region Homing Attack Reticle
 		[Export]
-		public NodePath homingReticle;
-		private Node2D _homingReticle;
+		public NodePath lockonReticle;
+		private Node2D _lockonReticle;
 		[Export]
-		public NodePath homingAnimator;
-		private AnimationPlayer _homingAnimator;
+		public NodePath lockonAnimator;
+		private AnimationPlayer _lockonAnimator;
+		[Export]
+		public Material lockonFlashMaterial;
 
 		private void InitializeHomingAttack()
 		{
-			_homingReticle = GetNode<Node2D>(homingReticle);
-			_homingAnimator = GetNode<AnimationPlayer>(homingAnimator);
+			_lockonReticle = GetNode<Node2D>(lockonReticle);
+			_lockonAnimator = GetNode<AnimationPlayer>(lockonAnimator);
 		}
 
-		public void DisableHomingReticle() => _homingAnimator.Play("disable");
+		public void DisableLockonReticle() => _lockonAnimator.Play("disable");
 
-		public void UpdateHomingReticle(Vector2 screenPosition, bool newTarget)
+		public void UpdateLockonReticle(Vector2 screenPosition, bool newTarget)
 		{
-			_homingReticle.SetDeferred("position", screenPosition);
+			_lockonReticle.SetDeferred("position", screenPosition);
 			if (newTarget)
-				_homingAnimator.Play("enable");
+				_lockonAnimator.Play("enable");
+		}
+
+		public void PerfectHomingAttack()
+		{
+			SceneTreeTween t = CreateTween();
+			t.TweenProperty(lockonFlashMaterial, "shader_param/flash_amount", 1f, .05f);
+			t.TweenProperty(lockonFlashMaterial, "shader_param/flash_amount", 0f, .1f);
 		}
 		#endregion
 

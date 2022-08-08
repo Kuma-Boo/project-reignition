@@ -30,11 +30,11 @@ namespace Project.Gameplay
 			if (!IsRespawnable()) return;
 
 			spawnData.UpdateSpawnData(this);
-			StageSettings.instance.RegisterRespawnableObject(this, nameof(Spawn));
-			Spawn();
+			StageSettings.instance.RegisterRespawnableObject(this);
+			Respawn();
 		}
 
-		public virtual void Spawn()
+		public virtual void Respawn()
 		{
 			if (IsInsideTree()) return;
 

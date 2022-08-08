@@ -13,7 +13,8 @@ namespace Project.Gameplay
 
 		#region Path Data
 		public bool isPathMovingForward = true; //Set this to false to move backwards along the path (Useful for reverse acts)
-		public int PathTravelDirection => isPathMovingForward ? 1 : -1;
+		public int PathTravelDirection => 1; //TODO implement reverse paths later
+		public Vector3 Xform(Vector3 v) => GlobalTransform.basis.Xform(v);
 		public Vector3 MovementDirection => this.Forward() * PathTravelDirection;
 
 		public Path ActivePath { get; private set; }
@@ -32,7 +33,7 @@ namespace Project.Gameplay
 			pathFollowerOffset = 0;
 
 			newPath.AddChild(this);
-			ResyncPathFollower();
+			Resync();
 		}
 		#endregion
 		
@@ -77,7 +78,7 @@ namespace Project.Gameplay
 		//Position of player relative to PathFollower.
 		public Vector3 LocalPlayerPosition => GlobalTransform.basis.XformInv(_character.GlobalTranslation - GlobalTranslation);
 
-		public void ResyncPathFollower()
+		public void Resync()
 		{
 			if (!IsInsideTree()) return;
 			if (ActivePath == null || pathFollowerOffset != 0) return;
@@ -96,8 +97,6 @@ namespace Project.Gameplay
 			float comparisonOffset = ActivePath.Curve.GetClosestOffset(p);
 			return Mathf.Sign(Offset - comparisonOffset) * PathTravelDirection > 0;
 		}
-
-		public Vector3 Xform(Vector3 v) => isPathMovingForward ? GlobalTransform.basis.Xform(v) : GlobalTransform.basis.XformInv(v);
 		#endregion
 	}
 }

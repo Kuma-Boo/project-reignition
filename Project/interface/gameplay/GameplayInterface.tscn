@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://effect/shader/screen/Timebreak.shader" type="Shader" id=1]
 [ext_resource path="res://interface/gameplay/pause/PauseMenu.cs" type="Script" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://interface/gameplay/hud/soul gauge/orange/fill/AnimatedTexture.tres" type="Texture" id=14]
 [ext_resource path="res://interface/gameplay/countdown/Countdown.png" type="Texture" id=15]
 [ext_resource path="res://interface/gameplay/countdown/Sparkle.png" type="Texture" id=16]
+[ext_resource path="res://interface/gameplay/hud/LockonFlash.tres" type="Material" id=17]
 [ext_resource path="res://interface/gameplay/pause/PauseOptionFont.tres" type="DynamicFontData" id=18]
 [ext_resource path="res://interface/gameplay/pause/Flame.png" type="Texture" id=19]
 [ext_resource path="res://interface/gameplay/pause/Paper.png" type="Texture" id=20]
@@ -828,7 +829,7 @@ tracks/4/keys = {
 [sub_resource type="Animation" id=77]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
+tracks/0/path = NodePath("Fade:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -837,161 +838,55 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0 ) ]
+"values": [ Vector2( 1.25, 1.25 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("Fade:scale")
+tracks/1/path = NodePath("Fade:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 1.25, 1.25 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Fade:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0.588235 ) ]
 }
-tracks/3/type = "value"
-tracks/3/path = NodePath("Surround:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 1.25, 1.25 ) ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Reticle:scale")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 1.3, 1.3 ) ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("Reticle:rotation_degrees")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0.0 ]
-}
-tracks/6/type = "value"
-tracks/6/path = NodePath("Surround:rotation_degrees")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0.0 ]
-}
-
-[sub_resource type="Animation" id=78]
-resource_name = "disable"
-length = 0.2
-step = 0.0833333
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.166667 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=79]
-resource_name = "enable"
-length = 0.166667
-step = 0.0833333
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Fade:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.166667 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector2( 1.25, 1.25 ), Vector2( 2, 2 ) ]
-}
 tracks/2/type = "value"
-tracks/2/path = NodePath("Fade:modulate")
+tracks/2/path = NodePath("Surround:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.166667 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0.588235 ), Color( 1, 1, 1, 0 ) ]
+"values": [ Vector2( 1.25, 1.25 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("Surround:scale")
+tracks/3/path = NodePath("Reticle:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 0.166667 ),
-"transitions": PoolRealArray( 1.5, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 1.3, 1.3 ), Vector2( 1, 1 ) ]
+"values": [ Vector2( 1.3, 1.3 ) ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("Reticle:scale")
+tracks/4/path = NodePath("Reticle:rotation_degrees")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.166667 ),
-"transitions": PoolRealArray( 1.5, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 1.3, 1.3 ), Vector2( 1, 1 ) ]
+"values": [ 0.0 ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("Surround:rotation_degrees")
@@ -1006,19 +901,257 @@ tracks/5/keys = {
 "values": [ 0.0 ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("Reticle:rotation_degrees")
+tracks/6/path = NodePath(".:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.166667 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ -60.0, 0.0 ]
+"values": [ false ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("PerfectHomingAttack/1:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -16, -16 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("PerfectHomingAttack/2:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -16, 16 ) ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("PerfectHomingAttack/3:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 16, -16 ) ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("PerfectHomingAttack/4:position")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 16, 16 ) ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("PerfectHomingAttack:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("PerfectHomingAttack:scale")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=80]
+[sub_resource type="Animation" id=78]
+resource_name = "disable"
+length = 0.2
+step = 0.0833333
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=79]
+resource_name = "enable"
+length = 0.8
+step = 0.0666667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Fade:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.133333 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.25, 1.25 ), Vector2( 2, 2 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Fade:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.133333 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0.588235 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Surround:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.133333 ),
+"transitions": PoolRealArray( 1.5, 1 ),
+"update": 0,
+"values": [ Vector2( 1.3, 1.3 ), Vector2( 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Reticle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.133333 ),
+"transitions": PoolRealArray( 1.5, 1 ),
+"update": 0,
+"values": [ Vector2( 1.3, 1.3 ), Vector2( 1, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("PerfectHomingAttack/1:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.133333, 0.333333 ),
+"transitions": PoolRealArray( 1, 1.5, 1 ),
+"update": 0,
+"values": [ Vector2( -56, -56 ), Vector2( -56, -56 ), Vector2( -16, -16 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("PerfectHomingAttack/2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.133333, 0.333333 ),
+"transitions": PoolRealArray( 1, 1.5, 1 ),
+"update": 0,
+"values": [ Vector2( -56, 56 ), Vector2( -56, 56 ), Vector2( -16, 16 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("PerfectHomingAttack/3:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.133333, 0.333333 ),
+"transitions": PoolRealArray( 1, 1.5, 1 ),
+"update": 0,
+"values": [ Vector2( 56, -56 ), Vector2( 56, -56 ), Vector2( 16, -16 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("PerfectHomingAttack/4:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 0.133333, 0.333333 ),
+"transitions": PoolRealArray( 1, 1.5, 1 ),
+"update": 0,
+"values": [ Vector2( 56, 56 ), Vector2( 56, 56 ), Vector2( 16, 16 ) ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("PerfectHomingAttack:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0, 0.133333, 0.466667, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("PerfectHomingAttack:rotation_degrees")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 0.333333 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -180.0, 0.0 ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("PerfectHomingAttack:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0, 0.333333, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.8, 0.8 ), Vector2( 0.5, 0.5 ), Vector2( 0.8, 0.8 ) ]
+}
+
+[sub_resource type="Animation" id=83]
 resource_name = "loop"
 length = 4.0
 loop = true
@@ -1345,8 +1478,9 @@ ringAnimator = NodePath("HUD/RingCounter/CurrentRing/Animator")
 soulGauge = NodePath("HUD/SoulGauge/SoulGauge")
 soulGaugeFill = NodePath("HUD/SoulGauge/SoulGauge/Background/Fill")
 soulGaugeAnimator = NodePath("HUD/SoulGauge/Animator")
-homingReticle = NodePath("HUD/HomingAttackReticle")
-homingAnimator = NodePath("HUD/HomingAttackReticle/Animator")
+lockonReticle = NodePath("HUD/LockonReticle")
+lockonAnimator = NodePath("HUD/LockonReticle/LockonAnimator")
+lockonFlashMaterial = ExtResource( 17 )
 cameraTransition = NodePath("ScreenEffects/CameraTransition")
 cameraTransitionAnimator = NodePath("ScreenEffects/CameraTransition/Animator")
 
@@ -1855,8 +1989,9 @@ stream = ExtResource( 21 )
 volume_db = -3.0
 bus = "SFX"
 
-[node name="HomingAttackReticle" type="Sprite" parent="HUD"]
-modulate = Color( 1, 1, 1, 0 )
+[node name="LockonReticle" type="Sprite" parent="HUD"]
+visible = false
+scale = Vector2( 2, 2 )
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 21, 21 )
@@ -1864,67 +1999,73 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Surround" type="Sprite" parent="HUD/HomingAttackReticle"]
+[node name="Surround" type="Sprite" parent="HUD/LockonReticle"]
 modulate = Color( 1, 1, 1, 0.588235 )
 scale = Vector2( 1.25, 1.25 )
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 128, 0, 128, 128 )
 
-[node name="Reticle" type="Sprite" parent="HUD/HomingAttackReticle"]
+[node name="Reticle" type="Sprite" parent="HUD/LockonReticle"]
 scale = Vector2( 1.3, 1.3 )
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 15, 15, 98, 98 )
 
-[node name="Fade" type="Sprite" parent="HUD/HomingAttackReticle"]
+[node name="PerfectFlash" type="Sprite" parent="HUD/LockonReticle/Reticle"]
+material = ExtResource( 17 )
+z_index = 1
+texture = ExtResource( 31 )
+region_enabled = true
+region_rect = Rect2( 15, 15, 98, 98 )
+
+[node name="Fade" type="Sprite" parent="HUD/LockonReticle"]
 modulate = Color( 1, 1, 1, 0.588235 )
 scale = Vector2( 1.25, 1.25 )
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 128, 0, 128, 128 )
 
-[node name="PerfectHomingAttack" type="Node2D" parent="HUD/HomingAttackReticle"]
+[node name="PerfectHomingAttack" type="Node2D" parent="HUD/LockonReticle"]
+rotation = -3.14159
 
-[node name="1" type="Sprite" parent="HUD/HomingAttackReticle/PerfectHomingAttack"]
-modulate = Color( 1, 1, 1, 0.588235 )
-position = Vector2( -54, -54 )
+[node name="1" type="Sprite" parent="HUD/LockonReticle/PerfectHomingAttack"]
+position = Vector2( -16, -16 )
 rotation = 0.785398
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 23, 0, 42, 14 )
 
-[node name="2" type="Sprite" parent="HUD/HomingAttackReticle/PerfectHomingAttack"]
-modulate = Color( 1, 1, 1, 0.588235 )
-position = Vector2( -54, 54 )
+[node name="2" type="Sprite" parent="HUD/LockonReticle/PerfectHomingAttack"]
+position = Vector2( -16, 16 )
 rotation = 5.49779
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 23, 0, 42, 14 )
 
-[node name="3" type="Sprite" parent="HUD/HomingAttackReticle/PerfectHomingAttack"]
-modulate = Color( 1, 1, 1, 0.588235 )
-position = Vector2( 54, -54 )
+[node name="3" type="Sprite" parent="HUD/LockonReticle/PerfectHomingAttack"]
+position = Vector2( 16, -16 )
 rotation = 2.35619
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 23, 0, 42, 14 )
 
-[node name="4" type="Sprite" parent="HUD/HomingAttackReticle/PerfectHomingAttack"]
-modulate = Color( 1, 1, 1, 0.588235 )
-position = Vector2( 54, 54 )
+[node name="4" type="Sprite" parent="HUD/LockonReticle/PerfectHomingAttack"]
+position = Vector2( 16, 16 )
 rotation = 3.92699
 texture = ExtResource( 31 )
 region_enabled = true
 region_rect = Rect2( 23, 0, 42, 14 )
 
-[node name="Animator" type="AnimationPlayer" parent="HUD/HomingAttackReticle"]
+[node name="LockonAnimator" type="AnimationPlayer" parent="HUD/LockonReticle"]
 anims/RESET = SubResource( 77 )
 anims/disable = SubResource( 78 )
 anims/enable = SubResource( 79 )
-anims/loop = SubResource( 80 )
 next/enable = "loop"
-blend_times = [ "enable", "loop", 0.05 ]
+
+[node name="RotationAnimator" type="AnimationPlayer" parent="HUD/LockonReticle"]
+autoplay = "loop"
+anims/loop = SubResource( 83 )
 
 [node name="Pause" type="CanvasLayer" parent="."]
 layer = 64

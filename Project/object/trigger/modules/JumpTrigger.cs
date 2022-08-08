@@ -2,17 +2,28 @@ using Godot;
 
 namespace Project.Gameplay.Triggers
 {
+	/// <summary>
+	/// Force the player to jump to a point, specified by <see cref="targetNode"/> or <see cref="targetPosition"/>
+	/// </summary>
 	[Tool]
 	public class JumpTrigger : StageTriggerModule
 	{
 		[Export]
-		public NodePath targetNode;
+		public NodePath targetNode; //Leaving this empty will use targetPosition exclusively.
 		private Spatial _targetNode;
 		[Export]
-		public Vector3 targetPosition;
+		public Vector3 targetPosition; //Position to jump to. (Added to targetNode's position)
 		[Export]
-		public float peakHeight;
-		private Vector3 TargetPosition => _targetNode != null ? _targetNode.GlobalTranslation : targetPosition;
+		public float peakHeight; //How high to jump.
+
+		private Vector3 GetTargetPosition()
+		{
+			Vector3 returnPosition = targetPosition;
+			if (_targetNode != null)
+				returnPosition += _targetNode.GlobalTranslation;
+
+			return returnPosition;
+		}
 
 		public override void _EnterTree()
 		{
@@ -22,7 +33,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
-			Character.JumpTo(TargetPosition, peakHeight);
+			Character.JumpTo(GetTargetPosition(), peakHeight);
 			Character.CanJumpDash = false;
 		}
 
@@ -30,7 +41,7 @@ namespace Project.Gameplay.Triggers
 		{
 			if (targetNode != null)
 				_targetNode = GetNodeOrNull<Spatial>(targetNode);
-			return Launcher.CreateData(GlobalTranslation, TargetPosition, peakHeight);
+			return Launcher.CreateData(GlobalTranslation, GetTargetPosition(), peakHeight);
 		}
 	}
 }

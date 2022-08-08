@@ -10,6 +10,9 @@ namespace Project.Gameplay
 		public NodePath animator;
 		private AnimationPlayer _animator;
 
+		[Signal]
+		public delegate void Collected();
+
 		public override bool IsRespawnable() => true;
 
 		public override void SetUp()
@@ -21,15 +24,17 @@ namespace Project.Gameplay
 		public override void OnEntered(Area _)
 		{
 			GameplayInterface.instance.CollectRing(isRichRing ? 20 : 1);
-			SoundManager.instance.PlayRingSoundEffect(); //SFX are played separately to avoid volume increase when collecting multiple rings at once
+			SoundManager.instance.PlayRingSoundEffect(); //SFX are played externally to avoid multiple ring sounds at once
 
 			if (_animator != null && _animator.HasAnimation("Collect"))
 				_animator.Play("Collect");
 			else
 				Despawn();
+
+			EmitSignal(nameof(Collected));
 		}
 
-		public override void Spawn()
+		public override void Respawn()
 		{
 			if (_animator != null && _animator.HasAnimation("RESET"))
 			{

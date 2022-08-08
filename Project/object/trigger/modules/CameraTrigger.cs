@@ -1,8 +1,10 @@
-//Module for camera triggers. STAGE TRIGGER MODE MUST BE SET "DISABLE ON EXIT" TO FUNCTION PROPERLY.
 using Godot;
 
 namespace Project.Gameplay.Triggers
 {
+	/// <summary>
+	/// Activates a <see cref="CameraSettingsResource"/>.
+	/// </summary>
 	public class CameraTrigger : StageTriggerModule
 	{
 		[Export]
@@ -13,22 +15,25 @@ namespace Project.Gameplay.Triggers
 		public bool crossfade; //Only works properly if entryTransitionTime is 0
 
 		[Export]
-		public CameraSettingsResource cameraData; //Leave empty to make this a RESET trigger.
+		public CameraSettingsResource cameraData; //Must be assigned to something.
 		[Export]
-		public CameraSettingsResource previousData; //Leave empty to automatically assign
+		public CameraSettingsResource previousData; //Leave empty to automatically assign.
+		[Export]
+		public CameraTrigger blendTrigger; //Used for blending camera triggers together.
+		private CameraController Camera => Character.Camera;
 
 		public override void Activate()
 		{
 			if (previousData == null) //Cache settings on the first time
-				previousData = Character.Camera.targetSettings;
+				previousData = Camera.targetSettings;
 
-			Character.Camera.SetCameraData(cameraData, entryTransitionSpeed, crossfade);
+			Camera.SetCameraData(cameraData, entryTransitionSpeed, crossfade);
 		}
 
-		public override void Deactivate(bool isMovingForward)
+		public override void Deactivate()
 		{
-			if (Character.Camera.targetSettings != cameraData) return; //Already overriden by a differnt trigger
-			Character.Camera.SetCameraData(previousData, exitTransitionSpeed >= 0 ? exitTransitionSpeed : entryTransitionSpeed);
+			if (Camera.targetSettings != cameraData) return; //Already overriden by a different trigger
+			Camera.SetCameraData(previousData, exitTransitionSpeed >= 0 ? exitTransitionSpeed : entryTransitionSpeed);
 		}
 	}
 }
