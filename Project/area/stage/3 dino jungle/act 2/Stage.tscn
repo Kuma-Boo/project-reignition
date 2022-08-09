@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://area/stage/3 dino jungle/data/models/skybox/DJSky.gltf" type="PackedScene" id=1]
 [ext_resource path="res://area/stage/3 dino jungle/data/models/environment/DJAct2.gltf" type="PackedScene" id=2]
@@ -42,6 +42,36 @@
 [ext_resource path="res://area/stage/3 dino jungle/act 2/data/camera/CAM_Cavern.tres" type="Resource" id=40]
 [ext_resource path="res://area/stage/3 dino jungle/act 2/data/camera/CAM_SpringTurn.tres" type="Resource" id=41]
 [ext_resource path="res://area/stage/3 dino jungle/data/models/WorldEnvironment.tres" type="Environment" id=42]
+[ext_resource path="res://addons/object_generator/ObjectGenerator.cs" type="Script" id=43]
+[ext_resource path="res://object/stage/pickups/Ring.tscn" type="PackedScene" id=44]
+[ext_resource path="res://area/stage/3 dino jungle/object/enemy/RedMajin.tscn" type="PackedScene" id=45]
+[ext_resource path="res://object/stage/pickups/Pearl.tscn" type="PackedScene" id=46]
+
+[sub_resource type="Curve" id=68]
+max_value = 0.5
+_data = [ Vector2( 0, 0.5 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=71]
+min_value = -1.25
+max_value = 0.0
+_data = [ Vector2( 0, -1.25 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=70]
+min_value = -0.5
+max_value = 0.0
+_data = [ Vector2( 0, -0.5 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=72]
+
+[sub_resource type="Curve" id=73]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=74]
+min_value = -1.0
+max_value = 0.0
+_data = [ Vector2( 0, -1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=69]
 
 [sub_resource type="BoxShape" id=23]
 extents = Vector3( 2, 20.701, 12.15 )
@@ -255,22 +285,257 @@ extents = Vector3( 226.34, 10, 274.67 )
 
 [node name="World" type="Node"]
 
-[node name="MajinEggAct" type="Spatial" parent="."]
-script = ExtResource( 5 )
-objectiveCount = 5
-
-[node name="MajinEgg" parent="MajinEggAct" instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008 )
-
-[node name="Common" type="Spatial" parent="."]
-
-[node name="StartingPosition" type="Spatial" parent="Common"]
-transform = Transform( 0.369204, 0, 0.929348, 0, 1, 0, -0.929348, 0, 0.369204, -31.762, -1.60001, -6.39001 )
+[node name="StartingPosition" type="Spatial" parent="."]
+transform = Transform( 0.369204, 0, 0.929348, 0, 1, 0, -0.929348, 0, 0.369204, -30.8267, -1.60001, -5.69455 )
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="CharacterSpawn" parent="Common/StartingPosition" instance=ExtResource( 12 )]
+[node name="CharacterSpawn" parent="StartingPosition" instance=ExtResource( 12 )]
+
+[node name="MajinEggAct" type="Spatial" parent="."]
+script = ExtResource( 5 )
+
+[node name="Start" type="Spatial" parent="MajinEggAct"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.385, 0, 4.639 )
+
+[node name="Rings1" type="Spatial" parent="MajinEggAct/Start"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.148, 0, -6.918 )
+script = ExtResource( 43 )
+targetScene = ExtResource( 44 )
+amount = 6
+type = 3
+spacing = 2.0
+path = NodePath("../../../Static/Paths/MainPath")
+pathHInterpolationCurve = SubResource( 68 )
+pathVInterpolationCurve = SubResource( 71 )
+
+[node name="Ring7" parent="MajinEggAct/Start/Rings1" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0621872, -1.25, -0.152366 )
+
+[node name="Ring8" parent="MajinEggAct/Start/Rings1" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92496, -1.25, 0.620561 )
+
+[node name="Ring9" parent="MajinEggAct/Start/Rings1" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.78051, -1.25, 1.40903 )
+
+[node name="Ring10" parent="MajinEggAct/Start/Rings1" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.61445, -1.25, 2.2111 )
+
+[node name="Ring11" parent="MajinEggAct/Start/Rings1" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45959, -1.25, 3.04657 )
+
+[node name="Ring12" parent="MajinEggAct/Start/Rings1" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2761, -1.25, 3.90424 )
+
+[node name="Rings2" type="Spatial" parent="MajinEggAct/Start"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.148, 0, -6.918 )
+script = ExtResource( 43 )
+targetScene = ExtResource( 44 )
+amount = 6
+type = 3
+spacing = 2.0
+path = NodePath("../../../Static/Paths/MainPath")
+pathHInterpolationCurve = SubResource( 70 )
+pathVInterpolationCurve = SubResource( 71 )
+
+[node name="Ring" parent="MajinEggAct/Start/Rings2" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.318012, -1.25, 0.772539 )
+
+[node name="Ring2" parent="MajinEggAct/Start/Rings2" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53768, -1.25, 1.54252 )
+
+[node name="Ring3" parent="MajinEggAct/Start/Rings2" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38445, -1.25, 2.32726 )
+
+[node name="Ring4" parent="MajinEggAct/Start/Rings2" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.20771, -1.25, 3.12464 )
+
+[node name="Ring5" parent="MajinEggAct/Start/Rings2" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.03962, -1.25, 3.95411 )
+
+[node name="Ring6" parent="MajinEggAct/Start/Rings2" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.84001, -1.25, 4.80414 )
+
+[node name="Pearl1" type="Spatial" parent="MajinEggAct/Start"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.559, 0, 3.321 )
+script = ExtResource( 43 )
+targetScene = ExtResource( 46 )
+amount = 10
+type = 3
+spacing = 1.0
+path = NodePath("../../../Static/Paths/MainPath")
+pathHInterpolationCurve = SubResource( 72 )
+pathVInterpolationCurve = SubResource( 71 )
+
+[node name="Pearl" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0502701, -1.25, 0.0527 )
+
+[node name="Pearl2" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.675014, -1.25, 0.747187 )
+
+[node name="Pearl3" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.37275, -1.25, 1.46957 )
+
+[node name="Pearl4" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04181, -1.25, 2.21629 )
+
+[node name="Pearl5" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.68718, -1.25, 2.99063 )
+
+[node name="Pearl6" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.30199, -1.25, 3.78143 )
+
+[node name="Pearl7" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.89188, -1.25, 4.59253 )
+
+[node name="Pearl8" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.45734, -1.25, 5.42148 )
+
+[node name="Pearl9" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.99957, -1.25, 6.2669 )
+
+[node name="Pearl10" parent="MajinEggAct/Start/Pearl1" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.51671, -1.25, 7.12213 )
+
+[node name="Pearl2" type="Spatial" parent="MajinEggAct/Start"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.559, 0, 3.321 )
+script = ExtResource( 43 )
+targetScene = ExtResource( 46 )
+amount = 10
+type = 3
+spacing = 1.0
+path = NodePath("../../../Static/Paths/MainPath")
+pathHInterpolationCurve = SubResource( 73 )
+pathVInterpolationCurve = SubResource( 71 )
+
+[node name="Pearl11" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.629749, -1.25, -0.680495 )
+
+[node name="Pearl12" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38349, -1.25, 0.0414524 )
+
+[node name="Pearl13" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10762, -1.25, 0.791363 )
+
+[node name="Pearl14" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.80088, -1.25, 1.56528 )
+
+[node name="Pearl15" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.46848, -1.25, 2.36647 )
+
+[node name="Pearl16" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1033, -1.25, 3.18318 )
+
+[node name="Pearl17" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.71127, -1.25, 4.01929 )
+
+[node name="Pearl18" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.29307, -1.25, 4.87234 )
+
+[node name="Pearl19" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8499, -1.25, 5.74065 )
+
+[node name="Pearl20" parent="MajinEggAct/Start/Pearl2" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.38015, -1.25, 6.61767 )
+
+[node name="Pearl3" type="Spatial" parent="MajinEggAct/Start"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.559, 0, 3.321 )
+script = ExtResource( 43 )
+targetScene = ExtResource( 46 )
+amount = 10
+type = 3
+spacing = 1.0
+path = NodePath("../../../Static/Paths/MainPath")
+pathHInterpolationCurve = SubResource( 74 )
+pathVInterpolationCurve = SubResource( 71 )
+
+[node name="Pearl" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.730289, -1.25, 0.785894 )
+
+[node name="Pearl2" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0334625, -1.25, 1.45292 )
+
+[node name="Pearl3" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.637882, -1.25, 2.14778 )
+
+[node name="Pearl4" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.28274, -1.25, 2.8673 )
+
+[node name="Pearl5" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90588, -1.25, 3.61478 )
+
+[node name="Pearl6" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.50068, -1.25, 4.37968 )
+
+[node name="Pearl7" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.07249, -1.25, 5.16576 )
+
+[node name="Pearl8" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6216, -1.25, 5.97061 )
+
+[node name="Pearl9" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.14924, -1.25, 6.79314 )
+
+[node name="Pearl10" parent="MajinEggAct/Start/Pearl3" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.65327, -1.25, 7.62659 )
+
+[node name="LotusGroup1" type="Spatial" parent="MajinEggAct"]
+
+[node name="Majin" parent="MajinEggAct/LotusGroup1" instance=ExtResource( 45 )]
+transform = Transform( -0.918218, 0, -0.396075, 0, 1, 0, 0.396075, 0, -0.918218, 23.1692, 4.45383, 65.2806 )
+collision_mask = 0
+spawnInstantly = true
+
+[node name="Majin2" parent="MajinEggAct/LotusGroup1" instance=ExtResource( 45 )]
+transform = Transform( -0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.999577, 24.3009, 3.57783, 82.5364 )
+collision_mask = 0
+spawnInstantly = true
+
+[node name="Majin3" parent="MajinEggAct/LotusGroup1" instance=ExtResource( 45 )]
+transform = Transform( -0.984806, 0, 0.173654, 0, 1, 0, -0.173654, 0, -0.984806, 20.8096, 2.51883, 99.0893 )
+collision_mask = 0
+spawnInstantly = true
+
+[node name="Rings" type="Spatial" parent="MajinEggAct/LotusGroup1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008 )
+script = ExtResource( 43 )
+targetScene = ExtResource( 44 )
+amount = 8
+type = 1
+spacing = 3.0
+path = NodePath("")
+pathHInterpolationCurve = SubResource( 68 )
+pathVInterpolationCurve = SubResource( 69 )
+
+[node name="Ring" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3 )
+
+[node name="Ring2" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12132, 0, -2.12132 )
+
+[node name="Ring3" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 1.31134e-07 )
+
+[node name="Ring4" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12132, 0, 2.12132 )
+
+[node name="Ring5" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.62268e-07, 0, 3 )
+
+[node name="Ring6" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.12132, 0, 2.12132 )
+
+[node name="Ring7" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -3.57746e-08 )
+
+[node name="Ring8" parent="MajinEggAct/LotusGroup1/Rings" instance=ExtResource( 44 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.12132, 0, -2.12132 )
+
+[node name="MajinEgg" parent="MajinEggAct/LotusGroup1" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008 )
+
+[node name="Common" type="Spatial" parent="."]
 
 [node name="Objects" type="Spatial" parent="Common"]
 
@@ -578,7 +843,7 @@ transform = Transform( 1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 40.7799, 
 [node name="Triggers" type="Spatial" parent="Common"]
 
 [node name="Start" parent="Common/Triggers" instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.762, -1.60001, -6.39001 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -30.845, -1.60001, -5.63301 )
 
 [node name="Path" type="Spatial" parent="Common/Triggers/Start"]
 script = ExtResource( 11 )
@@ -874,7 +1139,7 @@ shape = SubResource( 19 )
 
 [node name="BGM" parent="." instance=ExtResource( 4 )]
 
-[connection signal="Shattered" from="MajinEggAct/MajinEgg" to="MajinEggAct" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/LotusGroup1/MajinEgg" to="MajinEggAct" method="IncrementObjective"]
 [connection signal="Activated" from="Common/Objects/LotusGroup1/CactusPlatform/Spring" to="Common/Objects/LotusGroup1/CactusPlatform/Spring/Camera" method="Activate"]
 [connection signal="Activated" from="Common/Objects/BoatSection2/Start1" to="Common/Objects/BoatSection2/BoatWall1Cull" method="ActivateNode"]
 [connection signal="Activated" from="Common/Objects/BoatSection2/Start1" to="Common/Objects/BoatSection2/BoatWall2Cull" method="DeactivateNode"]

@@ -41,7 +41,6 @@ namespace Project.Core
 			debugTurbo.Update(Input.IsKeyPressed((int)KeyList.Tab));
 		}
 
-		/*
 		public override void _Input(InputEvent e) //For Controller/Keyboard hotswitching
 		{
 			if (e is InputEventJoypadButton && !controller.IsUsingGamepad)
@@ -51,7 +50,6 @@ namespace Project.Core
 
 			e.Dispose();
 		}
-		*/
 
 		public static void DefaultControls()
 		{

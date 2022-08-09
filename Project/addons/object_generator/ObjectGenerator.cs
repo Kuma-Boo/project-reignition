@@ -19,8 +19,9 @@ namespace Project.Editor
 		public GenerationType type;
 		public enum GenerationType
 		{
-			Ring, //Spawns around a ring
-			Line, //Spawn linearly
+			RingVertical, //Spawns around a ring
+			RingFlat, //Spawns around a ring
+ 			Line, //Spawn linearly
 			Path //Spawn linearly along a path
 		}
 
@@ -31,9 +32,9 @@ namespace Project.Editor
 		[Export]
 		public NodePath path;
 		[Export]
-		public Curve pathHInterpolationCurve = new Curve();
+		public Curve pathHInterpolationCurve;
 		[Export]
-		public Curve pathVInterpolationCurve = new Curve();
+		public Curve pathVInterpolationCurve;
 
 		public override void _Process(float _)
 		{
@@ -48,16 +49,28 @@ namespace Project.Editor
 
 				switch (type)
 				{
-					case GenerationType.Ring:
+					case GenerationType.RingVertical:
 						if (amount == 1)
 						{
-							Spawn(Vector3.Zero); //Just spawn a lone pearl
+							Spawn(Vector3.Zero);
 							break;
 						}
 
-						float interval = (Mathf.Tau * ringRatio) / (ringRatio == 1 ? amount : amount - 1);
+						float interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
 						for (int i = 0; i < amount; i++)
 							Spawn(Vector3.Left.Rotated(Vector3.Forward, (interval * i)).Normalized() * spacing);
+
+						break;
+					case GenerationType.RingFlat:
+						if (amount == 1)
+						{
+							Spawn(Vector3.Zero);
+							break;
+						}
+
+						interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
+						for (int i = 0; i < amount; i++)
+							Spawn(Vector3.Forward.Rotated(Vector3.Up, (interval * i)).Normalized() * spacing);
 
 						break;
 					case GenerationType.Line:

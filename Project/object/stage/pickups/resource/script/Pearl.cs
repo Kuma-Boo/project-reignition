@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay
@@ -12,13 +13,16 @@ namespace Project.Gameplay
 
 		private bool isCollected;
 		private bool isReparenting;
-		private Tween tween;
+		private Tween tweener;
 
-		public override bool IsRespawnable() => true;
-		public override void SetUp()
+		protected override bool IsRespawnable() => true;
+		protected override void SetUp()
 		{
 			base.SetUp();
-			GetNode<CollisionShape>(collider).Shape = isRichPearl ? StageSettings.instance.RichPearlCollisionShape : StageSettings.instance.PearlCollisionShape;
+			GetNode<CollisionShape>(collider).Shape = isRichPearl ? StageSettings.RichPearlCollisionShape : StageSettings.PearlCollisionShape;
+
+			tweener = new Tween();
+			AddChild(tweener);
 		}
 
 		public override void _Process(float _)
@@ -29,11 +33,15 @@ namespace Project.Gameplay
 
 		public override void Respawn()
 		{
-			base.Respawn();
+			ResetTweener();
 			isCollected = false;
+			
+			base.Respawn();
 		}
 
-		public override void OnEntered(Area _)
+		private void ResetTweener() => tweener.StopAll(); //Unreference tweener
+
+		private void OnEntered(Area _)
 		{
 			if (isCollected) return;
 			isReparenting = true;
@@ -46,27 +54,16 @@ namespace Project.Gameplay
 			GetParent().RemoveChild(this);
 			Character.AddChild(this);
 			GlobalTransform = t;
-
-			if (tween == null)
-			{
-				tween = new Tween()
-				{
-					PlaybackProcessMode = Tween.TweenProcessMode.Physics
-				};
-				AddChild(tween);
-			}
-			else
-				tween.StopAll();
-
+			
 			SoundManager.instance.PlayPearlSoundEffect();
 
 			//Collection tween
-			int travelDirection = StageSettings.instance.randomNumberGenerator.RandiRange(-1, 1);
+			int travelDirection = StageSettings.randomNumberGenerator.RandiRange(-1, 1);
 			bool reverseDirection = Mathf.Sign(Character.Forward().Dot(Transform.origin)) < 0; //True when collecting a pearl behind us
 			if (travelDirection == 0)
 			{
-				tween.InterpolateProperty(this, "translation", Transform.origin, new Vector3(0, .5f, (reverseDirection ? -1 : 1) * .8f), .2f, Tween.TransitionType.Sine, Tween.EaseType.InOut);
-				tween.InterpolateProperty(this, "scale", Vector3.One, Vector3.Zero, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
+				tweener.InterpolateProperty(this, "translation", Vector3.Zero, new Vector3(0, .5f, (reverseDirection ? -1 : 1) * .8f), .2f, Tween.TransitionType.Sine, Tween.EaseType.InOut);
+				tweener.InterpolateProperty(this, "scale", Vector3.One, Vector3.Zero, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
 			}
 			else
 			{
@@ -80,17 +77,17 @@ namespace Project.Gameplay
 					midPoint.z *= -1;
 				}
 
-				tween.InterpolateProperty(this, "translation:y", Transform.origin.y, endPoint.y, .2f);
-				tween.InterpolateProperty(this, "translation:x", Transform.origin.x, midPoint.x, .2f, Tween.TransitionType.Sine, Tween.EaseType.Out);
-				tween.InterpolateProperty(this, "translation:z", Transform.origin.z, midPoint.z, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
-				tween.InterpolateProperty(this, "translation:x", midPoint.x, endPoint.x, .2f, Tween.TransitionType.Sine, Tween.EaseType.In, .2f);
-				tween.InterpolateProperty(this, "translation:z", midPoint.z, endPoint.z, .2f, Tween.TransitionType.Sine, Tween.EaseType.Out, .2f);
-				tween.InterpolateProperty(this, "scale", Vector3.One, Vector3.One * .6f, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
+				tweener.InterpolateProperty(this, "translation:y", Transform.origin.y, endPoint.y, .2f);
+				tweener.InterpolateProperty(this, "translation:x", Transform.origin.x, midPoint.x, .2f, Tween.TransitionType.Sine, Tween.EaseType.Out);
+				tweener.InterpolateProperty(this, "translation:z", Transform.origin.z, midPoint.z, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
+				tweener.InterpolateProperty(this, "translation:x", midPoint.x, endPoint.x, .2f, Tween.TransitionType.Sine, Tween.EaseType.In, .2f);
+				tweener.InterpolateProperty(this, "translation:z", midPoint.z, endPoint.z, .2f, Tween.TransitionType.Sine, Tween.EaseType.Out, .2f);
+				tweener.InterpolateProperty(this, "scale", Vector3.One, Vector3.One * .6f, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
 			}
 
-			tween.InterpolateCallback(GameplayInterface.instance, .1f, nameof(GameplayInterface.instance.ModifySoulGauge), isRichPearl ? 20 : 1);
-			tween.InterpolateCallback(this, .3f, nameof(Despawn));
-			tween.Start();
+			tweener.InterpolateCallback(HeadsUpDisplay.instance, .1f, nameof(HeadsUpDisplay.instance.ModifySoulGauge), isRichPearl ? 20 : 1);
+			tweener.InterpolateCallback(this, .3f, nameof(Despawn));
+			tweener.Start();
 
 			isReparenting = false;
 			isCollected = true;

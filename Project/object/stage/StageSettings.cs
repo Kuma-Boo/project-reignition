@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay
@@ -35,15 +34,16 @@ namespace Project.Gameplay
 
 		private void SetUpMission()
 		{
+			/*
 			switch (missionType)
 			{
 				case MissionType.Ring:
-					GD.Print(GameplayInterface.instance);
 					break;
 				case MissionType.Enemy:
 					Array rings = GetTree().GetNodesInGroup("enemy");
 					break;
 			}
+			*/
 		}
 
 		public void IncrementObjective(int amount = 1)
@@ -111,9 +111,9 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		public SphereShape PearlCollisionShape { get; private set; }
-		public SphereShape RichPearlCollisionShape { get; private set; }
-		public RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+		public static SphereShape PearlCollisionShape = new SphereShape();
+		public static SphereShape RichPearlCollisionShape = new SphereShape();
+		public static RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
 
 		private const float PEARL_NORMAL_COLLISION = .4f;
 		private const float RICH_PEARL_NORMAL_COLLISION = .6f;
@@ -124,15 +124,8 @@ namespace Project.Gameplay
 		private void SetUpSkills()
 		{
 			//TODO Expand hitbox if skills is equipped
-			PearlCollisionShape = new SphereShape()
-			{
-				Radius = PEARL_NORMAL_COLLISION
-			};
-			RichPearlCollisionShape = new SphereShape()
-			{
-				Radius = RICH_PEARL_NORMAL_COLLISION
-			};
-
+			PearlCollisionShape.Radius = PEARL_NORMAL_COLLISION;
+			RichPearlCollisionShape.Radius = RICH_PEARL_NORMAL_COLLISION;
 			if (SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.PearlAttractor))
 			{
 				PearlCollisionShape.Radius *= PEARL_ATTRACTOR_MULTIPLIER;
@@ -142,25 +135,36 @@ namespace Project.Gameplay
 
 		#region Object Spawning
 		[Signal]
-		public delegate void OnRespawned();
+		public delegate void Respawned();
+		[Signal]
+		public delegate void StageUnload();
 		private const string RESPAWN_FUNCTION = "Respawn";
 
-		public void RegisterRespawnableObject(Node o)
+		public void RegisterRespawnableObject(Node node)
 		{
-			if (!o.HasMethod(RESPAWN_FUNCTION))
+			if (!IsConnected(nameof(StageUnload), node, "queue_free")) //Prevent memory leaks
+				Connect(nameof(StageUnload), node, "queue_free");
+
+			if (!node.HasMethod(RESPAWN_FUNCTION))
 			{
-				GD.PrintErr($"Node {o.Name} doesn't have a function 'Respawn!'");
+				GD.PrintErr($"Node {node.Name} doesn't have a function 'Respawn!'");
 				return;
 			}
 
-			if (IsConnected(nameof(OnRespawned), o, RESPAWN_FUNCTION)) return;
-			Connect(nameof(OnRespawned), o, RESPAWN_FUNCTION);
+			if (!IsConnected(nameof(Respawned), node, RESPAWN_FUNCTION))
+				Connect(nameof(Respawned), node, RESPAWN_FUNCTION);
 		}
 
 		public void RespawnObjects()
 		{
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
-			EmitSignal(nameof(OnRespawned));
+			EmitSignal(nameof(Respawned));
+		}
+
+		public override void _ExitTree()
+		{
+			EmitSignal(nameof(StageUnload));
+
 		}
 		#endregion
 	}

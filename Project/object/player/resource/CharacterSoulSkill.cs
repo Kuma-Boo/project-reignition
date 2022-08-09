@@ -55,7 +55,7 @@ namespace Project.Gameplay
 		public void UpdateSoulSkills()
 		{
 			if (CheatManager.InfiniteSoulGauge)
-				GameplayInterface.instance.ModifySoulGauge(300);
+				HeadsUpDisplay.instance.ModifySoulGauge(300);
 
 			UpdateTimeBreak();
 			UpdateSpeedBreak();
@@ -66,18 +66,18 @@ namespace Project.Gameplay
 			{
 				if (IsSpeedBreakActive)
 				{
-					GameplayInterface.instance.ModifySoulGauge(-1);
-					if (GameplayInterface.instance.IsSoulGaugeEmpty)
+					HeadsUpDisplay.instance.ModifySoulGauge(-1);
+					if (HeadsUpDisplay.instance.IsSoulGaugeEmpty)
 						ToggleSpeedBreak();
 				}
 				else
 				{
 					if (soulGaugeDrainTimer == 0)
 					{
-						GameplayInterface.instance.ModifySoulGauge(-1);
+						HeadsUpDisplay.instance.ModifySoulGauge(-1);
 						soulGaugeDrainTimer = TIME_BREAK_SOUL_DRAIN_INTERVAL;
 
-						if (GameplayInterface.instance.IsSoulGaugeEmpty)
+						if (HeadsUpDisplay.instance.IsSoulGaugeEmpty)
 							ToggleTimeBreak();
 					}
 					soulGaugeDrainTimer--;
@@ -97,7 +97,7 @@ namespace Project.Gameplay
 					return;
 				}
 
-				if (!GameplayInterface.instance.IsSoulGaugeCharged) return;
+				if (!HeadsUpDisplay.instance.IsSoulGaugeCharged) return;
 
 				ToggleTimeBreak();
 			}
@@ -115,7 +115,7 @@ namespace Project.Gameplay
 					return;
 				}
 
-				if (!GameplayInterface.instance.IsSoulGaugeCharged) return;
+				if (!HeadsUpDisplay.instance.IsSoulGaugeCharged) return;
 				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
 				if (!Character.IsOnGround) return;
 
@@ -152,7 +152,7 @@ namespace Project.Gameplay
 			{
 				breakTimer = BREAK_SKILLS_COOLDOWN;
 				BGMPlayer.instance.VolumeDb = 0f;
-				GameplayInterface.instance.UpdateSoulGaugeColor();
+				HeadsUpDisplay.instance.UpdateSoulGaugeColor();
 			}
 		}
 
@@ -168,7 +168,7 @@ namespace Project.Gameplay
 			else
 				Character.MoveSpeed = Character.moveSettings.speed;
 
-			GameplayInterface.instance.UpdateSoulGaugeColor();
+			HeadsUpDisplay.instance.UpdateSoulGaugeColor();
 		}
 	}
 }

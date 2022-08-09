@@ -49,7 +49,7 @@ namespace Project.Gameplay.Triggers
 				bonusObtained = true;
 
 				if (wasSuccessful)
-					GameplayInterface.instance.AddBonus(GameplayInterface.BonusTypes.Drift);
+					HeadsUpDisplay.instance.AddBonus(HeadsUpDisplay.BonusTypes.Drift);
 			}
 
 			Character.CancelMovementState(CharacterController.MovementStates.Drift);

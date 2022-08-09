@@ -26,7 +26,7 @@ namespace Project.Gameplay
 			IsHomingAttacking = true;
 
 			//TODO Check whether it's actually a perfect homing attack
-			GameplayInterface.instance.PerfectHomingAttack();
+			HeadsUpDisplay.instance.PerfectHomingAttack();
 		}
 
 		public void ProcessLockonTargets()
@@ -59,17 +59,24 @@ namespace Project.Gameplay
 
 			//Disable Homing Attack
 			if (LockonTarget == null && isLockedOn)
-				GameplayInterface.instance.DisableLockonReticle();
+				HeadsUpDisplay.instance.DisableLockonReticle();
 			else if (LockonTarget != null)
 			{
 				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(LockonTarget.GlobalTranslation);
-				GameplayInterface.instance.UpdateLockonReticle(screenPos, !isLockedOn);
+				HeadsUpDisplay.instance.UpdateLockonReticle(screenPos, !isLockedOn);
 			}
 		}
 
 		private bool IsTargetInvalid(Spatial t)
 		{
-			if (!activeTargets.Contains(t) || !t.IsVisibleInTree() || Character.IsBeingDamaged || IsBouncing)
+			if (!activeTargets.Contains(t) || !t.IsVisibleInTree() || Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing)
+				return true;
+
+			Vector3 castVector = t.GlobalTranslation - Character.GlobalTranslation;
+			RaycastHit h = this.CastRay(Character.GlobalTranslation, castVector, Character.environmentMask);
+			Debug.DrawRay(Character.GlobalTranslation, castVector, Colors.Magenta);
+
+			if (h && h.collidedObject != t)
 				return true;
 
 			return false;
@@ -82,7 +89,7 @@ namespace Project.Gameplay
 			if (LockonTarget != null) //Reset Active Target
 			{
 				LockonTarget = null;
-				GameplayInterface.instance.DisableLockonReticle();
+				HeadsUpDisplay.instance.DisableLockonReticle();
 			}
 		}
 

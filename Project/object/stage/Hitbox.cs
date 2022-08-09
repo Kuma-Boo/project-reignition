@@ -9,14 +9,7 @@ namespace Project.Gameplay
 
 		protected CharacterController Character => CharacterController.instance;
 
-		public void OnEntered(Area _)
-		{
-			Character.TakeDamage(this);
-		}
-
-		public void OnExited(Area _)
-		{
-			Character.CancelDamage(this);
-		}
+		public void OnEntered(Area _) => Character.TakeDamage(this);
+		public void OnExited(Area _) => Character.DequeueHitbox(this);
 	}
 }

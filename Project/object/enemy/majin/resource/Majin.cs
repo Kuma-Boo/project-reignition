@@ -3,6 +3,9 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
+	/// <summary>
+	/// Most common enemy type in Secret Rings.
+	/// </summary>
 	[Tool]
 	public class Majin : Enemy
 	{
@@ -17,8 +20,9 @@ namespace Project.Gameplay
 		private CollisionShape _lockonArea;
 
 		[Export]
-		public NodePath activationTrigger;
-		public Area _activationTrigger;
+		public bool spawnInstantly;
+		[Export]
+		public Vector3 launchDirection; //Direction to be launched in
 
 		[Export]
 		public AttackType attackType;
@@ -28,19 +32,18 @@ namespace Project.Gameplay
 			FireRotating,
 			FireStraight
 		}
+		[Export]
+		public bool isFireMajin;
 
 		[Export]
-		public Vector3 spawnOffset; //Where to come from
+		public Vector3 spawnOffset; //Where to come from (Based on local position in the editor)
 		private Vector3 targetPosition;
-		private Tween movementTween;
 
-		public override void SetUp()
+		protected override void SetUp()
 		{
 			if (Engine.EditorHint) return; //In Editor
 
 			targetPosition = GlobalTranslation;
-			spawnData.UpdateSpawnData(this);
-			spawnData.spawnTransform.origin = GlobalTranslation + spawnOffset;
 			StageSettings.instance.RegisterRespawnableObject(this);
 
 			_animationTree = GetNode<AnimationTree>(animationTree);
@@ -51,15 +54,7 @@ namespace Project.Gameplay
 
 			_lockonArea = GetNode<CollisionShape>(lockonArea);
 
-			if (!activationTrigger.IsEmpty())
-			{
-				_activationTrigger = GetNode<Area>(activationTrigger);
-				_activationTrigger.Connect("area_entered", this, nameof(Activate));
-			}
-
-			movementTween = new Tween();
-			AddChild(movementTween);
-
+			base.SetUp();
 			Respawn();
 		}
 
@@ -67,57 +62,65 @@ namespace Project.Gameplay
 		{
 			base.Respawn();
 
-			if (activationTrigger.IsEmpty()) //No activation trigger. Activate immediately.
+			if (isFireMajin) //Fire majins take 2 hits
+				currentHealth = 2;
+
+			//No activation trigger. Activate immediately.
+			if (spawnInstantly)
 				Activate();
 			else
 				Despawn(); //Start despawned
 		}
 
-		public override void OnEnter()
+		protected override void Defeat()
+		{
+			base.Defeat();
+
+			if (!launchDirection.IsEqualApprox(Vector3.Zero))
+			{
+				//Get knocked back
+				SceneTreeTween tween = CreateTween().SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
+				tween.TweenProperty(this, "global_transform:origin", GlobalTranslation + launchDirection, .5f);
+				tween.TweenCallback(this, nameof(Despawn)).SetDelay(.5f);
+			}
+			else
+				Despawn();
+
+		}
+
+		protected override void ProcessEnemy()
+		{
+			//Rotate to face player
+		}
+
+		protected override void Interact()
 		{
 			if (Character.IsAttacking)
 			{
-				Vector3 travelOffset = (_lockonArea.GlobalTranslation - Character.CenterPosition).Flatten().Normalized() * 10f * Character.MoveSpeed / Character.Lockon.homingAttackSpeed;
-				movementTween.InterpolateProperty(this, "global_transform:origin", GlobalTranslation, GlobalTranslation + travelOffset, .5f);
-				movementTween.InterpolateCallback(this, .5f, nameof(Despawn));
-				movementTween.Start();
-
-				_lockonArea.Disabled = true;
+				TakeDamage();
 				Character.Lockon.StartBounce();
-				EmitSignal(nameof(OnDefeated));
 			}
 			else
 				Character.TakeDamage(this);
 		}
 
-		public override void OnExit() => Character.CancelDamage(this);
-
-		public override void _PhysicsProcess(float _)
-		{
-			if (!IsInsideTree() || !Visible) return;
-
-			//Look at player
-		}
-
 		private void Activate()
 		{
-			if (spawnOffset.IsEqualApprox(Vector3.Zero))
+			if(!spawnInstantly)
 			{
-				//TODO Play vfx
-				_animationTree.Set("parameters/teleport/active", true);
-				_animationTree.Set("parameters/idle_seek/seek_position", 0f);
-			}
-			else
-			{
-				movementTween.InterpolateProperty(this, "global_transform:origin", spawnData.spawnTransform.origin, targetPosition, 1f, Tween.TransitionType.Sine, Tween.EaseType.Out);
-				movementTween.Start();
+				if (spawnOffset.IsEqualApprox(Vector3.Zero)) //Spawn in
+				{
+					//TODO Play vfx
+					_animationTree.Set("parameters/teleport/active", true);
+					_animationTree.Set("parameters/idle_seek/seek_position", 0f);
+				}
 			}
 
 			_hurtbox.Disabled = false;
 			_lockonArea.Disabled = false;
 		}
 
-		//Call this from an activation signal
+		//Overload activation method for using godot's built-in area trigger
 		private void Activate(Area _) => Activate();
 	}
 }

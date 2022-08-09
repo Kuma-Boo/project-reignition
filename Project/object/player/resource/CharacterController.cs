@@ -43,8 +43,8 @@ namespace Project.Gameplay
 
 			UpdatePhysics();
 			Animator.UpdateAnimation();
-			Camera.UpdateCamera();
 			Soul.UpdateSoulSkills();
+			Camera.UpdateCamera();
 		}
 
 		#region State Machine
@@ -194,6 +194,14 @@ namespace Project.Gameplay
 
 		#region Control Lockouts
 		private bool isCountdownActive;
+		public void CountdownStarted()
+		{
+			isCountdownActive = true;
+			Animator.Countdown();
+		}
+		public void CountdownCompleted() => isCountdownActive = false;
+
+
 		private bool isControlsLocked;
 		private float controlLockoutTimer;
 		public ControlLockoutResource ControlLockoutData { get; private set; }
@@ -228,17 +236,6 @@ namespace Project.Gameplay
 			controlLockoutTimer = Mathf.MoveToward(controlLockoutTimer, 0, PhysicsManager.physicsDelta);
 			if (controlLockoutTimer == 0)
 				ResetControlLockout();
-		}
-
-		public void OnCountdownStarted()
-		{
-			isCountdownActive = true;
-			Animator.Countdown();
-		}
-
-		public void OnCountdownCompleted()
-		{
-			isCountdownActive = false;
 		}
 		#endregion
 
@@ -288,7 +285,7 @@ namespace Project.Gameplay
 		#region Normal State
 		private void UpdateNormalState()
 		{
-			if (IsBeingDamaged) //Damage action overrides all other states
+			if (ActionState == ActionStates.Damaged) //Damage action overrides all other states
 			{
 				UpdateDamage();
 				return;
@@ -503,6 +500,16 @@ namespace Project.Gameplay
 
 		[Export]
 		public float landingBoost; //Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster.
+		private void CheckLandingBoost()
+		{
+			if (MovementState == MovementStates.Normal && ActionState != ActionStates.Damaged && GetMovementInputValue() > 0.5f)
+			{
+				//Landing boost when holding forward (See Sonic and the Black Knight)
+				if (MoveSpeed < landingBoost)
+					MoveSpeed = landingBoost;
+			}
+		}
+
 		private void LandOnGround()
 		{
 			IsOnGround = true;
@@ -515,15 +522,10 @@ namespace Project.Gameplay
 			isAccelerationJump = false;
 
 			landingTimer = 2;
-			ActionState = ActionStates.Normal;
 
-			if (MovementState == MovementStates.Normal && GetMovementInputValue() > 0.5f)
-			{
-				//Landing boost when holding forward (See Sonic and the Black Knight)
-				if (MoveSpeed < landingBoost)
-					MoveSpeed = landingBoost;
-			}
+			CheckLandingBoost();
 
+			ResetActionState();
 			Lockon.ResetLockonTarget();
 		}
 
@@ -630,6 +632,7 @@ namespace Project.Gameplay
 			{
 				MoveSpeed = jumpDashSpeed;
 				VerticalSpeed = jumpDashPower;
+				Animator.ResetLocalRotation();
 			}
 			else
 				Lockon.HomingAttack(); //Start Homing attack
@@ -685,6 +688,10 @@ namespace Project.Gameplay
 			StrafeSpeed = 0;
 			VerticalSpeed = 0;
 			actionBufferTimer = 0;
+
+			Lockon.ResetLockonTarget();
+			Lockon.IsMonitoring = false;
+
 			ActionState = ActionStates.Stomping;
 			Animator.Stomp();
 		}
@@ -747,7 +754,7 @@ namespace Project.Gameplay
 
 		#endregion
 
-		#region Damage
+		#region Damage & Invincibility
 		private bool IsInvincible => invincibliltyTimer != 0;
 		private float invincibliltyTimer;
 		private const float INVINCIBILITY_LENGTH = 5f;
@@ -758,53 +765,53 @@ namespace Project.Gameplay
 			{
 				invincibliltyTimer = Mathf.MoveToward(invincibliltyTimer, 0, PhysicsManager.physicsDelta);
 
-				if (!IsInvincible && queuedDamage.Count != 0)
-					TakeDamage(); //Do it again!
+				if (!IsInvincible && collidingHitboxCount.Count != 0) //Invincibility ran out while still touching a hurtbox
+					TakeDamage(); //Take Damage again
 			}
 		}
-
-		public bool IsBeingDamaged => ActionState == ActionStates.Damaged;
-		private readonly Array<Node> queuedDamage = new Array<Node>();
 
 		private void UpdateDamage()
 		{
 			if (IsOnGround)
-				ActionState = ActionStates.Normal;
+			{
+				ResetActionState();
+				return;
+			}
 
 			VerticalSpeed -= GRAVITY * PhysicsManager.physicsDelta;
 		}
 
-		public void TakeDamage(Node s = null)
+		private readonly Array<Node> collidingHitboxCount = new Array<Node>(); //Number of hitboxes that are colliding with the player
+		//called when a hitbox stops colliding with the player
+		public void DequeueHitbox(Node n)
 		{
-			if(IsInvincible && s != null)
-			{
-				queuedDamage.Add(s);
-				return;
-			}
+			if (collidingHitboxCount.Contains(n))
+				collidingHitboxCount.Remove(n);
+		}
+
+		public void TakeDamage(Node n = null)
+		{
+			if(n != null && !collidingHitboxCount.Contains(n))
+				collidingHitboxCount.Add(n);
 
 			if (MovementState == MovementStates.Normal)
 			{
-				//Bonk~
-				MoveSpeed = -4;
-				StrafeSpeed = 0;
-				VerticalSpeed = 8;
 				IsOnGround = false;
+				MoveSpeed = -4f;
+				StrafeSpeed = 0f;
+				VerticalSpeed = 4f;
 			}
-			else if(MovementState == MovementStates.Sidle)
+
+			ActionState = ActionStates.Damaged;
+
+			if (IsInvincible) return; //Don't take damage.
+			invincibliltyTimer = INVINCIBILITY_LENGTH;
+
+			if (MovementState == MovementStates.Sidle) //Start falling
 			{
 				sidleTimer = SIDLE_DAMAGE_LENGTH;
-				MoveSpeed = 0;
-				VerticalSpeed = 0;
+				MoveSpeed = VerticalSpeed = 0;
 			}
-
-			invincibliltyTimer = INVINCIBILITY_LENGTH;
-			ActionState = ActionStates.Damaged;
-		}
-
-		public void CancelDamage(Node n)
-		{
-			if (queuedDamage.Contains(n))
-				queuedDamage.Remove(n);
 		}
 
 		public void Kill()
@@ -828,7 +835,7 @@ namespace Project.Gameplay
 
 			PathFollower.pathFollowerOffset = 0f; //Reset excess offset
 			StageSettings.instance.RespawnObjects();
-			Camera.ResetFlag = true;
+			//Camera.ResetFlag = true;
 		}
 		#endregion
 
@@ -1019,7 +1026,7 @@ namespace Project.Gameplay
 		public void StartGrinding(GrindRail newRail, Vector3 railPosition)
 		{
 			if (IsGrindStepping)
-				GameplayInterface.instance.AddBonus(GameplayInterface.BonusTypes.GrindStep);
+				HeadsUpDisplay.instance.AddBonus(HeadsUpDisplay.BonusTypes.GrindStep);
 
 			IsGrindStepping = false;
 			ActionState = ActionStates.Normal;
@@ -1189,7 +1196,7 @@ namespace Project.Gameplay
 		private const float COLLISION_RADIUS = .4f;
 		private void UpdatePhysics()
 		{
-			UpdateTriggers();
+			Lockon.ProcessLockonTargets();
 			if (customPhysicsEnabled) return; //When physics are handled in the state machine
 
 			/*Movement method
@@ -1452,16 +1459,6 @@ namespace Project.Gameplay
 		//Returns the absolute dot product of a normal relative to an axis ignoring Y values.
 		private float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized()));
 
-		private readonly Array<RespawnableObject> activeTriggers = new Array<RespawnableObject>();
-		private void UpdateTriggers()
-		{
-			//Stage objects
-			for (int i = 0; i < activeTriggers.Count; i++)
-				activeTriggers[i].OnStay();
-
-			Lockon.ProcessLockonTargets();
-		}
-
 		public void OnObjectCollisionEnter(PhysicsBody body)
 		{
 			/*
@@ -1477,7 +1474,7 @@ namespace Project.Gameplay
 				{
 					GD.Print($"Crushed by {body.Name}");
 					AddCollisionExceptionWith(body); //Avoid clipping through the ground
-					TakeDamage();
+					TakeDamage(body);
 				}
 			}
 
@@ -1491,42 +1488,20 @@ namespace Project.Gameplay
 			{
 				GD.Print($"Stopped ignoring {body.Name}");
 				RemoveCollisionExceptionWith(body);
-				CancelDamage(body);
+				DequeueHitbox(body);
 			}
 		}
 
 		public void OnObjectTriggerEnter(Area area)
 		{
-			if((Node)area is RespawnableObject == false)
-			{
-				if (area.IsInGroup("railing"))
-					currentRailing = area;
-
-				return;
-			}
-
-			RespawnableObject target = (Node)area as RespawnableObject;
-			target.OnEnter();
-
-			if (!activeTriggers.Contains(target))
-				activeTriggers.Add(target);
+			if (area.IsInGroup("railing"))
+				currentRailing = area;
 		}
 
 		public void OnObjectTriggerExit(Area area)
 		{
-			if ((Node)area is RespawnableObject == false)
-			{
-				if (area.IsInGroup("railing"))
-					currentRailing = null;
-
-				return;
-			}
-
-			RespawnableObject target = (Node)area as RespawnableObject;
-			target.OnExit();
-
-			if (activeTriggers.Contains(target))
-				activeTriggers.Remove(target);
+			if (area.IsInGroup("railing"))
+				currentRailing = null;
 		}
 		#endregion
 	}

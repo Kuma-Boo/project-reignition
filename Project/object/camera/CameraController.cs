@@ -5,7 +5,6 @@ namespace Project.Gameplay
 {
 	public class CameraController : Spatial
 	{
-		private CharacterPathFollower PlayerPathFollower => Character.PathFollower;
 		[Export]
 		public NodePath calculationRoot;
 		private Spatial _calculationRoot; //Responsible for pitch rotation
@@ -23,12 +22,13 @@ namespace Project.Gameplay
 		private Camera _camera;
 
 		private CharacterController Character => CharacterController.instance;
+		private CharacterPathFollower PlayerPathFollower => Character.PathFollower;
 
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
 
 		public override void _Ready()
 		{
-			ResetFlag = true;
+			//ResetFlag = true;
 
 			_calculationRoot = GetNode<Spatial>(calculationRoot);
 			_calculationGimbal = GetNode<Spatial>(calculationGimbal);
@@ -38,6 +38,13 @@ namespace Project.Gameplay
 			_camera = GetNode<Camera>(camera);
 
 			Character.Camera = this;
+		}
+
+		public override void _ExitTree()
+		{
+			//Fix memory leak
+			currentSettings.Dispose();
+			previousSettings.Dispose();
 		}
 
 		public void UpdateCamera()
@@ -51,9 +58,6 @@ namespace Project.Gameplay
 		}
 
 		#region Settings
-		[Export]
-		public CameraSettingsResource backstepCameraSettings;
-
 		public CameraSettingsResource targetSettings; //End lerp here
 		private readonly CameraSettingsResource previousSettings = new CameraSettingsResource(); //Start lerping here
 		private readonly CameraSettingsResource currentSettings = new CameraSettingsResource(); //Apply transforms based on this
@@ -84,7 +88,7 @@ namespace Project.Gameplay
 				Image img = _calculationGimbal.GetViewport().GetTexture().GetData();
 				var tex = new ImageTexture();
 				tex.CreateFromImage(img);
-				GameplayInterface.instance.PlayCameraTransition(tex);
+				HeadsUpDisplay.instance.PlayCameraTransition(tex);
 			}
 		}
 
@@ -94,13 +98,6 @@ namespace Project.Gameplay
 		private void UpdateActiveSettings() //Calculate the active camera settings
 		{
 			if (targetSettings == null) return; //ERROR! No data set.
-
-			/*
-			UpdateBackstep();
-
-			if (IsBackStepping)
-				currentSettings = backstepCameraSettings;
-			*/
 
 			if (Mathf.IsZeroApprox(transitionSpeed))
 				ResetFlag = true;
@@ -114,21 +111,6 @@ namespace Project.Gameplay
 			currentSettings.distance = Mathf.Lerp(previousSettings.distance, targetSettings.distance, transitionTime);
 			currentSettings.height = Mathf.Lerp(previousSettings.height, targetSettings.height, transitionTime);
 			currentSettings.heightTrackingStrength = Mathf.Lerp(previousSettings.heightTrackingStrength, targetSettings.heightTrackingStrength, transitionTime);
-		}
-		#endregion
-
-		#region Backstep Camera
-		private float backstepTimer;
-		private bool IsBackStepping => backstepTimer >= BACKSTEP_CAMERA_DELAY;
-		private const float BACKSTEP_CAMERA_DELAY = .5f;
-
-		private void UpdateBackstep()
-		{
-			//Backstep camera
-			if (Character.MoveSpeed < 0)
-				backstepTimer = Mathf.MoveToward(backstepTimer, BACKSTEP_CAMERA_DELAY, PhysicsManager.physicsDelta);
-			else if (backstepTimer < BACKSTEP_CAMERA_DELAY || Character.MoveSpeed > 0)
-				backstepTimer = Mathf.MoveToward(backstepTimer, 0f, PhysicsManager.physicsDelta);
 		}
 		#endregion
 

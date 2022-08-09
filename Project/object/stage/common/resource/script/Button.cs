@@ -13,7 +13,7 @@ namespace Project.Gameplay
 
 		private bool isActive;
 
-		public override void SetUp()
+		protected override void SetUp()
 		{
 			_buttonAnimator = GetNode<AnimationPlayer>(buttonAnimator);
 
@@ -27,8 +27,7 @@ namespace Project.Gameplay
 			_buttonAnimator.Play("RESET");
 		}
 
-		public override void OnEntered(Area _) => Activate();
-
+		private void OnEntered(Area _) => Activate();
 		public void Activate()
 		{
 			if (isActive) return;

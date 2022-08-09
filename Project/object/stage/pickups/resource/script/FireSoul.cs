@@ -7,14 +7,14 @@ namespace Project.Gameplay
 		[Export]
 		public bool isCollected; //Determined by save data
 
-		public override bool IsRespawnable() => false;
-		public override void SetUp()
+		protected override bool IsRespawnable() => false;
+		protected override void SetUp()
 		{
 			if (isCollected)
 				Despawn();
 		}
 
-		public override void OnEntered(Area _)
+		private void OnEntered(Area _)
 		{
 			//TODO Write save data
 			//ActiveCharacter.AddScore(1000);

@@ -1,0 +1,143 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://object/enemy/majin/resource/Majin.cs" type="Script" id=1]
+[ext_resource path="res://object/enemy/majin/resource/majin charge.png" type="Texture" id=2]
+[ext_resource path="res://object/enemy/majin/resource/majin flame.png" type="Texture" id=3]
+
+[sub_resource type="CapsuleShape" id=21]
+height = 0.6
+
+[sub_resource type="SphereShape" id=2]
+radius = 0.6
+
+[sub_resource type="ParticlesMaterial" id=15]
+emission_shape = 5
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 1.5
+emission_ring_height = 1.0
+emission_ring_axis = Vector3( 0, 0, 1 )
+direction = Vector3( 0, 1, 0 )
+gravity = Vector3( 0, 0, 0 )
+
+[sub_resource type="SpatialMaterial" id=14]
+flags_transparent = true
+flags_unshaded = true
+flags_do_not_receive_shadows = true
+flags_disable_ambient_light = true
+vertex_color_use_as_albedo = true
+params_blend_mode = 1
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="QuadMesh" id=16]
+material = SubResource( 14 )
+
+[sub_resource type="Gradient" id=17]
+offsets = PoolRealArray( 0, 0.517588, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 17 )
+width = 64
+
+[sub_resource type="Curve" id=18]
+max_value = 2.0
+_data = [ Vector2( 0, 0.308664 ), 0.0, 1.38852, 0, 0, Vector2( 0.162664, 0.669675 ), 3.12314, 3.12314, 0, 0, Vector2( 1, 2 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=12]
+width = 64
+curve = SubResource( 18 )
+
+[sub_resource type="ParticlesMaterial" id=19]
+emission_shape = 5
+emission_ring_radius = 0.01
+emission_ring_inner_radius = 0.0
+emission_ring_height = 0.0
+emission_ring_axis = Vector3( 0, 0, 1 )
+flag_rotate_y = true
+direction = Vector3( 0, 0, 1 )
+spread = 5.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 40.0
+initial_velocity_random = 0.1
+damping = 80.0
+angle = 360.0
+angle_random = 1.0
+scale = 1.2
+scale_curve = SubResource( 12 )
+color_ramp = SubResource( 10 )
+
+[sub_resource type="SpatialMaterial" id=8]
+flags_transparent = true
+flags_unshaded = true
+flags_do_not_receive_shadows = true
+flags_disable_ambient_light = true
+vertex_color_use_as_albedo = true
+params_blend_mode = 1
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="QuadMesh" id=20]
+material = SubResource( 8 )
+
+[sub_resource type="AnimationNodeBlendTree" id=3]
+graph_offset = Vector2( -22.4, 44 )
+
+[node name="Majin" type="Area" groups=["enemy"]]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource( 1 )
+animationTree = NodePath("AnimationTree")
+hurtbox = NodePath("Hurtbox")
+lockonArea = NodePath("LockonLocation/CollisionShape")
+
+[node name="Hurtbox" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.25, 0 )
+shape = SubResource( 21 )
+
+[node name="LockonLocation" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0 )
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape" type="CollisionShape" parent="LockonLocation"]
+shape = SubResource( 2 )
+
+[node name="Particles" type="Spatial" parent="."]
+
+[node name="Charging" type="Particles" parent="Particles"]
+generate_lightmap = false
+emitting = false
+amount = 64
+lifetime = 0.5
+one_shot = true
+process_material = SubResource( 15 )
+draw_pass_1 = SubResource( 16 )
+
+[node name="Flame" type="Particles" parent="Particles"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0.2 )
+generate_lightmap = false
+emitting = false
+amount = 64
+lifetime = 0.5
+speed_scale = 0.38
+visibility_aabb = AABB( -2, -2, 0, 4, 4, 10 )
+local_coords = false
+process_material = SubResource( 19 )
+draw_pass_1 = SubResource( 20 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 3 )
+anim_player = NodePath("../AnimationPlayer")
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_exited" from="." to="." method="OnExited"]

@@ -13,17 +13,28 @@ namespace Project.Gameplay
 		[Signal]
 		public delegate void Collected();
 
-		public override bool IsRespawnable() => true;
+		protected override bool IsRespawnable() => true;
 
-		public override void SetUp()
+		protected override void SetUp()
 		{
 			_animator = GetNodeOrNull<AnimationPlayer>(animator);
 			base.SetUp();
 		}
 
-		public override void OnEntered(Area _)
+		public override void Respawn()
 		{
-			GameplayInterface.instance.CollectRing(isRichRing ? 20 : 1);
+			base.Respawn();
+
+			_animator.Play("RESET");
+			_animator.Advance(0);
+
+			if (!_animator.Autoplay.Empty())
+				_animator.Play(_animator.Autoplay);
+		}
+
+		private void OnEntered(Area _)
+		{
+			HeadsUpDisplay.instance.CollectRing(isRichRing ? 20 : 1);
 			SoundManager.instance.PlayRingSoundEffect(); //SFX are played externally to avoid multiple ring sounds at once
 
 			if (_animator != null && _animator.HasAnimation("Collect"))
@@ -32,18 +43,6 @@ namespace Project.Gameplay
 				Despawn();
 
 			EmitSignal(nameof(Collected));
-		}
-
-		public override void Respawn()
-		{
-			if (_animator != null && _animator.HasAnimation("RESET"))
-			{
-				_animator.Play("RESET");
-				_animator.Advance(0);
-			}
-
-			if(!_animator.Autoplay.Empty())
-				_animator.Play(_animator.Autoplay);
 		}
 	}
 }

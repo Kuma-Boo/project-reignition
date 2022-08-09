@@ -1,14 +1,16 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://object/stage/StageSettings.cs" type="Script" id=1]
 [ext_resource path="res://area/stage/2 sand oasis/resource/BGM.tscn" type="PackedScene" id=2]
 [ext_resource path="res://object/player/CharacterSpawn.tscn" type="PackedScene" id=3]
+[ext_resource path="res://object/camera/preset/FloorCam.tres" type="Resource" id=4]
 [ext_resource path="res://area/stage/2 sand oasis/act 2/data/MainPath.tres" type="Curve3D" id=5]
 [ext_resource path="res://object/trigger/modules/PathTrigger.cs" type="Script" id=6]
+[ext_resource path="res://object/trigger/modules/CameraTrigger.cs" type="Script" id=7]
 [ext_resource path="res://object/trigger/StageTrigger.tscn" type="PackedScene" id=8]
 
-[sub_resource type="SphereShape" id=4]
-radius = 5.0
+[sub_resource type="SphereShape" id=32]
+radius = 5.72
 
 [sub_resource type="ArrayMesh" id=30]
 surfaces/0 = {
@@ -33,19 +35,24 @@ script = ExtResource( 1 )
 
 [node name="SpawnPosition" type="Spatial" parent="MainAct"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="StageTrigger" parent="MainAct/SpawnPosition" instance=ExtResource( 8 )]
+
+[node name="Path" type="Spatial" parent="MainAct/SpawnPosition/StageTrigger"]
+script = ExtResource( 6 )
+path = NodePath("../../../../Path/MainPath")
+
+[node name="Camera" type="Spatial" parent="MainAct/SpawnPosition/StageTrigger"]
+script = ExtResource( 7 )
+cameraData = ExtResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/SpawnPosition/StageTrigger"]
+shape = SubResource( 32 )
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource( 3 )]
-
-[node name="StageTrigger" parent="MainAct/SpawnPosition/CharacterSpawn" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0 )
-
-[node name="Trigger" type="CollisionShape" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
-shape = SubResource( 4 )
-
-[node name="PathSwitcher" type="Spatial" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
-script = ExtResource( 6 )
-path = NodePath("../../../../../Path/MainPath")
-targetObject = 2
 
 [node name="Object" type="Spatial" parent="MainAct"]
 

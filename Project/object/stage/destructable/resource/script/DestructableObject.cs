@@ -48,9 +48,9 @@ namespace Project.Gameplay
 		public float explosionForce;
 
 		private bool wasShattered;
-		public override bool IsRespawnable() => true;
+		protected override bool IsRespawnable() => true;
 
-		public override void SetUp()
+		protected override void SetUp()
 		{
 			_originalMesh = GetNode<Spatial>(originalMesh);
 			_pieceParent = GetNode<Spatial>(pieceParent);
@@ -153,7 +153,7 @@ namespace Project.Gameplay
 			_pieceParent.QueueFree();
 		}
 
-		public override void OnEntered(Area a)
+		private void OnEntered(Area a)
 		{
 			if(a.IsInGroup("player"))
 			{

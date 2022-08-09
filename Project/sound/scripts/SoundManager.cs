@@ -130,7 +130,7 @@ namespace Project.Gameplay
 
 			if (pearlSoundEffectIndex < (pearlStreams.Length - 1) * 5)
 				pearlSoundEffectIndex++;
-			else if (!GameplayInterface.instance.IsSoulGaugeFull)
+			else if (!HeadsUpDisplay.instance.IsSoulGaugeFull)
 				pearlSoundEffectIndex = 15;
 		}
 		#endregion

@@ -134,12 +134,9 @@ namespace Project.Gameplay
 						if (Character.MoveSpeed > MOVEMENT_DEADZONE || Mathf.Abs(Character.StrafeSpeed) > MOVEMENT_DEADZONE)
 							targetRotation = new Vector2(Character.StrafeSpeed, -Character.MoveSpeed).Normalized().AngleTo(Vector2.Up);
 						else
-						{
-							Vector2 input = -Character.Controller.MovementAxis;
-							if (input.y < 0) //Disable turning backwards
-								input.y = 0;
-							targetRotation = input.Normalized().AngleTo(Vector2.Down);
-						}
+							targetRotation = -Character.Controller.MovementAxis.Normalized().AngleTo(Vector2.Down);
+
+						targetRotation = Mathf.Clamp(targetRotation, -Mathf.Pi * .5f, Mathf.Pi * .5f);
 					}
 
 					Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .2f);
