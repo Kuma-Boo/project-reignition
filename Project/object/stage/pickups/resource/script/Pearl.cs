@@ -1,8 +1,7 @@
 using Godot;
-using Godot.Collections;
 using Project.Core;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Objects
 {
 	public class Pearl : RespawnableObject
 	{
@@ -12,7 +11,6 @@ namespace Project.Gameplay
 		public bool isRichPearl;
 
 		private bool isCollected;
-		private bool isReparenting;
 		private Tween tweener;
 
 		protected override bool IsRespawnable() => true;
@@ -25,11 +23,13 @@ namespace Project.Gameplay
 			AddChild(tweener);
 		}
 
+		/*
 		public override void _Process(float _)
 		{
 			if(isReparenting)
 				Collect();
 		}
+		*/
 
 		public override void Respawn()
 		{
@@ -44,7 +44,7 @@ namespace Project.Gameplay
 		private void OnEntered(Area _)
 		{
 			if (isCollected) return;
-			isReparenting = true;
+			CallDeferred(nameof(Collect));
 		}
 
 		//Godot doesn't allow reparenting from signals, so a separate function is needed.
@@ -89,7 +89,6 @@ namespace Project.Gameplay
 			tweener.InterpolateCallback(this, .3f, nameof(Despawn));
 			tweener.Start();
 
-			isReparenting = false;
 			isCollected = true;
 		}
 	}

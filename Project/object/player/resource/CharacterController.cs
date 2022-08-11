@@ -154,7 +154,7 @@ namespace Project.Gameplay
 			{
 				if (MoveSpeed >= 0 && Controller.verticalAxis.value < -.2f && Controller.verticalAxis.value > 0)
 					return 0;
-				return Controller.verticalAxis.value;
+				return Controller.MovementAxis.y;
 			}
 
 			return isFacingRight ? Controller.horizontalAxis.value : -Controller.horizontalAxis.value;
@@ -163,7 +163,7 @@ namespace Project.Gameplay
 		{
 			//Returns 1 for moving right, -1 for moving left
 			if (!isSideScroller)
-				return Controller.horizontalAxis.value;
+				return Controller.MovementAxis.x;
 
 			return 0; //No strafe when sidescrolling
 		}
@@ -762,12 +762,7 @@ namespace Project.Gameplay
 		private void UpdateInvincibility()
 		{
 			if (IsInvincible)
-			{
 				invincibliltyTimer = Mathf.MoveToward(invincibliltyTimer, 0, PhysicsManager.physicsDelta);
-
-				if (!IsInvincible && collidingHitboxCount.Count != 0) //Invincibility ran out while still touching a hurtbox
-					TakeDamage(); //Take Damage again
-			}
 		}
 
 		private void UpdateDamage()
@@ -781,18 +776,9 @@ namespace Project.Gameplay
 			VerticalSpeed -= GRAVITY * PhysicsManager.physicsDelta;
 		}
 
-		private readonly Array<Node> collidingHitboxCount = new Array<Node>(); //Number of hitboxes that are colliding with the player
-		//called when a hitbox stops colliding with the player
-		public void DequeueHitbox(Node n)
+		public void TakeDamage()
 		{
-			if (collidingHitboxCount.Contains(n))
-				collidingHitboxCount.Remove(n);
-		}
-
-		public void TakeDamage(Node n = null)
-		{
-			if(n != null && !collidingHitboxCount.Contains(n))
-				collidingHitboxCount.Add(n);
+			if (IsInvincible) return; //Don't take damage.
 
 			if (MovementState == MovementStates.Normal)
 			{
@@ -803,8 +789,6 @@ namespace Project.Gameplay
 			}
 
 			ActionState = ActionStates.Damaged;
-
-			if (IsInvincible) return; //Don't take damage.
 			invincibliltyTimer = INVINCIBILITY_LENGTH;
 
 			if (MovementState == MovementStates.Sidle) //Start falling
@@ -842,7 +826,7 @@ namespace Project.Gameplay
 		#region Sidle
 		[Export]
 		public MovementResource sidleSettings;
-		private Spatial currentRailing;
+		public Spatial CurrentRailing { get; set; }
 		private float sidleTimer;
 		private readonly float SIDLE_DAMAGE_LENGTH = .5f;
 		private readonly float SIDLE_RAIL_FALL_SPEED = 4f;
@@ -884,9 +868,9 @@ namespace Project.Gameplay
 			{
 				PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, -1, SIDLE_HORIZONTAL_SPEED);
 
-				if (currentRailing != null)
+				if (CurrentRailing != null)
 				{
-					float targetY = currentRailing.GlobalTranslation.y;
+					float targetY = CurrentRailing.GlobalTranslation.y;
 					GlobalTranslation = new Vector3(GlobalTranslation.x, Mathf.MoveToward(GlobalTranslation.y, targetY, SIDLE_RAIL_FALL_SPEED * PhysicsManager.physicsDelta), GlobalTranslation.z); //Snap to railing
 
 					if (Mathf.IsEqualApprox(GlobalTranslation.y, targetY))
@@ -924,12 +908,12 @@ namespace Project.Gameplay
 
 		#region Launchers and Jumps
 		[Signal]
-		public delegate void OnLauncherFinished();
+		public delegate void LauncherFinished();
 		
 		private float launcherTime;
-		private Launcher activeLauncher;
-		private Launcher.LaunchData launchData;
-		public void StartLauncher(Launcher.LaunchData data, Launcher newLauncher = null)
+		private Objects.Launcher activeLauncher;
+		private Objects.LaunchData launchData;
+		public void StartLauncher(Objects.LaunchData data, Objects.Launcher newLauncher = null, bool useAutoAlignment = false)
 		{
 			if (activeLauncher != null && activeLauncher == newLauncher) return; //Already launching that!
 
@@ -950,6 +934,18 @@ namespace Project.Gameplay
 
 			CanJumpDash = false;
 			Lockon.ResetLockonTarget();
+
+			if (!useAutoAlignment) return;
+
+			Vector3 direction = launchData.launchDirection.Flatten().Normalized();
+			if (!direction.IsNormalized()) //Direction parallel with Vector3.Up! Use launcher's forward direction instead.
+			{
+				if (newLauncher == null) return;
+				direction = newLauncher.Forward().Flatten().Normalized();
+			}
+
+			Animator.SetForwardDirection(direction);
+			Animator.ResetLocalRotation();
 		}
 
 		private void UpdateLauncher()
@@ -984,17 +980,17 @@ namespace Project.Gameplay
 
 		private void FinishLauncher()
 		{
-			if(activeLauncher != null)
+			if(activeLauncher != null && !IsOnGround)
 				CanJumpDash = activeLauncher.allowJumpDashing;
 				
 			ResetMovementState();
 			activeLauncher = null;
-			EmitSignal(nameof(OnLauncherFinished));
+			EmitSignal(nameof(LauncherFinished));
 		}
 
-		public void JumpTo(Vector3 destination, float midHeight = 0f, bool relativeToDst = false) //Generic JumpTo
+		public void JumpTo(Vector3 destination, float midHeight = 0f, bool relativeToEnd = false) //Generic JumpTo
 		{
-			Launcher.LaunchData data = Launcher.CreateData(GlobalTranslation, destination, midHeight, relativeToDst);
+			Objects.LaunchData data = Objects.LaunchData.Create(GlobalTranslation, destination, midHeight, relativeToEnd);
 			StartLauncher(data);
 		}
 		#endregion
@@ -1020,10 +1016,10 @@ namespace Project.Gameplay
 		public int grindStepHeight;
 		public bool IsGrinding => MovementState == MovementStates.Grinding;
 		public bool IsGrindStepping { get; private set; }
-		private GrindRail grindRail;
+		private Objects.GrindRail grindRail;
 		private const float MINIMUM_GRIND_SPEED = 2f;
 
-		public void StartGrinding(GrindRail newRail, Vector3 railPosition)
+		public void StartGrinding(Objects.GrindRail newRail, Vector3 railPosition)
 		{
 			if (IsGrindStepping)
 				HeadsUpDisplay.instance.AddBonus(HeadsUpDisplay.BonusTypes.GrindStep);
@@ -1474,7 +1470,7 @@ namespace Project.Gameplay
 				{
 					GD.Print($"Crushed by {body.Name}");
 					AddCollisionExceptionWith(body); //Avoid clipping through the ground
-					TakeDamage(body);
+					TakeDamage();
 				}
 			}
 
@@ -1488,20 +1484,7 @@ namespace Project.Gameplay
 			{
 				GD.Print($"Stopped ignoring {body.Name}");
 				RemoveCollisionExceptionWith(body);
-				DequeueHitbox(body);
 			}
-		}
-
-		public void OnObjectTriggerEnter(Area area)
-		{
-			if (area.IsInGroup("railing"))
-				currentRailing = area;
-		}
-
-		public void OnObjectTriggerExit(Area area)
-		{
-			if (area.IsInGroup("railing"))
-				currentRailing = null;
 		}
 		#endregion
 	}

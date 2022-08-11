@@ -30,7 +30,7 @@ namespace Project.Gameplay
 
 		[Export]
 		public int objectiveCount;
-		private int currentObjectiveCount;
+		public int CurrentObjectiveCount { get; private set; }
 
 		private void SetUpMission()
 		{
@@ -46,10 +46,10 @@ namespace Project.Gameplay
 			*/
 		}
 
-		public void IncrementObjective(int amount = 1)
+		public void IncrementObjective()
 		{
-			currentObjectiveCount += amount;
-			GD.Print("Objective is now " + currentObjectiveCount);
+			CurrentObjectiveCount++;
+			GD.Print("Objective is now " + CurrentObjectiveCount);
 		}
 
 		/*

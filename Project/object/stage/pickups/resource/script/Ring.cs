@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Objects
 {
 	public class Ring : RespawnableObject
 	{
@@ -24,7 +24,7 @@ namespace Project.Gameplay
 		public override void Respawn()
 		{
 			base.Respawn();
-
+			
 			_animator.Play("RESET");
 			_animator.Advance(0);
 

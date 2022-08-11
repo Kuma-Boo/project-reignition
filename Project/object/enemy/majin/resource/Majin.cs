@@ -12,12 +12,6 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath animationTree;
 		private AnimationTree _animationTree;
-		[Export]
-		public NodePath hurtbox;
-		private CollisionShape _hurtbox;
-		[Export]
-		public NodePath lockonArea;
-		private CollisionShape _lockonArea;
 
 		[Export]
 		public bool spawnInstantly;
@@ -32,8 +26,6 @@ namespace Project.Gameplay
 			FireRotating,
 			FireStraight
 		}
-		[Export]
-		public bool isFireMajin;
 
 		[Export]
 		public Vector3 spawnOffset; //Where to come from (Based on local position in the editor)
@@ -43,27 +35,20 @@ namespace Project.Gameplay
 		{
 			if (Engine.EditorHint) return; //In Editor
 
+			base.SetUp();
+
 			targetPosition = GlobalTranslation;
 			StageSettings.instance.RegisterRespawnableObject(this);
 
 			_animationTree = GetNode<AnimationTree>(animationTree);
 			_animationTree.Active = true;
 
-			_hurtbox = GetNode<CollisionShape>(hurtbox);
-			_hurtbox.Disabled = true;
-
-			_lockonArea = GetNode<CollisionShape>(lockonArea);
-
-			base.SetUp();
 			Respawn();
 		}
 
 		public override void Respawn()
 		{
 			base.Respawn();
-
-			if (isFireMajin) //Fire majins take 2 hits
-				currentHealth = 2;
 
 			//No activation trigger. Activate immediately.
 			if (spawnInstantly)
@@ -85,23 +70,11 @@ namespace Project.Gameplay
 			}
 			else
 				Despawn();
-
 		}
 
 		protected override void ProcessEnemy()
 		{
 			//Rotate to face player
-		}
-
-		protected override void Interact()
-		{
-			if (Character.IsAttacking)
-			{
-				TakeDamage();
-				Character.Lockon.StartBounce();
-			}
-			else
-				Character.TakeDamage(this);
 		}
 
 		private void Activate()
@@ -115,9 +88,6 @@ namespace Project.Gameplay
 					_animationTree.Set("parameters/idle_seek/seek_position", 0f);
 				}
 			}
-
-			_hurtbox.Disabled = false;
-			_lockonArea.Disabled = false;
 		}
 
 		//Overload activation method for using godot's built-in area trigger

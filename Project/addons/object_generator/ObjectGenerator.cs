@@ -22,6 +22,7 @@ namespace Project.Editor
 			RingVertical, //Spawns around a ring
 			RingFlat, //Spawns around a ring
  			Line, //Spawn linearly
+			LineUp, //Spawn Upwards
 			Path //Spawn linearly along a path
 		}
 
@@ -74,6 +75,13 @@ namespace Project.Editor
 
 						break;
 					case GenerationType.Line:
+						for (int i = 0; i < amount; i++)
+						{
+							Vector3 offset = new Vector3(pathHInterpolationCurve.Interpolate((float)i / (amount - 1)), pathVInterpolationCurve.Interpolate((float)i / (amount - 1)), 0);
+							Spawn(Vector3.Forward * i * spacing + offset);
+						}
+						break;
+					case GenerationType.LineUp:
 						for (int i = 0; i < amount; i++)
 						{
 							Vector3 offset = new Vector3(pathHInterpolationCurve.Interpolate((float)i / (amount - 1)), pathVInterpolationCurve.Interpolate((float)i / (amount - 1)), 0);

@@ -2,167 +2,177 @@ using Godot;
 using Godot.Collections;
 using Project.Core;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Objects
 {
 	/// <summary>
-	/// Object that shatters when destroyed
+	/// Object that shatters when destroyed. All pieces must be a child of this object.
 	/// </summary>
 	public class DestructableObject : RespawnableObject
 	{
 		[Export]
-		public NodePath originalMesh; //Unbroken mesh
+		public NodePath originalMesh; //Unbroken mesh. Leave empty to always show the pieces
 		private Spatial _originalMesh;
-		[Export]
-		public NodePath pieceParent;
-		private Spatial _pieceParent;
 		[Export]
 		public NodePath collider;
 		private CollisionShape _collider;
-
-		private RigidBody rb;
-		private bool IsRigidbody => rb != null;
-
 		[Export]
-		public Material overrideMaterial;
-		private bool UseOverrideMaterial => overrideMaterial != null;
-
-		private readonly Array<RigidBody> _pieces = new Array<RigidBody>();
-		private readonly Array<Transform> _piecesOriginTransforms = new Array<Transform>();
+		public Array<Material> overrideMaterials = new Array<Material>();
+		private readonly Array<Material> materialList = new Array<Material>();
 
 		[Export]
 		public ShatterType shatterType;
 		public enum ShatterType
 		{
-			Disabled,
+			OnSignal,
 			OnTouch,
 			OnAttack
 		}
-		[Export]
-		public int maxHealth; //How much health does this object have?
-		private int health;
-		
+		private bool isShattered;
 		[Signal]
 		public delegate void Shattered();
 
-		[Export]
-		public float explosionForce;
-
-		private bool wasShattered;
 		protected override bool IsRespawnable() => true;
+
+		private readonly Array<RigidBody> _pieces = new Array<RigidBody>();
+		private readonly Array<Transform> _piecesSpawnTransforms = new Array<Transform>();
+		private const float EXPLOSION_FORCE = 10f;
 
 		protected override void SetUp()
 		{
-			_originalMesh = GetNode<Spatial>(originalMesh);
-			_pieceParent = GetNode<Spatial>(pieceParent);
-			_collider = GetNode<CollisionShape>(collider);
+			base.SetUp();
 
-			if (UseOverrideMaterial)
-				overrideMaterial = overrideMaterial.Duplicate() as Material;
+			if (originalMesh != null)
+				_originalMesh = GetNodeOrNull<Spatial>(originalMesh);
 
-			for (int i = 0; i < _pieceParent.GetChildCount(); i++)
+			if(collider != null)
+				_collider = GetNodeOrNull<CollisionShape>(collider);
+
+			//Clone materials so multiple destructable objects of the same type can animate independantly
+			for (int i = 0; i < overrideMaterials.Count; i++)
+				materialList.Add(overrideMaterials[i].Duplicate() as Material);
+
+			for (int i = 0; i < GetChildCount(); i++)
 			{
-				RigidBody rigidbody = _pieceParent.GetChildOrNull<RigidBody>(i);
-				if (rigidbody == null)
+				RigidBody rigidbody = GetChildOrNull<RigidBody>(i);
+				if (rigidbody == null) //Pieces must be a rigidbody
 					continue;
 
 				_pieces.Add(rigidbody);
-				_piecesOriginTransforms.Add(rigidbody.Transform);
+				_piecesSpawnTransforms.Add(rigidbody.Transform);
 
-				//Initialize materials
-				if (!UseOverrideMaterial) continue;
-
-				MeshInstance mesh = _pieces[i].GetChildOrNull<MeshInstance>(0); //Note mesh must be the FIRST child of the rigidbody.
-				if (mesh == null) continue;
-
-				mesh.MaterialOverride = overrideMaterial;
+				if (materialList.Count != 0) //Assign override material
+				{
+					MeshInstance mesh = _pieces[i].GetChildOrNull<MeshInstance>(0); //NOTE mesh must be the FIRST child of the rigidbody.
+					if (mesh != null)
+					{
+						for (int j = 0; j < materialList.Count; j++)
+						{
+							if (j >= mesh.GetSurfaceMaterialCount()) break;
+							mesh.SetSurfaceMaterial(j, materialList[j]);
+						}
+					}
+				}
 			}
 
-			if (((Node)this) is RigidBody)
-				rb = ((Node)this) as RigidBody;
-
-			health = maxHealth;
-			base.SetUp();
+			Respawn();
 		}
 
 		public override void Respawn()
 		{
 			base.Respawn();
 
-			health = maxHealth;
-			wasShattered = false;
-			_originalMesh.Visible = true;
+			isShattered = false;
 
-			if (IsRigidbody)
-			{
-				rb.AngularVelocity = rb.LinearVelocity = Vector3.Zero;
-				rb.GravityScale = 1f;
-				rb.Sleeping = true;
+			if (_collider != null)
+				_collider.Disabled = false;
+			if (_originalMesh != null)
+				_originalMesh.Visible = true;
 
-				foreach (Node e in rb.GetCollisionExceptions())
-					rb.RemoveCollisionExceptionWith(e);
-			}
+			if (_originalMesh != null)
+				DisablePieces();
+			else
+				EnablePieces();
+		}
 
-			for (int i = 0; i < _pieces.Count; i++)
-			{
-				_pieces[i].Transform = _piecesOriginTransforms[i];
-				_pieces[i].LinearVelocity = _pieces[i].AngularVelocity = Vector3.Zero;
-				_pieces[i].Sleeping = true;
-			}
+		public override void Despawn()
+		{
+			if (!isShattered) return; //Just in case the player was respawned while the object was still shattering
 
-			DisablePieces();
+			base.Despawn();
 		}
 
 		private void DisablePieces()
 		{
-			//Disable the pieces
-			if (!_pieceParent.IsInsideTree()) return;
-			_pieceParent.GetParent().RemoveChild(_pieceParent);
-		}
-
-		public virtual void Shatter(Vector3 fromPoint)
-		{
-			if (wasShattered) return;
-
-			wasShattered = true;
-			_collider.Disabled = true;
-			_originalMesh.Visible = false;
-
-			GetParent().AddChild(_pieceParent);
-			_pieceParent.GlobalTransform = GlobalTransform;
-			_pieceParent.Visible = true;
 			for (int i = 0; i < _pieces.Count; i++)
 			{
-				_pieces[i].AddExplosionForce(fromPoint, explosionForce);
+				if (_pieces[i].IsInsideTree())
+					RemoveChild(_pieces[i]);
+			}
+		}
+
+		private void EnablePieces()
+		{
+			for (int i = 0; i < _pieces.Count; i++)
+			{
+				if (!_pieces[i].IsInsideTree())
+					AddChild(_pieces[i]);
+
+				_pieces[i].Transform = _piecesSpawnTransforms[i];
+				_pieces[i].LinearVelocity = _pieces[i].AngularVelocity = Vector3.Zero; //Reset velocity
+			}
+		}
+
+		public void Shatter()
+		{
+			if (isShattered) return;
+
+			if (_collider != null)
+				_collider.Disabled = true;
+			if (_originalMesh != null)
+			{
+				_originalMesh.Visible = false;
+				EnablePieces();
+			}
+
+			for (int i = 0; i < _pieces.Count; i++)
+			{
+				_pieces[i].AddExplosionForce(GlobalTranslation, EXPLOSION_FORCE);
 				_pieces[i].Sleeping = false;
 			}
 
-			SceneTreeTween tween = CreateTween();
-			if (UseOverrideMaterial)
+			SceneTreeTween tween = CreateTween().SetParallel(true);
+			for (int i = 0; i < materialList.Count; i++)
 			{
-				overrideMaterial.Set("albedo_color", Colors.White);
-				tween.TweenProperty(overrideMaterial, "albedo_color", Colors.Transparent, 2f).SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
+				materialList[i].Set("albedo_color", Colors.White);
+				tween.TweenProperty(materialList[i], "albedo_color", Colors.Transparent, 1f).SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
 			}
-			tween.TweenCallback(this, nameof(DisablePieces)).SetDelay(3f);
+			tween.TweenCallback(this, nameof(Despawn)).SetDelay(3f); //Despawn this object
 
+			isShattered = true;
 			EmitSignal(nameof(Shattered));
 		}
 
 		public override void _ExitTree()
 		{
-			//Avoid memory leak
-			_pieceParent.QueueFree();
+			for (int i = 0; i < _pieces.Count; i++) //Prevent memory leak
+			{
+				if(_pieces[i].GetParent() != this)
+					_pieces[i].QueueFree();
+			}
 		}
 
 		private void OnEntered(Area a)
 		{
-			if(a.IsInGroup("player"))
+			if (!a.IsInGroup("player")) return;
+			if (shatterType == ShatterType.OnSignal) return; //Don't process
+
+			if (CharacterController.instance.IsAttacking)
 			{
-				if (CharacterController.instance.IsAttacking)
-					health--;
+
 			}
-			
-			if(health <= 0)
-				Shatter(a.GlobalTranslation);
+
+			//if(health <= 0)
+			//Shatter(a.GlobalTranslation);
 		}
 	}
 }

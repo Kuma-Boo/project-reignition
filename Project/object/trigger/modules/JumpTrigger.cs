@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
@@ -21,7 +22,6 @@ namespace Project.Gameplay.Triggers
 			Vector3 returnPosition = targetPosition;
 			if (_targetNode != null)
 				returnPosition += _targetNode.GlobalTranslation;
-
 			return returnPosition;
 		}
 
@@ -37,11 +37,11 @@ namespace Project.Gameplay.Triggers
 			Character.CanJumpDash = false;
 		}
 
-		public Launcher.LaunchData GetData()
+		public Objects.LaunchData GetLaunchData()
 		{
 			if (targetNode != null)
 				_targetNode = GetNodeOrNull<Spatial>(targetNode);
-			return Launcher.CreateData(GlobalTranslation, GetTargetPosition(), peakHeight);
+			return Objects.LaunchData.Create(GlobalTranslation, GetTargetPosition(), peakHeight);
 		}
 	}
 }

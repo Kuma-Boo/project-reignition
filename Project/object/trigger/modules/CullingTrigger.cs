@@ -25,18 +25,24 @@ namespace Project.Gameplay.Triggers
 			if (modifyTree)
 			{
 				originalParent = _targetNode.GetParent();
-				originalTransform = _targetNode.GlobalTransform;
+				originalTransform = _targetNode.Transform;
 			}
 
-			//Disable the node on startup?
-			if(!startEnabled)
-				CallDeferred(nameof(DeactivateNode));
+			Respawn();
+			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
 		public override void _ExitTree()
 		{
 			if (modifyTree && !_targetNode.IsQueuedForDeletion())
 				_targetNode.QueueFree();
+		}
+
+		private void Respawn()
+		{
+			//Disable the node on startup?
+			if (!startEnabled)
+				CallDeferred(nameof(DeactivateNode));
 		}
 
 		private void ActivateNode()
@@ -46,7 +52,7 @@ namespace Project.Gameplay.Triggers
 				if (_targetNode.IsInsideTree()) return;
 
 				originalParent.CallDeferred("add_child", _targetNode);
-				_targetNode.CallDeferred("set_global_transform", originalTransform);
+				_targetNode.CallDeferred("set_transform", originalTransform);
 				return;
 			}
 
@@ -61,7 +67,7 @@ namespace Project.Gameplay.Triggers
 			{
 				if (!_targetNode.IsInsideTree()) return;
 
-				originalParent.RemoveChild(_targetNode);
+				originalParent.CallDeferred("remove_child", _targetNode);
 				return;
 			}
 

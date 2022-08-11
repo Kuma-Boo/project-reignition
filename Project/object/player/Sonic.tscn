@@ -26,13 +26,13 @@
 [ext_resource path="res://object/player/resource/CharacterLockon.cs" type="Script" id=24]
 
 [sub_resource type="BoxShape" id=19]
-extents = Vector3( 10, 4, 10 )
+extents = Vector3( 10, 10, 10 )
 
 [sub_resource type="BoxShape" id=130]
-extents = Vector3( 5, 4, 2 )
+extents = Vector3( 5, 10, 2 )
 
 [sub_resource type="BoxShape" id=131]
-extents = Vector3( 1, 4, 0.6 )
+extents = Vector3( 1, 10, 0.6 )
 
 [sub_resource type="SphereShape" id=129]
 radius = 0.5
@@ -142,7 +142,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1808, 160 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -368, 400 )
-node_connections = [ "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump_cancel_time", 0, "fall-start", "jump", 0, "backflip", "jump", 1, "jump-start", "fall_reset", 0, "jump_cancel_time", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "output", 0, "IsJumpDashing" ]
+node_connections = [ "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "fall_reset", 0, "jump_cancel_time", "jump", 0, "backflip", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "output", 0, "IsJumpDashing" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -334,7 +334,7 @@ nodes/backstep/node = SubResource( 124 )
 nodes/backstep/position = Vector2( -944, 128 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "MovementReset", 0, "MoveSpeed", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MoveSpeed", 0, "MoveState", "output", 0, "IsCrouching" ]
+node_connections = [ "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "MovementReset", 0, "MoveSpeed", "MoveSpeed", 0, "MoveState", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "output", 0, "IsCrouching" ]
 
 [sub_resource type="AnimationNodeAnimation" id=127]
 animation = "sidle-fast-loop"
@@ -361,14 +361,14 @@ nodes/sidle_anim/node = SubResource( 127 )
 nodes/sidle_anim/position = Vector2( -880, 464 )
 nodes/sidle_speed/node = SubResource( 128 )
 nodes/sidle_speed/position = Vector2( -672, 432 )
-node_connections = [ "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "countdown", 0, "ActionState", "countdown", 1, "countdown_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "sidle_speed", 0, "sidle_anim", "output", 0, "countdown" ]
+node_connections = [ "sidle_speed", 0, "sidle_anim", "countdown", 0, "ActionState", "countdown", 1, "countdown_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "output", 0, "countdown" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=119]
 
 [node name="Player" type="KinematicBody" groups=["player"]]
-collision_layer = 2
+collision_layer = 8
 script = ExtResource( 10 )
 pathFollower = NodePath("Components/PathFollower")
 animator = NodePath("Components/Animator")
@@ -442,15 +442,15 @@ bounceLockoutSettings = ExtResource( 7 )
 bouncePower = 14.0
 
 [node name="Collision" type="CollisionShape" parent="Components/Animator/LockonTrigger"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 15.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.4, 15.5 )
 shape = SubResource( 19 )
 
 [node name="CollisionClose" type="CollisionShape" parent="Components/Animator/LockonTrigger"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 3.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.4, 3.5 )
 shape = SubResource( 130 )
 
 [node name="CollisionClose2" type="CollisionShape" parent="Components/Animator/LockonTrigger"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 0.9 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.4, 0.9 )
 shape = SubResource( 131 )
 
 [node name="Sound" type="Node" parent="Components"]
@@ -482,7 +482,6 @@ isTimeBreakEnabled = true
 [node name="ObjectTrigger" type="Area" parent="Components" groups=["player"]]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.42, 0 )
 collision_layer = 2
-collision_mask = 9
 
 [node name="Trigger" type="CollisionShape" parent="Components/ObjectTrigger"]
 shape = SubResource( 129 )
@@ -522,8 +521,6 @@ parameters/sidle_speed/scale = 1.5
 [connection signal="area_exited" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetTriggerExit"]
 [connection signal="body_entered" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetBodyEnter"]
 [connection signal="body_exited" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetBodyExit"]
-[connection signal="area_entered" from="Components/ObjectTrigger" to="." method="OnObjectTriggerEnter"]
-[connection signal="area_exited" from="Components/ObjectTrigger" to="." method="OnObjectTriggerExit"]
 [connection signal="body_entered" from="Components/ObjectTrigger" to="." method="OnObjectCollisionEnter"]
 [connection signal="body_exited" from="Components/ObjectTrigger" to="." method="OnObjectCollisionExit"]
 

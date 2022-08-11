@@ -2,11 +2,11 @@ using Godot;
 
 namespace Project.Gameplay
 {
-	//Parent class of all stage objects.
+	/// <summary>
+	/// Parent class of all respawnable objects
+	/// </summary>
 	public abstract class RespawnableObject : Spatial
 	{
-		protected CharacterController Character => CharacterController.instance;
-
 		private struct SpawnData
 		{
 			public Node parentNode;
@@ -16,11 +16,17 @@ namespace Project.Gameplay
 				if (!s.IsInsideTree()) return;
 
 				parentNode = s.GetParent();
-				spawnTransform = s.GlobalTransform;
+				spawnTransform = s.Transform;
 			}
 		}
 		private SpawnData spawnData;
 		protected virtual bool IsRespawnable() => false; //Set to True for enemies
+
+		[Signal]
+		public delegate void Respawned();
+		[Signal]
+		public delegate void Despawned();
+		protected CharacterController Character => CharacterController.instance;
 
 		public override void _Ready() => SetUp();
 
@@ -34,10 +40,11 @@ namespace Project.Gameplay
 
 		public virtual void Respawn()
 		{
-			if (!IsInsideTree())
+			if (!IsInsideTree() && GetParent() != spawnData.parentNode)
 				spawnData.parentNode.AddChild(this);
 
-			GlobalTransform = spawnData.spawnTransform;
+			Transform = spawnData.spawnTransform;
+			EmitSignal(nameof(Respawned));
 		}
 
 		public virtual void Despawn()
@@ -45,6 +52,7 @@ namespace Project.Gameplay
 			if (!IsInsideTree()) return;
 
 			GetParent().CallDeferred("remove_child", this);
+			EmitSignal(nameof(Despawned));
 		}
 	}
 }

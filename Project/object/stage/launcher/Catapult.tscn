@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://object/stage/launcher/resource/model/catapult/Catapult.gltf" type="PackedScene" id=1]
+[ext_resource path="res://object/stage/launcher/resource/script/Catapult.cs" type="Script" id=2]
+
+[sub_resource type="SphereShape" id=2]
+radius = 0.9
+
+[sub_resource type="CylinderShape" id=3]
+radius = 0.3
+
+[node name="Catapult" type="StaticBody" groups=["wall"]]
+collision_layer = 9
+script = ExtResource( 2 )
+closeDistance = 10.0
+closeMidHeight = 2.0
+farDistance = 10.0
+farMidHeight = 2.0
+launchNode = NodePath("Catapult/CatapultArm/Lockon")
+armNode = NodePath("Catapult/CatapultArm")
+
+[node name="Catapult" parent="." instance=ExtResource( 1 )]
+transform = Transform( -1, 0, -6.34988e-06, 0, 1, 0, 6.34988e-06, 0, -1, 0, 0, 0 )
+
+[node name="CatapultArm" parent="Catapult" index="0"]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0.24, 0 )
+
+[node name="Lockon" type="Area" parent="Catapult/CatapultArm" index="0"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.81899e-12, 0, 3 )
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="Catapult/CatapultArm/Lockon"]
+shape = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 2 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.093, -1.496 )
+shape = SubResource( 3 )
+
+[connection signal="area_entered" from="Catapult/CatapultArm/Lockon" to="." method="PlayerEntered"]
+
+[editable path="Catapult"]

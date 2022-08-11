@@ -61,7 +61,8 @@ namespace Project.Core
 		{
 			public Axis horizontalAxis;
 			public Axis verticalAxis;
-			public Vector2 MovementAxis => new Vector2(horizontalAxis.value, verticalAxis.value);
+			public Button movementModifier;
+			public Vector2 MovementAxis => new Vector2(horizontalAxis.value, verticalAxis.value).LimitLength(1f);
 
 			public Button jumpButton;
 			public Button actionButton;
@@ -78,16 +79,18 @@ namespace Project.Core
 
 			public void Update(float delta)
 			{
+				movementModifier.Update(IsUsingGamepad ? false : ButtonHeld(ActiveMapping.movementModifierBinding));
+				
 				//Update all inputs.
 				if (IsUsingGamepad && ActiveMapping.horizontalBinding != -1)
 					horizontalAxis.Update(AnalogAxisHeld(ActiveMapping.horizontalBinding), delta);
 				else
-					horizontalAxis.Update(DigitalAxisHeld(ActiveMapping.rightBinding, ActiveMapping.leftBinding), delta);
+					horizontalAxis.Update(DigitalAxisHeld(ActiveMapping.rightBinding, ActiveMapping.leftBinding, movementModifier.isHeld), delta);
 
-				if (IsUsingGamepad && ActiveMapping.verticalBinding != -1)
-					verticalAxis.Update(AnalogAxisHeld(ActiveMapping.verticalBinding), delta);
+				if (IsUsingGamepad && ActiveMapping.verticalBinding != -1) //Gamepad vertical normally needs to be inverted
+					verticalAxis.Update(-AnalogAxisHeld(ActiveMapping.verticalBinding), delta);
 				else
-					verticalAxis.Update(DigitalAxisHeld(ActiveMapping.upBinding, ActiveMapping.downBinding), delta);
+					verticalAxis.Update(DigitalAxisHeld(ActiveMapping.upBinding, ActiveMapping.downBinding, movementModifier.isHeld), delta);
 
 				jumpButton.Update(ButtonHeld(ActiveMapping.jumpBinding));
 				boostButton.Update(ButtonHeld(ActiveMapping.boostBinding));
@@ -100,13 +103,16 @@ namespace Project.Core
 			//Returns the current physical value of an analog axis (Gamepad Only)
 			private float AnalogAxisHeld(int axisCode) => Input.GetJoyAxis(activeGamepad, axisCode);
 			//Combines two buttons as a single axis
-			private float DigitalAxisHeld(int p, int n)
+			private float DigitalAxisHeld(int p, int n, bool modify)
 			{
 				float r = 0;
 				if (ButtonHeld(p))
 					r++;
 				if (ButtonHeld(n))
 					r--;
+
+				if (modify) //Modify results
+					r *= .5f;
 				return r;
 			}
 			//Returns the physical state of a button
@@ -131,6 +137,7 @@ namespace Project.Core
 					downBinding = (int)KeyList.Down,
 					leftBinding = (int)KeyList.Left,
 					rightBinding = (int)KeyList.Right,
+					movementModifierBinding = (int)KeyList.Shift,
 
 					jumpBinding = (int)KeyList.V,
 					actionBinding = (int)KeyList.C,
@@ -212,6 +219,7 @@ namespace Project.Core
 			public int upBinding;
 			public int downBinding;
 			public int verticalBinding; //For analog inputs, -1 if unused
+			public int movementModifierBinding;
 			public int jumpBinding;
 			public int actionBinding;
 			public int breakBinding;

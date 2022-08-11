@@ -80,7 +80,7 @@ namespace Project.Core
 			if (Mathf.IsZeroApprox(distance)) return;
 			float invDistance = 1 / distance;
 			float impulseMag = power * invDistance * invDistance;
-			body.AddCentralForce(impulseMag * blastDir);
+			body.ApplyCentralImpulse(impulseMag * blastDir);
 		}
 
 		//Returns the absolute angle between 2 angles
