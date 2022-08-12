@@ -60,9 +60,8 @@ namespace Project.Core
 			s.GlobalTransform = t;
 		}
 
-		public static Vector2 RemoveVertical(this Vector3 v) => new Vector2(v.x, v.z);
-		public static Vector3 Flatten(this Vector3 v) => new Vector3(v.x, 0, v.z);
-		public static Vector3 Unflatten(this Vector2 v) => new Vector3(v.x, 0, v.y); //Convert 2d to 3d by adding y axis
+		public static Vector2 Flatten(this Vector3 v) => new Vector2(v.x, v.z);
+		public static Vector3 RemoveVertical(this Vector3 v) => new Vector3(v.x, 0, v.z);
 		public static Vector2 RotateLinear(this Vector2 v, Vector2 t, float spd)
 		{
 			float ang = v.AngleTo(t);

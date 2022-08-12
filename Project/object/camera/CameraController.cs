@@ -25,11 +25,17 @@ namespace Project.Gameplay
 		private CharacterPathFollower PlayerPathFollower => Character.PathFollower;
 
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
+		public bool IsOnScreen(Vector3 worldSpace)
+		{
+			Vector2 screenPosition = ConvertToScreenSpace(worldSpace);
+			if (screenPosition.x / 1920f > 1f || screenPosition.x < 0f) return false;
+			if (screenPosition.y / 1080f > 1f || screenPosition.y < 0f) return false;
+			return true;
+		}	
 
 		public override void _Ready()
 		{
 			//ResetFlag = true;
-
 			_calculationRoot = GetNode<Spatial>(calculationRoot);
 			_calculationGimbal = GetNode<Spatial>(calculationGimbal);
 
@@ -223,7 +229,7 @@ namespace Project.Gameplay
 					forwardDirection = Mathf.Sign(PlayerPathFollower.Forward().y) * PlayerPathFollower.Down();
 			}
 
-			Vector3 forwardFlattened = forwardDirection.Flatten().Normalized();
+			Vector3 forwardFlattened = forwardDirection.RemoveVertical().Normalized();
 			Vector3 rightDirection = forwardFlattened.Cross(Vector3.Up);
 
 			Vector2 targetRotation = Vector2.Zero;
@@ -265,7 +271,7 @@ namespace Project.Gameplay
 			Vector2 pitchVector = new Vector2(currentDistance, -PlayerPathFollower.LocalPlayerPosition.y);
 			if (targetSettings.IsStaticCamera)
 			{
-				pitchVector.x = forwardDirection.RemoveVertical().Length();
+				pitchVector.x = forwardDirection.Flatten().Length();
 				pitchVector.y = -forwardDirection.y;
 			}
 			currentPitchTracking = Mathf.Lerp(previousPitchTracking, pitchVector.AngleTo(Vector2.Right) * (1 - currentSettings.heightTrackingStrength), transitionTimeStepped);

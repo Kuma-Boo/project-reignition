@@ -20,6 +20,7 @@ namespace Project.Gameplay
 		[Export]
 		public float homingAttackSpeed;
 		public bool IsHomingAttacking { get; set; }
+		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalTranslation - GlobalTranslation).Normalized() : this.Forward();
 
 		public void HomingAttack()
 		{
@@ -37,21 +38,23 @@ namespace Project.Gameplay
 				LockonTarget = null;
 
 			//Update homing attack
-			if (LockonTarget == null && IsMonitoring)
+			if (IsMonitoring)
 			{
 				float closestDistance = Mathf.Inf;
+				if(LockonTarget != null)
+					closestDistance = LockonTarget.GlobalTranslation.Flatten().DistanceSquaredTo(Character.GlobalTranslation.Flatten());
+
 				//Pick new target
 				for (int i = 0; i < activeTargets.Count; i++)
 				{
 					if (IsTargetInvalid(activeTargets[i]))
 						continue;
 
-					float dst = activeTargets[i].GlobalTranslation.RemoveVertical().DistanceSquaredTo(Character.GlobalTranslation.RemoveVertical());
+					float dst = activeTargets[i].GlobalTranslation.Flatten().DistanceSquaredTo(Character.GlobalTranslation.Flatten());
 					if (dst > closestDistance)
 						continue;
 
 					//Raycast
-
 					closestDistance = dst;
 					LockonTarget = activeTargets[i];
 				}
@@ -72,9 +75,15 @@ namespace Project.Gameplay
 			if (!activeTargets.Contains(t) || !t.IsVisibleInTree() || Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing)
 				return true;
 
-			Vector3 castVector = t.GlobalTranslation - Character.GlobalTranslation;
-			RaycastHit h = this.CastRay(Character.GlobalTranslation, castVector, Character.environmentMask);
-			Debug.DrawRay(Character.GlobalTranslation, castVector, Colors.Magenta);
+			if (!Character.Camera.IsOnScreen(t.GlobalTranslation))
+				return true;
+
+			Vector3 castPosition = Character.GlobalTranslation;
+			if (Character.VerticalSpeed < 0)
+				castPosition += Character.worldDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
+			Vector3 castVector = t.GlobalTranslation - castPosition;
+			RaycastHit h = this.CastRay(castPosition, castVector, Character.environmentMask);
+			Debug.DrawRay(castPosition, castVector, Colors.Magenta);
 
 			if (h && h.collidedObject != t)
 				return true;
@@ -96,6 +105,8 @@ namespace Project.Gameplay
 		#region Bouncing
 		[Export]
 		public ControlLockoutResource bounceLockoutSettings;
+		[Export]
+		public float bounceSpeed;
 		[Export]
 		public float bouncePower;
 
@@ -120,7 +131,7 @@ namespace Project.Gameplay
 			ResetLockonTarget();
 
 			Character.CanJumpDash = true;
-			Character.MoveSpeed = -bouncePower;
+			Character.MoveSpeed = bounceSpeed;
 			Character.VerticalSpeed = bouncePower;
 			Character.SetControlLockout(bounceLockoutSettings);
 			Character.ResetActionState();

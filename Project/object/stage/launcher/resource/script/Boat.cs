@@ -55,12 +55,12 @@ namespace Project.Gameplay.Objects
 				velocity.x = Mathf.MoveToward(velocity.x, inputDirection * strafeSpeed, turnaround * PhysicsManager.physicsDelta);
 
 			velocity.y = Mathf.MoveToward(velocity.y, moveSpeed, acceleration * PhysicsManager.physicsDelta);
-			Vector3 moveDirection = Character.PathFollower.Forward().Flatten().Normalized();
+			Vector3 moveDirection = Character.PathFollower.Forward().RemoveVertical().Normalized();
 			MoveAndSlide(this.Left() * velocity.x + moveDirection * velocity.y);
 
 			Character.PathFollower.Resync();
 			Character.UpdateExternalControl();
-			GlobalRotation = Vector3.Up * (moveDirection.RemoveVertical().AngleTo(Vector2.Up) + Mathf.Pi);
+			GlobalRotation = Vector3.Up * (moveDirection.Flatten().AngleTo(Vector2.Up) + Mathf.Pi);
 		}
 
 		public void OnPlayerEntered(Area a)

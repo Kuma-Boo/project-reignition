@@ -90,7 +90,7 @@ namespace Project.Gameplay
 			Crouching, //Sliding included
 			Damaged, //Being knocked back by damage
 			Respawning, //Idle until respawn timer reaches zero
-			JumpDashing, //Also includes homing attack
+			JumpDash, //Also includes homing attack
 			Stomping, //Jump cancel
 			Backflip,
 
@@ -168,6 +168,8 @@ namespace Project.Gameplay
 			return 0; //No strafe when sidescrolling
 		}
 
+		public bool FaceMovementDirection => ActionState == ActionStates.AccelJump || ActionState == ActionStates.JumpDash;
+
 		private float jumpBufferTimer;
 		private float actionBufferTimer;
 		private const float ACTION_BUFFER_LENGTH = .2f; //How long to allow actions to be buffered
@@ -200,7 +202,6 @@ namespace Project.Gameplay
 			Animator.Countdown();
 		}
 		public void CountdownCompleted() => isCountdownActive = false;
-
 
 		private bool isControlsLocked;
 		private float controlLockoutTimer;
@@ -328,6 +329,9 @@ namespace Project.Gameplay
 				return;
 			}
 
+			if (FaceMovementDirection)
+				return;
+
 			if (IsOnGround)
 			{
 				if (MoveSpeed >= 0)
@@ -385,6 +389,9 @@ namespace Project.Gameplay
 				return;
 			}
 
+			if(FaceMovementDirection)
+				return;
+
 			if (IsOnGround)
 			{
 				float standingStrafe = standingStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
@@ -422,6 +429,16 @@ namespace Project.Gameplay
 		public float maxGravity;
 		private void UpdateActions()
 		{
+			if(FaceMovementDirection)
+			{
+				if (!isControlsLocked) //Rotate & Apply new speed
+				{
+					float totalSpeed = Mathf.Sqrt(Mathf.Pow(MoveSpeed, 2) + Mathf.Pow(StrafeSpeed, 2));
+					totalSpeed = airMoveSettings.Interpolate(totalSpeed, 0f); //Slow down
+					ApplyJumpDashSpeed(totalSpeed);
+				}
+			}
+
 			if (IsStomping)
 			{
 				UpdateStomp();
@@ -440,7 +457,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (ActionState == ActionStates.JumpDashing)
+			if (ActionState == ActionStates.JumpDash)
 			{
 				UpdateJumpDash();
 				return;
@@ -626,13 +643,12 @@ namespace Project.Gameplay
 		{
 			IsAttacking = true;
 			CanJumpDash = false; //Don't use get/set so we keep our target monitoring.
-			ActionState = ActionStates.JumpDashing;
+			ActionState = ActionStates.JumpDash;
 
 			if (Lockon.LockonTarget == null) //Normal jumpdash
 			{
-				MoveSpeed = jumpDashSpeed;
+				ApplyJumpDashSpeed(jumpDashSpeed);
 				VerticalSpeed = jumpDashPower;
-				Animator.ResetLocalRotation();
 			}
 			else
 				Lockon.HomingAttack(); //Start Homing attack
@@ -640,21 +656,32 @@ namespace Project.Gameplay
 
 		private void UpdateJumpDash()
 		{
-			if (Lockon.LockonTarget != null && IsAttacking)
+			if (Lockon.IsHomingAttacking) //Homing attack
 			{
-				MoveSpeed = Lockon.homingAttackSpeed;
-				StrafeSpeed = VerticalSpeed = 0;
+				if (Lockon.LockonTarget == null) //Target disappeared. Transition to jumpdash
+				{
+					Lockon.IsHomingAttacking = false;
+					StartJumpDash();
+					return;
+				}
+
+				VerticalSpeed = 0;
+
 				customPhysicsEnabled = true;
-				Vector3 travelDirection = (Lockon.LockonTarget.GlobalTranslation - GlobalTranslation).Normalized();
-				MoveAndCollide(travelDirection * MoveSpeed * PhysicsManager.physicsDelta);
+				MoveAndSlide(Lockon.HomingAttackDirection.Normalized() * Lockon.homingAttackSpeed);
+				PathFollower.Resync();
 			}
-			else
-			{
-				MoveSpeed = jumpDashSpeed;
+			else //Normal Jump dash; Apply gravity
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
-			}
 
 			CheckStomp();
+		}
+
+		private void ApplyJumpDashSpeed(float spd)
+		{
+			Vector2 direction = Vector2.Down.Rotated(Animator.Rotation.y); //Allow homing attack sideways (Game feels weird without it)
+			StrafeSpeed = spd * direction.x;
+			MoveSpeed = spd * direction.y;
 		}
 		#endregion
 
@@ -937,14 +964,14 @@ namespace Project.Gameplay
 
 			if (!useAutoAlignment) return;
 
-			Vector3 direction = launchData.launchDirection.Flatten().Normalized();
+			Vector3 direction = launchData.launchDirection.RemoveVertical().Normalized();
 			if (!direction.IsNormalized()) //Direction parallel with Vector3.Up! Use launcher's forward direction instead.
 			{
 				if (newLauncher == null) return;
-				direction = newLauncher.Forward().Flatten().Normalized();
+				direction = newLauncher.Forward().RemoveVertical().Normalized();
 			}
 
-			Animator.SetForwardDirection(direction);
+			//Animator.SetForwardDirection(direction);
 			Animator.ResetLocalRotation();
 		}
 
@@ -1126,7 +1153,7 @@ namespace Project.Gameplay
 			customPhysicsEnabled = true;
 
 			Vector3 targetPosition = activeDriftCorner.TargetPosition;
-			float distance = GlobalTranslation.RemoveVertical().DistanceTo(targetPosition.RemoveVertical());
+			float distance = GlobalTranslation.Flatten().DistanceTo(targetPosition.Flatten());
 
 			if (activeDriftCorner.cornerCleared)
 			{
@@ -1210,16 +1237,19 @@ namespace Project.Gameplay
 			//Increases accuracy around turns.
 			movementDirection = movementDirection.LinearInterpolate(movementDirection, .5f).Normalized();
 
-			CheckMainWall(movementDirection);
 			CheckGround();
 
-			strafeCollision = StrafeCollisions.None;
+			if(!FaceMovementDirection)
+			{
+				CheckMainWall(movementDirection);
+				strafeCollision = StrafeCollisions.None;
 
-			CheckStrafeWall(1);
-			CheckStrafeWall(-1);
+				CheckStrafeWall(1);
+				CheckStrafeWall(-1);
+			}
 
-			if (!IsOnGround && ActionState == ActionStates.JumpDashing)
-				movementDirection = movementDirection.Flatten().Normalized();
+			if (!IsOnGround && ActionState == ActionStates.JumpDash)
+				movementDirection = movementDirection.RemoveVertical().Normalized();
 			MoveAndSlide(movementDirection * MoveSpeed + StrafeDirection * StrafeSpeed + worldDirection * VerticalSpeed);
 			CheckCeiling();
 
@@ -1283,14 +1313,13 @@ namespace Project.Gameplay
 				if (Mathf.Rad2Deg(groundHit.normal.AngleTo(Vector3.Up) - worldDirection.AngleTo(Vector3.Up)) > MAX_ANGLE_CHANGE)
 					return;
 
-				Vector3 newNormal = ((groundHit.normal * 100).Round() * .01f).Normalized(); //FIX Round to nearest hundredth to reduce jittering
 				if(!IsOnGround)
 				{
 					LandOnGround();
-					worldDirection = newNormal;
+					worldDirection = groundHit.normal;
 				}
 				else
-					worldDirection = worldDirection.LinearInterpolate(newNormal, .2f).Normalized();
+					worldDirection = worldDirection.LinearInterpolate(groundHit.normal, .2f).Normalized();
 
 				float rotationAmount = PathFollower.GlobalTransform.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
 				Vector3 slopeDirection = groundHit.normal.Rotated(Vector3.Up, rotationAmount).Normalized();
@@ -1430,9 +1459,7 @@ namespace Project.Gameplay
 					if (dot > .8f)
 					{
 						GlobalTranslate(hit.direction * (hit.distance - COLLISION_RADIUS));
-
-						if(ActionState != ActionStates.AccelJump) //Maintain speed when accel jumping
-							StrafeSpeed = 0;
+						StrafeSpeed = 0;
 					}
 					else
 					{
@@ -1453,7 +1480,7 @@ namespace Project.Gameplay
 		}
 
 		//Returns the absolute dot product of a normal relative to an axis ignoring Y values.
-		private float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.RemoveVertical().Normalized().Dot(axis.RemoveVertical().Normalized()));
+		private float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.Flatten().Normalized().Dot(axis.Flatten().Normalized()));
 
 		public void OnObjectCollisionEnter(PhysicsBody body)
 		{
@@ -1474,7 +1501,7 @@ namespace Project.Gameplay
 				}
 			}
 
-			if (Lockon.IsHomingAttacking)
+			if (Lockon.IsHomingAttacking && body.IsInGroup("wall"))
 				Lockon.StartBounce();
 		}
 

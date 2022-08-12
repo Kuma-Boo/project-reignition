@@ -81,7 +81,7 @@ namespace Project.Gameplay
 
 				if(Character.Soul.IsSpeedBreakActive) //For now, speed break kills enemies instantly
 					Defeat();
-				else if(Character.ActionState == CharacterController.ActionStates.JumpDashing)
+				else if(Character.ActionState == CharacterController.ActionStates.JumpDash)
 				{
 					TakeDamage();
 					Character.Lockon.StartBounce();

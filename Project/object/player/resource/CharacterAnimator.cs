@@ -79,7 +79,7 @@ namespace Project.Gameplay
 			_animator.Set(BACKFLIP_TRIGGER_PARAMETER, true);
 			_animator.Set(FALL_TRIGGER_PARAMETER, false);
 			_animator.Set(FALL_RESET_PARAMETER, 0);
-			Rotation = Vector3.Zero; //Reset Rotation
+			ResetLocalRotation();
 		}
 
 		public void JumpAccel()
@@ -123,31 +123,55 @@ namespace Project.Gameplay
 		{
 			//Don't update directions when externally controlled or on launchers
 			if (Character.MovementState != CharacterController.MovementStates.External && Character.MovementState != CharacterController.MovementStates.Launcher)
-			{
-				SetForwardDirection(Character.PathFollower.MovementDirection);
-
-				if (Character.Controller.MovementAxis != Vector2.Zero || Character.Soul.IsSpeedBreakActive)
-				{
-					float targetRotation = 0;
-					if (!Character.Soul.IsSpeedBreakActive && Character.SpeedRatio <= .8f)
-					{
-						if (Character.MoveSpeed > MOVEMENT_DEADZONE || Mathf.Abs(Character.StrafeSpeed) > MOVEMENT_DEADZONE)
-							targetRotation = new Vector2(Character.StrafeSpeed, -Character.MoveSpeed).Normalized().AngleTo(Vector2.Up);
-						else
-							targetRotation = -Character.Controller.MovementAxis.Normalized().AngleTo(Vector2.Down);
-
-						targetRotation = Mathf.Clamp(targetRotation, -Mathf.Pi * .5f, Mathf.Pi * .5f);
-					}
-
-					Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .2f);
-				}
-			}
+				UpdateCharacterRotation();
 
 			_animator.Set(GROUND_PARAMETER, Character.IsOnGround ? 0 : 1);
 			if (Character.IsOnGround)
 				GroundAnimations();
 			else
 				AirAnimations();
+		}
+
+		private void UpdateCharacterRotation()
+		{
+			SetForwardDirection(Character.PathFollower.MovementDirection); //Set base forward direction
+
+			if (Character.Lockon.IsHomingAttacking)
+			{
+				float targetRotation = Character.Lockon.HomingAttackDirection.Flatten().Rotated(_root.GlobalRotation.y).AngleTo(Vector2.Down);
+				Rotation = Vector3.Up * targetRotation;
+				return;
+			}
+
+			if (Character.Controller.MovementAxis != Vector2.Zero || Character.Soul.IsSpeedBreakActive)
+			{
+				float targetRotation = 0;
+				if (Character.FaceMovementDirection)
+				{
+					Vector2 input = Character.Controller.MovementAxis;
+					if (input.y < 0)
+						input.y = 0;
+					targetRotation = -input.Normalized().AngleTo(Vector2.Down);
+					Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .032f);
+					return;
+				}
+
+				if (!Character.Soul.IsSpeedBreakActive || Character.SpeedRatio <= .8f)
+				{
+					if (Character.MoveSpeed > MOVEMENT_DEADZONE || (Character.MoveSpeed >= 0 && Mathf.Abs(Character.StrafeSpeed) > MOVEMENT_DEADZONE))
+						targetRotation = new Vector2(Character.StrafeSpeed, -Character.MoveSpeed).Normalized().AngleTo(Vector2.Up);
+					else
+					{
+						Vector2 input = Character.Controller.MovementAxis;
+						input.y = Mathf.Abs(input.y);
+						targetRotation = -input.Normalized().AngleTo(Vector2.Down);
+					}
+
+					targetRotation = Mathf.Clamp(targetRotation, -Mathf.Pi * .5f, Mathf.Pi * .5f);
+				}
+
+				Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .4f);
+			}
 		}
 
 		private float strafeVelocity;
@@ -189,7 +213,7 @@ namespace Project.Gameplay
 
 		private void AirAnimations()
 		{
-			bool isJumpDashing = Character.ActionState == CharacterController.ActionStates.JumpDashing || Character.ActionState == CharacterController.ActionStates.AccelJump;
+			bool isJumpDashing = Character.ActionState == CharacterController.ActionStates.JumpDash || Character.ActionState == CharacterController.ActionStates.AccelJump;
 			_animator.Set(JUMPDASH_PARAMETER, isJumpDashing ? 1 : 0);
 
 			if ((int)_animator.Get(JUMPING_PARAMETER) == 1)

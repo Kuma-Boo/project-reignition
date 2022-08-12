@@ -139,7 +139,7 @@ namespace Project.Gameplay.Objects
 			InitialVerticalVelocity = Mathf.Sqrt(-2 * GRAVITY * (middleHeight - startingHeight));
 			FinalVerticalVelocity = GRAVITY * SecondHalfTime;
 
-			InitialVelocity = launchDirection.Flatten().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
+			InitialVelocity = launchDirection.RemoveVertical().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
 		}
 
 		public static LaunchData Create(Vector3 s, Vector3 e, float h, bool relativeToEnd = false)
@@ -150,7 +150,7 @@ namespace Project.Gameplay.Objects
 				startPosition = s,
 				launchDirection = delta.Normalized(),
 
-				distance = delta.RemoveVertical().Length(),
+				distance = delta.Flatten().Length(),
 				startingHeight = 0f,
 				middleHeight = h,
 				finalHeight = delta.y,

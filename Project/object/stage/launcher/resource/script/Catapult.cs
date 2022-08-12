@@ -132,7 +132,7 @@ namespace Project.Gameplay.Objects
 		private void CancelCatapult()
 		{
 			isControllingPlayer = false;
-			Character.JumpTo(Character.GlobalTranslation + this.Back().Flatten() * 2f + Vector3.Down * 2f, 1f);
+			Character.JumpTo(Character.GlobalTranslation + this.Back().RemoveVertical() * 2f + Vector3.Down * 2f, 1f);
 		}
 
 		public void PlayerEntered(Area a)
