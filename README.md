@@ -1,9 +1,9 @@
 # sonic-wildfire-remake
 A Fan Remake of Sonic and the Secret Rings.
 
-Originally released for the Nintendo Wii in 2007 with a critical reception of "Only slightly better than 06", over the course of time many Sonic fans have called Sonic and the Secret Rings their least favorite Sonic game, with the main reasons cited being the Wii Remote's required motion controls, and nonsensical progression.
+Originally released for the Nintendo Wii in 2007, over time many Sonic fans have called Sonic and the Secret Rings their least favorite Sonic game, with the main reasons cited being the Wii Remote's required motion controls, repetitive music, unnecessary skills, and nonsensical level progression.
 
-While this remake intends to keep the core of Secret Rings, many things are to be changed and overhauled.
+While this remake intends to keep the core ideas of Secret Rings, many things are to be changed and overhauled.
 
 
 **PRIMARY CHANGES**
