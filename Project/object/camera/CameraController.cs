@@ -175,7 +175,7 @@ namespace Project.Gameplay
 				else
 					playerOffset = (Mathf.Abs(playerOffset) - resource.strafeDeadzone) * Mathf.Sign(playerOffset);
 
-				Vector3 strafeOffset = Character.StrafeDirection * -playerOffset * resource.strafeTrackingStrength;
+				Vector3 strafeOffset = Character.PathFollower.StrafeDirection * -playerOffset * resource.strafeTrackingStrength;
 				return strafeOffset;
 			}
 

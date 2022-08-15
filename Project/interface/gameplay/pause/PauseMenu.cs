@@ -29,7 +29,7 @@ namespace Project.Interface
 			//TODO Pause all shaders
 			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
 			GetTree().Paused = !GetTree().Paused;
-			BGMPlayer.instance.StreamPaused = GetTree().Paused;
+			StageSettings.instance.MusicPaused = GetTree().Paused;
 			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
 
 			if (CharacterController.instance.Soul.IsTimeBreakActive)//Fix speed break

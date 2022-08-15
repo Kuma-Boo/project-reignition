@@ -1,0 +1,96 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://interface/menu/main/sprite/Background.png" type="Texture" id=1]
+[ext_resource path="res://interface/menu/flames/Flames.tscn" type="PackedScene" id=2]
+[ext_resource path="res://interface/menu/main/MainMenu.cs" type="Script" id=3]
+[ext_resource path="res://interface/menu/main/reference.png" type="Texture" id=4]
+[ext_resource path="res://interface/menu/main/sprite/text/base en.png" type="Texture" id=5]
+[ext_resource path="res://interface/menu/main/sprite/text/highlight en.png" type="Texture" id=6]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+
+[node name="MainMenu" type="Control"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="TextureRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 1 )
+expand = true
+
+[node name="Reference" type="TextureRect" parent="."]
+visible = false
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 4 )
+expand = true
+
+[node name="Adventure" type="Sprite" parent="."]
+position = Vector2( 568, 272 )
+scale = Vector2( 1.15, 1.15 )
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 1024, 140 )
+
+[node name="Highlight" type="Sprite" parent="Adventure"]
+material = SubResource( 1 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 1024, 140 )
+
+[node name="Party" type="Sprite" parent="."]
+self_modulate = Color( 1, 1, 1, 0.392157 )
+position = Vector2( 1400, 376 )
+scale = Vector2( 1.15, 1.15 )
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( 0, 140, 1024, 130 )
+
+[node name="Highlight" type="Sprite" parent="Party"]
+visible = false
+self_modulate = Color( 1, 1, 1, 0.392157 )
+material = SubResource( 1 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 140, 1024, 130 )
+
+[node name="Book" type="Sprite" parent="."]
+self_modulate = Color( 1, 1, 1, 0.392157 )
+position = Vector2( 584, 552 )
+scale = Vector2( 1.15, 1.15 )
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( 0, 270, 1024, 120 )
+
+[node name="Highlight" type="Sprite" parent="Book"]
+visible = false
+self_modulate = Color( 1, 1, 1, 0.392157 )
+material = SubResource( 1 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 270, 1024, 120 )
+
+[node name="Options" type="Sprite" parent="."]
+position = Vector2( 1344, 608 )
+scale = Vector2( 1.15, 1.15 )
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( 0, 390, 1024, 120 )
+
+[node name="Highlight" type="Sprite" parent="Options"]
+visible = false
+material = SubResource( 1 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 390, 1024, 120 )
+
+[node name="Flames" parent="." instance=ExtResource( 2 )]
+
+[node name="Animator" type="AnimationPlayer" parent="."]

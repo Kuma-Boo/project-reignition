@@ -61,7 +61,7 @@ namespace Project.Gameplay
 
 			if (limitRingCount)
 			{
-				maxRingCount = StageSettings.instance.objectiveCount;
+				maxRingCount = StageSettings.instance.targetObjectiveCount;
 				_maxRingLabel.Text = maxRingCount.ToString("000");
 			}
 			else

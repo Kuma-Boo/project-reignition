@@ -77,6 +77,7 @@ namespace Project.Gameplay.Hazards
 			}
 
 			GlobalTranslation = spawnPosition + GetOffset();
+			ProcessCollision();
 		}
 
 		private void Respawn()

@@ -87,7 +87,7 @@ namespace Project.Gameplay
 					Character.Lockon.StartBounce();
 				}
 				else if(damagePlayer)
-					Character.TakeDamage();
+					Character.TakeDamage(this);
 			}
 		}
 

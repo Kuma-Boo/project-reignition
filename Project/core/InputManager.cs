@@ -79,7 +79,7 @@ namespace Project.Core
 
 			public void Update(float delta)
 			{
-				movementModifier.Update(IsUsingGamepad ? false : ButtonHeld(ActiveMapping.movementModifierBinding));
+				movementModifier.Update(!IsUsingGamepad && ButtonHeld(ActiveMapping.movementModifierBinding));
 				
 				//Update all inputs.
 				if (IsUsingGamepad && ActiveMapping.horizontalBinding != -1)
@@ -99,6 +99,9 @@ namespace Project.Core
 
 				pauseButton.Update(ButtonHeld(ActiveMapping.pauseBinding));
 			}
+
+			//Returns true when any of the action buttons were pressed
+			public bool AnyButtonPressed => jumpButton.wasPressed || boostButton.wasPressed || breakButton.wasPressed || actionButton.wasPressed || pauseButton.wasPressed;
 
 			//Returns the current physical value of an analog axis (Gamepad Only)
 			private float AnalogAxisHeld(int axisCode) => Input.GetJoyAxis(activeGamepad, axisCode);

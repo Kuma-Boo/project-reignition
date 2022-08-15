@@ -9,12 +9,12 @@
 [ext_resource path="res://object/player/resource/movement settings/BounceLockout.tres" type="Resource" id=7]
 [ext_resource path="res://object/player/resource/movement settings/SidleSettings.tres" type="Resource" id=8]
 [ext_resource path="res://object/player/resource/movement settings/GrindSettings.tres" type="Resource" id=9]
-[ext_resource path="res://object/player/resource/CharacterController.cs" type="Script" id=10]
-[ext_resource path="res://object/player/resource/CharacterAnimator.cs" type="Script" id=11]
+[ext_resource path="res://object/player/resource/script/CharacterController.cs" type="Script" id=10]
+[ext_resource path="res://object/player/resource/script/CharacterAnimator.cs" type="Script" id=11]
 [ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=12]
-[ext_resource path="res://object/player/resource/CharacterSoulSkill.cs" type="Script" id=13]
+[ext_resource path="res://object/player/resource/script/CharacterSoulSkill.cs" type="Script" id=13]
 [ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=14]
-[ext_resource path="res://object/player/resource/CharacterSound.cs" type="Script" id=15]
+[ext_resource path="res://object/player/resource/script/CharacterSound.cs" type="Script" id=15]
 [ext_resource path="res://sound/sfx/player/en/VOICE_E_2.wav" type="AudioStream" id=16]
 [ext_resource path="res://sound/sfx/player/en/VOICE_E_24.wav" type="AudioStream" id=17]
 [ext_resource path="res://sound/sfx/player/ja/VOICE_J_24.wav" type="AudioStream" id=18]
@@ -22,8 +22,8 @@
 [ext_resource path="res://sound/sfx/player/PLAYER_5.wav" type="AudioStream" id=20]
 [ext_resource path="res://sound/sfx/player/PLAYER_75.wav" type="AudioStream" id=21]
 [ext_resource path="res://object/player/resource/movement settings/StandingStrafeSettings.tres" type="Resource" id=22]
-[ext_resource path="res://object/player/resource/CharacterPathFollower.cs" type="Script" id=23]
-[ext_resource path="res://object/player/resource/CharacterLockon.cs" type="Script" id=24]
+[ext_resource path="res://object/player/resource/script/CharacterPathFollower.cs" type="Script" id=23]
+[ext_resource path="res://object/player/resource/script/CharacterLockon.cs" type="Script" id=24]
 
 [sub_resource type="ConvexPolygonShape" id=130]
 points = PoolVector3Array( 1, 0.5, 0, -1, 0.5, 0, -1, -20, 0, 1, -20, 0, 8, 0.5, 5, -8, 0.5, 5, -8, -20, 5, 8, -20, 5, 10, 0.5, 25, -10, 0.5, 25, -10, -20, 25, 10, -20, 25 )
@@ -136,7 +136,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1808, 160 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -368, 400 )
-node_connections = [ "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "jump", 0, "backflip", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start", "fall_reset", 0, "jump_cancel_time", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "output", 0, "IsJumpDashing" ]
+node_connections = [ "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "fall_reset", 0, "jump_cancel_time", "jump", 0, "backflip", "jump", 1, "jump-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "jump_cancel_time", 0, "fall-start", "output", 0, "IsJumpDashing" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -328,7 +328,7 @@ nodes/backstep/node = SubResource( 124 )
 nodes/backstep/position = Vector2( -944, 128 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "MovementReset", 0, "MoveSpeed", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MoveSpeed", 0, "MoveState", "output", 0, "IsCrouching" ]
+node_connections = [ "MoveSpeed", 0, "MoveState", "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "MovementReset", 0, "MoveSpeed", "output", 0, "IsCrouching" ]
 
 [sub_resource type="AnimationNodeAnimation" id=127]
 animation = "sidle-fast-loop"
@@ -355,7 +355,7 @@ nodes/sidle_anim/node = SubResource( 127 )
 nodes/sidle_anim/position = Vector2( -880, 464 )
 nodes/sidle_speed/node = SubResource( 128 )
 nodes/sidle_speed/position = Vector2( -672, 432 )
-node_connections = [ "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "sidle_speed", 0, "sidle_anim", "countdown", 0, "ActionState", "countdown", 1, "countdown_anim", "output", 0, "countdown" ]
+node_connections = [ "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "countdown", 0, "ActionState", "countdown", 1, "countdown_anim", "sidle_speed", 0, "sidle_anim", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "output", 0, "countdown" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
@@ -365,10 +365,10 @@ node_connections = [ "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_stat
 collision_layer = 8
 script = ExtResource( 10 )
 pathFollower = NodePath("Components/PathFollower")
-animator = NodePath("Components/Animator")
+animator = NodePath("Components/Model")
 sound = NodePath("Components/Sound")
 soul = NodePath("Components/SoulSkills")
-lockon = NodePath("Components/Animator/LockonTrigger")
+lockon = NodePath("Components/Model/LockonTrigger")
 moveSettings = ExtResource( 1 )
 airMoveSettings = ExtResource( 4 )
 runningStrafeSettings = ExtResource( 3 )
@@ -378,8 +378,7 @@ backstepSettings = ExtResource( 2 )
 maxGravity = -48.0
 landingBoost = 18.0
 accelerationJumpSpeed = 28.0
-jumpHeight = 5.2
-jumpPower = 18.0
+jumpHeight = 3.8
 jumpDashSpeed = 24.0
 jumpDashPower = 4.0
 jumpDashGravity = 18.0
@@ -392,6 +391,7 @@ grindStepLockoutSettings = ExtResource( 6 )
 grindShuffleSpeed = 28
 grindStepSpeed = 15
 grindStepHeight = 12
+environmentCollider = NodePath("CollisionShape")
 environmentMask = 1
 
 [node name="Components" type="Spatial" parent="."]
@@ -402,30 +402,30 @@ loop = false
 script = ExtResource( 23 )
 character = NodePath("../..")
 
-[node name="Animator" parent="Components" instance=ExtResource( 12 )]
+[node name="Model" parent="Components" instance=ExtResource( 12 )]
 script = ExtResource( 11 )
 animator = NodePath("../../AnimationTree")
 root = NodePath("../..")
 
-[node name="Body" parent="Components/Animator/Sonic/Skeleton" index="0"]
+[node name="Body" parent="Components/Model/Sonic/Skeleton" index="0"]
 portal_mode = 4
 use_in_baked_light = true
 
-[node name="EyeL" parent="Components/Animator/Sonic/Skeleton" index="1"]
+[node name="EyeL" parent="Components/Model/Sonic/Skeleton" index="1"]
 portal_mode = 4
 use_in_baked_light = true
 
-[node name="EyeR" parent="Components/Animator/Sonic/Skeleton" index="2"]
+[node name="EyeR" parent="Components/Model/Sonic/Skeleton" index="2"]
 portal_mode = 4
 use_in_baked_light = true
 
-[node name="Metal" parent="Components/Animator/Sonic/Skeleton" index="3"]
+[node name="Metal" parent="Components/Model/Sonic/Skeleton" index="3"]
 portal_mode = 4
 use_in_baked_light = true
 
-[node name="VFX" type="Spatial" parent="Components/Animator"]
+[node name="VFX" type="Spatial" parent="Components/Model"]
 
-[node name="LockonTrigger" type="Area" parent="Components/Animator"]
+[node name="LockonTrigger" type="Area" parent="Components/Model"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
 collision_layer = 0
 collision_mask = 4
@@ -436,7 +436,7 @@ bounceLockoutSettings = ExtResource( 7 )
 bounceSpeed = -8.0
 bouncePower = 14.0
 
-[node name="Collision" type="CollisionShape" parent="Components/Animator/LockonTrigger"]
+[node name="Collision" type="CollisionShape" parent="Components/Model/LockonTrigger"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.3 )
 shape = SubResource( 130 )
 
@@ -479,7 +479,7 @@ shape = SubResource( 80 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 37 )
-anim_player = NodePath("../Components/Animator/AnimationPlayer")
+anim_player = NodePath("../Components/Model/AnimationPlayer")
 active = true
 parameters/ActionState/current = 0
 parameters/IsGrounded/current = 0
@@ -504,11 +504,11 @@ parameters/ground_state/Run/blend_position = 0.0
 parameters/ground_state/crouch_state/playback = SubResource( 119 )
 parameters/sidle_speed/scale = 1.5
 
-[connection signal="area_entered" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetTriggerEnter"]
-[connection signal="area_exited" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetTriggerExit"]
-[connection signal="body_entered" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetBodyEnter"]
-[connection signal="body_exited" from="Components/Animator/LockonTrigger" to="Components/Animator/LockonTrigger" method="OnTargetBodyExit"]
+[connection signal="area_entered" from="Components/Model/LockonTrigger" to="Components/Model/LockonTrigger" method="OnTargetTriggerEnter"]
+[connection signal="area_exited" from="Components/Model/LockonTrigger" to="Components/Model/LockonTrigger" method="OnTargetTriggerExit"]
+[connection signal="body_entered" from="Components/Model/LockonTrigger" to="Components/Model/LockonTrigger" method="OnTargetBodyEnter"]
+[connection signal="body_exited" from="Components/Model/LockonTrigger" to="Components/Model/LockonTrigger" method="OnTargetBodyExit"]
 [connection signal="body_entered" from="Components/ObjectTrigger" to="." method="OnObjectCollisionEnter"]
 [connection signal="body_exited" from="Components/ObjectTrigger" to="." method="OnObjectCollisionExit"]
 
-[editable path="Components/Animator"]
+[editable path="Components/Model"]

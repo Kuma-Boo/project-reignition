@@ -105,10 +105,19 @@ namespace Project.Editor
 
 						for (int i = 0; i < amount; i++)
 						{
-							_follow.HOffset = pathHInterpolationCurve.Interpolate((float)i / (amount - 1));
-							_follow.VOffset = pathVInterpolationCurve.Interpolate((float)i / (amount - 1));
+							if (pathHInterpolationCurve != null)
+								_follow.HOffset = pathHInterpolationCurve.Interpolate((float)i / (amount - 1));
+							else
+								_follow.HOffset = _follow.GlobalTransform.basis.XformInv(GlobalTranslation - _follow.GlobalTranslation).x;
+
+							if (pathVInterpolationCurve != null)
+								_follow.VOffset = pathVInterpolationCurve.Interpolate((float)i / (amount - 1));
+							else
+								_follow.VOffset = _follow.GlobalTransform.basis.XformInv(GlobalTranslation - _follow.GlobalTranslation).y;
+
 							Spawn(_follow.GlobalTranslation, true);
 							_follow.Offset += spacing;
+							_follow.HOffset = _follow.VOffset = 0f;
 						}
 
 						_follow.QueueFree();

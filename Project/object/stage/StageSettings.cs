@@ -14,9 +14,28 @@ namespace Project.Gameplay
 		public override void _EnterTree()
 		{
 			instance = this; //Always override previous instance
+
 			SetUpMission();
 			SetUpSkills();
 		}
+
+		#region Music
+		public bool MusicPaused
+		{
+			get => BGMPlayer.instance == null || BGMPlayer.instance.StreamPaused;
+			set
+			{
+				if (BGMPlayer.instance == null) return;
+				BGMPlayer.instance.StreamPaused = value;
+			}
+		}
+
+		public void SetMusicVolume(float db)
+		{
+			if (BGMPlayer.instance == null) return;
+			BGMPlayer.instance.VolumeDb = db;
+		}
+		#endregion
 
 		#region Stage Settings
 		[Export]
@@ -29,7 +48,7 @@ namespace Project.Gameplay
 		}
 
 		[Export]
-		public int objectiveCount;
+		public int targetObjectiveCount;
 		public int CurrentObjectiveCount { get; private set; }
 
 		private void SetUpMission()
@@ -50,6 +69,9 @@ namespace Project.Gameplay
 		{
 			CurrentObjectiveCount++;
 			GD.Print("Objective is now " + CurrentObjectiveCount);
+
+			if(CurrentObjectiveCount == targetObjectiveCount)
+				FinishStage(true);
 		}
 
 		/*
@@ -103,6 +125,7 @@ namespace Project.Gameplay
 		{
 			if (isSuccess)
 			{
+				GD.Print("Stage Complete.");
 				return;
 			}
 
@@ -111,6 +134,8 @@ namespace Project.Gameplay
 		}
 		#endregion
 
+
+		#region Skills
 		public static SphereShape PearlCollisionShape = new SphereShape();
 		public static SphereShape RichPearlCollisionShape = new SphereShape();
 		public static RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
@@ -132,6 +157,7 @@ namespace Project.Gameplay
 				RichPearlCollisionShape.Radius *= PEARL_ATTRACTOR_MULTIPLIER;
 			}
 		}
+		#endregion
 
 		#region Object Spawning
 		[Signal]

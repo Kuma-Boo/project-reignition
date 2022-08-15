@@ -13,6 +13,9 @@ namespace Project.Gameplay.Objects
 		public NodePath originalMesh; //Unbroken mesh. Leave empty to always show the pieces
 		private Spatial _originalMesh;
 		[Export]
+		public NodePath brokenMesh; //Useful if you have a model that represents the broken object
+		private Spatial _brokenMesh;
+		[Export]
 		public NodePath collider;
 		private CollisionShape _collider;
 		[Export]
@@ -44,7 +47,10 @@ namespace Project.Gameplay.Objects
 			if (originalMesh != null)
 				_originalMesh = GetNodeOrNull<Spatial>(originalMesh);
 
-			if(collider != null)
+			if (brokenMesh != null)
+				_brokenMesh = GetNodeOrNull<Spatial>(brokenMesh);
+
+			if (collider != null)
 				_collider = GetNodeOrNull<CollisionShape>(collider);
 
 			//Clone materials so multiple destructable objects of the same type can animate independantly
@@ -87,6 +93,8 @@ namespace Project.Gameplay.Objects
 				_collider.Disabled = false;
 			if (_originalMesh != null)
 				_originalMesh.Visible = true;
+			if (_brokenMesh != null)
+				_brokenMesh.Visible = false;
 
 			if (_originalMesh != null)
 				DisablePieces();
@@ -133,6 +141,8 @@ namespace Project.Gameplay.Objects
 				_originalMesh.Visible = false;
 				EnablePieces();
 			}
+			if (_brokenMesh != null)
+				_brokenMesh.Visible = true;
 
 			for (int i = 0; i < _pieces.Count; i++)
 			{

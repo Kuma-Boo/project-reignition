@@ -1,0 +1,237 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://sound/jingle/Stage Clear.mp3" type="AudioStream" id=1]
+[ext_resource path="res://sound/scripts/BGMPlayer.cs" type="Script" id=2]
+[ext_resource path="res://interface/gameplay/results/icon/bronze.png" type="Texture" id=3]
+[ext_resource path="res://interface/gameplay/results/RSRE8P_2022-08-13_21-47-21.png" type="Texture" id=4]
+[ext_resource path="res://interface/gameplay/results/result atlas.png" type="Texture" id=5]
+[ext_resource path="res://interface/font/HUDNumber.tres" type="BitmapFont" id=6]
+[ext_resource path="res://interface/gameplay/results/text/results en.png" type="Texture" id=7]
+
+[sub_resource type="Animation" id=1]
+resource_name = "MissionComplete"
+
+[node name="StageResults" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Ref" type="TextureRect" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0.458824 )
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 4 )
+expand = true
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Data" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Medal" type="Sprite" parent="Data"]
+position = Vector2( 1456, 394.4 )
+scale = Vector2( 1.2, 1.2 )
+texture = ExtResource( 3 )
+
+[node name="HeaderSuccess" type="Node2D" parent="Data"]
+position = Vector2( 960, 232 )
+scale = Vector2( 0.85, 0.85 )
+
+[node name="DecalLeft" type="Sprite" parent="Data/HeaderSuccess"]
+position = Vector2( 0, 19.2 )
+texture = ExtResource( 5 )
+offset = Vector2( -252, 0 )
+region_enabled = true
+region_rect = Rect2( 8, 160, 504, 320 )
+
+[node name="DecalRight" type="Sprite" parent="Data/HeaderSuccess"]
+position = Vector2( 0, 19.2 )
+texture = ExtResource( 5 )
+offset = Vector2( 252, 0 )
+region_enabled = true
+region_rect = Rect2( 512, 160, 504, 320 )
+
+[node name="Label" type="Sprite" parent="Data/HeaderSuccess"]
+position = Vector2( 0, 19.2 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 1024, 112 )
+
+[node name="HeaderFail" type="Node2D" parent="Data"]
+visible = false
+position = Vector2( 960, 232 )
+scale = Vector2( 0.85, 0.85 )
+
+[node name="Label" type="Sprite" parent="Data/HeaderFail"]
+position = Vector2( 0, 19.2 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 0, 112, 1024, 104 )
+
+[node name="Labels" type="Node2D" parent="Data"]
+position = Vector2( 512, 488 )
+
+[node name="Score" type="Sprite" parent="Data/Labels"]
+position = Vector2( -16, -128 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 588, 240, 436, 56 )
+
+[node name="Value" type="Label" parent="Data/Labels/Score"]
+margin_top = -5.0
+margin_right = 891.0
+margin_bottom = 62.0
+rect_scale = Vector2( 0.85, 0.85 )
+rect_pivot_offset = Vector2( 0, 32 )
+custom_fonts/font = ExtResource( 6 )
+text = "0000000"
+align = 2
+
+[node name="Time" type="Sprite" parent="Data/Labels"]
+position = Vector2( -16, -56 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 88, 240, 448, 56 )
+
+[node name="Value" type="Label" parent="Data/Labels/Time"]
+margin_top = -5.0
+margin_right = 891.0
+margin_bottom = 62.0
+rect_scale = Vector2( 0.85, 0.85 )
+rect_pivot_offset = Vector2( 0, 32 )
+custom_fonts/font = ExtResource( 6 )
+text = "00:00.00"
+align = 2
+
+[node name="DecalTop" type="Sprite" parent="Data/Labels"]
+position = Vector2( 448, 32 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( -8, 0, 1032, 64 )
+
+[node name="Enemy" type="Sprite" parent="Data/Labels"]
+position = Vector2( 0, 72 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 88, 400, 448, 40 )
+
+[node name="Value" type="Label" parent="Data/Labels/Enemy"]
+margin_left = 514.286
+margin_top = -7.0
+margin_right = 869.286
+margin_bottom = 60.0
+rect_scale = Vector2( 0.8, 0.8 )
+rect_pivot_offset = Vector2( 0, 32 )
+custom_fonts/font = ExtResource( 6 )
+text = "2500"
+align = 2
+
+[node name="Ring" type="Sprite" parent="Data/Labels"]
+position = Vector2( 0, 144 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 88, 448, 448, 40 )
+
+[node name="Value" type="Label" parent="Data/Labels/Ring"]
+margin_left = 514.286
+margin_top = -7.0
+margin_right = 869.286
+margin_bottom = 60.0
+rect_scale = Vector2( 0.8, 0.8 )
+rect_pivot_offset = Vector2( 0, 32 )
+custom_fonts/font = ExtResource( 6 )
+text = "2400"
+align = 2
+
+[node name="Technical" type="Sprite" parent="Data/Labels"]
+position = Vector2( 0, 216 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 88, 496, 448, 48 )
+
+[node name="Value" type="Label" parent="Data/Labels/Technical"]
+margin_left = 514.286
+margin_top = -7.0
+margin_right = 870.286
+margin_bottom = 60.0
+rect_scale = Vector2( 0.8, 0.8 )
+rect_pivot_offset = Vector2( 0, 32 )
+custom_fonts/font = ExtResource( 6 )
+text = "x2.0"
+align = 2
+
+[node name="ResultsBar" type="Sprite" parent="Data/Labels"]
+position = Vector2( 448, 291.84 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( -8, 72, 984, 64 )
+
+[node name="Total" type="Sprite" parent="Data/Labels"]
+position = Vector2( -48, 315.84 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 592, 432, 336, 72 )
+
+[node name="Value" type="Label" parent="Data/Labels/Total"]
+margin_top = 3.57141
+margin_right = 891.0
+margin_bottom = 70.5714
+rect_pivot_offset = Vector2( 0, 32 )
+custom_fonts/font = ExtResource( 6 )
+text = "0000000"
+align = 2
+
+[node name="Prompts" type="Node2D" parent="Data"]
+
+[node name="Next" type="Sprite" parent="Data/Prompts"]
+position = Vector2( 1488, 927.36 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 584, 376, 320, 56 )
+
+[node name="ButtonIcon" type="Node2D" parent="Data/Prompts/Next"]
+position = Vector2( -184, 0 )
+
+[node name="Retry" type="Sprite" parent="Data/Prompts"]
+position = Vector2( 1120, 927 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 584, 312, 320, 56 )
+
+[node name="ButtonIcon" type="Node2D" parent="Data/Prompts/Retry"]
+position = Vector2( -184, 0 )
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+bus = "BGM"
+script = ExtResource( 2 )
+loopStartPosition = 5.85
+loopEndPosition = 28.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/MissionComplete = SubResource( 1 )
+
+[connection signal="finished" from="Music" to="Music" method="RestartLoop"]

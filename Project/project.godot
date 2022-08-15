@@ -11,10 +11,10 @@ config_version=4
 [application]
 
 config/name="Sonic Remake Project"
-run/main_scene="res://interface/main menu/MainMenu.tscn"
+run/main_scene="res://interface/menu/Menu.tscn"
 boot_splash/show_image=false
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
-config/icon="res://interface/sprites/Icon.png"
+config/icon="res://interface/boot/Icon.png"
 
 [audio]
 
@@ -22,10 +22,11 @@ default_bus_layout="res://sound/AudioLayout.tres"
 
 [autoload]
 
-Debug="*res://core/Debug.cs"
-InputManager="*res://core/InputManager.cs"
-SaveManager="*res://core/SaveManager.cs"
-PhysicsManager="*res://core/PhysicsManager.cs"
+Debug="res://core/Debug.cs"
+InputManager="res://core/InputManager.cs"
+SaveManager="res://core/SaveManager.cs"
+PhysicsManager="res://core/PhysicsManager.cs"
+TransitionManager="res://interface/transition/TransitionManager.tscn"
 SoundManager="res://sound/SoundManager.tscn"
 
 [display]
@@ -44,6 +45,10 @@ enabled=PoolStringArray( "res://addons/BitmapFontCutterPlus/plugin.cfg", "res://
 [filesystem]
 
 import/blend/blender_path="C:\\Program Files\\Blender Foundation\\Blender 3.1\\blender.exe"
+
+[global]
+
+local=false
 
 [importer_defaults]
 
@@ -1117,10 +1122,11 @@ scene={
 
 [locale]
 
-test="en"
-locale_filter=[ 1, [ "de", "en", "es", "fr", "it", "ja" ] ]
+test="ja"
+locale_filter=[ 1, [ "de", "en", "es", "fr", "it", "ja", "ja_JP" ] ]
 translations=PoolStringArray( "res://locale/Locale.en.translation", "res://locale/Locale.ja.translation" )
 translation_remaps={
+"res://interface/gameplay/results/text/results en.png": PoolStringArray( "res://interface/gameplay/results/text/results es.png:es", "res://interface/gameplay/results/text/results fr.png:fr", "res://interface/gameplay/results/text/results it.png:it", "res://interface/gameplay/results/text/results de.png:de", "res://interface/gameplay/results/text/results ja.png:ja" ),
 "res://interface/main menu/logos/logo en.png": PoolStringArray( "res://interface/main menu/logos/logo de.png:de", "res://interface/main menu/logos/logo es.png:es", "res://interface/main menu/logos/logo ja.png:ja", "res://interface/main menu/logos/logo it.png:it" )
 }
 

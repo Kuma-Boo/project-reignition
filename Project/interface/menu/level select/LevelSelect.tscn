@@ -1,0 +1,32 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://interface/menu/level select/LevelSelect.cs" type="Script" id=1]
+[ext_resource path="res://interface/menu/flames/Flames.tscn" type="PackedScene" id=2]
+[ext_resource path="res://interface/menu/level select/Background.png" type="Texture" id=3]
+[ext_resource path="res://video/demo/demo7.ogv" type="VideoStream" id=4]
+[ext_resource path="res://video/demo/demo0.ogv" type="VideoStream" id=5]
+[ext_resource path="res://video/demo/demo2.ogv" type="VideoStream" id=6]
+[ext_resource path="res://video/demo/demo4.ogv" type="VideoStream" id=7]
+[ext_resource path="res://video/demo/demo5.ogv" type="VideoStream" id=8]
+[ext_resource path="res://video/demo/demo6.ogv" type="VideoStream" id=9]
+[ext_resource path="res://video/demo/demo1.ogv" type="VideoStream" id=10]
+[ext_resource path="res://video/demo/demo3.ogv" type="VideoStream" id=11]
+
+[node name="LevelSelect" type="Control"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+script = ExtResource( 1 )
+video = NodePath("DemoVideo")
+areaDemos = [ ExtResource( 5 ), ExtResource( 10 ), ExtResource( 6 ), ExtResource( 11 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 4 ) ]
+
+[node name="DemoVideo" type="VideoPlayer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="BG" type="TextureRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 3 )
+expand = true
+
+[node name="Flames" parent="." instance=ExtResource( 2 )]

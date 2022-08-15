@@ -1,0 +1,252 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://interface/gameplay/results/result atlas.png" type="Texture" id=1]
+[ext_resource path="res://interface/gameplay/results/experience/ref.png" type="Texture" id=2]
+[ext_resource path="res://interface/menu/main/sprite/Background.png" type="Texture" id=3]
+[ext_resource path="res://interface/gameplay/results/text/results en.png" type="Texture" id=4]
+[ext_resource path="res://interface/font/HUDNumber.tres" type="BitmapFont" id=5]
+
+[node name="ExperienceResults" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Background" type="TextureRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 3 )
+expand = true
+
+[node name="Ref" type="TextureRect" parent="."]
+visible = false
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 2 )
+expand = true
+
+[node name="Decals" type="Node2D" parent="."]
+
+[node name="DecalTop" type="Sprite" parent="Decals"]
+position = Vector2( 953.92, 232 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( -8, 0, 1032, 64 )
+
+[node name="DecalBottom" type="Sprite" parent="Decals"]
+position = Vector2( 953.92, 680 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( -8, 0, 1032, 64 )
+
+[node name="DecalTopRight" type="Sprite" parent="Decals"]
+position = Vector2( 1720, 176 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 24, 496, 168, 168 )
+
+[node name="DecalBottomRight" type="Sprite" parent="Decals"]
+position = Vector2( 1720, 904 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 1 )
+flip_v = true
+region_enabled = true
+region_rect = Rect2( 24, 496, 168, 168 )
+
+[node name="DecalTopLeft" type="Sprite" parent="Decals"]
+position = Vector2( 198.08, 176 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 1 )
+flip_h = true
+region_enabled = true
+region_rect = Rect2( 24, 496, 168, 168 )
+
+[node name="DecalBottomLeft" type="Sprite" parent="Decals"]
+position = Vector2( 198.08, 904 )
+scale = Vector2( 1.12, 1.12 )
+texture = ExtResource( 1 )
+flip_h = true
+flip_v = true
+region_enabled = true
+region_rect = Rect2( 24, 496, 168, 168 )
+
+[node name="Stats" type="Node2D" parent="."]
+
+[node name="ExperienceBar" type="Sprite" parent="Stats"]
+position = Vector2( 600, 296 )
+scale = Vector2( 1.14, 1.07 )
+z_index = 5
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 384, 512, 400, 48 )
+
+[node name="BG" type="Sprite" parent="Stats/ExperienceBar"]
+z_index = -3
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 384, 560, 400, 56 )
+
+[node name="EdgeLeft" type="Sprite" parent="Stats/ExperienceBar"]
+position = Vector2( -176, 0 )
+z_index = -1
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 816, 560, 48, 56 )
+
+[node name="EdgeRight" type="Sprite" parent="Stats/ExperienceBar"]
+position = Vector2( 176, 0 )
+z_index = -1
+texture = ExtResource( 1 )
+flip_h = true
+region_enabled = true
+region_rect = Rect2( 816, 560, 48, 56 )
+
+[node name="Fill" type="Sprite" parent="Stats/ExperienceBar"]
+position = Vector2( -176, -16 )
+scale = Vector2( 2.875, 1 )
+z_index = -2
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 832, 520, 32, 32 )
+
+[node name="Exp" type="Node2D" parent="Stats"]
+
+[node name="Label" type="Sprite" parent="Stats/Exp"]
+position = Vector2( 824, 272 )
+scale = Vector2( 1.15, 1.15 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 528, 920, 152, 48 )
+
+[node name="Value" type="Label" parent="Stats/Exp"]
+margin_left = 1000.0
+margin_top = 280.0
+margin_right = 1660.0
+margin_bottom = 344.0
+rect_scale = Vector2( 0.72, 0.72 )
+custom_fonts/font = ExtResource( 5 )
+text = "0000000/0000000"
+
+[node name="Total" type="Node2D" parent="Stats"]
+
+[node name="Label" type="Sprite" parent="Stats/Total"]
+position = Vector2( 568, 352 )
+scale = Vector2( 1.1, 1.1 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 112, 624, 272, 64 )
+
+[node name="Colon" type="Label" parent="Stats/Total"]
+margin_left = 872.0
+margin_top = 352.0
+margin_right = 920.0
+margin_bottom = 416.0
+custom_fonts/font = ExtResource( 5 )
+text = ":"
+
+[node name="Value" type="Label" parent="Stats/Total"]
+margin_left = 936.0
+margin_top = 352.0
+margin_right = 1248.0
+margin_bottom = 416.0
+custom_fonts/font = ExtResource( 5 )
+text = "0000000"
+align = 2
+
+[node name="Mission" type="Node2D" parent="Stats"]
+
+[node name="Label" type="Sprite" parent="Stats/Mission"]
+position = Vector2( 592, 440 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 448, 624, 400, 56 )
+
+[node name="Colon" type="Label" parent="Stats/Mission"]
+margin_left = 1056.0
+margin_top = 440.0
+margin_right = 1104.0
+margin_bottom = 504.0
+rect_scale = Vector2( 0.9, 0.9 )
+custom_fonts/font = ExtResource( 5 )
+text = ":"
+
+[node name="Value" type="Label" parent="Stats/Mission"]
+margin_left = 1096.0
+margin_top = 440.0
+margin_right = 1416.0
+margin_bottom = 504.0
+rect_scale = Vector2( 0.9, 0.9 )
+custom_fonts/font = ExtResource( 5 )
+text = "0000000"
+align = 2
+
+[node name="Experience" type="Node2D" parent="Stats"]
+
+[node name="Label" type="Sprite" parent="Stats/Experience"]
+position = Vector2( 592, 512 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 448, 688, 400, 48 )
+
+[node name="Colon" type="Label" parent="Stats/Experience"]
+margin_left = 1056.0
+margin_top = 512.0
+margin_right = 1104.0
+margin_bottom = 576.0
+rect_scale = Vector2( 0.9, 0.9 )
+custom_fonts/font = ExtResource( 5 )
+text = ":"
+
+[node name="Value2" type="Label" parent="Stats/Experience"]
+margin_left = 1104.0
+margin_top = 512.0
+margin_right = 1371.0
+margin_bottom = 576.0
+rect_scale = Vector2( 0.9, 0.9 )
+custom_fonts/font = ExtResource( 5 )
+text = "000000"
+align = 2
+
+[node name="Lower" type="Node2D" parent="."]
+
+[node name="Level" type="Node2D" parent="Lower"]
+
+[node name="Label" type="Sprite" parent="Lower/Level"]
+position = Vector2( 528, 744 )
+scale = Vector2( 1.15, 1.15 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 80, 792, 240, 56 )
+
+[node name="Value" type="Label" parent="Lower/Level"]
+margin_left = 1056.0
+margin_top = 744.0
+margin_right = 1232.0
+margin_bottom = 808.0
+custom_fonts/font = ExtResource( 5 )
+text = ":99"
+
+[node name="SkillPoint" type="Node2D" parent="Lower"]
+
+[node name="Label" type="Sprite" parent="Lower/SkillPoint"]
+position = Vector2( 528, 824 )
+scale = Vector2( 1.15, 1.15 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 568, 856, 400, 56 )
+
+[node name="Value" type="Label" parent="Lower/SkillPoint"]
+margin_left = 1056.0
+margin_top = 824.0
+margin_right = 1232.0
+margin_bottom = 888.0
+custom_fonts/font = ExtResource( 5 )
+text = ":999"

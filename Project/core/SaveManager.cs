@@ -124,7 +124,6 @@ namespace Project.Core
 
 		public void LoadGame()
 		{
-
 			//Debug game data
 			ActiveGameData = new GameData()
 			{

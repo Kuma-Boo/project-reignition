@@ -1,16 +1,17 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Boat Wave.tres" type="Material" id=1]
 [ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Boat Interior.tres" type="Material" id=2]
 [ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Boat Exterior.tres" type="Material" id=3]
 [ext_resource path="res://object/stage/launcher/resource/script/Boat.cs" type="Script" id=4]
-[ext_resource path="res://area/stage/3 dino jungle/object/CAM_Boat.tres" type="Resource" id=5]
+[ext_resource path="res://area/stage/3 dino jungle/object/BOAT_CAM.tres" type="Resource" id=5]
+[ext_resource path="res://area/stage/3 dino jungle/object/BOAT_Strafe.tres" type="Resource" id=6]
 
-[sub_resource type="CapsuleShape" id=4]
-radius = 0.35
-height = 2.0
+[sub_resource type="CapsuleShape" id=8]
+radius = 0.4
+height = 1.5
 
-[sub_resource type="SphereShape" id=3]
+[sub_resource type="SphereShape" id=9]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Boat_BoatRipple"
@@ -151,24 +152,23 @@ tracks/1/keys = {
 }
 
 [node name="Boat" type="KinematicBody"]
-collision_layer = 8
 script = ExtResource( 4 )
 cameraSettings = ExtResource( 5 )
-acceleration = 40.0
+strafeSettings = ExtResource( 6 )
 animator = NodePath("Boat/AnimationPlayer")
 
 [node name="CollisionShape" type="CollisionShape" parent="." groups=["boat"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 8 )
 
-[node name="PlayerActivationTrigger" type="Area" parent="."]
+[node name="ObjectTrigger" type="Area" parent="."]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape" type="CollisionShape" parent="PlayerActivationTrigger"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0 )
-shape = SubResource( 3 )
+[node name="CollisionShape" type="CollisionShape" parent="ObjectTrigger"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+shape = SubResource( 9 )
 
 [node name="Boat" type="Spatial" parent="."]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.25, 0 )
@@ -184,4 +184,4 @@ anims/Despawn = SubResource( 5 )
 anims/RESET = SubResource( 7 )
 anims/Spawn = SubResource( 6 )
 
-[connection signal="area_entered" from="PlayerActivationTrigger" to="." method="OnPlayerEntered"]
+[connection signal="area_entered" from="ObjectTrigger" to="." method="OnPlayerEntered"]
