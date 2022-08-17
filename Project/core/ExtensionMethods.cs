@@ -11,11 +11,6 @@ namespace Project.Core
 			AddObjectToArray(s, ref ex);
 			return PhysicsManager.CastRay(pos, dir, hitArea, mask, ex);
 		}
-		public static Node[] OverlapShape(this Spatial s, RID rid, Vector3 pos, Basis basis, int maxCollisionCount, uint mask = 2147483647, Array ex = null)
-		{
-			AddObjectToArray(s, ref ex);
-			return PhysicsManager.OverlapShape(rid, pos, basis, maxCollisionCount, mask, ex);
-		}
 
 		public static void AddObjectToArray(object o, ref Array i)
 		{

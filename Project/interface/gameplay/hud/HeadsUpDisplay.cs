@@ -1,19 +1,61 @@
 using Godot;
+using System;
 using Project.Core;
 
 namespace Project.Gameplay
 {
+	/// <summary>
+	/// Displays game data to the player. Only handles the graphics.
+	/// </summary>
 	public class HeadsUpDisplay : Control
 	{
 		public static HeadsUpDisplay instance;
+		private StageSettings Stage => StageSettings.instance;
 
 		public override void _Ready()
 		{
 			instance = this;
 
-			InitializeRingCounter();
-			InitializeSoulGauge();
-			InitializeHomingAttack();
+			_time = GetNode<Label>(time);
+
+			//Initialize ring counter
+			_ringLabel = GetNode<Label>(ringLabel);
+			_maxRingLabel = GetNode<Label>(maxRingLabel);
+			_ringDividerSprite = GetNode<Sprite>(ringDividerSprite);
+			_ringAnimator = GetNode<AnimationPlayer>(ringAnimator);
+
+			if(Stage != null)
+			{
+				Stage.Connect(nameof(StageSettings.RingChanged), this, nameof(UpdateRingCount));
+				Stage.Connect(nameof(StageSettings.TimeChanged), this, nameof(UpdateTime));
+				//Stage.Connect(nameof(StageSettings.ObjectiveChanged), this, nameof(UpdateObjective));
+				//Stage.Connect(nameof(StageSettings.ScoreChanged), this, nameof(UpdateScore));
+
+				_maxRingLabel.Visible = _ringDividerSprite.Visible = Stage.missionType == StageSettings.MissionType.Ring; //Show/Hide max ring count
+				if (_maxRingLabel.Visible)
+					_maxRingLabel.Text = Stage.targetObjectiveCount.ToString(RING_LABEL_FORMAT);
+
+				_ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
+				if (Stage.CurrentRingCount == 0) //Starting in a ringless state
+					_ringAnimator.Play("Ringless");
+			}
+
+			//Initialize soul gauge
+			_soulGauge = GetNode<Control>(soulGauge);
+			_soulGaugeRoot = _soulGauge.GetParent<Control>();
+			_soulGaugeFill = GetNode<Control>(soulGaugeFill);
+			_soulGaugeBackground = _soulGaugeFill.GetParent<Control>();
+			_soulGaugeAnimator = GetNode<AnimationPlayer>(soulGaugeAnimator);
+
+			//Resize the soul gauge
+			int lerpFrom = Mathf.RoundToInt(_soulGaugeRoot.RectSize.y - _soulGauge.RectMinSize.y); //Smallest gauge size
+			_soulGauge.MarginTop = Mathf.Lerp(lerpFrom, 0, SaveManager.ActiveGameData.SoulGaugeLevel); //Set the soul gauge to the correct size
+			ModifySoulGauge(0f, false);
+		}
+
+		public override void _PhysicsProcess(float _)
+		{
+			UpdateSoulGauge(); //Animate the soul gauge
 		}
 
 		#region Heads up display
@@ -29,78 +71,32 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath ringAnimator;
 		private AnimationPlayer _ringAnimator;
+		private const string RING_LABEL_FORMAT = "000";
 
-		public int Score { get; private set; }
-
-		public enum BonusTypes
+		private void UpdateRingCount(int amount)
 		{
-			Drift,
-			Grinding,
-			GrindStep,
-		}
-
-		public void AddBonus(BonusTypes bonusType)
-		{
-			//TODO Play point bonus animation, similar to Black Knight
-		}
-
-		public int RingCount { get; private set; }
-		private int maxRingCount;
-
-		private void InitializeRingCounter()
-		{
-			_ringLabel = GetNode<Label>(ringLabel);
-			_maxRingLabel = GetNode<Label>(maxRingLabel);
-			_ringDividerSprite = GetNode<Sprite>(ringDividerSprite);
-			_ringAnimator = GetNode<AnimationPlayer>(ringAnimator);
-
-			//TODO set ring count based on skills
-
-			bool limitRingCount = StageSettings.instance != null && StageSettings.instance.missionType == StageSettings.MissionType.Ring;
-			_maxRingLabel.Visible = _ringDividerSprite.Visible = limitRingCount;
-
-			if (limitRingCount)
-			{
-				maxRingCount = StageSettings.instance.targetObjectiveCount;
-				_maxRingLabel.Text = maxRingCount.ToString("000");
-			}
-			else
-				maxRingCount = int.MaxValue;
-
-			_ringLabel.Text = RingCount.ToString("000");
-
-			if (RingCount == 0)
-				_ringAnimator.Play("Ringless");
-		}
-
-		[Signal]
-		public delegate void RingCountChanged();
-		public void CollectRing(int amount)
-		{
-			//Play animation
-			if (RingCount != maxRingCount)
+			if (amount > 0) //Play animation
 			{
 				_ringAnimator.Play("CollectRing");
 				_ringAnimator.Seek(0.0f, true);
 			}
+			else
+			{
+				_ringAnimator.Play("LoseRing");
+				_ringAnimator.AnimationSetNext("LoseRing", Stage.CurrentRingCount == 0 ? "Ringless" : "RESET");
+			}
 
-			RingCount += amount;
-			RingCount = Mathf.Clamp(RingCount, 0, maxRingCount);
-			_ringLabel.Text = RingCount.ToString("000");
-
-			EmitSignal(nameof(RingCountChanged));
+			_ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 		}
 
-		public void LoseRings(int amount)
+		[Export]
+		public NodePath time;
+		private Label _time;
+		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
+		private void UpdateTime()
 		{
-			RingCount -= amount;
-			if (RingCount <= 0)
-				RingCount = 0;
-
-			_ringLabel.Text = RingCount.ToString("000");
-
-			_ringAnimator.Play("LoseRing");
-			_ringAnimator.AnimationSetNext("LoseRing", RingCount == 0 ? "Ringless" : "RESET");
+			TimeSpan time = TimeSpan.FromSeconds(Stage.CurrentTime);
+			_time.Text = time.ToString(TIME_LABEL_FORMAT);
 		}
 
 		[Export]
@@ -114,127 +110,37 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath soulGaugeAnimator;
 		private AnimationPlayer _soulGaugeAnimator;
-		private Tween _soulGaugeTweener; //Leaving this as a tween node for now to avoid leaking
 
-		public bool IsSoulGaugeFull => soulPower == maxSoulPower;
-		public bool IsSoulGaugeCharged { get; private set; }
-		public bool IsSoulGaugeEmpty => soulPower == 0;
-		private int soulPower;
-		private int maxSoulPower;
+		public void ModifySoulGauge(float ratio, bool isCharged)
+		{
+			targetSoulGaugeRatio = ratio;
+			UpdateSoulGaugeColor(isCharged);
+		}
 
-		private const int SOUL_GAUGE_BASE = 100; //Base size of soul gauge
-		private const int SOUL_GAUGE_MAX = 300; //Max size of soul gauge
-		private const int MINIMUM_SOUL_POWER = 50; //Minimum amount of soul power needed to use soul skills.
-
+		private float targetSoulGaugeRatio;
+		private Vector2 soulGaugeVelocity;
 		private const int SOUL_GAUGE_FILL_OFFSET = 15;
-
-		private void InitializeSoulGauge()
+		private void UpdateSoulGauge()
 		{
-			_soulGauge = GetNode<Control>(soulGauge);
-			_soulGaugeRoot = _soulGauge.GetParent<Control>();
-			_soulGaugeFill = GetNode<Control>(soulGaugeFill);
-			_soulGaugeBackground = _soulGaugeFill.GetParent<Control>();
-			_soulGaugeAnimator = GetNode<AnimationPlayer>(soulGaugeAnimator);
-			_soulGaugeTweener = new Tween();
-			AddChild(_soulGaugeTweener);
-
-			//Soul Gauge increases by 20 every 5 levels, caps at 300 (level 50).
-			float levelRatio = Mathf.Clamp(SaveManager.ActiveGameData.level, 0, 50) / 5f; //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
-			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio) * 20;
-
-			int lerpFrom = Mathf.RoundToInt(_soulGaugeRoot.RectSize.y - _soulGauge.RectMinSize.y);
-			levelRatio *= .1f; //Convert from 0 -> 10 to 0 -> 1
-			_soulGauge.MarginTop = Mathf.Lerp(lerpFrom, 0, levelRatio); //Set the soul gauge to the correct size
-			UpdateSoulFill(0f);
+			Vector2 end = Vector2.Down * Mathf.Lerp(_soulGaugeBackground.RectSize.y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
+			_soulGaugeFill.RectPosition = ExtensionMethods.SmoothDamp(_soulGaugeFill.RectPosition, end, ref soulGaugeVelocity, 0.1f);
 		}
 
-		public void ModifySoulGauge(int amount)
+		private bool isSoulGaugeCharged;
+		public void UpdateSoulGaugeColor(bool isCharged)
 		{
-			soulPower += amount;
-			soulPower = Mathf.Clamp(soulPower, 0, maxSoulPower);
-			UpdateSoulFill((float)soulPower / maxSoulPower);
-
-			if (amount > 0)
-				UpdateSoulGaugeColor();
-		}
-
-		public void UpdateSoulGaugeColor()
-		{
-			if (!IsSoulGaugeCharged && soulPower >= MINIMUM_SOUL_POWER)
+			if (!isSoulGaugeCharged && isCharged)
 			{
 				//Play animation
-				IsSoulGaugeCharged = true;
+				isSoulGaugeCharged = true;
 				_soulGaugeAnimator.Play("Charged");
 			}
-			else if (IsSoulGaugeCharged && soulPower < MINIMUM_SOUL_POWER)
+			else if (isSoulGaugeCharged && !isCharged)
 			{
 				//Lost charge
-				IsSoulGaugeCharged = false;
+				isSoulGaugeCharged = false;
 				_soulGaugeAnimator.Play("RESET"); //Revert to blue
 			}
-		}
-
-		private void UpdateSoulFill(float t)
-		{
-			_soulGaugeTweener.StopAll();
-
-			Vector2 end = Vector2.Down * Mathf.Lerp(_soulGaugeBackground.RectSize.y + SOUL_GAUGE_FILL_OFFSET, 0, t);
-			_soulGaugeTweener.InterpolateProperty(_soulGaugeFill, "rect_position", _soulGaugeFill.RectPosition, end, .08f, Tween.TransitionType.Sine, Tween.EaseType.Out);
-			_soulGaugeTweener.Start();
-		}
-		#endregion
-
-		#region Homing Attack Reticle
-		[Export]
-		public NodePath lockonReticle;
-		private Node2D _lockonReticle;
-		[Export]
-		public NodePath lockonAnimator;
-		private AnimationPlayer _lockonAnimator;
-		[Export]
-		public Material lockonFlashMaterial;
-
-		private void InitializeHomingAttack()
-		{
-			_lockonReticle = GetNode<Node2D>(lockonReticle);
-			_lockonAnimator = GetNode<AnimationPlayer>(lockonAnimator);
-		}
-
-		public void DisableLockonReticle() => _lockonAnimator.Play("disable");
-
-		public void UpdateLockonReticle(Vector2 screenPosition, bool newTarget)
-		{
-			_lockonReticle.SetDeferred("position", screenPosition);
-			if (newTarget)
-				_lockonAnimator.Play("enable");
-		}
-
-		public void PerfectHomingAttack()
-		{
-			SceneTreeTween t = CreateTween();
-			t.TweenProperty(lockonFlashMaterial, "shader_param/flash_amount", 1f, .05f);
-			t.TweenProperty(lockonFlashMaterial, "shader_param/flash_amount", 0f, .1f);
-		}
-		#endregion
-
-		#region Camera Transition
-		//Used for instant camera transitions
-		[Export]
-		public NodePath cameraTransition;
-		private TextureRect _cameraTransition;
-		[Export]
-		public NodePath cameraTransitionAnimator;
-		private AnimationPlayer _cameraTransitionAnimator;
-		public void PlayCameraTransition(ImageTexture texture)
-		{
-			if (_cameraTransition == null)
-			{
-				_cameraTransition = GetNode<TextureRect>(cameraTransition);
-				_cameraTransitionAnimator = GetNode<AnimationPlayer>(cameraTransitionAnimator);
-			}
-
-			_cameraTransition.Texture = texture;
-			_cameraTransitionAnimator.Play("Transition");
 		}
 		#endregion
 

@@ -22,12 +22,17 @@ namespace Project.Gameplay
 		public bool IsHomingAttacking { get; set; }
 		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalTranslation - GlobalTranslation).Normalized() : this.Forward();
 
+		public override void _Ready()
+		{
+			_lockonReticle = GetNode<Node2D>(lockonReticle);
+			_lockonAnimator = GetNode<AnimationPlayer>(lockonAnimator);
+		}
+
 		public void HomingAttack()
 		{
 			IsHomingAttacking = true;
 
-			//TODO Check whether it's actually a perfect homing attack
-			HeadsUpDisplay.instance.PerfectHomingAttack();
+			//TODO Check whether it's a perfect homing attack
 		}
 
 		public void ProcessLockonTargets()
@@ -62,11 +67,11 @@ namespace Project.Gameplay
 
 			//Disable Homing Attack
 			if (LockonTarget == null && isLockedOn)
-				HeadsUpDisplay.instance.DisableLockonReticle();
+				DisableLockonReticle();
 			else if (LockonTarget != null)
 			{
 				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(LockonTarget.GlobalTranslation);
-				HeadsUpDisplay.instance.UpdateLockonReticle(screenPos, !isLockedOn);
+				UpdateLockonReticle(screenPos, !isLockedOn);
 			}
 		}
 
@@ -98,7 +103,7 @@ namespace Project.Gameplay
 			if (LockonTarget != null) //Reset Active Target
 			{
 				LockonTarget = null;
-				HeadsUpDisplay.instance.DisableLockonReticle();
+				DisableLockonReticle();
 			}
 		}
 
@@ -135,6 +140,28 @@ namespace Project.Gameplay
 			Character.VerticalSpeed = bouncePower;
 			Character.SetControlLockout(bounceLockoutSettings);
 			Character.ResetActionState();
+		}
+		#endregion
+
+		#region Homing Attack Reticle
+		[Export]
+		public NodePath lockonReticle;
+		private Node2D _lockonReticle;
+		[Export]
+		public NodePath lockonAnimator;
+		private AnimationPlayer _lockonAnimator;
+
+		public void DisableLockonReticle() => _lockonAnimator.Play("disable");
+		public void UpdateLockonReticle(Vector2 screenPosition, bool newTarget)
+		{
+			_lockonReticle.SetDeferred("position", screenPosition);
+			if (newTarget)
+				_lockonAnimator.Play("enable");
+		}
+
+		public void PerfectHomingAttack()
+		{
+			//TODO Play animation
 		}
 		#endregion
 

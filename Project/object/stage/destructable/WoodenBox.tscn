@@ -1,6 +1,5 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=35 format=2]
 
-[ext_resource path="res://object/stage/destructable/resource/model/wooden box/Wooden Box Shatter.tres" type="Material" id=1]
 [ext_resource path="res://object/stage/destructable/resource/model/wooden box/Wooden Box.tres" type="Material" id=2]
 [ext_resource path="res://object/stage/destructable/resource/script/DestructableObject.cs" type="Script" id=3]
 
@@ -294,13 +293,7 @@ points = PoolVector3Array( -0.458416, 0.15479, 0.497478, -0.5, -0.122445, -0.116
 
 [node name="WoodenBox" type="RigidBody"]
 collision_layer = 16
-collision_mask = 19
-can_sleep = false
-script = ExtResource( 3 )
-originalMesh = NodePath("Mesh")
-pieceParent = NodePath("Pieces")
-collider = NodePath("CollisionShape")
-overrideMaterial = ExtResource( 1 )
+collision_mask = 25
 
 [node name="Mesh" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
@@ -310,6 +303,9 @@ shape = SubResource( 17 )
 
 [node name="Pieces" type="Spatial" parent="."]
 visible = false
+script = ExtResource( 3 )
+originalMesh = NodePath("../Mesh")
+collider = NodePath("../CollisionShape")
 
 [node name="Piece1" type="RigidBody" parent="Pieces"]
 collision_layer = 32
@@ -499,4 +495,5 @@ monitorable = false
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
 shape = SubResource( 17 )
 
-[connection signal="area_entered" from="Area" to="." method="OnEntered"]
+[connection signal="area_entered" from="Area" to="Pieces" method="OnEntered"]
+[connection signal="body_entered" from="Area" to="Pieces" method="OnBodyEntered"]

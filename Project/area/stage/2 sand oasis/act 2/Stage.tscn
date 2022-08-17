@@ -1,13 +1,33 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://object/stage/StageSettings.cs" type="Script" id=1]
-[ext_resource path="res://area/stage/2 sand oasis/resource/BGM.tscn" type="PackedScene" id=2]
-[ext_resource path="res://object/player/CharacterSpawn.tscn" type="PackedScene" id=3]
-[ext_resource path="res://object/camera/preset/FloorCam.tres" type="Resource" id=4]
+[ext_resource path="res://object/player/Sonic.tscn" type="PackedScene" id=2]
+[ext_resource path="res://object/camera/Camera.tscn" type="PackedScene" id=3]
+[ext_resource path="res://interface/gameplay/hud/HeadsUpDisplay.tscn" type="PackedScene" id=4]
 [ext_resource path="res://area/stage/2 sand oasis/act 2/data/MainPath.tres" type="Curve3D" id=5]
-[ext_resource path="res://object/trigger/modules/PathTrigger.cs" type="Script" id=6]
+[ext_resource path="res://interface/gameplay/countdown/Countdown.tscn" type="PackedScene" id=6]
 [ext_resource path="res://object/trigger/modules/CameraTrigger.cs" type="Script" id=7]
 [ext_resource path="res://object/trigger/StageTrigger.tscn" type="PackedScene" id=8]
+[ext_resource path="res://interface/gameplay/results/StageResults.tscn" type="PackedScene" id=9]
+[ext_resource path="res://interface/gameplay/pause/Pause.tscn" type="PackedScene" id=10]
+[ext_resource path="res://object/trigger/modules/PathTrigger.cs" type="Script" id=11]
+[ext_resource path="res://object/script resources/CameraSettingsResource.cs" type="Script" id=12]
+
+[sub_resource type="Resource" id=35]
+script = ExtResource( 12 )
+distance = 2.0
+followMode = 0
+height = 0.8
+heightTrackingStrength = 0.5
+heightMode = 2
+strafeTrackingStrength = 1.0
+strafeMode = 1
+strafeDeadzone = 1.0
+tiltMode = 0
+pitchMode = 0
+yawMode = 0
+viewAngle = Vector2( 0, 0 )
+viewPosition = Vector3( 0, 0, 0 )
 
 [sub_resource type="SphereShape" id=32]
 radius = 5.72
@@ -39,24 +59,38 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="StageTrigger" parent="MainAct/SpawnPosition" instance=ExtResource( 8 )]
+[node name="CharacterSpawn" type="Spatial" parent="MainAct/SpawnPosition"]
 
-[node name="Path" type="Spatial" parent="MainAct/SpawnPosition/StageTrigger"]
-script = ExtResource( 6 )
-path = NodePath("../../../../Path/MainPath")
+[node name="Player" parent="MainAct/SpawnPosition/CharacterSpawn" instance=ExtResource( 2 )]
+collision/safe_margin = 0.01
 
-[node name="Camera" type="Spatial" parent="MainAct/SpawnPosition/StageTrigger"]
+[node name="Camera" parent="MainAct/SpawnPosition/CharacterSpawn" instance=ExtResource( 3 )]
+
+[node name="Interface" type="Node" parent="MainAct/SpawnPosition/CharacterSpawn"]
+pause_mode = 2
+
+[node name="Countdown" parent="MainAct/SpawnPosition/CharacterSpawn/Interface" instance=ExtResource( 6 )]
+
+[node name="HeadsUpDisplay" parent="MainAct/SpawnPosition/CharacterSpawn/Interface" instance=ExtResource( 4 )]
+
+[node name="StageResults" parent="MainAct/SpawnPosition/CharacterSpawn/Interface" instance=ExtResource( 9 )]
+
+[node name="Pause" parent="MainAct/SpawnPosition/CharacterSpawn/Interface" instance=ExtResource( 10 )]
+
+[node name="SpawnTrigger" parent="MainAct/SpawnPosition/CharacterSpawn" instance=ExtResource( 8 )]
+
+[node name="Path" type="Spatial" parent="MainAct/SpawnPosition/CharacterSpawn/SpawnTrigger"]
+script = ExtResource( 11 )
+path = NodePath("../../../../../Path/MainPath")
+
+[node name="Camera" type="Spatial" parent="MainAct/SpawnPosition/CharacterSpawn/SpawnTrigger"]
 script = ExtResource( 7 )
-cameraData = ExtResource( 4 )
+cameraData = SubResource( 35 )
 
-[node name="CollisionShape" type="CollisionShape" parent="MainAct/SpawnPosition/StageTrigger"]
+[node name="CollisionShape" type="CollisionShape" parent="MainAct/SpawnPosition/CharacterSpawn/SpawnTrigger"]
 shape = SubResource( 32 )
 
-[node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource( 3 )]
-
 [node name="Object" type="Spatial" parent="MainAct"]
-
-[node name="BGM" parent="." instance=ExtResource( 2 )]
 
 [node name="Collision" type="Spatial" parent="."]
 
@@ -72,3 +106,11 @@ shape = SubResource( 31 )
 
 [node name="MainPath" type="Path" parent="Path"]
 curve = ExtResource( 5 )
+
+[connection signal="PlayerProcessed" from="MainAct/SpawnPosition/CharacterSpawn/Player" to="MainAct/SpawnPosition/CharacterSpawn/Camera" method="UpdateCamera"]
+[connection signal="CountdownCompleted" from="MainAct/SpawnPosition/CharacterSpawn/Interface/Countdown" to="MainAct/SpawnPosition/CharacterSpawn/Player" method="CountdownCompleted"]
+[connection signal="CountdownCompleted" from="MainAct/SpawnPosition/CharacterSpawn/Interface/Countdown" to="MainAct/SpawnPosition/CharacterSpawn/Interface/HeadsUpDisplay" method="CountdownCompleted"]
+[connection signal="CountdownCompleted" from="MainAct/SpawnPosition/CharacterSpawn/Interface/Countdown" to="MainAct/SpawnPosition/CharacterSpawn/Interface/Pause" method="EnablePausing"]
+[connection signal="CountdownStarted" from="MainAct/SpawnPosition/CharacterSpawn/Interface/Countdown" to="MainAct/SpawnPosition/CharacterSpawn/Player" method="CountdownStarted"]
+[connection signal="CountdownStarted" from="MainAct/SpawnPosition/CharacterSpawn/Interface/Countdown" to="MainAct/SpawnPosition/CharacterSpawn/Interface/HeadsUpDisplay" method="CountdownStarted"]
+[connection signal="CountdownStarted" from="MainAct/SpawnPosition/CharacterSpawn/Interface/Countdown" to="MainAct/SpawnPosition/CharacterSpawn/Interface/Pause" method="DisablePausing"]

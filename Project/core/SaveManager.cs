@@ -114,6 +114,8 @@ namespace Project.Core
 			public int level;
 			public float playTime;
 
+
+			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f; //Soul gauge's level, from 0 -> 1
 			public SkillRing skillRing;
 		}
 

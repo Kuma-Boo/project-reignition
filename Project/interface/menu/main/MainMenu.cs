@@ -12,7 +12,7 @@ namespace Project.Interface.Menu
 
 		protected override void SetUp()
 		{
-
+			_animator = GetNode<AnimationPlayer>(animator);
 		}
 
 		protected override void ProcessMenu()

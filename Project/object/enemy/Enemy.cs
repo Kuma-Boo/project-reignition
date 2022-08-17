@@ -12,7 +12,7 @@ namespace Project.Gameplay
 		protected CollisionShape _collider;
 		[Export]
 		public NodePath hitbox; //Lockon/Hitbox collider. Disabled when defeated
-		protected CollisionShape _hitbox;
+		protected Area _hitbox;
 
 		[Export]
 		public int maxHealth;
@@ -25,7 +25,7 @@ namespace Project.Gameplay
 		protected override void SetUp()
 		{
 			if (collider != null) _collider = GetNode<CollisionShape>(collider);
-			if (hitbox != null) _hitbox = GetNode<CollisionShape>(hitbox);
+			if (hitbox != null) _hitbox = GetNode<Node>(hitbox) as Area;
 
 			base.SetUp();
 			Respawn();
@@ -48,7 +48,7 @@ namespace Project.Gameplay
 			currentHealth = maxHealth;
 
 			if(_collider != null) _collider.Disabled = false;
-			if (_hitbox != null) _hitbox.Disabled = false;
+			if(_hitbox != null) _hitbox.Monitorable = _hitbox.Monitoring = true;
 		}
 
 		public virtual void TakeDamage()
@@ -65,8 +65,8 @@ namespace Project.Gameplay
 		protected virtual void Defeat()
 		{
 			if (_collider != null) _collider.Disabled = true;
-			if (_hitbox != null) _hitbox.Disabled = true;
-
+			if (_hitbox != null) _hitbox.Monitorable = _hitbox.Monitoring = false;
+			
 			OnExited(null);
 			EmitSignal(nameof(Defeated));
 		}

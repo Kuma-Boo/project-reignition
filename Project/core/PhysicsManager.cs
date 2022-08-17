@@ -7,7 +7,7 @@ namespace Project.Core
 	{
 		public static float normalDelta;
 		public static float physicsDelta;
-		private static PhysicsDirectSpaceState physicsState;
+		public static PhysicsDirectSpaceState physicsState;
 		public override void _Ready() => UpdatePhysicsState();
 
 		private void UpdatePhysicsState() => physicsState = GetWorld().DirectSpaceState; //Update world space
@@ -50,29 +50,10 @@ namespace Project.Core
 					raycast.distance = pos.DistanceTo(raycast.point);
 			}
 
+			//Fix memory leaks
+			ex.Dispose();
+			result.Dispose();
 			return raycast;
-		}
-
-		public static Node[] OverlapShape(RID shape, Vector3 pos, Basis basis, int maxCollisionCount, uint mask = 2147483647, Array ex = null)
-		{
-			Array result = physicsState.IntersectShape(new PhysicsShapeQueryParameters()
-			{
-				ShapeRid = shape,
-				Transform = new Transform(basis, pos),
-				Exclude = ex,
-				CollisionMask = mask
-			}, maxCollisionCount);
-
-			if (result.Count != 0)
-			{
-				Node[] colliders = new Node[result.Count];
-				for (int i = 0; i < result.Count; i++)
-					colliders[i] = (result[0] as Dictionary)["collider"] as Node;
-
-				return colliders;
-			}
-
-			return null;
 		}
 	}
 

@@ -144,12 +144,12 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (Character.Controller.MovementAxis != Vector2.Zero || Character.Soul.IsSpeedBreakActive)
+			if (Character.RotatedMovementValue != Vector2.Zero || Character.Soul.IsSpeedBreakActive)
 			{
 				float targetRotation = 0;
 				if (Character.FaceMovementDirection) //Jumpdash/Accel Jump
 				{
-					Vector2 input = Character.Controller.MovementAxis;
+					Vector2 input = Character.RotatedMovementValue;
 					if (input.y < 0)
 						input.y = 0;
 					targetRotation = -input.Normalized().AngleTo(Vector2.Down);
@@ -163,7 +163,7 @@ namespace Project.Gameplay
 						targetRotation = new Vector2(Character.StrafeSpeed, -Character.MoveSpeed).Normalized().AngleTo(Vector2.Up);
 					else
 					{
-						Vector2 input = Character.Controller.MovementAxis;
+						Vector2 input = Character.RotatedMovementValue;
 						input.y = Mathf.Abs(input.y);
 						targetRotation = -input.Normalized().AngleTo(Vector2.Down);
 					}

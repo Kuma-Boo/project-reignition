@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay.Objects
 {
-	public class Pearl : RespawnableObject
+	public class Pearl : Pickup
 	{
 		[Export]
 		public NodePath collider;
@@ -13,7 +13,6 @@ namespace Project.Gameplay.Objects
 		private bool isCollected;
 		private Tween tweener;
 
-		protected override bool IsRespawnable() => true;
 		protected override void SetUp()
 		{
 			base.SetUp();
@@ -22,14 +21,6 @@ namespace Project.Gameplay.Objects
 			tweener = new Tween();
 			AddChild(tweener);
 		}
-
-		/*
-		public override void _Process(float _)
-		{
-			if(isReparenting)
-				Collect();
-		}
-		*/
 
 		public override void Respawn()
 		{
@@ -41,15 +32,10 @@ namespace Project.Gameplay.Objects
 
 		private void ResetTweener() => tweener.StopAll(); //Unreference tweener
 
-		private void OnEntered(Area _)
+		protected override void Collect()
 		{
 			if (isCollected) return;
-			CallDeferred(nameof(Collect));
-		}
 
-		//Godot doesn't allow reparenting from signals, so a separate function is needed.
-		private void Collect()
-		{
 			Transform t = GlobalTransform;
 			GetParent().RemoveChild(this);
 			Character.AddChild(this);
@@ -85,11 +71,12 @@ namespace Project.Gameplay.Objects
 				tweener.InterpolateProperty(this, "scale", Vector3.One, Vector3.One * .6f, .2f, Tween.TransitionType.Sine, Tween.EaseType.In);
 			}
 
-			tweener.InterpolateCallback(HeadsUpDisplay.instance, .1f, nameof(HeadsUpDisplay.instance.ModifySoulGauge), isRichPearl ? 20 : 1);
+			tweener.InterpolateCallback(Character.Soul, .1f, nameof(Character.Soul.ModifySoulGauge), isRichPearl ? 20 : 1);
 			tweener.InterpolateCallback(this, .3f, nameof(Despawn));
 			tweener.Start();
 
 			isCollected = true;
+			base.Collect();
 		}
 	}
 }

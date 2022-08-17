@@ -99,12 +99,6 @@ points = PoolVector3Array( -0.639896, 0.919416, 0.479033, -0.195642, -0.0016, -0
 collision_layer = 8
 collision_mask = 2
 monitorable = false
-script = ExtResource( 3 )
-originalMesh = NodePath("Mesh")
-pieceParent = NodePath("Pieces")
-collider = NodePath("CollisionShape")
-overrideMaterial = ExtResource( 1 )
-explosionForce = 200.0
 
 [node name="Mesh" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
@@ -115,6 +109,9 @@ shape = SubResource( 2 )
 
 [node name="Pieces" type="Spatial" parent="."]
 visible = false
+script = ExtResource( 3 )
+originalMesh = NodePath("../Mesh")
+collider = NodePath("../CollisionShape")
 
 [node name="Piece1" type="RigidBody" parent="Pieces"]
 collision_layer = 8
@@ -164,4 +161,4 @@ skeleton = NodePath("../..")
 [node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece4"]
 shape = SubResource( 11 )
 
-[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_entered" from="." to="Pieces" method="OnEntered"]

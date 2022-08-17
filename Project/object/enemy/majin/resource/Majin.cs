@@ -54,7 +54,7 @@ namespace Project.Gameplay
 			if (spawnInstantly)
 				Activate();
 			else
-				Despawn(); //Start despawned
+				Deactivate();
 		}
 
 		protected override void Defeat()
@@ -87,7 +87,16 @@ namespace Project.Gameplay
 					_animationTree.Set("parameters/teleport/active", true);
 					_animationTree.Set("parameters/idle_seek/seek_position", 0f);
 				}
+
+				_hitbox.Monitorable = _hitbox.Monitoring = true;
 			}
+		}
+
+		private void Deactivate()
+		{
+			Visible = false;
+			_collider.Disabled = true;
+			_hitbox.Monitorable = _hitbox.Monitoring = false;
 		}
 
 		//Overload activation method for using godot's built-in area trigger

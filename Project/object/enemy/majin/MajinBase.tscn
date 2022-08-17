@@ -94,19 +94,21 @@ collision_layer = 8
 collision_mask = 8
 script = ExtResource( 1 )
 collider = NodePath("CollisionShape")
-hitbox = NodePath("LockonLocation/CollisionShape")
+hitbox = NodePath("Hitbox")
 animationTree = NodePath("AnimationTree")
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0 )
 shape = SubResource( 21 )
 
-[node name="LockonLocation" type="Area" parent="."]
+[node name="Hitbox" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0 )
 collision_layer = 4
 collision_mask = 2
+monitoring = false
+monitorable = false
 
-[node name="CollisionShape" type="CollisionShape" parent="LockonLocation"]
+[node name="CollisionShape" type="CollisionShape" parent="Hitbox"]
 shape = SubResource( 2 )
 
 [node name="Particles" type="Spatial" parent="."]
@@ -138,5 +140,5 @@ draw_pass_1 = SubResource( 20 )
 tree_root = SubResource( 3 )
 anim_player = NodePath("../AnimationPlayer")
 
-[connection signal="area_entered" from="LockonLocation" to="." method="OnEntered"]
-[connection signal="area_exited" from="LockonLocation" to="." method="OnExited"]
+[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]

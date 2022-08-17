@@ -40,106 +40,93 @@ namespace Project.Gameplay
 		public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
 		
 		private float breakTimer = 0; //Timer for break skills
-		private const float SPEEDBREAK_DELAY = 0.32f;
+		private const float SPEEDBREAK_DELAY = 0.12f; //Time to say SPEED BREAK!
 		private const float BREAK_SKILLS_COOLDOWN = 1f; //Prevent skill spam
 		public const float TIME_BREAK_RATIO = .6f; //Time scale
 
-		private int soulGaugeDrainTimer;
-		private const int TIME_BREAK_SOUL_DRAIN_INTERVAL = 3; //Drain 1 point every x frames
-
 		private CharacterController Character => CharacterController.instance;
+
+		public override void _Ready()
+		{
+			float levelRatio = SaveManager.ActiveGameData.SoulGaugeLevel; //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
+			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; //Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
+		}
 
 		//Cancel time break, just in case
 		public override void _ExitTree() => IsTimeBreakEnabled = false;
 
 		public void UpdateSoulSkills()
 		{
-			if (CheatManager.InfiniteSoulGauge)
-				HeadsUpDisplay.instance.ModifySoulGauge(300);
+			if (CheatManager.InfiniteSoulGauge) //Max out the soul gauge
+				ModifySoulGauge(SOUL_GAUGE_MAX);
 
 			UpdateTimeBreak();
 			UpdateSpeedBreak();
 
-			if (!IsUsingBreakSkills)
-				breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
-			else if (breakTimer == 0)
-			{
-				if (IsSpeedBreakActive)
-				{
-					HeadsUpDisplay.instance.ModifySoulGauge(-1);
-					if (HeadsUpDisplay.instance.IsSoulGaugeEmpty)
-						ToggleSpeedBreak();
-				}
-				else
-				{
-					if (soulGaugeDrainTimer == 0)
-					{
-						HeadsUpDisplay.instance.ModifySoulGauge(-1);
-						soulGaugeDrainTimer = TIME_BREAK_SOUL_DRAIN_INTERVAL;
-
-						if (HeadsUpDisplay.instance.IsSoulGaugeEmpty)
-							ToggleTimeBreak();
-					}
-					soulGaugeDrainTimer--;
-				}
-			}
+			breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
 		}
 
-		public void UpdateTimeBreak()
+		private int timeBreakDrainTimer;
+		private const int TIME_BREAK_SOUL_DRAIN_INTERVAL = 3; //Drain 1 point every x frames
+		private void UpdateTimeBreak()
 		{
-			if (!IsTimeBreakActive && breakTimer != 0) return; //Cooldown
+			if (IsTimeBreakActive)
+			{
+				if (timeBreakDrainTimer <= 0)
+				{
+					ModifySoulGauge(-1);
+					timeBreakDrainTimer = TIME_BREAK_SOUL_DRAIN_INTERVAL;
+				}
+				timeBreakDrainTimer--;
+
+				if (IsSoulGaugeEmpty || !Character.Controller.breakButton.isHeld) //Cancel time break?
+					ToggleTimeBreak();
+
+				return;
+			}
+			else if (breakTimer != 0) return; //Cooldown
 
 			if (Character.Controller.breakButton.wasPressed && !IsSpeedBreakActive)
 			{
-				if (IsTimeBreakActive)
-				{
-					ToggleTimeBreak();
-					return;
-				}
-
-				if (!HeadsUpDisplay.instance.IsSoulGaugeCharged) return;
-
+				if (!IsSoulGaugeCharged) return;
 				ToggleTimeBreak();
 			}
 		}
 
 		private void UpdateSpeedBreak()
 		{
-			if (!IsSpeedBreakActive && breakTimer != 0) return; //Cooldown
+			if (IsSpeedBreakActive)
+			{
+				if (breakTimer == 0)
+				{
+					ModifySoulGauge(-1); //Drain soul gauge
+					if (IsSoulGaugeEmpty || !Character.Controller.boostButton.isHeld)//Check whether we shoudl cancel speed break
+						ToggleSpeedBreak();
 
+					if (Character.IsOnGround)
+						Character.MoveSpeed = speedBreakSpeed;
+				}
+				else
+					Character.MoveSpeed = Character.StrafeSpeed = 0f;
+
+				return;
+			}
+			else if (breakTimer != 0) return; //Cooldown
+
+			//Check whether we can start speed break
 			if (Character.Controller.boostButton.wasPressed && !IsTimeBreakActive)
 			{
-				if (IsSpeedBreakActive) //Always allow canceling speed break
-				{
-					ToggleSpeedBreak();
-					return;
-				}
-
-				if (!HeadsUpDisplay.instance.IsSoulGaugeCharged) return;
+				if (!IsSoulGaugeCharged) return;
 				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
 				if (!Character.IsOnGround) return;
 
 				ToggleSpeedBreak();
 			}
-
-			if (IsSpeedBreakActive)
-			{
-				if (breakTimer == 0)
-				{
-					if(Character.IsOnGround)
-						Character.MoveSpeed = speedBreakSpeed;
-				}
-				else
-				{
-					Character.MoveSpeed = Character.StrafeSpeed = 0f;
-					breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
-				}
-			}
 		}
 
 		public void ToggleTimeBreak()
 		{
-			soulGaugeDrainTimer = 0;
+			timeBreakDrainTimer = 0;
 			IsTimeBreakActive = !IsTimeBreakActive;
 			Engine.TimeScale = IsTimeBreakActive ? TIME_BREAK_RATIO : 1f;
 
@@ -152,7 +139,10 @@ namespace Project.Gameplay
 			{
 				breakTimer = BREAK_SKILLS_COOLDOWN;
 				StageSettings.instance.SetMusicVolume(0f);
-				HeadsUpDisplay.instance.UpdateSoulGaugeColor();
+
+
+				if (HeadsUpDisplay.instance != null)
+					HeadsUpDisplay.instance.UpdateSoulGaugeColor(IsSoulGaugeCharged);
 			}
 		}
 
@@ -168,7 +158,25 @@ namespace Project.Gameplay
 			else
 				Character.MoveSpeed = Character.moveSettings.speed;
 
-			HeadsUpDisplay.instance.UpdateSoulGaugeColor();
+			if(HeadsUpDisplay.instance != null)
+				HeadsUpDisplay.instance.UpdateSoulGaugeColor(IsSoulGaugeCharged);
+		}
+
+		private int soulPower; //Current soul power
+		private int maxSoulPower; //Calculated on start
+
+		private bool IsSoulGaugeEmpty => soulPower == 0;
+		private bool IsSoulGaugeCharged => soulPower > 50;
+
+		private const int MINIMUM_SOUL_POWER = 50; //Minimum amount of soul power needed to use soul skills.
+		private const int SOUL_GAUGE_BASE = 100; //Starting size of soul gauge
+		private const int SOUL_GAUGE_MAX = 300; //Max size of soul gauge
+		public void ModifySoulGauge(int amount)
+		{
+			soulPower = Mathf.Clamp(soulPower + amount, 0, maxSoulPower);
+
+			if(HeadsUpDisplay.instance != null)
+				HeadsUpDisplay.instance.ModifySoulGauge((float)soulPower / maxSoulPower, soulPower >= MINIMUM_SOUL_POWER);
 		}
 	}
 }

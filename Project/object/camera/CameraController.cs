@@ -21,6 +21,8 @@ namespace Project.Gameplay
 		public NodePath camera;
 		private Camera _camera;
 
+		public Vector3 ForwardDirection => _calculationGimbal.Back();
+
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PlayerPathFollower => Character.PathFollower;
 
@@ -35,13 +37,17 @@ namespace Project.Gameplay
 
 		public override void _Ready()
 		{
-			//ResetFlag = true;
+			ResetFlag = true; //Start by snapping to the proper position
 			_calculationRoot = GetNode<Spatial>(calculationRoot);
 			_calculationGimbal = GetNode<Spatial>(calculationGimbal);
 
 			_cameraRoot = GetNode<Spatial>(cameraRoot);
 			_cameraGimbal = GetNode<Spatial>(cameraGimbal);
 			_camera = GetNode<Camera>(camera);
+
+			//For crossfading
+			_cameraTransition = GetNode<TextureRect>(cameraTransition);
+			_cameraTransitionAnimator = GetNode<AnimationPlayer>(cameraTransitionAnimator);
 
 			Character.Camera = this;
 		}
@@ -90,12 +96,7 @@ namespace Project.Gameplay
 			currentSettings.viewPosition = data.viewPosition;
 
 			if (useCrossfade) //Crossfade transition
-			{
-				Image img = _calculationGimbal.GetViewport().GetTexture().GetData();
-				var tex = new ImageTexture();
-				tex.CreateFromImage(img);
-				HeadsUpDisplay.instance.PlayCameraTransition(tex);
-			}
+				CrossfadeTransition();
 		}
 
 		private float transitionTime; //Ratio (from 0 -> 1) of transition that has been completed
@@ -326,6 +327,24 @@ namespace Project.Gameplay
 			targetPosition += currentStrafe;
 
 			_calculationRoot.GlobalTranslation = targetPosition;
+		}
+		#endregion
+
+		#region Crossfade Transition
+		//Used for instant camera transitions
+		[Export]
+		public NodePath cameraTransition;
+		private TextureRect _cameraTransition;
+		[Export]
+		public NodePath cameraTransitionAnimator;
+		private AnimationPlayer _cameraTransitionAnimator;
+		public void CrossfadeTransition()
+		{
+			Image img = _calculationGimbal.GetViewport().GetTexture().GetData();
+			var tex = new ImageTexture();
+			tex.CreateFromImage(img);
+			_cameraTransition.Texture = tex;
+			_cameraTransitionAnimator.Play("Transition");
 		}
 		#endregion
 

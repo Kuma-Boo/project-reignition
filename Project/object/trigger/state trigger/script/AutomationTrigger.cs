@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
@@ -17,7 +18,7 @@ namespace Project.Gameplay.Triggers
 		public float cameraBlend;
 
 		private bool isEntered;
-		private bool isActive;
+		private bool isProcessing;
 
 		private float startingOffset;
 		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Offset - startingOffset);
@@ -31,11 +32,14 @@ namespace Project.Gameplay.Triggers
 
 		public override void _PhysicsProcess(float _)
 		{
-			if(isActive)
+			if(isProcessing)
 			{
 				if(IsFinished)
 					Deactivate();
 
+				if (Character.MoveSpeed < Character.moveSettings.speed)
+					Character.MoveSpeed = Character.moveSettings.speed;
+				Character.PathFollower.Offset += Character.MoveSpeed * PhysicsManager.physicsDelta;
 				return;
 			}
 
@@ -54,10 +58,10 @@ namespace Project.Gameplay.Triggers
 		private void Activate()
 		{
 			Character.PathFollower.SetActivePath(_automationPath);
-			Character.StartExternal();
+			Character.StartExternal(Character.PathFollower, false);
 			
 			startingOffset = Character.PathFollower.Offset;
-			isActive = true;
+			isProcessing = true;
 
 			UpdateCamera();
 		}
@@ -70,7 +74,7 @@ namespace Project.Gameplay.Triggers
 
 		private void Deactivate()
 		{
-			isActive = false;
+			isProcessing = false;
 			Character.CancelMovementState(CharacterController.MovementStates.External);
 		}
 

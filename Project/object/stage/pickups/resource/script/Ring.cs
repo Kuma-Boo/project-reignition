@@ -2,18 +2,13 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public class Ring : RespawnableObject
+	public class Ring : Pickup
 	{
 		[Export]
 		public bool isRichRing;
 		[Export]
 		public NodePath animator;
 		private AnimationPlayer _animator;
-
-		[Signal]
-		public delegate void Collected();
-
-		protected override bool IsRespawnable() => true;
 
 		protected override void SetUp()
 		{
@@ -32,9 +27,9 @@ namespace Project.Gameplay.Objects
 				_animator.Play(_animator.Autoplay);
 		}
 
-		private void OnEntered(Area _)
+		protected override void Collect()
 		{
-			HeadsUpDisplay.instance.CollectRing(isRichRing ? 20 : 1);
+			StageSettings.instance.UpdateRingCount(isRichRing ? 20 : 1);
 			SoundManager.instance.PlayRingSoundEffect(); //SFX are played externally to avoid multiple ring sounds at once
 
 			if (_animator != null && _animator.HasAnimation("Collect"))
@@ -42,7 +37,7 @@ namespace Project.Gameplay.Objects
 			else
 				Despawn();
 
-			EmitSignal(nameof(Collected));
+			base.Collect();
 		}
 	}
 }

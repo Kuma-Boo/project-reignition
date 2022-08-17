@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://object/camera/CameraController.cs" type="Script" id=2]
-[ext_resource path="res://object/camera/preset/BackstepCam.tres" type="Resource" id=3]
 
 [sub_resource type="CubeMesh" id=2]
 
@@ -13,6 +12,37 @@ albedo_color = Color( 0, 0, 1, 1 )
 [sub_resource type="SpatialMaterial" id=4]
 albedo_color = Color( 1, 0, 0, 1 )
 
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Transition"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1.5, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
 [node name="Camera" type="Spatial"]
 script = ExtResource( 2 )
 calculationRoot = NodePath("CalculationRoot")
@@ -20,7 +50,8 @@ calculationGimbal = NodePath("CalculationRoot/CalculationGimbal")
 cameraRoot = NodePath("CameraRoot")
 cameraGimbal = NodePath("CameraRoot/CameraGimbal")
 camera = NodePath("CameraRoot/CameraGimbal/Camera")
-backstepCameraSettings = ExtResource( 3 )
+cameraTransition = NodePath("CrossfadeTransition")
+cameraTransitionAnimator = NodePath("CrossfadeTransition/Animator")
 
 [node name="CalculationRoot" type="Spatial" parent="."]
 visible = false
@@ -48,3 +79,18 @@ current = true
 fov = 60.0
 near = 0.01
 far = 8192.0
+
+[node name="CrossfadeTransition" type="TextureRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch_mode = 1
+flip_v = true
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Animator" type="AnimationPlayer" parent="CrossfadeTransition"]
+anims/RESET = SubResource( 5 )
+anims/Transition = SubResource( 6 )

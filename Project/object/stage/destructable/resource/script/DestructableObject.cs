@@ -164,25 +164,42 @@ namespace Project.Gameplay.Objects
 
 		public override void _ExitTree()
 		{
-			for (int i = 0; i < _pieces.Count; i++) //Prevent memory leak
+			//Prevent memory leakage
+			for (int i = 0; i < _pieces.Count; i++)
 			{
 				if(_pieces[i].GetParent() != this)
 					_pieces[i].QueueFree();
 			}
+
+			for (int i = 0; i < overrideMaterials.Count; i++)
+				materialList[i].Dispose();
+
+			_pieces.Clear();
+			_piecesSpawnTransforms.Clear();
+			materialList.Clear();
+			overrideMaterials.Clear();
+		}
+
+		public void OnBodyEntered(PhysicsBody body)
+		{
+			if (body.IsInGroup("crusher"))
+				Shatter();
 		}
 
 		private void OnEntered(Area a)
 		{
-			if (!a.IsInGroup("player")) return;
 			if (shatterType == ShatterType.OnSignal) return; //Don't process
 
-			if (CharacterController.instance.IsAttacking)
+			if (a.IsInGroup("player"))
 			{
-
+				if (CharacterController.instance.IsAttacking)
+				{
+					//if(health <= 0)
+					//Shatter(a.GlobalTranslation);
+				}
 			}
-
-			//if(health <= 0)
-			//Shatter(a.GlobalTranslation);
+			else
+				Shatter(); //Must be an enemy or something
 		}
 	}
 }

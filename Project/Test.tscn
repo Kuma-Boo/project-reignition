@@ -1,9 +1,11 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=32 format=2]
 
-[ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Egg Majin.tres" type="Material" id=1]
+[ext_resource path="res://object/stage/StageSettings.cs" type="Script" id=1]
 [ext_resource path="res://object/stage/destructable/resource/script/DestructableObject.cs" type="Script" id=2]
 [ext_resource path="res://object/enemy/Enemy.cs" type="Script" id=3]
-[ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Egg Majin Shatter.tres" type="Material" id=4]
+[ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Egg Majin.tres" type="Material" id=4]
+[ext_resource path="res://area/stage/3 dino jungle/data/models/environment/Egg Majin Shatter.tres" type="Material" id=5]
+[ext_resource path="res://area/stage/3 dino jungle/object/MajinEgg.tscn" type="PackedScene" id=9]
 
 [sub_resource type="SphereShape" id=28]
 radius = 0.61
@@ -20,7 +22,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 600,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 126
@@ -35,7 +37,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 264,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 264
@@ -53,7 +55,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 204,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 204
@@ -71,7 +73,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 180,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 180
@@ -89,7 +91,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 264,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 264
@@ -107,7 +109,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 252,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 252
@@ -125,7 +127,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 240,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 240
@@ -143,7 +145,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 252,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 252
@@ -161,7 +163,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 168,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 168
@@ -179,7 +181,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 264,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 264
@@ -197,7 +199,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 264,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 264
@@ -215,7 +217,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194751,
 "index_count": 300,
-"material": ExtResource( 1 ),
+"material": ExtResource( 4 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 300
@@ -224,7 +226,14 @@ surfaces/0 = {
 [sub_resource type="ConvexPolygonShape" id=16]
 points = PoolVector3Array( -0.334513, -0.625345, -0.193109, -0.386239, -0.625345, -1.14739e-05, -0.515838, -0.464533, -1.14739e-05, -0.307611, -0.583922, -0.185243, -8.49962e-05, -0.725892, -0.176395, -0.124587, -0.725892, -0.124548, -0.176408, -0.725892, -1.14739e-05, -0.334513, -0.625345, 0.193086, -0.517631, -0.375458, 0.105451, -0.474495, -0.437021, -0.00597613, -0.446744, -0.464533, 0.257845, -0.479969, -0.351009, 0.27705, -0.471757, -0.359937, 0.0931289, 0.358223, -0.584545, -0.00748368, -8.49962e-05, -0.676423, -0.168988, 0.124417, -0.725892, -0.124548, -8.49962e-05, -0.75221, -1.14739e-05, -0.124587, -0.725892, 0.12446, -0.193115, -0.625345, 0.334468, -0.257961, -0.464533, 0.446616, -0.40474, -0.237485, 0.404667, -0.371136, -0.221913, 0.371108, 0.414764, -0.433232, 0.235363, 0.446668, -0.464533, 0.257845, 0.386163, -0.625345, -1.14739e-05, 0.176332, -0.725892, -1.14739e-05, 0.124417, -0.725892, 0.12446, -8.49962e-05, -0.725892, 0.176306, -8.49962e-05, -0.625345, 0.386183, -8.49962e-05, -0.513275, 0.476505, 0.352183, -0.464533, 0.352231, 0.324337, -0.433803, 0.324308, 0.193039, -0.625345, 0.334468, 0.334437, -0.625345, 0.193086 )
 
-[node name="MajinEgg" type="StaticBody"]
+[node name="MajinEggAct" type="Spatial"]
+script = ExtResource( 1 )
+targetObjectiveCount = 5
+
+[node name="Eggs" type="Spatial" parent="."]
+
+[node name="MajinEgg" type="StaticBody" parent="Eggs"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008 )
 collision_layer = 8
 collision_mask = 8
 script = ExtResource( 3 )
@@ -232,153 +241,174 @@ collider = NodePath("CollisionShape")
 hitbox = NodePath("Hitbox")
 maxHealth = 3
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg"]
 shape = SubResource( 28 )
 
-[node name="Hitbox" type="Area" parent="."]
+[node name="Hitbox" type="Area" parent="Eggs/MajinEgg"]
 collision_layer = 4
 collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape" type="CollisionShape" parent="Hitbox"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Hitbox"]
 shape = SubResource( 27 )
 
-[node name="Egg" type="MeshInstance" parent="."]
+[node name="Egg" type="MeshInstance" parent="Eggs/MajinEgg"]
 transform = Transform( -1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 1 )
-skeleton = NodePath("")
+skeleton = NodePath("../Pieces")
 
-[node name="Pieces" type="Spatial" parent="."]
+[node name="Pieces" type="Spatial" parent="Eggs/MajinEgg"]
 script = ExtResource( 2 )
 originalMesh = NodePath("../Egg")
-overrideMaterials = [ ExtResource( 4 ) ]
+overrideMaterials = [ ExtResource( 5 ) ]
 
-[node name="Piece1" type="RigidBody" parent="Pieces"]
+[node name="Piece1" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece1" type="MeshInstance" parent="Pieces/Piece1"]
+[node name="MajinEggPiece1" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece1"]
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece1"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece1"]
 transform = Transform( 1, 0, 0, 0, 0.999692, -0.0248335, 0, 0.0248335, 0.999692, 0, 0, 0 )
 shape = SubResource( 13 )
 
-[node name="Piece2" type="RigidBody" parent="Pieces"]
+[node name="Piece2" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece2" type="MeshInstance" parent="Pieces/Piece2"]
+[node name="MajinEggPiece2" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece2"]
 mesh = SubResource( 3 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece2"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece2"]
 transform = Transform( 0.999668, 0.0257582, 0, -0.0257582, 0.999668, 0, 0, 0, 1, 0, 0, 0 )
 shape = SubResource( 20 )
 
-[node name="Piece3" type="RigidBody" parent="Pieces"]
+[node name="Piece3" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece3" type="MeshInstance" parent="Pieces/Piece3"]
+[node name="MajinEggPiece3" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece3"]
 mesh = SubResource( 4 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece3"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece3"]
 transform = Transform( 1, 0, 0, 0, 0.999282, 0.0378995, 0, -0.0378995, 0.999282, 0, 0, 0 )
 shape = SubResource( 21 )
 
-[node name="Piece4" type="RigidBody" parent="Pieces"]
+[node name="Piece4" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece4" type="MeshInstance" parent="Pieces/Piece4"]
+[node name="MajinEggPiece4" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece4"]
 mesh = SubResource( 5 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece4"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece4"]
 shape = SubResource( 22 )
 
-[node name="Piece5" type="RigidBody" parent="Pieces"]
+[node name="Piece5" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece5" type="MeshInstance" parent="Pieces/Piece5"]
+[node name="MajinEggPiece5" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece5"]
 mesh = SubResource( 6 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece5"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece5"]
 shape = SubResource( 23 )
 
-[node name="Piece6" type="RigidBody" parent="Pieces"]
+[node name="Piece6" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece6" type="MeshInstance" parent="Pieces/Piece6"]
+[node name="MajinEggPiece6" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece6"]
 mesh = SubResource( 7 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece6"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece6"]
 transform = Transform( 0.999914, -0.013142, 0, 0.013142, 0.999914, 0, 0, 0, 1, 0, 0, 0 )
 shape = SubResource( 24 )
 
-[node name="Piece7" type="RigidBody" parent="Pieces"]
+[node name="Piece7" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece7" type="MeshInstance" parent="Pieces/Piece7"]
+[node name="MajinEggPiece7" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece7"]
 mesh = SubResource( 8 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece7"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece7"]
 shape = SubResource( 25 )
 
-[node name="Piece8" type="RigidBody" parent="Pieces"]
+[node name="Piece8" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece8" type="MeshInstance" parent="Pieces/Piece8"]
+[node name="MajinEggPiece8" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece8"]
 mesh = SubResource( 9 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece8"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece8"]
 shape = SubResource( 26 )
 
-[node name="Piece9" type="RigidBody" parent="Pieces"]
+[node name="Piece9" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece9" type="MeshInstance" parent="Pieces/Piece9"]
+[node name="MajinEggPiece9" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece9"]
 mesh = SubResource( 10 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece9"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece9"]
 shape = SubResource( 14 )
 
-[node name="Piece10" type="RigidBody" parent="Pieces"]
+[node name="Piece10" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece10" type="MeshInstance" parent="Pieces/Piece10"]
+[node name="MajinEggPiece10" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece10"]
 mesh = SubResource( 11 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece10"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece10"]
 shape = SubResource( 15 )
 
-[node name="Piece11" type="RigidBody" parent="Pieces"]
+[node name="Piece11" type="RigidBody" parent="Eggs/MajinEgg/Pieces"]
 collision_layer = 32
 collision_mask = 41
 
-[node name="MajinEggPiece11" type="MeshInstance" parent="Pieces/Piece11"]
+[node name="MajinEggPiece11" type="MeshInstance" parent="Eggs/MajinEgg/Pieces/Piece11"]
 mesh = SubResource( 12 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" type="CollisionShape" parent="Pieces/Piece11"]
+[node name="CollisionShape" type="CollisionShape" parent="Eggs/MajinEgg/Pieces/Piece11"]
 shape = SubResource( 16 )
 
-[connection signal="Defeated" from="." to="Pieces" method="Shatter"]
-[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[node name="MajinEgg2" parent="Eggs" instance=ExtResource( 9 )]
+transform = Transform( 0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, -18.903, 11.404, 149.805 )
+
+[node name="MajinEgg3" parent="Eggs" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -166.893, 6.604, 65.545 )
+
+[node name="MajinEgg4" parent="Eggs" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.803, 15.304, 83.305 )
+
+[node name="MajinEgg5" parent="Eggs" instance=ExtResource( 9 )]
+transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -139.003, 7.704, -42.795 )
+
+[node name="MajinEgg6" parent="Eggs" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -95.102, 4.651, -9.386 )
+
+[connection signal="Defeated" from="Eggs/MajinEgg" to="." method="IncrementObjective"]
+[connection signal="Defeated" from="Eggs/MajinEgg" to="Eggs/MajinEgg/Pieces" method="Shatter"]
+[connection signal="area_entered" from="Eggs/MajinEgg/Hitbox" to="Eggs/MajinEgg" method="OnEntered"]
+[connection signal="area_exited" from="Eggs/MajinEgg/Hitbox" to="Eggs/MajinEgg" method="OnExited"]
+[connection signal="Defeated" from="Eggs/MajinEgg2" to="." method="IncrementObjective"]
+[connection signal="Defeated" from="Eggs/MajinEgg3" to="." method="IncrementObjective"]
+[connection signal="Defeated" from="Eggs/MajinEgg4" to="." method="IncrementObjective"]
+[connection signal="Defeated" from="Eggs/MajinEgg5" to="." method="IncrementObjective"]
+[connection signal="Defeated" from="Eggs/MajinEgg6" to="." method="IncrementObjective"]

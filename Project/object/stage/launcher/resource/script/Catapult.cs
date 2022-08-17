@@ -117,8 +117,8 @@ namespace Project.Gameplay.Objects
 			}
 			else
 			{
-				ejectTween.TweenProperty(_armNode, "rotation_degrees", Vector3.Left * 90f, .4f).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Back);
-				ejectTween.TweenCallback(this, nameof(LaunchPlayer)).SetDelay(.24f);
+				ejectTween.TweenProperty(_armNode, "rotation_degrees", Vector3.Left * 90f, .4f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Back);
+				ejectTween.TweenCallback(this, nameof(LaunchPlayer)).SetDelay(.16f);
 			}
 		}
 

@@ -39,7 +39,7 @@ namespace Project.Gameplay.Triggers
 		public delegate void Deactivated();
 		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
 
-		public override void _Ready()
+		public override void _EnterTree()
 		{
 			//Connect child modules
 			Array children = GetChildren();
@@ -60,10 +60,8 @@ namespace Project.Gameplay.Triggers
 			}
 		}
 
-		public void OnEntered(Area a)
+		public void OnEnter() //Called from player
 		{
-			if (!a.IsInGroup("player")) return;
-
 			//Determine whether activation is successful
 			if (triggerMode == TriggerMode.OnExit)
 				return;
@@ -78,9 +76,9 @@ namespace Project.Gameplay.Triggers
 			Activate();
 		}
 
-		public void OnExited(Area a)
+		public void OnExit()
 		{
-			if (!a.IsInGroup("player") || !PathFollower.IsInsideTree()) return;
+			if (!PathFollower.IsInsideTree()) return;
 
 			//Determine whether deactivation is successful
 			if (triggerMode == TriggerMode.OnEnter)

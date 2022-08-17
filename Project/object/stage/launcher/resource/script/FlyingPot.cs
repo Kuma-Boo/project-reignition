@@ -156,10 +156,8 @@ namespace Project.Gameplay.Objects
 				Character.UpdateExternalControl();
 		}
 
-		public void PlayerEntered(Area a)
+		public void PlayerEntered(Area _)
 		{
-			if (!a.IsInGroup("player")) return;
-
 			interactingWithPlayer = true;
 			isLeavingPot = false;
 
@@ -171,10 +169,8 @@ namespace Project.Gameplay.Objects
 			Character.Camera.SetCameraData(cameraSettings);
 		}
 
-		public void PlayerExited(Area a)
+		public void PlayerExited(Area _)
 		{
-			if (!a.IsInGroup("player")) return;
-
 			if (isLeavingPot)
 			{
 				Character.CanJumpDash = true; //So the player isn't completely helpless
