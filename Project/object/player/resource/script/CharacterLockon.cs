@@ -20,6 +20,10 @@ namespace Project.Gameplay
 		[Export]
 		public float homingAttackSpeed;
 		public bool IsHomingAttacking { get; set; }
+		public bool IsPerfectHomingAttack { get; private set; }
+		private bool monitoringPerfectHomingAttack;
+		public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
+		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalTranslation - GlobalTranslation).Normalized() : this.Forward();
 
 		public override void _Ready()
@@ -31,8 +35,9 @@ namespace Project.Gameplay
 		public void HomingAttack()
 		{
 			IsHomingAttacking = true;
-
-			//TODO Check whether it's a perfect homing attack
+			IsPerfectHomingAttack = monitoringPerfectHomingAttack;
+			if(IsPerfectHomingAttack)
+				StageSettings.instance.AddBonus(StageSettings.BonusType.PerfectHomingAttack);
 		}
 
 		public void ProcessLockonTargets()
@@ -77,10 +82,13 @@ namespace Project.Gameplay
 
 		private bool IsTargetInvalid(Spatial t)
 		{
-			if (!activeTargets.Contains(t) || !t.IsVisibleInTree() || Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing)
+			if (!t.IsVisibleInTree() || Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing)
 				return true;
 
 			if (!Character.Camera.IsOnScreen(t.GlobalTranslation))
+				return true;
+
+			if (!activeTargets.Contains(t) && t != LockonTarget)
 				return true;
 
 			Vector3 castPosition = Character.GlobalTranslation;
@@ -99,6 +107,7 @@ namespace Project.Gameplay
 		public void ResetLockonTarget()
 		{
 			IsHomingAttacking = false;
+			IsPerfectHomingAttack = false;
 
 			if (LockonTarget != null) //Reset Active Target
 			{
@@ -138,7 +147,7 @@ namespace Project.Gameplay
 			Character.CanJumpDash = true;
 			Character.MoveSpeed = bounceSpeed;
 			Character.VerticalSpeed = bouncePower;
-			Character.SetControlLockout(bounceLockoutSettings);
+			Character.StartControlLockout(bounceLockoutSettings);
 			Character.ResetActionState();
 		}
 		#endregion

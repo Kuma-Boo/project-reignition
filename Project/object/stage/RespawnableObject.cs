@@ -32,12 +32,15 @@ namespace Project.Gameplay
 
 		protected virtual void SetUp()
 		{
+			StageSettings.instance.Connect(nameof(StageSettings.StageUnload), this, nameof(Unload));
+
 			if (!IsRespawnable()) return;
 
 			spawnData.UpdateSpawnData(this);
 			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
+		public virtual void Unload() { }
 		public virtual void Respawn()
 		{
 			if (!IsInsideTree() && GetParent() != spawnData.parentNode)

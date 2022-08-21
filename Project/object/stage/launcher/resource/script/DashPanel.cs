@@ -34,12 +34,13 @@ namespace Project.Gameplay.Objects
 			_sfxPlayer.Play();
 			isQueued = false;
 			Character.CancelBackflip();
-			Character.SetControlLockout(new ControlLockoutResource()
+			Character.StartControlLockout(new ControlLockoutResource()
 			{
 				strafeSettings = ControlLockoutResource.StrafeSettings.KeepPosition,
 				speedRatio = speedRatio,
 				disableJumping = true,
-				tractionRatio = 0,
+				overrideSpeed = true,
+				tractionRatio = 8f,
 				length = length,
 			});
 		}

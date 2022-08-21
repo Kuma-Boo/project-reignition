@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode ambient_light_disabled, blend_add;
+render_mode blend_add;
 uniform sampler2D albedo : hint_albedo;
 uniform float brightness = 1.0;
 uniform float scrollBias;

@@ -29,6 +29,7 @@ namespace Project.Gameplay.Objects
 
 		protected override void Collect()
 		{
+			StageSettings.instance.ChangeScore(isRichRing ? 100 : 10, StageSettings.ScoreFunction.Add);
 			StageSettings.instance.UpdateRingCount(isRichRing ? 20 : 1);
 			SoundManager.instance.PlayRingSoundEffect(); //SFX are played externally to avoid multiple ring sounds at once
 

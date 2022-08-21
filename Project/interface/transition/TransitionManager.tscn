@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://interface/transition/TransitionManager.cs" type="Script" id=1]
 
@@ -15,6 +15,33 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Crossfade:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "crossfade"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Crossfade:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -36,13 +63,27 @@ tracks/0/keys = {
 layer = 128
 script = ExtResource( 1 )
 animator = NodePath("Animator")
-fadeTransition = NodePath("Fade")
+fade = NodePath("Fade")
+crossfade = NodePath("Crossfade")
 
 [node name="Fade" type="ColorRect" parent="."]
 self_modulate = Color( 1, 1, 1, 0 )
 margin_right = 1920.0
 margin_bottom = 1080.0
 
+[node name="Crossfade" type="TextureRect" parent="."]
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch_mode = 1
+flip_v = true
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
 [node name="Animator" type="AnimationPlayer" parent="."]
+playback_speed = 2.0
 anims/RESET = SubResource( 1 )
+anims/crossfade = SubResource( 3 )
 anims/fade = SubResource( 2 )

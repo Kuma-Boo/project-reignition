@@ -3,7 +3,7 @@
 [ext_resource path="res://object/player/resource/script/CharacterLockon.cs" type="Script" id=1]
 [ext_resource path="res://interface/gameplay/hud/lockon/LockonFlash.tres" type="Material" id=2]
 [ext_resource path="res://interface/gameplay/hud/lockon/Lockon.png" type="Texture" id=3]
-[ext_resource path="res://object/player/resource/movement settings/BounceLockout.tres" type="Resource" id=4]
+[ext_resource path="res://object/player/resource/movement settings/aerial/BounceLockout.tres" type="Resource" id=4]
 
 [sub_resource type="ConvexPolygonShape" id=130]
 points = PoolVector3Array( 1, 0.5, 0, -1, 0.5, 0, -1, -20, 0, 1, -20, 0, 8, 0.5, 5, -8, 0.5, 5, -8, -20, 5, 8, -20, 5, 10, 0.5, 25, -10, 0.5, 25, -10, -20, 25, 10, -20, 25 )
@@ -332,6 +332,26 @@ tracks/11/keys = {
 "update": 0,
 "values": [ Vector2( 1, 1 ), Vector2( 0.8, 0.8 ), Vector2( 0.5, 0.5 ), Vector2( 0.8, 0.8 ) ]
 }
+tracks/12/type = "method"
+tracks/12/path = NodePath("..")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0, 0.335, 0.469 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "DisablePerfectHomingAttack"
+}, {
+"args": [  ],
+"method": "EnablePerfectHomingAttack"
+}, {
+"args": [  ],
+"method": "DisablePerfectHomingAttack"
+} ]
+}
 
 [sub_resource type="Animation" id=134]
 resource_name = "loop"
@@ -418,7 +438,6 @@ region_enabled = true
 region_rect = Rect2( 128, 0, 128, 128 )
 
 [node name="PerfectHomingAttack" type="Node2D" parent="LockonReticle"]
-rotation = -3.14159
 
 [node name="1" type="Sprite" parent="LockonReticle/PerfectHomingAttack"]
 position = Vector2( -16, -16 )

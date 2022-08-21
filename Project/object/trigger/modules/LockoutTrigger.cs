@@ -10,7 +10,7 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		public ControlLockoutResource lockoutData; //Leave empty to make this a RESET trigger.
 
-		public override void Activate() => Character.SetControlLockout(lockoutData);
-		public override void Deactivate() => Character.SetControlLockout(null);
+		public override void Activate() => Character.StartControlLockout(lockoutData);
+		public override void Deactivate() => Character.StartControlLockout(null);
 	}
 }

@@ -5,9 +5,6 @@ namespace Project.Gameplay.Objects
 {
 	public class Boat : KinematicBody
 	{
-		[Export]
-		public NodePath overridePath;
-		private Path _overridePath;
 		private Transform startingTransform;
 
 		[Export]
@@ -33,9 +30,6 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
-			if(overridePath != null)
-				_overridePath = GetNodeOrNull<Path>(overridePath);
-
 			startingTransform = GlobalTransform;
 			StageSettings.instance.RegisterRespawnableObject(this);
 
@@ -88,8 +82,6 @@ namespace Project.Gameplay.Objects
 			damageTimer = 0f;
 			velocity = Vector2.Down * moveSpeed; //Acccelerate instantly
 
-			if (_overridePath != null)
-				Character.PathFollower.SetActivePath(_overridePath);
 			Character.StartExternal(this, true);
 			Character.DisableEnvironmentCollider();
 			

@@ -75,6 +75,7 @@ namespace Project.Gameplay.Objects
 			tweener.InterpolateCallback(this, .3f, nameof(Despawn));
 			tweener.Start();
 
+			StageSettings.instance.ChangeScore(isRichPearl ? 5 : 1, StageSettings.ScoreFunction.Add);
 			isCollected = true;
 			base.Collect();
 		}

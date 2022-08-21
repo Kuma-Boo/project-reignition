@@ -8,15 +8,14 @@ namespace Project.Gameplay
 		public delegate void Defeated();
 
 		[Export]
-		public NodePath collider; //Environmental collider. Disabled when defeated
+		public NodePath collider; //Environmental collider. Disabled when defeated (For death animations, etc)
 		protected CollisionShape _collider;
 		[Export]
-		public NodePath hitbox; //Lockon/Hitbox collider. Disabled when defeated
+		public NodePath hitbox; //Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
 		protected Area _hitbox;
-
 		[Export]
 		public int maxHealth;
-		private int currentHealth;
+		protected int currentHealth;
 		[Export]
 		public bool damagePlayer;
 
@@ -26,7 +25,7 @@ namespace Project.Gameplay
 		{
 			if (collider != null) _collider = GetNode<CollisionShape>(collider);
 			if (hitbox != null) _hitbox = GetNode<Node>(hitbox) as Area;
-
+			
 			base.SetUp();
 			Respawn();
 		}
@@ -53,7 +52,10 @@ namespace Project.Gameplay
 
 		public virtual void TakeDamage()
 		{
-			currentHealth--; //TODO increase player attack based on skills?
+			if (Character.Lockon.IsPerfectHomingAttack)
+				currentHealth -= 2; //Double damage
+			else
+				currentHealth--; //TODO increase player attack based on skills?
 
 			if (currentHealth <= 0)
 				Defeat();
@@ -64,9 +66,10 @@ namespace Project.Gameplay
 		//Called when the enemy is defeated
 		protected virtual void Defeat()
 		{
+			//Stop colliding/monitoring
 			if (_collider != null) _collider.Disabled = true;
 			if (_hitbox != null) _hitbox.Monitorable = _hitbox.Monitoring = false;
-			
+
 			OnExited(null);
 			EmitSignal(nameof(Defeated));
 		}
@@ -79,7 +82,7 @@ namespace Project.Gameplay
 			{
 				if (Character.Lockon.IsBouncing) return;
 
-				if(Character.Soul.IsSpeedBreakActive) //For now, speed break kills enemies instantly
+				if (Character.Soul.IsSpeedBreakActive) //For now, speed break kills enemies instantly
 					Defeat();
 				else if(Character.ActionState == CharacterController.ActionStates.JumpDash)
 				{
@@ -101,7 +104,7 @@ namespace Project.Gameplay
 		{
 			isInteracting = false;
 
-			if(isInteractingWithPlayer)
+			if (isInteractingWithPlayer)
 				isInteractingWithPlayer = false;
 		}
 	}

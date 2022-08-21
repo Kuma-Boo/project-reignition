@@ -38,6 +38,10 @@ namespace Project.Gameplay.Objects
 		[Export]
 		public NodePath armNode;
 		public Spatial _armNode;
+		[Export]
+		public NodePath animator;
+		public AnimationPlayer _animator;
+
 		public LaunchData GetLaunchData()
 		{
 			Vector3 launchPoint = GetLaunchPosition();
@@ -56,16 +60,21 @@ namespace Project.Gameplay.Objects
 
 		public override void _EnterTree()
 		{
-			_armNode = GetNodeOrNull<Spatial>(armNode);
-			_launchNode = GetNodeOrNull<Spatial>(launchNode);
+			_armNode = GetNode<Spatial>(armNode);
+			_launchNode = GetNode<Spatial>(launchNode);
+			_animator = GetNode<AnimationPlayer>(animator);
 		}
 
 		public override void _PhysicsProcess(float _)
 		{
 			if (Engine.EditorHint)
 			{
-				if (_armNode != null)
-					_armNode.RotationDegrees = Vector3.Right * Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
+				/*
+				//preview power in the editor?
+				 * 
+					if (_armNode != null)
+						_armNode.RotationDegrees = Vector3.Right * Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
+				*/
 
 				return;
 			}
@@ -107,30 +116,20 @@ namespace Project.Gameplay.Objects
 		private void EjectPlayer(bool isCancel)
 		{
 			isEjectingPlayer = true;
-			SceneTreeTween ejectTween = CreateTween().SetParallel(true).SetProcessMode(Tween.TweenProcessMode.Physics);
-
-			if (isCancel)
-			{
-				float timeRatio = (1 - launchPower);
-				ejectTween.TweenProperty(_armNode, "rotation_degrees", Vector3.Zero, .2f * timeRatio).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Sine);
-				ejectTween.TweenCallback(this, nameof(CancelCatapult)).SetDelay(.2f * timeRatio);
-			}
-			else
-			{
-				ejectTween.TweenProperty(_armNode, "rotation_degrees", Vector3.Left * 90f, .4f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Back);
-				ejectTween.TweenCallback(this, nameof(LaunchPlayer)).SetDelay(.16f);
-			}
+			_animator.Play(isCancel ? "Cancel" : "Launch");
 		}
 
 		private void LaunchPlayer()
 		{
 			isControllingPlayer = false;
-			Character.Animator.ResetLocalRotation();
+			//Character.Animator.ResetLocalRotation();
 			Character.StartLauncher(GetLaunchData(), null, true);
 		}
 
 		private void CancelCatapult()
 		{
+			if (!isControllingPlayer) return;
+
 			isControllingPlayer = false;
 			Character.JumpTo(Character.GlobalTranslation + this.Back().RemoveVertical() * 2f + Vector3.Down * 2f, 1f);
 		}

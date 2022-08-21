@@ -1,9 +1,9 @@
 shader_type spatial;
-render_mode specular_disabled;
+render_mode specular_disabled, depth_draw_alpha_prepass;
 
 uniform sampler2D albedo : hint_albedo;
 uniform sampler2D text : hint_albedo;
-uniform float roughness : hint_range(0,1);
+uniform float roughness : hint_range(0, 1);
 
 void fragment() {
 	vec4 albedo_tex = texture(albedo, UV);

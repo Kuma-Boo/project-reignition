@@ -58,7 +58,7 @@ namespace Project.Core
 					Adventure.Objects.Level.instance.RespawnLevel();
 				else
 				*/
-				GetTree().ReloadCurrentScene();
+				TransitionManager.QueueSceneChange(string.Empty, true);
 			}
 
 			if (lines.Count != 0 && !IsPaused)

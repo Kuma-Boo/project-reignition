@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay
@@ -7,13 +8,18 @@ namespace Project.Gameplay
 	/// Manager responsible for stage setup.
 	/// This is the first thing that gets loaded in a stage.
 	/// </summary>
-	public class StageSettings : Node
+	public class StageSettings : Spatial
 	{
 		public static StageSettings instance;
 
 		public override void _EnterTree()
 		{
 			instance = this; //Always override previous instance
+			if (cameraDemo != null)
+			{
+				_cameraDemo = GetNode<AnimationPlayer>(cameraDemo);
+				_cameraDemo.Connect("animation_changed", this, nameof(CameraDemoAdvanced));
+			}
 
 			SetUpMission();
 			SetUpSkills();
@@ -52,20 +58,68 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Stage Data
-		public float CurrentTime { get; private set; } //How long has the player been on this stage?
-		public int CurrentObjectiveCount { get; private set; } //How much has the player currently completed?
-		public int CurrentRingCount { get; private set; } //How many rings is the player currently holding?
 		public int CurrentScore { get; private set; } //How high is the current score?
-
-		[Signal]
-		public delegate void ObjectiveChanged(); //Progress towards the objective has changed
-		[Signal]
-		public delegate void RingChanged(int change); //Ring count has changed
+		public string DisplayScore { get; private set; } //Current score formatted to eight zeros
 		[Signal]
 		public delegate void ScoreChanged(); //Score has changed, normally occours from a bonus
-		[Signal]
-		public delegate void TimeChanged(); //Time has changed.
+		public enum ScoreFunction //List of ways the score can be modified
+		{
+			Add,
+			Subtract,
+			Multiply,
+			Replace
+		}
+		private const string SCORE_FORMATTING = "00000000";
+		public void ChangeScore(int amount, ScoreFunction func)
+		{
+			switch (func)
+			{
+				case ScoreFunction.Add:
+					CurrentScore += amount;
+					break;
+				case ScoreFunction.Subtract:
+					CurrentScore -= amount;
+					if (CurrentScore < 0)
+						CurrentScore = 0;
+					break;
+				case ScoreFunction.Multiply:
+					CurrentScore *= amount;
+					break;
+				case ScoreFunction.Replace:
+					CurrentScore = amount;
+					break;
+			}
 
+			DisplayScore = CurrentScore.ToString(SCORE_FORMATTING);
+			EmitSignal(nameof(ScoreChanged));
+		}
+
+		//Bonuses
+		public enum BonusType
+		{
+			PerfectHomingAttack, //Obtained by attacking an enemy using a perfect homing attack
+			DriftBonus, //Obtained by performing a Drift
+			Grind, //Obtained by continuously grinding
+			GrindStep, //Obtained by using the Grind Step
+		}
+		[Signal]
+		public delegate void BonusAdded(BonusType type);
+		public void AddBonus(BonusType type)
+		{
+			switch (type)
+			{
+				default:
+					break;
+			}
+
+
+			EmitSignal(nameof(BonusAdded), type);
+		}
+
+		//Objectives
+		public int CurrentObjectiveCount { get; private set; } //How much has the player currently completed?
+		[Signal]
+		public delegate void ObjectiveChanged(); //Progress towards the objective has changed
 		public void IncrementObjective()
 		{
 			CurrentObjectiveCount++;
@@ -76,6 +130,10 @@ namespace Project.Gameplay
 				FinishStage(true);
 		}
 
+		//Rings
+		public int CurrentRingCount { get; private set; } //How many rings is the player currently holding?
+		[Signal]
+		public delegate void RingChanged(int change); //Ring count has changed
 		public void UpdateRingCount(int amount)
 		{
 			CurrentRingCount += amount;
@@ -90,22 +148,75 @@ namespace Project.Gameplay
 			EmitSignal(nameof(RingChanged), amount);
 		}
 
+
+		//Time
+		private bool isUpdatingTime = true;
+
+		[Signal]
+		public delegate void TimeChanged(); //Time has changed.
+
+		public float CurrentTime { get; private set; } //How long has the player been on this stage?
+		public string DisplayTime { get; private set; } //Current time formatted in mm:ss.ff
+
+		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
 		private void UpdateTime()
 		{
+			if (!isUpdatingTime) return;
+
 			CurrentTime += PhysicsManager.normalDelta; //Add current time
+			System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
+			DisplayTime = time.ToString(TIME_LABEL_FORMAT);
 			EmitSignal(nameof(TimeChanged));
 		}
 
+		//Completion
+		[Export]
+		public StageCompletionType completionType;
+		public enum StageCompletionType
+		{
+			Crossfade, //Instantly crossfade to the camera demo
+			Run, //Keep running forward, then crossfade
+		}
+		[Export]
+		public ControlLockoutResource CompletionControlLockout;
+		[Export]
+		public NodePath cameraDemo; //Camera demo that gets enabled after the stage clears
+		private AnimationPlayer _cameraDemo;
+
+		[Signal]
+		public delegate void StageCompleted(bool isSuccess); //Stage was completed
 		public void FinishStage(bool isSuccess)
 		{
-			if (isSuccess)
-			{
-				GD.Print("Stage Complete.");
-				return;
-			}
-
 			//Asssign rank
 			//GameplayInterface.instance.Score;
+			if (_cameraDemo != null)
+			{
+				CameraDemoAdvanced(string.Empty, string.Empty);
+				_cameraDemo.Play("demo1");
+
+				//Hide everything so shadows don't render
+				Visible = false;
+
+				//Disable all object nodes that aren't parented to this node
+				Array nodes = GetTree().GetNodesInGroup("cull on complete");
+				for (int i = 0; i < nodes.Count; i++)
+				{
+					if (nodes[i] is Spatial spatial)
+						spatial.Visible = false;
+				}
+			}
+
+			isUpdatingTime = false;
+			EmitSignal(nameof(StageCompleted), isSuccess);
+		}
+
+		private void CameraDemoAdvanced(string _, string newAnim) //Camera demo was advanced, play a crossfade
+		{
+			TransitionManager.StartTransition(new TransitionData()
+			{
+				type = TransitionData.Type.Crossfade,
+				inSpeed = .5f,
+			});
 		}
 		#endregion
 

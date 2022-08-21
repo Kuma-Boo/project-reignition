@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://sound/jingle/Stage Clear.mp3" type="AudioStream" id=1]
 [ext_resource path="res://sound/scripts/BGMPlayer.cs" type="Script" id=2]
 [ext_resource path="res://interface/gameplay/results/icon/bronze.png" type="Texture" id=3]
+[ext_resource path="res://interface/gameplay/results/StageResult.cs" type="Script" id=4]
 [ext_resource path="res://interface/gameplay/results/result atlas.png" type="Texture" id=5]
 [ext_resource path="res://interface/font/HUDNumber.tres" type="BitmapFont" id=6]
 [ext_resource path="res://interface/gameplay/results/text/results en.png" type="Texture" id=7]
@@ -207,6 +208,20 @@ tracks/15/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( -16, -128 ) ]
+}
+tracks/16/type = "method"
+tracks/16/path = NodePath(".")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ true ],
+"method": "SetInputProcessing"
+} ]
 }
 
 [sub_resource type="Animation" id=1]
@@ -673,6 +688,32 @@ tracks/13/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( -16, -72 ) ]
+}
+tracks/14/type = "value"
+tracks/14/path = NodePath("Data/Labels/Time:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/15/type = "method"
+tracks/15/path = NodePath(".")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ true ],
+"method": "SetInputProcessing"
+} ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -1226,9 +1267,17 @@ tracks/37/keys = {
 [node name="StageResults" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 4 )
 __meta__ = {
 "_edit_lock_": true
 }
+animator = NodePath("AnimationPlayer")
+score = NodePath("Data/Labels/Score/Value")
+time = NodePath("Data/Labels/Time/Value")
+enemy = NodePath("Data/Labels/Enemy/Value")
+ring = NodePath("Data/Labels/Ring/Value")
+technical = NodePath("Data/Labels/Technical/Value")
+total = NodePath("Data/Labels/Total/Value")
 
 [node name="Header" type="Node2D" parent="."]
 position = Vector2( 960, 232 )
@@ -1350,7 +1399,7 @@ margin_bottom = 62.0
 rect_scale = Vector2( 0.85, 0.85 )
 rect_pivot_offset = Vector2( 0, 32 )
 custom_fonts/font = ExtResource( 6 )
-text = "0000000"
+text = "00000000"
 align = 2
 
 [node name="Time" type="Sprite" parent="Data/Labels"]

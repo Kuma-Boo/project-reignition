@@ -36,7 +36,7 @@ namespace Project.Gameplay.Triggers
 		private bool IsDriftValid() //Checks whether the player is in a state where a drift is possible
 		{
 			if (Character.Soul.IsUsingBreakSkills) return false; //Can't drift during speed/time break :\
-			if (!Character.IsOnGround || Character.SpeedRatio < MINIMUM_ENTRANCE_SPEED_RATIO) return false; //In air/too slow
+			if (!Character.IsOnGround || Character.SpeedRatio < MINIMUM_ENTRANCE_SPEED_RATIO || Character.MoveSpeed < 0) return false; //In air/too slow
 
 			return true; //Valid drift
 		}

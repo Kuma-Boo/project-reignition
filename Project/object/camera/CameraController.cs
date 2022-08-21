@@ -21,7 +21,16 @@ namespace Project.Gameplay
 		public NodePath camera;
 		private Camera _camera;
 
-		public Vector3 ForwardDirection => _calculationGimbal.Back();
+		public float ViewAngle { get; private set; }
+		public Vector3 ForwardDirection
+		{
+			get
+			{
+				if (_calculationGimbal.Back().AngleTo(Vector3.Up) < .1f)
+					return _calculationGimbal.Down() * Mathf.Sign(_calculationGimbal.Back().Dot(Vector3.Up));
+				return _calculationGimbal.Back();
+			}
+		}
 
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PlayerPathFollower => Character.PathFollower;
@@ -45,16 +54,11 @@ namespace Project.Gameplay
 			_cameraGimbal = GetNode<Spatial>(cameraGimbal);
 			_camera = GetNode<Camera>(camera);
 
-			//For crossfading
-			_cameraTransition = GetNode<TextureRect>(cameraTransition);
-			_cameraTransitionAnimator = GetNode<AnimationPlayer>(cameraTransitionAnimator);
-
 			Character.Camera = this;
 		}
 
-		public override void _ExitTree()
+		public override void _ExitTree() //Fix memory leak
 		{
-			//Fix memory leak
 			currentSettings.Dispose();
 			previousSettings.Dispose();
 		}
@@ -70,6 +74,7 @@ namespace Project.Gameplay
 		}
 
 		#region Settings
+		[Export]
 		public CameraSettingsResource targetSettings; //End lerp here
 		private readonly CameraSettingsResource previousSettings = new CameraSettingsResource(); //Start lerping here
 		private readonly CameraSettingsResource currentSettings = new CameraSettingsResource(); //Apply transforms based on this
@@ -96,7 +101,15 @@ namespace Project.Gameplay
 			currentSettings.viewPosition = data.viewPosition;
 
 			if (useCrossfade) //Crossfade transition
-				CrossfadeTransition();
+			{
+				TransitionManager.StartTransition(new TransitionData()
+				{
+					type = TransitionData.Type.Crossfade,
+					inSpeed = .5f,
+				});
+
+				ResetFlag = true;
+			}
 		}
 
 		private float transitionTime; //Ratio (from 0 -> 1) of transition that has been completed
@@ -260,6 +273,7 @@ namespace Project.Gameplay
 
 			targetRotation.x = Mathf.LerpAngle(previousSettings.viewAngle.x, targetRotation.x, transitionTimeStepped);
 			targetRotation.y = Mathf.LerpAngle(previousSettings.viewAngle.y, targetRotation.y, transitionTimeStepped);
+			ViewAngle = targetRotation.y; //Update view angle
 
 			if (ResetFlag)
 				currentRotation = targetRotation;
@@ -296,7 +310,6 @@ namespace Project.Gameplay
 			}
 
 			currentYawTracking = Mathf.LerpAngle(currentYawTracking, targetYawTracking, .2f);
-
 			_calculationGimbal.RotateObjectLocal(Vector3.Up, Mathf.Lerp(previousYawTracking, currentYawTracking, transitionTimeStepped));
 			_calculationGimbal.RotateObjectLocal(Vector3.Right, currentRotation.x + currentPitchTracking);
 		}
@@ -327,24 +340,6 @@ namespace Project.Gameplay
 			targetPosition += currentStrafe;
 
 			_calculationRoot.GlobalTranslation = targetPosition;
-		}
-		#endregion
-
-		#region Crossfade Transition
-		//Used for instant camera transitions
-		[Export]
-		public NodePath cameraTransition;
-		private TextureRect _cameraTransition;
-		[Export]
-		public NodePath cameraTransitionAnimator;
-		private AnimationPlayer _cameraTransitionAnimator;
-		public void CrossfadeTransition()
-		{
-			Image img = _calculationGimbal.GetViewport().GetTexture().GetData();
-			var tex = new ImageTexture();
-			tex.CreateFromImage(img);
-			_cameraTransition.Texture = tex;
-			_cameraTransitionAnimator.Play("Transition");
 		}
 		#endregion
 

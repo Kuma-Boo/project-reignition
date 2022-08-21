@@ -28,17 +28,17 @@ namespace Project.Gameplay
 					ToggleSpeedBreak();
 			}
 		}
-		[Export]
-		public bool isSpeedBreakEnabled;
-		[Export]
-		public bool isTimeBreakEnabled;
+		private bool isSpeedBreakEnabled = true;
+		private bool isTimeBreakEnabled = true;
 
 		[Export]
 		public float speedBreakSpeed = 54; //Movement speed during speed break
 		public bool IsTimeBreakActive { get; private set; }
 		public bool IsSpeedBreakActive { get; private set; }
 		public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
-		
+
+		private uint characterCollisionLayer;
+
 		private float breakTimer = 0; //Timer for break skills
 		private const float SPEEDBREAK_DELAY = 0.12f; //Time to say SPEED BREAK!
 		private const float BREAK_SKILLS_COOLDOWN = 1f; //Prevent skill spam
@@ -50,6 +50,7 @@ namespace Project.Gameplay
 		{
 			float levelRatio = SaveManager.ActiveGameData.SoulGaugeLevel; //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
 			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; //Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
+			characterCollisionLayer = Character.CollisionLayer;
 		}
 
 		//Cancel time break, just in case
@@ -154,9 +155,15 @@ namespace Project.Gameplay
 			breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
 
 			if (IsSpeedBreakActive)
+			{
+				Character.CollisionLayer = 0; //Don't collide with any objects
 				Character.Sound.PlayVoice(0);
+			}
 			else
+			{
 				Character.MoveSpeed = Character.moveSettings.speed;
+				Character.CollisionLayer = characterCollisionLayer; //Reset collision layer
+			}
 
 			if(HeadsUpDisplay.instance != null)
 				HeadsUpDisplay.instance.UpdateSoulGaugeColor(IsSoulGaugeCharged);
@@ -166,7 +173,7 @@ namespace Project.Gameplay
 		private int maxSoulPower; //Calculated on start
 
 		private bool IsSoulGaugeEmpty => soulPower == 0;
-		private bool IsSoulGaugeCharged => soulPower > 50;
+		private bool IsSoulGaugeCharged => soulPower >= MINIMUM_SOUL_POWER;
 
 		private const int MINIMUM_SOUL_POWER = 50; //Minimum amount of soul power needed to use soul skills.
 		private const int SOUL_GAUGE_BASE = 100; //Starting size of soul gauge
@@ -176,7 +183,7 @@ namespace Project.Gameplay
 			soulPower = Mathf.Clamp(soulPower + amount, 0, maxSoulPower);
 
 			if(HeadsUpDisplay.instance != null)
-				HeadsUpDisplay.instance.ModifySoulGauge((float)soulPower / maxSoulPower, soulPower >= MINIMUM_SOUL_POWER);
+				HeadsUpDisplay.instance.ModifySoulGauge((float)soulPower / maxSoulPower, IsSoulGaugeCharged);
 		}
 	}
 }

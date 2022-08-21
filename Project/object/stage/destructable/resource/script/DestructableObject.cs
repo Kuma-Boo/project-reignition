@@ -22,6 +22,8 @@ namespace Project.Gameplay.Objects
 		public Array<Material> overrideMaterials = new Array<Material>();
 		private readonly Array<Material> materialList = new Array<Material>();
 
+		private SceneTreeTween tween;
+
 		[Export]
 		public ShatterType shatterType;
 		public enum ShatterType
@@ -87,6 +89,9 @@ namespace Project.Gameplay.Objects
 		{
 			base.Respawn();
 
+			if (tween != null)
+				tween.Stop();
+
 			isShattered = false;
 
 			if (_collider != null)
@@ -136,11 +141,13 @@ namespace Project.Gameplay.Objects
 
 			if (_collider != null)
 				_collider.Disabled = true;
+
 			if (_originalMesh != null)
 			{
 				_originalMesh.Visible = false;
 				EnablePieces();
 			}
+
 			if (_brokenMesh != null)
 				_brokenMesh.Visible = true;
 
@@ -150,11 +157,11 @@ namespace Project.Gameplay.Objects
 				_pieces[i].Sleeping = false;
 			}
 
-			SceneTreeTween tween = CreateTween().SetParallel(true);
+			tween = CreateTween().SetParallel(true);
 			for (int i = 0; i < materialList.Count; i++)
 			{
 				materialList[i].Set("albedo_color", Colors.White);
-				tween.TweenProperty(materialList[i], "albedo_color", Colors.Transparent, 1f).SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
+				tween.TweenProperty(materialList[i], "albedo_color", Colors.Transparent, 1f);
 			}
 			tween.TweenCallback(this, nameof(Despawn)).SetDelay(3f); //Despawn this object
 
@@ -162,7 +169,7 @@ namespace Project.Gameplay.Objects
 			EmitSignal(nameof(Shattered));
 		}
 
-		public override void _ExitTree()
+		public override void Unload()
 		{
 			//Prevent memory leakage
 			for (int i = 0; i < _pieces.Count; i++)

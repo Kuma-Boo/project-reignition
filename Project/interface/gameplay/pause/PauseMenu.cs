@@ -31,9 +31,13 @@ namespace Project.Interface
 			GetTree().Paused = !GetTree().Paused;
 			StageSettings.instance.MusicPaused = GetTree().Paused;
 			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
+			VisualServer.SetShaderTimeScale(GetTree().Paused ? 0.0f : 1.0f);
 
-			if (CharacterController.instance.Soul.IsTimeBreakActive)//Fix speed break
+			if (CharacterController.instance.Soul.IsTimeBreakActive)//Fix time break
+			{
 				Engine.TimeScale = GetTree().Paused ? 1f : CharacterSoulSkill.TIME_BREAK_RATIO;
+				VisualServer.SetShaderTimeScale(GetTree().Paused ? 0.0f : CharacterSoulSkill.TIME_BREAK_RATIO);
+			}
 		}
 
 		public override void _Process(float _)

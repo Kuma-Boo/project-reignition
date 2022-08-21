@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://object/enemy/majin/resource/Majin.cs" type="Script" id=1]
 [ext_resource path="res://object/enemy/majin/resource/majin charge.png" type="Texture" id=2]
@@ -10,14 +10,41 @@ height = 0.5
 
 [sub_resource type="SphereShape" id=2]
 
+[sub_resource type="Curve" id=22]
+min_value = -20.0
+max_value = 5.0
+_data = [ Vector2( 0, 0 ), 0.0, 22.4655, 0, 0, Vector2( 0.514249, 5 ), 0.0, 0.0, 0, 0, Vector2( 1, -20 ), -121.932, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=23]
+curve = SubResource( 22 )
+
+[sub_resource type="Curve" id=24]
+_data = [ Vector2( 0, 0 ), 0.0, 3.73712, 0, 0, Vector2( 0.623057, 1 ), -0.689178, -0.689178, 0, 0, Vector2( 0.892487, 0.676895 ), -1.8782, -1.8782, 0, 0, Vector2( 1, 0 ), -9.85773, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=25]
+curve = SubResource( 24 )
+
+[sub_resource type="Curve" id=26]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -2.47545, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=27]
+curve = SubResource( 26 )
+
 [sub_resource type="ParticlesMaterial" id=15]
+trail_divisor = 64
+trail_size_modifier = SubResource( 27 )
 emission_shape = 5
 emission_ring_radius = 2.0
-emission_ring_inner_radius = 1.5
+emission_ring_inner_radius = 2.0
 emission_ring_height = 1.0
 emission_ring_axis = Vector3( 0, 0, 1 )
+flag_align_y = true
 direction = Vector3( 0, 1, 0 )
 gravity = Vector3( 0, 0, 0 )
+radial_accel = -20.0
+radial_accel_curve = SubResource( 23 )
+scale = 0.25
+scale_curve = SubResource( 25 )
 
 [sub_resource type="SpatialMaterial" id=14]
 flags_transparent = true
@@ -114,11 +141,12 @@ shape = SubResource( 2 )
 [node name="Particles" type="Spatial" parent="."]
 
 [node name="Charging" type="Particles" parent="Particles"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0 )
 generate_lightmap = false
 emitting = false
-amount = 64
-lifetime = 0.5
-one_shot = true
+amount = 256
+lifetime = 0.4
+speed_scale = 1.4
 process_material = SubResource( 15 )
 draw_pass_1 = SubResource( 16 )
 

@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Interface.Menu
 {
@@ -19,8 +20,13 @@ namespace Project.Interface.Menu
 		{
 			if(Controller.actionButton.wasPressed)
 			{
-				TransitionManager.Fade(Colors.Black, 2f);
-				TransitionManager.instance.Connect(nameof(TransitionManager.TransitionLoad), this, nameof(Hide), null, (uint)ConnectFlags.Oneshot);
+				TransitionManager.StartTransition(new TransitionData()
+				{
+					inSpeed = 2f,
+					color= Colors.Black,
+					type = TransitionData.Type.Fade
+				});
+				TransitionManager.instance.Connect(nameof(TransitionManager.PerformLoading), this, nameof(Hide), null, (uint)ConnectFlags.Oneshot);
 				DisableProcessing();
 			}
 		}
@@ -43,7 +49,7 @@ namespace Project.Interface.Menu
 			if (memory[KEY] == 0) //Returning to title screen
 			{
 				_parentMenu.Show();
-				TransitionManager.CompleteFade(1f);
+				TransitionManager.FinishTransition();
 			}
 
 			base.Hide();

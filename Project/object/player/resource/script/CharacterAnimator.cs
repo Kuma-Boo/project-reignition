@@ -79,7 +79,7 @@ namespace Project.Gameplay
 			_animator.Set(BACKFLIP_TRIGGER_PARAMETER, true);
 			_animator.Set(FALL_TRIGGER_PARAMETER, false);
 			_animator.Set(FALL_RESET_PARAMETER, 0);
-			ResetLocalRotation();
+			//ResetLocalRotation();
 		}
 
 		public void JumpAccel()
@@ -101,12 +101,14 @@ namespace Project.Gameplay
 			_animator.Set(FALL_RESET_PARAMETER, 0);
 		}
 
-
+		/*
 		public void ResetLocalRotation()
 		{
 			Rotation = Vector3.Zero;
 		}
+		*/
 
+		/*
 		public void SetForwardDirection(Vector3 direction)
 		{
 			Transform t = _root.GlobalTransform;
@@ -116,15 +118,12 @@ namespace Project.Gameplay
 			t.basis = t.basis.Orthonormalized();
 			_root.GlobalTransform = t;
 		}
+		*/
 
 		private const string GROUND_PARAMETER = "parameters/IsGrounded/current";
 		private const float MOVEMENT_DEADZONE = .2f;
 		public void UpdateAnimation()
 		{
-			//Don't update directions when externally controlled or on launchers
-			if (Character.MovementState != CharacterController.MovementStates.External && Character.MovementState != CharacterController.MovementStates.Launcher)
-				UpdateCharacterRotation();
-
 			_animator.Set(GROUND_PARAMETER, Character.IsOnGround ? 0 : 1);
 			if (Character.IsOnGround)
 				GroundAnimations();
@@ -133,15 +132,26 @@ namespace Project.Gameplay
 		}
 
 		//Rotates the local direction of the player
-		private void UpdateCharacterRotation()
+		public void UpdateRotation()
 		{
-			SetForwardDirection(Character.PathFollower.MovementDirection); //Set base forward direction
+			//Don't update directions when externally controlled or on launchers
+			if (Character.MovementState == CharacterController.MovementStates.External || Character.MovementState == CharacterController.MovementStates.Launcher)
+				return;
 
+			//SetForwardDirection(Character.PathFollower.MovementDirection); //Set base forward direction
+
+			/*
 			if (Character.Lockon.IsHomingAttacking) //Face target
 			{
 				float targetRotation = Character.Lockon.HomingAttackDirection.Flatten().Rotated(_root.GlobalRotation.y).AngleTo(Vector2.Down);
 				Rotation = Vector3.Up * targetRotation;
 				return;
+			}
+
+			if (Character.MoveSpeed != 0) //Rotate smoothly
+			{
+				float rotationAmount = -this.Forward().Flatten().AngleTo(Character.PathFollower.ForwardDirection.Flatten());
+				RotateObjectLocal(Vector3.Up, rotationAmount * .4f);
 			}
 
 			if (Character.RotatedMovementValue != Vector2.Zero || Character.Soul.IsSpeedBreakActive)
@@ -173,6 +183,7 @@ namespace Project.Gameplay
 
 				Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .4f);
 			}
+			*/
 		}
 
 		private float strafeVelocity;
@@ -190,6 +201,7 @@ namespace Project.Gameplay
 			_animator.Set(MOVEMENT_STATE_PARAMETER, transition);
 			_animator.Set(CROUCH_PARAMETER, Character.IsCrouching ? 1 : 0);
 
+			/*
 			float targetStrafeTilt = 0;
 
 			if (Character.ControlLockoutData == null && Character.Controller.MovementAxis != Vector2.Zero)
@@ -198,6 +210,7 @@ namespace Project.Gameplay
 				targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Pi * .5f, -1, 1);
 			}
 			strafeTilt = ExtensionMethods.SmoothDamp(strafeTilt, targetStrafeTilt, ref strafeVelocity, .2f);
+			*/
 
 			float moveAnimationSpeed = 1f;
 			

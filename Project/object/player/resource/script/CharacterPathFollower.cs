@@ -16,10 +16,10 @@ namespace Project.Gameplay
 
 		#region Path Data
 		public bool isPathMovingForward = true; //Set this to false to move backwards along the path (Useful for reverse acts)
-		public int PathTravelDirection => 1; //TODO implement reverse paths later
+		public int PathTravelDirection => isPathMovingForward ? 1 : -1; //TODO implement reverse paths later
 		public Vector3 Xform(Vector3 v) => GlobalTransform.basis.Xform(v);
-		public Vector3 MovementDirection => this.Forward() * PathTravelDirection;
-		public Vector3 StrafeDirection => MovementDirection.Cross(_character.worldDirection).Normalized();
+		public Vector3 ForwardDirection => this.Forward() * PathTravelDirection;
+		public Vector3 StrafeDirection => ForwardDirection.Cross(_character.worldDirection).Normalized();
 
 		public Path ActivePath { get; private set; }
 

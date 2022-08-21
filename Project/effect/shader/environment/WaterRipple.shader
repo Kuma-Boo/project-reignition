@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_add, unshaded;
+render_mode blend_add;
 
 uniform sampler2D albedo : hint_albedo;
 uniform float main_speed : hint_range(0, 1) = .28;

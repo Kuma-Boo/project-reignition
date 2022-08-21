@@ -57,14 +57,8 @@ namespace Project.Core
 
 		public static Vector2 Flatten(this Vector3 v) => new Vector2(v.x, v.z);
 		public static Vector3 RemoveVertical(this Vector3 v) => new Vector3(v.x, 0, v.z);
-		public static Vector2 RotateLinear(this Vector2 v, Vector2 t, float spd)
-		{
-			float ang = v.AngleTo(t);
-			int sign = Mathf.Sign(ang);
-			ang = Mathf.Abs(ang);
-			return v.Rotated(Mathf.Min(ang, spd) * sign);
-		}
-		public static Vector2 RotateSmooth(this Vector2 v, Vector2 t, float spd) => v.Rotated(v.AngleTo(t) * spd);
+		//Returns the absolute dot product of a normal relative to an axis ignoring Y values.
+		public static float DotProd2D(Vector3 normal, Vector3 axis) => Mathf.Abs(normal.Flatten().Normalized().Dot(axis.Flatten().Normalized()));
 
 		public static void AddExplosionForce(this RigidBody body, Vector3 explosionPoint, float power)
 		{
@@ -80,10 +74,9 @@ namespace Project.Core
 		//Returns the absolute angle between 2 angles
 		public static float DeltaAngleDegrees(float firstAngle, float secondAngle)
 		{
-			float d = Mathf.Abs(firstAngle - secondAngle) % 360;
-			if (d > 180)
-				d -= 360;
-			return Mathf.Abs(d);
+			firstAngle %= 360;
+			secondAngle %= 360;
+			return firstAngle - secondAngle;
 		}
 		public static float MoveTowardAngleDegrees(float from, float to, float delta)
 		{
