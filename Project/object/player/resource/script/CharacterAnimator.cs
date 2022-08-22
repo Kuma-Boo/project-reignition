@@ -1,6 +1,7 @@
 using Godot;
 using Project.Core;
 
+//TODO Rewrite this entire script
 namespace Project.Gameplay
 {
 	/// <summary>
@@ -11,16 +12,12 @@ namespace Project.Gameplay
 		[Export]
 		public NodePath animator;
 		private AnimationTree _animator;
-		[Export]
-		public NodePath root;
-		private Spatial _root;
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _Ready()
 		{
 			_animator = GetNode<AnimationTree>(animator);
 			_animator.Active = true;
-			_root = GetNode<Spatial>(root);
 		}
 
 		private const string COUNTDOWN_PARAMETER = "parameters/countdown/active";
@@ -129,16 +126,16 @@ namespace Project.Gameplay
 				GroundAnimations();
 			else
 				AirAnimations();
+
+			UpdateRotation();
 		}
 
 		//Rotates the local direction of the player
-		public void UpdateRotation()
+		private void UpdateRotation()
 		{
 			//Don't update directions when externally controlled or on launchers
 			if (Character.MovementState == CharacterController.MovementStates.External || Character.MovementState == CharacterController.MovementStates.Launcher)
 				return;
-
-			//SetForwardDirection(Character.PathFollower.MovementDirection); //Set base forward direction
 
 			/*
 			if (Character.Lockon.IsHomingAttacking) //Face target
@@ -188,14 +185,15 @@ namespace Project.Gameplay
 
 		private float strafeVelocity;
 		private const string MOVEMENT_STATE_PARAMETER = "parameters/ground_state/MoveState/current";
+		public bool IsIdling => (Mathf.Abs(Character.StrafeSpeed) < .1f && Mathf.Abs(Character.MoveSpeed) < .1f);
 		private void GroundAnimations()
 		{
 			int transition = 1; //Idle
-			if (Character.SpeedRatio < 0) //Backstep
+			if (Character.MoveSpeed < 0) //Backstep
 				transition = 0;
 			else if (Character.SpeedRatio >= 1) //Running
 				transition = 3;
-			else if(!Character.IsIdling) //Walk -> Jog
+			else if(!IsIdling) //Walk -> Jog
 				transition = 2;
 
 			_animator.Set(MOVEMENT_STATE_PARAMETER, transition);
@@ -213,10 +211,12 @@ namespace Project.Gameplay
 			*/
 
 			float moveAnimationSpeed = 1f;
-			
-			if(Character.SpeedRatio < 0)
+
+			if (Character.IsFreeMovementActive)
+				moveAnimationSpeed = Character.SpeedRatio;
+			else if(Character.SpeedRatio < 0)
 				moveAnimationSpeed = .8f * Mathf.Abs(Character.backstepSettings.GetSpeedRatio(Character.MoveSpeed));
-			else if(!Character.IsIdling)
+			else if(!IsIdling)
 				moveAnimationSpeed = Mathf.Max(Character.SpeedRatio, Mathf.Abs(Character.runningStrafeSettings.GetSpeedRatioClamped(Character.StrafeSpeed)));
 
 			_animator.Set("parameters/ground_state/Jog/blend_position", new Vector2(strafeTilt, moveAnimationSpeed));

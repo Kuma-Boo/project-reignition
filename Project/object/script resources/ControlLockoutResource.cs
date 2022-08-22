@@ -41,10 +41,10 @@ namespace Project.Gameplay
 		public bool overrideSpeed;
 		[Export(PropertyHint.Range, "0, 2f")]
 		public float speedRatio; //Ratio compared to character's normal top speed. Character will move to this speed ratio
-		[Export(PropertyHint.Range, "0f, 8f")]
-		public float tractionRatio; //Multiplied with character's traction. Ignored when set to zero
-		[Export(PropertyHint.Range, "0f, 8f")]
-		public float frictionRatio; //Multiplied with character's friction. Ignored when set to zero
+		[Export(PropertyHint.Range, "-1f, 8f")]
+		public float tractionRatio; //Multiplied with character's traction. Ignored when set to zero, snaps when set to -1f
+		[Export(PropertyHint.Range, "-1f, 8f")]
+		public float frictionRatio; //Multiplied with character's friction. Ignored when set to zero, snaps when set to -1f
 
 		[Export(PropertyHint.Range, "0, 32")]
 		public int priority; //Lockouts with lower priorities will be unable to override higher priority lockouts

@@ -251,7 +251,7 @@ namespace Project.Gameplay
 				targetRotation.y = Mathf.LerpAngle(previousSettings.viewAngle.y, Mathf.Deg2Rad(targetSettings.viewAngle.y), transitionTime);
 			else
 			{
-				targetRotation.y = forwardFlattened.SignedAngleTo(Vector3.Forward, Vector3.Up) + Mathf.Deg2Rad(targetSettings.viewAngle.y);
+				targetRotation.y = forwardFlattened.SignedAngleTo(Vector3.Forward, Vector3.Up);
 
 				if (targetSettings.yawMode == CameraSettingsResource.OverrideMode.Add)
 					targetRotation.y += Mathf.Deg2Rad(targetSettings.viewAngle.y);
@@ -263,7 +263,7 @@ namespace Project.Gameplay
 			{
 				float cachedRotation = _calculationRoot.GlobalRotation.y;
 				_calculationRoot.GlobalRotation = Vector3.Down * targetRotation.y; //Temporarily apply the rotation so pitch calculation can be correct
-				targetRotation.x = forwardFlattened.SignedAngleTo(PlayerPathFollower.Forward(), rightDirection) + Mathf.Deg2Rad(targetSettings.viewAngle.x);
+				targetRotation.x = forwardFlattened.SignedAngleTo(PlayerPathFollower.Forward(), rightDirection);
 
 				//Reset rotation
 				_calculationRoot.GlobalRotation = Vector3.Up * cachedRotation;

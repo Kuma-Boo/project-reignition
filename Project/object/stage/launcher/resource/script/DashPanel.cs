@@ -40,7 +40,7 @@ namespace Project.Gameplay.Objects
 				speedRatio = speedRatio,
 				disableJumping = true,
 				overrideSpeed = true,
-				tractionRatio = 8f,
+				tractionRatio = -1f,
 				length = length,
 			});
 		}

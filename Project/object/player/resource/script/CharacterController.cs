@@ -44,6 +44,8 @@ namespace Project.Gameplay
 			_gimbal = GetNode<Spatial>(gimbal);
 			_environmentCollider = GetNode<CollisionShape>(environmentCollider);
 
+			ResetOrientation = true; //Start with proper orientation
+
 			if (StageSettings.instance != null)
 				StageSettings.instance.Connect(nameof(StageSettings.StageCompleted), this, nameof(OnStageCompleted));
 		}
@@ -87,6 +89,7 @@ namespace Project.Gameplay
 					break;
 			}
 
+			enableLandingBoost = false; //Disable landing boost temporarily
 			CancelMovementState(MovementState);
 			Soul.IsSpeedBreakEnabled = Soul.IsTimeBreakEnabled = true; //Reenable soul skills
 		}
@@ -178,6 +181,7 @@ namespace Project.Gameplay
 		}
 
 		private Vector2 rotatedMovementValue; //MovementDirection, relative to camera
+		private float inputRotationAmount;
 
 		private bool IsHoldingForward()
 		{
@@ -195,8 +199,6 @@ namespace Project.Gameplay
 			return rotatedMovementValue.y < -0.6f && Mathf.Abs(rotatedMovementValue.x) < .8f;
 		}
 
-		public bool FaceMovementDirection => ActionState == ActionStates.AccelJump || ActionState == ActionStates.JumpDash;
-
 		private float jumpBufferTimer;
 		private float actionBufferTimer;
 		private const float ACTION_BUFFER_LENGTH = .2f; //How long to allow actions to be buffered
@@ -206,8 +208,8 @@ namespace Project.Gameplay
 		{
 			if(Camera != null) //Calculate movement value
 			{
-				float delta = PathFollower.ForwardDirection.Flatten().Normalized().AngleTo(Vector2.Up.Rotated(Camera.ViewAngle));
-				rotatedMovementValue = Controller.MovementAxis.Rotated(-delta); //Input angle based off view angle, in character space
+				inputRotationAmount = -PathFollower.ForwardDirection.Flatten().Normalized().AngleTo(Vector2.Up.Rotated(Camera.ViewAngle));
+				rotatedMovementValue = Controller.MovementAxis.Rotated(inputRotationAmount); //Input angle based off view angle, in character space
 
 				//Software Deadzone
 				if (Mathf.Abs(rotatedMovementValue.x) < .2f)
@@ -249,7 +251,6 @@ namespace Project.Gameplay
 			Soul.IsTimeBreakEnabled = false;
 			Soul.IsSpeedBreakEnabled = false;
 
-			Visible = false; //Hide player (Add delays later depending on victory animations?)
 			StartControlLockout(StageSettings.instance.CompletionControlLockout);
 		}
 
@@ -306,17 +307,10 @@ namespace Project.Gameplay
 
 			externalParent = followObject;
 			externalOffset = Vector3.Zero; //Reset offset
-			if (externalParent != null)
-			{
-				MoveSpeed = 0;
+			if (externalParent != null && !snap) //Smooth out transition
+				externalOffset = GlobalTranslation - externalParent.GlobalTranslation;
 
-				if(!snap) //Smooth out transition
-					externalOffset = GlobalTranslation - externalParent.GlobalTranslation;
-			}
-
-			StrafeSpeed = 0;
-			VerticalSpeed = 0;
-
+			ResetVelocity();
 			UpdateExternalControl();
 		}
 
@@ -342,6 +336,7 @@ namespace Project.Gameplay
 				return;
 			}
 
+			UpdateFreeMovement();
 			UpdateMoveSpeed();
 			UpdateStrafeSpeed();
 			UpdateActions();
@@ -354,11 +349,89 @@ namespace Project.Gameplay
 		[Export]
 		public MovementResource runningStrafeSettings;
 		[Export]
-		public MovementResource standingStrafeSettings;
-		[Export]
 		public MovementResource airStrafeSettings;
 		[Export]
 		public MovementResource backstepSettings;
+
+		public bool IsFreeMovementActive { get; private set; } //Can the player rotate freely?
+		public float FreeMoveSpeed { get; set; } //Move speed for free movement
+		private bool IsJumpDashing => ActionState == ActionStates.JumpDash || ActionState == ActionStates.AccelJump;
+		private Vector2 freeMoveDirection; //Current movement direction
+		private const float FREE_MOVE_TURNAROUND_ANGLE = 2f; //At what angle do inputs register as turning around?
+		private void UpdateFreeMovement() //Allows the player to turn freely, similar to Sonic Adventure. Helps with more open areas
+		{
+			//Calculate whether the player is turning freely
+			if (isControlsLocked) //Locked controls are handled with the UpdateMoveSpeed and UpdateStrafeSpeed
+				SetFreeMovement(false);
+			else if (MoveSpeed <= 0 && IsHoldingBack()) //Backstepping always overrides Adventure-styled movement
+				SetFreeMovement(false);
+			else if (MoveSpeed >= 0) //Forward movement
+			{
+				if (!IsFreeMovementActive && moveSettings.GetSpeedRatio(MoveSpeed) < .6f)  //Free rotational movement if speed drops below 60%, or we're accelerating
+					SetFreeMovement(true);
+				else if (moveSettings.GetSpeedRatio(MoveSpeed) > .8f) //Stop using free movement when moving forward quickly
+					SetFreeMovement(false);
+			}
+
+			if (!IsFreeMovementActive) return; //Player is confined to a path
+
+			//360ish movement, similar to the original Adventure games
+			float angle = freeMoveDirection.AngleTo(rotatedMovementValue);
+			MovementResource activeSettings = IsOnGround ? moveSettings : airMoveSettings;
+
+			if (rotatedMovementValue == Vector2.Zero || IsJumpDashing)
+				FreeMoveSpeed = activeSettings.Interpolate(FreeMoveSpeed, 0f); //Slow down
+			else if (Mathf.IsZeroApprox(FreeMoveSpeed) || Mathf.Abs(angle) < FREE_MOVE_TURNAROUND_ANGLE)
+			{
+				if (Mathf.IsZeroApprox(FreeMoveSpeed)) //Snap rotation
+					freeMoveDirection = rotatedMovementValue.Normalized();
+				else //Rotate smoothly
+					freeMoveDirection = freeMoveDirection.Rotated(angle * .2f * (1f - SpeedRatio)); //Lerp turning (Higher speeds turn slower)
+
+				float input = Mathf.Abs(rotatedMovementValue.Length() * (1f - (Mathf.Abs(angle) / FREE_MOVE_TURNAROUND_ANGLE)));
+				FreeMoveSpeed = activeSettings.Interpolate(FreeMoveSpeed, input);
+			}
+			else
+				FreeMoveSpeed = activeSettings.Interpolate(FreeMoveSpeed, -1f); //Turn around
+
+			freeMoveDirection = freeMoveDirection.Normalized(); //Normalize movement direction
+
+			if (FreeMoveSpeed < 0) //FreeMoveSpeed cannot be negative
+				FreeMoveSpeed = 0f;
+			SetFreeMoveSpeed(FreeMoveSpeed);
+		}
+
+		private void SetFreeMovement(bool value)
+		{
+			IsFreeMovementActive = value;
+
+			if (IsFreeMovementActive) //Sync variables
+			{
+				Vector2 movementVector = new Vector2(StrafeSpeed, MoveSpeed);
+
+				if (!movementVector.IsEqualApprox(Vector2.Zero))
+				{
+					if (!IsJumpDashing)
+						freeMoveDirection = movementVector;
+					else if (freeMoveDirection.y < 0) //Disable jumpdashing backwards
+						freeMoveDirection.y = 0;
+				}
+				else if (freeMoveDirection.IsEqualApprox(Vector2.Zero))
+					freeMoveDirection = Vector2.Down;
+
+				freeMoveDirection = freeMoveDirection.Normalized();
+				SetFreeMoveSpeed(movementVector.Length());
+			}
+			else
+				freeMoveDirection = Vector2.Down;
+		}
+
+		private void SetFreeMoveSpeed(float spd)
+		{
+			FreeMoveSpeed = spd;
+			StrafeSpeed = FreeMoveSpeed * freeMoveDirection.x;
+			MoveSpeed = FreeMoveSpeed * freeMoveDirection.y;
+		}
 
 		private void UpdateMoveSpeed()
 		{
@@ -372,6 +445,13 @@ namespace Project.Gameplay
 
 				//Change speed to the correct value
 				float spd = moveSettings.speed * ControlLockoutData.speedRatio;
+
+				if(ControlLockoutData.tractionRatio < 0) //Negative traction, snap speed
+				{
+					MoveSpeed = spd;
+					return;
+				}
+
 				float delta = PhysicsManager.physicsDelta;
 				if (MoveSpeed < spd) //Accelerate using traction
 					delta *= moveSettings.traction * ControlLockoutData.tractionRatio;
@@ -382,7 +462,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (FaceMovementDirection)
+			if (IsFreeMovementActive)
 				return;
 
 			if (IsOnGround)
@@ -442,15 +522,11 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if(FaceMovementDirection)
+			if(IsFreeMovementActive)
 				return;
 
 			if (IsOnGround)
-			{
-				float standingStrafe = standingStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
-				float runningStrafe = runningStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
-				StrafeSpeed = Mathf.Lerp(standingStrafe, runningStrafe, Mathf.Abs(SpeedRatio));
-			}
+				StrafeSpeed = runningStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
 			else
 				StrafeSpeed = airStrafeSettings.Interpolate(StrafeSpeed, GetStrafeInputValue());
 		}
@@ -481,16 +557,6 @@ namespace Project.Gameplay
 		public float maxGravity;
 		private void UpdateActions()
 		{
-			if(FaceMovementDirection)
-			{
-				if (!isControlsLocked) //Rotate & Apply new speed
-				{
-					float totalSpeed = Mathf.Sqrt(Mathf.Pow(MoveSpeed, 2) + Mathf.Pow(StrafeSpeed, 2));
-					totalSpeed = airMoveSettings.Interpolate(totalSpeed, 0f); //Slow down
-					ApplyJumpDashSpeed(totalSpeed);
-				}
-			}
-
 			if (IsStomping)
 			{
 				UpdateStomp();
@@ -567,13 +633,24 @@ namespace Project.Gameplay
 
 		[Export]
 		public float landingBoost; //Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster.
+		private bool enableLandingBoost;
 		private void CheckLandingBoost()
 		{
-			if (MovementState != MovementStates.Normal || ActionState != ActionStates.Damaged) return;
+			if (!enableLandingBoost) return;
+			enableLandingBoost = false; //Reset landing boost
+
+			if (MovementState != MovementStates.Normal) return;
 
 			//Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
 			if (IsHoldingForward() && MoveSpeed < landingBoost)
+			{
 				MoveSpeed = landingBoost;
+				if(IsFreeMovementActive) //Landing boost only works directly forward
+				{
+					freeMoveDirection = Vector2.Down;
+					FreeMoveSpeed = landingBoost;
+				}
+			}
 		}
 
 		#region Jump
@@ -595,12 +672,10 @@ namespace Project.Gameplay
 			isJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
+			enableLandingBoost = true;
 			ActionState = ActionStates.Jumping;
 
 			VerticalSpeed = JumpPower;
-			if (MoveSpeed < 0) //Disallow jumping backwards
-				MoveSpeed = 0;
-
 			Animator.Jump();
 		}
 
@@ -608,17 +683,17 @@ namespace Project.Gameplay
 		{
 			if (isAccelerationJump && currentJumpLength >= ACCELERATION_JUMP_LENGTH)
 			{
-				//Acceleration jump dash?
-				if (Controller.verticalAxis.value > 0 || Controller.horizontalAxis.value != 0)
+				//Acceleration jump?
+				if (IsHoldingForward() || (IsFreeMovementActive && rotatedMovementValue.Length() > .5f))
 				{
 					ActionState = ActionStates.AccelJump;
-					Vector2 accelJumpDirection = Vector2.Down.Rotated(Animator.Rotation.y); //Allow accel jumping sideways (For those rare wide fields)
-					StrafeSpeed = accelerationJumpSpeed * accelJumpDirection.x;
-					MoveSpeed = accelerationJumpSpeed * accelJumpDirection.y;
+					SetFreeMovement(true);
+					SetFreeMoveSpeed(accelerationJumpSpeed);
 					Animator.JumpAccel();
 				}
-				VerticalSpeed = 5f;
-				isAccelerationJump = false;
+
+				VerticalSpeed = 5f; //Consistant accel jump height
+				isAccelerationJump = false; //Stop listening for an acceleartion jump
 			}
 
 			if (!isJumpClamped)
@@ -626,12 +701,12 @@ namespace Project.Gameplay
 				if (!Controller.jumpButton.isHeld)
 				{
 					isJumpClamped = true;
-					if (currentJumpLength <= ACCELERATION_JUMP_LENGTH)
+					if (currentJumpLength <= ACCELERATION_JUMP_LENGTH) //Listen for acceleration jump
 						isAccelerationJump = true;
 				}
 			}
 			else if (IsRising)
-				VerticalSpeed *= jumpCurve;
+				VerticalSpeed *= jumpCurve; //Kill jump height
 
 			currentJumpLength += PhysicsManager.physicsDelta;
 		}
@@ -675,7 +750,8 @@ namespace Project.Gameplay
 
 			if (Lockon.LockonTarget == null) //Normal jumpdash
 			{
-				ApplyJumpDashSpeed(jumpDashSpeed);
+				SetFreeMovement(true);
+				SetFreeMoveSpeed(jumpDashSpeed);
 				VerticalSpeed = jumpDashPower;
 			}
 			else
@@ -696,6 +772,8 @@ namespace Project.Gameplay
 				VerticalSpeed = 0;
 
 				customPhysicsEnabled = true;
+
+				freeMoveDirection = Lockon.HomingAttackDirection.Flatten().Rotated(_gimbal.GlobalRotation.y).Normalized();
 				MoveAndSlide(Lockon.HomingAttackDirection.Normalized() * Lockon.homingAttackSpeed);
 				PathFollower.Resync();
 			}
@@ -703,13 +781,6 @@ namespace Project.Gameplay
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
 
 			CheckStomp();
-		}
-
-		private void ApplyJumpDashSpeed(float spd)
-		{
-			Vector2 direction = Vector2.Down.Rotated(Animator.Rotation.y); //Allow homing attack sideways (Game feels weird without it)
-			StrafeSpeed = spd * direction.x;
-			MoveSpeed = spd * direction.y;
 		}
 		#endregion
 
@@ -739,11 +810,10 @@ namespace Project.Gameplay
 		public bool IsStomping => ActionState == ActionStates.Stomping;
 		private void StartStomping()
 		{
-			MoveSpeed = 0;
-			StrafeSpeed = 0;
-			VerticalSpeed = 0;
+			ResetVelocity();
 			actionBufferTimer = 0;
 
+			enableLandingBoost = true;
 			Lockon.ResetLockonTarget();
 			Lockon.IsMonitoring = false;
 
@@ -794,6 +864,8 @@ namespace Project.Gameplay
 			CanJumpDash = true;
 
 			IsOnGround = false;
+
+			freeMoveDirection = Vector2.Down; //For jumpdashing
 
 			ActionState = ActionStates.Backflip;
 			Animator.Backflip();
@@ -859,9 +931,7 @@ namespace Project.Gameplay
 
 		public void Kill()
 		{
-			MoveSpeed = 0;
-			StrafeSpeed = 0;
-			VerticalSpeed = 0;
+			ResetVelocity();
 			PathFollower.HOffset = PathFollower.VOffset = 0;
 
 			//TODO Check deathless mission modifier/Play death animation
@@ -875,9 +945,11 @@ namespace Project.Gameplay
 
 			GlobalTransform = Triggers.CheckpointTrigger.activeCheckpoint.GlobalTransform;
 
-			PathFollower.offsetExtension = 0f; //Reset excess offset
 			StageSettings.instance.RespawnObjects();
-			//Camera.ResetFlag = true;
+
+			freeMoveDirection = Vector2.Zero; //Reset free roam direction
+			ResetOrientation = true;
+			Camera.ResetFlag = true;
 		}
 		#endregion
 
@@ -983,9 +1055,7 @@ namespace Project.Gameplay
 			activeLauncher = newLauncher;
 			launchData = data;
 
-			MoveSpeed = 0;
-			VerticalSpeed = 0;
-			StrafeSpeed = 0;
+			ResetVelocity();
 
 			IsOnGround = false;
 			launcherTime = 0;
@@ -1156,9 +1226,6 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		#region Drift
-		#endregion
-
 		#region Physics
 		[Export]
 		public NodePath environmentCollider;
@@ -1174,7 +1241,7 @@ namespace Project.Gameplay
 			get => velocity.x;
 			set => velocity.x = value;
 		}
-		public float VerticalSpeed //Player's speed towards the goal
+		public float VerticalSpeed //Player's vertical speed
 		{
 			get => velocity.y;
 			set => velocity.y = value;
@@ -1185,13 +1252,19 @@ namespace Project.Gameplay
 			set => velocity.z = value;
 		}
 		private Vector3 velocity; //x -> strafe, y -> jump/fall, z -> speed
+		private void ResetVelocity() //Resets all speed values to zero
+		{
+			MoveSpeed = 0;
+			FreeMoveSpeed = 0;
+			StrafeSpeed = 0;
+			VerticalSpeed = 0;
+		}
 
-		public float SpeedRatio => MoveSpeed < 0 ? backstepSettings.GetSpeedRatio(MoveSpeed) : moveSettings.GetSpeedRatio(MoveSpeed);
+		public float SpeedRatio => IsFreeMovementActive ? moveSettings.GetSpeedRatio(FreeMoveSpeed) : MoveSpeed < 0 ? backstepSettings.GetSpeedRatio(MoveSpeed) : moveSettings.GetSpeedRatio(MoveSpeed);
 		public Vector3 Velocity => PathFollower.Xform(velocity);
 
 		public bool IsFalling => VerticalSpeed < 0;
 		public bool IsRising => VerticalSpeed > 0;
-		public bool IsIdling => Mathf.Abs(StrafeSpeed) < .1f && Mathf.Abs(MoveSpeed) < .1f;
 
 		public Vector3 CenterPosition => GlobalTranslation + worldDirection * COLLISION_RADIUS; //Center of collision calculations
 
@@ -1211,19 +1284,15 @@ namespace Project.Gameplay
 			//Collision checks
 			CheckGround();
 
-			if (!FaceMovementDirection)
-			{
-				strafeCollisions = StrafeCollisions.None;
-				CheckStrafeWall(1);
-				CheckStrafeWall(-1);
-
-				CheckMainWall(movementDirection);
-			}
+			strafeCollisions = StrafeCollisions.None;
+			CheckStrafeWall(1);
+			CheckStrafeWall(-1);
+			CheckMainWall(movementDirection);
 
 			if (!IsOnGround && ActionState == ActionStates.JumpDash) //Jump dash ignores slopes
 				movementDirection = movementDirection.RemoveVertical().Normalized();
 			MoveAndSlide(movementDirection * MoveSpeed + PathFollower.StrafeDirection * StrafeSpeed + worldDirection * VerticalSpeed);
-			CheckCeiling(); //Ceiling needs to be checked after applying movement
+			CheckCeiling();
 
 			PathFollower.Resync(); //Resync
 		}
@@ -1259,9 +1328,25 @@ namespace Project.Gameplay
 			RaycastHit groundHit = this.CastRay(castOrigin, castVector, environmentMask, false, GetCollisionExceptions());
 			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
 
-			if (groundHit && !groundHit.collidedObject.IsInGroup("wall")) //Don't count walls as the ground
+			if (!ValidateGroundCast(ref groundHit))
 			{
-				if(!IsOnGround) //Land on the ground
+				//Whisker casts (For slanted walls and ground)
+				float interval = Mathf.Tau / 4f;
+				Vector3 castOffset = PathFollower.ForwardDirection;
+				for (int i = 0; i < 4; i++)
+				{
+					castOffset = castOffset.Rotated(worldDirection, interval).Normalized() * COLLISION_RADIUS * .5f;
+					groundHit = this.CastRay(castOrigin + castOffset, castVector, environmentMask);
+					Debug.DrawRay(castOrigin + castOffset, castVector, groundHit ? Colors.Red : Colors.White);
+					if (ValidateGroundCast(ref groundHit)) break; //Found the floor
+				}
+			}
+
+			if (groundHit) //Successful ground hit
+			{
+				GlobalTranslation -= worldDirection * (groundHit.distance - COLLISION_RADIUS); //Snap to ground
+
+				if (!IsOnGround) //Landing on the ground
 				{
 					IsOnGround = true;
 					VerticalSpeed = 0;
@@ -1280,13 +1365,11 @@ namespace Project.Gameplay
 					Lockon.ResetLockonTarget();
 					worldDirection = groundHit.normal;
 				}
-				else
+				else //Update world direction
 					worldDirection = worldDirection.LinearInterpolate(groundHit.normal, .2f).Normalized();
 
-				float rotationAmount = PathFollower.GlobalTransform.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
-				GlobalTranslation = groundHit.point; //Snap to ground
-
 				//Calculate slope influence
+				float rotationAmount = PathFollower.GlobalTransform.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
 				Vector3 slopeDirection = groundHit.normal.Rotated(Vector3.Up, rotationAmount).Normalized();
 				slopeInfluence = slopeDirection.z * SLOPE_INFLUENCE;
 			}
@@ -1295,16 +1378,22 @@ namespace Project.Gameplay
 				slopeInfluence = 0f; //Reset slope influence
 				if (IsOnGround && !IsBackflipping)
 					Animator.FallAnimation();
-				
-				IsOnGround = false;
 
+				IsOnGround = false;
+				
 				if (IsBackflipping) return;
 
-				if (ControlLockoutData != null && ControlLockoutData.strafeSettings == ControlLockoutResource.StrafeSettings.Recenter)
+				if (isControlsLocked && ControlLockoutData.strafeSettings == ControlLockoutResource.StrafeSettings.Recenter)
 					worldDirection = PathFollower.Up(); //Follow path
-				else
-					worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .1f, 0f, 1f)).Normalized();
+				else //Smooth world direction based on vertical speed
+					worldDirection = worldDirection.LinearInterpolate(Vector3.Up, Mathf.Clamp((VerticalSpeed / maxGravity) - .15f, 0f, 1f)).Normalized();
 			}
+		}
+
+		private bool ValidateGroundCast(ref RaycastHit groundHit) //Don't count walls as the ground
+		{
+			if (groundHit && groundHit.collidedObject.IsInGroup("wall")) groundHit = new RaycastHit();
+			return groundHit;
 		}
 
 		private void CheckCeiling() //Checks the ceiling.
@@ -1351,8 +1440,17 @@ namespace Project.Gameplay
 
 					MoveSpeed = 0;
 
-					if(centerHit.distance > COLLISION_RADIUS + COLLISION_PADDING)
+					if (centerHit.distance > COLLISION_RADIUS + COLLISION_PADDING)
 						GlobalTranslate(castVector * (centerHit.distance - COLLISION_RADIUS)); //Snap to wall
+
+					if (IsFreeMovementActive)
+					{
+						float dot = Mathf.Abs(castVector.Flatten().Normalized().Dot(freeMoveDirection.Rotated(-_gimbal.GlobalRotation.y)));
+						float speedClamp = Mathf.Clamp(1.2f - dot * .4f, 0f, 1f);
+						if (dot > .8f)
+							speedClamp = 0f;
+						SetFreeMoveSpeed(FreeMoveSpeed * speedClamp);
+					}
 				}
 			}
 		}
@@ -1391,7 +1489,17 @@ namespace Project.Gameplay
 					{
 						if (hit.distance > COLLISION_RADIUS + COLLISION_PADDING) //Snap
 							GlobalTranslate(hit.direction * (hit.distance - COLLISION_RADIUS));
+
 						StrafeSpeed = 0;
+
+						if (IsFreeMovementActive)
+						{
+							dot = Mathf.Abs(castVector.Flatten().Normalized().Dot(freeMoveDirection.Rotated(-_gimbal.GlobalRotation.y)));
+							float speedClamp = Mathf.Clamp(1.2f - dot * .4f, 0f, 1f);
+							if (dot > .8f)
+								speedClamp = 0f;
+							SetFreeMoveSpeed(FreeMoveSpeed * speedClamp);
+						}
 					}
 					else
 					{
@@ -1409,6 +1517,8 @@ namespace Project.Gameplay
 		}
 
 		private const float ORIENTATION_SMOOTHING = .4f;
+		private bool ResetOrientation { get; set; }
+
 		private void UpdateOrientation() //Orientates Root to world direction, then rotates the gimbal on the y-axis
 		{
 			Transform t = GlobalTransform;
@@ -1418,13 +1528,17 @@ namespace Project.Gameplay
 			t.basis = t.basis.Orthonormalized();
 			GlobalTransform = t;
 
-			float rotationAmount = 0f;
+			float rotationAmount = -_gimbal.Forward().Flatten().AngleTo(PathFollower.ForwardDirection.Flatten()); //Face path
 			if (Lockon.IsHomingAttacking) //Face target
 				rotationAmount = -_gimbal.Forward().Flatten().AngleTo(Lockon.HomingAttackDirection.Flatten());
-			else if (MoveSpeed != 0 || StrafeSpeed != 0) //Face path
-				rotationAmount = -_gimbal.Forward().Flatten().AngleTo(PathFollower.ForwardDirection.Flatten());
 
-			_gimbal.RotateObjectLocal(Vector3.Up, rotationAmount * ORIENTATION_SMOOTHING);
+			if (ResetOrientation) //Snap orientation
+			{
+				ResetOrientation = false;
+				_gimbal.RotateObjectLocal(Vector3.Up, rotationAmount);
+			}
+			else
+				_gimbal.RotateObjectLocal(Vector3.Up, rotationAmount * ORIENTATION_SMOOTHING);
 		}
 
 		public void OnObjectAreaEntered(Area a)

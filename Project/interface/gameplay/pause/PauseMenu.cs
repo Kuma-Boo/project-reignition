@@ -26,14 +26,13 @@ namespace Project.Interface
 
 		private void TogglePause()
 		{
-			//TODO Pause all shaders
 			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
 			GetTree().Paused = !GetTree().Paused;
 			StageSettings.instance.MusicPaused = GetTree().Paused;
 			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
-			VisualServer.SetShaderTimeScale(GetTree().Paused ? 0.0f : 1.0f);
+			VisualServer.SetShaderTimeScale(GetTree().Paused ? 0.0f : 1.0f); //Pause shaders
 
-			if (CharacterController.instance.Soul.IsTimeBreakActive)//Fix time break
+			if (CharacterController.instance.Soul.IsTimeBreakActive) //Correct time scales for time break
 			{
 				Engine.TimeScale = GetTree().Paused ? 1f : CharacterSoulSkill.TIME_BREAK_RATIO;
 				VisualServer.SetShaderTimeScale(GetTree().Paused ? 0.0f : CharacterSoulSkill.TIME_BREAK_RATIO);
@@ -45,10 +44,7 @@ namespace Project.Interface
 			if (!canInteractWithPauseMenu) return;
 
 			if (InputManager.controller.pauseButton.wasPressed)
-			{
 				TogglePause();
-				return;
-			}
 		}
 	}
 }

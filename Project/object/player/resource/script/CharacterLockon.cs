@@ -42,19 +42,17 @@ namespace Project.Gameplay
 
 		public void ProcessLockonTargets()
 		{
-			bool isLockedOn = LockonTarget != null;
-			//Validate current lockon target
-			if (isLockedOn && IsTargetInvalid(LockonTarget))
-				LockonTarget = null;
+			bool isTargetChanged = false;
 
 			//Update homing attack
 			if (IsMonitoring)
 			{
-				float closestDistance = Mathf.Inf;
-				if(LockonTarget != null)
+				int currentTarget = -1; //Index of the current target
+				float closestDistance = Mathf.Inf; //Current closest target
+				if (LockonTarget != null) //Current lockon target starts as the closest target
 					closestDistance = LockonTarget.GlobalTranslation.Flatten().DistanceSquaredTo(Character.GlobalTranslation.Flatten());
 
-				//Pick new target
+				//Check whether to pick a new target
 				for (int i = 0; i < activeTargets.Count; i++)
 				{
 					if (IsTargetInvalid(activeTargets[i]))
@@ -64,33 +62,45 @@ namespace Project.Gameplay
 					if (dst > closestDistance)
 						continue;
 
-					//Raycast
-					closestDistance = dst;
-					LockonTarget = activeTargets[i];
+					//Update data
+					closestDistance = dst; 
+					currentTarget = i;
+				}
+
+				if (currentTarget != -1 && activeTargets[currentTarget] != LockonTarget) //Target has changed
+				{
+					LockonTarget = activeTargets[currentTarget];
+					isTargetChanged = true;
+				}
+				else if (LockonTarget != null && IsTargetInvalid(LockonTarget)) //Validate current lockon target
+				{
+					LockonTarget = null;
+					isTargetChanged = true;
 				}
 			}
 
 			//Disable Homing Attack
-			if (LockonTarget == null && isLockedOn)
+			if (LockonTarget == null && isTargetChanged)
 				DisableLockonReticle();
 			else if (LockonTarget != null)
 			{
 				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(LockonTarget.GlobalTranslation);
-				UpdateLockonReticle(screenPos, !isLockedOn);
+				UpdateLockonReticle(screenPos, isTargetChanged);
 			}
 		}
 
 		private bool IsTargetInvalid(Spatial t)
 		{
-			if (!t.IsVisibleInTree() || Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing)
+			if (!activeTargets.Contains(t)) //Not in target list anymore (target hitbox may have been disabled)
 				return true;
 
-			if (!Character.Camera.IsOnScreen(t.GlobalTranslation))
+			if (Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing) //Character is busy
 				return true;
 
-			if (!activeTargets.Contains(t) && t != LockonTarget)
+			if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalTranslation)) //Not visible
 				return true;
 
+			//Raycast for obstacles
 			Vector3 castPosition = Character.GlobalTranslation;
 			if (Character.VerticalSpeed < 0)
 				castPosition += Character.worldDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
@@ -165,7 +175,11 @@ namespace Project.Gameplay
 		{
 			_lockonReticle.SetDeferred("position", screenPosition);
 			if (newTarget)
+			{
+				_lockonAnimator.Play("RESET");
+				_lockonAnimator.Advance(0);
 				_lockonAnimator.Play("enable");
+			}
 		}
 
 		public void PerfectHomingAttack()
