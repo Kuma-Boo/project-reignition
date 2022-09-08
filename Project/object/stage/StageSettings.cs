@@ -144,10 +144,8 @@ namespace Project.Gameplay
 				CurrentRingCount = targetObjectiveCount; //Clamp
 				FinishStage(true);
 			}
-
 			EmitSignal(nameof(RingChanged), amount);
 		}
-
 
 		//Time
 		private bool isUpdatingTime = true;
@@ -210,16 +208,9 @@ namespace Project.Gameplay
 			EmitSignal(nameof(StageCompleted), isSuccess);
 		}
 
-		private void CameraDemoAdvanced(string _, string newAnim) //Camera demo was advanced, play a crossfade
-		{
-			TransitionManager.StartTransition(new TransitionData()
-			{
-				type = TransitionData.Type.Crossfade,
-				inSpeed = .5f,
-			});
-		}
+		//Camera demo was advanced, play a crossfade
+		private void CameraDemoAdvanced(string _, string _newAnim) => CharacterController.instance.Camera.StartCrossfade();
 		#endregion
-
 
 		#region Skills
 		public static SphereShape PearlCollisionShape = new SphereShape();

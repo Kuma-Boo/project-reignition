@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://video/EventPlayer.cs" type="Script" id=1]
+
+[node name="Event" type="CanvasLayer"]
+script = ExtResource( 1 )
+videoPlayer = NodePath("Video")
+audioPlayer = NodePath("Audio")
+
+[node name="Video" type="VideoPlayer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="Audio" type="AudioStreamPlayer" parent="."]
+autoplay = true
+bus = "CUTSCENE"
+
+[connection signal="finished" from="Video" to="." method="OnEventFinished"]

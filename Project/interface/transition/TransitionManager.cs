@@ -16,9 +16,6 @@ namespace Project.Core
 		[Export]
 		public NodePath fade;
 		private ColorRect _fade;
-		[Export]
-		public NodePath crossfade;
-		private TextureRect _crossfade;
 
 		//Converts realtime seconds to a ratio for the animation player's speed. ALL ANIMATIONS MUST BE 1 SECOND LONG.
 		public float ConvertToAnimatorSpeed(float seconds) => 1f / seconds;
@@ -27,7 +24,6 @@ namespace Project.Core
 		{
 			instance = this;
 			_animator = GetNode<AnimationPlayer>(animator);
-			_crossfade = GetNode<TextureRect>(crossfade);
 			_fade = GetNode<ColorRect>(fade);
 		}
 
@@ -35,31 +31,30 @@ namespace Project.Core
 		//Simple cut transition. During loading, everything will freeze temporarily.
 		private void StartCut() => EmitSignal(nameof(PerformLoading));
 
-		//Render the viewport and crossfade the texture
-		private void StartCrossfade()
-		{
-			Image img = GetViewport().GetTexture().GetData();
-			ImageTexture tex = new ImageTexture();
-			tex.CreateFromImage(img, 0);
-			_crossfade.Texture = tex;
-			_animator.Play("crossfade");
-			_animator.Connect("animation_finished", instance, nameof(TransitionFinished), null, (uint)ConnectFlags.Oneshot);
-		}
 
 		private void StartFade()
 		{
 			IsTransitionActive = true;
 			_fade.Color = CurrentTransitionData.color;
-			_animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
 			_animator.Play("fade");
-			_animator.Connect("animation_finished", instance, nameof(TransitionLoading), null, (uint)ConnectFlags.Oneshot);
+
+			if (CurrentTransitionData.inSpeed == 0)
+			{
+				_animator.Seek(_animator.CurrentAnimationLength, true);
+				EmitSignal(nameof(PerformLoading));
+			}
+			else
+			{
+				_animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
+				_animator.Connect("animation_finished", instance, nameof(TransitionLoading), null, (uint)ConnectFlags.Oneshot);
+			}
 		}
 
 		private void FinishFade()
 		{
 			if(CurrentTransitionData.outSpeed != 0)
 				_animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
-				
+			
 			_animator.PlayBackwards("fade");
 			_animator.Connect("animation_finished", instance, nameof(TransitionFinished), null, (uint)ConnectFlags.Oneshot);
 		}
@@ -85,32 +80,16 @@ namespace Project.Core
 
 			instance.CurrentTransitionData = data;
 
-			if (instance.CurrentTransitionData.inSpeed == 0)
+			if (data.inSpeed == 0 && data.outSpeed == 0)
 			{
 				instance.StartCut(); //Cut transition
 				return;
 			}
 
-			switch (instance.CurrentTransitionData.type)
-			{
-				case TransitionData.Type.Crossfade:
-					instance.StartCrossfade();
-					break;
-				case TransitionData.Type.Fade:
-					instance.StartFade();
-					break;
-			}
+			instance.StartFade();
 		}
 		
-		public static void FinishTransition()
-		{
-			switch (instance.CurrentTransitionData.type)
-			{
-				case TransitionData.Type.Fade:
-					instance.FinishFade();
-					break;
-			}
-		}
+		public static void FinishTransition() => instance.FinishFade();
 
 		public static void QueueSceneChange(string scene, bool changeInstantly)
 		{
@@ -122,6 +101,7 @@ namespace Project.Core
 
 		private void ChangeScene(string queuedScene)
 		{
+			Gameplay.SoundManager.instance.CancelDialog(); //Cancel any active dialog
 			if (string.IsNullOrEmpty(queuedScene)) //Reload the current scene
 				GetTree().ReloadCurrentScene();
 			else
@@ -133,15 +113,9 @@ namespace Project.Core
 
 	public struct TransitionData
 	{
-		public float inSpeed; //Keep this at 0 to perform a simple cut transition
+		//Keep both speeds at 0 to perform simple cut transitions
+		public float inSpeed;
 		public float outSpeed;
 		public Color color;
-		public Type type;
-
-		public enum Type
-		{
-			Crossfade,
-			Fade,
-		}
 	}
 }

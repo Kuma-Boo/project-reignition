@@ -4,7 +4,7 @@ using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay
 {
-	public class SoundManager : Control
+	public class SoundManager : Node
 	{
 		public static SoundManager instance;
 
@@ -13,17 +13,28 @@ namespace Project.Gameplay
 			instance = this;
 
 			_subtitleLabel = GetNode<Label>(subtitleLabel);
+			_subtitleLetterbox = GetNode<ColorRect>(subtitleLetterbox);
+			_subtitleAnimator = GetNode<AnimationPlayer>(subtitleAnimator);
 			_dialogChannel = GetNode<AudioStreamPlayer>(dialogChannel);
 			_delayTimer = GetNode<Timer>(delayTimer);
 
 			_ringSoundEffect = GetNode<AudioStreamPlayer>(ringSoundEffect);
 			_pearlSoundEffect = GetNode<AudioStreamPlayer>(pearlSoundEffect);
+
+			_subtitleAnimator.Play("RESET");
 		}
 
 		#region Dialog
+		public bool IsDialogActive { get; private set; }
 		[Export]
 		public NodePath subtitleLabel;
 		private Label _subtitleLabel;
+		[Export]
+		public NodePath subtitleLetterbox;
+		private ColorRect _subtitleLetterbox;
+		[Export]
+		public NodePath subtitleAnimator;
+		private AnimationPlayer _subtitleAnimator;
 		[Export]
 		public NodePath dialogChannel;
 		private AudioStreamPlayer _dialogChannel;
@@ -36,9 +47,11 @@ namespace Project.Gameplay
 		{
 			if (dialog.IsInvalid()) return;
 
+			IsDialogActive = true;
+			_subtitleLabel.Text = string.Empty;
+			
 			currentDialog = dialog;
 			currentDialogIndex = 0;
-
 			UpdateDialog(true);
 		}
 
@@ -46,10 +59,10 @@ namespace Project.Gameplay
 		{
 			_delayTimer.Stop();
 			
+			CallDeferred(nameof(DisableDialog));
 			if (_dialogChannel.Playing)
 			{
 				_dialogChannel.Stop();
-				_subtitleLabel.Visible = false;
 
 				if (isSonicSpeaking)
 				{
@@ -64,29 +77,83 @@ namespace Project.Gameplay
 		{
 			currentDialogIndex++;
 			if (currentDialogIndex < currentDialog.DialogCount)
-				UpdateDialog(true);
+			{
+				_subtitleAnimator.Play("deactivate-text");
+				CallDeferred(nameof(UpdateDialog), true);
+			}
 			else
-				_subtitleLabel.Visible = false;
+				CallDeferred(nameof(DisableDialog));
+		}
+
+		private void DisableDialog()
+		{
+			IsDialogActive = false;
+			_subtitleAnimator.Play("deactivate");
+
+			//Disconnect signals
+			if (_delayTimer.IsConnected("timeout", this, nameof(OnDialogDelayComplete)))
+				_delayTimer.Disconnect("timeout", this, nameof(OnDialogDelayComplete));
+
+			if (_delayTimer.IsConnected("timeout", this, nameof(OnDialogFinished)))
+				_delayTimer.Disconnect("timeout", this, nameof(OnDialogFinished));
+
+			if (_dialogChannel.IsConnected("finished", this, nameof(OnDialogFinished)))
+				_dialogChannel.Disconnect("finished", this, nameof(OnDialogFinished));
 		}
 
 		private void UpdateDialog(bool processDelay)
 		{
-			if (processDelay && currentDialog.delays.Count > currentDialogIndex && !Mathf.IsZeroApprox(currentDialog.delays[currentDialogIndex]))
+			UpdateSonicDialog();
+			UpdateShahraDialog();
+
+			if (processDelay && currentDialog.HasDelay(currentDialogIndex))
 			{
 				_delayTimer.Start(currentDialog.delays[currentDialogIndex]);
+				_delayTimer.Connect("timeout", this, nameof(OnDialogDelayComplete), null, (uint)ConnectFlags.Oneshot);
 				return;
 			}
 
-			if (SaveManager.UseEnglishVoices)
-				_dialogChannel.Stream = currentDialog.englishVoiceClips[currentDialogIndex];
+			if(currentDialogIndex == 0)
+				_subtitleAnimator.Play("activate");
 			else
-				_dialogChannel.Stream = currentDialog.japaneseVoiceClips[currentDialogIndex];
+				_subtitleAnimator.Play("activate-text");
 
-			_subtitleLabel.Text = Tr(currentDialog.textKeys[currentDialogIndex]);
-			_subtitleLabel.Visible = true;
-			_dialogChannel.Play();
+			if (currentDialog.HasAudio(currentDialogIndex)) //Using audio
+			{
+				if (SaveManager.UseEnglishVoices)
+					_dialogChannel.Stream = currentDialog.englishVoiceClips[currentDialogIndex];
+				else
+					_dialogChannel.Stream = currentDialog.japaneseVoiceClips[currentDialogIndex];
 
-			UpdateSonicDialog();
+				_subtitleLabel.Text = Tr(currentDialog.textKeys[currentDialogIndex]);
+				_dialogChannel.Play();
+				if (!currentDialog.HasLength(currentDialogIndex))//Use audio length
+				{
+					_dialogChannel.Connect("finished", this, nameof(OnDialogFinished), null, (uint)ConnectFlags.Oneshot);
+					return;
+				}
+			}
+			else  //Text-only keys
+			{
+				if (!currentDialog.HasLength(currentDialogIndex)) //Skip
+				{
+					GD.PrintErr("Text-only dialog doesn't have a specified length. Skipping.");
+					OnDialogFinished();
+					return;
+				}
+
+				_dialogChannel.Stream = null; //Disable dialog channel
+
+				string key = currentDialog.textKeys[currentDialogIndex];
+				if (string.IsNullOrEmpty(key) || key.EndsWith("*")) //Cutscene Support - To avoid busywork in editor
+					key = currentDialog.textKeys[0].Replace("*", (currentDialogIndex + 1).ToString());
+				_subtitleLabel.Text = Tr(key); //Update subtitles
+			}
+
+			//If we've made it this far, we're using the custom specified time
+			if (!_delayTimer.IsConnected("timeout", this, nameof(OnDialogFinished)))
+				_delayTimer.Connect("timeout", this, nameof(OnDialogFinished), null, (uint)ConnectFlags.Oneshot);
+			_delayTimer.Start(currentDialog.displayLength[currentDialogIndex]);
 		}
 
 		private bool isSonicSpeaking;
@@ -103,6 +170,22 @@ namespace Project.Gameplay
 				EmitSignal(nameof(OnSonicStartedSpeaking));
 			else if (!isSonicSpeaking && wasSonicSpeaking)
 				EmitSignal(nameof(OnSonicFinishedSpeaking));
+		}
+
+		private bool isShahraSpeaking;
+		[Signal]
+		public delegate void OnShahraStartedSpeaking();
+		[Signal]
+		public delegate void OnShahraFinishedSpeaking();
+		private const string SHAHRA_VOICE_SUFFIX = "sh"; //Any dialog key that ends with this will be Shahra speaking
+		private void UpdateShahraDialog() //Checks whether Shahra is the one speaking, and mutes his gameplay audio.
+		{
+			bool wasShahraSpeaking = isShahraSpeaking;
+			isShahraSpeaking = currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
+			if (isShahraSpeaking && !wasShahraSpeaking)
+				EmitSignal(nameof(OnShahraStartedSpeaking));
+			else if (!isShahraSpeaking && wasShahraSpeaking)
+				EmitSignal(nameof(OnShahraFinishedSpeaking));
 		}
 		#endregion
 

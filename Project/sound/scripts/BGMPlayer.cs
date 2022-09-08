@@ -12,6 +12,8 @@ public class BGMPlayer : AudioStreamPlayer
 	[Export]
 	public float loopEndPosition;
 	[Export]
+	public float debugSeek; //Debug
+	[Export]
 	public bool isStageMusic; //Override singleton?
 	private bool canLoop;
 	private float LoopLength => loopEndPosition - loopStartPosition;
@@ -51,6 +53,14 @@ public class BGMPlayer : AudioStreamPlayer
 		float currentPosition = GetPlaybackPosition();
 		if (currentPosition >= loopEndPosition)
 			Seek(currentPosition - LoopLength);
+
+		if(Engine.EditorHint)
+		{
+			if (currentPosition < debugSeek)
+				Seek(debugSeek);
+
+			debugSeek = 0.0f;
+		}
 	}
 
 	public void RestartLoop()

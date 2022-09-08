@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=2]
+[gd_scene load_steps=89 format=2]
 
 [ext_resource path="res://object/player/resource/movement settings/ground/MoveSettings.tres" type="Resource" id=1]
 [ext_resource path="res://object/player/resource/movement settings/ground/BackstepSettings.tres" type="Resource" id=2]
@@ -45,6 +45,34 @@ input_0/name = "Grounded"
 input_0/auto_advance = false
 input_1/name = "Airborne"
 input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeTransition" id=130]
+input_count = 7
+input_0/name = "state 0"
+input_0/auto_advance = false
+input_1/name = "state 1"
+input_1/auto_advance = false
+input_2/name = "state 2"
+input_2/auto_advance = false
+input_3/name = "state 3"
+input_3/auto_advance = false
+input_4/name = "state 4"
+input_4/auto_advance = false
+input_5/name = "state 5"
+input_5/auto_advance = false
+input_6/name = "state 6"
+input_6/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=131]
+animation = "countdown"
+
+[sub_resource type="AnimationNodeBlendTree" id=132]
+graph_offset = Vector2( -352.041, 57.8181 )
+nodes/Animation/node = SubResource( 130 )
+nodes/Animation/position = Vector2( 32, 144 )
+nodes/countdown/node = SubResource( 131 )
+nodes/countdown/position = Vector2( -320, 160 )
+node_connections = [ "output", 0, "Animation", "Animation", 0, "countdown" ]
 
 [sub_resource type="AnimationNodeTransition" id=111]
 input_count = 2
@@ -131,7 +159,7 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1808, 160 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -368, 400 )
-node_connections = [ "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "fall_reset", 0, "jump_cancel_time", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "jump", 0, "backflip", "jump", 1, "jump-start", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "jump_cancel_time", 0, "fall-start", "output", 0, "IsJumpDashing" ]
+node_connections = [ "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "jump_cancel_time", 0, "fall-start", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "fall_reset", 0, "jump_cancel_time", "jump", 0, "backflip", "jump", 1, "jump-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "output", 0, "IsJumpDashing" ]
 
 [sub_resource type="AnimationNodeAnimation" id=38]
 animation = "balance-left-loop"
@@ -201,9 +229,6 @@ graph_offset = Vector2( 88, 38 )
 [sub_resource type="AnimationNodeOneShot" id=65]
 fadein_time = 0.0
 fadeout_time = 0.15
-
-[sub_resource type="AnimationNodeAnimation" id=66]
-animation = "countdown"
 
 [sub_resource type="AnimationNodeAnimation" id=72]
 animation = "RESET"
@@ -331,26 +356,26 @@ animation = "sidle-fast-loop"
 [sub_resource type="AnimationNodeTimeScale" id=128]
 
 [sub_resource type="AnimationNodeBlendTree" id=37]
-graph_offset = Vector2( -717.179, 86.4969 )
+graph_offset = Vector2( -289.298, 67.8134 )
 nodes/ActionState/node = SubResource( 70 )
 nodes/ActionState/position = Vector2( -464, 176 )
 nodes/IsGrounded/node = SubResource( 55 )
 nodes/IsGrounded/position = Vector2( -960, 192 )
+nodes/OneShotAnimations/node = SubResource( 132 )
+nodes/OneShotAnimations/position = Vector2( -160, 272 )
 nodes/air_state/node = SubResource( 109 )
 nodes/air_state/position = Vector2( -1280, 288 )
 nodes/balance_state/node = SubResource( 52 )
 nodes/balance_state/position = Vector2( -720, 272 )
 nodes/countdown/node = SubResource( 65 )
 nodes/countdown/position = Vector2( 112, 160 )
-nodes/countdown_anim/node = SubResource( 66 )
-nodes/countdown_anim/position = Vector2( -144, 288 )
 nodes/ground_state/node = SubResource( 71 )
 nodes/ground_state/position = Vector2( -1280, 160 )
 nodes/sidle_anim/node = SubResource( 127 )
 nodes/sidle_anim/position = Vector2( -880, 464 )
 nodes/sidle_speed/node = SubResource( 128 )
 nodes/sidle_speed/position = Vector2( -672, 432 )
-node_connections = [ "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "sidle_speed", 0, "sidle_anim", "countdown", 0, "ActionState", "countdown", 1, "countdown_anim", "output", 0, "countdown" ]
+node_connections = [ "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "countdown", 0, "ActionState", "countdown", 1, "OneShotAnimations", "sidle_speed", 0, "sidle_anim", "output", 0, "countdown" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
@@ -397,22 +422,6 @@ environmentMask = 1
 script = ExtResource( 11 )
 animator = NodePath("../../AnimationTree")
 
-[node name="Body" parent="Components/Model/Sonic/Skeleton" index="0"]
-portal_mode = 4
-use_in_baked_light = true
-
-[node name="EyeL" parent="Components/Model/Sonic/Skeleton" index="1"]
-portal_mode = 4
-use_in_baked_light = true
-
-[node name="EyeR" parent="Components/Model/Sonic/Skeleton" index="2"]
-portal_mode = 4
-use_in_baked_light = true
-
-[node name="Metal" parent="Components/Model/Sonic/Skeleton" index="3"]
-portal_mode = 4
-use_in_baked_light = true
-
 [node name="VFX" type="Spatial" parent="Components/Model"]
 
 [node name="Lockon" parent="Components/Model" instance=ExtResource( 7 )]
@@ -458,6 +467,7 @@ anim_player = NodePath("../Components/Model/AnimationPlayer")
 active = true
 parameters/ActionState/current = 0
 parameters/IsGrounded/current = 0
+parameters/OneShotAnimations/Animation/current = 0
 parameters/air_state/IsJumpDashing/current = 0
 parameters/air_state/IsJumping/current = 0
 parameters/air_state/backflip/active = false
@@ -483,5 +493,3 @@ parameters/sidle_speed/scale = 1.5
 [connection signal="area_exited" from="Components/ObjectTrigger" to="." method="OnObjectAreaExited"]
 [connection signal="body_entered" from="Components/ObjectTrigger" to="." method="OnObjectCollisionEnter"]
 [connection signal="body_exited" from="Components/ObjectTrigger" to="." method="OnObjectCollisionExit"]
-
-[editable path="Components/Model"]

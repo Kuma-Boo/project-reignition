@@ -1,0 +1,22 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode cull_back, specular_schlick_ggx;
+
+uniform sampler2D albedo : hint_black_albedo;
+uniform sampler2D specular : hint_black;
+uniform float specular_multiplier : hint_range(0, 1) = 1;
+uniform float roughness : hint_range(0, 1) = .8;
+uniform float alpha_scissor : hint_range(0, 1) = .5;
+
+void fragment() {
+	vec4 col = texture(albedo, UV) * COLOR;
+	float spec = clamp(texture(specular, UV).r * dot(NORMAL, VIEW) * specular_multiplier, 0, 1);
+	SPECULAR = spec;
+	ROUGHNESS = roughness;
+	ALBEDO = col.rgb;
+	ALPHA = col.a;
+	ALPHA_SCISSOR = alpha_scissor;
+}
+"

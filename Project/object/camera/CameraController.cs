@@ -21,6 +21,13 @@ namespace Project.Gameplay
 		public NodePath camera;
 		private Camera _camera;
 
+		[Export]
+		public NodePath crossfade;
+		private TextureRect _crossfade;
+		[Export]
+		public NodePath crossfadeAnimator;
+		private AnimationPlayer _crossfadeAnimator;
+
 		public float ViewAngle { get; private set; }
 		public Vector3 ForwardDirection
 		{
@@ -53,6 +60,8 @@ namespace Project.Gameplay
 			_cameraRoot = GetNode<Spatial>(cameraRoot);
 			_cameraGimbal = GetNode<Spatial>(cameraGimbal);
 			_camera = GetNode<Camera>(camera);
+
+			_crossfadeAnimator = GetNode<AnimationPlayer>(crossfadeAnimator);
 
 			Character.Camera = this;
 		}
@@ -102,14 +111,18 @@ namespace Project.Gameplay
 
 			if (useCrossfade) //Crossfade transition
 			{
-				TransitionManager.StartTransition(new TransitionData()
-				{
-					type = TransitionData.Type.Crossfade,
-					inSpeed = .5f,
-				});
-
+				StartCrossfade();
 				ResetFlag = true;
 			}
+		}
+
+		public void StartCrossfade()
+		{
+			Image img = GetViewport().GetTexture().GetData(); //Render the viewport and crossfade the texture
+			ImageTexture tex = new ImageTexture();
+			tex.CreateFromImage(img, 0);
+			_crossfade.Texture = tex;
+			_crossfadeAnimator.Play("activate");
 		}
 
 		private float transitionTime; //Ratio (from 0 -> 1) of transition that has been completed
@@ -174,9 +187,9 @@ namespace Project.Gameplay
 			if (resource.followMode == CameraSettingsResource.FollowMode.Static)
 				return resource.viewPosition;
 			else if (resource.followMode == CameraSettingsResource.FollowMode.Pathfollower)
-				return PlayerPathFollower.GlobalTranslation;
+				return PlayerPathFollower.GlobalTranslation + resource.viewPosition;
 			else
-				return Character.GlobalTranslation - GetHeightDirection(resource.heightMode) * PlayerPathFollower.LocalPlayerPosition.y;
+				return Character.GlobalTranslation - GetHeightDirection(resource.heightMode) * PlayerPathFollower.LocalPlayerPosition.y + resource.viewPosition;
 		}
 
 		private Vector3 GetStrafeOffset(CameraSettingsResource resource)

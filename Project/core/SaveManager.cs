@@ -21,7 +21,8 @@ namespace Project.Core
 		}
 		public enum TextLanguage
 		{
-			English,
+			English, //Retail english script
+			Retranslated, //Use the retranslation script
 			Japanese,
 			German,
 			Italian,
@@ -66,8 +67,16 @@ namespace Project.Core
 		public void LoadSettings()
 		{
 			//Attempt to load.
-			if (settings == null)
-				settings = new SettingsData(); //Default settings
+			if (settings == null) //Load Default settings
+			{
+				settings = new SettingsData()
+				{
+					textLanguage = TextLanguage.English,
+					voiceLanguage = VoiceLanguage.Japanese,
+				};
+			}
+
+			ApplyLocalization();
 
 			//TODO Attempt to load control configuration. for now, default controls
 			InputManager.DefaultControls();
@@ -85,6 +94,34 @@ namespace Project.Core
 			*/
 
 			saveDataInitialized = true;
+		}
+
+		private void ApplyLocalization()
+		{
+			switch (settings.textLanguage)
+			{
+				case TextLanguage.Retranslated:
+					TranslationServer.SetLocale("en_US");
+					break;
+				case TextLanguage.Japanese:
+					TranslationServer.SetLocale("ja");
+					break;
+				case TextLanguage.Spanish:
+					TranslationServer.SetLocale("es");
+					break;
+				case TextLanguage.French:
+					TranslationServer.SetLocale("fr");
+					break;
+				case TextLanguage.Italian:
+					TranslationServer.SetLocale("it");
+					break;
+				case TextLanguage.German:
+					TranslationServer.SetLocale("de");
+					break;
+				default:
+					TranslationServer.SetLocale("en");
+					break;
+			}
 		}
 
 		public void SaveSettings()

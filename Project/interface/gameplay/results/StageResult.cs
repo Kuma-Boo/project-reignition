@@ -66,7 +66,6 @@ namespace Project.Interface
 
 				TransitionManager.StartTransition(new TransitionData()
 				{
-					type = TransitionData.Type.Fade,
 					color = Colors.Black,
 					inSpeed = 1f,
 				});

@@ -28,6 +28,7 @@ SaveManager="res://core/SaveManager.cs"
 PhysicsManager="res://core/PhysicsManager.cs"
 TransitionManager="res://interface/transition/TransitionManager.tscn"
 SoundManager="res://sound/SoundManager.tscn"
+ReflectMaterialManager="*res://addons/Silicon.vfx.planar_reflection/reflect_material_manager.gd"
 
 [display]
 
@@ -35,12 +36,13 @@ window/size/width=1920
 window/size/height=1080
 window/size/test_width=800
 window/size/test_height=450
+window/vsync/use_vsync=false
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/BitmapFontCutterPlus/plugin.cfg", "res://addons/StageObjectEditor/plugin.cfg", "res://addons/animated_texture_importer/plugin.cfg", "res://addons/object_generator/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/BitmapFontCutterPlus/plugin.cfg", "res://addons/Silicon.vfx.planar_reflection/plugin.cfg", "res://addons/StageObjectEditor/plugin.cfg", "res://addons/animated_texture_importer/plugin.cfg", "res://addons/object_generator/plugin.cfg" )
 
 [filesystem]
 
@@ -1122,12 +1124,17 @@ scene={
 
 [locale]
 
-locale_filter=[ 1, [ "de", "en", "es", "fr", "it", "ja", "ja_JP" ] ]
-translations=PoolStringArray( "res://locale/Locale.en.translation", "res://locale/Locale.ja.translation" )
+test="en"
+locale_filter=[ 1, [ "de", "en", "en_US", "es", "fr", "it", "ja" ] ]
+translations=PoolStringArray( "res://locale/Locale.en.translation", "res://locale/Locale.ja.translation", "res://locale/Locale.en_US.translation" )
 translation_remaps={
 "res://interface/gameplay/results/text/results en.png": PoolStringArray( "res://interface/gameplay/results/text/results es.png:es", "res://interface/gameplay/results/text/results fr.png:fr", "res://interface/gameplay/results/text/results it.png:it", "res://interface/gameplay/results/text/results de.png:de", "res://interface/gameplay/results/text/results ja.png:ja" ),
 "res://interface/main menu/logos/logo en.png": PoolStringArray( "res://interface/main menu/logos/logo de.png:de", "res://interface/main menu/logos/logo es.png:es", "res://interface/main menu/logos/logo ja.png:ja", "res://interface/main menu/logos/logo it.png:it" )
 }
+
+[mono]
+
+project/assembly_name="Sonic Remake Project"
 
 [physics]
 
@@ -1136,5 +1143,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+quality/filters/sharpen_intensity=0.5
+quality/filters/anisotropic_filter_level=2
 quality/filters/use_fxaa=true
 environment/default_environment="res://area/default_env.tres"

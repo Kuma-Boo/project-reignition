@@ -1,0 +1,556 @@
+[gd_scene load_steps=68 format=2]
+
+[ext_resource path="res://area/stage/7 night palace/boss/data/script/Erazor.cs" type="Script" id=1]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/model/Erazor.gltf" type="PackedScene" id=2]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/model/Chain.gltf" type="PackedScene" id=3]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/model/ChainEnd.gltf" type="PackedScene" id=4]
+[ext_resource path="res://area/stage/7 night palace/boss/data/script/ErazorChain.cs" type="Script" id=5]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/camera/StandardCamera.tres" type="Resource" id=6]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/camera/DuelCamera.tres" type="Resource" id=7]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/teleport dust.png" type="Texture" id=8]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/sword attack.png" type="Texture" id=9]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/sword smoke.png" type="Texture" id=10]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/attack/ErazorTestPattern.tres" type="Resource" id=11]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/attack/ErazorPattern3.tres" type="Resource" id=12]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/attack/ErazorPattern2.tres" type="Resource" id=13]
+[ext_resource path="res://sound/voice/night palace/erazor/ja/BOS04_E01_02_ER.wav" type="AudioStream" id=14]
+[ext_resource path="res://sound/voice/night palace/erazor/en/BOS04_E01_01_ER.wav" type="AudioStream" id=15]
+[ext_resource path="res://sound/voice/night palace/erazor/ja/BOS04_E01_01_ER.wav" type="AudioStream" id=16]
+[ext_resource path="res://sound/voice/night palace/erazor/en/BOS04_E01_02_ER.wav" type="AudioStream" id=17]
+[ext_resource path="res://object/trigger/modules/DialogTrigger.cs" type="Script" id=18]
+[ext_resource path="res://sound/voice/night palace/erazor/en/BOS04_E00_ER.wav" type="AudioStream" id=19]
+[ext_resource path="res://sound/voice/night palace/erazor/ja/BOS04_E00_ER.wav" type="AudioStream" id=20]
+[ext_resource path="res://sound/voice/night palace/sonic/en/BOS04_E00_SN.wav" type="AudioStream" id=21]
+[ext_resource path="res://sound/voice/night palace/sonic/ja/BOS04_E00_SN.wav" type="AudioStream" id=22]
+[ext_resource path="res://sound/voice/night palace/shahra/ja/BOS04_H02_SH.wav" type="AudioStream" id=23]
+[ext_resource path="res://sound/voice/night palace/shahra/en/BOS04_H02_SH.wav" type="AudioStream" id=24]
+[ext_resource path="res://sound/voice/night palace/sonic/ja/BOS04_E01_SN.wav" type="AudioStream" id=25]
+[ext_resource path="res://sound/voice/night palace/sonic/en/BOS04_E01_SN.wav" type="AudioStream" id=26]
+
+[sub_resource type="SphereShape" id=2]
+radius = 0.7
+
+[sub_resource type="Gradient" id=31]
+offsets = PoolRealArray( 0, 0.866953, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=32]
+gradient = SubResource( 31 )
+
+[sub_resource type="Curve" id=33]
+max_value = 5.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 5 ), 10.3306, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=34]
+curve = SubResource( 33 )
+
+[sub_resource type="ParticlesMaterial" id=35]
+emission_shape = 1
+emission_sphere_radius = 1.0
+gravity = Vector3( 0, 0, 0 )
+scale_curve = SubResource( 34 )
+color_ramp = SubResource( 32 )
+
+[sub_resource type="SpatialMaterial" id=36]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+params_specular_mode = 4
+params_blend_mode = 1
+params_billboard_mode = 3
+params_billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 9 )
+metallic_specular = 0.0
+
+[sub_resource type="QuadMesh" id=37]
+material = SubResource( 36 )
+size = Vector2( 1, 10 )
+
+[sub_resource type="ParticlesMaterial" id=38]
+emission_shape = 2
+emission_box_extents = Vector3( 1, 0, 1 )
+gravity = Vector3( 0, 0, 0 )
+scale = 2.0
+scale_curve = SubResource( 34 )
+color = Color( 0.968627, 0.545098, 0.556863, 1 )
+color_ramp = SubResource( 32 )
+
+[sub_resource type="SpatialMaterial" id=39]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+params_specular_mode = 4
+params_blend_mode = 1
+params_billboard_mode = 3
+params_billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 10 )
+metallic_specular = 0.0
+
+[sub_resource type="QuadMesh" id=40]
+material = SubResource( 39 )
+
+[sub_resource type="ParticlesMaterial" id=28]
+emission_shape = 1
+emission_sphere_radius = 1.0
+gravity = Vector3( 0, 0, 0 )
+scale_curve = SubResource( 34 )
+color_ramp = SubResource( 32 )
+
+[sub_resource type="SpatialMaterial" id=29]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+params_specular_mode = 4
+params_billboard_mode = 3
+params_billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 8 )
+metallic_specular = 0.0
+
+[sub_resource type="QuadMesh" id=30]
+material = SubResource( 29 )
+
+[sub_resource type="AnimationNodeTransition" id=7]
+input_count = 5
+xfade_time = 0.1
+input_0/name = "Movement"
+input_0/auto_advance = false
+input_1/name = "Start"
+input_1/auto_advance = true
+input_2/name = "Windup"
+input_2/auto_advance = false
+input_3/name = "Strike"
+input_3/auto_advance = true
+input_4/name = "NextAttack"
+input_4/auto_advance = false
+
+[sub_resource type="AnimationNodeTransition" id=15]
+input_count = 5
+input_0/name = "I"
+input_0/auto_advance = false
+input_1/name = "V"
+input_1/auto_advance = false
+input_2/name = "L"
+input_2/auto_advance = false
+input_3/name = "Z"
+input_3/auto_advance = false
+input_4/name = "D"
+input_4/auto_advance = false
+
+[sub_resource type="AnimationNodeTransition" id=18]
+input_count = 5
+input_0/name = "I"
+input_0/auto_advance = false
+input_1/name = "V"
+input_1/auto_advance = false
+input_2/name = "L"
+input_2/auto_advance = false
+input_3/name = "Z"
+input_3/auto_advance = false
+input_4/name = "D"
+input_4/auto_advance = false
+
+[sub_resource type="AnimationNodeTimeScale" id=41]
+
+[sub_resource type="AnimationNodeTransition" id=45]
+input_count = 4
+input_0/name = "Idle"
+input_0/auto_advance = false
+input_1/name = "Start"
+input_1/auto_advance = true
+input_2/name = "Waiting"
+input_2/auto_advance = false
+input_3/name = "Finish"
+input_3/auto_advance = true
+
+[sub_resource type="AnimationNodeTransition" id=42]
+input_count = 5
+input_0/name = "I"
+input_0/auto_advance = false
+input_1/name = "V"
+input_1/auto_advance = false
+input_2/name = "L"
+input_2/auto_advance = false
+input_3/name = "Z"
+input_3/auto_advance = false
+input_4/name = "D"
+input_4/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=47]
+
+[sub_resource type="AnimationNodeAnimation" id=43]
+
+[sub_resource type="AnimationNodeAnimation" id=44]
+
+[sub_resource type="AnimationNodeAnimation" id=48]
+animation = "attack-i-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "attack-i-start"
+
+[sub_resource type="AnimationNodeAnimation" id=20]
+animation = "attack-i-strike"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "idle-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=49]
+animation = "attack-l-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=21]
+animation = "attack-l-start"
+
+[sub_resource type="AnimationNodeAnimation" id=22]
+animation = "attack-l-strike"
+
+[sub_resource type="AnimationNodeAnimation" id=46]
+animation = "teleport-finish"
+
+[sub_resource type="AnimationNodeAnimation" id=23]
+animation = "teleport-start"
+
+[sub_resource type="AnimationNodeAnimation" id=50]
+animation = "attack-v-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=24]
+animation = "attack-v-start"
+
+[sub_resource type="AnimationNodeAnimation" id=25]
+animation = "attack-v-strike"
+
+[sub_resource type="AnimationNodeAnimation" id=51]
+animation = "attack-z-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=26]
+animation = "attack-z-start"
+
+[sub_resource type="AnimationNodeAnimation" id=27]
+animation = "attack-z-strike"
+
+[sub_resource type="AnimationNodeBlendTree" id=9]
+graph_offset = Vector2( -487.107, -12.3899 )
+nodes/CurrentAction/node = SubResource( 7 )
+nodes/CurrentAction/position = Vector2( 80, 208 )
+nodes/StartType/node = SubResource( 15 )
+nodes/StartType/position = Vector2( -1104, 304 )
+nodes/StrikeType/node = SubResource( 18 )
+nodes/StrikeType/position = Vector2( -176, 1088 )
+nodes/TeleportSpeed/node = SubResource( 41 )
+nodes/TeleportSpeed/position = Vector2( -192, 48 )
+nodes/Teleporting/node = SubResource( 45 )
+nodes/Teleporting/position = Vector2( -432, -176 )
+nodes/WindupType/node = SubResource( 42 )
+nodes/WindupType/position = Vector2( -736, 736 )
+nodes/d-loop/node = SubResource( 47 )
+nodes/d-loop/position = Vector2( -1024, 1056 )
+nodes/d-start/node = SubResource( 43 )
+nodes/d-start/position = Vector2( -1392, 608 )
+nodes/d-strike/node = SubResource( 44 )
+nodes/d-strike/position = Vector2( -544, 1488 )
+nodes/i-loop/node = SubResource( 48 )
+nodes/i-loop/position = Vector2( -1024, 608 )
+nodes/i-start/node = SubResource( 16 )
+nodes/i-start/position = Vector2( -1392, 160 )
+nodes/i-strike/node = SubResource( 20 )
+nodes/i-strike/position = Vector2( -544, 1040 )
+nodes/idle/node = SubResource( 14 )
+nodes/idle/position = Vector2( -720, -256 )
+nodes/l-loop/node = SubResource( 49 )
+nodes/l-loop/position = Vector2( -1024, 832 )
+nodes/l-start/node = SubResource( 21 )
+nodes/l-start/position = Vector2( -1392, 384 )
+nodes/l-strike/node = SubResource( 22 )
+nodes/l-strike/position = Vector2( -544, 1264 )
+nodes/output/position = Vector2( 352, 208 )
+nodes/teleport-finish/node = SubResource( 46 )
+nodes/teleport-finish/position = Vector2( -720, 0 )
+nodes/teleport-start/node = SubResource( 23 )
+nodes/teleport-start/position = Vector2( -720, -128 )
+nodes/v-loop/node = SubResource( 50 )
+nodes/v-loop/position = Vector2( -1024, 720 )
+nodes/v-start/node = SubResource( 24 )
+nodes/v-start/position = Vector2( -1392, 272 )
+nodes/v-strike/node = SubResource( 25 )
+nodes/v-strike/position = Vector2( -544, 1152 )
+nodes/z-loop/node = SubResource( 51 )
+nodes/z-loop/position = Vector2( -1024, 944 )
+nodes/z-start/node = SubResource( 26 )
+nodes/z-start/position = Vector2( -1392, 496 )
+nodes/z-strike/node = SubResource( 27 )
+nodes/z-strike/position = Vector2( -544, 1376 )
+node_connections = [ "output", 0, "CurrentAction", "Teleporting", 0, "idle", "Teleporting", 1, "teleport-start", "Teleporting", 3, "teleport-finish", "CurrentAction", 0, "TeleportSpeed", "CurrentAction", 1, "StartType", "CurrentAction", 2, "WindupType", "CurrentAction", 3, "StrikeType", "WindupType", 0, "i-loop", "WindupType", 1, "v-loop", "WindupType", 2, "l-loop", "WindupType", 3, "z-loop", "WindupType", 4, "d-loop", "StrikeType", 0, "i-strike", "StrikeType", 1, "v-strike", "StrikeType", 2, "l-strike", "StrikeType", 3, "z-strike", "StrikeType", 4, "d-strike", "StartType", 0, "i-start", "StartType", 1, "v-start", "StartType", 2, "l-start", "StartType", 3, "z-start", "StartType", 4, "d-start", "TeleportSpeed", 0, "Teleporting" ]
+
+[sub_resource type="Animation" id=52]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=53]
+resource_name = "activate"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
+}
+
+[node name="Erazor" type="Spatial"]
+script = ExtResource( 1 )
+health = 24
+lockonTarget = NodePath("Erazor/Erazor/Skeleton/Head/Lockon")
+patterns = [ ExtResource( 11 ), ExtResource( 13 ), ExtResource( 12 ) ]
+animationTree = NodePath("AnimationTree")
+duelAnimator = NodePath("DuelTransition/AnimationPlayer")
+duelVoices = [ NodePath("Data/DuelVoices/Erazor"), NodePath("Data/DuelVoices/ErazorAlt"), NodePath("Data/DuelVoices/ShahraHint"), NodePath("Data/DuelVoices/Hint1"), NodePath("Data/DuelVoices/Hint2"), NodePath("Data/DuelVoices/Sonic") ]
+standardCamera = ExtResource( 6 )
+duelCamera = ExtResource( 7 )
+
+[node name="Erazor" parent="." instance=ExtResource( 2 )]
+
+[node name="Head" type="BoneAttachment" parent="Erazor/Erazor/Skeleton" index="0"]
+transform = Transform( 0.982613, -0.184452, 0.0211893, 0.179107, 0.971776, 0.153532, -0.0489107, -0.147068, 0.987916, -0.135312, 8.18875, 0.121015 )
+bone_name = "head"
+
+[node name="Lockon" type="Area" parent="Erazor/Erazor/Skeleton/Head"]
+transform = Transform( 1, 6.40284e-10, 0, 2.18279e-10, 1, 7.45058e-09, -9.31323e-10, -1.11759e-08, 1, 0.00241192, 0.199739, -0.00992453 )
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape" type="CollisionShape" parent="Erazor/Erazor/Skeleton/Head/Lockon"]
+transform = Transform( 1, 6.69388e-10, 4.65661e-10, 2.91038e-10, 1, 0, -4.65661e-10, -3.72529e-09, 1, 0, 0, 0 )
+shape = SubResource( 2 )
+disabled = true
+
+[node name="Sword" type="BoneAttachment" parent="Erazor/Erazor/Skeleton" index="1"]
+transform = Transform( 0.950719, -0.290957, 0.107132, -0.142544, -0.71701, -0.682333, 0.275344, 0.633436, -0.723149, 2.80472, 5.91416, -1.73329 )
+bone_name = "edge"
+
+[node name="SwordAttack" type="Particles" parent="Erazor/Erazor/Skeleton/Sword"]
+cast_shadow = 0
+emitting = false
+amount = 24
+lifetime = 1.5
+explosiveness = 1.0
+local_coords = false
+process_material = SubResource( 35 )
+draw_pass_1 = SubResource( 37 )
+
+[node name="SwordSmoke" type="Particles" parent="Erazor/Erazor/Skeleton/Sword"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.374366, 0.383564, 1.78214 )
+cast_shadow = 0
+emitting = false
+amount = 30
+preprocess = 1.0
+local_coords = false
+process_material = SubResource( 38 )
+draw_pass_1 = SubResource( 40 )
+
+[node name="Chain" type="BoneAttachment" parent="Erazor/Erazor/Skeleton" index="2"]
+transform = Transform( 0.290957, 0.950719, 0.10713, 0.71701, -0.142545, -0.682332, -0.633436, 0.275343, -0.723149, 3.1666, 8.27793, 0.661389 )
+bone_name = "chain"
+
+[node name="Controller" type="Spatial" parent="Erazor/Erazor/Skeleton/Chain"]
+transform = Transform( 1, -4.86616e-07, 2.12707e-14, 0, -4.37114e-08, -1, 4.86616e-07, 1, -4.37114e-08, 9.53674e-07, -0.0714303, 0.0508623 )
+script = ExtResource( 5 )
+parent = NodePath("")
+child = NodePath("../../ChainPieces/Chain1")
+gravity = 9.81
+
+[node name="ChainPieces" type="Spatial" parent="Erazor/Erazor/Skeleton" index="3"]
+
+[node name="Chain1" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.95072, -0.136919, -0.278184, -0.142545, -0.989788, 9.37291e-10, 0.275343, -0.0396538, 0.960528, 3.10414, 8.2224, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../../Chain/Controller")
+child = NodePath("../Chain2")
+chainSize = 0.031
+
+[node name="Chain2" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 8.0724, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain1")
+child = NodePath("../Chain3")
+chainSize = 0.15
+
+[node name="Chain3" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.9224, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain2")
+child = NodePath("../Chain4")
+chainSize = 0.15
+
+[node name="Chain4" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.7724, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain3")
+child = NodePath("../Chain5")
+chainSize = 0.15
+
+[node name="Chain5" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.6224, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain4")
+child = NodePath("../Chain6")
+chainSize = 0.15
+
+[node name="Chain6" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.4724, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain5")
+child = NodePath("../Chain7")
+chainSize = 0.15
+
+[node name="Chain7" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.3224, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain6")
+child = NodePath("../Chain8")
+chainSize = 0.15
+
+[node name="Chain8" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.1724, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain7")
+child = NodePath("../Chain9")
+chainSize = 0.15
+
+[node name="Chain9" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.0224, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain8")
+child = NodePath("../Chain10")
+chainSize = 0.15
+
+[node name="Chain10" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 6.8724, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain9")
+child = NodePath("../ChainEnd")
+chainSize = 0.15
+
+[node name="ChainEnd" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 4 )]
+transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 6.7724, 0.604939 )
+script = ExtResource( 5 )
+parent = NodePath("../Chain10")
+child = NodePath("")
+chainSize = 0.1
+
+[node name="Particles" type="Spatial" parent="."]
+
+[node name="Smoke" type="Particles" parent="Particles"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
+cast_shadow = 0
+emitting = false
+amount = 5
+preprocess = 1.0
+local_coords = false
+process_material = SubResource( 28 )
+draw_pass_1 = SubResource( 30 )
+
+[node name="Data" type="Spatial" parent="."]
+
+[node name="Intro" type="Spatial" parent="Data"]
+script = ExtResource( 18 )
+delays = [ 0.0, 0.0 ]
+textKeys = [ "nig_boss_intro_so", "nig_boss_intro_er" ]
+englishVoiceClips = [ ExtResource( 21 ), ExtResource( 19 ) ]
+japaneseVoiceClips = [ ExtResource( 22 ), ExtResource( 20 ) ]
+
+[node name="DuelVoices" type="Spatial" parent="Data"]
+
+[node name="Erazor" type="Spatial" parent="Data/DuelVoices"]
+script = ExtResource( 18 )
+delays = [  ]
+displayLength = [ 4.0 ]
+textKeys = [ "nig_boss_duel_er" ]
+englishVoiceClips = [ ExtResource( 15 ) ]
+japaneseVoiceClips = [ ExtResource( 16 ) ]
+
+[node name="ErazorAlt" type="Spatial" parent="Data/DuelVoices"]
+script = ExtResource( 18 )
+delays = [  ]
+displayLength = [ 4.0 ]
+textKeys = [ "nig_boss_duel_alt_er" ]
+englishVoiceClips = [ ExtResource( 17 ) ]
+japaneseVoiceClips = [ ExtResource( 14 ) ]
+
+[node name="ShahraHint" type="Spatial" parent="Data/DuelVoices"]
+script = ExtResource( 18 )
+delays = [  ]
+displayLength = [  ]
+textKeys = [ "nig_boss_duel_sh" ]
+englishVoiceClips = [ ExtResource( 24 ) ]
+japaneseVoiceClips = [ ExtResource( 23 ) ]
+
+[node name="Sonic" type="Spatial" parent="Data/DuelVoices"]
+script = ExtResource( 18 )
+delays = [ 0.0 ]
+displayLength = [  ]
+textKeys = [ "nig_boss_duel_so" ]
+englishVoiceClips = [ ExtResource( 26 ) ]
+japaneseVoiceClips = [ ExtResource( 25 ) ]
+
+[node name="Hint1" type="Spatial" parent="Data/DuelVoices"]
+script = ExtResource( 18 )
+delays = [  ]
+displayLength = [ 2.0 ]
+textKeys = [ "nig_boss_duel_hint1" ]
+englishVoiceClips = [  ]
+japaneseVoiceClips = [  ]
+
+[node name="Hint2" type="Spatial" parent="Data/DuelVoices"]
+script = ExtResource( 18 )
+delays = [  ]
+displayLength = [ 2.0 ]
+textKeys = [ "nig_boss_duel_hint2" ]
+englishVoiceClips = [  ]
+japaneseVoiceClips = [  ]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 9 )
+anim_player = NodePath("../Erazor/AnimationPlayer")
+process_mode = 0
+parameters/CurrentAction/current = 0
+parameters/StartType/current = 0
+parameters/StrikeType/current = 0
+parameters/TeleportSpeed/scale = 1.0
+parameters/Teleporting/current = 0
+parameters/WindupType/current = 0
+
+[node name="DuelTransition" type="ColorRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DuelTransition"]
+autoplay = "RESET"
+anims/RESET = SubResource( 52 )
+anims/activate = SubResource( 53 )
+
+[editable path="Erazor"]

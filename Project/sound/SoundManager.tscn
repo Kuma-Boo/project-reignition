@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://sound/scripts/SoundManager.cs" type="Script" id=1]
 [ext_resource path="res://sound/sfx/objects/OBJECTS_37.wav" type="AudioStream" id=2]
@@ -12,42 +12,189 @@
 [ext_resource path="res://sound/sfx/objects/OBJECTS_42.wav" type="AudioStream" id=10]
 [ext_resource path="res://sound/sfx/objects/OBJECTS_38.wav" type="AudioStream" id=11]
 [ext_resource path="res://sound/sfx/objects/OBJECTS_45.wav" type="AudioStream" id=12]
-[ext_resource path="res://interface/font/source/Chiaro Std B.otf" type="DynamicFontData" id=13]
+[ext_resource path="res://interface/font/Subtitle.tres" type="DynamicFont" id=13]
 
-[sub_resource type="DynamicFont" id=1]
-size = 54
-use_filter = true
-font_data = ExtResource( 13 )
-
-[node name="SoundManager" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_lock_": true
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
 }
-subtitleLabel = NodePath("Subtitles")
+tracks/1/type = "value"
+tracks/1/path = NodePath("Subtitles:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "activate"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Subtitles:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "activate-text"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Subtitles:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "deactivate"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Subtitles:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "deactivate-text"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Subtitles:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[node name="SoundManager" type="CanvasLayer"]
+layer = 12
+script = ExtResource( 1 )
+subtitleLabel = NodePath("SubtitleLetterbox/Subtitles")
+subtitleLetterbox = NodePath("SubtitleLetterbox")
+subtitleAnimator = NodePath("SubtitleLetterbox/AnimationPlayer")
 dialogChannel = NodePath("DialogChannel")
 delayTimer = NodePath("DialogChannel/DelayTimer")
 ringSoundEffect = NodePath("Objects/RingSFX")
 pearlStreams = [ ExtResource( 8 ), ExtResource( 2 ), ExtResource( 11 ), ExtResource( 4 ), ExtResource( 9 ), ExtResource( 5 ), ExtResource( 10 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 12 ) ]
 pearlSoundEffect = NodePath("Objects/PearlSFX")
 
-[node name="Subtitles" type="Label" parent="."]
-margin_top = 832.0
-margin_right = 1920.0
-margin_bottom = 960.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+[node name="SubtitleLetterbox" type="ColorRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 128.0
+margin_top = 896.0
+margin_right = 1792.0
+margin_bottom = 1032.0
+color = Color( 0, 0, 0, 0.392157 )
+
+[node name="Subtitles" type="Label" parent="SubtitleLetterbox"]
+margin_right = 1664.0
+margin_bottom = 136.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0.784314 )
 custom_constants/shadow_offset_x = 3
-custom_constants/shadow_offset_y = 2
-custom_fonts/font = SubResource( 1 )
+custom_constants/line_spacing = 8
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = ExtResource( 13 )
 align = 1
+valign = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SubtitleLetterbox"]
+anims/RESET = SubResource( 1 )
+anims/activate = SubResource( 2 )
+anims/activate-text = SubResource( 3 )
+anims/deactivate = SubResource( 4 )
+anims/deactivate-text = SubResource( 5 )
 
 [node name="DialogChannel" type="AudioStreamPlayer" parent="."]
 bus = "VOICE"
 
 [node name="DelayTimer" type="Timer" parent="DialogChannel"]
-process_mode = 0
 one_shot = true
 
 [node name="Objects" type="Node" parent="."]
@@ -63,6 +210,3 @@ bus = "SFX"
 
 [node name="IngameChannel" type="AudioStreamPlayer" parent="Ingame"]
 bus = "VOICE"
-
-[connection signal="finished" from="DialogChannel" to="." method="OnDialogFinished"]
-[connection signal="timeout" from="DialogChannel/DelayTimer" to="." method="OnDialogDelayComplete"]

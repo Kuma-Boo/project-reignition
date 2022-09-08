@@ -23,8 +23,7 @@ namespace Project.Interface.Menu
 				TransitionManager.StartTransition(new TransitionData()
 				{
 					inSpeed = 2f,
-					color= Colors.Black,
-					type = TransitionData.Type.Fade
+					color = Colors.Black,
 				});
 				TransitionManager.instance.Connect(nameof(TransitionManager.PerformLoading), this, nameof(Hide), null, (uint)ConnectFlags.Oneshot);
 				DisableProcessing();
