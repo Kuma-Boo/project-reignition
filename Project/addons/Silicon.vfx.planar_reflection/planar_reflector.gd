@@ -46,8 +46,6 @@ var viewport_rect := Rect2(0, 0, 1, 1)
 
 var main_cam : Camera
 var reflect_camera : Camera
-var render_frequency : int = 1 setget set_render_frequency #how often should the frames be rerendered? (0 to stop rendering)
-var render_counter : int
 
 func _set(property : String, value) -> bool:
 	match property:
@@ -79,7 +77,6 @@ func _get_property_list() -> Array:
 	props += [{"name": "position_offset", "type": TYPE_VECTOR2}]
 	props += [{"name": "render_sky", "type": TYPE_BOOL}]
 	props += [{"name": "cull_mask", "type": TYPE_INT, "hint": PROPERTY_HINT_LAYERS_3D_RENDER}]
-	props += [{"name": "render_frequency", "type": TYPE_INT, "hint": PROPERTY_HINT_RANGE, "hint_string": "0, 256, 1"}]
 
 	return props
 
@@ -143,18 +140,11 @@ func _process(delta : float) -> void:
 	if not reflect_camera or not reflect_viewport or not get_extents().length():
 		return
 
-	if not is_visible_in_tree() or render_frequency == 0: #Don't process hidden reflectors
+	if not is_visible_in_tree(): #Don't process hidden reflectors
 		reflect_camera.current = false
 		return
 
-	render_counter -= 1
-	if render_counter <= 0:
-		reflect_camera.current = true
-		render_counter = render_frequency
-	else: #IDLE
-		reflect_camera.current = false
-		return
-
+	reflect_camera.current = true
 	update_viewport()
 
 	# Get main camera and viewport
@@ -322,7 +312,3 @@ func set_layers(value : int) -> void:
 
 func set_position_offset(value : Vector2) -> void:
 	position_offset = value
-
-func set_render_frequency(value : int) -> void:
-	render_frequency = value
-	render_counter = 0

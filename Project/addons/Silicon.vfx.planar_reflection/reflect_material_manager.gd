@@ -78,6 +78,9 @@ func remove_material(material : Material, planar) -> void:
 			reflectors[idx].erase(planar)
 
 func update_material(index : int) -> void:
+	if !Engine.editor_hint:
+		return
+
 	var material = materials[index]
 	var variables := read_material_properties(material)
 	for planar in reflectors[index]:

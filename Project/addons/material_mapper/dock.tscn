@@ -50,7 +50,7 @@ margin_bottom = 24.0
 pressed = true
 text = "Lowercase"
 icon_align = 2
-items = [ "Keep", null, false, 0, null, "Lowercase", null, false, 1, null, "Uppercase", null, false, 2, null ]
+items = [ "Keep", null, false, 0, null, "Lowercase", null, false, 1, null, "Uppercase", null, false, 2, null, "Keep", null, false, 3, null, "Lowercase", null, false, 4, null, "Uppercase", null, false, 5, null, "Keep", null, false, 6, null, "Lowercase", null, false, 7, null, "Uppercase", null, false, 8, null ]
 selected = 1
 
 [node name="Toggles" type="VBoxContainer" parent="."]
@@ -86,29 +86,37 @@ text = "Apply Suffix on Main Texture"
 margin_top = 108.0
 margin_right = 304.0
 margin_bottom = 148.0
-hint_tooltip = "Replaces \"ALBEDO\" with \"DIFFUSE\"."
+hint_tooltip = "Imports \"NORMAL\" map."
 text = "Import Normal"
 
 [node name="ImportRoughness" type="CheckButton" parent="Toggles"]
 margin_top = 144.0
 margin_right = 304.0
 margin_bottom = 184.0
-hint_tooltip = "Replaces \"ALBEDO\" with \"DIFFUSE\"."
+hint_tooltip = "Imports \"ROUGHNESS\" map."
 text = "Import Roughness"
 
-[node name="ClearMissingTextures" type="CheckButton" parent="Toggles"]
+[node name="ResetSpecular" type="CheckButton" parent="Toggles"]
 margin_top = 180.0
 margin_right = 304.0
 margin_bottom = 220.0
+hint_tooltip = "Resets metallic_specular to 0."
+pressed = true
+text = "Clear Specular"
+
+[node name="ClearMissingTextures" type="CheckButton" parent="Toggles"]
+margin_top = 216.0
+margin_right = 304.0
+margin_bottom = 256.0
 hint_tooltip = "Resets any missing textures to NULL. Only affects maps that are toggled on."
 pressed = true
 text = "Clear Missing Textures"
 
 [node name="Update" type="Button" parent="."]
 margin_left = 96.0
-margin_top = 368.0
+margin_top = 384.0
 margin_right = 217.0
-margin_bottom = 400.0
+margin_bottom = 416.0
 text = "Update Materials"
 
 [connection signal="pressed" from="Update" to="." method="_on_update_pressed"]

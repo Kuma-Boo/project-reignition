@@ -16,8 +16,9 @@ collision/safe_margin = 0.01
 [node name="Camera" parent="." instance=ExtResource( 1 )]
 targetSettings = ExtResource( 7 )
 
-[node name="Interface" type="Node" parent="."]
+[node name="Interface" type="CanvasLayer" parent="."]
 pause_mode = 2
+layer = 64
 
 [node name="Countdown" parent="Interface" instance=ExtResource( 3 )]
 
@@ -26,6 +27,7 @@ pause_mode = 2
 [node name="StageResults" parent="Interface" instance=ExtResource( 6 )]
 
 [node name="Pause" parent="Interface" instance=ExtResource( 5 )]
+layer = 100
 
 [connection signal="PlayerProcessed" from="Player" to="Camera" method="UpdateCamera"]
 [connection signal="CountdownCompleted" from="Interface/Countdown" to="Player" method="CountdownCompleted"]

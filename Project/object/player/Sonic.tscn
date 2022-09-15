@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://object/player/resource/movement settings/ground/MoveSettings.tres" type="Resource" id=1]
 [ext_resource path="res://object/player/resource/movement settings/ground/BackstepSettings.tres" type="Resource" id=2]
@@ -13,7 +13,6 @@
 [ext_resource path="res://object/player/resource/script/CharacterAnimator.cs" type="Script" id=11]
 [ext_resource path="res://object/player/resource/model/Model.tscn" type="PackedScene" id=12]
 [ext_resource path="res://object/player/resource/component/SoulSkills.tscn" type="PackedScene" id=13]
-[ext_resource path="res://object/player/resource/animation/BalanceStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=14]
 [ext_resource path="res://object/player/resource/script/CharacterSound.cs" type="Script" id=15]
 [ext_resource path="res://sound/sfx/player/en/VOICE_E_2.wav" type="AudioStream" id=16]
 [ext_resource path="res://sound/sfx/player/en/VOICE_E_24.wav" type="AudioStream" id=17]
@@ -159,79 +158,14 @@ nodes/jump_cancel_time/node = SubResource( 122 )
 nodes/jump_cancel_time/position = Vector2( -1808, 160 )
 nodes/jump_dash_state/node = SubResource( 112 )
 nodes/jump_dash_state/position = Vector2( -368, 400 )
-node_connections = [ "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "jump_cancel_time", 0, "fall-start", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "fall_reset", 0, "jump_cancel_time", "jump", 0, "backflip", "jump", 1, "jump-start", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "output", 0, "IsJumpDashing" ]
-
-[sub_resource type="AnimationNodeAnimation" id=38]
-animation = "balance-left-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=39]
-animation = "balance-left-in-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=40]
-animation = "balance-left-out-loop"
-
-[sub_resource type="AnimationNodeBlendSpace1D" id=41]
-blend_point_0/node = SubResource( 38 )
-blend_point_0/pos = 0.0
-blend_point_1/node = SubResource( 39 )
-blend_point_1/pos = 1.0
-blend_point_2/node = SubResource( 40 )
-blend_point_2/pos = -1.0
-
-[sub_resource type="AnimationNodeAnimation" id=42]
-animation = "balance-right-out-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=43]
-animation = "balance-right-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=44]
-animation = "balance-right-in-loop"
-
-[sub_resource type="AnimationNodeBlendSpace1D" id=45]
-blend_point_0/node = SubResource( 42 )
-blend_point_0/pos = 1.0
-blend_point_1/node = SubResource( 43 )
-blend_point_1/pos = 0.0
-blend_point_2/node = SubResource( 44 )
-blend_point_2/pos = -1.0
-
-[sub_resource type="AnimationNodeAnimation" id=46]
-animation = "shuffle-left"
-
-[sub_resource type="AnimationNodeAnimation" id=47]
-animation = "shuffle-right"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=48]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=49]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=50]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=51]
-
-[sub_resource type="AnimationNodeStateMachine" id=52]
-states/balance_left/node = SubResource( 41 )
-states/balance_left/position = Vector2( 632.6, 98.6224 )
-states/balance_right/node = SubResource( 45 )
-states/balance_right/position = Vector2( 151, 98.328 )
-states/shuffle-left/node = SubResource( 46 )
-states/shuffle-left/position = Vector2( 388.293, 63.8 )
-states/shuffle-right/node = SubResource( 47 )
-states/shuffle-right/position = Vector2( 388.105, 160.6 )
-transitions = [ "shuffle-left", "balance_left", SubResource( 48 ), "shuffle-right", "balance_right", SubResource( 49 ), "balance_right", "shuffle-left", SubResource( 50 ), "balance_left", "shuffle-right", SubResource( 51 ) ]
-start_node = "shuffle-left"
-graph_offset = Vector2( 88, 38 )
+node_connections = [ "output", 0, "IsJumpDashing", "IsJumping", 0, "fall", "IsJumping", 1, "jump-loop", "IsJumpDashing", 0, "jump", "IsJumpDashing", 1, "jump_dash_state", "backflip", 0, "IsJumping", "backflip", 1, "backflip_anim", "fall", 0, "fall-loop", "fall", 1, "fall_reset", "fall_reset", 0, "jump_cancel_time", "jump", 0, "backflip", "jump", 1, "jump-start", "jump_cancel_time", 0, "fall-start" ]
 
 [sub_resource type="AnimationNodeOneShot" id=65]
 fadein_time = 0.0
 fadeout_time = 0.15
 
 [sub_resource type="AnimationNodeAnimation" id=72]
-animation = "RESET"
+animation = "idle-loop"
 
 [sub_resource type="AnimationNodeTransition" id=114]
 input_count = 2
@@ -241,44 +175,24 @@ input_0/auto_advance = false
 input_1/name = "Crouching"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeAnimation" id=88]
-animation = "gait-loop"
+[sub_resource type="AnimationNodeAnimation" id=133]
+animation = "walk-loop"
 
-[sub_resource type="AnimationNodeAnimation" id=89]
+[sub_resource type="AnimationNodeAnimation" id=134]
 animation = "jog-loop"
 
-[sub_resource type="AnimationNodeAnimation" id=90]
-animation = "jog-left-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=91]
-animation = "gait-left-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=92]
-animation = "jog-right-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=93]
-animation = "gait-right-loop"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=94]
-blend_point_0/node = SubResource( 88 )
-blend_point_0/pos = Vector2( 0, 0 )
-blend_point_1/node = SubResource( 89 )
-blend_point_1/pos = Vector2( 0, 0.8 )
-blend_point_2/node = SubResource( 90 )
-blend_point_2/pos = Vector2( -1, 0.8 )
-blend_point_3/node = SubResource( 91 )
-blend_point_3/pos = Vector2( -1, 0 )
-blend_point_4/node = SubResource( 92 )
-blend_point_4/pos = Vector2( 1, 0.8 )
-blend_point_5/node = SubResource( 93 )
-blend_point_5/pos = Vector2( 1, 0 )
-min_space = Vector2( -1, 0 )
+[sub_resource type="AnimationNodeBlendSpace1D" id=135]
+blend_point_0/node = SubResource( 133 )
+blend_point_0/pos = 0.2
+blend_point_1/node = SubResource( 134 )
+blend_point_1/pos = 0.5
+min_space = 0.0
 
 [sub_resource type="AnimationNodeTimeScale" id=79]
 
 [sub_resource type="AnimationNodeTransition" id=78]
 input_count = 4
-xfade_time = 0.2
+xfade_time = 0.25
 input_0/name = "Backstep"
 input_0/auto_advance = false
 input_1/name = "Idle"
@@ -288,16 +202,14 @@ input_2/auto_advance = false
 input_3/name = "Running"
 input_3/auto_advance = false
 
-[sub_resource type="AnimationNodeTimeSeek" id=101]
-
 [sub_resource type="AnimationNodeAnimation" id=85]
-animation = "run-loop"
+animation = "walk-loop"
 
 [sub_resource type="AnimationNodeAnimation" id=86]
-animation = "run-left-loop"
+animation = "RESET"
 
 [sub_resource type="AnimationNodeAnimation" id=87]
-animation = "run-right-loop"
+animation = "RESET"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id=84]
 blend_point_0/node = SubResource( 85 )
@@ -329,34 +241,27 @@ transitions = [ "crouch-start", "crouch-loop", SubResource( 117 ) ]
 start_node = "crouch-start"
 
 [sub_resource type="AnimationNodeBlendTree" id=71]
-graph_offset = Vector2( -742.031, 133.664 )
+graph_offset = Vector2( -555.298, 138.018 )
 nodes/Idle/node = SubResource( 72 )
-nodes/Idle/position = Vector2( -1200, 240 )
+nodes/Idle/position = Vector2( -1008, 240 )
 nodes/IsCrouching/node = SubResource( 114 )
 nodes/IsCrouching/position = Vector2( 96, 160 )
-nodes/Jog/node = SubResource( 94 )
-nodes/Jog/position = Vector2( -944, 400 )
+nodes/Jog/node = SubResource( 135 )
+nodes/Jog/position = Vector2( -752, 384 )
 nodes/MoveSpeed/node = SubResource( 79 )
-nodes/MoveSpeed/position = Vector2( -480, 192 )
+nodes/MoveSpeed/position = Vector2( -288, 192 )
 nodes/MoveState/node = SubResource( 78 )
-nodes/MoveState/position = Vector2( -656, 256 )
-nodes/MovementReset/node = SubResource( 101 )
-nodes/MovementReset/position = Vector2( -304, 176 )
+nodes/MoveState/position = Vector2( -464, 256 )
 nodes/Run/node = SubResource( 84 )
-nodes/Run/position = Vector2( -944, 592 )
+nodes/Run/position = Vector2( -752, 592 )
 nodes/backstep/node = SubResource( 124 )
-nodes/backstep/position = Vector2( -944, 128 )
+nodes/backstep/position = Vector2( -752, 128 )
 nodes/crouch_state/node = SubResource( 118 )
 nodes/crouch_state/position = Vector2( -144, 336 )
-node_connections = [ "IsCrouching", 0, "MovementReset", "IsCrouching", 1, "crouch_state", "MoveSpeed", 0, "MoveState", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run", "MovementReset", 0, "MoveSpeed", "output", 0, "IsCrouching" ]
-
-[sub_resource type="AnimationNodeAnimation" id=127]
-animation = "sidle-fast-loop"
-
-[sub_resource type="AnimationNodeTimeScale" id=128]
+node_connections = [ "output", 0, "IsCrouching", "MoveSpeed", 0, "MoveState", "IsCrouching", 0, "MoveSpeed", "IsCrouching", 1, "crouch_state", "MoveState", 0, "backstep", "MoveState", 1, "Idle", "MoveState", 2, "Jog", "MoveState", 3, "Run" ]
 
 [sub_resource type="AnimationNodeBlendTree" id=37]
-graph_offset = Vector2( -289.298, 67.8134 )
+graph_offset = Vector2( -1021.55, 98.4016 )
 nodes/ActionState/node = SubResource( 70 )
 nodes/ActionState/position = Vector2( -464, 176 )
 nodes/IsGrounded/node = SubResource( 55 )
@@ -365,17 +270,11 @@ nodes/OneShotAnimations/node = SubResource( 132 )
 nodes/OneShotAnimations/position = Vector2( -160, 272 )
 nodes/air_state/node = SubResource( 109 )
 nodes/air_state/position = Vector2( -1280, 288 )
-nodes/balance_state/node = SubResource( 52 )
-nodes/balance_state/position = Vector2( -720, 272 )
 nodes/countdown/node = SubResource( 65 )
 nodes/countdown/position = Vector2( 112, 160 )
 nodes/ground_state/node = SubResource( 71 )
 nodes/ground_state/position = Vector2( -1280, 160 )
-nodes/sidle_anim/node = SubResource( 127 )
-nodes/sidle_anim/position = Vector2( -880, 464 )
-nodes/sidle_speed/node = SubResource( 128 )
-nodes/sidle_speed/position = Vector2( -672, 432 )
-node_connections = [ "ActionState", 0, "IsGrounded", "ActionState", 1, "balance_state", "ActionState", 2, "sidle_speed", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state", "countdown", 0, "ActionState", "countdown", 1, "OneShotAnimations", "sidle_speed", 0, "sidle_anim", "output", 0, "countdown" ]
+node_connections = [ "output", 0, "countdown", "ActionState", 0, "IsGrounded", "countdown", 0, "ActionState", "countdown", 1, "OneShotAnimations", "IsGrounded", 0, "ground_state", "IsGrounded", 1, "air_state" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=113]
 
@@ -464,7 +363,6 @@ shape = SubResource( 80 )
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 37 )
 anim_player = NodePath("../Components/Model/AnimationPlayer")
-active = true
 parameters/ActionState/current = 0
 parameters/IsGrounded/current = 0
 parameters/OneShotAnimations/Animation/current = 0
@@ -476,20 +374,17 @@ parameters/air_state/fall_reset/seek_position = -1.0
 parameters/air_state/jump/active = false
 parameters/air_state/jump_cancel_time/scale = 1.0
 parameters/air_state/jump_dash_state/playback = SubResource( 113 )
-parameters/balance_state/playback = ExtResource( 14 )
-parameters/balance_state/balance_left/blend_position = -0.00141644
-parameters/balance_state/balance_right/blend_position = -0.00914633
 parameters/countdown/active = false
 parameters/ground_state/IsCrouching/current = 0
-parameters/ground_state/Jog/blend_position = Vector2( 0, 0 )
+parameters/ground_state/Jog/blend_position = 0.0
 parameters/ground_state/MoveSpeed/scale = 1.0
 parameters/ground_state/MoveState/current = 1
-parameters/ground_state/MovementReset/seek_position = -1.0
 parameters/ground_state/Run/blend_position = 0.0
 parameters/ground_state/crouch_state/playback = SubResource( 119 )
-parameters/sidle_speed/scale = 1.5
 
 [connection signal="area_entered" from="Components/ObjectTrigger" to="." method="OnObjectAreaEntered"]
 [connection signal="area_exited" from="Components/ObjectTrigger" to="." method="OnObjectAreaExited"]
 [connection signal="body_entered" from="Components/ObjectTrigger" to="." method="OnObjectCollisionEnter"]
 [connection signal="body_exited" from="Components/ObjectTrigger" to="." method="OnObjectCollisionExit"]
+
+[editable path="Components/Model"]

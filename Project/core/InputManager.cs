@@ -189,7 +189,7 @@ namespace Project.Core
 			public bool WasTapBuffered => tapBuffer > 0;
 			public float tapBuffer;
 
-			private const float DEADZONE = .1f;
+			private const float DEADZONE = .6f;
 			private const float TAP_BUFFER_LENGTH = .2f;
 
 			public void Update(float currentValue, float timeDelta)

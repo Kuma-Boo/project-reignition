@@ -12,6 +12,7 @@ onready var useDiffuse : Button = get_node("Toggles/UseDiffuse")
 onready var applySuffix : Button = get_node("Toggles/ApplySuffix")
 onready var importNormal : Button = get_node("Toggles/ImportNormal")
 onready var importRoughness : Button = get_node("Toggles/ImportRoughness")
+onready var resetSpecular : Button = get_node("Toggles/ResetSpecular")
 onready var clearMissingTextures : Button = get_node("Toggles/ClearMissingTextures")
 
 var materials : Array
@@ -24,19 +25,20 @@ var currentMaterial : SpatialMaterial
 var currentMaterialName : String
 
 func _ready():
+	textureNameFormat.clear()
 	textureNameFormat.add_item("Keep")
 	textureNameFormat.add_item("Lowercase")
 	textureNameFormat.add_item("Uppercase")
 	textureNameFormat.select(1)
 
 func _on_update_pressed():
-#	if texturePath.text.empty() || !dir.dir_exists(texturePath.text):
-#		printerr("Texture directory not found!")
-#		return
-#
-#	if materialPath.text.empty() || !dir.dir_exists(materialPath.text):
-#		printerr("Material directory not found!")
-#		return
+	if texturePath.text.empty() || !dir.dir_exists(texturePath.text):
+		printerr("Texture directory not found!")
+		return
+
+	if materialPath.text.empty() || !dir.dir_exists(materialPath.text):
+		printerr("Material directory not found!")
+		return
 
 	update_materials()
 
@@ -51,6 +53,10 @@ func update_materials():
 			continue #Custom Shader materials should be edited manually!
 
 		currentMaterial = mat
+
+		#Default to no specular?
+		if resetSpecular.pressed:
+			currentMaterial.metallic_specular = 0;
 
 		var materialName = str(i).replace(MATERIAL_EXTENSTION, "")
 		currentMaterialName = materialName

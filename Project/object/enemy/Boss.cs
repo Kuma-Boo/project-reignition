@@ -18,7 +18,7 @@ namespace Project.Gameplay.Bosses
 
 		[Export]
 		public Array<BossPatternResource> patterns = new Array<BossPatternResource>();
-		protected int CurrentPattern { get; private set; }
+		public int CurrentPattern { get; private set; }
 
 		[Export]
 		public NodePath animationTree;

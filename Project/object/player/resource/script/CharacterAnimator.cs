@@ -54,7 +54,6 @@ namespace Project.Gameplay
 
 		#region Normal Animation
 		private float strafeTilt;
-
 		private const string CROUCH_PARAMETER = "parameters/ground_state/IsCrouching/current";
 
 		private const string JUMP_TRIGGER_PARAMETER = "parameters/air_state/jump/active";
@@ -219,10 +218,12 @@ namespace Project.Gameplay
 			else if(!IsIdling)
 				moveAnimationSpeed = Mathf.Max(Character.SpeedRatio, Mathf.Abs(Character.runningStrafeSettings.GetSpeedRatioClamped(Character.StrafeSpeed)));
 
-			_animator.Set("parameters/ground_state/Jog/blend_position", new Vector2(strafeTilt, moveAnimationSpeed));
+			_animator.Set("parameters/ground_state/Jog/blend_position", Character.SpeedRatio);//new Vector2(strafeTilt, moveAnimationSpeed));
 			_animator.Set("parameters/ground_state/Run/blend_position", strafeTilt);
 
-			_animator.Set("parameters/ground_state/MoveSpeed/scale", Mathf.Lerp(1f, 2.5f, moveAnimationSpeed));
+			
+			moveAnimationSpeed = Mathf.Clamp((moveAnimationSpeed - .5f) / .5f, 0f, 1f);
+			_animator.Set("parameters/ground_state/MoveSpeed/scale", Mathf.Lerp(1.2f, 2f, moveAnimationSpeed));
 		}
 
 		private void AirAnimations()
