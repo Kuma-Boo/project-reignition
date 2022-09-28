@@ -3,69 +3,76 @@ using Godot;
 /// <summary>
 /// Loops an audio stream seamlessly
 /// </summary>
-[Tool]
-public class BGMPlayer : AudioStreamPlayer
+namespace Project
 {
-	public static BGMPlayer instance;
-	[Export]
-	public float loopStartPosition;
-	[Export]
-	public float loopEndPosition;
-	[Export]
-	public float debugSeek; //Debug
-	[Export]
-	public bool isStageMusic; //Override singleton?
-	private bool canLoop;
-	private float LoopLength => loopEndPosition - loopStartPosition;
-
-	public override void _EnterTree()
+	[Tool]
+	public partial class BGMPlayer : AudioStreamPlayer
 	{
-		canLoop = loopEndPosition > loopStartPosition;
-		if (!canLoop)
-			GD.PrintErr("BGM loop points are set up incorrectly. Looping is disabled.");
-
-		if (isStageMusic)
-			instance = this;
-	}
-
-	public override void _ExitTree()
-	{
-		if (instance == this) //Unreference
-			instance = null;
-	}
-
-	public void Play()
-	{
-		if (Playing) return; //Already playing
-
-		if (instance != null && instance.Playing)
-			if (instance.Stream == Stream) return; //already playing current song
-
-		Play(0f);
-		instance = this;
-	}
-
-	public override void _Process(float delta)
-	{
-		if (!canLoop) return;
-		if (!Playing) return;
-
-		float currentPosition = GetPlaybackPosition();
-		if (currentPosition >= loopEndPosition)
-			Seek(currentPosition - LoopLength);
-
-		if(Engine.EditorHint)
+		private static BGMPlayer stageMusicInstance;
+		public static bool StageMusicPaused
 		{
-			if (currentPosition < debugSeek)
-				Seek(debugSeek);
-
-			debugSeek = 0.0f;
+			get => stageMusicInstance == null || stageMusicInstance.StreamPaused;
+			set
+			{
+				if (stageMusicInstance == null) return;
+				stageMusicInstance.StreamPaused = value;
+			}
 		}
-	}
 
-	public void RestartLoop()
-	{
-		if(GetPlaybackPosition() >= loopEndPosition)
-			Play(loopStartPosition);
+		public static void SetStageMusicVolume(float db)
+		{
+			if (stageMusicInstance != null)
+				stageMusicInstance.VolumeDb = db;
+		}
+
+		[Export]
+		public float loopStartPosition;
+		[Export]
+		public float loopEndPosition;
+		[Export]
+		public float debugSeek; //Editor debug. Seeks to the specified point (in seconds)
+		[Export]
+		public bool isStageMusic; //Override singleton?
+
+		private bool canLoop;
+		private float LoopLength => loopEndPosition - loopStartPosition;
+
+		public override void _EnterTree()
+		{
+			canLoop = loopEndPosition > loopStartPosition;
+			if (!canLoop)
+				GD.PrintErr("BGM loop points are set up incorrectly. Looping is disabled.");
+
+			if (isStageMusic) //Only one stage music can be playing at a time
+				stageMusicInstance = this;
+		}
+
+		public override void _ExitTree()
+		{
+			if (stageMusicInstance == this) //Unreference
+				stageMusicInstance = null;
+		}
+
+		public override void _Process(double _)
+		{
+			if (!canLoop) return;
+			if (!Playing) return;
+
+			float currentPosition = GetPlaybackPosition();
+			if (currentPosition >= loopEndPosition)
+				Seek(currentPosition - LoopLength);
+
+			if (Engine.IsEditorHint() && Mathf.IsEqualApprox(debugSeek, -1))
+			{
+				Seek(debugSeek);
+				debugSeek = -1;
+			}
+		}
+
+		public void RestartLoop()
+		{
+			if (GetPlaybackPosition() >= loopEndPosition)
+				Play(loopStartPosition);
+		}
 	}
 }

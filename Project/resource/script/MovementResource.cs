@@ -4,23 +4,24 @@ using Project.Core;
 //Data for movement
 namespace Project.Gameplay
 {
-	public class MovementResource : Resource
+	/// <summary>
+	/// Contains data of movement settings. Leave values at -1 to ignore (primarily for skill overrides)
+	/// </summary>
+	public partial class MovementResource : Resource
 	{
-		[Export]
-		public bool isTwoWay; //Allow negative values
 		[Export]
 		public bool clampTurnaround; //Don't allow reversing into negative numbers
 
-		[Export(PropertyHint.Range, "-256, 256")]
-		public int speed;
-		[Export(PropertyHint.Range, "0, 256")]
-		public int traction; //Speed up rate
-		[Export(PropertyHint.Range, "0, 256")]
-		public int friction; //Slow down rate
-		[Export(PropertyHint.Range, "0, 256")]
-		public int overspeedFriction; //Slow down rate when going faster than speed
-		[Export(PropertyHint.Range, "0, 256")]
-		public int turnaround; //Skidding
+		[Export(PropertyHint.Range, "-1, 256")]
+		public int speed = -1;
+		[Export(PropertyHint.Range, "-1, 256")]
+		public int traction = -1; //Speed up rate
+		[Export(PropertyHint.Range, "-1, 256")]
+		public int friction = -1; //Slow down rate
+		[Export(PropertyHint.Range, "-1, 256")]
+		public int overspeedFriction = -1; //Slow down rate when going faster than speed
+		[Export(PropertyHint.Range, "-1, 256")]
+		public int turnaround = -1; //Skidding
 
 		public MovementResource()
 		{
@@ -29,20 +30,21 @@ namespace Project.Gameplay
 			friction = 0;
 		}
 
-		public float Interpolate(float spd, float signedValue)
+		//Figures out whether to speed up or slow down depending on the input
+		public float Interpolate(float spd, float input)
 		{
-			float targetSpeed = speed * signedValue;
+			float targetSpeed = speed * input;
 			float delta = traction;
 
 			if (Mathf.Abs(spd) > speed)
 				delta = overspeedFriction;
 
-			if (signedValue == 0) //Deccelerate
+			if (input == 0) //Deccelerate
 			{
 				targetSpeed = 0;
 				delta = friction;
 			}
-			else if(Mathf.Sign(signedValue) != Mathf.Sign(spd)) //Turnaround
+			else if (spd != 0 && Mathf.Sign(input) != Mathf.Sign(spd)) //Turnaround
 			{
 				delta = turnaround;
 				if (clampTurnaround)

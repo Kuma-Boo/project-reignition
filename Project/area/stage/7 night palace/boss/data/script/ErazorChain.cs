@@ -4,7 +4,7 @@ using Project.Core;
 namespace Project.Gameplay.Bosses
 {
 	[Tool]
-	public class ErazorChain : Spatial
+	public partial class ErazorChain : Node3D
 	{
 		[Export]
 		public NodePath parent;
@@ -25,31 +25,31 @@ namespace Project.Gameplay.Bosses
 			GetComponents();
 		}
 
-		public override void _PhysicsProcess(float delta)
+		public override void _PhysicsProcess(double _)
 		{
 			//Child chain or simulation is disabled
 			if (disableSimulation || parentChain != null) return;
-			
-			Scale = GetParent<Spatial>().Scale; //Copy rotation from parent
+
+			Scale = GetParent<Node3D>().Scale; //Copy rotation from parent
 
 			if (childChain != null)
-				childChain.UpdateChain(this, gravity * delta);
+				childChain.UpdateChain(this, gravity * PhysicsManager.physicsDelta);
 		}
 
-		private void UpdateChain(Spatial parent, float gravityAmount)
+		private void UpdateChain(Node3D parent, float gravityAmount)
 		{
-			Vector3 targetPosition = GlobalTranslation + Vector3.Down * gravityAmount;
-			Vector3 delta = targetPosition - parent.GlobalTranslation;
+			Vector3 targetPosition = GlobalPosition + Vector3.Down * gravityAmount;
+			Vector3 delta = targetPosition - parent.GlobalPosition;
 
 			if (chainSize == 0)
-				targetPosition = parent.GlobalTranslation;
+				targetPosition = parent.GlobalPosition;
 			else
 			{
 				delta = delta.LimitLength(chainSize);
-				targetPosition = parent.GlobalTranslation + delta;
+				targetPosition = parent.GlobalPosition + delta;
 			}
 
-			Transform transform = GlobalTransform;
+			Transform3D transform = GlobalTransform;
 			transform.basis.y = -delta.Normalized();
 			//Rotate Chain
 			transform.basis.x = parent.Forward();

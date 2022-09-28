@@ -3,7 +3,7 @@ using System;
 
 namespace Project.Core
 {
-	public class SaveManager : Node
+	public partial class SaveManager : Node
 	{
 		public static bool saveDataInitialized; //Has the initial save data check been completed?
 
@@ -41,7 +41,7 @@ namespace Project.Core
 		public static SettingsData settings;
 		public static bool UseEnglishVoices => settings.voiceLanguage == VoiceLanguage.English;
 
-		public class SettingsData
+		public partial class SettingsData
 		{
 			//Video
 			public bool useVsync;
@@ -81,10 +81,10 @@ namespace Project.Core
 			//TODO Attempt to load control configuration. for now, default controls
 			InputManager.DefaultControls();
 
-			//Load and apply settings
-			OS.VsyncEnabled = settings.useVsync;
+			//TODO Load and apply settings
+			//OS.VsyncEnabled = settings.useVsync;
 			//OS.WindowSize = settings.screenResolution;
-			OS.WindowFullscreen = settings.isFullscreen;
+			//OS.WindowFullscreen = settings.isFullscreen;
 
 			/*
 			SetAudioBusVolume((int)AudioBuses.MASTER, settings.masterVolume, settings.isMasterMuted);
@@ -144,7 +144,7 @@ namespace Project.Core
 
 		#region Game data
 		public static GameData ActiveGameData { get; private set; }
-		public class GameData
+		public partial class GameData
 		{
 			//public bool[] worldRingsCollected;
 			public int exp;
@@ -173,7 +173,7 @@ namespace Project.Core
 		#endregion
 
 		#region Skills
-		public class SkillRing
+		public partial class SkillRing
 		{
 			public Skills equippedSkills;
 
@@ -182,9 +182,9 @@ namespace Project.Core
 			{
 				//Standard skills
 				None = 0,
-				Susan = 1,
+				LandingBoost = 1, //Allows for a quick boost of speed when landing
 				PearlAttractor = 2,
-				Karen = 4
+				SkillC = 4
 			}
 		}
 

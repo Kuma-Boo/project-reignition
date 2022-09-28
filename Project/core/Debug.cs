@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Project.Core
 {
-	public class Debug : Node2D
+	public partial class Debug : Node2D
 	{
 		public static Debug Instance;
 		private bool isAdvancingFrame;
@@ -23,10 +23,10 @@ namespace Project.Core
 		public override void _Ready()
 		{
 			Instance = this;
-			PauseMode = PauseModeEnum.Process;
+			ProcessMode = ProcessModeEnum.Always;
 		}
 
-		public override void _PhysicsProcess(float _)
+		public override void _PhysicsProcess(double _)
 		{
 			if (!OS.IsDebugBuild()) //Don't do anything in real build
 				return;
@@ -52,41 +52,32 @@ namespace Project.Core
 			}
 
 			if (InputManager.debugRestart.wasPressed)
-			{
-				/*
-				if (IsInstanceValid(Adventure.Objects.Level.instance))
-					Adventure.Objects.Level.instance.RespawnLevel();
-				else
-				*/
 				TransitionManager.QueueSceneChange(string.Empty, true);
-			}
 
 			if (lines.Count != 0 && !IsPaused)
-			{
-				Update();
-				lines.Clear();
-			}
+				QueueRedraw();
 		}
 
 		public override void _Draw()
 		{
-			if (!drawRaycasts)
-				return;
-
-			Camera cam = GetViewport().GetCamera();
-
-			if (cam == null) return; //NO CAMERA
-
-			for (int i = lines.Count - 1; i >= 0; i--)
+			if (drawRaycasts)
 			{
-				if (cam.IsPositionBehind(lines[i].start) || cam.IsPositionBehind(lines[i].end))
-					continue;
+				Camera3D cam = GetViewport().GetCamera3d();
+				if (cam == null) return; //NO CAMERA
 
-				Vector2 startPos = cam.UnprojectPosition(lines[i].start);
-				Vector2 endPos = cam.UnprojectPosition(lines[i].end);
+				for (int i = lines.Count - 1; i >= 0; i--)
+				{
+					if (cam.IsPositionBehind(lines[i].start) || cam.IsPositionBehind(lines[i].end))
+						continue;
 
-				DrawLine(startPos, endPos, lines[i].color);
+					Vector2 startPos = cam.UnprojectPosition(lines[i].start);
+					Vector2 endPos = cam.UnprojectPosition(lines[i].end);
+
+					DrawLine(startPos, endPos, lines[i].color, 1.0f, true);
+				}
 			}
+
+			lines.Clear();
 		}
 
 		#region Line Drawer

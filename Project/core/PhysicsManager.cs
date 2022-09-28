@@ -3,20 +3,20 @@ using Godot.Collections;
 
 namespace Project.Core
 {
-	public class PhysicsManager : Spatial
+	public partial class PhysicsManager : Node3D
 	{
 		public static float normalDelta;
 		public static float physicsDelta;
-		public static PhysicsDirectSpaceState physicsState;
+		public static PhysicsDirectSpaceState3D physicsState;
 		public override void _Ready() => UpdatePhysicsState();
 
-		private void UpdatePhysicsState() => physicsState = GetWorld().DirectSpaceState; //Update world space
+		private void UpdatePhysicsState() => physicsState = GetWorld3d().DirectSpaceState; //Update world space
 
-		public override void _Process(float delta) => normalDelta = delta;
+		public override void _Process(double delta) => normalDelta = (float)delta;
 
-		public override void _PhysicsProcess(float delta)
+		public override void _PhysicsProcess(double delta)
 		{
-			physicsDelta = delta;
+			physicsDelta = (float)delta;
 			UpdatePhysicsState();
 		}
 
@@ -33,7 +33,18 @@ namespace Project.Core
 		public static RaycastHit CastRay(Vector3 pos, Vector3 dir, bool hitAreas, uint mask = 2147483647, Array ex = null)
 		{
 			Vector3 endPos = pos + dir;
-			Dictionary result = physicsState.IntersectRay(pos, endPos, ex, mask, true, hitAreas);
+
+			PhysicsRayQueryParameters3D rayQuery = new PhysicsRayQueryParameters3D()
+			{
+				From = pos,
+				To = endPos,
+				Exclude = ex,
+				CollisionMask = mask,
+				CollideWithBodies = true,
+				CollideWithAreas = hitAreas,
+			};
+
+			Dictionary result = physicsState.IntersectRay(rayQuery);
 			RaycastHit raycast = new RaycastHit()
 			{
 				startPoint = pos,

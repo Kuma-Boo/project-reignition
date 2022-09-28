@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Hazards
 {
-	public class Hazard : Spatial
+	public partial class Hazard : Node3D
 	{
 		[Export]
 		public bool isDisabled; //Is this hitbox active?
@@ -12,20 +12,20 @@ namespace Project.Gameplay.Hazards
 		protected CharacterController Character => CharacterController.instance;
 
 		[Signal]
-		public delegate void DamagedPlayer();
+		public delegate void DamagedPlayerEventHandler();
 
-		public override void _PhysicsProcess(float _) => ProcessCollision();
+		public override void _PhysicsProcess(double _) => ProcessCollision();
 
 		protected void ProcessCollision()
 		{
 			if (!isDisabled && isInteractingWithPlayer)
 			{
 				Character.TakeDamage(this);
-				EmitSignal(nameof(DamagedPlayer));
+				EmitSignal(SignalName.DamagedPlayer);
 			}
 		}
 
-		public void OnEntered(Area _) => isInteractingWithPlayer = true;
-		public void OnExited(Area _) => isInteractingWithPlayer = false;
+		public void OnEntered(Area3D _) => isInteractingWithPlayer = true;
+		public void OnExited(Area3D _) => isInteractingWithPlayer = false;
 	}
 }

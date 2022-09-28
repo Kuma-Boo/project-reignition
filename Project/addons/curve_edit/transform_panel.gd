@@ -1,5 +1,5 @@
 # Panel which is added to UI and used to trigger callbacks to update paths.
-tool
+@tool
 extends VBoxContainer
 
 # Index aliases
@@ -7,13 +7,13 @@ const POS = 0;
 const IN = 1;
 const OUT = 2;
 
-onready var point_index:OptionButton = get_node("HBoxContainer2/point_selector")
-onready var point_part:OptionButton = get_node("HBoxContainer2/point_part")
-onready var edit_x:LineEdit = get_node("HBoxContainer/x_edit")
-onready var edit_y:LineEdit = get_node("HBoxContainer/y_edit")
-onready var edit_z:LineEdit = get_node("HBoxContainer/z_edit")
+@onready var point_index:OptionButton = get_node("HBoxContainer2/point_selector")
+@onready var point_part:OptionButton = get_node("HBoxContainer2/point_part")
+@onready var edit_x:LineEdit = get_node("HBoxContainer/x_edit")
+@onready var edit_y:LineEdit = get_node("HBoxContainer/y_edit")
+@onready var edit_z:LineEdit = get_node("HBoxContainer/z_edit")
 
-var current_path:Path
+var current_path:Path3D
 var backup_curve:Curve3D
 var backup_path:WeakRef
 
@@ -33,7 +33,7 @@ func _input(event):
 		return
 	if not event.scancode == KEY_ENTER:
 		return
-	var focus = get_focus_owner()
+	var focus = get_viewport().gui_get_focus_owner()
 	if focus == edit_x or focus == edit_y or focus == edit_z:
 		_on_edit_focus_exited()
 		print("Pressed enter")
@@ -43,9 +43,9 @@ func _input(event):
 # for when the curve is modified externally.
 func update_current_transform(object):
 	if current_path and current_path != object:
-		current_path.disconnect("curve_changed", self, "_on_point_selector_item_selected")
+		current_path.disconnect("curve_changed",Callable(self,"_on_point_selector_item_selected"))
 	current_path = object
-	current_path.connect("curve_changed", self, "_on_point_selector_item_selected")
+	current_path.connect("curve_changed",Callable(self,"_on_point_selector_item_selected"))
 	if not current_path:
 		return
 	if not current_path.curve:
@@ -95,14 +95,14 @@ func _on_edit_focus_exited():
 
 
 func _enforce_numeric_values(new_text:String, line_edit:LineEdit):
-	var init_cursor_pos = line_edit.caret_position
+	var init_cursor_pos = line_edit.caret_column
 	var compiled = ''
 	var regex = RegEx.new()
 	regex.compile("[-+]?[0-9]*\\.?[0-9]+")
 	for valid_character in regex.search_all(str(new_text)):
 		compiled += valid_character.get_string()
 	line_edit.set_text(compiled)
-	line_edit.caret_position = init_cursor_pos
+	line_edit.caret_column = init_cursor_pos
 
 
 # When the option dropdown is modified. No actual curve changes to apply.
@@ -166,15 +166,15 @@ func _on_z_edit_focus_entered():
 
 
 func _on_x_edit_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		edit_x.select_all()
 
 
 func _on_y_edit_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		edit_y.select_all()
 
 
 func _on_z_edit_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		edit_z.select_all()

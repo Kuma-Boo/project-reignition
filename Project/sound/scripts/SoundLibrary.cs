@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-public class SoundLibrary : Node
+public partial class SoundLibrary : Node
 {
     [Export]
     public Array<AudioStream> clips;

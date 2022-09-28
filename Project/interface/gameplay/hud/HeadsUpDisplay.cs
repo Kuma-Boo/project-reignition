@@ -7,7 +7,7 @@ namespace Project.Gameplay
 	/// <summary>
 	/// Displays game data to the player. Only handles the graphics.
 	/// </summary>
-	public class HeadsUpDisplay : Control
+	public partial class HeadsUpDisplay : Control
 	{
 		public static HeadsUpDisplay instance;
 		private StageSettings Stage => StageSettings.instance;
@@ -24,17 +24,17 @@ namespace Project.Gameplay
 			InitializeObjectives();
 			InitializeSoulGauge();
 
-			if(Stage != null) //Decouple from stage settings
+			if (Stage != null) //Decouple from stage settings
 			{
-				Stage.Connect(nameof(StageSettings.RingChanged), this, nameof(UpdateRingCount));
-				Stage.Connect(nameof(StageSettings.TimeChanged), this, nameof(UpdateTime));
-				Stage.Connect(nameof(StageSettings.ScoreChanged), this, nameof(UpdateScore));
-				Stage.Connect(nameof(StageSettings.BonusAdded), this, nameof(AddBonus));
-				Stage.Connect(nameof(StageSettings.StageCompleted), this, nameof(StageComplete)); //Hide interface
+				Stage.Connect(nameof(StageSettings.RingChanged), new Callable(this, nameof(UpdateRingCount)));
+				Stage.Connect(nameof(StageSettings.TimeChanged), new Callable(this, nameof(UpdateTime)));
+				Stage.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, nameof(UpdateScore)));
+				Stage.Connect(nameof(StageSettings.BonusAdded), new Callable(this, nameof(AddBonus)));
+				Stage.Connect(nameof(StageSettings.StageCompleted), new Callable(this, nameof(StageComplete))); //Hide interface
 			}
 		}
 
-		public override void _PhysicsProcess(float _)
+		public override void _PhysicsProcess(double _)
 		{
 			UpdateSoulGauge(); //Animate the soul gauge
 			UpdateBonus();
@@ -49,7 +49,7 @@ namespace Project.Gameplay
 		private Label _maxRingLabel;
 		[Export]
 		public NodePath ringDividerSprite;
-		private Sprite _ringDividerSprite;
+		private Sprite2D _ringDividerSprite;
 		[Export]
 		public NodePath ringAnimator;
 		private AnimationPlayer _ringAnimator;
@@ -60,10 +60,10 @@ namespace Project.Gameplay
 			//Initialize ring counter
 			_ringLabel = GetNode<Label>(ringLabel);
 			_maxRingLabel = GetNode<Label>(maxRingLabel);
-			_ringDividerSprite = GetNode<Sprite>(ringDividerSprite);
+			_ringDividerSprite = GetNode<Sprite2D>(ringDividerSprite);
 			_ringAnimator = GetNode<AnimationPlayer>(ringAnimator);
 
-			if(Stage != null)
+			if (Stage != null)
 			{
 				_maxRingLabel.Visible = _ringDividerSprite.Visible = Stage.missionType == StageSettings.MissionType.Ring; //Show/Hide max ring count
 				if (_maxRingLabel.Visible)
@@ -109,7 +109,7 @@ namespace Project.Gameplay
 		public NodePath bonusAnimator;
 		private AnimationPlayer _bonusAnimator;
 		[Export]
-		public Array<NodePath> bonusLabels = new Array<NodePath>();
+		public Array<NodePath> bonusLabels;
 		private int bonusCount = -1;
 		private readonly Array<Label> _bonusLabels = new Array<Label>();
 		private readonly Array<StageSettings.BonusType> bonusQueue = new Array<StageSettings.BonusType>();
@@ -126,12 +126,12 @@ namespace Project.Gameplay
 
 		private void AddBonus(StageSettings.BonusType type)
 		{
-			if(_bonusAnimator.IsPlaying())
+			if (_bonusAnimator.IsPlaying())
 			{
 				bonusQueue.Add(type);
 				return;
 			}
-			
+
 			//Increment bonus count
 			bonusCount++;
 			if (bonusCount > MAX_BONUS_COUNT)
@@ -156,20 +156,20 @@ namespace Project.Gameplay
 		{
 			if (GetTree().Paused) return; //Paused
 
-			if(bonusQueue.Count != 0 && !_bonusAnimator.IsPlaying())
+			if (bonusQueue.Count != 0 && !_bonusAnimator.IsPlaying())
 			{
 				AddBonus(bonusQueue[0]);
 				bonusQueue.RemoveAt(0);
 			}
 
-			if(bonusCount >= 0)
+			if (bonusCount >= 0)
 			{
-				bonusTimer += PhysicsManager.physicsDelta / Engine.TimeScale;
+				bonusTimer += PhysicsManager.physicsDelta / (float)Engine.TimeScale;
 
 				if (bonusTimer > 1f)
 				{
 					float fadeAmount = Mathf.Clamp((bonusTimer % 1f) / .25f, 0f, 1f);
-					_bonusLabels[bonusCount].Modulate = Colors.White.LinearInterpolate(Colors.Transparent, fadeAmount);
+					_bonusLabels[bonusCount].Modulate = Colors.White.Lerp(Colors.Transparent, fadeAmount);
 
 					if (fadeAmount >= 1f)
 					{
@@ -203,8 +203,8 @@ namespace Project.Gameplay
 
 			_objectiveMaxValue = GetNode<Label>(objectiveMaxValue);
 			_objectiveMaxValue.Text = Stage.targetObjectiveCount.ToString("00");
-			
-			Stage.Connect(nameof(StageSettings.ObjectiveChanged), this, nameof(UpdateObjective));
+
+			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}
 
 		private void UpdateObjective() => _objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
@@ -232,8 +232,8 @@ namespace Project.Gameplay
 			_soulGaugeAnimator = GetNode<AnimationPlayer>(soulGaugeAnimator);
 
 			//Resize the soul gauge
-			int lerpFrom = Mathf.RoundToInt(_soulGaugeRoot.RectSize.y - _soulGauge.RectMinSize.y); //Smallest gauge size
-			_soulGauge.MarginTop = Mathf.Lerp(lerpFrom, 0, SaveManager.ActiveGameData.SoulGaugeLevel); //Set the soul gauge to the correct size
+			int lerpFrom = Mathf.RoundToInt(_soulGaugeRoot.Size.y - _soulGauge.GetMinimumSize().y); //Smallest gauge size
+			_soulGauge.OffsetTop = Mathf.Lerp(lerpFrom, 0, SaveManager.ActiveGameData.SoulGaugeLevel); //Set the soul gauge to the correct size
 			ModifySoulGauge(0f, false);
 		}
 
@@ -248,8 +248,8 @@ namespace Project.Gameplay
 		private const int SOUL_GAUGE_FILL_OFFSET = 15;
 		private void UpdateSoulGauge()
 		{
-			Vector2 end = Vector2.Down * Mathf.Lerp(_soulGaugeBackground.RectSize.y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
-			_soulGaugeFill.RectPosition = ExtensionMethods.SmoothDamp(_soulGaugeFill.RectPosition, end, ref soulGaugeVelocity, 0.1f);
+			Vector2 end = Vector2.Down * Mathf.Lerp(_soulGaugeBackground.Size.y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
+			_soulGaugeFill.Position = ExtensionMethods.SmoothDamp(_soulGaugeFill.Position, end, ref soulGaugeVelocity, 0.1f);
 		}
 
 		private bool isSoulGaugeCharged;

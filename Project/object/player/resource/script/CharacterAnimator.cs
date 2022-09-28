@@ -7,7 +7,7 @@ namespace Project.Gameplay
 	/// <summary>
 	/// Responsible for playing the player's animations and visual effects.
 	/// </summary>
-	public class CharacterAnimator : Spatial
+	public partial class CharacterAnimator : Node3D
 	{
 		[Export]
 		public NodePath animator;
@@ -28,7 +28,7 @@ namespace Project.Gameplay
 
 		public void PlayAnimation(string anim) //Play a specific animation
 		{
-			
+
 		}
 
 		#region Grinding Animation
@@ -44,7 +44,7 @@ namespace Project.Gameplay
 			_animator.Set(BALANCE_RIGHT_STATE_PARAMETER, 0);
 		}
 
-		public AnimationNodeStateMachinePlayback GrindingState => _animator.Get("parameters/balance_state/playback") as AnimationNodeStateMachinePlayback;
+		//public AnimationNodeStateMachinePlayback GrindingState => _animator.Get("parameters/balance_state/playback") as AnimationNodeStateMachinePlayback;
 
 		public void StopGrinding()
 		{
@@ -107,7 +107,7 @@ namespace Project.Gameplay
 		/*
 		public void SetForwardDirection(Vector3 direction)
 		{
-			Transform t = _root.GlobalTransform;
+			Transform3D t = _root.GlobalTransform;
 			t.basis.z = direction;
 			t.basis.y = Character.worldDirection;
 			t.basis.x = -t.basis.z.Cross(t.basis.y);
@@ -159,7 +159,7 @@ namespace Project.Gameplay
 					if (input.y < 0)
 						input.y = 0;
 					targetRotation = -input.Normalized().AngleTo(Vector2.Down);
-					Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .032f);
+					Rotation = Rotation.Lerp(Vector3.Up * targetRotation, .032f);
 					return;
 				}
 
@@ -177,28 +177,27 @@ namespace Project.Gameplay
 					targetRotation = Mathf.Clamp(targetRotation, -Mathf.Pi * .5f, Mathf.Pi * .5f);
 				}
 
-				Rotation = Rotation.LinearInterpolate(Vector3.Up * targetRotation, .4f);
+				Rotation = Rotation.Lerp(Vector3.Up * targetRotation, .4f);
 			}
 			*/
 		}
 
 		private float strafeVelocity;
 		private const string MOVEMENT_STATE_PARAMETER = "parameters/ground_state/MoveState/current";
-		public bool IsIdling => (Mathf.Abs(Character.StrafeSpeed) < .1f && Mathf.Abs(Character.MoveSpeed) < .1f);
 		private void GroundAnimations()
 		{
+			/*
 			int transition = 1; //Idle
 			if (Character.MoveSpeed < 0) //Backstep
 				transition = 0;
 			else if (Character.SpeedRatio >= 1) //Running
 				transition = 3;
-			else if(!IsIdling) //Walk -> Jog
+			else if (!IsIdling) //Walk -> Jog
 				transition = 2;
 
 			_animator.Set(MOVEMENT_STATE_PARAMETER, transition);
 			_animator.Set(CROUCH_PARAMETER, Character.IsCrouching ? 1 : 0);
 
-			/*
 			float targetStrafeTilt = 0;
 
 			if (Character.ControlLockoutData == null && Character.Controller.MovementAxis != Vector2.Zero)
@@ -207,23 +206,23 @@ namespace Project.Gameplay
 				targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Pi * .5f, -1, 1);
 			}
 			strafeTilt = ExtensionMethods.SmoothDamp(strafeTilt, targetStrafeTilt, ref strafeVelocity, .2f);
-			*/
 
 			float moveAnimationSpeed = 1f;
 
 			if (Character.IsFreeMovementActive)
 				moveAnimationSpeed = Character.SpeedRatio;
-			else if(Character.SpeedRatio < 0)
+			else if (Character.SpeedRatio < 0)
 				moveAnimationSpeed = .8f * Mathf.Abs(Character.backstepSettings.GetSpeedRatio(Character.MoveSpeed));
-			else if(!IsIdling)
+			else if (!IsIdling)
 				moveAnimationSpeed = Mathf.Max(Character.SpeedRatio, Mathf.Abs(Character.runningStrafeSettings.GetSpeedRatioClamped(Character.StrafeSpeed)));
 
 			_animator.Set("parameters/ground_state/Jog/blend_position", Character.SpeedRatio);//new Vector2(strafeTilt, moveAnimationSpeed));
 			_animator.Set("parameters/ground_state/Run/blend_position", strafeTilt);
 
-			
+
 			moveAnimationSpeed = Mathf.Clamp((moveAnimationSpeed - .5f) / .5f, 0f, 1f);
 			_animator.Set("parameters/ground_state/MoveSpeed/scale", Mathf.Lerp(1.2f, 2f, moveAnimationSpeed));
+			*/
 		}
 
 		private void AirAnimations()
@@ -233,7 +232,7 @@ namespace Project.Gameplay
 
 			if ((int)_animator.Get(JUMPING_PARAMETER) == 1)
 			{
-				if (Character.ActionState != CharacterController.ActionStates.Jumping || Character.VerticalSpeed <= 5f)
+				if (Character.ActionState != CharacterController.ActionStates.Jumping || Character.VerticalSpd <= 5f)
 					FallAnimation();
 			}
 		}

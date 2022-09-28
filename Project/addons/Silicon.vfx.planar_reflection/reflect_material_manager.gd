@@ -1,11 +1,11 @@
-tool
+@tool
 extends Node
 
 const DEFAULT_SPATIAL_CODE := """
 shader_type spatial;
 render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-uniform vec4 albedo : hint_color;
-uniform sampler2D texture_albedo : hint_albedo;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color;
 uniform float specular;
 uniform float metallic;
 uniform float roughness : hint_range(0,1);
@@ -34,8 +34,8 @@ var reflectors := []
 var mat_ref_counts := []
 
 func _enter_tree() -> void:
-	if not VisualServer.is_connected("frame_pre_draw", self,"_pre_draw"):
-		VisualServer.connect("frame_pre_draw", self,"_pre_draw")
+	if not RenderingServer.is_connected("frame_pre_draw",Callable(self,"_pre_draw")):
+		RenderingServer.connect("frame_pre_draw",Callable(self,"_pre_draw"))
 
 # Update the materials before the frame is rendered.
 func _pre_draw() -> void:
@@ -70,9 +70,9 @@ func remove_material(material : Material, planar) -> void:
 	var idx := materials.find(material)
 	if idx != -1:
 		if mat_ref_counts[idx] <= 1:
-			materials.remove(idx)
-			reflectors.remove(idx)
-			mat_ref_counts.remove(idx)
+			materials.remove_at(idx)
+			reflectors.remove_at(idx)
+			mat_ref_counts.remove_at(idx)
 		else:
 			mat_ref_counts[idx] -= 1
 			reflectors[idx].erase(planar)
@@ -92,7 +92,7 @@ func update_material(index : int) -> void:
 
 func update_reflector(index : int, planar, material : Material, variables := []) -> void:
 	var reflector = reflectors[index][planar]
-	if variables.empty():
+	if variables.is_empty():
 		variables = read_material_properties(material)
 
 	var shader_params := []
@@ -100,7 +100,7 @@ func update_reflector(index : int, planar, material : Material, variables := [])
 	for variable in variables:
 		var property = variable[1]
 		var name = property.name
-		if material is SpatialMaterial:
+		if material is StandardMaterial3D:
 			if property.type in [TYPE_INT, TYPE_BOOL] and not name.ends_with("_texture_channel"):
 				var meta_list = reflector.get_meta_list()
 				if not name in meta_list or reflector.get_meta(name) != material.get(name):
@@ -121,24 +121,24 @@ func update_reflector(index : int, planar, material : Material, variables := [])
 		else:
 			# Check for change in shader code
 			var prev_code = reflector.get_meta("prev_code")
-			if not prev_code or prev_code != VisualServer.shader_get_code(material.shader.get_rid()):
+			if not prev_code or prev_code != RenderingServer.shader_get_code(material.gdshader.get_rid()):
 				update_required = true
-			reflector.set_meta("prev_code", VisualServer.shader_get_code(material.shader.get_rid()))
+			reflector.set_meta("prev_code", RenderingServer.shader_get_code(material.gdshader.get_rid()))
 			shader_params.append([variable[0], material.get(name)])
 
 	if update_required:
-		reflector.shader = convert_material(material)
+		reflector.gdshader = convert_material(material)
 
 	for variable in shader_params:
-		reflector.set_shader_param(variable[0], variable[1])
+		reflector.set_shader_parameter(variable[0], variable[1])
 
 	# Pass planar reflector parameters
 	var rect : Rect2 = planar.viewport_rect
-	reflector.set_shader_param("_pr_viewport_rect", Plane(
+	reflector.set_shader_parameter("_pr_viewport_rect", Plane(
 			rect.position.x, rect.position.y, rect.size.x, rect.size.y
 	))
-	reflector.set_shader_param("_pr_viewport", planar.reflect_texture)
-	reflector.set_shader_param("_pr_perturb_scale", planar.perturb_scale)
+	reflector.set_shader_parameter("_pr_viewport", planar.reflect_texture)
+	reflector.set_shader_parameter("_pr_perturb_scale", planar.perturb_scale)
 
 # Returns an array of [shader name, property of material]
 func read_material_properties(material : Material) -> Array:
@@ -162,7 +162,7 @@ func read_material_properties(material : Material) -> Array:
 
 		# Not all properties match with their shader parameter.
 		# We'll need to convert some of them.
-		if material is SpatialMaterial:
+		if material is StandardMaterial3D:
 			match shader_name:
 				"params_grow_amount":
 					shader_name = "grow"
@@ -195,20 +195,18 @@ func read_material_properties(material : Material) -> Array:
 				shader_name = "texture_" + shader_name
 		else:
 			if shader_name.begins_with("shader_param/"):
-				shader_name.erase(0, "shader_param/".length())
+				shader_name = shader_name.substr("shader_param/".length())
 		list.append([shader_name, property])
 	return list
 
 static func convert_material(material : Material) -> Shader:
-	var base := preload("base_reflection.shader").code
-	var code := VisualServer.shader_get_code(
-			VisualServer.material_get_shader(material.get_rid())
-	)
+	var base := preload("base_reflection.gdshader").code
+	var code := RenderingServer.shader_get_code(material.get_rid())
 
 	# When a material is first created, it does not immediately have shader code.
 	# This makes sure that it will initially work.
-	if code.empty():
-		if material is SpatialMaterial:
+	if code.is_empty():
+		if material is StandardMaterial3D:
 			code = DEFAULT_SPATIAL_CODE
 		else:
 			var default := Shader.new()

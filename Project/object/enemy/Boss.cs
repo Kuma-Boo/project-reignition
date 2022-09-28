@@ -3,7 +3,7 @@ using Godot.Collections;
 
 namespace Project.Gameplay.Bosses
 {
-	public class Boss : Spatial
+	public partial class Boss : Node3D
 	{
 		public static Boss instance;
 		protected CharacterController Character => CharacterController.instance;
@@ -14,10 +14,10 @@ namespace Project.Gameplay.Bosses
 
 		[Export]
 		public NodePath lockonTarget;
-		protected Area _lockonTarget;
+		protected Area3D _lockonTarget;
 
 		[Export]
-		public Array<BossPatternResource> patterns = new Array<BossPatternResource>();
+		public Array<BossPatternResource> patterns;
 		public int CurrentPattern { get; private set; }
 
 		[Export]
@@ -32,13 +32,13 @@ namespace Project.Gameplay.Bosses
 
 		protected virtual void SetUp()
 		{
-			_lockonTarget = GetNode<Area>(lockonTarget);
+			_lockonTarget = GetNode<Area3D>(lockonTarget);
 			Animator = GetNode<AnimationTree>(animationTree);
 			Animator.Active = true;
 			LoadAttackPattern();
 		}
 
-		public override void _PhysicsProcess(float _) => ProcessBoss();
+		public override void _PhysicsProcess(double _) => ProcessBoss();
 		protected virtual void ProcessBoss() { }
 
 		public virtual void TakeDamage(int amount)

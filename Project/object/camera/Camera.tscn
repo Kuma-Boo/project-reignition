@@ -1,79 +1,89 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource path="res://object/camera/CameraController.cs" type="Script" id=2]
+[ext_resource type="Script" path="res://object/camera/CameraController.cs" id="2"]
+[ext_resource type="Resource" path="res://resource/preset/camera/DefaultCam.tres" id="2_oj4og"]
 
-[sub_resource type="CubeMesh" id=2]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j0ipy"]
+albedo_color = Color(0, 0, 1, 1)
 
-[sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0, 0, 1, 1 )
+[sub_resource type="BoxMesh" id="BoxMesh_spaeu"]
+material = SubResource("StandardMaterial3D_j0ipy")
 
-[sub_resource type="CapsuleMesh" id=1]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_27rql"]
+albedo_color = Color(1, 0, 0, 1)
 
-[sub_resource type="SpatialMaterial" id=4]
-albedo_color = Color( 1, 0, 0, 1 )
+[sub_resource type="CapsuleMesh" id="1"]
+material = SubResource("StandardMaterial3D_27rql")
+radius = 0.8
+height = 2.5
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id="6"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0 ) ]
+"values": [Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id="5"]
 resource_name = "activate"
 length = 0.5
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
-[node name="Camera" type="Spatial"]
-script = ExtResource( 2 )
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mih1k"]
+_data = {
+"RESET": SubResource("6"),
+"activate": SubResource("5")
+}
+
+[node name="Camera" type="Node3D"]
+script = ExtResource("2")
 calculationRoot = NodePath("CalculationRoot")
 calculationGimbal = NodePath("CalculationRoot/CalculationGimbal")
 cameraRoot = NodePath("CameraRoot")
 cameraGimbal = NodePath("CameraRoot/CameraGimbal")
-camera = NodePath("CameraRoot/CameraGimbal/Camera")
+camera = NodePath("CameraRoot/CameraGimbal/Camera3D")
 crossfade = NodePath("Crossfade")
 crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
+targetSettings = ExtResource("2_oj4og")
 
-[node name="CalculationRoot" type="Spatial" parent="."]
+[node name="CalculationRoot" type="Node3D" parent="."]
 visible = false
 
-[node name="CalculationGimbal" type="Spatial" parent="CalculationRoot"]
+[node name="CalculationGimbal" type="Node3D" parent="CalculationRoot"]
 
-[node name="MeshInstance2" type="MeshInstance" parent="CalculationRoot/CalculationGimbal"]
-transform = Transform( 0.1, -5.58794e-09, 1.49012e-08, 7.45058e-09, 0.05, 0, 3.72529e-09, 3.72529e-09, 0.4, 0, 0, -0.25 )
-mesh = SubResource( 2 )
+[node name="DirectionDebug" type="MeshInstance3D" parent="CalculationRoot/CalculationGimbal"]
+transform = Transform3D(0.2, -7.45058e-09, -1.49012e-08, 1.49012e-08, 0.1, -2.98023e-08, 7.45058e-09, 7.45058e-09, 0.4, 0, 0, -0.25)
+mesh = SubResource("BoxMesh_spaeu")
 skeleton = NodePath("../..")
-material/0 = SubResource( 3 )
 
-[node name="MeshInstance" type="MeshInstance" parent="CalculationRoot"]
-transform = Transform( -6.25849e-07, -7.45058e-09, -0.2, 0, 0.2, -7.45058e-09, 0.2, 3.72529e-09, -6.33299e-07, 0, 0, 0 )
-mesh = SubResource( 1 )
-material/0 = SubResource( 4 )
+[node name="TiltDebug" type="MeshInstance3D" parent="CalculationRoot"]
+transform = Transform3D(-8.74228e-09, -0.2, 0, 0.2, -8.74228e-09, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("1")
 
-[node name="CameraRoot" type="Spatial" parent="."]
+[node name="CameraRoot" type="Node3D" parent="."]
 
-[node name="CameraGimbal" type="Spatial" parent="CameraRoot"]
+[node name="CameraGimbal" type="Node3D" parent="CameraRoot"]
 
-[node name="Camera" type="Camera" parent="CameraRoot/CameraGimbal"]
+[node name="Camera3D" type="Camera3D" parent="CameraRoot/CameraGimbal"]
 cull_mask = 524287
 current = true
 fov = 60.0
@@ -81,10 +91,11 @@ near = 0.01
 far = 8000.0
 
 [node name="Crossfade" type="TextureRect" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-margin_right = 1920.0
-margin_bottom = 1080.0
+modulate = Color(1, 1, 1, 0)
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Crossfade"]
-anims/RESET = SubResource( 6 )
-anims/activate = SubResource( 5 )
+libraries = {
+"": SubResource("AnimationLibrary_mih1k")
+}

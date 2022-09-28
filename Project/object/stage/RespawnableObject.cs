@@ -5,13 +5,13 @@ namespace Project.Gameplay
 	/// <summary>
 	/// Parent class of all respawnable objects
 	/// </summary>
-	public abstract class RespawnableObject : Spatial
+	public abstract partial class RespawnableObject : Node3D
 	{
 		private struct SpawnData
 		{
 			public Node parentNode;
-			public Transform spawnTransform;
-			public void UpdateSpawnData(Spatial s)
+			public Transform3D spawnTransform;
+			public void UpdateSpawnData(Node3D s)
 			{
 				if (!s.IsInsideTree()) return;
 
@@ -23,16 +23,16 @@ namespace Project.Gameplay
 		protected virtual bool IsRespawnable() => false; //Set to True for enemies
 
 		[Signal]
-		public delegate void Respawned();
+		public delegate void RespawnedEventHandler();
 		[Signal]
-		public delegate void Despawned();
+		public delegate void DespawnedEventHandler();
 		protected CharacterController Character => CharacterController.instance;
 
 		public override void _Ready() => SetUp();
 
 		protected virtual void SetUp()
 		{
-			StageSettings.instance.Connect(nameof(StageSettings.StageUnload), this, nameof(Unload));
+			StageSettings.instance.Connect(StageSettings.SignalName.StageUnload, new Callable(this, nameof(Unload)));
 
 			if (!IsRespawnable()) return;
 
@@ -47,7 +47,7 @@ namespace Project.Gameplay
 				spawnData.parentNode.AddChild(this);
 
 			Transform = spawnData.spawnTransform;
-			EmitSignal(nameof(Respawned));
+			EmitSignal(SignalName.Respawned);
 		}
 
 		public virtual void Despawn()
@@ -55,7 +55,7 @@ namespace Project.Gameplay
 			if (!IsInsideTree()) return;
 
 			GetParent().CallDeferred("remove_child", this);
-			EmitSignal(nameof(Despawned));
+			EmitSignal(SignalName.Despawned);
 		}
 	}
 }

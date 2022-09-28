@@ -7,7 +7,7 @@ namespace Project.Interface.Menu
 	/// <summary>
 	/// Base class for all menus.
 	/// </summary>
-	public class Menu : Control
+	public partial class Menu : Control
 	{
 		public static Dictionary<string, int> memory = new Dictionary<string, int>(); //Use this for determining which menu is open/which option is selected
 
@@ -15,8 +15,8 @@ namespace Project.Interface.Menu
 		public NodePath parentMenu;
 		protected Menu _parentMenu;
 		[Export]
-		public Array<NodePath> submenus = new Array<NodePath>();
-		protected Array<Menu> _submenus = new Array<Menu>(); //Also ensure the order of submenus is correct in the inspector higherarchy
+		public Array<NodePath> submenus;
+		protected Array<Menu> _submenus = new Array<Menu>(); //Also ensure the order of submenus is correct in the inspector hierarchy
 
 		protected int SelectionHorizontal { get; set; }
 		protected int SelectionVertical { get; set; }
@@ -27,16 +27,19 @@ namespace Project.Interface.Menu
 
 		public override void _Ready()
 		{
-			if(parentMenu != null)
+			if (parentMenu != null)
 				_parentMenu = GetNode<Menu>(parentMenu);
 
-			for (int i = 0; i < submenus.Count; i++)
-				_submenus.Add(GetNode<Menu>(submenus[i]));
+			if (submenus != null)
+			{
+				for (int i = 0; i < submenus.Count; i++)
+					_submenus.Add(GetNode<Menu>(submenus[i]));
+			}
 
 			SetUp();
 		}
 
-		public override void _PhysicsProcess(float _)
+		public override void _PhysicsProcess(double _)
 		{
 			if (!isReadingInputs || TransitionManager.IsTransitionActive) return;
 			ProcessMenu();

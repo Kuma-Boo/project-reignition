@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorPlugin
 
 var plugin
@@ -6,7 +6,6 @@ var plugin
 func _enter_tree():
 	plugin = preload("res://addons/animated_texture_importer/importer.gd").new()
 	add_inspector_plugin(plugin)
-
 
 func _exit_tree():
 	remove_inspector_plugin(plugin)

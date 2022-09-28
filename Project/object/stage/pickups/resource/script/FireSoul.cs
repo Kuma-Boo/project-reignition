@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public class FireSoul : RespawnableObject
+	public partial class FireSoul : RespawnableObject
 	{
 		[Export]
 		public bool isCollected; //Determined by save data
@@ -14,7 +14,7 @@ namespace Project.Gameplay.Objects
 				Despawn();
 		}
 
-		private void OnEntered(Area _)
+		private void OnEntered(Area3D _)
 		{
 			//TODO Write save data
 			//ActiveCharacter.AddScore(1000);

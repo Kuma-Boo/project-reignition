@@ -9,29 +9,31 @@ using Project.Gameplay.Hazards;
 namespace Project.Editor
 {
 	[Tool]
-	public class Plugin : EditorPlugin
+	public partial class Plugin : EditorPlugin
 	{
 		public Plugin plugin;
 
 		private Node target;
-		private Camera editorCam;
+		private Camera3D editorCam;
 
-		public override bool Handles(Object obj)
+		public override bool _Handles(Variant var)
 		{
-			return obj is DriftTrigger || obj is JumpTrigger || obj is Launcher || obj is FlyingPot || obj is Catapult || obj is Majin || obj is SpikeBall;
+			return var.Obj is DriftTrigger || var.Obj is JumpTrigger || var.Obj is Launcher ||
+			var.Obj is FlyingPot || var.Obj is Catapult || var.Obj is Majin || var.Obj is SpikeBall;
 		}
-		public override void Edit(Object obj) => target = obj as Node;
 
-		public override bool ForwardSpatialGuiInput(Camera cam, InputEvent e)
+		public override void _Edit(Variant var) => target = (Node)var.Obj;
+
+		public override long _Forward3dGuiInput(Camera3D cam, InputEvent e)
 		{
 			editorCam = cam;
 			UpdateOverlays();
-			return base.ForwardSpatialGuiInput(cam, e);
+			return base._Forward3dGuiInput(cam, e);
 		}
 
 		private const int PREVIEW_RESOLUTION = 32;
 
-		public override void ForwardSpatialDrawOverViewport(Control overlay)
+		public override void _Forward3dDrawOverViewport(Control overlay)
 		{
 			if (editorCam == null) return;
 
@@ -40,7 +42,7 @@ namespace Project.Editor
 			else if (target is JumpTrigger)
 				DrawLaunchData(overlay, (target as JumpTrigger).GetLaunchData(), DEFAULT_DRAW_COLOR);
 			else if (target is Catapult)
-				DrawLaunchData(overlay, (target as Catapult).GetLaunchData(), DEFAULT_DRAW_COLOR.LinearInterpolate(Colors.Red, (target as Catapult).launchPower));
+				DrawLaunchData(overlay, (target as Catapult).GetLaunchData(), DEFAULT_DRAW_COLOR.Lerp(Colors.Red, (target as Catapult).launchPower));
 			else if (target is FlyingPot)
 				UpdatePot(overlay);
 			else if (target is DriftTrigger)
@@ -74,8 +76,8 @@ namespace Project.Editor
 			Array<Vector3> points = new Array<Vector3>();
 			FlyingPot pot = (target as FlyingPot);
 
-			Vector3 bottomRight = pot.GlobalTranslation + pot.Right() * pot.travelBounds.x;
-			Vector3 bottomLeft = pot.GlobalTranslation + pot.Left() * pot.travelBounds.x;
+			Vector3 bottomRight = pot.GlobalPosition + pot.Right() * pot.travelBounds.x;
+			Vector3 bottomLeft = pot.GlobalPosition + pot.Left() * pot.travelBounds.x;
 			points.Add(bottomRight);
 			points.Add(bottomRight + Vector3.Up * pot.travelBounds.y);
 			points.Add(bottomLeft + Vector3.Up * pot.travelBounds.y);
@@ -92,11 +94,11 @@ namespace Project.Editor
 
 		private void UpdateDriftCorner(Control overlay)
 		{
-			if (editorCam.IsPositionBehind((target as DriftTrigger).GlobalTranslation) ||
+			if (editorCam.IsPositionBehind((target as DriftTrigger).GlobalPosition) ||
 			editorCam.IsPositionBehind((target as DriftTrigger).MiddlePosition))
 				return;
 
-			Vector2 start = editorCam.UnprojectPosition((target as DriftTrigger).GlobalTranslation);
+			Vector2 start = editorCam.UnprojectPosition((target as DriftTrigger).GlobalPosition);
 			Vector2 middle = editorCam.UnprojectPosition((target as DriftTrigger).MiddlePosition);
 			overlay.DrawLine(start, middle, Colors.Blue, 1, true);
 
@@ -112,10 +114,10 @@ namespace Project.Editor
 
 			if (ball.movementType == SpikeBall.MovementType.Static) return; //Don't draw
 
-			if(ball.movementType == SpikeBall.MovementType.Linear)
+			if (ball.movementType == SpikeBall.MovementType.Linear)
 			{
-				Vector2 start = editorCam.UnprojectPosition(ball.GlobalTranslation);
-				Vector2 end = editorCam.UnprojectPosition(ball.GlobalTranslation + ball.Right() * ball.distance);
+				Vector2 start = editorCam.UnprojectPosition(ball.GlobalPosition);
+				Vector2 end = editorCam.UnprojectPosition(ball.GlobalPosition + ball.Right() * ball.distance);
 				overlay.DrawLine(start, end, Colors.Red);
 			}
 			else
@@ -124,7 +126,7 @@ namespace Project.Editor
 				for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 				{
 					float angle = Mathf.Tau * ((float)i / PREVIEW_RESOLUTION);
-					points.Add(ball.GlobalTranslation + ball.Forward().Rotated(ball.Up(), angle).Normalized() * ball.distance);
+					points.Add(ball.GlobalPosition + ball.Forward().Rotated(ball.Up(), angle).Normalized() * ball.distance);
 				}
 
 				Vector2 start = editorCam.UnprojectPosition(points[0]);
@@ -144,7 +146,7 @@ namespace Project.Editor
 			Majin t = target as Majin;
 			if (t.spawnOffset == Vector3.Zero) return;
 
-			Vector3 s = t.GlobalTranslation;
+			Vector3 s = t.GlobalPosition;
 			Vector3 e = s + t.spawnOffset;
 			if (editorCam.IsPositionBehind(s) ||
 			editorCam.IsPositionBehind(e))

@@ -1,10 +1,10 @@
-tool
+@tool
 extends EditorPlugin
 
 var dock;
 
 func _enter_tree():
-	dock = preload("res://addons/material_mapper/dock.tscn").instance()
+	dock = preload("res://addons/material_mapper/dock.tscn").instantiate()
 	add_control_to_dock(EditorPlugin.DOCK_SLOT_RIGHT_BL, dock)
 
 

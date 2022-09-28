@@ -3,7 +3,7 @@ using Godot;
 //Data for movement
 namespace Project.Gameplay.Bosses
 {
-	public class BossPatternResource : Resource
+	public partial class BossPatternResource : Resource
 	{
 		[Export]
 		public int damage = 0; //How much damage is needed to trigger this phase?

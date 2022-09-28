@@ -5,14 +5,17 @@ namespace Project.Gameplay.Triggers
 	/// <summary>
 	/// Activates a <see cref="CameraSettingsResource"/>.
 	/// </summary>
-	public class CameraTrigger : StageTriggerModule
+	public partial class CameraTrigger : StageTriggerModule
 	{
 		[Export]
-		public float entryTransitionSpeed; //How long the transition is
+		public float transitionTime; //How long the transition is
 		[Export]
-		public float exitTransitionSpeed = -1; //Set to -1 to use the same as the entry transition time
-		[Export]
-		public bool crossfade; //Only works properly if entryTransitionTime is 0
+		public TransitionType transitionType;
+		public enum TransitionType
+		{
+			Blend, //Interpolate between states; Use a transition time of 0 to perform an instant cut
+			Crossfade, //Crossfade scenes
+		}
 
 		[Export]
 		public CameraSettingsResource cameraData; //Must be assigned to something.
@@ -20,20 +23,23 @@ namespace Project.Gameplay.Triggers
 		public CameraSettingsResource previousData; //Leave empty to automatically assign.
 		[Export]
 		public CameraTrigger blendTrigger; //Used for blending camera triggers together.
-		private CameraController Camera => Character.Camera;
+		private CameraController CameraController => Character.Camera;
 
 		public override void Activate()
 		{
-			if (previousData == null) //Cache settings on the first time
-				previousData = Camera.targetSettings;
+			if (cameraData != null && cameraData.isStaticCamera && cameraData.autosetStaticPosition)
+				cameraData.staticPosition = GlobalPosition;
 
-			Camera.SetCameraData(cameraData, entryTransitionSpeed, crossfade);
+			if (previousData == null) //Cache settings on the first time
+				previousData = CameraController.targetSettings;
+
+			CameraController.SetCameraData(cameraData, transitionTime, transitionType == TransitionType.Crossfade);
 		}
 
 		public override void Deactivate()
 		{
-			if (Camera.targetSettings != cameraData) return; //Already overriden by a different trigger
-			Camera.SetCameraData(previousData, exitTransitionSpeed >= 0 ? exitTransitionSpeed : entryTransitionSpeed);
+			if (CameraController.targetSettings != cameraData) return; //Already overriden by a different trigger
+			CameraController.SetCameraData(previousData, transitionTime);
 		}
 	}
 }

@@ -7,9 +7,9 @@
 [ext_resource path="res://area/stage/7 night palace/boss/data/script/ErazorChain.cs" type="Script" id=5]
 [ext_resource path="res://area/stage/7 night palace/boss/data/boss/camera/StandardCamera.tres" type="Resource" id=6]
 [ext_resource path="res://area/stage/7 night palace/boss/data/boss/camera/DuelCamera.tres" type="Resource" id=7]
-[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/teleport dust.png" type="Texture" id=8]
-[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/sword attack.png" type="Texture" id=9]
-[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/sword smoke.png" type="Texture" id=10]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/teleport dust.png" type="Texture2D" id=8]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/sword attack.png" type="Texture2D" id=9]
+[ext_resource path="res://area/stage/7 night palace/boss/data/boss/effect/sword smoke.png" type="Texture2D" id=10]
 [ext_resource path="res://area/stage/7 night palace/boss/data/boss/attack/ErazorPattern1.tres" type="Resource" id=11]
 [ext_resource path="res://area/stage/7 night palace/boss/data/boss/attack/ErazorPattern3.tres" type="Resource" id=12]
 [ext_resource path="res://area/stage/7 night palace/boss/data/boss/attack/ErazorPattern2.tres" type="Resource" id=13]
@@ -27,14 +27,14 @@
 [ext_resource path="res://sound/voice/night palace/sonic/ja/BOS04_E01_SN.wav" type="AudioStream" id=25]
 [ext_resource path="res://sound/voice/night palace/sonic/en/BOS04_E01_SN.wav" type="AudioStream" id=26]
 
-[sub_resource type="SphereShape" id=2]
+[sub_resource type="SphereShape3D" id=2]
 radius = 0.7
 
 [sub_resource type="Gradient" id=31]
-offsets = PoolRealArray( 0, 0.866953, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+offsets = PackedFloat32Array( 0, 0.866953, 1 )
+colors = PackedColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
 
-[sub_resource type="GradientTexture" id=32]
+[sub_resource type="GradientTexture2D" id=32]
 gradient = SubResource( 31 )
 
 [sub_resource type="Curve" id=33]
@@ -44,14 +44,14 @@ _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 5 ), 10.3306, 0.0, 0, 0 ]
 [sub_resource type="CurveTexture" id=34]
 curve = SubResource( 33 )
 
-[sub_resource type="ParticlesMaterial" id=35]
+[sub_resource type="ParticleProcessMaterial" id=35]
 emission_shape = 1
 emission_sphere_radius = 1.0
 gravity = Vector3( 0, 0, 0 )
 scale_curve = SubResource( 34 )
 color_ramp = SubResource( 32 )
 
-[sub_resource type="SpatialMaterial" id=36]
+[sub_resource type="StandardMaterial3D" id=36]
 flags_transparent = true
 vertex_color_use_as_albedo = true
 params_specular_mode = 4
@@ -68,7 +68,7 @@ metallic_specular = 0.0
 material = SubResource( 36 )
 size = Vector2( 1, 10 )
 
-[sub_resource type="ParticlesMaterial" id=38]
+[sub_resource type="ParticleProcessMaterial" id=38]
 emission_shape = 2
 emission_box_extents = Vector3( 1, 0, 1 )
 gravity = Vector3( 0, 0, 0 )
@@ -77,7 +77,7 @@ scale_curve = SubResource( 34 )
 color = Color( 0.968627, 0.545098, 0.556863, 1 )
 color_ramp = SubResource( 32 )
 
-[sub_resource type="SpatialMaterial" id=39]
+[sub_resource type="StandardMaterial3D" id=39]
 flags_transparent = true
 vertex_color_use_as_albedo = true
 params_specular_mode = 4
@@ -93,14 +93,14 @@ metallic_specular = 0.0
 [sub_resource type="QuadMesh" id=40]
 material = SubResource( 39 )
 
-[sub_resource type="ParticlesMaterial" id=28]
+[sub_resource type="ParticleProcessMaterial" id=28]
 emission_shape = 1
 emission_sphere_radius = 1.0
 gravity = Vector3( 0, 0, 0 )
 scale_curve = SubResource( 34 )
 color_ramp = SubResource( 32 )
 
-[sub_resource type="SpatialMaterial" id=29]
+[sub_resource type="StandardMaterial3D" id=29]
 flags_transparent = true
 vertex_color_use_as_albedo = true
 params_specular_mode = 4
@@ -294,8 +294,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0 ),
+"transitions": PackedFloat32Array( 1 ),
 "update": 0,
 "values": [ Color( 0, 0, 0, 0 ) ]
 }
@@ -310,16 +310,16 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 0.5, 1 ),
+"times": PackedFloat32Array( 0, 0.2 ),
+"transitions": PackedFloat32Array( 0.5, 1 ),
 "update": 0,
 "values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
 }
 
-[node name="Erazor" type="Spatial"]
+[node name="Erazor" type="Node3D"]
 script = ExtResource( 1 )
 health = 24
-lockonTarget = NodePath("Erazor/Erazor/Skeleton/Head/Lockon")
+lockonTarget = NodePath("Erazor/Erazor/Skeleton3D/Head/Lockon")
 patterns = [ ExtResource( 11 ), ExtResource( 13 ), ExtResource( 12 ) ]
 animationTree = NodePath("AnimationTree")
 duelAnimator = NodePath("DuelTransition/AnimationPlayer")
@@ -329,26 +329,26 @@ duelCamera = ExtResource( 7 )
 
 [node name="Erazor" parent="." instance=ExtResource( 2 )]
 
-[node name="Head" type="BoneAttachment" parent="Erazor/Erazor/Skeleton" index="0"]
-transform = Transform( 0.982613, -0.184452, 0.0211893, 0.179107, 0.971776, 0.153532, -0.0489107, -0.147068, 0.987916, -0.135312, 8.18875, 0.121015 )
+[node name="Head" type="BoneAttachment3D" parent="Erazor/Erazor/Skeleton3D" index="0"]
+transform = Transform3D( 0.982613, -0.184452, 0.0211893, 0.179107, 0.971776, 0.153532, -0.0489107, -0.147068, 0.987916, -0.135312, 8.18875, 0.121015 )
 bone_name = "head"
 
-[node name="Lockon" type="Area" parent="Erazor/Erazor/Skeleton/Head"]
-transform = Transform( 1, 6.40284e-10, 0, 2.18279e-10, 1, 7.45058e-09, -9.31323e-10, -1.11759e-08, 1, 0.00241192, 0.199739, -0.00992453 )
+[node name="Lockon" type="Area3D" parent="Erazor/Erazor/Skeleton3D/Head"]
+transform = Transform3D( 1, 6.40284e-10, 0, 2.18279e-10, 1, 7.45058e-09, -9.31323e-10, -1.11759e-08, 1, 0.00241192, 0.199739, -0.00992453 )
 collision_layer = 4
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape" type="CollisionShape" parent="Erazor/Erazor/Skeleton/Head/Lockon"]
-transform = Transform( 1, 6.69388e-10, 4.65661e-10, 2.91038e-10, 1, 0, -4.65661e-10, -3.72529e-09, 1, 0, 0, 0 )
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Erazor/Erazor/Skeleton3D/Head/Lockon"]
+transform = Transform3D( 1, 6.69388e-10, 4.65661e-10, 2.91038e-10, 1, 0, -4.65661e-10, -3.72529e-09, 1, 0, 0, 0 )
 shape = SubResource( 2 )
 disabled = true
 
-[node name="Sword" type="BoneAttachment" parent="Erazor/Erazor/Skeleton" index="1"]
-transform = Transform( 0.950719, -0.290957, 0.107132, -0.142544, -0.71701, -0.682333, 0.275344, 0.633436, -0.723149, 2.80472, 5.91416, -1.73329 )
+[node name="Sword" type="BoneAttachment3D" parent="Erazor/Erazor/Skeleton3D" index="1"]
+transform = Transform3D( 0.950719, -0.290957, 0.107132, -0.142544, -0.71701, -0.682333, 0.275344, 0.633436, -0.723149, 2.80472, 5.91416, -1.73329 )
 bone_name = "edge"
 
-[node name="SwordAttack" type="Particles" parent="Erazor/Erazor/Skeleton/Sword"]
+[node name="SwordAttack" type="GPUParticles3D" parent="Erazor/Erazor/Skeleton3D/Sword"]
 cast_shadow = 0
 emitting = false
 amount = 24
@@ -358,8 +358,8 @@ local_coords = false
 process_material = SubResource( 35 )
 draw_pass_1 = SubResource( 37 )
 
-[node name="SwordSmoke" type="Particles" parent="Erazor/Erazor/Skeleton/Sword"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.374366, 0.383564, 1.78214 )
+[node name="SwordSmoke" type="GPUParticles3D" parent="Erazor/Erazor/Skeleton3D/Sword"]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.374366, 0.383564, 1.78214 )
 cast_shadow = 0
 emitting = false
 amount = 30
@@ -368,100 +368,100 @@ local_coords = false
 process_material = SubResource( 38 )
 draw_pass_1 = SubResource( 40 )
 
-[node name="Chain" type="BoneAttachment" parent="Erazor/Erazor/Skeleton" index="2"]
-transform = Transform( 0.290957, 0.950719, 0.10713, 0.71701, -0.142545, -0.682332, -0.633436, 0.275343, -0.723149, 3.1666, 8.27793, 0.661389 )
+[node name="Chain" type="BoneAttachment3D" parent="Erazor/Erazor/Skeleton3D" index="2"]
+transform = Transform3D( 0.290957, 0.950719, 0.10713, 0.71701, -0.142545, -0.682332, -0.633436, 0.275343, -0.723149, 3.1666, 8.27793, 0.661389 )
 bone_name = "chain"
 
-[node name="Controller" type="Spatial" parent="Erazor/Erazor/Skeleton/Chain"]
-transform = Transform( 1, -4.86616e-07, 2.12707e-14, 0, -4.37114e-08, -1, 4.86616e-07, 1, -4.37114e-08, 9.53674e-07, -0.0714303, 0.0508623 )
+[node name="Controller" type="Node3D" parent="Erazor/Erazor/Skeleton3D/Chain"]
+transform = Transform3D( 1, -4.86616e-07, 2.12707e-14, 0, -4.37114e-08, -1, 4.86616e-07, 1, -4.37114e-08, 9.53674e-07, -0.0714303, 0.0508623 )
 script = ExtResource( 5 )
 parent = NodePath("")
 child = NodePath("../../ChainPieces/Chain1")
 gravity = 9.81
 
-[node name="ChainPieces" type="Spatial" parent="Erazor/Erazor/Skeleton" index="3"]
+[node name="ChainPieces" type="Node3D" parent="Erazor/Erazor/Skeleton3D" index="3"]
 
-[node name="Chain1" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.95072, -0.136919, -0.278184, -0.142545, -0.989788, 9.37291e-10, 0.275343, -0.0396538, 0.960528, 3.10414, 8.2224, 0.604939 )
+[node name="Chain1" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.95072, -0.136919, -0.278184, -0.142545, -0.989788, 9.37291e-10, 0.275343, -0.0396538, 0.960528, 3.10414, 8.2224, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../../Chain/Controller")
 child = NodePath("../Chain2")
 chainSize = 0.031
 
-[node name="Chain2" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 8.0724, 0.604939 )
+[node name="Chain2" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 8.0724, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain1")
 child = NodePath("../Chain3")
 chainSize = 0.15
 
-[node name="Chain3" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.9224, 0.604939 )
+[node name="Chain3" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.9224, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain2")
 child = NodePath("../Chain4")
 chainSize = 0.15
 
-[node name="Chain4" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.7724, 0.604939 )
+[node name="Chain4" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.7724, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain3")
 child = NodePath("../Chain5")
 chainSize = 0.15
 
-[node name="Chain5" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.6224, 0.604939 )
+[node name="Chain5" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.6224, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain4")
 child = NodePath("../Chain6")
 chainSize = 0.15
 
-[node name="Chain6" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.4724, 0.604939 )
+[node name="Chain6" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.4724, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain5")
 child = NodePath("../Chain7")
 chainSize = 0.15
 
-[node name="Chain7" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.3224, 0.604939 )
+[node name="Chain7" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.3224, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain6")
 child = NodePath("../Chain8")
 chainSize = 0.15
 
-[node name="Chain8" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.1724, 0.604939 )
+[node name="Chain8" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 7.1724, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain7")
 child = NodePath("../Chain9")
 chainSize = 0.15
 
-[node name="Chain9" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.0224, 0.604939 )
+[node name="Chain9" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 7.0224, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain8")
 child = NodePath("../Chain10")
 chainSize = 0.15
 
-[node name="Chain10" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 3 )]
-transform = Transform( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 6.8724, 0.604939 )
+[node name="Chain10" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 3 )]
+transform = Transform3D( 0.278184, 2.43196e-08, -0.960528, 8.74228e-08, -1, 0, -0.960528, -8.3972e-08, -0.278184, 3.10414, 6.8724, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain9")
 child = NodePath("../ChainEnd")
 chainSize = 0.15
 
-[node name="ChainEnd" parent="Erazor/Erazor/Skeleton/ChainPieces" instance=ExtResource( 4 )]
-transform = Transform( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 6.7724, 0.604939 )
+[node name="ChainEnd" parent="Erazor/Erazor/Skeleton3D/ChainPieces" instance=ExtResource( 4 )]
+transform = Transform3D( 0.960528, 0, -0.278184, 0, -1, 0, 0.278184, 0, 0.960528, 3.10414, 6.7724, 0.604939 )
 script = ExtResource( 5 )
 parent = NodePath("../Chain10")
 child = NodePath("")
 chainSize = 0.1
 
-[node name="Particles" type="Spatial" parent="."]
+[node name="GPUParticles3D" type="Node3D" parent="."]
 
-[node name="Smoke" type="Particles" parent="Particles"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
+[node name="Smoke" type="GPUParticles3D" parent="GPUParticles3D"]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
 cast_shadow = 0
 emitting = false
 amount = 5
@@ -470,18 +470,18 @@ local_coords = false
 process_material = SubResource( 28 )
 draw_pass_1 = SubResource( 30 )
 
-[node name="Data" type="Spatial" parent="."]
+[node name="Data" type="Node3D" parent="."]
 
-[node name="Intro" type="Spatial" parent="Data"]
+[node name="Intro" type="Node3D" parent="Data"]
 script = ExtResource( 18 )
 delays = [ 0.0, 0.0 ]
 textKeys = [ "nig_boss_intro_so", "nig_boss_intro_er" ]
 englishVoiceClips = [ ExtResource( 21 ), ExtResource( 19 ) ]
 japaneseVoiceClips = [ ExtResource( 22 ), ExtResource( 20 ) ]
 
-[node name="DuelVoices" type="Spatial" parent="Data"]
+[node name="DuelVoices" type="Node3D" parent="Data"]
 
-[node name="Erazor" type="Spatial" parent="Data/DuelVoices"]
+[node name="Erazor" type="Node3D" parent="Data/DuelVoices"]
 script = ExtResource( 18 )
 delays = [  ]
 displayLength = [ 4.0 ]
@@ -489,7 +489,7 @@ textKeys = [ "nig_boss_duel_er" ]
 englishVoiceClips = [ ExtResource( 15 ) ]
 japaneseVoiceClips = [ ExtResource( 16 ) ]
 
-[node name="ErazorAlt" type="Spatial" parent="Data/DuelVoices"]
+[node name="ErazorAlt" type="Node3D" parent="Data/DuelVoices"]
 script = ExtResource( 18 )
 delays = [  ]
 displayLength = [ 4.0 ]
@@ -497,7 +497,7 @@ textKeys = [ "nig_boss_duel_alt_er" ]
 englishVoiceClips = [ ExtResource( 17 ) ]
 japaneseVoiceClips = [ ExtResource( 14 ) ]
 
-[node name="ShahraHint" type="Spatial" parent="Data/DuelVoices"]
+[node name="ShahraHint" type="Node3D" parent="Data/DuelVoices"]
 script = ExtResource( 18 )
 delays = [  ]
 displayLength = [  ]
@@ -505,7 +505,7 @@ textKeys = [ "nig_boss_duel_sh" ]
 englishVoiceClips = [ ExtResource( 24 ) ]
 japaneseVoiceClips = [ ExtResource( 23 ) ]
 
-[node name="Sonic" type="Spatial" parent="Data/DuelVoices"]
+[node name="Sonic" type="Node3D" parent="Data/DuelVoices"]
 script = ExtResource( 18 )
 delays = [ 0.0 ]
 displayLength = [  ]
@@ -513,7 +513,7 @@ textKeys = [ "nig_boss_duel_so" ]
 englishVoiceClips = [ ExtResource( 26 ) ]
 japaneseVoiceClips = [ ExtResource( 25 ) ]
 
-[node name="Hint1" type="Spatial" parent="Data/DuelVoices"]
+[node name="Hint1" type="Node3D" parent="Data/DuelVoices"]
 script = ExtResource( 18 )
 delays = [  ]
 displayLength = [ 2.0 ]
@@ -521,7 +521,7 @@ textKeys = [ "nig_boss_duel_hint1" ]
 englishVoiceClips = [  ]
 japaneseVoiceClips = [  ]
 
-[node name="Hint2" type="Spatial" parent="Data/DuelVoices"]
+[node name="Hint2" type="Node3D" parent="Data/DuelVoices"]
 script = ExtResource( 18 )
 delays = [  ]
 displayLength = [ 2.0 ]
@@ -541,8 +541,8 @@ parameters/Teleporting/current = 0
 parameters/WindupType/current = 0
 
 [node name="DuelTransition" type="ColorRect" parent="."]
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 color = Color( 0, 0, 0, 0 )
 __meta__ = {
 "_edit_lock_": true

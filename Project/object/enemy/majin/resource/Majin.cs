@@ -6,7 +6,7 @@ namespace Project.Gameplay
 	/// Most common enemy type in Secret Rings.
 	/// </summary>
 	[Tool]
-	public class Majin : Enemy
+	public partial class Majin : Enemy
 	{
 		[Export]
 		public NodePath animationTree;
@@ -32,11 +32,11 @@ namespace Project.Gameplay
 
 		protected override void SetUp()
 		{
-			if (Engine.EditorHint) return; //In Editor
+			if (Engine.IsEditorHint()) return; //In Editor
 
 			base.SetUp();
 
-			targetPosition = GlobalTranslation;
+			targetPosition = GlobalPosition;
 			StageSettings.instance.RegisterRespawnableObject(this);
 
 			_animationTree = GetNode<AnimationTree>(animationTree);
@@ -63,9 +63,9 @@ namespace Project.Gameplay
 			if (!launchDirection.IsEqualApprox(Vector3.Zero))
 			{
 				//Get knocked back
-				SceneTreeTween tween = CreateTween().SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
-				tween.TweenProperty(this, "global_transform:origin", GlobalTranslation + launchDirection, .5f);
-				tween.TweenCallback(this, nameof(Despawn)).SetDelay(.5f);
+				Tween tween = CreateTween().SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
+				tween.TweenProperty(this, "global_transform:origin", GlobalPosition + launchDirection, .5f);
+				tween.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(.5f);
 			}
 			else
 				Despawn();
@@ -78,7 +78,7 @@ namespace Project.Gameplay
 
 		private void Activate()
 		{
-			if(!spawnInstantly)
+			if (!spawnInstantly)
 			{
 				if (spawnOffset.IsEqualApprox(Vector3.Zero)) //Spawn in
 				{
@@ -99,6 +99,6 @@ namespace Project.Gameplay
 		}
 
 		//Overload activation method for using godot's built-in area trigger
-		private void Activate(Area _) => Activate();
+		private void Activate(Area3D _) => Activate();
 	}
 }

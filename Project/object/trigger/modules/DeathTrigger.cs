@@ -5,7 +5,7 @@ namespace Project.Gameplay.Triggers
 	/// <summary>
 	/// Instantly kills the player.
 	/// </summary>
-	public class DeathTrigger : StageTriggerModule
+	public partial class DeathTrigger : StageTriggerModule
 	{
 		[Export]
 		public TriggerType triggerType;

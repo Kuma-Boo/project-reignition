@@ -1,18 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://ct1tmuno23lj2"]
 
-[ext_resource path="res://video/EventPlayer.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://video/EventPlayer.cs" id="1"]
 
 [node name="Event" type="CanvasLayer"]
-script = ExtResource( 1 )
+script = ExtResource("1")
 videoPlayer = NodePath("Video")
 audioPlayer = NodePath("Audio")
 
-[node name="Video" type="VideoPlayer" parent="."]
-margin_right = 1920.0
-margin_bottom = 1080.0
+[node name="Video" type="VideoStreamPlayer" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+expand = true
 
 [node name="Audio" type="AudioStreamPlayer" parent="."]
 autoplay = true
-bus = "CUTSCENE"
+bus = &"CUTSCENE"
 
 [connection signal="finished" from="Video" to="." method="OnEventFinished"]

@@ -4,7 +4,7 @@ using Godot;
 namespace Project.Editor
 {
 	[Tool]
-	public class ObjectGenerator : Spatial
+	public partial class ObjectGenerator : Node3D
 	{
 		[Export]
 		public PackedScene targetScene;
@@ -21,9 +21,9 @@ namespace Project.Editor
 		{
 			RingVertical, //Spawns around a ring
 			RingFlat, //Spawns around a ring
- 			Line, //Spawn linearly
+			Line, //Spawn linearly
 			LineUp, //Spawn Upwards
-			Path //Spawn linearly along a path
+			Path3D //Spawn linearly along a path
 		}
 
 		[Export(PropertyHint.Range, "0, 12")]
@@ -37,9 +37,9 @@ namespace Project.Editor
 		[Export]
 		public Curve pathVInterpolationCurve;
 
-		public override void _Process(float _)
+		public override void _Process(double _)
 		{
-			if (!Engine.EditorHint) return;
+			if (!Engine.IsEditorHint()) return;
 
 			if (generate)
 			{
@@ -77,46 +77,46 @@ namespace Project.Editor
 					case GenerationType.Line:
 						for (int i = 0; i < amount; i++)
 						{
-							Vector3 offset = new Vector3(pathHInterpolationCurve.Interpolate((float)i / (amount - 1)), pathVInterpolationCurve.Interpolate((float)i / (amount - 1)), 0);
+							Vector3 offset = new Vector3(pathHInterpolationCurve.Sample((float)i / (amount - 1)), pathVInterpolationCurve.Sample((float)i / (amount - 1)), 0);
 							Spawn(Vector3.Forward * i * spacing + offset);
 						}
 						break;
 					case GenerationType.LineUp:
 						for (int i = 0; i < amount; i++)
 						{
-							Vector3 offset = new Vector3(pathHInterpolationCurve.Interpolate((float)i / (amount - 1)), pathVInterpolationCurve.Interpolate((float)i / (amount - 1)), 0);
+							Vector3 offset = new Vector3(pathHInterpolationCurve.Sample((float)i / (amount - 1)), pathVInterpolationCurve.Sample((float)i / (amount - 1)), 0);
 							Spawn(Vector3.Forward * i * spacing + offset);
 						}
 						break;
-					case GenerationType.Path:
-						if (path.IsEmpty())
+					case GenerationType.Path3D:
+						if (path.IsEmpty)
 						{
-							GD.PrintErr("No Path Provided.");
+							GD.PrintErr("No Path3D Provided.");
 							break;
 						}
 
-						Path _path = GetNode<Path>(path);
-						PathFollow _follow = new PathFollow
+						Path3D _path = GetNode<Path3D>(path);
+						PathFollow3D _follow = new PathFollow3D
 						{
-							RotationMode = PathFollow.RotationModeEnum.Oriented
+							RotationMode = PathFollow3D.RotationModeEnum.Oriented
 						};
 						_path.AddChild(_follow);
-						_follow.Offset = _path.Curve.GetClosestOffset(GlobalTranslation - _path.GlobalTranslation);
+						_follow.Progress = _path.Curve.GetClosestOffset(GlobalPosition - _path.GlobalPosition);
 
 						for (int i = 0; i < amount; i++)
 						{
 							if (pathHInterpolationCurve != null)
-								_follow.HOffset = pathHInterpolationCurve.Interpolate((float)i / (amount - 1));
+								_follow.HOffset = pathHInterpolationCurve.Sample((float)i / (amount - 1));
 							else
-								_follow.HOffset = _follow.GlobalTransform.basis.XformInv(GlobalTranslation - _follow.GlobalTranslation).x;
+								_follow.HOffset = (_follow.GlobalTransform.basis * (_follow.GlobalPosition - GlobalPosition)).x; //XFormInv
 
 							if (pathVInterpolationCurve != null)
-								_follow.VOffset = pathVInterpolationCurve.Interpolate((float)i / (amount - 1));
+								_follow.VOffset = pathVInterpolationCurve.Sample((float)i / (amount - 1));
 							else
-								_follow.VOffset = _follow.GlobalTransform.basis.XformInv(GlobalTranslation - _follow.GlobalTranslation).y;
+								_follow.VOffset = (_follow.GlobalTransform.basis * (_follow.GlobalPosition - GlobalPosition)).y; //XFormInv
 
-							Spawn(_follow.GlobalTranslation, true);
-							_follow.Offset += spacing;
+							Spawn(_follow.GlobalPosition, true);
+							_follow.Progress += spacing;
 							_follow.HOffset = _follow.VOffset = 0f;
 						}
 
@@ -128,22 +128,14 @@ namespace Project.Editor
 
 		private void Spawn(Vector3 pos, bool globalPosition = default)
 		{
-			Spatial obj = targetScene.Instance() as Spatial;
+			Node3D obj = targetScene.Instantiate<Node3D>();
 			AddChild(obj);
 			obj.Owner = GetTree().EditedSceneRoot;
 
 			if (globalPosition)
-			{
-				Transform t = obj.GlobalTransform;
-				t.origin = pos;
-				obj.GlobalTransform = t;
-			}
+				GlobalPosition = pos;
 			else
-			{
-				Transform t = obj.Transform;
-				t.origin = pos;
-				obj.Transform = t;
-			}
+				obj.Position = pos;
 		}
 	}
 }

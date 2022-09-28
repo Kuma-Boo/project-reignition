@@ -6,46 +6,51 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
 [application]
 
 config/name="Sonic Remake Project"
 run/main_scene="res://interface/menu/Menu.tscn"
+config/features=PackedStringArray("4.0", "C#")
 boot_splash/show_image=false
-boot_splash/bg_color=Color( 0, 0, 0, 1 )
+boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="res://interface/boot/Icon.png"
 
 [audio]
 
+buses/default_bus_layout="res://sound/AudioLayout.tres"
 default_bus_layout="res://sound/AudioLayout.tres"
 
 [autoload]
 
-Debug="res://core/Debug.cs"
-InputManager="res://core/InputManager.cs"
-SaveManager="res://core/SaveManager.cs"
-PhysicsManager="res://core/PhysicsManager.cs"
+Core="res://core/Core.tscn"
 TransitionManager="res://interface/transition/TransitionManager.tscn"
 SoundManager="res://sound/SoundManager.tscn"
 ReflectMaterialManager="*res://addons/Silicon.vfx.planar_reflection/reflect_material_manager.gd"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
-window/size/test_width=800
-window/size/test_height=450
-window/vsync/use_vsync=false
-window/stretch/mode="2d"
-window/stretch/aspect="keep"
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/resizable=false
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/vsync/vsync_mode=0
+window/stretch/mode="viewport"
+
+[dotnet]
+
+project/assembly_name="Sonic Remake Project"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/BitmapFontCutterPlus/plugin.cfg", "res://addons/Silicon.vfx.planar_reflection/plugin.cfg", "res://addons/StageObjectEditor/plugin.cfg", "res://addons/animated_texture_importer/plugin.cfg", "res://addons/object_generator/plugin.cfg" )
+enabled=PackedStringArray("res://addons/Silicon.vfx.planar_reflection/plugin.cfg", "res://addons/animated_texture_importer/plugin.cfg")
 
 [filesystem]
 
+import/blender/enabled=false
+import/fbx/enabled=false
 import/blend/blender_path="C:\\Program Files\\Blender Foundation\\Blender 3.1\\blender.exe"
 
 [global]
@@ -1109,6 +1114,15 @@ scene={
 "skins/use_named_skins": true
 }
 
+[internationalization]
+
+locale/translation_remaps={
+"res://interface/menu/title/sprite/logos/logo en.png": PackedStringArray("res://interface/menu/title/sprite/logos/logo de.png:de", "res://interface/menu/title/sprite/logos/logo es.png:es", "res://interface/menu/title/sprite/logos/logo it.png:it", "res://interface/menu/title/sprite/logos/logo ja.png:ja")
+}
+locale/translations=PackedStringArray("res://locale/Locale.de.translation", "res://locale/Locale.en.translation", "res://locale/Locale.en_US.translation", "res://locale/Locale.es.translation", "res://locale/Locale.fr.translation", "res://locale/Locale.it.translation", "res://locale/Locale.ja.translation")
+locale/locale_filter_mode=1
+locale/language_filter=["de", "en", "es", "fr", "it", "ja"]
+
 [layer_names]
 
 3d_render/layer_1="ExteriorEnvironment"
@@ -1125,11 +1139,11 @@ scene={
 [locale]
 
 test="en"
-locale_filter=[ 1, [ "de", "en", "en_US", "es", "fr", "it", "ja" ] ]
-translations=PoolStringArray( "res://locale/Locale.en.translation", "res://locale/Locale.ja.translation", "res://locale/Locale.en_US.translation" )
+locale_filter=[1, ["de", "en", "en_US", "es", "fr", "it", "ja"]]
+translations=PackedStringArray("res://locale/Locale.en.translation", "res://locale/Locale.ja.translation", "res://locale/Locale.en_US.translation")
 translation_remaps={
-"res://interface/gameplay/results/text/results en.png": PoolStringArray( "res://interface/gameplay/results/text/results es.png:es", "res://interface/gameplay/results/text/results fr.png:fr", "res://interface/gameplay/results/text/results it.png:it", "res://interface/gameplay/results/text/results de.png:de", "res://interface/gameplay/results/text/results ja.png:ja" ),
-"res://interface/main menu/logos/logo en.png": PoolStringArray( "res://interface/main menu/logos/logo de.png:de", "res://interface/main menu/logos/logo es.png:es", "res://interface/main menu/logos/logo ja.png:ja", "res://interface/main menu/logos/logo it.png:it" )
+"res://interface/gameplay/results/text/results en.png": PackedStringArray("res://interface/gameplay/results/text/results es.png:es", "res://interface/gameplay/results/text/results fr.png:fr", "res://interface/gameplay/results/text/results it.png:it", "res://interface/gameplay/results/text/results de.png:de", "res://interface/gameplay/results/text/results ja.png:ja"),
+"res://interface/main menu/logos/logo en.png": PackedStringArray("res://interface/main menu/logos/logo de.png:de", "res://interface/main menu/logos/logo es.png:es", "res://interface/main menu/logos/logo ja.png:ja", "res://interface/main menu/logos/logo it.png:it")
 }
 
 [mono]
@@ -1138,14 +1152,16 @@ project/assembly_name="Sonic Remake Project"
 
 [physics]
 
-common/enable_pause_aware_picking=true
 3d/default_gravity=32.0
+common/enable_pause_aware_picking=true
 
 [rendering]
 
-quality/filters/sharpen_intensity=0.5
-quality/shadow_atlas/size=8192
-quality/filters/anisotropic_filter_level=2
-quality/reflections/atlas_subdiv=4
-quality/filters/use_fxaa=true
-environment/default_environment="res://area/default_env.tres"
+anti_aliasing/quality/screen_space_aa=1
+
+[shader_globals]
+
+time={
+"type": "float",
+"value": 0.0
+}

@@ -1,40 +1,38 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://fubliju0kgj"]
 
-[ext_resource path="res://sound/scripts/BGMPlayer.cs" type="Script" id=1]
-[ext_resource path="res://interface/menu/main/MainMenu.tscn" type="PackedScene" id=3]
-[ext_resource path="res://interface/menu/title/Title.tscn" type="PackedScene" id=5]
-[ext_resource path="res://sound/ost/bonus disc/SEVEN RINGS IN HAND CRUSH 40 VERSION INSTRUMENTAL.mp3" type="AudioStream" id=6]
+[ext_resource type="Script" path="res://sound/scripts/BGMPlayer.cs" id="1"]
+[ext_resource type="PackedScene" path="res://interface/menu/main/MainMenu.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://6uerwx5kahwl" path="res://interface/menu/title/Title.tscn" id="5"]
+[ext_resource type="AudioStream" uid="uid://bkhrdc0atop0w" path="res://sound/ost/bonus disc/SEVEN RINGS IN HAND CRUSH 40 VERSION INSTRUMENTAL.mp3" id="6"]
 
-[sub_resource type="Environment" id=14]
-background_mode = 4
+[sub_resource type="Environment" id="14"]
+background_canvas_max_layer = 1000
 glow_enabled = true
-glow_levels/1 = true
-glow_levels/5 = false
+glow_levels/1 = 1.0
+glow_levels/5 = 0.0
 glow_intensity = 0.2
 glow_hdr_threshold = 1.5
-glow_bicubic_upscale = true
-glow_high_quality = true
 
 [node name="Menu" type="Control"]
-margin_right = 1920.0
-margin_bottom = 1080.0
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
-[node name="MainMenu" parent="." instance=ExtResource( 3 )]
+[node name="MainMenu" parent="." instance=ExtResource("3")]
+layout_mode = 1
+anchors_preset = 0
 parentMenu = NodePath("../Title")
 
-[node name="Title" parent="." instance=ExtResource( 5 )]
-submenus = [ NodePath("../MainMenu") ]
+[node name="Title" parent="." instance=ExtResource("5")]
+layout_mode = 1
+submenus = [NodePath("../MainMenu")]
 
 [node name="LevelSelectBGM" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 6 )
-bus = "BGM"
-script = ExtResource( 1 )
+stream = ExtResource("6")
+script = ExtResource("1")
 loopStartPosition = 1.091
 loopEndPosition = 13.11
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 14 )
+environment = SubResource("14")

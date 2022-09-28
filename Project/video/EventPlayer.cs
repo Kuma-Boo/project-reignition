@@ -7,7 +7,7 @@ namespace Project.Interface
 	/// <summary>
 	/// Plays an event (cutscene) with the correct audio depending on the localization settings
 	/// </summary>
-	public class EventPlayer : Node
+	public partial class EventPlayer : Node
 	{
 		[Export]
 		public AudioStream enAudio;
@@ -19,7 +19,7 @@ namespace Project.Interface
 
 		[Export]
 		public NodePath videoPlayer;
-		private VideoPlayer _videoPlayer;
+		private VideoStreamPlayer _videoPlayer;
 
 		[Export]
 		public NodePath audioPlayer;
@@ -29,12 +29,12 @@ namespace Project.Interface
 
 		public override void _Ready()
 		{
-			_videoPlayer = GetNode<VideoPlayer>(videoPlayer);
+			_videoPlayer = GetNode<VideoStreamPlayer>(videoPlayer);
 			_audioPlayer = GetNode<AudioStreamPlayer>(audioPlayer);
 
-			if(!string.IsNullOrEmpty(subtitleData))
+			if (!string.IsNullOrEmpty(subtitleData))
 				CreateSubtitles();
-			
+
 			_audioPlayer.Stream = SaveManager.UseEnglishVoices ? enAudio : jaAudio;
 			CallDeferred(nameof(StartCutscene));
 		}
@@ -44,13 +44,13 @@ namespace Project.Interface
 			_videoPlayer.Play();
 			_audioPlayer.Play();
 
-			if(_subtitles != null)
+			if (_subtitles != null)
 				_subtitles.Activate();
 		}
 
-		public override void _PhysicsProcess(float _)
+		public override void _PhysicsProcess(double _)
 		{
-			if(Controller.pauseButton.wasPressed) //Skip cutscene
+			if (Controller.pauseButton.wasPressed) //Skip cutscene
 			{
 
 			}
@@ -104,11 +104,11 @@ namespace Project.Interface
 
 				//Advance read position
 				currentData = nextData;
-				if(i < dataPoints.Length - 2)
+				if (i < dataPoints.Length - 2)
 					nextData = dataPoints[i + 2].Split('	');
 				else
 					nextData = dataPoints[i + 1].Split('	');
-					
+
 				//Update values
 				previousSpacing = currentSpacing;
 				nextStartTime = GetStartTime(nextData);
@@ -123,7 +123,7 @@ namespace Project.Interface
 
 		public void OnEventFinished() //Called after the cutscene has finished playing
 		{
-			
+
 		}
 	}
 }

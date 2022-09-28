@@ -7,7 +7,7 @@ namespace Project.Core
 	/// The transition will play halfway, at which point a signal will be emitted, allowing for loading.
 	/// Call <see cref="FinishTransition"/> to complete the transition.
 	/// </summary>
-	public class TransitionManager : Node
+	public partial class TransitionManager : Node
 	{
 		public static TransitionManager instance;
 		[Export]
@@ -29,9 +29,7 @@ namespace Project.Core
 
 		#region Transition Types
 		//Simple cut transition. During loading, everything will freeze temporarily.
-		private void StartCut() => EmitSignal(nameof(PerformLoading));
-
-
+		private void StartCut() => EmitSignal(SignalName.Load);
 		private void StartFade()
 		{
 			IsTransitionActive = true;
@@ -41,36 +39,36 @@ namespace Project.Core
 			if (CurrentTransitionData.inSpeed == 0)
 			{
 				_animator.Seek(_animator.CurrentAnimationLength, true);
-				EmitSignal(nameof(PerformLoading));
+				EmitSignal(SignalName.Load);
 			}
 			else
 			{
 				_animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
-				_animator.Connect("animation_finished", instance, nameof(TransitionLoading), null, (uint)ConnectFlags.Oneshot);
+				_animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
 			}
 		}
 
 		private void FinishFade()
 		{
-			if(CurrentTransitionData.outSpeed != 0)
+			if (CurrentTransitionData.outSpeed != 0)
 				_animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
-			
+
 			_animator.PlayBackwards("fade");
-			_animator.Connect("animation_finished", instance, nameof(TransitionFinished), null, (uint)ConnectFlags.Oneshot);
+			_animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 		}
 		#endregion
 
 		private TransitionData CurrentTransitionData { get; set; }
 		public static bool IsTransitionActive { get; set; }
 		[Signal]
-		public delegate void PerformLoading(); //Called in the middle of the transition (i.e. when the screen is completely black)
+		public delegate void LoadEventHandler(); //Called in the middle of the transition (i.e. when the screen is completely black)
 		[Signal]
-		public delegate void TransitionComplete(); //Called when the transition is finished
-		private void TransitionLoading(string _) => EmitSignal(nameof(PerformLoading));
+		public delegate void FinishEventHandler(); //Called when the transition is finished
+		private void TransitionLoading(string _) => EmitSignal(SignalName.Load);
 		private void TransitionFinished(string _)
 		{
 			IsTransitionActive = false;
-			EmitSignal(nameof(TransitionComplete));
+			EmitSignal(SignalName.Finish);
 		}
 
 		public static void StartTransition(TransitionData data)
@@ -88,25 +86,28 @@ namespace Project.Core
 
 			instance.StartFade();
 		}
-		
+
 		public static void FinishTransition() => instance.FinishFade();
 
 		public static void QueueSceneChange(string scene, bool changeInstantly)
 		{
+			instance.queuedScene = scene;
 			if (changeInstantly)
-				instance.ChangeScene(scene);
+				instance.ApplySceneChange();
 			else
-				instance.Connect(nameof(PerformLoading), instance, nameof(ChangeScene), new Godot.Collections.Array() { scene }, (uint)ConnectFlags.Oneshot);
+				instance.Connect(SignalName.Load, new Callable(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
 		}
 
-		private void ChangeScene(string queuedScene)
+		private string queuedScene;
+		private void ApplySceneChange()
 		{
 			Gameplay.SoundManager.instance.CancelDialog(); //Cancel any active dialog
 			if (string.IsNullOrEmpty(queuedScene)) //Reload the current scene
 				GetTree().ReloadCurrentScene();
 			else
-				GetTree().ChangeScene(queuedScene);
+				GetTree().ChangeSceneToFile(queuedScene);
 
+			queuedScene = string.Empty; //Clear queue
 			FinishFade();
 		}
 	}

@@ -5,7 +5,7 @@ namespace Project.Gameplay.Triggers
 	/// <summary>
 	/// Moves player with moving platforms.
 	/// </summary>
-	public class PlatformTrigger : StageTriggerModule
+	public partial class PlatformTrigger : StageTriggerModule
 	{
 		[Export]
 		public float calculationOffset;
@@ -13,11 +13,11 @@ namespace Project.Gameplay.Triggers
 		//Sleep
 		public override void _Ready() => SetProcess(false);
 
-		public override void _Process(float _)
+		public override void _Process(double _)
 		{
-			float targetYPosition = GlobalTranslation.y + calculationOffset;
-			if (Character.GlobalTranslation.y < targetYPosition)
-				Character.GlobalTranslate(Vector3.Up * (targetYPosition - Character.GlobalTranslation.y));
+			float targetYPosition = GlobalPosition.y + calculationOffset;
+			if (Character.GlobalPosition.y < targetYPosition)
+				Character.GlobalTranslate(Vector3.Up * (targetYPosition - Character.GlobalPosition.y));
 		}
 
 		public override void Activate() => SetProcess(true); //Start Processing

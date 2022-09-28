@@ -1,20 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://dwhmyvtdaundd"]
 
-[ext_resource path="res://area/stage/2 dino jungle/data/models/environment/DJAct2.gltf" type="PackedScene" id=1]
-[ext_resource path="res://area/stage/2 dino jungle/data/models/skybox/DJSky.gltf" type="PackedScene" id=2]
-[ext_resource path="res://area/stage/2 dino jungle/data/WorldEnvironment.tres" type="Environment" id=3]
+[ext_resource type="PackedScene" uid="uid://cg02s7lwl8pmc" path="res://area/stage/2 dino jungle/data/models/environment/DJAct2.gltf" id="1"]
+[ext_resource type="PackedScene" uid="uid://bnpg5oxwcit2i" path="res://area/stage/2 dino jungle/data/models/skybox/DJSky.gltf" id="2"]
+[ext_resource type="Environment" uid="uid://co6uwp4i2peka" path="res://area/stage/2 dino jungle/data/WorldEnvironment.tres" id="3"]
 
-[node name="Visuals" type="Spatial"]
-__meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true
-}
+[node name="Visuals" type="Node3D"]
 
-[node name="DJSky" parent="." instance=ExtResource( 2 )]
+[node name="DJSky" parent="." instance=ExtResource("2")]
 visible = false
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="clouds side" parent="DJSky" index="0"]
 cast_shadow = 0
@@ -25,11 +18,8 @@ cast_shadow = 0
 [node name="sky" parent="DJSky" index="2"]
 cast_shadow = 0
 
-[node name="DJAct2" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 275, 1100 )
-__meta__ = {
-"_edit_lock_": true
-}
+[node name="DJAct2" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 275, 1100)
 
 [node name="stg021_falls_w_Mesh_0" parent="DJAct2" index="1"]
 cast_shadow = 0
@@ -584,11 +574,11 @@ cast_shadow = 0
 cast_shadow = 0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 3 )
+environment = ExtResource("3")
 
-[node name="Sun" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, -0.34202, 0.939692, 0, -0.939692, -0.34202, 0, 0, 0 )
-light_color = Color( 1, 0.976471, 0.407843, 1 )
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.34202, 0.939692, 0, -0.939692, -0.34202, 0, 0, 0)
+light_color = Color(1, 0.976471, 0.407843, 1)
 light_energy = 0.5
 shadow_enabled = true
 

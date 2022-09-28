@@ -6,21 +6,21 @@ namespace Project.Gameplay.Triggers
 	/// Hides/Shows nodes.
 	/// Use <see cref="modifyTree"/> to enable/disable objects completely. (i.e. one way collisions)
 	/// </summary>
-	public class CullingTrigger : StageTriggerModule 
+	public partial class CullingTrigger : StageTriggerModule
 	{
 		[Export]
 		public NodePath targetNode;
-		private Spatial _targetNode;
+		private Node3D _targetNode;
 		[Export]
 		public bool modifyTree; //Can cause stuttering for larger objects. Primary use is for one-way collisions
 		private Node originalParent; //Data for tree modification
-		private Transform originalTransform;
+		private Transform3D originalTransform;
 		[Export]
 		public bool startEnabled; //Generally things should start culled
 
 		public override void _Ready()
 		{
-			_targetNode = GetNode<Spatial>(targetNode);
+			_targetNode = GetNode<Node3D>(targetNode);
 
 			if (modifyTree)
 			{
@@ -63,7 +63,7 @@ namespace Project.Gameplay.Triggers
 
 		private void DeactivateNode()
 		{
-			if(modifyTree)
+			if (modifyTree)
 			{
 				if (!_targetNode.IsInsideTree()) return;
 

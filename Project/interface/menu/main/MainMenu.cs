@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Interface.Menu
 {
-	public class MainMenu : Menu
+	public partial class MainMenu : Menu
 	{
 		public static string KEY = "Main Menu"; //Menu dictionary key
 
@@ -18,14 +18,14 @@ namespace Project.Interface.Menu
 
 		protected override void ProcessMenu()
 		{
-			if(Controller.actionButton.wasPressed)
+			if (Controller.actionButton.wasPressed)
 			{
 				TransitionManager.StartTransition(new TransitionData()
 				{
 					inSpeed = 2f,
 					color = Colors.Black,
 				});
-				TransitionManager.instance.Connect(nameof(TransitionManager.PerformLoading), this, nameof(Hide), null, (uint)ConnectFlags.Oneshot);
+				TransitionManager.instance.Connect(TransitionManager.SignalName.Load, new Callable(this, MethodName.Hide), (uint)ConnectFlags.OneShot);
 				DisableProcessing();
 			}
 		}
@@ -37,10 +37,10 @@ namespace Project.Interface.Menu
 			if (!memory.ContainsKey(KEY))
 				memory.Add(KEY, -1);
 
-			if(memory[KEY] != 0)
-			//_animator.Play("Show");
+			if (memory[KEY] != 0)
+				//_animator.Play("Show");
 
-			memory[KEY] = 0;
+				memory[KEY] = 0;
 		}
 
 		public override void Hide()

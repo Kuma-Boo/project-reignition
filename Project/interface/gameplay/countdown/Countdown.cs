@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Interface
 {
-    public class Countdown : Node
+	public partial class Countdown : Node
 	{
 		[Export]
 		public NodePath countdownTickParent;
@@ -19,14 +19,14 @@ namespace Project.Interface
 		}
 
 		[Signal]
-		public delegate void CountdownStarted();
+		public delegate void CountdownStartEventHandler();
 		[Signal]
-		public delegate void CountdownCompleted();
+		public delegate void CountdownCompleteEventHandler();
 
 		private void StartCountdown()
 		{
 			if (CheatManager.SkipCountdown)
-				EmitSignal(nameof(CountdownCompleted));
+				EmitSignal(SignalName.CountdownComplete);
 			else
 			{
 				if (_countdownAnimator == null)
@@ -41,8 +41,8 @@ namespace Project.Interface
 		//WIP - NEEDS MORE WORK!
 		private void TweenCountdownTicks()
 		{
-			//SceneTreeTween creates a temporary "memory leak" but the garbage collector cleans it up later
-			SceneTreeTween countdownTweener = CreateTween().SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.InOut).SetParallel(true);
+			//Tween creates a temporary "memory leak" but the garbage collector cleans it up later
+			Tween countdownTweener = CreateTween().SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.InOut).SetParallel(true);
 
 			for (int i = 0; i < _countdownTickParent.GetChildCount(); i++)
 			{

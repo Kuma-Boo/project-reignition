@@ -6,7 +6,7 @@ namespace Project.Interface.Menu
 	/// <summary>
 	/// Press start. Also plays an intro cutscene if you wait long enough.
 	/// </summary>
-	public class Title : Menu
+	public partial class Title : Menu
 	{
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
@@ -25,20 +25,20 @@ namespace Project.Interface.Menu
 		{
 			if (isCutsceneActive)
 			{
-				if(Controller.pauseButton.wasPressed || Controller.jumpButton.wasPressed)
+				if (Controller.pauseButton.wasPressed || Controller.jumpButton.wasPressed)
 					FinishCutscene();
 
 				return;
 			}
 
 			cutsceneTimer += PhysicsManager.physicsDelta;
-			if(cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
+			if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
 			{
 				StartCutscene();
 				return;
 			}
 
-			if(Controller.AnyButtonPressed)
+			if (Controller.AnyButtonPressed)
 			{
 				//Change menu
 				_animator.Play("MenuTransition");

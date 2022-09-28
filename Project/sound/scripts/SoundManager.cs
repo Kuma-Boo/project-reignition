@@ -4,7 +4,7 @@ using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay
 {
-	public class SoundManager : Node
+	public partial class SoundManager : Node
 	{
 		public static SoundManager instance;
 
@@ -43,13 +43,13 @@ namespace Project.Gameplay
 		private Timer _delayTimer;
 		private int currentDialogIndex;
 		private DialogTrigger currentDialog;
-		public void PlayDialog (DialogTrigger dialog)
+		public void PlayDialog(DialogTrigger dialog)
 		{
 			if (dialog.IsInvalid()) return;
 
 			IsDialogActive = true;
 			_subtitleLabel.Text = string.Empty;
-			
+
 			currentDialog = dialog;
 			currentDialogIndex = 0;
 			UpdateDialog(true);
@@ -58,7 +58,7 @@ namespace Project.Gameplay
 		public void CancelDialog()
 		{
 			_delayTimer.Stop();
-			
+
 			CallDeferred(nameof(DisableDialog));
 			if (_dialogChannel.Playing)
 			{
@@ -66,7 +66,7 @@ namespace Project.Gameplay
 
 				if (isSonicSpeaking)
 				{
-					EmitSignal(nameof(OnSonicFinishedSpeaking));
+					EmitSignal(nameof(SonicSpeechEndEventHandler));
 					isSonicSpeaking = false;
 				}
 			}
@@ -91,14 +91,14 @@ namespace Project.Gameplay
 			_subtitleAnimator.Play("deactivate");
 
 			//Disconnect signals
-			if (_delayTimer.IsConnected("timeout", this, nameof(OnDialogDelayComplete)))
-				_delayTimer.Disconnect("timeout", this, nameof(OnDialogDelayComplete));
+			if (_delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogDelayComplete))))
+				_delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogDelayComplete)));
 
-			if (_delayTimer.IsConnected("timeout", this, nameof(OnDialogFinished)))
-				_delayTimer.Disconnect("timeout", this, nameof(OnDialogFinished));
+			if (_delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogFinished))))
+				_delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogFinished)));
 
-			if (_dialogChannel.IsConnected("finished", this, nameof(OnDialogFinished)))
-				_dialogChannel.Disconnect("finished", this, nameof(OnDialogFinished));
+			if (_dialogChannel.IsConnected("finished", new Callable(this, nameof(OnDialogFinished))))
+				_dialogChannel.Disconnect("finished", new Callable(this, nameof(OnDialogFinished)));
 		}
 
 		private void UpdateDialog(bool processDelay)
@@ -109,11 +109,11 @@ namespace Project.Gameplay
 			if (processDelay && currentDialog.HasDelay(currentDialogIndex))
 			{
 				_delayTimer.Start(currentDialog.delays[currentDialogIndex]);
-				_delayTimer.Connect("timeout", this, nameof(OnDialogDelayComplete), null, (uint)ConnectFlags.Oneshot);
+				_delayTimer.Connect("timeout", new Callable(this, MethodName.OnDialogDelayComplete), (uint)ConnectFlags.OneShot);
 				return;
 			}
 
-			if(currentDialogIndex == 0)
+			if (currentDialogIndex == 0)
 				_subtitleAnimator.Play("activate");
 			else
 				_subtitleAnimator.Play("activate-text");
@@ -129,7 +129,7 @@ namespace Project.Gameplay
 				_dialogChannel.Play();
 				if (!currentDialog.HasLength(currentDialogIndex))//Use audio length
 				{
-					_dialogChannel.Connect("finished", this, nameof(OnDialogFinished), null, (uint)ConnectFlags.Oneshot);
+					_dialogChannel.Connect("finished", new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
 					return;
 				}
 			}
@@ -151,41 +151,41 @@ namespace Project.Gameplay
 			}
 
 			//If we've made it this far, we're using the custom specified time
-			if (!_delayTimer.IsConnected("timeout", this, nameof(OnDialogFinished)))
-				_delayTimer.Connect("timeout", this, nameof(OnDialogFinished), null, (uint)ConnectFlags.Oneshot);
+			if (!_delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogFinished)))
+				_delayTimer.Connect(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
 			_delayTimer.Start(currentDialog.displayLength[currentDialogIndex]);
 		}
 
 		private bool isSonicSpeaking;
 		[Signal]
-		public delegate void OnSonicStartedSpeaking();
+		public delegate void SonicSpeechStartEventHandler();
 		[Signal]
-		public delegate void OnSonicFinishedSpeaking();
+		public delegate void SonicSpeechEndEventHandler();
 		private const string SONIC_VOICE_SUFFIX = "so"; //Any dialog key that ends with this will be Sonic speaking
 		private void UpdateSonicDialog() //Checks whether Sonic is the one speaking, and mutes his gameplay audio.
 		{
 			bool wasSonicSpeaking = isSonicSpeaking;
 			isSonicSpeaking = currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
 			if (isSonicSpeaking && !wasSonicSpeaking)
-				EmitSignal(nameof(OnSonicStartedSpeaking));
+				EmitSignal(SignalName.SonicSpeechStart);
 			else if (!isSonicSpeaking && wasSonicSpeaking)
-				EmitSignal(nameof(OnSonicFinishedSpeaking));
+				EmitSignal(SignalName.SonicSpeechEnd);
 		}
 
 		private bool isShahraSpeaking;
 		[Signal]
-		public delegate void OnShahraStartedSpeaking();
+		public delegate void ShahraSpeechStartEventHandler();
 		[Signal]
-		public delegate void OnShahraFinishedSpeaking();
+		public delegate void ShahraSpeechEndEventHandler();
 		private const string SHAHRA_VOICE_SUFFIX = "sh"; //Any dialog key that ends with this will be Shahra speaking
 		private void UpdateShahraDialog() //Checks whether Shahra is the one speaking, and mutes his gameplay audio.
 		{
 			bool wasShahraSpeaking = isShahraSpeaking;
 			isShahraSpeaking = currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
 			if (isShahraSpeaking && !wasShahraSpeaking)
-				EmitSignal(nameof(OnShahraStartedSpeaking));
+				EmitSignal(SignalName.ShahraSpeechStart);
 			else if (!isShahraSpeaking && wasShahraSpeaking)
-				EmitSignal(nameof(OnShahraFinishedSpeaking));
+				EmitSignal(SignalName.ShahraSpeechEnd);
 		}
 		#endregion
 

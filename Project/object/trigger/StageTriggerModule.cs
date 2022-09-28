@@ -6,7 +6,7 @@ namespace Project.Gameplay.Triggers
     /// Parent class for all stage trigger modules.
     /// Connect a signal to Activate() or Deactivate(), or use a StageTrigger to automatically assign signals at runtime.
     /// </summary>
-    public class StageTriggerModule : Spatial
+    public partial class StageTriggerModule : Node3D
     {
         protected CharacterController Character => CharacterController.instance;
         public virtual bool IsRespawnable() => false; //Most triggers don't need to be respawned

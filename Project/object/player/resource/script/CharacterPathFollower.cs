@@ -4,65 +4,80 @@ using Project.Core;
 namespace Project.Gameplay
 {
 	/// <summary>
-	/// Responsible for keeping the player orientated on the path.
+	/// Helps keep track of where the player is relative to the level's path
 	/// </summary>
-	public class CharacterPathFollower : PathFollow
+	public partial class CharacterPathFollower : PathFollow3D
 	{
-		[Export]
-		public NodePath character;
-		public CharacterController _character;
+		public CharacterController Character => CharacterController.instance;
 
-		public override void _Ready() => _character = GetNode<CharacterController>(character);
+		/// <summary> Current rotation of the pathfollower, in global radians. </summary>
+		public float ForwardAngle { get; private set; }
+		/// <summary> Current backwards rotation of the pathfollower, always equal to ForwardAngle + Mathf.Pi. </summary>
+		public float BackAngle { get; private set; }
+		public Path3D ActivePath { get; private set; }
+		private float bakedLength;
+		private float bakeInterval;
+		private Vector3[] bakedPoints;
 
-		#region Path Data
-		public bool isPathMovingForward = true; //Set this to false to move backwards along the path (Useful for reverse acts)
-		public int PathTravelDirection => isPathMovingForward ? 1 : -1;
-		public Vector3 Xform(Vector3 v) => GlobalTransform.basis.Xform(v);
-		public Vector3 ForwardDirection => this.Forward() * PathTravelDirection;
-		public Vector3 StrafeDirection => ForwardDirection.Cross(_character.worldDirection).Normalized();
-
-		public Path ActivePath { get; private set; }
-
-		public void SetActivePath(Path newPath)
+		public void SetActivePath(Path3D newPath)
 		{
 			if (newPath == null) return;
-
-			if (IsInsideTree())
+			if (IsInsideTree()) //Unparent
 				GetParent().RemoveChild(this);
 
 			ActivePath = newPath;
-			Loop = newPath.Curve.IsLoopingPath();
+			if (newPath != null)
+			{
+				bakeInterval = newPath.Curve.BakeInterval;
+				bakedLength = newPath.Curve.GetBakedLength(); //Get length and rebake path
+				bakedPoints = newPath.Curve.GetBakedPoints(); //Cache all points
+			}
 
 			newPath.AddChild(this);
 			Resync();
 		}
-		#endregion
-		
-		#region Path Positions
-		//Moves the pathfollower's offset by movementDelta using the path travel direction
-		public void UpdateOffset(float movementDelta) => Offset += movementDelta * PathTravelDirection;
 
-		//Position of player relative to PathFollower.
-		public Vector3 LocalPlayerPosition => GlobalTransform.basis.XformInv(_character.GlobalTranslation - GlobalTranslation);
-
+		public Vector3 LocalPlayerPosition => GlobalTransform.basis.GetRotationQuaternion() * (GlobalPosition - Character.GlobalPosition);
 		public void Resync()
 		{
 			if (!IsInsideTree()) return;
 			if (ActivePath == null) return;
 
-			Vector3 p = _character.GlobalTranslation - ActivePath.GlobalTranslation;
-			Offset = ActivePath.Curve.GetClosestOffset(p);
+			//GetClosestOffset() is broken in the Godot 4.0 update. Keep checking back later to see if it's been fixed.
+			Progress = ActivePath.Curve.GetClosestOffset(Character.GlobalPosition - ActivePath.GlobalPosition);
+			ForwardAngle = GetForwardAngle();
+			BackAngle = ForwardAngle + Mathf.Pi;
 
-			if (_character.isSideScroller)
-				_character.RecenterStrafe();
+			//if (_character.isSideScroller)
+			//_character.RecenterStrafe();
 		}
 
-		public bool IsAheadOfPoint(Vector3 position) //Is the player moving forward compared to the reference point? (Based on Path and PathTravelDirection)
+		private float GetForwardAngle()
 		{
-			Vector3 p = position - ActivePath.GlobalTranslation;
-			float comparisonOffset = ActivePath.Curve.GetClosestOffset(p);
-			return Mathf.Sign(Offset - comparisonOffset) * PathTravelDirection > 0;
+			Vector3 forwardDirection = this.Forward();
+			float dot = Mathf.Abs(forwardDirection.Dot(Vector3.Up));
+			if (dot > .9f)//UNIMPLEMENTED - Moving vertically
+			{
+
+			}
+
+			return forwardDirection.Flatten().AngleTo(Vector2.Down);
 		}
-		#endregion
+
+		/// <summary> Difference between angle from the current frame to the previous frame. </summary>
+		public float CalculateDeltaAngle()
+		{
+			float currentProgress = Progress;
+			float spdDelta = Character.MoveSpd * PhysicsManager.physicsDelta;
+			spdDelta *= ExtensionMethods.DotAngle(Character.MovementAngle, ForwardAngle);
+			Progress += spdDelta;
+			float deltaAngle = GetForwardAngle() - ForwardAngle;
+
+			Progress = currentProgress; //Reset
+			return deltaAngle;
+		}
+
+		//Is the pathfollower ahead of the reference point?
+		public bool IsAheadOfPoint(Vector3 globalPosition) => Mathf.Sign(Progress - ActivePath.Curve.GetClosestOffset(globalPosition - ActivePath.GlobalPosition)) > 0;
 	}
 }

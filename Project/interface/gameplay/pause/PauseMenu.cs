@@ -4,7 +4,7 @@ using Project.Gameplay;
 
 namespace Project.Interface
 {
-    public class PauseMenu : Node
+	public partial class PauseMenu : Node
 	{
 		[Export]
 		public NodePath pauseAnimator;
@@ -28,21 +28,20 @@ namespace Project.Interface
 		{
 			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
 			GetTree().Paused = !GetTree().Paused;
-			StageSettings.instance.MusicPaused = GetTree().Paused;
+			BGMPlayer.StageMusicPaused = GetTree().Paused;
 			_pauseAnimator.Play(GetTree().Paused ? "Pause" : "Unpause");
-			VisualServer.SetShaderTimeScale(GetTree().Paused ? 0.0f : 1.0f); //Pause shaders
 
-			if (CharacterController.instance.Soul.IsTimeBreakActive) //Correct time scales for time break
-			{
-				Engine.TimeScale = GetTree().Paused ? 1f : CharacterSoulSkill.TIME_BREAK_RATIO;
-				VisualServer.SetShaderTimeScale(GetTree().Paused ? 0.0f : CharacterSoulSkill.TIME_BREAK_RATIO);
-			}
+			float targetTimeScale = GetTree().Paused ? 0.0f : 1.0f; //Calculate the correct time scale
+			if (CharacterController.instance.Skills.IsTimeBreakActive) //Correct time scales for time break
+				targetTimeScale = CharacterSkillManager.TIME_BREAK_RATIO;
+			Engine.TimeScale = targetTimeScale;
+
+			GD.Print("TODO - Pausing shaders are currently unimplemented. Shaders need to be updated to use the 'time_scale' global uniform.");
 		}
 
-		public override void _Process(float _)
+		public override void _Process(double _)
 		{
 			if (!canInteractWithPauseMenu) return;
-
 			if (InputManager.controller.pauseButton.wasPressed)
 				TogglePause();
 		}

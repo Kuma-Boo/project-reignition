@@ -4,7 +4,7 @@ using Project.Core;
 namespace Project.Gameplay.Hazards
 {
 	[Tool]
-	public class SpikeBall : Hazard
+	public partial class SpikeBall : Hazard
 	{
 		[Export]
 		public float moveSpeed;
@@ -27,27 +27,27 @@ namespace Project.Gameplay.Hazards
 
 		[Export]
 		public NodePath mesh;
-		public Spatial _mesh;
+		public Node3D _mesh;
 
 		private Vector3 spawnPosition;
 		private const float ROTATION_SPEED = .1f;
 
 		public override void _Ready()
 		{
-			if (Engine.EditorHint) return;
+			if (Engine.IsEditorHint()) return;
 
-			_mesh = GetNode<Spatial>(mesh);
-			_mesh.Translation = Vector3.Zero; //Reset editor debug translation
+			_mesh = GetNode<Node3D>(mesh);
+			_mesh.Position = Vector3.Zero; //Reset editor debug translation
 
-			spawnPosition = GlobalTranslation;
+			spawnPosition = GlobalPosition;
 
 			StageSettings.instance.RegisterRespawnableObject(this);
 			Respawn();
 		}
 
-		public override void _PhysicsProcess(float _)
+		public override void _PhysicsProcess(double _)
 		{
-			if (Engine.EditorHint)
+			if (Engine.IsEditorHint())
 			{
 				UpdateEditor();
 				return;
@@ -76,7 +76,7 @@ namespace Project.Gameplay.Hazards
 				}
 			}
 
-			GlobalTranslation = spawnPosition + GetOffset();
+			GlobalPosition = spawnPosition + GetOffset();
 			ProcessCollision();
 		}
 
@@ -88,8 +88,8 @@ namespace Project.Gameplay.Hazards
 
 		private Vector3 GetOffset()
 		{
-			if(movementType == MovementType.Linear)
-				return Vector3.Zero.LinearInterpolate(this.Right() * distance, Mathf.SmoothStep(0f, 1f, currentOffset));
+			if (movementType == MovementType.Linear)
+				return Vector3.Zero.Lerp(this.Right() * distance, Mathf.SmoothStep(0f, 1f, currentOffset));
 			else if (movementType == MovementType.Circle)
 				return this.Forward().Rotated(this.Up(), Mathf.Lerp(0f, Mathf.Tau, currentOffset)).Normalized() * distance * MovementDirection;
 
@@ -98,15 +98,15 @@ namespace Project.Gameplay.Hazards
 
 		private void UpdateEditor()
 		{
-			if(_mesh == null)
+			if (_mesh == null)
 			{
 				if (mesh == null) return;
 
-				_mesh = GetNode<Spatial>(mesh);
+				_mesh = GetNode<Node3D>(mesh);
 			}
 
 			currentOffset = startingOffset;
-			_mesh.GlobalTranslation = GlobalTranslation + GetOffset();
+			_mesh.GlobalPosition = GlobalPosition + GetOffset();
 		}
 	}
 }

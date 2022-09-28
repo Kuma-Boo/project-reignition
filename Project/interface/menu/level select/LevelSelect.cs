@@ -3,17 +3,17 @@ using Godot.Collections;
 
 namespace Project.Interface.Menu
 {
-	public class LevelSelect : Menu
+	public partial class LevelSelect : Menu
 	{
 		[Export]
 		public NodePath video;
-		private VideoPlayer _video;
+		private VideoStreamPlayer _video;
 		[Export]
-		public Array<VideoStreamTheora> areaDemos = new Array<VideoStreamTheora>();
+		public Array<VideoStreamTheora> areaDemos;
 
 		protected override void SetUp()
 		{
-			_video = GetNode<VideoPlayer>(video);
+			_video = GetNode<VideoStreamPlayer>(video);
 		}
 
 		protected override void ProcessMenu()

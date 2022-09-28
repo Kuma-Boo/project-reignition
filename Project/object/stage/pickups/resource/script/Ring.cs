@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public class Ring : Pickup
+	public partial class Ring : Pickup
 	{
 		[Export]
 		public bool isRichRing;
@@ -19,11 +19,11 @@ namespace Project.Gameplay.Objects
 		public override void Respawn()
 		{
 			base.Respawn();
-			
+
 			_animator.Play("RESET");
 			_animator.Advance(0);
 
-			if (!_animator.Autoplay.Empty())
+			if (!string.IsNullOrEmpty(_animator.Autoplay))
 				_animator.Play(_animator.Autoplay);
 		}
 

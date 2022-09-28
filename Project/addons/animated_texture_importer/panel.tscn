@@ -1,66 +1,89 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://b1jomgjsib7pw"]
 
-[ext_resource path="res://addons/animated_texture_importer/panel.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/animated_texture_importer/panel.gd" id="1"]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id="1"]
 content_margin_left = 10.0
 content_margin_top = 7.0
 content_margin_bottom = 7.0
-bg_color = Color( 0.12549, 0.145098, 0.192157, 1 )
+bg_color = Color(0.12549, 0.145098, 0.192157, 1)
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id="3"]
 content_margin_left = 12.0
-content_margin_right = 4.0
 content_margin_top = 7.0
+content_margin_right = 4.0
 content_margin_bottom = 7.0
-bg_color = Color( 0.12549, 0.145098, 0.192157, 1 )
+bg_color = Color(0.12549, 0.145098, 0.192157, 1)
 
-[sub_resource type="Theme" id=2]
+[sub_resource type="Theme" id="2"]
 LineEdit/constants/minimum_spaces = 16
-LineEdit/styles/normal = SubResource( 1 )
-OptionButton/styles/hover = SubResource( 3 )
-OptionButton/styles/normal = SubResource( 3 )
+LineEdit/styles/normal = SubResource("1")
+OptionButton/styles/hover = SubResource("3")
+OptionButton/styles/normal = SubResource("3")
 
 [node name="Panel" type="VBoxContainer"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 2 )
-script = ExtResource( 1 )
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("2")
+script = ExtResource("1")
 
 [node name="Label" type="Label" parent="."]
-margin_right = 1920.0
-margin_bottom = 14.0
+layout_mode = 2
+offset_right = 1920.0
+offset_bottom = 26.0
 size_flags_horizontal = 3
-text = "Texture Frame Path"
+text = "Texture2D Frame Path3D"
 
-[node name="Path" type="LineEdit" parent="."]
-margin_top = 18.0
-margin_right = 1920.0
-margin_bottom = 46.0
+[node name="Source" type="LineEdit" parent="."]
+layout_mode = 2
+offset_top = 30.0
+offset_right = 1920.0
+offset_bottom = 67.0
 placeholder_text = "res://animated_texture/"
 
 [node name="Filter" type="LineEdit" parent="."]
-margin_top = 50.0
-margin_right = 1920.0
-margin_bottom = 78.0
+layout_mode = 2
+offset_top = 71.0
+offset_right = 1920.0
+offset_bottom = 108.0
 placeholder_text = "Filter (i.e tile)"
 
+[node name="Framerate" type="SpinBox" parent="."]
+layout_mode = 2
+offset_top = 112.0
+offset_right = 1920.0
+offset_bottom = 149.0
+max_value = 60.0
+value = 24.0
+rounded = true
+suffix = "FPS"
+
 [node name="Format" type="OptionButton" parent="."]
-margin_top = 82.0
-margin_right = 1920.0
-margin_bottom = 110.0
-text = "File Format"
+layout_mode = 2
+offset_top = 153.0
+offset_right = 1920.0
+offset_bottom = 179.0
+
+[node name="LoopType" type="OptionButton" parent="."]
+layout_mode = 2
+offset_top = 183.0
+offset_right = 1920.0
+offset_bottom = 209.0
 
 [node name="LoadButton" type="Button" parent="."]
-margin_top = 114.0
-margin_right = 1920.0
-margin_bottom = 134.0
+layout_mode = 2
+offset_top = 213.0
+offset_right = 1920.0
+offset_bottom = 244.0
 text = "Load Frames"
 
 [node name="HSeparator" type="HSeparator" parent="."]
-margin_top = 138.0
-margin_right = 1920.0
-margin_bottom = 153.0
-rect_min_size = Vector2( 0, 15 )
+layout_mode = 2
+offset_top = 248.0
+offset_right = 1920.0
+offset_bottom = 252.0
 
 [connection signal="pressed" from="LoadButton" to="." method="LoadFrames"]

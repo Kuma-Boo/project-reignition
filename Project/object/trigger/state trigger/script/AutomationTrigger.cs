@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
-	public class AutomationTrigger : Area
+	public partial class AutomationTrigger : Area3D
 	{
 		[Export]
 		public float distanceToTravel; //How far to travel. Set at 0 to travel the entire path
@@ -11,7 +11,7 @@ namespace Project.Gameplay.Triggers
 		public float minimumSpeedRatio = 1f;
 		[Export]
 		public NodePath automationPath;
-		private Path _automationPath;
+		private Path3D _automationPath;
 		[Export]
 		public CameraSettingsResource cameraSettings;
 		[Export]
@@ -21,25 +21,25 @@ namespace Project.Gameplay.Triggers
 		private bool isProcessing;
 
 		private float startingOffset;
-		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Offset - startingOffset);
+		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingOffset);
 		private bool IsFinished => (!Mathf.IsZeroApprox(distanceToTravel) && DistanceTraveled >= distanceToTravel) || (_automationPath != null && Character.PathFollower.ActivePath != _automationPath);
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _Ready()
 		{
-			_automationPath = GetNodeOrNull<Path>(automationPath);
+			_automationPath = GetNodeOrNull<Path3D>(automationPath);
 		}
 
-		public override void _PhysicsProcess(float _)
+		public override void _PhysicsProcess(double _)
 		{
-			if(isProcessing)
+			if (isProcessing)
 			{
-				if(IsFinished)
+				if (IsFinished)
 					Deactivate();
 
-				if (Character.MoveSpeed < Character.moveSettings.speed)
-					Character.MoveSpeed = Character.moveSettings.speed;
-				Character.PathFollower.Offset += Character.MoveSpeed * PhysicsManager.physicsDelta;
+				if (Character.MoveSpd < Character.groundSettings.speed)
+					Character.MoveSpd = Character.groundSettings.speed;
+				Character.PathFollower.Progress += Character.MoveSpd * PhysicsManager.physicsDelta;
 				return;
 			}
 
@@ -51,7 +51,7 @@ namespace Project.Gameplay.Triggers
 
 		private bool IsActivationValid()
 		{
-			if (!Character.IsOnGround || Character.SpeedRatio < minimumSpeedRatio) return false;
+			if (!Character.IsOnGround || Character.groundSettings.GetSpeedRatio(Character.MoveSpd) < minimumSpeedRatio) return false;
 			return true;
 		}
 
@@ -59,8 +59,8 @@ namespace Project.Gameplay.Triggers
 		{
 			Character.PathFollower.SetActivePath(_automationPath);
 			Character.StartExternal(Character.PathFollower, false);
-			
-			startingOffset = Character.PathFollower.Offset;
+
+			startingOffset = Character.PathFollower.Progress;
 			isProcessing = true;
 
 			UpdateCamera();
@@ -78,7 +78,7 @@ namespace Project.Gameplay.Triggers
 			Character.CancelMovementState(CharacterController.MovementStates.External);
 		}
 
-		public void OnEntered(Area _) => isEntered = true;
-		public void OnExited(Area _) => isEntered = false;
+		public void OnEntered(Area3D _) => isEntered = true;
+		public void OnExited(Area3D _) => isEntered = false;
 	}
 }

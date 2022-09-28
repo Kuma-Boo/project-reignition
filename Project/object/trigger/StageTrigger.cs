@@ -4,10 +4,10 @@ using Godot.Collections;
 namespace Project.Gameplay.Triggers
 {
 	/// <summary>
-	/// Extended Area node that can determine the direction the player enters.
+	/// Extended Area3D node that can determine the direction the player enters.
 	/// Automatically sets up signals for children that inherit from StageTriggerModule.
 	/// </summary>
-	public class StageTrigger : Area
+	public partial class StageTrigger : Area3D
 	{
 		[Export]
 		public bool isOneShot; //Disables this trigger after being activated (Trigger mode must be set to OnEnter to function properly)
@@ -34,15 +34,15 @@ namespace Project.Gameplay.Triggers
 		}
 
 		[Signal]
-		public delegate void Activated();
+		public delegate void ActivatedEventHandler();
 		[Signal]
-		public delegate void Deactivated();
+		public delegate void DeactivatedEventHandler();
 		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
 
 		public override void _EnterTree()
 		{
 			//Connect child modules
-			Array children = GetChildren();
+			Array<Node> children = GetChildren();
 			for (int i = 0; i < children.Count; i++)
 			{
 				if (children[i] is StageTriggerModule)
@@ -50,8 +50,8 @@ namespace Project.Gameplay.Triggers
 					StageTriggerModule module = children[i] as StageTriggerModule;
 
 					//Connect signals
-					Connect(nameof(Activated), module, nameof(StageTriggerModule.Activate));
-					Connect(nameof(Deactivated), module, nameof(StageTriggerModule.Deactivate));
+					Connect(SignalName.Activated, new Callable(module, nameof(StageTriggerModule.Activate)));
+					Connect(SignalName.Deactivated, new Callable(module, nameof(StageTriggerModule.Deactivate)));
 
 					//Register respawnable modules
 					if (module.IsRespawnable())
@@ -68,7 +68,7 @@ namespace Project.Gameplay.Triggers
 
 			if (enterMode != InteractionMode.BothWays)
 			{
-				bool isEnteringForward = !PathFollower.IsAheadOfPoint(GlobalTranslation) || CharacterController.instance.MoveSpeed > 0;
+				bool isEnteringForward = !PathFollower.IsAheadOfPoint(GlobalPosition);
 				if ((enterMode == InteractionMode.MovingForward && !isEnteringForward) || (enterMode == InteractionMode.MovingBackward && isEnteringForward))
 					return;
 			}
@@ -86,7 +86,7 @@ namespace Project.Gameplay.Triggers
 
 			if (exitMode != InteractionMode.BothWays)
 			{
-				bool isExitingForward = PathFollower.IsAheadOfPoint(GlobalTranslation) || CharacterController.instance.MoveSpeed > 0;
+				bool isExitingForward = PathFollower.IsAheadOfPoint(GlobalPosition);
 				if ((exitMode == InteractionMode.MovingForward && !isExitingForward) || (exitMode == InteractionMode.MovingBackward && isExitingForward))
 					return;
 			}
@@ -99,12 +99,12 @@ namespace Project.Gameplay.Triggers
 			if (isTriggered) return;
 			isTriggered = isOneShot;
 
-			EmitSignal(nameof(Activated));
+			EmitSignal(SignalName.Activated);
 		}
 
 		private void Deactivate()
 		{
-			EmitSignal(nameof(Deactivated));
+			EmitSignal(SignalName.Deactivated);
 		}
 	}
 }

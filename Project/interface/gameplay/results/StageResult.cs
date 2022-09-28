@@ -4,7 +4,7 @@ using Project.Gameplay;
 
 namespace Project.Interface
 {
-	public class StageResult : Node
+	public partial class StageResult : Node
 	{
 		[Export]
 		public NodePath animator;
@@ -46,10 +46,10 @@ namespace Project.Interface
 			_total = GetNode<Label>(total);
 
 			if (Stage != null)
-				Stage.Connect(nameof(StageSettings.StageCompleted), this, nameof(StartResults));
+				Stage.Connect(nameof(StageSettings.StageCompleted), new Callable(this, nameof(StartResults)));
 		}
 
-		public override void _PhysicsProcess(float _)
+		public override void _PhysicsProcess(double _)
 		{
 			if (!isProcessingInputs) return;
 
@@ -59,10 +59,10 @@ namespace Project.Interface
 				if (Controller.jumpButton.wasPressed)
 					_animator.Seek(_animator.CurrentAnimationLength, true);
 			}
-			else if(Controller.jumpButton.wasPressed || Controller.actionButton.wasPressed)
+			else if (Controller.jumpButton.wasPressed || Controller.actionButton.wasPressed)
 			{
 				//Determine which scene to load
-					TransitionManager.QueueSceneChange(Controller.jumpButton.wasPressed ? MENU_SCENE_PATH : string.Empty, false);
+				TransitionManager.QueueSceneChange(Controller.jumpButton.wasPressed ? MENU_SCENE_PATH : string.Empty, false);
 
 				TransitionManager.StartTransition(new TransitionData()
 				{

@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://object/stage/common/resource/model/goal/Goal.gltf" id="1"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Goal.cs" id="3"]
+
+[sub_resource type="Animation" id=3]
+length = 4.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PackedFloat32Array( 0, 1, 2, 3, 4 ),
+"transitions": PackedFloat32Array( 0.6, 2, 0.6, 2, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0.5, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, -0.5, 0 ), Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PackedFloat32Array( 0 ),
+"transitions": PackedFloat32Array( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[node name="Goal" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource( 3 )
+
+[node name="Goal" parent="." instance=ExtResource( 1 )]
+
+[node name="Animator" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Goal")
+autoplay = "Loop"
+playback_speed = 1.2
+anims/Loop = SubResource( 3 )
+anims/RESET = SubResource( 2 )
+
+[connection signal="area_entered" from="." to="." method="OnPlayerEntered"]

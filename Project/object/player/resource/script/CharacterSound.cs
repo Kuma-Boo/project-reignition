@@ -4,26 +4,26 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
-	public class CharacterSound : Node
+	public partial class CharacterSound : Node
 	{
 		[Export]
-		public Array<AudioStream> enClips = new Array<AudioStream>();
+		public Array<AudioStream> enClips;
 		[Export]
-		public Array<AudioStream> jaClips = new Array<AudioStream>();
+		public Array<AudioStream> jaClips;
 		[Export]
-		public Array<AudioStream> actionClips = new Array<AudioStream>();
-		
+		public Array<AudioStream> actionClips;
+
 		[Export]
 		public NodePath voiceChannel;
 		private AudioStreamPlayer _voiceChannel;
 		[Export]
 		public Array<NodePath> sfxChannels;
-	
+
 		public override void _Ready()
 		{
 			_voiceChannel = GetNode<AudioStreamPlayer>(voiceChannel);
-			SoundManager.instance.Connect(nameof(SoundManager.OnSonicStartedSpeaking), this, nameof(MuteGameplayVoice));
-			SoundManager.instance.Connect(nameof(SoundManager.OnSonicFinishedSpeaking), this, nameof(UnmuteGameplayVoice));
+			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechStart, new Callable(this, MethodName.MuteGameplayVoice));
+			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
 		}
 
 		public void PlayVoice(int audioIndex)

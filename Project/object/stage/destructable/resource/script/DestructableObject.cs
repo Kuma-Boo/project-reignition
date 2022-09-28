@@ -7,22 +7,22 @@ namespace Project.Gameplay.Objects
 	/// <summary>
 	/// Object that shatters when destroyed. All pieces must be a child of this object.
 	/// </summary>
-	public class DestructableObject : RespawnableObject
+	public partial class DestructableObject : RespawnableObject
 	{
 		[Export]
 		public NodePath originalMesh; //Unbroken mesh. Leave empty to always show the pieces
-		private Spatial _originalMesh;
+		private Node3D _originalMesh;
 		[Export]
 		public NodePath brokenMesh; //Useful if you have a model that represents the broken object
-		private Spatial _brokenMesh;
+		private Node3D _brokenMesh;
 		[Export]
 		public NodePath collider;
-		private CollisionShape _collider;
+		private CollisionShape3D _collider;
 		[Export]
-		public Array<Material> overrideMaterials = new Array<Material>();
+		public Array<Material> overrideMaterials;
 		private readonly Array<Material> materialList = new Array<Material>();
 
-		private SceneTreeTween tween;
+		private Tween tween;
 
 		[Export]
 		public ShatterType shatterType;
@@ -34,12 +34,12 @@ namespace Project.Gameplay.Objects
 		}
 		private bool isShattered;
 		[Signal]
-		public delegate void Shattered();
+		public delegate void ShatteredEventHandler();
 
 		protected override bool IsRespawnable() => true;
 
-		private readonly Array<RigidBody> _pieces = new Array<RigidBody>();
-		private readonly Array<Transform> _piecesSpawnTransforms = new Array<Transform>();
+		private readonly Array<RigidBody3D> _pieces = new Array<RigidBody3D>();
+		private readonly Array<Transform3D> _piecesSpawnTransforms = new Array<Transform3D>();
 		private const float EXPLOSION_FORCE = 10f;
 
 		protected override void SetUp()
@@ -47,13 +47,13 @@ namespace Project.Gameplay.Objects
 			base.SetUp();
 
 			if (originalMesh != null)
-				_originalMesh = GetNodeOrNull<Spatial>(originalMesh);
+				_originalMesh = GetNodeOrNull<Node3D>(originalMesh);
 
 			if (brokenMesh != null)
-				_brokenMesh = GetNodeOrNull<Spatial>(brokenMesh);
+				_brokenMesh = GetNodeOrNull<Node3D>(brokenMesh);
 
 			if (collider != null)
-				_collider = GetNodeOrNull<CollisionShape>(collider);
+				_collider = GetNodeOrNull<CollisionShape3D>(collider);
 
 			//Clone materials so multiple destructable objects of the same type can animate independantly
 			for (int i = 0; i < overrideMaterials.Count; i++)
@@ -61,7 +61,7 @@ namespace Project.Gameplay.Objects
 
 			for (int i = 0; i < GetChildCount(); i++)
 			{
-				RigidBody rigidbody = GetChildOrNull<RigidBody>(i);
+				RigidBody3D rigidbody = GetChildOrNull<RigidBody3D>(i);
 				if (rigidbody == null) //Pieces must be a rigidbody
 					continue;
 
@@ -70,13 +70,13 @@ namespace Project.Gameplay.Objects
 
 				if (materialList.Count != 0) //Assign override material
 				{
-					MeshInstance mesh = _pieces[i].GetChildOrNull<MeshInstance>(0); //NOTE mesh must be the FIRST child of the rigidbody.
+					MeshInstance3D mesh = _pieces[i].GetChildOrNull<MeshInstance3D>(0); //NOTE mesh must be the FIRST child of the rigidbody.
 					if (mesh != null)
 					{
 						for (int j = 0; j < materialList.Count; j++)
 						{
-							if (j >= mesh.GetSurfaceMaterialCount()) break;
-							mesh.SetSurfaceMaterial(j, materialList[j]);
+							if (j >= mesh.GetSurfaceOverrideMaterialCount()) break;
+							mesh.SetSurfaceOverrideMaterial(j, materialList[j]);
 						}
 					}
 				}
@@ -153,7 +153,7 @@ namespace Project.Gameplay.Objects
 
 			for (int i = 0; i < _pieces.Count; i++)
 			{
-				_pieces[i].AddExplosionForce(GlobalTranslation, EXPLOSION_FORCE);
+				_pieces[i].AddExplosionForce(GlobalPosition, EXPLOSION_FORCE);
 				_pieces[i].Sleeping = false;
 			}
 
@@ -163,10 +163,10 @@ namespace Project.Gameplay.Objects
 				materialList[i].Set("albedo_color", Colors.White);
 				tween.TweenProperty(materialList[i], "albedo_color", Colors.Transparent, 1f);
 			}
-			tween.TweenCallback(this, nameof(Despawn)).SetDelay(3f); //Despawn this object
+			tween.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(3f); //Despawn this object
 
 			isShattered = true;
-			EmitSignal(nameof(Shattered));
+			EmitSignal(SignalName.Shattered);
 		}
 
 		public override void Unload()
@@ -174,7 +174,7 @@ namespace Project.Gameplay.Objects
 			//Prevent memory leakage
 			for (int i = 0; i < _pieces.Count; i++)
 			{
-				if(_pieces[i].GetParent() != this)
+				if (_pieces[i].GetParent() != this)
 					_pieces[i].QueueFree();
 			}
 
@@ -187,13 +187,13 @@ namespace Project.Gameplay.Objects
 			overrideMaterials.Clear();
 		}
 
-		public void OnBodyEntered(PhysicsBody body)
+		public void OnBodyEntered(PhysicsBody3D body)
 		{
 			if (body.IsInGroup("crusher"))
 				Shatter();
 		}
 
-		private void OnEntered(Area a)
+		private void OnEntered(Area3D a)
 		{
 			if (shatterType == ShatterType.OnSignal) return; //Don't process
 
@@ -202,7 +202,7 @@ namespace Project.Gameplay.Objects
 				if (CharacterController.instance.IsAttacking)
 				{
 					//if(health <= 0)
-					//Shatter(a.GlobalTranslation);
+					//Shatter(a.GlobalPosition);
 				}
 			}
 			else

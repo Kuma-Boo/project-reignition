@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Hazards
 {
-	public class SpikePanel : Hazard
+	public partial class SpikePanel : Hazard
 	{
 		[Export]
 		public float inactiveLength;

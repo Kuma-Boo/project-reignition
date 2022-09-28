@@ -7,11 +7,11 @@ namespace Project.Gameplay.Triggers
 	/// Force the player to jump to a point, specified by <see cref="targetNode"/> or <see cref="targetPosition"/>
 	/// </summary>
 	[Tool]
-	public class JumpTrigger : StageTriggerModule
+	public partial class JumpTrigger : StageTriggerModule
 	{
 		[Export]
 		public NodePath targetNode; //Leaving this empty will use targetPosition exclusively.
-		private Spatial _targetNode;
+		private Node3D _targetNode;
 		[Export]
 		public Vector3 targetPosition; //Position to jump to. (Added to targetNode's position)
 		[Export]
@@ -21,14 +21,14 @@ namespace Project.Gameplay.Triggers
 		{
 			Vector3 returnPosition = targetPosition;
 			if (_targetNode != null)
-				returnPosition += _targetNode.GlobalTranslation;
+				returnPosition += _targetNode.GlobalPosition;
 			return returnPosition;
 		}
 
 		public override void _EnterTree()
 		{
 			if (targetNode != null)
-				_targetNode = GetNodeOrNull<Spatial>(targetNode);
+				_targetNode = GetNodeOrNull<Node3D>(targetNode);
 		}
 
 		public override void Activate()
@@ -40,8 +40,8 @@ namespace Project.Gameplay.Triggers
 		public Objects.LaunchData GetLaunchData()
 		{
 			if (targetNode != null)
-				_targetNode = GetNodeOrNull<Spatial>(targetNode);
-			return Objects.LaunchData.Create(GlobalTranslation, GetTargetPosition(), peakHeight);
+				_targetNode = GetNodeOrNull<Node3D>(targetNode);
+			return Objects.LaunchData.Create(GlobalPosition, GetTargetPosition(), peakHeight);
 		}
 	}
 }

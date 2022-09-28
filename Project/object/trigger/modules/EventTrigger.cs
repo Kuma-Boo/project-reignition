@@ -6,7 +6,7 @@ namespace Project.Gameplay.Triggers
 	/// Triggers a non-playable cutscene.
 	/// For gameplay automated sections (such as loops), see <see cref="AutomationTrigger"/>.
 	/// </summary>
-	public class EventTrigger : StageTriggerModule
+	public partial class EventTrigger : StageTriggerModule
 	{
 		[Export]
 		public NodePath animator;
@@ -21,7 +21,7 @@ namespace Project.Gameplay.Triggers
 		public NodePath cameraStandin;
 
 		[Signal]
-		public delegate void Activated();
+		public delegate void ActivatedEventHandler();
 		private bool wasActivated;
 
 		public override void _Ready()
@@ -34,7 +34,7 @@ namespace Project.Gameplay.Triggers
 		{
 			wasActivated = false;
 
-			if(!resetName.Empty())
+			if (!string.IsNullOrEmpty(resetName))
 				_animator.Play(resetName); //Reset event
 		}
 
@@ -42,16 +42,16 @@ namespace Project.Gameplay.Triggers
 		{
 			if (wasActivated) return;
 
-			if (!eventName.Empty())
+			if (!string.IsNullOrEmpty(eventName))
 				_animator.Play(eventName);
 			else
 				GD.Print($"{Name} doesn't have an event animation. Nothing will happen");
 
-			if(playerStandin != null)
-				Character.StartExternal(GetNode<Spatial>(playerStandin), true);
+			if (playerStandin != null)
+				Character.StartExternal(GetNode<Node3D>(playerStandin), true);
 
 			wasActivated = true;
-			EmitSignal(nameof(Activated));
+			EmitSignal(SignalName.Activated);
 		}
 
 		//Call this from the animator to play a specific animation on the player

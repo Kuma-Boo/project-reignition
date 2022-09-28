@@ -1,19 +1,19 @@
-tool
+@tool
 extends Control
 
 var dir = Directory.new()
 
-onready var texturePath : LineEdit = get_node("Texture/Path")
-onready var materialPath : LineEdit = get_node("Material/Path")
-onready var textureNameFormat : OptionButton = get_node("TextureNameFormat/Format")
+@onready var texturePath : LineEdit = get_node("Texture2D/Path3D")
+@onready var materialPath : LineEdit = get_node("Material/Path3D")
+@onready var textureNameFormat : OptionButton = get_node("TextureNameFormat/Format")
 
-onready var importAlbedo : Button = get_node("Toggles/ImportAlbedo")
-onready var useDiffuse : Button = get_node("Toggles/UseDiffuse")
-onready var applySuffix : Button = get_node("Toggles/ApplySuffix")
-onready var importNormal : Button = get_node("Toggles/ImportNormal")
-onready var importRoughness : Button = get_node("Toggles/ImportRoughness")
-onready var resetSpecular : Button = get_node("Toggles/ResetSpecular")
-onready var clearMissingTextures : Button = get_node("Toggles/ClearMissingTextures")
+@onready var importAlbedo : Button = get_node("Toggles/ImportAlbedo")
+@onready var useDiffuse : Button = get_node("Toggles/UseDiffuse")
+@onready var applySuffix : Button = get_node("Toggles/ApplySuffix")
+@onready var importNormal : Button = get_node("Toggles/ImportNormal")
+@onready var importRoughness : Button = get_node("Toggles/ImportRoughness")
+@onready var resetSpecular : Button = get_node("Toggles/ResetSpecular")
+@onready var clearMissingTextures : Button = get_node("Toggles/ClearMissingTextures")
 
 var materials : Array
 var textures : Array
@@ -21,7 +21,7 @@ var textures : Array
 const MATERIAL_EXTENSTION : String = ".tres"
 const TEXTURE_EXTENSTION : String = ".png"
 
-var currentMaterial : SpatialMaterial
+var currentMaterial : StandardMaterial3D
 var currentMaterialName : String
 
 func _ready():
@@ -32,11 +32,11 @@ func _ready():
 	textureNameFormat.select(1)
 
 func _on_update_pressed():
-	if texturePath.text.empty() || !dir.dir_exists(texturePath.text):
-		printerr("Texture directory not found!")
+	if texturePath.text.is_empty() || !dir.dir_exists(texturePath.text):
+		printerr("Texture2D directory not found!")
 		return
 
-	if materialPath.text.empty() || !dir.dir_exists(materialPath.text):
+	if materialPath.text.is_empty() || !dir.dir_exists(materialPath.text):
 		printerr("Material directory not found!")
 		return
 
@@ -49,7 +49,7 @@ func update_materials():
 
 	for i in materials:
 		var mat = load(str(materialPath.text) + i)
-		if not mat is SpatialMaterial:
+		if not mat is StandardMaterial3D:
 			continue #Custom Shader materials should be edited manually!
 
 		currentMaterial = mat
@@ -85,7 +85,7 @@ func apply_texture(textureIndex : int, map : String):
 
 	if textureIndex != -1:
 		var texture : String = texturePath.text + textures[textureIndex]
-		var image : StreamTexture = load(texture)
+		var image : CompressedTexture2D = load(texture)
 
 		if map == "albedo_texture":
 			currentMaterial.albedo_texture = image
@@ -113,7 +113,7 @@ func find_texture(fileName : String, map : String) -> int:
 func get_files_in_directory(path, extension) -> Array:
 	var files = []
 	dir.open(path)
-	dir.list_dir_begin()
+	dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 
 	while true:
 		var file = dir.get_next()

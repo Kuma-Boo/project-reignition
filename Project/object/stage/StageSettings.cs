@@ -8,7 +8,7 @@ namespace Project.Gameplay
 	/// Manager responsible for stage setup.
 	/// This is the first thing that gets loaded in a stage.
 	/// </summary>
-	public class StageSettings : Spatial
+	public partial class StageSettings : Node3D
 	{
 		public static StageSettings instance;
 
@@ -18,14 +18,13 @@ namespace Project.Gameplay
 			if (cameraDemo != null)
 			{
 				_cameraDemo = GetNode<AnimationPlayer>(cameraDemo);
-				_cameraDemo.Connect("animation_changed", this, nameof(CameraDemoAdvanced));
+				_cameraDemo.Connect("animation_changed", new Callable(this, nameof(CameraDemoAdvanced)));
 			}
 
 			SetUpMission();
-			SetUpSkills();
 		}
 
-		public override void _Process(float _) => UpdateTime();
+		public override void _PhysicsProcess(double _) => UpdateTime();
 
 		#region Stage Settings
 		[Export]
@@ -61,7 +60,7 @@ namespace Project.Gameplay
 		public int CurrentScore { get; private set; } //How high is the current score?
 		public string DisplayScore { get; private set; } //Current score formatted to eight zeros
 		[Signal]
-		public delegate void ScoreChanged(); //Score has changed, normally occours from a bonus
+		public delegate void ScoreChangedEventHandler(); //Score has changed, normally occours from a bonus
 		public enum ScoreFunction //List of ways the score can be modified
 		{
 			Add,
@@ -91,7 +90,7 @@ namespace Project.Gameplay
 			}
 
 			DisplayScore = CurrentScore.ToString(SCORE_FORMATTING);
-			EmitSignal(nameof(ScoreChanged));
+			EmitSignal(SignalName.ScoreChanged);
 		}
 
 		//Bonuses
@@ -103,7 +102,7 @@ namespace Project.Gameplay
 			GrindStep, //Obtained by using the Grind Step
 		}
 		[Signal]
-		public delegate void BonusAdded(BonusType type);
+		public delegate void BonusAddedEventHandler(BonusType type);
 		public void AddBonus(BonusType type)
 		{
 			switch (type)
@@ -113,17 +112,17 @@ namespace Project.Gameplay
 			}
 
 
-			EmitSignal(nameof(BonusAdded), type);
+			EmitSignal(SignalName.BonusAdded, (int)type);
 		}
 
 		//Objectives
 		public int CurrentObjectiveCount { get; private set; } //How much has the player currently completed?
 		[Signal]
-		public delegate void ObjectiveChanged(); //Progress towards the objective has changed
+		public delegate void ObjectiveChangedEventHandler(); //Progress towards the objective has changed
 		public void IncrementObjective()
 		{
 			CurrentObjectiveCount++;
-			EmitSignal(nameof(ObjectiveChanged));
+			EmitSignal(SignalName.ObjectiveChanged);
 			GD.Print("Objective is now " + CurrentObjectiveCount);
 
 			if (CurrentObjectiveCount >= targetObjectiveCount)
@@ -133,7 +132,7 @@ namespace Project.Gameplay
 		//Rings
 		public int CurrentRingCount { get; private set; } //How many rings is the player currently holding?
 		[Signal]
-		public delegate void RingChanged(int change); //Ring count has changed
+		public delegate void RingChangedEventHandler(int change); //Ring count has changed
 		public void UpdateRingCount(int amount)
 		{
 			CurrentRingCount += amount;
@@ -144,14 +143,14 @@ namespace Project.Gameplay
 				CurrentRingCount = targetObjectiveCount; //Clamp
 				FinishStage(true);
 			}
-			EmitSignal(nameof(RingChanged), amount);
+			EmitSignal(SignalName.RingChanged, amount);
 		}
 
 		//Time
 		private bool isUpdatingTime = true;
 
 		[Signal]
-		public delegate void TimeChanged(); //Time has changed.
+		public delegate void TimeChangedEventHandler(); //Time has changed.
 
 		public float CurrentTime { get; private set; } //How long has the player been on this stage?
 		public string DisplayTime { get; private set; } //Current time formatted in mm:ss.ff
@@ -161,10 +160,10 @@ namespace Project.Gameplay
 		{
 			if (!isUpdatingTime) return;
 
-			CurrentTime += PhysicsManager.normalDelta; //Add current time
+			CurrentTime += PhysicsManager.physicsDelta; //Add current time
 			System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
 			DisplayTime = time.ToString(TIME_LABEL_FORMAT);
-			EmitSignal(nameof(TimeChanged));
+			EmitSignal(SignalName.TimeChanged);
 		}
 
 		//Completion
@@ -176,13 +175,13 @@ namespace Project.Gameplay
 			Run, //Keep running forward, then crossfade
 		}
 		[Export]
-		public ControlLockoutResource CompletionControlLockout;
+		public LockoutResource CompletionControlLockout;
 		[Export]
-		public NodePath cameraDemo; //Camera demo that gets enabled after the stage clears
+		public NodePath cameraDemo; //Camera3D demo that gets enabled after the stage clears
 		private AnimationPlayer _cameraDemo;
 
 		[Signal]
-		public delegate void StageCompleted(bool isSuccess); //Stage was completed
+		public delegate void StageCompletedEventHandler(bool isSuccess); //Stage was completed
 		public void FinishStage(bool isSuccess)
 		{
 			//Asssign rank
@@ -196,57 +195,33 @@ namespace Project.Gameplay
 				Visible = false;
 
 				//Disable all object nodes that aren't parented to this node
-				Array nodes = GetTree().GetNodesInGroup("cull on complete");
+				Array<Node> nodes = GetTree().GetNodesInGroup("cull on complete");
 				for (int i = 0; i < nodes.Count; i++)
 				{
-					if (nodes[i] is Spatial spatial)
+					if (nodes[i] is Node3D spatial)
 						spatial.Visible = false;
 				}
 			}
 
 			isUpdatingTime = false;
-			EmitSignal(nameof(StageCompleted), isSuccess);
+			EmitSignal(SignalName.StageCompleted, isSuccess);
 		}
 
-		//Camera demo was advanced, play a crossfade
+		//Camera3D demo was advanced, play a crossfade
 		private void CameraDemoAdvanced(string _, string _newAnim) => CharacterController.instance.Camera.StartCrossfade();
-		#endregion
-
-		#region Skills
-		public static SphereShape PearlCollisionShape = new SphereShape();
-		public static SphereShape RichPearlCollisionShape = new SphereShape();
-		public static RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
-
-		private const float PEARL_NORMAL_COLLISION = .4f;
-		private const float RICH_PEARL_NORMAL_COLLISION = .6f;
-		private const float PEARL_ATTRACTOR_MULTIPLIER = .5f;
-
-		private const int ENEMY_PEARL_AMOUNT = 16; //How many pearls are obtained when defeating an enemy
-
-		private void SetUpSkills()
-		{
-			//TODO Expand hitbox if skills is equipped
-			PearlCollisionShape.Radius = PEARL_NORMAL_COLLISION;
-			RichPearlCollisionShape.Radius = RICH_PEARL_NORMAL_COLLISION;
-			if (SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.PearlAttractor))
-			{
-				PearlCollisionShape.Radius *= PEARL_ATTRACTOR_MULTIPLIER;
-				RichPearlCollisionShape.Radius *= PEARL_ATTRACTOR_MULTIPLIER;
-			}
-		}
 		#endregion
 
 		#region Object Spawning
 		[Signal]
-		public delegate void Respawned();
+		public delegate void RespawnedEventHandler();
 		[Signal]
-		public delegate void StageUnload();
+		public delegate void StageUnloadEventHandler();
 		private const string RESPAWN_FUNCTION = "Respawn";
 
 		public void RegisterRespawnableObject(Node node)
 		{
-			if (!IsConnected(nameof(StageUnload), node, "queue_free")) //Prevent memory leaks
-				Connect(nameof(StageUnload), node, "queue_free");
+			if (!IsConnected(SignalName.StageUnload, new Callable(node, "queue_free"))) //Prevent memory leaks
+				Connect(SignalName.StageUnload, new Callable(node, "queue_free"));
 
 			if (!node.HasMethod(RESPAWN_FUNCTION))
 			{
@@ -254,38 +229,21 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (!IsConnected(nameof(Respawned), node, RESPAWN_FUNCTION))
-				Connect(nameof(Respawned), node, RESPAWN_FUNCTION);
+			if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
+				Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION));
 		}
 
 		public void RespawnObjects()
 		{
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
-			EmitSignal(nameof(Respawned));
+			EmitSignal(SignalName.Respawned);
 		}
 
 		public override void _ExitTree()
 		{
-			EmitSignal(nameof(StageUnload));
+			EmitSignal(SignalName.StageUnload);
 		}
 		#endregion
 
-		#region Music
-		public bool MusicPaused
-		{
-			get => BGMPlayer.instance == null || BGMPlayer.instance.StreamPaused;
-			set
-			{
-				if (BGMPlayer.instance == null) return;
-				BGMPlayer.instance.StreamPaused = value;
-			}
-		}
-
-		public void SetMusicVolume(float db)
-		{
-			if (BGMPlayer.instance == null) return;
-			BGMPlayer.instance.VolumeDb = db;
-		}
-		#endregion
 	}
 }

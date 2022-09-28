@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Core
 {
-	public class InputManager : Node
+	public partial class InputManager : Node
 	{
 		/*
 		 Handles all input related code.
@@ -20,25 +20,20 @@ namespace Project.Core
 		public static bool ignoreInputs; //Flag to ignore inputs until the next frame
 		public static Controller controller;
 
-		public override void _Ready()
-		{
-			PauseMode = PauseModeEnum.Process;
-		}
-
-		public override void _PhysicsProcess(float delta)
+		public override void _PhysicsProcess(double _)
 		{
 			ignoreInputs = false;
-			controller.Update(delta);
+			controller.Update(PhysicsManager.physicsDelta);
 
 			//Debug keys
 			if (!OS.IsDebugBuild())
 				return;
-			
-			debugHud.Update(Input.IsKeyPressed((int)KeyList.Tab));
-			debugPause.Update(Input.IsKeyPressed((int)KeyList.P));
-			debugAdvance.Update(Input.IsKeyPressed((int)KeyList.F1));
-			debugRestart.Update(Input.IsKeyPressed((int)KeyList.F5));
-			debugTurbo.Update(Input.IsKeyPressed((int)KeyList.Tab));
+
+			debugHud.Update(Input.IsKeyPressed(Key.Tab));
+			debugPause.Update(Input.IsKeyPressed(Key.P));
+			debugAdvance.Update(Input.IsKeyPressed(Key.F1));
+			debugRestart.Update(Input.IsKeyPressed(Key.F5));
+			debugTurbo.Update(Input.IsKeyPressed(Key.Tab));
 		}
 
 		public override void _Input(InputEvent e) //For Controller/Keyboard hotswitching
@@ -62,7 +57,7 @@ namespace Project.Core
 			public Axis horizontalAxis;
 			public Axis verticalAxis;
 			public Button movementModifier;
-			public Vector2 MovementAxis => new Vector2(horizontalAxis.value, verticalAxis.value).LimitLength(1f);
+			public Vector2 MovementAxis { get; private set; }
 
 			public Button jumpButton;
 			public Button actionButton;
@@ -76,21 +71,22 @@ namespace Project.Core
 			public int activeGamepad; //The current gamepad being used. -1 for keyboard, indexing starts at 0.
 			public Mapping ActiveMapping => IsUsingGamepad ? gamepadMapping : keyboardMapping;
 			public bool IsUsingGamepad => activeGamepad != -1; //-1 if the player is using a keyboard.
+			private const float DEADZONE = .4f;
 
 			public void Update(float delta)
 			{
 				movementModifier.Update(!IsUsingGamepad && ButtonHeld(ActiveMapping.movementModifierBinding));
-				
+
 				//Update all inputs.
 				if (IsUsingGamepad && ActiveMapping.horizontalBinding != -1)
 					horizontalAxis.Update(AnalogAxisHeld(ActiveMapping.horizontalBinding), delta);
 				else
 					horizontalAxis.Update(DigitalAxisHeld(ActiveMapping.rightBinding, ActiveMapping.leftBinding, movementModifier.isHeld), delta);
 
-				if (IsUsingGamepad && ActiveMapping.verticalBinding != -1) //Gamepad vertical normally needs to be inverted
-					verticalAxis.Update(-AnalogAxisHeld(ActiveMapping.verticalBinding), delta);
+				if (IsUsingGamepad && ActiveMapping.verticalBinding != -1)
+					verticalAxis.Update(AnalogAxisHeld(ActiveMapping.verticalBinding), delta);
 				else
-					verticalAxis.Update(DigitalAxisHeld(ActiveMapping.upBinding, ActiveMapping.downBinding, movementModifier.isHeld), delta);
+					verticalAxis.Update(DigitalAxisHeld(ActiveMapping.downBinding, ActiveMapping.upBinding, movementModifier.isHeld), delta);
 
 				jumpButton.Update(ButtonHeld(ActiveMapping.jumpBinding));
 				boostButton.Update(ButtonHeld(ActiveMapping.boostBinding));
@@ -98,13 +94,17 @@ namespace Project.Core
 				actionButton.Update(ButtonHeld(ActiveMapping.actionBinding));
 
 				pauseButton.Update(ButtonHeld(ActiveMapping.pauseBinding));
+
+				MovementAxis = new Vector2(horizontalAxis.value, verticalAxis.value).LimitLength(1f);
+				if (MovementAxis.Length() < DEADZONE)
+					MovementAxis = Vector2.Zero;
 			}
 
 			//Returns true when any of the action buttons were pressed
 			public bool AnyButtonPressed => jumpButton.wasPressed || boostButton.wasPressed || breakButton.wasPressed || actionButton.wasPressed || pauseButton.wasPressed;
 
 			//Returns the current physical value of an analog axis (Gamepad Only)
-			private float AnalogAxisHeld(int axisCode) => Input.GetJoyAxis(activeGamepad, axisCode);
+			private float AnalogAxisHeld(int axisCode) => Input.GetJoyAxis(activeGamepad, (JoyAxis)axisCode);
 			//Combines two buttons as a single axis
 			private float DigitalAxisHeld(int p, int n, bool modify)
 			{
@@ -120,8 +120,8 @@ namespace Project.Core
 			}
 			//Returns the physical state of a button
 			private bool ButtonHeld(int buttonCode) =>
-			IsUsingGamepad ? Input.IsJoyButtonPressed(activeGamepad, buttonCode) :
-			Input.IsKeyPressed(buttonCode);
+			IsUsingGamepad ? Input.IsJoyButtonPressed(activeGamepad, (JoyButton)buttonCode) :
+			Input.IsKeyPressed((Key)buttonCode);
 
 			//TODO Consoles will require default controls for gamepads
 			public void DefaultControls()
@@ -136,33 +136,38 @@ namespace Project.Core
 				//Default to keyboard
 				keyboardMapping = new Mapping()
 				{
-					upBinding = (int)KeyList.Up,
-					downBinding = (int)KeyList.Down,
-					leftBinding = (int)KeyList.Left,
-					rightBinding = (int)KeyList.Right,
-					movementModifierBinding = (int)KeyList.Shift,
+					upBinding = (int)Key.Up,
+					downBinding = (int)Key.Down,
+					leftBinding = (int)Key.Left,
+					rightBinding = (int)Key.Right,
+					movementModifierBinding = (int)Key.Shift,
 
-					jumpBinding = (int)KeyList.V,
-					actionBinding = (int)KeyList.C,
-					breakBinding = (int)KeyList.Z,
-					boostBinding = (int)KeyList.X,
-					pauseBinding = (int)KeyList.Enter
+					//Disable joystick axis
+					horizontalBinding = -1,
+					verticalBinding = -1,
+
+					jumpBinding = (int)Key.V,
+					actionBinding = (int)Key.C,
+					breakBinding = (int)Key.Z,
+					boostBinding = (int)Key.X,
+					pauseBinding = (int)Key.Enter
 				};
 			}
 
 			public void DefaultGamepadControls()
 			{
+
 				//Default to keyboard
 				gamepadMapping = new Mapping()
 				{
-					horizontalBinding = (int)JoystickList.Axis0,
-					verticalBinding = (int)JoystickList.Axis1,
-					
-					jumpBinding = (int)JoystickList.SonyX,
-					actionBinding = (int)JoystickList.SonyCircle,
-					breakBinding = (int)JoystickList.SonySquare,
-					boostBinding = (int)JoystickList.SonyTriangle,
-					pauseBinding = (int)JoystickList.Start
+					horizontalBinding = (int)JoyAxis.LeftX,
+					verticalBinding = (int)JoyAxis.LeftY,
+
+					jumpBinding = (int)JoyButton.A,
+					actionBinding = (int)JoyButton.B,
+					breakBinding = (int)JoyButton.X,
+					boostBinding = (int)JoyButton.Y,
+					pauseBinding = (int)JoyButton.Start
 				};
 			}
 		}
@@ -189,14 +194,10 @@ namespace Project.Core
 			public bool WasTapBuffered => tapBuffer > 0;
 			public float tapBuffer;
 
-			private const float DEADZONE = .6f;
 			private const float TAP_BUFFER_LENGTH = .2f;
 
 			public void Update(float currentValue, float timeDelta)
 			{
-				if (Mathf.Abs(currentValue) < DEADZONE)
-					currentValue = 0;
-
 				int oldDirection = sign;
 				sign = Mathf.Sign(currentValue);
 				wasTapped = sign != 0 && oldDirection != sign;
@@ -218,10 +219,10 @@ namespace Project.Core
 			//Contains a list of all the input bindings.
 			public int leftBinding;
 			public int rightBinding;
-			public int horizontalBinding; //For analog inputs, -1 if unused
+			public int horizontalBinding; //For analog inputs. -1 if unused
+			public int verticalBinding; //For analog inputs. -1 if unused
 			public int upBinding;
 			public int downBinding;
-			public int verticalBinding; //For analog inputs, -1 if unused
 			public int movementModifierBinding;
 			public int jumpBinding;
 			public int actionBinding;
