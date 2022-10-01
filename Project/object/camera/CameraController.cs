@@ -38,14 +38,10 @@ namespace Project.Gameplay
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PathFollower => Character.PathFollower;
 
+		public Transform3D CameraTransform => _camera.GlobalTransform;
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
-		public bool IsOnScreen(Vector3 worldSpace)
-		{
-			Vector2 screenPosition = ConvertToScreenSpace(worldSpace);
-			if (screenPosition.x / 1920f > 1f || screenPosition.x < 0f) return false;
-			if (screenPosition.y / 1080f > 1f || screenPosition.y < 0f) return false;
-			return true;
-		}
+		public bool IsOnScreen(Vector3 worldSpace) => _camera.IsPositionInFrustum(worldSpace);
+		public bool IsPositionBehind(Vector3 worldSpace) => _camera.IsPositionBehind(worldSpace);
 		public float ViewAngle { get; private set; }
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
 		private float xformAngle;

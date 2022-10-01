@@ -1,13 +1,13 @@
-[gd_resource type="Shader" format=3 uid="uid://bpkle5kmjnjv6"]
+[gd_resource type="Shader" format=3 uid="uid://cyw03ft1xr07i"]
 
 [resource]
 code = "shader_type spatial;
-render_mode diffuse_burley, specular_disabled;
+render_mode diffuse_burley;
 
-uniform sampler2D albedo : hint_default_black;
-uniform sampler2D detail : hint_default_black;
+uniform sampler2D albedo : hint_default_black, source_color;
+uniform sampler2D detail : hint_default_black, source_color;
 uniform sampler2D specular : hint_default_black;
-uniform float specular_multiplier : hint_range(0, 1) = 1;
+uniform float specular_multiplier : hint_range(0, 5) = 1;
 uniform float rim_bias : hint_range(0, 1) = .5;
 uniform float rim_multiplier : hint_range(0, 1) = 0;
 uniform float roughness : hint_range(0, 1) = .8;
@@ -43,5 +43,4 @@ void fragment()
 	EMISSION = vec3(rim);
 	ALPHA = col.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_scissor;
-}
-"
+}"

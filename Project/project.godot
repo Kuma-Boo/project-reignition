@@ -27,7 +27,6 @@ default_bus_layout="res://sound/AudioLayout.tres"
 Core="res://core/Core.tscn"
 TransitionManager="res://interface/transition/TransitionManager.tscn"
 SoundManager="res://sound/SoundManager.tscn"
-ReflectMaterialManager="*res://addons/Silicon.vfx.planar_reflection/reflect_material_manager.gd"
 
 [display]
 
@@ -45,7 +44,7 @@ project/assembly_name="Sonic Remake Project"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Silicon.vfx.planar_reflection/plugin.cfg", "res://addons/animated_texture_importer/plugin.cfg")
+enabled=PackedStringArray("res://addons/animated_texture_importer/plugin.cfg", "res://addons/StageObjectEditor/plugin.cfg")
 
 [filesystem]
 
@@ -1125,9 +1124,9 @@ locale/language_filter=["de", "en", "es", "fr", "it", "ja"]
 
 [layer_names]
 
-3d_render/layer_1="ExteriorEnvironment"
-3d_render/layer_2="InteriorEnvironment"
+3d_render/layer_1="Environment"
 3d_render/layer_6="Objects"
+3d_render/layer_19="Effects"
 3d_render/layer_20="Debug"
 3d_physics/layer_1="Environment"
 3d_physics/layer_2="Player"
@@ -1157,11 +1156,21 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+environment/ssao/half_size=false
+environment/ssil/half_size=false
 anti_aliasing/quality/screen_space_aa=1
 
 [shader_globals]
 
 time={
+"type": "float",
+"value": 0.0
+}
+sun_occlusion={
+"type": "float",
+"value": 0.0
+}
+sun_movement={
 "type": "float",
 "value": 0.0
 }

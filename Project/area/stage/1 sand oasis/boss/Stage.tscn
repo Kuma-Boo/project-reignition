@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://psd2gdvvn2cq"]
+
+[ext_resource type="Environment" uid="uid://cj6encwubebc4" path="res://area/stage/1 sand oasis/data/common/Environment.tres" id="1_dgxgs"]
+[ext_resource type="PackedScene" uid="uid://c05ywjotwd0ik" path="res://area/stage/1 sand oasis/data/environment/SOBoss.tscn" id="1_gt2in"]
+[ext_resource type="PackedScene" uid="uid://b1p1m7cbr5is5" path="res://area/stage/1 sand oasis/boss/data/collision/Collision.tscn" id="1_y3a8x"]
+[ext_resource type="Curve3D" uid="uid://bvpu60xrfh0px" path="res://area/stage/1 sand oasis/boss/data/path/MainPath.tres" id="2_sspwl"]
+[ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/stage/1 sand oasis/data/skybox/Skybox.tscn" id="3_ud18g"]
+
+[node name="World" type="Node"]
+
+[node name="BossAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="BossAct"]
+metadata/_edit_lock_ = true
+
+[node name="Static" type="Node3D" parent="."]
+
+[node name="Visuals" type="Node3D" parent="Static"]
+
+[node name="SOBoss" parent="Static/Visuals" instance=ExtResource("1_gt2in")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Static/Visuals"]
+environment = ExtResource("1_dgxgs")
+
+[node name="Sunlight" type="DirectionalLight3D" parent="Static/Visuals"]
+transform = Transform3D(0.812445, -0.422361, -0.401927, -0.121512, -0.796888, 0.591781, -0.570236, -0.431951, -0.698749, 0, 4, 0)
+light_energy = 0.6
+shadow_enabled = true
+
+[node name="Skybox" parent="Static/Visuals" instance=ExtResource("3_ud18g")]
+
+[node name="Collision" parent="Static" instance=ExtResource("1_y3a8x")]
+visible = false
+
+[node name="MainPath" type="Path3D" parent="Static"]
+curve = ExtResource("2_sspwl")

@@ -1,171 +1,146 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=21 format=3 uid="uid://b01dbeptkooh3"]
 
-[ext_resource path="res://object/enemy/majin/resource/Majin.cs" type="Script" id=1]
-[ext_resource path="res://object/enemy/majin/resource/majin charge.png" type="Texture2D" id=2]
-[ext_resource path="res://object/enemy/majin/resource/majin flame.png" type="Texture2D" id=3]
+[ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
+[ext_resource type="Texture2D" uid="uid://cmetjirqhdjv3" path="res://object/enemy/majin/data/majin charge.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://b67ymd8yraldi" path="res://object/enemy/majin/data/majin flame.png" id="3"]
 
-[sub_resource type="CapsuleShape3D" id=21]
-radius = 0.75
+[sub_resource type="CapsuleShape3D" id="21"]
+radius = 0.25
 height = 0.5
 
-[sub_resource type="SphereShape3D" id=2]
+[sub_resource type="SphereShape3D" id="2"]
 
-[sub_resource type="Curve" id=22]
+[sub_resource type="Curve" id="22"]
 min_value = -20.0
 max_value = 5.0
-_data = [ Vector2( 0, 0 ), 0.0, 22.4655, 0, 0, Vector2( 0.514249, 5 ), 0.0, 0.0, 0, 0, Vector2( 1, -20 ), -121.932, 0.0, 0, 0 ]
+_data = [Vector2(0, 0), 0.0, 22.4655, 0, 0, Vector2(0.514249, 5), 0.0, 0.0, 0, 0, Vector2(1, -20), -121.932, 0.0, 0, 0]
+point_count = 3
 
-[sub_resource type="CurveTexture" id=23]
-curve = SubResource( 22 )
+[sub_resource type="CurveTexture" id="23"]
+curve = SubResource("22")
 
-[sub_resource type="Curve" id=24]
-_data = [ Vector2( 0, 0 ), 0.0, 3.73712, 0, 0, Vector2( 0.623057, 1 ), -0.689178, -0.689178, 0, 0, Vector2( 0.892487, 0.676895 ), -1.8782, -1.8782, 0, 0, Vector2( 1, 0 ), -9.85773, 0.0, 0, 0 ]
+[sub_resource type="Curve" id="24"]
+_data = [Vector2(0, 0), 0.0, 3.73712, 0, 0, Vector2(0.623057, 1), -0.689178, -0.689178, 0, 0, Vector2(0.892487, 0.676895), -1.8782, -1.8782, 0, 0, Vector2(1, 0), -9.85773, 0.0, 0, 0]
+point_count = 4
 
-[sub_resource type="CurveTexture" id=25]
-curve = SubResource( 24 )
+[sub_resource type="CurveTexture" id="25"]
+curve = SubResource("24")
 
-[sub_resource type="Curve" id=26]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -2.47545, 0.0, 0, 0 ]
-
-[sub_resource type="CurveTexture" id=27]
-curve = SubResource( 26 )
-
-[sub_resource type="ParticleProcessMaterial" id=15]
-trail_divisor = 64
-trail_size_modifier = SubResource( 27 )
+[sub_resource type="ParticleProcessMaterial" id="15"]
 emission_shape = 5
-emission_ring_radius = 2.0
-emission_ring_inner_radius = 2.0
-emission_ring_height = 1.0
-emission_ring_axis = Vector3( 0, 0, 1 )
-flag_align_y = true
-direction = Vector3( 0, 1, 0 )
-gravity = Vector3( 0, 0, 0 )
-radial_accel = -20.0
-radial_accel_curve = SubResource( 23 )
-scale = 0.25
-scale_curve = SubResource( 25 )
+emission_point_count = 1
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 0, 0)
+radial_accel_curve = SubResource("23")
+scale_curve = SubResource("25")
 
-[sub_resource type="StandardMaterial3D" id=14]
-flags_transparent = true
-flags_unshaded = true
-flags_do_not_receive_shadows = true
-flags_disable_ambient_light = true
+[sub_resource type="StandardMaterial3D" id="14"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
 vertex_color_use_as_albedo = true
-params_blend_mode = 1
-params_billboard_mode = 3
+albedo_texture = ExtResource("2")
+disable_receive_shadows = true
+billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
-albedo_texture = ExtResource( 2 )
 
-[sub_resource type="QuadMesh" id=16]
-material = SubResource( 14 )
+[sub_resource type="PlaneMesh" id="16"]
+material = SubResource("14")
 
-[sub_resource type="Gradient" id=17]
-offsets = PackedFloat32Array( 0, 0.517588, 1 )
-colors = PackedColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+[sub_resource type="Gradient" id="17"]
+offsets = PackedFloat32Array(0, 0.517588, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture2D" id=10]
-gradient = SubResource( 17 )
-width = 64
+[sub_resource type="GradientTexture2D" id="10"]
+gradient = SubResource("17")
 
-[sub_resource type="Curve" id=18]
+[sub_resource type="Curve" id="18"]
 max_value = 2.0
-_data = [ Vector2( 0, 0.308664 ), 0.0, 1.38852, 0, 0, Vector2( 0.162664, 0.669675 ), 3.12314, 3.12314, 0, 0, Vector2( 1, 2 ), 0.0, 0.0, 0, 0 ]
+_data = [Vector2(0, 0.308664), 0.0, 1.38852, 0, 0, Vector2(0.162664, 0.669675), 3.12314, 3.12314, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+point_count = 3
 
-[sub_resource type="CurveTexture" id=12]
+[sub_resource type="CurveTexture" id="12"]
 width = 64
-curve = SubResource( 18 )
+curve = SubResource("18")
 
-[sub_resource type="ParticleProcessMaterial" id=19]
+[sub_resource type="ParticleProcessMaterial" id="19"]
 emission_shape = 5
-emission_ring_radius = 0.01
-emission_ring_inner_radius = 0.0
-emission_ring_height = 0.0
-emission_ring_axis = Vector3( 0, 0, 1 )
-flag_rotate_y = true
-direction = Vector3( 0, 0, 1 )
+emission_point_count = 1
+direction = Vector3(0, 0, 1)
 spread = 5.0
-gravity = Vector3( 0, 0, 0 )
-initial_velocity = 40.0
-initial_velocity_random = 0.1
-damping = 80.0
-angle = 360.0
-angle_random = 1.0
-scale = 1.2
-scale_curve = SubResource( 12 )
-color_ramp = SubResource( 10 )
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("12")
+color_ramp = SubResource("10")
 
-[sub_resource type="StandardMaterial3D" id=8]
-flags_transparent = true
-flags_unshaded = true
-flags_do_not_receive_shadows = true
-flags_disable_ambient_light = true
+[sub_resource type="StandardMaterial3D" id="8"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
 vertex_color_use_as_albedo = true
-params_blend_mode = 1
-params_billboard_mode = 3
+albedo_texture = ExtResource("3")
+disable_receive_shadows = true
+billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
-albedo_texture = ExtResource( 3 )
 
-[sub_resource type="QuadMesh" id=20]
-material = SubResource( 8 )
+[sub_resource type="PlaneMesh" id="20"]
+material = SubResource("8")
 
-[sub_resource type="AnimationNodeBlendTree" id=3]
-graph_offset = Vector2( -22.4, 44 )
+[sub_resource type="AnimationNodeBlendTree" id="3"]
+graph_offset = Vector2(-22.4, 44)
 
 [node name="Majin" type="StaticBody3D" groups=["enemy"]]
 collision_layer = 8
 collision_mask = 8
-script = ExtResource( 1 )
+script = ExtResource("1")
 collider = NodePath("CollisionShape3D")
 hitbox = NodePath("Hitbox")
 animationTree = NodePath("AnimationTree")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0 )
-shape = SubResource( 21 )
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0)
+shape = SubResource("21")
 
 [node name="Hitbox" type="Area3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 collision_layer = 4
 collision_mask = 2
 monitoring = false
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
-shape = SubResource( 2 )
+shape = SubResource("2")
 
-[node name="GPUParticles3D" type="Node3D" parent="."]
+[node name="Particles" type="Node3D" parent="."]
 
-[node name="Charging" type="GPUParticles3D" parent="GPUParticles3D"]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0 )
-generate_lightmap = false
+[node name="Charging" type="GPUParticles3D" parent="Particles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 emitting = false
 amount = 256
 lifetime = 0.4
 speed_scale = 1.4
-process_material = SubResource( 15 )
-draw_pass_1 = SubResource( 16 )
+process_material = SubResource("15")
+draw_pass_1 = SubResource("16")
 
-[node name="Flame" type="GPUParticles3D" parent="GPUParticles3D"]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0.2 )
-generate_lightmap = false
+[node name="Flame" type="GPUParticles3D" parent="Particles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0.2)
 emitting = false
 amount = 64
 lifetime = 0.5
 speed_scale = 0.38
-visibility_aabb = AABB( -2, -2, 0, 4, 4, 10 )
-local_coords = false
-process_material = SubResource( 19 )
-draw_pass_1 = SubResource( 20 )
+visibility_aabb = AABB(-2, -2, 0, 4, 4, 10)
+process_material = SubResource("19")
+draw_pass_1 = SubResource("20")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 3 )
+tree_root = SubResource("3")
 anim_player = NodePath("../AnimationPlayer")
 
 [connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]

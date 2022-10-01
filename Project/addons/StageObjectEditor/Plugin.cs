@@ -14,7 +14,7 @@ namespace Project.Editor
 		public Plugin plugin;
 
 		private Node target;
-		private Camera3D editorCam;
+		public static Camera3D editorCam;
 
 		public override bool _Handles(Variant var)
 		{

@@ -1,7 +1,7 @@
 shader_type spatial;
 render_mode specular_disabled, shadows_disabled;
 
-uniform sampler2D albedo;
+uniform sampler2D albedo : source_color;
 
 void fragment()
 {

@@ -47,9 +47,8 @@ func LoadFrames():
 
 func GetFiles() -> Array:
 	var files = []
-	var dir = Directory.new()
-
-	dir.open(load_text.text)
+	
+	var dir = DirAccess.open(load_text.text)
 	dir.list_dir_begin()
 
 	while true:

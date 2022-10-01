@@ -1,0 +1,115 @@
+[gd_scene load_steps=14 format=3 uid="uid://co2akledxygt2"]
+
+[ext_resource type="Script" path="res://effect/sun/script/Sun.cs" id="1_wrbwf"]
+[ext_resource type="Material" uid="uid://c0oinwdqfmb1f" path="res://effect/sun/material/Base.tres" id="2_128fb"]
+[ext_resource type="Material" uid="uid://c3terqidtfvws" path="res://effect/sun/material/MovingRays.tres" id="3_2mahx"]
+[ext_resource type="Material" uid="uid://dpxjb35fgc2ev" path="res://effect/sun/material/GlowSmall.tres" id="5_gkrww"]
+[ext_resource type="Material" uid="uid://jjlounorqqn8" path="res://effect/sun/material/Glow.tres" id="6_q30rt"]
+[ext_resource type="Material" uid="uid://b8p44u7keaph6" path="res://effect/sun/material/Ray 1.tres" id="7_1wjt8"]
+[ext_resource type="Material" uid="uid://dk01p6t8xigxa" path="res://effect/sun/material/Ray 2.tres" id="8_jw0f7"]
+[ext_resource type="Shader" path="res://effect/sun/shader/DepthRenderer.gdshader" id="9_rj8i5"]
+[ext_resource type="Texture2D" uid="uid://uhr1jsl10415" path="res://effect/sun/texture/lens flare.png" id="10_c4481"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ye86b"]
+size = Vector2(800, 800)
+orientation = 2
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_oku0r"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bkhqf"]
+render_priority = 0
+shader = ExtResource("9_rj8i5")
+
+[sub_resource type="QuadMesh" id="QuadMesh_uo8y5"]
+size = Vector2(2, 2)
+
+[node name="Sun" type="Node3D"]
+script = ExtResource("1_wrbwf")
+depthCamera = NodePath("DepthViewport/DepthCamera")
+depthViewport = NodePath("DepthViewport")
+lensFlareBase = NodePath("Occluded/LensFlare")
+backgroundSeparation = 0.8
+movementThreshold = 0.02
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 2.32831e-10, 7.567e-10, -1.16415e-09, 1, -2.98023e-08, -4.65661e-10, 0, 1, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ye86b")
+surface_material_override/0 = ExtResource("2_128fb")
+
+[node name="Occluded" type="Node3D" parent="."]
+
+[node name="MovingRays" type="MeshInstance3D" parent="Occluded"]
+transform = Transform3D(1.6, 1.49012e-09, 3.7253e-10, -1.49012e-09, 1.6, -4.76837e-08, -3.7253e-10, 4.76837e-08, 1.6, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ye86b")
+surface_material_override/0 = ExtResource("3_2mahx")
+
+[node name="GlowSmall" type="MeshInstance3D" parent="Occluded"]
+transform = Transform3D(1, 1.16415e-09, 4.65661e-10, -1.16415e-09, 1, 0, -4.65661e-10, -5.42099e-19, 1, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ye86b")
+surface_material_override/0 = ExtResource("5_gkrww")
+
+[node name="Glow" type="MeshInstance3D" parent="Occluded"]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ye86b")
+surface_material_override/0 = ExtResource("6_q30rt")
+
+[node name="Ray1" type="MeshInstance3D" parent="Occluded"]
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ye86b")
+surface_material_override/0 = ExtResource("7_1wjt8")
+
+[node name="Ray2" type="MeshInstance3D" parent="Occluded"]
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ye86b")
+surface_material_override/0 = ExtResource("8_jw0f7")
+
+[node name="LensFlare" type="Node2D" parent="Occluded"]
+material = SubResource("CanvasItemMaterial_oku0r")
+position = Vector2(960, 540)
+
+[node name="LensFlare01" type="Sprite2D" parent="Occluded/LensFlare"]
+self_modulate = Color(1, 1, 1, 0.156863)
+use_parent_material = true
+texture = ExtResource("10_c4481")
+
+[node name="LensFlare02" type="Sprite2D" parent="Occluded/LensFlare"]
+self_modulate = Color(1, 1, 1, 0.156863)
+use_parent_material = true
+scale = Vector2(2, 2)
+texture = ExtResource("10_c4481")
+
+[node name="LensFlare03" type="Sprite2D" parent="Occluded/LensFlare"]
+self_modulate = Color(1, 1, 1, 0.156863)
+use_parent_material = true
+scale = Vector2(3, 3)
+texture = ExtResource("10_c4481")
+
+[node name="LensFlare04" type="Sprite2D" parent="Occluded/LensFlare"]
+self_modulate = Color(1, 1, 1, 0.156863)
+use_parent_material = true
+scale = Vector2(2, 2)
+texture = ExtResource("10_c4481")
+
+[node name="DepthViewport" type="SubViewport" parent="."]
+gui_disable_input = true
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+
+[node name="DepthCamera" type="Camera3D" parent="DepthViewport"]
+visible = false
+cull_mask = 262143
+current = true
+
+[node name="DepthRenderer" type="MeshInstance3D" parent="DepthViewport/DepthCamera"]
+layers = 262144
+material_override = SubResource("ShaderMaterial_bkhqf")
+cast_shadow = 0
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_uo8y5")
+skeleton = NodePath("")

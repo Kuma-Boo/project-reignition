@@ -1,8 +1,8 @@
 shader_type spatial;
-render_mode cull_back;
 
 global uniform float time;
-uniform float scroll_speed : hint_range(0.0, 5.0);
+
+uniform float scroll_speed : hint_range(-5.0, 5.0) = 0.0;
 uniform sampler2D albedo : source_color;
 
 void fragment()
