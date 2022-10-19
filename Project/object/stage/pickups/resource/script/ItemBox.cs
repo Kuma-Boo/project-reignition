@@ -1,6 +1,6 @@
 namespace Project.Gameplay.Objects
 {
-	public partial class ItemBox : RespawnableObject
+	public partial class ItemBox : Pickup
 	{
 
 	}

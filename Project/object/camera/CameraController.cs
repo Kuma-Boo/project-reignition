@@ -42,7 +42,8 @@ namespace Project.Gameplay
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
 		public bool IsOnScreen(Vector3 worldSpace) => _camera.IsPositionInFrustum(worldSpace);
 		public bool IsPositionBehind(Vector3 worldSpace) => _camera.IsPositionBehind(worldSpace);
-		public float ViewAngle { get; private set; }
+		public float CurrentYaw { get; private set; }
+		public float CurrentPitch { get; private set; }
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
 		private float xformAngle;
 		public float TransformAngle(float angle) => xformAngle + angle;
@@ -111,7 +112,7 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		#region Gameplay Camera3D
+		#region Gameplay Camera
 		public bool ResetFlag { get; set; } //Set to true to skip smoothing
 
 		private void UpdateGameplayCamera()
@@ -142,30 +143,40 @@ namespace Project.Gameplay
 			UpdateYaw();
 			UpdateTilt();
 
-			_calculationRoot.GlobalRotation = Vector3.Up * ViewAngle;
-			xformAngle = Vector2.Down.Rotated(-ViewAngle).AngleTo(Vector2.Down);
+			_calculationRoot.GlobalRotation = Vector3.Up * CurrentYaw;
+			_calculationGimbal.Rotation = Vector3.Right * CurrentPitch;
+			xformAngle = Vector2.Down.Rotated(-CurrentYaw).AngleTo(Vector2.Down);
 		}
 
 		private void UpdateYaw() //Calculate horizontal rotation (yaw)
 		{
 			if (targetSettings.yawMode == CameraSettingsResource.OverrideMode.Override)
-				ViewAngle = Mathf.DegToRad(targetSettings.viewAngle.y); //Override view direction
+				CurrentYaw = Mathf.DegToRad(targetSettings.viewAngle.y); //Override view direction
 			else
 			{
 				if (Mathf.Abs(PathFollower.Forward().Dot(Vector3.Up)) > .9f) //Moving vertically, can't use PathFollower.Forward
 				{
 					if (Character.IsOnGround) //Use ground direction as "forward"
-						ViewAngle = Character.GroundDirection.SignedAngleTo(Vector3.Forward, Vector3.Up);
+						CurrentYaw = Character.GroundDirection.SignedAngleTo(Vector3.Forward, Vector3.Up);
 					else //NEEDS TESTING - Maintain the current view angle?
 						return;
 				}
 				else //Forward direction is based on PathFollower's orientation
 				{
 					//Using a flattened vector because 3d vectors cause issues when traveling down slopes
-					ViewAngle = PathFollower.Forward().Flatten().Normalized().AngleTo(Vector2.Down);
+					CurrentYaw = PathFollower.Forward().Flatten().Normalized().AngleTo(Vector2.Down);
 				}
 
-				ViewAngle += Mathf.DegToRad(targetSettings.viewAngle.y);
+				CurrentYaw += Mathf.DegToRad(targetSettings.viewAngle.y); //Add
+			}
+
+
+			if (targetSettings.pitchMode == CameraSettingsResource.OverrideMode.Override)
+				CurrentPitch = Mathf.DegToRad(targetSettings.viewAngle.x); //Override view direction
+			else
+			{
+				CurrentPitch = 0; //TODO Calculate pitch
+				CurrentPitch += Mathf.DegToRad(targetSettings.viewAngle.x); //Add
 			}
 		}
 

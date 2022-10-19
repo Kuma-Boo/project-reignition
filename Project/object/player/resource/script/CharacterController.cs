@@ -312,7 +312,7 @@ namespace Project.Gameplay
 
 		private const float TURN_SPEED = .1f; //How much to turn when moving slowly
 		private const float TURN_SPEED_LOSS = .06f; //How much speed to lose when turning sharply
-		private const float MAX_TURN_SPEED = .4f; //How much to turn when moving at top speed
+		private const float MAX_TURN_SPEED = .2f; //How much to turn when moving at top speed
 		/// <summary> Maximum angle as to what registers as turning, before transitioning into turnaround</summary>
 		private const float MAX_TURN_ANGLE = Mathf.Pi * .8f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
@@ -385,7 +385,6 @@ namespace Project.Gameplay
 				else //Ensure character turns facing forward, for more consistant homing attacks.
 					MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .49f);
 			}
-
 			if (!IsLockoutActive || !currentLockoutData.overrideSpeed) //Don't apply turning speed loss when overriding speed
 			{
 				//Calculate turn delta, relative to ground speed
@@ -399,6 +398,7 @@ namespace Project.Gameplay
 			{
 				if (currentLockoutData.recenterPlayer)
 				{
+					//TODO Fix recentering player
 					GD.Print("Recentering player is broken!");
 
 					Vector3 recenterDirection = GroundDirection.Cross(GetMovementDirection());
@@ -1247,7 +1247,7 @@ namespace Project.Gameplay
 		private void ResetOrientation() //Resets orientation
 		{
 			GroundDirection = Vector3.Up;
-			MovementAngle = GetParent<Node3D>().Rotation.y; //Copy movement angle from global parent
+			//MovementAngle = GetParent<Node3D>().Rotation.y; //Copy movement angle from global parent
 
 			//TODO Re-sync visual rotations
 		}
@@ -1262,20 +1262,6 @@ namespace Project.Gameplay
 			t.basis.x = -t.basis.z.Cross(t.basis.y);
 			t.basis = t.basis.Orthonormalized();
 			GlobalTransform = t;
-
-			/*
-			float rotationAmount = -_gimbal.Forward().Flatten().AngleTo(PathFollower.ForwardDirection.Flatten()); //Face path
-			if (Lockon.IsHomingAttacking) //Face target
-				rotationAmount = -_gimbal.Forward().Flatten().AngleTo(Lockon.HomingAttackDirection.Flatten());
-
-			if (ResetOrientation) //Snap orientation
-			{
-				ResetOrientation = false;
-				_gimbal.RotateObjectLocal(Vector3.Up, rotationAmount);
-			}
-			else
-				_gimbal.RotateObjectLocal(Vector3.Up, rotationAmount * ORIENTATION_SMOOTHING);
-			*/
 		}
 		#endregion
 
@@ -1293,8 +1279,6 @@ namespace Project.Gameplay
 			Lockon.IsMonitoring = false;
 			Skills.IsTimeBreakEnabled = false;
 			Skills.IsSpeedBreakEnabled = false;
-
-			AddLockoutData(Stage.CompletionControlLockout);
 		}
 
 		public void OnObjectAreaEntered(Area3D a)

@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctvnkxdv1iapb"]
+
+[ext_resource type="PackedScene" uid="uid://de3fli06d0saj" path="res://area/stage/1 sand oasis/data/environment/model/Jar.gltf" id="1_qspct"]
+[ext_resource type="PackedScene" uid="uid://c8ij60kwe77ol" path="res://area/stage/1 sand oasis/data/environment/model/JarPieces.gltf" id="2_2vdbn"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="2_l0n6o"]
+
+[sub_resource type="CylinderShape3D" id="2"]
+height = 2.2
+radius = 0.8
+
+[node name="Jar" type="Area3D"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="Jar" parent="." instance=ExtResource("1_qspct")]
+
+[node name="JarPieces" parent="." instance=ExtResource("2_2vdbn")]
+script = ExtResource("2_l0n6o")
+originalMesh = NodePath("../Jar")
+collider = NodePath("../CollisionShape3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("2")

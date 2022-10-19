@@ -7,7 +7,7 @@ namespace Project.Gameplay.Objects
 	/// <summary>
 	/// Object that shatters when destroyed. All pieces must be a child of this object.
 	/// </summary>
-	public partial class DestructableObject : RespawnableObject
+	public partial class DestructableObject : Node3D
 	{
 		[Export]
 		public NodePath originalMesh; //Unbroken mesh. Leave empty to always show the pieces
@@ -36,15 +36,15 @@ namespace Project.Gameplay.Objects
 		[Signal]
 		public delegate void ShatteredEventHandler();
 
-		protected override bool IsRespawnable() => true;
-
+		private StageSettings.SpawnData spawnData;
 		private readonly Array<RigidBody3D> _pieces = new Array<RigidBody3D>();
 		private readonly Array<Transform3D> _piecesSpawnTransforms = new Array<Transform3D>();
 		private const float EXPLOSION_FORCE = 10f;
 
-		protected override void SetUp()
+		public override void _Ready()
 		{
-			base.SetUp();
+			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
+			StageSettings.instance.RegisterRespawnableObject(this);
 
 			if (originalMesh != null)
 				_originalMesh = GetNodeOrNull<Node3D>(originalMesh);
@@ -85,9 +85,11 @@ namespace Project.Gameplay.Objects
 			Respawn();
 		}
 
-		public override void Respawn()
+		public void Respawn()
 		{
-			base.Respawn();
+			if (!IsInsideTree() && GetParent() != spawnData.parentNode)
+				spawnData.parentNode.AddChild(this);
+			Transform = spawnData.spawnTransform;
 
 			if (tween != null)
 				tween.Stop();
@@ -107,11 +109,10 @@ namespace Project.Gameplay.Objects
 				EnablePieces();
 		}
 
-		public override void Despawn()
+		public void Despawn()
 		{
-			if (!isShattered) return; //Just in case the player was respawned while the object was still shattering
-
-			base.Despawn();
+			if (!IsInsideTree() || !isShattered) return; //Just in case the player was respawned while the object was still shattering
+			GetParent().CallDeferred("remove_child", this);
 		}
 
 		private void DisablePieces()
@@ -169,7 +170,7 @@ namespace Project.Gameplay.Objects
 			EmitSignal(SignalName.Shattered);
 		}
 
-		public override void Unload()
+		public override void _ExitTree()
 		{
 			//Prevent memory leakage
 			for (int i = 0; i < _pieces.Count; i++)

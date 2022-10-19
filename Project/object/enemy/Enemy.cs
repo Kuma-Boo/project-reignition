@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay
 {
-	public partial class Enemy : RespawnableObject
+	public partial class Enemy : Node3D
 	{
 		[Signal]
 		public delegate void DefeatedEventHandler();
@@ -19,14 +19,17 @@ namespace Project.Gameplay
 		[Export]
 		public bool damagePlayer;
 
-		protected override bool IsRespawnable() => true; //Enemies are always respawnable
+		private StageSettings.SpawnData spawnData;
+		protected CharacterController Character => CharacterController.instance;
 
-		protected override void SetUp()
+		public override void _Ready() => SetUp();
+		protected virtual void SetUp()
 		{
-			if (collider != null) _collider = GetNode<CollisionShape3D>(collider);
-			if (hitbox != null) _hitbox = GetNode<Node>(hitbox) as Area3D;
+			_collider = GetNode<CollisionShape3D>(collider);
+			_hitbox = GetNode<Area3D>(hitbox);
 
-			base.SetUp();
+			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
+			StageSettings.instance.RegisterRespawnableObject(this);
 			Respawn();
 		}
 
@@ -40,14 +43,23 @@ namespace Project.Gameplay
 				ProcessInteraction();
 		}
 
-		public override void Respawn()
+		public virtual void Respawn()
 		{
-			base.Respawn();
+			if (!IsInsideTree() && GetParent() != spawnData.parentNode)
+				spawnData.parentNode.AddChild(this);
+
+			Transform = spawnData.spawnTransform;
 
 			currentHealth = maxHealth;
 
 			if (_collider != null) _collider.Disabled = false;
 			if (_hitbox != null) _hitbox.Monitorable = _hitbox.Monitoring = true;
+		}
+
+		public virtual void Despawn()
+		{
+			if (!IsInsideTree()) return;
+			GetParent().CallDeferred("remove_child", this);
 		}
 
 		public virtual void TakeDamage()

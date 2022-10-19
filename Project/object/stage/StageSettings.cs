@@ -8,52 +8,202 @@ namespace Project.Gameplay
 	/// Manager responsible for stage setup.
 	/// This is the first thing that gets loaded in a stage.
 	/// </summary>
+	[Tool]
 	public partial class StageSettings : Node3D
 	{
+		#region Editor
+		public override Array<Dictionary> _GetPropertyList()
+		{
+			Array<Dictionary> properties = new Array<Dictionary>();
+
+			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, "None,Objective,Rings,Pearls,Enemies"));
+
+			if (MissionType != MissionTypes.None)
+				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,512"));
+
+			properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Activation Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));
+			if (itemCycleActivationTrigger != null && !itemCycleActivationTrigger.IsEmpty)
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Halfway Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));
+				properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Enable Respawning", Variant.Type.Bool));
+				properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Item Cycles", Variant.Type.Array, PropertyHint.TypeString, "22/0:"));
+			}
+
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Float, PropertyHint.Range, "0,10,.05"));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Float, PropertyHint.Range, "0,10,.05"));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Float, PropertyHint.Range, "0,10,.05"));
+
+			if (!skipScore)
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,10"));
+				properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,10"));
+				properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,10"));
+			}
+
+			properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,4,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object));
+			properties.Add(ExtensionMethods.CreateProperty("Completion/Animator", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "AnimationPlayer"));
+
+			return properties;
+		}
+
+		public override Variant _Get(StringName property)
+		{
+			switch ((string)property)
+			{
+				case "Mission Type":
+					return (int)MissionType;
+				case "Objective Count":
+					return ObjectiveCount;
+
+				case "Item Cycling/Activation Trigger":
+					return itemCycleActivationTrigger;
+				case "Item Cycling/Halfway Trigger":
+					return itemCycleHalfwayTrigger;
+				case "Item Cycling/Enable Respawning":
+					return itemCycleRespawnEnabled;
+				case "Item Cycling/Item Cycles":
+					return itemCycles;
+
+				case "Ranking/Skip Score":
+					return skipScore;
+				case "Ranking/Gold Time":
+					return goldTime;
+				case "Ranking/Silver Time":
+					return silverTime;
+				case "Ranking/Bronze Time":
+					return bronzeTime;
+				case "Ranking/Gold Score":
+					return goldScore;
+				case "Ranking/Silver Score":
+					return silverScore;
+				case "Ranking/Bronze Score":
+					return bronzeScore;
+
+				case "Completion/Delay":
+					return completionDelay;
+				case "Completion/Lockout":
+					return completionLockout;
+				case "Completion/Animator":
+					return completionAnimator;
+			}
+
+			return base._Get(property);
+		}
+
+		public override bool _Set(StringName property, Variant value)
+		{
+			switch ((string)property)
+			{
+				case "Mission Type":
+					MissionType = (MissionTypes)(int)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Objective Count":
+					ObjectiveCount = (int)value;
+					break;
+
+				case "Item Cycling/Activation Trigger":
+					itemCycleActivationTrigger = (NodePath)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Item Cycling/Halfway Trigger":
+					itemCycleHalfwayTrigger = (NodePath)value;
+					break;
+				case "Item Cycling/Enable Respawning":
+					itemCycleRespawnEnabled = (bool)value;
+					break;
+				case "Item Cycling/Item Cycles":
+					itemCycles = (Array<NodePath>)value;
+					break;
+
+				case "Ranking/Skip Score":
+					skipScore = (bool)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Ranking/Gold Time":
+					goldTime = (float)value;
+					break;
+				case "Ranking/Silver Time":
+					silverTime = (float)value;
+					break;
+				case "Ranking/Bronze Time":
+					bronzeTime = (float)value;
+					break;
+				case "Ranking/Gold Score":
+					goldScore = (int)value;
+					break;
+				case "Ranking/Silver Score":
+					silverScore = (int)value;
+					break;
+				case "Ranking/Bronze Score":
+					bronzeScore = (int)value;
+					break;
+
+				case "Completion/Delay":
+					completionDelay = (float)value;
+					break;
+				case "Completion/Lockout":
+					completionLockout = (LockoutResource)value;
+					break;
+				case "Completion/Animator":
+					completionAnimator = (NodePath)value;
+					break;
+				default:
+					return false;
+			}
+
+			return true;
+		}
+		#endregion
+
 		public static StageSettings instance;
 
 		public override void _EnterTree()
 		{
+			if (Engine.IsEditorHint()) return;
+
 			instance = this; //Always override previous instance
-			if (cameraDemo != null)
+			if (completionAnimator != null && !completionAnimator.IsEmpty)
 			{
-				_cameraDemo = GetNode<AnimationPlayer>(cameraDemo);
-				_cameraDemo.Connect("animation_changed", new Callable(this, nameof(CameraDemoAdvanced)));
+				_completionAnimator = GetNode<AnimationPlayer>(completionAnimator);
+				_completionAnimator.Connect("animation_changed", new Callable(this, nameof(OnCameraDemoAdvance)));
 			}
 
-			SetUpMission();
+			SetUpItemCycles();
 		}
 
-		public override void _PhysicsProcess(double _) => UpdateTime();
+		public override void _PhysicsProcess(double _)
+		{
+			if (Engine.IsEditorHint()) return;
+
+			UpdateTime();
+		}
 
 		#region Stage Settings
-		[Export]
-		public int scoreRequirement; //Requirement for score rank
-		[Export]
-		public float timeRequirement; //Requirement for time rank. Format is [minutes.seconds (.5 is 30 seconds)]
-		[Export]
-		public int targetObjectiveCount; //What's the target amount for the current objective?
-		[Export]
-		public MissionType missionType; //Type of mission
-		public enum MissionType
+		private bool skipScore; //Don't use score when ranking (i.e. for bosses)
+
+		//Requirements for time rank. Format is in minutes. (.5 is 30 seconds)
+		private float goldTime;
+		private float silverTime;
+		private float bronzeTime;
+		//Requirement for score rank
+		private int goldScore;
+		private int silverScore;
+		private int bronzeScore;
+
+		public int ObjectiveCount { get; private set; } //What's the target amount for the current objective?
+		public MissionTypes MissionType { get; private set; } //Type of mission
+		public enum MissionTypes
 		{
-			Objective, //For Get to the Goal stages, add a goal node and set the objective count to 0.
+			None, //Add a goal node or a boss so the player doesn't get stuck!
+			Objective, //Add custom nodes that call IncrementObjective()
 			Ring, //Collect a certain amount of rings
+			Pearl, //Collect a certain amount of pearls (normally zero)
 			Enemy, //Destroy a certain amount of enemies
 		}
-		private void SetUpMission()
-		{
-			/*
-			switch (missionType)
-			{
-				case MissionType.Ring:
-					break;
-				case MissionType.Enemy:
-					Array rings = GetTree().GetNodesInGroup("enemy");
-					break;
-			}
-			*/
-		}
+
 		#endregion
 
 		#region Stage Data
@@ -125,7 +275,7 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.ObjectiveChanged);
 			GD.Print("Objective is now " + CurrentObjectiveCount);
 
-			if (CurrentObjectiveCount >= targetObjectiveCount)
+			if (CurrentObjectiveCount >= ObjectiveCount)
 				FinishStage(true);
 		}
 
@@ -138,11 +288,12 @@ namespace Project.Gameplay
 			CurrentRingCount += amount;
 			if (CurrentRingCount < 0) //Clamp to zero
 				CurrentRingCount = 0;
-			else if (missionType == MissionType.Ring && CurrentRingCount >= targetObjectiveCount) //For ring based missions
+			else if (MissionType == MissionTypes.Ring && CurrentRingCount >= ObjectiveCount) //For ring based missions
 			{
-				CurrentRingCount = targetObjectiveCount; //Clamp
+				CurrentRingCount = ObjectiveCount; //Clamp
 				FinishStage(true);
 			}
+
 			EmitSignal(SignalName.RingChanged, amount);
 		}
 
@@ -165,31 +316,29 @@ namespace Project.Gameplay
 			DisplayTime = time.ToString(TIME_LABEL_FORMAT);
 			EmitSignal(SignalName.TimeChanged);
 		}
+		#endregion
 
+		#region Stage Completion
 		//Completion
-		[Export]
-		public StageCompletionType completionType;
-		public enum StageCompletionType
-		{
-			Crossfade, //Instantly crossfade to the camera demo
-			Run, //Keep running forward, then crossfade
-		}
-		[Export]
-		public LockoutResource CompletionControlLockout;
-		[Export]
-		public NodePath cameraDemo; //Camera3D demo that gets enabled after the stage clears
-		private AnimationPlayer _cameraDemo;
+		private float completionDelay;
+		private LockoutResource completionLockout;
+		private NodePath completionAnimator; //Camera3D demo that gets enabled after the stage clears
+		private AnimationPlayer _completionAnimator;
 
 		[Signal]
 		public delegate void StageCompletedEventHandler(bool isSuccess); //Stage was completed
 		public void FinishStage(bool isSuccess)
 		{
-			//Asssign rank
+			CharacterController.instance.AddLockoutData(completionLockout); //Lockout player
+
+			//Assign rank
 			//GameplayInterface.instance.Score;
-			if (_cameraDemo != null)
+			if (_completionAnimator != null)
 			{
-				CameraDemoAdvanced(string.Empty, string.Empty);
-				_cameraDemo.Play("demo1");
+				OnCameraDemoAdvance(string.Empty);
+
+				_completionAnimator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(this, MethodName.OnCameraDemoAdvance));
+				_completionAnimator.Play("demo1");
 
 				//Hide everything so shadows don't render
 				Visible = false;
@@ -198,8 +347,8 @@ namespace Project.Gameplay
 				Array<Node> nodes = GetTree().GetNodesInGroup("cull on complete");
 				for (int i = 0; i < nodes.Count; i++)
 				{
-					if (nodes[i] is Node3D spatial)
-						spatial.Visible = false;
+					if (nodes[i] is Node3D node)
+						node.Visible = false;
 				}
 			}
 
@@ -207,22 +356,28 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.StageCompleted, isSuccess);
 		}
 
-		//Camera3D demo was advanced, play a crossfade
-		private void CameraDemoAdvanced(string _, string _newAnim) => CharacterController.instance.Camera.StartCrossfade();
+		//Completion demo advanced, play a crossfade
+		private void OnCameraDemoAdvance(string _) => CharacterController.instance.Camera.StartCrossfade();
 		#endregion
 
 		#region Object Spawning
+		public struct SpawnData
+		{
+			public Node parentNode; //Original parent node
+			public Transform3D spawnTransform; //Local transform to spawn with
+			public SpawnData(Node parent, Transform3D transform)
+			{
+				parentNode = parent;
+				spawnTransform = transform;
+			}
+		}
+
 		[Signal]
 		public delegate void RespawnedEventHandler();
-		[Signal]
-		public delegate void StageUnloadEventHandler();
-		private const string RESPAWN_FUNCTION = "Respawn";
+		private const string RESPAWN_FUNCTION = "Respawn"; //Default name of respawn functions
 
 		public void RegisterRespawnableObject(Node node)
 		{
-			if (!IsConnected(SignalName.StageUnload, new Callable(node, "queue_free"))) //Prevent memory leaks
-				Connect(SignalName.StageUnload, new Callable(node, "queue_free"));
-
 			if (!node.HasMethod(RESPAWN_FUNCTION))
 			{
 				GD.PrintErr($"Node {node.Name} doesn't have a function 'Respawn!'");
@@ -239,11 +394,80 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.Respawned);
 		}
 
-		public override void _ExitTree()
+		private bool itemCycleRespawnEnabled = true; //Respawn items when cycling?
+		private bool itemCycleFlagSet; //Should we trigger an item switch?
+		private int itemCycleIndex; //Active item set
+
+		//Make sure itemCycle triggers are monitoring and collide with the player
+		private NodePath itemCycleActivationTrigger; //When to apply the item cycle
+		private NodePath itemCycleHalfwayTrigger; //So the player can't just move in and out of the activation trigger
+		private Array<NodePath> itemCycles = new Array<NodePath>();
+		private Node3D[] _itemCycles;
+		private SpawnData[] _itemCyclesSpawnData;
+
+		private void SetUpItemCycles()
 		{
-			EmitSignal(SignalName.StageUnload);
+			if (itemCycleActivationTrigger == null) return; //Item cycling disabled
+
+			GetNode<Area3D>(itemCycleActivationTrigger).Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnItemCycleActivate));
+			if (itemCycleHalfwayTrigger != null)
+				GetNode<Area3D>(itemCycleHalfwayTrigger).Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnItemCycleHalfwayEntered));
+
+			_itemCycles = new Node3D[itemCycles.Count];
+			_itemCyclesSpawnData = new SpawnData[itemCycles.Count];
+
+			for (int i = 0; i < itemCycles.Count; i++)
+			{
+				if (itemCycles[i] == null || itemCycles[i].IsEmpty) //Nothing on this item cycle!
+				{
+					_itemCycles[i] = null;
+					_itemCyclesSpawnData[i] = new SpawnData();
+					continue;
+				}
+
+				Node3D node = GetNode<Node3D>(itemCycles[i]);
+				SpawnData spawnData = new SpawnData(node.GetParent(), node.Transform);
+				node.Visible = true;
+
+				_itemCycles[i] = node;
+				_itemCyclesSpawnData[i] = spawnData;
+
+				if (i != itemCycleIndex) //Disable inactive nodes
+					spawnData.parentNode.CallDeferred(MethodName.RemoveChild, node);
+			}
+		}
+
+		public void OnItemCycleActivate(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			if (itemCycles.Count == 0 || !itemCycleFlagSet) return;
+
+			//Cycle items
+			if (itemCycleRespawnEnabled)
+				RespawnObjects();
+
+			if (_itemCycles[itemCycleIndex] != null) //Despawn current item cycle
+				_itemCyclesSpawnData[itemCycleIndex].parentNode.CallDeferred(MethodName.RemoveChild, _itemCycles[itemCycleIndex]);
+
+			//Increment counter
+			itemCycleIndex++;
+			if (itemCycleIndex > itemCycles.Count - 1)
+				itemCycleIndex = 0;
+
+			if (_itemCycles[itemCycleIndex] != null) //Spawn current item cycle
+			{
+				_itemCyclesSpawnData[itemCycleIndex].parentNode.AddChild(_itemCycles[itemCycleIndex]);
+				_itemCycles[itemCycleIndex].Transform = _itemCyclesSpawnData[itemCycleIndex].spawnTransform;
+			}
+
+			itemCycleFlagSet = false;
+		}
+
+		public void OnItemCycleHalfwayEntered(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			itemCycleFlagSet = true;
 		}
 		#endregion
-
 	}
 }

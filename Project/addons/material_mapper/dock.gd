@@ -1,15 +1,11 @@
 @tool
 extends Control
 
-var dir = Directory.new()
-
-@onready var texturePath : LineEdit = get_node("Texture2D/Path3D")
-@onready var materialPath : LineEdit = get_node("Material/Path3D")
+@onready var texturePath : LineEdit = get_node("Texture/Path")
+@onready var materialPath : LineEdit = get_node("Material/Path")
 @onready var textureNameFormat : OptionButton = get_node("TextureNameFormat/Format")
 
 @onready var importAlbedo : Button = get_node("Toggles/ImportAlbedo")
-@onready var useDiffuse : Button = get_node("Toggles/UseDiffuse")
-@onready var applySuffix : Button = get_node("Toggles/ApplySuffix")
 @onready var importNormal : Button = get_node("Toggles/ImportNormal")
 @onready var importRoughness : Button = get_node("Toggles/ImportRoughness")
 @onready var resetSpecular : Button = get_node("Toggles/ResetSpecular")
@@ -32,12 +28,12 @@ func _ready():
 	textureNameFormat.select(1)
 
 func _on_update_pressed():
-	if texturePath.text.is_empty() || !dir.dir_exists(texturePath.text):
-		printerr("Texture2D directory not found!")
+	if texturePath.text.is_empty():
+		printerr("Texture directory cannot be empty!")
 		return
 
-	if materialPath.text.is_empty() || !dir.dir_exists(materialPath.text):
-		printerr("Material directory not found!")
+	if materialPath.text.is_empty():
+		printerr("Material directory cannot be empty!")
 		return
 
 	update_materials()
@@ -64,19 +60,13 @@ func update_materials():
 			materialName = materialName.to_lower()
 		elif textureNameFormat.selected == 2:
 			materialName = materialName.to_upper()
+		
 		process_material(materialName)
 
 func process_material(materialName : String):
 	var textureIndex : int;
 	if importAlbedo.pressed:
-		if applySuffix.pressed:
-			if useDiffuse.pressed:
-				textureIndex = find_texture(materialName, "diffuse")
-			else:
-				textureIndex = find_texture(materialName, "albedo")
-		else:
-			textureIndex = find_texture(materialName, "")
-
+		textureIndex = find_texture(materialName, "")
 		apply_texture(textureIndex, "albedo")
 
 
@@ -112,15 +102,17 @@ func find_texture(fileName : String, map : String) -> int:
 
 func get_files_in_directory(path, extension) -> Array:
 	var files = []
-	dir.open(path)
-	dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+	var dir = DirAccess.open(path)
+	if dir.list_dir_begin() == OK:
+		while true:
+			var file = dir.get_next()
+			if file == "":
+				break
+			elif file.ends_with(extension):
+				files.append(file)
 
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif file.ends_with(extension):
-			files.append(file)
-
-	dir.list_dir_end()
+		dir.list_dir_end()
+	else:
+		printerr("Error loading path " + path)
+	
 	return files

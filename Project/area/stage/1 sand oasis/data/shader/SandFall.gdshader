@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode specular_disabled, depth_draw_opaque, shadows_disabled;
+render_mode cull_disabled, depth_draw_opaque;
 
 uniform float direction : hint_range(-1, 1);
 uniform float flowSpeed : hint_range(0, 2);
@@ -17,6 +17,8 @@ void fragment()
 {
 	float scrollAmount = TIME * flowSpeed * direction;
 	
+	float alpha = texture(mask, vec2(UV.x + scrollAmount, clamp(UV.y, .1, .9))).r;
+
 	ALBEDO = texture(albedo, vec2(UV.x + scrollAmount, UV.y)).rgb;
-	ALPHA = texture(mask, vec2(UV.x + scrollAmount, clamp(UV.y, .1, .9))).a;
+	ALPHA = alpha;
 }

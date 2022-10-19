@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 //Tool for generating groups of objects
 namespace Project.Editor
@@ -6,134 +7,240 @@ namespace Project.Editor
 	[Tool]
 	public partial class ObjectGenerator : Node3D
 	{
-		[Export]
-		public PackedScene targetScene;
+		private PackedScene source;
+		private int amount;
 
-		[Export]
-		public bool generate;
-
-		[Export(PropertyHint.Range, "0, 64")]
-		public int amount;
-
-		[Export]
-		public GenerationType type;
-		public enum GenerationType
+		public SpawnShape shape;
+		public enum SpawnShape
 		{
-			RingVertical, //Spawns around a ring
-			RingFlat, //Spawns around a ring
 			Line, //Spawn linearly
-			LineUp, //Spawn Upwards
-			Path3D //Spawn linearly along a path
+			Ring, //Spawns around a ring
+			Path //Spawn linearly along a path
 		}
 
-		[Export(PropertyHint.Range, "0, 12")]
-		public float spacing;
-		[Export(PropertyHint.Range, "0, 1")]
-		public float ringRatio = 1f;
-		[Export]
-		public NodePath path;
-		[Export]
-		public Curve pathHInterpolationCurve;
-		[Export]
-		public Curve pathVInterpolationCurve;
-
-		public override void _Process(double _)
+		public SpawnOrientation orientation;
+		public enum SpawnOrientation
 		{
-			if (!Engine.IsEditorHint()) return;
+			Horizontal,
+			Vertical,
+		}
 
-			if (generate)
+		public float spacing;
+		public float ringRatio = 1f;
+
+		public NodePath path;
+		public float progressOffset; //Used whenever path isn't getting the proper point
+		public Curve hOffsetCurve;
+		public Curve vOffsetCurve;
+
+		private int currentChildCount;
+
+		public override Array<Dictionary> _GetPropertyList()
+		{
+			Array<Dictionary> properties = new Array<Dictionary>();
+
+			properties.Add(ExtensionMethods.CreateProperty("Generate", Variant.Type.Bool));
+
+			properties.Add(ExtensionMethods.CreateProperty("Source", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"));
+			properties.Add(ExtensionMethods.CreateProperty("Amount", Variant.Type.Int, PropertyHint.Range, "0,64"));
+
+			properties.Add(ExtensionMethods.CreateProperty("Shape", Variant.Type.Int, PropertyHint.Enum, "Line,Ring,Path"));
+
+			if (shape == SpawnShape.Path)
 			{
-				generate = false;
+				properties.Add(ExtensionMethods.CreateProperty("Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
+				properties.Add(ExtensionMethods.CreateProperty("Path Progress Offset", Variant.Type.Float, PropertyHint.Range, "-64,64,.1"));
+			}
+			else
+				properties.Add(ExtensionMethods.CreateProperty("Orientation", Variant.Type.Int, PropertyHint.Enum, "Horizontal,Vertical"));
 
-				for (int i = 0; i < GetChildCount(); i++)
-					GetChild(i).QueueFree();
+			if (shape == SpawnShape.Ring)
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Ring Ratio", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
+			}
+			else
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Horizontal Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
+				properties.Add(ExtensionMethods.CreateProperty("Vertical Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
+			}
 
-				switch (type)
-				{
-					case GenerationType.RingVertical:
-						if (amount == 1)
-						{
-							Spawn(Vector3.Zero);
-							break;
-						}
+			return properties;
+		}
 
-						float interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
-						for (int i = 0; i < amount; i++)
-							Spawn(Vector3.Left.Rotated(Vector3.Forward, (interval * i)).Normalized() * spacing);
+		public override bool _Set(StringName property, Variant value)
+		{
+			switch ((string)property)
+			{
+				case "Generate":
+					GenerateChildren();
+					break;
+				case "Source":
+					source = (PackedScene)value;
+					break;
+				case "Amount":
+					amount = (int)value;
+					break;
+				case "Shape":
+					shape = (SpawnShape)(int)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Orientation":
+					orientation = (SpawnOrientation)(int)value;
+					break;
+				case "Ring Ratio":
+					ringRatio = (float)value;
+					break;
+				case "Ring Size":
+					spacing = (float)value;
+					break;
+				case "Spacing":
+					spacing = (float)value;
+					break;
+				case "Path":
+					path = (NodePath)value;
+					break;
+				case "Path Progress Offset":
+					progressOffset = (float)value;
+					break;
 
+				case "Horizontal Offset":
+					hOffsetCurve = (Curve)value;
+					break;
+				case "Vertical Offset":
+					vOffsetCurve = (Curve)value;
+					break;
+
+				default:
+					return false;
+			}
+
+			return true;
+		}
+
+		public override Variant _Get(StringName property)
+		{
+			switch ((string)property)
+			{
+				case "Generate":
+					return false;
+				case "Source":
+					return source;
+				case "Amount":
+					return amount;
+				case "Shape":
+					return (int)shape;
+				case "Orientation":
+					return (int)orientation;
+				case "Ring Ratio":
+					return ringRatio;
+				case "Ring Size":
+					return spacing;
+				case "Spacing":
+					return spacing;
+				case "Path":
+					return path;
+				case "Path Progress Offset":
+					return progressOffset;
+
+				case "Horizontal Offset":
+					return hOffsetCurve;
+				case "Vertical Offset":
+					return vOffsetCurve;
+			}
+
+			return base._Get(property);
+		}
+
+		private void GenerateChildren()
+		{
+			//Delete old children
+			for (int i = 0; i < GetChildCount(); i++)
+			{
+				GetChild(i).Name = "Deletion" + i;
+				GetChild(i).QueueFree();
+			}
+			currentChildCount = 1; //Reset child counter
+
+			switch (shape)
+			{
+				case SpawnShape.Ring:
+					if (amount == 1)
+					{
+						Spawn(Vector3.Zero);
 						break;
-					case GenerationType.RingFlat:
-						if (amount == 1)
-						{
-							Spawn(Vector3.Zero);
-							break;
-						}
+					}
 
-						interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
-						for (int i = 0; i < amount; i++)
-							Spawn(Vector3.Forward.Rotated(Vector3.Up, (interval * i)).Normalized() * spacing);
+					float interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
+					Vector3 rotationBase = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Left;
+					Vector3 rotationAxis = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Forward;
+					for (int i = 0; i < amount; i++)
+						Spawn(Vector3.Left.Rotated(rotationAxis, (interval * i)).Normalized() * spacing);
+					break;
+				case SpawnShape.Line:
+					Vector3 forwardDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Up;
+					Vector3 upDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Back;
+					float divider = amount - 1;
+					float hOffset = 0;
+					float vOffset = 0;
 
+					for (int i = 0; i < amount; i++)
+					{
+						if (hOffsetCurve != null)
+							hOffset = hOffsetCurve.Sample(i / divider);
+
+						if (vOffsetCurve != null)
+							vOffset = vOffsetCurve.Sample(i / divider);
+
+						Spawn(forwardDirection * i * spacing + Vector3.Right * hOffset + upDirection * vOffset);
+					}
+					break;
+				case SpawnShape.Path:
+					if (path.IsEmpty)
+					{
+						GD.PrintErr("No Path Provided.");
 						break;
-					case GenerationType.Line:
-						for (int i = 0; i < amount; i++)
-						{
-							Vector3 offset = new Vector3(pathHInterpolationCurve.Sample((float)i / (amount - 1)), pathVInterpolationCurve.Sample((float)i / (amount - 1)), 0);
-							Spawn(Vector3.Forward * i * spacing + offset);
-						}
-						break;
-					case GenerationType.LineUp:
-						for (int i = 0; i < amount; i++)
-						{
-							Vector3 offset = new Vector3(pathHInterpolationCurve.Sample((float)i / (amount - 1)), pathVInterpolationCurve.Sample((float)i / (amount - 1)), 0);
-							Spawn(Vector3.Forward * i * spacing + offset);
-						}
-						break;
-					case GenerationType.Path3D:
-						if (path.IsEmpty)
-						{
-							GD.PrintErr("No Path3D Provided.");
-							break;
-						}
+					}
 
-						Path3D _path = GetNode<Path3D>(path);
-						PathFollow3D _follow = new PathFollow3D
-						{
-							RotationMode = PathFollow3D.RotationModeEnum.Oriented
-						};
-						_path.AddChild(_follow);
-						_follow.Progress = _path.Curve.GetClosestOffset(GlobalPosition - _path.GlobalPosition);
+					Path3D _path = GetNode<Path3D>(path);
+					PathFollow3D _follow = new PathFollow3D
+					{
+						RotationMode = PathFollow3D.RotationModeEnum.Oriented
+					};
+					_path.AddChild(_follow);
+					_follow.Progress = _path.Curve.GetClosestOffset(GlobalPosition - _path.GlobalPosition) + progressOffset;
 
-						for (int i = 0; i < amount; i++)
-						{
-							if (pathHInterpolationCurve != null)
-								_follow.HOffset = pathHInterpolationCurve.Sample((float)i / (amount - 1));
-							else
-								_follow.HOffset = (_follow.GlobalTransform.basis * (_follow.GlobalPosition - GlobalPosition)).x; //XFormInv
+					Vector3 offset = _follow.GlobalTransform.Inverse().basis * (GlobalPosition - _follow.GlobalPosition);
+					_follow.HOffset = offset.x;
+					_follow.VOffset = offset.y;
 
-							if (pathVInterpolationCurve != null)
-								_follow.VOffset = pathVInterpolationCurve.Sample((float)i / (amount - 1));
-							else
-								_follow.VOffset = (_follow.GlobalTransform.basis * (_follow.GlobalPosition - GlobalPosition)).y; //XFormInv
+					for (int i = 0; i < amount; i++)
+					{
+						if (hOffsetCurve != null)
+							_follow.HOffset = hOffsetCurve.Sample((float)i / (amount - 1));
+						if (vOffsetCurve != null)
+							_follow.VOffset = vOffsetCurve.Sample((float)i / (amount - 1));
 
-							Spawn(_follow.GlobalPosition, true);
-							_follow.Progress += spacing;
-							_follow.HOffset = _follow.VOffset = 0f;
-						}
+						Spawn(_follow.GlobalPosition, true);
+						_follow.Progress += spacing;
+					}
 
-						_follow.QueueFree();
-						break;
-				}
+					_follow.QueueFree();
+					break;
 			}
 		}
 
 		private void Spawn(Vector3 pos, bool globalPosition = default)
 		{
-			Node3D obj = targetScene.Instantiate<Node3D>();
+			Node3D obj = source.Instantiate<Node3D>();
+			obj.Name = "Child" + currentChildCount.ToString("00"); //Set name
+			currentChildCount++;
 			AddChild(obj);
 			obj.Owner = GetTree().EditedSceneRoot;
 
 			if (globalPosition)
-				GlobalPosition = pos;
+				obj.GlobalPosition = pos;
 			else
 				obj.Position = pos;
 		}

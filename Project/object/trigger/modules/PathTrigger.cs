@@ -7,7 +7,7 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class PathTrigger : StageTriggerModule
 	{
-		[Export]
+		[Export(PropertyHint.NodePathValidTypes, "Path3D")]
 		public NodePath path;
 		private Path3D _path;
 		[Export]

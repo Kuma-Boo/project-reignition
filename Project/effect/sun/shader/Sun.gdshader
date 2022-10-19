@@ -9,5 +9,6 @@ uniform sampler2D albedo : source_color;
 
 void fragment() {
 	vec4 col = texture(albedo, UV);
-	ALBEDO = mix(col.rgb, vec4(0.0).rgb, sun_occlusion * occlusion_affect + movement_affect * sun_movement);
+	float fac = clamp(sun_occlusion * occlusion_affect + movement_affect * sun_movement, 0.0, 1.0);
+	ALBEDO = mix(col.rgb, vec4(0.0).rgb, fac);
 }

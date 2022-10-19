@@ -2,13 +2,12 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public partial class FireSoul : RespawnableObject
+	public partial class FireSoul : Pickup
 	{
 		[Export]
 		public bool isCollected; //Determined by save data
 
-		protected override bool IsRespawnable() => false;
-		protected override void SetUp()
+		protected override void SetUp() //TODO Check save data
 		{
 			if (isCollected)
 				Despawn();

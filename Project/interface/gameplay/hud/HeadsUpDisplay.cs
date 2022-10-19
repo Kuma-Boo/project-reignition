@@ -65,9 +65,9 @@ namespace Project.Gameplay
 
 			if (Stage != null)
 			{
-				_maxRingLabel.Visible = _ringDividerSprite.Visible = Stage.missionType == StageSettings.MissionType.Ring; //Show/Hide max ring count
+				_maxRingLabel.Visible = _ringDividerSprite.Visible = Stage.MissionType == StageSettings.MissionTypes.Ring; //Show/Hide max ring count
 				if (_maxRingLabel.Visible)
-					_maxRingLabel.Text = Stage.targetObjectiveCount.ToString(RING_LABEL_FORMAT);
+					_maxRingLabel.Text = Stage.ObjectiveCount.ToString(RING_LABEL_FORMAT);
 
 				_ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 				if (Stage.CurrentRingCount == 0) //Starting in a ringless state
@@ -193,7 +193,7 @@ namespace Project.Gameplay
 		private Label _objectiveMaxValue;
 		private void InitializeObjectives()
 		{
-			if (Stage == null || Stage.missionType != StageSettings.MissionType.Objective) return; //Don't do anything when not set to objective based mission
+			if (Stage == null || Stage.MissionType != StageSettings.MissionTypes.Objective) return; //Don't do anything when not set to objective based mission
 
 			_objectiveSprite = GetNode<TextureRect>(objectiveSprite);
 			_objectiveSprite.Visible = true;
@@ -202,7 +202,7 @@ namespace Project.Gameplay
 			_objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 
 			_objectiveMaxValue = GetNode<Label>(objectiveMaxValue);
-			_objectiveMaxValue.Text = Stage.targetObjectiveCount.ToString("00");
+			_objectiveMaxValue.Text = Stage.ObjectiveCount.ToString("00");
 
 			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}

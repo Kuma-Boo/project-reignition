@@ -40,30 +40,20 @@ namespace Project.Gameplay.Objects
 			//Collection tween
 			int travelDirection = RuntimeConstants.randomNumberGenerator.RandiRange(-1, 1);
 			bool reverseDirection = Mathf.Sign(Character.Forward().Dot(Position)) < 0; //True when collecting a pearl behind us
-			if (travelDirection == 0)
-			{
-				tweener.TweenProperty(this, "translation", new Vector3(0, .5f, (reverseDirection ? -1 : 1) * .8f), .2f).SetEase(Tween.EaseType.InOut);
-				tweener.TweenProperty(this, "scale", Vector3.Zero, .2f).SetEase(Tween.EaseType.In);
-			}
-			else
-			{
-				Vector3 endPoint = new Vector3(0, .5f, -1f);
-				Vector3 midPoint = new Vector3(travelDirection * .7f, (Position.y + endPoint.y) * .5f, 0);
 
-				if (reverseDirection)
-				{
-					endPoint.z *= -1;
-					midPoint.x *= -1;
-					midPoint.z *= -1;
-				}
+			Vector3 endPoint = new Vector3(0, .5f, 0);
+			Vector3 midPoint = new Vector3(travelDirection * .7f, (Position.y + endPoint.y) * .5f, 0);
 
-				tweener.TweenProperty(this, "translation:y", endPoint.y, .2f);
-				tweener.TweenProperty(this, "translation:x", midPoint.x, .2f).SetEase(Tween.EaseType.Out);
-				tweener.TweenProperty(this, "translation:z", midPoint.z, .2f).SetEase(Tween.EaseType.In);
-				tweener.TweenProperty(this, "translation:x", endPoint.x, .2f).SetEase(Tween.EaseType.In).SetDelay(.2f);
-				tweener.TweenProperty(this, "translation:z", endPoint.z, .2f).SetEase(Tween.EaseType.Out).SetDelay(.2f);
-				tweener.TweenProperty(this, "scale", Vector3.One * .6f, .2f).SetEase(Tween.EaseType.In);
+			if (reverseDirection)
+			{
+				endPoint.z *= -1;
+				midPoint.x *= -1;
+				midPoint.z *= -1;
 			}
+
+			tweener.TweenProperty(this, "position", midPoint, .2f);
+			tweener.TweenProperty(this, "position", endPoint, .2f).SetEase(Tween.EaseType.In);
+			tweener.Parallel().TweenProperty(this, "scale", Vector3.One * .001f, .2f).SetEase(Tween.EaseType.In);
 
 			//TODO BROKEN
 			//isRichPearl ? 20 : 1

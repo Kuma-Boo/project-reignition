@@ -9,7 +9,7 @@ namespace Project.Gameplay.Objects
 			if (!a.IsInGroup("player")) return;
 
 			//End stage
-			StageSettings.instance.FinishStage(StageSettings.instance.missionType == StageSettings.MissionType.Objective);
+			StageSettings.instance.FinishStage(StageSettings.instance.MissionType == StageSettings.MissionTypes.Objective);
 		}
 	}
 }

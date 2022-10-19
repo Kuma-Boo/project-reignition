@@ -5,7 +5,7 @@ namespace Project.Gameplay.Objects
 	/// <summary>
 	/// Shatters after a certain number of enemies are defeated. Connect target enemies with Signals.
 	/// </summary>
-	public partial class EnemyStone : RespawnableObject
+	public partial class EnemyStone : Node3D
 	{
 		[Export]
 		public int enemyCount;
@@ -18,28 +18,34 @@ namespace Project.Gameplay.Objects
 		[Export]
 		public NodePath shatterNode;
 		private DestructableObject _shatterNode;
-		protected override bool IsRespawnable() => true; //Set to True for enemies
 
-		protected override void SetUp()
+		private StageSettings.SpawnData spawnData;
+
+		public override void _Ready()
 		{
-			base.SetUp();
+			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
+			StageSettings.instance.RegisterRespawnableObject(this);
+
 			_effectMesh = GetNode<MeshInstance3D>(effectMesh);
 			_effectMesh.MaterialOverride = effectMaterial;
 			_shatterNode = GetNode<DestructableObject>(shatterNode);
 		}
 
-		public override void Respawn()
+		public void Respawn()
 		{
-			base.Respawn();
+			if (!IsInsideTree() && GetParent() != spawnData.parentNode)
+				spawnData.parentNode.AddChild(this);
+			Transform = spawnData.spawnTransform;
+
 			currentEnemyCount = 0;
 		}
 
-		public override void Despawn()
+		public void Despawn()
 		{
-			if (currentEnemyCount < enemyCount) //Player respawned during animation
+			if (!IsInsideTree() || currentEnemyCount < enemyCount) //Player respawned during animation
 				return;
 
-			base.Despawn();
+			GetParent().CallDeferred("remove_child", this);
 		}
 
 		private void IncrementCounter()

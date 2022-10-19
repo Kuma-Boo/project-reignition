@@ -1,44 +1,45 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://cm6xo016tw7kl"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Launcher.cs" id="1"]
-[ext_resource type="PackedScene" path="res://object/stage/common/resource/model/Spring.gltf" id="2"]
+[ext_resource type="PackedScene" uid="uid://cmcymj6kdqsda" path="res://object/stage/common/resource/model/Spring.gltf" id="2"]
 [ext_resource type="AudioStream" uid="uid://cq48r8fmf6vox" path="res://sound/sfx/objects/OBJECTS_7.wav" id="3"]
 
-[sub_resource type="SphereShape3D" id=3]
+[sub_resource type="SphereShape3D" id="3"]
 radius = 0.65
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id="2"]
 length = 0.001
 
-[sub_resource type="Animation" id=4]
-loop = true
+[sub_resource type="Animation" id="4"]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tfuy7"]
+_data = {
+"RESET": SubResource("2"),
+"Spring": SubResource("4")
+}
 
 [node name="Spring" type="Area3D"]
 collision_layer = 4
 collision_mask = 2
-script = ExtResource( 1 )
+script = ExtResource("1")
 sfxPlayer = NodePath("SFX")
 allowJumpDashing = true
 launchDirection = 1
 
-[node name="Spring" parent="." instance=ExtResource( 2 )]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )
-
-[node name="Spring" parent="Spring" index="0"]
-layers = 32
+[node name="Spring" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 3 )
-bus = "SFX"
+stream = ExtResource("3")
+bus = &"SFX"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
-shape = SubResource( 3 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("3")
 
 [node name="Animator" type="AnimationPlayer" parent="."]
-anims/RESET = SubResource( 2 )
-anims/Spring = SubResource( 4 )
+libraries = {
+"": SubResource("AnimationLibrary_tfuy7")
+}
 
 [connection signal="area_entered" from="." to="." method="Activate"]
-
-[editable path="Spring"]

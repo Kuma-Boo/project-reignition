@@ -82,7 +82,6 @@ namespace Project
 			previousScreenUV = screenUV;
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_MOVEMENT, currentMovement);
 			currentMovement = ExtensionMethods.SmoothDamp(currentMovement, 1f, ref currentMovementVelocity, MOVEMENT_SMOOTHING);
-			GD.Print(currentMovement);
 
 			UpdateLensFlare();
 		}
@@ -91,8 +90,8 @@ namespace Project
 		{
 			screenUV = Camera.ConvertToScreenSpace(GlobalPosition) / RuntimeConstants.SCREEN_SIZE;
 			Image depthBuffer = _depthViewport.GetTexture().GetImage();
-			Vector2i samplePosition = (Vector2i)(screenUV * depthBuffer.GetSize()).Round();
-			return depthBuffer.GetPixelv(samplePosition).r;
+			Vector2 samplePosition = screenUV * depthBuffer.GetSize();
+			return depthBuffer.GetPixel(Mathf.FloorToInt(samplePosition.x), Mathf.FloorToInt(samplePosition.y)).r;
 		}
 
 		private void UpdateLensFlare()

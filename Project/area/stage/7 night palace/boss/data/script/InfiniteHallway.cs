@@ -85,7 +85,7 @@ namespace Project.Gameplay.Bosses
 				_itemBundle.Visible = false;
 				_itemBundle.Visible = true;
 
-				itemBundleCounter = itemBundleLocations[Boss.instance.CurrentPattern];
+				itemBundleCounter = itemBundleLocations[Erazor.CurrentPattern];
 
 				if (itemBundleCounter == 0) //Don't spawn item bundle anymore
 				{

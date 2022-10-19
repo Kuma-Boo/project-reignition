@@ -21,10 +21,7 @@ namespace Project.Gameplay.Objects
 			base.Respawn();
 
 			_animator.Play("RESET");
-			_animator.Advance(0);
-
-			if (!string.IsNullOrEmpty(_animator.Autoplay))
-				_animator.Play(_animator.Autoplay);
+			_animator.Queue("loop");
 		}
 
 		protected override void Collect()
@@ -33,8 +30,8 @@ namespace Project.Gameplay.Objects
 			StageSettings.instance.UpdateRingCount(isRichRing ? 20 : 1);
 			SoundManager.instance.PlayRingSoundEffect(); //SFX are played externally to avoid multiple ring sounds at once
 
-			if (_animator != null && _animator.HasAnimation("Collect"))
-				_animator.Play("Collect");
+			if (_animator != null && _animator.HasAnimation("collect"))
+				_animator.Play("collect");
 			else
 				Despawn();
 

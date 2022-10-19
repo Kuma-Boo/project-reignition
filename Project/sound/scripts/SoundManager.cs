@@ -57,6 +57,8 @@ namespace Project.Gameplay
 
 		public void CancelDialog()
 		{
+			if (!IsDialogActive) return;
+
 			_delayTimer.Stop();
 
 			CallDeferred(nameof(DisableDialog));

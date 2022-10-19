@@ -4,8 +4,26 @@ using Project.Core;
 
 namespace Project.Gameplay.Bosses
 {
-	public partial class Erazor : Boss
+	public partial class Erazor : Node3D
 	{
+		protected CharacterController Character => CharacterController.instance;
+
+		[Export]
+		public int health;
+		protected int DamageTaken { get; private set; }
+
+		[Export]
+		public NodePath lockonTarget;
+		protected Area3D _lockonTarget;
+
+		[Export]
+		public Array<BossPatternResource> patterns;
+		public static int CurrentPattern { get; private set; }
+
+		[Export]
+		public NodePath animationTree;
+		protected AnimationTree Animator { get; private set; }
+
 		private float timer;
 		private int currentAttackIndex;
 		private ErazorAttack CurrentAttack => attacks[currentAttackIndex];
@@ -52,9 +70,14 @@ namespace Project.Gameplay.Bosses
 		private const string STRIKE_TYPE_PARAMETER = "parameters/StrikeType/current";
 		private const string CURRENT_ACTION_PARAMETER = "parameters/CurrentAction/current";
 
-		protected override void SetUp()
+		public override void _Ready()
 		{
-			base.SetUp();
+			_lockonTarget = GetNode<Area3D>(lockonTarget);
+			Animator = GetNode<AnimationTree>(animationTree);
+			Animator.Active = true;
+
+			CurrentPattern = 0; //Reset pattern
+			LoadAttackPattern();
 
 			_duelVoices = new Triggers.DialogTrigger[duelVoices.Count];
 			for (int i = 0; i < duelVoices.Count; i++)
@@ -66,7 +89,7 @@ namespace Project.Gameplay.Bosses
 			StartTeleportation();
 		}
 
-		protected override void ProcessBoss()
+		public override void _PhysicsProcess(double _)
 		{
 			int actionState = (int)Animator.Get(CURRENT_ACTION_PARAMETER);
 
@@ -238,7 +261,22 @@ namespace Project.Gameplay.Bosses
 			Animator.Set(TELEPORTING_PARAMETER, 1); //Start teleportation
 		}
 
-		protected override void LoadAttackPattern()
+		private void TakeDamage(int amount)
+		{
+			DamageTaken += amount;
+
+			if (DamageTaken >= health)
+			{
+				//Defeat boss
+			}
+			else if (CurrentPattern < patterns.Count - 1 && DamageTaken > patterns[CurrentPattern].damage) //Advance attack pattern
+			{
+				CurrentPattern++;
+				LoadAttackPattern();
+			}
+		}
+
+		private void LoadAttackPattern()
 		{
 			attacks.Clear();
 			currentAttackIndex = 0; //Reset current attack

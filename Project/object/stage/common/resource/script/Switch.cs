@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public partial class Switch : RespawnableObject
+	public partial class Switch : Area3D
 	{
 		[Export]
 		public NodePath animator;
@@ -18,7 +18,7 @@ namespace Project.Gameplay.Objects
 
 		private bool isActive;
 
-		protected override void SetUp()
+		public override void _Ready()
 		{
 			_animator = GetNode<AnimationPlayer>(animator);
 
@@ -26,7 +26,7 @@ namespace Project.Gameplay.Objects
 			Respawn();
 		}
 
-		public override void Respawn()
+		public void Respawn()
 		{
 			isActive = false;
 			_animator.Play("RESET");
