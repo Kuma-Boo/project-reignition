@@ -74,5 +74,7 @@ namespace Project
 			if (GetPlaybackPosition() >= loopEndPosition)
 				Play(loopStartPosition);
 		}
+
+		public void Play() => Play(0);
 	}
 }

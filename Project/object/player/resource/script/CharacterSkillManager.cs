@@ -132,10 +132,10 @@ namespace Project.Gameplay
 						ToggleSpeedBreak();
 
 					if (Character.IsOnGround)
-						Character.MoveSpd = speedBreakSpeed;
+						Character.MoveSpeed = speedBreakSpeed;
 				}
 				else
-					Character.MoveSpd = 0f;
+					Character.MoveSpeed = 0f;
 
 				return;
 			}
@@ -188,7 +188,7 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				Character.MoveSpd = Character.groundSettings.speed; //Override speed
+				Character.MoveSpeed = Character.groundSettings.speed; //Override speed
 				Character.CollisionLayer = characterCollisionLayer; //Reset collision layer
 			}
 

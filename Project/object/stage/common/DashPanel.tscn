@@ -1,29 +1,29 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://bhnh1as6xgpiy"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/DashPanel.cs" id="1"]
-[ext_resource type="PackedScene" path="res://object/stage/common/resource/model/DashPanel.gltf" id="2"]
-[ext_resource type="AudioStream" uid="uid://bp4dfv8pmeb2v" path="res://sound/sfx/objects/OBJECTS_53.wav" id="4"]
+[ext_resource type="PackedScene" uid="uid://deyyl3nryic8g" path="res://object/stage/common/resource/model/DashPanel.gltf" id="2"]
+[ext_resource type="AudioStream" uid="uid://bp4dfv8pmeb2v" path="res://sound/sfx/objects/dash panel.wav" id="3_tsajd"]
 
-[sub_resource type="BoxShape3D" id=3]
-extents = Vector3( 0.9, 0.2, 1.5 )
+[sub_resource type="BoxShape3D" id="3"]
+size = Vector3(1.8, 0.4, 3)
 
 [node name="DashPanel" type="Area3D"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
-script = ExtResource( 1 )
+script = ExtResource("1")
 sfxPlayer = NodePath("SFX")
 speedRatio = 1.0
 length = 1.0
 
-[node name="DashPanel" parent="." instance=ExtResource( 2 )]
+[node name="DashPanel" parent="." instance=ExtResource("2")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
-shape = SubResource( 3 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("3")
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 4 )
-bus = "SFX"
+stream = ExtResource("3_tsajd")
+bus = &"SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]

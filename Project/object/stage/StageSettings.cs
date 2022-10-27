@@ -166,10 +166,7 @@ namespace Project.Gameplay
 
 			instance = this; //Always override previous instance
 			if (completionAnimator != null && !completionAnimator.IsEmpty)
-			{
 				_completionAnimator = GetNode<AnimationPlayer>(completionAnimator);
-				_completionAnimator.Connect("animation_changed", new Callable(this, nameof(OnCameraDemoAdvance)));
-			}
 
 			SetUpItemCycles();
 		}
@@ -322,7 +319,7 @@ namespace Project.Gameplay
 		//Completion
 		private float completionDelay;
 		private LockoutResource completionLockout;
-		private NodePath completionAnimator; //Camera3D demo that gets enabled after the stage clears
+		private NodePath completionAnimator; //Camera demo that gets enabled after the stage clears
 		private AnimationPlayer _completionAnimator;
 
 		[Signal]
@@ -335,7 +332,7 @@ namespace Project.Gameplay
 			//GameplayInterface.instance.Score;
 			if (_completionAnimator != null)
 			{
-				OnCameraDemoAdvance(string.Empty);
+				OnCameraDemoAdvance();
 
 				_completionAnimator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(this, MethodName.OnCameraDemoAdvance));
 				_completionAnimator.Play("demo1");
@@ -357,7 +354,7 @@ namespace Project.Gameplay
 		}
 
 		//Completion demo advanced, play a crossfade
-		private void OnCameraDemoAdvance(string _) => CharacterController.instance.Camera.StartCrossfade();
+		public void OnCameraDemoAdvance() => CharacterController.instance.Camera.StartCrossfade();
 		#endregion
 
 		#region Object Spawning
@@ -374,6 +371,7 @@ namespace Project.Gameplay
 
 		[Signal]
 		public delegate void RespawnedEventHandler();
+		public static bool IsRespawnedFromPlayer; //Did the stage respawn from the player dying?
 		private const string RESPAWN_FUNCTION = "Respawn"; //Default name of respawn functions
 
 		public void RegisterRespawnableObject(Node node)
@@ -388,8 +386,9 @@ namespace Project.Gameplay
 				Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION));
 		}
 
-		public void RespawnObjects()
+		public void RespawnObjects(bool fromPlayer)
 		{
+			IsRespawnedFromPlayer = fromPlayer;
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
 			EmitSignal(SignalName.Respawned);
 		}
@@ -444,7 +443,7 @@ namespace Project.Gameplay
 
 			//Cycle items
 			if (itemCycleRespawnEnabled)
-				RespawnObjects();
+				RespawnObjects(false);
 
 			if (_itemCycles[itemCycleIndex] != null) //Despawn current item cycle
 				_itemCyclesSpawnData[itemCycleIndex].parentNode.CallDeferred(MethodName.RemoveChild, _itemCycles[itemCycleIndex]);

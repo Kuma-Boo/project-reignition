@@ -91,7 +91,7 @@ namespace Project.Gameplay.Hazards
 			if (movementType == MovementType.Linear)
 				return Vector3.Zero.Lerp(this.Right() * distance, Mathf.SmoothStep(0f, 1f, currentOffset));
 			else if (movementType == MovementType.Circle)
-				return this.Forward().Rotated(this.Up(), Mathf.Lerp(0f, Mathf.Tau, currentOffset)).Normalized() * distance * MovementDirection;
+				return this.Back().Rotated(this.Up(), Mathf.Lerp(0f, Mathf.Tau, currentOffset)).Normalized() * distance * MovementDirection;
 
 			return Vector3.Zero;
 		}

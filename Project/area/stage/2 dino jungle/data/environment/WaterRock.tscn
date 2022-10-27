@@ -1,3 +1,20 @@
-[gd_scene format=3 uid="uid://cnktakxmo4l0c"]
+[gd_scene load_steps=4 format=3 uid="uid://cnktakxmo4l0c"]
 
-[node name="WaterRock" type="Node3D"]
+[ext_resource type="PackedScene" uid="uid://b0j1oonffumcu" path="res://area/stage/2 dino jungle/data/environment/model/WaterRock.gltf" id="1_2rr6v"]
+[ext_resource type="PackedScene" uid="uid://dkaur6l4d3eyg" path="res://area/stage/2 dino jungle/data/environment/model/WaterRockBroken.gltf" id="2_ybxqc"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8hm55"]
+height = 6.0
+radius = 0.9
+
+[node name="WaterRock" type="Area3D" groups=["stagger boat"]]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0.15)
+shape = SubResource("CylinderShape3D_8hm55")
+
+[node name="WaterRock" parent="." instance=ExtResource("1_2rr6v")]
+
+[node name="WaterRockBroken" parent="." instance=ExtResource("2_ybxqc")]

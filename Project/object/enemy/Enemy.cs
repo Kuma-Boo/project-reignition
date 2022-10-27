@@ -11,8 +11,8 @@ namespace Project.Gameplay
 		public NodePath collider; //Environmental collider. Disabled when defeated (For death animations, etc)
 		protected CollisionShape3D _collider;
 		[Export]
-		public NodePath hitbox; //Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
-		protected Area3D _hitbox;
+		public NodePath hurtbox; //Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
+		protected Area3D _hurtbox;
 		[Export]
 		public int maxHealth;
 		protected int currentHealth;
@@ -26,7 +26,7 @@ namespace Project.Gameplay
 		protected virtual void SetUp()
 		{
 			_collider = GetNode<CollisionShape3D>(collider);
-			_hitbox = GetNode<Area3D>(hitbox);
+			_hurtbox = GetNode<Area3D>(hurtbox);
 
 			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
 			StageSettings.instance.RegisterRespawnableObject(this);
@@ -53,7 +53,7 @@ namespace Project.Gameplay
 			currentHealth = maxHealth;
 
 			if (_collider != null) _collider.Disabled = false;
-			if (_hitbox != null) _hitbox.Monitorable = _hitbox.Monitoring = true;
+			if (_hurtbox != null) _hurtbox.Monitorable = _hurtbox.Monitoring = true;
 		}
 
 		public virtual void Despawn()
@@ -80,7 +80,7 @@ namespace Project.Gameplay
 		{
 			//Stop colliding/monitoring
 			if (_collider != null) _collider.Disabled = true;
-			if (_hitbox != null) _hitbox.Monitorable = _hitbox.Monitoring = false;
+			if (_hurtbox != null) _hurtbox.Monitorable = _hurtbox.Monitoring = false;
 
 			OnExited(null);
 			EmitSignal(SignalName.Defeated);

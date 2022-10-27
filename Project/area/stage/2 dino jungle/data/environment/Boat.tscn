@@ -1,5 +1,154 @@
-[gd_scene load_steps=2 format=3 uid="uid://cucsjjuewxfo6"]
+[gd_scene load_steps=10 format=3 uid="uid://5l5prl8d0kmd"]
 
-[ext_resource type="PackedScene" uid="uid://cxwm25rwhwn7r" path="res://area/stage/2 dino jungle/data/environment/model/Boat.gltf" id="1_jccfq"]
+[ext_resource type="Script" path="res://area/stage/2 dino jungle/data/script/Boat.cs" id="1_8wvpo"]
+[ext_resource type="PackedScene" uid="uid://uifmmk08s0v3" path="res://area/stage/2 dino jungle/data/environment/model/Boat.gltf" id="1_jccfq"]
+[ext_resource type="Resource" uid="uid://b3bjolw42bp2p" path="res://resource/preset/camera/object/BoatCam.tres" id="2_rrka6"]
 
-[node name="Boat" instance=ExtResource("1_jccfq")]
+[sub_resource type="BoxShape3D" id="BoxShape3D_67srd"]
+size = Vector3(0.6, 0.4, 2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_j10iq"]
+
+[sub_resource type="Animation" id="Animation_5h4yi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Boat/BoatMesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Boat:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nxpop"]
+resource_name = "despawn"
+length = 0.999999
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Boat/BoatMesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(0.5, 1.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.2, 0.1), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Boat:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.330964),
+"transitions": PackedFloat32Array(3, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Respawn"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_a6uw5"]
+resource_name = "respawn"
+length = 0.333333
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Boat/BoatMesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1.5, 0.5),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.2, 0.1), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Boat:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.333333),
+"transitions": PackedFloat32Array(1, 3),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e4dfs"]
+_data = {
+"RESET": SubResource("Animation_5h4yi"),
+"despawn": SubResource("Animation_nxpop"),
+"respawn": SubResource("Animation_a6uw5")
+}
+
+[node name="Boat" type="StaticBody3D"]
+collision_mask = 2
+script = ExtResource("1_8wvpo")
+speed = 15.0
+passengerPosition = NodePath("PassengerPosition")
+animator = NodePath("AnimationPlayer")
+cameraSettings = ExtResource("2_rrka6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_67srd")
+
+[node name="Boat" parent="." instance=ExtResource("1_jccfq")]
+
+[node name="PassengerPosition" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+
+[node name="Activation" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Activation"]
+shape = SubResource("SphereShape3D_j10iq")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_e4dfs")
+}
+
+[connection signal="area_entered" from="Activation" to="." method="PlayerEntered"]

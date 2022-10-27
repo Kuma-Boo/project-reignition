@@ -15,9 +15,6 @@ namespace Project.Gameplay
 		/// <summary> Current backwards rotation of the pathfollower, always equal to ForwardAngle + Mathf.Pi. </summary>
 		public float BackAngle { get; private set; }
 		public Path3D ActivePath { get; private set; }
-		private float bakedLength;
-		private float bakeInterval;
-		private Vector3[] bakedPoints;
 
 		public void SetActivePath(Path3D newPath)
 		{
@@ -26,18 +23,12 @@ namespace Project.Gameplay
 				GetParent().RemoveChild(this);
 
 			ActivePath = newPath;
-			if (newPath != null)
-			{
-				bakeInterval = newPath.Curve.BakeInterval;
-				bakedLength = newPath.Curve.GetBakedLength(); //Get length and rebake path
-				bakedPoints = newPath.Curve.GetBakedPoints(); //Cache all points
-			}
 
 			newPath.AddChild(this);
 			Resync();
 		}
 
-		public Vector3 LocalPlayerPosition => GlobalTransform.basis.GetRotationQuaternion() * (GlobalPosition - Character.GlobalPosition);
+		public Vector3 LocalPlayerPosition => GlobalTransform.basis.Inverse() * (GlobalPosition - Character.GlobalPosition);
 		public void Resync()
 		{
 			if (!IsInsideTree()) return;
@@ -54,21 +45,21 @@ namespace Project.Gameplay
 
 		private float GetForwardAngle()
 		{
-			Vector3 forwardDirection = this.Forward();
+			Vector3 forwardDirection = this.Back();
 			float dot = Mathf.Abs(forwardDirection.Dot(Vector3.Up));
 			if (dot > .9f)//UNIMPLEMENTED - Moving vertically
 			{
 
 			}
 
-			return forwardDirection.Flatten().AngleTo(Vector2.Down);
+			return forwardDirection.Flatten().AngleTo(Vector2.Up);
 		}
 
 		/// <summary> Difference between angle from the current frame to the previous frame. </summary>
 		public float CalculateDeltaAngle()
 		{
 			float currentProgress = Progress;
-			float spdDelta = Character.MoveSpd * PhysicsManager.physicsDelta;
+			float spdDelta = Character.MoveSpeed * PhysicsManager.physicsDelta;
 			spdDelta *= ExtensionMethods.DotAngle(Character.MovementAngle, ForwardAngle);
 			Progress += spdDelta;
 			float deltaAngle = GetForwardAngle() - ForwardAngle;

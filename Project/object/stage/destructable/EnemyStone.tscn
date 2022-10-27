@@ -150,13 +150,14 @@ points = PackedVector3Array(0.272315, -0.451767, 0.0865853, -0.127348, -0.439706
 [node name="EnemyStone" type="StaticBody3D"]
 collision_mask = 0
 script = ExtResource("5")
-effectMesh = NodePath("OriginalMesh/EnemyStoneAdd/EnemyStoneAdd")
+effectMesh = NodePath("OriginalMesh/EnemyStoneAdd")
 effectMaterial = ExtResource("7")
 shatterNode = NodePath("Pieces")
 
 [node name="OriginalMesh" type="Node3D" parent="."]
 
 [node name="EnemyStoneAdd" parent="OriginalMesh" instance=ExtResource("4")]
+visible = false
 
 [node name="EnemyStone" parent="OriginalMesh" instance=ExtResource("1")]
 
@@ -164,6 +165,7 @@ shatterNode = NodePath("Pieces")
 shape = SubResource("17")
 
 [node name="Pieces" type="Node3D" parent="."]
+visible = false
 script = ExtResource("3")
 originalMesh = NodePath("../OriginalMesh")
 collider = NodePath("../CollisionShape3D")

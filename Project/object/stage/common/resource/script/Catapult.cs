@@ -68,29 +68,16 @@ namespace Project.Gameplay.Objects
 		public override void _PhysicsProcess(double _)
 		{
 			if (Engine.IsEditorHint())
-			{
-				/*
-				//preview power in the editor?
-				 * 
-					if (_armNode != null)
-						_armNode.RotationDegrees = Vector3.Right * Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
-				*/
-
 				return;
-			}
 
 			Vector3 targetRotation = Vector3.Zero;
 			if (isControllingPlayer)
 			{
-				if (isEjectingPlayer)
+				if (!isEjectingPlayer) //Update Controls
 				{
-
-				}
-				else //Update Controls
-				{
-					float targetLaunchPower = .5f - (Controller.verticalAxis.value * .5f);
+					float targetLaunchPower = .5f + (Controller.verticalAxis.value * .5f);
 					launchPower = ExtensionMethods.SmoothDamp(launchPower, targetLaunchPower, ref launchPowerVelocity, POWER_ADJUSTMENT_SPEED);
-					targetRotation = Vector3.Right * Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
+					targetRotation = Vector3.Left * Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
 
 					if (Controller.jumpButton.wasPressed) //Cancel
 						EjectPlayer(true);
@@ -132,7 +119,7 @@ namespace Project.Gameplay.Objects
 
 			isControllingPlayer = false;
 
-			Vector3 destination = this.Back().RemoveVertical() * 2f + Vector3.Down * 2f;
+			Vector3 destination = this.Forward().RemoveVertical() * 2f + Vector3.Down * 2f;
 			Character.JumpTo(Character.GlobalPosition + destination, 1f);
 		}
 

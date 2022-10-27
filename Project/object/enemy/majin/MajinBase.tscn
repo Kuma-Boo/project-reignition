@@ -98,22 +98,22 @@ graph_offset = Vector2(-22.4, 44)
 collision_layer = 8
 collision_mask = 8
 script = ExtResource("1")
-collider = NodePath("CollisionShape3D")
-hitbox = NodePath("Hitbox")
 animationTree = NodePath("AnimationTree")
+collider = NodePath("CollisionShape3D")
+hurtbox = NodePath("Hurtbox")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0)
 shape = SubResource("21")
 
-[node name="Hitbox" type="Area3D" parent="."]
+[node name="Hurtbox" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 collision_layer = 4
 collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
 shape = SubResource("2")
 
 [node name="Particles" type="Node3D" parent="."]
@@ -143,5 +143,5 @@ draw_pass_1 = SubResource("20")
 tree_root = SubResource("3")
 anim_player = NodePath("../AnimationPlayer")
 
-[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Hurtbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hurtbox" to="." method="OnExited"]

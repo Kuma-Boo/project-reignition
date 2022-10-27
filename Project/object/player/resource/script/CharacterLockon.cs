@@ -24,7 +24,7 @@ namespace Project.Gameplay
 		private bool monitoringPerfectHomingAttack;
 		public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
 		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
-		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
+		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalPosition - GlobalPosition).Normalized() : this.Back();
 
 		public override void _Ready()
 		{
@@ -42,6 +42,8 @@ namespace Project.Gameplay
 
 		public void ProcessLockonTargets()
 		{
+			GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
+
 			bool isTargetChanged = false;
 
 			//Update homing attack
@@ -142,7 +144,7 @@ namespace Project.Gameplay
 		{
 			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
 
-			Character.MoveSpd = Mathf.MoveToward(Character.MoveSpd, 0f, Character.groundSettings.friction * PhysicsManager.physicsDelta);
+			Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.groundSettings.friction * PhysicsManager.physicsDelta);
 			Character.VerticalSpd -= RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta;
 		}
 
@@ -154,7 +156,7 @@ namespace Project.Gameplay
 			ResetLockonTarget();
 
 			Character.CanJumpDash = true;
-			Character.MoveSpd = bounceSpeed;
+			Character.MoveSpeed = bounceSpeed;
 			Character.VerticalSpd = bouncePower;
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();

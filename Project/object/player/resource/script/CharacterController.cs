@@ -162,7 +162,7 @@ namespace Project.Gameplay
 			}
 		}
 		/// <summary> Angle (in radians) of Controller.MovementAxis, relative to Vector2.Down. </summary>
-		private float InputAngle => Controller.MovementAxis.AngleTo(Vector2.Up);
+		private float InputAngle => Controller.MovementAxis.AngleTo(Vector2.Down);
 
 		private float jumpBufferTimer;
 		private float actionBufferTimer;
@@ -321,7 +321,7 @@ namespace Project.Gameplay
 		/// <summary> Updates MoveSpd. What else do you need know? </summary>
 		private void UpdateMoveSpd()
 		{
-			isIdling = Mathf.IsZeroApprox(MoveSpd);
+			isIdling = Mathf.IsZeroApprox(MoveSpeed);
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Backflip) return;
 			if (Skills.IsSpeedBreakActive) return; //Overridden to max speed
 
@@ -340,37 +340,37 @@ namespace Project.Gameplay
 				float targetSpd = activeMovementResource.speed * currentLockoutData.speedRatio;
 				if (Mathf.IsZeroApprox(currentLockoutData.tractionMultiplier)) //Negative traction, snap speed
 				{
-					MoveSpd = targetSpd;
+					MoveSpeed = targetSpd;
 					return;
 				}
 
 				float delta = PhysicsManager.physicsDelta;
-				if (MoveSpd <= targetSpd) //Accelerate using traction
+				if (MoveSpeed <= targetSpd) //Accelerate using traction
 					delta *= activeMovementResource.traction * currentLockoutData.tractionMultiplier;
 				else //Slow down with friction
 					delta *= activeMovementResource.friction * currentLockoutData.frictionMultiplier;
-				MoveSpd = Mathf.MoveToward(MoveSpd, targetSpd, delta);
+				MoveSpeed = Mathf.MoveToward(MoveSpeed, targetSpd, delta);
 				return;
 			}
 
 			if (Controller.MovementAxis.IsEqualApprox(Vector2.Zero) || dot <= 0.1f) //Basic slow down
-				MoveSpd = activeMovementResource.Interpolate(MoveSpd, 0);
+				MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, 0);
 			else
 			{
 				bool isTurningAround = deltaAngle > MAX_TURN_ANGLE;
 				if (isTurningAround) //Skid to a stop
-					MoveSpd = activeMovementResource.Interpolate(MoveSpd, -1);
+					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, -1);
 				else
-					MoveSpd = activeMovementResource.Interpolate(MoveSpd, inputLength); //Accelerate based on input strength
+					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, inputLength); //Accelerate based on input strength
 			}
 
-			isMovingBackward = MoveSpd > 0 && ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > MAX_BACKSTEP_ANGLE; //Moving backwards, limit speed
+			isMovingBackward = MoveSpeed > 0 && ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > MAX_BACKSTEP_ANGLE; //Moving backwards, limit speed
 		}
 
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
-			float speedRatio = groundSettings.GetSpeedRatio(MoveSpd);
+			float speedRatio = groundSettings.GetSpeedRatio(MoveSpeed);
 			float targetMovementAngle = GetTargetMovementAngle();
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			float turnDelta = Mathf.Lerp(TURN_SPEED, MAX_TURN_SPEED, speedRatio);
@@ -389,9 +389,9 @@ namespace Project.Gameplay
 			{
 				//Calculate turn delta, relative to ground speed
 				float speedLossRatio = deltaAngle / MAX_TURN_ANGLE;
-				MoveSpd -= MoveSpd * turningSpeedCurve.Sample(speedLossRatio) * TURN_SPEED_LOSS;
-				if (MoveSpd < 0)
-					MoveSpd = 0;
+				MoveSpeed -= MoveSpeed * turningSpeedCurve.Sample(speedLossRatio) * TURN_SPEED_LOSS;
+				if (MoveSpeed < 0)
+					MoveSpeed = 0;
 			}
 
 			if (IsLockoutActive)
@@ -405,7 +405,7 @@ namespace Project.Gameplay
 					float offset = PathFollower.LocalPlayerPosition.x;
 					if (!isRecentered) //Smooth out recenter speed
 					{
-						offset = Mathf.MoveToward(offset, 0, MoveSpd * PhysicsManager.physicsDelta);
+						offset = Mathf.MoveToward(offset, 0, MoveSpeed * PhysicsManager.physicsDelta);
 						if (Mathf.IsZeroApprox(offset))
 							isRecentered = true;
 						offset = PathFollower.LocalPlayerPosition.x - offset;
@@ -444,7 +444,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			float rotationAmount = PathFollower.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
+			float rotationAmount = PathFollower.Back().SignedAngleTo(Vector3.Forward, Vector3.Up);
 			Vector3 slopeDirection = groundNormal.Rotated(Vector3.Up, rotationAmount).Normalized();
 			slopeInfluence = slopeDirection.z;
 		}
@@ -557,8 +557,8 @@ namespace Project.Gameplay
 			if (MovementState != MovementStates.Normal) return;
 
 			//Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
-			if (IsHoldingForward && MoveSpd < landingBoost)
-				MoveSpd = landingBoost;
+			if (IsHoldingForward && MoveSpeed < landingBoost)
+				MoveSpeed = landingBoost;
 		}
 
 		#region Jump
@@ -590,7 +590,7 @@ namespace Project.Gameplay
 				if (!IsHoldingBackward && Controller.MovementAxis.Length() > .5f)
 				{
 					ActionState = ActionStates.AccelJump;
-					MoveSpd = Skills.accelerationJumpSpeed;
+					MoveSpeed = Skills.accelerationJumpSpeed;
 					MovementAngle = ExtensionMethods.ClampAngleRange(GetTargetInputAngle(), PathFollower.ForwardAngle, Mathf.Pi * .5f);
 				}
 
@@ -657,7 +657,7 @@ namespace Project.Gameplay
 			else //Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
-			MoveSpd = jumpDashSpeed;
+			MoveSpeed = jumpDashSpeed;
 
 			if (Lockon.LockonTarget == null) //Normal jumpdash
 				VerticalSpd = jumpDashPower;
@@ -698,7 +698,7 @@ namespace Project.Gameplay
 
 		private void UpdateCrouching()
 		{
-			MoveSpd = Mathf.MoveToward(MoveSpd, 0, SLIDE_FRICTION * PhysicsManager.physicsDelta);
+			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, SLIDE_FRICTION * PhysicsManager.physicsDelta);
 
 			if (Controller.actionButton.wasReleased)
 				ResetActionState();
@@ -751,14 +751,14 @@ namespace Project.Gameplay
 				MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, BACKFLIP_TURN_SPEED);
 			}
 
-			MoveSpd = backflipSpeed;
+			MoveSpeed = backflipSpeed;
 		}
 
 		private void StartBackflip()
 		{
 			CanJumpDash = true;
 			backflipTimer = 0;
-			MoveSpd = backflipSpeed;
+			MoveSpeed = backflipSpeed;
 			MovementAngle = GetTargetInputAngle();
 			VerticalSpd = RuntimeConstants.GetJumpPower(backflipHeight);
 
@@ -772,7 +772,7 @@ namespace Project.Gameplay
 		#region Damage & Invincibility
 		public bool IsInvincible => invincibliltyTimer != 0;
 		private float invincibliltyTimer;
-		private const float INVINCIBILITY_LENGTH = 5f;
+		private const float INVINCIBILITY_LENGTH = 3f;
 
 		private void UpdateInvincibility()
 		{
@@ -804,16 +804,21 @@ namespace Project.Gameplay
 			invincibliltyTimer = INVINCIBILITY_LENGTH;
 
 			if (MovementState == MovementStates.Normal)
-			{
-				IsOnGround = false;
-				MoveSpd = -4f;
-				VerticalSpd = 4f;
-			}
+				Knockback(true);
 			else if (MovementState == MovementStates.Sidle) //Start falling
 			{
 				sidleTimer = SIDLE_DAMAGE_LENGTH;
-				MoveSpd = VerticalSpd = 0;
+				MoveSpeed = VerticalSpd = 0;
 			}
+		}
+
+		public void Knockback(bool damaged) //Knocks the player backwards
+		{
+			IsOnGround = false;
+			MoveSpeed = -4f;
+			VerticalSpd = 4f;
+
+			//TODO Play hurt animation
 		}
 
 		public void Kill()
@@ -832,7 +837,7 @@ namespace Project.Gameplay
 
 			GlobalTransform = Triggers.CheckpointTrigger.activeCheckpoint.GlobalTransform;
 
-			Stage.RespawnObjects();
+			Stage.RespawnObjects(true);
 
 			ResetOrientation();
 			Camera.ResetFlag = true;
@@ -875,7 +880,7 @@ namespace Project.Gameplay
 					return;
 			}
 
-			MoveSpd = sidleSettings.Interpolate(MoveSpd, isFacingRight ? Controller.MovementAxis.x : -Controller.MovementAxis.x);
+			MoveSpeed = sidleSettings.Interpolate(MoveSpeed, isFacingRight ? Controller.MovementAxis.x : -Controller.MovementAxis.x);
 		}
 
 		private void UpdateSidleDamage()
@@ -955,7 +960,7 @@ namespace Project.Gameplay
 			if (!direction.IsNormalized()) //Direction parallel with Vector3.Up! Use launcher's forward direction instead.
 			{
 				if (newLauncher == null) return;
-				direction = newLauncher.Forward().RemoveVertical().Normalized();
+				direction = newLauncher.Back().RemoveVertical().Normalized();
 			}
 		}
 
@@ -978,7 +983,7 @@ namespace Project.Gameplay
 					FinishLauncher();
 					if (!IsOnGround)
 					{
-						MoveSpd = launchData.InitialHorizontalVelocity;
+						MoveSpeed = launchData.InitialHorizontalVelocity;
 						VerticalSpd = launchData.FinalVerticalVelocity;
 					}
 				}
@@ -1068,15 +1073,15 @@ namespace Project.Gameplay
 			return inputAngle;
 		}
 
-		private Vector3 GetMovementDirection() => this.Forward().Rotated(GroundDirection, MovementAngle);
+		public Vector3 GetMovementDirection() => this.Forward().Rotated(GroundDirection, MovementAngle);
 
-		public float MoveSpd { get; set; } //Character's primary movement speed.
-										   //public float StrafeSpd { get; set; }
+		public float MoveSpeed { get; set; } //Character's primary movement speed.
+											 //public float StrafeSpd { get; set; }
 		public float VerticalSpd { get; set; } //Used for jumping and falling
 
 		private void ResetVelocity() //Resets all speed values to zero
 		{
-			MoveSpd = VerticalSpd = 0;
+			MoveSpeed = VerticalSpd = 0;
 		}
 
 		private bool useCustomPhysics; //TRUE whenever external objects are overridding physics
@@ -1094,7 +1099,7 @@ namespace Project.Gameplay
 			if (!IsOnGround && ActionState == ActionStates.JumpDash) //Jump dash ignores slopes
 				movementDirection = movementDirection.RemoveVertical().Normalized();
 
-			Velocity = movementDirection * MoveSpd;
+			Velocity = movementDirection * MoveSpeed;
 			//Velocity += PathFollower.StrafeDirection * StrafeSpd;
 			Velocity += GroundDirection * VerticalSpd;
 			MoveAndSlide();
@@ -1135,7 +1140,7 @@ namespace Project.Gameplay
 			{
 				//Whisker casts (For slanted walls and ground)
 				float interval = Mathf.Tau / 4f;
-				Vector3 castOffset = this.Forward();
+				Vector3 castOffset = this.Back();
 				for (int i = 0; i < 4; i++)
 				{
 					castOffset = castOffset.Rotated(GroundDirection, interval).Normalized() * COLLISION_RADIUS * .5f;
@@ -1210,10 +1215,10 @@ namespace Project.Gameplay
 		//Checks for walls forward and backwards (only in the direction the player is moving).
 		private void CheckMainWall(Vector3 castVector)
 		{
-			if (Mathf.IsZeroApprox(MoveSpd)) return; //No movement
+			if (Mathf.IsZeroApprox(MoveSpeed)) return; //No movement
 
-			castVector *= Mathf.Sign(MoveSpd);
-			float castLength = COLLISION_RADIUS + COLLISION_PADDING + Mathf.Abs(MoveSpd) * PhysicsManager.physicsDelta;
+			castVector *= Mathf.Sign(MoveSpeed);
+			float castLength = COLLISION_RADIUS + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
 
 			RaycastHit centerHit = this.CastRay(CenterPosition, castVector * castLength, environmentMask, false, (Godot.Collections.Array)GetCollisionExceptions());
 			Debug.DrawRay(CenterPosition, castVector * castLength, centerHit ? Colors.Red : Colors.White);
@@ -1229,18 +1234,18 @@ namespace Project.Gameplay
 					if (Skills.IsSpeedBreakActive) //Cancel speed break
 						Skills.ToggleSpeedBreak();
 
-					MoveSpd = 0f; //Kill speed
+					MoveSpeed = 0f; //Kill speed
 					GlobalTranslate(castVector * (centerHit.distance - COLLISION_RADIUS));
 				}
 				else //Reduce MoveSpd when moving against walls
 				{
 					float speedClamp = Mathf.Clamp(1.2f - wallRatio * .4f, 0f, 1f); //Arbitrary formula that works well
-					MoveSpd *= speedClamp;
+					MoveSpeed *= speedClamp;
 				}
 			}
 		}
 
-		private bool IsValidWallCast(RaycastHit hit) => hit && !hit.collidedObject.IsInGroup("floor");
+		private bool IsValidWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");
 		private const float COLLISION_PADDING = .1f;
 
 		private const float ORIENTATION_SMOOTHING = .4f;
@@ -1248,7 +1253,6 @@ namespace Project.Gameplay
 		{
 			GroundDirection = Vector3.Up;
 			//MovementAngle = GetParent<Node3D>().Rotation.y; //Copy movement angle from global parent
-
 			//TODO Re-sync visual rotations
 		}
 

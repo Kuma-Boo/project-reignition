@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dotsib7c1l4lt"]
+[gd_scene load_steps=29 format=3]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_bh06n"]
 [ext_resource type="Environment" uid="uid://36h130trqtgl" path="res://area/stage/1 sand oasis/data/common/Environment.tres" id="1_dgxgs"]
@@ -8,11 +8,13 @@
 [ext_resource type="PackedScene" uid="uid://c083xdkdh5iau" path="res://area/stage/1 sand oasis/boss/data/environment/collision/Collision.tscn" id="1_y3a8x"]
 [ext_resource type="PackedScene" uid="uid://21pykhrm72xx" path="res://object/stage/pickups/Ring.tscn" id="2_g1pxi"]
 [ext_resource type="Curve3D" uid="uid://bvpu60xrfh0px" path="res://area/stage/1 sand oasis/boss/data/environment/path/MainPath.tres" id="2_sspwl"]
-[ext_resource type="PackedScene" uid="uid://dxd1j88cv4fbn" path="res://area/stage/1 sand oasis/boss/data/boss/SandScorpion.tscn" id="2_ur7rr"]
+[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/boss/data/boss/SandScorpion.tscn" id="2_ur7rr"]
 [ext_resource type="PackedScene" path="res://object/trigger/StageTrigger.tscn" id="3_ofxsh"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/stage/1 sand oasis/data/skybox/Skybox.tscn" id="3_ud18g"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="4_15cum"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="4_k3scl"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="6_l2a15"]
+[ext_resource type="Resource" uid="uid://c06k4gxe3e5nt" path="res://resource/preset/camera/boss/SandScorpionCamera.tres" id="7_f4pdp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_i8rmg"]
 radius = 4.0
@@ -53,6 +55,287 @@ point_count = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_h301n"]
 size = Vector3(24, 20, 4)
 
+[sub_resource type="Animation" id="Animation_8u7gl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Static/DemoCamera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-16, -3, -225)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Static/DemoCamera/Camera:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.523599, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../Static/DemoCamera:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Static/DemoCamera/Camera:fov")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../Static/DemoCamera/Camera:current")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_t4ie5"]
+resource_name = "demo1"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Static/DemoCamera/Camera:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [40.0, 45.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Static/DemoCamera:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(0.8, 1),
+"update": 0,
+"values": [Vector3(-60, 18, 60), Vector3(-10, 20, -100)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../Static/DemoCamera:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -1.13446, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Static/DemoCamera/Camera:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.0872665, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../Static/DemoCamera/Camera:current")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(9.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OnCameraDemoAdvance"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_y1ost"]
+resource_name = "demo2"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Static/DemoCamera:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.74533, 0), Vector3(0, 2.0944, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Static/DemoCamera:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(0.8, 1),
+"update": 0,
+"values": [Vector3(280, 10, -60), Vector3(275, 10, 68)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../Static/DemoCamera/Camera:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.174533, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Static/DemoCamera/Camera:fov")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [55.0]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(9.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OnCameraDemoAdvance"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_5pere"]
+resource_name = "demo3"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Static/DemoCamera:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Static/DemoCamera:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(0.8, 1),
+"update": 0,
+"values": [Vector3(0, 5, 70), Vector3(0, 5, -40)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../Static/DemoCamera/Camera:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Static/DemoCamera/Camera:fov")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [60.0]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(9.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OnCameraDemoAdvance"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vh30f"]
+_data = {
+"RESET": SubResource("Animation_8u7gl"),
+"demo1": SubResource("Animation_t4ie5"),
+"demo2": SubResource("Animation_y1ost"),
+"demo3": SubResource("Animation_5pere")
+}
+
 [node name="World" type="Node"]
 
 [node name="BossAct" type="Node3D" parent="."]
@@ -71,10 +354,10 @@ script = ExtResource("1_bh06n")
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = null
-Completion/Animator = NodePath("")
+Completion/Animator = NodePath("../Static/DemoCamera/AnimationPlayer")
 
 [node name="SandScorpion" parent="BossAct" instance=ExtResource("2_ur7rr")]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, -55)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
 pathFollower = NodePath("../../Static/Path/MainPath/BossPathFollow")
 
 [node name="SpawnPosition" type="Node3D" parent="BossAct"]
@@ -91,6 +374,10 @@ script = ExtResource("4_15cum")
 path = NodePath("../../../../../Static/Path/MainPath")
 loopPath = true
 
+[node name="CameraSettings" type="Node3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start"]
+script = ExtResource("6_l2a15")
+cameraData = ExtResource("7_f4pdp")
+
 [node name="CollisionShape3d" type="CollisionShape3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start"]
 shape = SubResource("SphereShape3D_i8rmg")
 
@@ -100,7 +387,7 @@ shape = SubResource("SphereShape3D_i8rmg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
 
 [node name="RingR01" type="Node3D" parent="BossAct/Lap01/Rings01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.6, 0)
 script = ExtResource("1_khena")
 Generate = false
 Source = ExtResource("2_g1pxi")
@@ -129,7 +416,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 
 [node name="RingL01" type="Node3D" parent="BossAct/Lap01/Rings01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.6, 0)
 script = ExtResource("1_khena")
 Generate = false
 Source = ExtResource("2_g1pxi")
@@ -158,7 +445,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 
 [node name="RingR02" type="Node3D" parent="BossAct/Lap01/Rings01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.6, -22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.6, -22)
 script = ExtResource("1_khena")
 Generate = false
 Source = ExtResource("2_g1pxi")
@@ -211,7 +498,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -24)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -26)
 
 [node name="RingL02" type="Node3D" parent="BossAct/Lap01/Rings01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.6, -22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.6, -22)
 script = ExtResource("1_khena")
 Generate = false
 Source = ExtResource("2_g1pxi")
@@ -2308,10 +2595,12 @@ shape = SubResource("BoxShape3D_h301n")
 environment = ExtResource("1_dgxgs")
 
 [node name="Sunlight" type="DirectionalLight3D" parent="Static/Visuals"]
-transform = Transform3D(0.812445, -0.422361, -0.401927, -0.121512, -0.796888, 0.591781, -0.570236, -0.431951, -0.698749, 0, 4, 0)
-light_color = Color(0.972549, 0.858824, 0.658824, 1)
-light_energy = 1.2
+transform = Transform3D(0.882458, -0.469216, -0.0332494, -0.270536, -0.564081, 0.780143, -0.384811, -0.679448, -0.624717, 0, 0, 0)
+light_color = Color(1, 0.843137, 0.658824, 1)
+light_energy = 0.8
 shadow_enabled = true
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 250.0
 
 [node name="Skybox" parent="Static/Visuals" instance=ExtResource("3_ud18g")]
 
@@ -2324,6 +2613,22 @@ visible = false
 curve = ExtResource("2_sspwl")
 
 [node name="BossPathFollow" type="PathFollow3D" parent="Static/Path/MainPath"]
-transform = Transform3D(-1.00001, 0, 0, 0, 1, 0, 0, 0, -0.99991, 0, 0, -55)
-progress = 55.0
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -60)
+progress = 60.0
 rotation_mode = 4
+cubic_interp = false
+
+[node name="DemoCamera" type="Node3D" parent="Static"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, -3, -225)
+
+[node name="Camera" type="Camera3D" parent="Static/DemoCamera"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Static/DemoCamera"]
+root_node = NodePath("../../../BossAct")
+libraries = {
+"": SubResource("AnimationLibrary_vh30f")
+}
+next/demo1 = &"demo2"
+next/demo2 = &"demo3"
+next/demo3 = &"demo1"

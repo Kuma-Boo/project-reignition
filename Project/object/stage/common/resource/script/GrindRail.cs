@@ -181,7 +181,7 @@ namespace Project.Gameplay.Objects
 			Vector3 delta = Character.GlobalPosition - GlobalPosition;
 			delta = GlobalTransform.basis.GetRotationQuaternion().Inverse() * delta;
 			float dst = Mathf.Abs(delta.z);
-			Vector3 connectionPoint = GlobalPosition + this.Up() * RAIL_HEIGHT - this.Forward() * dst;
+			Vector3 connectionPoint = GlobalPosition + this.Up() * RAIL_HEIGHT + this.Back() * dst;
 			//Character.StartGrinding(this, connectionPoint);
 		}
 

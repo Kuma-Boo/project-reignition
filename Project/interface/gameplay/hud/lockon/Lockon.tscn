@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dlnfilv6x7rkh"]
+[gd_scene load_steps=13 format=3 uid="uid://dlnfilv6x7rkh"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterLockon.cs" id="1"]
 [ext_resource type="Material" path="res://interface/gameplay/hud/lockon/LockonFlash.tres" id="2"]
@@ -187,7 +187,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="133"]
 resource_name = "enable"
 length = 0.8
-step = 0.0666667
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -303,42 +303,30 @@ tracks/9/path = NodePath("PerfectHomingAttack:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.133333, 0.466667, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.466667, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("PerfectHomingAttack:rotation")
+tracks/10/path = NodePath("PerfectHomingAttack:scale")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 0.333333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [-3.14159, 0.0]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("PerfectHomingAttack:scale")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
 "times": PackedFloat32Array(0, 0.333333, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.8, 0.8), Vector2(0.5, 0.5), Vector2(0.8, 0.8)]
 }
-tracks/12/type = "method"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("..")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("..")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
 "times": PackedFloat32Array(0, 0.335, 0.469),
 "transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
@@ -394,6 +382,8 @@ tracks/1/keys = {
 _data = {
 "loop": SubResource("134")
 }
+
+[sub_resource type="BoxMesh" id="BoxMesh_kdtiw"]
 
 [node name="Lockon" type="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -488,6 +478,10 @@ autoplay = "loop"
 libraries = {
 "": SubResource("AnimationLibrary_jbwmb")
 }
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)
+mesh = SubResource("BoxMesh_kdtiw")
 
 [connection signal="area_entered" from="." to="." method="OnTargetTriggerEnter"]
 [connection signal="area_exited" from="." to="." method="OnTargetTriggerExit"]

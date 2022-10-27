@@ -14,7 +14,7 @@ namespace Project.Gameplay.Triggers
 
 		//Public for the editor
 		public Vector3 EndPosition => MiddlePosition + this.Right() * (isRightTurn ? 1 : -1) * SLIDE_DISTANCE;
-		public Vector3 MiddlePosition => GlobalPosition + this.Back() * SLIDE_DISTANCE;
+		public Vector3 MiddlePosition => GlobalPosition + this.Forward() * SLIDE_DISTANCE;
 
 		private bool isProcessing; //Is this drift trigger currently processing?
 		private bool isCornerCleared; //Has the corner been cleared?
@@ -36,7 +36,7 @@ namespace Project.Gameplay.Triggers
 		private bool IsDriftValid() //Checks whether the player is in a state where a drift is possible
 		{
 			if (Character.Skills.IsUsingBreakSkills) return false; //Can't drift during speed/time break :\
-			if (!Character.IsOnGround || Character.groundSettings.GetSpeedRatio(Character.MoveSpd) < ENTRANCE_SPEED_RATIO) return false; //In air/too slow
+			if (!Character.IsOnGround || Character.groundSettings.GetSpeedRatio(Character.MoveSpeed) < ENTRANCE_SPEED_RATIO) return false; //In air/too slow
 
 			return true; //Valid drift
 		}
@@ -44,7 +44,7 @@ namespace Project.Gameplay.Triggers
 		private void StartDrift() //Initialize drift
 		{
 			isCornerCleared = false;
-			entrySpeed = Character.MoveSpd;
+			entrySpeed = Character.MoveSpeed;
 			driftVelocity = Vector3.Zero;
 
 			Character.StartExternal();
@@ -60,8 +60,8 @@ namespace Project.Gameplay.Triggers
 
 			if (isCornerCleared)
 			{
-				Character.MoveSpd = Character.groundSettings.speed * EXIT_SPEED_RATIO;
-				Character.GlobalPosition = Character.GlobalPosition.MoveToward(targetPosition, Character.MoveSpd * PhysicsManager.physicsDelta);
+				Character.MoveSpeed = Character.groundSettings.speed * EXIT_SPEED_RATIO;
+				Character.GlobalPosition = Character.GlobalPosition.MoveToward(targetPosition, Character.MoveSpeed * PhysicsManager.physicsDelta);
 
 				if (distance < SLIDE_DISTANCE * .1f) //Drift successful
 					CompleteDrift();
@@ -80,7 +80,7 @@ namespace Project.Gameplay.Triggers
 					}
 					else if (distance < .1f) //Drift failed
 					{
-						Character.MoveSpd = 0f; //Reset Movespeed
+						Character.MoveSpeed = 0f; //Reset Movespeed
 						ApplyBonus(false);
 						CompleteDrift();
 					}

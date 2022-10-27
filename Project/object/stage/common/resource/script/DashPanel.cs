@@ -50,7 +50,7 @@ namespace Project.Gameplay.Objects
 		private float GetForwardAngle()
 		{
 			GD.Print("DashPanel.cs GetFowardAngle() is untested code. This is a reminder to check for bugs.");
-			Vector3 forwardDirection = this.Forward();
+			Vector3 forwardDirection = this.Back();
 			float dot = forwardDirection.Dot(Vector3.Up);
 			if (Mathf.Abs(dot) > .9f)
 				forwardDirection = Mathf.Sign(dot) * this.Up();

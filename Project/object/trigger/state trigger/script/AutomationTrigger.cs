@@ -37,9 +37,9 @@ namespace Project.Gameplay.Triggers
 				if (IsFinished)
 					Deactivate();
 
-				if (Character.MoveSpd < Character.groundSettings.speed)
-					Character.MoveSpd = Character.groundSettings.speed;
-				Character.PathFollower.Progress += Character.MoveSpd * PhysicsManager.physicsDelta;
+				if (Character.MoveSpeed < Character.groundSettings.speed)
+					Character.MoveSpeed = Character.groundSettings.speed;
+				Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 				return;
 			}
 
@@ -51,7 +51,7 @@ namespace Project.Gameplay.Triggers
 
 		private bool IsActivationValid()
 		{
-			if (!Character.IsOnGround || Character.groundSettings.GetSpeedRatio(Character.MoveSpd) < minimumSpeedRatio) return false;
+			if (!Character.IsOnGround || Character.groundSettings.GetSpeedRatio(Character.MoveSpeed) < minimumSpeedRatio) return false;
 			return true;
 		}
 

@@ -126,7 +126,7 @@ namespace Project.Editor
 				for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 				{
 					float angle = Mathf.Tau * ((float)i / PREVIEW_RESOLUTION);
-					points.Add(ball.GlobalPosition + ball.Forward().Rotated(ball.Up(), angle).Normalized() * ball.distance);
+					points.Add(ball.GlobalPosition + ball.Back().Rotated(ball.Up(), angle).Normalized() * ball.distance);
 				}
 
 				Vector2 start = editorCam.UnprojectPosition(points[0]);

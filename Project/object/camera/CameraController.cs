@@ -154,7 +154,7 @@ namespace Project.Gameplay
 				CurrentYaw = Mathf.DegToRad(targetSettings.viewAngle.y); //Override view direction
 			else
 			{
-				if (Mathf.Abs(PathFollower.Forward().Dot(Vector3.Up)) > .9f) //Moving vertically, can't use PathFollower.Forward
+				if (Mathf.Abs(PathFollower.Back().Dot(Vector3.Up)) > .9f) //Moving vertically, can't use PathFollower.Forward
 				{
 					if (Character.IsOnGround) //Use ground direction as "forward"
 						CurrentYaw = Character.GroundDirection.SignedAngleTo(Vector3.Forward, Vector3.Up);
@@ -164,7 +164,7 @@ namespace Project.Gameplay
 				else //Forward direction is based on PathFollower's orientation
 				{
 					//Using a flattened vector because 3d vectors cause issues when traveling down slopes
-					CurrentYaw = PathFollower.Forward().Flatten().Normalized().AngleTo(Vector2.Down);
+					CurrentYaw = PathFollower.Back().Flatten().Normalized().AngleTo(Vector2.Down);
 				}
 
 				CurrentYaw += Mathf.DegToRad(targetSettings.viewAngle.y); //Add
@@ -184,7 +184,7 @@ namespace Project.Gameplay
 		{
 			if (targetSettings.enableZTilting) //Rotate the z axis along PathFollower's forward, by angle of worldDirection to up
 			{
-				float targetTiltAmount = Character.GroundDirection.SignedAngleTo(Vector3.Up, PathFollower.Forward());
+				float targetTiltAmount = Character.GroundDirection.SignedAngleTo(Vector3.Up, PathFollower.Back());
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace Project.Gameplay
 				return targetSettings.staticPosition;
 
 			Vector3 targetPosition = Character.CenterPosition;
-			targetPosition += _calculationRoot.Back() * targetSettings.distance;
+			targetPosition += _calculationRoot.Forward() * targetSettings.distance;
 			targetPosition += _calculationRoot.Up() * targetSettings.height;
 			return targetPosition;
 		}
@@ -244,9 +244,9 @@ namespace Project.Gameplay
 			if (Input.IsKeyPressed(Key.Q))
 				_cameraRoot.GlobalTranslate(_camera.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.W))
-				_cameraRoot.GlobalTranslate(_camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
-			if (Input.IsKeyPressed(Key.S))
 				_cameraRoot.GlobalTranslate(_camera.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
+			if (Input.IsKeyPressed(Key.S))
+				_cameraRoot.GlobalTranslate(_camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.D))
 				_cameraRoot.GlobalTranslate(_camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.A))

@@ -1,5 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://bsqs306vy0tri"]
+[gd_scene load_steps=20 format=3 uid="uid://bu84myec8qr7u"]
 
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://object/player/resource/movement settings/stage completion/StopLockout.tres" id="2_cngxd"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="3"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="4"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5"]
@@ -8,21 +9,28 @@
 [ext_resource type="PackedScene" uid="uid://21pykhrm72xx" path="res://object/stage/pickups/Ring.tscn" id="8"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://dvl6l15xl3mqa" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://cgy6r1swkygh" path="res://area/stage/2 dino jungle/data/environment/MajinEgg.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="14"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="15"]
-[ext_resource type="PackedScene" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="16"]
+[ext_resource type="PackedScene" uid="uid://djfifvpwuj32l" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="16"]
 [ext_resource type="PackedScene" uid="uid://cnktakxmo4l0c" path="res://area/stage/2 dino jungle/data/environment/WaterRock.tscn" id="17"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="18"]
+
+[sub_resource type="Curve" id="Curve_sbtd2"]
+max_value = 3.0
+_data = [Vector2(0, 0), 0.0, 0.912133, 0, 0, Vector2(1, 3), 4.88802, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="BoxShape3D" id="91"]
 size = Vector3(9.4, 11.5, 2)
 
 [node name="MajinEggAct" type="Node3D"]
 script = ExtResource("4")
-"Mission Type" = 0
+"Mission Type" = 1
+"Objective Count" = 5
+"Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
 "Ranking/Gold Time" = 0.0
 "Ranking/Silver Time" = 0.0
@@ -31,8 +39,8 @@ script = ExtResource("4")
 "Ranking/Silver Score" = 0
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
-Completion/Lockout = null
-Completion/Animator = null
+Completion/Lockout = ExtResource("2_cngxd")
+Completion/Animator = NodePath("")
 
 [node name="Eggs" type="Node3D" parent="."]
 
@@ -243,91 +251,89 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.14924, -1.25, 6.79314)
 [node name="Pearl10" parent="Start/Pearl3" instance=ExtResource("9")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.65327, -1.25, 7.62659)
 
-[node name="LotusGroup1" type="Node3D" parent="."]
+[node name="LotusGroup" type="Node3D" parent="."]
 
-[node name="RedMajin" parent="LotusGroup1" instance=ExtResource("16")]
+[node name="RedMajin" parent="LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.918218, 0, -0.396075, 0, 1, 0, 0.396075, 0, -0.918218, 23.1692, 4.45383, 65.2806)
 spawnInstantly = true
 
-[node name="RedMajin2" parent="LotusGroup1" instance=ExtResource("16")]
+[node name="RedMajin2" parent="LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.999577, 24.3009, 3.57783, 82.5364)
 spawnInstantly = true
 
-[node name="RedMajin3" parent="LotusGroup1" instance=ExtResource("16")]
+[node name="RedMajin3" parent="LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.984806, 0, 0.173654, 0, 1, 0, -0.173654, 0, -0.984806, 20.8096, 2.51883, 99.0893)
 spawnInstantly = true
 
-[node name="Rings" type="Node3D" parent="LotusGroup1"]
+[node name="Rings" type="Node3D" parent="LotusGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008)
 script = ExtResource("18")
 Generate = false
-Source = null
+Source = ExtResource("8")
 Amount = 8
-Shape = 0
+Shape = 1
 Orientation = 0
-Spacing = 3.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
+"Ring Size" = 3.0
+"Ring Ratio" = 1.0
 
-[node name="Ring" parent="LotusGroup1/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+[node name="Child01" parent="LotusGroup/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
 
-[node name="Ring2" parent="LotusGroup1/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12132, 0, -2.12132)
-
-[node name="Ring3" parent="LotusGroup1/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 1.31134e-07)
-
-[node name="Ring4" parent="LotusGroup1/Rings" instance=ExtResource("8")]
+[node name="Child02" parent="LotusGroup/Rings" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12132, 0, 2.12132)
 
-[node name="Ring5" parent="LotusGroup1/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.62268e-07, 0, 3)
+[node name="Child03" parent="LotusGroup/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.31134e-07, 0, 3)
 
-[node name="Ring6" parent="LotusGroup1/Rings" instance=ExtResource("8")]
+[node name="Child04" parent="LotusGroup/Rings" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.12132, 0, 2.12132)
 
-[node name="Ring7" parent="LotusGroup1/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -3.57746e-08)
+[node name="Child05" parent="LotusGroup/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -2.62268e-07)
 
-[node name="Ring8" parent="LotusGroup1/Rings" instance=ExtResource("8")]
+[node name="Child06" parent="LotusGroup/Rings" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.12132, 0, -2.12132)
 
-[node name="Rings2" type="Node3D" parent="LotusGroup1"]
+[node name="Child07" parent="LotusGroup/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.57746e-08, 0, -3)
+
+[node name="Child08" parent="LotusGroup/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12132, 0, -2.12132)
+
+[node name="Rings2" type="Node3D" parent="LotusGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.903, 11.404, 149.805)
 script = ExtResource("18")
 Generate = false
-Source = null
+Source = ExtResource("8")
 Amount = 8
-Shape = 0
+Shape = 1
 Orientation = 0
-Spacing = 2.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
+"Ring Size" = 2.0
+"Ring Ratio" = 1.0
 
-[node name="Ring9" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+[node name="Child01" parent="LotusGroup/Rings2" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
 
-[node name="Ring10" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41421, 0, -1.41421)
-
-[node name="Ring11" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 8.74228e-08)
-
-[node name="Ring12" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
+[node name="Child02" parent="LotusGroup/Rings2" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41421, 0, 1.41421)
 
-[node name="Ring13" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.74846e-07, 0, 2)
+[node name="Child03" parent="LotusGroup/Rings2" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.74228e-08, 0, 2)
 
-[node name="Ring14" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
+[node name="Child04" parent="LotusGroup/Rings2" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.41421, 0, 1.41421)
 
-[node name="Ring15" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2.38498e-08)
+[node name="Child05" parent="LotusGroup/Rings2" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1.74846e-07)
 
-[node name="Ring16" parent="LotusGroup1/Rings2" instance=ExtResource("8")]
+[node name="Child06" parent="LotusGroup/Rings2" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.41421, 0, -1.41421)
+
+[node name="Child07" parent="LotusGroup/Rings2" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38498e-08, 0, -2)
+
+[node name="Child08" parent="LotusGroup/Rings2" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41421, 0, -1.41421)
 
 [node name="Catapult" parent="." instance=ExtResource("15")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 5.20006, 17.873, 133.459)
@@ -715,40 +721,39 @@ enemyCount = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -177.7, 6.615, 85.93)
 script = ExtResource("18")
 Generate = false
-Source = null
+Source = ExtResource("8")
 Amount = 9
 Shape = 0
 Orientation = 0
 Spacing = 1.0
-"Horizontal Offset" = null
+"Horizontal Offset" = SubResource("Curve_sbtd2")
 "Vertical Offset" = null
 
-[node name="Ring" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36734, -0.115, -0.131165)
+[node name="Child01" parent="Island/Rings" instance=ExtResource("8")]
 
-[node name="Ring2" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19928, -0.115, -1.1469)
+[node name="Child02" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.149372, 0, -1)
 
-[node name="Ring3" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0399323, -0.115, -2.1494)
+[node name="Child03" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.367893, 0, -2)
 
-[node name="Ring4" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.347183, -0.115, -3.13264)
+[node name="Child04" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.653221, 0, -3)
 
-[node name="Ring5" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.716232, -0.115, -4.08414)
+[node name="Child05" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00301, 0, -4)
 
-[node name="Ring6" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13992, -0.115, -5.01426)
+[node name="Child06" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.41493, 0, -5)
 
-[node name="Ring7" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61156, -0.115, -5.9203)
+[node name="Child07" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.88663, 0, -6)
 
-[node name="Ring8" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.13593, -0.115, -6.79719)
+[node name="Child08" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.41577, 0, -7)
 
-[node name="Ring9" parent="Island/Rings" instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.71664, -0.115, -7.63711)
+[node name="Child09" parent="Island/Rings" instance=ExtResource("8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -8)
 
 [node name="Boat3" type="Node3D" parent="."]
 
@@ -912,7 +917,7 @@ transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, 
 spawnInstantly = true
 
 [node name="Catapult" parent="RightPath" instance=ExtResource("15")]
-transform = Transform3D(0.690516, 0, 0.723317, 0, 1, 0, -0.723317, 0, 0.690516, -128.18, 6.98, -46.0578)
+transform = Transform3D(0.690882, 0, 0.722967, 0, 1, 0, -0.722967, 0, 0.690882, -128.18, 6.98, -46.0578)
 closeDistance = 16.0
 closeMidHeight = 14.0
 closeEndHeight = -2.0

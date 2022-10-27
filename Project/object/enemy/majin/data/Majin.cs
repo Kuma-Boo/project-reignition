@@ -87,7 +87,7 @@ namespace Project.Gameplay
 					_animationTree.Set("parameters/idle_seek/seek_position", 0f);
 				}
 
-				_hitbox.Monitorable = _hitbox.Monitoring = true;
+				_hurtbox.Monitorable = _hurtbox.Monitoring = true;
 			}
 		}
 
@@ -95,7 +95,7 @@ namespace Project.Gameplay
 		{
 			Visible = false;
 			_collider.Disabled = true;
-			_hitbox.Monitorable = _hitbox.Monitoring = false;
+			_hurtbox.Monitorable = _hurtbox.Monitoring = false;
 		}
 
 		//Overload activation method for using godot's built-in area trigger

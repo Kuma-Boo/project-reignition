@@ -60,8 +60,8 @@ namespace Project.Gameplay.Bosses
 			_reflection.GlobalPosition = Character.PathFollower.GlobalPosition;
 
 			Debug.DrawRay(_reflection.GlobalPosition, _reflection.Up() * 10, Colors.Green);
-			Debug.DrawRay(_reflection.GlobalPosition, Character.PathFollower.Forward() * 10, Colors.Blue);
-			_reflection.Rotation = new Vector3(-Mathf.Pi * .5f, Character.PathFollower.Forward().SignedAngleTo(Vector3.Forward, Vector3.Down), 0);
+			Debug.DrawRay(_reflection.GlobalPosition, Character.PathFollower.Back() * 10, Colors.Blue);
+			_reflection.Rotation = new Vector3(-Mathf.Pi * .5f, Character.PathFollower.Back().SignedAngleTo(Vector3.Forward, Vector3.Down), 0);
 		}
 
 		public void ResetHallway()
@@ -111,7 +111,7 @@ namespace Project.Gameplay.Bosses
 
 		private void MovePiece(Node3D piece)
 		{
-			piece.GlobalPosition += piece.Forward() * COLLISION_PIECE_SPACING;
+			piece.GlobalPosition += piece.Back() * COLLISION_PIECE_SPACING;
 			piece.GlobalRotate(Vector3.Up, Mathf.DegToRad(COLLISION_PIECE_ROTATION));
 		}
 	}

@@ -1,3 +1,24 @@
-[gd_scene format=3 uid="uid://cgy6r1swkygh"]
+[gd_scene load_steps=4 format=3 uid="uid://cgy6r1swkygh"]
 
-[node name="MajinEgg" type="Node3D"]
+[ext_resource type="Script" path="res://area/stage/2 dino jungle/data/script/MajinEgg.cs" id="1_5tg85"]
+[ext_resource type="PackedScene" uid="uid://bw6dle4jv80uw" path="res://area/stage/2 dino jungle/data/environment/model/MajinEgg.gltf" id="2_n5tno"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_l2s66"]
+radius = 0.75
+
+[node name="MajinEgg" type="StaticBody3D"]
+collision_layer = 8
+collision_mask = 8
+script = ExtResource("1_5tg85")
+
+[node name="MajinEgg" parent="." instance=ExtResource("2_n5tno")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_l2s66")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 12
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+shape = SubResource("SphereShape3D_l2s66")

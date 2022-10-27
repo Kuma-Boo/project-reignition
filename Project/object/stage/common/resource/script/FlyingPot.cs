@@ -163,9 +163,8 @@ namespace Project.Gameplay.Objects
 
 			Character.Skills.IsSpeedBreakEnabled = false;
 
-			cameraSettings.viewAngle.y = 180f - Mathf.RadToDeg(GlobalRotation.y); //Sync viewAngle to current flying pot's rotation
-			cameraSettings.staticPosition = startPosition;
-			cameraSettings.staticPosition.y = 0f; //Since heightTracking is enabled, this is unneeded.
+			cameraSettings.viewAngle.y = (Mathf.RadToDeg(GlobalRotation.y) + 180) % 360; //Sync viewAngle to current flying pot's rotation
+			GD.Print(cameraSettings.viewAngle.y);
 			Character.Camera.SetCameraData(cameraSettings);
 		}
 

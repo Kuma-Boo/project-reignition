@@ -29,8 +29,8 @@ namespace Project
 		//Global Directions
 		public static Vector3 Up(this Node3D s) => s.GlobalTransform.basis.y.Normalized();
 		public static Vector3 Down(this Node3D s) => -s.GlobalTransform.basis.y.Normalized();
-		public static Vector3 Forward(this Node3D s) => -s.GlobalTransform.basis.z.Normalized();
-		public static Vector3 Back(this Node3D s) => s.GlobalTransform.basis.z.Normalized();
+		public static Vector3 Forward(this Node3D s) => s.GlobalTransform.basis.z.Normalized();
+		public static Vector3 Back(this Node3D s) => -s.GlobalTransform.basis.z.Normalized();
 		public static Vector3 Right(this Node3D s) => s.GlobalTransform.basis.x.Normalized();
 		public static Vector3 Left(this Node3D s) => -s.GlobalTransform.basis.x.Normalized();
 
