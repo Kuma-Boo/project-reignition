@@ -8,21 +8,18 @@ namespace Project
 	public partial class Sun : Node3D
 	{
 		[Export]
-		public NodePath depthCamera;
-		private Camera3D _depthCamera;
+		private Camera3D depthCamera; //Used to get the depth texture to determine whether the sun is occluded
 		[Export]
-		public NodePath depthViewport;
-		private SubViewport _depthViewport;
+		private SubViewport depthViewport;
 		[Export]
-		public NodePath lensFlareBase;
-		private Node2D _lensFlareBase;
+		private Node2D lensFlareBase;
 		private readonly Array<Node2D> _lensPieces = new Array<Node2D>();
 		private readonly float LENS_FLARE_SPACING = .2f;
 
 		[Export(PropertyHint.Range, "0,1,0.1")]
-		public float backgroundSeparation;
+		private float backgroundSeparation;
 		[Export(PropertyHint.Range, "0,1")]
-		public float movementThreshold;
+		private float movementThreshold;
 
 		private Vector2 previousScreenUV;
 		private Vector2 screenUV;
@@ -39,14 +36,10 @@ namespace Project
 
 		public override void _Ready()
 		{
-			_depthCamera = GetNode<Camera3D>(depthCamera);
-			_depthCamera.Visible = true; //Enable the depth camera
+			depthCamera.Visible = true; //Enable the depth camera
 
-			_depthViewport = GetNode<SubViewport>(depthViewport);
-
-			_lensFlareBase = GetNode<Node2D>(lensFlareBase);
-			for (int i = 0; i < _lensFlareBase.GetChildCount(); i++)
-				_lensPieces.Add(_lensFlareBase.GetChild<Node2D>(i));
+			for (int i = 0; i < lensFlareBase.GetChildCount(); i++)
+				_lensPieces.Add(lensFlareBase.GetChild<Node2D>(i));
 
 			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePreDraw, new Callable(this, MethodName.SyncCamera), (uint)ConnectFlags.Deferred);
 			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, new Callable(this, MethodName.UpdateFrame), (uint)ConnectFlags.Deferred);
@@ -61,7 +54,7 @@ namespace Project
 		private void SyncCamera()
 		{
 			if (Camera == null) return; //No camera found			
-			_depthCamera.GlobalTransform = Camera.CameraTransform; //Keep cameras in sync
+			depthCamera.GlobalTransform = Camera.CameraTransform; //Keep cameras in sync
 		}
 
 		private void UpdateFrame()
@@ -89,7 +82,7 @@ namespace Project
 		private float SampleTexture()
 		{
 			screenUV = Camera.ConvertToScreenSpace(GlobalPosition) / RuntimeConstants.SCREEN_SIZE;
-			Image depthBuffer = _depthViewport.GetTexture().GetImage();
+			Image depthBuffer = depthViewport.GetTexture().GetImage();
 			Vector2 samplePosition = screenUV * depthBuffer.GetSize();
 			return depthBuffer.GetPixel(Mathf.FloorToInt(samplePosition.x), Mathf.FloorToInt(samplePosition.y)).r;
 		}
@@ -97,9 +90,9 @@ namespace Project
 		private void UpdateLensFlare()
 		{
 			Vector2 originPosition = Camera.ConvertToScreenSpace(GlobalPosition);
-			Vector2 flareDirection = _lensFlareBase.GlobalPosition - originPosition; //Get the direction to the center of the screen
+			Vector2 flareDirection = lensFlareBase.GlobalPosition - originPosition; //Get the direction to the center of the screen
 
-			_lensFlareBase.Modulate = Colors.White.Lerp(Colors.Transparent, currentOcclusion);
+			lensFlareBase.Modulate = Colors.White.Lerp(Colors.Transparent, currentOcclusion);
 			for (int i = 0; i < _lensPieces.Count; i++)
 				_lensPieces[i].Position = flareDirection * i * LENS_FLARE_SPACING;
 

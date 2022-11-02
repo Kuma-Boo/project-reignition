@@ -9,16 +9,16 @@ namespace Project.Gameplay.Triggers
 	public partial class EventTrigger : StageTriggerModule
 	{
 		[Export]
-		public NodePath animator;
+		private NodePath animator;
 		private AnimationPlayer _animator;
 		[Export]
-		public string eventName = "Event";
+		private string eventName = "Event";
 		[Export]
-		public string resetName = "RESET";
+		private string resetName = "RESET";
 		[Export]
-		public NodePath playerStandin;
+		private Node3D playerStandin;
 		[Export]
-		public NodePath cameraStandin;
+		private Node3D cameraStandin;
 
 		[Signal]
 		public delegate void ActivatedEventHandler();
@@ -48,7 +48,7 @@ namespace Project.Gameplay.Triggers
 				GD.Print($"{Name} doesn't have an event animation. Nothing will happen");
 
 			if (playerStandin != null)
-				Character.StartExternal(GetNode<Node3D>(playerStandin), true);
+				Character.StartExternal(playerStandin, true);
 
 			wasActivated = true;
 			EmitSignal(SignalName.Activated);

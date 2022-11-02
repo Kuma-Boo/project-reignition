@@ -9,23 +9,19 @@ namespace Project.Gameplay.Objects
 	[Tool]
 	public partial class Launcher : Area3D //Similar to Character.JumpTo(), but jumps between static points w/ custom sfx support
 	{
-		[Export]
-		public NodePath sfxPlayer; //Height at the beginning of the arc
-		private AudioStreamPlayer _sfxPlayer; //Height at the beginning of the arc
-
 		[Signal]
 		public delegate void ActivatedEventHandler();
 
 		[Export]
-		public float startingHeight; //Height at the beginning of the arc
+		private float startingHeight; //Height at the beginning of the arc
 		[Export]
-		public float middleHeight; //Height at the highest point of the arc
+		private float middleHeight; //Height at the highest point of the arc
 		[Export]
-		public float finalHeight; //Height at the end of the arc
+		private float finalHeight; //Height at the end of the arc
 		[Export]
-		public float distance; //How far to travel
+		private float distance; //How far to travel
 
-		public Vector3 travelDirection; //Direction the player should face when being launched
+		private Vector3 travelDirection; //Direction the player should face when being launched
 
 		public LaunchData GetLaunchData()
 		{
@@ -66,16 +62,10 @@ namespace Project.Gameplay.Objects
 
 		public Vector3 StartingPoint => GlobalPosition + Vector3.Up * startingHeight;
 
-		public override void _Ready()
-		{
-			if (sfxPlayer != null)
-				_sfxPlayer = GetNodeOrNull<AudioStreamPlayer>(sfxPlayer);
-		}
-
 		public virtual void Activate(Area3D a)
 		{
-			if (_sfxPlayer != null)
-				_sfxPlayer.Play();
+			if (sfxPlayer != null)
+				sfxPlayer.Play();
 
 			IsCharacterCentered = recenterSpeed == 0;
 
@@ -86,7 +76,8 @@ namespace Project.Gameplay.Objects
 		}
 
 		[Export]
-		public int recenterSpeed; //How fast to recenter the character
+		private int recenterSpeed; //How fast to recenter the character
+
 		public bool IsCharacterCentered { get; private set; }
 		private CharacterController Character => CharacterController.instance;
 
@@ -96,6 +87,9 @@ namespace Project.Gameplay.Objects
 			IsCharacterCentered = pos.IsEqualApprox(StartingPoint);
 			return pos;
 		}
+
+		[Export]
+		private AudioStreamPlayer sfxPlayer;
 	}
 
 	public struct LaunchData
@@ -120,11 +114,15 @@ namespace Project.Gameplay.Objects
 		public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
 		private float GRAVITY => -RuntimeConstants.GRAVITY; //Use the same gravity as the character controller
 
-		public Vector3 InterpolatePosition(float t)
+		//Get the current position, t -> [0 <-> 1]
+		public Vector3 InterpolatePositionRatio(float t) => InterpolatePositionTime(t * TotalTravelTime);
+		//Get the current position. t -> current time, in seconds.
+		public Vector3 InterpolatePositionTime(float t)
 		{
 			Vector3 displacement = InitialVelocity * t + Vector3.Up * GRAVITY * t * t / 2f;
 			return startPosition + displacement;
 		}
+
 
 		public void Calculate()
 		{
@@ -142,6 +140,10 @@ namespace Project.Gameplay.Objects
 			InitialVelocity = launchDirection.RemoveVertical().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
 		}
 
+		/// <summary>
+		/// Creates new launch data.
+		/// s -> starting position, e -> ending position, h -> height, relativeToEnd -> Is the height relative to the end, or start?
+		/// </summary>
 		public static LaunchData Create(Vector3 s, Vector3 e, float h, bool relativeToEnd = false)
 		{
 			Vector3 delta = e - s;

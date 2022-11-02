@@ -1,9 +1,10 @@
-[gd_scene load_steps=38 format=3]
+[gd_scene load_steps=39 format=3 uid="uid://dyha1qxtl2yec"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="7"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="21"]
 [ext_resource type="PackedScene" uid="uid://pn5533vrs251" path="res://area/stage/1 sand oasis/act 1/data/environment/collision/Collision.tscn" id="24_86eb6"]
 [ext_resource type="Curve3D" path="res://area/stage/1 sand oasis/act 1/data/environment/path/MainPath1.tres" id="24_q7ck1"]
+[ext_resource type="Environment" uid="uid://36h130trqtgl" path="res://area/stage/1 sand oasis/data/common/Environment.tres" id="28_j86cn"]
 [ext_resource type="Resource" path="res://resource/preset/camera/common/CloseLinearCam.tres" id="30"]
 [ext_resource type="Resource" path="res://resource/preset/camera/common/FrontWallCam.tres" id="32"]
 [ext_resource type="PackedScene" path="res://object/trigger/StageTrigger.tscn" id="33"]
@@ -20,7 +21,7 @@
 [ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/data/trigger/camera/IslandJumpCam3.tres" id="106"]
 [ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/data/trigger/camera/IslandJumpSpringCam.tres" id="107"]
 [ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/data/trigger/camera/IslandJumpCam4.tres" id="108"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/data/common/BGM.tscn" id="109"]
+[ext_resource type="PackedScene" uid="uid://7wm2nigdurx3" path="res://area/stage/1 sand oasis/data/common/BGM.tscn" id="109"]
 [ext_resource type="Resource" path="res://resource/preset/camera/common/FarOpenCam.tres" id="111"]
 [ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/data/trigger/camera/InteriorCam.tres" id="112"]
 [ext_resource type="Resource" path="res://resource/preset/camera/common/FloorCam.tres" id="113"]
@@ -59,514 +60,513 @@ size = Vector3(34, 22, 2)
 
 [node name="World" type="Node"]
 
-[node name="CommonObjects" type="Node3D" parent="."]
+[node name="Common" type="Node3D" parent="."]
 
-[node name="PathTriggers" type="Node3D" parent="CommonObjects"]
+[node name="PathTriggers" type="Node3D" parent="Common"]
 
-[node name="Path1" parent="CommonObjects/PathTriggers" instance=ExtResource("33")]
+[node name="Path1" parent="Common/PathTriggers" instance=ExtResource("33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.175, -37, -161.5)
 
-[node name="PathSwitcher" type="Node3D" parent="CommonObjects/PathTriggers/Path1"]
-script = ExtResource("7")
-path = NodePath("../../../../Static/Path/MainPath1")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/PathTriggers/Path1"]
-shape = SubResource("395")
-
-[node name="Path2" parent="CommonObjects/PathTriggers" instance=ExtResource("33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.625, -41.1, -301.7)
-
-[node name="PathSwitcher" type="Node3D" parent="CommonObjects/PathTriggers/Path2"]
+[node name="PathSwitcher" type="Node3D" parent="Common/PathTriggers/Path1" node_paths=PackedStringArray("path")]
 script = ExtResource("7")
 path = NodePath("../../../../Static/Path/MainPath2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/PathTriggers/Path2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/PathTriggers/Path1"]
+shape = SubResource("395")
+
+[node name="Path2" parent="Common/PathTriggers" instance=ExtResource("33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.625, -41.1, -301.7)
+
+[node name="PathSwitcher" type="Node3D" parent="Common/PathTriggers/Path2" node_paths=PackedStringArray("path")]
+script = ExtResource("7")
+path = NodePath("../../../../Static/Path/MainPath2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/PathTriggers/Path2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.3, 0, -133.8)
 shape = SubResource("395")
 
-[node name="CollisionShape2" type="CollisionShape3D" parent="CommonObjects/PathTriggers/Path2"]
+[node name="CollisionShape2" type="CollisionShape3D" parent="Common/PathTriggers/Path2"]
 shape = SubResource("395")
 
-[node name="Cameras" type="Node3D" parent="CommonObjects"]
+[node name="Cameras" type="Node3D" parent="Common"]
 
-[node name="SlopeEnd" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="SlopeEnd" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -135.705, -44.562, -62.8862)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/SlopeEnd"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/SlopeEnd"]
 script = ExtResource("21")
 cameraData = ExtResource("30")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/SlopeEnd"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/SlopeEnd"]
 shape = SubResource("395")
 
-[node name="Zipper" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Zipper" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -148.705, -44.562, -88.8862)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Zipper"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Zipper"]
 script = ExtResource("21")
 cameraData = ExtResource("35")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Zipper"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Zipper"]
 shape = SubResource("395")
 
-[node name="Roundabout" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Roundabout" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.390133, 0, 0.920759, 0, 1, 0, -0.920759, 0, 0.390133, -203, -44.138, -87.5519)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Roundabout"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Roundabout"]
 script = ExtResource("21")
 cameraData = ExtResource("113")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Roundabout"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Roundabout"]
 shape = SubResource("395")
 
-[node name="Overhead" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Overhead" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -276.521, -41.2, -264.25)
 triggerMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Overhead"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Overhead"]
 script = ExtResource("21")
 cameraData = ExtResource("32")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Overhead"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Overhead"]
 transform = Transform3D(0.999998, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 0.999998, -0.000183105, -0.5, -1.52588e-05)
 shape = SubResource("332")
 
-[node name="Overhead2" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Overhead2" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.919492, 0, -0.39311, 0, 1, 0, 0.39311, 0, 0.919492, -266.455, -41.2, -259.571)
 triggerMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Overhead2"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Overhead2"]
 script = ExtResource("21")
 cameraData = ExtResource("103")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Overhead2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Overhead2"]
 transform = Transform3D(0.999998, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 0.999998, -0.000183105, -0.5, -1.52588e-05)
 shape = SubResource("332")
 
-[node name="Plain" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Plain" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.959823, 0, -0.280604, 0, 1, 0, 0.280604, 0, 0.959823, -291.293, -38.5, -269.895)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Plain"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Plain"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Plain"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Plain"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="Forest" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Forest" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.911695, 0, -0.410866, 0, 1, 0, 0.410866, 0, 0.911695, -34.6407, -32.5, -151.488)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Forest"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Forest"]
 script = ExtResource("21")
 cameraData = ExtResource("104")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Forest"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Forest"]
 transform = Transform3D(0.999999, 0, 1.49012e-07, 0, 1, 0, -1.49012e-07, 0, 0.999999, 0.599922, -1.5, -2.28882e-05)
 shape = SubResource("336")
 
-[node name="ForestDrift" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="ForestDrift" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.256, -32.5, -155.6)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/ForestDrift"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/ForestDrift"]
 script = ExtResource("21")
 cameraData = ExtResource("102")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/ForestDrift"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/ForestDrift"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="IslandStart" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="IslandStart" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -161.6)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/IslandStart"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/IslandStart"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/IslandStart"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/IslandStart"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="IslandJump1" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="IslandJump1" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -191.8)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/IslandJump1"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/IslandJump1"]
 script = ExtResource("21")
 cameraData = ExtResource("86")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/IslandJump1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/IslandJump1"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="Island1" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Island1" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -216.8)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Island1"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Island1"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Island1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Island1"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="IslandJump2" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="IslandJump2" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -300.8)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/IslandJump2"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/IslandJump2"]
 script = ExtResource("21")
 cameraData = ExtResource("105")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/IslandJump2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/IslandJump2"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="Island2" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Island2" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37114e-08, 60.256, -32.5, -349.8)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Island2"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Island2"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Island2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Island2"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="IslandJump3" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="IslandJump3" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.594564, 0, 0.804047, 0, 1, 0, -0.804047, 0, 0.594564, 90.2136, -39.5, -398.345)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/IslandJump3"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/IslandJump3"]
 script = ExtResource("21")
 cameraData = ExtResource("106")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/IslandJump3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/IslandJump3"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="IslandJumpSpring" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="IslandJumpSpring" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 116.041, -36.6, -430.339)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/IslandJumpSpring"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/IslandJumpSpring"]
 script = ExtResource("21")
 cameraData = ExtResource("107")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/IslandJumpSpring"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/IslandJumpSpring"]
 shape = SubResource("343")
 
-[node name="Island3" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Island3" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-0.999999, 0, -4.20411e-06, 0, 1, 0, 4.20411e-06, 0, -0.999999, 95.856, -32.5, -435.9)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Island3"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Island3"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Island3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Island3"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="IslandJump4" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="IslandJump4" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 44.4679, -39.5, -436.138)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/IslandJump4"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/IslandJump4"]
 script = ExtResource("21")
 cameraData = ExtResource("108")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/IslandJump4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/IslandJump4"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="Mainland" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Mainland" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-0.999999, 0, -4.20411e-06, 0, 1, 0, 4.20411e-06, 0, -0.999999, -1.94402, -32.5, -435.9)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Mainland"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Mainland"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Mainland"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Mainland"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("341")
 
-[node name="InteriorZipper" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="InteriorZipper" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -87.4756, -32.5, -317.103)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/InteriorZipper"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/InteriorZipper"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/InteriorZipper"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/InteriorZipper"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("350")
 
-[node name="InteriorStatic" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="InteriorStatic" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -131.377, -61.5, -345.586)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/InteriorStatic"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/InteriorStatic"]
 script = ExtResource("21")
 cameraData = ExtResource("112")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/InteriorStatic"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/InteriorStatic"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="InteriorNormal" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="InteriorNormal" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.686242, 0, -0.727374, 0, 1, 0, 0.727374, 0, 0.686242, -138.862, -58.5, -352.588)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/InteriorNormal"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/InteriorNormal"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/InteriorNormal"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/InteriorNormal"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="Beach" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="Beach" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.642788, 0, -0.766045, 0, 1, 0, 0.766045, 0, 0.642788, -339.262, -44.5, -449.893)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/Beach"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/Beach"]
 script = ExtResource("21")
 cameraData = ExtResource("111")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/Beach"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/Beach"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="WallRunEntry" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="WallRunEntry" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, -495.732, -32.5, -592.759)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/WallRunEntry"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/WallRunEntry"]
 script = ExtResource("21")
 cameraData = ExtResource("101")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/WallRunEntry"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/WallRunEntry"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("336")
 
-[node name="CollisionShape2" type="CollisionShape3D" parent="CommonObjects/Cameras/WallRunEntry"]
+[node name="CollisionShape2" type="CollisionShape3D" parent="Common/Cameras/WallRunEntry"]
 transform = Transform3D(0.996194, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996194, -21.4028, -0.5, 3.4133)
 shape = SubResource("336")
 
-[node name="WallRunTop" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="WallRunTop" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -661.762, 10.5, -640.177)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/WallRunTop"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/WallRunTop"]
 script = ExtResource("21")
 cameraData = ExtResource("115")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/WallRunTop"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/WallRunTop"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0.599915, -1.5, -1.52588e-05)
 shape = SubResource("351")
 
-[node name="SidleWall" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="SidleWall" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.722, 16.5, -648.462)
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/SidleWall"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/SidleWall"]
 script = ExtResource("21")
 cameraData = ExtResource("117")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/SidleWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/SidleWall"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0, 0, 0)
 shape = SubResource("336")
 
-[node name="SidleCorner" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="SidleCorner" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.722, 16.5, -661.462)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/SidleCorner"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/SidleCorner"]
 script = ExtResource("21")
 cameraData = ExtResource("118")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/SidleCorner"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/SidleCorner"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0, 0, 0)
 shape = SubResource("336")
 
-[node name="SidleWall2" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="SidleWall2" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.722, 16.5, -670.762)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/SidleWall2"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/SidleWall2"]
 script = ExtResource("21")
 cameraData = ExtResource("117")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/SidleWall2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/SidleWall2"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0, 0, 0)
 shape = SubResource("336")
 
-[node name="SidleCorner2" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="SidleCorner2" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.722, 16.5, -701.462)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/SidleCorner2"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/SidleCorner2"]
 script = ExtResource("21")
 cameraData = ExtResource("118")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/SidleCorner2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/SidleCorner2"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0, 0, 0)
 shape = SubResource("336")
 
-[node name="SidleWall3" parent="CommonObjects/Cameras" instance=ExtResource("33")]
+[node name="SidleWall3" parent="Common/Cameras" instance=ExtResource("33")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -663.722, 16.5, -710.762)
 triggerMode = 2
 exitMode = 2
 
-[node name="Camera3D" type="Node3D" parent="CommonObjects/Cameras/SidleWall3"]
+[node name="Camera3D" type="Node3D" parent="Common/Cameras/SidleWall3"]
 script = ExtResource("21")
 cameraData = ExtResource("117")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Cameras/SidleWall3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Cameras/SidleWall3"]
 transform = Transform3D(0.999999, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 0.999999, 0, 0, 0)
 shape = SubResource("336")
 
-[node name="DeathTriggers" type="Node3D" parent="CommonObjects"]
+[node name="DeathTriggers" type="Node3D" parent="Common"]
 visible = false
 
-[node name="WaterTrigger" parent="CommonObjects/DeathTriggers" instance=ExtResource("33")]
+[node name="WaterTrigger" parent="Common/DeathTriggers" instance=ExtResource("33")]
 
-[node name="DeathTrigger" type="Node3D" parent="CommonObjects/DeathTriggers/WaterTrigger"]
+[node name="DeathTrigger" type="Node3D" parent="Common/DeathTriggers/WaterTrigger"]
 script = ExtResource("50")
 triggerType = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/DeathTriggers/WaterTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/DeathTriggers/WaterTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49, -51, -289)
 shape = SubResource("165")
 
-[node name="CollisionShape2" type="CollisionShape3D" parent="CommonObjects/DeathTriggers/WaterTrigger"]
+[node name="CollisionShape2" type="CollisionShape3D" parent="Common/DeathTriggers/WaterTrigger"]
 transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.0871558, -387.597, -51, -774.425)
 shape = SubResource("165")
 
-[node name="FallTrigger" parent="CommonObjects/DeathTriggers" instance=ExtResource("33")]
+[node name="FallTrigger" parent="Common/DeathTriggers" instance=ExtResource("33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -658.04, 6, -702.61)
 
-[node name="DeathTrigger" type="Node3D" parent="CommonObjects/DeathTriggers/FallTrigger"]
+[node name="DeathTrigger" type="Node3D" parent="Common/DeathTriggers/FallTrigger"]
 script = ExtResource("50")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/DeathTriggers/FallTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/DeathTriggers/FallTrigger"]
 shape = SubResource("252")
 
-[node name="Checkpoints" type="Node3D" parent="CommonObjects"]
+[node name="Checkpoints" type="Node3D" parent="Common"]
 visible = false
 
-[node name="Checkpoint1" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint1" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -248.74, -40, -252.31)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint1"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint1"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint2" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint2" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 60.15, -40, -162.3)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint2"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint2"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint3" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint3" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, -2.42635, -45, -435.95)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint3"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint3"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint4" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint4" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -135.628, -65, -349.434)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint4"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint4"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint5" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint5" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(1.94707e-07, 3.09086e-08, -1, 1.28028e-08, 1, 3.09086e-08, 1, -1.28028e-08, 1.94707e-07, -225.552, -65, -435.001)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint5"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint5"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint5"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint6" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint6" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(-0.766044, 3.09086e-08, -0.642788, 3.19068e-08, 1, 1.00602e-08, 0.642788, -1.28028e-08, -0.766044, -338.723, -50.2, -449.587)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint6"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint6"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint6"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint7" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint7" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(-0.5, 3.09086e-08, -0.866026, 2.65418e-08, 1, 2.03663e-08, 0.866026, -1.28028e-08, -0.5, -515.901, -40, -601.083)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint7"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint7"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint7"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint8" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint8" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(-1, 3.78552e-08, -1.50996e-07, 3.78552e-08, 1, -2.18557e-08, 1.50996e-07, -2.18557e-08, -1, -663.601, 10, -649.432)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint8"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint8"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint8"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint8"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint9" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint9" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(-2.8213e-07, 3.09086e-08, 1, -1.28028e-08, 1, -3.09086e-08, -1, -1.28028e-08, -2.8213e-07, -625.501, -40, -765.032)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint9"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint9"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint9"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
-[node name="Checkpoint10" parent="CommonObjects/Checkpoints" instance=ExtResource("33")]
+[node name="Checkpoint10" parent="Common/Checkpoints" instance=ExtResource("33")]
 transform = Transform3D(0.707013, -0.0186227, 0.706955, 0.0109648, 0.999822, 0.0153718, -0.707116, -0.00311647, 0.707091, -316.701, -30, -721.732)
 
-[node name="Checkpoint" type="Node3D" parent="CommonObjects/Checkpoints/Checkpoint10"]
+[node name="Checkpoint" type="Node3D" parent="Common/Checkpoints/Checkpoint10"]
 script = ExtResource("37")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CommonObjects/Checkpoints/Checkpoint10"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Checkpoints/Checkpoint10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
 [node name="Static" type="Node" parent="."]
 
 [node name="Collision" parent="Static" instance=ExtResource("24_86eb6")]
-visible = false
 
 [node name="Visuals" type="Node3D" parent="Static"]
 
@@ -581,4 +581,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.604, -40.312, -313.632)
 curve = ExtResource("47")
 
 [node name="BGM" parent="Static" instance=ExtResource("109")]
-bus = &"BGM"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Static"]
+environment = ExtResource("28_j86cn")

@@ -1,97 +1,96 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://drjj80rcyaax8"]
 
-[ext_resource path="res://interface/menu/main/sprite/Background.png" type="Texture2D" id=1]
-[ext_resource path="res://interface/menu/flames/Flames.tscn" type="PackedScene" id=2]
-[ext_resource path="res://interface/menu/main/MainMenu.cs" type="Script" id=3]
-[ext_resource path="res://interface/menu/main/reference.png" type="Texture2D" id=4]
-[ext_resource path="res://interface/menu/main/sprite/text/base en.png" type="Texture2D" id=5]
-[ext_resource path="res://interface/menu/main/sprite/text/highlight en.png" type="Texture2D" id=6]
+[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/sprite/Background.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://dvsnm477jfuyw" path="res://interface/menu/flames/Flames.tscn" id="2"]
+[ext_resource type="Script" path="res://interface/menu/main/MainMenu.cs" id="3"]
+[ext_resource type="Texture2D" uid="uid://bwisxibidol7c" path="res://interface/menu/main/reference.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://juxc0jedx8xn" path="res://interface/menu/main/sprite/text/base en.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://cwptosd4ygb8j" path="res://interface/menu/main/sprite/text/highlight en.png" id="6"]
 
-[sub_resource type="CanvasItemMaterial" id=1]
+[sub_resource type="CanvasItemMaterial" id="1"]
 blend_mode = 1
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("animator")]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-animator = NodePath("Animator")
+script = ExtResource("3")
+animator = NodePath("AnimationPlayer")
 
 [node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
-texture = ExtResource( 1 )
-expand = true
+texture = ExtResource("1")
 
 [node name="RefCounted" type="TextureRect" parent="."]
 visible = false
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
-texture = ExtResource( 4 )
-expand = true
+texture = ExtResource("4")
 
 [node name="Adventure" type="Sprite2D" parent="."]
-position = Vector2( 568, 272 )
-scale = Vector2( 1.15, 1.15 )
-texture = ExtResource( 5 )
+position = Vector2(568, 272)
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("5")
 region_enabled = true
-region_rect = Rect2( 0, 0, 1024, 140 )
+region_rect = Rect2(0, 0, 1024, 140)
 
 [node name="Highlight" type="Sprite2D" parent="Adventure"]
-material = SubResource( 1 )
-texture = ExtResource( 6 )
+material = SubResource("1")
+texture = ExtResource("6")
 region_enabled = true
-region_rect = Rect2( 0, 0, 1024, 140 )
+region_rect = Rect2(0, 0, 1024, 140)
 
 [node name="Party" type="Sprite2D" parent="."]
-self_modulate = Color( 1, 1, 1, 0.392157 )
-position = Vector2( 1400, 376 )
-scale = Vector2( 1.15, 1.15 )
-texture = ExtResource( 5 )
+self_modulate = Color(1, 1, 1, 0.392157)
+position = Vector2(1400, 376)
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("5")
 region_enabled = true
-region_rect = Rect2( 0, 140, 1024, 130 )
+region_rect = Rect2(0, 140, 1024, 130)
 
 [node name="Highlight" type="Sprite2D" parent="Party"]
 visible = false
-self_modulate = Color( 1, 1, 1, 0.392157 )
-material = SubResource( 1 )
-texture = ExtResource( 6 )
+self_modulate = Color(1, 1, 1, 0.392157)
+material = SubResource("1")
+texture = ExtResource("6")
 region_enabled = true
-region_rect = Rect2( 0, 140, 1024, 130 )
+region_rect = Rect2(0, 140, 1024, 130)
 
 [node name="Book" type="Sprite2D" parent="."]
-self_modulate = Color( 1, 1, 1, 0.392157 )
-position = Vector2( 584, 552 )
-scale = Vector2( 1.15, 1.15 )
-texture = ExtResource( 5 )
+self_modulate = Color(1, 1, 1, 0.392157)
+position = Vector2(584, 552)
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("5")
 region_enabled = true
-region_rect = Rect2( 0, 270, 1024, 120 )
+region_rect = Rect2(0, 270, 1024, 120)
 
 [node name="Highlight" type="Sprite2D" parent="Book"]
 visible = false
-self_modulate = Color( 1, 1, 1, 0.392157 )
-material = SubResource( 1 )
-texture = ExtResource( 6 )
+self_modulate = Color(1, 1, 1, 0.392157)
+material = SubResource("1")
+texture = ExtResource("6")
 region_enabled = true
-region_rect = Rect2( 0, 270, 1024, 120 )
+region_rect = Rect2(0, 270, 1024, 120)
 
 [node name="Options" type="Sprite2D" parent="."]
-position = Vector2( 1344, 608 )
-scale = Vector2( 1.15, 1.15 )
-texture = ExtResource( 5 )
+position = Vector2(1344, 608)
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("5")
 region_enabled = true
-region_rect = Rect2( 0, 390, 1024, 120 )
+region_rect = Rect2(0, 390, 1024, 120)
 
 [node name="Highlight" type="Sprite2D" parent="Options"]
 visible = false
-material = SubResource( 1 )
-texture = ExtResource( 6 )
+material = SubResource("1")
+texture = ExtResource("6")
 region_enabled = true
-region_rect = Rect2( 0, 390, 1024, 120 )
+region_rect = Rect2(0, 390, 1024, 120)
 
-[node name="Flames" parent="." instance=ExtResource( 2 )]
+[node name="Flames" parent="." instance=ExtResource("2")]
+layout_mode = 1
 
-[node name="Animator" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

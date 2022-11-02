@@ -33,7 +33,6 @@ namespace Project.Gameplay
 					properties.Add(ExtensionMethods.CreateProperty("Position Settings/Static Position", Variant.Type.Vector3));
 			}
 
-
 			return properties;
 		}
 
@@ -54,7 +53,6 @@ namespace Project.Gameplay
 					return height;
 				case "Position Settings/Follow Horizontal":
 					return isTrackingHorizontal;
-
 
 				case "Rotation Settings/" + nameof(enableZTilting):
 					return enableZTilting;

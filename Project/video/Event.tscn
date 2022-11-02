@@ -2,18 +2,18 @@
 
 [ext_resource type="Script" path="res://video/EventPlayer.cs" id="1"]
 
-[node name="Event" type="CanvasLayer"]
+[node name="Event" type="CanvasLayer" node_paths=PackedStringArray("audioPlayer", "videoPlayer")]
 script = ExtResource("1")
-videoPlayer = NodePath("Video")
 audioPlayer = NodePath("Audio")
+videoPlayer = NodePath("Video")
+
+[node name="Audio" type="AudioStreamPlayer" parent="."]
+autoplay = true
+bus = &"CUTSCENE"
 
 [node name="Video" type="VideoStreamPlayer" parent="."]
 offset_right = 1920.0
 offset_bottom = 1080.0
 expand = true
-
-[node name="Audio" type="AudioStreamPlayer" parent="."]
-autoplay = true
-bus = &"CUTSCENE"
 
 [connection signal="finished" from="Video" to="." method="OnEventFinished"]

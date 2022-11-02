@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dlnfilv6x7rkh"]
+[gd_scene load_steps=12 format=3 uid="uid://dlnfilv6x7rkh"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterLockon.cs" id="1"]
 [ext_resource type="Material" path="res://interface/gameplay/hud/lockon/LockonFlash.tres" id="2"]
@@ -383,9 +383,7 @@ _data = {
 "loop": SubResource("134")
 }
 
-[sub_resource type="BoxMesh" id="BoxMesh_kdtiw"]
-
-[node name="Lockon" type="Area3D"]
+[node name="Lockon" type="Area3D" node_paths=PackedStringArray("lockonReticle", "lockonAnimator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 0
 collision_mask = 4
@@ -478,10 +476,6 @@ autoplay = "loop"
 libraries = {
 "": SubResource("AnimationLibrary_jbwmb")
 }
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)
-mesh = SubResource("BoxMesh_kdtiw")
 
 [connection signal="area_entered" from="." to="." method="OnTargetTriggerEnter"]
 [connection signal="area_exited" from="." to="." method="OnTargetTriggerExit"]

@@ -10,12 +10,11 @@ namespace Project.Core
 	public partial class TransitionManager : Node
 	{
 		public static TransitionManager instance;
+
 		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
+		private ColorRect fade;
 		[Export]
-		public NodePath fade;
-		private ColorRect _fade;
+		private AnimationPlayer animator;
 
 		//Converts realtime seconds to a ratio for the animation player's speed. ALL ANIMATIONS MUST BE 1 SECOND LONG.
 		public float ConvertToAnimatorSpeed(float seconds) => 1f / seconds;
@@ -23,8 +22,6 @@ namespace Project.Core
 		public override void _Ready()
 		{
 			instance = this;
-			_animator = GetNode<AnimationPlayer>(animator);
-			_fade = GetNode<ColorRect>(fade);
 		}
 
 		#region Transition Types
@@ -33,28 +30,28 @@ namespace Project.Core
 		private void StartFade()
 		{
 			IsTransitionActive = true;
-			_fade.Color = CurrentTransitionData.color;
-			_animator.Play("fade");
+			fade.Color = CurrentTransitionData.color;
+			animator.Play("fade");
 
 			if (CurrentTransitionData.inSpeed == 0)
 			{
-				_animator.Seek(_animator.CurrentAnimationLength, true);
+				animator.Seek(animator.CurrentAnimationLength, true);
 				EmitSignal(SignalName.Load);
 			}
 			else
 			{
-				_animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
-				_animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
+				animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
+				animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
 			}
 		}
 
 		private void FinishFade()
 		{
 			if (CurrentTransitionData.outSpeed != 0)
-				_animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
+				animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
 
-			_animator.PlayBackwards("fade");
-			_animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
+			animator.PlayBackwards("fade");
+			animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 		}
 		#endregion
 
@@ -73,8 +70,8 @@ namespace Project.Core
 
 		public static void StartTransition(TransitionData data)
 		{
-			instance._animator.Play("RESET"); //Reset animator, just in case
-			instance._animator.Advance(0);
+			instance.animator.Play("RESET"); //Reset animator, just in case
+			instance.animator.Advance(0);
 
 			instance.CurrentTransitionData = data;
 

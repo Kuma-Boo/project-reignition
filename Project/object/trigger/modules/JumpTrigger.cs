@@ -10,25 +10,18 @@ namespace Project.Gameplay.Triggers
 	public partial class JumpTrigger : StageTriggerModule
 	{
 		[Export]
-		public NodePath targetNode; //Leaving this empty will use targetPosition exclusively.
-		private Node3D _targetNode;
+		private Node3D targetNode; //Leaving this empty will use targetPosition exclusively.
 		[Export]
-		public Vector3 targetPosition; //Position to jump to. (Added to targetNode's position)
+		private Vector3 targetPosition; //Position to jump to. (Added to targetNode's position)
 		[Export]
 		public float peakHeight; //How high to jump.
 
 		private Vector3 GetTargetPosition()
 		{
 			Vector3 returnPosition = targetPosition;
-			if (_targetNode != null)
-				returnPosition += _targetNode.GlobalPosition;
-			return returnPosition;
-		}
-
-		public override void _EnterTree()
-		{
 			if (targetNode != null)
-				_targetNode = GetNodeOrNull<Node3D>(targetNode);
+				returnPosition += targetNode.GlobalPosition;
+			return returnPosition;
 		}
 
 		public override void Activate()
@@ -37,11 +30,6 @@ namespace Project.Gameplay.Triggers
 			Character.CanJumpDash = false;
 		}
 
-		public Objects.LaunchData GetLaunchData()
-		{
-			if (targetNode != null)
-				_targetNode = GetNodeOrNull<Node3D>(targetNode);
-			return Objects.LaunchData.Create(GlobalPosition, GetTargetPosition(), peakHeight);
-		}
+		public Objects.LaunchData GetLaunchData() => Objects.LaunchData.Create(GlobalPosition, GetTargetPosition(), peakHeight);
 	}
 }

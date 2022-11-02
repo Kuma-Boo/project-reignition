@@ -27,7 +27,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Amount:modulate")
+tracks/1/path = NodePath("CurrentAmount:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -54,7 +54,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Amount:modulate")
+tracks/1/path = NodePath("CurrentAmount:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -82,7 +82,7 @@ step = 0.0416667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Amount:modulate")
+tracks/0/path = NodePath("CurrentAmount:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -366,7 +366,7 @@ _data = {
 "RESET": SubResource("60")
 }
 
-[node name="HeadsUpDisplay" type="Control"]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringDividerSprite", "ringAnimator", "time", "score", "bonusAnimator", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -374,10 +374,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("13")
-ringLabel = NodePath("RingCounter/CurrentRing/Amount")
+ringLabel = NodePath("RingCounter/CurrentRing/CurrentAmount")
 maxRingLabel = NodePath("RingCounter/RingMax")
 ringDividerSprite = NodePath("RingCounter/Divider")
-ringAnimator = NodePath("RingCounter/CurrentRing/Animator")
+ringAnimator = NodePath("RingCounter/CurrentRing/AnimationPlayer")
 time = NodePath("Values/Time")
 score = NodePath("Values/Score")
 bonusAnimator = NodePath("Bonus/AnimationPlayer")
@@ -386,8 +386,10 @@ objectiveSprite = NodePath("Objective")
 objectiveValue = NodePath("Objective/Value")
 objectiveMaxValue = NodePath("Objective/MaxValue")
 soulGauge = NodePath("SoulGauge/SoulGauge")
+soulGaugeRoot = NodePath("SoulGauge")
 soulGaugeFill = NodePath("SoulGauge/SoulGauge/Background/Fill")
-soulGaugeAnimator = NodePath("SoulGauge/Animator")
+soulGaugeBackground = NodePath("SoulGauge/SoulGauge/Background")
+soulGaugeAnimator = NodePath("SoulGauge/AnimationPlayer")
 
 [node name="RingCounter" type="Control" parent="."]
 layout_mode = 1
@@ -426,7 +428,7 @@ offset_bottom = 48.0
 pivot_offset = Vector2(48, 48)
 texture = ExtResource("5")
 
-[node name="Amount" type="Label" parent="RingCounter/CurrentRing"]
+[node name="CurrentAmount" type="Label" parent="RingCounter/CurrentRing"]
 offset_left = -48.0
 offset_top = -40.0
 offset_right = 79.0
@@ -435,7 +437,7 @@ scale = Vector2(1.2, 1.2)
 text = "000"
 vertical_alignment = 1
 
-[node name="Animator" type="AnimationPlayer" parent="RingCounter/CurrentRing"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RingCounter/CurrentRing"]
 libraries = {
 "": SubResource("AnimationLibrary_kw3qf")
 }
@@ -673,7 +675,7 @@ texture = ExtResource("7")
 region_enabled = true
 region_rect = Rect2(112, 120, 88, 24)
 
-[node name="Animator" type="AnimationPlayer" parent="SoulGauge"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SoulGauge"]
 libraries = {
 "": SubResource("AnimationLibrary_x2ft5")
 }

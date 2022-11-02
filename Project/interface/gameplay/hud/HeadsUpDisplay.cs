@@ -16,9 +16,6 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
-			_score = GetNode<Label>(score);
-			_time = GetNode<Label>(time);
-
 			InitializeBonuses();
 			InitializeRings();
 			InitializeObjectives();
@@ -42,36 +39,27 @@ namespace Project.Gameplay
 
 		#region Rings
 		[Export]
-		public NodePath ringLabel;
-		private Label _ringLabel;
+		private Label ringLabel;
 		[Export]
-		public NodePath maxRingLabel;
-		private Label _maxRingLabel;
+		private Label maxRingLabel;
 		[Export]
-		public NodePath ringDividerSprite;
-		private Sprite2D _ringDividerSprite;
+		private Sprite2D ringDividerSprite;
 		[Export]
-		public NodePath ringAnimator;
-		private AnimationPlayer _ringAnimator;
+		private AnimationPlayer ringAnimator;
 		private const string RING_LABEL_FORMAT = "000";
 
 		private void InitializeRings()
 		{
 			//Initialize ring counter
-			_ringLabel = GetNode<Label>(ringLabel);
-			_maxRingLabel = GetNode<Label>(maxRingLabel);
-			_ringDividerSprite = GetNode<Sprite2D>(ringDividerSprite);
-			_ringAnimator = GetNode<AnimationPlayer>(ringAnimator);
-
 			if (Stage != null)
 			{
-				_maxRingLabel.Visible = _ringDividerSprite.Visible = Stage.MissionType == StageSettings.MissionTypes.Ring; //Show/Hide max ring count
-				if (_maxRingLabel.Visible)
-					_maxRingLabel.Text = Stage.ObjectiveCount.ToString(RING_LABEL_FORMAT);
+				maxRingLabel.Visible = ringDividerSprite.Visible = Stage.MissionType == StageSettings.MissionTypes.Ring; //Show/Hide max ring count
+				if (maxRingLabel.Visible)
+					maxRingLabel.Text = Stage.ObjectiveCount.ToString(RING_LABEL_FORMAT);
 
-				_ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
+				ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 				if (Stage.CurrentRingCount == 0) //Starting in a ringless state
-					_ringAnimator.Play("Ringless");
+					ringAnimator.Play("Ringless");
 			}
 		}
 
@@ -79,54 +67,48 @@ namespace Project.Gameplay
 		{
 			if (amount > 0) //Play animation
 			{
-				_ringAnimator.Play("CollectRing");
-				_ringAnimator.Seek(0.0f, true);
+				ringAnimator.Play("CollectRing");
+				ringAnimator.Seek(0.0f, true);
 			}
 			else
 			{
-				_ringAnimator.Play("LoseRing");
-				_ringAnimator.AnimationSetNext("LoseRing", Stage.CurrentRingCount == 0 ? "Ringless" : "RESET");
+				ringAnimator.Play("LoseRing");
+				ringAnimator.AnimationSetNext("LoseRing", Stage.CurrentRingCount == 0 ? "Ringless" : "RESET");
 			}
 
-			_ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
+			ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 		}
 		#endregion
 
 		#region Time and Score
 		[Export]
-		public NodePath time;
-		private Label _time;
-		private void UpdateTime() => _time.Text = Stage.DisplayTime;
+		private Label time;
+		private void UpdateTime() => time.Text = Stage.DisplayTime;
 
 		[Export]
-		public NodePath score;
-		private Label _score;
-		private void UpdateScore() => _score.Text = Stage.DisplayScore;
+		private Label score;
+		private void UpdateScore() => score.Text = Stage.DisplayScore;
 		#endregion
 
 		#region Bonuses
 		[Export]
-		public NodePath bonusAnimator;
-		private AnimationPlayer _bonusAnimator;
+		private AnimationPlayer bonusAnimator;
 		[Export]
-		public Array<NodePath> bonusLabels;
+		private Array<Label> bonusLabels;
 		private int bonusCount = -1;
-		private readonly Array<Label> _bonusLabels = new Array<Label>();
 		private readonly Array<StageSettings.BonusType> bonusQueue = new Array<StageSettings.BonusType>();
 		private const int MAX_BONUS_COUNT = 5; //How many bonuses can be onscreen at once
 		private void InitializeBonuses()
 		{
-			_bonusAnimator = GetNode<AnimationPlayer>(bonusAnimator);
 			for (int i = 0; i < bonusLabels.Count; i++)
 			{
-				_bonusLabels.Add(GetNode<Label>(bonusLabels[i]));
-				_bonusLabels[i].Modulate = Colors.Transparent;
+				bonusLabels[i].Modulate = Colors.Transparent;
 			}
 		}
 
 		private void AddBonus(StageSettings.BonusType type)
 		{
-			if (_bonusAnimator.IsPlaying())
+			if (bonusAnimator.IsPlaying())
 			{
 				bonusQueue.Add(type);
 				return;
@@ -138,17 +120,17 @@ namespace Project.Gameplay
 				bonusCount = MAX_BONUS_COUNT;
 
 			//Update text
-			for (int i = 1; i < _bonusLabels.Count; i++)
+			for (int i = 1; i < bonusLabels.Count; i++)
 			{
-				_bonusLabels[i].Text = _bonusLabels[i - 1].Text;
-				_bonusLabels[i].Modulate = i > bonusCount ? Colors.Transparent : Colors.White;
+				bonusLabels[i].Text = bonusLabels[i - 1].Text;
+				bonusLabels[i].Modulate = i > bonusCount ? Colors.Transparent : Colors.White;
 			}
-			_bonusLabels[0].Text = Tr(type.ToString());
+			bonusLabels[0].Text = Tr(type.ToString());
 
 			//Play animations
-			_bonusAnimator.Play("RESET");
-			_bonusAnimator.Seek(0, true);
-			_bonusAnimator.Play("AddBonus", -1, bonusQueue.Count != 0 ? 1.5f : 1f);
+			bonusAnimator.Play("RESET");
+			bonusAnimator.Seek(0, true);
+			bonusAnimator.Play("AddBonus", -1, bonusQueue.Count != 0 ? 1.5f : 1f);
 		}
 
 		private float bonusTimer;
@@ -156,7 +138,7 @@ namespace Project.Gameplay
 		{
 			if (GetTree().Paused) return; //Paused
 
-			if (bonusQueue.Count != 0 && !_bonusAnimator.IsPlaying())
+			if (bonusQueue.Count != 0 && !bonusAnimator.IsPlaying())
 			{
 				AddBonus(bonusQueue[0]);
 				bonusQueue.RemoveAt(0);
@@ -169,7 +151,7 @@ namespace Project.Gameplay
 				if (bonusTimer > 1f)
 				{
 					float fadeAmount = Mathf.Clamp((bonusTimer % 1f) / .25f, 0f, 1f);
-					_bonusLabels[bonusCount].Modulate = Colors.White.Lerp(Colors.Transparent, fadeAmount);
+					bonusLabels[bonusCount].Modulate = Colors.White.Lerp(Colors.Transparent, fadeAmount);
 
 					if (fadeAmount >= 1f)
 					{
@@ -183,57 +165,44 @@ namespace Project.Gameplay
 
 		#region Objectives
 		[Export]
-		public NodePath objectiveSprite;
-		private TextureRect _objectiveSprite;
+		private TextureRect objectiveSprite;
 		[Export]
-		public NodePath objectiveValue;
-		private Label _objectiveValue;
+		private Label objectiveValue;
 		[Export]
-		public NodePath objectiveMaxValue;
-		private Label _objectiveMaxValue;
+		private Label objectiveMaxValue;
 		private void InitializeObjectives()
 		{
 			if (Stage == null || Stage.MissionType != StageSettings.MissionTypes.Objective) return; //Don't do anything when not set to objective based mission
 
-			_objectiveSprite = GetNode<TextureRect>(objectiveSprite);
-			_objectiveSprite.Visible = true;
-
-			_objectiveValue = GetNode<Label>(objectiveValue);
-			_objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
-
-			_objectiveMaxValue = GetNode<Label>(objectiveMaxValue);
-			_objectiveMaxValue.Text = Stage.ObjectiveCount.ToString("00");
+			objectiveSprite.Visible = true;
+			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+			objectiveMaxValue.Text = Stage.ObjectiveCount.ToString("00");
 
 			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}
 
-		private void UpdateObjective() => _objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+		private void UpdateObjective() => objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		#endregion
 
 		#region Soul Gauge
 		[Export]
-		public NodePath soulGauge;
-		private Control _soulGauge;
-		private Control _soulGaugeRoot;
+		private Control soulGauge;
 		[Export]
-		public NodePath soulGaugeFill;
-		private Control _soulGaugeFill;
-		private Control _soulGaugeBackground;
+		private Control soulGaugeRoot;
 		[Export]
-		public NodePath soulGaugeAnimator;
-		private AnimationPlayer _soulGaugeAnimator;
+		private Control soulGaugeFill;
+		[Export]
+		private Control soulGaugeBackground;
+		[Export]
+		private AnimationPlayer soulGaugeAnimator;
 		private void InitializeSoulGauge()
 		{
 			//Initialize soul gauge
-			_soulGauge = GetNode<Control>(soulGauge);
-			_soulGaugeRoot = _soulGauge.GetParent<Control>();
-			_soulGaugeFill = GetNode<Control>(soulGaugeFill);
-			_soulGaugeBackground = _soulGaugeFill.GetParent<Control>();
-			_soulGaugeAnimator = GetNode<AnimationPlayer>(soulGaugeAnimator);
+			soulGaugeBackground = soulGaugeFill.GetParent<Control>();
 
 			//Resize the soul gauge
-			int lerpFrom = Mathf.RoundToInt(_soulGaugeRoot.Size.y - _soulGauge.GetMinimumSize().y); //Smallest gauge size
-			_soulGauge.OffsetTop = Mathf.Lerp(lerpFrom, 0, SaveManager.ActiveGameData.SoulGaugeLevel); //Set the soul gauge to the correct size
+			int lerpFrom = Mathf.RoundToInt(soulGaugeRoot.Size.y - soulGauge.GetMinimumSize().y); //Smallest gauge size
+			soulGauge.OffsetTop = Mathf.Lerp(lerpFrom, 0, SaveManager.ActiveGameData.SoulGaugeLevel); //Set the soul gauge to the correct size
 			ModifySoulGauge(0f, false);
 		}
 
@@ -248,8 +217,8 @@ namespace Project.Gameplay
 		private const int SOUL_GAUGE_FILL_OFFSET = 15;
 		private void UpdateSoulGauge()
 		{
-			Vector2 end = Vector2.Down * Mathf.Lerp(_soulGaugeBackground.Size.y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
-			_soulGaugeFill.Position = ExtensionMethods.SmoothDamp(_soulGaugeFill.Position, end, ref soulGaugeVelocity, 0.1f);
+			Vector2 end = Vector2.Down * Mathf.Lerp(soulGaugeBackground.Size.y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
+			soulGaugeFill.Position = ExtensionMethods.SmoothDamp(soulGaugeFill.Position, end, ref soulGaugeVelocity, 0.1f);
 		}
 
 		private bool isSoulGaugeCharged;
@@ -259,13 +228,13 @@ namespace Project.Gameplay
 			{
 				//Play animation
 				isSoulGaugeCharged = true;
-				_soulGaugeAnimator.Play("Charged");
+				soulGaugeAnimator.Play("Charged");
 			}
 			else if (isSoulGaugeCharged && !isCharged)
 			{
 				//Lost charge
 				isSoulGaugeCharged = false;
-				_soulGaugeAnimator.Play("RESET"); //Revert to blue
+				soulGaugeAnimator.Play("RESET"); //Revert to blue
 			}
 		}
 		#endregion

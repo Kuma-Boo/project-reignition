@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://krnj2r3cdn5m"]
+
+[ext_resource type="Script" path="res://area/stage/2 dino jungle/data/script/PteroNest.cs" id="1_srudr"]
+[ext_resource type="PackedScene" uid="uid://bvuiwx4utllri" path="res://area/stage/2 dino jungle/data/environment/model/egg/EggNest.gltf" id="2_kgs6n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dpa0q"]
+size = Vector3(1.65, 2, 0.4)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ditjm"]
+radius = 1.2
+
+[node name="EggNest" type="StaticBody3D" node_paths=PackedStringArray("trigger")]
+script = ExtResource("1_srudr")
+trigger = NodePath("Lockon")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.994647, 0.0600144, -0.0841192, -0.0446738, 0.983794, 0.173648, 0.0931774, -0.168961, 0.981209, 0.0340463, 1.2, -1.1)
+shape = SubResource("BoxShape3D_dpa0q")
+
+[node name="EggNest" parent="." instance=ExtResource("2_kgs6n")]
+
+[node name="Lockon" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
+shape = SubResource("SphereShape3D_ditjm")
+
+[connection signal="area_entered" from="Lockon" to="." method="OnEntered"]

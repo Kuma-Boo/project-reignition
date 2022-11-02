@@ -6,15 +6,12 @@ namespace Project.Interface
 	public partial class Countdown : Node
 	{
 		[Export]
-		public NodePath countdownTickParent;
-		private Node2D _countdownTickParent;
+		private Node2D tickParent;
 		[Export]
-		public NodePath countdownAnimator;
-		private AnimationPlayer _countdownAnimator;
+		private AnimationPlayer animator;
 
 		public override void _Ready()
 		{
-			_countdownTickParent = GetNode<Node2D>(countdownTickParent);
 			StartCountdown();
 		}
 
@@ -29,10 +26,7 @@ namespace Project.Interface
 				EmitSignal(SignalName.CountdownComplete);
 			else
 			{
-				if (_countdownAnimator == null)
-					_countdownAnimator = GetNode<AnimationPlayer>(countdownAnimator);
-
-				_countdownAnimator.Play("Countdown");
+				animator.Play("Countdown");
 				TweenCountdownTicks();
 			}
 		}
@@ -44,9 +38,9 @@ namespace Project.Interface
 			//Tween creates a temporary "memory leak" but the garbage collector cleans it up later
 			Tween countdownTweener = CreateTween().SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.InOut).SetParallel(true);
 
-			for (int i = 0; i < _countdownTickParent.GetChildCount(); i++)
+			for (int i = 0; i < tickParent.GetChildCount(); i++)
 			{
-				Node2D tick = _countdownTickParent.GetChild<Node2D>(i);
+				Node2D tick = tickParent.GetChild<Node2D>(i);
 
 				float delay = i * .04f + .6f;
 				Vector2 targetPosition = tick.Position + (tick.Position.Normalized() * 48f);

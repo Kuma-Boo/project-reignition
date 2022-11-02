@@ -9,24 +9,17 @@ namespace Project.Gameplay.Triggers
 	public partial class CullingTrigger : StageTriggerModule
 	{
 		[Export]
-		public NodePath targetNode;
-		private Node3D _targetNode;
+		private Node3D targetNode;
 		[Export]
-		public bool modifyTree; //Can cause stuttering for larger objects. Primary use is for one-way collisions
-		private Node originalParent; //Data for tree modification
-		private Transform3D originalTransform;
+		private bool modifyTree; //Can cause stuttering when used on denser objects
+		private SpawnData spawnData; //Data for tree modification
 		[Export]
-		public bool startEnabled; //Generally things should start culled
+		private bool startEnabled; //Generally things should start culled
 
 		public override void _Ready()
 		{
-			_targetNode = GetNode<Node3D>(targetNode);
-
 			if (modifyTree)
-			{
-				originalParent = _targetNode.GetParent();
-				originalTransform = _targetNode.Transform;
-			}
+				spawnData = new SpawnData(targetNode.GetParent(), targetNode.Transform);
 
 			Respawn();
 			StageSettings.instance.RegisterRespawnableObject(this);
@@ -34,8 +27,8 @@ namespace Project.Gameplay.Triggers
 
 		public override void _ExitTree()
 		{
-			if (modifyTree && !_targetNode.IsQueuedForDeletion())
-				_targetNode.QueueFree();
+			if (modifyTree && !targetNode.IsQueuedForDeletion())
+				targetNode.QueueFree();
 		}
 
 		private void Respawn()
@@ -45,35 +38,34 @@ namespace Project.Gameplay.Triggers
 				CallDeferred(nameof(DeactivateNode));
 		}
 
-		private void ActivateNode()
+		public void ActivateNode()
 		{
 			if (modifyTree)
 			{
-				if (_targetNode.IsInsideTree()) return;
+				if (targetNode.IsInsideTree()) return;
 
-				originalParent.CallDeferred("add_child", _targetNode);
-				_targetNode.CallDeferred("set_transform", originalTransform);
+				spawnData.Respawn(targetNode);
 				return;
 			}
 
-			_targetNode.Visible = true;
-			_targetNode.SetProcess(true);
-			_targetNode.SetPhysicsProcess(true);
+			targetNode.Visible = true;
+			targetNode.SetProcess(true);
+			targetNode.SetPhysicsProcess(true);
 		}
 
-		private void DeactivateNode()
+		public void DeactivateNode()
 		{
 			if (modifyTree)
 			{
-				if (!_targetNode.IsInsideTree()) return;
+				if (!targetNode.IsInsideTree()) return;
 
-				originalParent.CallDeferred("remove_child", _targetNode);
+				spawnData.parentNode.CallDeferred("remove_child", targetNode);
 				return;
 			}
 
-			_targetNode.Visible = false;
-			_targetNode.SetProcess(false);
-			_targetNode.SetPhysicsProcess(false);
+			targetNode.Visible = false;
+			targetNode.SetProcess(false);
+			targetNode.SetPhysicsProcess(false);
 		}
 	}
 }

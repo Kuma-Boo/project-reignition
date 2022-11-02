@@ -6,22 +6,21 @@ namespace Project.Gameplay.Objects
 	public partial class Pearl : Pickup
 	{
 		[Export]
-		public NodePath collider;
+		private bool isRichPearl;
 		[Export]
-		public bool isRichPearl;
+		private CollisionShape3D collider;
 
 		private bool isCollected;
 
 		protected override void SetUp()
 		{
+			collider.Shape = isRichPearl ? RuntimeConstants.RichPearlCollisionShape : RuntimeConstants.PearlCollisionShape;
 			base.SetUp();
-			GetNode<CollisionShape3D>(collider).Shape = isRichPearl ? RuntimeConstants.RichPearlCollisionShape : RuntimeConstants.PearlCollisionShape;
 		}
 
 		public override void Respawn()
 		{
 			isCollected = false;
-
 			base.Respawn();
 		}
 

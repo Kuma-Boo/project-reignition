@@ -1,47 +1,28 @@
-[gd_resource type="Shader" format=3 uid="uid://biosmvuu0fbse"]
+[gd_resource type="Shader" format=3 uid="uid://dw6qk62gsuy37"]
 
 [resource]
 code = "shader_type spatial;
 render_mode diffuse_burley;
 
 uniform sampler2D albedo : hint_default_black, source_color;
-uniform sampler2D detail : hint_default_black, source_color;
 uniform sampler2D specular : hint_default_black;
 uniform float specular_multiplier : hint_range(0, 5) = 1;
-uniform float rim_bias : hint_range(0, 1) = .5;
-uniform float rim_multiplier : hint_range(0, 1) = 0;
 uniform float roughness : hint_range(0, 1) = .8;
-uniform float alpha_scissor : hint_range(0, 1) = .5;
-uniform bool toggle_uvs = false;
 
 void fragment()
 {
 	vec2 uv = UV;
-	vec2 uv2 = UV2;
-	if (toggle_uvs)
-	{
-		uv = UV2;
-		uv2 = UV;
-	}
 	
-	vec4 col = texture(albedo, uv);
-	vec4 detailCol = texture(detail, uv2);
-	
-	col = mix(col, detailCol, 1.0 - col.a) * COLOR;
+	vec4 col = texture(albedo, uv) * COLOR;
 	float view = dot(NORMAL, VIEW);
 	
 	//Calculate rim lighting
 	vec4 spec_col = texture(specular, uv);
 	float spec = spec_col.r * spec_col.a;
-	float rim = spec * (rim_bias - view) * rim_multiplier;
-	rim = clamp(rim, 0, 1);
 	
 	//Calculate specularity
 	spec *= view;
 	ROUGHNESS = roughness;
-	SPECULAR = clamp(spec * specular_multiplier - .2, 0, 1);
+	SPECULAR = clamp(spec * specular_multiplier, 0, 1);
 	ALBEDO = col.rgb;
-	EMISSION = vec3(rim);
-	ALPHA = col.a;
-	ALPHA_SCISSOR_THRESHOLD = alpha_scissor;
 }"

@@ -11,33 +11,25 @@ namespace Project.Gameplay.Objects
 		public int enemyCount;
 		private int currentEnemyCount;
 		[Export]
-		public NodePath effectMesh;
-		private MeshInstance3D _effectMesh;
-		[Export]
-		public Material effectMaterial;
-		[Export]
-		public NodePath shatterNode;
-		private DestructableObject _shatterNode;
+		private AnimationPlayer animator;
 
-		private StageSettings.SpawnData spawnData;
+		private bool isShattered;
+		private SpawnData spawnData;
 
 		public override void _Ready()
 		{
-			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
+			spawnData = new SpawnData(GetParent(), Transform);
 			StageSettings.instance.RegisterRespawnableObject(this);
-
-			_effectMesh = GetNode<MeshInstance3D>(effectMesh);
-			_effectMesh.MaterialOverride = effectMaterial;
-			_shatterNode = GetNode<DestructableObject>(shatterNode);
 		}
 
 		public void Respawn()
 		{
-			if (!IsInsideTree() && GetParent() != spawnData.parentNode)
-				spawnData.parentNode.AddChild(this);
-			Transform = spawnData.spawnTransform;
+			spawnData.Respawn(this);
 
+			isShattered = false;
 			currentEnemyCount = 0;
+
+			animator.Play("RESET");
 		}
 
 		public void Despawn()
@@ -50,15 +42,13 @@ namespace Project.Gameplay.Objects
 
 		private void IncrementCounter()
 		{
+			if (isShattered) return;
+
 			currentEnemyCount++;
 			if (currentEnemyCount >= enemyCount)
 			{
-				//Shatter
-				Tween tween = CreateTween();
-				tween.TweenProperty(effectMaterial, "albedo_color", Colors.White, .2f);
-				tween.TweenProperty(effectMaterial, "albedo_color", Colors.Transparent, .2f);
-				tween.TweenCallback(new Callable(_shatterNode, nameof(_shatterNode.Shatter)));
-				tween.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(5f);
+				isShattered = true;
+				animator.Play("shatter");
 			}
 		}
 	}

@@ -22,24 +22,18 @@ namespace Project.Gameplay.Hazards
 		}
 
 		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
-
+		private AnimationPlayer animator;
 		[Export]
-		public NodePath timer;
-		private Timer _timer;
+		private Timer timer;
 
 		public override void _Ready()
 		{
-			_animator = GetNode<AnimationPlayer>(animator);
-			_timer = GetNode<Timer>(timer);
-
 			if (Mathf.IsZeroApprox(inactiveLength))
 				TimerCompleted();
 			else
 			{
-				_timer.WaitTime = inactiveLength - (startingOffset * inactiveLength);
-				_timer.Start();
+				timer.WaitTime = inactiveLength - (startingOffset * inactiveLength);
+				timer.Start();
 			}
 		}
 
@@ -52,26 +46,26 @@ namespace Project.Gameplay.Hazards
 				case AttackState.Active:
 					attackState = AttackState.Inactive;
 					targetWaitTime = inactiveLength;
-					_animator.Play("inactive");
+					animator.Play("inactive");
 					break;
 				case AttackState.Inactive:
 					attackState = AttackState.Warning;
 					targetWaitTime = warningLength;
-					_animator.Play("warning");
+					animator.Play("warning");
 					break;
 				case AttackState.Warning:
 					attackState = AttackState.Active;
 					targetWaitTime = activeLength;
-					_animator.Play("active");
+					animator.Play("active");
 					break;
 			}
 
-			_animator.Advance(0);
+			animator.Advance(0);
 
 			//Update Animation
-			targetWaitTime += _animator.CurrentAnimationLength;
-			_timer.WaitTime = targetWaitTime;
-			_timer.Start();
+			targetWaitTime += animator.CurrentAnimationLength;
+			timer.WaitTime = targetWaitTime;
+			timer.Start();
 		}
 	}
 }

@@ -28,7 +28,8 @@ namespace Project.Editor
 		public float spacing;
 		public float ringRatio = 1f;
 
-		public NodePath path;
+		[Export]
+		public Path3D path;
 		public float progressOffset; //Used whenever path isn't getting the proper point
 		public Curve hOffsetCurve;
 		public Curve vOffsetCurve;
@@ -99,7 +100,7 @@ namespace Project.Editor
 					spacing = (float)value;
 					break;
 				case "Path":
-					path = (NodePath)value;
+					path = GetNodeOrNull<Path3D>((NodePath)value);
 					break;
 				case "Path Progress Offset":
 					progressOffset = (float)value;
@@ -140,7 +141,7 @@ namespace Project.Editor
 				case "Spacing":
 					return spacing;
 				case "Path":
-					return path;
+					return GetPathTo(path);
 				case "Path Progress Offset":
 					return progressOffset;
 
@@ -197,36 +198,35 @@ namespace Project.Editor
 					}
 					break;
 				case SpawnShape.Path:
-					if (path.IsEmpty)
+					if (path == null)
 					{
 						GD.PrintErr("No Path Provided.");
 						break;
 					}
 
-					Path3D _path = GetNode<Path3D>(path);
-					PathFollow3D _follow = new PathFollow3D
+					PathFollow3D follow = new PathFollow3D
 					{
 						RotationMode = PathFollow3D.RotationModeEnum.Oriented
 					};
-					_path.AddChild(_follow);
-					_follow.Progress = _path.Curve.GetClosestOffset(GlobalPosition - _path.GlobalPosition) + progressOffset;
+					path.AddChild(follow);
+					follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
 
-					Vector3 offset = _follow.GlobalTransform.Inverse().basis * (GlobalPosition - _follow.GlobalPosition);
-					_follow.HOffset = offset.x;
-					_follow.VOffset = offset.y;
+					Vector3 offset = follow.GlobalTransform.Inverse().basis * (GlobalPosition - follow.GlobalPosition);
+					follow.HOffset = offset.x;
+					follow.VOffset = offset.y;
 
 					for (int i = 0; i < amount; i++)
 					{
 						if (hOffsetCurve != null)
-							_follow.HOffset = hOffsetCurve.Sample((float)i / (amount - 1));
+							follow.HOffset = hOffsetCurve.Sample((float)i / (amount - 1));
 						if (vOffsetCurve != null)
-							_follow.VOffset = vOffsetCurve.Sample((float)i / (amount - 1));
+							follow.VOffset = vOffsetCurve.Sample((float)i / (amount - 1));
 
-						Spawn(_follow.GlobalPosition, true);
-						_follow.Progress += spacing;
+						Spawn(follow.GlobalPosition, true);
+						follow.Progress += spacing;
 					}
 
-					_follow.QueueFree();
+					follow.QueueFree();
 					break;
 			}
 		}

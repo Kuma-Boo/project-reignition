@@ -8,27 +8,22 @@ namespace Project.Gameplay
 		public delegate void DefeatedEventHandler();
 
 		[Export]
-		public NodePath collider; //Environmental collider. Disabled when defeated (For death animations, etc)
-		protected CollisionShape3D _collider;
+		protected CollisionShape3D collider; //Environmental collider. Disabled when defeated (For death animations, etc)
 		[Export]
-		public NodePath hurtbox; //Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
-		protected Area3D _hurtbox;
+		protected Area3D hurtbox; //Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
 		[Export]
 		public int maxHealth;
 		protected int currentHealth;
 		[Export]
 		public bool damagePlayer;
 
-		private StageSettings.SpawnData spawnData;
+		private SpawnData spawnData;
 		protected CharacterController Character => CharacterController.instance;
 
 		public override void _Ready() => SetUp();
 		protected virtual void SetUp()
 		{
-			_collider = GetNode<CollisionShape3D>(collider);
-			_hurtbox = GetNode<Area3D>(hurtbox);
-
-			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
+			spawnData = new SpawnData(GetParent(), Transform);
 			StageSettings.instance.RegisterRespawnableObject(this);
 			Respawn();
 		}
@@ -45,15 +40,17 @@ namespace Project.Gameplay
 
 		public virtual void Respawn()
 		{
-			if (!IsInsideTree() && GetParent() != spawnData.parentNode)
-				spawnData.parentNode.AddChild(this);
-
-			Transform = spawnData.spawnTransform;
+			spawnData.Respawn(this);
 
 			currentHealth = maxHealth;
 
-			if (_collider != null) _collider.Disabled = false;
-			if (_hurtbox != null) _hurtbox.Monitorable = _hurtbox.Monitoring = true;
+			if (collider != null)
+				collider.SetDeferred("disabled", false);
+			if (hurtbox != null)
+			{
+				hurtbox.SetDeferred("monitorable", true);
+				hurtbox.SetDeferred("monitoring", true);
+			}
 		}
 
 		public virtual void Despawn()
@@ -79,8 +76,13 @@ namespace Project.Gameplay
 		protected virtual void Defeat()
 		{
 			//Stop colliding/monitoring
-			if (_collider != null) _collider.Disabled = true;
-			if (_hurtbox != null) _hurtbox.Monitorable = _hurtbox.Monitoring = false;
+			if (collider != null)
+				collider.SetDeferred("disabled", true);
+			if (hurtbox != null)
+			{
+				hurtbox.SetDeferred("monitorable", false);
+				hurtbox.SetDeferred("monitoring", false);
+			}
 
 			OnExited(null);
 			EmitSignal(SignalName.Defeated);

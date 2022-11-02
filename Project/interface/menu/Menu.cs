@@ -12,8 +12,7 @@ namespace Project.Interface.Menu
 		public static Dictionary<string, int> memory = new Dictionary<string, int>(); //Use this for determining which menu is open/which option is selected
 
 		[Export]
-		public NodePath parentMenu;
-		protected Menu _parentMenu;
+		protected Menu parentMenu;
 		[Export]
 		public Array<NodePath> submenus;
 		protected Array<Menu> _submenus = new Array<Menu>(); //Also ensure the order of submenus is correct in the inspector hierarchy
@@ -27,12 +26,9 @@ namespace Project.Interface.Menu
 
 		public override void _Ready()
 		{
-			if (parentMenu != null)
-				_parentMenu = GetNode<Menu>(parentMenu);
-
 			if (submenus != null)
 			{
-				for (int i = 0; i < submenus.Count; i++)
+				for (int i = 0; i < submenus.Count; i++) //Required due to inspector not allowing for custom classes
 					_submenus.Add(GetNode<Menu>(submenus[i]));
 			}
 

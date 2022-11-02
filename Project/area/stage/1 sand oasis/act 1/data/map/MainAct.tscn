@@ -1,4 +1,4 @@
-[gd_scene load_steps=204 format=3]
+[gd_scene load_steps=186 format=3 uid="uid://dl0lx28vna5v3"]
 
 [ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/data/trigger/camera/UTurnCam.tres" id="1"]
 [ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/data/trigger/ZipperControlLock.tres" id="2"]
@@ -27,7 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://2nkt0wt8v770" path="res://area/stage/1 sand oasis/data/environment/SquarePillarShort.tscn" id="37"]
 [ext_resource type="PackedScene" path="res://object/stage/pickups/FireSoul.tscn" id="38"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="39"]
-[ext_resource type="PackedScene" uid="uid://b8alpr3heheem" path="res://object/stage/common/FlyingPot.tscn" id="40"]
+[ext_resource type="PackedScene" uid="uid://c1ivqxpa0ry7i" path="res://object/stage/common/FlyingPot.tscn" id="40"]
 [ext_resource type="PackedScene" uid="uid://gdm74q4nrubh" path="res://area/stage/1 sand oasis/data/environment/Drawbridge.tscn" id="41"]
 [ext_resource type="PackedScene" uid="uid://da84q66iyuyyy" path="res://object/stage/common/JumpPanel.tscn" id="42"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="43"]
@@ -81,63 +81,11 @@
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="103"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="104"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="105"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="106"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="107"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="108"]
 
 [sub_resource type="SphereShape3D" id="6"]
 radius = 10.0
-
-[sub_resource type="BoxShape3D" id="308"]
-size = Vector3(40, 10, 72)
-
-[sub_resource type="BoxShape3D" id="307"]
-size = Vector3(124, 188, 8)
-
-[sub_resource type="BoxShape3D" id="309"]
-size = Vector3(150, 108, 64)
-
-[sub_resource type="BoxShape3D" id="310"]
-size = Vector3(128, 30, 134)
-
-[sub_resource type="BoxShape3D" id="311"]
-size = Vector3(180, 30, 186)
-
-[sub_resource type="BoxShape3D" id="312"]
-size = Vector3(64, 30, 282)
-
-[sub_resource type="BoxShape3D" id="313"]
-size = Vector3(194, 30, 90)
-
-[sub_resource type="BoxShape3D" id="314"]
-size = Vector3(138, 44, 308)
-
-[sub_resource type="BoxShape3D" id="315"]
-size = Vector3(50, 44, 178)
-
-[sub_resource type="BoxShape3D" id="316"]
-size = Vector3(76, 44, 56)
-
-[sub_resource type="BoxShape3D" id="317"]
-size = Vector3(222, 26, 96.4)
-
-[sub_resource type="BoxShape3D" id="318"]
-size = Vector3(256, 44, 108)
-
-[sub_resource type="BoxShape3D" id="319"]
-size = Vector3(210, 108, 108)
-
-[sub_resource type="BoxShape3D" id="320"]
-size = Vector3(24, 66, 138)
-
-[sub_resource type="BoxShape3D" id="321"]
-size = Vector3(103.4, 66, 138)
-
-[sub_resource type="BoxShape3D" id="322"]
-size = Vector3(246, 46, 138)
-
-[sub_resource type="BoxShape3D" id="323"]
-size = Vector3(134, 46, 152)
 
 [sub_resource type="BoxShape3D" id="1"]
 size = Vector3(10, 10, 2)
@@ -1604,268 +1552,6 @@ cameraData = ExtResource("100")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnPosition/CharacterSpawn/StageTrigger"]
 shape = SubResource("6")
-
-[node name="VisibilitySet" type="Node3D" parent="."]
-visible = false
-
-[node name="Start" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, 2.4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Start"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Start")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -32)
-shape = SubResource("308")
-
-[node name="Descent" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 35, -62)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Descent"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Descent")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Descent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-shape = SubResource("307")
-
-[node name="Zipper" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -173, -45, -99)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Zipper"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Zipper")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Zipper"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 43, 9)
-shape = SubResource("309")
-
-[node name="DoublePond" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -232, -44, -116)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/DoublePond"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/DoublePond")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/DoublePond"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6, -1)
-shape = SubResource("310")
-
-[node name="Roundabout" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Roundabout"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Roundabout")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Roundabout"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.70709, 6, -2.22473)
-shape = SubResource("311")
-
-[node name="Plain" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -179, -40.999, -226)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Plain"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Plain")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Plain"]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 4.24033, 0)
-shape = SubResource("312")
-
-[node name="Forest" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -40, -156)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Forest"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Forest")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Forest"]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -29.4021, 0, -16.1142)
-shape = SubResource("313")
-
-[node name="Island" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, -40, -325)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Island"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Island")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Island"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.4021, -1, 25.8858)
-shape = SubResource("314")
-
-[node name="Hallway" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.1, -45, -359)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Hallway"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Hallway")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Hallway"]
-transform = Transform3D(0.990483, 0, -0.137635, 0, 1, 0, 0.137635, 0, 0.990483, 16.0042, -1, -11.4168)
-shape = SubResource("315")
-
-[node name="CollisionShape2" type="CollisionShape3D" parent="VisibilitySet/Hallway"]
-transform = Transform3D(7.54979e-08, 0, 1, 0, 1, 0, -1, 0, 7.54979e-08, 91.5824, -1, -68.8318)
-shape = SubResource("315")
-
-[node name="UTurn" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -106, -45, -334)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/UTurn"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/UTurn")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/UTurn"]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.5743, 0, 3.84076)
-shape = SubResource("316")
-
-[node name="Interior" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -220, -65, -435)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Interior"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Interior")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Interior"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2.97711, 11, 58.9559)
-shape = SubResource("317")
-
-[node name="Beach" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -410, -50, -540)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Beach"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Beach")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Beach"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 16.2635, 2, 16.2635)
-shape = SubResource("318")
-
-[node name="WallClimb" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -593.948, -40, -632.193)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/WallClimb"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/WallClimb")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/WallClimb"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 35.7393, 19, 9.57629)
-shape = SubResource("319")
-
-[node name="WallSidle" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -664, 10, -705)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/WallSidle"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/WallSidle")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/WallSidle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -18, 0)
-shape = SubResource("320")
-
-[node name="Landing" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -575, -30, -790)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Landing"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Landing")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Landing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 17, 0)
-shape = SubResource("321")
-
-[node name="Bridge" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -415, -50, -820)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Bridge"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Bridge")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Bridge"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 17, 30)
-shape = SubResource("322")
-
-[node name="Town" parent="VisibilitySet" instance=ExtResource("58")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -230, -46, -747)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-triggerMode = 2
-
-[node name="Node" type="Node3D" parent="VisibilitySet/Town"]
-script = ExtResource("106")
-targetNode = NodePath("../../../Objects/Town")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilitySet/Town"]
-transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -36.5359, 17, -9.41156)
-shape = SubResource("323")
 
 [node name="Objects" type="Node" parent="."]
 
@@ -3432,32 +3118,32 @@ transform = Transform3D(0.972474, -0.172987, -0.156106, 0.156106, 0.98106, -0.11
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox2" parent="Objects/Roundabout" instance=ExtResource("52")]
 transform = Transform3D(0.982379, -0.172988, -0.0707545, 0.165507, 0.98106, -0.100639, 0.0868237, 0.0871556, 0.992404, 31.908, -1.65828, -78.245)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox3" parent="Objects/Roundabout" instance=ExtResource("52")]
 transform = Transform3D(0.982379, -0.172988, -0.0707545, 0.165507, 0.98106, -0.100639, 0.0868237, 0.0871556, 0.992404, 32.218, -1.70944, -77.054)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox4" parent="Objects/Roundabout" instance=ExtResource("52")]
 transform = Transform3D(0.97297, -0.172988, -0.152981, 0.156473, 0.98106, -0.114179, 0.169836, 0.0871556, 0.981611, 32.04, -1.84275, -75.906)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="Plain" type="Node3D" parent="Objects"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -179, -40.999, -226)
@@ -3465,8 +3151,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -179, -40.999, -226)
 [node name="Jar" parent="Objects/Plain" instance=ExtResource("53")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -95.2331, 1.23294, -38.357)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Plain/Jar" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0, 1, 0)
@@ -3477,7 +3161,6 @@ monitorable = false
 [node name="BlueMajin" parent="Objects/Plain" instance=ExtResource("56")]
 transform = Transform3D(-0.39253, 0, -0.919739, 0, 1, 0, 0.919739, 0, -0.39253, -85.371, 3.9931, -33.5302)
 spawnOffset = Vector3(0, 20, 0)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="CircularPillar" parent="Objects/Plain" instance=ExtResource("55")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -83.6, -2.8, -29.2)
@@ -3485,7 +3168,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -83.6, -2.8, -29.2)
 [node name="GreenMajin" parent="Objects/Plain/CircularPillar" instance=ExtResource("21")]
 transform = Transform3D(-0.39253, 0, -0.919739, 0, 1, 0, 0.919739, 0, -0.39253, -0.031189, 10.7931, 0.000289917)
 spawnOffset = Vector3(0, 20, 0)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="CircularPillar2" parent="Objects/Plain" instance=ExtResource("55")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -76.8466, -0.600002, -33.5578)
@@ -3493,7 +3175,6 @@ transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195
 [node name="GreenMajin" parent="Objects/Plain/CircularPillar2" instance=ExtResource("21")]
 transform = Transform3D(-0.471197, 0, -0.882028, 0, 1, 0, 0.882028, 0, -0.471197, -0.0124359, 10.8931, -0.039032)
 spawnOffset = Vector3(0, 20, 0)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="SquarePillarMid" parent="Objects/Plain" instance=ExtResource("57")]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -73.3885, -0.400002, -27.6324)
@@ -3568,7 +3249,6 @@ transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 
 
 [node name="BlueMajin2" parent="Objects/Plain" instance=ExtResource("56")]
 transform = Transform3D(-0.422617, 0, -0.906305, 0, 1, 0, 0.906305, 0, -0.422617, -39.2891, 2.2, -11.6959)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="GrindRail" parent="Objects/Plain" instance=ExtResource("45")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -39.2891, 1.2, -11.6959)
@@ -3885,15 +3565,12 @@ transform = Transform3D(0.0183869, 0.362065, -0.931971, 0.999164, -0.0406839, 0.
 
 [node name="BlueMajin3" parent="Objects/Plain" instance=ExtResource("56")]
 transform = Transform3D(-0.422617, 0, -0.906305, 0, 1, 0, 0.906305, 0, -0.422617, 27.2339, 2.2, 19.3243)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="BlueMajin4" parent="Objects/Plain" instance=ExtResource("56")]
 transform = Transform3D(-0.422617, 0, -0.906305, 0, 1, 0, 0.906305, 0, -0.422617, 33.6392, 4.2, 24.5178)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="BlueMajin5" parent="Objects/Plain" instance=ExtResource("56")]
 transform = Transform3D(-0.422617, 0, -0.906305, 0, 1, 0, 0.906305, 0, -0.422617, 43.0638, 6.2, 25.6025)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="Rings2" type="Node3D" parent="Objects/Plain"]
 transform = Transform3D(-0.422617, 0, -0.906305, 0, 1, 0, 0.906305, 0, -0.422617, 35.569, 1.7, 13.2806)
@@ -4090,7 +3767,6 @@ shape = SubResource("139")
 
 [node name="BlueMajin6" parent="Objects/Plain" instance=ExtResource("56")]
 transform = Transform3D(-0.422617, 0, -0.906305, 0, 1, 0, 0.906305, 0, -0.422617, 81.5701, 1.5, 44.772)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="Boxes" type="Node3D" parent="Objects/Plain"]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 87.7745, 1.5, 47.759)
@@ -4099,88 +3775,88 @@ transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox2" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox3" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.00001, 0, -1.52588e-05)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox4" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999992, 0, -1.52588e-05)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox5" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99999, 0, -1.52588e-05)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox6" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99999, 0, -1.00002)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox7" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.00001, 0, -1.00002)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox8" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50001, 1, -0.45)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox9" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.500008, 1, -0.45)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox10" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.499992, 1, -0.45)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox11" parent="Objects/Plain/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49999, 1, -0.45)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="RichRing" parent="Objects/Plain/Boxes" instance=ExtResource("27")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 0.300003, -1)
@@ -5696,8 +5372,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.1, -45, -359)
 [node name="Jar" parent="Objects/Hallway" instance=ExtResource("53")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.1, 0, -78)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Hallway/Jar" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -5708,8 +5382,6 @@ monitorable = false
 [node name="Jar2" parent="Objects/Hallway" instance=ExtResource("53")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.2, 0, -76.3)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Hallway/Jar2" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -5922,7 +5594,6 @@ monitorable = false
 [node name="RedMajin" parent="Objects/Hallway" instance=ExtResource("44")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 0, -13.9)
 attackType = 1
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="FireSoul" parent="Objects/Hallway" instance=ExtResource("38")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3, 10.5, -40.1)
@@ -5930,13 +5601,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3, 10.5, -40.1)
 [node name="RedMajin2" parent="Objects/Hallway" instance=ExtResource("44")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, 0, -6.40002)
 attackType = 2
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="Jar3" parent="Objects/Hallway" instance=ExtResource("53")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0999985, 0, 1.20001)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Hallway/Jar3" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -5947,8 +5615,6 @@ monitorable = false
 [node name="Jar4" parent="Objects/Hallway" instance=ExtResource("53")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, -0.399994)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Hallway/Jar4" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -5959,8 +5625,6 @@ monitorable = false
 [node name="Jar5" parent="Objects/Hallway" instance=ExtResource("53")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.900002, 0, -0.799988)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Hallway/Jar5" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -6883,8 +6547,6 @@ shape = SubResource("175")
 [node name="Jar" parent="Objects/Interior" instance=ExtResource("53")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.5, 0, 12.5)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Interior/Jar" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -8054,7 +7716,6 @@ length = 59
 
 [node name="BlueMajin" parent="Objects/WallClimb/CenterRail/Objects" instance=ExtResource("56")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.00012207, 0, -6.00031)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="Boxes" type="Node3D" parent="Objects/WallClimb/CenterRail/Objects"]
 transform = Transform3D(1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, 1, 0.00012207, 0.4, -16.0002)
@@ -8063,64 +7724,64 @@ transform = Transform3D(1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, 1, 0.000122
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox2" parent="Objects/WallClimb/CenterRail/Objects/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999969, 0, 0)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox3" parent="Objects/WallClimb/CenterRail/Objects/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99988, 0, 6.10352e-05)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox4" parent="Objects/WallClimb/CenterRail/Objects/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00021, 0, 0.00012207)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox6" parent="Objects/WallClimb/CenterRail/Objects/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox7" parent="Objects/WallClimb/CenterRail/Objects/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999969, 1, 0)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox8" parent="Objects/WallClimb/CenterRail/Objects/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00031, 1, 0.000183105)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="WoodenBox5" parent="Objects/WallClimb/CenterRail/Objects/Boxes" instance=ExtResource("52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.00027, 0, 0.000183105)
 collision_mask = 19
 can_sleep = false
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
+collisionLayer = 0
+collisionMask = 0
 
 [node name="RichRing" parent="Objects/WallClimb/CenterRail/Objects" instance=ExtResource("27")]
 transform = Transform3D(1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 6.10352e-05, 0.900002, -17.0001)
@@ -8165,7 +7826,6 @@ monitorable = false
 
 [node name="BlueMajin2" parent="Objects/WallClimb/CenterRail/Objects" instance=ExtResource("56")]
 transform = Transform3D(1, 0, -2.08616e-07, 0, 1, 0, 2.08616e-07, 0, 1, -0.000183105, 0, -51.0007)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="Rings2" type="Node3D" parent="Objects/WallClimb/CenterRail/Objects"]
 transform = Transform3D(1, 0, -3.57628e-07, 0, 1, 0, 3.57628e-07, 0, 1, 0.000305176, 0.799999, -53.5011)
@@ -8263,7 +7923,6 @@ shape = SubResource("BoxShape3D_vnsre")
 
 [node name="BlueMajin3" parent="Objects/WallClimb" instance=ExtResource("56")]
 transform = Transform3D(0.984809, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984809, -3.29544, 10.85, -31.1871)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="DashPanel" parent="Objects/WallClimb" instance=ExtResource("59")]
 transform = Transform3D(0.984809, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984809, -4.37872, 0.0499992, -30.996)
@@ -8808,7 +8467,7 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="Event" type="Node3D" parent="Objects/Sandfall/SandfallEvent"]
+[node name="Event" type="Node3D" parent="Objects/Sandfall/SandfallEvent" node_paths=PackedStringArray("playerStandin", "cameraStandin")]
 script = ExtResource("103")
 animator = NodePath("AnimationPlayer")
 playerStandin = NodePath("EventBlock/PlayerStandin")
@@ -8820,7 +8479,6 @@ collision_layer = 4
 collision_mask = 2
 monitorable = false
 script = ExtResource("17")
-sfxPlayer = NodePath("")
 middleHeight = 5.0
 finalHeight = -17.0
 distance = 12.0
@@ -8836,7 +8494,7 @@ transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.29999, 1.5, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Sandfall/SandfallEvent/Event/EventBlock/PlayerStandin"]
-transform = Transform3D(1, 0, -1.77636e-15, 0, 0.5, 0, 3.55271e-15, 0, 0.5, 0, 0, 0)
+transform = Transform3D(1, 0, -3.55271e-15, 0, 0.5, 0, 7.10543e-15, 0, 0.5, 0, 0, 0)
 mesh = SubResource("326")
 
 [node name="CameraStandin" type="Node3D" parent="Objects/Sandfall/SandfallEvent/Event"]
@@ -9158,8 +8816,6 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.299
 [node name="Jar" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -80.5, 16, 0)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="RichRing" parent="Objects/Bridge/Jar" instance=ExtResource("27")]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 1, 0)
@@ -9170,8 +8826,6 @@ monitorable = false
 [node name="Jar2" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -80.5, 16, 2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar2" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9182,8 +8836,6 @@ monitorable = false
 [node name="Jar3" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -80.5, 16, -2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar3" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9278,8 +8930,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60.2, 20.5, 0.200012)
 [node name="Jar4" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -51.5, 18, -2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="RichRing" parent="Objects/Bridge/Jar4" instance=ExtResource("27")]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 1, 0)
@@ -9290,8 +8940,6 @@ monitorable = false
 [node name="Jar5" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -51.5, 18, 0)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Spring" parent="Objects/Bridge/Jar5" instance=ExtResource("43")]
 transform = Transform3D(1, 0, 0, 0, 0.999048, 0.0436194, 0, -0.0436194, 0.999048, 0, 0.399998, 0)
@@ -9368,8 +9016,6 @@ monitorable = false
 [node name="Jar6" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -51.5, 18, 2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar6" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9467,8 +9113,6 @@ monitorable = false
 [node name="Jar7" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.5, 15.3, -2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="RichRing" parent="Objects/Bridge/Jar7" instance=ExtResource("27")]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 1, 0)
@@ -9479,8 +9123,6 @@ monitorable = false
 [node name="Jar8" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.5, 15.3, 0)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar8" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9491,8 +9133,6 @@ monitorable = false
 [node name="Jar9" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.5, 15.3, 2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar9" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9503,8 +9143,6 @@ monitorable = false
 [node name="Jar10" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.5, 15.3, 2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="RichRing" parent="Objects/Bridge/Jar10" instance=ExtResource("27")]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 1, 0)
@@ -9515,18 +9153,13 @@ monitorable = false
 [node name="Jar11" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.5, 15.3, 0)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="GreenMajin" parent="Objects/Bridge" instance=ExtResource("21")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.5, 16.8, 0)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="Jar12" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.5, 15.3, -2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar12" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9537,8 +9170,6 @@ monitorable = false
 [node name="Jar13" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.5, 15.3, 2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="RichRing" parent="Objects/Bridge/Jar13" instance=ExtResource("27")]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 1, 0)
@@ -9549,8 +9180,6 @@ monitorable = false
 [node name="Jar14" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.5, 15.3, 0)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar14" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9561,8 +9190,6 @@ monitorable = false
 [node name="Jar15" parent="Objects/Bridge" instance=ExtResource("53")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.5, 15.3, -2)
 script = ExtResource("14")
-originalMesh = NodePath("Mesh")
-collider = NodePath("CollisionShape3D")
 
 [node name="Ring" parent="Objects/Bridge/Jar15" instance=ExtResource("23")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -9572,7 +9199,6 @@ monitorable = false
 
 [node name="BlueMajin" parent="Objects/Bridge" instance=ExtResource("56")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5, 18.3, 0)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="GrindRail5" parent="Objects/Bridge" instance=ExtResource("45")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 4.49997, 20.15, -2)
@@ -10216,15 +9842,12 @@ shape = SubResource("334")
 
 [node name="GreenMajin" parent="Objects/Town" instance=ExtResource("21")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.800003, 3.9, 8.5)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="GreenMajin2" parent="Objects/Town" instance=ExtResource("21")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.900009, 3.4, 2.5)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="GreenMajin3" parent="Objects/Town" instance=ExtResource("21")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0999908, 4.1, -3.90002)
-hitbox = NodePath("LockonLocation/CollisionShape3D")
 
 [node name="Rings2" type="Node3D" parent="Objects/Town"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799999, -17.4)
@@ -10427,40 +10050,6 @@ shape = SubResource("65")
 
 [connection signal="area_entered" from="SpawnPosition/CharacterSpawn/StageTrigger" to="SpawnPosition/CharacterSpawn/StageTrigger" method="OnEntered"]
 [connection signal="area_exited" from="SpawnPosition/CharacterSpawn/StageTrigger" to="SpawnPosition/CharacterSpawn/StageTrigger" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Start" to="VisibilitySet/Start" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Start" to="VisibilitySet/Start" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Descent" to="VisibilitySet/Descent" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Descent" to="VisibilitySet/Descent" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Zipper" to="VisibilitySet/Zipper" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Zipper" to="VisibilitySet/Zipper" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/DoublePond" to="VisibilitySet/DoublePond" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/DoublePond" to="VisibilitySet/DoublePond" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Roundabout" to="VisibilitySet/Roundabout" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Roundabout" to="VisibilitySet/Roundabout" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Plain" to="VisibilitySet/Plain" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Plain" to="VisibilitySet/Plain" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Forest" to="VisibilitySet/Forest" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Forest" to="VisibilitySet/Forest" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Island" to="VisibilitySet/Island" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Island" to="VisibilitySet/Island" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Hallway" to="VisibilitySet/Hallway" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Hallway" to="VisibilitySet/Hallway" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/UTurn" to="VisibilitySet/UTurn" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/UTurn" to="VisibilitySet/UTurn" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Interior" to="VisibilitySet/Interior" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Interior" to="VisibilitySet/Interior" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Beach" to="VisibilitySet/Beach" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Beach" to="VisibilitySet/Beach" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/WallClimb" to="VisibilitySet/WallClimb" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/WallClimb" to="VisibilitySet/WallClimb" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/WallSidle" to="VisibilitySet/WallSidle" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/WallSidle" to="VisibilitySet/WallSidle" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Landing" to="VisibilitySet/Landing" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Landing" to="VisibilitySet/Landing" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Bridge" to="VisibilitySet/Bridge" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Bridge" to="VisibilitySet/Bridge" method="OnExited"]
-[connection signal="area_entered" from="VisibilitySet/Town" to="VisibilitySet/Town" method="OnEntered"]
-[connection signal="area_exited" from="VisibilitySet/Town" to="VisibilitySet/Town" method="OnExited"]
 [connection signal="area_entered" from="Objects/Start/DialogTrigger" to="Objects/Start/DialogTrigger" method="OnEntered"]
 [connection signal="area_exited" from="Objects/Start/DialogTrigger" to="Objects/Start/DialogTrigger" method="OnExited"]
 [connection signal="area_entered" from="Objects/Start/Ring/Ring6" to="Objects/Start/Ring/Ring6" method="OnEntered"]

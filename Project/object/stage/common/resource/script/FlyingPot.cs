@@ -12,16 +12,13 @@ namespace Project.Gameplay.Objects
 		[Export]
 		public Vector2 travelBounds;
 		[Export]
-		public NodePath root;
-		private Node3D _root;
+		private Node3D root;
 		[Export]
-		public NodePath environmentCollider;
-		private CollisionShape3D _environmentCollider;
+		private CollisionShape3D environmentCollider;
 		[Export]
-		public NodePath lockonArea;
-		private Area3D _lockonArea;
+		private Area3D lockonArea;
 		[Export]
-		public CameraSettingsResource cameraSettings;
+		private CameraSettingsResource cameraSettings;
 
 		private bool isControllingPlayer;
 		private bool interactingWithPlayer;
@@ -48,10 +45,6 @@ namespace Project.Gameplay.Objects
 			if (Engine.IsEditorHint()) return;
 
 			startPosition = GlobalPosition;
-			_root = GetNode<Node3D>(root);
-			_lockonArea = GetNode<Area3D>(lockonArea);
-			_environmentCollider = GetNode<CollisionShape3D>(environmentCollider);
-
 			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
@@ -62,7 +55,7 @@ namespace Project.Gameplay.Objects
 			velocity = Vector2.Zero;
 			GlobalPosition = startPosition;
 
-			_lockonArea.Monitorable = true;
+			lockonArea.SetDeferred("monitorable", true);
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -76,22 +69,22 @@ namespace Project.Gameplay.Objects
 				else if (!isEnteringPot && !Character.IsOnGround)
 				{
 					isEnteringPot = true;
-					_environmentCollider.Disabled = true;
+					environmentCollider.Disabled = true;
 
 					if (Character.GlobalPosition.y > GlobalPosition.y)
 						Character.JumpTo(GlobalPosition);
 					else
 						Character.JumpTo(GlobalPosition, 2f, true);
 
-					_lockonArea.Monitorable = false;
+					lockonArea.SetDeferred("monitorable", false);
 
 					Character.CanJumpDash = false;
 					Character.Lockon.ResetLockonTarget();
 					Character.Connect(CharacterController.SignalName.LauncherFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
 				}
 			}
-			else if (!_lockonArea.Monitorable) //Re-enable lockon
-				_lockonArea.Monitorable = Character.VerticalSpd < 0f;
+			else if (!lockonArea.Monitorable) //Re-enable lockon
+				lockonArea.SetDeferred("monitorable", Character.VerticalSpd < 0f);
 
 			if (!isControllingPlayer)
 				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
@@ -147,7 +140,7 @@ namespace Project.Gameplay.Objects
 				velocity.y = 0;
 
 			GlobalPosition = startPosition + Vector3.Up * position.y + this.Right() * position.x;
-			_root.Rotation = Vector3.Back * angle;
+			root.Rotation = Vector3.Back * angle;
 
 			velocity.x = Mathf.Lerp(velocity.x, 0f, HORIZONTAL_DRAG);
 			velocity.y -= GRAVITY * PhysicsManager.physicsDelta;
@@ -177,7 +170,7 @@ namespace Project.Gameplay.Objects
 			}
 
 			interactingWithPlayer = false;
-			_environmentCollider.Disabled = false;
+			environmentCollider.SetDeferred("disabled", false);
 		}
 	}
 }

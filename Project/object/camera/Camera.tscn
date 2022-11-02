@@ -54,16 +54,17 @@ _data = {
 "activate": SubResource("5")
 }
 
-[node name="Camera" type="Node3D"]
+[node name="Camera" type="Node3D" node_paths=PackedStringArray("_calculationRoot", "_calculationGimbal", "_cameraRoot", "_cameraGimbal", "_camera", "_crossfade", "_crossfadeAnimator", "reflectionCamera")]
 script = ExtResource("2")
-calculationRoot = NodePath("CalculationRoot")
-calculationGimbal = NodePath("CalculationRoot/CalculationGimbal")
-cameraRoot = NodePath("CameraRoot")
-cameraGimbal = NodePath("CameraRoot/CameraGimbal")
-camera = NodePath("CameraRoot/CameraGimbal/Camera")
-crossfade = NodePath("Crossfade")
-crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
+_calculationRoot = NodePath("CalculationRoot")
+_calculationGimbal = NodePath("CalculationRoot/CalculationGimbal")
+_cameraRoot = NodePath("CameraRoot")
+_cameraGimbal = NodePath("CameraRoot/CameraGimbal")
+_camera = NodePath("CameraRoot/CameraGimbal/Camera")
+_crossfade = NodePath("Crossfade")
+_crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
 targetSettings = ExtResource("2_ynty5")
+reflectionCamera = NodePath("SubViewport/ReflectionCamera")
 
 [node name="CalculationRoot" type="Node3D" parent="."]
 visible = false
@@ -87,7 +88,7 @@ mesh = SubResource("1")
 cull_mask = 262143
 current = true
 fov = 64.0
-near = 0.01
+size = 0.1
 
 [node name="Crossfade" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -98,3 +99,11 @@ offset_bottom = 1080.0
 libraries = {
 "": SubResource("AnimationLibrary_mih1k")
 }
+
+[node name="SubViewport" type="SubViewport" parent="."]
+
+[node name="ReflectionCamera" type="Camera3D" parent="SubViewport"]
+cull_mask = 32765
+current = true
+fov = 64.0
+size = 0.07

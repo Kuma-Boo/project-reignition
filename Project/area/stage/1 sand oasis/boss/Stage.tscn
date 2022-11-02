@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3]
+[gd_scene load_steps=30 format=3 uid="uid://uqmxmwv8pxcb"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_bh06n"]
 [ext_resource type="Environment" uid="uid://36h130trqtgl" path="res://area/stage/1 sand oasis/data/common/Environment.tres" id="1_dgxgs"]
@@ -8,13 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://c083xdkdh5iau" path="res://area/stage/1 sand oasis/boss/data/environment/collision/Collision.tscn" id="1_y3a8x"]
 [ext_resource type="PackedScene" uid="uid://21pykhrm72xx" path="res://object/stage/pickups/Ring.tscn" id="2_g1pxi"]
 [ext_resource type="Curve3D" uid="uid://bvpu60xrfh0px" path="res://area/stage/1 sand oasis/boss/data/environment/path/MainPath.tres" id="2_sspwl"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/boss/data/boss/SandScorpion.tscn" id="2_ur7rr"]
+[ext_resource type="PackedScene" uid="uid://ct6dlcsvt1kif" path="res://area/stage/1 sand oasis/boss/data/boss/SandScorpion.tscn" id="2_ur7rr"]
 [ext_resource type="PackedScene" path="res://object/trigger/StageTrigger.tscn" id="3_ofxsh"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/stage/1 sand oasis/data/skybox/Skybox.tscn" id="3_ud18g"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="4_15cum"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="4_k3scl"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="6_l2a15"]
 [ext_resource type="Resource" uid="uid://c06k4gxe3e5nt" path="res://resource/preset/camera/boss/SandScorpionCamera.tres" id="7_f4pdp"]
+[ext_resource type="PackedScene" uid="uid://lwu1iqqynww2" path="res://area/stage/1 sand oasis/data/common/BossBGM.tscn" id="16_0ck80"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_i8rmg"]
 radius = 4.0
@@ -354,9 +355,9 @@ script = ExtResource("1_bh06n")
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = null
-Completion/Animator = NodePath("../Static/DemoCamera/AnimationPlayer")
+Completion/Animator = null
 
-[node name="SandScorpion" parent="BossAct" instance=ExtResource("2_ur7rr")]
+[node name="SandScorpion" parent="BossAct" node_paths=PackedStringArray("pathFollower") instance=ExtResource("2_ur7rr")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
 pathFollower = NodePath("../../Static/Path/MainPath/BossPathFollow")
 
@@ -369,7 +370,7 @@ transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 
 [node name="Start" parent="BossAct/SpawnPosition/CharacterSpawn" instance=ExtResource("3_ofxsh")]
 isOneShot = true
 
-[node name="MainPath" type="Node3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start"]
+[node name="MainPath" type="Node3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start" node_paths=PackedStringArray("path")]
 script = ExtResource("4_15cum")
 path = NodePath("../../../../../Static/Path/MainPath")
 loopPath = true
@@ -560,7 +561,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 20
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -633,7 +634,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 20
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -1019,7 +1020,7 @@ Generate = false
 Source = ExtResource("2_g1pxi")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -1056,7 +1057,7 @@ Generate = false
 Source = ExtResource("2_g1pxi")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -1096,7 +1097,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 20
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_2qi3h")
@@ -1169,7 +1170,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 20
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_nbkw4")
@@ -1242,7 +1243,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 20
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_vjrtx")
@@ -1315,7 +1316,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 20
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 0.0
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_iqq0q")
@@ -1500,7 +1501,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 3.0
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1537,7 +1538,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 3.0
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1577,7 +1578,7 @@ Generate = false
 Source = ExtResource("2_g1pxi")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 2.8
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1620,7 +1621,7 @@ Generate = false
 Source = ExtResource("2_g1pxi")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 2.8
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1666,7 +1667,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 3.2
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1709,7 +1710,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 3.2
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1755,7 +1756,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 2.4
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1792,7 +1793,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 2.4
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1832,7 +1833,7 @@ Generate = false
 Source = ExtResource("2_g1pxi")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 1.8
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -1869,7 +1870,7 @@ Generate = false
 Source = ExtResource("2_g1pxi")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 1.8
 Spacing = 2.4
 "Horizontal Offset" = null
@@ -2150,7 +2151,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 2.8
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -2193,7 +2194,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 2.8
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -2265,7 +2266,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 1.4
 Spacing = 1.4
 "Horizontal Offset" = null
@@ -2296,7 +2297,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 1.4
 Spacing = 1.4
 "Horizontal Offset" = null
@@ -2327,7 +2328,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 1.4
 Spacing = 1.4
 "Horizontal Offset" = null
@@ -2358,7 +2359,7 @@ Generate = false
 Source = ExtResource("4_k3scl")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../../Static/Path/MainPath")
+Path = NodePath("")
 "Path Progress Offset" = 1.4
 Spacing = 1.4
 "Horizontal Offset" = null
@@ -2589,18 +2590,15 @@ shape = SubResource("BoxShape3D_h301n")
 
 [node name="Visuals" type="Node3D" parent="Static"]
 
-[node name="SOBoss" parent="Static/Visuals" instance=ExtResource("1_gt2in")]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Static/Visuals"]
-environment = ExtResource("1_dgxgs")
-
-[node name="Sunlight" type="DirectionalLight3D" parent="Static/Visuals"]
-transform = Transform3D(0.882458, -0.469216, -0.0332494, -0.270536, -0.564081, 0.780143, -0.384811, -0.679448, -0.624717, 0, 0, 0)
+[node name="Sun" type="DirectionalLight3D" parent="Static/Visuals"]
+transform = Transform3D(0.882457, -0.469216, -0.0332494, -0.270536, -0.564081, 0.780143, -0.384811, -0.679448, -0.624717, 0, 0, 0)
 light_color = Color(1, 0.843137, 0.658824, 1)
 light_energy = 0.8
 shadow_enabled = true
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 250.0
+
+[node name="SOBoss" parent="Static/Visuals" instance=ExtResource("1_gt2in")]
 
 [node name="Skybox" parent="Static/Visuals" instance=ExtResource("3_ud18g")]
 
@@ -2632,3 +2630,8 @@ libraries = {
 next/demo1 = &"demo2"
 next/demo2 = &"demo3"
 next/demo3 = &"demo1"
+
+[node name="BGM" parent="Static" instance=ExtResource("16_0ck80")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Static"]
+environment = ExtResource("1_dgxgs")

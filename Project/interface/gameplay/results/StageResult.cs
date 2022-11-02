@@ -7,26 +7,19 @@ namespace Project.Interface
 	public partial class StageResult : Node
 	{
 		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
+		private Label score;
 		[Export]
-		public NodePath score;
-		private Label _score;
+		private Label time;
 		[Export]
-		public NodePath time;
-		private Label _time;
+		private Label enemy;
 		[Export]
-		public NodePath enemy;
-		private Label _enemy;
+		private Label ring;
 		[Export]
-		public NodePath ring;
-		private Label _ring;
+		private Label technical;
 		[Export]
-		public NodePath technical;
-		private Label _technical;
+		private Label total;
 		[Export]
-		public NodePath total;
-		private Label _total;
+		private AnimationPlayer animator;
 
 		private bool isProcessingInputs;
 		private InputManager.Controller Controller => InputManager.controller;
@@ -36,15 +29,6 @@ namespace Project.Interface
 
 		public override void _Ready()
 		{
-			_animator = GetNode<AnimationPlayer>(animator);
-
-			_score = GetNode<Label>(score);
-			_time = GetNode<Label>(time);
-			_enemy = GetNode<Label>(enemy);
-			_ring = GetNode<Label>(ring);
-			_technical = GetNode<Label>(technical);
-			_total = GetNode<Label>(total);
-
 			if (Stage != null)
 				Stage.Connect(nameof(StageSettings.StageCompleted), new Callable(this, nameof(StartResults)));
 		}
@@ -53,11 +37,11 @@ namespace Project.Interface
 		{
 			if (!isProcessingInputs) return;
 
-			if (_animator.IsPlaying())
+			if (animator.IsPlaying())
 			{
 				//Skip animation
 				if (Controller.jumpButton.wasPressed)
-					_animator.Seek(_animator.CurrentAnimationLength, true);
+					animator.Seek(animator.CurrentAnimationLength, true);
 			}
 			else if (Controller.jumpButton.wasPressed || Controller.actionButton.wasPressed)
 			{
@@ -75,22 +59,22 @@ namespace Project.Interface
 
 		public void StartResults(bool wasSuccessful)
 		{
-			_animator.Play(wasSuccessful ? "CompleteStart" : "FailStart");
+			animator.Play(wasSuccessful ? "CompleteStart" : "FailStart");
 
-			_score.Text = Stage.DisplayScore;
-			_time.Text = Stage.DisplayTime;
+			score.Text = Stage.DisplayScore;
+			time.Text = Stage.DisplayTime;
 
 			int enemyBonus = 0; //Stage.CurrentEnemyCount * 50;
-			_enemy.Text = enemyBonus.ToString();
+			enemy.Text = enemyBonus.ToString();
 
 			int ringBonus = Stage.CurrentRingCount * 10;
-			_ring.Text = ringBonus.ToString();
+			ring.Text = ringBonus.ToString();
 
 			float technicalBonus = 1.0f;
-			_technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
+			technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
 
 			Stage.ChangeScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.ScoreFunction.Add);
-			_total.Text = Stage.DisplayScore;
+			total.Text = Stage.DisplayScore;
 		}
 
 		public void SetInputProcessing(bool value) => isProcessingInputs = value;

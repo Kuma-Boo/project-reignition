@@ -26,12 +26,6 @@ namespace Project.Gameplay
 		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalPosition - GlobalPosition).Normalized() : this.Back();
 
-		public override void _Ready()
-		{
-			_lockonReticle = GetNode<Node2D>(lockonReticle);
-			_lockonAnimator = GetNode<AnimationPlayer>(lockonAnimator);
-		}
-
 		public void HomingAttack()
 		{
 			IsHomingAttacking = true;
@@ -105,7 +99,7 @@ namespace Project.Gameplay
 			//Raycast for obstacles
 			Vector3 castPosition = Character.GlobalPosition;
 			if (Character.VerticalSpd < 0)
-				castPosition += Character.GroundDirection * Character.VerticalSpd * PhysicsManager.physicsDelta;
+				castPosition += Character.UpDirection * Character.VerticalSpd * PhysicsManager.physicsDelta;
 			Vector3 castVector = t.GlobalPosition - castPosition;
 			RaycastHit h = this.CastRay(castPosition, castVector, Character.environmentMask);
 			Debug.DrawRay(castPosition, castVector, Colors.Magenta);
@@ -120,6 +114,8 @@ namespace Project.Gameplay
 		{
 			IsHomingAttacking = false;
 			IsPerfectHomingAttack = false;
+
+			GD.Print("Lockon reset");
 
 			if (LockonTarget != null) //Reset Active Target
 			{
@@ -165,21 +161,19 @@ namespace Project.Gameplay
 
 		#region Homing Attack Reticle
 		[Export]
-		public NodePath lockonReticle;
-		private Node2D _lockonReticle;
+		private Node2D lockonReticle;
 		[Export]
-		public NodePath lockonAnimator;
-		private AnimationPlayer _lockonAnimator;
+		private AnimationPlayer lockonAnimator;
 
-		public void DisableLockonReticle() => _lockonAnimator.Play("disable");
+		public void DisableLockonReticle() => lockonAnimator.Play("disable");
 		public void UpdateLockonReticle(Vector2 screenPosition, bool newTarget)
 		{
-			_lockonReticle.SetDeferred("position", screenPosition);
+			lockonReticle.SetDeferred("position", screenPosition);
 			if (newTarget)
 			{
-				_lockonAnimator.Play("RESET");
-				_lockonAnimator.Advance(0);
-				_lockonAnimator.Play("enable");
+				lockonAnimator.Play("RESET");
+				lockonAnimator.Advance(0);
+				lockonAnimator.Play("enable");
 			}
 		}
 

@@ -148,7 +148,7 @@ namespace Project.Gameplay
 					completionLockout = (LockoutResource)value;
 					break;
 				case "Completion/Animator":
-					completionAnimator = (NodePath)value;
+					completionAnimator = GetNodeOrNull<AnimationPlayer>((NodePath)value);
 					break;
 				default:
 					return false;
@@ -165,9 +165,6 @@ namespace Project.Gameplay
 			if (Engine.IsEditorHint()) return;
 
 			instance = this; //Always override previous instance
-			if (completionAnimator != null && !completionAnimator.IsEmpty)
-				_completionAnimator = GetNode<AnimationPlayer>(completionAnimator);
-
 			SetUpItemCycles();
 		}
 
@@ -319,8 +316,7 @@ namespace Project.Gameplay
 		//Completion
 		private float completionDelay;
 		private LockoutResource completionLockout;
-		private NodePath completionAnimator; //Camera demo that gets enabled after the stage clears
-		private AnimationPlayer _completionAnimator;
+		private AnimationPlayer completionAnimator; //Camera demo that gets enabled after the stage clears
 
 		[Signal]
 		public delegate void StageCompletedEventHandler(bool isSuccess); //Stage was completed
@@ -330,12 +326,12 @@ namespace Project.Gameplay
 
 			//Assign rank
 			//GameplayInterface.instance.Score;
-			if (_completionAnimator != null)
+			if (completionAnimator != null)
 			{
 				OnCameraDemoAdvance();
 
-				_completionAnimator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(this, MethodName.OnCameraDemoAdvance));
-				_completionAnimator.Play("demo1");
+				completionAnimator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(this, MethodName.OnCameraDemoAdvance));
+				completionAnimator.Play("demo1");
 
 				//Hide everything so shadows don't render
 				Visible = false;
@@ -358,17 +354,6 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Object Spawning
-		public struct SpawnData
-		{
-			public Node parentNode; //Original parent node
-			public Transform3D spawnTransform; //Local transform to spawn with
-			public SpawnData(Node parent, Transform3D transform)
-			{
-				parentNode = parent;
-				spawnTransform = transform;
-			}
-		}
-
 		[Signal]
 		public delegate void RespawnedEventHandler();
 		public static bool IsRespawnedFromPlayer; //Did the stage respawn from the player dying?
@@ -406,7 +391,7 @@ namespace Project.Gameplay
 
 		private void SetUpItemCycles()
 		{
-			if (itemCycleActivationTrigger == null) return; //Item cycling disabled
+			if (itemCycleActivationTrigger == null || itemCycleActivationTrigger.IsEmpty) return; //Item cycling disabled
 
 			GetNode<Area3D>(itemCycleActivationTrigger).Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnItemCycleActivate));
 			if (itemCycleHalfwayTrigger != null)
@@ -468,5 +453,30 @@ namespace Project.Gameplay
 			itemCycleFlagSet = true;
 		}
 		#endregion
+	}
+
+
+	public struct SpawnData
+	{
+		public Node parentNode; //Original parent node
+		public Transform3D spawnTransform; //Local transform to spawn with
+		public SpawnData(Node parent, Transform3D transform)
+		{
+			parentNode = parent;
+			spawnTransform = transform;
+		}
+
+		public void Respawn(Node n)
+		{
+			if (n.GetParent() != parentNode)
+			{
+				if (n.IsInsideTree()) //Object needs to be unparented first.
+					n.GetParent().CallDeferred("remove_child", n);
+
+				parentNode.CallDeferred("add_child", n);
+			}
+
+			n.SetDeferred("transform", spawnTransform);
+		}
 	}
 }

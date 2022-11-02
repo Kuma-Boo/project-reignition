@@ -25,7 +25,7 @@ shader = ExtResource("9_rj8i5")
 [sub_resource type="QuadMesh" id="QuadMesh_uo8y5"]
 size = Vector2(2, 2)
 
-[node name="Sun" type="Node3D"]
+[node name="Sun" type="Node3D" node_paths=PackedStringArray("depthCamera", "depthViewport", "lensFlareBase")]
 script = ExtResource("1_wrbwf")
 depthCamera = NodePath("DepthViewport/DepthCamera")
 depthViewport = NodePath("DepthViewport")
@@ -103,7 +103,7 @@ render_target_update_mode = 4
 
 [node name="DepthCamera" type="Camera3D" parent="DepthViewport"]
 visible = false
-cull_mask = 262143
+cull_mask = 32767
 current = true
 
 [node name="DepthRenderer" type="MeshInstance3D" parent="DepthViewport/DepthCamera"]

@@ -8,16 +8,15 @@ namespace Project.Interface.Menu
 	/// </summary>
 	public partial class Title : Menu
 	{
+		[Export]
+		private AnimationPlayer animator;
+
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
 		private const float CUTSCENE_TIME_LENGTH = 5f;
-		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
 
 		protected override void SetUp()
 		{
-			_animator = GetNode<AnimationPlayer>(animator);
 			Show();
 		}
 
@@ -41,7 +40,7 @@ namespace Project.Interface.Menu
 			if (Controller.AnyButtonPressed)
 			{
 				//Change menu
-				_animator.Play("MenuTransition");
+				animator.Play("MenuTransition");
 				_submenus[0].Show(); //Activate main menu (submenu 0)
 				DisableProcessing();
 			}
@@ -51,9 +50,9 @@ namespace Project.Interface.Menu
 		{
 			base.Show();
 
-			_animator.Play("RESET");
-			_animator.Advance(0);
-			_animator.Play("TitleSpawn");
+			animator.Play("RESET");
+			animator.Advance(0);
+			animator.Play("TitleSpawn");
 
 			cutsceneTimer = 0;
 		}
@@ -61,16 +60,16 @@ namespace Project.Interface.Menu
 		private void StartCutscene()
 		{
 			isCutsceneActive = true;
-			_animator.Play("CutsceneTransition");
+			animator.Play("CutsceneTransition");
 		}
 
 		private void FinishCutscene()
 		{
 			cutsceneTimer = 0;
 			isCutsceneActive = false;
-			_animator.Play("RESET");
-			_animator.Advance(0);
-			_animator.Play("CutsceneFinishTransition");
+			animator.Play("RESET");
+			animator.Advance(0);
+			animator.Play("CutsceneFinishTransition");
 		}
 	}
 }

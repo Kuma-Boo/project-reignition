@@ -33,14 +33,11 @@ namespace Project.Gameplay.Objects
 		private readonly float POWER_RESET_SPEED = .8f; //How fast to adjust the power
 
 		[Export]
-		public NodePath launchNode;
-		public Node3D _launchNode;
+		public Node3D launchNode;
 		[Export]
-		public NodePath armNode;
-		public Node3D _armNode;
+		public Node3D armNode;
 		[Export]
-		public NodePath animator;
-		public AnimationPlayer _animator;
+		public AnimationPlayer animator;
 
 		public LaunchData GetLaunchData()
 		{
@@ -57,13 +54,6 @@ namespace Project.Gameplay.Objects
 		private bool isEnteringCatapult;
 		private bool isEjectingPlayer;
 		private bool isControllingPlayer;
-
-		public override void _EnterTree()
-		{
-			_armNode = GetNode<Node3D>(armNode);
-			_launchNode = GetNode<Node3D>(launchNode);
-			_animator = GetNode<AnimationPlayer>(animator);
-		}
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -84,18 +74,18 @@ namespace Project.Gameplay.Objects
 					else if (Controller.actionButton.wasPressed) //Launch
 						EjectPlayer(false);
 
-					_armNode.Rotation = _armNode.Rotation.Lerp(targetRotation, POWER_SMOOTHING_SPEED);
+					armNode.Rotation = armNode.Rotation.Lerp(targetRotation, POWER_SMOOTHING_SPEED);
 				}
 			}
 			else
-				_armNode.Rotation = _armNode.Rotation.Lerp(targetRotation, POWER_RESET_SPEED);
+				armNode.Rotation = armNode.Rotation.Lerp(targetRotation, POWER_RESET_SPEED);
 		}
 
 		private void OnEnteredCatapult()
 		{
 			isControllingPlayer = true;
 			isEnteringCatapult = false;
-			Character.StartExternal(_launchNode, true);
+			Character.StartExternal(launchNode, true);
 			launchPower = 0f;
 			launchPowerVelocity = 0f;
 		}
@@ -103,7 +93,7 @@ namespace Project.Gameplay.Objects
 		private void EjectPlayer(bool isCancel)
 		{
 			isEjectingPlayer = true;
-			_animator.Play(isCancel ? "Cancel" : "Launch");
+			animator.Play(isCancel ? "Cancel" : "Launch");
 		}
 
 		private void LaunchPlayer()
@@ -119,7 +109,7 @@ namespace Project.Gameplay.Objects
 
 			isControllingPlayer = false;
 
-			Vector3 destination = this.Forward().RemoveVertical() * 2f + Vector3.Down * 2f;
+			Vector3 destination = this.Back().RemoveVertical() * 2f + Vector3.Down * 2f;
 			Character.JumpTo(Character.GlobalPosition + destination, 1f);
 		}
 
@@ -133,7 +123,7 @@ namespace Project.Gameplay.Objects
 			isEnteringCatapult = true;
 
 			Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = false; //Disable break skills
-			Character.JumpTo(_launchNode.GlobalPosition, 2f);
+			Character.JumpTo(launchNode.GlobalPosition, 2f);
 			Character.Connect(CharacterController.SignalName.LauncherFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
 		}
 	}

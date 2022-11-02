@@ -1,9 +1,9 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=20 format=3 uid="uid://be55im382klr8"]
 
 [ext_resource type="Script" path="res://interface/gameplay/pause/PauseMenu.cs" id="1"]
 [ext_resource type="Texture2D" uid="uid://dmwakwnnul8dk" path="res://interface/gameplay/pause/Flame.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://tbukuwdkqg5w" path="res://interface/gameplay/pause/Paper.png" id="3"]
-[ext_resource type="FontFile" path="res://interface/font/Greco Std DB.otf" id="4_p3s4p"]
+[ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/Greco Std DB.otf" id="4_p3s4p"]
 
 [sub_resource type="CanvasItemMaterial" id="82"]
 blend_mode = 1
@@ -280,11 +280,11 @@ _data = {
 "Unpause": SubResource("60")
 }
 
-[node name="Pause" type="CanvasLayer"]
+[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("pauseCursor", "pauseAnimator")]
 layer = 64
 script = ExtResource("1")
-pauseAnimator = NodePath("Animator")
 pauseCursor = NodePath("Pause/Cursor")
+pauseAnimator = NodePath("AnimationPlayer")
 
 [node name="Pause" type="ColorRect" parent="."]
 visible = false
@@ -292,6 +292,8 @@ modulate = Color(1, 1, 1, 0.705882)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Paper" type="TextureRect" parent="Pause"]
@@ -300,6 +302,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(1e-05, 1)
 pivot_offset = Vector2(960, 540)
 texture = ExtResource("3")
@@ -324,6 +328,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="Options" type="Control" parent="PauseLabel"]
+layout_mode = 1
 anchors_preset = 0
 offset_left = 264.0
 offset_top = 760.0
@@ -364,7 +369,7 @@ offset_bottom = 212.0
 text = "quit"
 uppercase = true
 
-[node name="Animator" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Pause")
 libraries = {
 "": SubResource("AnimationLibrary_oiknc")

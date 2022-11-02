@@ -11,36 +11,21 @@ namespace Project.Gameplay
 		public override void _Ready()
 		{
 			instance = this;
-
-			_subtitleLabel = GetNode<Label>(subtitleLabel);
-			_subtitleLetterbox = GetNode<ColorRect>(subtitleLetterbox);
-			_subtitleAnimator = GetNode<AnimationPlayer>(subtitleAnimator);
-			_dialogChannel = GetNode<AudioStreamPlayer>(dialogChannel);
-			_delayTimer = GetNode<Timer>(delayTimer);
-
-			_ringSoundEffect = GetNode<AudioStreamPlayer>(ringSoundEffect);
-			_pearlSoundEffect = GetNode<AudioStreamPlayer>(pearlSoundEffect);
-
-			_subtitleAnimator.Play("RESET");
+			subtitleAnimator.Play("RESET");
 		}
 
 		#region Dialog
 		public bool IsDialogActive { get; private set; }
 		[Export]
-		public NodePath subtitleLabel;
-		private Label _subtitleLabel;
+		private Label subtitleLabel;
 		[Export]
-		public NodePath subtitleLetterbox;
-		private ColorRect _subtitleLetterbox;
+		private ColorRect subtitleLetterbox;
 		[Export]
-		public NodePath subtitleAnimator;
-		private AnimationPlayer _subtitleAnimator;
+		private AnimationPlayer subtitleAnimator;
 		[Export]
-		public NodePath dialogChannel;
-		private AudioStreamPlayer _dialogChannel;
+		private AudioStreamPlayer dialogChannel;
 		[Export]
-		public NodePath delayTimer;
-		private Timer _delayTimer;
+		private Timer delayTimer;
 		private int currentDialogIndex;
 		private DialogTrigger currentDialog;
 		public void PlayDialog(DialogTrigger dialog)
@@ -48,7 +33,7 @@ namespace Project.Gameplay
 			if (dialog.IsInvalid()) return;
 
 			IsDialogActive = true;
-			_subtitleLabel.Text = string.Empty;
+			subtitleLabel.Text = string.Empty;
 
 			currentDialog = dialog;
 			currentDialogIndex = 0;
@@ -59,12 +44,12 @@ namespace Project.Gameplay
 		{
 			if (!IsDialogActive) return;
 
-			_delayTimer.Stop();
+			delayTimer.Stop();
 
 			CallDeferred(nameof(DisableDialog));
-			if (_dialogChannel.Playing)
+			if (dialogChannel.Playing)
 			{
-				_dialogChannel.Stop();
+				dialogChannel.Stop();
 
 				if (isSonicSpeaking)
 				{
@@ -80,7 +65,7 @@ namespace Project.Gameplay
 			currentDialogIndex++;
 			if (currentDialogIndex < currentDialog.DialogCount)
 			{
-				_subtitleAnimator.Play("deactivate-text");
+				subtitleAnimator.Play("deactivate-text");
 				CallDeferred(nameof(UpdateDialog), true);
 			}
 			else
@@ -90,17 +75,17 @@ namespace Project.Gameplay
 		private void DisableDialog()
 		{
 			IsDialogActive = false;
-			_subtitleAnimator.Play("deactivate");
+			subtitleAnimator.Play("deactivate");
 
 			//Disconnect signals
-			if (_delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogDelayComplete))))
-				_delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogDelayComplete)));
+			if (delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogDelayComplete))))
+				delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogDelayComplete)));
 
-			if (_delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogFinished))))
-				_delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogFinished)));
+			if (delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogFinished))))
+				delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogFinished)));
 
-			if (_dialogChannel.IsConnected("finished", new Callable(this, nameof(OnDialogFinished))))
-				_dialogChannel.Disconnect("finished", new Callable(this, nameof(OnDialogFinished)));
+			if (dialogChannel.IsConnected("finished", new Callable(this, nameof(OnDialogFinished))))
+				dialogChannel.Disconnect("finished", new Callable(this, nameof(OnDialogFinished)));
 		}
 
 		private void UpdateDialog(bool processDelay)
@@ -110,28 +95,28 @@ namespace Project.Gameplay
 
 			if (processDelay && currentDialog.HasDelay(currentDialogIndex))
 			{
-				_delayTimer.Start(currentDialog.delays[currentDialogIndex]);
-				_delayTimer.Connect("timeout", new Callable(this, MethodName.OnDialogDelayComplete), (uint)ConnectFlags.OneShot);
+				delayTimer.Start(currentDialog.delays[currentDialogIndex]);
+				delayTimer.Connect("timeout", new Callable(this, MethodName.OnDialogDelayComplete), (uint)ConnectFlags.OneShot);
 				return;
 			}
 
 			if (currentDialogIndex == 0)
-				_subtitleAnimator.Play("activate");
+				subtitleAnimator.Play("activate");
 			else
-				_subtitleAnimator.Play("activate-text");
+				subtitleAnimator.Play("activate-text");
 
 			if (currentDialog.HasAudio(currentDialogIndex)) //Using audio
 			{
 				if (SaveManager.UseEnglishVoices)
-					_dialogChannel.Stream = currentDialog.englishVoiceClips[currentDialogIndex];
+					dialogChannel.Stream = currentDialog.englishVoiceClips[currentDialogIndex];
 				else
-					_dialogChannel.Stream = currentDialog.japaneseVoiceClips[currentDialogIndex];
+					dialogChannel.Stream = currentDialog.japaneseVoiceClips[currentDialogIndex];
 
-				_subtitleLabel.Text = Tr(currentDialog.textKeys[currentDialogIndex]);
-				_dialogChannel.Play();
+				subtitleLabel.Text = Tr(currentDialog.textKeys[currentDialogIndex]);
+				dialogChannel.Play();
 				if (!currentDialog.HasLength(currentDialogIndex))//Use audio length
 				{
-					_dialogChannel.Connect("finished", new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
+					dialogChannel.Connect("finished", new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
 					return;
 				}
 			}
@@ -144,18 +129,18 @@ namespace Project.Gameplay
 					return;
 				}
 
-				_dialogChannel.Stream = null; //Disable dialog channel
+				dialogChannel.Stream = null; //Disable dialog channel
 
 				string key = currentDialog.textKeys[currentDialogIndex];
 				if (string.IsNullOrEmpty(key) || key.EndsWith("*")) //Cutscene Support - To avoid busywork in editor
 					key = currentDialog.textKeys[0].Replace("*", (currentDialogIndex + 1).ToString());
-				_subtitleLabel.Text = Tr(key); //Update subtitles
+				subtitleLabel.Text = Tr(key); //Update subtitles
 			}
 
 			//If we've made it this far, we're using the custom specified time
-			if (!_delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogFinished)))
-				_delayTimer.Connect(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
-			_delayTimer.Start(currentDialog.displayLength[currentDialogIndex]);
+			if (!delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogFinished)))
+				delayTimer.Connect(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
+			delayTimer.Start(currentDialog.displayLength[currentDialogIndex]);
 		}
 
 		private bool isSonicSpeaking;
@@ -193,24 +178,22 @@ namespace Project.Gameplay
 
 		#region SFX
 		[Export]
-		public NodePath ringSoundEffect;
-		private AudioStreamPlayer _ringSoundEffect;
-		public void PlayRingSoundEffect() => _ringSoundEffect.Play();
+		private AudioStreamPlayer ringSoundEffect;
+		public void PlayRingSoundEffect() => ringSoundEffect.Play();
 
 		[Export]
 		public AudioStream[] pearlStreams;
 		[Export]
-		public NodePath pearlSoundEffect;
-		private AudioStreamPlayer _pearlSoundEffect;
+		private AudioStreamPlayer pearlSoundEffect;
 		private int pearlSoundEffectIndex;
 		public void ResetPearlSoundEffect() => pearlSoundEffectIndex = 0;
 		public void PlayPearlSoundEffect()
 		{
 			//Needs more work :\
-			if (!_pearlSoundEffect.Playing || _pearlSoundEffect.GetPlaybackPosition() > .06f)
+			if (!pearlSoundEffect.Playing || pearlSoundEffect.GetPlaybackPosition() > .06f)
 			{
-				_pearlSoundEffect.Stream = pearlStreams[pearlSoundEffectIndex / 5];
-				_pearlSoundEffect.Play();
+				pearlSoundEffect.Stream = pearlStreams[pearlSoundEffectIndex / 5];
+				pearlSoundEffect.Play();
 			}
 
 			if (pearlSoundEffectIndex < (pearlStreams.Length - 1) * 5)

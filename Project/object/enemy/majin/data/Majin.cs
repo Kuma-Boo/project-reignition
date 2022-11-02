@@ -9,17 +9,16 @@ namespace Project.Gameplay
 	public partial class Majin : Enemy
 	{
 		[Export]
-		public NodePath animationTree;
-		private AnimationTree _animationTree;
+		private AnimationTree animationTree;
 
 		[Export]
-		public bool spawnInstantly;
+		private bool spawnInstantly;
 		[Export]
-		public Vector3 launchDirection; //Direction to be launched in
+		private Vector3 launchDirection; //For the enemy to be launched a particular direction when defeated?
 
 		[Export]
-		public AttackType attackType;
-		public enum AttackType
+		private AttackType attackType;
+		private enum AttackType
 		{
 			None,
 			FireRotating,
@@ -39,8 +38,7 @@ namespace Project.Gameplay
 			targetPosition = GlobalPosition;
 			StageSettings.instance.RegisterRespawnableObject(this);
 
-			_animationTree = GetNode<AnimationTree>(animationTree);
-			_animationTree.Active = true;
+			animationTree.Active = true;
 
 			Respawn();
 		}
@@ -83,19 +81,19 @@ namespace Project.Gameplay
 				if (spawnOffset.IsEqualApprox(Vector3.Zero)) //Spawn in
 				{
 					//TODO Play vfx
-					_animationTree.Set("parameters/teleport/active", true);
-					_animationTree.Set("parameters/idle_seek/seek_position", 0f);
+					animationTree.Set("parameters/teleport/active", true);
+					animationTree.Set("parameters/idle_seek/seek_position", 0f);
 				}
 
-				_hurtbox.Monitorable = _hurtbox.Monitoring = true;
+				hurtbox.Monitorable = hurtbox.Monitoring = true;
 			}
 		}
 
 		private void Deactivate()
 		{
 			Visible = false;
-			_collider.Disabled = true;
-			_hurtbox.Monitorable = _hurtbox.Monitoring = false;
+			collider.Disabled = true;
+			hurtbox.Monitorable = hurtbox.Monitoring = false;
 		}
 
 		//Overload activation method for using godot's built-in area trigger

@@ -4,22 +4,15 @@ namespace Project.Gameplay.Objects
 {
 	public partial class DashPanel : Area3D
 	{
-		[Export]
-		public NodePath sfxPlayer;
-		private AudioStreamPlayer _sfxPlayer;
 		[Export(PropertyHint.Range, "0, 2")]
-		public float speedRatio;
+		private float speedRatio;
 		[Export]
-		public float length; //How long for the boost pad to last
+		private float length; //How long for the boost pad to last
+		private bool isQueued; //For when the player collides with the dash panel from the air
 
-		private bool isQueued;
-
+		[Export]
+		private AudioStreamPlayer sfxPlayer;
 		private CharacterController Character => CharacterController.instance;
-
-		public override void _Ready()
-		{
-			_sfxPlayer = GetNode<AudioStreamPlayer>(sfxPlayer);
-		}
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -31,7 +24,7 @@ namespace Project.Gameplay.Objects
 
 		private void Activate()
 		{
-			_sfxPlayer.Play();
+			sfxPlayer.Play();
 			isQueued = false;
 			//Character.CancelBackflip();
 

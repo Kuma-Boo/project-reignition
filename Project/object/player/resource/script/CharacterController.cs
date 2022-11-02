@@ -22,14 +22,6 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
-			PathFollower = GetNode<CharacterPathFollower>(pathFollower);
-			Animator = GetNode<CharacterAnimator>(animator);
-			Sound = GetNode<CharacterSound>(sound);
-			Skills = GetNode<CharacterSkillManager>(skills);
-			Lockon = GetNode<CharacterLockon>(lockon);
-
-			_environmentCollider = GetNode<CollisionShape3D>(environmentCollider);
-
 			ResetOrientation(); //Start with proper orientation
 
 			if (Stage != null)
@@ -177,6 +169,8 @@ namespace Project.Gameplay
 				actionBufferTimer = 0;
 				return;
 			}
+
+			if (IsLockoutActive && currentLockoutData.disableActions) return;
 
 			actionBufferTimer = Mathf.MoveToward(actionBufferTimer, 0, PhysicsManager.physicsDelta);
 			jumpBufferTimer = Mathf.MoveToward(jumpBufferTimer, 0, PhysicsManager.physicsDelta);
@@ -401,7 +395,7 @@ namespace Project.Gameplay
 					//TODO Fix recentering player
 					GD.Print("Recentering player is broken!");
 
-					Vector3 recenterDirection = GroundDirection.Cross(GetMovementDirection());
+					Vector3 recenterDirection = UpDirection.Cross(GetMovementDirection());
 					float offset = PathFollower.LocalPlayerPosition.x;
 					if (!isRecentered) //Smooth out recenter speed
 					{
@@ -971,7 +965,7 @@ namespace Project.Gameplay
 				GlobalPosition = activeLauncher.RecenterCharacter();
 			else
 			{
-				Vector3 targetPosition = launchData.InterpolatePosition(launcherTime);
+				Vector3 targetPosition = launchData.InterpolatePositionTime(launcherTime);
 				float heightDelta = targetPosition.y - GlobalPosition.y;
 				GlobalPosition = targetPosition;
 
@@ -1013,19 +1007,16 @@ namespace Project.Gameplay
 
 		#region Physics
 		[Export]
-		public NodePath environmentCollider;
-		private CollisionShape3D _environmentCollider;
+		private CollisionShape3D environmentCollider;
 		public bool IsEnvironmentColliderEnabled
 		{
-			get => !_environmentCollider.Disabled;
-			set => _environmentCollider.Disabled = !value;
+			get => !environmentCollider.Disabled;
+			set => environmentCollider.Disabled = !value;
 		}
 
 		[Export(PropertyHint.Layers3dPhysics)]
 		public uint environmentMask;
 
-		/// <summary> Global "up" direction of the player. Same as groundHit.normal when on the ground </summary>
-		public Vector3 GroundDirection { get; private set; }
 		/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs </summary>
 		public float MovementAngle { get; private set; }
 		private float GetTargetInputAngle()
@@ -1073,7 +1064,7 @@ namespace Project.Gameplay
 			return inputAngle;
 		}
 
-		public Vector3 GetMovementDirection() => this.Forward().Rotated(GroundDirection, MovementAngle);
+		public Vector3 GetMovementDirection() => this.Forward().Rotated(UpDirection, MovementAngle);
 
 		public float MoveSpeed { get; set; } //Character's primary movement speed.
 											 //public float StrafeSpd { get; set; }
@@ -1096,12 +1087,12 @@ namespace Project.Gameplay
 			CheckGround();
 			CheckMainWall(movementDirection);
 
-			if (!IsOnGround && ActionState == ActionStates.JumpDash) //Jump dash ignores slopes
+			if (ActionState == ActionStates.JumpDash) //Jump dash ignores slopes
 				movementDirection = movementDirection.RemoveVertical().Normalized();
 
 			Velocity = movementDirection * MoveSpeed;
-			//Velocity += PathFollower.StrafeDirection * StrafeSpd;
-			Velocity += GroundDirection * VerticalSpd;
+			Velocity += UpDirection * VerticalSpd;
+
 			MoveAndSlide();
 			CheckCeiling();
 
@@ -1111,7 +1102,7 @@ namespace Project.Gameplay
 		public bool IsOnGround { get; private set; }
 		public bool JustLandedOnGround { get; private set; } //Flag for doing stuff on land
 
-		public Vector3 CenterPosition => GlobalPosition + GroundDirection * COLLISION_RADIUS; //Center of collision calculations
+		public Vector3 CenterPosition => GlobalPosition + UpDirection * COLLISION_RADIUS; //Center of collision calculations
 		private const float COLLISION_RADIUS = .3f;
 		private void CheckGround()
 		{
@@ -1132,7 +1123,7 @@ namespace Project.Gameplay
 			else if (VerticalSpd > 0)
 				castLength = -.1f; //Reduce snapping when moving upwards
 
-			Vector3 castVector = -GroundDirection * castLength;
+			Vector3 castVector = -UpDirection * castLength;
 			RaycastHit groundHit = this.CastRay(castOrigin, castVector, environmentMask, false, (Godot.Collections.Array)GetCollisionExceptions());
 			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
 
@@ -1143,7 +1134,7 @@ namespace Project.Gameplay
 				Vector3 castOffset = this.Back();
 				for (int i = 0; i < 4; i++)
 				{
-					castOffset = castOffset.Rotated(GroundDirection, interval).Normalized() * COLLISION_RADIUS * .5f;
+					castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * COLLISION_RADIUS * .5f;
 					groundHit = this.CastRay(castOrigin + castOffset, castVector, environmentMask);
 					Debug.DrawRay(castOrigin + castOffset, castVector, groundHit ? Colors.Red : Colors.White);
 					if (ValidateGroundCast(ref groundHit)) break; //Found the floor
@@ -1152,7 +1143,7 @@ namespace Project.Gameplay
 
 			if (groundHit) //Successful ground hit
 			{
-				GlobalPosition -= GroundDirection * (groundHit.distance - COLLISION_RADIUS); //Snap to ground
+				GlobalPosition -= UpDirection * (groundHit.distance - COLLISION_RADIUS); //Snap to ground
 
 				if (!IsOnGround) //Landing on the ground
 				{
@@ -1169,10 +1160,10 @@ namespace Project.Gameplay
 
 					ResetActionState();
 					Lockon.ResetLockonTarget();
-					GroundDirection = groundHit.normal;
+					UpDirection = groundHit.normal;
 				}
 				else //Update world direction
-					GroundDirection = GroundDirection.Lerp(groundHit.normal, .2f).Normalized();
+					UpDirection = UpDirection.Lerp(groundHit.normal, .2f).Normalized();
 
 				UpdateSlopeInfluence(groundHit.normal);
 			}
@@ -1181,7 +1172,7 @@ namespace Project.Gameplay
 				IsOnGround = false;
 
 				//Smooth world direction based on vertical speed
-				GroundDirection = GroundDirection.Lerp(Vector3.Up, Mathf.Clamp((VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .15f, 0f, 1f)).Normalized();
+				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp((VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .15f, 0f, 1f)).Normalized();
 			}
 		}
 
@@ -1196,7 +1187,7 @@ namespace Project.Gameplay
 			Vector3 castOrigin = CenterPosition;
 			float castLength = COLLISION_RADIUS;
 
-			Vector3 castVector = GroundDirection * castLength;
+			Vector3 castVector = UpDirection * castLength;
 			if (VerticalSpd > 0)
 				castVector.y += VerticalSpd * PhysicsManager.physicsDelta;
 
@@ -1205,7 +1196,7 @@ namespace Project.Gameplay
 
 			if (ceilingHit)
 			{
-				GlobalTranslate(ceilingHit.point - (CenterPosition + GroundDirection * COLLISION_RADIUS));
+				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * COLLISION_RADIUS));
 
 				if (VerticalSpd > 0)
 					VerticalSpd = 0;
@@ -1251,7 +1242,7 @@ namespace Project.Gameplay
 		private const float ORIENTATION_SMOOTHING = .4f;
 		private void ResetOrientation() //Resets orientation
 		{
-			GroundDirection = Vector3.Up;
+			UpDirection = Vector3.Up;
 			//MovementAngle = GetParent<Node3D>().Rotation.y; //Copy movement angle from global parent
 			//TODO Re-sync visual rotations
 		}
@@ -1260,7 +1251,7 @@ namespace Project.Gameplay
 		{
 			Transform3D t = GlobalTransform;
 			t.basis.z = Vector3.Back;
-			t.basis.y = GroundDirection;
+			t.basis.y = UpDirection;
 			if (Mathf.Abs(t.basis.z.Dot(t.basis.y)) > .9f) //BUGFIX Prevent player blipping out of existence when on 90 wall
 				t.basis.z = Vector3.Up;
 			t.basis.x = -t.basis.z.Cross(t.basis.y);
@@ -1271,10 +1262,7 @@ namespace Project.Gameplay
 
 		#region Signals
 		private bool isCountdownActive;
-		public void CountdownStarted()
-		{
-			isCountdownActive = true;
-		}
+		public void CountdownStarted() => isCountdownActive = true;
 		public void CountdownCompleted() => isCountdownActive = false;
 
 		private void OnStageCompleted(bool _)
@@ -1299,7 +1287,7 @@ namespace Project.Gameplay
 				trigger.OnExit();
 		}
 
-		public void OnObjectCollisionEnter(PhysicsBody3D body)
+		public void OnObjectCollisionEnter(Node3D body)
 		{
 			/*
 			Note for when I come back wondering why the player is being pushed through the floor
@@ -1309,7 +1297,7 @@ namespace Project.Gameplay
 			if (body.IsInGroup("crusher"))
 			{
 				//Check whether we're ACTUALLy being crushed and not running into the side of the crusher
-				RaycastHit hit = this.CastRay(CenterPosition, GroundDirection * COLLISION_RADIUS * 2f, environmentMask, false);
+				RaycastHit hit = this.CastRay(CenterPosition, UpDirection * COLLISION_RADIUS * 2f, environmentMask, false);
 				if (hit.collidedObject == body)
 				{
 					GD.Print($"Crushed by {body.Name}");
@@ -1322,9 +1310,11 @@ namespace Project.Gameplay
 				Lockon.StartBounce();
 		}
 
-		public void OnObjectCollisionExit(PhysicsBody3D body)
+		public void OnObjectCollisionExit(Node3D body)
 		{
-			if (body.IsInGroup("crusher") && GetCollisionExceptions().Contains(body))
+			if (!(body is PhysicsBody3D)) return;
+
+			if (body.IsInGroup("crusher") && GetCollisionExceptions().Contains(body as PhysicsBody3D))
 			{
 				GD.Print($"Stopped ignoring {body.Name}");
 				RemoveCollisionExceptionWith(body);
@@ -1333,20 +1323,16 @@ namespace Project.Gameplay
 		#endregion
 
 		//Components, rarely needs to be edited, so they go at the bottom of the inspector
+		//All public so any object can get whatever player data they need
 		[Export]
-		public NodePath pathFollower;
 		public CharacterPathFollower PathFollower { get; private set; }
 		[Export]
-		public NodePath animator;
 		public CharacterAnimator Animator { get; private set; }
 		[Export]
-		public NodePath sound;
 		public CharacterSound Sound { get; private set; }
 		[Export]
-		public NodePath skills;
 		public CharacterSkillManager Skills { get; private set; }
 		[Export]
-		public NodePath lockon;
 		public CharacterLockon Lockon { get; private set; }
 	}
 }

@@ -13,26 +13,19 @@ namespace Project.Gameplay
 		public static CameraController instance;
 
 		[Export]
-		public NodePath calculationRoot;
 		private Node3D _calculationRoot; //Responsible for pitch rotation
 		[Export]
-		public NodePath calculationGimbal;
 		private Node3D _calculationGimbal; //Responsible for yaw rotation
 		[Export]
-		public NodePath cameraRoot;
 		private Node3D _cameraRoot;
 		[Export]
-		public NodePath cameraGimbal;
 		private Node3D _cameraGimbal;
 		[Export]
-		public NodePath camera;
 		private Camera3D _camera;
 
 		[Export]
-		public NodePath crossfade;
 		private TextureRect _crossfade;
 		[Export]
-		public NodePath crossfadeAnimator;
 		private AnimationPlayer _crossfadeAnimator;
 
 		private CharacterController Character => CharacterController.instance;
@@ -52,14 +45,6 @@ namespace Project.Gameplay
 		{
 			instance = this;
 			ResetFlag = true; //Default to snapping view when spawning
-			_calculationRoot = GetNode<Node3D>(calculationRoot);
-			_calculationGimbal = GetNode<Node3D>(calculationGimbal);
-
-			_cameraRoot = GetNode<Node3D>(cameraRoot);
-			_cameraGimbal = GetNode<Node3D>(cameraGimbal);
-			_camera = GetNode<Camera3D>(camera);
-
-			_crossfadeAnimator = GetNode<AnimationPlayer>(crossfadeAnimator);
 		}
 
 		public void UpdateCamera()
@@ -157,7 +142,7 @@ namespace Project.Gameplay
 				if (Mathf.Abs(PathFollower.Back().Dot(Vector3.Up)) > .9f) //Moving vertically, can't use PathFollower.Forward
 				{
 					if (Character.IsOnGround) //Use ground direction as "forward"
-						CurrentYaw = Character.GroundDirection.SignedAngleTo(Vector3.Forward, Vector3.Up);
+						CurrentYaw = Character.UpDirection.SignedAngleTo(Vector3.Forward, Vector3.Up);
 					else //NEEDS TESTING - Maintain the current view angle?
 						return;
 				}
@@ -184,14 +169,10 @@ namespace Project.Gameplay
 		{
 			if (targetSettings.enableZTilting) //Rotate the z axis along PathFollower's forward, by angle of worldDirection to up
 			{
-				float targetTiltAmount = Character.GroundDirection.SignedAngleTo(Vector3.Up, PathFollower.Back());
+				float targetTiltAmount = Character.UpDirection.SignedAngleTo(Vector3.Up, PathFollower.Back());
 			}
 		}
 
-		private Vector3 previousStrafe;
-		private Vector3 currentStrafe;
-		private Vector3 strafeVelocity;
-		private const float STRAFE_SMOOTHING = .1f;
 		private Vector3 GetTargetPosition()
 		{
 			if (targetSettings.isStaticCamera) //Static camera, move to view position
@@ -287,6 +268,25 @@ namespace Project.Gameplay
 			}
 
 			e.Dispose();
+		}
+		#endregion
+
+		#region Reflections
+		[Export]
+		private Camera3D reflectionCamera;
+
+		public void UpdateReflection(Vector3 planePosition, Vector3 planeNormal)
+		{
+			reflectionCamera.Fov = _camera.Fov;
+
+			//Update Position
+			float projectionLength = planeNormal.Dot(_camera.GlobalPosition - planePosition);
+			reflectionCamera.GlobalPosition = _camera.GlobalPosition - planeNormal * projectionLength * 2f;
+
+			//Update Rotation
+			Vector3 upDirection = _camera.Up().Reflect(planeNormal);
+			Vector3 forwardDirection = _camera.Forward().Reflect(planeNormal);
+			reflectionCamera.LookAt(reflectionCamera.GlobalPosition + forwardDirection, upDirection);
 		}
 		#endregion
 	}

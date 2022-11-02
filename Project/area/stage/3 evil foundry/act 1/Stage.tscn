@@ -1,6 +1,6 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=16 format=3 uid="uid://1qb3y2030al1"]
 
-[ext_resource type="PackedScene" path="res://area/stage/3 evil foundry/data/common/BGM.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://dsn3vorf5nwjm" path="res://area/stage/3 evil foundry/data/common/BGM.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://object/trigger/StageTrigger.tscn" id="2_8iqvt"]
 [ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/stage/3 evil foundry/data/common/Environment.tres" id="3"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="3_2vbkl"]
@@ -24,8 +24,22 @@ size = Vector3(12, 6, 42)
 
 [node name="MainAct" type="Node3D" parent="."]
 
-[node name="CharacterSpawn" parent="MainAct" instance=ExtResource("4")]
+[node name="SpawnPosition" type="Node3D" parent="MainAct"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("4")]
+
+[node name="SpawnTrigger" parent="MainAct/SpawnPosition" instance=ExtResource("2_8iqvt")]
+
+[node name="MainPath" type="Node3D" parent="MainAct/SpawnPosition/SpawnTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("3_2vbkl")
+path = NodePath("../../../../Static/Path/MainPath")
+
+[node name="Checkpoint" type="Node3D" parent="MainAct/SpawnPosition/SpawnTrigger"]
+script = ExtResource("4_lpjrs")
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="MainAct/SpawnPosition/SpawnTrigger"]
+shape = SubResource("SphereShape3D_744t3")
 
 [node name="Static" type="Node3D" parent="."]
 
@@ -62,19 +76,6 @@ environment = ExtResource("3")
 
 [node name="Triggers" type="Node3D" parent="Static"]
 
-[node name="Spawn" parent="Static/Triggers" instance=ExtResource("2_8iqvt")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
-
-[node name="MainPath" type="Node3D" parent="Static/Triggers/Spawn"]
-script = ExtResource("3_2vbkl")
-path = NodePath("../../../Path/MainPath")
-
-[node name="Checkpoint" type="Node3D" parent="Static/Triggers/Spawn"]
-script = ExtResource("4_lpjrs")
-
-[node name="CollisionShape3d" type="CollisionShape3D" parent="Static/Triggers/Spawn"]
-shape = SubResource("SphereShape3D_744t3")
-
 [node name="StartingLockout" parent="Static/Triggers" instance=ExtResource("2_8iqvt")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -11.8284, -6.7716)
 triggerMode = 2
@@ -103,6 +104,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 curve = ExtResource("11_s5xf8")
 
 [node name="BGM" parent="Static" instance=ExtResource("1")]
-bus = &"BGM"
 
 [node name="ScreenWarp" parent="Static" instance=ExtResource("13_nbr7w")]

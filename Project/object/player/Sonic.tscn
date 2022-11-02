@@ -24,9 +24,7 @@ point_count = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_wrj8s"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xpo0a"]
-radius = 0.25
-height = 1.0
+[sub_resource type="SphereShape3D" id="SphereShape3D_uookt"]
 
 [sub_resource type="SphereShape3D" id="80"]
 radius = 0.4
@@ -302,8 +300,9 @@ _data = {
 "invincibility": SubResource("Animation_v1whi")
 }
 
-[node name="Player" type="CharacterBody3D" groups=["player"]]
-collision_layer = 8
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("environmentCollider", "PathFollower", "Animator", "Sound", "Skills", "Lockon") groups=["player"]]
+collision_layer = 2
+floor_stop_on_slope = false
 script = ExtResource("10")
 groundSettings = ExtResource("2_qbh54")
 airSettings = ExtResource("3_ywh7m")
@@ -320,11 +319,11 @@ backflipHeight = 1.4
 sidleSettings = ExtResource("8")
 environmentCollider = NodePath("CollisionShape3D")
 environmentMask = 1
-pathFollower = NodePath("Components/PathFollower")
-animator = NodePath("Components/Model")
-sound = NodePath("Components/Sound")
-skills = NodePath("Components/Skills")
-lockon = NodePath("Components/Lockon")
+PathFollower = NodePath("Components/PathFollower")
+Animator = NodePath("Components/Model")
+Sound = NodePath("Components/Sound")
+Skills = NodePath("Components/Skills")
+Lockon = NodePath("Components/Lockon")
 
 [node name="Components" type="Node3D" parent="."]
 
@@ -337,13 +336,13 @@ script = ExtResource("6_80hf8")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower"]
 mesh = SubResource("SphereMesh_wrj8s")
 
-[node name="Model" parent="Components" instance=ExtResource("12")]
+[node name="Model" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("12")]
 script = ExtResource("11")
 animator = NodePath("../../AnimationTree")
 
 [node name="VFX" type="Node3D" parent="Components/Model"]
 
-[node name="Sound" type="Node" parent="Components"]
+[node name="Sound" type="Node" parent="Components" node_paths=PackedStringArray("voiceChannel")]
 script = ExtResource("15")
 enClips = [ExtResource("16"), ExtResource("17")]
 jaClips = [ExtResource("19"), ExtResource("18")]
@@ -361,6 +360,7 @@ stream = ExtResource("16")
 [node name="FootstepChannel2" type="AudioStreamPlayer" parent="Components/Sound"]
 
 [node name="Skills" parent="Components" instance=ExtResource("13")]
+speedBreakCollisionMask = 1
 accelerationJumpSpeed = 24.0
 landingDashSpeed = 32.0
 speedBreakSpeed = 54.0
@@ -374,7 +374,7 @@ collision_mask = 9
 
 [node name="Trigger" type="CollisionShape3D" parent="Components/ObjectTrigger"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_xpo0a")
+shape = SubResource("SphereShape3D_uookt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)

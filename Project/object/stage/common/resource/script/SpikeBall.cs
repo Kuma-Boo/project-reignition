@@ -26,8 +26,7 @@ namespace Project.Gameplay.Hazards
 		}
 
 		[Export]
-		public NodePath mesh;
-		public Node3D _mesh;
+		public Node3D root;
 
 		private Vector3 spawnPosition;
 		private const float ROTATION_SPEED = .1f;
@@ -36,9 +35,7 @@ namespace Project.Gameplay.Hazards
 		{
 			if (Engine.IsEditorHint()) return;
 
-			_mesh = GetNode<Node3D>(mesh);
-			_mesh.Position = Vector3.Zero; //Reset editor debug translation
-
+			root.Position = Vector3.Zero; //Reset editor debug translation
 			spawnPosition = GlobalPosition;
 
 			StageSettings.instance.RegisterRespawnableObject(this);
@@ -58,7 +55,7 @@ namespace Project.Gameplay.Hazards
 			float speed = moveSpeed / distance;
 
 			currentOffset += speed * PhysicsManager.physicsDelta * MovementDirection;
-			_mesh.RotateY(ROTATION_SPEED); //Constant rotation
+			root.RotateY(ROTATION_SPEED); //Constant rotation
 
 			if (movementType == MovementType.Circle)
 				currentOffset %= 1f;
@@ -83,7 +80,7 @@ namespace Project.Gameplay.Hazards
 		private void Respawn()
 		{
 			currentOffset = startingOffset;
-			_mesh.Rotation = Vector3.Zero; //Reset Rotation
+			root.Rotation = Vector3.Zero; //Reset Rotation
 		}
 
 		private Vector3 GetOffset()
@@ -98,15 +95,10 @@ namespace Project.Gameplay.Hazards
 
 		private void UpdateEditor()
 		{
-			if (_mesh == null)
-			{
-				if (mesh == null) return;
-
-				_mesh = GetNode<Node3D>(mesh);
-			}
+			if (root == null) return;
 
 			currentOffset = startingOffset;
-			_mesh.GlobalPosition = GlobalPosition + GetOffset();
+			root.GlobalPosition = GlobalPosition + GetOffset();
 		}
 	}
 }

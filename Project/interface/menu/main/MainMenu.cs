@@ -8,13 +8,7 @@ namespace Project.Interface.Menu
 		public static string KEY = "Main Menu"; //Menu dictionary key
 
 		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
-
-		protected override void SetUp()
-		{
-			_animator = GetNode<AnimationPlayer>(animator);
-		}
+		private AnimationPlayer animator;
 
 		protected override void ProcessMenu()
 		{
@@ -47,7 +41,7 @@ namespace Project.Interface.Menu
 		{
 			if (memory[KEY] == 0) //Returning to title screen
 			{
-				_parentMenu.Show();
+				parentMenu.Show();
 				TransitionManager.FinishTransition();
 			}
 

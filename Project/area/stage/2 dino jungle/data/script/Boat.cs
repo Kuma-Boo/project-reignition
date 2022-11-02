@@ -6,16 +6,16 @@ namespace Project.Gameplay.Objects
 	public partial class Boat : Node3D
 	{
 		[Export]
-		public float speed; //How fast should the boat move?
+		private float speed; //How fast should the boat move?
 
 		[Export]
-		public NodePath passengerPosition;
-		private Node3D _passengerPosition;
+		private Node3D passengerPosition;
 		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
+		private AnimationPlayer animator;
 		[Export]
-		public CameraSettingsResource cameraSettings;
+		private CameraSettingsResource cameraSettings;
+		[Export(PropertyHint.Layers3dPhysics)]
+		private uint environmentMask;
 
 		private bool isActive;
 		private float moveSpeed;
@@ -24,22 +24,19 @@ namespace Project.Gameplay.Objects
 		private float strafeVelocity;
 		private readonly float SPEED_TRACTION = .4f;
 		private readonly float STRAFE_TRACTION = .2f;
-		private readonly float STRAFE_SPEED = 10f;
+		private readonly float STRAFE_SPEED = 14f;
 
 		private float hitstunTimer;
 		private readonly float HITSTUN_LENGTH = 2f;
 
-		private StageSettings.SpawnData spawnData;
+		private SpawnData spawnData;
 		private CharacterController Character => CharacterController.instance;
 		private InputManager.Controller Controller => InputManager.controller;
 
 		public override void _Ready()
 		{
-			_passengerPosition = GetNode<Node3D>(passengerPosition);
-			_animator = GetNode<AnimationPlayer>(animator);
-
 			StageSettings.instance.RegisterRespawnableObject(this);
-			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
+			spawnData = new SpawnData(GetParent(), Transform);
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -50,9 +47,47 @@ namespace Project.Gameplay.Objects
 			UpdatePosition();
 		}
 
+		private readonly float COLLISION_SIZE = .3f;
+		private readonly float CAST_DISTANCE = 1.5f;
 		private void UpdateStrafe()
 		{
 			strafeSpeed = ExtensionMethods.SmoothDamp(strafeSpeed, Controller.horizontalAxis.value * STRAFE_SPEED, ref strafeVelocity, STRAFE_TRACTION);
+
+			CheckWall(1);
+			CheckWall(-1);
+		}
+
+		private void CheckWall(int direction)
+		{
+			bool isActiveDirection = !Mathf.IsZeroApprox(strafeSpeed) && Mathf.Sign(direction) == Mathf.Sign(strafeSpeed);
+			float distance = CAST_DISTANCE;
+			if (isActiveDirection)
+				distance += Mathf.Abs(strafeSpeed * PhysicsManager.physicsDelta);
+
+			Vector3 castDirection = this.Left() * direction;
+			Vector3 castVector = castDirection * distance;
+			RaycastHit hit = this.CastRay(GlobalPosition, castVector, environmentMask);
+			Debug.DrawRay(GlobalPosition, castVector, hit ? Colors.Red : Colors.White);
+
+			if (hit)
+			{
+				if (hit.distance <= COLLISION_SIZE)
+				{
+					GlobalPosition = hit.point - castDirection * COLLISION_SIZE;
+
+					if (isActiveDirection)
+						strafeSpeed = strafeVelocity = 0;
+				}
+				else if (hit.distance < CAST_DISTANCE)
+				{
+					if (isActiveDirection)
+					{
+						float clampFac = (hit.distance - COLLISION_SIZE) / (CAST_DISTANCE - COLLISION_SIZE);
+						strafeSpeed *= clampFac;
+						strafeVelocity *= clampFac;
+					}
+				}
+			}
 		}
 
 		private void UpdatePosition()
@@ -65,7 +100,6 @@ namespace Project.Gameplay.Objects
 			else
 				moveSpeed = ExtensionMethods.SmoothDamp(moveSpeed, speed, ref speedVelocity, SPEED_TRACTION);
 
-			Debug.DrawRay(GlobalPosition, this.Right() * 10, Colors.Red);
 			GlobalPosition += this.Forward() * moveSpeed * PhysicsManager.physicsDelta;
 			GlobalPosition += this.Left() * strafeSpeed * PhysicsManager.physicsDelta;
 			GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
@@ -77,7 +111,8 @@ namespace Project.Gameplay.Objects
 		private void Despawn()
 		{
 			isActive = false;
-			_animator.Play("despawn");
+			Character.ResetMovementState();
+			animator.Play("despawn");
 		}
 
 		public void Respawn()
@@ -85,7 +120,7 @@ namespace Project.Gameplay.Objects
 			isActive = false;
 
 			Transform = spawnData.spawnTransform;
-			_animator.Play("respawn");
+			animator.Play("respawn");
 
 			hitstunTimer = 0;
 			moveSpeed = speedVelocity = 0;
@@ -96,7 +131,7 @@ namespace Project.Gameplay.Objects
 			if (!a.IsInGroup("player")) return;
 
 			isActive = true;
-			Character.StartExternal(_passengerPosition, true); //Snap player into position
+			Character.StartExternal(passengerPosition, true); //Snap player into position
 			CameraController.instance.SetCameraData(cameraSettings);
 		}
 

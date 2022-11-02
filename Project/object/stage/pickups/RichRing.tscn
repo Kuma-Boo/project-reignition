@@ -1,7 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://md5shjosamyy"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
-[ext_resource type="PackedScene" uid="uid://c87j8m1kv16j0" path="res://object/stage/pickups/resource/model/rings/RichRing.gltf" id="2"]
+[ext_resource type="PackedScene" uid="uid://bch5jhmxeabaf" path="res://object/stage/pickups/resource/model/rings/RichRing.gltf" id="2"]
+
+[sub_resource type="SphereShape3D" id="3"]
+radius = 0.8
 
 [sub_resource type="Animation" id="5"]
 resource_name = "Loop"
@@ -40,24 +43,21 @@ _data = {
 "RESET": SubResource("4")
 }
 
-[sub_resource type="SphereShape3D" id="3"]
-radius = 0.8
-
-[node name="RichRing" type="Area3D"]
+[node name="RichRing" type="Area3D" node_paths=PackedStringArray("animator")]
 collision_layer = 8
 collision_mask = 0
 monitoring = false
 script = ExtResource("1")
 isRichRing = true
-animator = NodePath("Animator")
+animator = NodePath("AnimationPlayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("3")
 
 [node name="RichRing" parent="." instance=ExtResource("2")]
 
-[node name="Animator" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Loop"
 libraries = {
 "": SubResource("AnimationLibrary_38s1q")
 }
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("3")

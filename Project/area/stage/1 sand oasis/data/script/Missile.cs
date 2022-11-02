@@ -8,18 +8,12 @@ namespace Project.Gameplay.Bosses
 	public partial class Missile : Area3D
 	{
 		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
+		private AnimationPlayer animator;
 
 		public bool IsActive { get; private set; } //Is the missile currently traveling?
 		private float travelInterpolation;
 
 		private LaunchData launchData { get; set; }
-
-		public void SetUp()
-		{
-			_animator = GetNode<AnimationPlayer>(animator);
-		}
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -30,13 +24,13 @@ namespace Project.Gameplay.Bosses
 
 		private void UpdatePosition()
 		{
-			GlobalPosition = launchData.InterpolatePosition(travelInterpolation);
+			GlobalPosition = launchData.InterpolatePositionTime(travelInterpolation);
 			travelInterpolation += PhysicsManager.physicsDelta;
 
 			//Reached the ground
 			if (travelInterpolation >= launchData.TotalTravelTime)
 			{
-				_animator.Play("impact"); //Impact effect
+				animator.Play("impact"); //Impact effect
 				IsActive = false;
 			}
 		}
@@ -47,7 +41,7 @@ namespace Project.Gameplay.Bosses
 			travelInterpolation = 0;
 
 			launchData = data;
-			_animator.Play("launch");
+			animator.Play("launch");
 
 			UpdatePosition();
 		}

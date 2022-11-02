@@ -6,29 +6,23 @@ namespace Project.Gameplay.Triggers
 	public partial class AutomationTrigger : Area3D
 	{
 		[Export]
-		public float distanceToTravel; //How far to travel. Set at 0 to travel the entire path
+		private float distanceToTravel; //How far to travel. Set at 0 to travel the entire path
 		[Export]
-		public float minimumSpeedRatio = 1f;
+		private float minimumSpeedRatio = 1f;
 		[Export]
-		public NodePath automationPath;
-		private Path3D _automationPath;
+		private Path3D automationPath;
 		[Export]
-		public CameraSettingsResource cameraSettings;
+		private CameraSettingsResource cameraSettings;
 		[Export]
-		public float cameraBlend;
+		private float cameraBlend;
 
 		private bool isEntered;
 		private bool isProcessing;
 
 		private float startingOffset;
 		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingOffset);
-		private bool IsFinished => (!Mathf.IsZeroApprox(distanceToTravel) && DistanceTraveled >= distanceToTravel) || (_automationPath != null && Character.PathFollower.ActivePath != _automationPath);
+		private bool IsFinished => (!Mathf.IsZeroApprox(distanceToTravel) && DistanceTraveled >= distanceToTravel) || (automationPath != null && Character.PathFollower.ActivePath != automationPath);
 		private CharacterController Character => CharacterController.instance;
-
-		public override void _Ready()
-		{
-			_automationPath = GetNodeOrNull<Path3D>(automationPath);
-		}
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -57,7 +51,7 @@ namespace Project.Gameplay.Triggers
 
 		private void Activate()
 		{
-			Character.PathFollower.SetActivePath(_automationPath);
+			Character.PathFollower.SetActivePath(automationPath);
 			Character.StartExternal(Character.PathFollower, false);
 
 			startingOffset = Character.PathFollower.Progress;

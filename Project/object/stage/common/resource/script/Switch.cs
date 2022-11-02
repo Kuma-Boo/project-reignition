@@ -5,10 +5,6 @@ namespace Project.Gameplay.Objects
 	public partial class Switch : Area3D
 	{
 		[Export]
-		public NodePath animator;
-		private AnimationPlayer _animator;
-
-		[Export]
 		public float activationLength;
 		[Export]
 		public bool invertState; //Used for when you want a switch that needs to be disabled
@@ -17,11 +13,11 @@ namespace Project.Gameplay.Objects
 		public delegate void ActivatedEventHandler();
 
 		private bool isActive;
+		[Export]
+		private AnimationPlayer animator;
 
 		public override void _Ready()
 		{
-			_animator = GetNode<AnimationPlayer>(animator);
-
 			StageSettings.instance.RegisterRespawnableObject(this);
 			Respawn();
 		}
@@ -29,7 +25,7 @@ namespace Project.Gameplay.Objects
 		public void Respawn()
 		{
 			isActive = false;
-			_animator.Play("RESET");
+			animator.Play("RESET");
 		}
 
 		private void OnEntered(Area3D _) => Activate();
@@ -38,7 +34,7 @@ namespace Project.Gameplay.Objects
 			if (isActive) return;
 
 			isActive = true;
-			_animator.Play("activate");
+			animator.Play("activate");
 			EmitSignal(SignalName.Activated);
 		}
 	}

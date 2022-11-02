@@ -1,15 +1,157 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnktakxmo4l0c"]
+[gd_scene load_steps=10 format=3 uid="uid://cnktakxmo4l0c"]
 
 [ext_resource type="PackedScene" uid="uid://b0j1oonffumcu" path="res://area/stage/2 dino jungle/data/environment/model/WaterRock.gltf" id="1_2rr6v"]
+[ext_resource type="Script" path="res://area/stage/2 dino jungle/data/script/WhiteRock.cs" id="1_gaqfb"]
 [ext_resource type="PackedScene" uid="uid://dkaur6l4d3eyg" path="res://area/stage/2 dino jungle/data/environment/model/WaterRockBroken.gltf" id="2_ybxqc"]
+[ext_resource type="PackedScene" uid="uid://c5ex0qeb6mn04" path="res://area/stage/2 dino jungle/data/environment/model/WhiteRockPieces.gltf" id="3_groqs"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="4_fb4eu"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_8hm55"]
 height = 6.0
 radius = 0.9
 
-[node name="WaterRock" type="Area3D" groups=["stagger boat"]]
+[sub_resource type="Animation" id="Animation_3q1s1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WaterRockBroken:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WaterRock:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WhiteRockPieces:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("WhiteRockPieces")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Respawn"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_oqsl4"]
+resource_name = "shatter"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WaterRockBroken:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WaterRock:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WhiteRockPieces:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("WhiteRockPieces")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Shatter"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ghebx"]
+_data = {
+"RESET": SubResource("Animation_3q1s1"),
+"shatter": SubResource("Animation_oqsl4")
+}
+
+[node name="WaterRock" type="Area3D" node_paths=PackedStringArray("animator") groups=["stagger boat"]]
 collision_layer = 8
 collision_mask = 8
+script = ExtResource("1_gaqfb")
+animator = NodePath("AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0.15)
@@ -18,3 +160,17 @@ shape = SubResource("CylinderShape3D_8hm55")
 [node name="WaterRock" parent="." instance=ExtResource("1_2rr6v")]
 
 [node name="WaterRockBroken" parent="." instance=ExtResource("2_ybxqc")]
+visible = false
+
+[node name="WhiteRockPieces" parent="." instance=ExtResource("3_groqs")]
+visible = false
+script = ExtResource("4_fb4eu")
+collisionLayer = 32
+collisionMask = 41
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ghebx")
+}
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]

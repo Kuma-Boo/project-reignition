@@ -7,23 +7,16 @@ namespace Project.Gameplay.Bosses
 	public partial class ErazorChain : Node3D
 	{
 		[Export]
-		public NodePath parent;
 		private ErazorChain parentChain;
 		[Export]
-		public NodePath child;
 		private ErazorChain childChain;
 		[Export]
-		public float chainSize;
+		private float chainSize;
 		[Export]
-		public bool disableSimulation;
+		private bool disableSimulation;
 
 		[Export]
-		public float gravity;
-
-		public override void _EnterTree()
-		{
-			GetComponents();
-		}
+		private float gravity;
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -61,15 +54,6 @@ namespace Project.Gameplay.Bosses
 
 			if (childChain != null)
 				childChain.UpdateChain(this, gravityAmount);
-		}
-
-		private void GetComponents()
-		{
-			if (parent != null)
-				parentChain = GetNodeOrNull<ErazorChain>(parent);
-
-			if (child != null)
-				childChain = GetNodeOrNull<ErazorChain>(child);
 		}
 	}
 }

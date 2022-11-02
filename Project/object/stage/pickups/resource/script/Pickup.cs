@@ -11,14 +11,14 @@ namespace Project.Gameplay.Objects
 		[Signal]
 		public delegate void DespawnedEventHandler();
 
-		private StageSettings.SpawnData spawnData;
+		private SpawnData spawnData;
 		protected CharacterController Character => CharacterController.instance;
 
 		public override void _Ready() => SetUp();
 
 		protected virtual void SetUp()
 		{
-			spawnData = new StageSettings.SpawnData(GetParent(), Transform);
+			spawnData = new SpawnData(GetParent(), Transform);
 			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
@@ -26,10 +26,7 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Respawn()
 		{
-			if (!IsInsideTree() && GetParent() != spawnData.parentNode)
-				spawnData.parentNode.AddChild(this);
-
-			Transform = spawnData.spawnTransform;
+			spawnData.Respawn(this);
 			EmitSignal(SignalName.Respawned);
 		}
 

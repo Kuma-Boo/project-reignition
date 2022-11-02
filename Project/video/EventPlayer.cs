@@ -10,39 +10,33 @@ namespace Project.Interface
 	public partial class EventPlayer : Node
 	{
 		[Export]
-		public AudioStream enAudio;
+		private AudioStream enAudio;
 		[Export]
-		public AudioStream jaAudio;
+		private AudioStream jaAudio;
 		[Export(PropertyHint.MultilineText)]
-		public string subtitleData = string.Empty; //Subtitle data, as a csv file
+		private string subtitleData = string.Empty; //Subtitle data, as a csv file
 		private Gameplay.Triggers.DialogTrigger _subtitles;
 
 		[Export]
-		public NodePath videoPlayer;
-		private VideoStreamPlayer _videoPlayer;
-
+		private AudioStreamPlayer audioPlayer;
 		[Export]
-		public NodePath audioPlayer;
-		private AudioStreamPlayer _audioPlayer;
+		private VideoStreamPlayer videoPlayer;
 
 		private InputManager.Controller Controller => InputManager.controller;
 
 		public override void _Ready()
 		{
-			_videoPlayer = GetNode<VideoStreamPlayer>(videoPlayer);
-			_audioPlayer = GetNode<AudioStreamPlayer>(audioPlayer);
-
 			if (!string.IsNullOrEmpty(subtitleData))
 				CreateSubtitles();
 
-			_audioPlayer.Stream = SaveManager.UseEnglishVoices ? enAudio : jaAudio;
+			audioPlayer.Stream = SaveManager.UseEnglishVoices ? enAudio : jaAudio;
 			CallDeferred(nameof(StartCutscene));
 		}
 
 		private void StartCutscene()
 		{
-			_videoPlayer.Play();
-			_audioPlayer.Play();
+			videoPlayer.Play();
+			audioPlayer.Play();
 
 			if (_subtitles != null)
 				_subtitles.Activate();

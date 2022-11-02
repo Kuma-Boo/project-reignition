@@ -61,7 +61,7 @@ namespace Project.Editor
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
 				float simulationTime = (i / (float)PREVIEW_RESOLUTION) * launchData.TotalTravelTime;
-				Vector3 position = launchData.InterpolatePosition(simulationTime);
+				Vector3 position = launchData.InterpolatePositionTime(simulationTime);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
 			}

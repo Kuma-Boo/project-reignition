@@ -10,13 +10,15 @@ namespace Project.Gameplay
 	{
 		private CharacterController Character => CharacterController.instance;
 
-		private uint characterCollisionLayer;
+		[Export(PropertyHint.Layers3dPhysics)]
+		public uint speedBreakCollisionMask;
+		private uint normalCollisionMask;
 
 		public override void _Ready()
 		{
 			float levelRatio = SaveManager.ActiveGameData.SoulGaugeLevel; //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
 			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; //Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
-			characterCollisionLayer = Character.CollisionLayer;
+			normalCollisionMask = Character.CollisionMask;
 
 			SetUpSkills();
 		}
@@ -183,13 +185,13 @@ namespace Project.Gameplay
 
 			if (IsSpeedBreakActive)
 			{
-				Character.CollisionLayer = 0; //Don't collide with any objects
 				Character.Sound.PlayVoice(0);
+				Character.CollisionMask = speedBreakCollisionMask; //Don't collide with any objects
 			}
 			else
 			{
 				Character.MoveSpeed = Character.groundSettings.speed; //Override speed
-				Character.CollisionLayer = characterCollisionLayer; //Reset collision layer
+				Character.CollisionMask = normalCollisionMask; //Reset collision layer
 			}
 
 			if (HeadsUpDisplay.instance != null)

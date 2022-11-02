@@ -9,20 +9,18 @@ namespace Project.Gameplay.Bosses
 		protected CharacterController Character => CharacterController.instance;
 
 		[Export]
-		public int health;
-		protected int DamageTaken { get; private set; }
+		private int health;
+		private int damageTaken;
 
 		[Export]
-		public NodePath lockonTarget;
-		protected Area3D _lockonTarget;
+		private Area3D lockonTarget;
 
 		[Export]
-		public Array<BossPatternResource> patterns;
+		private Array<BossPatternResource> patterns;
 		public static int CurrentPattern { get; private set; }
 
 		[Export]
-		public NodePath animationTree;
-		protected AnimationTree Animator { get; private set; }
+		private AnimationTree animator;
 
 		private float timer;
 		private int currentAttackIndex;
@@ -38,11 +36,9 @@ namespace Project.Gameplay.Bosses
 		private float distanceVelocity;
 
 		[Export]
-		public NodePath duelAnimator;
-		private AnimationPlayer _duelAnimator;
+		private AnimationPlayer duelAnimator;
 		[Export]
-		public Array<NodePath> duelVoices;
-		private Triggers.DialogTrigger[] _duelVoices;
+		public Array<Triggers.DialogTrigger> duelVoices;
 		private bool duelCharged; //Ready to strike?
 
 		private float currentDistance = 30f; //Current distance from the player
@@ -51,9 +47,9 @@ namespace Project.Gameplay.Bosses
 		private const float STRAFE_SMOOTHING = .2f;
 
 		[Export]
-		public CameraSettingsResource standardCamera;
+		private CameraSettingsResource standardCamera;
 		[Export]
-		public CameraSettingsResource duelCamera; //Sideview camera used for duels
+		private CameraSettingsResource duelCamera; //Sideview camera used for duels
 		private bool IsDueling => CurrentAttack != null && CurrentAttack.AttackType == 4;
 		private const float DUEL_SMOOTHING = .4f;
 		private const float MAX_DUEL_SPEED = 80f;
@@ -72,18 +68,10 @@ namespace Project.Gameplay.Bosses
 
 		public override void _Ready()
 		{
-			_lockonTarget = GetNode<Area3D>(lockonTarget);
-			Animator = GetNode<AnimationTree>(animationTree);
-			Animator.Active = true;
+			animator.Active = true;
 
 			CurrentPattern = 0; //Reset pattern
 			LoadAttackPattern();
-
-			_duelVoices = new Triggers.DialogTrigger[duelVoices.Count];
-			for (int i = 0; i < duelVoices.Count; i++)
-				_duelVoices[i] = GetNode<Triggers.DialogTrigger>(duelVoices[i]);
-
-			_duelAnimator = GetNode<AnimationPlayer>(duelAnimator);
 
 			Character.Camera.SetCameraData(standardCamera);
 			StartTeleportation();
@@ -91,18 +79,18 @@ namespace Project.Gameplay.Bosses
 
 		public override void _PhysicsProcess(double _)
 		{
-			int actionState = (int)Animator.Get(CURRENT_ACTION_PARAMETER);
+			int actionState = (int)animator.Get(CURRENT_ACTION_PARAMETER);
 
 			if (isTeleporting) //Process teleporation
 			{
-				actionState = (int)Animator.Get(TELEPORTING_PARAMETER);
+				actionState = (int)animator.Get(TELEPORTING_PARAMETER);
 
 				if (actionState == 2) //Waiting
 				{
 					isNearPlayer = !isNearPlayer;
 					targetStrafe = currentStrafe = currentStrafeVelocity = 0; //Reset strafe
 					currentDistance = isNearPlayer ? (IsDueling ? DUEL_DISTANCE : ATTACK_DISTANCE) : IDLE_DISTANCE;
-					Animator.Set(TELEPORTING_PARAMETER, 3); //Finish Teleportation
+					animator.Set(TELEPORTING_PARAMETER, 3); //Finish Teleportation
 				}
 				else if (actionState == 0) //Finished teleportation
 					isTeleporting = false;
@@ -121,7 +109,7 @@ namespace Project.Gameplay.Bosses
 			}
 			else if (actionState == 4) //Attack Finished
 			{
-				Animator.Set(CURRENT_ACTION_PARAMETER, 0);
+				animator.Set(CURRENT_ACTION_PARAMETER, 0);
 				//Queue the next attack
 				currentAttackIndex++;
 				if (currentAttackIndex >= attacks.Count) //Loop attacks
@@ -167,8 +155,8 @@ namespace Project.Gameplay.Bosses
 
 									if (currentDistance <= 0)
 									{
-										_duelAnimator.Seek(0, true);
-										_duelAnimator.Play("activate");
+										duelAnimator.Seek(0, true);
+										duelAnimator.Play("activate");
 
 										if (Character.Lockon.IsHomingAttacking)
 										{
@@ -184,13 +172,13 @@ namespace Project.Gameplay.Bosses
 							else if (timer >= DUEL_DIALOG_DELAY) //Hint
 							{
 								duelCharged = true;
-								_duelVoices[RuntimeConstants.randomNumberGenerator.RandiRange(3, 5)].Activate();
+								duelVoices[RuntimeConstants.randomNumberGenerator.RandiRange(3, 5)].Activate();
 							}
 						}
 						else if (timer >= CurrentAttack.Startup)
 						{
 							timer = 0;
-							Animator.Set(CURRENT_ACTION_PARAMETER, 3); //Strike
+							animator.Set(CURRENT_ACTION_PARAMETER, 3); //Strike
 						}
 
 						timer += PhysicsManager.physicsDelta;
@@ -220,10 +208,10 @@ namespace Project.Gameplay.Bosses
 		private void StartAttack()
 		{
 			timer = 0;
-			Animator.Set(ATTACK_TYPE_PARAMETER, attacks[currentAttackIndex].AttackType);
-			Animator.Set(WINDUP_TYPE_PARAMETER, attacks[currentAttackIndex].AttackType);
-			Animator.Set(STRIKE_TYPE_PARAMETER, attacks[currentAttackIndex].AttackType);
-			Animator.Set(CURRENT_ACTION_PARAMETER, 1); //Start Attack
+			animator.Set(ATTACK_TYPE_PARAMETER, attacks[currentAttackIndex].AttackType);
+			animator.Set(WINDUP_TYPE_PARAMETER, attacks[currentAttackIndex].AttackType);
+			animator.Set(STRIKE_TYPE_PARAMETER, attacks[currentAttackIndex].AttackType);
+			animator.Set(CURRENT_ACTION_PARAMETER, 1); //Start Attack
 
 			if (IsDueling)
 				StartDuel();
@@ -231,12 +219,12 @@ namespace Project.Gameplay.Bosses
 
 		private void StartDuel()
 		{
-			_duelAnimator.Seek(0, true);
-			_duelAnimator.Play("activate");
+			duelAnimator.Seek(0, true);
+			duelAnimator.Play("activate");
 			duelCharged = false;
 			isNearPlayer = true;
 			distanceVelocity = 0;
-			_duelVoices[RuntimeConstants.randomNumberGenerator.RandiRange(0, 1)].Activate(); //Play audio clip
+			duelVoices[RuntimeConstants.randomNumberGenerator.RandiRange(0, 1)].Activate(); //Play audio clip
 
 			//Update camera
 			duelCamera.distance = 35f;
@@ -258,18 +246,18 @@ namespace Project.Gameplay.Bosses
 		private void StartTeleportation()
 		{
 			isTeleporting = true;
-			Animator.Set(TELEPORTING_PARAMETER, 1); //Start teleportation
+			animator.Set(TELEPORTING_PARAMETER, 1); //Start teleportation
 		}
 
 		private void TakeDamage(int amount)
 		{
-			DamageTaken += amount;
+			damageTaken += amount;
 
-			if (DamageTaken >= health)
+			if (damageTaken >= health)
 			{
 				//Defeat boss
 			}
-			else if (CurrentPattern < patterns.Count - 1 && DamageTaken > patterns[CurrentPattern].damage) //Advance attack pattern
+			else if (CurrentPattern < patterns.Count - 1 && damageTaken > patterns[CurrentPattern].damage) //Advance attack pattern
 			{
 				CurrentPattern++;
 				LoadAttackPattern();

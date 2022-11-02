@@ -1,5 +1,4 @@
 using Godot;
-using Project.Core;
 
 //TODO Rewrite this entire script
 namespace Project.Gameplay
@@ -10,20 +9,18 @@ namespace Project.Gameplay
 	public partial class CharacterAnimator : Node3D
 	{
 		[Export]
-		public NodePath animator;
-		private AnimationTree _animator;
+		private AnimationTree animator;
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _Ready()
 		{
-			_animator = GetNode<AnimationTree>(animator);
-			_animator.Active = true;
+			animator.Active = true;
 		}
 
 		private const string COUNTDOWN_PARAMETER = "parameters/countdown/active";
 		public void Countdown()
 		{
-			_animator.Set(COUNTDOWN_PARAMETER, true);
+			animator.Set(COUNTDOWN_PARAMETER, true);
 		}
 
 		public void PlayAnimation(string anim) //Play a specific animation
@@ -38,17 +35,17 @@ namespace Project.Gameplay
 		private const string BALANCE_RIGHT_STATE_PARAMETER = "parameters/balance_state/balance_right/blend_position";
 		public void StartGrinding()
 		{
-			_animator.Set(IS_BALANCING_STATE, 1); //Turn on grinding animations
-			_animator.Set(BALANCE_STATE_PARAMETER, true);
-			_animator.Set(BALANCE_LEFT_STATE_PARAMETER, 0);
-			_animator.Set(BALANCE_RIGHT_STATE_PARAMETER, 0);
+			animator.Set(IS_BALANCING_STATE, 1); //Turn on grinding animations
+			animator.Set(BALANCE_STATE_PARAMETER, true);
+			animator.Set(BALANCE_LEFT_STATE_PARAMETER, 0);
+			animator.Set(BALANCE_RIGHT_STATE_PARAMETER, 0);
 		}
 
 		//public AnimationNodeStateMachinePlayback GrindingState => _animator.Get("parameters/balance_state/playback") as AnimationNodeStateMachinePlayback;
 
 		public void StopGrinding()
 		{
-			_animator.Set("parameters/balancing/current", 0); //Turn off grinding animations
+			animator.Set("parameters/balancing/current", 0); //Turn off grinding animations
 		}
 		#endregion
 
@@ -65,16 +62,16 @@ namespace Project.Gameplay
 
 		public void Jump()
 		{
-			_animator.Set(JUMPING_PARAMETER, 1);
-			_animator.Set(JUMP_TRIGGER_PARAMETER, true);
+			animator.Set(JUMPING_PARAMETER, 1);
+			animator.Set(JUMP_TRIGGER_PARAMETER, true);
 		}
 
 		private const string BACKFLIP_TRIGGER_PARAMETER = "parameters/air_state/backflip/active";
 		public void Backflip()
 		{
-			_animator.Set(BACKFLIP_TRIGGER_PARAMETER, true);
-			_animator.Set(FALL_TRIGGER_PARAMETER, false);
-			_animator.Set(FALL_RESET_PARAMETER, 0);
+			animator.Set(BACKFLIP_TRIGGER_PARAMETER, true);
+			animator.Set(FALL_TRIGGER_PARAMETER, false);
+			animator.Set(FALL_RESET_PARAMETER, 0);
 			//ResetLocalRotation();
 		}
 
@@ -86,15 +83,15 @@ namespace Project.Gameplay
 		public void Stomp()
 		{
 			FallAnimation();
-			_animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
+			animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
 		}
 
 		public void FallAnimation()
 		{
-			_animator.Set(JUMPING_PARAMETER, 0);
-			_animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1f);
-			_animator.Set(FALL_TRIGGER_PARAMETER, true);
-			_animator.Set(FALL_RESET_PARAMETER, 0);
+			animator.Set(JUMPING_PARAMETER, 0);
+			animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1f);
+			animator.Set(FALL_TRIGGER_PARAMETER, true);
+			animator.Set(FALL_RESET_PARAMETER, 0);
 		}
 
 		/*
@@ -120,7 +117,7 @@ namespace Project.Gameplay
 		private const float MOVEMENT_DEADZONE = .2f;
 		public void UpdateAnimation()
 		{
-			_animator.Set(GROUND_PARAMETER, Character.IsOnGround ? 0 : 1);
+			animator.Set(GROUND_PARAMETER, Character.IsOnGround ? 0 : 1);
 			if (Character.IsOnGround)
 				GroundAnimations();
 			else
@@ -228,9 +225,9 @@ namespace Project.Gameplay
 		private void AirAnimations()
 		{
 			bool isJumpDashing = Character.ActionState == CharacterController.ActionStates.JumpDash || Character.ActionState == CharacterController.ActionStates.AccelJump;
-			_animator.Set(JUMPDASH_PARAMETER, isJumpDashing ? 1 : 0);
+			animator.Set(JUMPDASH_PARAMETER, isJumpDashing ? 1 : 0);
 
-			if ((int)_animator.Get(JUMPING_PARAMETER) == 1)
+			if ((int)animator.Get(JUMPING_PARAMETER) == 1)
 			{
 				if (Character.ActionState != CharacterController.ActionStates.Jumping || Character.VerticalSpd <= 5f)
 					FallAnimation();

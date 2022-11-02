@@ -1,11 +1,11 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=23 format=3 uid="uid://dnemvkr1dqwi2"]
 
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/boss/data/environment/path/MainPath.tres" id="1"]
 [ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/stage/7 night palace/data/common/Environment.tres" id="4"]
 [ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/AutorunLockout.tres" id="4_nwrv5"]
 [ext_resource type="PackedScene" path="res://area/stage/7 night palace/data/common/BossBGM.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://cv2p1g3d1w3gi" path="res://area/stage/7 night palace/boss/data/environment/model/NPBossLOD.gltf" id="6"]
-[ext_resource type="PackedScene" path="res://area/stage/7 night palace/boss/data/boss/Erazor.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://cm4ed26pojat3" path="res://area/stage/7 night palace/boss/data/boss/Erazor.tscn" id="9"]
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://object/trigger/StageTrigger.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://clsihyyvcgq6t" path="res://area/stage/7 night palace/boss/data/environment/NPBoss.tscn" id="11_tu1m1"]
@@ -57,39 +57,49 @@ data = PackedVector3Array(-5.42, -0.0002, -0.099, -5.42, 20.0002, -88.1306, -5.4
 
 [node name="BossAct" type="Node3D" parent="."]
 script = ExtResource("14")
+"Mission Type" = 0
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0.0
+"Ranking/Silver Time" = 0.0
+"Ranking/Bronze Time" = 0.0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = null
+Completion/Animator = null
 
 [node name="CharacterSpawn" parent="BossAct" instance=ExtResource("10")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -49)
 
-[node name="Lockout" type="Node3D" parent="BossAct/CharacterSpawn"]
-script = ExtResource("18")
-lockoutData = ExtResource("4_nwrv5")
-
 [node name="SpawnTrigger" parent="BossAct/CharacterSpawn" instance=ExtResource("11")]
 isOneShot = true
 
-[node name="Path3D" type="Node3D" parent="BossAct/CharacterSpawn/SpawnTrigger"]
+[node name="MainPath" type="Node3D" parent="BossAct/CharacterSpawn/SpawnTrigger" node_paths=PackedStringArray("path")]
 script = ExtResource("12")
 path = NodePath("../../../../Paths/MainPath")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/CharacterSpawn/SpawnTrigger"]
-shape = SubResource("9")
+[node name="Lockout" type="Node3D" parent="BossAct/CharacterSpawn/SpawnTrigger"]
+script = ExtResource("18")
+lockoutData = ExtResource("4_nwrv5")
 
 [node name="Checkpoint" type="Node3D" parent="BossAct/CharacterSpawn/SpawnTrigger"]
 script = ExtResource("13")
 
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/CharacterSpawn/SpawnTrigger"]
+shape = SubResource("9")
+
 [node name="Erazor" parent="BossAct" instance=ExtResource("9")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -70)
 
-[node name="InfiniteHall" type="Node3D" parent="BossAct"]
+[node name="InfiniteHall" type="Node3D" parent="BossAct" node_paths=PackedStringArray("hallRoot", "itemBundle", "primaryCollision", "secondaryCollision")]
 script = ExtResource("15")
 hallRoot = NodePath("HallRoot")
-sky = NodePath("")
-reflection = NodePath("")
 itemBundle = NodePath("ItemBundle")
 itemBundleLocations = [6, 18, 0]
-collisionPiece = NodePath("Collision/Collision")
-collisionPiece2 = NodePath("Collision/Collision2")
+primaryCollision = NodePath("Collision/PrimaryCollision")
+secondaryCollision = NodePath("Collision/SecondaryCollision")
 
 [node name="ItemBundle" parent="BossAct/InfiniteHall" instance=ExtResource("16")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -58)
@@ -97,60 +107,60 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -58)
 [node name="Collision" type="Node3D" parent="BossAct/InfiniteHall"]
 visible = false
 
-[node name="Collision" type="Node3D" parent="BossAct/InfiniteHall/Collision"]
+[node name="PrimaryCollision" type="Node3D" parent="BossAct/InfiniteHall/Collision"]
 
-[node name="AdvanceTrigger" parent="BossAct/InfiniteHall/Collision/Collision" instance=ExtResource("11")]
+[node name="AdvanceTrigger" parent="BossAct/InfiniteHall/Collision/PrimaryCollision" instance=ExtResource("11")]
 transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 0, -1, -97)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/Collision/AdvanceTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/PrimaryCollision/AdvanceTrigger"]
 transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, 0, 15, 0)
 shape = SubResource("10")
 
-[node name="Floor" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/Collision"]
+[node name="Floor" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/PrimaryCollision"]
 mesh = SubResource("11")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/Collision/Floor" groups=["floor"]]
+[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/PrimaryCollision/Floor" groups=["floor"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/Collision/Floor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/PrimaryCollision/Floor/StaticBody3D"]
 shape = SubResource("12")
 
-[node name="Wall" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/Collision"]
+[node name="Wall" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/PrimaryCollision"]
 mesh = SubResource("13")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/Collision/Wall" groups=["wall"]]
+[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/PrimaryCollision/Wall" groups=["wall"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/Collision/Wall/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/PrimaryCollision/Wall/StaticBody3D"]
 shape = SubResource("14")
 
-[node name="Collision2" type="Node3D" parent="BossAct/InfiniteHall/Collision"]
+[node name="SecondaryCollision" type="Node3D" parent="BossAct/InfiniteHall/Collision"]
 
-[node name="AdvanceTrigger" parent="BossAct/InfiniteHall/Collision/Collision2" instance=ExtResource("11")]
+[node name="AdvanceTrigger" parent="BossAct/InfiniteHall/Collision/SecondaryCollision" instance=ExtResource("11")]
 transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, -1, -1, -194)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/Collision2/AdvanceTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/SecondaryCollision/AdvanceTrigger"]
 transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, 0, 15, 0)
 shape = SubResource("10")
 
-[node name="Floor" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/Collision2"]
+[node name="Floor" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/SecondaryCollision"]
 transform = Transform3D(0.999847, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999847, 0, 0, -87)
 mesh = SubResource("11")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/Collision2/Floor" groups=["floor"]]
+[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/SecondaryCollision/Floor" groups=["floor"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/Collision2/Floor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/SecondaryCollision/Floor/StaticBody3D"]
 shape = SubResource("12")
 
-[node name="Wall" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/Collision2"]
+[node name="Wall" type="MeshInstance3D" parent="BossAct/InfiniteHall/Collision/SecondaryCollision"]
 transform = Transform3D(0.999847, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999847, 0, 0, -87)
 mesh = SubResource("13")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/Collision2/Wall" groups=["wall"]]
+[node name="StaticBody3D" type="StaticBody3D" parent="BossAct/InfiniteHall/Collision/SecondaryCollision/Wall" groups=["wall"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/Collision2/Wall/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/InfiniteHall/Collision/SecondaryCollision/Wall/StaticBody3D"]
 shape = SubResource("14")
 
 [node name="HallRoot" parent="BossAct/InfiniteHall" instance=ExtResource("11_tu1m1")]
@@ -212,6 +222,6 @@ autoplay = true
 bus = &"Master"
 
 [connection signal="DuelCompleted" from="BossAct/Erazor" to="BossAct/InfiniteHall" method="ResetHallway"]
-[connection signal="Activated" from="BossAct/InfiniteHall/Collision/Collision/AdvanceTrigger" to="BossAct/InfiniteHall" method="AdvanceCollision" flags=3 binds= [true]]
-[connection signal="Activated" from="BossAct/InfiniteHall/Collision/Collision2/AdvanceTrigger" to="BossAct/InfiniteHall" method="AdvanceCollision" flags=3 binds= [false]]
+[connection signal="Activated" from="BossAct/InfiniteHall/Collision/PrimaryCollision/AdvanceTrigger" to="BossAct/InfiniteHall" method="AdvanceCollision" flags=3 binds= [true]]
+[connection signal="Activated" from="BossAct/InfiniteHall/Collision/SecondaryCollision/AdvanceTrigger" to="BossAct/InfiniteHall" method="AdvanceCollision" flags=3 binds= [false]]
 [connection signal="Activated" from="BossAct/InfiniteHall/HallRoot/Hall2/AdvanceTrigger" to="BossAct/InfiniteHall" method="AdvanceHall" flags=3]
