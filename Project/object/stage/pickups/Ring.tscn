@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://21pykhrm72xx"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
-[ext_resource type="PackedScene" uid="uid://bcaaqu6sk0iho" path="res://object/stage/pickups/resource/model/rings/Ring.gltf" id="2"]
+[ext_resource type="PackedScene" uid="uid://7q1qood2upqf" path="res://object/stage/pickups/resource/model/rings/Ring.gltf" id="2"]
 [ext_resource type="Texture2D" uid="uid://cr0mgarekxinl" path="res://object/stage/pickups/resource/model/rings/texture/ring particle.png" id="3"]
 
 [sub_resource type="SphereShape3D" id="3"]
@@ -183,8 +183,8 @@ _data = {
 
 [node name="Ring" type="Area3D" node_paths=PackedStringArray("animator")]
 collision_layer = 8
-collision_mask = 0
-monitoring = false
+collision_mask = 2
+monitorable = false
 script = ExtResource("1")
 animator = NodePath("AnimationPlayer")
 
@@ -208,3 +208,5 @@ autoplay = "loop"
 libraries = {
 "": SubResource("AnimationLibrary_6x35q")
 }
+
+[connection signal="area_entered" from="." to="." method="OnEnter"]

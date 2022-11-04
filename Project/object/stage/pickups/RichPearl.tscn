@@ -8,11 +8,11 @@ orientation = 2
 
 [node name="RichPearl" type="Area3D" node_paths=PackedStringArray("collider")]
 collision_layer = 8
-collision_mask = 0
-monitoring = false
+collision_mask = 2
+monitorable = false
 script = ExtResource("2")
-collider = NodePath("CollisionShape3D")
 isRichPearl = true
+collider = NodePath("CollisionShape3D")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 layers = 32
@@ -21,3 +21,5 @@ cast_shadow = 0
 mesh = SubResource("2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[connection signal="area_entered" from="." to="." method="OnEnter"]

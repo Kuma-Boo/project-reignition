@@ -22,7 +22,11 @@ namespace Project.Gameplay.Objects
 			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
-		public void OnEnter() => CallDeferred(nameof(Collect));
+		public void OnEnter(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			CallDeferred(nameof(Collect));
+		}
 
 		public virtual void Respawn()
 		{
@@ -38,9 +42,6 @@ namespace Project.Gameplay.Objects
 			EmitSignal(SignalName.Despawned);
 		}
 
-		protected virtual void Collect()
-		{
-			EmitSignal(SignalName.Collected);
-		}
+		protected virtual void Collect() => EmitSignal(SignalName.Collected);
 	}
 }

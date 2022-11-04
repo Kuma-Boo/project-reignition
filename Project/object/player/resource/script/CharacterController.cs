@@ -392,10 +392,8 @@ namespace Project.Gameplay
 			{
 				if (currentLockoutData.recenterPlayer)
 				{
-					//TODO Fix recentering player
-					GD.Print("Recentering player is broken!");
+					Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
 
-					Vector3 recenterDirection = UpDirection.Cross(GetMovementDirection());
 					float offset = PathFollower.LocalPlayerPosition.x;
 					if (!isRecentered) //Smooth out recenter speed
 					{
@@ -405,7 +403,8 @@ namespace Project.Gameplay
 						offset = PathFollower.LocalPlayerPosition.x - offset;
 					}
 
-					GlobalTranslate(offset * recenterDirection);
+					GlobalPosition += offset * recenterDirection; //Move towards the pathfollower
+					targetMovementAngle = isMovingBackward ? PathFollower.BackAngle : PathFollower.ForwardAngle; //Override to pathfollower's movement angle
 				}
 
 				if (currentLockoutData.directionOverrideMode != LockoutResource.DirectionOverrideMode.Free &&
@@ -1271,20 +1270,6 @@ namespace Project.Gameplay
 			Lockon.IsMonitoring = false;
 			Skills.IsTimeBreakEnabled = false;
 			Skills.IsSpeedBreakEnabled = false;
-		}
-
-		public void OnObjectAreaEntered(Area3D a)
-		{
-			if (a is Triggers.StageTrigger trigger)
-				trigger.OnEnter();
-			else if ((Node)a is Objects.Pickup pickup) //This node cast is NOT redundant, and IS needed
-				pickup.OnEnter();
-		}
-
-		public void OnObjectAreaExited(Area3D a)
-		{
-			if (a is Triggers.StageTrigger trigger)
-				trigger.OnExit();
 		}
 
 		public void OnObjectCollisionEnter(Node3D body)

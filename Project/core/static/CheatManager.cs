@@ -4,7 +4,7 @@ namespace Project.Core
 	{
 		private static bool EnableCheats => true;
 
-		public static bool InfiniteSoulGauge => EnableCheats && false;
+		public static bool InfiniteSoulGauge => EnableCheats && true;
 		public static bool SkipCountdown => EnableCheats && true;
 	}
 }

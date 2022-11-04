@@ -5,10 +5,10 @@
 [ext_resource type="Resource" uid="uid://bsdyr3nwbjt2s" path="res://object/player/resource/movement settings/aerial/AirSettings.tres" id="3_ywh7m"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
 [ext_resource type="PackedScene" uid="uid://dlnfilv6x7rkh" path="res://interface/gameplay/hud/lockon/Lockon.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://dokqgt2vqpcw" path="res://object/player/resource/model/Sonic.gltf" id="7_6ntt8"]
 [ext_resource type="Resource" path="res://object/player/resource/movement settings/ground/SidleSettings.tres" id="8"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterController.cs" id="10"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="11"]
-[ext_resource type="PackedScene" uid="uid://cwas4ba3y3woi" path="res://object/player/resource/model/Model.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://qf6je82vhwme" path="res://object/player/resource/component/Skills.tscn" id="13"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterSound.cs" id="15"]
 [ext_resource type="AudioStream" uid="uid://xpupnecr1hc6" path="res://sound/sfx/player/en/VOICE_E_2.wav" id="16"]
@@ -264,35 +264,11 @@ node_connections = [&"output", 0, &"countdown", &"ActionState", 0, &"IsGrounded"
 
 [sub_resource type="Animation" id="Animation_dbqye"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Components/Model:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 
 [sub_resource type="Animation" id="Animation_v1whi"]
 resource_name = "invincibility"
 length = 3.0
 step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Components/Model:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.133333, 0.266666, 0.4, 0.533333, 0.666666, 0.799999, 0.933332, 1.06667, 1.2, 1.33333, 1.46667, 1.6, 1.73333, 1.86666, 2, 2.13333, 2.26666, 2.4, 2.53333, 2.66666, 2.8, 2.9, 3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3ughb"]
 _data = {
@@ -320,7 +296,7 @@ sidleSettings = ExtResource("8")
 environmentCollider = NodePath("CollisionShape3D")
 environmentMask = 1
 PathFollower = NodePath("Components/PathFollower")
-Animator = NodePath("Components/Model")
+Animator = NodePath("Components/Sonic")
 Sound = NodePath("Components/Sound")
 Skills = NodePath("Components/Skills")
 Lockon = NodePath("Components/Lockon")
@@ -336,19 +312,19 @@ script = ExtResource("6_80hf8")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower"]
 mesh = SubResource("SphereMesh_wrj8s")
 
-[node name="Model" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("12")]
+[node name="Sonic" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("7_6ntt8")]
 script = ExtResource("11")
 animator = NodePath("../../AnimationTree")
 
-[node name="VFX" type="Node3D" parent="Components/Model"]
+[node name="VFX" type="Node3D" parent="Components/Sonic"]
 
 [node name="Sound" type="Node" parent="Components" node_paths=PackedStringArray("voiceChannel")]
 script = ExtResource("15")
 enClips = [ExtResource("16"), ExtResource("17")]
 jaClips = [ExtResource("19"), ExtResource("18")]
 actionClips = [ExtResource("20"), ExtResource("21")]
-voiceChannel = NodePath("VoiceChannel")
 sfxChannels = [NodePath("ActionChannel"), NodePath("FootstepChannel"), NodePath("FootstepChannel2")]
+voiceChannel = NodePath("VoiceChannel")
 
 [node name="VoiceChannel" type="AudioStreamPlayer" parent="Components/Sound"]
 stream = ExtResource("16")
@@ -368,7 +344,7 @@ speedBreakSpeed = 54.0
 [node name="Lockon" parent="Components" instance=ExtResource("7")]
 
 [node name="ObjectTrigger" type="Area3D" parent="Components" groups=["player"]]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 2
 collision_mask = 9
 
@@ -382,7 +358,7 @@ shape = SubResource("80")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("37")
-anim_player = NodePath("../Components/Model/AnimationPlayer")
+anim_player = NodePath("../Components/Sonic/AnimationPlayer")
 parameters/ActionState/current = 0
 parameters/IsGrounded/current = 0
 parameters/OneShotAnimations/Animation/current = 0
@@ -407,7 +383,5 @@ libraries = {
 "": SubResource("AnimationLibrary_3ughb")
 }
 
-[connection signal="area_entered" from="Components/ObjectTrigger" to="." method="OnObjectAreaEntered"]
-[connection signal="area_exited" from="Components/ObjectTrigger" to="." method="OnObjectAreaExited"]
 [connection signal="body_entered" from="Components/ObjectTrigger" to="." method="OnObjectCollisionEnter"]
 [connection signal="body_exited" from="Components/ObjectTrigger" to="." method="OnObjectCollisionExit"]

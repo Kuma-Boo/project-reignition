@@ -94,15 +94,19 @@ namespace Project.Gameplay
 		[Export]
 		private AnimationPlayer bonusAnimator;
 		[Export]
-		private Array<Label> bonusLabels;
+		private Array<NodePath> bonusLabels;
+		private Label[] _bonusLabels;
 		private int bonusCount = -1;
 		private readonly Array<StageSettings.BonusType> bonusQueue = new Array<StageSettings.BonusType>();
 		private const int MAX_BONUS_COUNT = 5; //How many bonuses can be onscreen at once
 		private void InitializeBonuses()
 		{
-			for (int i = 0; i < bonusLabels.Count; i++)
+			_bonusLabels = new Label[bonusLabels.Count];
+
+			for (int i = 0; i < _bonusLabels.Length; i++)
 			{
-				bonusLabels[i].Modulate = Colors.Transparent;
+				_bonusLabels[i] = GetNode<Label>(bonusLabels[i]);
+				_bonusLabels[i].Modulate = Colors.Transparent;
 			}
 		}
 
@@ -120,12 +124,12 @@ namespace Project.Gameplay
 				bonusCount = MAX_BONUS_COUNT;
 
 			//Update text
-			for (int i = 1; i < bonusLabels.Count; i++)
+			for (int i = 1; i < _bonusLabels.Length; i++)
 			{
-				bonusLabels[i].Text = bonusLabels[i - 1].Text;
-				bonusLabels[i].Modulate = i > bonusCount ? Colors.Transparent : Colors.White;
+				_bonusLabels[i].Text = _bonusLabels[i - 1].Text;
+				_bonusLabels[i].Modulate = i > bonusCount ? Colors.Transparent : Colors.White;
 			}
-			bonusLabels[0].Text = Tr(type.ToString());
+			_bonusLabels[0].Text = Tr(type.ToString());
 
 			//Play animations
 			bonusAnimator.Play("RESET");
@@ -151,7 +155,7 @@ namespace Project.Gameplay
 				if (bonusTimer > 1f)
 				{
 					float fadeAmount = Mathf.Clamp((bonusTimer % 1f) / .25f, 0f, 1f);
-					bonusLabels[bonusCount].Modulate = Colors.White.Lerp(Colors.Transparent, fadeAmount);
+					_bonusLabels[bonusCount].Modulate = Colors.White.Lerp(Colors.Transparent, fadeAmount);
 
 					if (fadeAmount >= 1f)
 					{

@@ -1,136 +1,132 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=16 format=3 uid="uid://cmufjh1nmvt64"]
 
-[ext_resource type="Texture2D" path="res://object/stage/pickups/resource/model/rings/texture/fire soul particle.png" id="1"]
-[ext_resource type="PackedScene" uid="uid://87du5ijim1aq" path="res://object/stage/pickups/resource/model/rings/RedRing.gltf" id="2"]
+[ext_resource type="Texture2D" uid="uid://bxpaofdf5ucpg" path="res://object/stage/pickups/resource/model/rings/texture/fire soul particle.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://go6dys8y08q8" path="res://object/stage/pickups/resource/model/rings/RedRing.gltf" id="2"]
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/FireSoul.cs" id="3"]
-[ext_resource type="Material" path="res://effect/common flame/CommonFlameMaterial.tres" id="4"]
 
-[sub_resource type="Animation" id=5]
-resource_name = "Loop"
-length = 1.5
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PackedFloat32Array( 0, 1.5 ),
-"transitions": PackedFloat32Array( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
-}
-
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id="4"]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ) ]
+"values": [Vector3(0, 0, 0)]
 }
 
-[sub_resource type="SphereShape3D" id=3]
+[sub_resource type="Animation" id="5"]
+resource_name = "loop"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e5wth"]
+_data = {
+"RESET": SubResource("4"),
+"loop": SubResource("5")
+}
+
+[sub_resource type="SphereShape3D" id="3"]
 radius = 0.6
 
-[sub_resource type="Gradient" id=7]
-offsets = PackedFloat32Array( 0, 0.79902, 1 )
-colors = PackedColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+[sub_resource type="Gradient" id="7"]
+offsets = PackedFloat32Array(0, 0.79902, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture2D" id=8]
-gradient = SubResource( 7 )
+[sub_resource type="GradientTexture2D" id="8"]
+gradient = SubResource("7")
 width = 128
 
-[sub_resource type="Curve" id=9]
-_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.496795, 0.337545 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.128159 ), -0.578235, 0.0, 0, 0 ]
+[sub_resource type="Curve" id="9"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.496795, 0.337545), 0.0, 0.0, 0, 0, Vector2(1, 0.128159), -0.578235, 0.0, 0, 0]
+point_count = 3
 
-[sub_resource type="CurveTexture" id=10]
+[sub_resource type="CurveTexture" id="10"]
 width = 128
-curve = SubResource( 9 )
+curve = SubResource("9")
 
-[sub_resource type="ParticleProcessMaterial" id=6]
+[sub_resource type="ParticleProcessMaterial" id="6"]
 emission_shape = 5
-emission_ring_radius = 0.5
-emission_ring_inner_radius = 0.2
-emission_ring_height = 0.25
-emission_ring_axis = Vector3( 0, 0, 1 )
-direction = Vector3( 0, 1, 0 )
+emission_point_count = 1
+direction = Vector3(0, 1, 0)
 spread = 180.0
-gravity = Vector3( 0, 5, 0 )
-radial_accel = 2.0
-radial_accel_random = 1.0
-scale = 2.0
-scale_random = 0.5
-scale_curve = SubResource( 10 )
-color_ramp = SubResource( 8 )
+gravity = Vector3(0, 5, 0)
+scale_curve = SubResource("10")
+color_ramp = SubResource("8")
 
-[sub_resource type="StandardMaterial3D" id=11]
-flags_transparent = true
-flags_unshaded = true
-flags_do_not_receive_shadows = true
+[sub_resource type="StandardMaterial3D" id="11"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 4
 vertex_color_use_as_albedo = true
-params_specular_mode = 4
-params_blend_mode = 1
-params_billboard_mode = 3
+albedo_color = Color(1, 0.486275, 0, 1)
+albedo_texture = ExtResource("1")
+disable_receive_shadows = true
+billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
-albedo_color = Color( 1, 0.486275, 0, 1 )
-albedo_texture = ExtResource( 1 )
 
-[sub_resource type="QuadMesh" id=12]
-material = SubResource( 11 )
+[sub_resource type="QuadMesh" id="12"]
+material = SubResource("11")
 
-[sub_resource type="QuadMesh" id=13]
+[sub_resource type="QuadMesh" id="13"]
 
 [node name="FireSoul" type="Area3D"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
-script = ExtResource( 3 )
+script = ExtResource("3")
 
-[node name="RedRing" parent="." instance=ExtResource( 2 )]
+[node name="RedRing" parent="." instance=ExtResource("2")]
 
 [node name="Animator" type="AnimationPlayer" parent="."]
-autoplay = "Loop"
-anims/Loop = SubResource( 5 )
-anims/RESET = SubResource( 4 )
+autoplay = "loop"
+libraries = {
+"": SubResource("AnimationLibrary_e5wth")
+}
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource( 3 )
+shape = SubResource("3")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 0.8, 0, 0, 0, 1, 0, 0, 0 )
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 1, 0, 0, 0)
 amount = 32
 lifetime = 0.2
 preprocess = 1.0
 explosiveness = 0.2
 randomness = 1.0
-visibility_aabb = AABB( -0.5, -0.6, -0.5, 1, 1.2, 1 )
-local_coords = false
-process_material = SubResource( 6 )
-draw_pass_1 = SubResource( 12 )
+visibility_aabb = AABB(-0.5, -0.6, -0.5, 1, 1.2, 1)
+process_material = SubResource("6")
+draw_pass_1 = SubResource("12")
 
 [node name="Flame" type="MeshInstance3D" parent="."]
-transform = Transform3D( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, 0.0570835, 0 )
-mesh = SubResource( 13 )
-material/0 = ExtResource( 4 )
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, 0.0570835, 0)
+mesh = SubResource("13")
 
 [node name="Flame2" type="MeshInstance3D" parent="."]
-transform = Transform3D( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, 0.0570835, 0 )
-mesh = SubResource( 13 )
-material/0 = ExtResource( 4 )
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, 0.0570835, 0)
+mesh = SubResource("13")
 
 [node name="Flame3" type="MeshInstance3D" parent="."]
-transform = Transform3D( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, 0.0570835, 0 )
-mesh = SubResource( 13 )
-material/0 = ExtResource( 4 )
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, 0.0570835, 0)
+mesh = SubResource("13")
 
-[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_entered" from="." to="." method="OnEnter"]

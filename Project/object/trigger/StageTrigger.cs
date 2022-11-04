@@ -41,6 +41,9 @@ namespace Project.Gameplay.Triggers
 
 		public override void _EnterTree()
 		{
+			Connect(SignalName.AreaEntered, new Callable(this, MethodName.OnEnter));
+			Connect(SignalName.AreaExited, new Callable(this, MethodName.OnExit));
+
 			//Connect child modules
 			Array<Node> children = GetChildren();
 			for (int i = 0; i < children.Count; i++)
@@ -50,8 +53,8 @@ namespace Project.Gameplay.Triggers
 					StageTriggerModule module = children[i] as StageTriggerModule;
 
 					//Connect signals
-					Connect(SignalName.Activated, new Callable(module, nameof(StageTriggerModule.Activate)));
-					Connect(SignalName.Deactivated, new Callable(module, nameof(StageTriggerModule.Deactivate)));
+					Connect(SignalName.Activated, new Callable(module, MethodName.Activate));
+					Connect(SignalName.Deactivated, new Callable(module, MethodName.Deactivate));
 
 					//Register respawnable modules
 					if (module.IsRespawnable())
@@ -60,8 +63,10 @@ namespace Project.Gameplay.Triggers
 			}
 		}
 
-		public void OnEnter() //Called from player
+		public void OnEnter(Area3D a)
 		{
+			if (!a.IsInGroup("player")) return;
+
 			//Determine whether activation is successful
 			if (triggerMode == TriggerMode.OnExit)
 				return;
@@ -76,8 +81,9 @@ namespace Project.Gameplay.Triggers
 			Activate();
 		}
 
-		public void OnExit()
+		public void OnExit(Area3D a)
 		{
+			if (!a.IsInGroup("player")) return;
 			if (!PathFollower.IsInsideTree()) return;
 
 			//Determine whether deactivation is successful
