@@ -6,8 +6,6 @@ namespace Project.Gameplay.Bosses
 {
 	public partial class Erazor : Node3D
 	{
-		protected CharacterController Character => CharacterController.instance;
-
 		[Export]
 		private int health;
 		private int damageTaken;
@@ -57,6 +55,9 @@ namespace Project.Gameplay.Bosses
 		private const float DUEL_DIALOG_DELAY = 4f; //How long to wait before starting hint dialog
 		[Signal]
 		public delegate void DuelCompletedEventHandler(); //Called when a duel attack ends. Resets positions to allow infinte hallway
+
+		private CharacterController Character => CharacterController.instance;
+		private float LocalPlayerPosition => Character.PathFollower.GetLocalPosition(Character.GlobalPosition).x;
 
 		//Animation parameters
 		private const string TELEPORT_SPEED = "parameters/TeleportSpeed/scale";
@@ -128,10 +129,10 @@ namespace Project.Gameplay.Bosses
 					if (CurrentAttack.AttackType == 0) //"I" attack
 					{
 						if (timer < CurrentAttack.Startup - .1f)
-							targetStrafe = Character.PathFollower.LocalPlayerPosition.x;
+							targetStrafe = LocalPlayerPosition;
 					}
 					else if (CurrentAttack.AttackType == 1) //"V" attack
-						targetStrafe = Mathf.Clamp(Character.PathFollower.LocalPlayerPosition.x, -3f, 3f);
+						targetStrafe = Mathf.Clamp(LocalPlayerPosition, -3f, 3f);
 					else if (CurrentAttack.AttackType == 2) //"L" attack
 						targetStrafe = 3f;
 

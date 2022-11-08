@@ -37,6 +37,7 @@ namespace Project.Gameplay.Bosses
 
 		private bool isActive; //Process the boss?
 		private CharacterController Character => CharacterController.instance;
+		private float LocalPlayerPosition => Character.PathFollower.GetLocalPosition(Character.GlobalPosition).x;
 
 		public override void _Ready()
 		{
@@ -261,7 +262,7 @@ namespace Project.Gameplay.Bosses
 			float dot = Character.GetMovementDirection().Dot(Character.PathFollower.Forward());
 			float offsetPrediction = Character.MoveSpeed * 2f * dot;
 			pathFollower.Progress = Character.PathFollower.Progress + offsetPrediction;
-			pathFollower.HOffset = -Character.PathFollower.LocalPlayerPosition.x; //Works since the path is flat
+			pathFollower.HOffset = -LocalPlayerPosition; //Works since the path is flat
 			if (i != 0 && i < MISSILE_COUNT - 1) //Slightly randomize the middle missiles
 				pathFollower.HOffset += RuntimeConstants.randomNumberGenerator.RandfRange(-1f, 1f);
 
@@ -330,7 +331,7 @@ namespace Project.Gameplay.Bosses
 					else if (attackSide != 0) //Track the player's position
 					{
 						float current = (float)lTailAnimator.Get(LIGHT_ATTACK_POSITION_PARAMETER);
-						float pos = Character.PathFollower.LocalPlayerPosition.x;
+						float pos = LocalPlayerPosition;
 						if ((attackSide == -1 && pos > 0) || (attackSide == 1 && pos < 0))
 							pos = 0;
 
@@ -374,7 +375,7 @@ namespace Project.Gameplay.Bosses
 		{
 			attackCounter++;
 			isAttacking = true;
-			if (Character.PathFollower.LocalPlayerPosition.x < 0) //Left Attack
+			if (LocalPlayerPosition < 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-light-attack");
@@ -395,7 +396,7 @@ namespace Project.Gameplay.Bosses
 		{
 			attackCounter = 0;
 			isAttacking = true;
-			if (Character.PathFollower.LocalPlayerPosition.x < 0) //Left Attack
+			if (LocalPlayerPosition < 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-heavy-attack");

@@ -16,6 +16,8 @@ namespace Project.Gameplay
 		{
 			Array<Dictionary> properties = new Array<Dictionary>();
 
+			properties.Add(ExtensionMethods.CreateProperty("Starting Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
+
 			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, "None,Objective,Rings,Pearls,Enemies"));
 
 			if (MissionType != MissionTypes.None)
@@ -52,6 +54,9 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
+				case "Starting Path":
+					return _startingPath;
+
 				case "Mission Type":
 					return (int)MissionType;
 				case "Objective Count":
@@ -86,7 +91,7 @@ namespace Project.Gameplay
 				case "Completion/Lockout":
 					return completionLockout;
 				case "Completion/Animator":
-					return completionAnimator;
+					return _completionAnimator;
 			}
 
 			return base._Get(property);
@@ -96,6 +101,10 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
+				case "Starting Path":
+					_startingPath = (NodePath)value;
+					break;
+
 				case "Mission Type":
 					MissionType = (MissionTypes)(int)value;
 					NotifyPropertyListChanged();
@@ -148,7 +157,7 @@ namespace Project.Gameplay
 					completionLockout = (LockoutResource)value;
 					break;
 				case "Completion/Animator":
-					completionAnimator = GetNodeOrNull<AnimationPlayer>((NodePath)value);
+					_completionAnimator = (NodePath)value;
 					break;
 				default:
 					return false;
@@ -160,18 +169,24 @@ namespace Project.Gameplay
 
 		public static StageSettings instance;
 
+		private NodePath _startingPath; //Node Path
+		public Path3D StartingPath { get; private set; } //Automatically assign to this path when stage starts.
+
 		public override void _EnterTree()
 		{
 			if (Engine.IsEditorHint()) return;
 
 			instance = this; //Always override previous instance
+
+			StartingPath = GetNodeOrNull<Path3D>(_startingPath);
+			completionAnimator = GetNodeOrNull<AnimationPlayer>(_completionAnimator);
+
 			SetUpItemCycles();
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
 			if (Engine.IsEditorHint()) return;
-
 			UpdateTime();
 		}
 
@@ -197,7 +212,6 @@ namespace Project.Gameplay
 			Pearl, //Collect a certain amount of pearls (normally zero)
 			Enemy, //Destroy a certain amount of enemies
 		}
-
 		#endregion
 
 		#region Stage Data
@@ -316,6 +330,7 @@ namespace Project.Gameplay
 		//Completion
 		private float completionDelay;
 		private LockoutResource completionLockout;
+		private NodePath _completionAnimator; //Node Path
 		private AnimationPlayer completionAnimator; //Camera demo that gets enabled after the stage clears
 
 		[Signal]
@@ -354,6 +369,16 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Object Spawning
+
+		//Checkpoint data
+		public Node3D Checkpoint { get; private set; }
+		public Path3D CheckpointPath { get; private set; }
+		public void SetCheckpoint(Node3D newCheckpoint)
+		{
+			Checkpoint = newCheckpoint; //Position transform
+			CheckpointPath = CharacterController.instance.PathFollower.ActivePath; //Store current path
+		}
+
 		[Signal]
 		public delegate void RespawnedEventHandler();
 		public static bool IsRespawnedFromPlayer; //Did the stage respawn from the player dying?
@@ -454,7 +479,6 @@ namespace Project.Gameplay
 		}
 		#endregion
 	}
-
 
 	public struct SpawnData
 	{

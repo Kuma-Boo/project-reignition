@@ -7,12 +7,16 @@ namespace Project.Gameplay.Hazards
 	public partial class SpikeBall : Hazard
 	{
 		[Export]
-		public float moveSpeed;
+		private float moveSpeed;
 		[Export]
 		public float distance; //How far to travel, or the radius of the circle
 		[Export]
-		public bool isMovingRight; //Start by moving right?
-		public int MovementDirection => isMovingRight ? 1 : -1;
+		private Vector3 movementAxis = new Vector3(0, 1, 0); //Movement axis, in LOCAL SPACE.
+		[Export]
+		private Vector3 rotationAxis = new Vector3(0, 1, 0); //Rotation axis in LOCAL SPACE. Used for circle movements.
+		[Export]
+		private bool startingMovementDirection;
+		private int MovementDirection => startingMovementDirection ? 1 : -1;
 		[Export(PropertyHint.Range, "0, 1")]
 		public float startingOffset;
 		private float currentOffset;
@@ -26,7 +30,8 @@ namespace Project.Gameplay.Hazards
 		}
 
 		[Export]
-		public Node3D root;
+		private NodePath root;
+		private Node3D _root;
 
 		private Vector3 spawnPosition;
 		private const float ROTATION_SPEED = .1f;
@@ -35,7 +40,8 @@ namespace Project.Gameplay.Hazards
 		{
 			if (Engine.IsEditorHint()) return;
 
-			root.Position = Vector3.Zero; //Reset editor debug translation
+			_root = GetNode<Node3D>(root);
+			_root.Position = Vector3.Zero; //Reset editor debug translation
 			spawnPosition = GlobalPosition;
 
 			StageSettings.instance.RegisterRespawnableObject(this);
@@ -52,10 +58,8 @@ namespace Project.Gameplay.Hazards
 
 			if (movementType == MovementType.Static) return;
 
-			float speed = moveSpeed / distance;
-
-			currentOffset += speed * PhysicsManager.physicsDelta * MovementDirection;
-			root.RotateY(ROTATION_SPEED); //Constant rotation
+			currentOffset += moveSpeed * PhysicsManager.physicsDelta * MovementDirection;
+			_root.RotateY(ROTATION_SPEED); //Constant rotation
 
 			if (movementType == MovementType.Circle)
 				currentOffset %= 1f;
@@ -64,41 +68,50 @@ namespace Project.Gameplay.Hazards
 				if (currentOffset > 1f)
 				{
 					currentOffset = 1f;
-					isMovingRight = !isMovingRight;
+					startingMovementDirection = !startingMovementDirection;
 				}
 				else if (currentOffset < 0f)
 				{
 					currentOffset = 0f;
-					isMovingRight = !isMovingRight;
+					startingMovementDirection = !startingMovementDirection;
 				}
 			}
 
-			GlobalPosition = spawnPosition + GetOffset();
+			GlobalPosition = spawnPosition + GlobalTransform.basis * GetOffset();
 			ProcessCollision();
 		}
 
 		private void Respawn()
 		{
 			currentOffset = startingOffset;
-			root.Rotation = Vector3.Zero; //Reset Rotation
+			_root.Rotation = Vector3.Zero; //Reset Rotation
 		}
 
 		private Vector3 GetOffset()
 		{
 			if (movementType == MovementType.Linear)
-				return Vector3.Zero.Lerp(this.Right() * distance, Mathf.SmoothStep(0f, 1f, currentOffset));
+				return Vector3.Zero.Lerp(movementAxis * distance, Mathf.SmoothStep(0f, 1f, currentOffset));
 			else if (movementType == MovementType.Circle)
-				return this.Back().Rotated(this.Up(), Mathf.Lerp(0f, Mathf.Tau, currentOffset)).Normalized() * distance * MovementDirection;
+			{
+				if (movementAxis.Dot(rotationAxis) >= 1f)
+				{
+					GD.PrintErr("MovementAxis and RotationAxis cannot be the same.");
+					return Vector3.Zero;
+				}
+
+				return movementAxis.Rotated(rotationAxis, Mathf.Lerp(0f, Mathf.Tau, currentOffset)).Normalized() * distance * MovementDirection;
+			}
 
 			return Vector3.Zero;
 		}
 
 		private void UpdateEditor()
 		{
-			if (root == null) return;
+			_root = GetNode<Node3D>(root);
+			if (_root == null) return;
 
 			currentOffset = startingOffset;
-			root.GlobalPosition = GlobalPosition + GetOffset();
+			_root.GlobalPosition = GlobalPosition + GlobalTransform.basis * GetOffset();
 		}
 	}
 }

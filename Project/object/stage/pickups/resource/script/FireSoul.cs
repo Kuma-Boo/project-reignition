@@ -4,8 +4,7 @@ namespace Project.Gameplay.Objects
 {
 	public partial class FireSoul : Pickup
 	{
-		[Export]
-		public bool isCollected; //Determined by save data
+		private bool isCollected; //Determined by save data
 
 		protected override void SetUp() //TODO Check save data
 		{
@@ -13,10 +12,9 @@ namespace Project.Gameplay.Objects
 				Despawn();
 		}
 
-		private void OnEntered(Area3D _)
+		protected override void Collect()
 		{
 			//TODO Write save data
-			//ActiveCharacter.AddScore(1000);
 			Despawn();
 		}
 	}

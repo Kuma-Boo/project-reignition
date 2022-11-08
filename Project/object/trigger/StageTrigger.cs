@@ -41,9 +41,6 @@ namespace Project.Gameplay.Triggers
 
 		public override void _EnterTree()
 		{
-			Connect(SignalName.AreaEntered, new Callable(this, MethodName.OnEnter));
-			Connect(SignalName.AreaExited, new Callable(this, MethodName.OnExit));
-
 			//Connect child modules
 			Array<Node> children = GetChildren();
 			for (int i = 0; i < children.Count; i++)
@@ -63,7 +60,7 @@ namespace Project.Gameplay.Triggers
 			}
 		}
 
-		public void OnEnter(Area3D a)
+		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
 
@@ -81,7 +78,7 @@ namespace Project.Gameplay.Triggers
 			Activate();
 		}
 
-		public void OnExit(Area3D a)
+		public void OnExited(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
 			if (!PathFollower.IsInsideTree()) return;

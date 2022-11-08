@@ -22,10 +22,10 @@ namespace Project.Gameplay.Objects
 			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
-		public void OnEnter(Area3D a)
+		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			CallDeferred(nameof(Collect));
+			CallDeferred(MethodName.Collect);
 		}
 
 		public virtual void Respawn()

@@ -3,7 +3,8 @@
 [ext_resource type="Material" uid="uid://bjd84t56eucyc" path="res://object/stage/pickups/resource/model/rich pearl/RichPearl.tres" id="1"]
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="2"]
 
-[sub_resource type="PlaneMesh" id="2"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_cjgpw"]
+size = Vector2(1.5, 1.5)
 orientation = 2
 
 [node name="RichPearl" type="Area3D" node_paths=PackedStringArray("collider")]
@@ -18,8 +19,8 @@ collider = NodePath("CollisionShape3D")
 layers = 32
 material_override = ExtResource("1")
 cast_shadow = 0
-mesh = SubResource("2")
+mesh = SubResource("PlaneMesh_cjgpw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 
-[connection signal="area_entered" from="." to="." method="OnEnter"]
+[connection signal="area_entered" from="." to="." method="OnEntered"]

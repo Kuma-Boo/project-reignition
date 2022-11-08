@@ -27,7 +27,6 @@ namespace Project.Gameplay.Objects
 		{
 			LaunchData data = new LaunchData
 			{
-				//gravity = GRAVITY,
 				launchDirection = GetLaunchDirection(),
 
 				startPosition = GlobalPosition + Vector3.Up * startingHeight,
@@ -68,7 +67,6 @@ namespace Project.Gameplay.Objects
 				sfxPlayer.Play();
 
 			IsCharacterCentered = recenterSpeed == 0;
-
 			LaunchData launchData = GetLaunchData();
 			Character.StartLauncher(launchData, this, true);
 
@@ -103,7 +101,7 @@ namespace Project.Gameplay.Objects
 		public float finalHeight;
 
 		public Vector3 InitialVelocity { get; private set; }
-		public float InitialHorizontalVelocity { get; private set; }
+		public float HorizontalVelocity { get; private set; } //Horizontal velocity remains constant throughout the entire launch
 		public float InitialVerticalVelocity { get; private set; }
 		public float FinalVerticalVelocity { get; private set; }
 
@@ -133,11 +131,11 @@ namespace Project.Gameplay.Objects
 			SecondHalfTime = Mathf.Sqrt((-2 * (middleHeight - finalHeight)) / GRAVITY);
 			TotalTravelTime = FirstHalfTime + SecondHalfTime;
 
-			InitialHorizontalVelocity = distance / TotalTravelTime;
+			HorizontalVelocity = distance / TotalTravelTime;
 			InitialVerticalVelocity = Mathf.Sqrt(-2 * GRAVITY * (middleHeight - startingHeight));
 			FinalVerticalVelocity = GRAVITY * SecondHalfTime;
 
-			InitialVelocity = launchDirection.RemoveVertical().Normalized() * InitialHorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
+			InitialVelocity = launchDirection.RemoveVertical().Normalized() * HorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
 		}
 
 		/// <summary>
@@ -164,6 +162,5 @@ namespace Project.Gameplay.Objects
 			data.Calculate();
 			return data;
 		}
-
 	}
 }

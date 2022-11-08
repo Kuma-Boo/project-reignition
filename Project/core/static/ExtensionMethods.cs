@@ -36,6 +36,7 @@ namespace Project
 
 		public static Vector3 RemoveVertical(this Vector3 v) => new Vector3(v.x, 0, v.z);
 		public static Vector2 Flatten(this Vector3 v) => new Vector2(v.x, v.z);
+
 		public static float InverseLerp(this Vector3 a, Vector3 b, Vector3 v)
 		{
 			Vector3 ab = b - a;
@@ -52,6 +53,13 @@ namespace Project
 			float invDistance = 1 / distance;
 			float impulseMag = power * invDistance * invDistance;
 			body.ApplyCentralImpulse(impulseMag * blastDir);
+		}
+
+		public static Vector3 GetLocalPosition(this PathFollow3D p, Vector3 pos)
+		{
+			Vector3 localPosition = p.GlobalTransform.basis.Inverse() * (pos - p.GlobalPosition);
+			localPosition.x *= -1; //Brute force "right" to be positive
+			return localPosition;
 		}
 
 		/// <summary> Converts angle to 0 <-> Mathf.Tau </summary>

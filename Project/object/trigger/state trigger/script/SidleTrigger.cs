@@ -1,24 +1,90 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
 	/// <summary>
-	/// Starts a sidle.
+	/// Handles sidle behaviour.
 	/// </summary>
 	public partial class SidleTrigger : Area3D
 	{
-		private CharacterController Character => CharacterController.instance;
+		[Export]
+		private bool isFacingRight = true; //Which way to sidle?
 
-		public void OnEntered(Area3D _)
+		[Export]
+		public MovementResource sidleSettings;
+
+		private Node3D currentRailing;
+
+		private bool isActive;
+		private bool isInteractingWithPlayer;
+		private CharacterController Character => CharacterController.instance;
+		private InputManager.Controller Controller => InputManager.controller;
+
+		public override void _PhysicsProcess(double _)
 		{
-			//Apply state
-			Character.StartSidle();
+			if (!isInteractingWithPlayer) return;
+
+			if (isActive)
+				UpdateSidle();
+			else if (Character.IsOnGround && Character.ActionState == CharacterController.ActionStates.Normal)
+				StartSidle();
 		}
 
-		public void OnExited(Area3D _)
+		private void StartSidle()
 		{
-			if (Character.PathFollower.IsAheadOfPoint(GlobalPosition)) return; //Keep state change
-			Character.CancelMovementState(CharacterController.MovementStates.Sidle);
+			isActive = true;
+			Character.StartExternal(Character.PathFollower);
+			GD.PrintErr("Pathfollower may be inaccurate!!!");
+		}
+
+		private void UpdateSidle()
+		{
+			Character.MoveSpeed = sidleSettings.Interpolate(Character.MoveSpeed, isFacingRight ? Controller.MovementAxis.x : -Controller.MovementAxis.x);
+			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+		}
+
+		#region Sidle
+		private void UpdateSidleDamage()
+		{
+		}
+
+		private void UpdateSidleHang()
+		{
+
+		}
+		#endregion
+
+		public void OnEntered(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+
+			isInteractingWithPlayer = true;
+
+			//Apply state
+			Character.Skills.IsSpeedBreakEnabled = false;
+			Character.isSideScroller = true; //Force side scroller
+			Character.isFacingRight = isFacingRight; //Update facing direction
+
+			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, Character.PathFollower.ForwardAngle);
+			if (dot < 0)
+			{
+				Character.MoveSpeed = -Mathf.Abs(Character.MoveSpeed);
+				Character.MovementAngle = Character.PathFollower.ForwardAngle;
+				Character.PathFollower.Resync();
+			}
+		}
+
+		public void OnExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+
+			Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.BackAngle : Character.PathFollower.ForwardAngle;
+			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
+
+			isActive = false;
+			isInteractingWithPlayer = false;
+			Character.ResetMovementState();
 		}
 	}
 }

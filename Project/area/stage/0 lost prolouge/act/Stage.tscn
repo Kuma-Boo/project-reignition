@@ -1,27 +1,22 @@
-[gd_scene load_steps=23 format=3 uid="uid://bsou3rf6jxssn"]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://dq1kdx05lgtf" path="res://area/stage/0 lost prolouge/data/common/BGM.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://dq1kdx05lgtf" path="res://area/stage/0 lost prolouge/data/environment/BGM.tscn" id="5"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="6"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7"]
-[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="8"]
 [ext_resource type="PackedScene" uid="uid://b8m5lb6i6w7dk" path="res://area/stage/0 lost prolouge/data/skybox/model/Skybox.gltf" id="8_m7whj"]
 [ext_resource type="PackedScene" uid="uid://cwbhcy53ii8or" path="res://area/stage/0 lost prolouge/act/data/environment/collision/Collision.tscn" id="9_46pgu"]
 [ext_resource type="PackedScene" uid="uid://curlmp7db45k5" path="res://area/stage/0 lost prolouge/act/data/environment/model/01Opening.gltf" id="9_qtbea"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="10"]
 [ext_resource type="PackedScene" uid="uid://bket6m31rl4af" path="res://area/stage/0 lost prolouge/act/data/environment/model/02Hall.gltf" id="10_np1id"]
-[ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/stage/0 lost prolouge/data/common/Environment.tres" id="10_yx1d5"]
+[ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/stage/0 lost prolouge/data/environment/Environment.tres" id="10_yx1d5"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="11"]
 [ext_resource type="PackedScene" uid="uid://cx5s0bstuvc4k" path="res://area/stage/0 lost prolouge/act/data/environment/model/03Tightrope.gltf" id="11_joblt"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="12"]
 [ext_resource type="Curve3D" uid="uid://wi3y53rkn4sj" path="res://area/stage/0 lost prolouge/act/data/environment/path/MainPath.tres" id="12_2pl4r"]
 [ext_resource type="PackedScene" uid="uid://d2xi6j86jfnn" path="res://area/stage/0 lost prolouge/act/data/environment/model/04Ribbon.gltf" id="12_blk7g"]
-[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="13"]
 [ext_resource type="PackedScene" uid="uid://bpp16liifnwle" path="res://area/stage/0 lost prolouge/act/data/environment/model/05Island.gltf" id="13_2hkij"]
 [ext_resource type="PackedScene" uid="uid://dpbtugnynma4a" path="res://area/stage/0 lost prolouge/act/data/environment/model/06End.gltf" id="14_kuse3"]
-
-[sub_resource type="SphereShape3D" id="7"]
-radius = 5.0
 
 [sub_resource type="BoxShape3D" id="12"]
 size = Vector3(90, 20, 10)
@@ -33,6 +28,7 @@ size = Vector3(153.4, 20, 251.8)
 
 [node name="MainAct" type="Node3D" parent="."]
 script = ExtResource("6")
+"Starting Path" = NodePath("../Static/Path/MainPath")
 "Mission Type" = 0
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
@@ -44,25 +40,12 @@ script = ExtResource("6")
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = null
-Completion/Animator = null
+Completion/Animator = NodePath("")
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("3")]
-
-[node name="StageTrigger" parent="MainAct/SpawnPosition/CharacterSpawn" instance=ExtResource("7")]
-
-[node name="MainPath" type="Node3D" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger" node_paths=PackedStringArray("path")]
-script = ExtResource("8")
-path = NodePath("../../../../../Static/Path/MainPath")
-loopPath = true
-
-[node name="Checkpoint" type="Node3D" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
-script = ExtResource("13")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/SpawnPosition/CharacterSpawn/StageTrigger"]
-shape = SubResource("7")
 
 [node name="Static" type="Node" parent="."]
 
@@ -84,6 +67,7 @@ directional_shadow_blend_splits = true
 environment = ExtResource("10_yx1d5")
 
 [node name="Skybox" parent="Static/Visuals" instance=ExtResource("8_m7whj")]
+visible = false
 
 [node name="01Opening" parent="Static/Visuals" instance=ExtResource("9_qtbea")]
 
@@ -127,5 +111,5 @@ script = ExtResource("12")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("13")
 
-[node name="BGM" parent="." instance=ExtResource("5")]
+[node name="BGM" parent="Static" instance=ExtResource("5")]
 bus = &"BGM"

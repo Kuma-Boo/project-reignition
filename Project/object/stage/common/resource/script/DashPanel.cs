@@ -9,6 +9,8 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private float length; //How long for the boost pad to last
 		private bool isQueued; //For when the player collides with the dash panel from the air
+		[Export]
+		private bool alignToPath; //Forces the player to  stay aligned to the path. Normally unneeded.
 
 		[Export]
 		private AudioStreamPlayer sfxPlayer;
@@ -28,26 +30,29 @@ namespace Project.Gameplay.Objects
 			isQueued = false;
 			//Character.CancelBackflip();
 
-			Character.AddLockoutData(new LockoutResource()
+			LockoutResource lockout = new LockoutResource()
 			{
 				directionOverrideMode = LockoutResource.DirectionOverrideMode.Replace,
-				overrideAngle = GetForwardAngle(),
+				directionSpaceMode = LockoutResource.DirectionSpaceMode.Camera,
+				overrideAngle = CharacterController.CalculateForwardAngle(this.Back()),
 				speedRatio = speedRatio,
 				disableActions = true,
 				overrideSpeed = true,
-				tractionMultiplier = -1f,
+				tractionMultiplier = 0f,
 				length = length,
-			});
-		}
+				priority = -1, //Not using priority
+			};
 
-		private float GetForwardAngle()
-		{
-			GD.Print("DashPanel.cs GetFowardAngle() is untested code. This is a reminder to check for bugs.");
-			Vector3 forwardDirection = this.Back();
-			float dot = forwardDirection.Dot(Vector3.Up);
-			if (Mathf.Abs(dot) > .9f)
-				forwardDirection = Mathf.Sign(dot) * this.Up();
-			return forwardDirection.Flatten().AngleTo(Vector2.Down);
+			if (alignToPath)
+			{
+				lockout.overrideAngle = 0f;
+				lockout.directionSpaceMode = LockoutResource.DirectionSpaceMode.PathFollower;
+				Character.MovementAngle = Character.PathFollower.ForwardAngle;
+			}
+			else
+				Character.MovementAngle = lockout.overrideAngle;
+
+			Character.AddLockoutData(lockout);
 		}
 	}
 }

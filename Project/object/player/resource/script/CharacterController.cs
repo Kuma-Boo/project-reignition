@@ -21,11 +21,15 @@ namespace Project.Gameplay
 		public override void _EnterTree()
 		{
 			instance = this;
+		}
 
-			ResetOrientation(); //Start with proper orientation
+		public override void _Ready()
+		{
+			PathFollower.Initialize(); //Attempt to autoload the default path
+			CallDeferred(MethodName.ResetOrientation); //Start with proper orientation
 
-			if (Stage != null)
-				Stage.Connect(StageSettings.SignalName.StageCompleted, new Callable(this, MethodName.OnStageCompleted));
+			Stage.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
+			Stage.Connect(StageSettings.SignalName.StageCompleted, new Callable(this, MethodName.OnStageCompleted));
 		}
 
 		[Signal]
@@ -63,14 +67,8 @@ namespace Project.Gameplay
 			}
 
 			canLandingBoost = false; //Disable landing boost temporarily
-			CancelMovementState(MovementState);
+			MovementState = MovementStates.Normal;
 			Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; //Reenable soul skills
-		}
-
-		public void CancelMovementState(MovementStates fromState) //Reset state to Normal
-		{
-			if (MovementState == fromState)
-				MovementState = MovementStates.Normal;
 		}
 
 		public ActionStates ActionState { get; private set; }
@@ -109,9 +107,6 @@ namespace Project.Gameplay
 					break;
 				case MovementStates.External:
 					UpdateExternalControl();
-					break;
-				case MovementStates.Sidle:
-					UpdateSidle();
 					break;
 				case MovementStates.Launcher:
 					UpdateLauncher();
@@ -183,7 +178,6 @@ namespace Project.Gameplay
 		}
 
 		#region Control Lockouts
-		private bool isRecentered;
 		private float lockoutTimer;
 		private LockoutResource currentLockoutData;
 		private bool IsLockoutActive => currentLockoutData != null;
@@ -197,7 +191,14 @@ namespace Project.Gameplay
 				lockoutDataList.Add(resource); //Add the new lockout data
 				if (lockoutDataList.Count >= 2) //List only needs to be sorted if there are multiple elements on it
 					lockoutDataList.Sort(new LockoutResource.Comparer());
-				RefreshCurrentLockoutData();
+
+				if (currentLockoutData != null && currentLockoutData.priority == -1) //Remove current lockout?
+					RemoveLockoutData(currentLockoutData);
+
+				if (resource.priority == -1) //Exempt from priority, take over immediately
+					SetLockoutData(resource);
+				else
+					RefreshCurrentLockoutData();
 			}
 		}
 
@@ -234,12 +235,33 @@ namespace Project.Gameplay
 
 		private void UpdateLockoutTimer()
 		{
-			if (!IsLockoutActive || Mathf.IsZeroApprox(lockoutTimer))
+			if (!IsLockoutActive || Mathf.IsZeroApprox(currentLockoutData.length))
 				return;
 
 			lockoutTimer = Mathf.MoveToward(lockoutTimer, currentLockoutData.length, PhysicsManager.physicsDelta);
 			if (Mathf.IsEqualApprox(lockoutTimer, currentLockoutData.length))
 				RemoveLockoutData(currentLockoutData);
+		}
+
+		private bool isRecentered; //Is the recenter complete?
+		/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
+		private void UpdateRecenter()
+		{
+			if (isSideScroller || (!IsLockoutActive || !currentLockoutData.recenterPlayer)) return;
+
+			Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
+
+			float currentOffset = PathFollower.GetLocalPosition(GlobalPosition).x;
+			float movementOffset = currentOffset;
+			if (!isRecentered) //Smooth out recenter speed
+			{
+				movementOffset = Mathf.MoveToward(movementOffset, 0, MoveSpeed * PhysicsManager.physicsDelta);
+				if (Mathf.IsZeroApprox(movementOffset))
+					isRecentered = true;
+				movementOffset = currentOffset - movementOffset;
+			}
+
+			GlobalPosition += movementOffset * recenterDirection; //Move towards the pathfollower
 		}
 		#endregion
 
@@ -299,7 +321,7 @@ namespace Project.Gameplay
 		[Export]
 		public MovementResource backstepSettings;
 		/// <summary> Is the player moving backwards? </summary>
-		private bool isMovingBackward;
+		public bool IsMovingBackward { get; private set; }
 		[Export]
 		public Curve turningSpeedCurve; //Curve of how speed is lost when turning
 		private float turningVelocity;
@@ -307,10 +329,8 @@ namespace Project.Gameplay
 		private const float TURN_SPEED = .1f; //How much to turn when moving slowly
 		private const float TURN_SPEED_LOSS = .06f; //How much speed to lose when turning sharply
 		private const float MAX_TURN_SPEED = .2f; //How much to turn when moving at top speed
-		/// <summary> Maximum angle as to what registers as turning, before transitioning into turnaround</summary>
-		private const float MAX_TURN_ANGLE = Mathf.Pi * .8f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
-		private const float MAX_BACKSTEP_ANGLE = Mathf.Pi * .6f;
+		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .6f;
 		private bool isIdling;
 		/// <summary> Updates MoveSpd. What else do you need know? </summary>
 		private void UpdateMoveSpd()
@@ -332,7 +352,7 @@ namespace Project.Gameplay
 			{
 				//Override speed to the correct value
 				float targetSpd = activeMovementResource.speed * currentLockoutData.speedRatio;
-				if (Mathf.IsZeroApprox(currentLockoutData.tractionMultiplier)) //Negative traction, snap speed
+				if (Mathf.IsZeroApprox(currentLockoutData.tractionMultiplier)) //Snap speed (i.e. Dash Panels)
 				{
 					MoveSpeed = targetSpd;
 					return;
@@ -351,14 +371,17 @@ namespace Project.Gameplay
 				MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, 0);
 			else
 			{
-				bool isTurningAround = deltaAngle > MAX_TURN_ANGLE;
+				bool isTurningAround = deltaAngle > MAX_TURNAROUND_ANGLE;
 				if (isTurningAround) //Skid to a stop
 					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, -1);
 				else
 					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, inputLength); //Accelerate based on input strength
 			}
 
-			isMovingBackward = MoveSpeed > 0 && ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > MAX_BACKSTEP_ANGLE; //Moving backwards, limit speed
+			if (isSideScroller)
+				IsMovingBackward = MoveSpeed < 0;
+			else
+				IsMovingBackward = MoveSpeed > 0 && ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > MAX_TURNAROUND_ANGLE; //Moving backwards, limit speed
 		}
 
 		/// <summary> Updates Turning. Read the function names. </summary>
@@ -369,7 +392,13 @@ namespace Project.Gameplay
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			float turnDelta = Mathf.Lerp(TURN_SPEED, MAX_TURN_SPEED, speedRatio);
 
-			if (!isIdling && deltaAngle > MAX_TURN_ANGLE) return; //Turning around
+			if (IsLockoutActive)
+			{
+				if (currentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.PathFollower)
+					MovementAngle += PathFollower.CalculateDeltaAngle(); //Follow pathfollower around turns better
+			}
+
+			if (!isIdling && deltaAngle > MAX_TURNAROUND_ANGLE) return; //Turning around
 
 			if (isIdling)
 			{
@@ -382,37 +411,10 @@ namespace Project.Gameplay
 			if (!IsLockoutActive || !currentLockoutData.overrideSpeed) //Don't apply turning speed loss when overriding speed
 			{
 				//Calculate turn delta, relative to ground speed
-				float speedLossRatio = deltaAngle / MAX_TURN_ANGLE;
+				float speedLossRatio = deltaAngle / MAX_TURNAROUND_ANGLE;
 				MoveSpeed -= MoveSpeed * turningSpeedCurve.Sample(speedLossRatio) * TURN_SPEED_LOSS;
 				if (MoveSpeed < 0)
 					MoveSpeed = 0;
-			}
-
-			if (IsLockoutActive)
-			{
-				if (currentLockoutData.recenterPlayer)
-				{
-					Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
-
-					float offset = PathFollower.LocalPlayerPosition.x;
-					if (!isRecentered) //Smooth out recenter speed
-					{
-						offset = Mathf.MoveToward(offset, 0, MoveSpeed * PhysicsManager.physicsDelta);
-						if (Mathf.IsZeroApprox(offset))
-							isRecentered = true;
-						offset = PathFollower.LocalPlayerPosition.x - offset;
-					}
-
-					GlobalPosition += offset * recenterDirection; //Move towards the pathfollower
-					targetMovementAngle = isMovingBackward ? PathFollower.BackAngle : PathFollower.ForwardAngle; //Override to pathfollower's movement angle
-				}
-
-				if (currentLockoutData.directionOverrideMode != LockoutResource.DirectionOverrideMode.Free &&
-			currentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.PathFollower)
-				{
-					turnDelta = TURN_SPEED; //More responsive turning
-					MovementAngle += PathFollower.CalculateDeltaAngle(); //Follow pathfollower around turns better
-				}
 			}
 
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
@@ -422,7 +424,7 @@ namespace Project.Gameplay
 		{
 			if (!IsOnGround)
 				return airSettings;
-			return isMovingBackward ? backstepSettings : groundSettings;
+			return IsMovingBackward ? backstepSettings : groundSettings;
 		}
 
 		private float slopeInfluence; //Current influence of the slope, from 0 <-> 1
@@ -645,7 +647,7 @@ namespace Project.Gameplay
 			ActionState = ActionStates.JumpDash;
 
 			float delta = ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-			if (delta > MAX_BACKSTEP_ANGLE) //Backstepping; Jumpdash directly forward
+			if (delta > MAX_TURNAROUND_ANGLE) //Backstepping; Jumpdash directly forward
 				MovementAngle = PathFollower.ForwardAngle;
 			else //Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
@@ -798,11 +800,6 @@ namespace Project.Gameplay
 
 			if (MovementState == MovementStates.Normal)
 				Knockback(true);
-			else if (MovementState == MovementStates.Sidle) //Start falling
-			{
-				sidleTimer = SIDLE_DAMAGE_LENGTH;
-				MoveSpeed = VerticalSpd = 0;
-			}
 		}
 
 		public void Knockback(bool damaged) //Knocks the player backwards
@@ -828,95 +825,12 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
-			GlobalTransform = Triggers.CheckpointTrigger.activeCheckpoint.GlobalTransform;
-
+			GlobalPosition = Stage.Checkpoint.GlobalPosition;
+			PathFollower.SetActivePath(Stage.CheckpointPath); //Revert path
 			Stage.RespawnObjects(true);
 
 			ResetOrientation();
 			Camera.ResetFlag = true;
-		}
-		#endregion
-
-		#region Sidle
-		[Export]
-		public MovementResource sidleSettings;
-		public Node3D CurrentRailing { get; set; }
-		private float sidleTimer;
-		private readonly float SIDLE_DAMAGE_LENGTH = .5f;
-		private readonly float SIDLE_RAIL_FALL_SPEED = 4f;
-		private readonly float SIDLE_HORIZONTAL_SPEED = .25f;
-
-		public void StartSidle()
-		{
-			Skills.IsSpeedBreakEnabled = false;
-
-			currentLockoutData.disableActions = true;
-			MovementState = MovementStates.Sidle;
-		}
-
-		private void UpdateSidle()
-		{
-			sidleTimer = Mathf.MoveToward(sidleTimer, 0, PhysicsManager.physicsDelta);
-
-			switch (ActionState)
-			{
-				case ActionStates.Normal:
-					break;
-				case ActionStates.Damaged: //Fall
-					UpdateSidleDamage();
-					return;
-				case ActionStates.Hanging:
-					UpdateSidleHang();
-					return;
-				default:
-					UpdateNormalState(); //Busy with a previous action
-					return;
-			}
-
-			MoveSpeed = sidleSettings.Interpolate(MoveSpeed, isFacingRight ? Controller.MovementAxis.x : -Controller.MovementAxis.x);
-		}
-
-		private void UpdateSidleDamage()
-		{
-			if (sidleTimer == 0)
-			{
-				PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, -1, SIDLE_HORIZONTAL_SPEED);
-
-				if (CurrentRailing != null)
-				{
-					float targetY = CurrentRailing.GlobalPosition.y;
-					GlobalPosition = new Vector3(GlobalPosition.x, Mathf.MoveToward(GlobalPosition.y, targetY, SIDLE_RAIL_FALL_SPEED * PhysicsManager.physicsDelta), GlobalPosition.z); //Snap to railing
-
-					if (Mathf.IsEqualApprox(GlobalPosition.y, targetY))
-					{
-						ActionState = ActionStates.Hanging;
-						sidleTimer = 5f;
-						PathFollower.HOffset = -1f; //All railings MUST be 1 unit away from the wall.
-					}
-				}
-				else
-					ApplyGravity();
-			}
-		}
-
-		private void UpdateSidleHang()
-		{
-			if (sidleTimer == 0)
-			{
-				if (VerticalSpd > 0)
-					PathFollower.HOffset = Mathf.Lerp(PathFollower.HOffset, 0, SIDLE_HORIZONTAL_SPEED);
-				else if (IsOnGround)
-					PathFollower.HOffset = 0;
-
-				ApplyGravity();
-			}
-			else if (jumpBufferTimer != 0)
-			{
-				//Sidle Recovery
-				jumpBufferTimer = 0;
-				VerticalSpd = 8;
-				sidleTimer = 0;
-			}
 		}
 		#endregion
 
@@ -947,14 +861,8 @@ namespace Project.Gameplay
 			CanJumpDash = false;
 			Lockon.ResetLockonTarget();
 
-			if (!useAutoAlignment) return;
-
-			Vector3 direction = launchData.launchDirection.RemoveVertical().Normalized();
-			if (!direction.IsNormalized()) //Direction parallel with Vector3.Up! Use launcher's forward direction instead.
-			{
-				if (newLauncher == null) return;
-				direction = newLauncher.Back().RemoveVertical().Normalized();
-			}
+			if (useAutoAlignment)
+				MovementAngle = CalculateForwardAngle(launchData.launchDirection);
 		}
 
 		private void UpdateLauncher()
@@ -976,7 +884,7 @@ namespace Project.Gameplay
 					FinishLauncher();
 					if (!IsOnGround)
 					{
-						MoveSpeed = launchData.InitialHorizontalVelocity;
+						MoveSpeed = launchData.HorizontalVelocity * .5f; //Prevent too much movement
 						VerticalSpd = launchData.FinalVerticalVelocity;
 					}
 				}
@@ -1017,7 +925,7 @@ namespace Project.Gameplay
 		public uint environmentMask;
 
 		/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs </summary>
-		public float MovementAngle { get; private set; }
+		public float MovementAngle { get; set; }
 		private float GetTargetInputAngle()
 		{
 			if (Controller.MovementAxis.IsEqualApprox(Vector2.Zero)) //Invalid input, no change
@@ -1096,6 +1004,7 @@ namespace Project.Gameplay
 			CheckCeiling();
 
 			PathFollower.Resync(); //Resync
+			UpdateRecenter();
 		}
 
 		public bool IsOnGround { get; private set; }
@@ -1109,14 +1018,9 @@ namespace Project.Gameplay
 				JustLandedOnGround = false;
 
 			Vector3 castOrigin = CenterPosition;
-			float castLength = COLLISION_RADIUS;
+			float castLength = COLLISION_RADIUS + COLLISION_PADDING;
 			if (IsOnGround)
-			{
-				castLength += .5f; //For slopes that go downwards
-
-				if (Skills.IsSpeedBreakActive) //Moving faster, more snapping needed
-					castLength += .5f;
-			}
+				castLength += MoveSpeed * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground
 			else if (VerticalSpd < 0)
 				castLength += Mathf.Abs(VerticalSpd) * PhysicsManager.physicsDelta;
 			else if (VerticalSpd > 0)
@@ -1169,17 +1073,32 @@ namespace Project.Gameplay
 			else
 			{
 				IsOnGround = false;
-
 				//Smooth world direction based on vertical speed
 				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp((VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .15f, 0f, 1f)).Normalized();
 			}
 		}
 
-		private bool ValidateGroundCast(ref RaycastHit groundHit) //Don't count walls as the ground
+		private bool ValidateGroundCast(ref RaycastHit hit) //Don't count walls as the ground
 		{
-			if (groundHit && groundHit.collidedObject.IsInGroup("wall")) groundHit = new RaycastHit();
-			return groundHit;
+			if (hit)
+			{
+				if (hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("floor")) //Unless the collider is supposed to be both
+					hit = new RaycastHit();
+			}
+
+			return hit;
 		}
+		private bool ValidateWallCast(ref RaycastHit hit)
+		{
+			if (hit)
+			{
+				if (!hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("moveable"))
+					hit = new RaycastHit();
+			}
+
+			return hit;
+		}
+
 
 		private void CheckCeiling() //Checks the ceiling.
 		{
@@ -1210,39 +1129,45 @@ namespace Project.Gameplay
 			castVector *= Mathf.Sign(MoveSpeed);
 			float castLength = COLLISION_RADIUS + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
 
-			RaycastHit centerHit = this.CastRay(CenterPosition, castVector * castLength, environmentMask, false, (Godot.Collections.Array)GetCollisionExceptions());
-			Debug.DrawRay(CenterPosition, castVector * castLength, centerHit ? Colors.Red : Colors.White);
-			if (!IsValidWallCast(centerHit))
-				centerHit = new RaycastHit();
+			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, environmentMask, false, (Godot.Collections.Array)GetCollisionExceptions());
+			Debug.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
 
-			if (centerHit && ActionState != ActionStates.JumpDash)
+			if (ValidateWallCast(ref wallHit))
 			{
-				float wallRatio = Mathf.Abs(centerHit.normal.Dot(castVector));
-
-				if (wallRatio > .9f) //Running into wall head-on
+				if (wallHit && ActionState != ActionStates.JumpDash)
 				{
-					if (Skills.IsSpeedBreakActive) //Cancel speed break
-						Skills.ToggleSpeedBreak();
+					float wallRatio = Mathf.Abs(wallHit.normal.Dot(castVector));
 
-					MoveSpeed = 0f; //Kill speed
-					GlobalTranslate(castVector * (centerHit.distance - COLLISION_RADIUS));
-				}
-				else //Reduce MoveSpd when moving against walls
-				{
-					float speedClamp = Mathf.Clamp(1.2f - wallRatio * .4f, 0f, 1f); //Arbitrary formula that works well
-					MoveSpeed *= speedClamp;
+					if (wallRatio > .9f) //Running into wall head-on
+					{
+						if (Skills.IsSpeedBreakActive) //Cancel speed break
+							Skills.ToggleSpeedBreak();
+
+						MoveSpeed = wallHit.distance - COLLISION_RADIUS; //Kill speed
+					}
+					else //Reduce MoveSpd when moving against walls
+					{
+						float speedClamp = Mathf.Clamp(1.2f - wallRatio * .4f, 0f, 1f); //Arbitrary formula that works well
+						MoveSpeed *= speedClamp;
+					}
 				}
 			}
 		}
 
-		private bool IsValidWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");
 		private const float COLLISION_PADDING = .1f;
-
 		private const float ORIENTATION_SMOOTHING = .4f;
-		private void ResetOrientation() //Resets orientation
+		private void ResetOrientation()
 		{
 			UpDirection = Vector3.Up;
-			//MovementAngle = GetParent<Node3D>().Rotation.y; //Copy movement angle from global parent
+
+			if (Stage.Checkpoint == null) //Default to parent node's position
+				Transform = Transform3D.Identity;
+			else
+				GlobalTransform = Stage.Checkpoint.GlobalTransform;
+
+			PathFollower.Resync(); //Update path follower
+			MovementAngle = PathFollower.ForwardAngle; //Reset movement angle
+
 			//TODO Re-sync visual rotations
 		}
 
@@ -1258,6 +1183,19 @@ namespace Project.Gameplay
 			GlobalTransform = t;
 		}
 		#endregion
+
+		//Gets the rotation of a given "forward" vector
+		public static float CalculateForwardAngle(Vector3 forwardDirection)
+		{
+			float dot = forwardDirection.Dot(Vector3.Up);
+			if (Mathf.Abs(dot) > .9f) //Moving vertically
+			{
+				Vector3 upDirection = instance.UpDirection.RemoveVertical().Normalized();
+				return forwardDirection.SignedAngleTo(Vector3.Up * Mathf.Sign(dot), upDirection);
+			}
+
+			return forwardDirection.Flatten().AngleTo(Vector2.Down);
+		}
 
 		#region Signals
 		private bool isCountdownActive;

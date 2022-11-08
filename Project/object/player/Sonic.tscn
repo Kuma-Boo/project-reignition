@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://dm3o3mmgewihr"]
+[gd_scene load_steps=67 format=3 uid="uid://dm3o3mmgewihr"]
 
 [ext_resource type="Resource" uid="uid://bijq2wxw8v0nx" path="res://object/player/resource/movement settings/ground/BackstepSettings.tres" id="2"]
 [ext_resource type="Resource" uid="uid://2r18q1m50o37" path="res://object/player/resource/movement settings/ground/GroundSettings.tres" id="2_qbh54"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
 [ext_resource type="PackedScene" uid="uid://dlnfilv6x7rkh" path="res://interface/gameplay/hud/lockon/Lockon.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://dokqgt2vqpcw" path="res://object/player/resource/model/Sonic.gltf" id="7_6ntt8"]
-[ext_resource type="Resource" path="res://object/player/resource/movement settings/ground/SidleSettings.tres" id="8"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterController.cs" id="10"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="11"]
 [ext_resource type="PackedScene" uid="uid://qf6je82vhwme" path="res://object/player/resource/component/Skills.tscn" id="13"]
@@ -22,7 +21,7 @@
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_wrj8s"]
+[sub_resource type="SphereMesh" id="SphereMesh_f0gyp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uookt"]
 
@@ -292,7 +291,6 @@ jumpDashGravity = 18.0
 jumpDashMaxGravity = -24.0
 backflipSpeed = 20.0
 backflipHeight = 1.4
-sidleSettings = ExtResource("8")
 environmentCollider = NodePath("CollisionShape3D")
 environmentMask = 1
 PathFollower = NodePath("Components/PathFollower")
@@ -304,13 +302,13 @@ Lockon = NodePath("Components/Lockon")
 [node name="Components" type="Node3D" parent="."]
 
 [node name="PathFollower" type="PathFollow3D" parent="Components"]
+visible = false
 rotation_mode = 4
-cubic_interp = false
 loop = false
 script = ExtResource("6_80hf8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower"]
-mesh = SubResource("SphereMesh_wrj8s")
+mesh = SubResource("SphereMesh_f0gyp")
 
 [node name="Sonic" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("7_6ntt8")]
 script = ExtResource("11")
@@ -336,10 +334,6 @@ stream = ExtResource("16")
 [node name="FootstepChannel2" type="AudioStreamPlayer" parent="Components/Sound"]
 
 [node name="Skills" parent="Components" instance=ExtResource("13")]
-speedBreakCollisionMask = 1
-accelerationJumpSpeed = 24.0
-landingDashSpeed = 32.0
-speedBreakSpeed = 54.0
 
 [node name="Lockon" parent="Components" instance=ExtResource("7")]
 
@@ -349,11 +343,10 @@ collision_layer = 2
 collision_mask = 9
 
 [node name="Trigger" type="CollisionShape3D" parent="Components/ObjectTrigger"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("SphereShape3D_uookt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("80")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

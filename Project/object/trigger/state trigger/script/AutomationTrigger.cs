@@ -3,6 +3,9 @@ using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
+	/// <summary>
+	/// Force the player to move along a path.
+	/// </summary>
 	public partial class AutomationTrigger : Area3D
 	{
 		[Export]
@@ -10,30 +13,30 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private float minimumSpeedRatio = 1f;
 		[Export]
-		private Path3D automationPath;
+		private Path3D automationPath; //Leave NULL to use the player's current path.
 		[Export]
 		private CameraSettingsResource cameraSettings;
 		[Export]
 		private float cameraBlend;
 
 		private bool isEntered;
-		private bool isProcessing;
+		private bool isActive;
 
-		private float startingOffset;
-		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingOffset);
+		private float startingProgress;
+		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingProgress);
 		private bool IsFinished => (!Mathf.IsZeroApprox(distanceToTravel) && DistanceTraveled >= distanceToTravel) || (automationPath != null && Character.PathFollower.ActivePath != automationPath);
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (isProcessing)
+			if (isActive)
 			{
 				if (IsFinished)
+				{
 					Deactivate();
+					return;
+				}
 
-				if (Character.MoveSpeed < Character.groundSettings.speed)
-					Character.MoveSpeed = Character.groundSettings.speed;
-				Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 				return;
 			}
 
@@ -54,22 +57,22 @@ namespace Project.Gameplay.Triggers
 			Character.PathFollower.SetActivePath(automationPath);
 			Character.StartExternal(Character.PathFollower, false);
 
-			startingOffset = Character.PathFollower.Progress;
-			isProcessing = true;
+			startingProgress = Character.PathFollower.Progress;
+			isActive = true;
 
 			UpdateCamera();
+		}
+
+		private void Deactivate()
+		{
+			isActive = false;
+			Character.ResetMovementState();
 		}
 
 		public void UpdateCamera()
 		{
 			if (cameraSettings != null)
 				Character.Camera.SetCameraData(cameraSettings, cameraBlend);
-		}
-
-		private void Deactivate()
-		{
-			isProcessing = false;
-			Character.CancelMovementState(CharacterController.MovementStates.External);
 		}
 
 		public void OnEntered(Area3D _) => isEntered = true;

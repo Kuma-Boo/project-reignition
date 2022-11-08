@@ -4,17 +4,16 @@ namespace Project.Gameplay.Objects
 {
 	public partial class Switch : Area3D
 	{
-		[Export]
-		public float activationLength;
-		[Export]
-		public bool invertState; //Used for when you want a switch that needs to be disabled
-
 		[Signal]
 		public delegate void ActivatedEventHandler();
 
-		private bool isActive;
+		[Export]
+		private float activationLength;
+		[Export]
+		private bool invertState; //Used for when you want a switch that needs to be disabled
 		[Export]
 		private AnimationPlayer animator;
+		private bool isActive;
 
 		public override void _Ready()
 		{

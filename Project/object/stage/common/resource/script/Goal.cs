@@ -4,7 +4,7 @@ namespace Project.Gameplay.Objects
 {
 	public partial class Goal : Area3D
 	{
-		public void OnPlayerEntered(Area3D a)
+		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
 

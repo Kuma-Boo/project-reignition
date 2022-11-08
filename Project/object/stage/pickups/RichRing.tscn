@@ -6,22 +6,6 @@
 [sub_resource type="SphereShape3D" id="3"]
 radius = 0.8
 
-[sub_resource type="Animation" id="5"]
-resource_name = "Loop"
-length = 1.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("RichRing:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 6.283, 0)]
-}
-
 [sub_resource type="Animation" id="4"]
 length = 0.001
 tracks/0/type = "value"
@@ -37,10 +21,27 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="5"]
+resource_name = "loop"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RichRing:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.283, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_38s1q"]
 _data = {
-"Loop": SubResource("5"),
-"RESET": SubResource("4")
+"RESET": SubResource("4"),
+"loop": SubResource("5")
 }
 
 [node name="RichRing" type="Area3D" node_paths=PackedStringArray("animator")]
@@ -57,9 +58,9 @@ shape = SubResource("3")
 [node name="RichRing" parent="." instance=ExtResource("2")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "Loop"
+autoplay = "loop"
 libraries = {
 "": SubResource("AnimationLibrary_38s1q")
 }
 
-[connection signal="area_entered" from="." to="." method="OnEnter"]
+[connection signal="area_entered" from="." to="." method="OnEntered"]

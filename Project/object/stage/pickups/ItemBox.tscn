@@ -1,22 +1,22 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://qpy6a6ijeyx6"]
 
-[ext_resource path="res://object/stage/pickups/resource/model/item box/ItemWings.gltf" type="PackedScene" id=1]
-[ext_resource path="res://object/stage/pickups/resource/script/ItemBox.cs" type="Script" id=2]
-[ext_resource path="res://object/stage/pickups/resource/model/item box/ItemBox.gltf" type="PackedScene" id=3]
+[ext_resource type="PackedScene" uid="uid://dwcyl3x1mi3fv" path="res://object/stage/common/resource/model/ItemWings.gltf" id="1"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/ItemBox.cs" id="2"]
+[ext_resource type="PackedScene" uid="uid://bn4nkmt8k2n1h" path="res://object/stage/common/resource/model/ItemBox.gltf" id="3"]
 
-[sub_resource type="BoxShape3D" id=6]
-extents = Vector3( 0.8, 0.7, 0.6 )
+[sub_resource type="BoxShape3D" id="6"]
+size = Vector3(1.6, 1.4, 1.2)
 
 [node name="ItemBox" type="Area3D"]
 collision_layer = 10
 collision_mask = 0
 monitoring = false
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="ItemWings" parent="." instance=ExtResource( 1 )]
+[node name="ItemWings" parent="." instance=ExtResource("1")]
 
-[node name="ItemBox" parent="." instance=ExtResource( 3 )]
+[node name="ItemBox" parent="." instance=ExtResource("3")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0 )
-shape = SubResource( 6 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("6")

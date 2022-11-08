@@ -115,8 +115,6 @@ namespace Project.Gameplay
 			IsHomingAttacking = false;
 			IsPerfectHomingAttack = false;
 
-			GD.Print("Lockon reset");
-
 			if (LockonTarget != null) //Reset Active Target
 			{
 				LockonTarget = null;

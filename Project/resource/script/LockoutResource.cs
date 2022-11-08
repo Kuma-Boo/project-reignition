@@ -163,7 +163,7 @@ namespace Project.Gameplay
 		public bool resetOnLand;
 		/// <summary> Resets any action the player may be doing (i.e. Sliding, Backflipping, etc)</summary>
 		public bool resetActions;
-		/// <summary> Lockouts with lower priorities will be unable to override higher priority lockouts </summary>
+		/// <summary> Lockouts with lower priorities will be unable to override higher priority lockouts. Priorities of -1 will be removed when overridden. </summary>
 		public int priority;
 		/// <summary> Collided enemies will be destroyed if this is enabled. Otherwise, the player can still take damage.</summary>
 		public bool invincible;

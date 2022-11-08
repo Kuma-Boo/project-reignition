@@ -9,12 +9,7 @@ namespace Project.Gameplay.Triggers
 	public partial class EventTrigger : StageTriggerModule
 	{
 		[Export]
-		private NodePath animator;
-		private AnimationPlayer _animator;
-		[Export]
-		private string eventName = "Event";
-		[Export]
-		private string resetName = "RESET";
+		private AnimationPlayer animator;
 		[Export]
 		private Node3D playerStandin;
 		[Export]
@@ -26,26 +21,23 @@ namespace Project.Gameplay.Triggers
 
 		public override void _Ready()
 		{
-			_animator = GetNode<AnimationPlayer>(animator);
 			StageSettings.instance.RegisterRespawnableObject(this);
 		}
 
 		public void Respawn()
 		{
 			wasActivated = false;
-
-			if (!string.IsNullOrEmpty(resetName))
-				_animator.Play(resetName); //Reset event
+			animator.Play("RESET"); //Reset event
 		}
 
 		public override void Activate()
 		{
 			if (wasActivated) return;
 
-			if (!string.IsNullOrEmpty(eventName))
-				_animator.Play(eventName);
+			if (!string.IsNullOrEmpty("event"))
+				animator.Play("event");
 			else
-				GD.Print($"{Name} doesn't have an event animation. Nothing will happen");
+				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen");
 
 			if (playerStandin != null)
 				Character.StartExternal(playerStandin, true);
@@ -56,6 +48,6 @@ namespace Project.Gameplay.Triggers
 
 		//Call this from the animator to play a specific animation on the player
 		public void PlayCharacterAnimation(string anim) => Character.Animator.PlayAnimation(anim);
-		public void FinishEvent() => Character.CancelMovementState(CharacterController.MovementStates.External);
+		public void FinishEvent() => Character.ResetMovementState();
 	}
 }

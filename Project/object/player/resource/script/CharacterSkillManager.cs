@@ -16,6 +16,7 @@ namespace Project.Gameplay
 
 		public override void _Ready()
 		{
+			//Determine the size of the soul gauge
 			float levelRatio = SaveManager.ActiveGameData.SoulGaugeLevel; //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
 			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; //Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
 			normalCollisionMask = Character.CollisionMask;
@@ -29,6 +30,13 @@ namespace Project.Gameplay
 		#region Skills
 		[Export]
 		public float accelerationJumpSpeed;
+
+		[Export]
+		public float unchargedGrindSpeed;
+		[Export]
+		public float chargedGrindSpeed;
+		[Export]
+		public MovementResource grindSettings; //Settings for grinding on rails
 
 		[Export]
 		public float landingDashSpeed;
@@ -133,7 +141,7 @@ namespace Project.Gameplay
 					if (IsSoulGaugeEmpty || !Character.Controller.boostButton.isHeld)//Check whether we shoudl cancel speed break
 						ToggleSpeedBreak();
 
-					if (Character.IsOnGround)
+					if (Character.IsOnGround) //Speed is only applied while on the ground
 						Character.MoveSpeed = speedBreakSpeed;
 				}
 				else
@@ -179,7 +187,6 @@ namespace Project.Gameplay
 		public void ToggleSpeedBreak()
 		{
 			Character.ResetActionState();
-
 			IsSpeedBreakActive = !IsSpeedBreakActive;
 			breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
 
