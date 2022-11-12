@@ -17,11 +17,11 @@ namespace Project.Gameplay
 			Array<Dictionary> properties = new Array<Dictionary>();
 
 			properties.Add(ExtensionMethods.CreateProperty("Starting Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
-
 			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, "None,Objective,Rings,Pearls,Enemies"));
+			properties.Add(ExtensionMethods.CreateProperty("Time Limit", Variant.Type.Int, PropertyHint.Range, "0,640"));
 
 			if (MissionType != MissionTypes.None)
-				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,512"));
+				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
 
 			properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Activation Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));
 			if (itemCycleActivationTrigger != null && !itemCycleActivationTrigger.IsEmpty)
@@ -59,6 +59,8 @@ namespace Project.Gameplay
 
 				case "Mission Type":
 					return (int)MissionType;
+				case "Time Limit":
+					return TimeLimit;
 				case "Objective Count":
 					return ObjectiveCount;
 
@@ -108,6 +110,9 @@ namespace Project.Gameplay
 				case "Mission Type":
 					MissionType = (MissionTypes)(int)value;
 					NotifyPropertyListChanged();
+					break;
+				case "Time Limit":
+					TimeLimit = (int)value;
 					break;
 				case "Objective Count":
 					ObjectiveCount = (int)value;
@@ -202,6 +207,7 @@ namespace Project.Gameplay
 		private int silverScore;
 		private int bronzeScore;
 
+		private float TimeLimit { get; set; } //Stage time limit, in seconds
 		public int ObjectiveCount { get; private set; } //What's the target amount for the current objective?
 		public MissionTypes MissionType { get; private set; } //Type of mission
 		public enum MissionTypes
@@ -283,7 +289,9 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.ObjectiveChanged);
 			GD.Print("Objective is now " + CurrentObjectiveCount);
 
-			if (CurrentObjectiveCount >= ObjectiveCount)
+			if (ObjectiveCount == 0) //i.e. Sand Oasis's "Don't break the jars!" mission.
+				FinishStage(false);
+			else if (CurrentObjectiveCount >= ObjectiveCount)
 				FinishStage(true);
 		}
 
@@ -320,8 +328,19 @@ namespace Project.Gameplay
 			if (!isUpdatingTime) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; //Add current time
-			System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
-			DisplayTime = time.ToString(TIME_LABEL_FORMAT);
+
+			if (TimeLimit == 0) //No time limit
+			{
+				System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
+				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
+			}
+			else
+			{
+				System.TimeSpan time = System.TimeSpan.FromSeconds(Mathf.Clamp(TimeLimit - CurrentTime, 0, TimeLimit));
+				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
+				if (CurrentTime > TimeLimit)
+					FinishStage(false); //Time's up!
+			}
 			EmitSignal(SignalName.TimeChanged);
 		}
 		#endregion

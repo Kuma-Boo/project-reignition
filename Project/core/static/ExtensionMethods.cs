@@ -62,15 +62,6 @@ namespace Project
 			return localPosition;
 		}
 
-		/// <summary> Converts angle to 0 <-> Mathf.Tau </summary>
-		public static float ModAngle(float value)
-		{
-			value %= Mathf.Tau; //Mod by Tau
-			if (value < 0) //Ensure value is positive
-				value += Mathf.Tau;
-			return value;
-		}
-
 		/// <summary> Returns the dot product of two angles (in radians) </summary>
 		public static float DotAngle(float a, float b)
 		{
@@ -82,17 +73,13 @@ namespace Project
 		/// <summary> Clamps an angle between two angles, in radians. </summary>
 		public static float ClampAngle(float value, float min, float max)
 		{
-			value = ModAngle(value);
-			min = ModAngle(min);
-			max = ModAngle(max);
+			min %= Mathf.Tau;
+			max %= Mathf.Tau;
+			value %= Mathf.Tau;
+			GD.Print($"{value}, {min}, {max}");
 
-			if (min > max)
-				min -= Mathf.Tau;
-
-			float minDelta = DeltaAngleRad(value, min);
-			float maxDelta = DeltaAngleRad(value, max);
-			if (minDelta < maxDelta && value > max)
-				value -= Mathf.Tau;
+			if (value < min && DeltaAngleRad(value, min) > DeltaAngleRad(value, max)) //Keep an eye on this. It may cause more issues later.
+				value += Mathf.Tau;
 
 			return Mathf.Clamp(value, min, max);
 		}
@@ -108,19 +95,19 @@ namespace Project
 		/// <summary> Returns the absolute delta between two angles (in radians) </summary>
 		public static float DeltaAngleRad(float firstAngle, float secondAngle)
 		{
-			firstAngle = ModAngle(firstAngle);
-			secondAngle = ModAngle(secondAngle);
+			firstAngle %= Mathf.Tau;
+			secondAngle %= Mathf.Tau;
 			float delta = Mathf.Abs(firstAngle - secondAngle);
 			if (delta > Mathf.Pi)
-				delta = Mathf.Tau - delta;
+				delta = Mathf.Abs(delta - Mathf.Tau);
 			return delta;
 		}
 
 		/// <summary> Moves toward an angle (in radians) </summary>
 		public static float MoveTowardAngleRad(float from, float to, float delta)
 		{
-			from = ModAngle(from);
-			to = ModAngle(to);
+			from %= Mathf.Tau;
+			to %= Mathf.Tau;
 			return from + ((to - from) * delta);
 		}
 

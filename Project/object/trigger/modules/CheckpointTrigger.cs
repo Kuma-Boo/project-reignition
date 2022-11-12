@@ -5,9 +5,6 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class CheckpointTrigger : StageTriggerModule
 	{
-		public override void Activate()
-		{
-			StageSettings.instance.SetCheckpoint(this);
-		}
+		public override void Activate() => StageSettings.instance.SetCheckpoint(this);
 	}
 }

@@ -219,6 +219,8 @@ namespace Project.Gameplay
 
 			if (Controller.jumpButton.wasPressed) //TODO jump off the rail
 			{
+				DisconnectFromRail();
+				Character.Jump(true);
 				return;
 			}
 

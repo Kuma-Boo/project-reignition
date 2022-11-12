@@ -1,0 +1,89 @@
+[gd_scene load_steps=7 format=3 uid="uid://bcsww42lqxn6w"]
+
+[ext_resource type="Script" path="res://object/stage/common/resource/script/LaunchRing.cs" id="1_17ata"]
+[ext_resource type="PackedScene" uid="uid://boex8m7dhjl24" path="res://object/stage/common/resource/model/LaunchRing.gltf" id="2_gkfym"]
+
+[sub_resource type="Animation" id="Animation_n5j51"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:launchPower")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaunchRing:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lguue"]
+resource_name = "charge"
+length = 2.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:launchPower")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.2, 1.4, 1.9, 2.4),
+"transitions": PackedFloat32Array(2, 0.5, 1, 0.5, 2, 0.5, 1),
+"update": 0,
+"values": [0.0, 0.4, 0.8, 0.8, 1.0, 0.5, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaunchRing:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 6.28319)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tk06v"]
+_data = {
+"RESET": SubResource("Animation_n5j51"),
+"charge": SubResource("Animation_lguue")
+}
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_eaqjp"]
+height = 0.4
+radius = 3.0
+
+[node name="LaunchRing" type="Area3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_17ata")
+pieces = [NodePath("LaunchRing/LaunchRing1"), NodePath("LaunchRing/LaunchRing2"), NodePath("LaunchRing/LaunchRing3"), NodePath("LaunchRing/LaunchRing4"), NodePath("LaunchRing/LaunchRing5"), NodePath("LaunchRing/LaunchRing6"), NodePath("LaunchRing/LaunchRing7"), NodePath("LaunchRing/LaunchRing8"), NodePath("LaunchRing/LaunchRing9"), NodePath("LaunchRing/LaunchRing10"), NodePath("LaunchRing/LaunchRing11"), NodePath("LaunchRing/LaunchRing12"), NodePath("LaunchRing/LaunchRing13"), NodePath("LaunchRing/LaunchRing14"), NodePath("LaunchRing/LaunchRing15"), NodePath("LaunchRing/LaunchRing16")]
+animator = NodePath("AnimationPlayer")
+
+[node name="LaunchRing" parent="." instance=ExtResource("2_gkfym")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_tk06v")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_eaqjp")
+
+[editable path="LaunchRing"]

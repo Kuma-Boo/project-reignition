@@ -33,11 +33,11 @@ namespace Project.Gameplay.Objects
 		private readonly float POWER_RESET_SPEED = .8f; //How fast to adjust the power
 
 		[Export]
-		public Node3D launchNode;
+		private Node3D launchNode;
 		[Export]
-		public Node3D armNode;
+		private Node3D armNode;
 		[Export]
-		public AnimationPlayer animator;
+		private AnimationPlayer animator;
 
 		public LaunchData GetLaunchData()
 		{
@@ -106,7 +106,6 @@ namespace Project.Gameplay.Objects
 		private void CancelCatapult()
 		{
 			if (!isControllingPlayer) return;
-
 			isControllingPlayer = false;
 
 			Vector3 destination = this.Back().RemoveVertical() * 2f + Vector3.Down * 2f;
@@ -116,7 +115,6 @@ namespace Project.Gameplay.Objects
 		public void PlayerEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-
 			if (isEnteringCatapult) return; //Already entering catapult
 
 			isEjectingPlayer = false; //Reset

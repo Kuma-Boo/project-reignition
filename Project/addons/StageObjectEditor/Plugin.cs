@@ -19,7 +19,7 @@ namespace Project.Editor
 		public override bool _Handles(Variant var)
 		{
 			return var.Obj is DriftTrigger || var.Obj is JumpTrigger || var.Obj is Launcher ||
-			var.Obj is FlyingPot || var.Obj is Catapult || var.Obj is Majin || var.Obj is SpikeBall;
+			var.Obj is FlyingPot || var.Obj is Catapult || var.Obj is LaunchRing || var.Obj is Majin || var.Obj is SpikeBall;
 		}
 
 		public override void _Edit(Variant var) => target = (Node)var.Obj;
@@ -43,6 +43,8 @@ namespace Project.Editor
 				DrawLaunchData(overlay, (target as JumpTrigger).GetLaunchData(), DEFAULT_DRAW_COLOR);
 			else if (target is Catapult)
 				DrawLaunchData(overlay, (target as Catapult).GetLaunchData(), DEFAULT_DRAW_COLOR.Lerp(Colors.Red, (target as Catapult).launchPower));
+			else if (target is LaunchRing)
+				DrawLaunchData(overlay, (target as LaunchRing).GetLaunchData(), DEFAULT_DRAW_COLOR.Lerp(Colors.Red, (target as LaunchRing).launchPower));
 			else if (target is FlyingPot)
 				UpdatePot(overlay);
 			else if (target is DriftTrigger)
@@ -117,7 +119,7 @@ namespace Project.Editor
 			if (ball.movementType == SpikeBall.MovementType.Linear)
 			{
 				Vector2 start = editorCam.UnprojectPosition(ball.GlobalPosition);
-				Vector2 end = editorCam.UnprojectPosition(ball.GlobalPosition + ball.Right() * ball.distance);
+				Vector2 end = editorCam.UnprojectPosition(ball.GlobalPosition + ball.GlobalTransform.basis * ball.movementAxis * ball.distance);
 				overlay.DrawLine(start, end, Colors.Red);
 			}
 			else
@@ -126,7 +128,7 @@ namespace Project.Editor
 				for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 				{
 					float angle = Mathf.Tau * ((float)i / PREVIEW_RESOLUTION);
-					points.Add(ball.GlobalPosition + ball.Back().Rotated(ball.Up(), angle).Normalized() * ball.distance);
+					points.Add(ball.GlobalPosition + ball.GlobalTransform.basis * ball.movementAxis.Rotated(ball.rotationAxis, angle).Normalized() * ball.distance);
 				}
 
 				Vector2 start = editorCam.UnprojectPosition(points[0]);

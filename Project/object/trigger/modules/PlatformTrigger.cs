@@ -5,22 +5,47 @@ namespace Project.Gameplay.Triggers
 	/// <summary>
 	/// Moves player with moving platforms.
 	/// </summary>
-	public partial class PlatformTrigger : StageTriggerModule
+	public partial class PlatformTrigger : Area3D
 	{
-		[Export]
-		public float calculationOffset;
+		private bool isActive;
+		private bool isInteractingWithPlayer;
 
-		//Sleep
-		public override void _Ready() => SetProcess(false);
+		private CharacterController Character => CharacterController.instance;
+
+		public override void _Ready()
+		{
+			Connect(SignalName.AreaEntered, new Callable(this, MethodName.OnEntered));
+			Connect(SignalName.AreaExited, new Callable(this, MethodName.OnExited));
+		}
 
 		public override void _Process(double _)
 		{
-			float targetYPosition = GlobalPosition.y + calculationOffset;
-			if (Character.GlobalPosition.y < targetYPosition)
-				Character.GlobalTranslate(Vector3.Up * (targetYPosition - Character.GlobalPosition.y));
+			if (isInteractingWithPlayer)
+			{
+				if (Character.IsOnGround && Character.GlobalPosition.y >= GlobalPosition.y)
+					isActive = true;
+			}
+
+			if (!isActive) return;
+
+			if (Character.GlobalPosition.y < GlobalPosition.y || Character.IsOnGround)
+				Character.GlobalTranslate(Vector3.Up * (GlobalPosition.y - Character.GlobalPosition.y));
+			else if (Character.VerticalSpd < 0) //Player is falling
+				isActive = false;
 		}
 
-		public override void Activate() => SetProcess(true); //Start Processing
-		public override void Deactivate() => SetProcess(false); //Stop Processing
+		public void OnEntered(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			isInteractingWithPlayer = true;
+		}
+
+		public void OnExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+
+			isInteractingWithPlayer = false;
+			isActive = false;
+		}
 	}
 }

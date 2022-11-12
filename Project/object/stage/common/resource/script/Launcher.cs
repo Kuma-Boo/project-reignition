@@ -124,7 +124,7 @@ namespace Project.Gameplay.Objects
 
 		public void Calculate()
 		{
-			if (middleHeight < finalHeight || middleHeight < startingHeight) //Ignore middle
+			if (middleHeight <= finalHeight || middleHeight < startingHeight) //Ignore middle
 				middleHeight = Mathf.Max(startingHeight, finalHeight);
 
 			FirstHalfTime = Mathf.Sqrt((-2 * middleHeight) / GRAVITY);

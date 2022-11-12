@@ -11,9 +11,9 @@ namespace Project.Gameplay.Hazards
 		[Export]
 		public float distance; //How far to travel, or the radius of the circle
 		[Export]
-		private Vector3 movementAxis = new Vector3(0, 1, 0); //Movement axis, in LOCAL SPACE.
+		public Vector3 movementAxis = new Vector3(0, 1, 0); //Movement axis, in LOCAL SPACE.
 		[Export]
-		private Vector3 rotationAxis = new Vector3(0, 1, 0); //Rotation axis in LOCAL SPACE. Used for circle movements.
+		public Vector3 rotationAxis = new Vector3(0, 1, 0); //Rotation axis in LOCAL SPACE. Used for circle movements.
 		[Export]
 		private bool startingMovementDirection;
 		private int MovementDirection => startingMovementDirection ? 1 : -1;

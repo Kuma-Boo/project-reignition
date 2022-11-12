@@ -232,15 +232,12 @@ namespace Project.Gameplay.Bosses
 			duelCamera.staticPosition.z = -DUEL_DISTANCE * .5f;
 			Character.Camera.SetCameraData(duelCamera, 0f);
 
-			//Toggle sidescrolling
-			Character.isSideScroller = true;
-			Character.isFacingRight = true;
+			//TODO Toggle sidescrolling
 		}
 
 		//Move everything back to the start and finish transition
 		private void FinishDuel()
 		{
-			Character.isSideScroller = false;
 			EmitSignal(SignalName.DuelCompleted);
 		}
 

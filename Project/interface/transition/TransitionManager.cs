@@ -41,7 +41,7 @@ namespace Project.Core
 			else
 			{
 				animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
-				animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
+				animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
 			}
 		}
 
@@ -51,7 +51,7 @@ namespace Project.Core
 				animator.PlaybackSpeed = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
 
 			animator.PlayBackwards("fade");
-			animator.Connect("animation_finished", new Callable(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
+			animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 		}
 		#endregion
 

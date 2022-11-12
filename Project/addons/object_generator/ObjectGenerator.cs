@@ -28,7 +28,6 @@ namespace Project.Editor
 		public float spacing;
 		public float ringRatio = 1f;
 
-		[Export]
 		public Path3D path;
 		public float progressOffset; //Used whenever path isn't getting the proper point
 		public Curve hOffsetCurve;

@@ -149,7 +149,7 @@ namespace Project.Gameplay
 				else //Forward direction is based on PathFollower's orientation
 				{
 					//Using a flattened vector because 3d vectors cause issues when traveling down slopes
-					CurrentYaw = PathFollower.Back().Flatten().Normalized().AngleTo(Vector2.Down);
+					CurrentYaw = PathFollower.Forward().Flatten().Normalized().AngleTo(Vector2.Down);
 				}
 
 				CurrentYaw += Mathf.DegToRad(targetSettings.viewAngle.y); //Add
@@ -179,7 +179,7 @@ namespace Project.Gameplay
 				return targetSettings.staticPosition;
 
 			Vector3 targetPosition = Character.CenterPosition;
-			targetPosition += _calculationRoot.Forward() * targetSettings.distance;
+			targetPosition += _calculationRoot.Back() * targetSettings.distance;
 			targetPosition += _calculationRoot.Up() * targetSettings.height;
 			return targetPosition;
 		}
@@ -245,7 +245,7 @@ namespace Project.Gameplay
 			if (e is InputEventMouseMotion)
 			{
 				_cameraRoot.RotateY(Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.x) * MOUSE_SENSITIVITY);
-				_cameraGimbal.RotateX(Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.y) * MOUSE_SENSITIVITY);
+				_cameraGimbal.RotateX(Mathf.DegToRad((e as InputEventMouseMotion).Relative.y) * MOUSE_SENSITIVITY);
 				_cameraGimbal.Rotation = Vector3.Right * Mathf.Clamp(_cameraGimbal.Rotation.x, -Mathf.Pi * .5f, Mathf.Pi * .5f);
 			}
 			else if (e is InputEventMouseButton emb)
@@ -268,25 +268,6 @@ namespace Project.Gameplay
 			}
 
 			e.Dispose();
-		}
-		#endregion
-
-		#region Reflections
-		[Export]
-		private Camera3D reflectionCamera;
-
-		public void UpdateReflection(Vector3 planePosition, Vector3 planeNormal)
-		{
-			reflectionCamera.Fov = _camera.Fov;
-
-			//Update Position
-			float projectionLength = planeNormal.Dot(_camera.GlobalPosition - planePosition);
-			reflectionCamera.GlobalPosition = _camera.GlobalPosition - planeNormal * projectionLength * 2f;
-
-			//Update Rotation
-			Vector3 upDirection = _camera.Up().Reflect(planeNormal);
-			Vector3 forwardDirection = _camera.Forward().Reflect(planeNormal);
-			reflectionCamera.LookAt(reflectionCamera.GlobalPosition + forwardDirection, upDirection);
 		}
 		#endregion
 	}

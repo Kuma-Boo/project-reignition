@@ -63,8 +63,6 @@ namespace Project.Gameplay.Triggers
 
 			//Apply state
 			Character.Skills.IsSpeedBreakEnabled = false;
-			Character.isSideScroller = true; //Force side scroller
-			Character.isFacingRight = isFacingRight; //Update facing direction
 
 			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, Character.PathFollower.ForwardAngle);
 			if (dot < 0)

@@ -1,0 +1,155 @@
+[gd_scene load_steps=9 format=3 uid="uid://c4gwcv45akikp"]
+
+[ext_resource type="PackedScene" uid="uid://b7m6ycj60sqx5" path="res://area/stage/3 evil foundry/data/environment/object/model/scrap/ScrapClaw.gltf" id="1_7go6u"]
+[ext_resource type="Script" path="res://area/stage/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
+[ext_resource type="PackedScene" uid="uid://cptiijnhwgwjm" path="res://area/stage/3 evil foundry/data/environment/object/model/scrap/HangingScrap.gltf" id="2_rhjaa"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wydx8"]
+radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yocea"]
+size = Vector3(4, 1.2, 4)
+
+[sub_resource type="Animation" id="Animation_tapwj"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HangingScrap:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -10.9, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Area3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ScrapClaw/AnimationPlayer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["RESET", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_8088o"]
+resource_name = "drop"
+length = 2.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScrapClaw/AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["claw-open", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Area3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HangingScrap:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(3, 1),
+"update": 0,
+"values": [Vector3(0, -10.9, 0), Vector3(0, -40, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uxish"]
+_data = {
+"RESET": SubResource("Animation_tapwj"),
+"drop": SubResource("Animation_8088o")
+}
+
+[node name="HangingScrap" type="Node3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_cv8j3")
+animator = NodePath("AnimationPlayer")
+
+[node name="ScrapClaw" parent="." instance=ExtResource("1_7go6u")]
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.7, 0)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_wydx8")
+
+[node name="HangingScrap" type="StaticBody3D" parent="." groups=["floor", "wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.9, 0)
+
+[node name="HangingScrap" parent="HangingScrap" instance=ExtResource("2_rhjaa")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HangingScrap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0)
+shape = SubResource("BoxShape3D_yocea")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_uxish")
+}
+
+[connection signal="area_entered" from="Area3D" to="." method="OnEntered"]

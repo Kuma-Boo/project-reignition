@@ -1,0 +1,102 @@
+[gd_scene load_steps=7 format=3 uid="uid://db770ujvjdio4"]
+
+[ext_resource type="Script" path="res://object/stage/common/resource/script/LaunchRing.cs" id="1_17ata"]
+[ext_resource type="PackedScene" uid="uid://bpnpdcveslbdp" path="res://object/stage/common/resource/model/LaunchRingSpike.gltf" id="2_jnkpc"]
+
+[sub_resource type="Animation" id="Animation_n5j51"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:launchPower")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaunchRingSpike:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lguue"]
+resource_name = "charge"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:launchPower")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.2, 1.4, 1.9, 2.4),
+"transitions": PackedFloat32Array(2, 0.5, 1, 0.5, 2, 0.5, 1),
+"update": 0,
+"values": [0.0, 0.4, 0.8, 0.8, 1.0, 0.5, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaunchRingSpike:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 6.28319)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"DamagePlayer"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tk06v"]
+_data = {
+"RESET": SubResource("Animation_n5j51"),
+"charge": SubResource("Animation_lguue")
+}
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_eaqjp"]
+height = 0.4
+radius = 3.0
+
+[node name="LaunchRingSpike" type="Area3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_17ata")
+pieces = [NodePath("LaunchRingSpike/LaunchRingSpike1"), NodePath("LaunchRingSpike/LaunchRingSpike2"), NodePath("LaunchRingSpike/LaunchRingSpike3"), NodePath("LaunchRingSpike/LaunchRingSpike4"), NodePath("LaunchRingSpike/LaunchRingSpike5"), NodePath("LaunchRingSpike/LaunchRingSpike6"), NodePath("LaunchRingSpike/LaunchRingSpike7"), NodePath("LaunchRingSpike/LaunchRingSpike8"), NodePath("LaunchRingSpike/LaunchRingSpike9"), NodePath("LaunchRingSpike/LaunchRingSpike10"), NodePath("LaunchRingSpike/LaunchRingSpike11"), NodePath("LaunchRingSpike/LaunchRingSpike12"), NodePath("LaunchRingSpike/LaunchRingSpike13"), NodePath("LaunchRingSpike/LaunchRingSpike14"), NodePath("LaunchRingSpike/LaunchRingSpike15"), NodePath("LaunchRingSpike/LaunchRingSpike16")]
+animator = NodePath("AnimationPlayer")
+
+[node name="LaunchRingSpike" parent="." instance=ExtResource("2_jnkpc")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_tk06v")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_eaqjp")
+
+[editable path="LaunchRingSpike"]
