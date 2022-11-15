@@ -95,7 +95,7 @@ namespace Project.Gameplay.Objects
 		private void OnEnteredPot()
 		{
 			isControllingPlayer = true;
-			Character.StartExternal(this, true);
+			Character.StartExternal(this);
 			Character.Visible = false;
 		}
 

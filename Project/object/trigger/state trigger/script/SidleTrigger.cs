@@ -34,7 +34,7 @@ namespace Project.Gameplay.Triggers
 		private void StartSidle()
 		{
 			isActive = true;
-			Character.StartExternal(Character.PathFollower);
+			Character.StartExternal(Character.PathFollower, .2f);
 			GD.PrintErr("Pathfollower may be inaccurate!!!");
 		}
 

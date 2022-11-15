@@ -85,7 +85,7 @@ namespace Project.Gameplay.Objects
 		{
 			isControllingPlayer = true;
 			isEnteringCatapult = false;
-			Character.StartExternal(launchNode, true);
+			Character.StartExternal(launchNode);
 			launchPower = 0f;
 			launchPowerVelocity = 0f;
 		}

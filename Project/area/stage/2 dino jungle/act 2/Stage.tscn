@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3]
+[gd_scene load_steps=103 format=3 uid="uid://d21bvlwutafu"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_lg7xo"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://object/player/resource/movement settings/stage completion/StopLockout.tres" id="3_mp2jf"]
@@ -62,7 +62,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="32"]
 [ext_resource type="Resource" path="res://area/stage/2 dino jungle/act 2/data/camera/CAM_Split.tres" id="34"]
 [ext_resource type="Resource" path="res://area/stage/2 dino jungle/act 2/data/camera/CAM_SplitMain.tres" id="35"]
-[ext_resource type="Environment" uid="uid://co6uwp4i2peka" path="res://area/stage/2 dino jungle/data/environment/Environment.tres" id="35_v2jvs"]
+[ext_resource type="Environment" path="res://area/stage/2 dino jungle/data/environment/Environment.tres" id="35_v2jvs"]
 [ext_resource type="Resource" path="res://area/stage/2 dino jungle/act 2/data/camera/CAM_SplitRight.tres" id="36"]
 [ext_resource type="PackedScene" uid="uid://c4hyuioqctd1p" path="res://area/stage/2 dino jungle/act 2/data/environment/collision/Collision.tscn" id="36_odp0v"]
 [ext_resource type="PackedScene" uid="uid://cv8wawfkxffx" path="res://area/stage/2 dino jungle/data/skybox/Skybox.tscn" id="36_q6u7u"]
@@ -426,7 +426,9 @@ _data = {
 
 [node name="PteroEggAct" type="Node3D" parent="."]
 script = ExtResource("2_lg7xo")
+"Starting Path" = null
 "Mission Type" = 1
+"Time Limit" = 0.0
 "Objective Count" = 4
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
@@ -438,7 +440,7 @@ script = ExtResource("2_lg7xo")
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = ExtResource("3_mp2jf")
-Completion/Animator = null
+Completion/Animator = NodePath("")
 
 [node name="Eggs" type="Node3D" parent="PteroEggAct"]
 script = ExtResource("3_xlcis")
@@ -1021,14 +1023,12 @@ transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, 
 transform = Transform3D(0.612599, 0, 0.790394, 0, 1, 0, -0.790394, 0, 0.612599, -98.5681, -5.875, 145.687)
 moveSpeed = 4.0
 distance = 10.0
-isMovingRight = true
 movementType = 1
 
 [node name="SpikeBall2" parent="PteroEggAct/Boat2" instance=ExtResource("11_mtl2e")]
 transform = Transform3D(0.727373, 0, 0.686243, 0, 1, 0, -0.686243, 0, 0.727373, -114.02, -5.875, 141.898)
 moveSpeed = 4.0
 distance = 18.0
-isMovingRight = true
 startingOffset = 0.4
 movementType = 1
 
@@ -1524,7 +1524,6 @@ transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 0.9, 4.21332, -5.34167, 14.493
 [node name="Dino" type="Node3D" parent="Common/Environment"]
 transform = Transform3D(-0.424705, 0, -0.905332, 0, 1, 0, 0.905332, 0, -0.424705, -84.862, -20.314, -30.62)
 script = ExtResource("32")
-animator = NodePath("AnimationPlayer")
 
 [node name="DinoApatos" parent="Common/Environment/Dino" instance=ExtResource("12_gymk4")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
@@ -2023,10 +2022,10 @@ environment = ExtResource("35_v2jvs")
 [connection signal="Activated" from="Common/Environment/Dino" to="Common/Objects/DinoBridge/DinoSwitchLeft" method="Activate"]
 [connection signal="Activated" from="Common/Objects/Spring" to="Common/Objects/Spring/Camera3D" method="Activate"]
 [connection signal="Activated" from="Common/Objects/BoatSection1/End" to="Common/Objects/BoatSection1/Boat" method="Despawn"]
-[connection signal="Activated" from="Common/Objects/BoatSection2/Start1" to="Common/Objects/BoatSection2/WallCull1" method="ActivateNode"]
-[connection signal="Activated" from="Common/Objects/BoatSection2/Start1" to="Common/Objects/BoatSection2/WallCull2" method="DeactivateNode"]
-[connection signal="Activated" from="Common/Objects/BoatSection2/Start2" to="Common/Objects/BoatSection2/WallCull1" method="DeactivateNode"]
-[connection signal="Activated" from="Common/Objects/BoatSection2/Start2" to="Common/Objects/BoatSection2/WallCull2" method="ActivateNode"]
+[connection signal="Activated" from="Common/Objects/BoatSection2/Start1" to="Common/Objects/BoatSection2/WallCull1" method="Activate"]
+[connection signal="Activated" from="Common/Objects/BoatSection2/Start1" to="Common/Objects/BoatSection2/WallCull2" method="Deactivate"]
+[connection signal="Activated" from="Common/Objects/BoatSection2/Start2" to="Common/Objects/BoatSection2/WallCull1" method="Deactivate"]
+[connection signal="Activated" from="Common/Objects/BoatSection2/Start2" to="Common/Objects/BoatSection2/WallCull2" method="Activate"]
 [connection signal="Activated" from="Common/Objects/BoatSection2/End" to="Common/Objects/BoatSection2/Boat1" method="Despawn"]
 [connection signal="Activated" from="Common/Objects/BoatSection2/End" to="Common/Objects/BoatSection2/Boat2" method="Despawn"]
 [connection signal="Activated" from="Common/Objects/BoatSection3/End" to="Common/Objects/BoatSection3/Boat" method="Despawn"]

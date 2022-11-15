@@ -1,42 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://21pykhrm72xx"]
+[gd_scene load_steps=11 format=3 uid="uid://21pykhrm72xx"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://7q1qood2upqf" path="res://object/stage/pickups/resource/model/rings/Ring.gltf" id="2"]
-[ext_resource type="Texture2D" uid="uid://cr0mgarekxinl" path="res://object/stage/pickups/resource/model/rings/texture/ring particle.png" id="3"]
+[ext_resource type="Material" uid="uid://bp84que225vth" path="res://object/stage/pickups/resource/model/rings/material/RingCollectionProcessMaterial.tres" id="3_h25yq"]
+[ext_resource type="PlaneMesh" uid="uid://bn5ftksxne0vb" path="res://object/stage/pickups/resource/model/rings/material/RingCollection.tres" id="4_6xpsy"]
+[ext_resource type="AudioStream" uid="uid://eivd5wvygewi" path="res://sound/sfx/objects/ring.wav" id="4_v4ywg"]
 
 [sub_resource type="SphereShape3D" id="3"]
-
-[sub_resource type="Gradient" id="Gradient_qjyu1"]
-offsets = PackedFloat32Array(0, 0.66065, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ugoro"]
-gradient = SubResource("Gradient_qjyu1")
-width = 64
-
-[sub_resource type="ParticleProcessMaterial" id="17"]
-lifetime_randomness = 0.4
-emission_shape = 2
-emission_sphere_radius = 0.5
-gravity = Vector3(0, 0, 0)
-scale_min = 0.1
-scale_max = 0.4
-color_ramp = SubResource("GradientTexture1D_ugoro")
-
-[sub_resource type="StandardMaterial3D" id="14"]
-transparency = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("3")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
-[sub_resource type="PlaneMesh" id="18"]
-material = SubResource("14")
-orientation = 2
 
 [sub_resource type="Animation" id="5"]
 length = 0.001
@@ -91,6 +61,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="15"]
 resource_name = "collect"
+length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -122,7 +93,7 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(1.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -154,6 +125,20 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="4"]
@@ -200,8 +185,12 @@ lifetime = 0.2
 one_shot = true
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
-process_material = SubResource("17")
-draw_pass_1 = SubResource("18")
+process_material = ExtResource("3_h25yq")
+draw_pass_1 = ExtResource("4_6xpsy")
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_v4ywg")
+bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "loop"

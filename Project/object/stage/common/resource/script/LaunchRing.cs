@@ -37,7 +37,12 @@ namespace Project.Gameplay.Objects
 
 		[Export]
 		private AnimationPlayer animator;
+		[Export]
+		private AudioStreamPlayback sfx;
 		private bool isActive;
+		private bool isRecentered;
+		private Vector3 recenterVelocity;
+		private readonly float RECENTER_SPEED = .8f;
 
 		private CharacterController Character => CharacterController.instance;
 		private InputManager.Controller Controller => InputManager.controller;
@@ -59,12 +64,22 @@ namespace Project.Gameplay.Objects
 
 			if (isActive)
 			{
-				if (Controller.jumpButton.wasPressed) //Disable launcher
-					DropPlayer();
-				else if (Controller.actionButton.wasPressed)
+				if (isRecentered)
 				{
-					Character.StartLauncher(GetLaunchData());
-					Character.CanJumpDash = true;
+					if (Controller.jumpButton.wasPressed) //Disable launcher
+						DropPlayer();
+					else if (Controller.actionButton.wasPressed)
+					{
+						DropPlayer();
+						Character.StartLauncher(GetLaunchData());
+						Character.CanJumpDash = true;
+					}
+				}
+				else //Recenter player
+				{
+					Character.CenterPosition = ExtensionMethods.SmoothDamp(Character.CenterPosition, GlobalPosition, ref recenterVelocity, RECENTER_SPEED * PhysicsManager.physicsDelta);
+					if (Character.CenterPosition.IsEqualApprox(GlobalPosition))
+						isRecentered = true;
 				}
 			}
 		}
@@ -101,8 +116,21 @@ namespace Project.Gameplay.Objects
 
 		private void OnEntered(Area3D a)
 		{
+			if (!a.IsInGroup("player")) return;
+
 			animator.Play("charge");
 			Character.StartExternal();
+
+			isActive = true;
+			isRecentered = false;
+			recenterVelocity = Vector3.Zero;
+			Character.MovementAngle = CharacterController.CalculateForwardAngle(this.Forward());
+		}
+
+		private void OnExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			animator.Play("RESET", .2 * (1 + launchPower));
 		}
 
 		public void DamagePlayer()

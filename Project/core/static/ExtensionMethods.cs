@@ -62,6 +62,20 @@ namespace Project
 			return localPosition;
 		}
 
+		/// <summary>
+		/// Manual implementation since Array.IndexOf() doesn't seem to work on StringNames.
+		/// </summary>
+		public static int GetStringNameIndex(this Array<StringName> a, StringName s)
+		{
+			for (int i = 0; i < a.Count; i++)
+			{
+				if (s == a[i])
+					return i;
+			}
+
+			return -1;
+		}
+
 		/// <summary> Returns the dot product of two angles (in radians) </summary>
 		public static float DotAngle(float a, float b)
 		{
@@ -70,36 +84,52 @@ namespace Project
 			return dot;
 		}
 
-		/// <summary> Clamps an angle between two angles, in radians. </summary>
-		public static float ClampAngle(float value, float min, float max)
-		{
-			min %= Mathf.Tau;
-			max %= Mathf.Tau;
-			value %= Mathf.Tau;
-			GD.Print($"{value}, {min}, {max}");
-
-			if (value < min && DeltaAngleRad(value, min) > DeltaAngleRad(value, max)) //Keep an eye on this. It may cause more issues later.
-				value += Mathf.Tau;
-
-			return Mathf.Clamp(value, min, max);
-		}
-
-		/// <summary> For when you have an reference angle and a range, but are too lazy to calculate a min and max. </summary>
+		/// <summary> Clamps an angle's distance to the reference angle, in radians. </summary>
 		public static float ClampAngleRange(float value, float reference, float range)
 		{
-			float clampMin = reference - Mathf.Abs(range);
-			float clampMax = reference + Mathf.Abs(range);
-			return ClampAngle(value, clampMin, clampMax);
+			range = Mathf.Abs(range); //Ensure range is positive
+			reference = ModAngle(reference);
+			value = ModAngle(value);
+			//Attempt to keep value and reference within range of Mathf.PI
+			if (value < reference - Mathf.Pi)
+				value += Mathf.Tau;
+			else if (value > reference + Mathf.Pi)
+				value -= Mathf.Tau;
+
+			float min = reference - range;
+			float max = reference + range;
+
+			if (value > min && value < max) //Input is between the two angles, no need to clamp
+				return value;
+
+			//Clamping needed
+			if (DeltaAngleRad(value, min) < DeltaAngleRad(value, max)) //Closer to min angle
+				return min;
+			else //Closer to max angle
+				return max;
+		}
+
+		/// <summary> Converts an angle to exist between 0 <-> Mathf.Tau
+		public static float ModAngle(float angle)
+		{
+			angle %= Mathf.Tau;
+			if (angle < 0)
+				angle += Mathf.Tau;
+			return angle;
 		}
 
 		/// <summary> Returns the absolute delta between two angles (in radians) </summary>
-		public static float DeltaAngleRad(float firstAngle, float secondAngle)
+		public static float DeltaAngleRad(float firstAngle, float secondAngle) => Mathf.Abs(SignedDeltaAngleRad(firstAngle, secondAngle));
+		/// <summary> Returns the delta between two angles (in radians) </summary>
+		public static float SignedDeltaAngleRad(float firstAngle, float secondAngle)
 		{
 			firstAngle %= Mathf.Tau;
 			secondAngle %= Mathf.Tau;
-			float delta = Mathf.Abs(firstAngle - secondAngle);
+			float delta = firstAngle - secondAngle;
 			if (delta > Mathf.Pi)
-				delta = Mathf.Abs(delta - Mathf.Tau);
+				delta -= Mathf.Tau;
+			else if (delta < -Mathf.Pi)
+				delta += Mathf.Tau;
 			return delta;
 		}
 

@@ -1,21 +1,15 @@
-[gd_scene load_steps=67 format=3 uid="uid://dm3o3mmgewihr"]
+[gd_scene load_steps=61 format=3 uid="uid://dm3o3mmgewihr"]
 
 [ext_resource type="Resource" uid="uid://bijq2wxw8v0nx" path="res://object/player/resource/movement settings/ground/BackstepSettings.tres" id="2"]
 [ext_resource type="Resource" uid="uid://2r18q1m50o37" path="res://object/player/resource/movement settings/ground/GroundSettings.tres" id="2_qbh54"]
 [ext_resource type="Resource" uid="uid://bsdyr3nwbjt2s" path="res://object/player/resource/movement settings/aerial/AirSettings.tres" id="3_ywh7m"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
-[ext_resource type="PackedScene" uid="uid://dlnfilv6x7rkh" path="res://interface/gameplay/hud/lockon/Lockon.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://b6m53bp56bkf1" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://dokqgt2vqpcw" path="res://object/player/resource/model/Sonic.gltf" id="7_6ntt8"]
+[ext_resource type="PackedScene" uid="uid://cyd2ep1n5php3" path="res://object/player/resource/component/Sound.tscn" id="8_ni1dd"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterController.cs" id="10"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="11"]
 [ext_resource type="PackedScene" uid="uid://qf6je82vhwme" path="res://object/player/resource/component/Skills.tscn" id="13"]
-[ext_resource type="Script" path="res://object/player/resource/script/CharacterSound.cs" id="15"]
-[ext_resource type="AudioStream" uid="uid://xpupnecr1hc6" path="res://sound/sfx/player/en/VOICE_E_2.wav" id="16"]
-[ext_resource type="AudioStream" uid="uid://cskbn8mwowjpr" path="res://sound/sfx/player/en/VOICE_E_24.wav" id="17"]
-[ext_resource type="AudioStream" uid="uid://bddbm1etyfgdm" path="res://sound/sfx/player/ja/VOICE_J_24.wav" id="18"]
-[ext_resource type="AudioStream" uid="uid://bcsslx745eoka" path="res://sound/sfx/player/ja/VOICE_J_2.wav" id="19"]
-[ext_resource type="AudioStream" uid="uid://nk8g3qa67l4" path="res://sound/sfx/player/PLAYER_5.wav" id="20"]
-[ext_resource type="AudioStream" uid="uid://cqcdwe2b7phjl" path="res://sound/sfx/player/PLAYER_75.wav" id="21"]
 
 [sub_resource type="Curve" id="Curve_0y4at"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -316,24 +310,9 @@ animator = NodePath("../../AnimationTree")
 
 [node name="VFX" type="Node3D" parent="Components/Sonic"]
 
-[node name="Sound" type="Node" parent="Components" node_paths=PackedStringArray("voiceChannel")]
-script = ExtResource("15")
-enClips = [ExtResource("16"), ExtResource("17")]
-jaClips = [ExtResource("19"), ExtResource("18")]
-actionClips = [ExtResource("20"), ExtResource("21")]
-sfxChannels = [NodePath("ActionChannel"), NodePath("FootstepChannel"), NodePath("FootstepChannel2")]
-voiceChannel = NodePath("VoiceChannel")
-
-[node name="VoiceChannel" type="AudioStreamPlayer" parent="Components/Sound"]
-stream = ExtResource("16")
-
-[node name="ActionChannel" type="AudioStreamPlayer" parent="Components/Sound"]
-
-[node name="FootstepChannel" type="AudioStreamPlayer" parent="Components/Sound"]
-
-[node name="FootstepChannel2" type="AudioStreamPlayer" parent="Components/Sound"]
-
 [node name="Skills" parent="Components" instance=ExtResource("13")]
+
+[node name="Sound" parent="Components" instance=ExtResource("8_ni1dd")]
 
 [node name="Lockon" parent="Components" instance=ExtResource("7")]
 

@@ -10,10 +10,6 @@ namespace Project.Gameplay
 	{
 		private CharacterController Character => CharacterController.instance;
 
-		[Export(PropertyHint.Layers3dPhysics)]
-		public uint speedBreakCollisionMask;
-		private uint normalCollisionMask;
-
 		public override void _Ready()
 		{
 			//Determine the size of the soul gauge
@@ -59,6 +55,9 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Soul Skills
+		[Export(PropertyHint.Layers3dPhysics)]
+		public uint speedBreakCollisionMask;
+		private uint normalCollisionMask;
 		public bool IsTimeBreakEnabled
 		{
 			get => isTimeBreakEnabled;
@@ -81,6 +80,19 @@ namespace Project.Gameplay
 		}
 		private bool isSpeedBreakEnabled = true;
 		private bool isTimeBreakEnabled = true;
+
+		//Audio clips
+		[Export]
+		private AudioStream speedBreakActivate;
+		[Export]
+		private AudioStream speedBreakDeactivate;
+		[Export]
+		private AudioStream timeBreakActivate;
+		//Audio players
+		[Export]
+		private AudioStreamPlayer breakSkillSfx;
+		[Export]
+		private AudioStreamPlayer heartbeatSfx;
 
 		[Export]
 		public float speedBreakSpeed; //Movement speed during speed break
@@ -122,7 +134,11 @@ namespace Project.Gameplay
 
 				return;
 			}
-			else if (breakTimer != 0) return; //Cooldown
+			else
+			{
+				SoundManager.instance.FadeSFX(heartbeatSfx, 80f); //Fade out sfx
+				if (breakTimer != 0) return; //Cooldown
+			}
 
 			if (Character.Controller.breakButton.wasPressed && !IsSpeedBreakActive)
 			{
@@ -137,6 +153,12 @@ namespace Project.Gameplay
 			{
 				if (breakTimer == 0)
 				{
+					if (breakSkillSfx.Stream != speedBreakActivate) //Play sfx when boost starts
+					{
+						breakSkillSfx.Stream = speedBreakActivate;
+						breakSkillSfx.Play();
+					}
+
 					ModifySoulGauge(-1); //Drain soul gauge
 					if (IsSoulGaugeEmpty || !Character.Controller.boostButton.isHeld)//Check whether we shoudl cancel speed break
 						ToggleSpeedBreak();
@@ -170,14 +192,20 @@ namespace Project.Gameplay
 
 			if (IsTimeBreakActive)
 			{
-				Character.Sound.PlayVoice(1);
+				Character.Sound.PlayVoice("time break");
 				BGMPlayer.SetStageMusicVolume(-80f);
+
+				//Reset volume and play
+				heartbeatSfx.VolumeDb = 0f;
+				heartbeatSfx.Play();
+
+				breakSkillSfx.Stream = timeBreakActivate;
+				breakSkillSfx.Play();
 			}
 			else
 			{
 				breakTimer = BREAK_SKILLS_COOLDOWN;
 				BGMPlayer.SetStageMusicVolume(0f);
-
 
 				if (HeadsUpDisplay.instance != null)
 					HeadsUpDisplay.instance.UpdateSoulGaugeColor(IsSoulGaugeCharged);
@@ -192,11 +220,14 @@ namespace Project.Gameplay
 
 			if (IsSpeedBreakActive)
 			{
-				Character.Sound.PlayVoice(0);
+				Character.Sound.PlayVoice("speed break");
 				Character.CollisionMask = speedBreakCollisionMask; //Don't collide with any objects
 			}
 			else
 			{
+				breakSkillSfx.Stream = speedBreakDeactivate;
+				breakSkillSfx.Play();
+
 				Character.MoveSpeed = Character.groundSettings.speed; //Override speed
 				Character.CollisionMask = normalCollisionMask; //Reset collision layer
 			}

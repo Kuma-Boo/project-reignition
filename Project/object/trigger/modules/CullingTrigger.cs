@@ -21,8 +21,8 @@ namespace Project.Gameplay.Triggers
 			if (modifyTree)
 				spawnData = new SpawnData(targetNode.GetParent(), targetNode.Transform);
 
-			Respawn();
 			StageSettings.instance.RegisterRespawnableObject(this);
+			Respawn();
 		}
 
 		public override void _ExitTree()
@@ -35,10 +35,10 @@ namespace Project.Gameplay.Triggers
 		{
 			//Disable the node on startup?
 			if (!startEnabled)
-				CallDeferred(nameof(DeactivateNode));
+				Deactivate();
 		}
 
-		public void ActivateNode()
+		public override void Activate()
 		{
 			if (modifyTree)
 			{
@@ -53,7 +53,7 @@ namespace Project.Gameplay.Triggers
 			targetNode.SetPhysicsProcess(true);
 		}
 
-		public void DeactivateNode()
+		public override void Deactivate()
 		{
 			if (modifyTree)
 			{

@@ -17,6 +17,7 @@ namespace Project.Gameplay
 
 			properties.Add(ExtensionMethods.CreateProperty("Rail Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
 			properties.Add(ExtensionMethods.CreateProperty("Invisible Rail Settings/Enabled", Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty("Align Camera", Variant.Type.Bool));
 
 			if (isInvisibleRail)
 			{
@@ -38,6 +39,8 @@ namespace Project.Gameplay
 			{
 				case "Rail Path":
 					return railPathPath;
+				case "Align Camera":
+					return alignCamera;
 
 				case "Invisible Rail Settings/Enabled":
 					return isInvisibleRail;
@@ -66,6 +69,9 @@ namespace Project.Gameplay
 			{
 				case "Rail Path":
 					railPathPath = (NodePath)value;
+					break;
+				case "Align Camera":
+					alignCamera = (bool)value;
 					break;
 
 				case "Invisible Rail Settings/Enabled":
@@ -101,6 +107,7 @@ namespace Project.Gameplay
 		}
 		#endregion
 
+		private bool alignCamera = true;
 		private Path3D railPath;
 		private NodePath railPathPath;
 		private PathFollow3D pathFollower;
@@ -118,9 +125,14 @@ namespace Project.Gameplay
 		public int RailLength { get; set; } //Only used on invisible rails
 		private bool isInvisibleRail;
 
+		[Export]
+		private AudioStreamPlayer sfx;
+		private bool isFadingSFX;
+
 		private bool isActive; //Is the rail active?
 		private bool isInteractingWithPlayer; //Check for collisions?
 
+		private CameraController Camera => CameraController.instance;
 		private CharacterController Character => CharacterController.instance;
 		private CharacterSkillManager Skills => Character.Skills;
 		private InputManager.Controller Controller => InputManager.controller;
@@ -168,6 +180,9 @@ namespace Project.Gameplay
 				return;
 			}
 
+			if (isFadingSFX)
+				isFadingSFX = SoundManager.instance.FadeSFX(sfx);
+
 			if (isActive)
 				UpdateRail();
 			else if (isInteractingWithPlayer)
@@ -201,8 +216,15 @@ namespace Project.Gameplay
 			isCharging = false;
 			chargeAmount = 0;
 
+			isFadingSFX = false;
+			sfx.VolumeDb = 0f; //Reset volume
+			sfx.Play();
+
 			if (isInvisibleRail)
+			{
 				railModel.Visible = true;
+				UpdateInvisibleRailPosition();
+			}
 
 			Character.StartExternal(pathFollower);
 			Character.MoveSpeed = Skills.grindSettings.speed;
@@ -211,13 +233,19 @@ namespace Project.Gameplay
 
 		private void UpdateRail()
 		{
+			if (alignCamera) //Align the camera to follow movement direction
+			{
+				float targetDirection = CharacterController.CalculateForwardAngle(pathFollower.Forward());
+				Camera.OverrideYaw(targetDirection, .4f);
+			}
+
 			if (Character.MovementState != CharacterController.MovementStates.External) //Player must have disconnected from the rail
 			{
 				DisconnectFromRail();
 				return;
 			}
 
-			if (Controller.jumpButton.wasPressed) //TODO jump off the rail
+			if (Controller.jumpButton.wasPressed) //TODO implement grindstepping
 			{
 				DisconnectFromRail();
 				Character.Jump(true);
@@ -238,6 +266,7 @@ namespace Project.Gameplay
 					float t = Mathf.SmoothStep(0, 1, chargeAmount / GRIND_RAIL_CHARGE_LENGTH);
 					Character.MoveSpeed = Mathf.Lerp(Skills.unchargedGrindSpeed, Skills.chargedGrindSpeed, t);
 					GD.Print($"{t} ,{Character.MoveSpeed}");
+					sfx.Play();
 
 					chargeAmount = 0f;
 					isCharging = false;
@@ -245,19 +274,25 @@ namespace Project.Gameplay
 			}
 
 			if (isInvisibleRail)
-			{
-				railModel.GlobalPosition = Character.GlobalPosition;
-				railMaterial.Set("uv_offset", railModel.Position.z % 1);
-			}
+				UpdateInvisibleRailPosition();
 
 			pathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 			if (pathFollower.ProgressRatio >= 1) //Disconnect from the rail
 				DisconnectFromRail();
 		}
 
+		private void UpdateInvisibleRailPosition()
+		{
+			railModel.GlobalPosition = Character.GlobalPosition;
+			railModel.Position = new Vector3(0, railModel.Position.y, railModel.Position.z); //Ignore player's x-offset
+			railMaterial.Set("uv_offset", railModel.Position.z % 1);
+		}
+
 		private void DisconnectFromRail()
 		{
 			if (!isActive) return;
+
+			isFadingSFX = true; //Start fading sound effect
 
 			isActive = false;
 			isInteractingWithPlayer = false;

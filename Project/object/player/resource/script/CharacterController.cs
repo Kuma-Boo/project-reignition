@@ -255,10 +255,11 @@ namespace Project.Gameplay
 		#region External Control, Automation and Events
 		private Vector3 externalOffset;
 		private Node3D externalParent;
+		private float externalSmoothing;
 
 		[Signal]
 		public delegate void ExternalControlFinishedEventHandler();
-		public void StartExternal(Node3D followObject = null, bool snap = false)
+		public void StartExternal(Node3D followObject = null, float smoothing = 0f)
 		{
 			ResetMovementState();
 			MovementState = MovementStates.External;
@@ -266,7 +267,8 @@ namespace Project.Gameplay
 
 			externalParent = followObject;
 			externalOffset = Vector3.Zero; //Reset offset
-			if (externalParent != null && !snap) //Smooth out transition
+			externalSmoothing = smoothing;
+			if (externalParent != null && !Mathf.IsZeroApprox(smoothing)) //Smooth out transition
 				externalOffset = GlobalPosition - externalParent.GlobalPosition;
 
 			ResetVelocity();
@@ -276,7 +278,7 @@ namespace Project.Gameplay
 		public void UpdateExternalControl()
 		{
 			useCustomPhysics = true;
-			externalOffset = externalOffset.Lerp(Vector3.Zero, .2f); //Smooth out entry
+			externalOffset = externalOffset.Lerp(Vector3.Zero, externalSmoothing); //Smooth out entry
 
 			if (externalParent != null)
 				GlobalTransform = externalParent.GlobalTransform;
@@ -382,6 +384,7 @@ namespace Project.Gameplay
 					MovementAngle += PathFollower.CalculateDeltaAngle(); //Follow pathfollower around turns better
 			}
 
+			if (ActionState == ActionStates.Backflip) return;
 			if (!isIdling && deltaAngle > MAX_TURNAROUND_ANGLE) return; //Turning around
 
 			if (isIdling) //Instantly set movement angle to target movement angle
@@ -389,7 +392,6 @@ namespace Project.Gameplay
 				turningVelocity = 0;
 				MovementAngle = targetMovementAngle;
 			}
-
 			if (!IsLockoutActive || !currentLockoutData.overrideSpeed) //Don't apply turning speed loss when overriding speed
 			{
 				//Calculate turn delta, relative to ground speed
@@ -547,15 +549,16 @@ namespace Project.Gameplay
 		private bool isAccelerationJump;
 		private float currentJumpTime; //Amount of time the jump button was held
 		private const float ACCELERATION_JUMP_LENGTH = .04f; //How fast the jump button needs to be released for an "acceleration jump"
-		public void Jump(bool skipAccelerationJump = default)
+		public void Jump(bool disableAccelerationJump = default)
 		{
-			currentJumpTime = skipAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
+			currentJumpTime = disableAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
 			isJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
 			canLandingBoost = Skills.IsLandingDashEnabled;
 			ActionState = ActionStates.Jumping;
 			VerticalSpd = RuntimeConstants.GetJumpPower(jumpHeight);
+			Sound.PlayActionSFX("jump");
 		}
 
 		private void UpdateJump()
@@ -622,17 +625,16 @@ namespace Project.Gameplay
 
 		private void StartJumpDash()
 		{
-			IsAttacking = true;
-			CanJumpDash = false; //Don't use get/set so we keep our target monitoring.
-			ActionState = ActionStates.JumpDash;
-
-			float delta = ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-			if (delta > MAX_TURNAROUND_ANGLE) //Backstepping; Jumpdash directly forward
+			if (ActionState == ActionStates.Backflip) //Backflipping - Jumpdash directly forward
 				MovementAngle = PathFollower.ForwardAngle;
 			else //Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
 			MoveSpeed = jumpDashSpeed;
+			IsAttacking = true;
+			CanJumpDash = false; //Don't use get/set so we keep our target monitoring.
+			ActionState = ActionStates.JumpDash;
+			Sound.PlayActionSFX("jump dash");
 
 			if (Lockon.LockonTarget == null) //Normal jumpdash
 				VerticalSpd = jumpDashPower;
@@ -707,34 +709,29 @@ namespace Project.Gameplay
 		public float backflipSpeed;
 		[Export]
 		public float backflipHeight;
-		private float backflipTimer;
-		/// <summary> How long does a backflip last before the player can act again? </summary>
-		private const float BACKFLIP_LENGTH = .4f;
 		/// <summary> How much can the player adjust their angle while backflipping? </summary>
 		private const float MAX_BACKFLIP_ADJUSTMENT = Mathf.Pi * .25f;
 		/// <summary> How much to turn when backflipping </summary>
 		private const float BACKFLIP_TURN_SPEED = .25f;
 		private void UpdateBackflip()
 		{
-			backflipTimer += PhysicsManager.physicsDelta;
-			if (backflipTimer > BACKFLIP_LENGTH)
-				ResetActionState();
-
 			if (!IsHoldingForward) //Influence backflip direction slightly
 			{
-				float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetInputAngle(), PathFollower.BackAngle, MAX_BACKFLIP_ADJUSTMENT);
+				float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.BackAngle, MAX_BACKFLIP_ADJUSTMENT);
 				MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, BACKFLIP_TURN_SPEED);
 			}
-			MoveSpeed = backflipSpeed;
+
+			if (IsOnGround)
+				ResetActionState();
 		}
 
 		private void StartBackflip()
 		{
 			CanJumpDash = true;
-			backflipTimer = 0;
 			MoveSpeed = backflipSpeed;
 			MovementAngle = GetTargetInputAngle();
 			VerticalSpd = RuntimeConstants.GetJumpPower(backflipHeight);
+			Sound.PlayActionSFX("jump");
 
 			IsOnGround = false;
 			ActionState = ActionStates.Backflip;
@@ -981,7 +978,11 @@ namespace Project.Gameplay
 		public bool IsOnGround { get; private set; }
 		public bool JustLandedOnGround { get; private set; } //Flag for doing stuff on land
 
-		public Vector3 CenterPosition => GlobalPosition + UpDirection * COLLISION_RADIUS; //Center of collision calculations
+		public Vector3 CenterPosition
+		{
+			get => GlobalPosition + UpDirection * COLLISION_RADIUS; //Center of collision calculations
+			set => GlobalPosition = value - UpDirection * COLLISION_RADIUS;
+		}
 		private const float COLLISION_RADIUS = .3f;
 		private void CheckGround()
 		{
@@ -1017,6 +1018,7 @@ namespace Project.Gameplay
 
 			if (groundHit) //Successful ground hit
 			{
+				Sound.UpdateGroundType(groundHit.collidedObject);
 				GlobalPosition -= UpDirection * (groundHit.distance - COLLISION_RADIUS); //Snap to ground
 
 				if (!IsOnGround) //Landing on the ground
@@ -1030,6 +1032,7 @@ namespace Project.Gameplay
 					isAccelerationJump = false;
 					JustLandedOnGround = true;
 
+					Sound.PlayLandingSFX();
 					CheckLandingBoost(); //Landing boost skill
 
 					ResetActionState();
@@ -1053,7 +1056,11 @@ namespace Project.Gameplay
 		{
 			if (hit)
 			{
-				if (hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("floor")) //Unless the collider is supposed to be both
+				//Unless the collider is supposed to be both
+				if (hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("floor"))
+					hit = new RaycastHit();
+
+				if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .6f) //Don't allow registering collisions with the ceiling
 					hit = new RaycastHit();
 			}
 
@@ -1112,13 +1119,13 @@ namespace Project.Gameplay
 				if (wallHit && ActionState != ActionStates.JumpDash)
 				{
 					float wallRatio = Mathf.Abs(wallHit.normal.Dot(castVector));
-
 					if (wallRatio > .9f) //Running into wall head-on
 					{
 						if (Skills.IsSpeedBreakActive) //Cancel speed break
 							Skills.ToggleSpeedBreak();
 
-						MoveSpeed = wallHit.distance - COLLISION_RADIUS; //Kill speed
+						MoveAndCollide(castVector * MoveSpeed * PhysicsManager.physicsDelta);
+						MoveSpeed = 0; //Kill speed
 					}
 					else //Reduce MoveSpd when moving against walls
 					{
@@ -1195,7 +1202,8 @@ namespace Project.Gameplay
 			if (body.IsInGroup("crusher"))
 			{
 				//Check whether we're ACTUALLy being crushed and not just running into the side of the crusher
-				RaycastHit hit = this.CastRay(CenterPosition, UpDirection * COLLISION_RADIUS * 2f, environmentMask, false);
+				float checkLength = COLLISION_RADIUS * 5f; //Needs to be long enough to guarantee hitting the target
+				RaycastHit hit = this.CastRay(CenterPosition, UpDirection * checkLength, environmentMask, false);
 				if (hit.collidedObject == body)
 				{
 					GD.Print($"Crushed by {body.Name}");

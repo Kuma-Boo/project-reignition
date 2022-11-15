@@ -1,14 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://qf6je82vhwme"]
+[gd_scene load_steps=7 format=3 uid="uid://qf6je82vhwme"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterSkillManager.cs" id="1_rj66u"]
 [ext_resource type="Resource" uid="uid://b0pl4vxr6ryfl" path="res://object/player/resource/movement settings/grinding/GrindSettings.tres" id="2_17xxn"]
+[ext_resource type="AudioStream" uid="uid://c0ht8bcbttefh" path="res://sound/sfx/player/speed break 1.wav" id="3_0mdyi"]
+[ext_resource type="AudioStream" uid="uid://dgg82ed3pd114" path="res://sound/sfx/player/speed break end 1.wav" id="3_di5ls"]
+[ext_resource type="AudioStream" uid="uid://b4miukkcidcma" path="res://sound/sfx/player/heartbeat 2.wav" id="4_mtjxk"]
+[ext_resource type="AudioStream" uid="uid://clst2fobk8mpm" path="res://sound/sfx/player/time break 1.wav" id="5_mafsj"]
 
-[node name="Skills" type="Node"]
+[node name="Skills" type="Node" node_paths=PackedStringArray("breakSkillSfx", "heartbeatSfx")]
 script = ExtResource("1_rj66u")
-speedBreakCollisionMask = 1
 accelerationJumpSpeed = 24.0
 unchargedGrindSpeed = 24.0
 chargedGrindSpeed = 36.0
 grindSettings = ExtResource("2_17xxn")
 landingDashSpeed = 32.0
+speedBreakCollisionMask = 1
+speedBreakActivate = ExtResource("3_0mdyi")
+speedBreakDeactivate = ExtResource("3_di5ls")
+timeBreakActivate = ExtResource("5_mafsj")
+breakSkillSfx = NodePath("BreakSFX")
+heartbeatSfx = NodePath("HeartbeatSFX")
 speedBreakSpeed = 54.0
+
+[node name="BreakSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_di5ls")
+bus = &"SFX"
+
+[node name="HeartbeatSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_mtjxk")
+bus = &"SFX"

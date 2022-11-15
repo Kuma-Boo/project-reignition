@@ -35,8 +35,6 @@ namespace Project.Gameplay
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
 		public bool IsOnScreen(Vector3 worldSpace) => _camera.IsPositionInFrustum(worldSpace);
 		public bool IsPositionBehind(Vector3 worldSpace) => _camera.IsPositionBehind(worldSpace);
-		public float CurrentYaw { get; private set; }
-		public float CurrentPitch { get; private set; }
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
 		private float xformAngle;
 		public float TransformAngle(float angle) => xformAngle + angle;
@@ -123,9 +121,14 @@ namespace Project.Gameplay
 			_calculationRoot.GlobalPosition = GetTargetPosition();
 		}
 
+		public float CurrentPitch { get; private set; }
+		public float CurrentYaw { get; private set; }
+		private float currentYawVelocity;
+		private readonly float BASE_YAW_SMOOTHING = .1f;
 		private void UpdateRotation()
 		{
 			UpdateYaw();
+			UpdatePitch();
 			UpdateTilt();
 
 			_calculationRoot.GlobalRotation = Vector3.Up * CurrentYaw;
@@ -133,29 +136,50 @@ namespace Project.Gameplay
 			xformAngle = Vector2.Down.Rotated(-CurrentYaw).AngleTo(Vector2.Down);
 		}
 
+		private bool isYawOverrideActive;
+		private float targetYawOverride; //In Radians
+		/// <summary>
+		/// Use this for stage objects that want to override yaw without modifying the other camera settings.
+		/// Must be called every frame.
+		/// </summary>
+		public void OverrideYaw(float angle, float smoothing = 0)
+		{
+			isYawOverrideActive = true;
+
+			if (Mathf.IsZeroApprox(smoothing))
+				targetYawOverride = angle;
+			else
+				targetYawOverride = Mathf.LerpAngle(CurrentYaw, angle, smoothing);
+		}
+
 		private void UpdateYaw() //Calculate horizontal rotation (yaw)
 		{
-			if (targetSettings.yawMode == CameraSettingsResource.OverrideMode.Override)
-				CurrentYaw = Mathf.DegToRad(targetSettings.viewAngle.y); //Override view direction
+			float targetYaw;
+			if (isYawOverrideActive)
+			{
+				targetYaw = targetYawOverride;
+				isYawOverrideActive = false;
+			}
+			else if (targetSettings.yawMode == CameraSettingsResource.OverrideMode.Override)
+				targetYaw = Mathf.DegToRad(targetSettings.viewAngle.y); //Override view direction
 			else
 			{
-				if (Mathf.Abs(PathFollower.Back().Dot(Vector3.Up)) > .9f) //Moving vertically, can't use PathFollower.Forward
-				{
-					if (Character.IsOnGround) //Use ground direction as "forward"
-						CurrentYaw = Character.UpDirection.SignedAngleTo(Vector3.Forward, Vector3.Up);
-					else //NEEDS TESTING - Maintain the current view angle?
-						return;
-				}
-				else //Forward direction is based on PathFollower's orientation
-				{
-					//Using a flattened vector because 3d vectors cause issues when traveling down slopes
-					CurrentYaw = PathFollower.Forward().Flatten().Normalized().AngleTo(Vector2.Down);
-				}
-
-				CurrentYaw += Mathf.DegToRad(targetSettings.viewAngle.y); //Add
+				//Forward direction is based on PathFollower's orientation
+				targetYaw = PathFollower.ForwardAngle;
+				targetYaw += Mathf.DegToRad(targetSettings.viewAngle.y); //Add
 			}
 
+			if (ResetFlag)
+			{
+				CurrentYaw = targetYaw;
+				currentYawVelocity = 0f;
+			}
+			else
+				CurrentYaw = ExtensionMethods.SmoothDampAngle(CurrentYaw, targetYaw, ref currentYawVelocity, BASE_YAW_SMOOTHING);
+		}
 
+		private void UpdatePitch()
+		{
 			if (targetSettings.pitchMode == CameraSettingsResource.OverrideMode.Override)
 				CurrentPitch = Mathf.DegToRad(targetSettings.viewAngle.x); //Override view direction
 			else

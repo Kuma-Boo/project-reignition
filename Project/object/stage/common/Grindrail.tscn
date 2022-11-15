@@ -1,12 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyx761cfvxpno"]
+[gd_scene load_steps=3 format=3 uid="uid://dvoongbmetjfh"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/GrindRail.cs" id="1_k4svk"]
+[ext_resource type="AudioStream" uid="uid://n4glservh4l2" path="res://sound/sfx/objects/grind rail.wav" id="2_p52bi"]
 
-[node name="Grindrail" type="Area3D"]
+[node name="Grindrail" type="Area3D" node_paths=PackedStringArray("sfx")]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("1_k4svk")
+"Rail Path" = NodePath("")
+"Invisible Rail Settings/Enabled" = false
+"Align Camera" = true
+sfx = NodePath("SFX")
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_p52bi")
+pitch_scale = 1.2
+bus = &"SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="area_exited" from="." to="." method="OnExited"]

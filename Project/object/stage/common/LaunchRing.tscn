@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://bcsww42lqxn6w"]
+[gd_scene load_steps=8 format=3 uid="uid://bcsww42lqxn6w"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/LaunchRing.cs" id="1_17ata"]
 [ext_resource type="PackedScene" uid="uid://boex8m7dhjl24" path="res://object/stage/common/resource/model/LaunchRing.gltf" id="2_gkfym"]
+[ext_resource type="AudioStream" uid="uid://c45k5tg8wn5m2" path="res://sound/sfx/objects/launch ring 1.wav" id="3_v5nwq"]
 
 [sub_resource type="Animation" id="Animation_n5j51"]
 resource_name = "RESET"
-length = 0.001
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -71,6 +72,9 @@ height = 0.4
 radius = 3.0
 
 [node name="LaunchRing" type="Area3D" node_paths=PackedStringArray("animator")]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
 script = ExtResource("1_17ata")
 pieces = [NodePath("LaunchRing/LaunchRing1"), NodePath("LaunchRing/LaunchRing2"), NodePath("LaunchRing/LaunchRing3"), NodePath("LaunchRing/LaunchRing4"), NodePath("LaunchRing/LaunchRing5"), NodePath("LaunchRing/LaunchRing6"), NodePath("LaunchRing/LaunchRing7"), NodePath("LaunchRing/LaunchRing8"), NodePath("LaunchRing/LaunchRing9"), NodePath("LaunchRing/LaunchRing10"), NodePath("LaunchRing/LaunchRing11"), NodePath("LaunchRing/LaunchRing12"), NodePath("LaunchRing/LaunchRing13"), NodePath("LaunchRing/LaunchRing14"), NodePath("LaunchRing/LaunchRing15"), NodePath("LaunchRing/LaunchRing16")]
 animator = NodePath("AnimationPlayer")
@@ -85,5 +89,13 @@ libraries = {
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CylinderShape3D_eaqjp")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_v5nwq")
+pitch_scale = 0.8
+bus = &"SFX"
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_exited" from="." to="." method="OnExited"]
 
 [editable path="LaunchRing"]

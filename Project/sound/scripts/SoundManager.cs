@@ -177,6 +177,24 @@ namespace Project.Gameplay
 		#endregion
 
 		#region SFX
+		/// <summary>
+		/// Fade a sound effect player to -80f, then stop the sfx. Returns true if the sfx is still playing.
+		/// </summary>
+		public bool FadeSFX(AudioStreamPlayer sfx, float fadeSpeed = 40f)
+		{
+			if (!sfx.Playing) //Already stopped playing
+				return false;
+
+			sfx.VolumeDb = Mathf.MoveToward(sfx.VolumeDb, -80f, fadeSpeed * PhysicsManager.physicsDelta);
+			if (Mathf.IsEqualApprox(sfx.VolumeDb, -80f))
+			{
+				sfx.Stop();
+				return false;
+			}
+
+			return true;
+		}
+
 		[Export]
 		private AudioStreamPlayer ringSoundEffect;
 		public void PlayRingSoundEffect() => ringSoundEffect.Play();

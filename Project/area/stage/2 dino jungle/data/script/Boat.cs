@@ -131,7 +131,7 @@ namespace Project.Gameplay.Objects
 			if (!a.IsInGroup("player")) return;
 
 			isActive = true;
-			Character.StartExternal(passengerPosition, true); //Snap player into position
+			Character.StartExternal(passengerPosition); //Snap player into position
 			CameraController.instance.SetCameraData(cameraSettings);
 		}
 

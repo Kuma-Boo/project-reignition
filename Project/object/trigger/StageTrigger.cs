@@ -52,10 +52,6 @@ namespace Project.Gameplay.Triggers
 					//Connect signals
 					Connect(SignalName.Activated, new Callable(module, MethodName.Activate));
 					Connect(SignalName.Deactivated, new Callable(module, MethodName.Deactivate));
-
-					//Register respawnable modules
-					if (module.IsRespawnable())
-						StageSettings.instance.RegisterRespawnableObject(module);
 				}
 			}
 		}

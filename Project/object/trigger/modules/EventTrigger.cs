@@ -40,7 +40,7 @@ namespace Project.Gameplay.Triggers
 				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen");
 
 			if (playerStandin != null)
-				Character.StartExternal(playerStandin, true);
+				Character.StartExternal(playerStandin, .2f);
 
 			wasActivated = true;
 			EmitSignal(SignalName.Activated);

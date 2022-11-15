@@ -26,7 +26,7 @@ namespace Project.Interface
 				EmitSignal(SignalName.CountdownComplete);
 			else
 			{
-				animator.Play("Countdown");
+				animator.Play("countdown");
 				TweenCountdownTicks();
 			}
 		}

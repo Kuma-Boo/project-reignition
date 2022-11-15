@@ -55,7 +55,7 @@ namespace Project.Gameplay.Triggers
 		private void Activate()
 		{
 			Character.PathFollower.SetActivePath(automationPath);
-			Character.StartExternal(Character.PathFollower, false);
+			Character.StartExternal(Character.PathFollower, .2f);
 
 			startingProgress = Character.PathFollower.Progress;
 			isActive = true;

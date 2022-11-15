@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://db770ujvjdio4"]
+[gd_scene load_steps=8 format=3 uid="uid://db770ujvjdio4"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/LaunchRing.cs" id="1_17ata"]
 [ext_resource type="PackedScene" uid="uid://bpnpdcveslbdp" path="res://object/stage/common/resource/model/LaunchRingSpike.gltf" id="2_jnkpc"]
+[ext_resource type="AudioStream" uid="uid://c45k5tg8wn5m2" path="res://sound/sfx/objects/launch ring 1.wav" id="3_q0poc"]
 
 [sub_resource type="Animation" id="Animation_n5j51"]
 resource_name = "RESET"
-length = 0.001
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -84,6 +85,9 @@ height = 0.4
 radius = 3.0
 
 [node name="LaunchRingSpike" type="Area3D" node_paths=PackedStringArray("animator")]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
 script = ExtResource("1_17ata")
 pieces = [NodePath("LaunchRingSpike/LaunchRingSpike1"), NodePath("LaunchRingSpike/LaunchRingSpike2"), NodePath("LaunchRingSpike/LaunchRingSpike3"), NodePath("LaunchRingSpike/LaunchRingSpike4"), NodePath("LaunchRingSpike/LaunchRingSpike5"), NodePath("LaunchRingSpike/LaunchRingSpike6"), NodePath("LaunchRingSpike/LaunchRingSpike7"), NodePath("LaunchRingSpike/LaunchRingSpike8"), NodePath("LaunchRingSpike/LaunchRingSpike9"), NodePath("LaunchRingSpike/LaunchRingSpike10"), NodePath("LaunchRingSpike/LaunchRingSpike11"), NodePath("LaunchRingSpike/LaunchRingSpike12"), NodePath("LaunchRingSpike/LaunchRingSpike13"), NodePath("LaunchRingSpike/LaunchRingSpike14"), NodePath("LaunchRingSpike/LaunchRingSpike15"), NodePath("LaunchRingSpike/LaunchRingSpike16")]
 animator = NodePath("AnimationPlayer")
@@ -98,5 +102,13 @@ libraries = {
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CylinderShape3D_eaqjp")
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_q0poc")
+pitch_scale = 0.8
+bus = &"SFX"
+
+[connection signal="area_entered" from="." to="." method="OnEnter"]
+[connection signal="area_exited" from="." to="." method="OnExited"]
 
 [editable path="LaunchRingSpike"]

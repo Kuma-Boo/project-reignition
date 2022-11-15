@@ -22,7 +22,7 @@ namespace Project.Gameplay.Objects
 		private readonly Array<RigidBody3D> _pieces = new Array<RigidBody3D>();
 		private readonly Array<MeshInstance3D> _meshes = new Array<MeshInstance3D>();
 		private readonly Array<Transform3D> _spawnTransforms = new Array<Transform3D>();
-		private const float EXPLOSION_FORCE = 10f;
+		private const float EXPLOSION_FORCE = 100f;
 
 		public override void _Ready()
 		{
