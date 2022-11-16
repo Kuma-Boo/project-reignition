@@ -32,10 +32,10 @@ namespace Project.Gameplay
 		{
 			if (!IsInsideTree() || !Visible) return;
 
-			ProcessEnemy();
+			UpdateEnemy();
 
 			if (isInteracting)
-				ProcessInteraction();
+				UpdateInteraction();
 		}
 
 		public virtual void Respawn()
@@ -70,7 +70,7 @@ namespace Project.Gameplay
 				Defeat();
 		}
 
-		protected virtual void ProcessEnemy() { }
+		protected virtual void UpdateEnemy() { }
 
 		//Called when the enemy is defeated
 		protected virtual void Defeat()
@@ -90,7 +90,7 @@ namespace Project.Gameplay
 
 		protected bool isInteracting; //True when colliding with an object
 		protected bool isInteractingWithPlayer; //True when colliding with the player specifically
-		protected virtual void ProcessInteraction()
+		protected virtual void UpdateInteraction()
 		{
 			if (isInteractingWithPlayer)
 			{

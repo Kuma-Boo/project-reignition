@@ -19,7 +19,7 @@ namespace Project.Interface.Menu
 					inSpeed = 2f,
 					color = Colors.Black,
 				});
-				TransitionManager.instance.Connect(TransitionManager.SignalName.Load, new Callable(this, MethodName.Hide), (uint)ConnectFlags.OneShot);
+				TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.Hide), (uint)ConnectFlags.OneShot);
 				DisableProcessing();
 			}
 		}

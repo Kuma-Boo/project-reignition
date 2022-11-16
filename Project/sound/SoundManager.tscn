@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://kuehwridu5v4"]
+[gd_scene load_steps=19 format=3 uid="uid://kuehwridu5v4"]
 
 [ext_resource type="Script" path="res://sound/scripts/SoundManager.cs" id="1"]
 [ext_resource type="AudioStream" uid="uid://doa0ttronifl3" path="res://sound/sfx/objects/pearl01.wav" id="2_kteke"]
@@ -12,7 +12,6 @@
 [ext_resource type="AudioStream" uid="uid://cf57gtgfa5mxo" path="res://sound/sfx/objects/pearl09.wav" id="10_15le3"]
 [ext_resource type="AudioStream" uid="uid://dau6nscqyu6us" path="res://sound/sfx/objects/pearl10.wav" id="11_0wvqg"]
 [ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/Chiaro Std B.otf" id="12_76i4n"]
-[ext_resource type="AudioStream" uid="uid://eivd5wvygewi" path="res://sound/sfx/objects/ring.wav" id="13_ih8my"]
 
 [sub_resource type="Animation" id="1"]
 length = 0.001
@@ -162,7 +161,7 @@ _data = {
 "deactivate-text": SubResource("5")
 }
 
-[node name="SoundManager" type="CanvasLayer" node_paths=PackedStringArray("subtitleLabel", "subtitleLetterbox", "subtitleAnimator", "dialogChannel", "delayTimer", "ringSoundEffect", "pearlSoundEffect")]
+[node name="SoundManager" type="CanvasLayer" node_paths=PackedStringArray("subtitleLabel", "subtitleLetterbox", "subtitleAnimator", "dialogChannel", "delayTimer", "pearlTimer")]
 layer = 12
 script = ExtResource("1")
 subtitleLabel = NodePath("SubtitleLetterbox/Subtitles")
@@ -170,9 +169,8 @@ subtitleLetterbox = NodePath("SubtitleLetterbox")
 subtitleAnimator = NodePath("SubtitleLetterbox/AnimationPlayer")
 dialogChannel = NodePath("DialogChannel")
 delayTimer = NodePath("DialogChannel/DelayTimer")
-ringSoundEffect = NodePath("Objects/RingSFX")
 pearlStreams = [ExtResource("2_kteke"), ExtResource("3_rc3xm"), ExtResource("4_gnpys"), ExtResource("5_x8oys"), ExtResource("6_f3e8k"), ExtResource("7_0bdmb"), ExtResource("8_r5bqr"), ExtResource("8_2mghr"), ExtResource("10_15le3"), ExtResource("11_0wvqg")]
-pearlSoundEffect = NodePath("Objects/PearlSFX")
+pearlTimer = NodePath("PearlSFXTimer")
 
 [node name="SubtitleLetterbox" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -203,16 +201,12 @@ bus = &"VOICE"
 [node name="DelayTimer" type="Timer" parent="DialogChannel"]
 one_shot = true
 
-[node name="Objects" type="Node" parent="."]
-
-[node name="RingSFX" type="AudioStreamPlayer" parent="Objects"]
-stream = ExtResource("13_ih8my")
-bus = &"SFX"
-
-[node name="PearlSFX" type="AudioStreamPlayer" parent="Objects"]
-bus = &"SFX"
-
 [node name="Ingame" type="Node" parent="."]
 
 [node name="IngameChannel" type="AudioStreamPlayer" parent="Ingame"]
 bus = &"VOICE"
+
+[node name="PearlSFXTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="PearlSFXTimer" to="." method="ResetPearlSFX"]

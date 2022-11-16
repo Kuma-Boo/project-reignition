@@ -34,7 +34,7 @@ namespace Project.Gameplay
 				StageSettings.instance.AddBonus(StageSettings.BonusType.PerfectHomingAttack);
 		}
 
-		public void ProcessLockonTargets()
+		public void UpdateLockonTargets()
 		{
 			GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
 

@@ -13,7 +13,7 @@ namespace Project.Gameplay
 		{
 		}
 
-		protected override void ProcessEnemy()
+		protected override void UpdateEnemy()
 		{
 
 		}

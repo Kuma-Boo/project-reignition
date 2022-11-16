@@ -10,6 +10,8 @@ namespace Project.Gameplay
 	[Tool]
 	public partial class GrindRail : Area3D
 	{
+		//TODO Disable the ability to shuffle accelerate during player's shuffle animation
+
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
@@ -189,7 +191,6 @@ namespace Project.Gameplay
 				CheckRailActivation();
 		}
 
-		private bool isCharging;
 		private float chargeAmount;
 		private readonly float GRIND_RAIL_CHARGE_LENGTH = .5f; //How long a full charge is.
 		private readonly float GRIND_RAIL_SNAPPING = .5f; //How "magnetic" the rail is. Early 3D Sonic games tended to put this too low.
@@ -213,7 +214,6 @@ namespace Project.Gameplay
 		private void ActivateRail()
 		{
 			isActive = true;
-			isCharging = false;
 			chargeAmount = 0;
 
 			isFadingSFX = false;
@@ -255,22 +255,21 @@ namespace Project.Gameplay
 			Character.MovementAngle = CharacterController.CalculateForwardAngle(pathFollower.Forward());
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 
-			if (Controller.actionButton.wasPressed)
-				isCharging = true;
-			else if (isCharging)
+			if (Controller.actionButton.isHeld) //Charge up!
 			{
 				chargeAmount = Mathf.MoveToward(chargeAmount, GRIND_RAIL_CHARGE_LENGTH, PhysicsManager.physicsDelta);
-
-				if (Controller.actionButton.wasReleased)
+			}
+			else
+			{
+				if (chargeAmount > 0f)
 				{
 					float t = Mathf.SmoothStep(0, 1, chargeAmount / GRIND_RAIL_CHARGE_LENGTH);
 					Character.MoveSpeed = Mathf.Lerp(Skills.unchargedGrindSpeed, Skills.chargedGrindSpeed, t);
 					GD.Print($"{t} ,{Character.MoveSpeed}");
 					sfx.Play();
-
-					chargeAmount = 0f;
-					isCharging = false;
 				}
+
+				chargeAmount = 0f;
 			}
 
 			if (isInvisibleRail)

@@ -3,8 +3,8 @@ render_mode blend_add, unshaded, cull_disabled;
 
 global uniform float time;
 
-uniform float scroll_speed : hint_range(0.0, 5.0) = 0.0;
 uniform sampler2D albedo : source_color;
+const float scroll_speed = 0.1;
 
 void fragment()
 {

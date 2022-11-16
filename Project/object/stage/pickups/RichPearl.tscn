@@ -1,19 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://v2hbw6y70jr3"]
+[gd_scene load_steps=5 format=3 uid="uid://v2hbw6y70jr3"]
 
 [ext_resource type="Material" uid="uid://bjd84t56eucyc" path="res://object/stage/pickups/resource/model/rich pearl/RichPearl.tres" id="1"]
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="2"]
+[ext_resource type="AudioStream" uid="uid://dhv6gnwwebpgr" path="res://sound/sfx/objects/pearl rich 1.wav" id="3_27n1q"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_cjgpw"]
 size = Vector2(1, 1)
 orientation = 2
 
-[node name="RichPearl" type="Area3D" node_paths=PackedStringArray("collider")]
+[node name="RichPearl" type="Area3D" node_paths=PackedStringArray("collider", "sfx")]
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 script = ExtResource("2")
 isRichPearl = true
 collider = NodePath("CollisionShape3D")
+sfx = NodePath("SFX")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 layers = 32
@@ -22,5 +24,11 @@ cast_shadow = 0
 mesh = SubResource("PlaneMesh_cjgpw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_27n1q")
+volume_db = -6.0
+pitch_scale = 1.4
+bus = &"SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]

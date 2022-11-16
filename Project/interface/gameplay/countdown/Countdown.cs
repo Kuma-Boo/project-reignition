@@ -5,37 +5,38 @@ namespace Project.Interface
 {
 	public partial class Countdown : Node
 	{
+		public static bool IsCountdownActive { get; private set; }
+
 		[Export]
 		private Node2D tickParent;
 		[Export]
 		private AnimationPlayer animator;
 
-		public override void _Ready()
-		{
-			StartCountdown();
-		}
-
-		[Signal]
-		public delegate void CountdownStartEventHandler();
 		[Signal]
 		public delegate void CountdownCompleteEventHandler();
 
-		private void StartCountdown()
+		public override void _EnterTree() => IsCountdownActive = true;
+		public override void _Ready()
 		{
-			if (CheatManager.SkipCountdown)
-				EmitSignal(SignalName.CountdownComplete);
-			else
+			if (!CheatManager.SkipCountdown)
 			{
 				animator.Play("countdown");
 				TweenCountdownTicks();
 			}
+			else
+				FinishCountdown();
+		}
+
+		public void FinishCountdown()
+		{
+			IsCountdownActive = false;
+			EmitSignal(SignalName.CountdownComplete);
 		}
 
 		//The ring animation is too tedious to animate by hand, so I'm using a tween instead.
-		//WIP - NEEDS MORE WORK!
 		private void TweenCountdownTicks()
 		{
-			//Tween creates a temporary "memory leak" but the garbage collector cleans it up later
+			//Tween seems to create a temporary "memory leak" but the garbage collector cleans it up later
 			Tween countdownTweener = CreateTween().SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.InOut).SetParallel(true);
 
 			for (int i = 0; i < tickParent.GetChildCount(); i++)

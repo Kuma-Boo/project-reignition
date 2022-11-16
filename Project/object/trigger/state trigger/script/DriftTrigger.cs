@@ -44,7 +44,7 @@ namespace Project.Gameplay.Triggers
 
 				return; //Inactive
 			}
-			ProcessDrift();
+			UpdateDrift();
 		}
 
 		private bool IsDriftValid() //Checks whether the player is in a state where a drift is possible
@@ -52,6 +52,7 @@ namespace Project.Gameplay.Triggers
 			if (Character.IsMovingBackward) return false; //Can't drift backwards
 			if (Character.Skills.IsUsingBreakSkills) return false; //Can't drift during speed/time break :\
 			if (!Character.IsOnGround || Character.groundSettings.GetSpeedRatio(Character.MoveSpeed) < ENTRANCE_SPEED_RATIO) return false; //In air/too slow
+			if (Character.MovementState == CharacterController.MovementStates.External) return false; //Player is already busy
 
 			return true; //Valid drift
 		}
@@ -73,7 +74,7 @@ namespace Project.Gameplay.Triggers
 			isProcessing = true;
 		}
 
-		private void ProcessDrift()
+		private void UpdateDrift()
 		{
 			Vector3 targetPosition = MiddlePosition;
 
@@ -87,7 +88,7 @@ namespace Project.Gameplay.Triggers
 
 			if (Controller.jumpButton.wasPressed) //Allow character to jump out of drift at any time
 			{
-				CompleteDrift();
+				FinishDrift();
 
 				ApplyBonus(false);
 				Character.Jump();
@@ -112,20 +113,20 @@ namespace Project.Gameplay.Triggers
 
 					//Snap to target position (NVM)
 					Character.GlobalPosition = new Vector3(targetPosition.x, Character.GlobalPosition.y, targetPosition.z);
-					CompleteDrift();
+					FinishDrift();
 				}
 			}
 			else if (distance < .1f) //Drift was failed
 			{
 				Character.MoveSpeed = 0f; //Reset Movespeed
 				ApplyBonus(false);
-				CompleteDrift();
+				FinishDrift();
 			}
 
 			Character.PathFollower.Resync(); //Resync
 		}
 
-		private void CompleteDrift()
+		private void FinishDrift()
 		{
 			isProcessing = false;
 			Character.ResetMovementState();

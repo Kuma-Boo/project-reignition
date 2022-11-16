@@ -314,8 +314,6 @@ namespace Project.Gameplay
 		}
 
 		//Time
-		private bool isUpdatingTime = true;
-
 		[Signal]
 		public delegate void TimeChangedEventHandler(); //Time has changed.
 
@@ -325,8 +323,7 @@ namespace Project.Gameplay
 		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
 		private void UpdateTime()
 		{
-			if (!isUpdatingTime) return;
-
+			if (isStageFinished || Interface.Countdown.IsCountdownActive || CharacterController.instance.IsRespawning) return;
 			CurrentTime += PhysicsManager.physicsDelta; //Add current time
 
 			if (TimeLimit == 0) //No time limit
@@ -346,7 +343,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Stage Completion
-		//Completion
+		private bool isStageFinished;
 		private float completionDelay;
 		private LockoutResource completionLockout;
 		private NodePath _completionAnimator; //Node Path
@@ -379,7 +376,7 @@ namespace Project.Gameplay
 				}
 			}
 
-			isUpdatingTime = false;
+			isStageFinished = true;
 			EmitSignal(SignalName.StageCompleted, isSuccess);
 		}
 
@@ -388,7 +385,6 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Object Spawning
-
 		//Checkpoint data
 		public Node3D Checkpoint { get; private set; }
 		public Path3D CheckpointPath { get; private set; }

@@ -13,13 +13,16 @@ namespace Project.Gameplay.Triggers
 		{
 			Height,
 			Water,
-			Lava,
 		}
 
 		public override void Activate()
 		{
 			//TODO Play VFX
 			Character.Kill();
+			Character.Sound.PlayVoice("fall");
+
+			if (triggerType == TriggerType.Water)
+				Character.Sound.PlayActionSFX("splash");
 		}
 	}
 }

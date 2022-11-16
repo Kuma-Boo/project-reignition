@@ -30,11 +30,12 @@ namespace Project.Core
 		}
 
 		//Pearl collision shapes
-		public static SphereShape3D PearlCollisionShape = new SphereShape3D();
-		public static SphereShape3D RichPearlCollisionShape = new SphereShape3D();
+		[Export]
+		public SphereShape3D PearlCollisionShape = new SphereShape3D();
+		public SphereShape3D RichPearlCollisionShape = new SphereShape3D();
 		private const float PEARL_NORMAL_COLLISION = .4f;
 		private const float RICH_PEARL_NORMAL_COLLISION = .6f;
-		public static void UpdatePearlCollisionShapes(float sizeMultiplier = 1f)
+		public void UpdatePearlCollisionShapes(float sizeMultiplier = 1f)
 		{
 			PearlCollisionShape.Radius = PEARL_NORMAL_COLLISION * sizeMultiplier;
 			RichPearlCollisionShape.Radius = RICH_PEARL_NORMAL_COLLISION * sizeMultiplier;

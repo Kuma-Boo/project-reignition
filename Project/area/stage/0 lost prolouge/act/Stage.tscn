@@ -1,22 +1,22 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=20 format=3 uid="uid://d87d3iej8mu2"]
 
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://dq1kdx05lgtf" path="res://area/stage/0 lost prolouge/data/environment/BGM.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://cwf1mayrqj6mm" path="res://area/stage/0 lost prolouge/act/data/environment/01Opening.tscn" id="5_truqt"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="6"]
+[ext_resource type="PackedScene" uid="uid://c4rnocmputo1e" path="res://area/stage/0 lost prolouge/act/data/environment/02Hall.tscn" id="6_domsb"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://ipbqdhwrc0ui" path="res://area/stage/0 lost prolouge/act/data/environment/03Tightrope.tscn" id="7_rjw21"]
 [ext_resource type="PackedScene" uid="uid://b8m5lb6i6w7dk" path="res://area/stage/0 lost prolouge/data/skybox/model/Skybox.gltf" id="8_m7whj"]
+[ext_resource type="PackedScene" uid="uid://baquhto5iycmf" path="res://area/stage/0 lost prolouge/act/data/environment/04Ribbon.tscn" id="8_rw3g8"]
 [ext_resource type="PackedScene" uid="uid://cwbhcy53ii8or" path="res://area/stage/0 lost prolouge/act/data/environment/collision/Collision.tscn" id="9_46pgu"]
-[ext_resource type="PackedScene" uid="uid://curlmp7db45k5" path="res://area/stage/0 lost prolouge/act/data/environment/model/01Opening.gltf" id="9_qtbea"]
+[ext_resource type="PackedScene" uid="uid://br5dnvn24wail" path="res://area/stage/0 lost prolouge/act/data/environment/05Island.tscn" id="9_j0wjr"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="10"]
-[ext_resource type="PackedScene" uid="uid://bket6m31rl4af" path="res://area/stage/0 lost prolouge/act/data/environment/model/02Hall.gltf" id="10_np1id"]
+[ext_resource type="PackedScene" uid="uid://b51stc11ut6ld" path="res://area/stage/0 lost prolouge/act/data/environment/06End.tscn" id="10_7yavc"]
 [ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/stage/0 lost prolouge/data/environment/Environment.tres" id="10_yx1d5"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="11"]
-[ext_resource type="PackedScene" uid="uid://cx5s0bstuvc4k" path="res://area/stage/0 lost prolouge/act/data/environment/model/03Tightrope.gltf" id="11_joblt"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="12"]
 [ext_resource type="Curve3D" uid="uid://wi3y53rkn4sj" path="res://area/stage/0 lost prolouge/act/data/environment/path/MainPath.tres" id="12_2pl4r"]
-[ext_resource type="PackedScene" uid="uid://d2xi6j86jfnn" path="res://area/stage/0 lost prolouge/act/data/environment/model/04Ribbon.gltf" id="12_blk7g"]
-[ext_resource type="PackedScene" uid="uid://bpp16liifnwle" path="res://area/stage/0 lost prolouge/act/data/environment/model/05Island.gltf" id="13_2hkij"]
-[ext_resource type="PackedScene" uid="uid://dpbtugnynma4a" path="res://area/stage/0 lost prolouge/act/data/environment/model/06End.gltf" id="14_kuse3"]
 
 [sub_resource type="BoxShape3D" id="12"]
 size = Vector3(90, 20, 10)
@@ -30,6 +30,7 @@ size = Vector3(153.4, 20, 251.8)
 script = ExtResource("6")
 "Starting Path" = NodePath("../Static/Path/MainPath")
 "Mission Type" = 0
+"Time Limit" = 0.0
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
 "Ranking/Gold Time" = 0.0
@@ -59,27 +60,26 @@ visible = false
 [node name="MainLight" type="DirectionalLight3D" parent="Static/Visuals/Environment"]
 transform = Transform3D(1, 0, 0, 0, 0.0348995, 0.999391, 0, -0.999391, 0.0348995, 0, 2.00365, -0.209397)
 light_color = Color(0.99, 0.8316, 0.6732, 1)
-light_energy = 0.8
+light_energy = 0.6
 shadow_enabled = true
 directional_shadow_blend_splits = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Static/Visuals/Environment"]
 environment = ExtResource("10_yx1d5")
 
+[node name="01Opening" parent="Static/Visuals" instance=ExtResource("5_truqt")]
+
+[node name="02Hall" parent="Static/Visuals" instance=ExtResource("6_domsb")]
+
+[node name="03Tightrope" parent="Static/Visuals" instance=ExtResource("7_rjw21")]
+
+[node name="04Ribbon" parent="Static/Visuals" instance=ExtResource("8_rw3g8")]
+
+[node name="05Island" parent="Static/Visuals" instance=ExtResource("9_j0wjr")]
+
+[node name="06End" parent="Static/Visuals" instance=ExtResource("10_7yavc")]
+
 [node name="Skybox" parent="Static/Visuals" instance=ExtResource("8_m7whj")]
-visible = false
-
-[node name="01Opening" parent="Static/Visuals" instance=ExtResource("9_qtbea")]
-
-[node name="02Hall" parent="Static/Visuals" instance=ExtResource("10_np1id")]
-
-[node name="03Tightrope" parent="Static/Visuals" instance=ExtResource("11_joblt")]
-
-[node name="04Ribbon" parent="Static/Visuals" instance=ExtResource("12_blk7g")]
-
-[node name="05Island" parent="Static/Visuals" instance=ExtResource("13_2hkij")]
-
-[node name="06End" parent="Static/Visuals" instance=ExtResource("14_kuse3")]
 
 [node name="Path" type="Node3D" parent="Static"]
 

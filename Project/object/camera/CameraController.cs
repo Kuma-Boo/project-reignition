@@ -13,15 +13,17 @@ namespace Project.Gameplay
 		public static CameraController instance;
 
 		[Export]
-		private Node3D _calculationRoot; //Responsible for pitch rotation
+		private Node3D calculationRoot; //Responsible for pitch rotation
 		[Export]
-		private Node3D _calculationGimbal; //Responsible for yaw rotation
+		private Node3D calculationGimbal; //Responsible for yaw rotation
 		[Export]
-		private Node3D _cameraRoot;
+		private Node3D cameraRoot;
 		[Export]
-		private Node3D _cameraGimbal;
+		private Node3D cameraGimbal;
 		[Export]
-		private Camera3D _camera;
+		private Camera3D camera;
+		[Export]
+		private Camera3D bloomCamera;
 
 		[Export]
 		private TextureRect _crossfade;
@@ -31,10 +33,10 @@ namespace Project.Gameplay
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PathFollower => Character.PathFollower;
 
-		public Transform3D CameraTransform => _camera.GlobalTransform;
-		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => _camera.UnprojectPosition(worldSpace);
-		public bool IsOnScreen(Vector3 worldSpace) => _camera.IsPositionInFrustum(worldSpace);
-		public bool IsPositionBehind(Vector3 worldSpace) => _camera.IsPositionBehind(worldSpace);
+		public Transform3D CameraTransform => camera.GlobalTransform;
+		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => camera.UnprojectPosition(worldSpace);
+		public bool IsOnScreen(Vector3 worldSpace) => camera.IsPositionInFrustum(worldSpace);
+		public bool IsPositionBehind(Vector3 worldSpace) => camera.IsPositionBehind(worldSpace);
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
 		private float xformAngle;
 		public float TransformAngle(float angle) => xformAngle + angle;
@@ -49,10 +51,10 @@ namespace Project.Gameplay
 		{
 			UpdateGameplayCamera();
 
-			if (!OS.IsDebugBuild())
-				return;
+			if (OS.IsDebugBuild())
+				UpdateFreeCam();
 
-			UpdateFreeCam();
+			bloomCamera.GlobalTransform = camera.GlobalTransform;
 		}
 
 		#region Settings
@@ -105,8 +107,8 @@ namespace Project.Gameplay
 
 			if (!freeCamEnabled) //Apply transform
 			{
-				_cameraRoot.GlobalTransform = _calculationRoot.GlobalTransform;
-				_cameraGimbal.GlobalTransform = _calculationGimbal.GlobalTransform;
+				cameraRoot.GlobalTransform = calculationRoot.GlobalTransform;
+				cameraGimbal.GlobalTransform = calculationGimbal.GlobalTransform;
 			}
 
 			if (ResetFlag) //Reset flag
@@ -118,7 +120,7 @@ namespace Project.Gameplay
 			UpdateRotation();
 
 			//TODO Check for floors, walls, etc.
-			_calculationRoot.GlobalPosition = GetTargetPosition();
+			calculationRoot.GlobalPosition = GetTargetPosition();
 		}
 
 		public float CurrentPitch { get; private set; }
@@ -131,8 +133,8 @@ namespace Project.Gameplay
 			UpdatePitch();
 			UpdateTilt();
 
-			_calculationRoot.GlobalRotation = Vector3.Up * CurrentYaw;
-			_calculationGimbal.Rotation = Vector3.Right * CurrentPitch;
+			calculationRoot.GlobalRotation = Vector3.Up * CurrentYaw;
+			calculationGimbal.Rotation = Vector3.Right * CurrentPitch;
 			xformAngle = Vector2.Down.Rotated(-CurrentYaw).AngleTo(Vector2.Down);
 		}
 
@@ -203,8 +205,8 @@ namespace Project.Gameplay
 				return targetSettings.staticPosition;
 
 			Vector3 targetPosition = Character.CenterPosition;
-			targetPosition += _calculationRoot.Back() * targetSettings.distance;
-			targetPosition += _calculationRoot.Up() * targetSettings.height;
+			targetPosition += calculationRoot.Back() * targetSettings.distance;
+			targetPosition += calculationRoot.Up() * targetSettings.height;
 			return targetPosition;
 		}
 		#endregion
@@ -221,7 +223,7 @@ namespace Project.Gameplay
 			if (Input.IsKeyPressed(Key.R))
 			{
 				freeCamEnabled = freeCamRotating = false;
-				_calculationRoot.Visible = false;
+				calculationRoot.Visible = false;
 				ResetFlag = true;
 			}
 
@@ -229,7 +231,7 @@ namespace Project.Gameplay
 			if (freeCamRotating)
 			{
 				freeCamEnabled = true;
-				_calculationRoot.Visible = true;
+				calculationRoot.Visible = true;
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 			else
@@ -245,17 +247,17 @@ namespace Project.Gameplay
 				targetMoveSpeed *= .5f;
 
 			if (Input.IsKeyPressed(Key.E))
-				_cameraRoot.GlobalTranslate(_camera.Up() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				cameraRoot.GlobalTranslate(camera.Up() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.Q))
-				_cameraRoot.GlobalTranslate(_camera.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				cameraRoot.GlobalTranslate(camera.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.W))
-				_cameraRoot.GlobalTranslate(_camera.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				cameraRoot.GlobalTranslate(camera.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.S))
-				_cameraRoot.GlobalTranslate(_camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				cameraRoot.GlobalTranslate(camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.D))
-				_cameraRoot.GlobalTranslate(_camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				cameraRoot.GlobalTranslate(camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.A))
-				_cameraRoot.GlobalTranslate(_camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				cameraRoot.GlobalTranslate(camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
 		}
 
 		public override void _Input(InputEvent e)
@@ -268,9 +270,9 @@ namespace Project.Gameplay
 
 			if (e is InputEventMouseMotion)
 			{
-				_cameraRoot.RotateY(Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.x) * MOUSE_SENSITIVITY);
-				_cameraGimbal.RotateX(Mathf.DegToRad((e as InputEventMouseMotion).Relative.y) * MOUSE_SENSITIVITY);
-				_cameraGimbal.Rotation = Vector3.Right * Mathf.Clamp(_cameraGimbal.Rotation.x, -Mathf.Pi * .5f, Mathf.Pi * .5f);
+				cameraRoot.RotateY(Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.x) * MOUSE_SENSITIVITY);
+				cameraGimbal.RotateX(Mathf.DegToRad((e as InputEventMouseMotion).Relative.y) * MOUSE_SENSITIVITY);
+				cameraGimbal.Rotation = Vector3.Right * Mathf.Clamp(cameraGimbal.Rotation.x, -Mathf.Pi * .5f, Mathf.Pi * .5f);
 			}
 			else if (e is InputEventMouseButton emb)
 			{

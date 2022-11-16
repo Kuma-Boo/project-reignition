@@ -1,11 +1,14 @@
-[gd_scene load_steps=18 format=3 uid="uid://b2xrar2kox4ss"]
+[gd_scene load_steps=21 format=3 uid="uid://b2xrar2kox4ss"]
 
 [ext_resource type="PackedScene" uid="uid://cv4u1fal6p32t" path="res://area/stage/1 sand oasis/act 1/data/map/MainAct.tscn" id="1_u5qbb"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="3_15f5a"]
+[ext_resource type="PackedScene" uid="uid://bq32fun4gahk" path="res://area/stage/1 sand oasis/act 1/data/environment/01Opening.tscn" id="9_3063g"]
+[ext_resource type="PackedScene" uid="uid://cemhqpxio4dln" path="res://area/stage/1 sand oasis/act 1/data/environment/02Slope.tscn" id="10_rxp42"]
+[ext_resource type="PackedScene" uid="uid://dd3w8fg0fkg2x" path="res://area/stage/1 sand oasis/act 1/data/environment/03Oasis.tscn" id="11_8u18w"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="14_bn6of"]
 [ext_resource type="PackedScene" uid="uid://pn5533vrs251" path="res://area/stage/1 sand oasis/act 1/data/environment/collision/Collision.tscn" id="24_86eb6"]
 [ext_resource type="Curve3D" path="res://area/stage/1 sand oasis/act 1/data/environment/path/MainPath.tres" id="25_4s3by"]
-[ext_resource type="Environment" path="res://area/stage/1 sand oasis/data/environment/Environment.tres" id="28_j86cn"]
+[ext_resource type="Environment" uid="uid://b7gi55vdfsr1s" path="res://area/stage/1 sand oasis/data/environment/Environment.tres" id="28_j86cn"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="33"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="37"]
 [ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="46_1j6sa"]
@@ -33,7 +36,6 @@ size = Vector3(34, 22, 2)
 [node name="World" type="Node"]
 
 [node name="MainAct" parent="." instance=ExtResource("1_u5qbb")]
-"Time Limit" = 0.0
 
 [node name="Common" type="Node3D" parent="."]
 
@@ -59,11 +61,10 @@ shape = SubResource("335")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8509, 6, -15.9712)
 shape = SubResource("335")
 
-[node name="UTurnTrigger" parent="Common/Trigger" node_paths=PackedStringArray("automationPath") instance=ExtResource("46_1j6sa")]
+[node name="UTurnTrigger" parent="Common/Trigger" instance=ExtResource("46_1j6sa")]
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -74.3558, -45, -295.905)
 distanceToTravel = 50.0
 minimumSpeedRatio = 0.0
-automationPath = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Trigger/UTurnTrigger"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
@@ -198,8 +199,15 @@ shape = SubResource("144")
 [node name="Static" type="Node" parent="."]
 
 [node name="Collision" parent="Static" instance=ExtResource("24_86eb6")]
+visible = false
 
 [node name="Visuals" type="Node3D" parent="Static"]
+
+[node name="01Opening" parent="Static/Visuals" instance=ExtResource("9_3063g")]
+
+[node name="02Slope" parent="Static/Visuals" instance=ExtResource("10_rxp42")]
+
+[node name="03Oasis" parent="Static/Visuals" instance=ExtResource("11_8u18w")]
 
 [node name="Path" type="Node3D" parent="Static"]
 

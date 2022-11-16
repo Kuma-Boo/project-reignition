@@ -26,7 +26,7 @@ namespace Project.Core
 
 		#region Transition Types
 		//Simple cut transition. During loading, everything will freeze temporarily.
-		private void StartCut() => EmitSignal(SignalName.Load);
+		private void StartCut() => EmitSignal(SignalName.TransitionProcess);
 		private void StartFade()
 		{
 			IsTransitionActive = true;
@@ -36,7 +36,7 @@ namespace Project.Core
 			if (CurrentTransitionData.inSpeed == 0)
 			{
 				animator.Seek(animator.CurrentAnimationLength, true);
-				EmitSignal(SignalName.Load);
+				EmitSignal(SignalName.TransitionProcess);
 			}
 			else
 			{
@@ -58,14 +58,14 @@ namespace Project.Core
 		private TransitionData CurrentTransitionData { get; set; }
 		public static bool IsTransitionActive { get; set; }
 		[Signal]
-		public delegate void LoadEventHandler(); //Called in the middle of the transition (i.e. when the screen is completely black)
+		public delegate void TransitionProcessEventHandler(); //Called in the middle of the transition (i.e. when the screen is completely black)
 		[Signal]
-		public delegate void FinishEventHandler(); //Called when the transition is finished
-		private void TransitionLoading(string _) => EmitSignal(SignalName.Load);
+		public delegate void TransitionFinishEventHandler(); //Called when the transition is finished
+		private void TransitionLoading(string _) => EmitSignal(SignalName.TransitionProcess);
 		private void TransitionFinished(string _)
 		{
 			IsTransitionActive = false;
-			EmitSignal(SignalName.Finish);
+			EmitSignal(SignalName.TransitionFinish);
 		}
 
 		public static void StartTransition(TransitionData data)
@@ -92,7 +92,7 @@ namespace Project.Core
 			if (changeInstantly)
 				instance.ApplySceneChange();
 			else
-				instance.Connect(SignalName.Load, new Callable(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
+				instance.Connect(SignalName.TransitionProcess, new Callable(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
 		}
 
 		private string queuedScene;

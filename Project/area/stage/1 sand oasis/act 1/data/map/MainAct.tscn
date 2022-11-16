@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_88wfl"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="4_bj8ws"]
 [ext_resource type="Resource" path="res://resource/preset/camera/common/FloorCam.tres" id="5_5cahl"]
-[ext_resource type="PackedScene" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="6_gbv7i"]
+[ext_resource type="PackedScene" uid="uid://dcyu1iuvha2k3" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="6_gbv7i"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="7_cud8b"]
 [ext_resource type="AudioStream" uid="uid://bg6nquy4qkp4r" path="res://sound/voice/sand oasis/sonic/en/OAS01_E00_SN.wav" id="8_hm1jb"]
 [ext_resource type="AudioStream" uid="uid://op3i27xblafn" path="res://sound/voice/sand oasis/shahra/en/OAS01_E00_SH.wav" id="9_v0s2t"]
@@ -32,7 +32,7 @@
 [ext_resource type="PackedScene" uid="uid://cmbwrey4a6tp8" path="res://area/stage/1 sand oasis/data/environment/object/grindrail/Grindrail05.tscn" id="30_5pm2k"]
 [ext_resource type="PackedScene" uid="uid://c671hfu76uvbr" path="res://area/stage/1 sand oasis/data/environment/object/grindrail/Grindrail04.tscn" id="31_n5ygs"]
 [ext_resource type="PackedScene" uid="uid://md5shjosamyy" path="res://object/stage/pickups/RichRing.tscn" id="32_00hot"]
-[ext_resource type="PackedScene" uid="uid://da84q66iyuyyy" path="res://object/stage/common/JumpPanel.tscn" id="33_iyxrw"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="33_iyxrw"]
 [ext_resource type="PackedScene" uid="uid://vynmf6dcou3l" path="res://area/stage/1 sand oasis/data/environment/object/grindrail/Grindrail03.tscn" id="34_uxv3v"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="35_pu3qj"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="36_bomy2"]
@@ -81,7 +81,7 @@
 [ext_resource type="AudioStream" uid="uid://bq0svliomly6q" path="res://sound/voice/sand oasis/shahra/en/OAS01_H10_SH.wav" id="79_k28qd"]
 [ext_resource type="AudioStream" uid="uid://wv001fxjghk7" path="res://sound/voice/sand oasis/sonic/ja/OAS01_H10_SN.wav" id="80_wbnfx"]
 [ext_resource type="AudioStream" uid="uid://dbvs7prqeaml3" path="res://sound/voice/sand oasis/shahra/ja/OAS01_H10_SH.wav" id="81_lyrb0"]
-[ext_resource type="PackedScene" uid="uid://d2n1iwqhmfvqx" path="res://object/stage/common/Goal.tscn" id="82_2mvc2"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="82_2mvc2"]
 
 [sub_resource type="SphereShape3D" id="6"]
 radius = 10.0
@@ -1306,6 +1306,7 @@ size = Vector3(12, 6, 2)
 script = ExtResource("1_l11tb")
 "Starting Path" = NodePath("../Static/Path/MainPath")
 "Mission Type" = 1
+"Time Limit" = 0.0
 "Objective Count" = 5
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
@@ -2283,10 +2284,9 @@ collision_layer = 0
 transform = Transform3D(1, 3.72529e-09, 0, 1.11759e-08, 1, 0, -7.45058e-09, 5.96046e-08, 1, 0, 0, 0)
 shape = SubResource("66")
 
-[node name="Event" type="Node3D" parent="Objects/Roundabout/CircularPillar" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Roundabout/CircularPillar"]
 transform = Transform3D(0.992404, -0.0320671, 0.11877, 0.0868241, 0.866528, -0.491519, -0.087156, 0.498097, 0.86273, 0.128235, -3.46613, 0.00761414)
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="CircularPillar" parent="Objects/Roundabout/CircularPillar/Event" groups=["wall"] instance=ExtResource("19_levvu")]
 transform = Transform3D(0.981711, 0.0818996, 0.17186, -0.130704, 0.946312, 0.295652, -0.13842, -0.312707, 0.939709, -28.2304, -8.85355, -4.55434)
@@ -2310,10 +2310,9 @@ collision_layer = 0
 transform = Transform3D(0.493937, 0.639104, -0.589553, -0.00362637, 0.679547, 0.733623, 0.86949, -0.360226, 0.337971, 0.214325, 3.00381, 52.8845)
 shape = SubResource("66")
 
-[node name="Event" type="Node3D" parent="Objects/Roundabout/SquarePillarTall" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Roundabout/SquarePillarTall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0400085, 0, 54.61)
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="SquarePillarTall" parent="Objects/Roundabout/SquarePillarTall/Event" groups=["wall"] instance=ExtResource("20_5dgns")]
 transform = Transform3D(0.820267, 0.567253, 0.0733869, -0.571186, 0.805592, 0.157379, 0.0301537, -0.17101, 0.984808, -10.3606, -11.4904, -11.2033)
@@ -2340,10 +2339,9 @@ collision_layer = 0
 transform = Transform3D(-4.47035e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 2.98023e-08, -2.98023e-08, 0.039978, 3.004, 54.61)
 shape = SubResource("66")
 
-[node name="Event" type="Node3D" parent="Objects/Roundabout/SquarePillarMid" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Roundabout/SquarePillarMid"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039978, 0, 54.61)
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="SquarePillarMid" parent="Objects/Roundabout/SquarePillarMid/Event" groups=["wall"] instance=ExtResource("21_pnee0")]
 transform = Transform3D(0.778142, 0.47172, 0.414701, -0.347774, 0.873398, -0.340925, -0.523019, 0.121066, 0.84368, -5.11459, -8.31792, -24.3192)
@@ -2370,10 +2368,9 @@ collision_layer = 0
 transform = Transform3D(-0.659739, 0.435596, -0.612372, -0.0473671, 0.789149, 0.612373, 0.75, 0.433013, -0.5, 0.0399475, 3.004, 54.61)
 shape = SubResource("66")
 
-[node name="Event" type="Node3D" parent="Objects/Roundabout/CircularPillar2" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Roundabout/CircularPillar2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039978, 0, 54.61)
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="CircularPillar" parent="Objects/Roundabout/CircularPillar2/Event" groups=["wall"] instance=ExtResource("19_levvu")]
 transform = Transform3D(0.812382, 0.332811, -0.478828, -0.567183, 0.641688, -0.516276, 0.135436, 0.690995, 0.71006, 16.433, -6.487, -26.2554)
@@ -2400,10 +2397,9 @@ collision_layer = 0
 transform = Transform3D(-0.973597, 0.109191, -0.20046, -0.020731, 0.832249, 0.554014, 0.227326, 0.543543, -0.808012, 0.0400085, 3.004, 0.610016)
 shape = SubResource("66")
 
-[node name="Event" type="Node3D" parent="Objects/Roundabout/FallingPillars" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Roundabout/FallingPillars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0400085, 0, 0.610016)
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="SquarePillar" parent="Objects/Roundabout/FallingPillars/Event" groups=["crusher"] instance=ExtResource("21_pnee0")]
 transform = Transform3D(0.996187, 0, -0.0871551, 0, 1, 0, 0.0871551, 0, 0.996187, 21.2658, 0.44693, -7.6972)
@@ -2534,9 +2530,8 @@ transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 7.31915, 1, 10.0591)
 collision_layer = 0
 
-[node name="Event" type="Node3D" parent="Objects/Plain/Pillars/RisingPillars" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Plain/Pillars/RisingPillars"]
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="SquarePillarShort" parent="Objects/Plain/Pillars/RisingPillars/Event" instance=ExtResource("26_65qbw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5737, -10.1539, -7.65768)
@@ -2563,9 +2558,8 @@ transform = Transform3D(0.0183869, 0.362065, -0.931971, 0.999164, -0.0406839, 0.
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 56.0537, 0, 32.9674)
 collision_layer = 0
 
-[node name="Event" type="Node3D" parent="Objects/Plain/Pillars/FallingPillars" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Plain/Pillars/FallingPillars"]
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="SquarePillarMid" parent="Objects/Plain/Pillars/FallingPillars/Event" groups=["crusher"] instance=ExtResource("21_pnee0")]
 transform = Transform3D(0.965874, 0, 0.259013, 0, 1, 0, -0.259013, 0, 0.965873, 1.99989, 1, 0)
@@ -2636,8 +2630,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 [node name="BlueMajin2" parent="Objects/Plain" instance=ExtResource("29_svxgl")]
 transform = Transform3D(-0.422617, 0, -0.906305, 0, 1, 0, 0.906305, 0, -0.422617, -39.2891, 2.2, -11.6959)
 
-[node name="GrindrailL" parent="Objects/Plain" instance=ExtResource("30_5pm2k")]
+[node name="GrindrailL" parent="Objects/Plain" node_paths=PackedStringArray("sfx") instance=ExtResource("30_5pm2k")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -42.1912, 1.2998, -19.6695)
+sfx = NodePath("SFX")
 
 [node name="Rings" type="Node3D" parent="Objects/Plain/GrindrailL"]
 transform = Transform3D(0.999997, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 0.999997, 1.52588e-05, 0.649998, -12)
@@ -2690,8 +2685,9 @@ collision_layer = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40.5)
 collision_layer = 0
 
-[node name="GrindrailM" parent="Objects/Plain" instance=ExtResource("31_n5ygs")]
+[node name="GrindrailM" parent="Objects/Plain" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -39.2891, 1.29979, -11.6959)
+sfx = NodePath("SFX")
 
 [node name="Rings" type="Node3D" parent="Objects/Plain/GrindrailM"]
 transform = Transform3D(0.999998, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 0.999998, 2.28882e-05, 0.649998, -38)
@@ -2744,8 +2740,9 @@ collision_layer = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40.5)
 collision_layer = 0
 
-[node name="GrindrailR" parent="Objects/Plain" instance=ExtResource("30_5pm2k")]
+[node name="GrindrailR" parent="Objects/Plain" node_paths=PackedStringArray("sfx") instance=ExtResource("30_5pm2k")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -47.2626, 1.29977, -8.79376)
+sfx = NodePath("SFX")
 
 [node name="Rings" type="Node3D" parent="Objects/Plain/GrindrailR"]
 transform = Transform3D(0.999998, 0, 1.49012e-07, 0, 1, 0, -1.49012e-07, 0, 0.999998, 1.52588e-05, 0.649998, -38)
@@ -3404,8 +3401,9 @@ distance = 32.0
 [node name="Island" type="Node3D" parent="Objects"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, -40, -325)
 
-[node name="Grindrail" parent="Objects/Island" instance=ExtResource("31_n5ygs")]
+[node name="Grindrail" parent="Objects/Island" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(1, 0, 0, 0, 0.996164, -0.0875035, 0, 0.0875035, 0.996164, -19.886, -3.28809, 88.3136)
+sfx = NodePath("SFX")
 
 [node name="Ring01" type="Node3D" parent="Objects/Island/Grindrail"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10002, -22.1)
@@ -3467,8 +3465,9 @@ middleHeight = 6.0
 finalHeight = -6.0
 distance = 56.0
 
-[node name="Grindrail2" parent="Objects/Island" instance=ExtResource("34_uxv3v")]
+[node name="Grindrail2" parent="Objects/Island" node_paths=PackedStringArray("sfx") instance=ExtResource("34_uxv3v")]
 transform = Transform3D(0.803857, 0.0539104, -0.592375, 0, 0.995884, 0.0906326, 0.594823, -0.0728556, 0.800549, -16.5515, -5.56179, -37.5729)
+sfx = NodePath("SFX")
 
 [node name="Pearl" type="Node3D" parent="Objects/Island/Grindrail2"]
 transform = Transform3D(0.999999, -3.72529e-09, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, -5.96046e-08, 1.49012e-08, 0.999999, 0, 0.55, -15)
@@ -3610,8 +3609,9 @@ collision_layer = 0
 transform = Transform3D(1, 7.43234e-07, 4.32134e-07, 5.96046e-08, 0.25882, -0.965925, -7.45058e-09, 0.965927, 0.258819, 0.00012207, 14.3378, -3.8439)
 collision_layer = 0
 
-[node name="Grindrail3" parent="Objects/Island" instance=ExtResource("34_uxv3v")]
+[node name="Grindrail3" parent="Objects/Island" node_paths=PackedStringArray("sfx") instance=ExtResource("34_uxv3v")]
 transform = Transform3D(-4.37114e-08, 0.0488498, 0.998806, 0, 0.998806, -0.0488498, -1, -2.13529e-09, -4.36592e-08, 7.27705, -7.54671, -111.062)
+sfx = NodePath("SFX")
 
 [node name="Rings" type="Node3D" parent="Objects/Island/Grindrail3"]
 transform = Transform3D(0.999999, 0, 3.55271e-15, 1.11759e-08, 1, 1.86265e-08, -1.78814e-07, 9.83679e-17, 0.999999, 0, 1.1, -15)
@@ -4115,9 +4115,8 @@ collision_layer = 0
 transform = Transform3D(0.766045, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766045, 29.5761, 5, -60.5752)
 collision_layer = 0
 
-[node name="Event" type="Node3D" parent="Objects/Hallway/SpikeBallTrigger" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Hallway/SpikeBallTrigger"]
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Objects/Hallway/SpikeBallTrigger/Event"]
 root_node = NodePath("../../../Button/SpikeBall")
@@ -4142,7 +4141,6 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -14, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Hallway/Button/EventTrigger/SquarePillarShort/PlatformTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("355")
 
 [node name="SquarePillarShort2" parent="Objects/Hallway/Button/EventTrigger" instance=ExtResource("26_65qbw")]
@@ -4856,10 +4854,9 @@ transform = Transform3D(0, 0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, 6.1
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -62.979, 0, 13.8947)
 collision_layer = 0
 
-[node name="Event" type="Node3D" parent="Objects/Interior/DoorCrumble" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Objects/Interior/DoorCrumble"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4001, 0, 3.05176e-05)
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
 
 [node name="BedrockBlock" parent="Objects/Interior/DoorCrumble/Event" instance=ExtResource("49_s7svc")]
 transform = Transform3D(-0.998331, -0.0259042, 0.0516205, 0.0262542, -0.999637, 0.00611183, 0.0514433, 0.00745688, 0.998648, 0.0308228, 0.905037, 0.80188)
@@ -5010,11 +5007,13 @@ collision_layer = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.87184, 0, -42)
 collision_layer = 0
 
-[node name="Grindrail" parent="Objects/Beach" instance=ExtResource("30_5pm2k")]
+[node name="Grindrail" parent="Objects/Beach" node_paths=PackedStringArray("sfx") instance=ExtResource("30_5pm2k")]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 63.3499, 0.150002, 71.0109)
+sfx = NodePath("SFX")
 
-[node name="Grindrail2" parent="Objects/Beach" instance=ExtResource("30_5pm2k")]
+[node name="Grindrail2" parent="Objects/Beach" node_paths=PackedStringArray("sfx") instance=ExtResource("30_5pm2k")]
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 15.2055, 0.150002, 13.1707)
+sfx = NodePath("SFX")
 
 [node name="DashPanel1" parent="Objects/Beach" instance=ExtResource("15_54g8l")]
 transform = Transform3D(0.572915, 0.206598, 0.793149, 0.0085462, 0.966151, -0.257834, -0.81957, 0.154496, 0.551757, -74.2511, 1.68186, -46.6385)
@@ -5451,8 +5450,9 @@ transform = Transform3D(-4.37114e-08, -1, -1.19209e-07, 1, -4.37114e-08, 0, -4.4
 [node name="SquarePillarMid2" parent="Objects/WallClimb" instance=ExtResource("21_pnee0")]
 transform = Transform3D(-4.37114e-08, -1, -1.19209e-07, 1, -4.37114e-08, 0, -3.55271e-15, -1.19209e-07, 1, 5.19955, 0.700001, 37.0005)
 
-[node name="GrindrailLL" parent="Objects/WallClimb" instance=ExtResource("31_n5ygs")]
+[node name="GrindrailLL" parent="Objects/WallClimb" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, 1, -10.0006, 0.25, 38.0002)
+sfx = NodePath("SFX")
 
 [node name="Pearls" type="Node3D" parent="Objects/WallClimb/GrindrailLL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 0.349998, -0.599976)
@@ -5665,11 +5665,13 @@ collision_layer = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -58.8)
 collision_layer = 0
 
-[node name="GrindrailL" parent="Objects/WallClimb" instance=ExtResource("31_n5ygs")]
+[node name="GrindrailL" parent="Objects/WallClimb" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, -3.5, 9, 35.78)
+sfx = NodePath("SFX")
 
-[node name="GrindrailM" parent="Objects/WallClimb" instance=ExtResource("31_n5ygs")]
+[node name="GrindrailM" parent="Objects/WallClimb" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(1, 0, -2.08616e-07, 0, 1, 0, 2.08616e-07, 0, 1, 0, 9, 35.78)
+sfx = NodePath("SFX")
 
 [node name="Objects" type="Node3D" parent="Objects/WallClimb/GrindrailM"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -0.15, 0)
@@ -5776,11 +5778,13 @@ collision_layer = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 collision_layer = 0
 
-[node name="GrindrailR" parent="Objects/WallClimb" instance=ExtResource("31_n5ygs")]
+[node name="GrindrailR" parent="Objects/WallClimb" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, 3.5, 9, 35.77)
+sfx = NodePath("SFX")
 
-[node name="GrindrailRR" parent="Objects/WallClimb" instance=ExtResource("31_n5ygs")]
+[node name="GrindrailRR" parent="Objects/WallClimb" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.99969, 0.25, 37.9999)
+sfx = NodePath("SFX")
 
 [node name="Rings" type="Node3D" parent="Objects/WallClimb/GrindrailRR"]
 transform = Transform3D(1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, -0.000305176, 0.649998, -2.99994)
@@ -6314,11 +6318,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -666, 8.5, -765)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.039978, 0, -0.0100098)
 collision_layer = 0
 
-[node name="Event" type="Node3D" parent="Objects/Sandfall/SandfallEvent" node_paths=PackedStringArray("animator", "playerStandin", "cameraStandin")]
+[node name="Event" type="Node3D" parent="Objects/Sandfall/SandfallEvent"]
 script = ExtResource("18_yb8xw")
-animator = NodePath("AnimationPlayer")
-playerStandin = NodePath("EventBlock/PlayerStandin")
-cameraStandin = NodePath("CameraStandin")
 
 [node name="JumpTrigger" type="Area3D" parent="Objects/Sandfall/SandfallEvent/Event"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26, -32, 0)
@@ -6642,11 +6643,13 @@ script = ExtResource("28_prktj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_layer = 0
 
-[node name="GrindrailL" parent="Objects/Bridge" instance=ExtResource("74_2n2xu")]
+[node name="GrindrailL" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("74_2n2xu")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -79.1, 20.3, -2)
+sfx = NodePath("SFX")
 
-[node name="GrindrailR" parent="Objects/Bridge" instance=ExtResource("74_2n2xu")]
+[node name="GrindrailR" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("74_2n2xu")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -79.1, 20.3, 2)
+sfx = NodePath("SFX")
 
 [node name="Rings" type="Node3D" parent="Objects/Bridge"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -72.6, 20.6, 0)
@@ -6752,11 +6755,13 @@ script = ExtResource("28_prktj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_layer = 0
 
-[node name="GrindrailL2" parent="Objects/Bridge" instance=ExtResource("76_ewrdl")]
+[node name="GrindrailL2" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("76_ewrdl")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -50.5, 20.3, -2)
+sfx = NodePath("SFX")
 
-[node name="GrindrailR2" parent="Objects/Bridge" instance=ExtResource("76_ewrdl")]
+[node name="GrindrailR2" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("76_ewrdl")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -50.5, 20.3, 2)
+sfx = NodePath("SFX")
 
 [node name="Rings2" type="Node3D" parent="Objects/Bridge"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -43.5, 20.6, 0)
@@ -6863,33 +6868,39 @@ collision_layer = 0
 [node name="BlueMajin" parent="Objects/Bridge" instance=ExtResource("29_svxgl")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5, 18.3, 0)
 
-[node name="GrindrailL3" parent="Objects/Bridge" instance=ExtResource("34_uxv3v")]
+[node name="GrindrailL3" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("34_uxv3v")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 4.49997, 20.3, -2)
+sfx = NodePath("SFX")
 
 [node name="Spring" parent="Objects/Bridge/GrindrailL3" instance=ExtResource("35_pu3qj")]
 transform = Transform3D(0.305472, 0.353298, -0.884232, -0.31273, 0.914332, 0.257287, 0.899381, 0.197932, 0.38979, 0.0999756, 0.250013, -40)
 middleHeight = 4.0
 distance = 10.0
 
-[node name="GrindrailR3" parent="Objects/Bridge" instance=ExtResource("76_ewrdl")]
+[node name="GrindrailR3" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("76_ewrdl")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 4.49997, 20.3, 2)
+sfx = NodePath("SFX")
 
 [node name="Spring" parent="Objects/Bridge/GrindrailR3" instance=ExtResource("35_pu3qj")]
 transform = Transform3D(0.992066, 0.0670337, -0.106356, 0, 0.845986, 0.533206, 0.125718, -0.528975, 0.839274, 0, 0.15, -29.5)
 middleHeight = 4.0
 distance = 12.25
 
-[node name="GrindrailL4" parent="Objects/Bridge" instance=ExtResource("34_uxv3v")]
+[node name="GrindrailL4" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("34_uxv3v")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 46.0784, 20.3, 3.46985)
+sfx = NodePath("SFX")
 
-[node name="GrindrailR4" parent="Objects/Bridge" instance=ExtResource("34_uxv3v")]
+[node name="GrindrailR4" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("34_uxv3v")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 39.7943, 20.3, 6.75061)
+sfx = NodePath("SFX")
 
-[node name="GrindrailM1" parent="Objects/Bridge" instance=ExtResource("31_n5ygs")]
+[node name="GrindrailM1" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("31_n5ygs")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 41.0473, 20.3, 1.75574)
+sfx = NodePath("SFX")
 
-[node name="GrindrailM2" parent="Objects/Bridge" instance=ExtResource("34_uxv3v")]
+[node name="GrindrailM2" parent="Objects/Bridge" node_paths=PackedStringArray("sfx") instance=ExtResource("34_uxv3v")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 63.7973, 11.3, 41.1599)
+sfx = NodePath("SFX")
 
 [node name="Rings" type="Node3D" parent="Objects/Bridge/GrindrailM2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00012207, 0.849998, -22.5)

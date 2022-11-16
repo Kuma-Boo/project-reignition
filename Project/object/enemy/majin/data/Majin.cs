@@ -69,7 +69,7 @@ namespace Project.Gameplay
 				Despawn();
 		}
 
-		protected override void ProcessEnemy()
+		protected override void UpdateEnemy()
 		{
 			//Rotate to face player
 		}

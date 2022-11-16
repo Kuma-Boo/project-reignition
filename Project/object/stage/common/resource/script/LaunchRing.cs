@@ -42,7 +42,7 @@ namespace Project.Gameplay.Objects
 		private bool isActive;
 		private bool isRecentered;
 		private Vector3 recenterVelocity;
-		private readonly float RECENTER_SPEED = .8f;
+		private readonly float RECENTER_SPEED = .16f;
 
 		private CharacterController Character => CharacterController.instance;
 		private InputManager.Controller Controller => InputManager.controller;
@@ -77,9 +77,12 @@ namespace Project.Gameplay.Objects
 				}
 				else //Recenter player
 				{
-					Character.CenterPosition = ExtensionMethods.SmoothDamp(Character.CenterPosition, GlobalPosition, ref recenterVelocity, RECENTER_SPEED * PhysicsManager.physicsDelta);
-					if (Character.CenterPosition.IsEqualApprox(GlobalPosition))
+					Character.CenterPosition = ExtensionMethods.SmoothDamp(Character.CenterPosition, GlobalPosition, ref recenterVelocity, RECENTER_SPEED);
+					if (Character.CenterPosition.DistanceSquaredTo(GlobalPosition) < .5f) //Law of close enough
+					{
+						Character.CenterPosition = GlobalPosition;
 						isRecentered = true;
+					}
 				}
 			}
 		}

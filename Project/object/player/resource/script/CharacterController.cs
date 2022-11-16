@@ -30,14 +30,15 @@ namespace Project.Gameplay
 
 			Stage.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
 			Stage.Connect(StageSettings.SignalName.StageCompleted, new Callable(this, MethodName.OnStageCompleted));
+
+			CallDeferred(MethodName.SnapToGround);
 		}
 
 		[Signal]
 		public delegate void ProcessedEventHandler(); //Called every frame after the player is done processing
-
 		public override void _PhysicsProcess(double _)
 		{
-			ProcessStateMachine();
+			UpdateStateMachine();
 			UpdatePhysics();
 			UpdateOrientation();
 
@@ -83,21 +84,24 @@ namespace Project.Gameplay
 			JumpDash, //Also includes homing attack
 			Stomping, //Jump cancel
 			Backflip,
-
-			//State specific
-			Hanging, //Hanging from a ledge (In Sidle Mode)
 		}
 
-		public void ResetActionState() //Reset action state
-		{
-			ActionState = ActionStates.Normal;
-		}
 
-		private void ProcessStateMachine()
+		/// <summary>
+		/// Reset action state to ActionState.Normal
+		/// </summary>
+		public void ResetActionState() => ActionState = ActionStates.Normal;
+		private void UpdateStateMachine()
 		{
-			if (isCountdownActive) return;
+			if (IsRespawning) return;
+
+			if (IsCountdownActive)
+			{
+				UpdateCountdown();
+				return;
+			}
+
 			UpdateInputs();
-
 			useCustomPhysics = false;
 
 			switch (MovementState)
@@ -119,7 +123,9 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Controls
-		/// <summary> Is the player holding forward, relative to the PathFollower's forward angle? </summary>
+		/// <summary>
+		/// Is the player holding forward, relative to the PathFollower's forward angle?
+		/// </summary>
 		private bool IsHoldingForward
 		{
 			get
@@ -128,7 +134,9 @@ namespace Project.Gameplay
 				return !Controller.MovementAxis.IsEqualApprox(Vector2.Zero) && delta < Mathf.Pi * .4f;
 			}
 		}
-		/// <summary> Is the player holding backward, relative to the PathFollower's forward angle? </summary>
+		/// <summary>
+		/// Is the player holding backward, relative to the PathFollower's forward angle?
+		/// </summary>
 		private bool IsHoldingBackward
 		{
 			get
@@ -142,7 +150,6 @@ namespace Project.Gameplay
 		private float actionBufferTimer;
 		private const float ACTION_BUFFER_LENGTH = .2f; //How long to allow actions to be buffered
 		private const float JUMP_BUFFER_LENGTH = .1f; //How long to allow actions to be buffered
-
 		private void UpdateInputs()
 		{
 			if (MovementState == MovementStates.External) //Ignore inputs
@@ -185,19 +192,24 @@ namespace Project.Gameplay
 				if (resource.priority == -1) //Exempt from priority, take over immediately
 					SetLockoutData(resource);
 				else
-					RefreshCurrentLockoutData();
+					ProcessCurrentLockoutData();
 			}
 		}
 
-		/// <summary> Removes a ControlLockoutResource from the list </summary>
+		/// <summary>
+		/// Removes a ControlLockoutResource from the list
+		/// </summary>
 		public void RemoveLockoutData(LockoutResource resource)
 		{
 			if (!lockoutDataList.Contains(resource)) return;
 			lockoutDataList.Remove(resource);
-			RefreshCurrentLockoutData();
+			ProcessCurrentLockoutData();
 		}
 
-		private void RefreshCurrentLockoutData() //Called whenever the lockout list is modified.
+		/// <summary>
+		/// Recalculates what the active lockout data is. Called whenever the lockout list is modified.
+		/// </summary>
+		private void ProcessCurrentLockoutData()
 		{
 			if (IsLockoutActive && lockoutDataList.Count == 0) //Disable lockout
 				SetLockoutData(null);
@@ -765,6 +777,9 @@ namespace Project.Gameplay
 		[Signal]
 		public delegate void DamagedEventHandler(Node3D n); //This signal is called anytime a hitbox collides with the player, regardless of invincibilty.
 
+		/// <summary>
+		/// Called when the player takes damage.
+		/// </summary>
 		public void TakeDamage(Node3D node)
 		{
 			EmitSignal(SignalName.Damaged, node);
@@ -778,35 +793,88 @@ namespace Project.Gameplay
 				Knockback(true);
 		}
 
-		public void Knockback(bool damaged) //Knocks the player backwards
+		/// <summary>
+		/// Knocks the player backwards.
+		/// </summary>
+		public void Knockback(bool damaged)
 		{
+			//TODO add support for being knocked forwards
+
 			IsOnGround = false;
 			MoveSpeed = -4f;
 			VerticalSpd = 4f;
-
 			//TODO Play hurt animation
 		}
 
+		/// <summary>
+		/// Called when the player loses a life, be it from falling or getting hit without rings.
+		/// </summary>
 		public void Kill()
 		{
-			ResetVelocity();
 			PathFollower.HOffset = PathFollower.VOffset = 0;
 
 			//TODO Check deathless mission modifier/Play death animation
-			Respawn();
+			StartRespawn();
 		}
 
-		public void Respawn()
+		public bool IsRespawning { get; private set; } //Is the player currently respawning?
+		private void StartRespawn() //Fade screen out, enable respawn flag, and connect signals
+		{
+			IsRespawning = true;
+			TransitionManager.StartTransition(new TransitionData()
+			{
+				inSpeed = .5f,
+				outSpeed = .5f,
+				color = Colors.Black
+			});
+
+			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.ProcessRespawn), (uint)ConnectFlags.OneShot);
+			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionFinish, new Callable(this, MethodName.FinishRespawn), (uint)ConnectFlags.OneShot);
+		}
+
+		/// <summary>
+		/// Warp the player to the previous checkpoint and revert any actions.
+		/// </summary>
+		private void ProcessRespawn()
 		{
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
 			GlobalPosition = Stage.Checkpoint.GlobalPosition;
 			PathFollower.SetActivePath(Stage.CheckpointPath); //Revert path
-			Stage.RespawnObjects(true);
-
+			ResetVelocity();
 			ResetOrientation();
+
 			Camera.ResetFlag = true;
+			Stage.RespawnObjects(true); //Respawn Objects
+
+			CallDeferred(MethodName.SnapToGround);
+
+			//TODO Play respawn animation/sfx
+			TransitionManager.FinishTransition();
+		}
+
+		/// <summary>
+		/// Force the player onto the ground by setting VerticalSpeed to a high value, then immediately checking the ground.
+		/// </summary>
+		private void SnapToGround()
+		{
+			VerticalSpd = -100;
+			CheckGround();
+
+			if (!IsOnGround)
+			{
+				VerticalSpd = 0f;
+				GD.Print("Couldn't find ground to snap to!");
+			}
+		}
+
+		/// <summary>
+		/// Disable respawn flags and allow the game to continue on normally
+		/// </summary>
+		private void FinishRespawn()
+		{
+			IsRespawning = false;
 		}
 		#endregion
 
@@ -953,7 +1021,7 @@ namespace Project.Gameplay
 		private bool useCustomPhysics; //TRUE whenever external objects are overridding physics
 		private void UpdatePhysics()
 		{
-			Lockon.ProcessLockonTargets();
+			Lockon.UpdateLockonTargets();
 			if (useCustomPhysics) return; //When physics are handled in the state machine
 
 			Vector3 movementDirection = GetMovementDirection();
@@ -1032,12 +1100,15 @@ namespace Project.Gameplay
 					isAccelerationJump = false;
 					JustLandedOnGround = true;
 
-					Sound.PlayLandingSFX();
-					CheckLandingBoost(); //Landing boost skill
-
 					ResetActionState();
 					Lockon.ResetLockonTarget();
 					UpDirection = groundHit.normal;
+
+					if (!IsCountdownActive && !IsRespawning) //Don't do this stuff during countdown
+					{
+						Sound.PlayLandingSFX();
+						CheckLandingBoost(); //Landing boost skill
+					}
 				}
 				else //Update world direction
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f).Normalized();
@@ -1180,9 +1251,28 @@ namespace Project.Gameplay
 		}
 
 		#region Signals
-		private bool isCountdownActive;
-		public void CountdownStarted() => isCountdownActive = true;
-		public void CountdownCompleted() => isCountdownActive = false;
+		private bool IsCountdownActive => Interface.Countdown.IsCountdownActive;
+		private float countdownBoostTimer;
+		private readonly float COUNTDOWN_BOOST_WINDOW = .4f;
+
+		private void UpdateCountdown()
+		{
+			if (Controller.actionButton.wasPressed)
+				actionBufferTimer = 1f;
+
+			actionBufferTimer -= PhysicsManager.physicsDelta;
+		}
+
+		public void CountdownCompleted()
+		{
+			if (Skills.isCountdownBoostEnabled && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) //Successful starting boost
+			{
+				MoveSpeed = Skills.countdownBoostSpeed;
+				GD.Print("Successful countdown boost");
+			}
+
+			actionBufferTimer = 0; //Reset action buffer from starting boost
+		}
 
 		private void OnStageCompleted(bool _)
 		{

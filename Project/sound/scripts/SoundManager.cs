@@ -196,26 +196,16 @@ namespace Project.Gameplay
 		}
 
 		[Export]
-		private AudioStreamPlayer ringSoundEffect;
-		public void PlayRingSoundEffect() => ringSoundEffect.Play();
-
-		[Export]
 		public AudioStream[] pearlStreams;
+		public int PearlSoundEffectIndex { get; set; }
 		[Export]
-		private AudioStreamPlayer pearlSoundEffect;
-		private int pearlSoundEffectIndex;
-		public void ResetPearlSoundEffect() => pearlSoundEffectIndex = 0;
-		public void PlayPearlSoundEffect()
-		{
-			//Needs more work :\
-			if (!pearlSoundEffect.Playing || pearlSoundEffect.GetPlaybackPosition() > .06f)
-			{
-				pearlSoundEffect.Stream = pearlStreams[pearlSoundEffectIndex / 5];
-				pearlSoundEffect.Play();
-			}
+		private Timer pearlTimer;
 
-			if (pearlSoundEffectIndex < (pearlStreams.Length - 1) * 5)
-				pearlSoundEffectIndex++;
+		public void ResetPearlSFX() => PearlSoundEffectIndex = 0;
+		public void StartPearlTimer()
+		{
+			pearlTimer.WaitTime = 3f; //Reset pearl sfx after 3 seconds
+			pearlTimer.Start();
 		}
 		#endregion
 	}

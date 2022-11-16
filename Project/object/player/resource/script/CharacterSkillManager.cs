@@ -25,6 +25,11 @@ namespace Project.Gameplay
 
 		#region Skills
 		[Export]
+		public bool isCountdownBoostEnabled;
+		[Export]
+		public float countdownBoostSpeed;
+
+		[Export]
 		public float accelerationJumpSpeed;
 
 		[Export]
@@ -48,9 +53,9 @@ namespace Project.Gameplay
 
 			//Expand hitbox if skills is equipped
 			if (SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.PearlAttractor))
-				RuntimeConstants.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
+				RuntimeConstants.Instance.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
 			else
-				RuntimeConstants.UpdatePearlCollisionShapes();
+				RuntimeConstants.Instance.UpdatePearlCollisionShapes();
 		}
 		#endregion
 

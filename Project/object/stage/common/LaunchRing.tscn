@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcsww42lqxn6w"]
+[gd_scene load_steps=9 format=3 uid="uid://bcsww42lqxn6w"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/LaunchRing.cs" id="1_17ata"]
 [ext_resource type="PackedScene" uid="uid://boex8m7dhjl24" path="res://object/stage/common/resource/model/LaunchRing.gltf" id="2_gkfym"]
-[ext_resource type="AudioStream" uid="uid://c45k5tg8wn5m2" path="res://sound/sfx/objects/launch ring 1.wav" id="3_v5nwq"]
+[ext_resource type="AudioStream" uid="uid://dkssgqqfjtfbp" path="res://sound/sfx/objects/launch ring 2.wav" id="3_lq4d6"]
+[ext_resource type="AudioStream" uid="uid://b5v6qhgo3y63l" path="res://sound/sfx/objects/launch ring enter.wav" id="4_wmq7e"]
 
 [sub_resource type="Animation" id="Animation_n5j51"]
 resource_name = "RESET"
@@ -91,8 +92,12 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 shape = SubResource("CylinderShape3D_eaqjp")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_v5nwq")
-pitch_scale = 0.8
+stream = ExtResource("3_lq4d6")
+pitch_scale = 0.85
+bus = &"SFX"
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_wmq7e")
 bus = &"SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
