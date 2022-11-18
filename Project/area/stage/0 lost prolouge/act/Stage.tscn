@@ -1,11 +1,18 @@
-[gd_scene load_steps=20 format=3 uid="uid://d87d3iej8mu2"]
+[gd_scene load_steps=29 format=3 uid="uid://d87d3iej8mu2"]
 
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dg5qugtyb10mt" path="res://area/stage/0 lost prolouge/data/environment/object/grindrail/Grindrail02.tscn" id="3_gi352"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="4_dbc02"]
+[ext_resource type="PackedScene" uid="uid://c5njcpcgig5xp" path="res://area/stage/0 lost prolouge/data/environment/object/grindrail/Grindrail01.tscn" id="4_jthv1"]
+[ext_resource type="PackedScene" uid="uid://cmufjh1nmvt64" path="res://object/stage/pickups/FireSoul.tscn" id="4_ve30n"]
 [ext_resource type="PackedScene" uid="uid://dq1kdx05lgtf" path="res://area/stage/0 lost prolouge/data/environment/BGM.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://cwf1mayrqj6mm" path="res://area/stage/0 lost prolouge/act/data/environment/01Opening.tscn" id="5_truqt"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="6"]
+[ext_resource type="PackedScene" uid="uid://b6pp7ahik6q77" path="res://area/stage/0 lost prolouge/data/environment/object/wonder/WonderBlock4.tscn" id="6_72i0e"]
 [ext_resource type="PackedScene" uid="uid://c4rnocmputo1e" path="res://area/stage/0 lost prolouge/act/data/environment/02Hall.tscn" id="6_domsb"]
+[ext_resource type="PackedScene" uid="uid://kxn0qngyej2h" path="res://area/stage/0 lost prolouge/data/environment/object/wonder/WonderBlock1.tscn" id="6_jeuvr"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://d2fud8l26vq5m" path="res://area/stage/0 lost prolouge/data/environment/object/wonder/WonderBlock2.tscn" id="7_nvicw"]
 [ext_resource type="PackedScene" uid="uid://ipbqdhwrc0ui" path="res://area/stage/0 lost prolouge/act/data/environment/03Tightrope.tscn" id="7_rjw21"]
 [ext_resource type="PackedScene" uid="uid://b8m5lb6i6w7dk" path="res://area/stage/0 lost prolouge/data/skybox/model/Skybox.gltf" id="8_m7whj"]
 [ext_resource type="PackedScene" uid="uid://baquhto5iycmf" path="res://area/stage/0 lost prolouge/act/data/environment/04Ribbon.tscn" id="8_rw3g8"]
@@ -18,6 +25,12 @@
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="12"]
 [ext_resource type="Curve3D" uid="uid://wi3y53rkn4sj" path="res://area/stage/0 lost prolouge/act/data/environment/path/MainPath.tres" id="12_2pl4r"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_y6kil"]
+size = Vector3(10, 10, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h6sva"]
+size = Vector3(10, 15, 6)
+
 [sub_resource type="BoxShape3D" id="12"]
 size = Vector3(90, 20, 10)
 
@@ -26,7 +39,7 @@ size = Vector3(153.4, 20, 251.8)
 
 [node name="World" type="Node"]
 
-[node name="MainAct" type="Node3D" parent="."]
+[node name="Tutorial" type="Node3D" parent="."]
 script = ExtResource("6")
 "Starting Path" = NodePath("../Static/Path/MainPath")
 "Mission Type" = 0
@@ -43,10 +56,58 @@ Completion/Delay = 0.0
 Completion/Lockout = null
 Completion/Animator = NodePath("")
 
-[node name="SpawnPosition" type="Node3D" parent="MainAct"]
+[node name="SpawnPosition" type="Node3D" parent="Tutorial"]
 metadata/_edit_lock_ = true
 
-[node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("3")]
+[node name="CharacterSpawn" parent="Tutorial/SpawnPosition" instance=ExtResource("3")]
+
+[node name="BackSection" type="Node3D" parent="Tutorial"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 141)
+
+[node name="BackstepWall" type="StaticBody3D" parent="Tutorial/BackSection" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -76)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Tutorial/BackSection/BackstepWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_y6kil")
+
+[node name="GrindrailR" parent="Tutorial/BackSection" node_paths=PackedStringArray("sfx") instance=ExtResource("3_gi352")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.3, -83)
+"Rail Path" = NodePath("../GrindrailL/Path3D")
+sfx = NodePath("../GrindrailL/SFX")
+
+[node name="GrindrailL" parent="Tutorial/BackSection" instance=ExtResource("4_jthv1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.3, -83)
+
+[node name="FireSoul1" parent="Tutorial/BackSection" instance=ExtResource("4_ve30n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -79)
+
+[node name="StartSection" type="Node3D" parent="Tutorial"]
+
+[node name="WonderBlock1A" parent="Tutorial/StartSection" instance=ExtResource("6_jeuvr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="WonderBlock1B" parent="Tutorial/StartSection" instance=ExtResource("6_jeuvr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -16)
+
+[node name="WonderBlock1C" parent="Tutorial/StartSection" instance=ExtResource("6_jeuvr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -16)
+
+[node name="WonderBlock2A" parent="Tutorial/StartSection" instance=ExtResource("7_nvicw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+
+[node name="WonderBlock2B" parent="Tutorial/StartSection" instance=ExtResource("7_nvicw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -50)
+
+[node name="WonderBlock4A" parent="Tutorial/StartSection" instance=ExtResource("6_72i0e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -55.2)
+
+[node name="Goal" parent="Tutorial" instance=ExtResource("4_dbc02")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 70)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Tutorial/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 2)
+shape = SubResource("BoxShape3D_h6sva")
 
 [node name="Static" type="Node" parent="."]
 

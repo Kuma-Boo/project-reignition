@@ -55,10 +55,12 @@ namespace Project
 			body.ApplyCentralImpulse(impulseMag * blastDir);
 		}
 
-		public static Vector3 GetLocalPosition(this PathFollow3D p, Vector3 pos)
+		/// <summary>
+		/// Gets the LocalPosition relative to a Node3D. Note that "left" is positive, while "right" is negative.
+		/// </summary>
+		public static Vector3 GetLocalPosition(this Node3D p, Vector3 pos)
 		{
 			Vector3 localPosition = p.GlobalTransform.basis.Inverse() * (pos - p.GlobalPosition);
-			localPosition.x *= -1; //Brute force "right" to be positive
 			return localPosition;
 		}
 

@@ -139,6 +139,9 @@ namespace Project.Gameplay
 		private CharacterSkillManager Skills => Character.Skills;
 		private InputManager.Controller Controller => InputManager.controller;
 
+		private readonly float GRIND_STEP_HEIGHT = 1.6f; //How high to jump during a grindstep
+		private readonly float GRIND_STEP_SPEED = 24.0f; //How fast to move during a grindstep
+
 		public override void _Ready()
 		{
 			if (Engine.IsEditorHint())
@@ -153,6 +156,7 @@ namespace Project.Gameplay
 
 			railPath = GetNode<Path3D>(railPathPath);
 			railPath.CallDeferred("add_child", pathFollower);
+
 			if (isInvisibleRail) //For Secret Rings' hidden rails
 			{
 				UpdateInvisibleRailLength();
@@ -165,9 +169,9 @@ namespace Project.Gameplay
 				//Generate curve and collision
 				collider.Shape = new BoxShape3D()
 				{
-					Size = new Vector3(.15f, .3f, RailLength)
+					Size = new Vector3(.5f, .5f, RailLength)
 				};
-				collider.Position = Vector3.Forward * RailLength * .5f;
+				collider.Position = Vector3.Forward * RailLength * .5f + Vector3.Down * .05f;
 				railPath.Curve = new Curve3D();
 				railPath.Curve.AddPoint(Vector3.Zero);
 				railPath.Curve.AddPoint(Vector3.Forward * RailLength);
@@ -194,6 +198,7 @@ namespace Project.Gameplay
 		private float chargeAmount;
 		private readonly float GRIND_RAIL_CHARGE_LENGTH = .5f; //How long a full charge is.
 		private readonly float GRIND_RAIL_SNAPPING = .5f; //How "magnetic" the rail is. Early 3D Sonic games tended to put this too low.
+		private readonly float STOMP_GRIND_RAIL_SNAPPING = .8f; //For when the player is stomping
 		private Vector3 closestPoint;
 		private void CheckRailActivation()
 		{
@@ -202,13 +207,16 @@ namespace Project.Gameplay
 			if (Character.MovementState != CharacterController.MovementStates.Normal) return; //Character is busy
 
 			GD.PrintErr("Grindrails may not be accurate due to PathFollower issues.");
-			Vector3 delta = railPath.GlobalTransform.basis.Inverse() * (Character.GlobalPosition - railPath.GlobalPosition);
+			Vector3 delta = railPath.GetLocalPosition(Character.GlobalPosition);
 			pathFollower.Progress = railPath.Curve.GetClosestOffset(delta);
-			delta = pathFollower.GetLocalPosition(Character.GlobalPosition); //Get local offset
-			GD.Print(delta);
+			float horizontalOffset = Mathf.Abs(pathFollower.GetLocalPosition(Character.GlobalPosition).x); //Get local offset
 
-			if (Mathf.Abs(delta.x) < GRIND_RAIL_SNAPPING && Character.VerticalSpd <= 0f) //Start grinding
-				ActivateRail();
+			if (Character.VerticalSpd <= 0f)
+			{
+				if (horizontalOffset < GRIND_RAIL_SNAPPING ||
+					(Character.ActionState == CharacterController.ActionStates.Stomping && horizontalOffset < STOMP_GRIND_RAIL_SNAPPING)) //Start grinding
+					ActivateRail();
+			}
 		}
 
 		private void ActivateRail()
@@ -226,8 +234,11 @@ namespace Project.Gameplay
 				UpdateInvisibleRailPosition();
 			}
 
+			Character.ResetActionState(); //Cancel stomps, jumps, etc
 			Character.StartExternal(pathFollower);
+			Character.IsOnGround = true; //Rail counts as being on the ground
 			Character.MoveSpeed = Skills.grindSettings.speed;
+			Character.VerticalSpd = 0f;
 			Character.Connect(CharacterController.SignalName.ExternalControlFinished, new Callable(this, MethodName.DisconnectFromRail), (uint)ConnectFlags.OneShot);
 		}
 
@@ -245,10 +256,31 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (Controller.jumpButton.wasPressed) //TODO implement grindstepping
+			//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
+			float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), Character.MovementAngle);
+
+			if (Controller.jumpButton.wasPressed)
 			{
 				DisconnectFromRail();
-				Character.Jump(true);
+
+				//Check if the player is holding a direction parallel to rail.
+				bool isGrindstep = !Character.IsHoldingDirection(Character.MovementAngle, true) && !Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi, true);
+				if (isGrindstep) //Grindstep
+				{
+					//Calculate how far player is trying to go
+					float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(deltaAngle);
+					horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxis.Length()); //Give some smoothing based on controller strength
+					Vector2 movementVector = new Vector2(horizontalTarget, Character.MoveSpeed);
+
+					Character.MovementAngle += movementVector.AngleTo(Vector2.Down);
+					Character.VerticalSpd = RuntimeConstants.GetJumpPower(GRIND_STEP_HEIGHT);
+					Character.MoveSpeed = movementVector.Length();
+					Character.IsOnGround = false; //Disconnect from the ground
+					Character.CanJumpDash = false; //Disable jumpdashing
+				}
+				else //Jump normally
+					Character.Jump(true);
+
 				return;
 			}
 

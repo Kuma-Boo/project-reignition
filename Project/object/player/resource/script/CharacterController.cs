@@ -16,8 +16,6 @@ namespace Project.Gameplay
 		public InputManager.Controller Controller => InputManager.controller;
 		public StageSettings Stage => StageSettings.instance;
 
-		public int score;
-
 		public override void _EnterTree()
 		{
 			instance = this;
@@ -124,26 +122,57 @@ namespace Project.Gameplay
 
 		#region Controls
 		/// <summary>
-		/// Is the player holding forward, relative to the PathFollower's forward angle?
+		/// Is the player holding in the specified direction?
 		/// </summary>
-		private bool IsHoldingForward
+		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default)
 		{
-			get
-			{
-				float delta = ExtensionMethods.DeltaAngleRad(GetTargetInputAngle(), PathFollower.ForwardAngle);
-				return !Controller.MovementAxis.IsEqualApprox(Vector2.Zero) && delta < Mathf.Pi * .4f;
-			}
+			if (!allowNullInputs && Controller.MovementAxis.IsEqualApprox(Vector2.Zero))
+				return false;
+
+			float delta = ExtensionMethods.DeltaAngleRad(GetTargetInputAngle(), refAngle);
+			return delta < Mathf.Pi * .4f;
 		}
+
 		/// <summary>
-		/// Is the player holding backward, relative to the PathFollower's forward angle?
+		/// Returns the target movement angle based on the camera view.
 		/// </summary>
-		private bool IsHoldingBackward
+		public float GetTargetInputAngle()
 		{
-			get
+			if (Controller.MovementAxis.IsEqualApprox(Vector2.Zero)) //Invalid input, no change
+				return MovementAngle;
+
+			return Camera.TransformAngle(Controller.MovementAxis.AngleTo(Vector2.Up)); //Target rotation angle (in radians)
+		}
+
+		private float GetTargetMovementAngle()
+		{
+			float inputAngle = GetTargetInputAngle();
+
+			if (IsLockoutActive && currentLockoutData.directionOverrideMode != LockoutResource.DirectionOverrideMode.Free)
 			{
-				float delta = ExtensionMethods.DeltaAngleRad(GetTargetInputAngle() + Mathf.Pi, PathFollower.ForwardAngle);
-				return !Controller.MovementAxis.IsEqualApprox(Vector2.Zero) && delta < Mathf.Pi * .4f;
+				float targetAngle = Mathf.DegToRad(currentLockoutData.overrideAngle);
+				if (currentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.Camera)
+					targetAngle = Camera.TransformAngle(targetAngle);
+				else if (currentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.PathFollower)
+					targetAngle = PathFollower.ForwardAngle + targetAngle;
+
+				if (currentLockoutData.allowReversing) //Check if we're trying to turn around
+				{
+					float dot = Mathf.Sign(ExtensionMethods.DotAngle(inputAngle, PathFollower.ForwardAngle));
+					if (dot < 0) //Invert targetAngle when moving backwards
+						targetAngle += Mathf.Pi;
+				}
+
+				if (currentLockoutData.directionOverrideMode == LockoutResource.DirectionOverrideMode.Clamp)
+				{
+					if (!currentLockoutData.overrideSpeed || !Controller.MovementAxis.IsEqualApprox(Vector2.Zero)) //Allows recentering when holding neutral on the control stick
+						targetAngle = ExtensionMethods.ClampAngleRange(inputAngle, targetAngle, Mathf.Pi * currentLockoutData.overrideAngleClampRange * .5f);
+				}
+
+				return targetAngle;
 			}
+
+			return inputAngle;
 		}
 
 		private float jumpBufferTimer;
@@ -249,8 +278,7 @@ namespace Project.Gameplay
 			if (!IsLockoutActive || !currentLockoutData.recenterPlayer) return;
 
 			Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
-
-			float currentOffset = PathFollower.GetLocalPosition(GlobalPosition).x;
+			float currentOffset = -PathFollower.GetLocalPosition(GlobalPosition).x;
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
 			{
@@ -496,7 +524,7 @@ namespace Project.Gameplay
 			{
 				jumpBufferTimer = 0;
 
-				if (IsHoldingBackward)
+				if (IsHoldingDirection(PathFollower.BackAngle))
 					StartBackflip();
 				else
 					Jump();
@@ -548,7 +576,7 @@ namespace Project.Gameplay
 			if (MovementState != MovementStates.Normal) return;
 
 			//Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
-			if (IsHoldingForward && MoveSpeed < landingBoost)
+			if (IsHoldingDirection(PathFollower.ForwardAngle) && MoveSpeed < landingBoost)
 				MoveSpeed = landingBoost;
 		}
 
@@ -577,7 +605,7 @@ namespace Project.Gameplay
 		{
 			if (isAccelerationJump && currentJumpTime >= ACCELERATION_JUMP_LENGTH) //Acceleration jump?
 			{
-				if (!IsHoldingBackward && Controller.MovementAxis.Length() > .5f)
+				if (IsHoldingDirection(PathFollower.ForwardAngle, true) && Controller.MovementAxis.Length() > .5f)
 				{
 					ActionState = ActionStates.AccelJump;
 					MoveSpeed = Skills.accelerationJumpSpeed;
@@ -727,7 +755,7 @@ namespace Project.Gameplay
 		private const float BACKFLIP_TURN_SPEED = .25f;
 		private void UpdateBackflip()
 		{
-			if (!IsHoldingForward) //Influence backflip direction slightly
+			if (!IsHoldingDirection(PathFollower.ForwardAngle)) //Influence backflip direction slightly
 			{
 				float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.BackAngle, MAX_BACKFLIP_ADJUSTMENT);
 				MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, BACKFLIP_TURN_SPEED);
@@ -970,44 +998,6 @@ namespace Project.Gameplay
 
 		/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs </summary>
 		public float MovementAngle { get; set; }
-		private float GetTargetInputAngle()
-		{
-			if (Controller.MovementAxis.IsEqualApprox(Vector2.Zero)) //Invalid input, no change
-				return MovementAngle;
-
-			return Camera.TransformAngle(Controller.MovementAxis.AngleTo(Vector2.Up)); //Target rotation angle (in radians)
-		}
-		private float GetTargetMovementAngle()
-		{
-			float inputAngle = GetTargetInputAngle();
-
-			if (IsLockoutActive && currentLockoutData.directionOverrideMode != LockoutResource.DirectionOverrideMode.Free)
-			{
-				float targetAngle = Mathf.DegToRad(currentLockoutData.overrideAngle);
-				if (currentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.Camera)
-					targetAngle = Camera.TransformAngle(targetAngle);
-				else if (currentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.PathFollower)
-					targetAngle = PathFollower.ForwardAngle + targetAngle;
-
-				if (currentLockoutData.allowReversing) //Check if we're trying to turn around
-				{
-					float dot = Mathf.Sign(ExtensionMethods.DotAngle(inputAngle, PathFollower.ForwardAngle));
-					if (dot < 0) //Invert targetAngle when moving backwards
-						targetAngle += Mathf.Pi;
-				}
-
-				if (currentLockoutData.directionOverrideMode == LockoutResource.DirectionOverrideMode.Clamp)
-				{
-					if (!currentLockoutData.overrideSpeed || !Controller.MovementAxis.IsEqualApprox(Vector2.Zero)) //Allows recentering when holding neutral on the control stick
-						targetAngle = ExtensionMethods.ClampAngleRange(inputAngle, targetAngle, Mathf.Pi * currentLockoutData.overrideAngleClampRange * .5f);
-				}
-
-				return targetAngle;
-			}
-
-			return inputAngle;
-		}
-
 		public Vector3 GetMovementDirection() => this.Forward().Rotated(UpDirection, MovementAngle);
 
 		public float MoveSpeed { get; set; } //Character's primary movement speed.
@@ -1043,7 +1033,7 @@ namespace Project.Gameplay
 			UpdateRecenter();
 		}
 
-		public bool IsOnGround { get; private set; }
+		public bool IsOnGround { get; set; }
 		public bool JustLandedOnGround { get; private set; } //Flag for doing stuff on land
 
 		public Vector3 CenterPosition
@@ -1195,7 +1185,7 @@ namespace Project.Gameplay
 						if (Skills.IsSpeedBreakActive) //Cancel speed break
 							Skills.ToggleSpeedBreak();
 
-						MoveAndCollide(castVector * MoveSpeed * PhysicsManager.physicsDelta);
+						//MoveAndCollide(castVector * MoveSpeed * PhysicsManager.physicsDelta);
 						MoveSpeed = 0; //Kill speed
 					}
 					else //Reduce MoveSpd when moving against walls

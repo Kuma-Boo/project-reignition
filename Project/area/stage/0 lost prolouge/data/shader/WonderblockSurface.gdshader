@@ -15,5 +15,5 @@ void fragment()
 	vec2 distortion_uv = UV - vec2(1, 0) * scroll_speed * time;
 	uv += texture(distortion, distortion_uv * distortion_scale).rg * (.5 - distortion_strength);
 	vec4 col = texture(albedo, uv);
-	ALBEDO = col.rgb * 10.0;
+	ALBEDO = clamp(col.rgb * 20.0, 0.0, 1.0);
 }

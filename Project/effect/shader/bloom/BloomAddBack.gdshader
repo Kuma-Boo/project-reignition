@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, depth_draw_never;
+render_mode unshaded, depth_draw_never, blend_add, cull_back;
 
 global uniform float bloom_amount;
 uniform vec2 direction;
