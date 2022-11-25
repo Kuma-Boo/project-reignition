@@ -11,7 +11,7 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private float distanceToTravel; //How far to travel. Set at 0 to travel the entire path
 		[Export]
-		private float minimumSpeedRatio = 1f;
+		private float startingPoint;
 		[Export]
 		private Path3D automationPath; //Leave NULL to use the player's current path.
 		[Export]
@@ -22,15 +22,16 @@ namespace Project.Gameplay.Triggers
 		private bool isEntered;
 		private bool isActive;
 
-		private float startingProgress;
-		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingProgress);
-		private bool IsFinished => (!Mathf.IsZeroApprox(distanceToTravel) && DistanceTraveled >= distanceToTravel) || (automationPath != null && Character.PathFollower.ActivePath != automationPath);
+		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingPoint);
+		private bool IsFinished => DistanceTraveled >= distanceToTravel;
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _PhysicsProcess(double _)
 		{
 			if (isActive)
 			{
+				UpdateAutomation();
+
 				if (IsFinished)
 				{
 					Deactivate();
@@ -46,27 +47,43 @@ namespace Project.Gameplay.Triggers
 				Activate();
 		}
 
+		private void UpdateAutomation()
+		{
+			if (!Character.Skills.IsSpeedBreakActive)
+				Character.MoveSpeed = Character.groundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
+
+			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			Character.UpdateExternalControl();
+		}
+
 		private bool IsActivationValid()
 		{
-			if (!Character.IsOnGround || Character.groundSettings.GetSpeedRatio(Character.MoveSpeed) < minimumSpeedRatio) return false;
+			if (!Character.IsOnGround) return false;
 			return true;
 		}
 
 		private void Activate()
 		{
+			//Cancel any lockout that doesn't have an assigned priority (i.e. Dash Panels)
+			if (Character.IsLockoutActive && Character.CurrentLockoutData.priority == -1)
+				Character.RemoveLockoutData(Character.CurrentLockoutData);
+
+			float initialVelocity = Character.MoveSpeed;
 			Character.PathFollower.SetActivePath(automationPath);
 			Character.StartExternal(Character.PathFollower, .2f);
+			Character.MoveSpeed = initialVelocity;
 
-			startingProgress = Character.PathFollower.Progress;
 			isActive = true;
-
 			UpdateCamera();
 		}
 
 		private void Deactivate()
 		{
 			isActive = false;
+			Character.PathFollower.Resync();
+
 			Character.ResetMovementState();
+			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 		}
 
 		public void UpdateCamera()

@@ -1,6 +1,5 @@
 using Godot;
 using Godot.Collections;
-using Project.Core;
 using Project.Gameplay;
 using Project.Gameplay.Triggers;
 using Project.Gameplay.Objects;
@@ -16,13 +15,12 @@ namespace Project.Editor
 		private Node target;
 		public static Camera3D editorCam;
 
-		public override bool _Handles(Variant var)
+		public override bool _Handles(Variant var) => true;
+		public override void _Edit(Variant var)
 		{
-			return var.Obj is DriftTrigger || var.Obj is JumpTrigger || var.Obj is Launcher ||
-			var.Obj is FlyingPot || var.Obj is Catapult || var.Obj is LaunchRing || var.Obj is Majin || var.Obj is SpikeBall;
+			if (var.Obj is Node)
+				target = (Node)var.Obj;
 		}
-
-		public override void _Edit(Variant var) => target = (Node)var.Obj;
 
 		public override long _Forward3dGuiInput(Camera3D cam, InputEvent e)
 		{
@@ -62,11 +60,13 @@ namespace Project.Editor
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
-				float simulationTime = (i / (float)PREVIEW_RESOLUTION) * launchData.TotalTravelTime;
+				float simulationTime = (i / ((float)PREVIEW_RESOLUTION - 1)) * launchData.TotalTravelTime;
 				Vector3 position = launchData.InterpolatePositionTime(simulationTime);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
 			}
+
+			if (points.Count < 2) return; //Can't draw!!!
 
 			Vector2[] pointsList = new Vector2[points.Count];
 			points.CopyTo(pointsList, 0);
@@ -91,6 +91,7 @@ namespace Project.Editor
 				if (!editorCam.IsPositionBehind(points[i]))
 					pointsList[i] = editorCam.UnprojectPosition(points[i]);
 			}
+
 			overlay.DrawPolyline(pointsList, Colors.Blue, 1, true);
 		}
 

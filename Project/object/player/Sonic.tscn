@@ -4,8 +4,8 @@
 [ext_resource type="Resource" uid="uid://2r18q1m50o37" path="res://object/player/resource/movement settings/ground/GroundSettings.tres" id="2_qbh54"]
 [ext_resource type="Resource" uid="uid://bsdyr3nwbjt2s" path="res://object/player/resource/movement settings/aerial/AirSettings.tres" id="3_ywh7m"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
+[ext_resource type="PackedScene" uid="uid://djwsy5ophmfdd" path="res://object/player/resource/model/Sonic.tscn" id="6_ip8ma"]
 [ext_resource type="PackedScene" uid="uid://b6m53bp56bkf1" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
-[ext_resource type="PackedScene" uid="uid://dokqgt2vqpcw" path="res://object/player/resource/model/Sonic.gltf" id="7_6ntt8"]
 [ext_resource type="PackedScene" uid="uid://cyd2ep1n5php3" path="res://object/player/resource/component/Sound.tscn" id="8_ni1dd"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterController.cs" id="10"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="11"]
@@ -274,6 +274,7 @@ collision_layer = 2
 floor_stop_on_slope = false
 floor_constant_speed = true
 floor_block_on_wall = false
+floor_max_angle = 0.0
 script = ExtResource("10")
 groundSettings = ExtResource("2_qbh54")
 airSettings = ExtResource("3_ywh7m")
@@ -288,7 +289,7 @@ jumpDashMaxGravity = -24.0
 backflipSpeed = 20.0
 backflipHeight = 1.4
 environmentCollider = NodePath("CollisionShape3D")
-environmentMask = 1
+environmentMask = 9
 PathFollower = NodePath("Components/PathFollower")
 Animator = NodePath("Components/Sonic")
 Sound = NodePath("Components/Sound")
@@ -298,7 +299,6 @@ Lockon = NodePath("Components/Lockon")
 [node name="Components" type="Node3D" parent="."]
 
 [node name="PathFollower" type="PathFollow3D" parent="Components"]
-visible = false
 rotation_mode = 4
 loop = false
 script = ExtResource("6_80hf8")
@@ -306,7 +306,7 @@ script = ExtResource("6_80hf8")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower"]
 mesh = SubResource("SphereMesh_f0gyp")
 
-[node name="Sonic" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("7_6ntt8")]
+[node name="Sonic" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("6_ip8ma")]
 script = ExtResource("11")
 animator = NodePath("../../AnimationTree")
 

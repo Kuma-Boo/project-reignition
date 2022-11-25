@@ -2,12 +2,11 @@
 
 [resource]
 code = "shader_type spatial;
-render_mode cull_disabled;
+render_mode cull_disabled, depth_prepass_alpha, depth_draw_opaque;
 
 uniform sampler2D albedo : hint_default_black;
 uniform sampler2D specular : hint_default_black;
 uniform float roughness : hint_range(0, 1) = .8;
-uniform float alpha_scissor : hint_range(0, 1) = .5;
 
 void fragment() {
 	vec4 col = texture(albedo, UV) * COLOR;
@@ -15,6 +14,5 @@ void fragment() {
 	ROUGHNESS = roughness;
 	ALBEDO = col.rgb;
 	ALPHA = col.a;
-	ALPHA_SCISSOR_THRESHOLD = alpha_scissor;
 }
 "

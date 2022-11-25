@@ -60,8 +60,6 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Soul Skills
-		[Export(PropertyHint.Layers3dPhysics)]
-		public uint speedBreakCollisionMask;
 		private uint normalCollisionMask;
 		public bool IsTimeBreakEnabled
 		{
@@ -226,7 +224,7 @@ namespace Project.Gameplay
 			if (IsSpeedBreakActive)
 			{
 				Character.Sound.PlayVoice("speed break");
-				Character.CollisionMask = speedBreakCollisionMask; //Don't collide with any objects
+				Character.CollisionMask = RuntimeConstants.Instance.environmentMask; //Don't collide with any objects
 			}
 			else
 			{

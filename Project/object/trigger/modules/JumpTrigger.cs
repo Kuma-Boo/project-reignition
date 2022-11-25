@@ -10,7 +10,8 @@ namespace Project.Gameplay.Triggers
 	public partial class JumpTrigger : StageTriggerModule
 	{
 		[Export]
-		private Node3D targetNode; //Leaving this empty will use targetPosition exclusively.
+		private NodePath targetNode;
+		private Node3D _targetNode; //Leaving this empty will use targetPosition exclusively.
 		[Export]
 		private Vector3 targetPosition; //Position to jump to. (Added to targetNode's position)
 		[Export]
@@ -19,8 +20,9 @@ namespace Project.Gameplay.Triggers
 		private Vector3 GetTargetPosition()
 		{
 			Vector3 returnPosition = targetPosition;
-			if (targetNode != null)
-				returnPosition += targetNode.GlobalPosition;
+			_targetNode = GetNodeOrNull<Node3D>(targetNode);
+			if (_targetNode != null)
+				returnPosition += _targetNode.GlobalPosition;
 			return returnPosition;
 		}
 

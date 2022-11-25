@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 namespace Project.Gameplay.Triggers
 {
@@ -14,6 +15,7 @@ namespace Project.Gameplay.Triggers
 		private Node3D playerStandin;
 		[Export]
 		private Node3D cameraStandin;
+		private readonly Array<DialogTrigger> dialogTriggers = new Array<DialogTrigger>();
 
 		[Signal]
 		public delegate void ActivatedEventHandler();
@@ -22,6 +24,12 @@ namespace Project.Gameplay.Triggers
 		public override void _Ready()
 		{
 			StageSettings.instance.RegisterRespawnableObject(this);
+
+			for (int i = 0; i < GetChildCount(); i++)
+			{
+				if (GetChild(i) is DialogTrigger)
+					dialogTriggers.Add(GetChild<DialogTrigger>(i));
+			}
 		}
 
 		public void Respawn()
@@ -34,10 +42,10 @@ namespace Project.Gameplay.Triggers
 		{
 			if (wasActivated) return;
 
-			if (!string.IsNullOrEmpty("event"))
+			if (animator.HasAnimation("event"))
 				animator.Play("event");
 			else
-				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen");
+				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen.");
 
 			if (playerStandin != null)
 				Character.StartExternal(playerStandin, .2f);
@@ -46,8 +54,23 @@ namespace Project.Gameplay.Triggers
 			EmitSignal(SignalName.Activated);
 		}
 
-		//Call this from the animator to play a specific animation on the player
+		/// <summary>
+		/// Call this to play a dialog track (DialogTriggers must be children to this EventTrigger node)
+		/// </summary>
+		public void PlayDialog(int index) => SoundManager.instance.PlayDialog(dialogTriggers[index]);
+
+		/// <summary>
+		/// Call this to play a specific animation on the player
+		/// </summary>
 		public void PlayCharacterAnimation(string anim) => Character.Animator.PlayAnimation(anim);
-		public void FinishEvent() => Character.ResetMovementState();
+		/// <summary>
+		/// Call this to reset character's movement state
+		/// </summary>
+		public void FinishEvent(float moveSpeed, float fallSpeed)
+		{
+			Character.MoveSpeed = moveSpeed;
+			Character.VerticalSpd = fallSpeed;
+			Character.ResetMovementState();
+		}
 	}
 }

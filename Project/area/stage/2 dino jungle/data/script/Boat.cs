@@ -3,13 +3,17 @@ using Project.Core;
 
 namespace Project.Gameplay.Objects
 {
-	public partial class Boat : Node3D
+	public partial class Boat : CharacterBody3D
 	{
 		[Export]
 		private float speed; //How fast should the boat move?
 
 		[Export]
 		private Node3D passengerPosition;
+		[Export]
+		private RayCast3D frontOrientationChecker;
+		[Export]
+		private RayCast3D rearOrientationChecker;
 		[Export]
 		private AnimationPlayer animator;
 		[Export]
@@ -28,6 +32,12 @@ namespace Project.Gameplay.Objects
 
 		private float hitstunTimer;
 		private readonly float HITSTUN_LENGTH = 2f;
+
+		private Vector3 CastOrigin
+		{
+			get => GlobalPosition + Vector3.Up * 5.0f;
+			set => GlobalPosition = value - Vector3.Up * 5.0f;
+		}
 
 		private SpawnData spawnData;
 		private CharacterController Character => CharacterController.instance;
@@ -66,14 +76,14 @@ namespace Project.Gameplay.Objects
 
 			Vector3 castDirection = this.Left() * direction;
 			Vector3 castVector = castDirection * distance;
-			RaycastHit hit = this.CastRay(GlobalPosition, castVector, environmentMask);
-			Debug.DrawRay(GlobalPosition, castVector, hit ? Colors.Red : Colors.White);
+			RaycastHit hit = this.CastRay(CastOrigin, castVector, environmentMask);
+			Debug.DrawRay(CastOrigin, castVector, hit ? Colors.Red : Colors.White);
 
 			if (hit)
 			{
 				if (hit.distance <= COLLISION_SIZE)
 				{
-					GlobalPosition = hit.point - castDirection * COLLISION_SIZE;
+					CastOrigin = hit.point - castDirection * COLLISION_SIZE;
 
 					if (isActiveDirection)
 						strafeSpeed = strafeVelocity = 0;
@@ -100,9 +110,22 @@ namespace Project.Gameplay.Objects
 			else
 				moveSpeed = ExtensionMethods.SmoothDamp(moveSpeed, speed, ref speedVelocity, SPEED_TRACTION);
 
-			GlobalPosition += this.Forward() * moveSpeed * PhysicsManager.physicsDelta;
-			GlobalPosition += this.Left() * strafeSpeed * PhysicsManager.physicsDelta;
-			GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
+			UpDirection = this.Up();
+			Velocity = this.Forward() * moveSpeed + this.Left() * strafeSpeed + this.Down() * 5.0f;
+			MoveAndSlide();
+
+			frontOrientationChecker.ForceRaycastUpdate();
+			rearOrientationChecker.ForceRaycastUpdate();
+
+			float targetAngle = Character.PathFollower.ForwardAngle + Character.PathFollower.CalculateDeltaAngle(moveSpeed);
+			Transform3D t = GlobalTransform;
+			t.basis.z = Vector3.Back;
+			t.basis.y = (frontOrientationChecker.GetCollisionNormal() + rearOrientationChecker.GetCollisionNormal()) * .5f;
+			t.basis.x = -t.basis.z.Cross(t.basis.y);
+			t.basis = GlobalTransform.basis.Slerp(t.basis.Orthonormalized(), .1f);
+			targetAngle -= CharacterController.CalculateForwardAngle(t.basis.z);
+			t = t.RotatedLocal(Vector3.Up, targetAngle);
+			GlobalTransform = t.Orthonormalized();
 
 			Character.UpdateExternalControl();
 			Character.PathFollower.Resync();

@@ -1,4 +1,4 @@
-[gd_scene load_steps=139 format=3 uid="uid://cv4u1fal6p32t"]
+[gd_scene load_steps=134 format=3 uid="uid://cv4u1fal6p32t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_l11tb"]
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="2_p184d"]
@@ -28,7 +28,7 @@
 [ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/data/environment/object/SquarePillarShort.tscn" id="26_65qbw"]
 [ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/data/environment/object/Jar.tscn" id="27_fr3rd"]
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="28_prktj"]
-[ext_resource type="PackedScene" path="res://object/enemy/majin/data/sand oasis/BlueMajin.tscn" id="29_svxgl"]
+[ext_resource type="PackedScene" uid="uid://bwu8jwjs8tfpb" path="res://object/enemy/majin/data/sand oasis/BlueMajin.tscn" id="29_svxgl"]
 [ext_resource type="PackedScene" uid="uid://cmbwrey4a6tp8" path="res://area/stage/1 sand oasis/data/environment/object/grindrail/Grindrail05.tscn" id="30_5pm2k"]
 [ext_resource type="PackedScene" uid="uid://c671hfu76uvbr" path="res://area/stage/1 sand oasis/data/environment/object/grindrail/Grindrail04.tscn" id="31_n5ygs"]
 [ext_resource type="PackedScene" uid="uid://md5shjosamyy" path="res://object/stage/pickups/RichRing.tscn" id="32_00hot"]
@@ -55,9 +55,6 @@
 [ext_resource type="AudioStream" uid="uid://c3led4qyqtqab" path="res://sound/voice/sand oasis/sonic/ja/OAS01_H02_SN.wav" id="53_fyceu"]
 [ext_resource type="AudioStream" uid="uid://c66d7acekixqn" path="res://sound/voice/sand oasis/shahra/ja/OAS01_H02_SH.wav" id="54_t6nnd"]
 [ext_resource type="PackedScene" uid="uid://c1ivqxpa0ry7i" path="res://object/stage/common/FlyingPot.tscn" id="55_ml5vo"]
-[ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="56_k4lo8"]
-[ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/data/trigger/camera/WallRunBottomCam.tres" id="57_2bf6x"]
-[ext_resource type="PackedScene" uid="uid://dldm3bsstvfgj" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="58_xkdl0"]
 [ext_resource type="PackedScene" uid="uid://doc2lrkdh0ga3" path="res://area/stage/1 sand oasis/data/environment/object/SidleRailing.tscn" id="59_ike03"]
 [ext_resource type="PackedScene" uid="uid://chojgx2uh1yjc" path="res://area/stage/1 sand oasis/data/environment/object/SidleRailingCenter.tscn" id="60_5jd2r"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Launcher.cs" id="61_q6614"]
@@ -1201,12 +1198,6 @@ size = Vector3(2, 10, 10)
 [sub_resource type="BoxShape3D" id="334"]
 size = Vector3(38, 10, 2)
 
-[sub_resource type="SphereShape3D" id="159"]
-radius = 2.0
-
-[sub_resource type="BoxShape3D" id="247"]
-size = Vector3(10, 10, 6)
-
 [sub_resource type="BoxShape3D" id="253"]
 size = Vector3(8.4, 2, 2)
 
@@ -1325,7 +1316,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, 2.4)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="SpawnPosition" instance=ExtResource("2_p184d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -296, -114, -244)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -715, -112, -643)
 
 [node name="StageTrigger" parent="SpawnPosition/CharacterSpawn" instance=ExtResource("3_88wfl")]
 collision_layer = 0
@@ -5894,26 +5885,10 @@ length = 0.5
 
 [node name="DashPanel5" parent="Objects/WallClimb" instance=ExtResource("15_54g8l")]
 transform = Transform3D(0.956306, 0.264435, 0.124721, 0, 0.426584, -0.904449, -0.292372, 0.864928, 0.407945, -11.1877, 4.59836, -64.7485)
-speedRatio = 2.0
 length = 0.5
-
-[node name="WallClimbTrigger" parent="Objects/WallClimb" instance=ExtResource("56_k4lo8")]
-transform = Transform3D(0.956305, 0, 0.292372, 0, 1, 0, -0.292372, 0, 0.956305, -11.2134, 6, -64.7656)
-distanceToTravel = 60.0
-minimumSpeedRatio = 0.0
-cameraSettings = ExtResource("57_2bf6x")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/WallClimb/WallClimbTrigger"]
-shape = SubResource("159")
 
 [node name="WallSidle" type="Node3D" parent="Objects"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -664, 10, -705)
-
-[node name="SidleTrigger" parent="Objects/WallSidle" instance=ExtResource("58_xkdl0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, 5.1, 57.2)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/WallSidle/SidleTrigger"]
-shape = SubResource("247")
 
 [node name="Spear" parent="Objects/WallSidle" instance=ExtResource("44_fid73")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 2.59998, 0, 58)

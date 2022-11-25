@@ -99,9 +99,7 @@ namespace Project.Gameplay
 		{
 			Rotation = Vector3.Zero;
 		}
-		*/
-
-		/*
+		
 		public void SetForwardDirection(Vector3 direction)
 		{
 			Transform3D t = _root.GlobalTransform;

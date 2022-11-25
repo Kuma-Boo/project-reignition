@@ -10,7 +10,7 @@ namespace Project.Gameplay.Objects
 		private float length; //How long for the boost pad to last
 		private bool isQueued; //For when the player collides with the dash panel from the air
 		[Export]
-		private bool alignToPath; //Forces the player to  stay aligned to the path. Normally unneeded.
+		private bool alignToPath; //Forces the player to stay aligned to the path. Useful when a dash panel is right before a corner.
 
 		[Export]
 		private AudioStreamPlayer sfxPlayer;
@@ -28,7 +28,6 @@ namespace Project.Gameplay.Objects
 		{
 			sfxPlayer.Play();
 			isQueued = false;
-			//Character.CancelBackflip();
 
 			LockoutResource lockout = new LockoutResource()
 			{

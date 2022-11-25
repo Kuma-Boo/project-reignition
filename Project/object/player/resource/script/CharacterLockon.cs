@@ -37,7 +37,6 @@ namespace Project.Gameplay
 		public void UpdateLockonTargets()
 		{
 			GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
-
 			bool isTargetChanged = false;
 
 			//Update homing attack
@@ -51,7 +50,7 @@ namespace Project.Gameplay
 				//Check whether to pick a new target
 				for (int i = 0; i < activeTargets.Count; i++)
 				{
-					if (IsTargetInvalid(activeTargets[i]))
+					if (IsTargetValid(activeTargets[i]) != TargetState.Valid)
 						continue;
 
 					float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
@@ -68,7 +67,7 @@ namespace Project.Gameplay
 					LockonTarget = activeTargets[currentTarget];
 					isTargetChanged = true;
 				}
-				else if (LockonTarget != null && IsTargetInvalid(LockonTarget)) //Validate current lockon target
+				else if (LockonTarget != null && IsTargetValid(LockonTarget) != TargetState.Valid) //Validate current lockon target
 				{
 					LockonTarget = null;
 					isTargetChanged = true;
@@ -85,29 +84,38 @@ namespace Project.Gameplay
 			}
 		}
 
-		private bool IsTargetInvalid(Node3D t)
+		private enum TargetState
+		{
+			Valid,
+			NotInList,
+			PlayerBusy,
+			Invisible,
+			HitObstacle,
+		}
+
+		private TargetState IsTargetValid(Node3D t)
 		{
 			if (!activeTargets.Contains(t)) //Not in target list anymore (target hitbox may have been disabled)
-				return true;
+				return TargetState.NotInList;
 
 			if (Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing) //Character is busy
-				return true;
+				return TargetState.PlayerBusy;
 
 			if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalPosition)) //Not visible
-				return true;
+				return TargetState.Invisible;
 
 			//Raycast for obstacles
 			Vector3 castPosition = Character.GlobalPosition;
 			if (Character.VerticalSpd < 0)
 				castPosition += Character.UpDirection * Character.VerticalSpd * PhysicsManager.physicsDelta;
 			Vector3 castVector = t.GlobalPosition - castPosition;
-			RaycastHit h = this.CastRay(castPosition, castVector, Character.environmentMask);
+			RaycastHit h = this.CastRay(castPosition, castVector, RuntimeConstants.Instance.environmentMask);
 			Debug.DrawRay(castPosition, castVector, Colors.Magenta);
 
 			if (h && h.collidedObject != t)
-				return true;
+				return TargetState.HitObstacle;
 
-			return false;
+			return TargetState.Valid;
 		}
 
 		public void ResetLockonTarget()

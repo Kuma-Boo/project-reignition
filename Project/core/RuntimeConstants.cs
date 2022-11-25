@@ -13,6 +13,8 @@ namespace Project.Core
 
 		public static RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
 		public static readonly Vector2 SCREEN_SIZE = new Vector2(1920, 1080); //Working resolution is 1080p
+		[Export(PropertyHint.Layers3dPhysics)]
+		public uint environmentMask;
 
 		public const float GRAVITY = 28.0f;
 		public const float MAX_GRAVITY = -48.0f;

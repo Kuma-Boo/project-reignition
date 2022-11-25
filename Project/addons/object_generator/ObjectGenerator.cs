@@ -28,8 +28,10 @@ namespace Project.Editor
 		public float spacing;
 		public float ringRatio = 1f;
 
+		public NodePath _path;
 		public Path3D path;
 		public float progressOffset; //Used whenever path isn't getting the proper point
+		public bool followPathY; //Enable this to use path's Y position
 		public Curve hOffsetCurve;
 		public Curve vOffsetCurve;
 
@@ -50,18 +52,19 @@ namespace Project.Editor
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
 				properties.Add(ExtensionMethods.CreateProperty("Path Progress Offset", Variant.Type.Float, PropertyHint.Range, "-64,64,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Follow Path Y", Variant.Type.Bool));
 			}
 			else
 				properties.Add(ExtensionMethods.CreateProperty("Orientation", Variant.Type.Int, PropertyHint.Enum, "Horizontal,Vertical"));
 
 			if (shape == SpawnShape.Ring)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12"));
 				properties.Add(ExtensionMethods.CreateProperty("Ring Ratio", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 			}
 			else
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12"));
 				properties.Add(ExtensionMethods.CreateProperty("Horizontal Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
 				properties.Add(ExtensionMethods.CreateProperty("Vertical Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
 			}
@@ -99,10 +102,13 @@ namespace Project.Editor
 					spacing = (float)value;
 					break;
 				case "Path":
-					path = GetNodeOrNull<Path3D>((NodePath)value);
+					_path = (NodePath)value;
 					break;
 				case "Path Progress Offset":
 					progressOffset = (float)value;
+					break;
+				case "Follow Path Y":
+					followPathY = (bool)value;
 					break;
 
 				case "Horizontal Offset":
@@ -140,9 +146,11 @@ namespace Project.Editor
 				case "Spacing":
 					return spacing;
 				case "Path":
-					return GetPathTo(path);
+					return _path;
 				case "Path Progress Offset":
 					return progressOffset;
+				case "Follow Path Y":
+					return followPathY;
 
 				case "Horizontal Offset":
 					return hOffsetCurve;
@@ -162,6 +170,7 @@ namespace Project.Editor
 				GetChild(i).QueueFree();
 			}
 			currentChildCount = 1; //Reset child counter
+			float divider = amount - 1;
 
 			switch (shape)
 			{
@@ -181,7 +190,6 @@ namespace Project.Editor
 				case SpawnShape.Line:
 					Vector3 forwardDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Up;
 					Vector3 upDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Back;
-					float divider = amount - 1;
 					float hOffset = 0;
 					float vOffset = 0;
 
@@ -197,6 +205,8 @@ namespace Project.Editor
 					}
 					break;
 				case SpawnShape.Path:
+					path = GetNodeOrNull<Path3D>(_path);
+
 					if (path == null)
 					{
 						GD.PrintErr("No Path Provided.");
@@ -217,11 +227,18 @@ namespace Project.Editor
 					for (int i = 0; i < amount; i++)
 					{
 						if (hOffsetCurve != null)
-							follow.HOffset = hOffsetCurve.Sample((float)i / (amount - 1));
-						if (vOffsetCurve != null)
-							follow.VOffset = vOffsetCurve.Sample((float)i / (amount - 1));
+							follow.HOffset = hOffsetCurve.Sample((float)i / divider);
 
-						Spawn(follow.GlobalPosition, true);
+						Vector3 spawnPosition = follow.GlobalPosition;
+						if (vOffsetCurve != null)
+						{
+							if (followPathY)
+								spawnPosition.y += vOffsetCurve.Sample(i / divider);
+							else
+								spawnPosition.y = GlobalPosition.y + vOffsetCurve.Sample(i / divider);
+						}
+
+						Spawn(spawnPosition, true);
 						follow.Progress += spacing;
 					}
 

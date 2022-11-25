@@ -46,10 +46,10 @@ namespace Project.Gameplay
 		}
 
 		/// <summary> Difference between angle from the current frame to the next frame. </summary>
-		public float CalculateDeltaAngle()
+		public float CalculateDeltaAngle(float speed)
 		{
 			float currentProgress = Progress;
-			Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			Progress += speed * PhysicsManager.physicsDelta;
 			float deltaAngle = CharacterController.CalculateForwardAngle(this.Forward()) - ForwardAngle;
 			Progress = currentProgress; //Reset
 

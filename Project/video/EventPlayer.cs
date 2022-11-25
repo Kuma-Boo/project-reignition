@@ -13,8 +13,11 @@ namespace Project.Interface
 		private AudioStream enAudio;
 		[Export]
 		private AudioStream jaAudio;
+		/// <summary>
+		/// Subtitle time table, separated by spaces.
+		/// </summary>
 		[Export(PropertyHint.MultilineText)]
-		private string subtitleData = string.Empty; //Subtitle data, as a csv file
+		private string subtitleData;
 		private Gameplay.Triggers.DialogTrigger _subtitles;
 
 		[Export]
@@ -82,12 +85,12 @@ namespace Project.Interface
 
 			//Calculate the delays and display lengths
 			string[] dataPoints = subtitleData.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
-			string[] currentData = dataPoints[1].Split('	');
-			string[] nextData = dataPoints[2].Split('	');
+			string[] currentData = dataPoints[0].Split('	');
+			string[] nextData = dataPoints[1].Split('	');
 			float previousSpacing = GetStartTime(currentData); //First key is an exception and uses it's start time as delay
 			float nextStartTime = GetStartTime(nextData);
 
-			for (int i = 1; i < dataPoints.Length - 1; i++) //Skip the first and last keys
+			for (int i = 0; i < dataPoints.Length - 1; i++) //Skip the last key
 			{
 				_subtitles.textKeys.Add(currentData[0]); //Assign key
 				float currentStartTime = GetStartTime(currentData); //When to start subtitles

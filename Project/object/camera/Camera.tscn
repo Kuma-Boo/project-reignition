@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://j27wf6j30uwv"]
+[gd_scene load_steps=10 format=3 uid="uid://j27wf6j30uwv"]
 
 [ext_resource type="Script" path="res://object/camera/CameraController.cs" id="2"]
 [ext_resource type="Resource" uid="uid://dhevcck1smng1" path="res://resource/preset/camera/common/DefaultCam.tres" id="2_ynty5"]
-[ext_resource type="Shader" path="res://effect/shader/bloom/BloomBlur.gdshader" id="3_0ie24"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j0ipy"]
 albedo_color = Color(0, 0, 1, 1)
@@ -55,18 +54,13 @@ _data = {
 "activate": SubResource("5")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3x4so"]
-shader = ExtResource("3_0ie24")
-shader_parameter/blur_amount = 3.0
-
-[node name="Camera" type="Node3D" node_paths=PackedStringArray("calculationRoot", "calculationGimbal", "cameraRoot", "cameraGimbal", "camera", "bloomCamera", "_crossfade", "_crossfadeAnimator")]
+[node name="Camera" type="Node3D" node_paths=PackedStringArray("calculationRoot", "calculationGimbal", "cameraRoot", "cameraGimbal", "camera", "_crossfade", "_crossfadeAnimator")]
 script = ExtResource("2")
 calculationRoot = NodePath("CalculationRoot")
 calculationGimbal = NodePath("CalculationRoot/CalculationGimbal")
 cameraRoot = NodePath("CameraRoot")
 cameraGimbal = NodePath("CameraRoot/CameraGimbal")
 camera = NodePath("CameraRoot/CameraGimbal/Camera")
-bloomCamera = NodePath("BloomViewport/BloomViewport/BloomCamera")
 _crossfade = NodePath("Crossfade")
 _crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
 targetSettings = ExtResource("2_ynty5")
@@ -96,6 +90,10 @@ current = true
 fov = 64.0
 size = 0.1
 
+[node name="GroundCheck" type="RayCast3D" parent="CameraRoot/CameraGimbal/Camera"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+enabled = false
+
 [node name="Crossfade" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0)
 offset_right = 1920.0
@@ -105,20 +103,3 @@ offset_bottom = 1080.0
 libraries = {
 "": SubResource("AnimationLibrary_mih1k")
 }
-
-[node name="BloomViewport" type="SubViewportContainer" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_3x4so")
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="BloomViewport" type="SubViewport" parent="BloomViewport"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(1920, 1080)
-render_target_update_mode = 0
-
-[node name="BloomCamera" type="Camera3D" parent="BloomViewport/BloomViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
-cull_mask = 32768
-current = true

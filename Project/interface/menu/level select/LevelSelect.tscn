@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c72opqrn4exo6"]
+[gd_scene load_steps=14 format=3 uid="uid://c72opqrn4exo6"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/LevelSelect.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://dvsnm477jfuyw" path="res://interface/menu/flames/Flames.tscn" id="2"]
@@ -11,6 +11,8 @@
 [ext_resource type="VideoStream" path="res://video/demo/demo6.ogv" id="9"]
 [ext_resource type="VideoStream" path="res://video/demo/demo1.ogv" id="10"]
 [ext_resource type="VideoStream" path="res://video/demo/demo3.ogv" id="11"]
+[ext_resource type="Script" path="res://sound/scripts/BGMPlayer.cs" id="12_8686a"]
+[ext_resource type="AudioStream" uid="uid://d36ykovj7lr0l" path="res://sound/ost/jingle/Level Select.mp3" id="12_ym63k"]
 
 [node name="LevelSelect" type="Control" node_paths=PackedStringArray("video")]
 layout_mode = 3
@@ -35,3 +37,11 @@ texture = ExtResource("3")
 
 [node name="Flames" parent="." instance=ExtResource("2")]
 layout_mode = 1
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_ym63k")
+autoplay = true
+bus = &"BGM"
+script = ExtResource("12_8686a")
+loopStartPosition = 0.534
+loopEndPosition = 12.514

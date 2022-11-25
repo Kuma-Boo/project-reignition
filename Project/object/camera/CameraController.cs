@@ -3,7 +3,6 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
-
 	/// <summary>
 	/// Follows the player based on the settings provided from CameraSettingsResource.cs
 	/// </summary>
@@ -22,8 +21,9 @@ namespace Project.Gameplay
 		private Node3D cameraGimbal;
 		[Export]
 		private Camera3D camera;
+		public Camera3D Camera { get => camera; }
 		[Export]
-		private Camera3D bloomCamera;
+		private RayCast3D backstepCheck;
 
 		[Export]
 		private TextureRect _crossfade;
@@ -53,8 +53,6 @@ namespace Project.Gameplay
 
 			if (OS.IsDebugBuild())
 				UpdateFreeCam();
-
-			bloomCamera.GlobalTransform = camera.GlobalTransform;
 		}
 
 		#region Settings
@@ -193,7 +191,7 @@ namespace Project.Gameplay
 
 		private void UpdateTilt()
 		{
-			if (targetSettings.enableZTilting) //Rotate the z axis along PathFollower's forward, by angle of worldDirection to up
+			if (targetSettings.enableZTilting) //Rotate the z axis along PathFollower's forward, by angle of the ground direction
 			{
 				float targetTiltAmount = Character.UpDirection.SignedAngleTo(Vector3.Up, PathFollower.Back());
 			}

@@ -121,7 +121,6 @@ namespace Project.Gameplay.Objects
 			return startPosition + displacement;
 		}
 
-
 		public void Calculate()
 		{
 			if (middleHeight <= finalHeight || middleHeight < startingHeight) //Ignore middle

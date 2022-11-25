@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://5l5prl8d0kmd"]
 
 [ext_resource type="Script" path="res://area/stage/2 dino jungle/data/script/Boat.cs" id="1_8wvpo"]
-[ext_resource type="PackedScene" uid="uid://uifmmk08s0v3" path="res://area/stage/2 dino jungle/data/environment/model/Boat.gltf" id="1_jccfq"]
 [ext_resource type="Resource" uid="uid://b3bjolw42bp2p" path="res://resource/preset/camera/object/BoatCam.tres" id="2_rrka6"]
+[ext_resource type="PackedScene" uid="uid://basm3ynnw1lsn" path="res://area/stage/2 dino jungle/data/environment/object/model/Boat.gltf" id="3_tcnkk"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_67srd"]
-size = Vector3(0.6, 0.4, 2)
+[sub_resource type="SphereShape3D" id="SphereShape3D_yrin3"]
+radius = 0.4
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_j10iq"]
 
@@ -115,22 +115,30 @@ _data = {
 "respawn": SubResource("Animation_a6uw5")
 }
 
-[node name="Boat" type="StaticBody3D" node_paths=PackedStringArray("passengerPosition", "animator")]
-collision_mask = 2
+[node name="Boat" type="CharacterBody3D" node_paths=PackedStringArray("passengerPosition", "frontOrientationChecker", "rearOrientationChecker", "animator")]
+collision_layer = 0
+wall_min_slide_angle = 0.0
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_block_on_wall = false
+floor_snap_length = 5.0
 script = ExtResource("1_8wvpo")
 speed = 15.0
-passengerPosition = NodePath("PassengerPosition")
+passengerPosition = NodePath("Boat/PlayerPosition")
+frontOrientationChecker = NodePath("FrontOrientationChecker")
+rearOrientationChecker = NodePath("RearOrientationChecker")
 animator = NodePath("AnimationPlayer")
 cameraSettings = ExtResource("2_rrka6")
 environmentMask = 1
 
+[node name="Boat" parent="." instance=ExtResource("3_tcnkk")]
+
+[node name="PlayerPosition" type="Node3D" parent="Boat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_67srd")
-
-[node name="Boat" parent="." instance=ExtResource("1_jccfq")]
-
-[node name="PassengerPosition" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("SphereShape3D_yrin3")
 
 [node name="Activation" type="Area3D" parent="."]
 collision_layer = 8
@@ -151,5 +159,15 @@ monitorable = false
 libraries = {
 "": SubResource("AnimationLibrary_e4dfs")
 }
+
+[node name="FrontOrientationChecker" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
+enabled = false
+target_position = Vector3(0, -5, 0)
+
+[node name="RearOrientationChecker" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
+enabled = false
+target_position = Vector3(0, -5, 0)
 
 [connection signal="area_entered" from="Activation" to="." method="PlayerEntered"]

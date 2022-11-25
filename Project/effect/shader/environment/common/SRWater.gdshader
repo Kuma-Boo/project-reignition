@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode shadows_disabled;
+render_mode shadows_disabled, depth_draw_opaque, depth_prepass_alpha;
 
 uniform sampler2D base : hint_normal;
 uniform sampler2D detail : hint_normal;
@@ -16,5 +16,5 @@ void fragment()
 	///NORMAL = normal.rgb;
 	
 	ROUGHNESS = 0.0;
-	ALPHA = col.a;
+	//FALPHA = col.a;
 }
