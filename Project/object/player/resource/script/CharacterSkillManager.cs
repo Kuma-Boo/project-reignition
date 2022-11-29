@@ -30,6 +30,9 @@ namespace Project.Gameplay
 		public float countdownBoostSpeed;
 
 		[Export]
+		public bool isSplashJumpEnabled;
+
+		[Export]
 		public float accelerationJumpSpeed;
 
 		[Export]

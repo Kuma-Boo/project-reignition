@@ -1,17 +1,15 @@
-[gd_scene load_steps=30 format=3]
+[gd_scene load_steps=28 format=3 uid="uid://dsphnuiudk8f8"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_bh06n"]
-[ext_resource type="Environment" uid="uid://36h130trqtgl" path="res://area/stage/1 sand oasis/data/environment/Environment.tres" id="1_dgxgs"]
+[ext_resource type="Environment" uid="uid://b7gi55vdfsr1s" path="res://area/stage/1 sand oasis/data/environment/Environment.tres" id="1_dgxgs"]
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="1_e1r11"]
 [ext_resource type="PackedScene" uid="uid://dsliw1663qdsw" path="res://area/stage/1 sand oasis/boss/data/environment/SOBoss.tscn" id="1_gt2in"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="1_khena"]
 [ext_resource type="PackedScene" uid="uid://c083xdkdh5iau" path="res://area/stage/1 sand oasis/boss/data/environment/collision/Collision.tscn" id="1_y3a8x"]
 [ext_resource type="PackedScene" uid="uid://21pykhrm72xx" path="res://object/stage/pickups/Ring.tscn" id="2_g1pxi"]
 [ext_resource type="Curve3D" uid="uid://bvpu60xrfh0px" path="res://area/stage/1 sand oasis/boss/data/environment/path/MainPath.tres" id="2_sspwl"]
-[ext_resource type="PackedScene" uid="uid://ct6dlcsvt1kif" path="res://area/stage/1 sand oasis/boss/data/boss/SandScorpion.tscn" id="2_ur7rr"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_ofxsh"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/stage/1 sand oasis/data/skybox/Skybox.tscn" id="3_ud18g"]
-[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="4_15cum"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="4_k3scl"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="6_l2a15"]
 [ext_resource type="Resource" uid="uid://c06k4gxe3e5nt" path="res://resource/preset/camera/boss/SandScorpionCamera.tres" id="7_f4pdp"]
@@ -337,11 +335,13 @@ _data = {
 "demo3": SubResource("Animation_5pere")
 }
 
-[node name="World" type="Node"]
+[node name="Stage" type="Node"]
 
 [node name="BossAct" type="Node3D" parent="."]
 script = ExtResource("1_bh06n")
+"Starting Path" = NodePath("../Static/Path/MainPath")
 "Mission Type" = 0
+"Time Limit" = 0.0
 "Item Cycling/Activation Trigger" = NodePath("ItemCyclePoint")
 "Item Cycling/Halfway Trigger" = NodePath("ItemHalfwayPoint")
 "Item Cycling/Enable Respawning" = true
@@ -355,25 +355,16 @@ script = ExtResource("1_bh06n")
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = null
-Completion/Animator = null
-
-[node name="SandScorpion" parent="BossAct" node_paths=PackedStringArray("pathFollower") instance=ExtResource("2_ur7rr")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
-pathFollower = NodePath("../../Static/Path/MainPath/BossPathFollow")
+Completion/Animator = NodePath("")
 
 [node name="SpawnPosition" type="Node3D" parent="BossAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_e1r11")]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
 
 [node name="Start" parent="BossAct/SpawnPosition/CharacterSpawn" instance=ExtResource("3_ofxsh")]
 isOneShot = true
-
-[node name="MainPath" type="Node3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start" node_paths=PackedStringArray("path")]
-script = ExtResource("4_15cum")
-path = NodePath("../../../../../Static/Path/MainPath")
-loopPath = true
 
 [node name="CameraSettings" type="Node3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start"]
 script = ExtResource("6_l2a15")
@@ -563,6 +554,7 @@ Amount = 20
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -636,6 +628,7 @@ Amount = 20
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1022,6 +1015,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1059,6 +1053,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1099,6 +1094,7 @@ Amount = 20
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_2qi3h")
 "Vertical Offset" = null
@@ -1172,6 +1168,7 @@ Amount = 20
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_nbkw4")
 "Vertical Offset" = null
@@ -1245,6 +1242,7 @@ Amount = 20
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_vjrtx")
 "Vertical Offset" = null
@@ -1318,6 +1316,7 @@ Amount = 20
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_iqq0q")
 "Vertical Offset" = null
@@ -1503,6 +1502,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 3.0
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1540,6 +1540,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 3.0
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1580,6 +1581,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 2.8
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1623,6 +1625,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 2.8
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1669,6 +1672,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 3.2
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1712,6 +1716,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 3.2
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1758,6 +1763,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 2.4
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1795,6 +1801,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 2.4
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1835,6 +1842,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 1.8
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -1872,6 +1880,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 1.8
+"Follow Path Y" = false
 Spacing = 2.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -2153,6 +2162,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 2.8
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -2196,6 +2206,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 2.8
+"Follow Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -2268,6 +2279,7 @@ Amount = 6
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 1.4
+"Follow Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -2299,6 +2311,7 @@ Amount = 6
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 1.4
+"Follow Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -2330,6 +2343,7 @@ Amount = 6
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 1.4
+"Follow Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -2361,6 +2375,7 @@ Amount = 6
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 1.4
+"Follow Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
 "Vertical Offset" = null

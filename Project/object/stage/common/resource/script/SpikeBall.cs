@@ -14,9 +14,8 @@ namespace Project.Gameplay.Hazards
 		public Vector3 movementAxis = new Vector3(0, 1, 0); //Movement axis, in LOCAL SPACE.
 		[Export]
 		public Vector3 rotationAxis = new Vector3(0, 1, 0); //Rotation axis in LOCAL SPACE. Used for circle movements.
-		[Export]
-		private bool startingMovementDirection;
-		private int MovementDirection => startingMovementDirection ? 1 : -1;
+		private bool isMovingForward;
+		private int MovementDirection => (isMovingForward ? 1 : -1) * Mathf.Sign(moveSpeed);
 		[Export(PropertyHint.Range, "0, 1")]
 		public float startingOffset;
 		private float currentOffset;
@@ -58,7 +57,7 @@ namespace Project.Gameplay.Hazards
 
 			if (movementType == MovementType.Static) return;
 
-			currentOffset += moveSpeed * PhysicsManager.physicsDelta * MovementDirection;
+			currentOffset += Mathf.Abs(moveSpeed) * PhysicsManager.physicsDelta * MovementDirection;
 			_root.RotateY(ROTATION_SPEED); //Constant rotation
 
 			if (movementType == MovementType.Circle)
@@ -68,12 +67,12 @@ namespace Project.Gameplay.Hazards
 				if (currentOffset > 1f)
 				{
 					currentOffset = 1f;
-					startingMovementDirection = !startingMovementDirection;
+					isMovingForward = !isMovingForward;
 				}
 				else if (currentOffset < 0f)
 				{
 					currentOffset = 0f;
-					startingMovementDirection = !startingMovementDirection;
+					isMovingForward = !isMovingForward;
 				}
 			}
 

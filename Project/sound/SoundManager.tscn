@@ -1,8 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://kuehwridu5v4"]
+[gd_scene load_steps=22 format=3 uid="uid://kuehwridu5v4"]
 
 [ext_resource type="Script" path="res://sound/scripts/SoundManager.cs" id="1"]
 [ext_resource type="AudioStream" uid="uid://doa0ttronifl3" path="res://sound/sfx/objects/pearl01.wav" id="2_kteke"]
 [ext_resource type="AudioStream" uid="uid://k1w83sxq8efi" path="res://sound/sfx/objects/pearl02.wav" id="3_rc3xm"]
+[ext_resource type="AudioStream" uid="uid://dhv6gnwwebpgr" path="res://sound/sfx/objects/pearl rich 1.wav" id="4_10jp1"]
+[ext_resource type="AudioStream" uid="uid://50nvnyvtbhf4" path="res://sound/sfx/objects/ring rich.wav" id="4_76siq"]
 [ext_resource type="AudioStream" uid="uid://je0hrlfto7pi" path="res://sound/sfx/objects/pearl03.wav" id="4_gnpys"]
 [ext_resource type="AudioStream" uid="uid://0gcgodlyltb0" path="res://sound/sfx/objects/pearl04.wav" id="5_x8oys"]
 [ext_resource type="AudioStream" uid="uid://cyh2pqo1qcohr" path="res://sound/sfx/objects/pearl05.wav" id="6_f3e8k"]
@@ -12,6 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://cf57gtgfa5mxo" path="res://sound/sfx/objects/pearl09.wav" id="10_15le3"]
 [ext_resource type="AudioStream" uid="uid://dau6nscqyu6us" path="res://sound/sfx/objects/pearl10.wav" id="11_0wvqg"]
 [ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/Chiaro Std B.otf" id="12_76i4n"]
+[ext_resource type="AudioStream" uid="uid://eivd5wvygewi" path="res://sound/sfx/objects/ring.wav" id="13_ipbx2"]
 
 [sub_resource type="Animation" id="1"]
 length = 0.001
@@ -161,7 +164,7 @@ _data = {
 "deactivate-text": SubResource("5")
 }
 
-[node name="SoundManager" type="CanvasLayer" node_paths=PackedStringArray("subtitleLabel", "subtitleLetterbox", "subtitleAnimator", "dialogChannel", "delayTimer", "pearlTimer")]
+[node name="SoundManager" type="CanvasLayer" node_paths=PackedStringArray("subtitleLabel", "subtitleLetterbox", "subtitleAnimator", "dialogChannel", "delayTimer", "ringSFX", "richRingSFX", "pearlSFX", "richPearlSFX", "pearlTimer")]
 layer = 12
 script = ExtResource("1")
 subtitleLabel = NodePath("SubtitleLetterbox/Subtitles")
@@ -169,8 +172,11 @@ subtitleLetterbox = NodePath("SubtitleLetterbox")
 subtitleAnimator = NodePath("SubtitleLetterbox/AnimationPlayer")
 dialogChannel = NodePath("DialogChannel")
 delayTimer = NodePath("DialogChannel/DelayTimer")
-pearlStreams = [ExtResource("2_kteke"), ExtResource("3_rc3xm"), ExtResource("4_gnpys"), ExtResource("5_x8oys"), ExtResource("6_f3e8k"), ExtResource("7_0bdmb"), ExtResource("8_r5bqr"), ExtResource("8_2mghr"), ExtResource("10_15le3"), ExtResource("11_0wvqg")]
-pearlTimer = NodePath("PearlSFXTimer")
+ringSFX = NodePath("RingSFX")
+richRingSFX = NodePath("RichRingSFX")
+pearlSFX = NodePath("PearlSFX")
+richPearlSFX = NodePath("RichPearlSFX")
+pearlTimer = NodePath("PearlSFX/PearlSFXResetTimer")
 
 [node name="SubtitleLetterbox" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -181,7 +187,6 @@ offset_bottom = 1032.0
 color = Color(0, 0, 0, 0.392157)
 
 [node name="Subtitles" type="Label" parent="SubtitleLetterbox"]
-layout_mode = 0
 offset_right = 1664.0
 offset_bottom = 136.0
 theme_override_constants/line_spacing = 12
@@ -206,7 +211,69 @@ one_shot = true
 [node name="IngameChannel" type="AudioStreamPlayer" parent="Ingame"]
 bus = &"VOICE"
 
-[node name="PearlSFXTimer" type="Timer" parent="."]
+[node name="RingSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_ipbx2")
+max_polyphony = 8
+bus = &"SFX"
+
+[node name="RichRingSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_76siq")
+volume_db = 3.0
+stream_paused = true
+max_polyphony = 8
+bus = &"SFX"
+
+[node name="RichPearlSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_10jp1")
+volume_db = -6.0
+pitch_scale = 1.4
+max_polyphony = 2
+bus = &"SFX"
+
+[node name="PearlSFX" type="Node" parent="."]
+
+[node name="PearlSFX1" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("2_kteke")
+bus = &"SFX"
+
+[node name="PearlSFX2" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("3_rc3xm")
+bus = &"SFX"
+
+[node name="PearlSFX3" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("4_gnpys")
+bus = &"SFX"
+
+[node name="PearlSFX4" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("5_x8oys")
+bus = &"SFX"
+
+[node name="PearlSFX5" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("6_f3e8k")
+bus = &"SFX"
+
+[node name="PearlSFX6" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("7_0bdmb")
+bus = &"SFX"
+
+[node name="PearlSFX7" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("8_r5bqr")
+bus = &"SFX"
+
+[node name="PearlSFX8" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("8_2mghr")
+bus = &"SFX"
+
+[node name="PearlSFX9" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("10_15le3")
+bus = &"SFX"
+
+[node name="PearlSFX10" type="AudioStreamPlayer" parent="PearlSFX"]
+stream = ExtResource("11_0wvqg")
+max_polyphony = 4
+bus = &"SFX"
+
+[node name="PearlSFXResetTimer" type="Timer" parent="PearlSFX"]
 one_shot = true
 
-[connection signal="timeout" from="PearlSFXTimer" to="." method="ResetPearlSFX"]
+[connection signal="timeout" from="PearlSFX/PearlSFXResetTimer" to="." method="ResetPearlSFX"]

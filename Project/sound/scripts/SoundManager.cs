@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 using Project.Gameplay.Triggers;
 
@@ -12,6 +13,8 @@ namespace Project.Gameplay
 		{
 			instance = this;
 			subtitleAnimator.Play("RESET");
+
+			InitializePearlSFX();
 		}
 
 		#region Dialog
@@ -195,18 +198,55 @@ namespace Project.Gameplay
 			return true;
 		}
 
+		// Item pickups are played in the SoundManager to avoid volume increase when collecting more than one at a time.
 		[Export]
-		public AudioStream[] pearlStreams;
+		private AudioStreamPlayer ringSFX;
+		public void PlayRingSFX() => ringSFX.Play();
+		[Export]
+		private AudioStreamPlayer richRingSFX;
+		public void PlayRichRingSFX() => richRingSFX.Play();
+
+		[Export]
+		private Node pearlSFX;
+		private readonly Array<AudioStreamPlayer> pearlSFXList = new Array<AudioStreamPlayer>();
 		public int PearlSoundEffectIndex { get; set; }
 		[Export]
+		private AudioStreamPlayer richPearlSFX;
+		[Export]
 		private Timer pearlTimer;
+		private const float PEARL_AUDIO_DUCK_STRENGTH = .8f;
+
+		private void InitializePearlSFX()
+		{
+			for (int i = 0; i < pearlSFX.GetChildCount(); i++)
+			{
+				AudioStreamPlayer audioPlayer = pearlSFX.GetChildOrNull<AudioStreamPlayer>(i);
+				if (audioPlayer != null)
+					pearlSFXList.Add(audioPlayer);
+			}
+		}
 
 		public void ResetPearlSFX() => PearlSoundEffectIndex = 0;
-		public void StartPearlTimer()
+		public void PlayPearlSFX()
 		{
+			pearlSFXList[PearlSoundEffectIndex].Play();
+			PearlSoundEffectIndex++;
+			if (PearlSoundEffectIndex >= pearlSFXList.Count)
+				PearlSoundEffectIndex = pearlSFXList.Count - 1;
+
+			float volume = ((PearlSoundEffectIndex - 1f) / pearlSFXList.Count) * PEARL_AUDIO_DUCK_STRENGTH;
+			volume = ExtensionMethods.LinearToDB(1 - volume);
+
+			for (int i = 0; i < pearlSFXList.Count; i++) //Audio Ducking
+			{
+				pearlSFXList[i].VolumeDb = volume;
+			}
+
 			pearlTimer.WaitTime = 3f; //Reset pearl sfx after 3 seconds
 			pearlTimer.Start();
 		}
+
+		public void PlayRichPearlSFX() => richPearlSFX.Play();
 		#endregion
 	}
 }

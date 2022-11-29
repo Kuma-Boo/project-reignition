@@ -9,13 +9,10 @@ namespace Project.Gameplay.Triggers
 	{
 		[Export(PropertyHint.NodePathValidTypes, "Path3D")]
 		private Path3D path;
-		[Export]
-		private bool loopPath;
 
 		public override void Activate()
 		{
 			Character.PathFollower.SetActivePath(path);
-			Character.PathFollower.Loop = loopPath;
 		}
 	}
 }

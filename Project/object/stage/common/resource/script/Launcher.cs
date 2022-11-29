@@ -93,6 +93,7 @@ namespace Project.Gameplay.Objects
 	public struct LaunchData
 	{
 		public Vector3 launchDirection;
+		public Vector3 endPosition;
 		public Vector3 startPosition;
 
 		public float distance;
@@ -112,9 +113,19 @@ namespace Project.Gameplay.Objects
 		public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
 		private float GRAVITY => -RuntimeConstants.GRAVITY; //Use the same gravity as the character controller
 
-		//Get the current position, t -> [0 <-> 1]
-		public Vector3 InterpolatePositionRatio(float t) => InterpolatePositionTime(t * TotalTravelTime);
-		//Get the current position. t -> current time, in seconds.
+		/// <summary>
+		/// Get the current position, using t -> [0 <-> 1]. Lerps when launch data is invalid.
+		/// </summary>
+		public Vector3 InterpolatePositionRatio(float t)
+		{
+			if (Mathf.IsZeroApprox(TotalTravelTime) && !Mathf.IsZeroApprox(distance)) //Invalid launch data, use a lerp
+				return startPosition.Lerp(endPosition, t);
+
+			return InterpolatePositionTime(t * TotalTravelTime);
+		}
+		/// <summary>
+		/// Get the current position, using t -> current time, in seconds. Relatively unsafe due to errors during invalid launch paths.
+		/// </summary>
 		public Vector3 InterpolatePositionTime(float t)
 		{
 			Vector3 displacement = InitialVelocity * t + Vector3.Up * GRAVITY * t * t / 2f;
@@ -147,6 +158,7 @@ namespace Project.Gameplay.Objects
 			LaunchData data = new LaunchData()
 			{
 				startPosition = s,
+				endPosition = e,
 				launchDirection = delta.Normalized(),
 
 				distance = delta.Flatten().Length(),

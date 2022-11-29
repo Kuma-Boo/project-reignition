@@ -1,29 +1,63 @@
-[gd_scene load_steps=11 format=3 uid="uid://md5shjosamyy"]
+[gd_scene load_steps=10 format=3 uid="uid://md5shjosamyy"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://25yo83pkwq4s" path="res://object/stage/pickups/resource/model/rings/RichRing.gltf" id="2"]
-[ext_resource type="AudioStream" uid="uid://50nvnyvtbhf4" path="res://sound/sfx/objects/ring rich.wav" id="2_wu5q6"]
 [ext_resource type="Material" uid="uid://bp84que225vth" path="res://object/stage/pickups/resource/model/rings/material/RingCollectionProcessMaterial.tres" id="3_rd42h"]
 [ext_resource type="PlaneMesh" uid="uid://bn5ftksxne0vb" path="res://object/stage/pickups/resource/model/rings/material/RingCollection.tres" id="4_3pixh"]
 
 [sub_resource type="SphereShape3D" id="3"]
 radius = 0.8
 
-[sub_resource type="Animation" id="Animation_62v8g"]
-resource_name = "loop"
-length = 1.5
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_qmr8c"]
+resource_name = "RESET"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RichRing:rotation")
+tracks/0/path = NodePath("CollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RichRing:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RichRing:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RingParticle:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_innwv"]
@@ -93,71 +127,22 @@ tracks/4/keys = {
 "update": 1,
 "values": [false]
 }
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SFX")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
 
-[sub_resource type="Animation" id="Animation_qmr8c"]
-resource_name = "RESET"
-length = 0.001
+[sub_resource type="Animation" id="Animation_62v8g"]
+resource_name = "loop"
+length = 1.5
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:disabled")
+tracks/0/path = NodePath("RichRing:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("RichRing:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("RichRing:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("RingParticle:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1ty06"]
@@ -189,10 +174,6 @@ interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 process_material = ExtResource("3_rd42h")
 draw_pass_1 = ExtResource("4_3pixh")
-
-[node name="SFX" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_wu5q6")
-bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "loop"

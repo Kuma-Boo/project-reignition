@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://dm3o3mmgewihr"]
+[gd_scene load_steps=62 format=3 uid="uid://dm3o3mmgewihr"]
 
 [ext_resource type="Resource" uid="uid://bijq2wxw8v0nx" path="res://object/player/resource/movement settings/ground/BackstepSettings.tres" id="2"]
 [ext_resource type="Resource" uid="uid://2r18q1m50o37" path="res://object/player/resource/movement settings/ground/GroundSettings.tres" id="2_qbh54"]
@@ -16,6 +16,9 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2
 point_count = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_f0gyp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_t4t3r"]
+size = Vector3(0.5, 0.1, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uookt"]
 
@@ -274,7 +277,6 @@ collision_layer = 2
 floor_stop_on_slope = false
 floor_constant_speed = true
 floor_block_on_wall = false
-floor_max_angle = 0.0
 script = ExtResource("10")
 groundSettings = ExtResource("2_qbh54")
 airSettings = ExtResource("3_ywh7m")
@@ -300,11 +302,16 @@ Lockon = NodePath("Components/Lockon")
 
 [node name="PathFollower" type="PathFollow3D" parent="Components"]
 rotation_mode = 4
+cubic_interp = false
 loop = false
 script = ExtResource("6_80hf8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower"]
 mesh = SubResource("SphereMesh_f0gyp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+mesh = SubResource("BoxMesh_t4t3r")
 
 [node name="Sonic" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("6_ip8ma")]
 script = ExtResource("11")

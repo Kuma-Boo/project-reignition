@@ -1,11 +1,10 @@
 shader_type spatial;
-render_mode blend_add, unshaded;
+render_mode blend_add;
 
 global uniform float time;
 
 uniform sampler2D albedo : source_color;
 uniform float main_speed : hint_range(0, 1) = .28;
-uniform float alpha : hint_range(0, 1) = .6;
 uniform float secondary_speed = 4.0;
 uniform float sway_amount = .4;
 
@@ -19,5 +18,5 @@ void fragment()
 	col *= COLOR;
 	
 	ALBEDO = col.rgb;
-	ALPHA = col.a * alpha;
+	ALPHA = col.a * .2;
 }

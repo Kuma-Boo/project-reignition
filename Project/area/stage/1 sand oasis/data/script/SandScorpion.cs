@@ -37,12 +37,17 @@ namespace Project.Gameplay.Bosses
 
 		private bool isActive; //Process the boss?
 		private CharacterController Character => CharacterController.instance;
-		private float LocalPlayerPosition => Character.PathFollower.GetLocalPosition(Character.GlobalPosition).x;
+		private float LocalPlayerPosition => Character.PathFollower.PlayerPositionDelta.x;
 
 		public override void _Ready()
 		{
 			rootAnimator.Active = lTailAnimator.Active = rTailAnimator.Active = true; //Activate animation trees
 
+			eyes = new Node3D[eyePaths.Length];
+			for (int i = 0; i < eyePaths.Length; i++)
+			{
+				eyes[i] = GetNode<Node3D>(eyePaths[i]);
+			}
 			//_eventAnimator.Play("intro");
 
 			SetUpMissiles();
@@ -467,6 +472,7 @@ namespace Project.Gameplay.Bosses
 		#endregion
 
 		[Export]
+		private NodePath[] eyePaths;
 		private Node3D[] eyes; //Generic eyes that always track the player
 		[Export]
 		private Node3D flyingEye; //Actual eyeball

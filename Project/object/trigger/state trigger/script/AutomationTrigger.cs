@@ -14,6 +14,7 @@ namespace Project.Gameplay.Triggers
 		private float startingPoint;
 		[Export]
 		private Path3D automationPath; //Leave NULL to use the player's current path.
+		private Path3D initialPath; //Reference to the player's initial path
 		[Export]
 		private CameraSettingsResource cameraSettings;
 		[Export]
@@ -23,7 +24,7 @@ namespace Project.Gameplay.Triggers
 		private bool isActive;
 
 		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingPoint);
-		private bool IsFinished => DistanceTraveled >= distanceToTravel;
+		private bool IsFinished => (distanceToTravel > 0 && DistanceTraveled >= distanceToTravel) || (automationPath != null && DistanceTraveled >= automationPath.Curve.GetBakedLength());
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _PhysicsProcess(double _)
@@ -53,12 +54,15 @@ namespace Project.Gameplay.Triggers
 				Character.MoveSpeed = Character.groundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
 
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
-			Character.UpdateExternalControl();
 		}
 
 		private bool IsActivationValid()
 		{
 			if (!Character.IsOnGround) return false;
+			//Ensure character is facing/moving the correct direction
+			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, CharacterController.CalculateForwardAngle(this.Forward()));
+			if (dot < 0f) return false;
+
 			return true;
 		}
 
@@ -68,9 +72,16 @@ namespace Project.Gameplay.Triggers
 			if (Character.IsLockoutActive && Character.CurrentLockoutData.priority == -1)
 				Character.RemoveLockoutData(Character.CurrentLockoutData);
 
+			if (automationPath != null)
+			{
+				initialPath = Character.PathFollower.ActivePath;
+				Character.PathFollower.SetActivePath(automationPath);
+			}
+
+			Character.PathFollower.Resync();
+
 			float initialVelocity = Character.MoveSpeed;
-			Character.PathFollower.SetActivePath(automationPath);
-			Character.StartExternal(Character.PathFollower, .2f);
+			Character.StartExternal(Character.PathFollower, .05f);
 			Character.MoveSpeed = initialVelocity;
 
 			isActive = true;
@@ -79,6 +90,10 @@ namespace Project.Gameplay.Triggers
 
 		private void Deactivate()
 		{
+			//Revert to previous path
+			if (automationPath != null)
+				Character.PathFollower.SetActivePath(initialPath);
+
 			isActive = false;
 			Character.PathFollower.Resync();
 

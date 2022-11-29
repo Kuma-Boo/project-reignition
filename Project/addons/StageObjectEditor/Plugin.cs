@@ -33,7 +33,7 @@ namespace Project.Editor
 
 		public override void _Forward3dDrawOverViewport(Control overlay)
 		{
-			if (editorCam == null) return;
+			if (editorCam == null || target == null) return;
 
 			if (target is Launcher)
 				DrawLaunchData(overlay, (target as Launcher).GetLaunchData(), DEFAULT_DRAW_COLOR);
@@ -43,6 +43,8 @@ namespace Project.Editor
 				DrawLaunchData(overlay, (target as Catapult).GetLaunchData(), DEFAULT_DRAW_COLOR.Lerp(Colors.Red, (target as Catapult).launchPower));
 			else if (target is LaunchRing)
 				DrawLaunchData(overlay, (target as LaunchRing).GetLaunchData(), DEFAULT_DRAW_COLOR.Lerp(Colors.Red, (target as LaunchRing).launchPower));
+			else if (target is ItemBox)
+				UpdateItemBox(overlay);
 			else if (target is FlyingPot)
 				UpdatePot(overlay);
 			else if (target is DriftTrigger)
@@ -60,8 +62,8 @@ namespace Project.Editor
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
-				float simulationTime = (i / ((float)PREVIEW_RESOLUTION - 1)) * launchData.TotalTravelTime;
-				Vector3 position = launchData.InterpolatePositionTime(simulationTime);
+				float simulationTime = i / ((float)PREVIEW_RESOLUTION - 1);
+				Vector3 position = launchData.InterpolatePositionRatio(simulationTime);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
 			}
@@ -111,6 +113,16 @@ namespace Project.Editor
 			overlay.DrawLine(middle, end, Colors.Blue, 1, true);
 		}
 
+		private void UpdateItemBox(Control overlay)
+		{
+			ItemBox box = (target as ItemBox);
+			if (box.autoCollect) return; //No paths
+
+			DrawLaunchData(overlay, box.GetLaunchData(), DEFAULT_DRAW_COLOR);
+			if (box.spawnAmount > 1)
+				DrawCircle(overlay, box.EndPosition, box.GlobalTransform.basis, box.spawnRadius, Vector3.Forward, Vector3.Up, DEFAULT_DRAW_COLOR);
+		}
+
 		private void UpdateSpikeBall(Control overlay)
 		{
 			SpikeBall ball = target as SpikeBall;
@@ -124,23 +136,26 @@ namespace Project.Editor
 				overlay.DrawLine(start, end, Colors.Red);
 			}
 			else
-			{
-				Array<Vector3> points = new Array<Vector3>();
-				for (int i = 0; i < PREVIEW_RESOLUTION; i++)
-				{
-					float angle = Mathf.Tau * ((float)i / PREVIEW_RESOLUTION);
-					points.Add(ball.GlobalPosition + ball.GlobalTransform.basis * ball.movementAxis.Rotated(ball.rotationAxis, angle).Normalized() * ball.distance);
-				}
+				DrawCircle(overlay, ball.GlobalPosition, ball.GlobalTransform.basis, ball.distance, ball.movementAxis, ball.rotationAxis, Colors.Red);
+		}
 
-				Vector2 start = editorCam.UnprojectPosition(points[0]);
-				Vector2 end = editorCam.UnprojectPosition(points[points.Count - 1]);
-				overlay.DrawLine(start, end, Colors.Red);
-				for (int i = 1; i < points.Count; i++)
-				{
-					start = editorCam.UnprojectPosition(points[i - 1]);
-					end = editorCam.UnprojectPosition(points[i]);
-					overlay.DrawLine(start, end, Colors.Red);
-				}
+		private void DrawCircle(Control overlay, Vector3 center, Basis basis, float radius, Vector3 startingAxis, Vector3 rotationAxis, Color col)
+		{
+			Array<Vector3> points = new Array<Vector3>();
+			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
+			{
+				float angle = Mathf.Tau * ((float)i / PREVIEW_RESOLUTION);
+				points.Add(center + basis * startingAxis.Rotated(rotationAxis, angle).Normalized() * radius);
+			}
+
+			Vector2 start = editorCam.UnprojectPosition(points[0]);
+			Vector2 end = editorCam.UnprojectPosition(points[points.Count - 1]);
+			overlay.DrawLine(start, end, col);
+			for (int i = 1; i < points.Count; i++)
+			{
+				start = editorCam.UnprojectPosition(points[i - 1]);
+				end = editorCam.UnprojectPosition(points[i]);
+				overlay.DrawLine(start, end, col);
 			}
 		}
 

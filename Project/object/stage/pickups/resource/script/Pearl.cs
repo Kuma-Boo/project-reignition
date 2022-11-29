@@ -9,8 +9,6 @@ namespace Project.Gameplay.Objects
 		private bool isRichPearl;
 		[Export]
 		private CollisionShape3D collider;
-		[Export]
-		private AudioStreamPlayer sfx;
 		private bool isCollected;
 
 		private SoundManager Sound => SoundManager.instance;
@@ -35,6 +33,7 @@ namespace Project.Gameplay.Objects
 			GetParent().RemoveChild(this);
 			Character.AddChild(this);
 			GlobalTransform = t;
+			Scale = Vector3.One;
 
 			Tween tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
 			//Collection tween
@@ -55,21 +54,14 @@ namespace Project.Gameplay.Objects
 			tweener.TweenProperty(this, "position", endPoint, .2f).SetEase(Tween.EaseType.In);
 			tweener.Parallel().TweenProperty(this, "scale", Vector3.One * .001f, .2f).SetEase(Tween.EaseType.In);
 
-			//TODO BROKEN
-			//isRichPearl ? 20 : 1
+			//TODO Modify soul gauge
 			//tweener.TweenCallback(new Callable(Character.Soul, CharacterSoulSkill.MethodName.ModifySoulGauge)).SetDelay(.1f);
 			tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(3f);
 
 			if (!isRichPearl) //Play the correct sfx
-			{
-				sfx.Stream = Sound.pearlStreams[Sound.PearlSoundEffectIndex];
-				Sound.PearlSoundEffectIndex++;
-				if (Sound.PearlSoundEffectIndex >= Sound.pearlStreams.Length)
-					Sound.PearlSoundEffectIndex = Sound.pearlStreams.Length - 1;
-
-				Sound.StartPearlTimer();
-			}
-			sfx.Play();
+				Sound.PlayPearlSFX();
+			else
+				Sound.PlayRichPearlSFX();
 
 			StageSettings.instance.ChangeScore(isRichPearl ? 5 : 1, StageSettings.ScoreFunction.Add);
 			isCollected = true;

@@ -11,6 +11,7 @@ namespace Project.Gameplay.Objects
 		[Signal]
 		public delegate void DespawnedEventHandler();
 
+		public bool DisableAutoRespawning { get; set; } //Used for ItemBoxes to allow manual respawning
 		private SpawnData spawnData;
 		protected CharacterController Character => CharacterController.instance;
 
@@ -18,6 +19,8 @@ namespace Project.Gameplay.Objects
 
 		protected virtual void SetUp()
 		{
+			if (DisableAutoRespawning) return; //Don't respawn automatically
+
 			spawnData = new SpawnData(GetParent(), Transform);
 			StageSettings.instance.RegisterRespawnableObject(this);
 		}
@@ -30,6 +33,8 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Respawn()
 		{
+			if (DisableAutoRespawning) return;
+
 			spawnData.Respawn(this);
 			EmitSignal(SignalName.Respawned);
 		}

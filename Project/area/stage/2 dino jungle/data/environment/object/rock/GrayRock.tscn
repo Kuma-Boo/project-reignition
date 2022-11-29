@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://bo4o50ef4ocn7"]
+
+[ext_resource type="PackedScene" uid="uid://c74h3ip5ctgjr" path="res://area/stage/2 dino jungle/data/environment/object/model/rock/GrayRock.gltf" id="1_jc5qu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rlc3e"]
+size = Vector3(6.6, 10.2, 6.4)
+
+[node name="GrayRock" type="Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
+shape = SubResource("BoxShape3D_rlc3e")
+
+[node name="GrayRock" parent="." instance=ExtResource("1_jc5qu")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." groups=["wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
+shape = SubResource("BoxShape3D_rlc3e")
+disabled = true

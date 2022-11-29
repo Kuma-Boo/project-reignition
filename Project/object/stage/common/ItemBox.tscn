@@ -1,0 +1,293 @@
+[gd_scene load_steps=9 format=3 uid="uid://b0uekqdfkbg6h"]
+
+[ext_resource type="PackedScene" uid="uid://dwcyl3x1mi3fv" path="res://object/stage/common/resource/model/ItemWings.gltf" id="1"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/ItemBox.cs" id="2"]
+[ext_resource type="PackedScene" uid="uid://bl0hh6rrv7hxo" path="res://object/stage/common/resource/model/ItemBox.gltf" id="3"]
+[ext_resource type="AudioStream" uid="uid://c3benwqxr66t4" path="res://sound/sfx/objects/treasure chest.wav" id="4_o2niv"]
+
+[sub_resource type="BoxShape3D" id="6"]
+size = Vector3(1.6, 1.4, 1.2)
+
+[sub_resource type="Animation" id="Animation_bg4xx"]
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemBox/ItemBoxRoot/Skeleton3D/ItemBoxGlowMesh:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemBox/ItemBoxRoot/Skeleton3D/ItemBoxGlowMesh:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ItemBox/ItemBoxRoot/Skeleton3D/ItemBoxMesh:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ItemWings/ItemBoxWingsRoot/Skeleton3D/ItemBoxWingsMesh:transparency")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ItemBox/AnimationPlayer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": ["item-open", -1, 1.0, false],
+"method": &"play"
+}, {
+"args": [true],
+"method": &"stop"
+}, {
+"args": [0.0, true],
+"method": &"seek"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".:monitoring")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_hxe17"]
+resource_name = "open"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemWings/ItemBoxWingsRoot/Skeleton3D/ItemBoxWingsMesh:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemBox/ItemBoxRoot/Skeleton3D/ItemBoxGlowMesh:transparency")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.35, 1),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.0, 1.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ItemBox/ItemBoxRoot/Skeleton3D/ItemBoxGlowMesh:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ItemBox/ItemBoxRoot/Skeleton3D/ItemBoxMesh:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SFX")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ItemBox/AnimationPlayer")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["item-open", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".:monitoring")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:monitorable")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c756k"]
+_data = {
+"RESET": SubResource("Animation_bg4xx"),
+"open": SubResource("Animation_hxe17")
+}
+
+[node name="ItemBox" type="Area3D" node_paths=PackedStringArray("rootPosition", "wings", "chest", "animator")]
+collision_layer = 12
+collision_mask = 2
+script = ExtResource("2")
+"Auto Collect" = false
+"Spawn Settings/Amount" = 1
+"Spawn Settings/Travel Time" = 1.0
+"Spawn Settings/Arc Height" = 0.0
+"Spawn Settings/Position" = Vector3(0, 0, 0)
+rootPosition = NodePath("ItemWings/ItemBoxWingsRoot/Skeleton3D/RootPosition/Position")
+wings = NodePath("ItemWings")
+chest = NodePath("ItemBox")
+animator = NodePath("AnimationPlayer")
+
+[node name="ItemWings" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+visible = false
+
+[node name="Skeleton3D" parent="ItemWings/ItemBoxWingsRoot" index="0"]
+bones/0/position = Vector3(0, -0.0969388, 0)
+bones/1/rotation = Quaternion(0.695228, -0.129067, 0.129066, 0.695228)
+bones/2/rotation = Quaternion(-5.19484e-07, 1.61988e-06, -0.0574779, 0.998347)
+bones/3/rotation = Quaternion(0.695228, 0.129067, -0.129066, 0.695228)
+bones/4/rotation = Quaternion(-5.19484e-07, -1.61988e-06, 0.0574779, 0.998347)
+
+[node name="RootPosition" type="BoneAttachment3D" parent="ItemWings/ItemBoxWingsRoot/Skeleton3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.0969388, 0)
+bone_name = "Root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("..")
+
+[node name="Position" type="Node3D" parent="ItemWings/ItemBoxWingsRoot/Skeleton3D/RootPosition"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="AnimationPlayer" parent="ItemWings" index="1"]
+autoplay = "wing"
+
+[node name="ItemBox" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="Skeleton3D" parent="ItemBox/ItemBoxRoot" index="0"]
+bones/1/rotation = Quaternion(0, 0, 1, 0)
+bones/2/position = Vector3(7.04355e-15, -0.540149, 0.560705)
+
+[node name="ItemBoxGlowMesh" parent="ItemBox/ItemBoxRoot/Skeleton3D" index="0"]
+visible = false
+transparency = 1.0
+cast_shadow = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("6")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." groups=["floor", "wall"]]
+visible = false
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("6")
+disabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_c756k")
+}
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_o2niv")
+bus = &"SFX"
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+
+[editable path="ItemWings"]
+[editable path="ItemBox"]

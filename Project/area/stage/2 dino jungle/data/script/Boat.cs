@@ -117,7 +117,7 @@ namespace Project.Gameplay.Objects
 			frontOrientationChecker.ForceRaycastUpdate();
 			rearOrientationChecker.ForceRaycastUpdate();
 
-			float targetAngle = Character.PathFollower.ForwardAngle + Character.PathFollower.CalculateDeltaAngle(moveSpeed);
+			float targetAngle = Character.PathFollower.ForwardAngle + Character.PathFollower.DeltaAngle;
 			Transform3D t = GlobalTransform;
 			t.basis.z = Vector3.Back;
 			t.basis.y = (frontOrientationChecker.GetCollisionNormal() + rearOrientationChecker.GetCollisionNormal()) * .5f;

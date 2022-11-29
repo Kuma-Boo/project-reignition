@@ -35,7 +35,8 @@ namespace Project.Gameplay.Triggers
 		public void Respawn()
 		{
 			wasActivated = false;
-			animator.Play("RESET"); //Reset event
+			if (animator.HasAnimation("RESET"))
+				animator.Play("RESET"); //Reset event
 		}
 
 		public override void Activate()

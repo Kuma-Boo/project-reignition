@@ -1,0 +1,2324 @@
+[gd_scene load_steps=19 format=3 uid="uid://cyep1k4vfngwn"]
+
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_1385a"]
+[ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="2_ks0kr"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_omywj"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="4_v1krb"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="5_h54m5"]
+[ext_resource type="Resource" uid="uid://c06k4gxe3e5nt" path="res://resource/preset/camera/boss/SandScorpionCamera.tres" id="6_04ty8"]
+[ext_resource type="PackedScene" uid="uid://ct6dlcsvt1kif" path="res://area/stage/1 sand oasis/boss/data/boss/SandScorpion.tscn" id="7_n5eph"]
+[ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="8_atfm6"]
+[ext_resource type="PackedScene" uid="uid://21pykhrm72xx" path="res://object/stage/pickups/Ring.tscn" id="9_7ca06"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="10_a21kh"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_i8rmg"]
+radius = 4.0
+
+[sub_resource type="Curve" id="Curve_5arqb"]
+max_value = 1.5
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, 9.0, 1, 0, Vector2(0.5, 1.5), 0.0, 0.0, 0, 0, Vector2(1, 1.5), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_4t8qg"]
+min_value = -1.5
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, -10.0, 1, 0, Vector2(0.5, -1.5), 0.0, 0.0, 0, 0, Vector2(1, -1.5), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_2qi3h"]
+min_value = -3.2
+max_value = 0.0
+_data = [Vector2(0, -3.2), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Curve" id="Curve_nbkw4"]
+min_value = -2.0
+max_value = 0.0
+_data = [Vector2(0, -2), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Curve" id="Curve_vjrtx"]
+max_value = 3.2
+_data = [Vector2(0, 3.2), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Curve" id="Curve_iqq0q"]
+max_value = 2.0
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h301n"]
+size = Vector3(24, 20, 4)
+
+[node name="BossAct" type="Node3D"]
+script = ExtResource("1_1385a")
+"Starting Path" = NodePath("")
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Item Cycling/Activation Trigger" = NodePath("ItemCyclePoint")
+"Item Cycling/Halfway Trigger" = NodePath("ItemHalfwayPoint")
+"Item Cycling/Enable Respawning" = true
+"Item Cycling/Item Cycles" = [NodePath("Lap01"), NodePath("Lap02"), NodePath("Lap03"), NodePath("")]
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0.0
+"Ranking/Silver Time" = 0.0
+"Ranking/Bronze Time" = 0.0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = null
+Completion/Animator = NodePath("")
+
+[node name="SpawnPosition" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="SpawnPosition" instance=ExtResource("2_ks0kr")]
+
+[node name="Start" parent="SpawnPosition/CharacterSpawn" instance=ExtResource("3_omywj")]
+isOneShot = true
+
+[node name="MainPath" type="Node3D" parent="SpawnPosition/CharacterSpawn/Start" node_paths=PackedStringArray("path")]
+script = ExtResource("4_v1krb")
+path = NodePath("../../../../../Static/Path/MainPath")
+loopPath = true
+
+[node name="CameraSettings" type="Node3D" parent="SpawnPosition/CharacterSpawn/Start"]
+script = ExtResource("5_h54m5")
+cameraData = ExtResource("6_04ty8")
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="SpawnPosition/CharacterSpawn/Start"]
+shape = SubResource("SphereShape3D_i8rmg")
+
+[node name="SandScorpion" parent="." node_paths=PackedStringArray("pathFollower") instance=ExtResource("7_n5eph")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
+pathFollower = NodePath("../../Static/Path/MainPath/BossPathFollow")
+
+[node name="Lap01" type="Node3D" parent="."]
+
+[node name="Rings01" type="Node3D" parent="Lap01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
+
+[node name="RingR01" type="Node3D" parent="Lap01/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.6, 0)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Rings01/RingR01" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap01/Rings01/RingR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="Lap01/Rings01/RingR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="Lap01/Rings01/RingR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="Lap01/Rings01/RingR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="Lap01/Rings01/RingR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="RingL01" type="Node3D" parent="Lap01/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.6, 0)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Rings01/RingL01" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap01/Rings01/RingL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="Lap01/Rings01/RingL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="Lap01/Rings01/RingL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="Lap01/Rings01/RingL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="Lap01/Rings01/RingL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="RingR02" type="Node3D" parent="Lap01/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.6, -22)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 14
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_5arqb")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.437151, 0, -4)
+
+[node name="Child04" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.909315, 0, -6)
+
+[node name="Child05" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2253, 0, -8)
+
+[node name="Child06" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.41071, 0, -10)
+
+[node name="Child07" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49115, 0, -12)
+
+[node name="Child08" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -14)
+
+[node name="Child09" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -16)
+
+[node name="Child10" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -18)
+
+[node name="Child11" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -20)
+
+[node name="Child12" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -22)
+
+[node name="Child13" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -24)
+
+[node name="Child14" parent="Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -26)
+
+[node name="RingL02" type="Node3D" parent="Lap01/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.6, -22)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 14
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_4t8qg")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.477476, 0, -4)
+
+[node name="Child04" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.968558, 0, -6)
+
+[node name="Child05" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27331, 0, -8)
+
+[node name="Child06" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43439, 0, -10)
+
+[node name="Child07" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49449, 0, -12)
+
+[node name="Child08" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -14)
+
+[node name="Child09" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -16)
+
+[node name="Child10" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -18)
+
+[node name="Child11" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -20)
+
+[node name="Child12" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -22)
+
+[node name="Child13" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -24)
+
+[node name="Child14" parent="Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -26)
+
+[node name="Pearls01" type="Node3D" parent="Lap01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -128)
+
+[node name="PearlL" type="Node3D" parent="Lap01/Pearls01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, -5)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 20
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.05736)
+
+[node name="Child02" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.05714)
+
+[node name="Child03" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.943039)
+
+[node name="Child04" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00988793, 0, -3.00873)
+
+[node name="Child05" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.101367, 0, -5.1481)
+
+[node name="Child06" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302655, 0, -7.30128)
+
+[node name="Child07" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.630527, 0, -9.45985)
+
+[node name="Child08" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09866, 0, -11.6088)
+
+[node name="Child09" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.71457, 0, -13.7293)
+
+[node name="Child10" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.47738, 0, -15.8023)
+
+[node name="Child11" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.37643, 0, -17.8096)
+
+[node name="Child12" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.39436, 0, -19.7401)
+
+[node name="Child13" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5103, 0, -21.5898)
+
+[node name="Child14" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.70435, 0, -23.3622)
+
+[node name="Child15" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.95887, 0, -25.0646)
+
+[node name="Child16" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.25843, 0, -26.705)
+
+[node name="Child17" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5929, 0, -28.2948)
+
+[node name="Child18" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9527, 0, -29.8419)
+
+[node name="Child19" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3319, 0, -31.355)
+
+[node name="Child20" parent="Lap01/Pearls01/PearlL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.725, 0, -32.8408)
+
+[node name="PearlR" type="Node3D" parent="Lap01/Pearls01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -5)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 20
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.05736)
+
+[node name="Child02" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.05714)
+
+[node name="Child03" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.943039)
+
+[node name="Child04" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00821352, 0, -2.85562)
+
+[node name="Child05" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0846815, 0, -4.66507)
+
+[node name="Child06" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.249337, 0, -6.43896)
+
+[node name="Child07" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.511639, 0, -8.17522)
+
+[node name="Child08" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.879067, 0, -9.86923)
+
+[node name="Child09" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35744, 0, -11.522)
+
+[node name="Child10" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95034, 0, -13.1376)
+
+[node name="Child11" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65782, 0, -14.7202)
+
+[node name="Child12" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.47637, 0, -16.2747)
+
+[node name="Child13" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3976, 0, -17.803)
+
+[node name="Child14" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4127, 0, -19.3107)
+
+[node name="Child15" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.50826, 0, -20.798)
+
+[node name="Child16" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.67276, 0, -22.2683)
+
+[node name="Child17" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.89354, 0, -23.7228)
+
+[node name="Child18" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.1611, 0, -25.165)
+
+[node name="Child19" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4658, 0, -26.5966)
+
+[node name="Child20" parent="Lap01/Pearls01/PearlR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.8005, 0, -28.0201)
+
+[node name="Pearls02" type="Node3D" parent="Lap01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, -190)
+
+[node name="PearlL01" type="Node3D" parent="Lap01/Pearls02"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, -3.2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="Lap01/Pearls02/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlL02" type="Node3D" parent="Lap01/Pearls02"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, -2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="Lap01/Pearls02/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlR01" type="Node3D" parent="Lap01/Pearls02"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, 3.2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="Lap01/Pearls02/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlR02" type="Node3D" parent="Lap01/Pearls02"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, 2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="Lap01/Pearls02/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Pearls03" type="Node3D" parent="Lap01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 280, 0, -53)
+
+[node name="PearlL01" type="Node3D" parent="Lap01/Pearls03"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.20001, 0.5, 0)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child03" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child04" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child05" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child06" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child07" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child08" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child09" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child10" parent="Lap01/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="PearlR02" type="Node3D" parent="Lap01/Pearls03"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0.5, 0)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child03" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child04" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child05" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child06" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child07" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child08" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child09" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child10" parent="Lap01/Pearls03/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="PearlR01" type="Node3D" parent="Lap01/Pearls03"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.20001, 0.5, 45)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child03" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child04" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child05" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child06" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child07" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child08" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child09" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child10" parent="Lap01/Pearls03/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="PearlL02" type="Node3D" parent="Lap01/Pearls03"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0.5, 45)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child03" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child04" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child05" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child06" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child07" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child08" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child09" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child10" parent="Lap01/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="Rings02" type="Node3D" parent="Lap01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 280, 0, 60)
+
+[node name="RingL" type="Node3D" parent="Lap01/Rings02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.6, 0)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000427246, 0, -1.40584)
+
+[node name="Child02" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0022583, 0, 0.602589)
+
+[node name="Child03" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0570984, 0, 2.63267)
+
+[node name="Child04" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.201843, 0, 4.66862)
+
+[node name="Child05" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4646, 0, 6.70334)
+
+[node name="Child06" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.873291, 0, 8.72447)
+
+[node name="Child07" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4487, 0, 10.7111)
+
+[node name="Child08" parent="Lap01/Rings02/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1976, 0, 12.6414)
+
+[node name="RingR" type="Node3D" parent="Lap01/Rings02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.6, 0)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000427246, 0, -1.40401)
+
+[node name="Child02" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00219727, 0, 0.587124)
+
+[node name="Child03" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0552673, 0, 2.55585)
+
+[node name="Child04" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.193909, 0, 4.50945)
+
+[node name="Child05" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.442932, 0, 6.44111)
+
+[node name="Child06" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.826477, 0, 8.34029)
+
+[node name="Child07" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36285, 0, 10.1942)
+
+[node name="Child08" parent="Lap01/Rings02/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.05972, 0, 11.9917)
+
+[node name="Pearls04" type="Node3D" parent="Lap01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 153, 0, 180)
+
+[node name="PearlR01" type="Node3D" parent="Lap01/Pearls04"]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 0.563965, 0.5, -1.49474)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 20
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_2qi3h")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.36049, 0, -2.48417)
+
+[node name="Child02" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.42453, 0, -0.510635)
+
+[node name="Child03" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5061, 0, 1.45534)
+
+[node name="Child04" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60957, 0, 3.41153)
+
+[node name="Child05" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.74059, 0, 5.35337)
+
+[node name="Child06" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.90636, 0, 7.27783)
+
+[node name="Child07" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.116, 0, 9.17883)
+
+[node name="Child08" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.38063, 0, 11.046)
+
+[node name="Child09" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7137, 0, 12.8676)
+
+[node name="Child10" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.13081, 0, 14.6307)
+
+[node name="Child11" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.64833, 0, 16.3216)
+
+[node name="Child12" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.28215, 0, 17.9332)
+
+[node name="Child13" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.04622, 0, 19.4704)
+
+[node name="Child14" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.94998, 0, 20.9503)
+
+[node name="Child15" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.99165, 0, 22.3916)
+
+[node name="Child16" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.18626, 0, 23.8521)
+
+[node name="Child17" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4713, 0, 25.3835)
+
+[node name="Child18" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.7567, 0, 26.9154)
+
+[node name="Child19" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0425, 0, 28.4478)
+
+[node name="Child20" parent="Lap01/Pearls04/PearlR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3282, 0, 29.98)
+
+[node name="PearlR02" type="Node3D" parent="Lap01/Pearls04"]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 0.563965, 0.5, -1.49474)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 20
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_nbkw4")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16101, 0, -2.44925)
+
+[node name="Child02" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.22537, 0, -0.465988)
+
+[node name="Child03" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.30745, 0, 1.512)
+
+[node name="Child04" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41176, 0, 3.48379)
+
+[node name="Child05" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54411, 0, 5.44551)
+
+[node name="Child06" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.71214, 0, 7.39546)
+
+[node name="Child07" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.92546, 0, 9.32922)
+
+[node name="Child08" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.19621, 0, 11.2387)
+
+[node name="Child09" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.53944, 0, 13.1148)
+
+[node name="Child10" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9731, 0, 14.9464)
+
+[node name="Child11" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.51645, 0, 16.7202)
+
+[node name="Child12" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.18753, 0, 18.4249)
+
+[node name="Child13" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99924, 0, 20.0568)
+
+[node name="Child14" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9552, 0, 21.6214)
+
+[node name="Child15" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.04564, 0, 23.1298)
+
+[node name="Child16" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.26689, 0, 24.6233)
+
+[node name="Child17" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55206, 0, 26.1549)
+
+[node name="Child18" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8376, 0, 27.687)
+
+[node name="Child19" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1233, 0, 29.2192)
+
+[node name="Child20" parent="Lap01/Pearls04/PearlR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.409, 0, 30.7514)
+
+[node name="PearlL01" type="Node3D" parent="Lap01/Pearls04"]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -92.436, 0.5, 10.1053)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 20
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_vjrtx")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.98055, 0, 0.0707245)
+
+[node name="Child02" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69479, 0, 1.60301)
+
+[node name="Child03" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.40945, 0, 3.13483)
+
+[node name="Child04" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123718, 0, 4.66711)
+
+[node name="Child05" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16194, 0, 6.1993)
+
+[node name="Child06" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.49898, 0, 7.77785)
+
+[node name="Child07" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.95097, 0, 9.36644)
+
+[node name="Child08" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.50197, 0, 10.8971)
+
+[node name="Child09" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.16333, 0, 12.35)
+
+[node name="Child10" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.93834, 0, 13.7)
+
+[node name="Child11" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8209, 0, 14.9225)
+
+[node name="Child12" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.7905, 0, 15.9964)
+
+[node name="Child13" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8235, 0, 16.9149)
+
+[node name="Child14" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.892, 0, 17.6828)
+
+[node name="Child15" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.9739, 0, 18.3158)
+
+[node name="Child16" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.054, 0, 18.835)
+
+[node name="Child17" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.1258, 0, 19.263)
+
+[node name="Child18" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.1849, 0, 19.6192)
+
+[node name="Child19" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.2318, 0, 19.9207)
+
+[node name="Child20" parent="Lap01/Pearls04/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.2669, 0, 20.1811)
+
+[node name="PearlL02" type="Node3D" parent="Lap01/Pearls04"]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -92.436, 0.5, 10.1053)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 20
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_iqq0q")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.06129, 0, -0.700623)
+
+[node name="Child02" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.77554, 0, 0.831665)
+
+[node name="Child03" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.490204, 0, 2.36348)
+
+[node name="Child04" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.795532, 0, 3.89577)
+
+[node name="Child05" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.08119, 0, 5.42795)
+
+[node name="Child06" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.40149, 0, 6.98698)
+
+[node name="Child07" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.81483, 0, 8.53355)
+
+[node name="Child08" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.31773, 0, 10.017)
+
+[node name="Child09" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.92041, 0, 11.4189)
+
+[node name="Child10" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.6264, 0, 12.7169)
+
+[node name="Child11" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.4317, 0, 13.8896)
+
+[node name="Child12" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3209, 0, 14.9199)
+
+[node name="Child13" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2747, 0, 15.803)
+
+[node name="Child14" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.2704, 0, 16.544)
+
+[node name="Child15" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.2891, 0, 17.1579)
+
+[node name="Child16" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.3166, 0, 17.6641)
+
+[node name="Child17" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.3461, 0, 18.0834)
+
+[node name="Child18" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.372, 0, 18.4339)
+
+[node name="Child19" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.3933, 0, 18.7317)
+
+[node name="Child20" parent="Lap01/Pearls04/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.409, 0, 18.9896)
+
+[node name="Lap02" type="Node3D" parent="."]
+visible = false
+
+[node name="Rings01" type="Node3D" parent="Lap02"]
+
+[node name="RingsL01" type="Node3D" parent="Lap02/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0.7, 94)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings01/RingsL01" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings01/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="Lap02/Rings01/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="Lap02/Rings01/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="Lap02/Rings01/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="RingsR01" type="Node3D" parent="Lap02/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.7, 94)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings01/RingsR01" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings01/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="Lap02/Rings01/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="Lap02/Rings01/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="Lap02/Rings01/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="RingsL02" type="Node3D" parent="Lap02/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.7, 47)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings01/RingsL02" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings01/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="Lap02/Rings01/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="Lap02/Rings01/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="Lap02/Rings01/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="RingsR02" type="Node3D" parent="Lap02/Rings01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0.7, 47)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings01/RingsR02" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings01/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="Lap02/Rings01/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="Lap02/Rings01/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="Lap02/Rings01/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Pearls01" type="Node3D" parent="Lap02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -133)
+
+[node name="PearlsL" type="Node3D" parent="Lap02/Pearls01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0.6, -9)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 3.0
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000261545, 0, -0.00154114)
+
+[node name="Child02" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.544773, 0, -2.64034)
+
+[node name="Child03" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30701, 0, -5.24283)
+
+[node name="Child04" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28344, 0, -7.77032)
+
+[node name="Child05" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.45116, 0, -10.1919)
+
+[node name="Child06" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.77404, 0, -12.4901)
+
+[node name="Child07" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.21516, 0, -14.667)
+
+[node name="Child08" parent="Lap02/Pearls01/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.74199, 0, -16.7345)
+
+[node name="PearlsR" type="Node3D" parent="Lap02/Pearls01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.6, -9)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 3.0
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00210571, 0, -0.0120087)
+
+[node name="Child02" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.544016, 0, -2.55724)
+
+[node name="Child03" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29527, 0, -5.06032)
+
+[node name="Child04" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25219, 0, -7.48926)
+
+[node name="Child05" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.39389, 0, -9.81989)
+
+[node name="Child06" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.68794, 0, -12.0401)
+
+[node name="Child07" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10067, 0, -14.1531)
+
+[node name="Child08" parent="Lap02/Pearls01/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6014, 0, -16.1696)
+
+[node name="Rings02" type="Node3D" parent="Lap02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55, 0, -190)
+
+[node name="RingsL" type="Node3D" parent="Lap02/Rings02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.1, 0.7, 7.8)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 10
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 2.8
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.034729, 0, 0.0260162)
+
+[node name="Child02" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.83276, 0, -1.30058)
+
+[node name="Child03" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75851, 0, -2.48987)
+
+[node name="Child04" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.74967, 0, -3.51474)
+
+[node name="Child05" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.81204, 0, -4.35558)
+
+[node name="Child06" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.94326, 0, -5.00349)
+
+[node name="Child07" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1367, 0, -5.46347)
+
+[node name="Child08" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.38, 0, -5.75168)
+
+[node name="Child09" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.6624, 0, -5.89093)
+
+[node name="Child10" parent="Lap02/Rings02/RingsL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.0073, 0, -5.91319)
+
+[node name="RingsR" type="Node3D" parent="Lap02/Rings02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.7, 9)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 10
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 2.8
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0362167, 0, 0.0269165)
+
+[node name="Child02" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75634, 0, -1.23579)
+
+[node name="Child03" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5857, 0, -2.35321)
+
+[node name="Child04" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.46018, 0, -3.30428)
+
+[node name="Child05" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.38819, 0, -4.07634)
+
+[node name="Child06" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.38235, 0, -4.66896)
+
+[node name="Child07" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4482, 0, -5.08961)
+
+[node name="Child08" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5803, 0, -5.35237)
+
+[node name="Child09" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.7696, 0, -5.47656)
+
+[node name="Child10" parent="Lap02/Rings02/RingsR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.079, 0, -5.49339)
+
+[node name="Pearls02" type="Node3D" parent="Lap02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 0, -190)
+
+[node name="PearlsL" type="Node3D" parent="Lap02/Pearls02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.6, -3.2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 3.2
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.278763, 0, 0)
+
+[node name="Child02" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74365, 0, 0.00654602)
+
+[node name="Child03" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.39545, 0, 0.154175)
+
+[node name="Child04" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.08604, 0, 0.548874)
+
+[node name="Child05" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7368, 0, 1.22427)
+
+[node name="Child06" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2751, 0, 2.15359)
+
+[node name="Child07" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6693, 0, 3.27339)
+
+[node name="Child08" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.9304, 0, 4.52313)
+
+[node name="Child09" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.0855, 0, 5.8597)
+
+[node name="Child10" parent="Lap02/Pearls02/PearlsL" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.1589, 0, 7.25386)
+
+[node name="PearlsR" type="Node3D" parent="Lap02/Pearls02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.6, -2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 3.2
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.278854, 0, 0)
+
+[node name="Child02" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.71935, 0, 0.00630188)
+
+[node name="Child03" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27507, 0, 0.148132)
+
+[node name="Child04" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.84709, 0, 0.524872)
+
+[node name="Child05" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3754, 0, 1.16856)
+
+[node name="Child06" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.8071, 0, 2.05855)
+
+[node name="Child07" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1181, 0, 3.13934)
+
+[node name="Child08" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.3191, 0, 4.35573)
+
+[node name="Child09" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.4309, 0, 5.66542)
+
+[node name="Child10" parent="Lap02/Pearls02/PearlsR" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.4734, 0, 7.03882)
+
+[node name="Pearls03" type="Node3D" parent="Lap02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 280, 0, -67)
+
+[node name="PearlL01" type="Node3D" parent="Lap02/Pearls03"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -6.79999, 0.5, -18)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 2.4
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0193787, 0, -0.0201035)
+
+[node name="Child02" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75101, 0, -1.87886)
+
+[node name="Child03" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42908, 0, -3.84587)
+
+[node name="Child04" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.02454, 0, -5.94785)
+
+[node name="Child05" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.49612, 0, -8.21246)
+
+[node name="Child06" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.78564, 0, -10.6499)
+
+[node name="Child07" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.83142, 0, -13.2361)
+
+[node name="Child08" parent="Lap02/Pearls03/PearlL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.59558, 0, -15.9067)
+
+[node name="PearlL02" type="Node3D" parent="Lap02/Pearls03"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.79999, 0.5, -17)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 2.4
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0189209, 0, -0.0196609)
+
+[node name="Child02" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.71298, 0, -1.83939)
+
+[node name="Child03" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.34396, 0, -3.75278)
+
+[node name="Child04" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.88324, 0, -5.78299)
+
+[node name="Child05" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.29004, 0, -7.9509)
+
+[node name="Child06" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.51392, 0, -10.2685)
+
+[node name="Child07" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.50107, 0, -12.7157)
+
+[node name="Child08" parent="Lap02/Pearls03/PearlL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.2229, 0, -15.2468)
+
+[node name="Rings03" type="Node3D" parent="Lap02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 280, 0, 50)
+
+[node name="RingR" type="Node3D" parent="Lap02/Rings03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.20001, 0.6, 6)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 1.8
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.256718)
+
+[node name="Child02" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.65633)
+
+[node name="Child03" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00808716, 0, 4.99725)
+
+[node name="Child04" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0977173, 0, 7.23223)
+
+[node name="Child05" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.313721, 0, 9.39705)
+
+[node name="Child06" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.688873, 0, 11.4761)
+
+[node name="Child07" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25037, 0, 13.4654)
+
+[node name="Child08" parent="Lap02/Rings03/RingR" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.01657, 0, 15.3786)
+
+[node name="RingL" type="Node3D" parent="Lap02/Rings03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.6, 7)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 8
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 1.8
+"Follow Path Y" = false
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.254608)
+
+[node name="Child02" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.65399)
+
+[node name="Child03" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0329895, 0, 4.97911)
+
+[node name="Child04" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17569, 0, 7.25661)
+
+[node name="Child05" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466827, 0, 9.48055)
+
+[node name="Child06" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9422, 0, 11.6349)
+
+[node name="Child07" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62811, 0, 13.7117)
+
+[node name="Child08" parent="Lap02/Rings03/RingL" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.53152, 0, 15.7082)
+
+[node name="Rings04" type="Node3D" parent="Lap02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 123, 0, 190)
+
+[node name="RingsL01" type="Node3D" parent="Lap02/Rings04"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5, 0.7, 3.2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings04/RingsL01" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings04/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap02/Rings04/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap02/Rings04/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap02/Rings04/RingsL01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="RingsR01" type="Node3D" parent="Lap02/Rings04"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5, 0.7, 2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings04/RingsR01" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings04/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap02/Rings04/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap02/Rings04/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap02/Rings04/RingsR01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="RingsL02" type="Node3D" parent="Lap02/Rings04"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -52, 0.7, -2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings04/RingsL02" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings04/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap02/Rings04/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap02/Rings04/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap02/Rings04/RingsL02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="RingsR02" type="Node3D" parent="Lap02/Rings04"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -52, 0.7, -3.2)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap02/Rings04/RingsR02" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap02/Rings04/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap02/Rings04/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap02/Rings04/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="Lap02/Rings04/RingsR02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Lap03" type="Node3D" parent="."]
+visible = false
+
+[node name="Rings01" type="Node3D" parent="Lap03"]
+
+[node name="Rings01" type="Node3D" parent="Lap03/Rings01"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0.7, -41)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings01/Rings01" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings01/Rings01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="Lap03/Rings01/Rings01" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings02" type="Node3D" parent="Lap03/Rings01"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0.7, -53)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings01/Rings02" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings01/Rings02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap03/Rings01/Rings02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap03/Rings01/Rings02" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings03" type="Node3D" parent="Lap03/Rings01"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0.7, -68)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings01/Rings03" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings01/Rings03" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="Lap03/Rings01/Rings03" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings04" type="Node3D" parent="Lap03/Rings01"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0.7, -92)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings01/Rings04" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings01/Rings04" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap03/Rings01/Rings04" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap03/Rings01/Rings04" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings05" type="Node3D" parent="Lap03/Rings01"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0.7, -114)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings01/Rings05" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings01/Rings05" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="Lap03/Rings01/Rings05" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings06" type="Node3D" parent="Lap03/Rings01"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.99999, 0.7, -128)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings01/Rings06" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings01/Rings06" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap03/Rings01/Rings06" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap03/Rings01/Rings06" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Pearl01" type="Node3D" parent="Lap03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 0, -173)
+
+[node name="PearlsR01" type="Node3D" parent="Lap03/Pearl01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 0.6, -8.60001)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 2.8
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0219803, 0, 0.0149689)
+
+[node name="Child02" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47277, 0, -0.950531)
+
+[node name="Child03" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99095, 0, -1.8049)
+
+[node name="Child04" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.54, 0, -2.54007)
+
+[node name="Child05" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.12663, 0, -3.15167)
+
+[node name="Child06" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.75951, 0, -3.6409)
+
+[node name="Child07" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.44254, 0, -4.01202)
+
+[node name="Child08" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1765, 0, -4.27266)
+
+[node name="Child09" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9559, 0, -4.43251)
+
+[node name="Child10" parent="Lap03/Pearl01/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.775, 0, -4.50296)
+
+[node name="PearlsL01" type="Node3D" parent="Lap03/Pearl01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.6, 0.6, -9.90001)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 10
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 2.8
+"Follow Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.019043, 0, 0.01297)
+
+[node name="Child02" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55113, 0, -1.00139)
+
+[node name="Child03" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.16041, 0, -1.90712)
+
+[node name="Child04" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.81404, 0, -2.692)
+
+[node name="Child05" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.51393, 0, -3.34734)
+
+[node name="Child06" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.26153, 0, -3.87111)
+
+[node name="Child07" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0541, 0, -4.2666)
+
+[node name="Child08" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8871, 0, -4.54237)
+
+[node name="Child09" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7527, 0, -4.71024)
+
+[node name="Child10" parent="Lap03/Pearl01/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6444, 0, -4.78378)
+
+[node name="Rings02" type="Node3D" parent="Lap03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93, 0, -190)
+
+[node name="Rings" type="Node3D" parent="Lap03/Rings02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 3)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings02/Rings" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings02/Rings" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap03/Rings02/Rings" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap03/Rings02/Rings" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Pearl02" type="Node3D" parent="Lap03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 280, 0, 48)
+
+[node name="PearlsL01" type="Node3D" parent="Lap03/Pearl02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.7, 17)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 6
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 1.4
+"Follow Path Y" = false
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl02/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000610352, 0, 0.00598145)
+
+[node name="Child02" parent="Lap03/Pearl02/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.187866, 0, 1.53864)
+
+[node name="Child03" parent="Lap03/Pearl02/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.451263, 0, 3.0812)
+
+[node name="Child04" parent="Lap03/Pearl02/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.800812, 0, 4.62344)
+
+[node name="Child05" parent="Lap03/Pearl02/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.24454, 0, 6.15708)
+
+[node name="Child06" parent="Lap03/Pearl02/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78336, 0, 7.66449)
+
+[node name="PearlsR01" type="Node3D" parent="Lap03/Pearl02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79999, 0.7, 17)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 6
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 1.4
+"Follow Path Y" = false
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl02/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000213623, 0, 0.00190735)
+
+[node name="Child02" parent="Lap03/Pearl02/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.186279, 0, 1.48293)
+
+[node name="Child03" parent="Lap03/Pearl02/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.445221, 0, 2.96402)
+
+[node name="Child04" parent="Lap03/Pearl02/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.786865, 0, 4.44145)
+
+[node name="Child05" parent="Lap03/Pearl02/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.21722, 0, 5.90299)
+
+[node name="Child06" parent="Lap03/Pearl02/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.73779, 0, 7.33758)
+
+[node name="PearlsL02" type="Node3D" parent="Lap03/Pearl02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.39999, 0.7, 26.6)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 6
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 1.4
+"Follow Path Y" = false
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl02/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0108337, 0, -0.0163345)
+
+[node name="Child02" parent="Lap03/Pearl02/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.718628, 0, 1.04089)
+
+[node name="Child03" parent="Lap03/Pearl02/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49988, 0, 2.07901)
+
+[node name="Child04" parent="Lap03/Pearl02/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.32657, 0, 3.09962)
+
+[node name="Child05" parent="Lap03/Pearl02/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.19232, 0, 4.10398)
+
+[node name="Child06" parent="Lap03/Pearl02/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.09116, 0, 5.09319)
+
+[node name="PearlsR02" type="Node3D" parent="Lap03/Pearl02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.60001, 0.7, 26.1)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 6
+Shape = 2
+Path = NodePath("")
+"Path Progress Offset" = 1.4
+"Follow Path Y" = false
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl02/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0192871, 0, -0.0313873)
+
+[node name="Child02" parent="Lap03/Pearl02/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.621765, 0, 0.965637)
+
+[node name="Child03" parent="Lap03/Pearl02/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32291, 0, 1.95447)
+
+[node name="Child04" parent="Lap03/Pearl02/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.07816, 0, 2.9351)
+
+[node name="Child05" parent="Lap03/Pearl02/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.88043, 0, 3.90637)
+
+[node name="Child06" parent="Lap03/Pearl02/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.72476, 0, 4.86967)
+
+[node name="Rings03" type="Node3D" parent="Lap03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185, 0, 153)
+
+[node name="Rings" type="Node3D" parent="Lap03/Rings03"]
+transform = Transform3D(-0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, -0.766044, -2.12132, 0.7, -2.12132)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("9_7ca06")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Rings03/Rings" instance=ExtResource("9_7ca06")]
+
+[node name="Child02" parent="Lap03/Rings03/Rings" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Lap03/Rings03/Rings" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Lap03/Rings03/Rings" instance=ExtResource("9_7ca06")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Pearl03" type="Node3D" parent="Lap03"]
+transform = Transform3D(0.71934, 0, 0.694658, 0, 1, 0, -0.694658, 0, 0.71934, 20, 0, 170)
+
+[node name="PearlsL01" type="Node3D" parent="Lap03/Pearl03"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -3.2, 0.6, 23)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl03/PearlsL01" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap03/Pearl03/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="Lap03/Pearl03/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="Lap03/Pearl03/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="Lap03/Pearl03/PearlsL01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="PearlsR01" type="Node3D" parent="Lap03/Pearl03"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -2, 0.6, 23)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl03/PearlsR01" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap03/Pearl03/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="Lap03/Pearl03/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="Lap03/Pearl03/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="Lap03/Pearl03/PearlsR01" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="PearlsL02" type="Node3D" parent="Lap03/Pearl03"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 2.00001, 0.6, 11)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl03/PearlsL02" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap03/Pearl03/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="Lap03/Pearl03/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="Lap03/Pearl03/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="Lap03/Pearl03/PearlsL02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="PearlsR02" type="Node3D" parent="Lap03/Pearl03"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 3.20002, 0.6, 11)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl03/PearlsR02" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap03/Pearl03/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="Lap03/Pearl03/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="Lap03/Pearl03/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="Lap03/Pearl03/PearlsR02" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="PearlsL03" type="Node3D" parent="Lap03/Pearl03"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -3.19998, 0.6, -0.999985)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl03/PearlsL03" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap03/Pearl03/PearlsL03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="Lap03/Pearl03/PearlsL03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="Lap03/Pearl03/PearlsL03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="Lap03/Pearl03/PearlsL03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="PearlsR03" type="Node3D" parent="Lap03/Pearl03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99998, 0.6, -0.999985)
+script = ExtResource("8_atfm6")
+Generate = false
+Source = ExtResource("10_a21kh")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lap03/Pearl03/PearlsR03" instance=ExtResource("10_a21kh")]
+
+[node name="Child02" parent="Lap03/Pearl03/PearlsR03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="Lap03/Pearl03/PearlsR03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="Lap03/Pearl03/PearlsR03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="Lap03/Pearl03/PearlsR03" instance=ExtResource("10_a21kh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="ItemCyclePoint" type="Area3D" parent="."]
+transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788, 158, 9, -175)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ItemCyclePoint"]
+shape = SubResource("BoxShape3D_h301n")
+
+[node name="ItemHalfwayPoint" type="Area3D" parent="."]
+transform = Transform3D(-0.707107, 0, -0.707106, 0, 1, 0, 0.707106, 0, -0.707107, 20.701, 9, 170.62)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ItemHalfwayPoint"]
+shape = SubResource("BoxShape3D_h301n")

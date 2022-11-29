@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
@@ -15,9 +16,17 @@ namespace Project.Gameplay.Triggers
 		private SpawnData spawnData; //Data for tree modification
 		[Export]
 		private bool startEnabled; //Generally things should start culled
+		[Export]
+		private bool isStageVisuals;
 
 		public override void _Ready()
 		{
+			if (isStageVisuals && CheatManager.DisableStageCulling)
+			{
+				Visible = true;
+				return;
+			}
+
 			if (modifyTree)
 				spawnData = new SpawnData(targetNode.GetParent(), targetNode.Transform);
 
@@ -40,6 +49,8 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
+			if (isStageVisuals && CheatManager.DisableStageCulling) return;
+
 			if (modifyTree)
 			{
 				if (targetNode.IsInsideTree()) return;
@@ -55,6 +66,8 @@ namespace Project.Gameplay.Triggers
 
 		public override void Deactivate()
 		{
+			if (isStageVisuals && CheatManager.DisableStageCulling) return;
+
 			if (modifyTree)
 			{
 				if (!targetNode.IsInsideTree()) return;

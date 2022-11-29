@@ -71,10 +71,9 @@ namespace Project.Gameplay.Objects
 					isEnteringPot = true;
 					environmentCollider.Disabled = true;
 
-					if (Character.GlobalPosition.y > GlobalPosition.y)
-						Character.JumpTo(GlobalPosition);
-					else
-						Character.JumpTo(GlobalPosition, 2f, true);
+					float jumpHeight = (GlobalPosition.y + 1) - Character.GlobalPosition.y;
+					jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
+					Character.JumpTo(GlobalPosition, jumpHeight, true);
 
 					lockonArea.SetDeferred("monitorable", false);
 
@@ -96,7 +95,7 @@ namespace Project.Gameplay.Objects
 		{
 			isControllingPlayer = true;
 			Character.StartExternal(this);
-			Character.Visible = false;
+			Character.Animator.Visible = false;
 		}
 
 		private void EjectPlayer()
@@ -109,12 +108,12 @@ namespace Project.Gameplay.Objects
 			Character.VerticalSpd = RuntimeConstants.GetJumpPower(Character.jumpHeight);
 			//Character.StrafeSpeed = Character.airStrafeSettings.speed * (angle / MAX_ANGLE);
 			Character.ResetMovementState();
-			Character.Visible = true;
+			Character.Animator.Visible = true;
 		}
 
 		private void ProcessMovement()
 		{
-			float targetRotation = Controller.horizontalAxis.value * MAX_ANGLE;
+			float targetRotation = -Controller.horizontalAxis.value * MAX_ANGLE;
 			angle = Mathf.Lerp(angle, targetRotation, ROTATION_SPEED);
 
 			if (Controller.jumpButton.wasPressed)
@@ -156,9 +155,12 @@ namespace Project.Gameplay.Objects
 
 			Character.Skills.IsSpeedBreakEnabled = false;
 
-			cameraSettings.viewAngle.y = (Mathf.RadToDeg(GlobalRotation.y) + 180) % 360; //Sync viewAngle to current flying pot's rotation
-			GD.Print(cameraSettings.viewAngle.y);
-			Character.Camera.SetCameraData(cameraSettings);
+			if (cameraSettings != null)
+			{
+				cameraSettings.viewAngle.y = (Mathf.RadToDeg(GlobalRotation.y) + 180) % 360; //Sync viewAngle to current flying pot's rotation
+				GD.Print(cameraSettings.viewAngle.y);
+				Character.Camera.SetCameraData(cameraSettings);
+			}
 		}
 
 		public void PlayerExited(Area3D _)

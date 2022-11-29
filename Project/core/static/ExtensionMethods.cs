@@ -229,5 +229,17 @@ namespace Project
 
 			flags = (T)(object)(flagsValue & (~flagValue));
 		}
+
+		public static bool IsLoopingPath(this Path3D path) => path.Curve.GetPointPosition(0).IsEqualApprox(path.Curve.GetPointPosition(path.Curve.PointCount - 1));
+
+		/// <summary>
+		/// Converts Decibels to Linear.
+		/// </summary>
+		public static float DBToLinear(float db) => Mathf.Exp(db * 0.11512925464970228420089957273422f);
+
+		/// <summary>
+		/// Converts Linear to Decibels.
+		/// </summary>
+		public static float LinearToDB(float linear) => Mathf.Log(linear) * 8.6858896380650365530225783783321f;
 	}
 }

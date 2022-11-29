@@ -19,8 +19,18 @@ namespace Project.Gameplay.Objects
 
 		protected override void Collect()
 		{
-			StageSettings.instance.ChangeScore(isRichRing ? 100 : 10, StageSettings.ScoreFunction.Add);
-			StageSettings.instance.UpdateRingCount(isRichRing ? 20 : 1);
+			if (isRichRing)
+			{
+				StageSettings.instance.ChangeScore(100, StageSettings.ScoreFunction.Add);
+				StageSettings.instance.UpdateRingCount(20);
+				SoundManager.instance.PlayRichRingSFX();
+			}
+			else
+			{
+				StageSettings.instance.ChangeScore(10, StageSettings.ScoreFunction.Add);
+				StageSettings.instance.UpdateRingCount(1);
+				SoundManager.instance.PlayRingSFX();
+			}
 
 			if (animator != null && animator.HasAnimation("collect"))
 				animator.Play("collect");

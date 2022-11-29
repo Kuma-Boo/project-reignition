@@ -148,7 +148,9 @@ namespace Project.Gameplay
 		{
 			float inputAngle = GetTargetInputAngle();
 
-			if (IsLockoutActive && CurrentLockoutData.directionOverrideMode != LockoutResource.DirectionOverrideMode.Free)
+			if (Skills.IsSpeedBreakActive && MoveSpeed == 0)
+				return PathFollower.ForwardAngle; //Reset forward angle
+			else if (IsLockoutActive && CurrentLockoutData.directionOverrideMode != LockoutResource.DirectionOverrideMode.Free)
 			{
 				float targetAngle = Mathf.DegToRad(CurrentLockoutData.overrideAngle);
 				if (CurrentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.Camera)
@@ -278,11 +280,11 @@ namespace Project.Gameplay
 			if (!IsLockoutActive || !CurrentLockoutData.recenterPlayer) return;
 
 			Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
-			float currentOffset = -PathFollower.GetLocalPosition(GlobalPosition).x;
+			float currentOffset = -PathFollower.PlayerPositionDelta.x;
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
 			{
-				movementOffset = Mathf.MoveToward(movementOffset, 0, MoveSpeed * PhysicsManager.physicsDelta);
+				movementOffset = Mathf.MoveToward(movementOffset, 0, groundSettings.GetSpeedRatio(MoveSpeed) * PhysicsManager.physicsDelta);
 				if (Mathf.IsZeroApprox(movementOffset))
 					isRecentered = true;
 				movementOffset = currentOffset - movementOffset;
@@ -421,7 +423,7 @@ namespace Project.Gameplay
 			if (IsLockoutActive)
 			{
 				if (CurrentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.PathFollower)
-					MovementAngle += PathFollower.CalculateDeltaAngle(MoveSpeed); //Follow pathfollower around turns better
+					MovementAngle += PathFollower.DeltaAngle; //Follow pathfollower around turns better
 			}
 
 			if (ActionState == ActionStates.Backflip) return;
@@ -839,8 +841,6 @@ namespace Project.Gameplay
 		/// </summary>
 		public void Kill()
 		{
-			PathFollower.HOffset = PathFollower.VOffset = 0;
-
 			//TODO Check deathless mission modifier/Play death animation
 			StartRespawn();
 		}
@@ -1291,8 +1291,16 @@ namespace Project.Gameplay
 				}
 			}
 
-			if (Lockon.IsHomingAttacking && body.IsInGroup("wall"))
-				Lockon.StartBounce();
+			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))
+			{
+				if (Skills.isSplashJumpEnabled) //Perform a splash jump
+					Lockon.StartBounce();
+				else //Cancel HomingAttack/JumpDash
+				{
+					Lockon.IsHomingAttacking = false;
+					ResetActionState();
+				}
+			}
 		}
 
 		public void OnObjectCollisionExit(Node3D body)

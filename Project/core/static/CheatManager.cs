@@ -6,5 +6,7 @@ namespace Project.Core
 
 		public static bool InfiniteSoulGauge => EnableCheats && true;
 		public static bool SkipCountdown => EnableCheats && true;
+
+		public static bool DisableStageCulling => EnableCheats && true; ///Don't cull stages
 	}
 }

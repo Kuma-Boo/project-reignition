@@ -44,24 +44,6 @@
 [sub_resource type="SphereShape3D" id="98"]
 radius = 5.098
 
-[sub_resource type="Animation" id="41"]
-resource_name = "Event"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DinoApatos/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["apato-2", -1, 1.0, false],
-"method": &"play"
-}]
-}
-
 [sub_resource type="Animation" id="42"]
 resource_name = "RESET"
 length = 0.001
@@ -80,10 +62,28 @@ tracks/0/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="41"]
+resource_name = "event"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DinoApatos/AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["apato-2", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v21xi"]
 _data = {
-"Event": SubResource("41"),
-"RESET": SubResource("42")
+"RESET": SubResource("42"),
+"event": SubResource("41")
 }
 
 [sub_resource type="BoxShape3D" id="23"]
@@ -382,7 +382,7 @@ _data = {
 "demo3": SubResource("96")
 }
 
-[node name="World" type="Node"]
+[node name="Stage" type="Node"]
 
 [node name="MajinEggAct" parent="." instance=ExtResource("1_3gnqv")]
 
