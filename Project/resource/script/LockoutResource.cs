@@ -35,7 +35,7 @@ namespace Project.Gameplay
 			if (directionOverrideMode == DirectionOverrideMode.Replace || directionOverrideMode == DirectionOverrideMode.Clamp)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Allow Reversing", Variant.Type.Bool));
-				properties.Add(ExtensionMethods.CreateProperty("Controls/Direction Space", Variant.Type.Int, PropertyHint.Enum, "Camera,Global,Pathfollower"));
+				properties.Add(ExtensionMethods.CreateProperty("Controls/Direction Space", Variant.Type.Int, PropertyHint.Enum, "Camera,Pathfollower,Local,Global"));
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle", Variant.Type.Float, PropertyHint.Range, "-180,180"));
 				if (directionOverrideMode == DirectionOverrideMode.Clamp)
 					properties.Add(ExtensionMethods.CreateProperty("Controls/Clamp Range", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
@@ -198,8 +198,9 @@ namespace Project.Gameplay
 		public enum DirectionSpaceMode
 		{
 			Camera,
-			Global,
 			PathFollower,
+			Local,
+			Global,
 		}
 		/// <summary> What "space" to calculate the movement direction in. </summary>
 		public DirectionSpaceMode directionSpaceMode;

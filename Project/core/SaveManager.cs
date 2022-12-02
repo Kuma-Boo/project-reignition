@@ -152,7 +152,7 @@ namespace Project.Core
 			public float playTime;
 
 
-			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f; //Soul gauge's level, from 0 -> 1
+			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f; //Soul gauge's level, normalized from 0 -> 1
 			public SkillRing skillRing;
 		}
 
@@ -182,9 +182,9 @@ namespace Project.Core
 			{
 				//Standard skills
 				None = 0,
-				LandingBoost = 1, //Allows for a quick boost of speed when landing
-				PearlAttractor = 2,
-				SkillC = 4
+				LandingBoost = 1, //Gives a speed boost when landing
+				PearlAttractor = 2, //Makes collecting pearls easier
+				SplashJump = 4, //Bounces the player when JumpDashing an obstacle
 			}
 		}
 

@@ -1,8 +1,5 @@
-[gd_scene load_steps=62 format=3 uid="uid://dm3o3mmgewihr"]
+[gd_scene load_steps=59 format=3 uid="uid://ddig36ceo6kee"]
 
-[ext_resource type="Resource" uid="uid://bijq2wxw8v0nx" path="res://object/player/resource/movement settings/ground/BackstepSettings.tres" id="2"]
-[ext_resource type="Resource" uid="uid://2r18q1m50o37" path="res://object/player/resource/movement settings/ground/GroundSettings.tres" id="2_qbh54"]
-[ext_resource type="Resource" uid="uid://bsdyr3nwbjt2s" path="res://object/player/resource/movement settings/aerial/AirSettings.tres" id="3_ywh7m"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
 [ext_resource type="PackedScene" uid="uid://djwsy5ophmfdd" path="res://object/player/resource/model/Sonic.tscn" id="6_ip8ma"]
 [ext_resource type="PackedScene" uid="uid://b6m53bp56bkf1" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
@@ -23,7 +20,7 @@ size = Vector3(0.5, 0.1, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_uookt"]
 
 [sub_resource type="SphereShape3D" id="80"]
-radius = 0.4
+radius = 0.36
 
 [sub_resource type="AnimationNodeTransition" id="70"]
 enabled_inputs = 1
@@ -276,11 +273,8 @@ _data = {
 collision_layer = 2
 floor_stop_on_slope = false
 floor_constant_speed = true
-floor_block_on_wall = false
+safe_margin = 0.01
 script = ExtResource("10")
-groundSettings = ExtResource("2_qbh54")
-airSettings = ExtResource("3_ywh7m")
-backstepSettings = ExtResource("2")
 turningSpeedCurve = SubResource("Curve_0y4at")
 landingBoost = 32.0
 jumpHeight = 4.6
@@ -301,7 +295,6 @@ Lockon = NodePath("Components/Lockon")
 [node name="Components" type="Node3D" parent="."]
 
 [node name="PathFollower" type="PathFollow3D" parent="Components"]
-rotation_mode = 4
 cubic_interp = false
 loop = false
 script = ExtResource("6_80hf8")

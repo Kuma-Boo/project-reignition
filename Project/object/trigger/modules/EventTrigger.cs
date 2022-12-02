@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 
 namespace Project.Gameplay.Triggers
 {
@@ -15,7 +14,8 @@ namespace Project.Gameplay.Triggers
 		private Node3D playerStandin;
 		[Export]
 		private Node3D cameraStandin;
-		private readonly Array<DialogTrigger> dialogTriggers = new Array<DialogTrigger>();
+		[Export]
+		private LockoutResource lockout;
 
 		[Signal]
 		public delegate void ActivatedEventHandler();
@@ -24,12 +24,6 @@ namespace Project.Gameplay.Triggers
 		public override void _Ready()
 		{
 			StageSettings.instance.RegisterRespawnableObject(this);
-
-			for (int i = 0; i < GetChildCount(); i++)
-			{
-				if (GetChild(i) is DialogTrigger)
-					dialogTriggers.Add(GetChild<DialogTrigger>(i));
-			}
 		}
 
 		public void Respawn()
@@ -37,6 +31,12 @@ namespace Project.Gameplay.Triggers
 			wasActivated = false;
 			if (animator.HasAnimation("RESET"))
 				animator.Play("RESET"); //Reset event
+			else if (!string.IsNullOrEmpty(animator.Autoplay)) //Fallback to autoplay animation
+			{
+				animator.Play(animator.Autoplay);
+				animator.Stop();
+				animator.Seek(0.0, true);
+			}
 		}
 
 		public override void Activate()
@@ -56,11 +56,6 @@ namespace Project.Gameplay.Triggers
 		}
 
 		/// <summary>
-		/// Call this to play a dialog track (DialogTriggers must be children to this EventTrigger node)
-		/// </summary>
-		public void PlayDialog(int index) => SoundManager.instance.PlayDialog(dialogTriggers[index]);
-
-		/// <summary>
 		/// Call this to play a specific animation on the player
 		/// </summary>
 		public void PlayCharacterAnimation(string anim) => Character.Animator.PlayAnimation(anim);
@@ -72,6 +67,9 @@ namespace Project.Gameplay.Triggers
 			Character.MoveSpeed = moveSpeed;
 			Character.VerticalSpd = fallSpeed;
 			Character.ResetMovementState();
+
+			if (lockout != null)
+				Character.AddLockoutData(lockout);
 		}
 	}
 }

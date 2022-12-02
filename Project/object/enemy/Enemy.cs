@@ -15,10 +15,12 @@ namespace Project.Gameplay
 		public int maxHealth;
 		protected int currentHealth;
 		[Export]
-		public bool damagePlayer;
+		public bool damagePlayer; //Does this enemy hurt the player on touch?
 
 		private SpawnData spawnData;
 		protected CharacterController Character => CharacterController.instance;
+
+		protected bool IsDefeated => currentHealth <= 0;
 
 		public override void _Ready() => SetUp();
 		protected virtual void SetUp()
@@ -66,7 +68,7 @@ namespace Project.Gameplay
 			else
 				currentHealth--; //TODO increase player attack based on skills?
 
-			if (currentHealth <= 0)
+			if (IsDefeated)
 				Defeat();
 		}
 
@@ -88,6 +90,10 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.Defeated);
 		}
 
+		protected bool isActivated; //Is the enemy being processed?
+		protected virtual void Activate() { }
+		protected virtual void Deactivate() { }
+
 		protected bool isInteracting; //True when colliding with an object
 		protected bool isInteractingWithPlayer; //True when colliding with the player specifically
 		protected virtual void UpdateInteraction()
@@ -108,10 +114,10 @@ namespace Project.Gameplay
 			}
 		}
 
-		public void OnEntered(Area3D area)
+		public void OnEntered(Area3D a)
 		{
 			isInteracting = true;
-			isInteractingWithPlayer = area.IsInGroup("player");
+			isInteractingWithPlayer = a.IsInGroup("player");
 		}
 
 		public void OnExited(Area3D _)
@@ -120,6 +126,22 @@ namespace Project.Gameplay
 
 			if (isInteractingWithPlayer)
 				isInteractingWithPlayer = false;
+		}
+
+		public void OnRangeEntered(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+
+			isActivated = true;
+			Activate();
+		}
+
+		public void OnRangeExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+
+			isActivated = false;
+			Deactivate();
 		}
 	}
 }

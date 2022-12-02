@@ -146,7 +146,7 @@ namespace Project.Gameplay
 		{
 			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
 
-			Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.groundSettings.friction * PhysicsManager.physicsDelta);
+			Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.friction * PhysicsManager.physicsDelta);
 			Character.VerticalSpd -= RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta;
 		}
 

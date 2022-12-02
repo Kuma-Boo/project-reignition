@@ -19,12 +19,6 @@ namespace Project.Gameplay
 		public Path3D ActivePath { get; private set; }
 		public Vector3 PlayerPositionDelta { get; private set; } //Local delta to player position
 
-		public void Initialize()
-		{
-			if (StageSettings.instance.StartingPath != null) //Auto assign path
-				SetActivePath(StageSettings.instance.StartingPath);
-		}
-
 		public void SetActivePath(Path3D newPath)
 		{
 			if (newPath == null || newPath == ActivePath) return;
@@ -44,7 +38,6 @@ namespace Project.Gameplay
 
 			UpdatePosition();
 			//Progress = ActivePath.Curve.GetClosestOffset(Character.GlobalPosition - ActivePath.GlobalPosition);
-
 
 			float newForwardAngle = CharacterController.CalculateForwardAngle(this.Forward());
 			DeltaAngle = newForwardAngle - ForwardAngle;
@@ -78,6 +71,9 @@ namespace Project.Gameplay
 
 			Progress = ActivePath.Curve.GetClosestOffset(targetPosition); //Estimate for external objects to reference
 
+			if (closestPointIndex >= points.Length - 1) //Limit point index
+				closestPointIndex--;
+
 			//Assign transform
 			Vector3 position = points[closestPointIndex];
 			Vector3 nextPoint = points[closestPointIndex + 1];
@@ -92,6 +88,7 @@ namespace Project.Gameplay
 				float t = 1.0f - Mathf.Clamp(targetPosition.x / nextDistance, 0f, 1f);
 				position = position.Lerp(nextPoint, t);
 			}
+
 			position += ActivePath.GlobalPosition;
 			LookAtFromPosition(position, position + forwardDirection, this.Up());
 		}

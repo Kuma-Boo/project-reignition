@@ -1,17 +1,276 @@
-[gd_scene load_steps=4 format=3 uid="uid://dyvci5lgd2dmo"]
+[gd_scene load_steps=16 format=3 uid="uid://oopb0pp2lp6a"]
 
 [ext_resource type="PackedScene" uid="uid://e2x7vee4w5gg" path="res://object/enemy/flower/data/model/Seed.gltf" id="1_vd2ic"]
 [ext_resource type="Script" path="res://object/enemy/flower/data/Seed.cs" id="2_ay1nr"]
+[ext_resource type="Material" uid="uid://b3cw6w8vrp87n" path="res://object/enemy/flower/data/model/material/Seed Base Particle.tres" id="3_6k1j1"]
+[ext_resource type="Material" uid="uid://dp6kaviyk8cpk" path="res://object/enemy/flower/data/model/material/Seed Dust.tres" id="4_2cnih"]
+[ext_resource type="Material" uid="uid://dfexukcpmjne8" path="res://object/enemy/flower/data/model/material/Seed Ember Particle.tres" id="5_j5d2c"]
+[ext_resource type="Material" uid="uid://c3jne04l667ho" path="res://object/enemy/flower/data/model/material/Seed Center Particle.tres" id="5_kuphg"]
+[ext_resource type="Material" uid="uid://c534ikwvcgb58" path="res://object/enemy/flower/data/model/material/Seed Ember.tres" id="5_omixy"]
+[ext_resource type="AudioStream" uid="uid://bten5v4c2la5m" path="res://sound/sfx/enemy/flower/flower seed.wav" id="8_k4dfh"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_kpm3l"]
-radius = 0.7
+[sub_resource type="SphereShape3D" id="SphereShape3D_tlqsk"]
 
-[node name="Seed" instance=ExtResource("1_vd2ic")]
-script = ExtResource("2_ay1nr")
+[sub_resource type="Animation" id="Animation_tjmbt"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SeedRoot/Seed:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SeedRoot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SeedRoot:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
-[node name="Area3d" type="Area3D" parent="." index="1"]
-collision_layer = 4
+[sub_resource type="Animation" id="Animation_xirpc"]
+resource_name = "explode"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SeedRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VFX/Base")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("VFX/Center")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("VFX/Ember")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SFX/Explode")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_2ndw7"]
+resource_name = "move"
+length = 2.0
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SeedRoot/Seed:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 12.5664, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SeedRoot:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33, 0.666667, 0.999999, 1.33333, 1.66667, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.0472, -1.5708, 3.14159), Vector3(1.0472, 0, 2.35619), Vector3(0.349066, 1.5708, 0), Vector3(0.349066, 1.5708, -2.0944), Vector3(-0.485134, 0.690496, -0.75161), Vector3(0.349066, -0.872665, 1.0472), Vector3(1.0472, -1.5708, 3.14159)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SeedRoot:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q5grg"]
+_data = {
+"RESET": SubResource("Animation_tjmbt"),
+"explode": SubResource("Animation_xirpc"),
+"move": SubResource("Animation_2ndw7")
+}
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pj74e"]
+material = ExtResource("4_2cnih")
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_d078f"]
+material = ExtResource("5_omixy")
+orientation = 2
+
+[node name="Seed" type="Area3D" node_paths=PackedStringArray("animator")]
+collision_layer = 12
 collision_mask = 3
+script = ExtResource("2_ay1nr")
+moveSpeed = 10.0
+animator = NodePath("AnimationPlayer")
 
-[node name="CollisionShape3d" type="CollisionShape3D" parent="Area3d" index="0"]
-shape = SubResource("SphereShape3D_kpm3l")
+[node name="SeedRoot" type="Node3D" parent="."]
+
+[node name="Seed" parent="SeedRoot" instance=ExtResource("1_vd2ic")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_tlqsk")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "move"
+libraries = {
+"": SubResource("AnimationLibrary_q5grg")
+}
+
+[node name="VFX" type="Node3D" parent="."]
+
+[node name="Base" type="GPUParticles3D" parent="VFX"]
+emitting = false
+one_shot = true
+explosiveness = 1.0
+interpolate = false
+process_material = ExtResource("3_6k1j1")
+draw_pass_1 = SubResource("PlaneMesh_pj74e")
+
+[node name="Center" type="GPUParticles3D" parent="VFX"]
+emitting = false
+amount = 32
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+interpolate = false
+process_material = ExtResource("5_kuphg")
+draw_pass_1 = SubResource("PlaneMesh_pj74e")
+
+[node name="Ember" type="GPUParticles3D" parent="VFX"]
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 1.0
+interpolate = false
+process_material = ExtResource("5_j5d2c")
+draw_pass_1 = SubResource("PlaneMesh_d078f")
+
+[node name="SFX" type="Node3D" parent="."]
+
+[node name="Explode" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("8_k4dfh")
+unit_size = 50.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

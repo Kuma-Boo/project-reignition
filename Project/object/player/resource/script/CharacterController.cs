@@ -7,7 +7,6 @@ namespace Project.Gameplay
 	/// <summary>
 	/// Responsible for handling the player's state, physics and basic movement.
 	/// </summary>
-	//Currently rewriting the entire movement controller...Again.
 	public partial class CharacterController : CharacterBody3D
 	{
 		public static CharacterController instance;
@@ -16,18 +15,15 @@ namespace Project.Gameplay
 		public InputManager.Controller Controller => InputManager.controller;
 		public StageSettings Stage => StageSettings.instance;
 
-		public override void _EnterTree()
-		{
-			instance = this;
-		}
+		public override void _EnterTree() => instance = this; //Override Singleton
 
 		public override void _Ready()
 		{
-			PathFollower.Initialize(); //Attempt to autoload the default path
 			CallDeferred(MethodName.ResetOrientation); //Start with proper orientation
 
 			Stage.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
 			Stage.Connect(StageSettings.SignalName.StageCompleted, new Callable(this, MethodName.OnStageCompleted));
+			PathFollower.SetActivePath(Stage.StartingPath); //Attempt to autoload the stage's default path
 
 			CallDeferred(MethodName.SnapToGround);
 		}
@@ -52,7 +48,6 @@ namespace Project.Gameplay
 		{
 			Normal, //Standard on rails movement
 			External, //Cutscenes, and stage objects that override player control
-			Sidle, //Scooting along the wall
 			Launcher, //Springs, Ramps, etc.
 		}
 
@@ -157,6 +152,8 @@ namespace Project.Gameplay
 					targetAngle = Camera.TransformAngle(targetAngle);
 				else if (CurrentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.PathFollower)
 					targetAngle = PathFollower.ForwardAngle + targetAngle;
+				else if (CurrentLockoutData.directionSpaceMode == LockoutResource.DirectionSpaceMode.Local)
+					targetAngle += MovementAngle;
 
 				if (CurrentLockoutData.allowReversing) //Check if we're trying to turn around
 				{
@@ -284,7 +281,7 @@ namespace Project.Gameplay
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
 			{
-				movementOffset = Mathf.MoveToward(movementOffset, 0, groundSettings.GetSpeedRatio(MoveSpeed) * PhysicsManager.physicsDelta);
+				movementOffset = Mathf.MoveToward(movementOffset, 0, GroundSettings.GetSpeedRatio(MoveSpeed) * PhysicsManager.physicsDelta);
 				if (Mathf.IsZeroApprox(movementOffset))
 					isRecentered = true;
 				movementOffset = currentOffset - movementOffset;
@@ -301,11 +298,13 @@ namespace Project.Gameplay
 
 		[Signal]
 		public delegate void ExternalControlFinishedEventHandler();
-		public void StartExternal(Node3D followObject = null, float smoothing = 0f)
+		public void StartExternal(Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
 		{
 			ResetMovementState();
 			MovementState = MovementStates.External;
 			ActionState = ActionStates.Normal;
+
+			Skills.IsSpeedBreakEnabled = allowSpeedBreak;
 
 			externalParent = followObject;
 			externalOffset = Vector3.Zero; //Reset offset
@@ -345,18 +344,17 @@ namespace Project.Gameplay
 			UpdateActions();
 		}
 
-		[Export]
-		public MovementResource groundSettings;
-		[Export]
-		public MovementResource airSettings;
-		[Export]
-		public MovementResource backstepSettings;
-		/// <summary> Is the player moving backwards? </summary>
-		public bool IsMovingBackward { get; private set; }
+		public MovementResource GroundSettings => Skills.GroundSettings;
+		public MovementResource AirSettings => Skills.AirSettings;
+		public MovementResource BackstepSettings => Skills.BackstepSettings;
+
 		[Export]
 		public Curve turningSpeedCurve; //Curve of how speed is lost when turning
 		private float turningVelocity;
+
 		private bool isIdling;
+		/// <summary> Is the player moving backwards? </summary>
+		public bool IsMovingBackward { get; private set; }
 
 		private const float TURN_SPEED = .1f; //How much to turn when moving slowly
 		private const float TURN_SPEED_LOSS = .06f; //How much speed to lose when turning sharply
@@ -415,7 +413,7 @@ namespace Project.Gameplay
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
-			float speedRatio = IsOnGround ? groundSettings.GetSpeedRatio(MoveSpeed) : airSettings.GetSpeedRatio(MoveSpeed);
+			float speedRatio = IsOnGround ? GroundSettings.GetSpeedRatio(MoveSpeed) : AirSettings.GetSpeedRatio(MoveSpeed);
 			float targetMovementAngle = GetTargetMovementAngle();
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			float turnDelta = Mathf.Lerp(TURN_SPEED, MAX_TURN_SPEED, speedRatio);
@@ -449,8 +447,8 @@ namespace Project.Gameplay
 		private MovementResource GetActiveMovementSettings()
 		{
 			if (!IsOnGround)
-				return airSettings;
-			return IsMovingBackward ? backstepSettings : groundSettings;
+				return AirSettings;
+			return IsMovingBackward ? BackstepSettings : GroundSettings;
 		}
 
 		private float slopeInfluence; //Current influence of the slope, from 0 <-> 1
@@ -597,10 +595,13 @@ namespace Project.Gameplay
 			isJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			canLandingBoost = Skills.IsLandingDashEnabled;
+			canLandingBoost = Skills.isLandingDashEnabled;
 			ActionState = ActionStates.Jumping;
 			VerticalSpd = RuntimeConstants.GetJumpPower(jumpHeight);
 			Sound.PlayActionSFX("jump");
+
+			if (IsMovingBackward) //Kill speed when jumping backwards
+				MoveSpeed = 0;
 		}
 
 		private void UpdateJump()
@@ -667,7 +668,8 @@ namespace Project.Gameplay
 
 		private void StartJumpDash()
 		{
-			if (ActionState == ActionStates.Backflip) //Backflipping - Jumpdash directly forward
+			//Backflipping or facing backwards - Jumpdash directly forward
+			if (ActionState == ActionStates.Backflip || ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.BackAngle) < Mathf.Pi * .2f)
 				MovementAngle = PathFollower.ForwardAngle;
 			else //Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
@@ -1038,6 +1040,7 @@ namespace Project.Gameplay
 			get => GlobalPosition + UpDirection * COLLISION_RADIUS; //Center of collision calculations
 			set => GlobalPosition = value - UpDirection * COLLISION_RADIUS;
 		}
+		private const int GROUND_CHECK_AMOUNT = 8; //How many "whiskers" to use when checking the ground
 		private const float COLLISION_RADIUS = .3f;
 		private void CheckGround()
 		{
@@ -1060,11 +1063,11 @@ namespace Project.Gameplay
 			if (!ValidateGroundCast(ref groundHit))
 			{
 				//Whisker casts (For slanted walls and ground)
-				float interval = Mathf.Tau / 4f;
+				float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
 				Vector3 castOffset = this.Forward() * (COLLISION_RADIUS - COLLISION_PADDING);
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 				{
-					castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * COLLISION_RADIUS * .5f;
+					castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * COLLISION_RADIUS;
 					groundHit = this.CastRay(castOrigin + castOffset, castVector, environmentMask);
 					Debug.DrawRay(castOrigin + castOffset, castVector, groundHit ? Colors.Red : Colors.White);
 					if (ValidateGroundCast(ref groundHit)) break; //Found the floor
@@ -1106,7 +1109,14 @@ namespace Project.Gameplay
 			{
 				IsOnGround = false;
 				//Smooth world direction based on vertical speed
-				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp((VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .15f, 0f, 1f)).Normalized();
+
+				float orientationResetFactor = 0;
+				if (VerticalSpd > 0)
+					orientationResetFactor = .1f;
+				else
+					orientationResetFactor = (VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .15f;
+
+				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
 
@@ -1118,7 +1128,7 @@ namespace Project.Gameplay
 				if (hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("floor"))
 					hit = new RaycastHit();
 
-				if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .6f) //Don't allow registering collisions with the ceiling
+				if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) //Limit angle collision
 					hit = new RaycastHit();
 			}
 

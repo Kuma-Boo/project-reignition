@@ -25,6 +25,8 @@ namespace Project.Gameplay.Triggers
 		public Array<AudioStream> englishVoiceClips;
 		[Export]
 		public Array<AudioStream> japaneseVoiceClips;
+		[Export]
+		public bool randomizeLine; //Enable this to choose a random line to play (only single lines are supported in this mode)
 
 		public bool IsInvalid()
 		{

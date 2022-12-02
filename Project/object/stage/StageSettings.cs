@@ -287,7 +287,6 @@ namespace Project.Gameplay
 		{
 			CurrentObjectiveCount++;
 			EmitSignal(SignalName.ObjectiveChanged);
-			GD.Print("Objective is now " + CurrentObjectiveCount);
 
 			if (ObjectiveCount == 0) //i.e. Sand Oasis's "Don't break the jars!" mission.
 				FinishStage(false);

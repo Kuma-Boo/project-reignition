@@ -40,7 +40,7 @@ namespace Project.Gameplay.Objects
 			GetParent().CallDeferred("remove_child", this);
 		}
 
-		private void IncrementCounter()
+		public void IncrementCounter() //Connect this from a signal
 		{
 			if (isShattered) return;
 

@@ -39,7 +39,7 @@ namespace Project.Gameplay
 			subtitleLabel.Text = string.Empty;
 
 			currentDialog = dialog;
-			currentDialogIndex = 0;
+			currentDialogIndex = currentDialog.randomizeLine ? RuntimeConstants.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1) : 0;
 			UpdateDialog(true);
 		}
 
@@ -65,6 +65,12 @@ namespace Project.Gameplay
 
 		public void OnDialogFinished()
 		{
+			if (currentDialog.randomizeLine) //Only single lines are supported in this mode
+			{
+				CallDeferred(nameof(DisableDialog));
+				return;
+			}
+
 			currentDialogIndex++;
 			if (currentDialogIndex < currentDialog.DialogCount)
 			{
@@ -93,6 +99,9 @@ namespace Project.Gameplay
 
 		private void UpdateDialog(bool processDelay)
 		{
+			if (dialogChannel.IsConnected("finished", new Callable(this, MethodName.OnDialogFinished))) //Must have been interrupted
+				dialogChannel.Disconnect("finished", new Callable(this, MethodName.OnDialogFinished));
+
 			UpdateSonicDialog();
 			UpdateShahraDialog();
 
@@ -103,7 +112,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (currentDialogIndex == 0)
+			if (currentDialog.randomizeLine || currentDialogIndex == 0)
 				subtitleAnimator.Play("activate");
 			else
 				subtitleAnimator.Play("activate-text");

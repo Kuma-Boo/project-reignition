@@ -74,7 +74,7 @@ namespace Project.Gameplay
 			//Rotate to face player
 		}
 
-		private void Activate()
+		protected override void Activate()
 		{
 			if (!spawnInstantly)
 			{
@@ -89,7 +89,7 @@ namespace Project.Gameplay
 			}
 		}
 
-		private void Deactivate()
+		protected override void Deactivate()
 		{
 			Visible = false;
 			collider.Disabled = true;

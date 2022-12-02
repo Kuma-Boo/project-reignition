@@ -8,11 +8,18 @@ namespace Project
 		/// <summary> Casts a ray from a Node3D </summary>
 		public static Core.RaycastHit CastRay(this Node3D s, Vector3 pos, Vector3 dir, uint mask = 2147483647, bool hitArea = false, Array ex = null)
 		{
+			Array<RID> excluded = new Array<RID>();
+
+			excluded.Add(new RID(s));
 			if (ex != null)
-				ex.Add(s);
-			else
-				ex = new Array { s };
-			return Core.PhysicsManager.CastRay(pos, dir, hitArea, mask, ex);
+			{
+				for (int i = 0; i < ex.Count; i++)
+				{
+					excluded.Add(new RID((Node)ex[i]));
+				}
+			}
+
+			return Core.PhysicsManager.CastRay(pos, dir, hitArea, mask, excluded);
 		}
 
 		/// <summary> Creates a property dictionary to be used in _GetPropertyList() </summary>
@@ -235,11 +242,11 @@ namespace Project
 		/// <summary>
 		/// Converts Decibels to Linear.
 		/// </summary>
-		public static float DBToLinear(float db) => Mathf.Exp(db * 0.11512925464970228420089957273422f);
+		public static float DBToLinear(float dbVolume) => Mathf.Exp(dbVolume * 0.11512925464970228420089957273422f);
 
 		/// <summary>
 		/// Converts Linear to Decibels.
 		/// </summary>
-		public static float LinearToDB(float linear) => Mathf.Log(linear) * 8.6858896380650365530225783783321f;
+		public static float LinearToDB(float linearVolume) => Mathf.Log(linearVolume) * 8.6858896380650365530225783783321f;
 	}
 }

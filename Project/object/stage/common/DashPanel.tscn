@@ -13,7 +13,7 @@ collision_mask = 2
 monitorable = false
 script = ExtResource("1")
 speedRatio = 1.0
-length = 1.0
+length = 0.1
 sfxPlayer = NodePath("SFX")
 
 [node name="DashPanel" parent="." instance=ExtResource("2")]
@@ -22,8 +22,12 @@ sfxPlayer = NodePath("SFX")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 shape = SubResource("3")
 
-[node name="SFX" type="AudioStreamPlayer" parent="."]
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_tsajd")
+unit_size = 50.0
+max_db = 0.0
+max_distance = 100.0
 bus = &"SFX"
+attenuation_filter_cutoff_hz = 10000.0
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]

@@ -22,8 +22,11 @@ sfxPlayer = NodePath("SFX")
 transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0.7, 0)
 shape = SubResource("3")
 
-[node name="SFX" type="AudioStreamPlayer" parent="."]
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_aivm4")
+max_db = 0.0
+max_distance = 100.0
 bus = &"SFX"
+attenuation_filter_cutoff_hz = 10000.0
 
 [connection signal="area_entered" from="." to="." method="Activate"]

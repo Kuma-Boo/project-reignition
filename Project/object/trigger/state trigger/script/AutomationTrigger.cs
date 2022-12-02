@@ -51,7 +51,7 @@ namespace Project.Gameplay.Triggers
 		private void UpdateAutomation()
 		{
 			if (!Character.Skills.IsSpeedBreakActive)
-				Character.MoveSpeed = Character.groundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
+				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
 
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 		}
@@ -81,7 +81,7 @@ namespace Project.Gameplay.Triggers
 			Character.PathFollower.Resync();
 
 			float initialVelocity = Character.MoveSpeed;
-			Character.StartExternal(Character.PathFollower, .05f);
+			Character.StartExternal(Character.PathFollower, .05f, true);
 			Character.MoveSpeed = initialVelocity;
 
 			isActive = true;

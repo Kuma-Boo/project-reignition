@@ -10,8 +10,14 @@ namespace Project.Gameplay.Triggers
 	public partial class StageTrigger : Area3D
 	{
 		[Export]
-		public bool isOneShot; //Disables this trigger after being activated (Trigger mode must be set to OnEnter to function properly)
-		private bool isTriggered; //For isOneShot
+		public ActivationMode activationMode;
+		public enum ActivationMode
+		{
+			Always, //Always activate this trigger
+			Oneshot, //Only activate once per level load
+			OneshotRespawnable, //Activate once each respawn
+		}
+		private bool wasTriggered; //For oneshot triggers
 
 		[Export]
 		public TriggerMode triggerMode; //How should this area be activated?
@@ -39,7 +45,7 @@ namespace Project.Gameplay.Triggers
 		public delegate void DeactivatedEventHandler();
 		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
 
-		public override void _EnterTree()
+		public override void _Ready()
 		{
 			//Connect child modules
 			Array<Node> children = GetChildren();
@@ -54,7 +60,12 @@ namespace Project.Gameplay.Triggers
 					Connect(SignalName.Deactivated, new Callable(module, MethodName.Deactivate));
 				}
 			}
+
+			if (activationMode == ActivationMode.OneshotRespawnable)
+				StageSettings.instance.RegisterRespawnableObject(this);
 		}
+
+		public void Respawn() => wasTriggered = false;
 
 		public void OnEntered(Area3D a)
 		{
@@ -95,8 +106,10 @@ namespace Project.Gameplay.Triggers
 
 		private void Activate()
 		{
-			if (isTriggered) return;
-			isTriggered = isOneShot;
+			if (wasTriggered) return;
+
+			if (activationMode != ActivationMode.Always)
+				wasTriggered = true;
 
 			EmitSignal(SignalName.Activated);
 		}

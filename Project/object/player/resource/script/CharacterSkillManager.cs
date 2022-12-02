@@ -17,21 +17,24 @@ namespace Project.Gameplay
 			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; //Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
 			normalCollisionMask = Character.CollisionMask;
 
+			SetUpStats();
 			SetUpSkills();
 		}
 
 		//Cancel time break, just in case
 		public override void _ExitTree() => IsTimeBreakEnabled = false;
 
-		#region Skills
+		#region Stats
+		[ExportCategory("Stats")]
 		[Export]
-		public bool isCountdownBoostEnabled;
+		private MovementResource baseGroundSettings; //Slowest Sonic
 		[Export]
-		public float countdownBoostSpeed;
+		private MovementResource maxGroundSettings; //Fastest Sonic
 
 		[Export]
-		public bool isSplashJumpEnabled;
-
+		private MovementResource baseAirSettings; //Slowest Sonic
+		[Export]
+		private MovementResource maxAirSettings; //Fastest Sonic
 		[Export]
 		public float accelerationJumpSpeed;
 
@@ -43,19 +46,57 @@ namespace Project.Gameplay
 		public MovementResource grindSettings; //Settings for grinding on rails
 
 		[Export]
+		private MovementResource backstepSettings; //While there aren't any upgrades for backstepping, it's here for consistancy
+
+		public MovementResource GroundSettings { get; private set; }
+		public MovementResource AirSettings { get; private set; }
+		public MovementResource BackstepSettings { get; private set; }
+
+		private void SetUpStats() //Stuff like upgradable speed, increased handling, etc.
+		{
+			//TODO Interpolate values based on skill ring settings
+			GroundSettings = baseGroundSettings;
+			AirSettings = baseAirSettings;
+			BackstepSettings = backstepSettings;
+
+		}
+		#endregion
+
+
+		#region Skills
+		[ExportCategory("Countdown Skills")]
+		[Export]
+		public bool isCountdownBoostEnabled;
+		[Export]
+		public float countdownBoostSpeed;
+
+		[Export]
+		public bool isSplashJumpEnabled;
+
+		[Export]
 		public float landingDashSpeed;
-		public bool IsLandingDashEnabled { get; private set; }
+		[Export]
+		public bool isLandingDashEnabled;
 
 		[Export(PropertyHint.Range, "1,5,.1")]
-		public float pearlAttractorMultiplier = 2f; //Collision multiplier when PearlAttractor skill is enabled 
+		public float pearlAttractorMultiplier = 2f; //Collision multiplier when PearlAttractor skill is enabled
+		[Export]
+		private bool isPearlAttractionEnabled;
 		private const int ENEMY_PEARL_AMOUNT = 16; //How many pearls are obtained when defeating an enemy
+
+		private void LoadSkillsFromSaveData()
+		{
+			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.LandingBoost);
+			isPearlAttractionEnabled = SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.PearlAttractor);
+		}
 
 		private void SetUpSkills()
 		{
-			IsLandingDashEnabled = SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.LandingBoost);
+			if (!CheatManager.UseEditorSkillValues)
+				LoadSkillsFromSaveData();
 
 			//Expand hitbox if skills is equipped
-			if (SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.PearlAttractor))
+			if (isPearlAttractionEnabled)
 				RuntimeConstants.Instance.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
 			else
 				RuntimeConstants.Instance.UpdatePearlCollisionShapes();
@@ -183,7 +224,7 @@ namespace Project.Gameplay
 			if (Character.Controller.boostButton.wasPressed && !IsTimeBreakActive)
 			{
 				if (!IsSoulGaugeCharged) return;
-				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
+				if (Character.MovementState == CharacterController.MovementStates.Launcher) return; //Can't speed break during launchers
 				if (!Character.IsOnGround) return;
 
 				ToggleSpeedBreak();
@@ -234,7 +275,7 @@ namespace Project.Gameplay
 				breakSkillSfx.Stream = speedBreakDeactivate;
 				breakSkillSfx.Play();
 
-				Character.MoveSpeed = Character.groundSettings.speed; //Override speed
+				Character.MoveSpeed = Character.GroundSettings.speed; //Override speed
 				Character.CollisionMask = normalCollisionMask; //Reset collision layer
 			}
 

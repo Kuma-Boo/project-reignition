@@ -135,7 +135,6 @@ namespace Project.Gameplay.Objects
 			if (Engine.IsEditorHint()) return;
 
 			wings.Visible = isFlying;
-			GD.Print(wings);
 			rotationInterval = Mathf.Tau / spawnAmount;
 
 			if (targetObject != null)

@@ -30,7 +30,7 @@ namespace Project.Core
 		private const string RAYCAST_NORMAL = "normal";
 		private const string RAYCAST_COLLIDER = "collider";
 
-		public static RaycastHit CastRay(Vector3 pos, Vector3 dir, bool hitAreas, uint mask = 2147483647, Array ex = null)
+		public static RaycastHit CastRay(Vector3 pos, Vector3 dir, bool hitAreas, uint mask = 2147483647, Array<RID> ex = null)
 		{
 			Vector3 endPos = pos + dir;
 
@@ -62,7 +62,7 @@ namespace Project.Core
 			}
 
 			//Fix memory leaks
-			ex.Dispose();
+			ex.Clear();
 			result.Dispose();
 			return raycast;
 		}

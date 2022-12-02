@@ -87,7 +87,7 @@ namespace Project.Gameplay.Objects
 		}
 
 		[Export]
-		private AudioStreamPlayer sfxPlayer;
+		private AudioStreamPlayer3D sfxPlayer;
 	}
 
 	public struct LaunchData

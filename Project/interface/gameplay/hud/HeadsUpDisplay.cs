@@ -232,7 +232,7 @@ namespace Project.Gameplay
 			{
 				//Play animation
 				isSoulGaugeCharged = true;
-				soulGaugeAnimator.Play("Charged");
+				soulGaugeAnimator.Play("charged");
 			}
 			else if (isSoulGaugeCharged && !isCharged)
 			{

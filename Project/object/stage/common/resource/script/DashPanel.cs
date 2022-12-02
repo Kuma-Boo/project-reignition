@@ -13,7 +13,7 @@ namespace Project.Gameplay.Objects
 		private bool alignToPath; //Forces the player to stay aligned to the path. Useful when a dash panel is right before a corner.
 
 		[Export]
-		private AudioStreamPlayer sfxPlayer;
+		private AudioStreamPlayer3D sfxPlayer;
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _PhysicsProcess(double _)
