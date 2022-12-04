@@ -1,24 +1,28 @@
 shader_type spatial;
-render_mode cull_disabled, depth_draw_opaque;
+render_mode unshaded, cull_disabled, depth_draw_opaque, depth_prepass_alpha;
 
-uniform float direction : hint_range(-1, 1);
-uniform float flowSpeed : hint_range(0, 2);
-uniform float positionDelta : hint_range(0, 2);
-uniform float positionSpeed;
+global uniform float time;
+
+uniform float flowSpeed : hint_range(0, 5, .1);
+uniform float position_delta : hint_range(0, 2, .1);
+uniform float position_offset;
 uniform sampler2D albedo : source_color;
 uniform sampler2D mask : source_color;
 
+const float POSITION_SPEED = 5.0;
+
 void vertex()
 {
-	VERTEX.y += sin(TIME * positionSpeed) * positionDelta * direction;
+	VERTEX.y -= sin((time + position_offset) * POSITION_SPEED) * position_delta;
 }
 
 void fragment()
 {
-	float scrollAmount = TIME * flowSpeed * direction;
+	float scrollAmount = time * flowSpeed;
 	
-	float alpha = texture(mask, vec2(UV.x + scrollAmount, clamp(UV.y, .1, .9))).r;
+	vec4 col = texture(albedo, vec2(UV.x + scrollAmount, UV.y)) * COLOR;
+	col.a *= texture(mask, vec2(UV.x + scrollAmount, clamp(UV.y, .1, .9))).r;
 
-	ALBEDO = texture(albedo, vec2(UV.x + scrollAmount, UV.y)).rgb;
-	ALPHA = alpha;
+	ALBEDO = col.rgb;
+	ALPHA = col.a;
 }

@@ -1,25 +1,27 @@
 shader_type spatial;
-render_mode async_visible,blend_add,depth_draw_opaque,cull_back,diffuse_burley,specular_disabled;
+render_mode specular_disabled, blend_add;
 
-uniform sampler2D main_tex : source_color;
-uniform sampler2D secondary_tex : source_color;
-uniform sampler2D lut : source_color;
-uniform vec2 offset;
-uniform vec2 secondary_offset;
-uniform float tail_fade : hint_range(0, 1);
-uniform float main_fade : hint_range(0, 1);
-uniform float secondary_alpha : hint_range(0, 1);
+global uniform float time;
+uniform sampler2D main_tex : source_color, filter_linear;
+uniform sampler2D secondary_tex : source_color, filter_linear;
+uniform float frequency;
+uniform float strength;
 
-void vertex() {
-	UV = UV + offset;
-}
-
-void fragment() {
-	vec4 col = texture(main_tex, UV) * main_fade;
-	col += texture(secondary_tex, UV + secondary_offset) * secondary_alpha;
-	col = mix(col, col * texture(lut, UV), tail_fade);
-	col *= COLOR;
+void fragment()
+{
+	float alpha = pow(sin(time * frequency), 2.0);
+	float uv_offset = sin(mod((time * frequency) / PI, 1.0) * 2.6) * strength - strength;//pow(cos(TIME * frequency), 2.0) * strength - strength;
+	float secondary_alpha = pow(sin((time - .4) * frequency), 2.0);
+	vec2 uv = UV;
+	uv.y = clamp(uv.y + uv_offset, 0.01, 1); //Repeat x only
+	
+	vec4 col = texture(main_tex, uv) * alpha;
+	uv.y = (UV.y - uv_offset) + .54;
+	vec4 secondary_col = texture(secondary_tex, uv) * secondary_alpha;
+	col += secondary_col * secondary_col.r * (1.0 - col.a) * .5;
 	col = clamp(col, 0, 1);
+	
+	col *= COLOR;
 	ALBEDO = col.rgb;
-	ALPHA = col.a;
+	ALPHA = col.a * .6;
 }

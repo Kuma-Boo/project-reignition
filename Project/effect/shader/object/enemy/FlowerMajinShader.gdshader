@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_disabled;
+render_mode diffuse_burley, cull_disabled;
 
 uniform sampler2D albedo : hint_default_black, source_color;
 uniform sampler2D specular : hint_default_black;

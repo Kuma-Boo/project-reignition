@@ -1,0 +1,40 @@
+[gd_scene load_steps=8 format=3 uid="uid://bq4g5yfvpiude"]
+
+[ext_resource type="PackedScene" uid="uid://cxevo8wfcevhy" path="res://area/stage/2 dino jungle/act 1/data/environment/collision/Collision.tscn" id="1_wbcn3"]
+[ext_resource type="Environment" path="res://area/stage/2 dino jungle/data/environment/Environment.tres" id="4_aixqo"]
+[ext_resource type="PackedScene" uid="uid://cc1ft0jnv1sql" path="res://area/stage/2 dino jungle/data/environment/object/dino/DinoTrio.tscn" id="4_yuvfk"]
+[ext_resource type="PackedScene" uid="uid://ce1hbxc2peway" path="res://area/stage/2 dino jungle/act 1/data/environment/01Chase.tscn" id="5_lhmkg"]
+[ext_resource type="PackedScene" uid="uid://c3l3nu6tsl0n3" path="res://area/stage/2 dino jungle/act 1/data/environment/model/RiverEvent.gltf" id="13_ym8ea"]
+[ext_resource type="Curve3D" uid="uid://bmk4fd8ewvg2r" path="res://area/stage/2 dino jungle/act 1/data/environment/path/MainPath.tres" id="27_mnucf"]
+[ext_resource type="PackedScene" uid="uid://c3yfeneeeu8kk" path="res://area/stage/2 dino jungle/data/environment/BGM.tscn" id="36_ci1tf"]
+
+[node name="StaticChaseOnly" type="Node"]
+
+[node name="Collision" type="Node3D" parent="."]
+visible = false
+
+[node name="Collision" parent="Collision" instance=ExtResource("1_wbcn3")]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
+environment = ExtResource("4_aixqo")
+
+[node name="01Chase" parent="Visuals" instance=ExtResource("5_lhmkg")]
+
+[node name="Event" type="Node3D" parent="."]
+
+[node name="TrioChase" type="Node3D" parent="Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 0, 90)
+
+[node name="DinoTrio" parent="Event/TrioChase" instance=ExtResource("4_yuvfk")]
+
+[node name="RiverEvent" parent="Event" instance=ExtResource("13_ym8ea")]
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="MainPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.778, 0, 90.293)
+curve = ExtResource("27_mnucf")
+
+[node name="BGM" parent="." instance=ExtResource("36_ci1tf")]

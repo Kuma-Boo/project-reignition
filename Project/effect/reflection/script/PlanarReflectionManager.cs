@@ -4,7 +4,10 @@ using Godot.Collections;
 namespace Project.Gameplay
 {
 	/// <summary>
-	/// Renders planar reflections into a global texture. Note that this method is hard-coded to only support reflections facing Vector3.Up
+	/// Renders planar reflections into a global texture.
+	/// Few side notes:
+	/// 1. This method is hard-coded to only support reflections facing Vector3.Up
+	/// 2. Near clipping cannot be aligned to the surface, so objects underneath will still be rendered (looking for a fix)
 	/// </summary>
 	[Tool]
 	public partial class PlanarReflectionManager : Node3D
@@ -16,6 +19,10 @@ namespace Project.Gameplay
 		[Export]
 		private NodePath reflectionViewportPath;
 		private SubViewport reflectionViewport;
+		[Export]
+		private float nearClip = .05f;
+		[Export]
+		private float farClip = 4000f;
 
 		[Export]
 		public Array<ShaderMaterial> reflectionMaterials; //List of materials that use reflection_texture
@@ -26,6 +33,7 @@ namespace Project.Gameplay
 		private float reflectorHeight; //Alternatively, specify reflection Y point here
 		private Texture2D reflectionTexture;
 		private Vector3 previousCapturePosition;
+		private Vector3 previousCaptureRotation;
 
 		public override void _EnterTree()
 		{
@@ -63,6 +71,11 @@ namespace Project.Gameplay
 			reflectionCamera.Size = mainCamera.Size;
 			reflectionCamera.Projection = mainCamera.Projection;
 
+
+			//TODO Update reflection camera's near clipping plane
+			reflectionCamera.Near = nearClip;
+			reflectionCamera.Far = farClip;
+
 			//Update reflectionCamera's position
 			float reflectionHeight = reflectorHeight;
 			if (reflectorNode != null)
@@ -90,11 +103,12 @@ namespace Project.Gameplay
 		{
 			if (!GetReflectionViewport()) return;
 
-
 			if (Engine.IsEditorHint())
 			{
-				if (reflectionCamera.GlobalPosition.IsEqualApprox(previousCapturePosition)) return; //Didn't move
+				if (reflectionCamera.GlobalPosition.IsEqualApprox(previousCapturePosition) &&
+				reflectionCamera.Forward().IsEqualApprox(previousCaptureRotation)) return; //Didn't move
 				previousCapturePosition = reflectionCamera.GlobalPosition;
+				previousCaptureRotation = reflectionCamera.Forward();
 			}
 
 			reflectionViewport.Size = new Vector2i(1920, 1080) / 2;

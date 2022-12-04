@@ -1,4 +1,5 @@
 shader_type spatial;
+render_mode diffuse_burley;
 
 uniform sampler2D albedo : hint_default_black, source_color;
 uniform sampler2D detail : hint_default_black, source_color;

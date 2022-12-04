@@ -32,7 +32,7 @@ namespace Project
 		[Export]
 		public float debugSeek; //Editor debug. Seeks to the specified point (in seconds)
 		[Export]
-		public bool isStageMusic; //Override singleton?
+		public bool isStageMusic;
 
 		private bool canLoop;
 		private float LoopLength => loopEndPosition - loopStartPosition;
@@ -43,7 +43,8 @@ namespace Project
 			if (!canLoop)
 				GD.PrintErr("BGM loop points are set up incorrectly. Looping is disabled.");
 
-			if (isStageMusic) //Only one stage music can be playing at a time
+			//Only one stage music can be playing at a time
+			if (isStageMusic)
 				stageMusicInstance = this;
 		}
 

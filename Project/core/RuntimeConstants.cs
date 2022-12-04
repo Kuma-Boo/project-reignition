@@ -5,6 +5,7 @@ namespace Project.Core
 	public partial class RuntimeConstants : Node
 	{
 		public static RuntimeConstants Instance;
+
 		public override void _Ready() => Instance = this;
 		public override void _Process(double _)
 		{

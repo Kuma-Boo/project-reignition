@@ -1,6 +1,17 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://de78n387ifmob"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://5wxyrpeo8ycq"]
+
+[ext_resource type="Shader" path="res://effect/shader/environment/Water.gdshader" id="1_prna3"]
+[ext_resource type="Texture2D" uid="uid://b0jcioai0nvr0" path="res://effect/shader/environment/water texture/SR water base.png" id="2_b83bo"]
+[ext_resource type="Texture2D" uid="uid://b3bxpbljnryu7" path="res://effect/shader/environment/water texture/SR water detail.png" id="4_t5ubv"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ndros"]
 
 [resource]
-resource_name = "Water"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.467784, 0.636845, 0.906332, 1)
+render_priority = 0
+shader = ExtResource("1_prna3")
+shader_parameter/base = ExtResource("2_b83bo")
+shader_parameter/base_color = Color(0, 0.301961, 0.705882, 0.223529)
+shader_parameter/base_scroll_speed = 0.1
+shader_parameter/detail = ExtResource("4_t5ubv")
+shader_parameter/detail_scroll_speed = 0.2
+shader_parameter/reflection_texture = SubResource("ViewportTexture_ndros")

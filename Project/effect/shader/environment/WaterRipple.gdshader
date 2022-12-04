@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_add;
+render_mode blend_add, shadows_disabled;
 
 global uniform float time;
 
@@ -14,9 +14,8 @@ void fragment()
 	vec2 second_uv = UV + vec2(time * -main_speed, 0.5 * sin(time * secondary_speed) * sway_amount);
 	vec4 col = texture(albedo, main_uv);
 	col += texture(albedo, second_uv);
-	col = clamp(col, 0, 1);
-	col *= COLOR;
+	col = clamp(col, 0, 1) * COLOR;
 	
 	ALBEDO = col.rgb;
-	ALPHA = col.a * .2;
+	ALPHA = col.a;
 }

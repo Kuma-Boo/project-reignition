@@ -1,0 +1,81 @@
+[gd_scene load_steps=12 format=3 uid="uid://b41nu8t4ive34"]
+
+[ext_resource type="PackedScene" uid="uid://dl3mt0ulynpm5" path="res://area/stage/3 evil foundry/act 1/data/environment/collision/Collision.tscn" id="1_liyuu"]
+[ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/stage/3 evil foundry/data/environment/Environment.tres" id="2_imo2i"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_1x0kj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="4_ueelj"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="5_eyxc2"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="6_xdtc0"]
+[ext_resource type="Resource" path="res://area/stage/3 evil foundry/act 1/data/trigger/StartingLockout.tres" id="7_ej31a"]
+[ext_resource type="Curve3D" path="res://area/stage/3 evil foundry/act 1/data/environment/path/MainPath.tres" id="8_5g4ao"]
+[ext_resource type="PackedScene" uid="uid://dsn3vorf5nwjm" path="res://area/stage/3 evil foundry/data/environment/BGM.tscn" id="9_qe1e0"]
+[ext_resource type="PackedScene" path="res://area/stage/3 evil foundry/data/shader/ScreenWarp.tscn" id="10_t3vg2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lmgvp"]
+size = Vector3(12, 6, 42)
+
+[node name="Static" type="Node"]
+
+[node name="Collision" parent="." instance=ExtResource("1_liyuu")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="Environment" type="Node3D" parent="Visuals"]
+
+[node name="Light" type="DirectionalLight3D" parent="Visuals/Environment"]
+transform = Transform3D(0.997296, -0.0722649, -0.0133753, 0.0560711, 0.63053, 0.774137, -0.0475094, -0.772793, 0.632877, 0, 6.68, -3.52118)
+light_energy = 1.4
+light_cull_mask = 4294967263
+shadow_enabled = true
+shadow_opacity = 0.5
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 200.0
+
+[node name="BounceLight" type="DirectionalLight3D" parent="Visuals/Environment"]
+transform = Transform3D(0.92456, 0.252439, 0.285419, -0.0395726, -0.681394, 0.730847, 0.378977, -0.687006, -0.62, 0, 6.68, -3.52118)
+light_cull_mask = 4294967263
+shadow_opacity = 0.5
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 200.0
+
+[node name="CharacterLighting" type="DirectionalLight3D" parent="Visuals/Environment"]
+transform = Transform3D(0.997296, -0.0722649, -0.0133753, 0.0560711, 0.63053, 0.774137, -0.0475094, -0.772793, 0.632877, 0, 6.68, -3.52118)
+light_color = Color(0.733333, 0.572549, 0.454902, 1)
+light_cull_mask = 4293918752
+shadow_opacity = 0.5
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 200.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals/Environment"]
+environment = ExtResource("2_imo2i")
+
+[node name="Triggers" type="Node3D" parent="."]
+
+[node name="StartingLockout" parent="Triggers" instance=ExtResource("3_1x0kj")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -11.8284, -6.7716)
+triggerMode = 2
+enterMode = 1
+
+[node name="Camera" type="Node3D" parent="Triggers/StartingLockout"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 5.4, 3)
+script = ExtResource("4_ueelj")
+cameraData = ExtResource("5_eyxc2")
+
+[node name="ControlLockout" type="Node3D" parent="Triggers/StartingLockout"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
+script = ExtResource("6_xdtc0")
+lockoutData = ExtResource("7_ej31a")
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Triggers/StartingLockout"]
+shape = SubResource("BoxShape3D_lmgvp")
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="MainPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+curve = ExtResource("8_5g4ao")
+
+[node name="BGM" parent="." instance=ExtResource("9_qe1e0")]
+
+[node name="ScreenWarp" parent="." instance=ExtResource("10_t3vg2")]
