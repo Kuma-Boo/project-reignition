@@ -31,14 +31,12 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Ignore Slopes", Variant.Type.Bool));
 			}
 
-			properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle Type", Variant.Type.Int, PropertyHint.Enum, "Free,Replace,Clamp"));
-			if (directionOverrideMode == DirectionOverrideMode.Replace || directionOverrideMode == DirectionOverrideMode.Clamp)
+			properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle Type", Variant.Type.Int, PropertyHint.Enum, "Free,Strafe,Replace"));
+			if (overrideMode == OverrideMode.Strafe || overrideMode == OverrideMode.Replace)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Allow Reversing", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Direction Space", Variant.Type.Int, PropertyHint.Enum, "Camera,Pathfollower,Local,Global"));
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle", Variant.Type.Float, PropertyHint.Range, "-180,180"));
-				if (directionOverrideMode == DirectionOverrideMode.Clamp)
-					properties.Add(ExtensionMethods.CreateProperty("Controls/Clamp Range", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 			}
 			return properties;
 		}
@@ -88,20 +86,17 @@ namespace Project.Gameplay
 					break;
 
 				case "Controls/Movement Angle Type":
-					directionOverrideMode = (DirectionOverrideMode)(int)value;
+					overrideMode = (OverrideMode)(int)value;
 					NotifyPropertyListChanged();
 					break;
 				case "Controls/Allow Reversing":
 					allowReversing = (bool)value;
 					break;
 				case "Controls/Direction Space":
-					directionSpaceMode = (DirectionSpaceMode)(int)value;
+					spaceMode = (SpaceMode)(int)value;
 					break;
 				case "Controls/Movement Angle":
 					overrideAngle = (float)value;
-					break;
-				case "Controls/Clamp Range":
-					overrideAngleClampRange = (float)value;
 					break;
 
 				default:
@@ -143,15 +138,13 @@ namespace Project.Gameplay
 					return ignoreSlopes;
 
 				case "Controls/Movement Angle Type":
-					return (int)directionOverrideMode;
+					return (int)overrideMode;
 				case "Controls/Allow Reversing":
 					return allowReversing;
 				case "Controls/Direction Space":
-					return (int)directionSpaceMode;
+					return (int)spaceMode;
 				case "Controls/Movement Angle":
 					return overrideAngle;
-				case "Controls/Clamp Range":
-					return overrideAngleClampRange;
 			}
 			return base._Get(property);
 		}
@@ -180,12 +173,12 @@ namespace Project.Gameplay
 		public float frictionMultiplier;
 		/// <summary> Don't use slope physics when calculating speed </summary>
 		public bool ignoreSlopes;
-		public DirectionOverrideMode directionOverrideMode;
-		public enum DirectionOverrideMode
+		public OverrideMode overrideMode;
+		public enum OverrideMode
 		{
-			Free, //Allows normal free movement
-			Replace, //Replace movement direction with movementAngle
-			Clamp, //Clamps movement direction between -movementAngleClampRange and +movementAngleClampRange
+			Free, //Allows free rotation-based movement
+			Strafe, //Enable this to use strafing instead of rotation. Works best when DirectionSpaceMode is set to pathfollower
+			Replace, //Replace movement direction with movementAngle,
 		}
 		/// <summary> Allow the player to move backwards when overriding movement angle? </summary>
 		public bool allowReversing;
@@ -193,9 +186,7 @@ namespace Project.Gameplay
 		public bool recenterPlayer;
 		/// <summary> What to override movement angle to </summary>
 		public float overrideAngle;
-		/// <summary> Multiply with Mathf.Tau to get get clamp range in radians. </summary>
-		public float overrideAngleClampRange;
-		public enum DirectionSpaceMode
+		public enum SpaceMode
 		{
 			Camera,
 			PathFollower,
@@ -203,7 +194,7 @@ namespace Project.Gameplay
 			Global,
 		}
 		/// <summary> What "space" to calculate the movement direction in. </summary>
-		public DirectionSpaceMode directionSpaceMode;
+		public SpaceMode spaceMode;
 
 		public LockoutResource()
 		{
@@ -220,8 +211,8 @@ namespace Project.Gameplay
 			frictionMultiplier = 1;
 			ignoreSlopes = false;
 
-			directionOverrideMode = DirectionOverrideMode.Free;
-			directionSpaceMode = DirectionSpaceMode.Camera;
+			overrideMode = OverrideMode.Free;
+			spaceMode = SpaceMode.Camera;
 			overrideAngle = 0f;
 		}
 

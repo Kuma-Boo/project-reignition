@@ -40,7 +40,7 @@ namespace Project.Gameplay
 			//Progress = ActivePath.Curve.GetClosestOffset(Character.GlobalPosition - ActivePath.GlobalPosition);
 
 			float newForwardAngle = CharacterController.CalculateForwardAngle(this.Forward());
-			DeltaAngle = newForwardAngle - ForwardAngle;
+			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f; //Half value seems to be more accurate for some reason
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;

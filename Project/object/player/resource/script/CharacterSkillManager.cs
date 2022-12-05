@@ -72,11 +72,17 @@ namespace Project.Gameplay
 
 		[Export]
 		public bool isSplashJumpEnabled;
+		public void SplashJump()
+		{
+			GD.Print("Splash Jump isn't implemented yet.");
+		}
 
 		[Export]
 		public float landingDashSpeed;
 		[Export]
 		public bool isLandingDashEnabled;
+
+		public bool IsAttacking { get; set; } //Is the player using an attack skill? (i.e Any of the fire skills)
 
 		[Export(PropertyHint.Range, "1,5,.1")]
 		public float pearlAttractorMultiplier = 2f; //Collision multiplier when PearlAttractor skill is enabled
@@ -127,6 +133,9 @@ namespace Project.Gameplay
 		}
 		private bool isSpeedBreakEnabled = true;
 		private bool isTimeBreakEnabled = true;
+
+		[Export]
+		public MovementResource strafeSettings; //Strafe settings used during speed break
 
 		//Audio clips
 		[Export]

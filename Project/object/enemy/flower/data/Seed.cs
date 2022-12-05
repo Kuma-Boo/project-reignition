@@ -12,6 +12,7 @@ namespace Project.Gameplay
 		private AnimationPlayer animator;
 
 		private bool isMoving;
+		private CharacterController Character => CharacterController.instance;
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -37,13 +38,12 @@ namespace Project.Gameplay
 
 		public void OnEntered(Area3D a)
 		{
-			if (CharacterController.instance.IsAttacking)
-			{
-				if (CharacterController.instance.Lockon.IsHomingAttacking)
-					CharacterController.instance.Lockon.StartBounce();
-			}
+			if (!a.IsInGroup("player")) return;
+
+			if (Character.ActionState == CharacterController.ActionStates.JumpDash || Character.Lockon.IsHomingAttacking)
+				Character.Lockon.StartBounce();
 			else
-				CharacterController.instance.TakeDamage(this);
+				Character.TakeDamage(this);
 
 			Explode();
 		}

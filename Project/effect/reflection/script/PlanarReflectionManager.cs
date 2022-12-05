@@ -67,10 +67,17 @@ namespace Project.Gameplay
 		{
 			if (!GetCamera()) return;
 
+			if (Engine.IsEditorHint())
+			{
+				if (mainCamera.GlobalPosition.IsEqualApprox(previousCapturePosition) &&
+				mainCamera.Forward().IsEqualApprox(previousCaptureRotation)) return; //Didn't move
+				previousCapturePosition = mainCamera.GlobalPosition;
+				previousCaptureRotation = mainCamera.Forward();
+			}
+
 			reflectionCamera.Fov = mainCamera.Fov;
 			reflectionCamera.Size = mainCamera.Size;
 			reflectionCamera.Projection = mainCamera.Projection;
-
 
 			//TODO Update reflection camera's near clipping plane
 			reflectionCamera.Near = nearClip;
@@ -103,22 +110,17 @@ namespace Project.Gameplay
 		{
 			if (!GetReflectionViewport()) return;
 
-			if (Engine.IsEditorHint())
-			{
-				if (reflectionCamera.GlobalPosition.IsEqualApprox(previousCapturePosition) &&
-				reflectionCamera.Forward().IsEqualApprox(previousCaptureRotation)) return; //Didn't move
-				previousCapturePosition = reflectionCamera.GlobalPosition;
-				previousCaptureRotation = reflectionCamera.Forward();
-			}
-
 			reflectionViewport.Size = new Vector2i(1920, 1080) / 2;
 			reflectionViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 
 			reflectionTexture = reflectionViewport.GetTexture();
 
-			for (int i = 0; i < reflectionMaterials.Count; i++)
+			if (reflectionMaterials != null)
 			{
-				reflectionMaterials[i].SetShaderParameter("reflection_texture", reflectionTexture);
+				for (int i = 0; i < reflectionMaterials.Count; i++)
+				{
+					reflectionMaterials[i].SetShaderParameter("reflection_texture", reflectionTexture);
+				}
 			}
 		}
 	}

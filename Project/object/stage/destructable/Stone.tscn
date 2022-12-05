@@ -1,0 +1,131 @@
+[gd_scene load_steps=8 format=3 uid="uid://bbgtmxw55soah"]
+
+[ext_resource type="PackedScene" uid="uid://jkk0r7rm1y7c" path="res://object/stage/destructable/resource/model/Stone.gltf" id="1_iujyt"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_vjnw7"]
+[ext_resource type="PackedScene" uid="uid://bsuaordtbg3c3" path="res://object/stage/destructable/resource/model/StonePieces.gltf" id="2_4gael"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l8c8x"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="Animation" id="Animation_8jw6v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_o0bgm"]
+resource_name = "shatter"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6jyev"]
+_data = {
+"RESET": SubResource("Animation_8jw6v"),
+"shatter": SubResource("Animation_o0bgm")
+}
+
+[node name="Stone" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_vjnw7")
+explosionStrength = 10.0
+pieceMass = 0.4
+root = NodePath("Root")
+pieceRoot = NodePath("StonePieces")
+animator = NodePath("AnimationPlayer")
+collisionLayer = 32
+collisionMask = 43
+shatterFlags = 16
+
+[node name="Root" type="StaticBody3D" parent="." groups=["floor", "splash jump", "wall"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="Stone" parent="Root" instance=ExtResource("1_iujyt")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
+shape = SubResource("BoxShape3D_l8c8x")
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+shape = SubResource("BoxShape3D_l8c8x")
+
+[node name="StonePieces" parent="." instance=ExtResource("2_4gael")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_6jyev")
+}
+
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]

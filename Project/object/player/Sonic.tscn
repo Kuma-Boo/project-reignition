@@ -1,12 +1,12 @@
 [gd_scene load_steps=59 format=3 uid="uid://ddig36ceo6kee"]
 
+[ext_resource type="PackedScene" uid="uid://dyw886sjpk8ee" path="res://object/player/resource/model/Sonic.gltf" id="3_1wesb"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
-[ext_resource type="PackedScene" uid="uid://djwsy5ophmfdd" path="res://object/player/resource/model/Sonic.tscn" id="6_ip8ma"]
-[ext_resource type="PackedScene" uid="uid://b6m53bp56bkf1" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://cyd2ep1n5php3" path="res://object/player/resource/component/Sound.tscn" id="8_ni1dd"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterController.cs" id="10"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="11"]
-[ext_resource type="PackedScene" uid="uid://qf6je82vhwme" path="res://object/player/resource/component/Skills.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://dqb313n3ldim8" path="res://object/player/resource/component/Skills.tscn" id="13"]
 
 [sub_resource type="Curve" id="Curve_0y4at"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -236,7 +236,7 @@ nodes/crouch_state/position = Vector2(-144, 336)
 node_connections = [&"output", 0, &"IsCrouching", &"IsCrouching", 0, &"MoveSpeed", &"IsCrouching", 1, &"crouch_state", &"MoveSpeed", 0, &"MoveState", &"MoveState", 0, &"backstep", &"MoveState", 1, &"Idle", &"MoveState", 2, &"Jog", &"MoveState", 3, &"Run"]
 
 [sub_resource type="AnimationNodeBlendTree" id="37"]
-graph_offset = Vector2(-390.048, -35.0758)
+graph_offset = Vector2(-365.228, 132.921)
 nodes/ActionState/node = SubResource("70")
 nodes/ActionState/position = Vector2(-464, 176)
 nodes/IsGrounded/node = SubResource("55")
@@ -271,6 +271,7 @@ _data = {
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("environmentCollider", "PathFollower", "Animator", "Sound", "Skills", "Lockon") groups=["player"]]
 collision_layer = 2
+collision_mask = 9
 floor_stop_on_slope = false
 floor_constant_speed = true
 safe_margin = 0.01
@@ -285,7 +286,6 @@ jumpDashMaxGravity = -24.0
 backflipSpeed = 20.0
 backflipHeight = 1.4
 environmentCollider = NodePath("CollisionShape3D")
-environmentMask = 9
 PathFollower = NodePath("Components/PathFollower")
 Animator = NodePath("Components/Sonic")
 Sound = NodePath("Components/Sound")
@@ -306,7 +306,7 @@ mesh = SubResource("SphereMesh_f0gyp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
 mesh = SubResource("BoxMesh_t4t3r")
 
-[node name="Sonic" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("6_ip8ma")]
+[node name="Sonic" parent="Components" node_paths=PackedStringArray("animator") instance=ExtResource("3_1wesb")]
 script = ExtResource("11")
 animator = NodePath("../../AnimationTree")
 

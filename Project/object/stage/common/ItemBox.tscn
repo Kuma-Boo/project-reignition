@@ -215,7 +215,7 @@ _data = {
 }
 
 [node name="ItemBox" type="Area3D" node_paths=PackedStringArray("rootPosition", "wings", "chest", "animator")]
-collision_layer = 12
+collision_layer = 4
 collision_mask = 2
 script = ExtResource("2")
 "Auto Collect" = false
@@ -268,24 +268,23 @@ cast_shadow = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 shape = SubResource("6")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." groups=["floor", "wall"]]
-visible = false
+[node name="Collision" type="StaticBody3D" parent="." groups=["floor", "wall"]]
 collision_layer = 8
-collision_mask = 2
+collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 shape = SubResource("6")
 disabled = true
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_o2niv")
+bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_c756k")
 }
-
-[node name="SFX" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_o2niv")
-bus = &"SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 

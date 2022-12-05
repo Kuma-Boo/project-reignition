@@ -20,6 +20,7 @@ namespace Project.Interface
 		{
 			if (!CheatManager.SkipCountdown)
 			{
+				BGMPlayer.StartStageMusic();
 				animator.Play("countdown");
 				TweenCountdownTicks();
 			}

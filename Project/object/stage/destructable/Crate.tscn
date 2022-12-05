@@ -1,0 +1,197 @@
+[gd_scene load_steps=11 format=3 uid="uid://cbpudluma1oux"]
+
+[ext_resource type="PackedScene" uid="uid://cl7a5e0hjconb" path="res://object/stage/destructable/resource/model/Crate.gltf" id="1_ievg5"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_m1iim"]
+[ext_resource type="PackedScene" uid="uid://cmksch87qsns2" path="res://object/stage/destructable/resource/model/CratePieces.gltf" id="2_ekvth"]
+[ext_resource type="AudioStream" uid="uid://caieglcob25kc" path="res://sound/sfx/objects/crate shatter.wav" id="4_ngm6l"]
+[ext_resource type="AudioStream" uid="uid://tf3yvlftwu8c" path="res://sound/sfx/objects/crate push.wav" id="5_0m3lv"]
+
+[sub_resource type="BoxShape3D" id="17"]
+
+[sub_resource type="Animation" id="Animation_e2u1m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Trigger:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_4phex"]
+resource_name = "push"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/SFX/Push")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_7ehdr"]
+resource_name = "shatter"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Trigger:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Root/SFX/Shatter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vgr4p"]
+_data = {
+"RESET": SubResource("Animation_e2u1m"),
+"push": SubResource("Animation_4phex"),
+"shatter": SubResource("Animation_7ehdr")
+}
+
+[node name="Crate" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_m1iim")
+explosionStrength = 1.6
+pieceMass = 0.2
+root = NodePath("Root")
+pieceRoot = NodePath("CratePieces")
+animator = NodePath("AnimationPlayer")
+collisionLayer = 32
+collisionMask = 43
+shatterFlags = 30
+
+[node name="Root" type="RigidBody3D" parent="." groups=["floor", "splash jump", "wall"]]
+collision_layer = 0
+collision_mask = 43
+mass = 5.0
+
+[node name="Trigger" type="Area3D" parent="Root"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Trigger"]
+shape = SubResource("17")
+
+[node name="Crate" parent="Root" instance=ExtResource("1_ievg5")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
+shape = SubResource("17")
+
+[node name="SFX" type="Node3D" parent="Root"]
+
+[node name="Shatter" type="AudioStreamPlayer3D" parent="Root/SFX"]
+stream = ExtResource("4_ngm6l")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Push" type="AudioStreamPlayer3D" parent="Root/SFX"]
+stream = ExtResource("5_0m3lv")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="CratePieces" parent="." instance=ExtResource("2_ekvth")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_vgr4p")
+}
+
+[connection signal="body_entered" from="Root" to="." method="OnBodyEntered"]
+[connection signal="area_entered" from="Root/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/Trigger" to="." method="OnExited"]
+[connection signal="body_entered" from="Root/Trigger" to="." method="OnBodyEntered"]

@@ -25,6 +25,12 @@ namespace Project
 				stageMusicInstance.VolumeDb = db;
 		}
 
+		public static void StartStageMusic() //Called when countdown starts to keep things in sync, regardless of load times.
+		{
+			if (stageMusicInstance != null)
+				stageMusicInstance.Play();
+		}
+
 		[Export]
 		public float loopStartPosition;
 		[Export]

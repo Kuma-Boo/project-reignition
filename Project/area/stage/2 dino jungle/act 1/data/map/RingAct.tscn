@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://cxddo10w2og6t"]
+
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_iec1i"]
+[ext_resource type="PackedScene" uid="uid://bq4g5yfvpiude" path="res://area/stage/2 dino jungle/act 1/data/StaticChaseOnly.tscn" id="1_tj0dc"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_tlcwl"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="3_5ajvl"]
+[ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/AutorunLockout.tres" id="4_dlj7f"]
+[ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="5_4dy7b"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="6_k35aj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ibixj"]
+size = Vector3(100, 100, 250)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kvbov"]
+size = Vector3(14, 12, 8)
+
+[node name="Stage" type="Node"]
+
+[node name="RingAct" type="Node3D" parent="."]
+script = ExtResource("1_iec1i")
+"Starting Path" = NodePath("../StaticChaseOnly/Path/MainPath")
+"Mission Type" = 2
+"Time Limit" = 0.0
+"Objective Count" = 100
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0.0
+"Ranking/Silver Time" = 0.0
+"Ranking/Bronze Time" = 0.0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = null
+Completion/Animator = NodePath("")
+
+[node name="SpawnPosition" type="Node3D" parent="RingAct"]
+metadata/_edit_lock_ = true
+
+[node name="AutorunLockout" parent="RingAct/SpawnPosition" instance=ExtResource("2_tlcwl")]
+triggerMode = 2
+
+[node name="Autorun" type="Node3D" parent="RingAct/SpawnPosition/AutorunLockout"]
+script = ExtResource("3_5ajvl")
+lockoutData = ExtResource("4_dlj7f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/SpawnPosition/AutorunLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0, -72)
+shape = SubResource("BoxShape3D_ibixj")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RingAct/SpawnPosition/AutorunLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -290)
+shape = SubResource("BoxShape3D_ibixj")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="RingAct/SpawnPosition/AutorunLockout"]
+transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0, -437)
+shape = SubResource("BoxShape3D_ibixj")
+
+[node name="CharacterSpawn" parent="RingAct/SpawnPosition" instance=ExtResource("5_4dy7b")]
+
+[node name="Goal" parent="RingAct" instance=ExtResource("6_k35aj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193, -32, -505)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 5)
+shape = SubResource("BoxShape3D_kvbov")
+
+[node name="StaticChaseOnly" parent="." instance=ExtResource("1_tj0dc")]

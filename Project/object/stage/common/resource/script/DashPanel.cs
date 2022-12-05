@@ -31,8 +31,8 @@ namespace Project.Gameplay.Objects
 
 			LockoutResource lockout = new LockoutResource()
 			{
-				directionOverrideMode = LockoutResource.DirectionOverrideMode.Replace,
-				directionSpaceMode = LockoutResource.DirectionSpaceMode.Camera,
+				overrideMode = LockoutResource.OverrideMode.Replace,
+				spaceMode = LockoutResource.SpaceMode.Camera,
 				overrideAngle = CharacterController.CalculateForwardAngle(this.Back()),
 				speedRatio = speedRatio,
 				disableActions = true,
@@ -42,10 +42,14 @@ namespace Project.Gameplay.Objects
 				priority = -1, //Not using priority
 			};
 
+			//Player is moving faster than the dash panel, don't slow them down!
+			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) > speedRatio)
+				lockout.overrideSpeed = false;
+
 			if (alignToPath)
 			{
 				lockout.overrideAngle = 0f;
-				lockout.directionSpaceMode = LockoutResource.DirectionSpaceMode.PathFollower;
+				lockout.spaceMode = LockoutResource.SpaceMode.PathFollower;
 				Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			}
 			else

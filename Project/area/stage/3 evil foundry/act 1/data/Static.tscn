@@ -1,12 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://b41nu8t4ive34"]
+[gd_scene load_steps=11 format=3 uid="uid://b41nu8t4ive34"]
 
 [ext_resource type="PackedScene" uid="uid://dl3mt0ulynpm5" path="res://area/stage/3 evil foundry/act 1/data/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/stage/3 evil foundry/data/environment/Environment.tres" id="2_imo2i"]
+[ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="3_1l7o3"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_1x0kj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="4_ueelj"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="5_eyxc2"]
-[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="6_xdtc0"]
-[ext_resource type="Resource" path="res://area/stage/3 evil foundry/act 1/data/trigger/StartingLockout.tres" id="7_ej31a"]
 [ext_resource type="Curve3D" path="res://area/stage/3 evil foundry/act 1/data/environment/path/MainPath.tres" id="8_5g4ao"]
 [ext_resource type="PackedScene" uid="uid://dsn3vorf5nwjm" path="res://area/stage/3 evil foundry/data/environment/BGM.tscn" id="9_qe1e0"]
 [ext_resource type="PackedScene" path="res://area/stage/3 evil foundry/data/shader/ScreenWarp.tscn" id="10_t3vg2"]
@@ -52,6 +51,12 @@ environment = ExtResource("2_imo2i")
 
 [node name="Triggers" type="Node3D" parent="."]
 
+[node name="AutomationTrigger" parent="Triggers" instance=ExtResource("3_1l7o3")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -11.8284, -6.7716)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/AutomationTrigger"]
+shape = SubResource("BoxShape3D_lmgvp")
+
 [node name="StartingLockout" parent="Triggers" instance=ExtResource("3_1x0kj")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -11.8284, -6.7716)
 triggerMode = 2
@@ -62,12 +67,7 @@ transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 5.4, 3)
 script = ExtResource("4_ueelj")
 cameraData = ExtResource("5_eyxc2")
 
-[node name="ControlLockout" type="Node3D" parent="Triggers/StartingLockout"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
-script = ExtResource("6_xdtc0")
-lockoutData = ExtResource("7_ej31a")
-
-[node name="CollisionShape3d" type="CollisionShape3D" parent="Triggers/StartingLockout"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/StartingLockout"]
 shape = SubResource("BoxShape3D_lmgvp")
 
 [node name="Path" type="Node3D" parent="."]
