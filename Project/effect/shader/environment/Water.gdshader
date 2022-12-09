@@ -3,13 +3,13 @@ render_mode shadows_disabled, diffuse_burley;
 
 global uniform float time;
 
-uniform sampler2D reflection_texture : source_color, hint_default_black;
+uniform sampler2D reflection_texture : source_color, hint_default_transparent;
 uniform sampler2D base : hint_normal;
 uniform sampler2D detail : hint_normal;
 uniform vec4 base_color : source_color;
 
-uniform float base_scroll_speed;
-uniform float detail_scroll_speed;
+uniform float base_scroll_speed = .1;
+uniform float detail_scroll_speed = .2;
 
 const float DISTORTION_STRENGTH = 0.1;
 const float REFLECTION_STRENGTH = 0.5;

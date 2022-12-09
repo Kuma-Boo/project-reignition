@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://cy3vl475eat3m"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="1_fditr"]
 [ext_resource type="PackedScene" uid="uid://cb8n0aolo1nyf" path="res://area/stage/1 sand oasis/data/environment/object/model/Spear.gltf" id="2_wcvmx"]
@@ -10,24 +10,24 @@ size = Vector3(0.4, 5.8, 0.4)
 size = Vector3(1.8, 3, 0.4)
 
 [node name="Spear" type="Area3D"]
-collision_layer = 8
-collision_mask = 0
-monitoring = false
+collision_layer = 0
+collision_mask = 2
+monitorable = false
 script = ExtResource("1_fditr")
 
 [node name="Spear" parent="." instance=ExtResource("2_wcvmx")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Collision" type="StaticBody3D" parent="."]
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("3")
 
-[node name="Spike" type="CollisionShape3D" parent="."]
+[node name="TipCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
 shape = SubResource("2")
 
-[node name="Handle" type="CollisionShape3D" parent="."]
+[node name="HandleCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("3")

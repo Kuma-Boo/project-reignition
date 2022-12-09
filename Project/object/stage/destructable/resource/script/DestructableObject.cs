@@ -14,17 +14,17 @@ namespace Project.Gameplay.Objects
 		private float explosionStrength;
 		[Export]
 		private float pieceMass;
+		[Export]
+		private bool stopPlayerOnShatter; //Stop the player when being shattered?
 
 		[Export]
+		private NodePath rootPath;
 		private Node3D root;
 		[Export]
-		private Node3D pieceRoot; //Parent node of pieces
+		private NodePath pieceRootPath; //Parent node of pieces
+		private Node3D pieceRoot;
 		[Export]
 		protected AnimationPlayer animator;
-		[Export(PropertyHint.Layers3dPhysics)]
-		private uint collisionLayer;
-		[Export(PropertyHint.Layers3dPhysics)]
-		private uint collisionMask;
 		[Export(PropertyHint.Flags, "PlayerCollision,ObjectCollision,AttackSkill,HomingAttack,SpeedBreak")]
 		private int shatterFlags;
 		private enum ShatterFlags
@@ -56,6 +56,9 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
+			root = GetNode<Node3D>(rootPath);
+			pieceRoot = GetNode<Node3D>(pieceRootPath);
+
 			for (int i = 0; i < pieceRoot.GetChildCount(); i++)
 			{
 				RigidBody3D rigidbody = pieceRoot.GetChildOrNull<RigidBody3D>(i);
@@ -65,8 +68,8 @@ namespace Project.Gameplay.Objects
 				MeshInstance3D mesh = rigidbody.GetChildOrNull<MeshInstance3D>(0); //NOTE mesh must be the FIRST child of the rigidbody.
 
 				rigidbody.Mass = pieceMass;
-				rigidbody.CollisionLayer = collisionLayer;
-				rigidbody.CollisionMask = collisionMask;
+				rigidbody.CollisionLayer = Core.RuntimeConstants.Instance.particleCollisionLayer;
+				rigidbody.CollisionMask = Core.RuntimeConstants.Instance.particleCollisionMask;
 
 				pieces.Add(new Piece()
 				{
@@ -144,6 +147,10 @@ namespace Project.Gameplay.Objects
 			float shatterStrength = explosionStrength;
 			if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) //Directional shatter
 			{
+				//Kill character's speed
+				if (Character.IsOnGround && stopPlayerOnShatter)
+					Character.MoveSpeed = 0f;
+
 				shatterPoint = Character.CenterPosition; //Shatter from player
 
 				if (Character.ActionState != CharacterController.ActionStates.JumpDash)
@@ -174,7 +181,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (isShattered) return;
 
-			if (!a.IsInGroup("player"))
+			if (!a.IsInGroup("player") && !a.IsInGroup("stackable"))
 			{
 				if (FlagSetting.IsSet(ShatterFlags.ObjectCollision))
 					Shatter();

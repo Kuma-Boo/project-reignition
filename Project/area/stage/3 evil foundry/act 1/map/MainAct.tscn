@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_f1agf"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="3_7xkky"]
+[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_qelh1"]
+[ext_resource type="PackedScene" uid="uid://b41nu8t4ive34" path="res://area/stage/3 evil foundry/act 1/Static.tscn" id="5_fqsot"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_744t3"]
+radius = 3.0
+
+[node name="Stage" type="Node"]
+
+[node name="MainAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_1wjgq")]
+
+[node name="SpawnTrigger" parent="MainAct/SpawnPosition" instance=ExtResource("2_f1agf")]
+
+[node name="MainPath" type="Node3D" parent="MainAct/SpawnPosition/SpawnTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("3_7xkky")
+path = NodePath("../../../../Static/Path/MainPath")
+
+[node name="Checkpoint" type="Node3D" parent="MainAct/SpawnPosition/SpawnTrigger"]
+script = ExtResource("4_qelh1")
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="MainAct/SpawnPosition/SpawnTrigger"]
+shape = SubResource("SphereShape3D_744t3")
+
+[node name="Static" parent="." instance=ExtResource("5_fqsot")]

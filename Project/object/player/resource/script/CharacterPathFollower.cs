@@ -36,8 +36,8 @@ namespace Project.Gameplay
 			if (!IsInsideTree()) return;
 			if (ActivePath == null) return;
 
-			UpdatePosition();
-			//Progress = ActivePath.Curve.GetClosestOffset(Character.GlobalPosition - ActivePath.GlobalPosition);
+			//UpdatePosition();
+			Progress = ActivePath.Curve.GetClosestOffset(Character.GlobalPosition - ActivePath.GlobalPosition);
 
 			float newForwardAngle = CharacterController.CalculateForwardAngle(this.Forward());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f; //Half value seems to be more accurate for some reason
@@ -50,7 +50,9 @@ namespace Project.Gameplay
 		/// <summary>
 		/// GetClosestOffset() seems to be broken in 4.0, so here's a more accurate (allbeit slower) method.
 		/// Loops over all baked points in a path, so try to restrict it's usage as much as possible.
+		/// UPDATE v4.0.beta8.mono.official [45cac42c0] seems to have fixed this. Leaving this as a fallback.
 		/// </summary>
+		/*
 		private void UpdatePosition()
 		{
 			Vector3 targetPosition = Character.GlobalPosition - ActivePath.GlobalPosition;
@@ -92,6 +94,7 @@ namespace Project.Gameplay
 			position += ActivePath.GlobalPosition;
 			LookAtFromPosition(position, position + forwardDirection, this.Up());
 		}
+		*/
 
 		//Is the pathfollower ahead of the reference point?
 		public bool IsAheadOfPoint(Vector3 globalPosition) => Mathf.Sign(Progress - ActivePath.Curve.GetClosestOffset(globalPosition - ActivePath.GlobalPosition)) > 0;

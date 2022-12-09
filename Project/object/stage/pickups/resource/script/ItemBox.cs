@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using System.Collections.Generic;
 using Project.Core;
 
 namespace Project.Gameplay.Objects
@@ -127,8 +128,10 @@ namespace Project.Gameplay.Objects
 		private bool isOpened;
 		private bool isMovingObjects;
 		private float currentTravelTime;
-		private Pickup[] objectPool;
-		private LaunchData[] objectLaunchData; //Godot doesn't support listing custom structs
+
+		//Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
+		private readonly List<Pickup> objectPool = new List<Pickup>();
+		private readonly List<LaunchData> objectLaunchData = new List<LaunchData>();
 
 		protected override void SetUp()
 		{
@@ -139,17 +142,14 @@ namespace Project.Gameplay.Objects
 
 			if (targetObject != null)
 			{
-				objectPool = new Pickup[spawnAmount];
-				objectLaunchData = new LaunchData[spawnAmount];
-
 				//Pool objects
 				for (int i = 0; i < spawnAmount; i++)
 				{
-					Pickup node = targetObject.Instantiate<Pickup>();
+					Pickup pickup = targetObject.Instantiate<Pickup>();
 
-					node.DisableAutoRespawning = true;
-					objectPool[i] = node;
-					objectLaunchData[i] = LaunchData.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), arcHeight);
+					pickup.DisableAutoRespawning = true;
+					objectPool.Add(pickup);
+					objectLaunchData.Add(LaunchData.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), arcHeight));
 				}
 			}
 			else
@@ -167,7 +167,7 @@ namespace Project.Gameplay.Objects
 			currentTravelTime = 0;
 			animator.Play("RESET");
 
-			for (int i = 0; i < objectPool.Length; i++)
+			for (int i = 0; i < objectPool.Count; i++)
 				objectPool[i].Respawn();
 		}
 
@@ -184,7 +184,7 @@ namespace Project.Gameplay.Objects
 				float t = Mathf.Clamp(currentTravelTime, 0, travelTime) / travelTime;
 				isMovingObjects = t < 1f;
 
-				for (int i = 0; i < objectPool.Length; i++)
+				for (int i = 0; i < objectPool.Count; i++)
 				{
 					if (!objectPool[i].IsInsideTree()) continue; //Already collected?
 
@@ -209,7 +209,7 @@ namespace Project.Gameplay.Objects
 			currentTravelTime = 0;
 
 			//Spawn objects
-			for (int i = 0; i < objectPool.Length; i++)
+			for (int i = 0; i < objectPool.Count; i++)
 			{
 				AddChild(objectPool[i]);
 				objectPool[i].Monitoring = objectPool[i].Monitorable = false; //Disable collision temporarily

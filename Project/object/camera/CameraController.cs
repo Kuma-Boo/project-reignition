@@ -11,6 +11,7 @@ namespace Project.Gameplay
 	{
 		public static CameraController instance;
 
+		[ExportSubgroup("Gameplay Camera")]
 		[Export]
 		private Node3D calculationRoot; //Responsible for pitch rotation
 		[Export]
@@ -21,7 +22,7 @@ namespace Project.Gameplay
 		private Node3D cameraGimbal;
 		[Export]
 		private Camera3D camera;
-		public Camera3D Camera { get => camera; }
+		public Camera3D Camera => camera;
 		[Export]
 		private RayCast3D backstepCheck;
 
@@ -33,7 +34,6 @@ namespace Project.Gameplay
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PathFollower => Character.PathFollower;
 
-		public Transform3D CameraTransform => camera.GlobalTransform;
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => camera.UnprojectPosition(worldSpace);
 		public bool IsOnScreen(Vector3 worldSpace) => camera.IsPositionInFrustum(worldSpace);
 		public bool IsPositionBehind(Vector3 worldSpace) => camera.IsPositionBehind(worldSpace);
@@ -43,11 +43,13 @@ namespace Project.Gameplay
 
 		public override void _Ready()
 		{
+			if (Engine.IsEditorHint()) return;
+
 			instance = this;
 			ResetFlag = true; //Default to snapping view when spawning
 		}
 
-		public void UpdateCamera()
+		public override void _PhysicsProcess(double _)
 		{
 			UpdateGameplayCamera();
 
@@ -229,7 +231,7 @@ namespace Project.Gameplay
 			if (freeCamRotating)
 			{
 				freeCamEnabled = true;
-				calculationRoot.Visible = true;
+				//calculationRoot.Visible = true;
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 			else

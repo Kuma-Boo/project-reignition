@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using System.Collections.Generic;
 using Project.Core;
 
 namespace Project.Gameplay
@@ -425,8 +426,8 @@ namespace Project.Gameplay
 		private NodePath itemCycleActivationTrigger; //When to apply the item cycle
 		private NodePath itemCycleHalfwayTrigger; //So the player can't just move in and out of the activation trigger
 		private Array<NodePath> itemCycles = new Array<NodePath>();
-		private Node3D[] _itemCycles;
-		private SpawnData[] _itemCyclesSpawnData;
+		private readonly List<Node3D> _itemCycles = new List<Node3D>();
+		private readonly List<SpawnData> _itemCyclesSpawnData = new List<SpawnData>();
 
 		private void SetUpItemCycles()
 		{
@@ -436,15 +437,12 @@ namespace Project.Gameplay
 			if (itemCycleHalfwayTrigger != null)
 				GetNode<Area3D>(itemCycleHalfwayTrigger).Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnItemCycleHalfwayEntered));
 
-			_itemCycles = new Node3D[itemCycles.Count];
-			_itemCyclesSpawnData = new SpawnData[itemCycles.Count];
-
 			for (int i = 0; i < itemCycles.Count; i++)
 			{
 				if (itemCycles[i] == null || itemCycles[i].IsEmpty) //Nothing on this item cycle!
 				{
-					_itemCycles[i] = null;
-					_itemCyclesSpawnData[i] = new SpawnData();
+					_itemCycles.Add(null);
+					_itemCyclesSpawnData.Add(new SpawnData());
 					continue;
 				}
 
@@ -452,8 +450,8 @@ namespace Project.Gameplay
 				SpawnData spawnData = new SpawnData(node.GetParent(), node.Transform);
 				node.Visible = true;
 
-				_itemCycles[i] = node;
-				_itemCyclesSpawnData[i] = spawnData;
+				_itemCycles.Add(node);
+				_itemCyclesSpawnData.Add(spawnData);
 
 				if (i != itemCycleIndex) //Disable inactive nodes
 					spawnData.parentNode.CallDeferred(MethodName.RemoveChild, node);

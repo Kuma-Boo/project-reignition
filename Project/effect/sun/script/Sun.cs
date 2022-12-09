@@ -5,12 +5,11 @@ using Project.Gameplay;
 
 namespace Project
 {
+	/// <summary>
+	/// Requires the DepthRenderer to be enabled to function properly.
+	/// </summary>
 	public partial class Sun : Node3D
 	{
-		[Export]
-		private Camera3D depthCamera; //Used to get the depth texture to determine whether the sun is occluded
-		[Export]
-		private SubViewport depthViewport;
 		[Export]
 		private Node2D lensFlareBase;
 		private readonly Array<Node2D> _lensPieces = new Array<Node2D>();
@@ -30,44 +29,37 @@ namespace Project
 		private readonly float OCCLUSION_SMOOTHING = .2f;
 		private readonly float MOVEMENT_SMOOTHING = 4.0f;
 
-		private CameraController Camera => CameraController.instance;
-		private readonly StringName SHADER_GLOBAL_SUN_OCCLUSION = new StringName("sun_occlusion");
-		private readonly StringName SHADER_GLOBAL_SUN_MOVEMENT = new StringName("sun_movement");
+		private CameraController MainCamera => CameraController.instance;
+		private Callable UpdateSunCallable => new Callable(this, MethodName.UpdateSun);
+
+		private readonly StringName SHADER_GLOBAL_SUN_OCCLUSION = "sun_occlusion";
+		private readonly StringName SHADER_GLOBAL_SUN_MOVEMENT = "sun_movement";
 
 		public override void _Ready()
 		{
-			depthCamera.Visible = true; //Enable the depth camera
-
 			for (int i = 0; i < lensFlareBase.GetChildCount(); i++)
 				_lensPieces.Add(lensFlareBase.GetChild<Node2D>(i));
 
-			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePreDraw, new Callable(this, MethodName.SyncCamera), (uint)ConnectFlags.Deferred);
-			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, new Callable(this, MethodName.UpdateFrame), (uint)ConnectFlags.Deferred);
+			if (!RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePostDraw, UpdateSunCallable))
+				RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, UpdateSunCallable, (uint)ConnectFlags.Deferred);
 		}
 
 		public override void _ExitTree()
 		{
-			RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePreDraw, new Callable(this, MethodName.SyncCamera));
-			RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, new Callable(this, MethodName.UpdateFrame));
+			if (RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePostDraw, UpdateSunCallable))
+				RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, UpdateSunCallable);
 		}
 
-		private void SyncCamera()
+		private void UpdateSun()
 		{
-			if (Camera == null) return; //No camera found			
-			depthCamera.GlobalTransform = Camera.CameraTransform; //Keep cameras in sync
-		}
-
-		private void UpdateFrame()
-		{
-			if (Camera == null) return; //No camera found
+			if (MainCamera == null || DepthRenderer.DepthTexture == null) return; //No camera/depth texture found
 
 			bool isOccluded = true;
-			if (!Camera.IsPositionBehind(GlobalPosition) && Camera.IsOnScreen(GlobalPosition))
+			if (!MainCamera.IsPositionBehind(GlobalPosition) && MainCamera.IsOnScreen(GlobalPosition))
 				isOccluded = SampleTexture() < backgroundSeparation;
 
 			currentOcclusion = ExtensionMethods.SmoothDamp(currentOcclusion, isOccluded ? 1f : 0f, ref currentOcclusionVelocity, OCCLUSION_SMOOTHING);
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_OCCLUSION, currentOcclusion);
-
 
 			if ((screenUV - previousScreenUV).LengthSquared() * 100.0f > movementThreshold)
 				currentMovement = 0f;
@@ -81,21 +73,20 @@ namespace Project
 
 		private float SampleTexture()
 		{
-			screenUV = Camera.ConvertToScreenSpace(GlobalPosition) / RuntimeConstants.SCREEN_SIZE;
-			Image depthBuffer = depthViewport.GetTexture().GetImage();
+			screenUV = MainCamera.ConvertToScreenSpace(GlobalPosition) / RuntimeConstants.SCREEN_SIZE;
+			Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
 			Vector2 samplePosition = screenUV * depthBuffer.GetSize();
 			return depthBuffer.GetPixel(Mathf.FloorToInt(samplePosition.x), Mathf.FloorToInt(samplePosition.y)).r;
 		}
 
 		private void UpdateLensFlare()
 		{
-			Vector2 originPosition = Camera.ConvertToScreenSpace(GlobalPosition);
+			Vector2 originPosition = MainCamera.ConvertToScreenSpace(GlobalPosition);
 			Vector2 flareDirection = lensFlareBase.GlobalPosition - originPosition; //Get the direction to the center of the screen
 
 			lensFlareBase.Modulate = Colors.White.Lerp(Colors.Transparent, currentOcclusion);
 			for (int i = 0; i < _lensPieces.Count; i++)
 				_lensPieces[i].Position = flareDirection * i * LENS_FLARE_SPACING;
-
 		}
 	}
 }

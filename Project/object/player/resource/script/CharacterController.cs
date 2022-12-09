@@ -28,8 +28,6 @@ namespace Project.Gameplay
 			CallDeferred(MethodName.SnapToGround);
 		}
 
-		[Signal]
-		public delegate void ProcessedEventHandler(); //Called every frame after the player is done processing
 		public override void _PhysicsProcess(double _)
 		{
 			UpdateStateMachine();
@@ -38,8 +36,6 @@ namespace Project.Gameplay
 
 			Animator.UpdateAnimation();
 			Skills.UpdateSoulSkills();
-
-			EmitSignal(SignalName.Processed);
 		}
 
 		#region State Machine

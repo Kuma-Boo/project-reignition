@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbwcphc75t0y7"]
+
+[ext_resource type="Script" path="res://effect/buffer/script/DepthRenderer.cs" id="1_8ches"]
+[ext_resource type="Material" uid="uid://5j72pm3pd60b" path="res://effect/buffer/material/DepthRendererMaterial.tres" id="2_jk5w5"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_xgfr5"]
+size = Vector2(2, 2)
+
+[node name="DepthRenderer" type="Node" node_paths=PackedStringArray("depthCamera", "depthViewport")]
+script = ExtResource("1_8ches")
+depthCamera = NodePath("DepthViewport/DepthCamera")
+depthViewport = NodePath("DepthViewport")
+depthMaterial = ExtResource("2_jk5w5")
+depthMaterials = []
+
+[node name="DepthViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+positional_shadow_atlas_size = 0
+positional_shadow_atlas_16_bits = false
+positional_shadow_atlas_quad_0 = 0
+positional_shadow_atlas_quad_1 = 0
+positional_shadow_atlas_quad_2 = 0
+positional_shadow_atlas_quad_3 = 0
+size = Vector2i(256, 256)
+render_target_update_mode = 0
+
+[node name="DepthCamera" type="Camera3D" parent="DepthViewport"]
+visible = false
+cull_mask = 262145
+current = true
+
+[node name="DepthRenderer" type="MeshInstance3D" parent="DepthViewport/DepthCamera"]
+layers = 262144
+material_override = ExtResource("2_jk5w5")
+cast_shadow = 0
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_xgfr5")

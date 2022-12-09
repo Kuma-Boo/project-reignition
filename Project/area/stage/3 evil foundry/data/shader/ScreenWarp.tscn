@@ -1,17 +1,22 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://cs7ogaqrx3sn5"]
 
 [ext_resource type="Shader" path="res://area/stage/3 evil foundry/data/shader/ScreenWarp.gdshader" id="1_73l67"]
-[ext_resource type="Texture2D" path="res://area/stage/3 evil foundry/data/shader/screen warp.png" id="2_atyha"]
+[ext_resource type="Texture2D" uid="uid://ql1tnby8pmpa" path="res://area/stage/3 evil foundry/data/shader/screen warp.png" id="2_atyha"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ko0th"]
 shader = ExtResource("1_73l67")
-shader_parameter/bias = -64.0
+shader_parameter/bias = -28.0
 shader_parameter/distortion = ExtResource("2_atyha")
 shader_parameter/intensity = 128.0
 shader_parameter/scale = Vector2(1.6, 2.4)
 shader_parameter/scroll_speed = Vector2(-0.4, 0.8)
 
-[node name="ScreenWarp" type="ColorRect"]
+[node name="ScreenWarp" type="Node"]
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+rect = Rect2(0, 0, 1920, 1080)
+
+[node name="ScreenWarp" type="ColorRect" parent="BackBufferCopy"]
 material = SubResource("ShaderMaterial_ko0th")
 anchors_preset = 15
 anchor_right = 1.0

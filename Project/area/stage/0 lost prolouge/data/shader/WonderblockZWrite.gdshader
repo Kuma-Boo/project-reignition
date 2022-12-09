@@ -1,7 +1,7 @@
 shader_type spatial;
-render_mode unshaded, depth_draw_always, blend_mul, specular_disabled;
+render_mode unshaded, depth_draw_always, specular_disabled;
 
 void fragment()
 {
-	ALBEDO = .5 - COLOR.rgb;
+	ALBEDO = COLOR.rgb;
 }

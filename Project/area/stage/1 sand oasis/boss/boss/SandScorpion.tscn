@@ -1,0 +1,1960 @@
+[gd_scene load_steps=105 format=3 uid="uid://b3folnh8hcqs"]
+
+[ext_resource type="PackedScene" uid="uid://cyme78kdqgxjq" path="res://area/stage/1 sand oasis/boss/boss/model/SandScorpion.gltf" id="1_k7ra0"]
+[ext_resource type="Script" path="res://area/stage/1 sand oasis/data/script/SandScorpion.cs" id="1_mewmp"]
+[ext_resource type="PackedScene" uid="uid://clp2chcp7c1au" path="res://area/stage/1 sand oasis/boss/boss/model/EyeLarge.gltf" id="2_0m58c"]
+[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/boss/boss/Missile.tscn" id="2_6mjm1"]
+[ext_resource type="PackedScene" uid="uid://bjidkwtacvmue" path="res://area/stage/1 sand oasis/boss/boss/model/FlyingEye.gltf" id="2_8luog"]
+[ext_resource type="PackedScene" uid="uid://wsxigaddy57x" path="res://area/stage/1 sand oasis/boss/boss/model/EyeSmall.gltf" id="2_a5gic"]
+[ext_resource type="Material" uid="uid://hf3nxsn25ii5" path="res://area/stage/1 sand oasis/boss/effect/process material/Dust.tres" id="6_xp45h"]
+[ext_resource type="Material" path="res://area/stage/1 sand oasis/boss/effect/material/Dust.tres" id="7_2o7i1"]
+[ext_resource type="PackedScene" uid="uid://bgua8h0rey52v" path="res://area/stage/1 sand oasis/boss/boss/model/Tail.gltf" id="7_rxibo"]
+[ext_resource type="Material" uid="uid://dynwblwb14su4" path="res://area/stage/1 sand oasis/boss/effect/process material/TailTip.tres" id="9_nnfhv"]
+[ext_resource type="Material" path="res://area/stage/1 sand oasis/boss/effect/material/TailTip.tres" id="10_36xuj"]
+[ext_resource type="Material" uid="uid://c7lnt3i757rv0" path="res://area/stage/1 sand oasis/boss/effect/process material/Tremor.tres" id="10_ooj1u"]
+[ext_resource type="Material" path="res://area/stage/1 sand oasis/boss/effect/material/Tremor.tres" id="11_npy58"]
+[ext_resource type="Material" path="res://area/stage/1 sand oasis/boss/effect/material/Charge.tres" id="12_6ym8d"]
+[ext_resource type="Material" uid="uid://m71xjneqipn" path="res://area/stage/1 sand oasis/boss/effect/process material/Shockwave.tres" id="12_n0grb"]
+[ext_resource type="Material" path="res://area/stage/1 sand oasis/boss/effect/material/Shockwave.tres" id="13_65rq6"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_c08po"]
+radius = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_i57o6"]
+radius = 2.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1nx1v"]
+animation = &"bite"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_1l0xm"]
+enabled_inputs = 3
+xfade_time = 0.2
+input_0/name = "Inactive"
+input_0/auto_advance = false
+input_1/name = "Bite"
+input_1/auto_advance = false
+input_2/name = "Retreat"
+input_2/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_54dah"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wbwml"]
+animation = &"eye-retreat"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_6uq47"]
+graph_offset = Vector2(-962.6, -180.759)
+nodes/BiteAnimation/node = SubResource("AnimationNodeAnimation_1nx1v")
+nodes/BiteAnimation/position = Vector2(-208, 240)
+nodes/EyeState/node = SubResource("AnimationNodeTransition_1l0xm")
+nodes/EyeState/position = Vector2(48, 112)
+nodes/RESET/node = SubResource("AnimationNodeAnimation_54dah")
+nodes/RESET/position = Vector2(-208, 112)
+nodes/RetreatAnimation/node = SubResource("AnimationNodeAnimation_wbwml")
+nodes/RetreatAnimation/position = Vector2(-208, 368)
+nodes/output/position = Vector2(304, 112)
+node_connections = [&"output", 0, &"EyeState", &"EyeState", 0, &"RESET", &"EyeState", 1, &"BiteAnimation", &"EyeState", 2, &"RetreatAnimation"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g3iia"]
+material = ExtResource("7_2o7i1")
+orientation = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_icvc0"]
+size = Vector3(4, 8, 16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_apgua"]
+size = Vector3(22, 8, 20)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lgbap"]
+radius = 0.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_6gfpm"]
+radius = 1.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_v7gw7"]
+radius = 1.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0bw7n"]
+size = Vector3(0.6, 2.5, 0.4)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_e7p6t"]
+radius = 2.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e01up"]
+material = ExtResource("10_36xuj")
+orientation = 2
+
+[sub_resource type="Gradient" id="Gradient_ld7ei"]
+offsets = PackedFloat32Array(0, 0.111913, 0.447653, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_x708d"]
+gradient = SubResource("Gradient_ld7ei")
+width = 64
+
+[sub_resource type="Curve" id="Curve_fdia7"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.769608, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -8.63669, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_dj6hw"]
+width = 64
+curve = SubResource("Curve_fdia7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ysei"]
+lifetime_randomness = 0.9
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 10.0
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_dj6hw")
+color = Color(1, 0.223529, 0, 1)
+color_ramp = SubResource("GradientTexture1D_x708d")
+hue_variation_min = -0.05
+hue_variation_max = 0.62
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_elby2"]
+material = ExtResource("12_6ym8d")
+size = Vector2(0.2, 2)
+orientation = 2
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_acwjk"]
+enabled_inputs = 3
+xfade_time = 0.2
+input_0/name = "Inactive"
+input_0/auto_advance = false
+input_1/name = "Strike"
+input_1/auto_advance = false
+input_2/name = "Recovery"
+input_2/auto_advance = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4tl1j"]
+animation = &"l-attack-heavy-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yu1tj"]
+animation = &"l-attack-heavy-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uigcs"]
+animation = &"l-idle"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_5sogy"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x1leq"]
+animation = &"l-attack-center-light"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w81nj"]
+animation = &"l-attack-out-light"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_drb8w"]
+animation = &"l-attack-in-light"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_htkjp"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_x1leq")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_w81nj")
+blend_point_1/pos = -1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_drb8w")
+blend_point_2/pos = 1.0
+sync = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_sgp5k"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_jx0dx"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_75wli"]
+graph_offset = Vector2(-430.614, 32.1393)
+nodes/HeavyAttackState/node = SubResource("AnimationNodeTransition_acwjk")
+nodes/HeavyAttackState/position = Vector2(-96, 160)
+nodes/HeavyRecoveryAnimation/node = SubResource("AnimationNodeAnimation_4tl1j")
+nodes/HeavyRecoveryAnimation/position = Vector2(-448, 464)
+nodes/HeavyStrikeAnimation/node = SubResource("AnimationNodeAnimation_yu1tj")
+nodes/HeavyStrikeAnimation/position = Vector2(-448, 352)
+nodes/IdleAnimation/node = SubResource("AnimationNodeAnimation_uigcs")
+nodes/IdleAnimation/position = Vector2(-624, 160)
+nodes/Intro/node = SubResource("AnimationNodeOneShot_5sogy")
+nodes/Intro/position = Vector2(128, 160)
+nodes/LightAnimation/node = SubResource("AnimationNodeBlendSpace1D_htkjp")
+nodes/LightAnimation/position = Vector2(-624, 288)
+nodes/LightAttack/node = SubResource("AnimationNodeOneShot_sgp5k")
+nodes/LightAttack/position = Vector2(-288, 160)
+nodes/MoveSpeed/node = SubResource("AnimationNodeTimeScale_jx0dx")
+nodes/MoveSpeed/position = Vector2(-448, 160)
+node_connections = [&"output", 0, &"Intro", &"HeavyAttackState", 0, &"LightAttack", &"HeavyAttackState", 1, &"HeavyStrikeAnimation", &"HeavyAttackState", 2, &"HeavyRecoveryAnimation", &"Intro", 0, &"HeavyAttackState", &"LightAttack", 0, &"MoveSpeed", &"LightAttack", 1, &"LightAnimation", &"MoveSpeed", 0, &"IdleAnimation"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_nhopx"]
+enabled_inputs = 3
+xfade_time = 0.2
+input_0/name = "Inactive"
+input_0/auto_advance = false
+input_1/name = "Strike"
+input_1/auto_advance = false
+input_2/name = "Recovery"
+input_2/auto_advance = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0phv0"]
+animation = &"r-attack-heavy-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_em3lq"]
+animation = &"r-attack-heavy-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4cjbg"]
+animation = &"r-idle"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_otdh0"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mabsk"]
+animation = &"r-attack-center-light"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c63xu"]
+animation = &"r-attack-out-light"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qo1cf"]
+animation = &"r-attack-in-light"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_4l0nk"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_mabsk")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_c63xu")
+blend_point_1/pos = -1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_qo1cf")
+blend_point_2/pos = 1.0
+sync = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ywr4y"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_gnxwo"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_7466l"]
+graph_offset = Vector2(-513.938, 80.0083)
+nodes/HeavyAttackState/node = SubResource("AnimationNodeTransition_nhopx")
+nodes/HeavyAttackState/position = Vector2(-96, 160)
+nodes/HeavyRecoveryAnimation/node = SubResource("AnimationNodeAnimation_0phv0")
+nodes/HeavyRecoveryAnimation/position = Vector2(-448, 464)
+nodes/HeavyStrikeAnimation/node = SubResource("AnimationNodeAnimation_em3lq")
+nodes/HeavyStrikeAnimation/position = Vector2(-448, 352)
+nodes/IdleAnimation/node = SubResource("AnimationNodeAnimation_4cjbg")
+nodes/IdleAnimation/position = Vector2(-624, 160)
+nodes/Intro/node = SubResource("AnimationNodeOneShot_otdh0")
+nodes/Intro/position = Vector2(128, 160)
+nodes/LightAnimation/node = SubResource("AnimationNodeBlendSpace1D_4l0nk")
+nodes/LightAnimation/position = Vector2(-624, 288)
+nodes/LightAttack/node = SubResource("AnimationNodeOneShot_ywr4y")
+nodes/LightAttack/position = Vector2(-288, 160)
+nodes/MoveSpeed/node = SubResource("AnimationNodeTimeScale_gnxwo")
+nodes/MoveSpeed/position = Vector2(-448, 160)
+node_connections = [&"output", 0, &"Intro", &"HeavyAttackState", 0, &"LightAttack", &"HeavyAttackState", 1, &"HeavyStrikeAnimation", &"HeavyAttackState", 2, &"HeavyRecoveryAnimation", &"Intro", 0, &"HeavyAttackState", &"LightAttack", 0, &"MoveSpeed", &"LightAttack", 1, &"LightAnimation", &"MoveSpeed", 0, &"IdleAnimation"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o15kk"]
+material = ExtResource("11_npy58")
+center_offset = Vector3(0, 0.1, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_82mox"]
+resource_name = "Shockwave_Shockwave"
+_surfaces = [{
+"aabb": AABB(-1.5, 0, -1.5, 3, 1, 3),
+"attribute_data": PackedByteArray(254, 255, 255, 62, 1, 0, 128, 63, 166, 0, 224, 62, 1, 0, 128, 63, 78, 1, 192, 62, 0, 0, 128, 63, 248, 1, 160, 62, 0, 0, 128, 63, 160, 2, 128, 62, 0, 0, 128, 63, 148, 6, 64, 62, 254, 255, 127, 63, 232, 7, 0, 62, 252, 255, 127, 63, 112, 18, 128, 61, 252, 255, 127, 63, 0, 128, 40, 56, 250, 255, 127, 63, 98, 253, 127, 63, 254, 255, 127, 63, 181, 253, 111, 63, 0, 0, 128, 63, 8, 254, 95, 63, 0, 0, 128, 63, 93, 254, 79, 63, 1, 0, 128, 63, 176, 254, 63, 63, 1, 0, 128, 63, 3, 255, 47, 63, 1, 0, 128, 63, 88, 255, 31, 63, 1, 0, 128, 63, 172, 255, 15, 63, 1, 0, 128, 63, 172, 255, 15, 63, 32, 215, 163, 60, 88, 255, 31, 63, 32, 215, 163, 60, 3, 255, 47, 63, 32, 215, 163, 60, 175, 254, 63, 63, 0, 215, 163, 60, 91, 254, 79, 63, 0, 215, 163, 60, 7, 254, 95, 63, 0, 215, 163, 60, 179, 253, 111, 63, 128, 214, 163, 60, 0, 64, 42, 56, 128, 214, 163, 60, 96, 253, 127, 63, 128, 214, 163, 60, 144, 18, 128, 61, 128, 214, 163, 60, 248, 7, 0, 62, 192, 214, 163, 60, 156, 6, 64, 62, 0, 215, 163, 60, 166, 2, 128, 62, 0, 215, 163, 60, 254, 1, 160, 62, 0, 215, 163, 60, 82, 1, 192, 62, 32, 215, 163, 60, 170, 0, 224, 62, 32, 215, 163, 60, 0, 0, 0, 63, 32, 215, 163, 60),
+"format": 4119,
+"index_count": 96,
+"index_data": PackedByteArray(8, 0, 26, 0, 7, 0, 8, 0, 24, 0, 26, 0, 12, 0, 22, 0, 11, 0, 12, 0, 21, 0, 22, 0, 16, 0, 18, 0, 15, 0, 16, 0, 17, 0, 18, 0, 3, 0, 31, 0, 2, 0, 3, 0, 30, 0, 31, 0, 7, 0, 27, 0, 6, 0, 7, 0, 26, 0, 27, 0, 11, 0, 23, 0, 10, 0, 11, 0, 22, 0, 23, 0, 15, 0, 19, 0, 14, 0, 15, 0, 18, 0, 19, 0, 2, 0, 32, 0, 1, 0, 2, 0, 31, 0, 32, 0, 6, 0, 28, 0, 5, 0, 6, 0, 27, 0, 28, 0, 10, 0, 25, 0, 9, 0, 10, 0, 23, 0, 25, 0, 14, 0, 20, 0, 13, 0, 14, 0, 19, 0, 20, 0, 5, 0, 29, 0, 4, 0, 5, 0, 28, 0, 29, 0, 0, 0, 17, 0, 16, 0, 0, 0, 33, 0, 17, 0, 13, 0, 21, 0, 12, 0, 13, 0, 20, 0, 21, 0, 1, 0, 33, 0, 0, 0, 1, 0, 32, 0, 33, 0, 4, 0, 30, 0, 3, 0, 4, 0, 29, 0, 30, 0),
+"lods": [0.202665, PackedByteArray(8, 0, 26, 0, 6, 0, 8, 0, 24, 0, 26, 0, 6, 0, 26, 0, 28, 0, 6, 0, 28, 0, 30, 0, 6, 0, 30, 0, 2, 0, 2, 0, 30, 0, 32, 0, 2, 0, 32, 0, 19, 0, 2, 0, 19, 0, 15, 0, 15, 0, 19, 0, 23, 0, 15, 0, 23, 0, 11, 0, 11, 0, 23, 0, 25, 0, 11, 0, 25, 0, 9, 0), 0.729141, PackedByteArray(8, 0, 28, 0, 6, 0, 8, 0, 24, 0, 28, 0, 6, 0, 28, 0, 15, 0, 15, 0, 28, 0, 19, 0, 15, 0, 19, 0, 25, 0, 15, 0, 25, 0, 9, 0)],
+"material": ExtResource("13_65rq6"),
+"primitive": 3,
+"vertex_count": 34,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 191, 255, 127, 169, 170, 255, 255, 255, 191, 22, 239, 195, 190, 0, 0, 0, 0, 94, 131, 108, 191, 28, 155, 108, 163, 254, 255, 189, 210, 243, 4, 53, 191, 0, 0, 0, 0, 243, 4, 53, 191, 71, 175, 110, 161, 255, 255, 255, 223, 94, 131, 108, 191, 0, 0, 0, 0, 22, 239, 195, 190, 116, 193, 108, 163, 255, 255, 64, 237, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 0, 128, 84, 213, 170, 170, 0, 0, 255, 255, 94, 131, 108, 191, 0, 0, 0, 0, 22, 239, 195, 62, 145, 220, 137, 190, 0, 0, 64, 237, 243, 4, 53, 191, 0, 0, 0, 0, 243, 4, 53, 63, 144, 222, 182, 208, 0, 0, 255, 223, 22, 239, 195, 190, 0, 0, 0, 0, 94, 131, 108, 63, 145, 220, 225, 228, 0, 0, 189, 210, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 84, 213, 255, 255, 25, 9, 44, 185, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 84, 213, 255, 255, 165, 13, 139, 196, 22, 239, 195, 62, 0, 0, 0, 0, 94, 131, 108, 63, 109, 35, 225, 228, 125, 37, 255, 191, 243, 4, 53, 63, 0, 0, 0, 0, 243, 4, 53, 63, 110, 33, 182, 208, 255, 63, 255, 191, 94, 131, 108, 63, 0, 0, 0, 0, 22, 239, 195, 62, 109, 35, 137, 190, 130, 90, 255, 191, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 128, 170, 42, 170, 170, 255, 127, 255, 191, 94, 131, 108, 63, 0, 0, 0, 0, 22, 239, 195, 190, 138, 62, 108, 163, 124, 165, 255, 191, 243, 4, 53, 63, 0, 0, 0, 0, 243, 4, 53, 191, 183, 80, 110, 161, 255, 191, 255, 191, 22, 239, 195, 62, 0, 0, 0, 0, 94, 131, 108, 191, 226, 100, 108, 163, 129, 218, 255, 191, 80, 243, 18, 63, 0, 0, 128, 63, 134, 98, 177, 191, 226, 100, 108, 163, 129, 218, 255, 191, 182, 195, 135, 63, 0, 0, 128, 63, 182, 195, 135, 191, 183, 80, 110, 161, 255, 191, 255, 191, 134, 98, 177, 63, 0, 0, 128, 63, 80, 243, 18, 191, 138, 62, 108, 163, 124, 165, 255, 191, 0, 0, 192, 63, 0, 0, 128, 63, 0, 0, 128, 49, 170, 42, 170, 170, 255, 127, 255, 191, 134, 98, 177, 63, 0, 0, 128, 63, 80, 243, 18, 63, 109, 35, 137, 190, 130, 90, 255, 191, 182, 195, 135, 63, 0, 0, 128, 63, 182, 195, 135, 63, 110, 33, 182, 208, 255, 63, 255, 191, 80, 243, 18, 63, 0, 0, 128, 63, 134, 98, 177, 63, 109, 35, 225, 228, 125, 37, 255, 191, 0, 0, 0, 50, 0, 0, 128, 63, 0, 0, 192, 63, 84, 213, 255, 255, 25, 9, 44, 185, 0, 0, 0, 50, 0, 0, 128, 63, 0, 0, 192, 63, 84, 213, 255, 255, 165, 13, 139, 196, 80, 243, 18, 191, 0, 0, 128, 63, 134, 98, 177, 63, 145, 220, 225, 228, 0, 0, 189, 210, 182, 195, 135, 191, 0, 0, 128, 63, 182, 195, 135, 63, 144, 222, 182, 208, 0, 0, 255, 223, 134, 98, 177, 191, 0, 0, 128, 63, 80, 243, 18, 63, 145, 220, 137, 190, 0, 0, 64, 237, 0, 0, 192, 191, 0, 0, 128, 63, 0, 0, 128, 49, 84, 213, 170, 170, 0, 0, 255, 255, 134, 98, 177, 191, 0, 0, 128, 63, 80, 243, 18, 191, 116, 193, 108, 163, 255, 255, 64, 237, 182, 195, 135, 191, 0, 0, 128, 63, 182, 195, 135, 191, 71, 175, 110, 161, 255, 255, 255, 223, 80, 243, 18, 191, 0, 0, 128, 63, 134, 98, 177, 191, 28, 155, 108, 163, 255, 255, 189, 210, 0, 0, 0, 50, 0, 0, 128, 63, 0, 0, 192, 191, 255, 127, 169, 170, 255, 255, 255, 191)
+}]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_puyoe"]
+resource_name = "Shockwave_ShockwaveFlat"
+_surfaces = [{
+"aabb": AABB(-1.8, 0, -1.8, 3.6, 0.5, 3.6),
+"attribute_data": PackedByteArray(254, 255, 255, 62, 1, 0, 128, 63, 166, 0, 224, 62, 1, 0, 128, 63, 78, 1, 192, 62, 0, 0, 128, 63, 248, 1, 160, 62, 0, 0, 128, 63, 160, 2, 128, 62, 0, 0, 128, 63, 148, 6, 64, 62, 254, 255, 127, 63, 232, 7, 0, 62, 252, 255, 127, 63, 112, 18, 128, 61, 252, 255, 127, 63, 0, 128, 40, 56, 250, 255, 127, 63, 98, 253, 127, 63, 254, 255, 127, 63, 181, 253, 111, 63, 0, 0, 128, 63, 8, 254, 95, 63, 0, 0, 128, 63, 93, 254, 79, 63, 1, 0, 128, 63, 176, 254, 63, 63, 1, 0, 128, 63, 3, 255, 47, 63, 1, 0, 128, 63, 88, 255, 31, 63, 1, 0, 128, 63, 172, 255, 15, 63, 1, 0, 128, 63, 172, 255, 15, 63, 32, 215, 163, 60, 88, 255, 31, 63, 32, 215, 163, 60, 3, 255, 47, 63, 32, 215, 163, 60, 175, 254, 63, 63, 0, 215, 163, 60, 91, 254, 79, 63, 0, 215, 163, 60, 7, 254, 95, 63, 0, 215, 163, 60, 179, 253, 111, 63, 128, 214, 163, 60, 0, 64, 42, 56, 128, 214, 163, 60, 96, 253, 127, 63, 128, 214, 163, 60, 144, 18, 128, 61, 128, 214, 163, 60, 248, 7, 0, 62, 192, 214, 163, 60, 156, 6, 64, 62, 0, 215, 163, 60, 166, 2, 128, 62, 0, 215, 163, 60, 254, 1, 160, 62, 0, 215, 163, 60, 82, 1, 192, 62, 32, 215, 163, 60, 170, 0, 224, 62, 32, 215, 163, 60, 0, 0, 0, 63, 32, 215, 163, 60, 3, 255, 47, 63, 32, 215, 163, 60, 78, 1, 192, 62, 0, 0, 128, 63, 232, 7, 0, 62, 252, 255, 127, 63, 88, 255, 31, 63, 1, 0, 128, 63, 3, 255, 47, 63, 32, 215, 163, 60, 170, 0, 224, 62, 32, 215, 163, 60),
+"format": 4119,
+"index_count": 96,
+"index_data": PackedByteArray(8, 0, 26, 0, 24, 0, 8, 0, 7, 0, 26, 0, 12, 0, 22, 0, 21, 0, 12, 0, 11, 0, 22, 0, 16, 0, 18, 0, 17, 0, 16, 0, 15, 0, 18, 0, 3, 0, 31, 0, 30, 0, 3, 0, 2, 0, 31, 0, 7, 0, 27, 0, 26, 0, 7, 0, 6, 0, 27, 0, 11, 0, 23, 0, 22, 0, 11, 0, 10, 0, 23, 0, 15, 0, 19, 0, 18, 0, 15, 0, 14, 0, 19, 0, 2, 0, 32, 0, 31, 0, 2, 0, 1, 0, 32, 0, 6, 0, 28, 0, 27, 0, 6, 0, 5, 0, 28, 0, 10, 0, 25, 0, 23, 0, 10, 0, 9, 0, 25, 0, 14, 0, 20, 0, 19, 0, 14, 0, 13, 0, 20, 0, 5, 0, 29, 0, 28, 0, 5, 0, 4, 0, 29, 0, 0, 0, 17, 0, 33, 0, 0, 0, 16, 0, 17, 0, 13, 0, 21, 0, 20, 0, 13, 0, 12, 0, 21, 0, 1, 0, 33, 0, 32, 0, 1, 0, 0, 0, 33, 0, 4, 0, 30, 0, 29, 0, 4, 0, 3, 0, 30, 0),
+"lods": [0.140218, PackedByteArray(8, 0, 26, 0, 24, 0, 8, 0, 6, 0, 26, 0, 6, 0, 28, 0, 26, 0, 6, 0, 4, 0, 28, 0, 4, 0, 30, 0, 28, 0, 4, 0, 2, 0, 30, 0, 2, 0, 32, 0, 30, 0, 2, 0, 1, 0, 32, 0, 1, 0, 33, 0, 32, 0, 1, 0, 0, 0, 33, 0, 0, 0, 17, 0, 33, 0, 0, 0, 15, 0, 17, 0, 15, 0, 19, 0, 17, 0, 15, 0, 13, 0, 19, 0, 13, 0, 21, 0, 19, 0, 13, 0, 11, 0, 21, 0, 11, 0, 23, 0, 21, 0, 11, 0, 10, 0, 23, 0, 10, 0, 25, 0, 23, 0, 10, 0, 9, 0, 25, 0), 0.323304, PackedByteArray(8, 0, 28, 0, 24, 0, 8, 0, 36, 0, 28, 0, 36, 0, 39, 0, 28, 0, 36, 0, 35, 0, 39, 0, 35, 0, 38, 0, 39, 0, 35, 0, 37, 0, 38, 0, 37, 0, 23, 0, 38, 0, 37, 0, 11, 0, 23, 0, 11, 0, 25, 0, 23, 0, 11, 0, 9, 0, 25, 0), 1.24253, PackedByteArray(8, 0, 28, 0, 24, 0, 8, 0, 11, 0, 28, 0, 11, 0, 19, 0, 28, 0, 11, 0, 9, 0, 25, 0, 11, 0, 25, 0, 34, 0)],
+"material": ExtResource("13_65rq6"),
+"primitive": 3,
+"vertex_count": 40,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 154, 153, 153, 191, 209, 69, 0, 0, 255, 255, 255, 63, 231, 30, 235, 190, 0, 0, 0, 0, 107, 232, 141, 191, 71, 61, 138, 19, 255, 255, 65, 45, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 191, 193, 58, 159, 34, 255, 255, 255, 31, 107, 232, 141, 191, 0, 0, 0, 0, 231, 30, 235, 190, 71, 61, 45, 47, 255, 255, 190, 18, 154, 153, 153, 191, 0, 0, 0, 0, 0, 0, 0, 128, 209, 69, 46, 58, 0, 0, 0, 0, 107, 232, 141, 191, 0, 0, 0, 0, 231, 30, 235, 62, 209, 80, 184, 66, 0, 0, 190, 18, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 63, 96, 93, 62, 69, 0, 0, 255, 31, 231, 30, 235, 190, 0, 0, 0, 0, 107, 232, 141, 63, 116, 108, 184, 66, 0, 0, 65, 45, 0, 0, 0, 0, 0, 0, 0, 0, 154, 153, 153, 63, 255, 127, 46, 58, 77, 10, 85, 75, 0, 0, 0, 0, 0, 0, 0, 0, 154, 153, 153, 63, 255, 127, 46, 58, 171, 22, 216, 58, 231, 30, 235, 62, 0, 0, 0, 0, 107, 232, 141, 63, 138, 147, 184, 66, 125, 37, 255, 63, 35, 57, 89, 63, 0, 0, 0, 0, 35, 57, 89, 63, 158, 162, 62, 69, 255, 63, 255, 63, 107, 232, 141, 63, 0, 0, 0, 0, 231, 30, 235, 62, 45, 175, 184, 66, 130, 90, 255, 63, 154, 153, 153, 63, 0, 0, 0, 0, 0, 0, 0, 128, 45, 186, 46, 58, 255, 127, 255, 63, 107, 232, 141, 63, 0, 0, 0, 0, 231, 30, 235, 190, 183, 194, 45, 47, 124, 165, 255, 63, 35, 57, 89, 63, 0, 0, 0, 0, 35, 57, 89, 191, 61, 197, 159, 34, 255, 191, 255, 63, 231, 30, 235, 62, 0, 0, 0, 0, 107, 232, 141, 191, 183, 194, 138, 19, 129, 218, 255, 63, 45, 87, 48, 63, 0, 0, 0, 63, 160, 220, 212, 191, 183, 194, 138, 19, 129, 218, 255, 63, 219, 234, 162, 63, 0, 0, 0, 63, 219, 234, 162, 191, 61, 197, 159, 34, 255, 191, 255, 63, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 191, 183, 194, 45, 47, 124, 165, 255, 63, 103, 102, 230, 63, 0, 0, 0, 63, 154, 153, 153, 49, 45, 186, 46, 58, 255, 127, 255, 63, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 63, 45, 175, 184, 66, 130, 90, 255, 63, 219, 234, 162, 63, 0, 0, 0, 63, 219, 234, 162, 63, 158, 162, 62, 69, 255, 63, 255, 63, 45, 87, 48, 63, 0, 0, 0, 63, 160, 220, 212, 63, 138, 147, 184, 66, 125, 37, 255, 63, 154, 153, 25, 50, 0, 0, 0, 63, 103, 102, 230, 63, 255, 127, 46, 58, 77, 10, 85, 75, 154, 153, 25, 50, 0, 0, 0, 63, 103, 102, 230, 63, 255, 127, 46, 58, 171, 22, 216, 58, 45, 87, 48, 191, 0, 0, 0, 63, 160, 220, 212, 63, 116, 108, 184, 66, 0, 0, 65, 45, 219, 234, 162, 191, 0, 0, 0, 63, 219, 234, 162, 63, 96, 93, 62, 69, 0, 0, 255, 31, 160, 220, 212, 191, 0, 0, 0, 63, 45, 87, 48, 63, 209, 80, 184, 66, 0, 0, 190, 18, 103, 102, 230, 191, 0, 0, 0, 63, 154, 153, 153, 49, 209, 69, 46, 58, 0, 0, 0, 0, 160, 220, 212, 191, 0, 0, 0, 63, 45, 87, 48, 191, 71, 61, 45, 47, 255, 255, 190, 18, 219, 234, 162, 191, 0, 0, 0, 63, 219, 234, 162, 191, 193, 58, 159, 34, 255, 255, 255, 31, 45, 87, 48, 191, 0, 0, 0, 63, 160, 220, 212, 191, 71, 61, 138, 19, 255, 255, 65, 45, 154, 153, 25, 50, 0, 0, 0, 63, 103, 102, 230, 191, 45, 186, 0, 0, 255, 255, 255, 63, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 191, 182, 171, 176, 66, 124, 165, 255, 63, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 191, 105, 67, 243, 18, 255, 255, 255, 31, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 63, 71, 82, 189, 60, 0, 0, 255, 31, 35, 57, 89, 63, 0, 0, 0, 0, 35, 57, 89, 191, 110, 186, 21, 40, 255, 191, 255, 63, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 191, 114, 190, 61, 30, 124, 165, 255, 63, 45, 87, 48, 191, 0, 0, 0, 63, 160, 220, 212, 191, 81, 65, 56, 36, 255, 255, 65, 45)
+}]
+
+[sub_resource type="Gradient" id="Gradient_uau5p"]
+offsets = PackedFloat32Array(0, 0.276018, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yq8k1"]
+gradient = SubResource("Gradient_uau5p")
+width = 64
+
+[sub_resource type="Curve" id="Curve_hw8iq"]
+_data = [Vector2(0, 0), 0.0, 8.62415, 0, 0, Vector2(1, 0), -8.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3kbrf"]
+width = 64
+curve = SubResource("Curve_hw8iq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yyun7"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 1, 0)
+spread = 60.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_3kbrf")
+color = Color(1, 0.921569, 0.741176, 1)
+color_ramp = SubResource("GradientTexture1D_yq8k1")
+hue_variation_max = 0.1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_w00fi"]
+material = ExtResource("12_6ym8d")
+size = Vector2(0.2, 2)
+orientation = 2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tmtda"]
+animation = &"flying-eye-active"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ujr7v"]
+animation = &"flying-eye-inactive"
+
+[sub_resource type="Curve" id="Curve_0clkj"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.14286, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_xbhmw"]
+enabled_inputs = 2
+xfade_time = 0.2
+xfade_curve = SubResource("Curve_0clkj")
+input_0/name = "Inactive"
+input_0/auto_advance = false
+input_1/name = "Active"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_amt6k"]
+filter_enabled = true
+filters = ["ScorpionRoot/Skeleton3D:head", "ScorpionRoot/Skeleton3D:jaw"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lnhkb"]
+animation = &"attack-heavy"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ga0lp"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_miudd"]
+filters = ["ScorpionRoot/Skeleton3D:hip"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2npr5"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_rxdcg"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_spdmi"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_tgoy3"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_1i5cf"]
+enabled_inputs = 2
+xfade_time = 0.4
+input_0/name = "Idle"
+input_0/auto_advance = false
+input_1/name = "Walking"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_neprv"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ax5ah"]
+filter_enabled = true
+filters = ["ScorpionRoot/Skeleton3D:head", "ScorpionRoot/Skeleton3D:hip", "ScorpionRoot/Skeleton3D:jaw"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6gmxk"]
+animation = &"phase-override"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jnmhk"]
+animation = &"RESET"
+
+[sub_resource type="Curve" id="Curve_ofb30"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_h4dsh"]
+enabled_inputs = 2
+xfade_time = 0.4
+xfade_curve = SubResource("Curve_ofb30")
+input_0/name = "Inactive"
+input_0/auto_advance = false
+input_1/name = "Active"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3v80a"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_kv6lr"]
+graph_offset = Vector2(-825.738, 427.113)
+nodes/EyeActiveAnimation/node = SubResource("AnimationNodeAnimation_tmtda")
+nodes/EyeActiveAnimation/position = Vector2(-1152, 896)
+nodes/EyeInactiveAnimation/node = SubResource("AnimationNodeAnimation_ujr7v")
+nodes/EyeInactiveAnimation/position = Vector2(-1152, 784)
+nodes/EyeState/node = SubResource("AnimationNodeTransition_xbhmw")
+nodes/EyeState/position = Vector2(-864, 752)
+nodes/FlyingEye/node = SubResource("AnimationNodeAdd2_amt6k")
+nodes/FlyingEye/position = Vector2(-624, 640)
+nodes/HeavyAnimation/node = SubResource("AnimationNodeAnimation_lnhkb")
+nodes/HeavyAnimation/position = Vector2(-912, 320)
+nodes/HeavyAttack/node = SubResource("AnimationNodeOneShot_ga0lp")
+nodes/HeavyAttack/position = Vector2(-720, 192)
+nodes/HeavyAttackAdd/node = SubResource("AnimationNodeAdd2_miudd")
+nodes/HeavyAttackAdd/position = Vector2(-504.421, 94.3315)
+nodes/IdleAnimation/node = SubResource("AnimationNodeAnimation_2npr5")
+nodes/IdleAnimation/position = Vector2(-1232, -16)
+nodes/Intro/node = SubResource("AnimationNodeOneShot_rxdcg")
+nodes/Intro/position = Vector2(240, 368)
+nodes/IntroAnimation/node = SubResource("AnimationNodeAnimation_spdmi")
+nodes/IntroAnimation/position = Vector2(0, 496)
+nodes/MoveSpeed/node = SubResource("AnimationNodeTimeScale_tgoy3")
+nodes/MoveSpeed/position = Vector2(-1056, 112)
+nodes/MovementState/node = SubResource("AnimationNodeTransition_1i5cf")
+nodes/MovementState/position = Vector2(-896, 32)
+nodes/ResetAnimation/node = SubResource("AnimationNodeAnimation_neprv")
+nodes/ResetAnimation/position = Vector2(-912, 208)
+nodes/SecondPhase/node = SubResource("AnimationNodeAdd2_ax5ah")
+nodes/SecondPhase/position = Vector2(-160, 304)
+nodes/SecondPhaseActive/node = SubResource("AnimationNodeAnimation_6gmxk")
+nodes/SecondPhaseActive/position = Vector2(-1072, 608)
+nodes/SecondPhaseInactive/node = SubResource("AnimationNodeAnimation_jnmhk")
+nodes/SecondPhaseInactive/position = Vector2(-816, 512)
+nodes/SecondPhaseState/node = SubResource("AnimationNodeTransition_h4dsh")
+nodes/SecondPhaseState/position = Vector2(-416, 496)
+nodes/WalkAnimation/node = SubResource("AnimationNodeAnimation_3v80a")
+nodes/WalkAnimation/position = Vector2(-1232, 112)
+nodes/output/position = Vector2(640, 240)
+node_connections = [&"output", 0, &"Intro", &"EyeState", 0, &"EyeInactiveAnimation", &"EyeState", 1, &"EyeActiveAnimation", &"FlyingEye", 0, &"SecondPhaseActive", &"FlyingEye", 1, &"EyeState", &"HeavyAttack", 0, &"ResetAnimation", &"HeavyAttack", 1, &"HeavyAnimation", &"HeavyAttackAdd", 0, &"MovementState", &"HeavyAttackAdd", 1, &"HeavyAttack", &"Intro", 0, &"SecondPhase", &"Intro", 1, &"IntroAnimation", &"MoveSpeed", 0, &"WalkAnimation", &"MovementState", 0, &"IdleAnimation", &"MovementState", 1, &"MoveSpeed", &"SecondPhase", 0, &"HeavyAttackAdd", &"SecondPhase", 1, &"SecondPhaseState", &"SecondPhaseState", 0, &"SecondPhaseInactive", &"SecondPhaseState", 1, &"FlyingEye"]
+
+[sub_resource type="Animation" id="Animation_74b1e"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Attachments/LTail/Tail/Eye02/Charge:emitting")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/ScorpionMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Attachments/BackEye/EyeLarge/EyeLargeMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_7vnlo"]
+resource_name = "damage"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/ScorpionMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Attachments/BackEye/EyeLarge/EyeLargeMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_1nbve"]
+resource_name = "defeat"
+
+[sub_resource type="Animation" id="Animation_yiv12"]
+resource_name = "disable-hurtbox-01"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_vg5tu"]
+resource_name = "disable-hurtbox-02"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_pyyk2"]
+resource_name = "disable-hurtbox-03"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_wa6h4"]
+resource_name = "intro"
+
+[sub_resource type="Animation" id="Animation_yw0g7"]
+resource_name = "l-heavy-attack"
+length = 3.2
+step = 0.0666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Attachments/LTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attachments/LTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.8, 3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"StartStrike"
+}, {
+"args": [false],
+"method": &"FinishHeavyAttack"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_6u87m"]
+resource_name = "l-light-attack"
+length = 2.0
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/LTail/Tail/Eye02/Charge:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 1.188),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.792, 1.53333, 1.66667, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [],
+"method": &"StartStrike"
+}, {
+"args": [NodePath("Attachments/LTail/Tail/Eye02")],
+"method": &"SetImpactPosition"
+}, {
+"args": [],
+"method": &"StopStrike"
+}, {
+"args": [],
+"method": &"FinishAttack"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ImpactEffect/Tremor")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ImpactEffect/Shockwave")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ImpactEffect/Spark")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_qhi1d"]
+resource_name = "r-heavy-attack"
+length = 3.2
+step = 0.0666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attachments/RTail/Tail/Eye01/EyeSmall/Lockon:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.53333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.8, 3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"StartStrike"
+}, {
+"args": [false],
+"method": &"FinishHeavyAttack"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_7ofif"]
+resource_name = "r-light-attack"
+length = 2.0
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attachments/RTail/Tail/Eye02/Charge:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 1.188),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.792, 1.53333, 1.66667, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [],
+"method": &"StartStrike"
+}, {
+"args": [NodePath("Attachments/RTail/Tail/Eye02")],
+"method": &"SetImpactPosition"
+}, {
+"args": [],
+"method": &"StopStrike"
+}, {
+"args": [],
+"method": &"FinishAttack"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ImpactEffect/Tremor")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ImpactEffect/Shockwave")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ImpactEffect/Spark")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6oscl"]
+_data = {
+"RESET": SubResource("Animation_74b1e"),
+"damage": SubResource("Animation_7vnlo"),
+"defeat": SubResource("Animation_1nbve"),
+"disable-hurtbox-01": SubResource("Animation_yiv12"),
+"disable-hurtbox-02": SubResource("Animation_vg5tu"),
+"disable-hurtbox-03": SubResource("Animation_pyyk2"),
+"intro": SubResource("Animation_wa6h4"),
+"l-heavy-attack": SubResource("Animation_yw0g7"),
+"l-light-attack": SubResource("Animation_6u87m"),
+"r-heavy-attack": SubResource("Animation_qhi1d"),
+"r-light-attack": SubResource("Animation_7ofif")
+}
+
+[node name="SandScorpion" type="Node3D" node_paths=PackedStringArray("rootAnimator", "lTailAnimator", "rTailAnimator", "eyeAnimator", "eventAnimator", "impactEffect", "flyingEye", "flyingEyeHurtbox", "flyingEyeRoot", "flyingEyeBone")]
+script = ExtResource("1_mewmp")
+rootAnimator = NodePath("RootAnimationTree")
+lTailAnimator = NodePath("Attachments/LTail/LTailAnimationTree")
+rTailAnimator = NodePath("Attachments/RTail/RTailAnimationTree")
+eyeAnimator = NodePath("Attachments/FlyingEye/FlyingEye/EyeAnimationTree")
+eventAnimator = NodePath("EventAnimator")
+missilePositions = [NodePath("Attachments/LMissile"), NodePath("Attachments/Missile"), NodePath("Attachments/RMissile")]
+missileScene = ExtResource("2_6mjm1")
+impactEffect = NodePath("ImpactEffect")
+eyePaths = [NodePath("Attachments/BackEye"), NodePath("Attachments/LTail/Tail/Eye01"), NodePath("Attachments/LTail/Tail/Eye02"), NodePath("Attachments/RTail/Tail/Eye01"), NodePath("Attachments/RTail/Tail/Eye02")]
+flyingEye = NodePath("Attachments/FlyingEye/FlyingEye/Eye/EyeLarge")
+flyingEyeHurtbox = NodePath("Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Lockon")
+flyingEyeRoot = NodePath("Attachments/FlyingEye/FlyingEye")
+flyingEyeBone = NodePath("Attachments/FlyingEye")
+
+[node name="SandScorpion" parent="." instance=ExtResource("1_k7ra0")]
+
+[node name="Attachments" type="Node3D" parent="."]
+
+[node name="FlyingEye" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 0, 2.93772e-15, 1.42109e-14, 1, -3.25441e-06, -1.43054e-14, 3.25441e-06, 1, 2.13163e-14, 2.94998, 6.60001)
+bone_name = "dummy_flyingeye"
+bone_idx = 16
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="FlyingEye" parent="Attachments/FlyingEye" instance=ExtResource("2_8luog")]
+transform = Transform3D(1, -8.07794e-28, 0, -8.15901e-22, 1, 2.27374e-13, 0, -2.27374e-13, 1, 0, 0, 0)
+
+[node name="Eye" type="BoneAttachment3D" parent="Attachments/FlyingEye/FlyingEye"]
+transform = Transform3D(1, -4.33431e-13, -3.55271e-15, 4.33431e-13, 1, 2.27374e-13, 3.55271e-15, -2.27374e-13, 1, 6.53998e-13, 0, 0)
+bone_name = "dummy_eye"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../FlyingEyeRoot/Skeleton3D")
+
+[node name="EyeLarge" parent="Attachments/FlyingEye/FlyingEye/Eye" instance=ExtResource("2_0m58c")]
+transform = Transform3D(1, 2.00603e-21, 5.29396e-23, -7.88404e-21, 1, 0, -2.5411e-21, 0, 1, 0, 0, 0)
+
+[node name="Lockon" type="Area3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge"]
+collision_layer = 12
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Lockon"]
+shape = SubResource("SphereShape3D_c08po")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge"]
+transform = Transform3D(1, 2.00603e-21, 5.29396e-23, -7.88404e-21, 1, -2.27374e-13, -8.47033e-22, 2.27374e-13, 1, 0, 0, 0)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox"]
+shape = SubResource("SphereShape3D_i57o6")
+
+[node name="EyeAnimationTree" type="AnimationTree" parent="Attachments/FlyingEye/FlyingEye"]
+tree_root = SubResource("AnimationNodeBlendTree_6uq47")
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/EyeState/current = 0
+
+[node name="Root" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 0, 0, 0, 3.51667e-06, 1, 0, -1, 3.51667e-06, 0, 0, 0)
+bone_name = "root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="Dust" type="GPUParticles3D" parent="Attachments/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 3.56039e-06, 0, -3.56039e-06, 1, 0, 0, 0)
+layers = 32
+emitting = false
+amount = 16
+interpolate = false
+visibility_aabb = AABB(-12, -12, -4, 24, 24, 16)
+local_coords = true
+process_material = ExtResource("6_xp45h")
+draw_pass_1 = SubResource("PlaneMesh_g3iia")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/Root"]
+transform = Transform3D(1, 0, 0, 0, 3.51667e-06, -1, 0, 1, 3.51667e-06, 0, 1.40667e-05, 4)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/Root/Hitbox"]
+shape = SubResource("BoxShape3D_icvc0")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Attachments/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/Root/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 3.56038e-06, 0, -3.56038e-06, 1, 0, 0, 5)
+shape = SubResource("BoxShape3D_apgua")
+
+[node name="LMissile" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, -3.17865e-08, -6.35733e-08, 3.17863e-08, 1, -3.49283e-06, 6.35734e-08, 3.49283e-06, 1, 1.8, 4.9, 0.600018)
+bone_name = "l_dummy_missile"
+bone_idx = 18
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="Missile" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 7.99645e-10, -7.99698e-10, -7.99616e-10, 1, -3.49283e-06, 7.99699e-10, 3.49283e-06, 1, 5.68434e-14, 5.4, 0.60002)
+bone_name = "dummy_missile"
+bone_idx = 17
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="RMissile" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, -3.17865e-08, -6.35733e-08, 3.17863e-08, 1, -3.49283e-06, 6.35734e-08, 3.49283e-06, 1, -1.8, 4.9, 0.600018)
+bone_name = "r_dummy_missile"
+bone_idx = 19
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="BackEye" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 0, 2.8058e-21, 9.66828e-27, 1, -3.39746e-06, -2.8058e-21, 3.39746e-06, 1, 0, 4.50001, -2.89999)
+bone_name = "dummy_backeye"
+bone_idx = 24
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="EyeLarge" parent="Attachments/BackEye" instance=ExtResource("2_0m58c")]
+
+[node name="Lockon" type="Area3D" parent="Attachments/BackEye/EyeLarge"]
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/BackEye/EyeLarge/Lockon"]
+shape = SubResource("SphereShape3D_c08po")
+
+[node name="LTail" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 1.11022e-16, -2.14253e-09, -7.57727e-15, 1, -3.39746e-06, 2.14253e-09, 3.39746e-06, 1, 3.8, 2.50003, -7.39999)
+bone_name = "l_dummy_tail"
+bone_idx = 23
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="Tail" parent="Attachments/LTail" instance=ExtResource("7_rxibo")]
+
+[node name="LTail01" type="BoneAttachment3D" parent="Attachments/LTail/Tail"]
+transform = Transform3D(1, 1.11022e-14, 4.28824e-15, -3.2057e-15, -0.0265133, 0.999648, 7.10543e-15, -0.999648, -0.0265133, 0, 7.39098e-06, -2)
+bone_name = "tail_02"
+bone_idx = 2
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/LTail01"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/LTail01/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="LTail02" type="BoneAttachment3D" parent="Attachments/LTail/Tail"]
+transform = Transform3D(1, 2.4647e-14, 4.08007e-15, -3.05223e-15, -0.00960487, 0.999954, 2.08722e-14, -0.999954, -0.00960486, 0, -0.0397766, -3.5)
+bone_name = "tail_03"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/LTail02"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/LTail02/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="LTail03" type="BoneAttachment3D" parent="Attachments/LTail/Tail"]
+transform = Transform3D(1, -5.08294e-07, 9.18156e-09, 9.18161e-09, 0.0361153, 0.999348, -5.08294e-07, -0.999347, 0.0361153, 0, -0.0541847, -5)
+bone_name = "tail_04"
+bone_idx = 4
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/LTail03"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/LTail03/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="LTail04" type="BoneAttachment3D" parent="Attachments/LTail/Tail"]
+transform = Transform3D(1, 7.77156e-15, 8.88178e-16, -4.44089e-15, 3.75882e-06, 1, 2.66454e-14, -1, 3.76254e-06, -7.15256e-07, 2.38419e-05, -6.5)
+bone_name = "tail_05"
+bone_idx = 5
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/LTail04"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/LTail04/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="Eye01" type="BoneAttachment3D" parent="Attachments/LTail/Tail"]
+transform = Transform3D(1, -2.20294e-07, 1.17397e-06, 2.20294e-07, 1, -2.38419e-07, -1.17397e-06, 2.38419e-07, 1, 4.76837e-07, 0, 0)
+bone_name = "dummy_tail01_eye"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="EyeSmall" parent="Attachments/LTail/Tail/Eye01" instance=ExtResource("2_a5gic")]
+transform = Transform3D(1, 1.17183e-06, 2.18152e-07, -2.18152e-07, -3.53905e-08, 1, 1.17183e-06, -1, -3.53905e-08, -4.76837e-07, 7.62939e-06, 4.76837e-07)
+
+[node name="Lockon" type="Area3D" parent="Attachments/LTail/Tail/Eye01/EyeSmall"]
+transform = Transform3D(1, 4.33681e-19, -2.0769e-16, 0, 1, 2.27374e-13, 1.43265e-17, -2.27374e-13, 1, 0, 0, 0)
+collision_layer = 12
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye01/EyeSmall/Lockon"]
+shape = SubResource("SphereShape3D_6gfpm")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/Eye01"]
+transform = Transform3D(1, 2.63635e-15, 1.13687e-13, -1.15749e-14, 1, 2.27374e-13, 0, -2.27374e-13, 1, 0, 0, 0)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye01/Hitbox"]
+transform = Transform3D(1, -3.99971e-14, 0, 4.52685e-14, 1, -9.09495e-13, 0, 9.09495e-13, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_v7gw7")
+
+[node name="Eye02" type="BoneAttachment3D" parent="Attachments/LTail/Tail"]
+transform = Transform3D(1, 8.5667e-08, -8.56671e-08, -8.5667e-08, 1, -3.7262e-09, 8.56671e-08, 7.45172e-09, 1, -7.15256e-07, 3.12328e-05, -8.5)
+bone_name = "dummy_tail05_eye"
+bone_idx = 6
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="EyeSmall" parent="Attachments/LTail/Tail/Eye02" instance=ExtResource("2_a5gic")]
+transform = Transform3D(-1, 1.0677e-07, -1.0677e-07, 0, 0.707107, 0.707107, 1.50996e-07, 0.707107, -0.707107, 0, 0, 0)
+
+[node name="Lockon" type="Area3D" parent="Attachments/LTail/Tail/Eye02/EyeSmall"]
+collision_layer = 12
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/EyeSmall/Lockon"]
+shape = SubResource("SphereShape3D_6gfpm")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/Eye02"]
+transform = Transform3D(1, -6.54999e-15, 7.10543e-15, 7.33381e-15, 1, 2.27374e-13, 0, 0, 1, 0, 0, 0)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="TipCollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/Hitbox"]
+transform = Transform3D(1, 3.97528e-08, -2.72043e-08, 4.04128e-08, -0.38502, 0.922908, 2.62141e-08, -0.922909, -0.385021, 0, -1.40005, -2.50001)
+shape = SubResource("BoxShape3D_0bw7n")
+
+[node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/Hitbox"]
+transform = Transform3D(0.85, -4.91825e-14, 2.13163e-14, 4.06951e-14, 1, -2.27374e-13, 0, 9.09495e-13, 1, 0, -0.0999999, 0)
+shape = SubResource("SphereShape3D_v7gw7")
+
+[node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/Hitbox"]
+transform = Transform3D(1, -4.26326e-14, -3.28283e-15, 4.2861e-14, -4.37128e-08, 1, 0, -1, -4.37115e-08, -2.38419e-07, -2.30002, -5)
+shape = SubResource("SphereShape3D_e7p6t")
+disabled = true
+
+[node name="TailTip" type="GPUParticles3D" parent="Attachments/LTail/Tail/Eye02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3, -5)
+lifetime = 0.2
+preprocess = 0.8
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = ExtResource("9_nnfhv")
+draw_pass_1 = SubResource("PlaneMesh_e01up")
+
+[node name="Charge" type="GPUParticles3D" parent="Attachments/LTail/Tail/Eye02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3, -5)
+emitting = false
+amount = 16
+lifetime = 0.4
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_0ysei")
+draw_pass_1 = SubResource("PlaneMesh_elby2")
+
+[node name="LTailAnimationTree" type="AnimationTree" parent="Attachments/LTail"]
+tree_root = SubResource("AnimationNodeBlendTree_75wli")
+anim_player = NodePath("../Tail/AnimationPlayer")
+parameters/HeavyAttackState/current = 0
+parameters/Intro/active = false
+parameters/LightAnimation/blend_position = 0.0
+parameters/LightAttack/active = false
+parameters/MoveSpeed/scale = 1.0
+
+[node name="RTail" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 1.11022e-16, -2.14253e-09, -7.57727e-15, 1, -3.39746e-06, 2.14253e-09, 3.39746e-06, 1, -3.8, 2.50003, -7.39999)
+bone_name = "r_dummy_tail"
+bone_idx = 22
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="Tail" parent="Attachments/RTail" instance=ExtResource("7_rxibo")]
+transform = Transform3D(1, -6.93889e-18, -2.22045e-16, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="RTail01" type="BoneAttachment3D" parent="Attachments/RTail/Tail"]
+transform = Transform3D(1, 1.11022e-14, 4.28824e-15, -3.2057e-15, -0.0265133, 0.999648, 7.10543e-15, -0.999648, -0.0265133, 0, 7.39098e-06, -2)
+bone_name = "tail_02"
+bone_idx = 2
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/RTail/Tail/RTail01"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/RTail01/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="RTail02" type="BoneAttachment3D" parent="Attachments/RTail/Tail"]
+transform = Transform3D(1, 2.4647e-14, 4.08007e-15, -3.05223e-15, -0.00960487, 0.999954, 2.08722e-14, -0.999954, -0.00960486, 0, -0.0397766, -3.5)
+bone_name = "tail_03"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/RTail/Tail/RTail02"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/RTail02/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="RTail03" type="BoneAttachment3D" parent="Attachments/RTail/Tail"]
+transform = Transform3D(1, -5.08294e-07, 9.18156e-09, 9.18161e-09, 0.0361153, 0.999348, -5.08294e-07, -0.999347, 0.0361153, 0, -0.0541847, -5)
+bone_name = "tail_04"
+bone_idx = 4
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/RTail/Tail/RTail03"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/RTail03/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="RTail04" type="BoneAttachment3D" parent="Attachments/RTail/Tail"]
+transform = Transform3D(1, 7.77156e-15, 8.8818e-16, -4.44089e-15, 3.75882e-06, 1, 2.66454e-14, -1, 3.76254e-06, -7.15256e-07, 2.38419e-05, -6.5)
+bone_name = "tail_05"
+bone_idx = 5
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/RTail/Tail/RTail04"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/RTail04/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_lgbap")
+
+[node name="Eye01" type="BoneAttachment3D" parent="Attachments/RTail/Tail"]
+transform = Transform3D(1, -2.20294e-07, 1.17397e-06, 2.20294e-07, 1, -2.38419e-07, -1.17397e-06, 2.38419e-07, 1, 4.76837e-07, 0, 0)
+bone_name = "dummy_tail01_eye"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="EyeSmall" parent="Attachments/RTail/Tail/Eye01" instance=ExtResource("2_a5gic")]
+transform = Transform3D(1, 1.17183e-06, 2.18152e-07, -2.18152e-07, -3.53905e-08, 1, 1.17183e-06, -1, -3.53905e-08, -4.76837e-07, 7.62939e-06, 4.76837e-07)
+
+[node name="Lockon" type="Area3D" parent="Attachments/RTail/Tail/Eye01/EyeSmall"]
+transform = Transform3D(1, 4.33681e-19, -2.0769e-16, 0, 1, 2.27374e-13, 1.43265e-17, -2.27374e-13, 1, 0, 0, 0)
+collision_layer = 12
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye01/EyeSmall/Lockon"]
+shape = SubResource("SphereShape3D_6gfpm")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/RTail/Tail/Eye01"]
+transform = Transform3D(1, 2.63635e-15, 1.13687e-13, -1.15749e-14, 1, 2.27374e-13, 0, -2.27374e-13, 1, 0, 0, 0)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye01/Hitbox"]
+transform = Transform3D(1, -3.99971e-14, 0, 4.52685e-14, 1, -9.09495e-13, 0, 9.09495e-13, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_v7gw7")
+
+[node name="Eye02" type="BoneAttachment3D" parent="Attachments/RTail/Tail"]
+transform = Transform3D(1, 8.5667e-08, -8.56671e-08, -8.5667e-08, 1, -3.7262e-09, 8.56671e-08, 7.45172e-09, 1, -7.15256e-07, 3.12328e-05, -8.5)
+bone_name = "dummy_tail05_eye"
+bone_idx = 6
+use_external_skeleton = true
+external_skeleton = NodePath("../TailRoot/Skeleton3D")
+
+[node name="EyeSmall" parent="Attachments/RTail/Tail/Eye02" instance=ExtResource("2_a5gic")]
+transform = Transform3D(-1, 1.0677e-07, -1.0677e-07, 0, 0.707107, 0.707107, 1.50996e-07, 0.707107, -0.707107, 0, 0, 0)
+
+[node name="Lockon" type="Area3D" parent="Attachments/RTail/Tail/Eye02/EyeSmall"]
+collision_layer = 12
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye02/EyeSmall/Lockon"]
+shape = SubResource("SphereShape3D_6gfpm")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/RTail/Tail/Eye02"]
+transform = Transform3D(1, -6.54999e-15, 7.10543e-15, 7.33381e-15, 1, 2.27374e-13, 0, 0, 1, 0, 0, 0)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="TipCollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye02/Hitbox"]
+transform = Transform3D(1, 3.97528e-08, -2.72043e-08, 4.04128e-08, -0.38502, 0.922908, 2.62141e-08, -0.922909, -0.385021, 0, -1.40005, -2.50001)
+shape = SubResource("BoxShape3D_0bw7n")
+
+[node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye02/Hitbox"]
+transform = Transform3D(0.85, -4.91825e-14, 2.13163e-14, 4.06951e-14, 1, -2.27374e-13, 0, 9.09495e-13, 1, 0, -0.0999999, 0)
+shape = SubResource("SphereShape3D_v7gw7")
+
+[node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye02/Hitbox"]
+transform = Transform3D(1, -4.26326e-14, -3.28283e-15, 4.2861e-14, -4.37128e-08, 1, 0, -1, -4.37115e-08, -2.38419e-07, -2.30002, -5)
+shape = SubResource("SphereShape3D_e7p6t")
+disabled = true
+
+[node name="TailTip" type="GPUParticles3D" parent="Attachments/RTail/Tail/Eye02"]
+transform = Transform3D(1, -9.89606e-17, 0, -9.90148e-17, 1, 0, 0, 0, 1, 0, -2.3, -5)
+lifetime = 0.2
+preprocess = 0.8
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = ExtResource("9_nnfhv")
+draw_pass_1 = SubResource("PlaneMesh_e01up")
+
+[node name="Charge" type="GPUParticles3D" parent="Attachments/RTail/Tail/Eye02"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3, -5)
+emitting = false
+amount = 16
+lifetime = 0.4
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_0ysei")
+draw_pass_1 = SubResource("PlaneMesh_elby2")
+
+[node name="RTailAnimationTree" type="AnimationTree" parent="Attachments/RTail"]
+tree_root = SubResource("AnimationNodeBlendTree_7466l")
+anim_player = NodePath("../Tail/AnimationPlayer")
+parameters/HeavyAttackState/current = 0
+parameters/Intro/active = false
+parameters/LightAnimation/blend_position = 0
+parameters/LightAttack/active = false
+parameters/MoveSpeed/scale = 1.0
+
+[node name="ImpactEffect" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Tremor" type="GPUParticles3D" parent="ImpactEffect"]
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.5
+interpolate = false
+visibility_aabb = AABB(-5, -2.00001, -5, 10, 4.00002, 10)
+process_material = ExtResource("10_ooj1u")
+draw_pass_1 = SubResource("PlaneMesh_o15kk")
+
+[node name="Shockwave" type="GPUParticles3D" parent="ImpactEffect"]
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+interpolate = false
+process_material = ExtResource("12_n0grb")
+draw_passes = 2
+draw_pass_1 = SubResource("ArrayMesh_82mox")
+draw_pass_2 = SubResource("ArrayMesh_puyoe")
+
+[node name="Spark" type="GPUParticles3D" parent="ImpactEffect"]
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+interpolate = false
+visibility_aabb = AABB(-5, -4, -4, 10, 14, 8)
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_yyun7")
+draw_pass_1 = SubResource("PlaneMesh_w00fi")
+
+[node name="CutsceneRoot" type="Node3D" parent="."]
+
+[node name="CutsceneCamera" type="Camera3D" parent="CutsceneRoot"]
+
+[node name="RootAnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeBlendTree_kv6lr")
+anim_player = NodePath("../SandScorpion/AnimationPlayer")
+parameters/EyeState/current = 0
+parameters/FlyingEye/add_amount = 1.0
+parameters/HeavyAttack/active = false
+parameters/HeavyAttackAdd/add_amount = 1.0
+parameters/Intro/active = false
+parameters/MoveSpeed/scale = 1.0
+parameters/MovementState/current = 0
+parameters/SecondPhase/add_amount = 1.0
+parameters/SecondPhaseState/current = 1
+
+[node name="EventAnimator" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_6oscl")
+}
+
+[connection signal="area_entered" from="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Lockon" to="." method="OnHurtboxCollision"]
+[connection signal="area_entered" from="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/Root/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/BackEye/EyeLarge/Lockon" to="." method="OnHurtboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail01/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail02/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail03/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail04/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/Eye01/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [false]]
+[connection signal="area_entered" from="Attachments/LTail/Tail/Eye01/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/Eye02/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
+[connection signal="area_entered" from="Attachments/LTail/Tail/Eye02/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail01/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail02/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail03/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail04/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/Eye01/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [false]]
+[connection signal="area_entered" from="Attachments/RTail/Tail/Eye01/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/Eye02/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
+[connection signal="area_entered" from="Attachments/RTail/Tail/Eye02/Hitbox" to="." method="OnHitboxCollision"]
