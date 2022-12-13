@@ -2,7 +2,7 @@ shader_type canvas_item;
 
 uniform vec2 blur_direction;
 const float blur_strength = 12.0;
-const int blur_iterations = 4;
+const int blur_iterations = 8;
 
 vec4 blur(sampler2D screen_tex, vec2 screen_uv, vec2 pixel_size)
 {

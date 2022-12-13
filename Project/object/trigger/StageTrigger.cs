@@ -69,6 +69,7 @@ namespace Project.Gameplay.Triggers
 
 		public void OnEntered(Area3D a)
 		{
+			GD.Print("Entered " + Name);
 			if (!a.IsInGroup("player")) return;
 
 			//Determine whether activation is successful
@@ -87,6 +88,7 @@ namespace Project.Gameplay.Triggers
 
 		public void OnExited(Area3D a)
 		{
+			GD.Print("Left " + Name);
 			if (!a.IsInGroup("player")) return;
 			if (!PathFollower.IsInsideTree()) return;
 

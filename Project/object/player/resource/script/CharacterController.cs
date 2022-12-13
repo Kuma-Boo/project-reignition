@@ -25,7 +25,7 @@ namespace Project.Gameplay
 			Stage.Connect(StageSettings.SignalName.StageCompleted, new Callable(this, MethodName.OnStageCompleted));
 			PathFollower.SetActivePath(Stage.StartingPath); //Attempt to autoload the stage's default path
 
-			CallDeferred(MethodName.SnapToGround);
+			PhysicsManager.Instance.Connect(PhysicsManager.SignalName.PhysicsUpdated, new Callable(this, MethodName.SnapToGround), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -367,7 +367,6 @@ namespace Project.Gameplay
 				inputLength *= dot;
 
 			MovementResource activeMovementResource = GetActiveMovementSettings();
-			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, inputAngle);
 
 			if (IsLockoutActive && CurrentLockoutData.overrideSpeed)
 			{
@@ -392,6 +391,7 @@ namespace Project.Gameplay
 				MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, 0);
 			else
 			{
+				float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, inputAngle);
 				bool isTurningAround = deltaAngle > MAX_TURNAROUND_ANGLE;
 				if (isTurningAround) //Skid to a stop
 					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, -1);
@@ -408,23 +408,26 @@ namespace Project.Gameplay
 		private void UpdateTurning()
 		{
 			float targetMovementAngle = GetTargetMovementAngle();
+			bool overrideFacingDirection = Skills.IsSpeedBreakActive || (IsLockoutActive &&
+			(CurrentLockoutData.overrideMode == LockoutResource.OverrideMode.Replace ||
+			CurrentLockoutData.overrideMode == LockoutResource.OverrideMode.Strafe));
 
 			//Strafe implementation
 			if (Skills.IsSpeedBreakActive ||
 			(IsLockoutActive && CurrentLockoutData.overrideMode == LockoutResource.OverrideMode.Strafe))
 			{
-				MovementAngle = targetMovementAngle;
-
 				//Custom strafing movement
 				float strafeAmount = ExtensionMethods.DotAngle(GetTargetInputAngle() + Mathf.Pi * .5f, PathFollower.ForwardAngle);
 				strafeAmount *= Controller.MovementAxis.Length(); //Analog inputs
 
 				//Reduce strafe speed when moving slowly
 				strafeAmount *= (IsOnGround ? GroundSettings.GetSpeedRatioClamped(MoveSpeed) : AirSettings.GetSpeedRatioClamped(MoveSpeed)) + .1f;
-
 				StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, strafeAmount);
-				return;
 			}
+
+			if (overrideFacingDirection)
+				MovementAngle = targetMovementAngle;
+
 			StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, 0); //Reset strafe when not in use
 
 			float speedRatio = IsOnGround ? GroundSettings.GetSpeedRatio(MoveSpeed) : AirSettings.GetSpeedRatio(MoveSpeed);
@@ -458,7 +461,8 @@ namespace Project.Gameplay
 			return IsMovingBackward ? BackstepSettings : GroundSettings;
 		}
 
-		private float slopeInfluence; //Current influence of the slope, from 0 <-> 1
+		private float slopeInfluence; //Current influence of the slope
+		private const float SLOPE_INFLUENCE_STRENGTH = .2f; //How much should slope affect player?
 		private const float SLOPE_THRESHOLD = .02f; //Ignore slopes that are shallower than Mathf.PI * threshold
 		private void UpdateSlopeInfluence(Vector3 groundNormal)
 		{
@@ -472,7 +476,7 @@ namespace Project.Gameplay
 
 			float rotationAmount = PathFollower.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
 			Vector3 slopeDirection = groundNormal.Rotated(Vector3.Up, rotationAmount).Normalized();
-			slopeInfluence = slopeDirection.z;
+			slopeInfluence = slopeDirection.z * SLOPE_INFLUENCE_STRENGTH;
 		}
 
 		private void UpdateSlopeSpd()
@@ -882,7 +886,7 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
-			GlobalPosition = Stage.Checkpoint.GlobalPosition;
+			GlobalPosition = Stage.CurrentCheckpoint.GlobalPosition;
 			PathFollower.SetActivePath(Stage.CheckpointPath); //Revert path
 			ResetVelocity();
 			ResetOrientation();
@@ -901,7 +905,7 @@ namespace Project.Gameplay
 		/// </summary>
 		private void SnapToGround()
 		{
-			VerticalSpd = -100;
+			MoveAndCollide(Vector3.Down * 1000);
 			CheckGround();
 
 			if (!IsOnGround)
@@ -1060,7 +1064,7 @@ namespace Project.Gameplay
 			Vector3 castOrigin = CenterPosition;
 			float castLength = COLLISION_RADIUS + COLLISION_PADDING;
 			if (IsOnGround)
-				castLength += MoveSpeed * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground
+				castLength += MoveSpeed * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpd < 0)
 				castLength += Mathf.Abs(VerticalSpd) * PhysicsManager.physicsDelta;
 			else if (VerticalSpd > 0)
@@ -1086,9 +1090,6 @@ namespace Project.Gameplay
 
 			if (groundHit) //Successful ground hit
 			{
-				Sound.UpdateGroundType(groundHit.collidedObject);
-				GlobalPosition -= UpDirection * (groundHit.distance - COLLISION_RADIUS); //Snap to ground
-
 				if (!IsOnGround) //Landing on the ground
 				{
 					IsOnGround = true;
@@ -1102,6 +1103,7 @@ namespace Project.Gameplay
 					ResetActionState();
 					Lockon.ResetLockonTarget();
 					UpDirection = groundHit.normal;
+					UpdateOrientation();
 
 					if (!IsCountdownActive && !IsRespawning) //Don't do this stuff during countdown
 					{
@@ -1112,6 +1114,9 @@ namespace Project.Gameplay
 				else //Update world direction
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f).Normalized();
 
+				Sound.UpdateGroundType(groundHit.collidedObject);
+				GlobalPosition -= groundHit.normal * (groundHit.distance - COLLISION_RADIUS); //Snap to ground
+				FloorMaxAngle = Mathf.Pi * .25f; //Allow KinematicBody to deal with slopes
 				UpdateSlopeInfluence(groundHit.normal);
 			}
 			else
@@ -1125,6 +1130,7 @@ namespace Project.Gameplay
 				else
 					orientationResetFactor = (VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .15f;
 
+				FloorMaxAngle = 0; //Treat everything as a wall when in the air
 				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
@@ -1136,9 +1142,13 @@ namespace Project.Gameplay
 				//Unless the collider is supposed to be both
 				if (hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("floor"))
 					hit = new RaycastHit();
-
-				if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) //Limit angle collision
+				else if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) //Limit angle collision
 					hit = new RaycastHit();
+				else if (!IsOnGround && hit.collidedObject.IsInGroup("wall")) //Be more strict on objects tagged as a wall
+				{
+					if (hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .1f)
+						hit = new RaycastHit();
+				}
 			}
 
 			return hit;
@@ -1218,10 +1228,10 @@ namespace Project.Gameplay
 		{
 			UpDirection = Vector3.Up;
 
-			if (Stage.Checkpoint == null) //Default to parent node's position
+			if (Stage.CurrentCheckpoint == null) //Default to parent node's position
 				Transform = Transform3D.Identity;
 			else
-				GlobalTransform = Stage.Checkpoint.GlobalTransform;
+				GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
 
 			PathFollower.Resync(); //Update path follower
 			MovementAngle = PathFollower.ForwardAngle; //Reset movement angle

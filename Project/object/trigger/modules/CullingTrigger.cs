@@ -12,46 +12,67 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private Node3D targetNode;
 		[Export]
-		private bool modifyTree; //Can cause stuttering when used on denser objects
+		private bool modifyTree; //Doesn't work with isStageVisuals, and can cause stuttering when used on denser objects
 		private SpawnData spawnData; //Data for tree modification
 		[Export]
 		private bool startEnabled; //Generally things should start culled
 		[Export]
 		private bool isStageVisuals;
+		private Callable ProcessCheckpointCallable => new Callable(this, MethodName.ProcessCheckpoint);
+		private StageSettings Stage => StageSettings.instance;
 
 		public override void _Ready()
 		{
-			if (isStageVisuals && CheatManager.DisableStageCulling)
+			if (isStageVisuals)
 			{
-				Visible = true;
-				return;
-			}
+				if (CheatManager.DisableStageCulling) //Culling disabled
+					return;
 
-			if (modifyTree)
+				if (!Stage.IsConnected(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
+					Stage.Connect(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
+			}
+			else if (modifyTree)
 				spawnData = new SpawnData(targetNode.GetParent(), targetNode.Transform);
 
-			StageSettings.instance.RegisterRespawnableObject(this);
 			Respawn();
+			Stage.RegisterRespawnableObject(this);
 		}
 
 		public override void _ExitTree()
 		{
+			if (Stage.IsConnected(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
+				Stage.Disconnect(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
+
 			if (modifyTree && !targetNode.IsQueuedForDeletion())
 				targetNode.QueueFree();
 		}
 
+		private bool wasInitialized;
+		private bool visibleOnCheckpoint; //Saves the current visiblity when player passes a checkpoint
+		private void ProcessCheckpoint() => visibleOnCheckpoint = targetNode.Visible;
+
 		private void Respawn()
 		{
+			if (isStageVisuals && wasInitialized)
+			{
+				if (visibleOnCheckpoint)
+					Activate();
+				else
+					Deactivate();
+			}
+
 			//Disable the node on startup?
 			if (!startEnabled)
 				Deactivate();
+
+			wasInitialized = true;
 		}
 
 		public override void Activate()
 		{
 			if (isStageVisuals && CheatManager.DisableStageCulling) return;
 
-			if (modifyTree)
+			if (!isStageVisuals && modifyTree)
 			{
 				if (targetNode.IsInsideTree()) return;
 
@@ -68,7 +89,7 @@ namespace Project.Gameplay.Triggers
 		{
 			if (isStageVisuals && CheatManager.DisableStageCulling) return;
 
-			if (modifyTree)
+			if (!isStageVisuals && modifyTree)
 			{
 				if (!targetNode.IsInsideTree()) return;
 

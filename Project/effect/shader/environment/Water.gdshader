@@ -31,7 +31,7 @@ void fragment()
 	
 	//Fade normal map over distance
 	float normal_fade = clamp(smoothstep(NORMAL_FADE_START, NORMAL_FADE_END, -VERTEX.z), 0.0, 1.0);
-	NORMAL = normal.rgb * normal_fade * .8;
+	NORMAL = normal.rgb * .5;
 	
 	ROUGHNESS = 0.0;
 	ALPHA = col.a;

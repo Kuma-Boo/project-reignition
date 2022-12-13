@@ -47,12 +47,12 @@ namespace Project.Gameplay
 			PlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
 		}
 
+		/*
 		/// <summary>
 		/// GetClosestOffset() seems to be broken in 4.0, so here's a more accurate (allbeit slower) method.
 		/// Loops over all baked points in a path, so try to restrict it's usage as much as possible.
 		/// UPDATE v4.0.beta8.mono.official [45cac42c0] seems to have fixed this. Leaving this as a fallback.
 		/// </summary>
-		/*
 		private void UpdatePosition()
 		{
 			Vector3 targetPosition = Character.GlobalPosition - ActivePath.GlobalPosition;

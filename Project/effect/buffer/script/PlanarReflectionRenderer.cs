@@ -25,6 +25,8 @@ namespace Project.Gameplay
 		private SubViewport reflectionViewport;
 		[Export]
 		private float nearClip = .05f;
+		[Export]
+		private bool editorPreview;
 
 		[Export]
 		public Array<ShaderMaterial> reflectionMaterials; //List of materials that use reflection_texture
@@ -76,6 +78,7 @@ namespace Project.Gameplay
 		private void UpdatePosition()
 		{
 			if (!GetCamera() || !GetReflectionViewport()) return;
+			if (Engine.IsEditorHint() && !editorPreview) return;
 
 			if (Engine.IsEditorHint())
 			{

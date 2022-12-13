@@ -240,10 +240,7 @@ namespace Project.Gameplay.Bosses
 				missileGroupReset = missileIndex >= MISSILE_COUNT;
 				missileTimer = missileGroupReset ? MISSILE_GROUP_SPACING : MISSILE_INTERVAL;
 				if (missileGroupReset) //Loop missile index
-				{
 					missileIndex = 0;
-					GD.PrintErr("Warning! Due to Godot 4 PathFollower regression, missiles are inaccurate for many parts of the stage.");
-				}
 			}
 		}
 

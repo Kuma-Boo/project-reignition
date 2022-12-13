@@ -40,7 +40,7 @@ namespace Project.Gameplay
 			switch ((string)property)
 			{
 				case "Rail Path":
-					return railPathPath;
+					return railPath;
 				case "Align Camera":
 					return alignCamera;
 
@@ -70,7 +70,7 @@ namespace Project.Gameplay
 			switch ((string)property)
 			{
 				case "Rail Path":
-					railPathPath = (NodePath)value;
+					railPath = (NodePath)value;
 					break;
 				case "Align Camera":
 					alignCamera = (bool)value;
@@ -110,8 +110,8 @@ namespace Project.Gameplay
 		#endregion
 
 		private bool alignCamera = true;
-		private Path3D railPath;
-		private NodePath railPathPath;
+		private Path3D rail;
+		private NodePath railPath;
 		private PathFollow3D pathFollower;
 
 		private NodePath colliderPath;
@@ -154,8 +154,8 @@ namespace Project.Gameplay
 				RotationMode = PathFollow3D.RotationModeEnum.Oriented
 			};
 
-			railPath = GetNode<Path3D>(railPathPath);
-			railPath.CallDeferred("add_child", pathFollower);
+			rail = GetNode<Path3D>(railPath);
+			rail.CallDeferred("add_child", pathFollower);
 
 			if (isInvisibleRail) //For Secret Rings' hidden rails
 			{
@@ -172,9 +172,9 @@ namespace Project.Gameplay
 					Size = new Vector3(.5f, .5f, RailLength)
 				};
 				collider.Position = Vector3.Forward * RailLength * .5f + Vector3.Down * .05f;
-				railPath.Curve = new Curve3D();
-				railPath.Curve.AddPoint(Vector3.Zero);
-				railPath.Curve.AddPoint(Vector3.Forward * RailLength);
+				rail.Curve = new Curve3D();
+				rail.Curve.AddPoint(Vector3.Zero, null, Vector3.Forward);
+				rail.Curve.AddPoint(Vector3.Forward * RailLength, Vector3.Back);
 			}
 		}
 
@@ -206,9 +206,8 @@ namespace Project.Gameplay
 			if (Character.Lockon.IsHomingAttacking) return; //Character is targeting something
 			if (Character.MovementState != CharacterController.MovementStates.Normal) return; //Character is busy
 
-			GD.PrintErr("Grindrails may not be accurate due to PathFollower issues.");
-			Vector3 delta = railPath.GetLocalPosition(Character.GlobalPosition);
-			pathFollower.Progress = railPath.Curve.GetClosestOffset(delta);
+			Vector3 delta = rail.GetLocalPosition(Character.GlobalPosition);
+			pathFollower.Progress = rail.Curve.GetClosestOffset(delta);
 			float horizontalOffset = Mathf.Abs(pathFollower.GetLocalPosition(Character.GlobalPosition).x); //Get local offset
 
 			if (Character.VerticalSpd <= 0f)
@@ -297,7 +296,6 @@ namespace Project.Gameplay
 				{
 					float t = Mathf.SmoothStep(0, 1, chargeAmount / GRIND_RAIL_CHARGE_LENGTH);
 					Character.MoveSpeed = Mathf.Lerp(Skills.unchargedGrindSpeed, Skills.chargedGrindSpeed, t);
-					GD.Print($"{t} ,{Character.MoveSpeed}");
 					sfx.Play();
 				}
 

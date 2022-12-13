@@ -31,23 +31,6 @@ visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
-[node name="Environment" type="Node3D" parent="Visuals"]
-
-[node name="MainLight" type="DirectionalLight3D" parent="Visuals/Environment"]
-transform = Transform3D(1, 0, 0, 0, 0.0348995, 0.999391, 0, -0.999391, 0.0348995, 0, 2.00365, -0.209397)
-light_color = Color(0.99, 0.8316, 0.6732, 1)
-light_energy = 0.6
-light_cull_mask = 4293918723
-shadow_enabled = true
-directional_shadow_mode = 0
-directional_shadow_blend_splits = true
-directional_shadow_fade_start = 0.9
-directional_shadow_max_distance = 200.0
-directional_shadow_pancake_size = 0.0
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals/Environment"]
-environment = ExtResource("2_ooith")
-
 [node name="01Opening" parent="Visuals" instance=ExtResource("3_gpjv8")]
 
 [node name="02Hall" parent="Visuals" instance=ExtResource("4_ut2gb")]
@@ -61,6 +44,23 @@ environment = ExtResource("2_ooith")
 [node name="06End" parent="Visuals" instance=ExtResource("8_2nkob")]
 
 [node name="Skybox" parent="Visuals" instance=ExtResource("9_8xbja")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 0.0348995, 0.999391, 0, -0.999391, 0.0348995, 0, 2.00365, -0.209397)
+light_color = Color(0.99, 0.8316, 0.6732, 1)
+light_energy = 0.6
+light_cull_mask = 4293918723
+shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.9
+directional_shadow_max_distance = 200.0
+directional_shadow_pancake_size = 0.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = ExtResource("2_ooith")
 
 [node name="Path" type="Node3D" parent="."]
 

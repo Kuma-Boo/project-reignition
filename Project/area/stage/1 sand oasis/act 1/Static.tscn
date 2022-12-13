@@ -1,21 +1,20 @@
-[gd_scene load_steps=34 format=3 uid="uid://bfq2e1u13sf0c"]
+[gd_scene load_steps=35 format=3 uid="uid://bfq2e1u13sf0c"]
 
 [ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
-[ext_resource type="PackedScene" uid="uid://cbwcphc75t0y7" path="res://effect/buffer/DepthRenderer.tscn" id="1_ufjki"]
 [ext_resource type="PackedScene" uid="uid://efrfjkjxlfc8" path="res://area/stage/1 sand oasis/act 1/environment/01Opening.tscn" id="2_eyaqr"]
 [ext_resource type="PackedScene" uid="uid://bb0wbyqxrs175" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="2_wxtpt"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/02Slope.tscn" id="3_b4ate"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/03Oasis.tscn" id="4_qddv3"]
+[ext_resource type="PackedScene" uid="uid://bu2kguc4ygtbo" path="res://area/stage/1 sand oasis/act 1/environment/02Slope.tscn" id="3_b4ate"]
+[ext_resource type="PackedScene" uid="uid://cq0d65qpud85m" path="res://area/stage/1 sand oasis/act 1/environment/03Oasis.tscn" id="4_qddv3"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_4sfp2"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/04Forest.tscn" id="5_i1spc"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/05Islands.tscn" id="6_5pcm3"]
+[ext_resource type="PackedScene" uid="uid://cn1pgixwy7otq" path="res://area/stage/1 sand oasis/act 1/environment/04Forest.tscn" id="5_i1spc"]
+[ext_resource type="PackedScene" uid="uid://drsd0y6s0hy22" path="res://area/stage/1 sand oasis/act 1/environment/05Islands.tscn" id="6_5pcm3"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="6_v74ea"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/06Interior.tscn" id="7_ichp8"]
+[ext_resource type="PackedScene" uid="uid://h8m64buhsjdd" path="res://area/stage/1 sand oasis/act 1/environment/06Interior.tscn" id="7_ichp8"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="7_wikol"]
 [ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="8_esmag"]
 [ext_resource type="PackedScene" uid="uid://c1tblqj07pix8" path="res://area/stage/1 sand oasis/act 1/environment/07Beach.tscn" id="8_owf84"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="9_bc5dk"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/08End.tscn" id="9_pbgai"]
+[ext_resource type="PackedScene" uid="uid://ckpkxovh854hl" path="res://area/stage/1 sand oasis/act 1/environment/08End.tscn" id="9_pbgai"]
 [ext_resource type="Resource" path="res://area/stage/1 sand oasis/act 1/trigger/camera/WallRunBottomCam.tres" id="10_g7go8"]
 [ext_resource type="PackedScene" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="11_hwlgd"]
 [ext_resource type="Material" uid="uid://5wxyrpeo8ycq" path="res://area/stage/1 sand oasis/data/environment/model/material/Water.tres" id="11_vtcnw"]
@@ -24,7 +23,7 @@
 [ext_resource type="Curve3D" uid="uid://brtouom1dta45" path="res://area/stage/1 sand oasis/act 1/environment/path/MainPath.tres" id="13_4atkq"]
 [ext_resource type="PackedScene" uid="uid://bcmlrr4h753at" path="res://area/stage/1 sand oasis/act 1/environment/SandfallEvent.tscn" id="13_6o732"]
 [ext_resource type="PackedScene" uid="uid://7wm2nigdurx3" path="res://area/stage/1 sand oasis/data/environment/BGM.tscn" id="14_ej622"]
-[ext_resource type="Environment" uid="uid://b7gi55vdfsr1s" path="res://area/stage/1 sand oasis/data/environment/Environment.tres" id="15_y7t0p"]
+[ext_resource type="Environment" uid="uid://b7gi55vdfsr1s" path="res://area/stage/1 sand oasis/data/environment/Environment.tres" id="21_xtian"]
 
 [sub_resource type="BoxShape3D" id="60"]
 size = Vector3(42, 13.4, 38)
@@ -50,6 +49,11 @@ size = Vector3(10, 10, 124)
 [sub_resource type="BoxShape3D" id="144"]
 size = Vector3(34, 22, 2)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_s3nwt"]
+size = Vector3(10, 20, 5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_njmjg"]
+
 [node name="Static" type="Node3D"]
 
 [node name="Collision" parent="." instance=ExtResource("1_pkods")]
@@ -58,6 +62,7 @@ visible = false
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="01Opening" parent="Visuals" instance=ExtResource("2_eyaqr")]
+startEnabled = true
 
 [node name="02Slope" parent="Visuals" instance=ExtResource("3_b4ate")]
 
@@ -80,6 +85,7 @@ visible = false
 [node name="SandfallEvent" parent="Event" instance=ExtResource("13_6o732")]
 
 [node name="Trigger" type="Node3D" parent="."]
+visible = false
 
 [node name="ZipperRecenterLockout" parent="Trigger" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -166.5, -48.7, -95.9)
@@ -102,7 +108,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8509, 6, -15.9712)
 shape = SubResource("335")
 
 [node name="UTurnTrigger" parent="Trigger" instance=ExtResource("8_esmag")]
-transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -74.3558, -45, -295.905)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -74.3558, -45, -295.905)
 distanceToTravel = 45.0
 startingPoint = 2125.0
 
@@ -151,6 +157,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -705)
 shape = SubResource("BoxShape3D_8dg41")
 
 [node name="Checkpoints" type="Node3D" parent="."]
+visible = false
 
 [node name="Checkpoint1" parent="Checkpoints" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -248.74, -40, -252.31)
@@ -252,6 +259,88 @@ script = ExtResource("12_lqbp2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
+[node name="StageCulling" type="Node3D" parent="."]
+
+[node name="SlopeCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 75, -48)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/SlopeCullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
+[node name="OasisCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 18, 100, -62)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/OasisCullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
+[node name="ForestCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 0, 0, 1, -399.054, -48.0437, -202)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/ForestCullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52588e-05, 9.80002, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
+[node name="IslandCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-0.464069, 0, -0.885799, 0, 1, 0, 0.885799, 0, -0.464069, -56.8, -40, -162.544)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/IslandCullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
+[node name="InteriorCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-0.9911, 0, 0.133121, 0, 1, 0, -0.133121, 0, -0.9911, -72.1954, -45, -307.803)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/InteriorCullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
+[node name="ForestDecullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -135.955, -65, -349.601)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/ForestDecullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
+[node name="BeachCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -274.053, -65, -429.716)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/BeachCullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
+[node name="EndCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -648.583, -40, -639.966)
+triggerMode = 2
+enterMode = 1
+exitMode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageCulling/EndCullTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_s3nwt")
+
 [node name="Path" type="Node3D" parent="."]
 
 [node name="MainPath" type="Path3D" parent="Path"]
@@ -260,29 +349,85 @@ curve = ExtResource("13_4atkq")
 
 [node name="Lighting" type="Node3D" parent="."]
 
-[node name="Sun" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -0.766044, 0.642788, 0, -0.642788, -0.766044, 0, 0, 0)
-light_color = Color(0.988235, 0.858824, 0.662745, 1)
-light_energy = 1.1
-light_cull_mask = 4293918721
+[node name="ExteriorLighting" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.984808, 0.163176, 0.0593912, 0, -0.34202, 0.939693, 0.173648, -0.925417, -0.336824, 0, 0, 0)
+layers = 1024
+light_color = Color(0.709804, 0.690196, 0.560784, 1)
+light_energy = 1.2
+light_cull_mask = 4293918723
 shadow_enabled = true
-shadow_bias = 0.09
-shadow_normal_bias = 0.9
-directional_shadow_mode = 0
-directional_shadow_split_1 = 0.116
-directional_shadow_blend_splits = true
-directional_shadow_fade_start = 0.9
-directional_shadow_max_distance = 200.0
-directional_shadow_pancake_size = 0.0
+shadow_bias = 0.05
+directional_shadow_max_distance = 150.0
+
+[node name="LightBlockers" type="Node3D" parent="Lighting"]
+
+[node name="Blocker1" type="MeshInstance3D" parent="Lighting/LightBlockers"]
+transform = Transform3D(-4.63629e-07, -0.707107, -10.6066, 15, -4.37114e-08, 0, -4.63629e-07, -0.707107, 10.6066, 47.9197, 87.059, 25.7987)
+layers = 0
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="Blocker2" type="MeshInstance3D" parent="Lighting/LightBlockers"]
+transform = Transform3D(30, 0, 0, 0, 2.005, 0, 0, 0, 30, 80.3533, 96.059, 14.2892)
+layers = 0
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="Blocker3" type="MeshInstance3D" parent="Lighting/LightBlockers"]
+transform = Transform3D(15, 0, 0, 0, 1, 0, 0, 0, 30, 72.0533, 96.059, -43.7108)
+layers = 0
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="ForestEntranceBlocker" type="MeshInstance3D" parent="Lighting/LightBlockers"]
+transform = Transform3D(13.5946, 0, -12.6785, 0, 1, 0, 6.33927, 0, 27.1892, -64.1, -7.10509, -170)
+layers = 0
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock" type="MeshInstance3D" parent="Lighting/LightBlockers"]
+transform = Transform3D(14.7721, -7.5904e-09, -4.3412, 1.13856e-07, 1, -1.66018e-08, 2.60472, -6.64075e-10, 24.6202, -101.969, -23.041, -478.45)
+layers = 0
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock2" type="MeshInstance3D" parent="Lighting/LightBlockers"]
+transform = Transform3D(14.7721, -7.5904e-09, -4.3412, 1.13856e-07, 1, -1.66018e-08, 2.60472, -6.64075e-10, 24.6202, -119.334, -47.041, -379.97)
+layers = 0
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="InteriorEntranceBlock" type="MeshInstance3D" parent="Lighting/LightBlockers"]
+transform = Transform3D(3.53553, -7.5904e-09, -10.6066, 2.9184e-08, 1, -7.34648e-08, 3.53553, -6.64077e-10, 10.6066, -133.419, -50.041, -347.081)
+layers = 0
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = ExtResource("21_xtian")
 
 [node name="BGM" parent="." instance=ExtResource("14_ej622")]
 
-[node name="DepthRenderer" parent="." instance=ExtResource("1_ufjki")]
-
 [node name="PlanarReflectionRenderer" parent="." instance=ExtResource("2_wxtpt")]
-nearClip = 10.0
 reflectionMaterials = [ExtResource("11_vtcnw")]
 reflectorHeight = -50.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("15_y7t0p")
+[connection signal="Activated" from="StageCulling/SlopeCullTrigger" to="Visuals/02Slope" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/SlopeCullTrigger" to="Visuals/02Slope" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/OasisCullTrigger" to="Visuals/01Opening" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/OasisCullTrigger" to="Visuals/03Oasis" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/OasisCullTrigger" to="Visuals/01Opening" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/OasisCullTrigger" to="Visuals/03Oasis" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/ForestCullTrigger" to="Visuals/04Forest" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/ForestCullTrigger" to="Visuals/04Forest" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/IslandCullTrigger" to="Visuals/02Slope" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/IslandCullTrigger" to="Visuals/05Islands" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/IslandCullTrigger" to="Visuals/02Slope" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/IslandCullTrigger" to="Visuals/05Islands" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/InteriorCullTrigger" to="Visuals/03Oasis" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/InteriorCullTrigger" to="Visuals/06Interior" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/InteriorCullTrigger" to="Visuals/03Oasis" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/InteriorCullTrigger" to="Visuals/06Interior" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/ForestDecullTrigger" to="Visuals/04Forest" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/ForestDecullTrigger" to="Visuals/05Islands" method="Deactivate"]
+[connection signal="Deactivated" from="StageCulling/ForestDecullTrigger" to="Visuals/04Forest" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/ForestDecullTrigger" to="Visuals/05Islands" method="Activate"]
+[connection signal="Activated" from="StageCulling/BeachCullTrigger" to="Visuals/07Beach" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/BeachCullTrigger" to="Visuals/07Beach" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/EndCullTrigger" to="Visuals/06Interior" method="Deactivate"]
+[connection signal="Activated" from="StageCulling/EndCullTrigger" to="Visuals/08End" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/EndCullTrigger" to="Visuals/06Interior" method="Activate"]
+[connection signal="Deactivated" from="StageCulling/EndCullTrigger" to="Visuals/08End" method="Deactivate"]

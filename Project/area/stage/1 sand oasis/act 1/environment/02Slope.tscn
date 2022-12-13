@@ -1,14 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://bu2kguc4ygtbo"]
+[gd_scene load_steps=5 format=3 uid="uid://bu2kguc4ygtbo"]
 
-[ext_resource type="PackedScene" uid="uid://berjol6lf2qh4" path="res://area/stage/1 sand oasis/act 1/environment/model/02Slope.gltf" id="1_fo68w"]
+[ext_resource type="PackedScene" uid="uid://bvtog1le250jw" path="res://area/stage/1 sand oasis/act 1/environment/model/02Slope.gltf" id="1_fo68w"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_rb7jk"]
+[ext_resource type="Material" uid="uid://qt5fqbhq87bs" path="res://area/stage/1 sand oasis/data/environment/model/material/Effect Bloom.tres" id="3_jhvtm"]
 
-[node name="02Slope" instance=ExtResource("1_fo68w")]
+[sub_resource type="PlaneMesh" id="PlaneMesh_t4s6q"]
+size = Vector2(6, 10)
+orientation = 2
+
+[node name="02Slope" node_paths=PackedStringArray("targetNode") instance=ExtResource("1_fo68w")]
+script = ExtResource("2_rb7jk")
+targetNode = NodePath(".")
+isStageVisuals = true
 
 [node name="stg010_o03_Mesh_0001" parent="." index="0"]
 layers = 2
 
 [node name="stg010_o03_Mesh_0002" parent="." index="1"]
 layers = 2
+cast_shadow = 2
 
 [node name="stg010_o03_Mesh_0007" parent="." index="2"]
 layers = 2
@@ -34,6 +44,7 @@ layers = 2
 
 [node name="stg010_o03_Mesh_0017" parent="." index="9"]
 layers = 2
+cast_shadow = 2
 
 [node name="stg010_o03_Mesh_0020" parent="." index="10"]
 layers = 2
@@ -101,3 +112,11 @@ layers = 2
 
 [node name="stg010_p03_Mesh_0003" parent="." index="30"]
 layers = 2
+
+[node name="Bloom" type="MeshInstance3D" parent="." index="31"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4, 114, -62)
+layers = 32768
+material_override = ExtResource("3_jhvtm")
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("PlaneMesh_t4s6q")

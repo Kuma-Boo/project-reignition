@@ -1,11 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://21pykhrm72xx"]
+[gd_scene load_steps=11 format=3 uid="uid://c7l8mr7ubn848"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://7q1qood2upqf" path="res://object/stage/pickups/resource/model/rings/Ring.gltf" id="2"]
-[ext_resource type="Material" uid="uid://bp84que225vth" path="res://object/stage/pickups/resource/model/rings/material/RingCollectionProcessMaterial.tres" id="3_h25yq"]
-[ext_resource type="PlaneMesh" uid="uid://bn5ftksxne0vb" path="res://object/stage/pickups/resource/model/rings/material/RingCollection.tres" id="4_6xpsy"]
+[ext_resource type="Material" uid="uid://bp84que225vth" path="res://object/stage/pickups/resource/model/rings/material/Ring Spark Process Material.tres" id="3_dnn02"]
+[ext_resource type="Material" uid="uid://cd8mqsy8lhhcb" path="res://object/stage/pickups/resource/model/rings/material/Ring Spark.tres" id="4_un35g"]
 
 [sub_resource type="SphereShape3D" id="3"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ekr2c"]
+material = ExtResource("4_un35g")
+orientation = 2
 
 [sub_resource type="Animation" id="5"]
 length = 0.001
@@ -48,7 +52,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("RingParticle:visible")
+tracks/3/path = NodePath("SparkParticle:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -102,7 +106,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("RingParticle")
+tracks/3/path = NodePath("SparkParticle")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -116,7 +120,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("RingParticle:visible")
+tracks/4/path = NodePath("SparkParticle:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -163,15 +167,15 @@ animator = NodePath("AnimationPlayer")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("3")
 
-[node name="RingParticle" type="GPUParticles3D" parent="."]
+[node name="SparkParticle" type="GPUParticles3D" parent="."]
 visible = false
 emitting = false
 lifetime = 0.2
 one_shot = true
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
-process_material = ExtResource("3_h25yq")
-draw_pass_1 = ExtResource("4_6xpsy")
+process_material = ExtResource("3_dnn02")
+draw_pass_1 = SubResource("PlaneMesh_ekr2c")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "loop"

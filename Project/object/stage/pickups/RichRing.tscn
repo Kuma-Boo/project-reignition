@@ -1,15 +1,18 @@
-[gd_scene load_steps=10 format=3 uid="uid://md5shjosamyy"]
+[gd_scene load_steps=11 format=3 uid="uid://68st06xyjgvp"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
-[ext_resource type="PackedScene" uid="uid://25yo83pkwq4s" path="res://object/stage/pickups/resource/model/rings/RichRing.gltf" id="2"]
-[ext_resource type="Material" uid="uid://bp84que225vth" path="res://object/stage/pickups/resource/model/rings/material/RingCollectionProcessMaterial.tres" id="3_rd42h"]
-[ext_resource type="PlaneMesh" uid="uid://bn5ftksxne0vb" path="res://object/stage/pickups/resource/model/rings/material/RingCollection.tres" id="4_3pixh"]
+[ext_resource type="PackedScene" uid="uid://c3fvfe7fvrd68" path="res://object/stage/pickups/resource/model/rings/RichRing.gltf" id="2"]
+[ext_resource type="Material" uid="uid://bp84que225vth" path="res://object/stage/pickups/resource/model/rings/material/Ring Spark Process Material.tres" id="3_hj5xx"]
+[ext_resource type="Material" uid="uid://cd8mqsy8lhhcb" path="res://object/stage/pickups/resource/model/rings/material/Ring Spark.tres" id="4_un35g"]
 
-[sub_resource type="SphereShape3D" id="3"]
-radius = 0.8
+[sub_resource type="SphereShape3D" id="SphereShape3D_3eyv2"]
+radius = 0.7
 
-[sub_resource type="Animation" id="Animation_qmr8c"]
-resource_name = "RESET"
+[sub_resource type="PlaneMesh" id="PlaneMesh_ekr2c"]
+material = ExtResource("4_un35g")
+orientation = 2
+
+[sub_resource type="Animation" id="5"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -26,41 +29,29 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("RichRing:visible")
+tracks/1/path = NodePath("RichRing:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [true]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("RichRing:rotation")
+tracks/2/path = NodePath("RichRing:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("RingParticle:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_innwv"]
+[sub_resource type="Animation" id="15"]
 resource_name = "collect"
 length = 1.5
 tracks/0/type = "value"
@@ -75,13 +66,25 @@ tracks/0/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".")
+tracks/1/path = NodePath("RichRing:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(1.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -89,13 +92,13 @@ tracks/1/keys = {
 "method": &"Despawn"
 }]
 }
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("RingParticle")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SparkParticle")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -103,35 +106,24 @@ tracks/2/keys = {
 "method": &"restart"
 }]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("RingParticle:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("RichRing:visible")
+tracks/4/path = NodePath("SparkParticle:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_62v8g"]
+[sub_resource type="Animation" id="4"]
 resource_name = "loop"
 length = 1.5
 loop_mode = 1
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -145,11 +137,11 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_1ty06"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6x35q"]
 _data = {
-"RESET": SubResource("Animation_qmr8c"),
-"collect": SubResource("Animation_innwv"),
-"loop": SubResource("Animation_62v8g")
+"RESET": SubResource("5"),
+"collect": SubResource("15"),
+"loop": SubResource("4")
 }
 
 [node name="RichRing" type="Area3D" node_paths=PackedStringArray("animator")]
@@ -157,28 +149,26 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("1")
-isRichRing = true
 animator = NodePath("AnimationPlayer")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("3")
 
 [node name="RichRing" parent="." instance=ExtResource("2")]
 
-[node name="RingParticle" type="GPUParticles3D" parent="."]
-visible = false
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_3eyv2")
+
+[node name="SparkParticle" type="GPUParticles3D" parent="."]
 emitting = false
 lifetime = 0.2
 one_shot = true
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
-process_material = ExtResource("3_rd42h")
-draw_pass_1 = ExtResource("4_3pixh")
+process_material = ExtResource("3_hj5xx")
+draw_pass_1 = SubResource("PlaneMesh_ekr2c")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "loop"
 libraries = {
-"": SubResource("AnimationLibrary_1ty06")
+"": SubResource("AnimationLibrary_6x35q")
 }
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]

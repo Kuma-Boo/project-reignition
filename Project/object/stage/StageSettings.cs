@@ -386,16 +386,19 @@ namespace Project.Gameplay
 
 		#region Object Spawning
 		//Checkpoint data
-		public Node3D Checkpoint { get; private set; }
+		public Node3D CurrentCheckpoint { get; private set; }
 		public Path3D CheckpointPath { get; private set; }
 		public void SetCheckpoint(Node3D newCheckpoint)
 		{
-			Checkpoint = newCheckpoint; //Position transform
+			CurrentCheckpoint = newCheckpoint; //Position transform
 			CheckpointPath = CharacterController.instance.PathFollower.ActivePath; //Store current path
+			EmitSignal(SignalName.OnTriggeredCheckpoint);
 		}
+		[Signal]
+		public delegate void OnTriggeredCheckpointEventHandler();
 
 		[Signal]
-		public delegate void RespawnedEventHandler();
+		public delegate void OnRespawnedEventHandler();
 		public static bool IsRespawnedFromPlayer; //Did the stage respawn from the player dying?
 		private const string RESPAWN_FUNCTION = "Respawn"; //Default name of respawn functions
 
@@ -407,15 +410,15 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
-				Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION));
+			if (!IsConnected(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION)))
+				Connect(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION));
 		}
 
 		public void RespawnObjects(bool fromPlayer)
 		{
 			IsRespawnedFromPlayer = fromPlayer;
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
-			EmitSignal(SignalName.Respawned);
+			EmitSignal(SignalName.OnRespawned);
 		}
 
 		private bool itemCycleRespawnEnabled = true; //Respawn items when cycling?

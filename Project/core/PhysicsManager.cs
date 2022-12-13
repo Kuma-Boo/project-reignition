@@ -5,12 +5,22 @@ namespace Project.Core
 {
 	public partial class PhysicsManager : Node3D
 	{
+		public static PhysicsManager Instance { get; private set; }
+
+		[Signal]
+		public delegate void PhysicsUpdatedEventHandler();
+
 		public static float normalDelta;
 		public static float physicsDelta;
 		public static PhysicsDirectSpaceState3D physicsState;
-		public override void _Ready() => UpdatePhysicsState();
 
-		private void UpdatePhysicsState() => physicsState = GetWorld3d().DirectSpaceState; //Update world space
+		public override void _EnterTree() => Instance = this;
+
+		private void UpdatePhysicsState()
+		{
+			physicsState = GetWorld3d().DirectSpaceState; //Update world's physics space
+			EmitSignal(SignalName.PhysicsUpdated); //Emit signal
+		}
 
 		public override void _Process(double delta) => normalDelta = (float)delta;
 
