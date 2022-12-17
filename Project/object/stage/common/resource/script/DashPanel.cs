@@ -18,14 +18,17 @@ namespace Project.Gameplay.Objects
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (isQueued && Character.IsOnGround)
-				Activate();
+			if (!isQueued) return;
+
+			Activate();
 		}
 
 		public void OnEntered(Area3D _) => isQueued = true;
 
 		private void Activate()
 		{
+			if (!Character.IsOnGround) return; //Can't activate when player is in the air
+
 			sfxPlayer.Play();
 			isQueued = false;
 

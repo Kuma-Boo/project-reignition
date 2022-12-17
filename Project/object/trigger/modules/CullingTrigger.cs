@@ -47,25 +47,30 @@ namespace Project.Gameplay.Triggers
 				targetNode.QueueFree();
 		}
 
-		private bool wasInitialized;
+		private bool useCheckpointVisibility;
 		private bool visibleOnCheckpoint; //Saves the current visiblity when player passes a checkpoint
 		private void ProcessCheckpoint() => visibleOnCheckpoint = targetNode.Visible;
 
 		private void Respawn()
 		{
-			if (isStageVisuals && wasInitialized)
+			if (isStageVisuals)
 			{
-				if (visibleOnCheckpoint)
-					Activate();
-				else
-					Deactivate();
+				if (useCheckpointVisibility)
+				{
+					if (visibleOnCheckpoint)
+						Activate();
+					else
+						Deactivate();
+
+					return;
+				}
+
+				useCheckpointVisibility = true;
 			}
 
 			//Disable the node on startup?
 			if (!startEnabled)
 				Deactivate();
-
-			wasInitialized = true;
 		}
 
 		public override void Activate()

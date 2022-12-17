@@ -47,13 +47,14 @@ namespace Project.Gameplay
 			depthCamera.Projection = MainCamera.Projection;
 
 			depthCamera.Near = MainCamera.Near;
+
 			depthCamera.Far = MainCamera.Far;
 			depthCamera.GlobalTransform = MainCamera.GlobalTransform;
 
 			depthViewport.Size = RuntimeConstants.HALF_SCREEN_SIZE;
 			depthViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 
-			depthMaterial.Set(FAR_CLIP_PARAMETER, MainCamera.Far);
+			depthMaterial.Set(FAR_CLIP_PARAMETER, depthCamera.Far);
 		}
 
 		private void ApplyTexture()

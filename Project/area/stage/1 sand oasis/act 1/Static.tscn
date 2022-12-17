@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bfq2e1u13sf0c"]
+[gd_scene load_steps=41 format=3 uid="uid://bfq2e1u13sf0c"]
 
 [ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
 [ext_resource type="PackedScene" uid="uid://efrfjkjxlfc8" path="res://area/stage/1 sand oasis/act 1/environment/01Opening.tscn" id="2_eyaqr"]
@@ -23,7 +23,12 @@
 [ext_resource type="Curve3D" uid="uid://brtouom1dta45" path="res://area/stage/1 sand oasis/act 1/environment/path/MainPath.tres" id="13_4atkq"]
 [ext_resource type="PackedScene" uid="uid://bcmlrr4h753at" path="res://area/stage/1 sand oasis/act 1/environment/SandfallEvent.tscn" id="13_6o732"]
 [ext_resource type="PackedScene" uid="uid://7wm2nigdurx3" path="res://area/stage/1 sand oasis/data/environment/BGM.tscn" id="14_ej622"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="19_gytq8"]
 [ext_resource type="Environment" uid="uid://b7gi55vdfsr1s" path="res://area/stage/1 sand oasis/data/environment/Environment.tres" id="21_xtian"]
+[ext_resource type="Curve3D" path="res://area/stage/1 sand oasis/act 1/environment/path/Island01.tres" id="22_gqp0b"]
+[ext_resource type="Curve3D" path="res://area/stage/1 sand oasis/act 1/environment/path/Island02.tres" id="23_0ws1h"]
+[ext_resource type="Curve3D" path="res://area/stage/1 sand oasis/act 1/environment/path/Island03.tres" id="24_myiv4"]
+[ext_resource type="PackedScene" uid="uid://cbwcphc75t0y7" path="res://effect/buffer/DepthRenderer.tscn" id="25_fbdtt"]
 
 [sub_resource type="BoxShape3D" id="60"]
 size = Vector3(42, 13.4, 38)
@@ -45,6 +50,9 @@ radius = 3.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8dg41"]
 size = Vector3(10, 10, 124)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nbeq0"]
+size = Vector3(20, 26, 4)
 
 [sub_resource type="BoxShape3D" id="144"]
 size = Vector3(34, 22, 2)
@@ -85,7 +93,6 @@ startEnabled = true
 [node name="SandfallEvent" parent="Event" instance=ExtResource("13_6o732")]
 
 [node name="Trigger" type="Node3D" parent="."]
-visible = false
 
 [node name="ZipperRecenterLockout" parent="Trigger" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -166.5, -48.7, -95.9)
@@ -110,7 +117,7 @@ shape = SubResource("335")
 [node name="UTurnTrigger" parent="Trigger" instance=ExtResource("8_esmag")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -74.3558, -45, -295.905)
 distanceToTravel = 45.0
-startingPoint = 2125.0
+startingPoint = 2185.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/UTurnTrigger"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
@@ -155,6 +162,46 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -705)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/SidleTrigger"]
 shape = SubResource("BoxShape3D_8dg41")
+
+[node name="Island1Trigger" parent="Trigger" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.148, -41.386, -210)
+
+[node name="PathTrigger" type="Node3D" parent="Trigger/Island1Trigger" node_paths=PackedStringArray("path")]
+script = ExtResource("19_gytq8")
+path = NodePath("../../../Path/Island01")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Island1Trigger"]
+shape = SubResource("BoxShape3D_nbeq0")
+
+[node name="Island2Trigger" parent="Trigger" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.148, -41.386, -335)
+
+[node name="PathTrigger" type="Node3D" parent="Trigger/Island2Trigger" node_paths=PackedStringArray("path")]
+script = ExtResource("19_gytq8")
+path = NodePath("../../../Path/Island02")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Island2Trigger"]
+shape = SubResource("BoxShape3D_nbeq0")
+
+[node name="Island3Trigger" parent="Trigger" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 95.955, -45.063, -435.953)
+
+[node name="PathTrigger" type="Node3D" parent="Trigger/Island3Trigger" node_paths=PackedStringArray("path")]
+script = ExtResource("19_gytq8")
+path = NodePath("../../../Path/Island03")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Island3Trigger"]
+shape = SubResource("BoxShape3D_nbeq0")
+
+[node name="HallwayTrigger" parent="Trigger" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.955, -40.063, -435.953)
+
+[node name="PathTrigger" type="Node3D" parent="Trigger/HallwayTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("19_gytq8")
+path = NodePath("../../../Path/MainPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/HallwayTrigger"]
+shape = SubResource("BoxShape3D_nbeq0")
 
 [node name="Checkpoints" type="Node3D" parent="."]
 visible = false
@@ -260,6 +307,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
 [node name="StageCulling" type="Node3D" parent="."]
+visible = false
 
 [node name="SlopeCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 75, -48)
@@ -347,17 +395,31 @@ shape = SubResource("BoxShape3D_s3nwt")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.194, 75.003, 5.155)
 curve = ExtResource("13_4atkq")
 
+[node name="Island01" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.148, -41.386, -190)
+curve = ExtResource("22_gqp0b")
+
+[node name="Island02" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.495, -42.868, -336.238)
+curve = ExtResource("23_0ws1h")
+
+[node name="Island03" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.955, -48.063, -435.953)
+curve = ExtResource("24_myiv4")
+
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="ExteriorLighting" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(0.984808, 0.163176, 0.0593912, 0, -0.34202, 0.939693, 0.173648, -0.925417, -0.336824, 0, 0, 0)
+transform = Transform3D(0.984808, 0.163176, 0.0593911, 0, -0.34202, 0.939693, 0.173648, -0.925417, -0.336824, 0, 0, 0)
 layers = 1024
 light_color = Color(0.709804, 0.690196, 0.560784, 1)
 light_energy = 1.2
+light_angular_distance = 0.5
 light_cull_mask = 4293918723
 shadow_enabled = true
-shadow_bias = 0.05
-directional_shadow_max_distance = 150.0
+directional_shadow_mode = 0
+directional_shadow_split_1 = 0.2
+directional_shadow_max_distance = 50.0
 
 [node name="LightBlockers" type="Node3D" parent="Lighting"]
 
@@ -401,7 +463,10 @@ environment = ExtResource("21_xtian")
 
 [node name="BGM" parent="." instance=ExtResource("14_ej622")]
 
+[node name="DepthRenderer" parent="." instance=ExtResource("25_fbdtt")]
+
 [node name="PlanarReflectionRenderer" parent="." instance=ExtResource("2_wxtpt")]
+renderMask = 18
 reflectionMaterials = [ExtResource("11_vtcnw")]
 reflectorHeight = -50.0
 

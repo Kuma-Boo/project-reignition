@@ -16,6 +16,9 @@ namespace Project.Gameplay
 		public static ViewportTexture ReflectionTexture { get; private set; }
 		public static readonly StringName REFLECTION_PARAMETER = "reflection_texture"; //All shaders that use reflections must have this parameter
 
+		[Export(PropertyHint.Layers3dRender)]
+		private uint renderMask;
+
 		[Export]
 		private NodePath reflectionCameraPath;
 		private Camera3D reflectionCamera;
@@ -88,6 +91,7 @@ namespace Project.Gameplay
 				previousCaptureRotation = mainCamera.Forward();
 			}
 
+			reflectionCamera.CullMask = renderMask;
 			reflectionCamera.Fov = mainCamera.Fov;
 			reflectionCamera.Size = mainCamera.Size;
 			reflectionCamera.Projection = mainCamera.Projection;

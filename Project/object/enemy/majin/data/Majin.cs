@@ -21,6 +21,7 @@ namespace Project.Gameplay
 		private enum AttackType
 		{
 			None,
+			Spin,
 			FireRotating,
 			FireStraight
 		}

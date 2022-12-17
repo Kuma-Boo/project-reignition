@@ -1,25 +1,26 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project
 {
 	public static class ExtensionMethods
 	{
 		/// <summary> Casts a ray from a Node3D </summary>
-		public static Core.RaycastHit CastRay(this Node3D s, Vector3 pos, Vector3 dir, uint mask = 2147483647, bool hitArea = false, Array ex = null)
+		public static RaycastHit CastRay(this Node3D s, Vector3 pos, Vector3 dir, uint mask = 2147483647, bool hitArea = false, Array ex = null)
 		{
-			Array<RID> excluded = new Array<RID>();
-
-			excluded.Add(new RID(s));
-			if (ex != null)
+			if (ex != null) //Reduce memory leaks
 			{
+				Array<RID> excluded = new Array<RID>();
+				excluded.Add(new RID(s));
+
 				for (int i = 0; i < ex.Count; i++)
-				{
 					excluded.Add(new RID((Node)ex[i]));
-				}
+
+				return PhysicsManager.CastRay(pos, dir, hitArea, mask, excluded);
 			}
 
-			return Core.PhysicsManager.CastRay(pos, dir, hitArea, mask, excluded);
+			return PhysicsManager.CastRay(pos, dir, hitArea, mask);
 		}
 
 		/// <summary> Creates a property dictionary to be used in _GetPropertyList() </summary>

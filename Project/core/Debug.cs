@@ -54,6 +54,7 @@ namespace Project.Core
 			if (InputManager.debugRestart.wasPressed)
 				TransitionManager.QueueSceneChange(string.Empty, true);
 
+
 			if (line3d.Count + line2d.Count != 0 && !IsPaused)
 				QueueRedraw();
 		}
@@ -63,7 +64,10 @@ namespace Project.Core
 			if (drawRaycasts)
 			{
 				for (int i = line2d.Count - 1; i >= 0; i--)
+				{
 					DrawLine(line2d[i].start, line2d[i].end, line3d[i].color, 1.0f, true);
+					line2d.RemoveAt(i);
+				}
 
 				Camera3D cam = GetViewport().GetCamera3d();
 				if (cam == null) return; //NO CAMERA
@@ -77,11 +81,9 @@ namespace Project.Core
 					Vector2 endPos = cam.UnprojectPosition(line3d[i].end);
 
 					DrawLine(startPos, endPos, line3d[i].color, 1.0f, true);
+					line3d.RemoveAt(i);
 				}
 			}
-
-			line2d.Clear();
-			line3d.Clear();
 		}
 
 		#region Line Drawer

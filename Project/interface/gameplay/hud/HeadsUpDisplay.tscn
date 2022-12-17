@@ -1,10 +1,5 @@
-[gd_scene load_steps=23 format=3 uid="uid://l2uoabrmrkg3"]
+[gd_scene load_steps=18 format=3 uid="uid://l2uoabrmrkg3"]
 
-[ext_resource type="Texture2D" uid="uid://comwfaowhnt8d" path="res://interface/gameplay/hud/soul gauge/orange/fill/AnimatedTexture.tres" id="1"]
-[ext_resource type="Texture2D" uid="uid://d0le4lri64mpt" path="res://interface/gameplay/hud/soul gauge/blue/fill/AnimatedTexture.tres" id="2"]
-[ext_resource type="Texture2D" uid="uid://46fjg4qe6ode" path="res://interface/gameplay/hud/soul gauge/blue/surface/AnimatedTexture.tres" id="3"]
-[ext_resource type="Texture2D" uid="uid://ct0masmpsfy21" path="res://interface/gameplay/hud/soul gauge/orange/surface/AnimatedTexture.tres" id="4"]
-[ext_resource type="Texture2D" uid="uid://dooldwbta7ksp" path="res://interface/gameplay/hud/rings/RingTexture.tres" id="5"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/Sprites.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://bn7bhmfqmn5i8" path="res://interface/gameplay/hud/soul gauge/Background.png" id="8"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
@@ -133,7 +128,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ExtResource("2")]
+"values": [null]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -145,7 +140,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ExtResource("3")]
+"values": [null]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -157,7 +152,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ExtResource("3")]
+"values": [null]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -198,7 +193,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ExtResource("1")]
+"values": [null]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -210,7 +205,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ExtResource("4")]
+"values": [null]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -222,7 +217,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("4")]
+"values": [null]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -417,18 +412,24 @@ texture = ExtResource("7")
 region_enabled = true
 region_rect = Rect2(120, 168, 64, 104)
 
-[node name="CurrentRing" type="Node2D" parent="RingCounter"]
-position = Vector2(128, 64)
+[node name="CurrentRing" type="Control" parent="RingCounter"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 128.0
+offset_top = 64.0
+offset_right = 128.0
+offset_bottom = 64.0
 
 [node name="Ring" type="TextureRect" parent="RingCounter/CurrentRing"]
+layout_mode = 0
 offset_left = -136.0
 offset_top = -48.0
 offset_right = -40.0
 offset_bottom = 48.0
 pivot_offset = Vector2(48, 48)
-texture = ExtResource("5")
 
 [node name="CurrentAmount" type="Label" parent="RingCounter/CurrentRing"]
+layout_mode = 0
 offset_left = -48.0
 offset_top = -40.0
 offset_right = 79.0
@@ -601,7 +602,6 @@ offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
-texture = ExtResource("2")
 stretch_mode = 1
 
 [node name="Surface" type="TextureRect" parent="SoulGauge/SoulGauge/Background/Fill"]
@@ -616,7 +616,6 @@ offset_bottom = 16.0
 grow_horizontal = 2
 scale = Vector2(0.8, 0.4)
 pivot_offset = Vector2(16, 16)
-texture = ExtResource("3")
 stretch_mode = 3
 
 [node name="SurfaceGlow" type="TextureRect" parent="SoulGauge/SoulGauge/Background/Fill"]
@@ -631,7 +630,6 @@ offset_bottom = 16.0
 grow_horizontal = 2
 scale = Vector2(0.8, 0.4)
 pivot_offset = Vector2(16, 16)
-texture = ExtResource("3")
 stretch_mode = 3
 flip_v = true
 

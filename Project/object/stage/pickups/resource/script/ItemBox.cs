@@ -173,7 +173,7 @@ namespace Project.Gameplay.Objects
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (Engine.IsEditorHint()) return;
+			if (Engine.IsEditorHint() || !IsVisibleInTree()) return;
 
 			if (isFlying)
 				chest.GlobalPosition = rootPosition.GlobalPosition;

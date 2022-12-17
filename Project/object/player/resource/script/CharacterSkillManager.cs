@@ -32,6 +32,9 @@ namespace Project.Gameplay
 		private MovementResource maxGroundSettings; //Fastest Sonic
 
 		[Export]
+		public MovementResource strafeSettings; //Strafe settings used during speed break, or strafe sections
+
+		[Export]
 		private MovementResource baseAirSettings; //Slowest Sonic
 		[Export]
 		private MovementResource maxAirSettings; //Fastest Sonic
@@ -133,9 +136,6 @@ namespace Project.Gameplay
 		}
 		private bool isSpeedBreakEnabled = true;
 		private bool isTimeBreakEnabled = true;
-
-		[Export]
-		public MovementResource strafeSettings; //Strafe settings used during speed break
 
 		//Audio clips
 		[Export]

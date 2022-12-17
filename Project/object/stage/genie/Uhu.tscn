@@ -1,0 +1,83 @@
+[gd_scene load_steps=12 format=3 uid="uid://dc1ik7p6xlh0a"]
+
+[ext_resource type="Material" uid="uid://bxgvc6gx60btc" path="res://object/stage/genie/material/Uhu.tres" id="1_hnp5r"]
+[ext_resource type="Material" uid="uid://clulwaslcx78q" path="res://object/stage/genie/material/Glow Process Material.tres" id="2_xptar"]
+[ext_resource type="Texture2D" uid="uid://ch6m32qbjicy7" path="res://object/stage/genie/texture/genie glow.png" id="3_7rm62"]
+[ext_resource type="Material" uid="uid://bm6mblpuw33xo" path="res://object/stage/genie/material/Wind.tres" id="3_qpv05"]
+[ext_resource type="Material" uid="uid://tij84kbrhtaa" path="res://object/stage/genie/material/Uhu Base Process Material.tres" id="4_610d3"]
+[ext_resource type="Material" uid="uid://b11xa70x4u0oh" path="res://object/stage/genie/material/Wind Process Material.tres" id="4_yq8lj"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0o2g1"]
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_se407"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_7rm62")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hnsb0"]
+material = SubResource("StandardMaterial3D_se407")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_l3yb0"]
+material = ExtResource("1_hnp5r")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rxv6i"]
+material = ExtResource("3_qpv05")
+size = Vector2(1, 1)
+orientation = 2
+
+[node name="Uhu" type="Node3D"]
+
+[node name="Base" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_hnp5r")
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("PlaneMesh_0o2g1")
+
+[node name="GlowParticle" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 1
+lifetime = 0.2
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = ExtResource("2_xptar")
+draw_pass_1 = SubResource("PlaneMesh_hnsb0")
+
+[node name="BaseParticle" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 1
+lifetime = 0.2
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = ExtResource("4_610d3")
+draw_pass_1 = SubResource("PlaneMesh_l3yb0")
+
+[node name="WindParticle" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 2
+lifetime = 0.3
+explosiveness = 0.9
+randomness = 0.2
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = ExtResource("4_yq8lj")
+draw_pass_1 = SubResource("PlaneMesh_rxv6i")

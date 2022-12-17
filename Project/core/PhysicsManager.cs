@@ -48,11 +48,13 @@ namespace Project.Core
 			{
 				From = pos,
 				To = endPos,
-				Exclude = ex,
 				CollisionMask = mask,
 				CollideWithBodies = true,
 				CollideWithAreas = hitAreas,
 			};
+
+			if (ex != null)
+				rayQuery.Exclude = ex;
 
 			Dictionary result = physicsState.IntersectRay(rayQuery);
 			RaycastHit raycast = new RaycastHit()
@@ -72,7 +74,13 @@ namespace Project.Core
 			}
 
 			//Fix memory leaks
-			ex.Clear();
+			if (ex != null)
+			{
+				ex.Clear();
+				rayQuery.Exclude.Clear();
+			}
+
+			rayQuery.Dispose();
 			result.Dispose();
 			return raycast;
 		}

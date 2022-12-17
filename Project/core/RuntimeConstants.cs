@@ -11,7 +11,7 @@ namespace Project.Core
 		public static readonly Vector2i SCREEN_SIZE = new Vector2i(1920, 1080); //Working resolution is 1080p
 		public static readonly Vector2i HALF_SCREEN_SIZE = (Vector2i)((Vector2)SCREEN_SIZE * .5f);
 
-		public override void _Ready() => Instance = this;
+		public override void _EnterTree() => Instance = this;
 		public override void _Process(double _)
 		{
 			UpdateShaderTime();

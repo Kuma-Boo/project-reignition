@@ -1,5 +1,4 @@
 using Godot;
-using Project.Core;
 
 namespace Project.Gameplay
 {
@@ -38,9 +37,8 @@ namespace Project.Gameplay
 
 			//UpdatePosition();
 			Progress = ActivePath.Curve.GetClosestOffset(Character.GlobalPosition - ActivePath.GlobalPosition);
-
 			float newForwardAngle = CharacterController.CalculateForwardAngle(this.Forward());
-			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f; //Half value seems to be more accurate for some reason
+			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f;
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;

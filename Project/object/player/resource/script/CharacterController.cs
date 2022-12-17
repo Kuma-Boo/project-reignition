@@ -31,11 +31,11 @@ namespace Project.Gameplay
 		public override void _PhysicsProcess(double _)
 		{
 			UpdateStateMachine();
-			UpdatePhysics();
 			UpdateOrientation();
+			UpdatePhysics();
 
-			Animator.UpdateAnimation();
-			Skills.UpdateSoulSkills();
+			//Animator.UpdateAnimation();
+			//Skills.UpdateSoulSkills();
 		}
 
 		#region State Machine
@@ -141,7 +141,7 @@ namespace Project.Gameplay
 
 			if (Skills.IsSpeedBreakActive)
 			{
-				return PathFollower.ForwardAngle;
+				return PathFollower.ForwardAngle + PathFollower.DeltaAngle;
 			}
 			else if (IsLockoutActive && CurrentLockoutData.overrideMode != LockoutResource.OverrideMode.Free)
 			{
@@ -149,15 +149,17 @@ namespace Project.Gameplay
 				if (CurrentLockoutData.spaceMode == LockoutResource.SpaceMode.Camera)
 					targetAngle = Camera.TransformAngle(targetAngle);
 				else if (CurrentLockoutData.spaceMode == LockoutResource.SpaceMode.PathFollower)
-					targetAngle = PathFollower.ForwardAngle + targetAngle;
+					targetAngle = PathFollower.ForwardAngle + targetAngle + PathFollower.DeltaAngle;
 				else if (CurrentLockoutData.spaceMode == LockoutResource.SpaceMode.Local)
 					targetAngle += MovementAngle;
 
 				if (CurrentLockoutData.allowReversing) //Check if we're trying to turn around
 				{
-					float dot = Mathf.Sign(ExtensionMethods.DotAngle(inputAngle, PathFollower.ForwardAngle));
-					if (dot < 0) //Invert targetAngle when moving backwards
-						targetAngle += Mathf.Pi;
+					if (IsMovingBackward || (IsHoldingDirection(targetAngle + Mathf.Pi) && turnInstantly))
+					{
+						IsMovingBackward = true;
+						targetAngle += Mathf.Pi; //Flip targetAngle when moving backwards
+					}
 				}
 
 				return targetAngle;
@@ -355,14 +357,14 @@ namespace Project.Gameplay
 		/// <summary> Updates MoveSpd. What else do you need know? </summary>
 		private void UpdateMoveSpd()
 		{
-			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); //Store this so UpdateTurning works properly
+			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); //Store this for turning function
 
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Backflip) return;
 			if (Skills.IsSpeedBreakActive) return; //Overridden to max speed
 
 			float inputAngle = GetTargetInputAngle();
+			float inputLength = Controller.MovementAxis.LimitLength(1f).Length(); //Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 			float dot = Mathf.Abs(ExtensionMethods.DotAngle(inputAngle, GetTargetMovementAngle()));
-			float inputLength = GetMovementDirection().Length(); //Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 			if (dot < .8f)
 				inputLength *= dot;
 
@@ -789,7 +791,10 @@ namespace Project.Gameplay
 		{
 			CanJumpDash = true;
 			MoveSpeed = backflipSpeed;
+
+			IsMovingBackward = true;
 			MovementAngle = GetTargetInputAngle();
+
 			VerticalSpd = RuntimeConstants.GetJumpPower(backflipHeight);
 			Sound.PlayActionSFX("jump");
 
@@ -905,11 +910,14 @@ namespace Project.Gameplay
 		/// </summary>
 		private void SnapToGround()
 		{
-			MoveAndCollide(Vector3.Down * 1000);
+			KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 1000);
 			CheckGround();
 
 			if (!IsOnGround)
 			{
+				if (collision.GetCollisionCount() == 0) //Undo movement
+					GlobalPosition += Vector3.Up * 1000;
+
 				VerticalSpd = 0f;
 				GD.Print("Couldn't find ground to snap to!");
 			}
@@ -1008,10 +1016,6 @@ namespace Project.Gameplay
 			set => environmentCollider.Disabled = !value;
 		}
 
-		/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs </summary>
-		public float MovementAngle { get; set; }
-		public Vector3 GetMovementDirection() => this.Forward().Rotated(UpDirection, MovementAngle);
-
 		public float MoveSpeed { get; set; } //Character's primary movement speed.
 		public float StrafeSpeed { get; set; } //Used during speed break, etc. 
 		public float VerticalSpd { get; set; } //Used for jumping and falling
@@ -1027,10 +1031,10 @@ namespace Project.Gameplay
 			Lockon.UpdateLockonTargets();
 			if (useCustomPhysics) return; //When physics are handled in the state machine
 
-			Vector3 movementDirection = GetMovementDirection();
-
 			//Collision checks
 			CheckGround();
+
+			Vector3 movementDirection = GetMovementDirection();
 			CheckMainWall(movementDirection);
 
 			if (ActionState == ActionStates.JumpDash) //Jump dash ignores slopes
@@ -1071,6 +1075,7 @@ namespace Project.Gameplay
 				castLength = -.1f; //Reduce snapping when moving upwards
 
 			Vector3 castVector = -UpDirection * castLength;
+
 			RaycastHit groundHit = this.CastRay(castOrigin, castVector, CollisionMask, false, (Godot.Collections.Array)GetCollisionExceptions());
 			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
 
@@ -1103,7 +1108,6 @@ namespace Project.Gameplay
 					ResetActionState();
 					Lockon.ResetLockonTarget();
 					UpDirection = groundHit.normal;
-					UpdateOrientation();
 
 					if (!IsCountdownActive && !IsRespawning) //Don't do this stuff during countdown
 					{
@@ -1233,10 +1237,7 @@ namespace Project.Gameplay
 			else
 				GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
 
-			PathFollower.Resync(); //Update path follower
 			MovementAngle = PathFollower.ForwardAngle; //Reset movement angle
-
-			//TODO Re-sync visual rotations
 		}
 
 		private void UpdateOrientation() //Orientates Root to world direction, then rotates the gimbal on the y-axis
@@ -1244,25 +1245,38 @@ namespace Project.Gameplay
 			if (MovementState == MovementStates.External) return; //Externally controlled
 
 			Transform3D t = GlobalTransform;
-			t.basis.z = Vector3.Back;
+			t.basis.z = Vector3.Forward;
 			t.basis.y = UpDirection;
-			if (Mathf.Abs(t.basis.z.Dot(t.basis.y)) > .9f) //BUGFIX Prevent player blipping out of existence when on 90 wall
-				t.basis.z = Vector3.Up;
-			t.basis.x = -t.basis.z.Cross(t.basis.y);
+			t.basis.x = t.basis.y.Cross(t.basis.z).Normalized();
 			t.basis = t.basis.Orthonormalized();
+
+			//if (Mathf.Abs(t.basis.z.Dot(t.basis.y)) > .9f) //BUGFIX Prevent player blipping out of existence when on 90 wall
+			//t.basis.z = Vector3.Up;
 			GlobalTransform = t;
 		}
 		#endregion
 
+		/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs </summary>
+		public float MovementAngle { get; set; }
+		public Vector3 GetMovementDirection()
+		{
+			if (Skills.IsSpeedBreakActive) //Follow pathfollower more accurately when speedbreaking
+				return PathFollower.Forward().Rotated(UpDirection, PathFollower.DeltaAngle);
+
+			return this.Back().Rotated(UpDirection, MovementAngle); //Normally this is good enough
+		}
+
 		//Gets the rotation of a given "forward" vector
 		public static float CalculateForwardAngle(Vector3 forwardDirection)
 		{
+			/*
 			float dot = forwardDirection.Dot(Vector3.Up);
 			if (Mathf.Abs(dot) > .9f) //Moving vertically
 			{
 				Vector3 upDirection = instance.UpDirection.RemoveVertical().Normalized();
 				return forwardDirection.SignedAngleTo(Vector3.Up * Mathf.Sign(dot), upDirection);
 			}
+			*/
 
 			return forwardDirection.Flatten().AngleTo(Vector2.Down);
 		}

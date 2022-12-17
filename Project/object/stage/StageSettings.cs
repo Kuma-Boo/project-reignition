@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using System;
 using System.Collections.Generic;
 using Project.Core;
 
@@ -18,7 +19,7 @@ namespace Project.Gameplay
 			Array<Dictionary> properties = new Array<Dictionary>();
 
 			properties.Add(ExtensionMethods.CreateProperty("Starting Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
-			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, "None,Objective,Rings,Pearls,Enemies"));
+			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, "None,Objective,Rings,Pearls,Enemies,Race"));
 			properties.Add(ExtensionMethods.CreateProperty("Time Limit", Variant.Type.Int, PropertyHint.Range, "0,640"));
 
 			if (MissionType != MissionTypes.None)
@@ -193,6 +194,7 @@ namespace Project.Gameplay
 		public override void _PhysicsProcess(double _)
 		{
 			if (Engine.IsEditorHint()) return;
+
 			UpdateTime();
 		}
 
@@ -218,6 +220,7 @@ namespace Project.Gameplay
 			Ring, //Collect a certain amount of rings
 			Pearl, //Collect a certain amount of pearls (normally zero)
 			Enemy, //Destroy a certain amount of enemies
+			Race, //Race against an enemy
 		}
 		#endregion
 
@@ -324,20 +327,21 @@ namespace Project.Gameplay
 		private void UpdateTime()
 		{
 			if (isStageFinished || Interface.Countdown.IsCountdownActive || CharacterController.instance.IsRespawning) return;
-			CurrentTime += PhysicsManager.physicsDelta; //Add current time
 
+			CurrentTime += PhysicsManager.physicsDelta; //Add current time
 			if (TimeLimit == 0) //No time limit
 			{
-				System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
+				TimeSpan time = TimeSpan.FromSeconds(CurrentTime);
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
 			}
 			else
 			{
-				System.TimeSpan time = System.TimeSpan.FromSeconds(Mathf.Clamp(TimeLimit - CurrentTime, 0, TimeLimit));
+				TimeSpan time = TimeSpan.FromSeconds(Mathf.Clamp(TimeLimit - CurrentTime, 0, TimeLimit));
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
 				if (CurrentTime > TimeLimit)
 					FinishStage(false); //Time's up!
 			}
+
 			EmitSignal(SignalName.TimeChanged);
 		}
 		#endregion
@@ -390,6 +394,8 @@ namespace Project.Gameplay
 		public Path3D CheckpointPath { get; private set; }
 		public void SetCheckpoint(Node3D newCheckpoint)
 		{
+			if (newCheckpoint == CurrentCheckpoint) return; //Already at this checkpoint
+
 			CurrentCheckpoint = newCheckpoint; //Position transform
 			CheckpointPath = CharacterController.instance.PathFollower.ActivePath; //Store current path
 			EmitSignal(SignalName.OnTriggeredCheckpoint);

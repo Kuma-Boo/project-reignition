@@ -13,6 +13,8 @@ namespace Project.Gameplay.Objects
 
 		public bool DisableAutoRespawning { get; set; } //Used for ItemBoxes to allow manual respawning
 		private SpawnData spawnData;
+
+		protected StageSettings Stage => StageSettings.instance;
 		protected CharacterController Character => CharacterController.instance;
 
 		public override void _Ready() => SetUp();
@@ -22,7 +24,7 @@ namespace Project.Gameplay.Objects
 			if (DisableAutoRespawning) return; //Don't respawn automatically
 
 			spawnData = new SpawnData(GetParent(), Transform);
-			StageSettings.instance.RegisterRespawnableObject(this);
+			Stage.RegisterRespawnableObject(this);
 		}
 
 		public void OnEntered(Area3D a)

@@ -24,6 +24,7 @@ namespace Project
 		private Vector2 screenUV;
 		private float currentMovement;
 		private float currentMovementVelocity;
+		private bool isOccluded = true; //Start occluded
 		private float currentOcclusion;
 		private float currentOcclusionVelocity;
 		private readonly float OCCLUSION_SMOOTHING = .2f;
@@ -54,16 +55,14 @@ namespace Project
 		{
 			if (MainCamera == null || DepthRenderer.DepthTexture == null) return; //No camera/depth texture found
 
-			bool isOccluded = true;
-			if (!MainCamera.IsPositionBehind(GlobalPosition) && MainCamera.IsOnScreen(GlobalPosition))
-				isOccluded = SampleTexture() < backgroundSeparation;
+			UpdateSample();
 
 			currentOcclusion = ExtensionMethods.SmoothDamp(currentOcclusion, isOccluded ? 1f : 0f, ref currentOcclusionVelocity, OCCLUSION_SMOOTHING);
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_OCCLUSION, currentOcclusion);
 
+			screenUV = MainCamera.ConvertToScreenSpace(GlobalPosition) / RuntimeConstants.SCREEN_SIZE;
 			if ((screenUV - previousScreenUV).LengthSquared() * 100.0f > movementThreshold)
 				currentMovement = 0f;
-
 			previousScreenUV = screenUV;
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_MOVEMENT, currentMovement);
 			currentMovement = ExtensionMethods.SmoothDamp(currentMovement, 1f, ref currentMovementVelocity, MOVEMENT_SMOOTHING);
@@ -71,12 +70,31 @@ namespace Project
 			UpdateLensFlare();
 		}
 
-		private float SampleTexture()
+
+		private float updateTimer;
+		private readonly float UPDATE_INTERVAL = .5f; //How often to update the sun. Reduces frame drops
+		private void UpdateSample()
 		{
-			screenUV = MainCamera.ConvertToScreenSpace(GlobalPosition) / RuntimeConstants.SCREEN_SIZE;
-			Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
-			Vector2 samplePosition = screenUV * depthBuffer.GetSize();
-			return depthBuffer.GetPixel(Mathf.FloorToInt(samplePosition.x), Mathf.FloorToInt(samplePosition.y)).r;
+			if (updateTimer <= 0f)
+			{
+				if (MainCamera.IsPositionBehind(GlobalPosition))
+					isOccluded = true; //Always occluded when the camera faces away
+				else if (MainCamera.IsOnScreen(GlobalPosition))
+				{
+					//Sample texture. VERY SLOW!!!
+					Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
+					Vector2i samplePosition = (Vector2i)(screenUV * depthBuffer.GetSize());
+
+					//Since the sun is so far away, a simple alpha check can determine occlusion.
+					float alpha = depthBuffer.GetPixelv(samplePosition).a;
+					isOccluded = !Mathf.IsZeroApprox(alpha);
+					depthBuffer.Dispose(); //Don't forget to dispose the image!
+				}
+
+				updateTimer = UPDATE_INTERVAL;
+			}
+			else
+				updateTimer -= PhysicsManager.physicsDelta;
 		}
 
 		private void UpdateLensFlare()

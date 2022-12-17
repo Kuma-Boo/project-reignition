@@ -32,6 +32,7 @@ namespace Project.Gameplay.Objects
 		private bool canTransitionToFalling; //Animator parameter to sync falling transition
 		[Export]
 		private bool isFalling; //Animator parameter to check falling status
+		private bool isProcessing;
 
 		private float flapTimer;
 		private float angle;
@@ -71,50 +72,51 @@ namespace Project.Gameplay.Objects
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (Engine.IsEditorHint()) return;
+			if (!isProcessing || Engine.IsEditorHint()) return;
 
 			if (interactingWithPlayer)
 			{
 				if (isControllingPlayer)
 					ProcessMovement();
 				else if (!isEnteringPot && !Character.IsOnGround)
-				{
-					isEnteringPot = true;
-					environmentCollider.Disabled = true;
-
-					float jumpHeight = (GlobalPosition.y + 1) - Character.GlobalPosition.y;
-					jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
-					Character.JumpTo(GlobalPosition, jumpHeight, true);
-
-					lockonArea.SetDeferred("monitorable", false);
-
-					Character.CanJumpDash = false;
-					Character.Skills.IsSpeedBreakEnabled = false; //Disable speed break
-
-					Character.Lockon.ResetLockonTarget();
-					Character.Connect(CharacterController.SignalName.LauncherFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
-
-					//Update camera
-					if (cameraSettings != null)
-					{
-						cameraSettings.viewAngle.y = (Mathf.RadToDeg(GlobalRotation.y) + 180) % 360; //Sync viewAngle to current flying pot's rotation
-						GD.Print(cameraSettings.viewAngle.y);
-						Character.Camera.SetCameraData(cameraSettings);
-					}
-				}
+					StartJump();
 			}
 			else if (!lockonArea.Monitorable) //Re-enable lockon
 				lockonArea.SetDeferred("monitorable", Character.VerticalSpd < 0f);
 
-			if (!isControllingPlayer)
-				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
-
 			ApplyMovement();
+		}
+
+		private void StartJump()
+		{
+			isEnteringPot = true;
+			environmentCollider.Disabled = true;
+
+			float jumpHeight = (GlobalPosition.y + 1) - Character.GlobalPosition.y;
+			jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
+			Character.JumpTo(GlobalPosition, jumpHeight, true);
+
+			lockonArea.SetDeferred("monitorable", false);
+
+			Character.CanJumpDash = false;
+			Character.Skills.IsSpeedBreakEnabled = false; //Disable speed break
+
+			Character.Lockon.ResetLockonTarget();
+			Character.Connect(CharacterController.SignalName.LauncherFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
+
+			//Update camera
+			if (cameraSettings != null)
+			{
+				cameraSettings.viewAngle.y = (Mathf.RadToDeg(GlobalRotation.y) + 180) % 360; //Sync viewAngle to current flying pot's rotation
+				GD.Print(cameraSettings.viewAngle.y);
+				Character.Camera.SetCameraData(cameraSettings);
+			}
 		}
 
 		private void OnEnteredPot()
 		{
 			flapTimer = 0;
+			isProcessing = false;
 			isControllingPlayer = true;
 			Character.StartExternal(this);
 			Character.Animator.Visible = false;
@@ -184,17 +186,24 @@ namespace Project.Gameplay.Objects
 			if (velocity.y < MAX_GRAVITY)
 				velocity.y = MAX_GRAVITY;
 
+			if (!isControllingPlayer)
+				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
+
 			GlobalPosition = startPosition + Vector3.Up * position.y + this.Right() * position.x;
 			root.Rotation = Vector3.Back * angle;
 
 			if (isControllingPlayer)
-				Character.UpdateExternalControl();
+				Character.UpdateExternalControl(); //Sync player object
+
+			if (lockonArea.Monitorable && !interactingWithPlayer)
+				isProcessing = !Mathf.IsZeroApprox(position.y) || !Mathf.IsZeroApprox(angle); //Update sleeping status
 		}
 
 		public void PlayerEntered(Area3D _)
 		{
-			interactingWithPlayer = true;
+			isProcessing = true;
 			isLeavingPot = false;
+			interactingWithPlayer = true;
 		}
 
 		public void PlayerExited(Area3D _)

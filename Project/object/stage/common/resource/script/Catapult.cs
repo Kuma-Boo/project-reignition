@@ -30,14 +30,12 @@ namespace Project.Gameplay.Objects
 		private float launchPowerVelocity;
 		private readonly float POWER_ADJUSTMENT_SPEED = .14f; //How fast to adjust the power
 		private readonly float POWER_SMOOTHING_SPEED = .2f; //How fast to adjust the power
-		private readonly float POWER_RESET_SPEED = .8f; //How fast to adjust the power
 
 		[Export]
 		private Node3D launchNode;
 		[Export]
 		private Node3D armNode;
-		[Export]
-		private AnimationPlayer animator;
+		private Tween armTween;
 
 		public LaunchData GetLaunchData()
 		{
@@ -48,37 +46,41 @@ namespace Project.Gameplay.Objects
 			return LaunchData.Create(launchPoint, launchPoint + this.Forward() * distance + Vector3.Up * endHeight, midHeight);
 		}
 
-		private readonly float CLOSE_WINDUP_ANGLE = Mathf.DegToRad(-45f);
+		private readonly float CLOSE_WINDUP_ANGLE = Mathf.DegToRad(45f);
 		private Vector3 GetLaunchPosition() => GlobalPosition + this.Up() * 3.5f;
 
 		private bool isEnteringCatapult;
 		private bool isEjectingPlayer;
 		private bool isControllingPlayer;
+		private bool isProcessing;
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (Engine.IsEditorHint())
-				return;
+			if (Engine.IsEditorHint() || !isProcessing) return;
 
-			Vector3 targetRotation = Vector3.Zero;
 			if (isControllingPlayer)
 			{
-				if (!isEjectingPlayer) //Update Controls
+				if (isEjectingPlayer) //Launch the player at the right time
+				{
+					if (armNode.Rotation.x > Mathf.Pi * .5f)
+						LaunchPlayer();
+				}
+				else //Update Controls
 				{
 					float targetLaunchPower = .5f + (Controller.verticalAxis.value * .5f);
 					launchPower = ExtensionMethods.SmoothDamp(launchPower, targetLaunchPower, ref launchPowerVelocity, POWER_ADJUSTMENT_SPEED);
-					targetRotation = Vector3.Left * Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
 
 					if (Controller.jumpButton.wasPressed) //Cancel
 						EjectPlayer(true);
 					else if (Controller.actionButton.wasPressed) //Launch
 						EjectPlayer(false);
 
-					armNode.Rotation = armNode.Rotation.Lerp(targetRotation, POWER_SMOOTHING_SPEED);
+					float targetRotation = Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
+					armNode.Rotation = Vector3.Right * Mathf.Lerp(armNode.Rotation.x, targetRotation, POWER_SMOOTHING_SPEED);
+
+					Character.UpdateExternalControl();
 				}
 			}
-			else
-				armNode.Rotation = armNode.Rotation.Lerp(targetRotation, POWER_RESET_SPEED);
 		}
 
 		private void OnEnteredCatapult()
@@ -86,20 +88,41 @@ namespace Project.Gameplay.Objects
 			isControllingPlayer = true;
 			isEnteringCatapult = false;
 			Character.StartExternal(launchNode);
-			launchPower = 0f;
+			launchPower = 1f;
 			launchPowerVelocity = 0f;
+
+			if (armTween != null)
+			{
+				armTween.Kill();
+				armTween.Dispose();
+			}
 		}
 
 		private void EjectPlayer(bool isCancel)
 		{
 			isEjectingPlayer = true;
-			animator.Play(isCancel ? "Cancel" : "Launch");
+
+			armTween = CreateTween();
+
+			if (isCancel)
+			{
+				armTween.TweenProperty(armNode, "rotation", Vector3.Zero, .2f * (1 - launchPower)).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+				armTween.TweenCallback(new Callable(this, MethodName.CancelCatapult));
+			}
+			else
+			{
+				armTween.TweenProperty(armNode, "rotation", Vector3.Right * Mathf.Pi, .25f * (launchPower + 1)).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+				armTween.TweenProperty(armNode, "rotation", Vector3.Zero, .4f).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+			}
+
+			armTween.TweenCallback(new Callable(this, MethodName.StopProcessing));
 		}
+
+		private void StopProcessing() => isProcessing = false;
 
 		private void LaunchPlayer()
 		{
 			isControllingPlayer = false;
-			//Character.Animator.ResetLocalRotation();
 			Character.StartLauncher(GetLaunchData(), null, true);
 		}
 
@@ -112,11 +135,12 @@ namespace Project.Gameplay.Objects
 			Character.JumpTo(Character.GlobalPosition + destination, 1f);
 		}
 
-		public void PlayerEntered(Area3D a)
+		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			if (isEnteringCatapult) return; //Already entering catapult
+			isProcessing = true; //Start processing
 
+			if (isEnteringCatapult) return; //Already entering catapult
 			isEjectingPlayer = false; //Reset
 			isEnteringCatapult = true;
 

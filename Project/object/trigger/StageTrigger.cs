@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 
 namespace Project.Gameplay.Triggers
 {
@@ -48,17 +47,14 @@ namespace Project.Gameplay.Triggers
 		public override void _Ready()
 		{
 			//Connect child modules
-			Array<Node> children = GetChildren();
-			for (int i = 0; i < children.Count; i++)
+			for (int i = 0; i < GetChildCount(); i++)
 			{
-				if (children[i] is StageTriggerModule)
-				{
-					StageTriggerModule module = children[i] as StageTriggerModule;
+				StageTriggerModule module = GetChildOrNull<StageTriggerModule>(i);
+				if (module == null) continue;
 
-					//Connect signals
-					Connect(SignalName.Activated, new Callable(module, MethodName.Activate));
-					Connect(SignalName.Deactivated, new Callable(module, MethodName.Deactivate));
-				}
+				//Connect signals
+				Connect(SignalName.Activated, new Callable(module, MethodName.Activate));
+				Connect(SignalName.Deactivated, new Callable(module, MethodName.Deactivate));
 			}
 
 			if (activationMode == ActivationMode.OneshotRespawnable)
@@ -69,7 +65,6 @@ namespace Project.Gameplay.Triggers
 
 		public void OnEntered(Area3D a)
 		{
-			GD.Print("Entered " + Name);
 			if (!a.IsInGroup("player")) return;
 
 			//Determine whether activation is successful
@@ -88,9 +83,7 @@ namespace Project.Gameplay.Triggers
 
 		public void OnExited(Area3D a)
 		{
-			GD.Print("Left " + Name);
 			if (!a.IsInGroup("player")) return;
-			if (!PathFollower.IsInsideTree()) return;
 
 			//Determine whether deactivation is successful
 			if (triggerMode == TriggerMode.OnEnter)
