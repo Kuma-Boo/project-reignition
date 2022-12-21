@@ -31,10 +31,16 @@ namespace Project.Gameplay.Triggers
 				StartSidle();
 		}
 
+		private Callable StopSidleCallable => new Callable(this, MethodName.StopSidle);
+
 		private void StartSidle()
 		{
 			isActive = true;
-			Character.StartExternal(Character.PathFollower, .2f);
+			Character.StartExternal(this, Character.PathFollower, .2f);
+		}
+
+		private void StopSidle()
+		{
 		}
 
 		private void UpdateSidle()
@@ -43,7 +49,6 @@ namespace Project.Gameplay.Triggers
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 		}
 
-		#region Sidle
 		private void UpdateSidleDamage()
 		{
 		}
@@ -52,7 +57,6 @@ namespace Project.Gameplay.Triggers
 		{
 
 		}
-		#endregion
 
 		public void OnEntered(Area3D a)
 		{
@@ -76,11 +80,13 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!a.IsInGroup("player")) return;
 
-			Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.BackAngle : Character.PathFollower.ForwardAngle;
-			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
-
 			isActive = false;
 			isInteractingWithPlayer = false;
+
+			if (Character.ExternalController != this) return; //Overridden by a different controller
+
+			Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.BackAngle : Character.PathFollower.ForwardAngle;
+			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
 			Character.ResetMovementState();
 		}
 	}

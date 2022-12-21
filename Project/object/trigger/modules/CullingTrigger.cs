@@ -3,42 +3,51 @@ using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
-	/// <summary>
-	/// Hides/Shows nodes.
-	/// Use <see cref="modifyTree"/> to enable/disable objects completely. (i.e. one way collisions)
-	/// </summary>
 	public partial class CullingTrigger : StageTriggerModule
 	{
+		/// <summary>
+		/// Target node to affect. Can't be the CullingTrigger object when set to CullMode.ModifyTree.
+		/// </summary>
 		[Export]
 		private Node3D targetNode;
 		[Export]
-		private bool modifyTree; //Doesn't work with isStageVisuals, and can cause stuttering when used on denser objects
-		private SpawnData spawnData; //Data for tree modification
-		[Export]
 		private bool startEnabled; //Generally things should start culled
 		[Export]
-		private bool isStageVisuals;
+		private bool modifyTree; //Should the SceneTree be modified when target object is culled?
+		[Export]
+		private bool saveVisibilityOnCheckpoint;
+		[Export]
+		private bool isStageVisuals; //Take cheat into account?
+		private SpawnData spawnData; //Data for tree modification
 		private Callable ProcessCheckpointCallable => new Callable(this, MethodName.ProcessCheckpoint);
 		private StageSettings Stage => StageSettings.instance;
 
+		private bool DebugDisableCulling => isStageVisuals && CheatManager.DisableStageCulling;
+
 		public override void _Ready()
 		{
-			if (isStageVisuals)
-			{
-				if (CheatManager.DisableStageCulling) //Culling disabled
-					return;
+			if (DebugDisableCulling) return;
 
+			if (saveVisibilityOnCheckpoint)
+			{
 				if (!Stage.IsConnected(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
 					Stage.Connect(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
 			}
-			else if (modifyTree)
+
+			if (modifyTree) //Save spawn data
+			{
+				if (targetNode == this) //The results of this configuration is that once the culling trigger gets despawned, it'll never be respawned again
+					GD.PrintErr($"{Name}: Target Node cannot be the same object as CullingTrigger.cs when using CullMode.ModifyTree!");
+
 				spawnData = new SpawnData(targetNode.GetParent(), targetNode.Transform);
+			}
 
 			Respawn();
-			Stage.RegisterRespawnableObject(this);
+			Stage.ConnectRespawnSignal(this);
+			Stage.ConnectUnloadSignal(this);
 		}
 
-		public override void _ExitTree()
+		public void Unload()
 		{
 			if (Stage.IsConnected(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
 				Stage.Disconnect(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
@@ -53,7 +62,7 @@ namespace Project.Gameplay.Triggers
 
 		private void Respawn()
 		{
-			if (isStageVisuals)
+			if (saveVisibilityOnCheckpoint)
 			{
 				if (useCheckpointVisibility)
 				{
@@ -69,20 +78,20 @@ namespace Project.Gameplay.Triggers
 			}
 
 			//Disable the node on startup?
-			if (!startEnabled)
+			if (startEnabled)
+				Activate();
+			else
 				Deactivate();
 		}
 
 		public override void Activate()
 		{
-			if (isStageVisuals && CheatManager.DisableStageCulling) return;
+			if (DebugDisableCulling) return;
 
-			if (!isStageVisuals && modifyTree)
+			if (modifyTree)
 			{
-				if (targetNode.IsInsideTree()) return;
-
+				GD.Print($"Respawned " + Name);
 				spawnData.Respawn(targetNode);
-				return;
 			}
 
 			targetNode.Visible = true;
@@ -92,9 +101,9 @@ namespace Project.Gameplay.Triggers
 
 		public override void Deactivate()
 		{
-			if (isStageVisuals && CheatManager.DisableStageCulling) return;
+			if (DebugDisableCulling) return;
 
-			if (!isStageVisuals && modifyTree)
+			if (modifyTree)
 			{
 				if (!targetNode.IsInsideTree()) return;
 

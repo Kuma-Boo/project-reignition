@@ -12,7 +12,7 @@ namespace Project.Gameplay
 
 		public override void _Ready()
 		{
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		public void Respawn()

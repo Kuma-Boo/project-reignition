@@ -80,6 +80,8 @@ namespace Project.Gameplay.Objects
 			}
 
 			Respawn();
+			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.instance.ConnectUnloadSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -172,7 +174,7 @@ namespace Project.Gameplay.Objects
 			EmitSignal(SignalName.Shattered);
 		}
 
-		public override void _ExitTree() //Prevent memory leakage
+		public void Unload() //Prevent memory leakage
 		{
 			root.QueueFree();
 			pieceRoot.QueueFree();

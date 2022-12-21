@@ -36,15 +36,14 @@ namespace Project.Gameplay.Objects
 
 		private float flapTimer;
 		private float angle;
+		private float velocity;
 		private Vector2 position;
-		private Vector2 velocity;
 		private Vector3 startPosition;
 
 		private const float MAX_GRAVITY = -10.0f;
 		private const float GRAVITY_SCALE = 0.26f;
 		private const float WING_POWER = 4.0f;
 		private const float MAX_SPEED = 12.0f;
-		private const float HORIZONTAL_DRAG = .05f;
 		private const float ROTATION_SPEED = .1f;
 		private const float MAX_ANGLE = Mathf.Pi * .2f;
 		private const float FLAP_INTERVAL = .32f; //How fast can the player flap?
@@ -57,14 +56,14 @@ namespace Project.Gameplay.Objects
 			if (Engine.IsEditorHint()) return;
 
 			startPosition = GlobalPosition;
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		private void Respawn()
 		{
 			angle = 0f;
+			velocity = 0f;
 			position = Vector2.Zero;
-			velocity = Vector2.Zero;
 			GlobalPosition = startPosition;
 
 			lockonArea.SetDeferred("monitorable", true);
@@ -116,7 +115,6 @@ namespace Project.Gameplay.Objects
 		private void OnEnteredPot()
 		{
 			flapTimer = 0;
-			isProcessing = false;
 			isControllingPlayer = true;
 			Character.StartExternal(this);
 			Character.Animator.Visible = false;
@@ -128,7 +126,7 @@ namespace Project.Gameplay.Objects
 			isLeavingPot = true;
 			isControllingPlayer = false;
 
-			velocity.y = 0f; //Kill all vertical velocity
+			velocity = 0f; //Kill all velocity
 
 			Character.VerticalSpd = RuntimeConstants.GetJumpPower(Character.jumpHeight);
 			//Character.StrafeSpeed = Character.airStrafeSettings.speed * (angle / MAX_ANGLE);
@@ -152,12 +150,12 @@ namespace Project.Gameplay.Objects
 
 			if (Mathf.IsZeroApprox(flapTimer) && Controller.actionButton.wasPressed) //Move upwards
 			{
-				if (velocity.y < 0)
-					velocity.y = 0;
+				if (velocity < 0)
+					velocity = 0;
 
-				velocity += Vector2.Down.Rotated(angle) * WING_POWER;
-				if (velocity.y > 0)
-					velocity = velocity.LimitLength(MAX_SPEED);
+				velocity += WING_POWER;
+				if (velocity > MAX_SPEED)
+					velocity = MAX_SPEED;
 
 				wingAnimator.Play("flap");
 				wingAnimator.Seek(0.0);
@@ -167,24 +165,27 @@ namespace Project.Gameplay.Objects
 
 		private void ApplyMovement()
 		{
-			position += velocity * PhysicsManager.physicsDelta;
+			if (velocity > 0)
+				position += Vector2.Down.Rotated(angle) * velocity * PhysicsManager.physicsDelta;
+			else
+				position += Vector2.Down * velocity * PhysicsManager.physicsDelta;
+
 			position.x = Mathf.Clamp(position.x, -travelBounds.x, travelBounds.x);
 			position.y = Mathf.Clamp(position.y, 0f, travelBounds.y);
 			if (Mathf.IsZeroApprox(position.y))
 			{
-				velocity.y = 0;
+				velocity = 0;
 
 				if (isFalling)
 					wingAnimator.Play("flap");
 			}
-			else if (velocity.y < 0 && canTransitionToFalling)
+			else if (velocity < 0 && canTransitionToFalling)
 				wingAnimator.Play("fall"); //Start fall animation
 
 			//Update velocity
-			velocity.x = Mathf.Lerp(velocity.x, 0f, HORIZONTAL_DRAG);
-			velocity.y -= RuntimeConstants.GRAVITY * GRAVITY_SCALE * PhysicsManager.physicsDelta; //Floaty fall
-			if (velocity.y < MAX_GRAVITY)
-				velocity.y = MAX_GRAVITY;
+			velocity -= RuntimeConstants.GRAVITY * GRAVITY_SCALE * PhysicsManager.physicsDelta; //Floaty fall
+			if (velocity < MAX_GRAVITY)
+				velocity = MAX_GRAVITY;
 
 			if (!isControllingPlayer)
 				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);

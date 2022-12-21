@@ -286,14 +286,18 @@ namespace Project.Gameplay
 		#endregion
 
 		#region External Control, Automation and Events
-		private Vector3 externalOffset;
+		[Signal]
+		public delegate void OnStartedExternalEventHandler();
+		public Node ExternalController { get; private set; } //Reference to the object currently controlling the player
 		private Node3D externalParent;
+		private Vector3 externalOffset;
 		private float externalSmoothing;
 
 		[Signal]
 		public delegate void ExternalControlFinishedEventHandler();
-		public void StartExternal(Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
+		public void StartExternal(Node controller, Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
 		{
+			ExternalController = controller;
 			ResetMovementState();
 			MovementState = MovementStates.External;
 			ActionState = ActionStates.Normal;
@@ -308,6 +312,8 @@ namespace Project.Gameplay
 
 			ResetVelocity();
 			UpdateExternalControl();
+
+			EmitSignal(SignalName.OnStartedExternal);
 		}
 
 		public void UpdateExternalControl()
@@ -910,14 +916,11 @@ namespace Project.Gameplay
 		/// </summary>
 		private void SnapToGround()
 		{
-			KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 1000);
+			VerticalSpd = -100f;
 			CheckGround();
 
 			if (!IsOnGround)
 			{
-				if (collision.GetCollisionCount() == 0) //Undo movement
-					GlobalPosition += Vector3.Up * 1000;
-
 				VerticalSpd = 0f;
 				GD.Print("Couldn't find ground to snap to!");
 			}

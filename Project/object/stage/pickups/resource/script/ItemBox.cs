@@ -156,6 +156,16 @@ namespace Project.Gameplay.Objects
 				GD.PrintErr("Item box can't spawn anything!");
 
 			base.SetUp();
+			Stage.ConnectUnloadSignal(this);
+		}
+
+		public void Unload() //Prevent memory leak
+		{
+			for (int i = objectPool.Count - 1; i >= 0; i--)
+				objectPool[i].QueueFree();
+
+			objectPool.Clear();
+			objectLaunchData.Clear();
 		}
 
 		public override void Respawn()

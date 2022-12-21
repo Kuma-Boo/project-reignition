@@ -404,15 +404,30 @@ namespace Project.Gameplay
 		public delegate void OnTriggeredCheckpointEventHandler();
 
 		[Signal]
+		public delegate void OnUnloadedEventHandler();
+		private const string UNLOAD_FUNCTION = "Unload"; //Clean up any memory leaks in this function
+		public override void _ExitTree() => EmitSignal(SignalName.OnUnloaded);
+		public void ConnectUnloadSignal(Node node)
+		{
+			if (!node.HasMethod(UNLOAD_FUNCTION))
+			{
+				GD.PrintErr($"Node {node.Name} doesn't have a function '{UNLOAD_FUNCTION}!'");
+				return;
+			}
+
+			if (!IsConnected(SignalName.OnUnloaded, new Callable(node, UNLOAD_FUNCTION)))
+				Connect(SignalName.OnUnloaded, new Callable(node, UNLOAD_FUNCTION));
+		}
+
+		[Signal]
 		public delegate void OnRespawnedEventHandler();
 		public static bool IsRespawnedFromPlayer; //Did the stage respawn from the player dying?
 		private const string RESPAWN_FUNCTION = "Respawn"; //Default name of respawn functions
-
-		public void RegisterRespawnableObject(Node node)
+		public void ConnectRespawnSignal(Node node)
 		{
 			if (!node.HasMethod(RESPAWN_FUNCTION))
 			{
-				GD.PrintErr($"Node {node.Name} doesn't have a function 'Respawn!'");
+				GD.PrintErr($"Node {node.Name} doesn't have a function '{RESPAWN_FUNCTION}!'");
 				return;
 			}
 

@@ -9,4 +9,5 @@ void fragment()
 	float m = 2.0 * sqrt(pow(r.x, 2) + pow(r.y, 2) + pow(r.z, 2));
 	vec2 uv = r.xy / m + .5;
 	ALBEDO = texture(albedo, uv).rgb;
+	EMISSION = ALBEDO * .2; //Reduce ambient light influence slightly
 }

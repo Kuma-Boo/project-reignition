@@ -23,7 +23,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void _Ready()
 		{
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		public void Respawn()
@@ -49,7 +49,7 @@ namespace Project.Gameplay.Triggers
 				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen.");
 
 			if (playerStandin != null)
-				Character.StartExternal(playerStandin, .2f);
+				Character.StartExternal(this, playerStandin, .2f);
 
 			wasActivated = true;
 			EmitSignal(SignalName.Activated);

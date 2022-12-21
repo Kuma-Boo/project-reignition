@@ -24,7 +24,7 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
 

@@ -81,7 +81,7 @@ namespace Project.Gameplay.Triggers
 			Character.PathFollower.Resync();
 
 			float initialVelocity = Character.MoveSpeed;
-			Character.StartExternal(Character.PathFollower, .05f, true);
+			Character.StartExternal(this, Character.PathFollower, .05f, true);
 			Character.MoveSpeed = initialVelocity;
 
 			isActive = true;
@@ -99,6 +99,7 @@ namespace Project.Gameplay.Triggers
 
 			Character.ResetMovementState();
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
+			Character.UpDirection = Character.PathFollower.Up();
 		}
 
 		public void UpdateCamera()

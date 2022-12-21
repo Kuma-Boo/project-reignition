@@ -33,6 +33,8 @@ namespace Project.Gameplay
 
 		protected override void SetUp()
 		{
+			StageSettings.instance.ConnectUnloadSignal(this);
+
 			for (int i = 0; i < MAX_SEED_COUNT; i++)
 			{
 				seedPool[i] = seed.Instantiate<Seed>();
@@ -41,12 +43,10 @@ namespace Project.Gameplay
 			base.SetUp();
 		}
 
-		public override void _ExitTree()
+		public void Unload()
 		{
 			for (int i = 0; i < seedPool.Length; i++) //Clear memory
-			{
 				seedPool[i].QueueFree();
-			}
 		}
 
 		protected override void Activate()

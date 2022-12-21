@@ -70,7 +70,7 @@ namespace Project.Gameplay.Triggers
 			sfx.VolumeDb = startingVolume;
 			sfx.Play();
 
-			Character.StartExternal();
+			Character.StartExternal(this);
 			isProcessing = true;
 		}
 

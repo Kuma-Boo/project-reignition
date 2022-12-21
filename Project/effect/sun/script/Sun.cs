@@ -84,6 +84,7 @@ namespace Project
 					//Sample texture. VERY SLOW!!!
 					Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
 					Vector2i samplePosition = (Vector2i)(screenUV * depthBuffer.GetSize());
+					samplePosition = samplePosition.Clamp(Vector2i.Zero, depthBuffer.GetSize());
 
 					//Since the sun is so far away, a simple alpha check can determine occlusion.
 					float alpha = depthBuffer.GetPixelv(samplePosition).a;

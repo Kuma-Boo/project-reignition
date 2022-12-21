@@ -37,7 +37,7 @@ namespace Project.Gameplay
 			base.SetUp();
 
 			targetPosition = GlobalPosition;
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 
 			animationTree.Active = true;
 

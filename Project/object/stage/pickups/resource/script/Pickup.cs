@@ -24,7 +24,7 @@ namespace Project.Gameplay.Objects
 			if (DisableAutoRespawning) return; //Don't respawn automatically
 
 			spawnData = new SpawnData(GetParent(), Transform);
-			Stage.RegisterRespawnableObject(this);
+			Stage.ConnectRespawnSignal(this);
 		}
 
 		public void OnEntered(Area3D a)

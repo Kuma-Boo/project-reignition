@@ -122,7 +122,7 @@ namespace Project.Gameplay.Objects
 			if (!a.IsInGroup("player")) return;
 
 			animator.Play("charge");
-			Character.StartExternal();
+			Character.StartExternal(this);
 
 			isActive = true;
 			isRecentered = false;

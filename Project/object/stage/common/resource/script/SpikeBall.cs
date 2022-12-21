@@ -43,7 +43,7 @@ namespace Project.Gameplay.Hazards
 			_root.Position = Vector3.Zero; //Reset editor debug translation
 			spawnPosition = GlobalPosition;
 
-			StageSettings.instance.RegisterRespawnableObject(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
 

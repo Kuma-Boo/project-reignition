@@ -33,7 +33,8 @@ namespace Project.Editor
 
 		public override void _Forward3dDrawOverViewport(Control overlay)
 		{
-			if (editorCam == null || target == null || !target.IsInsideTree()) return;
+			if (editorCam == null || target == null) return;
+			if (!target.IsInsideTree()) return;
 
 			if (target is Launcher)
 				DrawLaunchData(overlay, (target as Launcher).GetLaunchData(), DEFAULT_DRAW_COLOR);

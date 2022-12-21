@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dujsnovkt4ufq"]
+
+[ext_resource type="Material" uid="uid://b05e0xdyglutl" path="res://area/stage/1 sand oasis/data/environment/particle/material/Falling Splatter Process Material.tres" id="1_qimv0"]
+[ext_resource type="Material" uid="uid://cplbye7l5yka1" path="res://area/stage/1 sand oasis/data/environment/particle/material/Water Splatter.tres" id="2_twqkj"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_h1p2s"]
+material = ExtResource("2_twqkj")
+size = Vector2(1, 1)
+orientation = 2
+
+[node name="FallingWaterSplatterParticle" type="GPUParticles3D"]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+interpolate = false
+visibility_aabb = AABB(-5, -4, -8, 10, 10, 16)
+process_material = ExtResource("1_qimv0")
+draw_pass_1 = SubResource("PlaneMesh_h1p2s")

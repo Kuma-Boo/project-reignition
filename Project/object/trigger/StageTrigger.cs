@@ -58,7 +58,7 @@ namespace Project.Gameplay.Triggers
 			}
 
 			if (activationMode == ActivationMode.OneshotRespawnable)
-				StageSettings.instance.RegisterRespawnableObject(this);
+				StageSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		public void Respawn() => wasTriggered = false;
@@ -106,11 +106,13 @@ namespace Project.Gameplay.Triggers
 			if (activationMode != ActivationMode.Always)
 				wasTriggered = true;
 
+			GD.Print($"Activated {Name}");
 			EmitSignal(SignalName.Activated);
 		}
 
 		private void Deactivate()
 		{
+			GD.Print($"Deactivated {Name}");
 			EmitSignal(SignalName.Deactivated);
 		}
 	}

@@ -27,12 +27,11 @@ void fragment()
 	vec4 col = base_color + texture(reflection_texture, uv) * REFLECTION_STRENGTH;
 	col = clamp(col, 0, 1) * COLOR;
 	
-	ALBEDO = col.rgb;
-	
 	//Fade normal map over distance
 	float normal_fade = clamp(smoothstep(NORMAL_FADE_START, NORMAL_FADE_END, -VERTEX.z), 0.0, 1.0);
 	NORMAL = normal.rgb * .5;
-	
 	ROUGHNESS = 0.0;
+	
+	ALBEDO = col.rgb;
 	ALPHA = col.a;
 }

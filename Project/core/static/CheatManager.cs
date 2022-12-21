@@ -9,6 +9,6 @@ namespace Project.Core
 		public static bool InfiniteSoulGauge => EnableCheats && true; //Grants an infinite soul gauge
 		public static bool SkipCountdown => EnableCheats && true; //Skip the countdown
 
-		public static bool DisableStageCulling => EnableCheats && false; ///Don't cull stages
+		public static bool DisableStageCulling => EnableCheats && true; ///Don't cull stages
 	}
 }
