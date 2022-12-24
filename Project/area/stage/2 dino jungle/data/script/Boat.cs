@@ -154,8 +154,8 @@ namespace Project.Gameplay.Objects
 			if (!a.IsInGroup("player")) return;
 
 			isActive = true;
-			Character.StartExternal(passengerPosition); //Snap player into position
-			CameraController.instance.SetCameraData(cameraSettings);
+			Character.StartExternal(this, passengerPosition); //Snap player into position
+			CameraController.instance.UpdateCameraSettings(cameraSettings);
 		}
 
 		public void OnHurtboxEntered(Area3D a)

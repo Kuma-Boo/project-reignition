@@ -105,7 +105,7 @@ namespace Project.Gameplay.Triggers
 		public void UpdateCamera()
 		{
 			if (cameraSettings != null)
-				Character.Camera.SetCameraData(cameraSettings, cameraBlend);
+				Character.Camera.UpdateCameraSettings(cameraSettings, cameraBlend);
 		}
 
 		public void OnEntered(Area3D _) => isEntered = true;

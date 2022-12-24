@@ -121,10 +121,24 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath(".")
+tracks/4/path = NodePath("Root/SFX/Push")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(2),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -152,7 +166,6 @@ shatterFlags = 30
 [node name="Root" type="RigidBody3D" parent="." groups=["floor", "splash jump", "stackable", "wall"]]
 collision_layer = 16
 collision_mask = 59
-mass = 5.0
 
 [node name="Trigger" type="Area3D" parent="Root"]
 collision_layer = 0
@@ -172,14 +185,16 @@ shape = SubResource("17")
 [node name="Shatter" type="AudioStreamPlayer3D" parent="Root/SFX"]
 stream = ExtResource("4_ngm6l")
 max_db = 0.0
-max_distance = 100.0
+max_distance = 50.0
 bus = &"SFX"
 
 [node name="Push" type="AudioStreamPlayer3D" parent="Root/SFX"]
 stream = ExtResource("5_0m3lv")
+unit_size = 5.0
 max_db = 0.0
-max_distance = 100.0
+max_distance = 10.0
 bus = &"SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="CratePieces" parent="." instance=ExtResource("2_ekvth")]
 visible = false

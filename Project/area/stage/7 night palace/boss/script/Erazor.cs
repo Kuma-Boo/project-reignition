@@ -57,7 +57,7 @@ namespace Project.Gameplay.Bosses
 		public delegate void DuelCompletedEventHandler(); //Called when a duel attack ends. Resets positions to allow infinte hallway
 
 		private CharacterController Character => CharacterController.instance;
-		private float LocalPlayerPosition => Character.PathFollower.PlayerPositionDelta.x;
+		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.x;
 
 		//Animation parameters
 		private const string TELEPORT_SPEED = "parameters/TeleportSpeed/scale";
@@ -74,7 +74,7 @@ namespace Project.Gameplay.Bosses
 			CurrentPattern = 0; //Reset pattern
 			LoadAttackPattern();
 
-			Character.Camera.SetCameraData(standardCamera);
+			Character.Camera.UpdateCameraSettings(standardCamera);
 			StartTeleportation();
 		}
 
@@ -230,7 +230,7 @@ namespace Project.Gameplay.Bosses
 			//Update camera
 			duelCamera.distance = 35f;
 			duelCamera.staticPosition.z = -DUEL_DISTANCE * .5f;
-			Character.Camera.SetCameraData(duelCamera, 0f);
+			Character.Camera.UpdateCameraSettings(duelCamera, 0f);
 
 			//TODO Toggle sidescrolling
 		}

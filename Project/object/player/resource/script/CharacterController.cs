@@ -271,7 +271,7 @@ namespace Project.Gameplay
 			if (!IsLockoutActive || !CurrentLockoutData.recenterPlayer) return;
 
 			Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
-			float currentOffset = -PathFollower.PlayerPositionDelta.x;
+			float currentOffset = -PathFollower.FlatPlayerPositionDelta.x;
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
 			{
@@ -355,9 +355,10 @@ namespace Project.Gameplay
 		/// <summary> Is the player moving backwards? </summary>
 		public bool IsMovingBackward { get; private set; }
 
-		private const float TURN_SPEED = .1f; //How much to turn when moving slowly
 		private const float TURNING_SPEED_LOSS = .04f; //How much speed to lose when turning sharply
-		private const float MAX_TURN_SPEED = .2f; //How much to turn when moving at top speed
+		private const float MIN_TURN_SPEED = .12f; //How much to turn when moving slowly
+		private const float MAX_TURN_SPEED = .28f; //How much to turn when moving at top speed
+		private const float STRAFE_TURNAROUND_SPEED = .12f; //How quickly to recenter
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .6f;
 		/// <summary> Updates MoveSpd. What else do you need know? </summary>
@@ -438,19 +439,28 @@ namespace Project.Gameplay
 
 			StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, 0); //Reset strafe when not in use
 
-			float speedRatio = IsOnGround ? GroundSettings.GetSpeedRatio(MoveSpeed) : AirSettings.GetSpeedRatio(MoveSpeed);
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
-			float turnDelta = Mathf.Lerp(TURN_SPEED, MAX_TURN_SPEED, speedRatio);
-
 			if (ActionState == ActionStates.Backflip) return;
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) return; //Turning around
+
+			float maxTurnSpeed = MAX_TURN_SPEED;
+			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
+			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
+			if (IsHoldingDirection(PathFollower.ForwardAngle) &&
+			(Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle)))
+				maxTurnSpeed = STRAFE_TURNAROUND_SPEED;
+
+			float speedRatio = IsOnGround ? GroundSettings.GetSpeedRatio(MoveSpeed) : AirSettings.GetSpeedRatio(MoveSpeed);
+			float turnDelta = Mathf.Lerp(MIN_TURN_SPEED, maxTurnSpeed, speedRatio);
 
 			if (turnInstantly) //Instantly set movement angle to target movement angle
 			{
 				turningVelocity = 0;
 				MovementAngle = targetMovementAngle;
 			}
-			if (!IsLockoutActive || !CurrentLockoutData.overrideSpeed) //Don't apply turning speed loss when overriding speed
+
+			//Don't apply turning speed loss when overriding speed or when moving quickly
+			if ((!IsLockoutActive || !CurrentLockoutData.overrideSpeed) && GroundSettings.GetSpeedRatio(MoveSpeed) < .5f)
 			{
 				//Calculate turn delta, relative to ground speed
 				float speedLossRatio = deltaAngle / MAX_TURNAROUND_ANGLE;
@@ -902,7 +912,7 @@ namespace Project.Gameplay
 			ResetVelocity();
 			ResetOrientation();
 
-			Camera.ResetFlag = true;
+			Camera.SnapFlag = true;
 			Stage.RespawnObjects(true); //Respawn Objects
 
 			CallDeferred(MethodName.SnapToGround);
@@ -1111,6 +1121,7 @@ namespace Project.Gameplay
 					ResetActionState();
 					Lockon.ResetLockonTarget();
 					UpDirection = groundHit.normal;
+					UpdateOrientation();
 
 					if (!IsCountdownActive && !IsRespawning) //Don't do this stuff during countdown
 					{
@@ -1122,7 +1133,16 @@ namespace Project.Gameplay
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f).Normalized();
 
 				Sound.UpdateGroundType(groundHit.collidedObject);
-				GlobalPosition -= groundHit.normal * (groundHit.distance - COLLISION_RADIUS); //Snap to ground
+
+				float snapDistance = groundHit.distance - COLLISION_RADIUS;
+				if (JustLandedOnGround && Mathf.Abs(groundHit.normal.Dot(Vector3.Up)) < .9f) //Slanted ground fix
+				{
+					Vector3 offsetVector = groundHit.point - GlobalPosition;
+					Vector3 axis = offsetVector.Cross(Vector3.Up).Normalized();
+					offsetVector = offsetVector.Rotated(axis, offsetVector.SignedAngleTo(Vector3.Up, axis));
+					snapDistance = offsetVector.y;
+				}
+				GlobalPosition -= groundHit.normal * snapDistance; //Snap to ground
 				FloorMaxAngle = Mathf.Pi * .25f; //Allow KinematicBody to deal with slopes
 				UpdateSlopeInfluence(groundHit.normal);
 			}
@@ -1133,9 +1153,9 @@ namespace Project.Gameplay
 
 				float orientationResetFactor = 0;
 				if (VerticalSpd > 0)
-					orientationResetFactor = .1f;
+					orientationResetFactor = .01f;
 				else
-					orientationResetFactor = (VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .15f;
+					orientationResetFactor = (VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .05f;
 
 				FloorMaxAngle = 0; //Treat everything as a wall when in the air
 				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();

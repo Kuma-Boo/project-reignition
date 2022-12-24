@@ -1,10 +1,10 @@
-[gd_scene load_steps=214 format=3 uid="uid://4gruo3xxdrbq"]
+[gd_scene load_steps=218 format=3 uid="uid://4gruo3xxdrbq"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_l11tb"]
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_h8gq5"]
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="2_p184d"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_88wfl"]
-[ext_resource type="PackedScene" uid="uid://dcyu1iuvha2k3" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="6_gbv7i"]
+[ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="6_gbv7i"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="7_cud8b"]
 [ext_resource type="AudioStream" uid="uid://bg6nquy4qkp4r" path="res://sound/voice/sand oasis/sonic/en/OAS01_E00_SN.wav" id="8_hm1jb"]
 [ext_resource type="AudioStream" uid="uid://op3i27xblafn" path="res://sound/voice/sand oasis/shahra/en/OAS01_E00_SH.wav" id="9_v0s2t"]
@@ -363,6 +363,15 @@ _data = {
 "event": SubResource("67")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_jn2wl"]
+size = Vector3(4, 10, 1.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7vmkt"]
+size = Vector3(1.25, 10, 1.25)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ptpj3"]
+radius = 0.75
+
 [sub_resource type="Animation" id="70"]
 length = 0.001
 tracks/0/type = "value"
@@ -380,19 +389,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Pillar2/SquarePillarTall2:position")
+tracks/1/path = NodePath("Pillar1/SoftlockFix1/CollisionShape3D:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, -12, 0)]
+"update": 1,
+"values": [true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Pillar3/SquarePillarTall3:position")
+tracks/2/path = NodePath("Pillar2/SquarePillarTall2:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -404,14 +413,86 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Pillar4/SquarePillarTall4:position")
+tracks/3/path = NodePath("Pillar2/SoftlockFix2/CollisionShape3D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pillar3/SquarePillarTall3:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, -12, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pillar3/SoftlockFix3/CollisionShape3D:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pillar3/SoftlockFix3/CollisionShape3D2:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pillar4/SquarePillarTall4:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -12, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pillar4/SoftlockFix4/CollisionShape3D:disabled")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pillar4/SoftlockFix4/CollisionShape3D2:disabled")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="69"]
@@ -429,24 +510,22 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, -12, 0), Vector3(0, 0, 0)]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Pillar1/WaterDustParticle1")
+tracks/1/path = NodePath("Pillar1/SoftlockFix1/CollisionShape3D:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Pillar1/WaterSplatterParticle1")
+tracks/2/path = NodePath("Pillar1/WaterDustParticle1")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -457,39 +536,51 @@ tracks/2/keys = {
 "method": &"restart"
 }]
 }
-tracks/3/type = "value"
+tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Pillar2/SquarePillarTall2:position")
+tracks/3/path = NodePath("Pillar1/WaterSplatterParticle1")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pillar2/SquarePillarTall2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.25, 0.5),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector3(0, -12, 0), Vector3(0, -12, 0), Vector3(0, 0, 0)]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Pillar2/WaterDustParticle2")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.25),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
-tracks/5/type = "method"
+tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Pillar2/WaterSplatterParticle2")
+tracks/5/path = NodePath("Pillar2/SoftlockFix2/CollisionShape3D:disabled")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.504),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pillar2/WaterDustParticle2")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
 "times": PackedFloat32Array(0.25),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -497,65 +588,103 @@ tracks/5/keys = {
 "method": &"restart"
 }]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Pillar3/SquarePillarTall3:position")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pillar2/WaterSplatterParticle2")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pillar3/SquarePillarTall3:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
 "times": PackedFloat32Array(0, 0.5, 0.75),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector3(0, -12, 0), Vector3(0, -12, 0), Vector3(0, 0, 0)]
 }
-tracks/7/type = "method"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Pillar3/WaterDustParticle3")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0.5),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
-tracks/8/type = "method"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("Pillar3/WaterSplatterParticle3")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0.5),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Pillar4/SquarePillarTall4:position")
+tracks/9/path = NodePath("Pillar3/SoftlockFix3/CollisionShape3D:disabled")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.750001),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Pillar3/SoftlockFix3/CollisionShape3D2:disabled")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.750001),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Pillar3/WaterDustParticle3")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pillar3/WaterSplatterParticle3")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pillar4/SquarePillarTall4:position")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
 "times": PackedFloat32Array(0, 0.75, 1),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector3(0, -12, 0), Vector3(0, -12, 0), Vector3(0, 0, 0)]
 }
-tracks/10/type = "method"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("Pillar4/WaterDustParticle4")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar4/WaterDustParticle4")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
 "times": PackedFloat32Array(0.75),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -563,19 +692,43 @@ tracks/10/keys = {
 "method": &"restart"
 }]
 }
-tracks/11/type = "method"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("Pillar4/WaterSplatterParticle4")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
+tracks/15/type = "method"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar4/WaterSplatterParticle4")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
 "times": PackedFloat32Array(0.75),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"restart"
 }]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pillar4/SoftlockFix4/CollisionShape3D:disabled")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pillar4/SoftlockFix4/CollisionShape3D2:disabled")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2awqy"]
@@ -6812,6 +6965,10 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_0q2l6"]
 size = Vector3(5, 20, 10)
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_brhdk"]
+height = 10.0
+radius = 1.5
+
 [sub_resource type="Animation" id="Animation_l6d8f"]
 length = 0.001
 tracks/0/type = "value"
@@ -6841,19 +6998,19 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Pillar2/SquarePillarShort2:position")
+tracks/2/path = NodePath("Pillar1/SoftlockFix1/CollisionShape3D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
+"update": 1,
+"values": [true]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Pillar2/SquarePillarShort2:rotation")
+tracks/3/path = NodePath("Pillar2/SquarePillarShort2:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -6861,6 +7018,30 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pillar2/SquarePillarShort2:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pillar2/SoftlockFix2/CollisionShape3D:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_unmyv"]
@@ -6890,13 +7071,25 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0.959931, 0, 0)]
 }
-tracks/2/type = "method"
+tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Pillar1/SandDustParticle1")
+tracks/2/path = NodePath("Pillar1/SoftlockFix1/CollisionShape3D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pillar1/SandDustParticle1")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0.4),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -6904,37 +7097,49 @@ tracks/2/keys = {
 "method": &"restart"
 }]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Pillar2/SquarePillarShort2:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.133333, 0.533333),
-"transitions": PackedFloat32Array(1, 2, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.5, 0.7)]
-}
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Pillar2/SquarePillarShort2:rotation")
+tracks/4/path = NodePath("Pillar2/SquarePillarShort2:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.133333, 0.533333),
 "transitions": PackedFloat32Array(1, 2, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.872665, 0, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.5, 0.7)]
 }
-tracks/5/type = "method"
+tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Pillar2/SandDustParticle2")
+tracks/5/path = NodePath("Pillar2/SquarePillarShort2:rotation")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.533333),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.872665, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pillar2/SoftlockFix2/CollisionShape3D:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pillar2/SandDustParticle2")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
 "times": PackedFloat32Array(0.533333),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -7327,11 +7532,10 @@ Completion/Lockout = ExtResource("2_h8gq5")
 Completion/Animator = NodePath("")
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, 2.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_p184d")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -700.5, -114.1, -767.3)
 
 [node name="ObjectCullMap" type="Node3D" parent="MainAct"]
 
@@ -8472,6 +8676,13 @@ transform = Transform3D(0.809174, 0.577443, 0.108615, -0.586546, 0.782936, 0.207
 [node name="SquarePillarTall1" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar1" instance=ExtResource("20_5dgns")]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, -12, 0)
 
+[node name="SoftlockFix1" type="StaticBody3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar1" groups=["wall"]]
+transform = Transform3D(0.999999, -2.41213e-07, 1.86265e-08, 5.52274e-07, 1, 2.38419e-07, 5.96046e-08, -7.45058e-08, 1, 1.39993, 7.19984, -3.05176e-05)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar1/SoftlockFix1"]
+shape = SubResource("BoxShape3D_jn2wl")
+disabled = true
+
 [node name="WaterDustParticle1" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar1" instance=ExtResource("39_mg726")]
 
 [node name="WaterSplatterParticle1" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar1" instance=ExtResource("40_kqtnl")]
@@ -8481,6 +8692,13 @@ transform = Transform3D(0.804759, 0.587973, 0.0815459, -0.592736, 0.788556, 0.16
 
 [node name="SquarePillarTall2" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar2" instance=ExtResource("20_5dgns")]
 transform = Transform3D(1, -1.44355e-08, 0, 3.72529e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0, -12, 0)
+
+[node name="SoftlockFix2" type="StaticBody3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar2" groups=["wall"]]
+transform = Transform3D(1, -5.96512e-07, -3.72529e-09, -2.51923e-07, 0.999999, 0, 8.56817e-08, 0, 1, 1.40015, 8.00011, -1.52588e-05)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar2/SoftlockFix2"]
+shape = SubResource("BoxShape3D_jn2wl")
+disabled = true
 
 [node name="WaterDustParticle2" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar2" instance=ExtResource("39_mg726")]
 
@@ -8492,15 +8710,41 @@ transform = Transform3D(0.827085, 0.561827, 0.0167762, -0.562041, 0.826326, 0.03
 [node name="SquarePillarTall3" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar3" instance=ExtResource("20_5dgns")]
 transform = Transform3D(1, 3.98286e-08, 1.16415e-09, 8.49832e-09, 1, 0, 1.16415e-09, 0, 1, 0, -12, 0)
 
+[node name="SoftlockFix3" type="StaticBody3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar3" groups=["wall"]]
+transform = Transform3D(0.999881, 0.0139973, 0.00635004, -0.0137405, 0.999137, -0.0391847, -0.00689319, 0.0390927, 0.999211, 1.22339, 6.89508, -0.100143)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar3/SoftlockFix3"]
+transform = Transform3D(1, -7.30193e-16, 0, -5.19581e-15, 1, 2.84217e-14, -7.10543e-15, 7.10543e-15, 1, -1.30002, -3.05176e-05, 0)
+shape = SubResource("BoxShape3D_7vmkt")
+disabled = true
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar3/SoftlockFix3"]
+transform = Transform3D(1, -7.30194e-16, -3.55271e-15, -5.19581e-15, 1, 7.10543e-14, -2.84217e-14, 2.84217e-14, 1, -0.300018, -0.100037, 0)
+shape = SubResource("SphereShape3D_ptpj3")
+disabled = true
+
 [node name="WaterDustParticle3" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar3" instance=ExtResource("39_mg726")]
 
 [node name="WaterSplatterParticle3" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar3" instance=ExtResource("40_kqtnl")]
 
 [node name="Pillar4" type="Node3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event"]
-transform = Transform3D(0.856359, 0.516367, -0.00376914, -0.51638, 0.856322, -0.00808294, -0.000946165, 0.00886821, 0.99996, -13.4647, -2.09146, -49.1646)
+transform = Transform3D(0.856359, 0.516367, -0.00376914, -0.51638, 0.856322, -0.00808293, -0.000946164, 0.00886821, 0.99996, -13.4647, -2.09146, -49.1646)
 
 [node name="SquarePillarTall4" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar4" instance=ExtResource("20_5dgns")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0)
+
+[node name="SoftlockFix4" type="StaticBody3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar4" groups=["wall"]]
+transform = Transform3D(1, -2.54759e-07, 2.67755e-09, 1.34814e-08, 0.999999, 2.79397e-09, 1.62981e-09, -9.31323e-10, 1, 1.43231, 7.09216, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar4/SoftlockFix4"]
+transform = Transform3D(1, -4.6145e-08, 4.07454e-10, 1.34823e-08, 1, 0, 1.16415e-10, 9.31323e-10, 1, -1.43533, -1.52588e-05, 0)
+shape = SubResource("BoxShape3D_7vmkt")
+disabled = true
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar4/SoftlockFix4"]
+transform = Transform3D(1, -1.35534e-07, -1.28057e-09, -1.63309e-08, 0.999999, 1.86265e-09, -2.32831e-09, 5.58794e-09, 1, -0.499756, -2.60007, 3.05176e-05)
+shape = SubResource("SphereShape3D_ptpj3")
+disabled = true
 
 [node name="WaterDustParticle4" parent="MainAct/Oasis/CullRoot/SquarePillarTallGroup/Event/Pillar4" instance=ExtResource("39_mg726")]
 
@@ -8514,10 +8758,6 @@ libraries = {
 [node name="SquarePillarMidGroup" parent="MainAct/Oasis/CullRoot" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -74.315, -3.6, -52.055)
 collision_layer = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarMidGroup"]
-transform = Transform3D(-4.47035e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 2.98023e-08, -2.98023e-08, 0.039978, 3.004, 54.61)
-shape = SubResource("66")
 
 [node name="Event" type="Node3D" parent="MainAct/Oasis/CullRoot/SquarePillarMidGroup" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039978, 0, 54.61)
@@ -8572,6 +8812,10 @@ transform = Transform3D(1, 5.58794e-08, -2.23517e-08, 4.09782e-08, 1, -2.98023e-
 libraries = {
 "": SubResource("AnimationLibrary_0encs")
 }
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CullRoot/SquarePillarMidGroup"]
+transform = Transform3D(-4.47035e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 2.98023e-08, -2.98023e-08, 0.039978, 3.004, 54.61)
+shape = SubResource("66")
 
 [node name="CircularPillarGroup2" parent="MainAct/Oasis/CullRoot" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -56.93, -3.6, -105.774)
@@ -8796,6 +9040,7 @@ shape = SubResource("BoxShape3D_dwoff")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -179, -40.999, -226)
 script = ExtResource("23_j40ed")
 targetNode = NodePath("CullRoot")
+startEnabled = true
 modifyTree = true
 saveVisibilityOnCheckpoint = true
 
@@ -12811,7 +13056,6 @@ shape = SubResource("BoxShape3D_0rd0k")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -415, -50, -820)
 script = ExtResource("23_j40ed")
 targetNode = NodePath("CullRoot")
-startEnabled = true
 modifyTree = true
 saveVisibilityOnCheckpoint = true
 
@@ -12984,18 +13228,32 @@ animator = NodePath("AnimationPlayer")
 [node name="Pillar1" type="Node3D" parent="MainAct/End/CullRoot/PillarGroup2/Event"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.09998, -0.5, 6.69995)
 
+[node name="SquarePillarShort1" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar1" instance=ExtResource("26_65qbw")]
+
+[node name="SoftlockFix1" type="StaticBody3D" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar1" groups=["wall"]]
+transform = Transform3D(-1, -7.16126e-08, 5.01437e-08, 0, 0.573576, 0.819152, -8.74228e-08, 0.819152, -0.573576, 0, 4.48368, 4.19971)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar1/SoftlockFix1"]
+shape = SubResource("CylinderShape3D_brhdk")
+disabled = true
+
 [node name="SandDustParticle1" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar1" instance=ExtResource("36_bb8w7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 9.90002)
-
-[node name="SquarePillarShort1" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar1" instance=ExtResource("26_65qbw")]
 
 [node name="Pillar2" type="Node3D" parent="MainAct/End/CullRoot/PillarGroup2/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.20001, 1, -5.90002)
 
+[node name="SquarePillarShort2" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar2" instance=ExtResource("26_65qbw")]
+
+[node name="SoftlockFix2" type="StaticBody3D" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar2" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, -0.642788, 0.766044, 0, -0.766044, -0.642788, 0, 4.64742, 3.67169)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar2/SoftlockFix2"]
+shape = SubResource("CylinderShape3D_brhdk")
+disabled = true
+
 [node name="SandDustParticle2" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar2" instance=ExtResource("36_bb8w7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 9)
-
-[node name="SquarePillarShort2" parent="MainAct/End/CullRoot/PillarGroup2/Event/Pillar2" instance=ExtResource("26_65qbw")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/End/CullRoot/PillarGroup2/Event"]
 playback_speed = 0.5

@@ -70,21 +70,20 @@ namespace Project
 			UpdateLensFlare();
 		}
 
-
 		private float updateTimer;
 		private readonly float UPDATE_INTERVAL = .5f; //How often to update the sun. Reduces frame drops
 		private void UpdateSample()
 		{
 			if (updateTimer <= 0f)
 			{
-				if (MainCamera.IsPositionBehind(GlobalPosition))
+				if (MainCamera.IsBehindCamera(GlobalPosition))
 					isOccluded = true; //Always occluded when the camera faces away
 				else if (MainCamera.IsOnScreen(GlobalPosition))
 				{
 					//Sample texture. VERY SLOW!!!
 					Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
 					Vector2i samplePosition = (Vector2i)(screenUV * depthBuffer.GetSize());
-					samplePosition = samplePosition.Clamp(Vector2i.Zero, depthBuffer.GetSize());
+					samplePosition = samplePosition.Clamp(Vector2i.Zero, depthBuffer.GetSize() - Vector2i.One);
 
 					//Since the sun is so far away, a simple alpha check can determine occlusion.
 					float alpha = depthBuffer.GetPixelv(samplePosition).a;

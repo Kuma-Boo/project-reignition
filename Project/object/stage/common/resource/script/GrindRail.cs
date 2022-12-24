@@ -234,7 +234,7 @@ namespace Project.Gameplay
 			}
 
 			Character.ResetActionState(); //Cancel stomps, jumps, etc
-			Character.StartExternal(pathFollower);
+			Character.StartExternal(this, pathFollower);
 			Character.IsOnGround = true; //Rail counts as being on the ground
 			Character.MoveSpeed = Skills.grindSettings.speed;
 			Character.VerticalSpd = 0f;
@@ -306,6 +306,10 @@ namespace Project.Gameplay
 				UpdateInvisibleRailPosition();
 
 			pathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+
+			Character.UpdateExternalControl();
+			Character.PathFollower.Resync();
+
 			if (pathFollower.ProgressRatio >= 1) //Disconnect from the rail
 				DisconnectFromRail();
 		}

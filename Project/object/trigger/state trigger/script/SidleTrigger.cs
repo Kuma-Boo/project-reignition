@@ -31,16 +31,10 @@ namespace Project.Gameplay.Triggers
 				StartSidle();
 		}
 
-		private Callable StopSidleCallable => new Callable(this, MethodName.StopSidle);
-
 		private void StartSidle()
 		{
 			isActive = true;
 			Character.StartExternal(this, Character.PathFollower, .2f);
-		}
-
-		private void StopSidle()
-		{
 		}
 
 		private void UpdateSidle()

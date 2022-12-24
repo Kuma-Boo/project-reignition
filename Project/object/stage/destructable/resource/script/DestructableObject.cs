@@ -234,10 +234,16 @@ namespace Project.Gameplay.Objects
 
 				if (!isShattered) //Attempt to play animator's "push" animation
 				{
-					Character.MoveSpeed *= 0.5f; //Kill character's speed
-
 					if (animator != null && animator.HasAnimation("push"))
+					{
+						//Prevent objects from getting "stuck" on the player
+						float pushPower = Mathf.Clamp(Character.MoveSpeed, 10.0f, 20.0f);
+						RigidBody3D rb = root as RigidBody3D;
+						rb.ApplyImpulse(((rb.GlobalPosition + rb.CenterOfMass) - Character.GlobalPosition) * pushPower);
 						animator.Play("push");
+					}
+
+					Character.MoveSpeed *= 0.4f; //Kill character's speed
 				}
 			}
 		}

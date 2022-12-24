@@ -37,7 +37,7 @@ namespace Project.Gameplay.Bosses
 
 		private bool isActive; //Process the boss?
 		private CharacterController Character => CharacterController.instance;
-		private float LocalPlayerPosition => Character.PathFollower.PlayerPositionDelta.x;
+		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.x;
 
 		public override void _Ready()
 		{

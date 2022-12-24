@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay
 {
@@ -16,7 +17,17 @@ namespace Project.Gameplay
 		/// <summary> Delta between last frame and current frame. Updates on Resync(). </summary>
 		public float DeltaAngle { get; private set; }
 		public Path3D ActivePath { get; private set; }
-		public Vector3 PlayerPositionDelta { get; private set; } //Local delta to player position
+		/// <summary> Local delta to player position. </summary>
+		public Vector3 FlatPlayerPositionDelta { get; private set; }
+		/// <summary> "True" local delta to player position using Basis.Inverse(). </summary>
+		public Vector3 TruePlayerPositionDelta { get; private set; }
+
+		/// <summary> Custom up axis. Equal to Forward() rotated 90 degrees around RightAxis. </summary>
+		public Vector3 UpAxis { get; private set; }
+		/// <summary> Custom right axis. Cross product of Forward() and Vector3.Up [Fallback: ForwardAxis] </summary>
+		public Vector3 RightAxis { get; private set; }
+		/// <summary> Custom forward axis. Equal to Vector3.Forward.Rotated(Vector3.Up, ForwardAngle) </summary>
+		public Vector3 ForwardAxis { get; private set; }
 
 		public void SetActivePath(Path3D newPath)
 		{
@@ -35,14 +46,37 @@ namespace Project.Gameplay
 			if (!IsInsideTree()) return;
 			if (ActivePath == null) return;
 
-			//UpdatePosition();
-			Progress = ActivePath.Curve.GetClosestOffset(Character.GlobalPosition - ActivePath.GlobalPosition);
+			Vector3 syncPoint = Character.GlobalPosition;
+			/*
+			if (!Character.IsOnGround)
+			{
+				RaycastHit groundCheck = this.CastRay(Character.GlobalPosition, -Character.UpDirection * 10f, RuntimeConstants.Instance.environmentMask);
+				if (groundCheck && groundCheck.collidedObject.IsInGroup("floor"))
+					syncPoint.y = groundCheck.point.y;
+			}
+			*/
+			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
+
 			float newForwardAngle = CharacterController.CalculateForwardAngle(this.Forward());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f;
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;
-			PlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
+			FlatPlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
+			TruePlayerPositionDelta = Basis.Inverse() * (Character.GlobalPosition - GlobalPosition);
+
+			//Update custom orientations
+			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, ForwardAngle).Normalized();
+			float upDotProduct = this.Forward().Dot(Vector3.Up);
+			if (upDotProduct < .9f)
+				RightAxis = this.Forward().Cross(Vector3.Up).Normalized();
+			else //Moving straight up/down
+				RightAxis = this.Forward().Cross(ForwardAxis).Normalized();
+			UpAxis = this.Forward().Rotated(RightAxis, Mathf.Pi * .5f).Normalized();
+
+			Debug.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
+			Debug.DrawRay(GlobalPosition, RightAxis, Colors.Red);
+			Debug.DrawRay(GlobalPosition, UpAxis, Colors.Green);
 		}
 
 		/*

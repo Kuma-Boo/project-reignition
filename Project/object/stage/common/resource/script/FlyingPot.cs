@@ -106,9 +106,9 @@ namespace Project.Gameplay.Objects
 			//Update camera
 			if (cameraSettings != null)
 			{
-				cameraSettings.viewAngle.y = (Mathf.RadToDeg(GlobalRotation.y) + 180) % 360; //Sync viewAngle to current flying pot's rotation
-				GD.Print(cameraSettings.viewAngle.y);
-				Character.Camera.SetCameraData(cameraSettings);
+				cameraSettings.yawAngle = (GlobalRotation.y + Mathf.Pi * .5f) % Mathf.Pi; //Sync viewAngle to current flying pot's rotation
+				GD.Print(Mathf.RadToDeg(cameraSettings.yawAngle));
+				Character.Camera.UpdateCameraSettings(cameraSettings);
 			}
 		}
 

@@ -207,7 +207,7 @@ namespace Project.Core
 				if (tapBuffer != 0)
 					tapBuffer = Mathf.MoveToward(tapBuffer, 0, timeDelta);
 
-				value = currentValue;
+				value = Mathf.SmoothStep(0, 1, Mathf.Abs(currentValue)) * sign;
 			}
 
 			public void ResetTap() => tapBuffer = 0;

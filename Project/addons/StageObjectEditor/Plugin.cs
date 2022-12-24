@@ -24,8 +24,9 @@ namespace Project.Editor
 
 		public override long _Forward3dGuiInput(Camera3D cam, InputEvent e)
 		{
-			editorCam = cam;
-			UpdateOverlays();
+			if (cam != null)
+				editorCam = cam;
+
 			return base._Forward3dGuiInput(cam, e);
 		}
 
@@ -33,8 +34,8 @@ namespace Project.Editor
 
 		public override void _Forward3dDrawOverViewport(Control overlay)
 		{
-			if (editorCam == null || target == null) return;
-			if (!target.IsInsideTree()) return;
+			if (editorCam == null || target == null || overlay == null) return;
+			if (!target.IsQueuedForDeletion() || !target.IsInsideTree()) return;
 
 			if (target is Launcher)
 				DrawLaunchData(overlay, (target as Launcher).GetLaunchData(), DEFAULT_DRAW_COLOR);

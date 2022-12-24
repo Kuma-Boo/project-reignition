@@ -106,13 +106,13 @@ namespace Project.Gameplay.Triggers
 			if (activationMode != ActivationMode.Always)
 				wasTriggered = true;
 
-			GD.Print($"Activated {Name}");
+			//GD.Print($"Activated {Name}");
 			EmitSignal(SignalName.Activated);
 		}
 
 		private void Deactivate()
 		{
-			GD.Print($"Deactivated {Name}");
+			//GD.Print($"Deactivated {Name}");
 			EmitSignal(SignalName.Deactivated);
 		}
 	}

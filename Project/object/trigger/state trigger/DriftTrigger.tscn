@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dcyu1iuvha2k3"]
+[gd_scene load_steps=3 format=3 uid="uid://etu2s6i547gb"]
 
 [ext_resource type="Script" path="res://object/trigger/state trigger/script/DriftTrigger.cs" id="1"]
-[ext_resource type="AudioStream" uid="uid://c4j07gitbntt8" path="res://sound/sfx/player/drift quiet 1.wav" id="2_m0f42"]
+[ext_resource type="AudioStream" uid="uid://jgdo3iiwsbx4" path="res://sound/sfx/player/drift.wav" id="2_s54aq"]
 
 [node name="DriftTrigger" type="Area3D" node_paths=PackedStringArray("sfx")]
 collision_layer = 0
@@ -11,6 +11,8 @@ script = ExtResource("1")
 sfx = NodePath("SFX")
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_m0f42")
+stream = ExtResource("2_s54aq")
+volume_db = -3.0
+bus = &"SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
