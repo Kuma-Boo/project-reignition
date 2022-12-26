@@ -1,5 +1,6 @@
-using Project.Core;
 using Godot;
+using Project.Core;
+using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Objects
 {
@@ -12,18 +13,20 @@ namespace Project.Gameplay.Objects
 		[Export]
 		public Vector2 travelBounds;
 		[Export]
+		private CameraSettingsResource customCameraSettings;
+
+		[ExportSubgroup("Components")]
+		[Export]
 		private Node3D root;
 		[Export]
 		private CollisionShape3D environmentCollider;
 		[Export]
 		private Area3D lockonArea;
 		[Export]
-		private CameraSettingsResource cameraSettings;
+		private CameraTrigger cameraTrigger;
 
-		private bool isControllingPlayer;
-		private bool interactingWithPlayer;
-		private bool isLeavingPot;
-		private bool isEnteringPot;
+
+		[ExportSubgroup("Animation")]
 		[Export]
 		private AnimationPlayer interactionAnimator;
 		[Export]
@@ -32,7 +35,12 @@ namespace Project.Gameplay.Objects
 		private bool canTransitionToFalling; //Animator parameter to sync falling transition
 		[Export]
 		private bool isFalling; //Animator parameter to check falling status
+
 		private bool isProcessing;
+		private bool isControllingPlayer;
+		private bool interactingWithPlayer;
+		private bool isLeavingPot;
+		private bool isEnteringPot;
 
 		private float flapTimer;
 		private float angle;
@@ -57,6 +65,9 @@ namespace Project.Gameplay.Objects
 
 			startPosition = GlobalPosition;
 			StageSettings.instance.ConnectRespawnSignal(this);
+
+			if (customCameraSettings != null)
+				cameraTrigger.settings = customCameraSettings;
 		}
 
 		private void Respawn()
@@ -104,11 +115,10 @@ namespace Project.Gameplay.Objects
 			Character.Connect(CharacterController.SignalName.LauncherFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
 
 			//Update camera
-			if (cameraSettings != null)
+			if (cameraTrigger != null)
 			{
-				cameraSettings.yawAngle = (GlobalRotation.y + Mathf.Pi * .5f) % Mathf.Pi; //Sync viewAngle to current flying pot's rotation
-				GD.Print(Mathf.RadToDeg(cameraSettings.yawAngle));
-				Character.Camera.UpdateCameraSettings(cameraSettings);
+				cameraTrigger.settings.yawAngle = (GlobalRotation.y + Mathf.Pi) % Mathf.Tau; //Sync viewAngle to current flying pot's rotation
+				cameraTrigger.Activate();
 			}
 		}
 
@@ -116,7 +126,7 @@ namespace Project.Gameplay.Objects
 		{
 			flapTimer = 0;
 			isControllingPlayer = true;
-			Character.StartExternal(this);
+			Character.StartExternal(this, this);
 			Character.Animator.Visible = false;
 			interactionAnimator.Play("enter");
 		}
@@ -129,15 +139,18 @@ namespace Project.Gameplay.Objects
 			velocity = 0f; //Kill all velocity
 
 			Character.VerticalSpd = RuntimeConstants.GetJumpPower(Character.jumpHeight);
-			//Character.StrafeSpeed = Character.airStrafeSettings.speed * (angle / MAX_ANGLE);
+			Character.StrafeSpeed = Character.Skills.AirSettings.speed * (angle / MAX_ANGLE);
 			Character.ResetMovementState();
 			Character.Animator.Visible = true;
 			interactionAnimator.Play("exit");
+
+			if (cameraTrigger != null)
+				cameraTrigger.Deactivate();
 		}
 
 		private void ProcessMovement()
 		{
-			float targetRotation = -Controller.horizontalAxis.value * MAX_ANGLE;
+			float targetRotation = Controller.horizontalAxis.value * MAX_ANGLE;
 			angle = Mathf.Lerp(angle, targetRotation, ROTATION_SPEED);
 
 			if (Controller.jumpButton.wasPressed)
@@ -166,7 +179,7 @@ namespace Project.Gameplay.Objects
 		private void ApplyMovement()
 		{
 			if (velocity > 0)
-				position += Vector2.Down.Rotated(angle) * velocity * PhysicsManager.physicsDelta;
+				position += Vector2.Down.Rotated(-angle) * velocity * PhysicsManager.physicsDelta;
 			else
 				position += Vector2.Down * velocity * PhysicsManager.physicsDelta;
 
@@ -191,7 +204,7 @@ namespace Project.Gameplay.Objects
 				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
 
 			GlobalPosition = startPosition + Vector3.Up * position.y + this.Right() * position.x;
-			root.Rotation = Vector3.Back * angle;
+			root.Rotation = Vector3.Forward * angle;
 
 			if (isControllingPlayer)
 				Character.UpdateExternalControl(); //Sync player object

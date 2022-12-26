@@ -128,7 +128,6 @@ namespace Project.Gameplay.Objects
 			GlobalTransform = t.Orthonormalized();
 
 			Character.UpdateExternalControl();
-			Character.PathFollower.Resync();
 		}
 
 		private void Despawn()

@@ -10,8 +10,6 @@ namespace Project.Gameplay
 	[Tool]
 	public partial class GrindRail : Area3D
 	{
-		//TODO Disable the ability to shuffle accelerate during player's shuffle animation
-
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
@@ -198,7 +196,7 @@ namespace Project.Gameplay
 		private float chargeAmount;
 		private readonly float GRIND_RAIL_CHARGE_LENGTH = .5f; //How long a full charge is.
 		private readonly float GRIND_RAIL_SNAPPING = .5f; //How "magnetic" the rail is. Early 3D Sonic games tended to put this too low.
-		private readonly float STOMP_GRIND_RAIL_SNAPPING = .8f; //For when the player is stomping
+		private readonly float GRINDSTEP_RAIL_SNAPPING = 1.2f; //For when the player is stomping
 		private Vector3 closestPoint;
 		private void CheckRailActivation()
 		{
@@ -206,14 +204,19 @@ namespace Project.Gameplay
 			if (Character.Lockon.IsHomingAttacking) return; //Character is targeting something
 			if (Character.MovementState != CharacterController.MovementStates.Normal) return; //Character is busy
 
+			//Sync rail pathfollower
 			Vector3 delta = rail.GetLocalPosition(Character.GlobalPosition);
 			pathFollower.Progress = rail.Curve.GetClosestOffset(delta);
+
+			//Check walls
+			if (CheckWall(Skills.grindSettings.speed * PhysicsManager.physicsDelta)) return;
+
 			float horizontalOffset = Mathf.Abs(pathFollower.GetLocalPosition(Character.GlobalPosition).x); //Get local offset
 
 			if (Character.VerticalSpd <= 0f)
 			{
 				if (horizontalOffset < GRIND_RAIL_SNAPPING ||
-					(Character.ActionState == CharacterController.ActionStates.Stomping && horizontalOffset < STOMP_GRIND_RAIL_SNAPPING)) //Start grinding
+					(Character.IsGrindstepJump && horizontalOffset < GRINDSTEP_RAIL_SNAPPING)) //Start grinding
 					ActivateRail();
 			}
 		}
@@ -222,6 +225,7 @@ namespace Project.Gameplay
 		{
 			isActive = true;
 			chargeAmount = 0;
+			Character.IsGrindstepJump = false; //Reset grind step
 
 			isFadingSFX = false;
 			sfx.VolumeDb = 0f; //Reset volume
@@ -249,25 +253,26 @@ namespace Project.Gameplay
 				Camera.OverrideYaw(targetDirection, .4f);
 			}
 
-			if (Character.MovementState != CharacterController.MovementStates.External) //Player must have disconnected from the rail
+			if (Character.MovementState != CharacterController.MovementStates.External ||
+				Character.ExternalController != this) //Player must have disconnected from the rail
 			{
 				DisconnectFromRail();
 				return;
 			}
 
 			//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
-			float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), Character.MovementAngle);
+			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), Character.MovementAngle);
 
 			if (Controller.jumpButton.wasPressed)
 			{
 				DisconnectFromRail();
 
 				//Check if the player is holding a direction parallel to rail.
-				bool isGrindstep = !Character.IsHoldingDirection(Character.MovementAngle, true) && !Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi, true);
-				if (isGrindstep) //Grindstep
+				Character.IsGrindstepJump = !Character.IsHoldingDirection(Character.MovementAngle, true) && !Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi, true);
+				if (Character.IsGrindstepJump) //Grindstep
 				{
 					//Calculate how far player is trying to go
-					float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(deltaAngle);
+					float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
 					horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxis.Length()); //Give some smoothing based on controller strength
 					Vector2 movementVector = new Vector2(horizontalTarget, Character.MoveSpeed);
 
@@ -286,6 +291,7 @@ namespace Project.Gameplay
 			Character.MovementAngle = CharacterController.CalculateForwardAngle(pathFollower.Forward());
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 
+			//TODO Disable the ability to shuffle accelerate during player's shuffle animation
 			if (Controller.actionButton.isHeld) //Charge up!
 			{
 				chargeAmount = Mathf.MoveToward(chargeAmount, GRIND_RAIL_CHARGE_LENGTH, PhysicsManager.physicsDelta);
@@ -305,20 +311,20 @@ namespace Project.Gameplay
 			if (isInvisibleRail)
 				UpdateInvisibleRailPosition();
 
-			pathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			//Check wall
+			float movementDelta = Character.MoveSpeed * PhysicsManager.physicsDelta;
+			RaycastHit hit = CheckWall(movementDelta);
+			if (hit && hit.collidedObject is StaticBody3D) //Stop player when colliding with a static body
+			{
+				movementDelta = hit.distance; //Limit movement distance
+				Character.MoveSpeed = 0f;
+			}
 
+			pathFollower.Progress += movementDelta;
 			Character.UpdateExternalControl();
-			Character.PathFollower.Resync();
 
-			if (pathFollower.ProgressRatio >= 1) //Disconnect from the rail
+			if (pathFollower.ProgressRatio >= 1 || Mathf.IsZeroApprox(Character.MoveSpeed)) //Disconnect from the rail
 				DisconnectFromRail();
-		}
-
-		private void UpdateInvisibleRailPosition()
-		{
-			railModel.GlobalPosition = Character.GlobalPosition;
-			railModel.Position = new Vector3(0, railModel.Position.y, railModel.Position.z); //Ignore player's x-offset
-			railMaterial.Set("uv_offset", railModel.Position.z % 1);
 		}
 
 		private void DisconnectFromRail()
@@ -336,6 +342,21 @@ namespace Project.Gameplay
 
 			if (Character.IsConnected(CharacterController.SignalName.ExternalControlFinished, new Callable(this, MethodName.DisconnectFromRail)))
 				Character.Disconnect(CharacterController.SignalName.ExternalControlFinished, new Callable(this, MethodName.DisconnectFromRail));
+		}
+
+		private RaycastHit CheckWall(float movementDelta)
+		{
+			float castLength = movementDelta + Character.CollisionRadius;
+			RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Character.CollisionMask);
+			Debug.DrawRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, hit ? Colors.Red : Colors.White);
+			return hit;
+		}
+
+		private void UpdateInvisibleRailPosition()
+		{
+			railModel.GlobalPosition = Character.GlobalPosition;
+			railModel.Position = new Vector3(0, railModel.Position.y, railModel.Position.z); //Ignore player's x-offset
+			railMaterial.Set("uv_offset", railModel.Position.z % 1);
 		}
 
 		private void UpdateInvisibleRailLength()

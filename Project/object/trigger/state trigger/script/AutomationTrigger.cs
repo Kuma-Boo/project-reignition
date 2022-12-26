@@ -16,9 +16,12 @@ namespace Project.Gameplay.Triggers
 		private Path3D automationPath; //Leave NULL to use the player's current path.
 		private Path3D initialPath; //Reference to the player's initial path
 		[Export]
-		private CameraSettingsResource cameraSettings;
-		[Export]
-		private float cameraBlend;
+		private bool ignoreDirection; //Always activate, regardless of which way the player entered/moves
+
+		[Signal]
+		public delegate void ActivatedEventHandler();
+		[Signal]
+		public delegate void DeactivatedEventHandler();
 
 		private bool isEntered;
 		private bool isActive;
@@ -54,14 +57,20 @@ namespace Project.Gameplay.Triggers
 				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
 
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			Character.UpdateExternalControl();
+			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 		}
 
 		private bool IsActivationValid()
 		{
 			if (!Character.IsOnGround) return false;
-			//Ensure character is facing/moving the correct direction
-			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, CharacterController.CalculateForwardAngle(this.Forward()));
-			if (dot < 0f) return false;
+
+			if (!ignoreDirection)
+			{
+				//Ensure character is facing/moving the correct direction
+				float dot = ExtensionMethods.DotAngle(Character.MovementAngle, CharacterController.CalculateForwardAngle(this.Forward()));
+				if (dot < 0f || Character.IsMovingBackward) return false;
+			}
 
 			return true;
 		}
@@ -85,7 +94,7 @@ namespace Project.Gameplay.Triggers
 			Character.MoveSpeed = initialVelocity;
 
 			isActive = true;
-			UpdateCamera();
+			EmitSignal(SignalName.Activated);
 		}
 
 		private void Deactivate()
@@ -100,12 +109,8 @@ namespace Project.Gameplay.Triggers
 			Character.ResetMovementState();
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			Character.UpDirection = Character.PathFollower.Up();
-		}
 
-		public void UpdateCamera()
-		{
-			if (cameraSettings != null)
-				Character.Camera.UpdateCameraSettings(cameraSettings, cameraBlend);
+			EmitSignal(SignalName.Deactivated);
 		}
 
 		public void OnEntered(Area3D _) => isEntered = true;

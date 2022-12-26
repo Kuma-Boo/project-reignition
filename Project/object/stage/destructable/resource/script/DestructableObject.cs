@@ -237,9 +237,10 @@ namespace Project.Gameplay.Objects
 					if (animator != null && animator.HasAnimation("push"))
 					{
 						//Prevent objects from getting "stuck" on the player
-						float pushPower = Mathf.Clamp(Character.MoveSpeed, 10.0f, 20.0f);
 						RigidBody3D rb = root as RigidBody3D;
-						rb.ApplyImpulse(((rb.GlobalPosition + rb.CenterOfMass) - Character.GlobalPosition) * pushPower);
+						float pushPower = Mathf.Clamp(Character.MoveSpeed, 10.0f, 20.0f);
+						Vector3 launchPosition = (rb.GlobalPosition + rb.CenterOfMass) - Character.GlobalPosition;
+						rb.ApplyImpulse(launchPosition * pushPower);
 						animator.Play("push");
 					}
 

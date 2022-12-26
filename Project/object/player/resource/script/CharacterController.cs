@@ -75,7 +75,6 @@ namespace Project.Gameplay
 			Backflip,
 		}
 
-
 		/// <summary>
 		/// Reset action state to ActionState.Normal
 		/// </summary>
@@ -91,7 +90,7 @@ namespace Project.Gameplay
 			}
 
 			UpdateInputs();
-			useCustomPhysics = false;
+			isCustomPhysicsEnabled = false;
 
 			switch (MovementState)
 			{
@@ -99,7 +98,7 @@ namespace Project.Gameplay
 					UpdateNormalState();
 					break;
 				case MovementStates.External:
-					UpdateExternalControl();
+					isCustomPhysicsEnabled = true; //Allow custom physics during external control
 					break;
 				case MovementStates.Launcher:
 					UpdateLauncher();
@@ -288,10 +287,15 @@ namespace Project.Gameplay
 		#region External Control, Automation and Events
 		[Signal]
 		public delegate void OnStartedExternalEventHandler();
-		public Node ExternalController { get; private set; } //Reference to the object currently controlling the player
+
+		/// <summary> Reference to the external object currently controlling the player </summary>
+		public Node ExternalController { get; private set; }
 		private Node3D externalParent;
 		private Vector3 externalOffset;
 		private float externalSmoothing;
+
+		/// <summary> Used during homing attacks and whenever external objects are overridding physics. </summary>
+		private bool isCustomPhysicsEnabled;
 
 		[Signal]
 		public delegate void ExternalControlFinishedEventHandler();
@@ -316,15 +320,19 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.OnStartedExternal);
 		}
 
+		/// <summary>
+		/// Moves the player to externalParent. Must be called after external controller has been processed.
+		/// </summary>
 		public void UpdateExternalControl()
 		{
-			useCustomPhysics = true;
+			isCustomPhysicsEnabled = true;
 			externalOffset = externalOffset.Lerp(Vector3.Zero, externalSmoothing); //Smooth out entry
 
 			if (externalParent != null)
 				GlobalTransform = externalParent.GlobalTransform;
 
 			GlobalPosition += externalOffset;
+			PathFollower.Resync();
 		}
 		#endregion
 		#endregion
@@ -360,7 +368,7 @@ namespace Project.Gameplay
 		private const float MAX_TURN_SPEED = .28f; //How much to turn when moving at top speed
 		private const float STRAFE_TURNAROUND_SPEED = .12f; //How quickly to recenter
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
-		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .6f;
+		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Updates MoveSpd. What else do you need know? </summary>
 		private void UpdateMoveSpd()
 		{
@@ -470,6 +478,9 @@ namespace Project.Gameplay
 			}
 
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
+
+			//if (Camera.ActiveSettings.isRollEnabled) //(Uncomment this to restrict application to tilting ground)
+			MovementAngle += PathFollower.DeltaAngle * 1.84f; //Random number that seems pretty accurate.
 		}
 
 		private MovementResource GetActiveMovementSettings()
@@ -617,6 +628,8 @@ namespace Project.Gameplay
 		[Export]
 		public float jumpCurve = .95f;
 		private bool isJumpClamped; //True after the player releases the jump button
+		/// <summary> Is the player switching between rails? </summary>
+		public bool IsGrindstepJump { get; set; }
 		private bool isAccelerationJump;
 		private float currentJumpTime; //Amount of time the jump button was held
 		private const float ACCELERATION_JUMP_LENGTH = .04f; //How fast the jump button needs to be released for an "acceleration jump"
@@ -726,7 +739,7 @@ namespace Project.Gameplay
 					return;
 				}
 
-				useCustomPhysics = true;
+				isCustomPhysicsEnabled = true;
 				VerticalSpd = 0;
 				Velocity = Lockon.HomingAttackDirection.Normalized() * Lockon.homingAttackSpeed;
 				MoveAndSlide();
@@ -870,6 +883,7 @@ namespace Project.Gameplay
 			//TODO add support for being knocked forwards
 
 			IsOnGround = false;
+			IsGrindstepJump = false;
 			MoveSpeed = -4f;
 			VerticalSpd = 4f;
 			//TODO Play hurt animation
@@ -978,7 +992,7 @@ namespace Project.Gameplay
 
 		private void UpdateLauncher()
 		{
-			useCustomPhysics = true;
+			isCustomPhysicsEnabled = true;
 			if (activeLauncher != null && !activeLauncher.IsCharacterCentered)
 				GlobalPosition = activeLauncher.RecenterCharacter();
 			else
@@ -1023,26 +1037,35 @@ namespace Project.Gameplay
 		#region Physics
 		[Export]
 		private CollisionShape3D environmentCollider;
+		/// <summary> Size to use for collision checks. </summary>
+		public float CollisionRadius => (environmentCollider.Shape as SphereShape3D).Radius;
 		public bool IsEnvironmentColliderEnabled
 		{
 			get => !environmentCollider.Disabled;
 			set => environmentCollider.Disabled = !value;
 		}
 
-		public float MoveSpeed { get; set; } //Character's primary movement speed.
-		public float StrafeSpeed { get; set; } //Used during speed break, etc. 
-		public float VerticalSpd { get; set; } //Used for jumping and falling
-
-		private void ResetVelocity() //Resets all speed values to zero
+		/// <summary> Center of collision calculations </summary>
+		public Vector3 CenterPosition
 		{
-			MoveSpeed = StrafeSpeed = VerticalSpd = 0;
+			get => GlobalPosition + UpDirection * CollisionRadius;
+			set => GlobalPosition = value - UpDirection * CollisionRadius;
 		}
+		private const float COLLISION_PADDING = .04f;
 
-		private bool useCustomPhysics; //TRUE whenever external objects are overridding physics
+		/// <summary> Character's primary movement speed. </summary>
+		public float MoveSpeed { get; set; }
+		/// <summary> Used during speed break, etc. </summary>
+		public float StrafeSpeed { get; set; }
+		/// <summary> Used for jumping and falling. </summary>
+		public float VerticalSpd { get; set; }
+		/// <summary> Resets all speed values to zero </summary>
+		private void ResetVelocity() => MoveSpeed = StrafeSpeed = VerticalSpd = 0;
+
 		private void UpdatePhysics()
 		{
 			Lockon.UpdateLockonTargets();
-			if (useCustomPhysics) return; //When physics are handled in the state machine
+			if (isCustomPhysicsEnabled) return; //When physics are handled in the state machine
 
 			//Collision checks
 			CheckGround();
@@ -1066,20 +1089,14 @@ namespace Project.Gameplay
 		public bool IsOnGround { get; set; }
 		public bool JustLandedOnGround { get; private set; } //Flag for doing stuff on land
 
-		public Vector3 CenterPosition
-		{
-			get => GlobalPosition + UpDirection * COLLISION_RADIUS; //Center of collision calculations
-			set => GlobalPosition = value - UpDirection * COLLISION_RADIUS;
-		}
 		private const int GROUND_CHECK_AMOUNT = 8; //How many "whiskers" to use when checking the ground
-		private const float COLLISION_RADIUS = .3f;
 		private void CheckGround()
 		{
 			if (JustLandedOnGround) //RESET FLAG
 				JustLandedOnGround = false;
 
 			Vector3 castOrigin = CenterPosition;
-			float castLength = COLLISION_RADIUS + COLLISION_PADDING;
+			float castLength = CollisionRadius + COLLISION_PADDING;
 			if (IsOnGround)
 				castLength += MoveSpeed * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpd < 0)
@@ -1096,10 +1113,10 @@ namespace Project.Gameplay
 			{
 				//Whisker casts (For slanted walls and ground)
 				float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
-				Vector3 castOffset = this.Forward() * (COLLISION_RADIUS - COLLISION_PADDING);
+				Vector3 castOffset = this.Forward() * (CollisionRadius - COLLISION_PADDING);
 				for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 				{
-					castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * COLLISION_RADIUS;
+					castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * CollisionRadius;
 					groundHit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask);
 					Debug.DrawRay(castOrigin + castOffset, castVector, groundHit ? Colors.Red : Colors.White);
 					if (ValidateGroundCast(ref groundHit)) break; //Found the floor
@@ -1115,6 +1132,7 @@ namespace Project.Gameplay
 
 					isJumpClamped = false;
 					CanJumpDash = false;
+					IsGrindstepJump = false;
 					isAccelerationJump = false;
 					JustLandedOnGround = true;
 
@@ -1134,7 +1152,7 @@ namespace Project.Gameplay
 
 				Sound.UpdateGroundType(groundHit.collidedObject);
 
-				float snapDistance = groundHit.distance - COLLISION_RADIUS;
+				float snapDistance = groundHit.distance - CollisionRadius;
 				if (JustLandedOnGround && Mathf.Abs(groundHit.normal.Dot(Vector3.Up)) < .9f) //Slanted ground fix
 				{
 					Vector3 offsetVector = groundHit.point - GlobalPosition;
@@ -1149,13 +1167,15 @@ namespace Project.Gameplay
 			else
 			{
 				IsOnGround = false;
-				//Smooth world direction based on vertical speed
 
+				//Smooth world direction based on vertical speed
 				float orientationResetFactor = 0;
-				if (VerticalSpd > 0)
+				if (ActionState == ActionStates.Stomping || ActionState == ActionStates.JumpDash) //Quickly reset when stomping/homing attacking
+					orientationResetFactor = .2f;
+				else if (VerticalSpd > 0)
 					orientationResetFactor = .01f;
 				else
-					orientationResetFactor = (VerticalSpd / RuntimeConstants.MAX_GRAVITY) - .05f;
+					orientationResetFactor = (VerticalSpd * .2f / RuntimeConstants.MAX_GRAVITY) - .05f;
 
 				FloorMaxAngle = 0; //Treat everything as a wall when in the air
 				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
@@ -1195,7 +1215,7 @@ namespace Project.Gameplay
 		private void CheckCeiling() //Checks the ceiling.
 		{
 			Vector3 castOrigin = CenterPosition;
-			float castLength = COLLISION_RADIUS;
+			float castLength = CollisionRadius;
 
 			Vector3 castVector = UpDirection * castLength;
 			if (VerticalSpd > 0)
@@ -1206,7 +1226,7 @@ namespace Project.Gameplay
 
 			if (ceilingHit)
 			{
-				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * COLLISION_RADIUS));
+				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * CollisionRadius));
 
 				if (VerticalSpd > 0)
 					VerticalSpd = 0;
@@ -1218,19 +1238,19 @@ namespace Project.Gameplay
 		{
 			if (Mathf.IsZeroApprox(MoveSpeed)) //No movement
 			{
-				Debug.DrawRay(CenterPosition, castVector * COLLISION_RADIUS, Colors.White);
+				Debug.DrawRay(CenterPosition, castVector * CollisionRadius, Colors.White);
 				return;
 			}
 
 			castVector *= Mathf.Sign(MoveSpeed);
-			float castLength = COLLISION_RADIUS + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
+			float castLength = CollisionRadius + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
 
 			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, (Godot.Collections.Array)GetCollisionExceptions());
 			Debug.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
 
 			if (ValidateWallCast(ref wallHit))
 			{
-				if (wallHit && ActionState != ActionStates.JumpDash)
+				if (wallHit && ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
 				{
 					float wallRatio = Mathf.Abs(wallHit.normal.Dot(castVector));
 					if (wallRatio > .9f) //Running into wall head-on
@@ -1238,7 +1258,8 @@ namespace Project.Gameplay
 						if (Skills.IsSpeedBreakActive) //Cancel speed break
 							Skills.ToggleSpeedBreak();
 
-						MoveSpeed = 0; //Kill speed
+						if (wallHit.distance < CollisionRadius + COLLISION_PADDING)
+							MoveSpeed = 0; //Kill speed
 					}
 					else //Reduce MoveSpd when moving against walls
 					{
@@ -1249,7 +1270,6 @@ namespace Project.Gameplay
 			}
 		}
 
-		private const float COLLISION_PADDING = .1f;
 		private const float ORIENTATION_SMOOTHING = .4f;
 		private void ResetOrientation()
 		{
@@ -1283,23 +1303,33 @@ namespace Project.Gameplay
 		public float MovementAngle { get; set; }
 		public Vector3 GetMovementDirection()
 		{
-			if (Skills.IsSpeedBreakActive) //Follow pathfollower more accurately when speedbreaking
-				return PathFollower.Forward().Rotated(UpDirection, PathFollower.DeltaAngle);
+			Vector3 pathFollowerForward = PathFollower.Forward().Rotated(UpDirection, PathFollower.DeltaAngle);
 
-			return this.Back().Rotated(UpDirection, MovementAngle); //Normally this is good enough
+			if (Skills.IsSpeedBreakActive) //Follow pathfollower more accurately when speedbreaking
+				return pathFollowerForward;
+
+			Vector3 flatForward = this.Back().Rotated(UpDirection, MovementAngle);
+			if (!Camera.ActiveSettings.isRollEnabled) //Flat terrain
+				return flatForward; //Normally this is good enough
+
+			//Tilted ground fix
+			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
+			return PathFollower.Forward().Rotated(UpDirection, fixAngle);
 		}
 
 		//Gets the rotation of a given "forward" vector
 		public static float CalculateForwardAngle(Vector3 forwardDirection)
 		{
-			/*
 			float dot = forwardDirection.Dot(Vector3.Up);
 			if (Mathf.Abs(dot) > .9f) //Moving vertically
 			{
-				Vector3 upDirection = instance.UpDirection.RemoveVertical().Normalized();
-				return forwardDirection.SignedAngleTo(Vector3.Up * Mathf.Sign(dot), upDirection);
+				float angle = new Vector2(forwardDirection.x + forwardDirection.z, forwardDirection.y).Angle();
+				Vector3 axis = instance.PathFollower.RightAxis; //Fallback
+				if (instance.IsOnGround)
+					axis = forwardDirection.Cross(instance.UpDirection).Normalized();
+
+				forwardDirection = -forwardDirection.Rotated(axis, angle);
 			}
-			*/
 
 			return forwardDirection.Flatten().AngleTo(Vector2.Down);
 		}
@@ -1346,7 +1376,7 @@ namespace Project.Gameplay
 			if (body.IsInGroup("crusher"))
 			{
 				//Check whether we're ACTUALLy being crushed and not just running into the side of the crusher
-				float checkLength = COLLISION_RADIUS * 5f; //Needs to be long enough to guarantee hitting the target
+				float checkLength = CollisionRadius * 5f; //Needs to be long enough to guarantee hitting the target
 				RaycastHit hit = this.CastRay(CenterPosition, UpDirection * checkLength, CollisionMask, false);
 				if (hit.collidedObject == body)
 				{

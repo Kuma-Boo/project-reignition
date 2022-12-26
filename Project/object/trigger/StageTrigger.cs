@@ -115,5 +115,8 @@ namespace Project.Gameplay.Triggers
 			//GD.Print($"Deactivated {Name}");
 			EmitSignal(SignalName.Deactivated);
 		}
+
+		public void EnableMonitoring() => Monitoring = true;
+		public void DisableMonitoring() => Monitoring = false;
 	}
 }

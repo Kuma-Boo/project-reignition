@@ -1,15 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://cjv4yu3rkdb1e"]
+[gd_scene load_steps=4 format=3 uid="uid://cjv4yu3rkdb1e"]
 
 [ext_resource type="PackedScene" uid="uid://cn87x7dfgaocs" path="res://area/stage/1 sand oasis/data/environment/object/model/pillar/SquarePillarShort.gltf" id="1_x385m"]
 
-[sub_resource type="BoxShape3D" id="2"]
-size = Vector3(3, 10, 3)
+[sub_resource type="BoxShape3D" id="BoxShape3D_4espr"]
+size = Vector3(2.5, 10, 2.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_1swbs"]
+points = PackedVector3Array(-1.5, -1.5, -1.5, -1.5, -1.5, 1.5, 1.5, -1.5, 1.5, 1.5, -1.5, -1.5, -1.5, 1, -1.5, -1.5, 1, 1.5, 1.5, 1, 1.5, 1.5, 1, -1.5, 1, 2, -1, 1, 2, 1, -1, 2, 1, -1, 2, -1)
 
 [node name="SquarePillarShort" type="StaticBody3D" groups=["floor", "splash jump", "wall"]]
 
 [node name="SquarePillarShort" parent="." instance=ExtResource("1_x385m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Pillar" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("2")
+shape = SubResource("BoxShape3D_4espr")
+
+[node name="Base" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("ConvexPolygonShape3D_1swbs")

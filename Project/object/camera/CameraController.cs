@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using System.Collections.Generic;
 
 namespace Project.Gameplay
 {
@@ -46,7 +47,7 @@ namespace Project.Gameplay
 			if (Engine.IsEditorHint()) return;
 
 			instance = this;
-			SnapFlag = true; //Default to snapping view when spawning
+			UpdateCameraSettings(defaultSettings, 0f); //Apply default settings
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -61,8 +62,16 @@ namespace Project.Gameplay
 		#region Transitions and Settings
 		[Export]
 		public CameraSettingsResource defaultSettings; //Default settings to use when nothing is set
-		public CameraSettingsResource BlendToSettings { get; private set; } //Settings to transition to
-		public CameraSettingsResource BlendFromSettings { get; private set; } //Settings to transition from
+		public CameraSettingsResource ActiveSettings => BlendSettingsList.Count == 0 ? null : BlendSettingsList[BlendSettingsList.Count - 1]; //Settings to transition to
+
+
+		/// <summary> Ratio [0 <-> 1] of transition that has been completed. </summary>
+		private readonly List<float> LinearBlendRatioList = new List<float>();
+		/// <summary> Smoothstep transition time. </summary>
+		private readonly List<float> SmoothBlendRatioList = new List<float>();
+		/// <summary> Speed of transition (in seconds). </summary>
+		private readonly List<float> BlendTimeList = new List<float>();
+		private readonly List<CameraSettingsResource> BlendSettingsList = new List<CameraSettingsResource>();
 
 		public void StartCrossfade()
 		{
@@ -77,67 +86,75 @@ namespace Project.Gameplay
 		/// </summary>
 		public void UpdateCameraSettings(CameraSettingsResource data, float blendTime = .2f, bool useCrossfade = false)
 		{
-			BlendFromSettings = BlendToSettings;
-			BlendToSettings = data;
-			transitionSpeed = blendTime;
-			transitionLinearRatio = transitionSmoothedRatio = 0f;
+			if (data == null) return;
 
-			if (Mathf.IsZeroApprox(transitionSpeed)) //Cut transition
+			if (Mathf.IsZeroApprox(blendTime)) //Cut transition
 				SnapFlag = true;
 			else if (useCrossfade) //Crossfade transition
 			{
 				StartCrossfade();
 				SnapFlag = true;
 			}
+
+			//Add current data
+			BlendSettingsList.Add(data);
+			LinearBlendRatioList.Add(0);
+			SmoothBlendRatioList.Add(0);
+			BlendTimeList.Add(blendTime);
 		}
 
 		/// <summary> Set to true to skip smoothing. </summary>
 		public bool SnapFlag { get; set; }
-		/// <summary> Ratio [0 <-> 1] of transition that has been completed. </summary>
-		private float transitionLinearRatio;
-		/// <summary> Smoothstep transition time. </summary>
-		private float transitionSmoothedRatio;
-		/// <summary> Speed of transition (in seconds). </summary>
-		private float transitionSpeed;
 		/// <summary>
 		/// Update the transition timer.
 		/// </summary>
 		private void UpdateTransitionTimer()
 		{
-			if (BlendToSettings == null) //No data set, cut to default camera settings
-				UpdateCameraSettings(defaultSettings, 0f);
-
-			if (!Mathf.IsEqualApprox(transitionLinearRatio, 1.0f)) //Update transition blend
+			//Clear all lists (except active one) when snapping
+			if (SnapFlag)
 			{
-				if (SnapFlag)
-					transitionLinearRatio = 1f;
-				else
-					transitionLinearRatio = Mathf.MoveToward(transitionLinearRatio, 1f, (1f / transitionSpeed) * PhysicsManager.physicsDelta);
+				for (int i = BlendSettingsList.Count - 2; i >= 0; i--)
+				{
+					BlendSettingsList.RemoveAt(i);
+					LinearBlendRatioList.RemoveAt(i);
+					SmoothBlendRatioList.RemoveAt(i);
+					BlendTimeList.RemoveAt(i);
+				}
 
-				transitionSmoothedRatio = Mathf.SmoothStep(0, 1f, transitionLinearRatio);
+				LinearBlendRatioList[0] = SmoothBlendRatioList[0] = 1;
+			}
+			else
+			{
+				for (int i = BlendSettingsList.Count - 1; i >= 0; i--)
+				{
+					//Remove completed blends
+					if (i < BlendSettingsList.Count - 2 && Mathf.IsEqualApprox(LinearBlendRatioList[i + 1], 1.0f))
+					{
+						BlendSettingsList.RemoveAt(i);
+						LinearBlendRatioList.RemoveAt(i);
+						SmoothBlendRatioList.RemoveAt(i);
+						BlendTimeList.RemoveAt(i);
+						continue;
+					}
+
+					LinearBlendRatioList[i] = Mathf.MoveToward(LinearBlendRatioList[i], 1f, (1f / BlendTimeList[i]) * PhysicsManager.physicsDelta);
+					SmoothBlendRatioList[i] = Mathf.SmoothStep(0, 1f, LinearBlendRatioList[i]);
+				}
 			}
 		}
 
-		/// <summary> Is the player behind the camera? </summary>
-		private bool isPlayerBehindCamera;
-		/// <summary> Player's position on screen, normalized by screen size. </summary>
-		private Vector2 playerPosition;
 		/// <summary> 0 -> Don't use backstep, 1 -> Use backstep. </summary>
 		private float backstepBlend;
 		private float backstepBlendVelocity;
 		/// <summary> Doesn't update when the Character isn't moving. </summary>
 		private bool isBackstepActive;
 		private readonly float BACKSTEP_TRANSITION_SPEED = .4f;
-		private void CalculatePlayerPosition()
+
+		/// <summary>
+		///Updates whether backstep distance should be used.
+		/// </summary>
+		private void UpdateBackstepCamera()
 		{
-			isPlayerBehindCamera = IsBehindCamera(Character.GlobalPosition);
-
-			//Calculate player's screen position
-			playerPosition = ConvertToScreenSpace(Character.GlobalPosition);
-			playerPosition /= RuntimeConstants.SCREEN_SIZE;
-			playerPosition = (playerPosition - Vector2.One * .5f) * 2f;
-
-			//Update backstep
 			if (Character.MoveSpeed != 0)
 			{
 				if (Character.IsMovingBackward)
@@ -159,19 +176,25 @@ namespace Project.Gameplay
 		private void UpdateGameplayCamera()
 		{
 			UpdateTransitionTimer();
-			CalculatePlayerPosition();
+			UpdateBackstepCamera();
 
 			UpdatePosition();
 			UpdateRotation();
-			UpdateTrackingPosition();
-			UpdateTrackingRotation();
 
 			//Update FOV and view offsets
-			Camera.Fov = Mathf.Lerp(CalculateTargetFOV(BlendFromSettings), CalculateTargetFOV(BlendFromSettings), transitionSmoothedRatio);
-			Vector2 viewOffset = CalculateViewOffset(BlendFromSettings).Lerp(CalculateViewOffset(BlendToSettings), transitionSmoothedRatio);
+			Camera.Fov = CalculateTargetFOV(BlendSettingsList[0]);
+			Vector2 viewOffset = CalculateViewOffset(BlendSettingsList[0]);
+			if (BlendSettingsList.Count > 1)
+			{
+				for (int i = 1; i < BlendSettingsList.Count; i++)
+				{
+					Camera.Fov = Mathf.Lerp(Camera.Fov, CalculateTargetFOV(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+					viewOffset = viewOffset.Lerp(CalculateViewOffset(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+				}
+			}
+
 			Camera.HOffset = viewOffset.x;
 			Camera.VOffset = viewOffset.y;
-
 			if (!freeCamEnabled) //Apply transform
 			{
 				cameraRoot.GlobalTransform = calculationRoot.GlobalTransform;
@@ -179,7 +202,12 @@ namespace Project.Gameplay
 			}
 
 			//Update input transformation angle
-			xformAngle = Mathf.Lerp(CalculateXform(BlendFromSettings), CalculateXform(BlendToSettings), transitionSmoothedRatio);
+			xformAngle = CalculateXform(BlendSettingsList[0]);
+			if (BlendSettingsList.Count > 1)
+			{
+				for (int i = 1; i < BlendSettingsList.Count; i++)
+					xformAngle = Mathf.LerpAngle(xformAngle, CalculateXform(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+			}
 
 			if (SnapFlag) //Reset flag
 				SnapFlag = false;
@@ -189,15 +217,15 @@ namespace Project.Gameplay
 		{
 			if (settings == null) return 0;
 
-			if (settings.isStaticCamera)
-				return Vector2.Down.Rotated(-calculationRoot.Rotation.y).AngleTo(Vector2.Down);
+			if (settings.IsStaticCamera)
+				return CalculateYaw(settings);
 
-			return Vector2.Down.Rotated(-CurrentYaw).AngleTo(Vector2.Down);
+			return CharacterController.CalculateForwardAngle(cameraRoot.Forward());
 		}
 
 		private float CalculateTargetFOV(CameraSettingsResource settings)
 		{
-			if (settings == null || !settings.modifyFOV) return Camera.Fov;
+			if (settings == null || !settings.useCustomFOV) return Camera.Fov;
 			return settings.fov;
 		}
 		private Vector2 CalculateViewOffset(CameraSettingsResource settings)
@@ -208,17 +236,23 @@ namespace Project.Gameplay
 
 		private void UpdatePosition()
 		{
-			Vector3 targetPosition = CalculatePosition(BlendFromSettings).Lerp(CalculatePosition(BlendToSettings), transitionSmoothedRatio);
+			Vector3 targetPosition = CalculatePosition(BlendSettingsList[0]);
+			if (BlendSettingsList.Count > 1)
+			{
+				for (int i = 1; i < BlendSettingsList.Count; i++)
+					targetPosition = targetPosition.Lerp(CalculatePosition(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+			}
+
 			calculationRoot.GlobalPosition = targetPosition;
 		}
 
 		/// <summary>
-		/// Calculates the position for a given CameraSettingResource.
+		/// Calculates the (offset) position for a given CameraSettingResource.
 		/// </summary>
 		private Vector3 CalculatePosition(CameraSettingsResource settings)
 		{
 			if (settings == null) return Vector3.Zero;
-			if (settings.isStaticCamera) //Static camera
+			if (settings.IsStaticCamera) //Static camera
 				return settings.staticPosition;
 
 			Vector3 targetPosition = PathFollower.GlobalPosition;
@@ -227,7 +261,7 @@ namespace Project.Gameplay
 			float distance = settings.distance;
 			distance += Mathf.Lerp(0, settings.backstepDistanceAddition, backstepBlend);
 
-			if (settings.yawMode != CameraSettingsResource.OverrideMode.Override)
+			if (settings.yawMode != CameraSettingsResource.OverrideModes.Override)
 				targetPosition += PathFollower.Back() * distance;
 			else
 				targetPosition += Vector3.Forward.Rotated(Vector3.Up, settings.yawAngle) * distance;
@@ -238,59 +272,67 @@ namespace Project.Gameplay
 			else
 				targetPosition += PathFollower.UpAxis * settings.height;
 
+			if (settings.IsFieldCamera) //Horizontal tracking
+			{
+				if (settings.isRollEnabled)
+					targetPosition += PathFollower.Right() * PathFollower.TruePlayerPositionDelta.x;
+				else
+					targetPosition += PathFollower.Forward().Rotated(Vector3.Up, Mathf.Pi * .5f).RemoveVertical().Normalized() * PathFollower.FlatPlayerPositionDelta.x;
+			}
+
+			if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Move) //Vertical tracking
+			{
+				if (settings.isRollEnabled)
+					targetPosition += PathFollower.Up() * PathFollower.TruePlayerPositionDelta.y;
+				else
+					targetPosition += PathFollower.UpAxis * PathFollower.FlatPlayerPositionDelta.y;
+			}
+
 			return targetPosition;
 		}
 
 		public float CurrentPitch { get; private set; }
 		public float CurrentYaw { get; private set; }
 		public float CurrentTilt { get; private set; }
-		private float currentPitchVelocity;
-		private float currentYawVelocity;
-		private float currentTiltVelocity;
-		private readonly float BASE_ROTATION_SMOOTHING = .1f;
 		private void UpdateRotation()
 		{
 			//Calculate target angles
-			float targetTilt = Mathf.Lerp(CalculateTilt(BlendFromSettings), CalculateTilt(BlendToSettings), transitionSmoothedRatio);
-			float targetYaw = Mathf.LerpAngle(CalculateYaw(BlendFromSettings), CalculateYaw(BlendToSettings), transitionSmoothedRatio);
+			float targetTilt = CalculateTilt(BlendSettingsList[0]);
+			float targetYaw = CalculateYaw(BlendSettingsList[0]);
+			if (BlendSettingsList.Count > 1)
+			{
+				for (int i = 1; i < BlendSettingsList.Count; i++)
+				{
+					targetTilt = Mathf.Lerp(targetTilt, CalculateTilt(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+					targetYaw = Mathf.LerpAngle(targetYaw, CalculateYaw(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+				}
+			}
+
 			if (isYawOverrideActive) //Yaw override (for Grindrails, needs to be deprecated)
 			{
 				targetYaw = targetYawOverride;
 				isYawOverrideActive = false;
 			}
-
-			if (SnapFlag)
-			{
-				CurrentTilt = targetTilt;
-				CurrentYaw = targetYaw;
-				currentYawVelocity = currentTiltVelocity = 0f;
-			}
-			else
-			{
-				CurrentTilt = ExtensionMethods.SmoothDampAngle(CurrentTilt, targetTilt, ref currentTiltVelocity, BASE_ROTATION_SMOOTHING);
-				CurrentYaw = ExtensionMethods.SmoothDampAngle(CurrentYaw, targetYaw, ref currentYawVelocity, BASE_ROTATION_SMOOTHING);
-			}
+			CurrentTilt = targetTilt;
+			CurrentYaw = targetYaw;
 
 			calculationRoot.GlobalRotation = new Vector3(0, CurrentYaw, CurrentTilt);
 
 			//Pitch has to be calculated after yaw and tilt rotation was applied
-			float targetPitch = Mathf.Lerp(CalculatePitch(BlendFromSettings), CalculatePitch(BlendToSettings), transitionSmoothedRatio);
-			CurrentPitch = targetPitch;
-			/*
-			if (SnapFlag)
+			float targetPitch = CalculatePitch(BlendSettingsList[0]);
+			if (BlendSettingsList.Count > 1)
 			{
-				currentPitchVelocity = 0;
+				for (int i = 1; i < BlendSettingsList.Count; i++)
+					targetPitch = Mathf.Lerp(targetPitch, CalculatePitch(BlendSettingsList[i]), SmoothBlendRatioList[i]);
 			}
-			else
-				CurrentPitch = ExtensionMethods.SmoothDamp(CurrentPitch, targetPitch, ref currentPitchVelocity, BASE_ROTATION_SMOOTHING);
-			*/
 
+			CurrentPitch = targetPitch;
 			calculationGimbal.Rotation = Vector3.Right * CurrentPitch;
 		}
 
 		private float CalculateTilt(CameraSettingsResource settings)
 		{
-			if (settings == null || !settings.isRollEnabled || settings.isStaticCamera) return 0;
+			if (settings == null || !settings.isRollEnabled || settings.IsStaticCamera) return 0;
 
 			//Rotate the z axis along PathFollower's forward, by angle of the ground direction
 			Vector3 angle = PathFollower.Up().Rotated(Vector3.Up, -PathFollower.ForwardAngle);
@@ -320,88 +362,46 @@ namespace Project.Gameplay
 		/// </summary>
 		private float CalculateYaw(CameraSettingsResource settings)
 		{
-			if (settings == null || settings.isStaticCamera) return 0; //Invalid resource
+			if (settings == null) return 0; //Invalid resource
 
-			float targetYaw;
-			if (settings.yawMode == CameraSettingsResource.OverrideMode.Override)
-				targetYaw = settings.yawAngle; //Override view direction
-			else
-			{
-				//Forward direction is based on PathFollower's orientation
-				targetYaw = PathFollower.ForwardAngle;
-				targetYaw += settings.yawAngle; //Add
-			}
+			if (settings.IsStaticCamera)
+				return (Character.GlobalPosition - settings.staticPosition).Flatten().AngleTo(Vector2.Down);
 
-			return targetYaw;
+			if (settings.yawMode == CameraSettingsResource.OverrideModes.Override)
+				return settings.yawAngle; //Override view direction
+
+			//Forward direction is based on PathFollower's orientation
+			return PathFollower.ForwardAngle + settings.yawAngle; //Add
 		}
 
+		private readonly float PITCH_RISING_LEAD_RATIO = .2f;
+		private readonly float PITCH_FALLING_LEAD_RATIO = .4f;
+		private readonly float PITCH_MAX_LEAD_AMOUNT = 5f;
 		/// <summary>
 		/// Calculates pitch (x-axis rotation) of a given CameraSettingsResource.
 		/// </summary>
 		private float CalculatePitch(CameraSettingsResource settings)
 		{
-			if (settings == null || settings.isStaticCamera) return 0;
-
-			if (settings.pitchMode == CameraSettingsResource.OverrideMode.Override)
-				return settings.pitchAngle; //Override view direction
-
-			Vector3 targetLookAtPosition = PathFollower.GlobalPosition;
-
-			if (settings.isRollEnabled)
-				targetLookAtPosition += PathFollower.Up() * settings.height;
-			else
-				targetLookAtPosition += PathFollower.UpAxis * settings.height;
-
-			Vector3 delta = calculationRoot.GlobalPosition - targetLookAtPosition;
-			delta = calculationRoot.Basis.Inverse() * delta;
-			delta.x = 0;
-			float targetPitch = Vector3.Forward.SignedAngleTo(delta.Normalized(), Vector3.Right);
-			targetPitch += settings.pitchAngle; //Add
-			return targetPitch;
-		}
-
-		private float CurrentYawTracking { get; set; }
-		private float CurrentPitchTracking { get; set; }
-		private float yawTrackingVelocity;
-		private float pitchTrackingVelocity;
-		private const float ROTATION_TRACKING_SMOOTHING = .1f;
-		private void UpdateTrackingRotation()
-		{
-			float yawTracking = Mathf.Lerp(CalculateTrackingYaw(BlendFromSettings), CalculateTrackingYaw(BlendToSettings), transitionSmoothedRatio);
-			if (SnapFlag)
-			{
-				CurrentYawTracking = yawTracking;
-				yawTrackingVelocity = 0;
-			}
-			else
-				CurrentYawTracking = ExtensionMethods.SmoothDampAngle(CurrentYawTracking, yawTracking, ref yawTrackingVelocity, ROTATION_TRACKING_SMOOTHING);
-			calculationRoot.GlobalRotate(calculationGimbal.Up(), CurrentYawTracking);
-
-			float pitchTracking = Mathf.Lerp(CalculateTrackingPitch(BlendFromSettings), CalculateTrackingPitch(BlendToSettings), transitionSmoothedRatio);
-			if (SnapFlag)
-			{
-				CurrentPitchTracking = pitchTracking;
-				pitchTrackingVelocity = 0;
-			}
-			else
-				CurrentPitchTracking = ExtensionMethods.SmoothDampAngle(CurrentPitchTracking, pitchTracking, ref pitchTrackingVelocity, ROTATION_TRACKING_SMOOTHING);
-
-			calculationGimbal.Rotation += Vector3.Right * CurrentPitchTracking;
-		}
-
-		private readonly float PITCH_RISING_LEAD_RATIO = 1f;
-		private readonly float PITCH_FALLING_LEAD_RATIO = 2f;
-		private readonly float PITCH_MAX_LEAD_AMOUNT = 5f;
-		private float CalculateTrackingPitch(CameraSettingsResource settings)
-		{
 			if (settings == null) return 0;
+
+			if (settings.IsStaticCamera)
+			{
+				Vector3 staticDelta = settings.staticPosition - Character.GlobalPosition;
+				staticDelta = staticDelta.Rotated(Vector3.Up, -CalculateYaw(settings));
+				staticDelta.x = 0;
+				return Vector3.Forward.SignedAngleTo(staticDelta.Normalized(), Vector3.Right);
+			}
+
+			if (settings.pitchMode == CameraSettingsResource.OverrideModes.Override)
+				return settings.pitchAngle; //Override view direction
 
 			Vector3 targetLookAtPosition = Character.GlobalPosition;
 			if (settings.isRollEnabled)
 				targetLookAtPosition += PathFollower.Up() * settings.height;
 			else
 				targetLookAtPosition += PathFollower.UpAxis * settings.height;
-			if (!Character.IsOnGround)
+
+			if (!Character.IsOnGround && settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Rotate)
 			{
 				float leadAmount = Character.VerticalSpd * PhysicsManager.physicsDelta;
 				if (Character.VerticalSpd > 0)
@@ -413,50 +413,14 @@ namespace Project.Gameplay
 				targetLookAtPosition += Character.UpDirection * leadAmount;
 			}
 
-			Vector3 delta = calculationRoot.GlobalPosition - targetLookAtPosition;
-			delta = calculationRoot.Basis.Inverse() * delta;
+			Vector3 delta = CalculatePosition(settings) - targetLookAtPosition;
+			delta = delta.Rotated(Vector3.Up, -PathFollower.ForwardAngle);
+			delta = delta.Rotated(Vector3.Forward, CalculateTilt(settings));
 			delta.x = 0;
 			float targetPitch = Vector3.Forward.SignedAngleTo(delta.Normalized(), Vector3.Right);
-			targetPitch -= calculationGimbal.Rotation.x;
-			return targetPitch * settings.pitchTrackingStrength;
-		}
+			targetPitch += settings.pitchAngle; //Add
 
-		private float CalculateTrackingYaw(CameraSettingsResource settings)
-		{
-			if (settings == null) return 0;
-
-			Vector3 referencePos = PathFollower.Basis.Inverse() * (calculationRoot.GlobalPosition - PathFollower.GlobalPosition);
-			Vector2 delta = (PathFollower.TruePlayerPositionDelta - referencePos).Flatten().Normalized();
-			float targetYaw = -Vector2.Down.AngleTo(delta);
-			return targetYaw * settings.yawTrackingStrength;
-		}
-
-		private void UpdateTrackingPosition()
-		{
-			Vector3 targetPosition = Vector3.Zero;
-			targetPosition += CalculateVTracking(BlendFromSettings).Lerp(CalculateVTracking(BlendToSettings), transitionSmoothedRatio);
-			targetPosition -= CalculateHTracking(BlendFromSettings).Lerp(CalculateHTracking(BlendToSettings), transitionSmoothedRatio);
-			calculationRoot.GlobalPosition += targetPosition;
-		}
-
-		private Vector3 CalculateHTracking(CameraSettingsResource settings)
-		{
-			if (settings == null || !settings.hTrackingEnabled || settings.isStaticCamera) return Vector3.Zero;
-
-			if (settings.isRollEnabled)
-				return PathFollower.Right() * PathFollower.TruePlayerPositionDelta.x;
-			else
-				return PathFollower.RightAxis * PathFollower.FlatPlayerPositionDelta.x;
-		}
-
-		private Vector3 CalculateVTracking(CameraSettingsResource settings)
-		{
-			if (settings == null || !settings.vTrackingEnabled || settings.isStaticCamera) return Vector3.Zero;
-
-			if (settings.isRollEnabled)
-				return PathFollower.Up() * PathFollower.TruePlayerPositionDelta.y;
-			else
-				return PathFollower.UpAxis * PathFollower.FlatPlayerPositionDelta.y;
+			return targetPitch;
 		}
 		#endregion
 

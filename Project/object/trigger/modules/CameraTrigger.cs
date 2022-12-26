@@ -18,36 +18,43 @@ namespace Project.Gameplay.Triggers
 		}
 
 		[Export]
-		public CameraSettingsResource cameraData; //Must be assigned to something.
-		private CameraSettingsResource previousData; //Reference to the camera data that was being used when this trigger was entered.
+		public CameraSettingsResource settings; //Must be assigned to something.
+		private CameraSettingsResource previousSettings; //Reference to the camera data that was being used when this trigger was entered.
+		private Vector3 previousStaticPosition;
 		private CameraController CameraController => Character.Camera;
 
 		public override void Activate()
 		{
-			if (cameraData == null)
+			if (settings == null)
 			{
 				GD.PrintErr($"{Name} doesn't have a CameraSettingResource attached!");
 				return;
 			}
 
-			if (CameraController.BlendToSettings == cameraData) return; //Already set
+			if (previousSettings == null)
+			{
+				previousSettings = CameraController.ActiveSettings;
+				if (previousSettings.IsStaticCamera && previousSettings.autosetStaticPosition) //Cache static position
+					previousStaticPosition = previousSettings.staticPosition;
+			}
 
-			if (cameraData.isStaticCamera && cameraData.autosetStaticPosition)
-				cameraData.staticPosition = GlobalPosition;
+			if (settings.IsStaticCamera && settings.autosetStaticPosition)
+				settings.staticPosition = GlobalPosition;
 
-			if (previousData == null)
-				previousData = CameraController.BlendToSettings;
-
-			CameraController.UpdateCameraSettings(cameraData, transitionTime, transitionType == TransitionType.Crossfade);
+			CameraController.UpdateCameraSettings(settings, transitionTime, transitionType == TransitionType.Crossfade);
 		}
 
 		public override void Deactivate()
 		{
-			if (cameraData == null) return;
-			if (CameraController.BlendToSettings != cameraData) return; //Already overriden by a different trigger
+			if (previousSettings.IsStaticCamera)
 
-			GD.Print($"Changed camera settings to {previousData}");
-			CameraController.UpdateCameraSettings(previousData, transitionTime);
+				if (previousSettings == null || settings == null) return;
+			if (CameraController.ActiveSettings != settings) return; //Already overridden by a different trigger
+
+			if (previousSettings.IsStaticCamera && previousSettings.autosetStaticPosition) //Reset static position
+				previousSettings.staticPosition = previousStaticPosition;
+
+			CameraController.UpdateCameraSettings(previousSettings, transitionTime);
 		}
 	}
 }

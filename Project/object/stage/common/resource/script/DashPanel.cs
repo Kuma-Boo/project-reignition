@@ -32,6 +32,19 @@ namespace Project.Gameplay.Objects
 			sfxPlayer.Play();
 			isQueued = false;
 
+			//Only apply speed boost when player is moving slower. Don't slow them down!
+			bool applyBoost = Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio;
+
+			//Apply boost during automation
+			if (Character.MovementState == CharacterController.MovementStates.External &&
+			 Character.ExternalController != null && Character.ExternalController is Triggers.AutomationTrigger)
+			{
+				if (applyBoost)
+					Character.MoveSpeed = Character.GroundSettings.speed * speedRatio;
+
+				return;
+			}
+
 			LockoutResource lockout = new LockoutResource()
 			{
 				overrideMode = LockoutResource.OverrideMode.Replace,
@@ -39,15 +52,11 @@ namespace Project.Gameplay.Objects
 				overrideAngle = CharacterController.CalculateForwardAngle(this.Back()),
 				speedRatio = speedRatio,
 				disableActions = true,
-				overrideSpeed = true,
+				overrideSpeed = applyBoost,
 				tractionMultiplier = 0f,
 				length = length,
 				priority = -1, //Not using priority
 			};
-
-			//Player is moving faster than the dash panel, don't slow them down!
-			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) > speedRatio)
-				lockout.overrideSpeed = false;
 
 			if (alignToPath)
 			{

@@ -47,14 +47,6 @@ namespace Project.Gameplay
 			if (ActivePath == null) return;
 
 			Vector3 syncPoint = Character.GlobalPosition;
-			/*
-			if (!Character.IsOnGround)
-			{
-				RaycastHit groundCheck = this.CastRay(Character.GlobalPosition, -Character.UpDirection * 10f, RuntimeConstants.Instance.environmentMask);
-				if (groundCheck && groundCheck.collidedObject.IsInGroup("floor"))
-					syncPoint.y = groundCheck.point.y;
-			}
-			*/
 			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
 
 			float newForwardAngle = CharacterController.CalculateForwardAngle(this.Forward());
@@ -66,12 +58,12 @@ namespace Project.Gameplay
 			TruePlayerPositionDelta = Basis.Inverse() * (Character.GlobalPosition - GlobalPosition);
 
 			//Update custom orientations
-			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, ForwardAngle).Normalized();
+			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();
 			float upDotProduct = this.Forward().Dot(Vector3.Up);
 			if (upDotProduct < .9f)
 				RightAxis = this.Forward().Cross(Vector3.Up).Normalized();
 			else //Moving straight up/down
-				RightAxis = this.Forward().Cross(ForwardAxis).Normalized();
+				RightAxis = this.Back().Cross(ForwardAxis).Normalized();
 			UpAxis = this.Forward().Rotated(RightAxis, Mathf.Pi * .5f).Normalized();
 
 			Debug.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);

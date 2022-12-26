@@ -41,6 +41,7 @@ namespace Project.Gameplay.Triggers
 		{
 			Character.MoveSpeed = sidleSettings.Interpolate(Character.MoveSpeed, isFacingRight ? Controller.MovementAxis.x : -Controller.MovementAxis.x);
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			Character.UpdateExternalControl();
 		}
 
 		private void UpdateSidleDamage()

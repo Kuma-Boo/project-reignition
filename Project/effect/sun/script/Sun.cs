@@ -55,8 +55,6 @@ namespace Project
 		{
 			if (MainCamera == null || DepthRenderer.DepthTexture == null) return; //No camera/depth texture found
 
-			UpdateSample();
-
 			currentOcclusion = ExtensionMethods.SmoothDamp(currentOcclusion, isOccluded ? 1f : 0f, ref currentOcclusionVelocity, OCCLUSION_SMOOTHING);
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_OCCLUSION, currentOcclusion);
 
@@ -67,6 +65,7 @@ namespace Project
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_MOVEMENT, currentMovement);
 			currentMovement = ExtensionMethods.SmoothDamp(currentMovement, 1f, ref currentMovementVelocity, MOVEMENT_SMOOTHING);
 
+			UpdateSample();
 			UpdateLensFlare();
 		}
 
@@ -76,7 +75,7 @@ namespace Project
 		{
 			if (updateTimer <= 0f)
 			{
-				if (MainCamera.IsBehindCamera(GlobalPosition))
+				if (MainCamera.IsBehindCamera(GlobalPosition) || screenUV.x < 0.0f || screenUV.x > 1.0f || screenUV.y < 0.0f || screenUV.y > 1.0f)
 					isOccluded = true; //Always occluded when the camera faces away
 				else if (MainCamera.IsOnScreen(GlobalPosition))
 				{
