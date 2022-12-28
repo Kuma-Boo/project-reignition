@@ -46,7 +46,7 @@ namespace Project.Editor
 			properties.Add(ExtensionMethods.CreateProperty("Source", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"));
 			properties.Add(ExtensionMethods.CreateProperty("Amount", Variant.Type.Int, PropertyHint.Range, "0,64"));
 
-			properties.Add(ExtensionMethods.CreateProperty("Shape", Variant.Type.Int, PropertyHint.Enum, "Line,Ring,Path"));
+			properties.Add(ExtensionMethods.CreateProperty("Shape", Variant.Type.Int, PropertyHint.Enum, shape.EnumToString()));
 
 			if (shape == SpawnShape.Path)
 			{
@@ -55,7 +55,7 @@ namespace Project.Editor
 				properties.Add(ExtensionMethods.CreateProperty("Follow Path Y", Variant.Type.Bool));
 			}
 			else
-				properties.Add(ExtensionMethods.CreateProperty("Orientation", Variant.Type.Int, PropertyHint.Enum, "Horizontal,Vertical"));
+				properties.Add(ExtensionMethods.CreateProperty("Orientation", Variant.Type.Int, PropertyHint.Enum, orientation.EnumToString()));
 
 			if (shape == SpawnShape.Ring)
 			{

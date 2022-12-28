@@ -13,24 +13,32 @@ namespace Project.Gameplay.Triggers
 		private bool isRightTurn; //Which way is the corner?
 
 		//Public for the editor
-		public Vector3 EndPosition => MiddlePosition + this.Left() * (isRightTurn ? 1 : -1) * slideDistance;
-		public Vector3 MiddlePosition => GlobalPosition + this.Forward() * slideDistance;
+		public Vector3 EndPosition => MiddlePosition + ExitDirection * slideDistance;
+		public Vector3 MiddlePosition => GlobalPosition + this.Back() * slideDistance;
+		public Vector3 ExitDirection => this.Right() * (isRightTurn ? 1 : -1);
 
 		private bool isProcessing; //Is this drift trigger currently processing?
 		private bool wasDriftAttempted; //Did the player already press the action button and fail?
 		private float entrySpeed; //Entry speed
-		private Vector3 driftVelocity; //For smooth damp
 		private CharacterController Character => CharacterController.instance;
 		private InputManager.Controller Controller => InputManager.controller;
 
-		[Export(PropertyHint.Range, "1, 10")]
-		private int slideDistance = 10; //How far to slide
+		/// <summary> For smooth damp </summary>
+		private Vector3 driftVelocity;
+		/// <summary> Positional smoothing </summary>
 		private const float DRIFT_SMOOTHING = .25f;
-		private const float ENTRANCE_SPEED_RATIO = .5f; //Entrance speed (ratio) required to start a drift
-		private const float EXIT_SPEED_RATIO = 1.2f; //Exit speed (ratio) from a successful drift
 
+		/// <summary> How far to slide. </summary>
+		[Export(PropertyHint.Range, "1, 10")]
+		private int slideDistance = 10;
+		/// <summary> Entrance speed (ratio) required to start a drift. </summary>
+		private const float ENTRANCE_SPEED_RATIO = .5f;
+
+		[ExportSubgroup("Components")]
 		[Export]
 		private AudioStreamPlayer sfx;
+		[Export]
+		private LockoutResource lockout;
 		private float startingVolume;
 		private bool isFadingSFX;
 		private float MIN_STARTING_VOLUME = -6f; //SFX volume when player enters slowly
@@ -59,8 +67,11 @@ namespace Project.Gameplay.Triggers
 
 		private void StartDrift() //Initialize drift
 		{
+			isProcessing = true;
+
 			entrySpeed = Character.MoveSpeed;
 			driftVelocity = Vector3.Zero;
+
 			wasDriftAttempted = false;
 
 			//Reset sfx volume
@@ -71,7 +82,7 @@ namespace Project.Gameplay.Triggers
 			sfx.Play();
 
 			Character.StartExternal(this);
-			isProcessing = true;
+			Character.Animator.ExternalAngle = Character.MovementAngle;
 		}
 
 		private void UpdateDrift()
@@ -103,16 +114,13 @@ namespace Project.Gameplay.Triggers
 					ApplyBonus(true);
 
 					//Turn 90 degrees
-					Character.MovementAngle = CharacterController.CalculateForwardAngle(this.Forward());
-					if (isRightTurn)
-						Character.MovementAngle -= Mathf.Pi * .5f;
-					else
-						Character.MovementAngle += Mathf.Pi * .5f;
+					Character.MovementAngle = Character.CalculateForwardAngle(ExitDirection);
+					Character.Animator.ExternalAngle = Character.MovementAngle;
 
-					Character.MoveSpeed = Character.GroundSettings.speed * EXIT_SPEED_RATIO;
-
-					//Snap to target position (NVM)
+					//Snap to target position (Except on the Y-axis)
 					Character.GlobalPosition = new Vector3(targetPosition.x, Character.GlobalPosition.y, targetPosition.z);
+					Character.AddLockoutData(lockout); //Apply lockout
+
 					FinishDrift();
 				}
 			}

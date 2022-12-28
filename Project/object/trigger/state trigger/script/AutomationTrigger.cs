@@ -58,7 +58,7 @@ namespace Project.Gameplay.Triggers
 
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 			Character.UpdateExternalControl();
-			Character.MovementAngle = Character.PathFollower.ForwardAngle;
+			Character.Animator.ExternalAngle = Character.MovementAngle = Character.PathFollower.ForwardAngle;
 		}
 
 		private bool IsActivationValid()
@@ -68,7 +68,7 @@ namespace Project.Gameplay.Triggers
 			if (!ignoreDirection)
 			{
 				//Ensure character is facing/moving the correct direction
-				float dot = ExtensionMethods.DotAngle(Character.MovementAngle, CharacterController.CalculateForwardAngle(this.Forward()));
+				float dot = ExtensionMethods.DotAngle(Character.MovementAngle, Character.CalculateForwardAngle(this.Forward()));
 				if (dot < 0f || Character.IsMovingBackward) return false;
 			}
 
@@ -78,8 +78,8 @@ namespace Project.Gameplay.Triggers
 		private void Activate()
 		{
 			//Cancel any lockout that doesn't have an assigned priority (i.e. Dash Panels)
-			if (Character.IsLockoutActive && Character.CurrentLockoutData.priority == -1)
-				Character.RemoveLockoutData(Character.CurrentLockoutData);
+			if (Character.IsLockoutActive && Character.ActiveLockoutData.priority == -1)
+				Character.RemoveLockoutData(Character.ActiveLockoutData);
 
 			if (automationPath != null)
 			{
@@ -107,7 +107,6 @@ namespace Project.Gameplay.Triggers
 			Character.PathFollower.Resync();
 
 			Character.ResetMovementState();
-			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			Character.UpDirection = Character.PathFollower.Up();
 
 			EmitSignal(SignalName.Deactivated);

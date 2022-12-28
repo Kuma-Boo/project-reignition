@@ -220,7 +220,7 @@ namespace Project.Gameplay
 			if (settings.IsStaticCamera)
 				return CalculateYaw(settings);
 
-			return CharacterController.CalculateForwardAngle(cameraRoot.Forward());
+			return Character.CalculateForwardAngle(calculationRoot.Forward());
 		}
 
 		private float CalculateTargetFOV(CameraSettingsResource settings)
@@ -374,6 +374,7 @@ namespace Project.Gameplay
 			return PathFollower.ForwardAngle + settings.yawAngle; //Add
 		}
 
+		private readonly float PITCH_DEADZONE = .6f; //Don't bother rotating when the player's screen ratio is less than this
 		private readonly float PITCH_RISING_LEAD_RATIO = .2f;
 		private readonly float PITCH_FALLING_LEAD_RATIO = .4f;
 		private readonly float PITCH_MAX_LEAD_AMOUNT = 5f;
@@ -385,40 +386,45 @@ namespace Project.Gameplay
 			if (settings == null) return 0;
 
 			if (settings.IsStaticCamera)
-			{
-				Vector3 staticDelta = settings.staticPosition - Character.GlobalPosition;
-				staticDelta = staticDelta.Rotated(Vector3.Up, -CalculateYaw(settings));
-				staticDelta.x = 0;
-				return Vector3.Forward.SignedAngleTo(staticDelta.Normalized(), Vector3.Right);
-			}
+				return CalculatePitchAngle(Character.GlobalPosition, settings);
 
 			if (settings.pitchMode == CameraSettingsResource.OverrideModes.Override)
 				return settings.pitchAngle; //Override view direction
 
-			Vector3 targetLookAtPosition = Character.GlobalPosition;
-			if (settings.isRollEnabled)
-				targetLookAtPosition += PathFollower.Up() * settings.height;
-			else
-				targetLookAtPosition += PathFollower.UpAxis * settings.height;
+			Vector3 upAxis = settings.isRollEnabled ? PathFollower.Up() : PathFollower.UpAxis;
+			Vector3 targetLookAtPosition = Character.GlobalPosition + upAxis * settings.height;
 
+			//Tracking
 			if (!Character.IsOnGround && settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Rotate)
 			{
 				float leadAmount = Character.VerticalSpd * PhysicsManager.physicsDelta;
-				if (Character.VerticalSpd > 0)
-					leadAmount *= PITCH_RISING_LEAD_RATIO;
-				else
-					leadAmount *= PITCH_FALLING_LEAD_RATIO;
-
+				leadAmount *= Character.VerticalSpd > 0 ? PITCH_RISING_LEAD_RATIO : PITCH_FALLING_LEAD_RATIO;
 				leadAmount = Mathf.Clamp(leadAmount, -PITCH_MAX_LEAD_AMOUNT, PITCH_MAX_LEAD_AMOUNT);
 				targetLookAtPosition += Character.UpDirection * leadAmount;
+
+				//For better framing
+				float maxFOV = Mathf.DegToRad(CalculateTargetFOV(settings) * .5f);
+				float pathPitch = CalculatePitchAngle(PathFollower.GlobalPosition + upAxis * settings.height, settings);
+				float characterPitch = CalculatePitchAngle(targetLookAtPosition, settings) - pathPitch;
+				float factor = characterPitch / maxFOV;
+				factor = Mathf.Abs(factor) <= PITCH_DEADZONE ? 0 : (factor - Mathf.Sign(factor) * PITCH_DEADZONE);
+
+				return pathPitch + maxFOV * factor;
 			}
 
-			Vector3 delta = CalculatePosition(settings) - targetLookAtPosition;
-			delta = delta.Rotated(Vector3.Up, -PathFollower.ForwardAngle);
+			return CalculatePitchAngle(targetLookAtPosition, settings);
+		}
+
+		private float CalculatePitchAngle(Vector3 lookAt, CameraSettingsResource settings)
+		{
+			Vector3 delta = CalculatePosition(settings) - lookAt;
+			delta = delta.Rotated(Vector3.Up, -CalculateYaw(settings));
 			delta = delta.Rotated(Vector3.Forward, CalculateTilt(settings));
 			delta.x = 0;
+
 			float targetPitch = Vector3.Forward.SignedAngleTo(delta.Normalized(), Vector3.Right);
-			targetPitch += settings.pitchAngle; //Add
+			if (!settings.IsStaticCamera)
+				targetPitch += settings.pitchAngle; //Add
 
 			return targetPitch;
 		}

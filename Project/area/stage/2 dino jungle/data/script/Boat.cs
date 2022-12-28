@@ -123,7 +123,7 @@ namespace Project.Gameplay.Objects
 			t.basis.y = (frontOrientationChecker.GetCollisionNormal() + rearOrientationChecker.GetCollisionNormal()) * .5f;
 			t.basis.x = -t.basis.z.Cross(t.basis.y);
 			t.basis = GlobalTransform.basis.Slerp(t.basis.Orthonormalized(), .1f);
-			targetAngle -= CharacterController.CalculateForwardAngle(t.basis.z);
+			targetAngle -= Character.CalculateForwardAngle(t.basis.z);
 			t = t.RotatedLocal(Vector3.Up, targetAngle);
 			GlobalTransform = t.Orthonormalized();
 

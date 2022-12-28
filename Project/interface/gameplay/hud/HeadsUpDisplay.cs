@@ -59,7 +59,7 @@ namespace Project.Gameplay
 
 				ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 				if (Stage.CurrentRingCount == 0) //Starting in a ringless state
-					ringAnimator.Play("Ringless");
+					ringAnimator.Play("ringless");
 			}
 		}
 
@@ -67,13 +67,13 @@ namespace Project.Gameplay
 		{
 			if (amount > 0) //Play animation
 			{
-				ringAnimator.Play("CollectRing");
+				ringAnimator.Play("collect");
 				ringAnimator.Seek(0.0f, true);
 			}
 			else
 			{
-				ringAnimator.Play("LoseRing");
-				ringAnimator.AnimationSetNext("LoseRing", Stage.CurrentRingCount == 0 ? "Ringless" : "RESET");
+				ringAnimator.Play("damaged");
+				ringAnimator.AnimationSetNext("damaged", Stage.CurrentRingCount == 0 ? "ringless" : "RESET");
 			}
 
 			ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);

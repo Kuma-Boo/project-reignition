@@ -1,36 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://l2uoabrmrkg3"]
+[gd_scene load_steps=19 format=3 uid="uid://l2uoabrmrkg3"]
 
+[ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/Numbers.fnt" id="2_lj78h"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/Sprites.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://bn7bhmfqmn5i8" path="res://interface/gameplay/hud/soul gauge/Background.png" id="8"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
 [ext_resource type="Script" path="res://interface/gameplay/hud/HeadsUpDisplay.cs" id="13"]
-
-[sub_resource type="Animation" id="1"]
-step = 0.0416667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0833333, 0.166667),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CurrentAmount:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -72,6 +46,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id="45"]
+resource_name = "ringless"
 loop_mode = 1
 step = 0.0416667
 tracks/0/type = "value"
@@ -87,7 +62,36 @@ tracks/0/keys = {
 "values": [Color(1, 0, 0, 1), Color(1, 0, 0, 0.588235), Color(1, 0, 0, 1)]
 }
 
+[sub_resource type="Animation" id="1"]
+resource_name = "collect"
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 0.166667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CurrentAmount:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="Animation" id="46"]
+resource_name = "damaged"
 step = 0.0416667
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -104,10 +108,10 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kw3qf"]
 _data = {
-"CollectRing": SubResource("1"),
 "RESET": SubResource("2"),
-"Ringless": SubResource("45"),
-"TakeDamage": SubResource("46")
+"collect": SubResource("1"),
+"damaged": SubResource("46"),
+"ringless": SubResource("45")
 }
 
 [sub_resource type="CanvasItemMaterial" id="57"]
@@ -401,6 +405,7 @@ offset_top = 48.0
 offset_right = 397.0
 offset_bottom = 112.0
 scale = Vector2(0.85, 0.85)
+theme_override_fonts/font = ExtResource("2_lj78h")
 text = "100"
 vertical_alignment = 1
 clip_text = true
@@ -422,19 +427,20 @@ offset_bottom = 64.0
 
 [node name="Ring" type="TextureRect" parent="RingCounter/CurrentRing"]
 layout_mode = 0
-offset_left = -136.0
+offset_left = -160.0
 offset_top = -48.0
-offset_right = -40.0
+offset_right = -64.0
 offset_bottom = 48.0
 pivot_offset = Vector2(48, 48)
 
 [node name="CurrentAmount" type="Label" parent="RingCounter/CurrentRing"]
 layout_mode = 0
-offset_left = -48.0
+offset_left = -64.0
 offset_top = -40.0
-offset_right = 79.0
+offset_right = 80.0
 offset_bottom = 27.0
 scale = Vector2(1.2, 1.2)
+theme_override_fonts/font = ExtResource("2_lj78h")
 text = "000"
 vertical_alignment = 1
 
@@ -445,37 +451,40 @@ libraries = {
 
 [node name="Objective" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 128.0
-offset_top = 224.0
-offset_right = 224.0
-offset_bottom = 320.0
+offset_left = 96.0
+offset_top = 256.0
+offset_right = 192.0
+offset_bottom = 352.0
 pivot_offset = Vector2(0, 48)
 
 [node name="Value" type="Label" parent="Objective"]
 layout_mode = 0
-offset_left = 104.0
-offset_top = 32.0
-offset_right = 160.0
-offset_bottom = 65.0
+offset_left = 96.0
+offset_top = 16.0
+offset_right = 192.0
+offset_bottom = 83.0
+theme_override_fonts/font = ExtResource("2_lj78h")
 text = "00"
 horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="MaxValue" type="Label" parent="Objective"]
 layout_mode = 0
-offset_left = 184.0
-offset_top = 32.0
-offset_right = 240.0
-offset_bottom = 65.0
+offset_left = 216.0
+offset_top = 16.0
+offset_right = 312.0
+offset_bottom = 83.0
+theme_override_fonts/font = ExtResource("2_lj78h")
 text = "22"
 vertical_alignment = 1
 
 [node name="Divider" type="Label" parent="Objective"]
 layout_mode = 0
-offset_left = 160.0
-offset_top = 32.0
-offset_right = 183.0
-offset_bottom = 65.0
+offset_left = 184.0
+offset_top = 16.0
+offset_right = 232.0
+offset_bottom = 83.0
+theme_override_fonts/font = ExtResource("2_lj78h")
 text = "/"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -492,6 +501,7 @@ offset_bottom = 80.0
 layout_mode = 0
 offset_right = 353.0
 offset_bottom = 67.0
+theme_override_fonts/font = ExtResource("2_lj78h")
 text = "00000000"
 vertical_alignment = 1
 
@@ -500,6 +510,7 @@ layout_mode = 0
 offset_top = 67.0
 offset_right = 353.0
 offset_bottom = 134.0
+theme_override_fonts/font = ExtResource("2_lj78h")
 text = "00:00.00"
 vertical_alignment = 1
 

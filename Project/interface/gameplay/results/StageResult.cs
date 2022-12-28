@@ -59,7 +59,7 @@ namespace Project.Interface
 
 		public void StartResults(bool wasSuccessful)
 		{
-			animator.Play(wasSuccessful ? "CompleteStart" : "FailStart");
+			animator.Play(wasSuccessful ? "complete-start" : "fail-start");
 
 			score.Text = Stage.DisplayScore;
 			time.Text = Stage.DisplayTime;

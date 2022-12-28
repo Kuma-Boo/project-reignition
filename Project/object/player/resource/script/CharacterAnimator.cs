@@ -94,23 +94,6 @@ namespace Project.Gameplay
 			animator.Set(FALL_RESET_PARAMETER, 0);
 		}
 
-		/*
-		public void ResetLocalRotation()
-		{
-			Rotation = Vector3.Zero;
-		}
-		
-		public void SetForwardDirection(Vector3 direction)
-		{
-			Transform3D t = _root.GlobalTransform;
-			t.basis.z = direction;
-			t.basis.y = Character.worldDirection;
-			t.basis.x = -t.basis.z.Cross(t.basis.y);
-			t.basis = t.basis.Orthonormalized();
-			_root.GlobalTransform = t;
-		}
-		*/
-
 		private const string GROUND_PARAMETER = "parameters/IsGrounded/current";
 		private const float MOVEMENT_DEADZONE = .2f;
 		public void UpdateAnimation()
@@ -124,58 +107,51 @@ namespace Project.Gameplay
 			UpdateRotation();
 		}
 
-		//Rotates the local direction of the player
+		#region Visual Rotation
+		/// <summary> Angle to use when character's MovementState is CharacterController.MovementStates.External. </summary>
+		public float ExternalAngle { get; set; }
+		/// <summary> Rotation (in radians) currently applied to Transform. </summary>
+		private float VisualAngle { get; set; }
+		private float rotationVelocity;
+
+		/// <summary> Rotation smoothing amount for movement. </summary>
+		private readonly float MOVEMENT_ROTATION_SMOOTHING = .1f;
+
+		/// <summary>
+		/// Snaps visual rotation, without any smoothing applied.
+		/// </summary>
+		public void SnapRotation(float angle)
+		{
+			VisualAngle = angle;
+			rotationVelocity = 0;
+			ApplyRotation();
+		}
+
+		/// <summary>
+		/// Calculates the target visual rotation and applies it.
+		/// </summary>
 		private void UpdateRotation()
 		{
 			//Don't update directions when externally controlled or on launchers
-			if (Character.MovementState == CharacterController.MovementStates.External || Character.MovementState == CharacterController.MovementStates.Launcher)
-				return;
+			float targetRotation = Character.MovementAngle;
+			float smoothing = MOVEMENT_ROTATION_SMOOTHING;
 
-			/*
 			if (Character.Lockon.IsHomingAttacking) //Face target
-			{
-				float targetRotation = Character.Lockon.HomingAttackDirection.Flatten().Rotated(_root.GlobalRotation.y).AngleTo(Vector2.Down);
-				Rotation = Vector3.Up * targetRotation;
-				return;
-			}
+				targetRotation = Character.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
+			else if (Character.Skills.IsSpeedBreakActive) //Speed break, use path's forward direction
+				targetRotation = Character.PathFollower.ForwardAngle;
+			else if (Character.MovementState == CharacterController.MovementStates.External)
+				targetRotation = ExternalAngle;
 
-			if (Character.MoveSpeed != 0) //Rotate smoothly
-			{
-				float rotationAmount = -this.Forward().Flatten().AngleTo(Character.PathFollower.ForwardDirection.Flatten());
-				RotateObjectLocal(Vector3.Up, rotationAmount * .4f);
-			}
-
-			if (Character.RotatedMovementValue != Vector2.Zero || Character.Soul.IsSpeedBreakActive)
-			{
-				float targetRotation = 0;
-				if (Character.FaceMovementDirection) //Jumpdash/Accel Jump
-				{
-					Vector2 input = Character.RotatedMovementValue;
-					if (input.y < 0)
-						input.y = 0;
-					targetRotation = -input.Normalized().AngleTo(Vector2.Down);
-					Rotation = Rotation.Lerp(Vector3.Up * targetRotation, .032f);
-					return;
-				}
-
-				if (!Character.Soul.IsSpeedBreakActive || Character.SpeedRatio <= .8f)
-				{
-					if (Character.MoveSpeed > MOVEMENT_DEADZONE || (Character.MoveSpeed >= 0 && Mathf.Abs(Character.StrafeSpeed) > MOVEMENT_DEADZONE))
-						targetRotation = new Vector2(Character.StrafeSpeed, -Character.MoveSpeed).Normalized().AngleTo(Vector2.Up);
-					else
-					{
-						Vector2 input = Character.RotatedMovementValue;
-						input.y = Mathf.Abs(input.y);
-						targetRotation = -input.Normalized().AngleTo(Vector2.Down);
-					}
-
-					targetRotation = Mathf.Clamp(targetRotation, -Mathf.Pi * .5f, Mathf.Pi * .5f);
-				}
-
-				Rotation = Rotation.Lerp(Vector3.Up * targetRotation, .4f);
-			}
-			*/
+			VisualAngle = ExtensionMethods.SmoothDampAngle(VisualAngle, targetRotation, ref rotationVelocity, MOVEMENT_ROTATION_SMOOTHING);
+			ApplyRotation();
 		}
+
+		/// <summary>
+		/// Apply currentRotation on Transform.
+		/// </summary>
+		private void ApplyRotation() => Rotation = Vector3.Up * VisualAngle;
+		#endregion
 
 		private float strafeVelocity;
 		private const string MOVEMENT_STATE_PARAMETER = "parameters/ground_state/MoveState/current";

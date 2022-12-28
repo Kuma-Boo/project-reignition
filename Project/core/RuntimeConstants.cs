@@ -24,8 +24,8 @@ namespace Project.Core
 		[Export(PropertyHint.Layers3dPhysics)]
 		public uint particleCollisionMask; //Collision mask for destructable particle effects
 
-		public const float GRAVITY = 28.0f;
-		public const float MAX_GRAVITY = -48.0f;
+		public static readonly float GRAVITY = 28.0f;
+		public static readonly float MAX_GRAVITY = -48.0f;
 		public static float GetJumpPower(float height) => Mathf.Sqrt(2 * RuntimeConstants.GRAVITY * height);
 
 		private float shaderTime;

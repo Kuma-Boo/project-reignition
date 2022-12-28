@@ -49,7 +49,7 @@ namespace Project.Gameplay
 			Vector3 syncPoint = Character.GlobalPosition;
 			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
 
-			float newForwardAngle = CharacterController.CalculateForwardAngle(this.Forward());
+			float newForwardAngle = Character.CalculateForwardAngle(this.Forward());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f;
 			ForwardAngle = newForwardAngle;
 

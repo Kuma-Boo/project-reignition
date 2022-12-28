@@ -31,13 +31,13 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Backstep Distance Addition", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Height", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
 
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Pitch Mode", Variant.Type.Int, PropertyHint.Enum, "Add, Override"));
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Yaw Mode", Variant.Type.Int, PropertyHint.Enum, "Add, Override"));
+				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Pitch Mode", Variant.Type.Int, PropertyHint.Enum, pitchMode.EnumToString()));
+				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Yaw Mode", Variant.Type.Int, PropertyHint.Enum, yawMode.EnumToString()));
 				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Pitch Angle", Variant.Type.Float, PropertyHint.Range, "-360,360,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Yaw Angle", Variant.Type.Float, PropertyHint.Range, "-360,360,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Allow Rolling", Variant.Type.Bool));
 
-				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Vertical Tracking Mode", Variant.Type.Int, PropertyHint.Enum, "Move,Rotate"));
+				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Vertical Tracking Mode", Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty("Position Settings/H_Offset", Variant.Type.Float));
@@ -68,6 +68,7 @@ namespace Project.Gameplay
 					return backstepDistanceAddition;
 				case "Position Settings/Height":
 					return height;
+
 				case "Position Settings/H_Offset":
 					return hOffset;
 				case "Position Settings/V_Offset":
@@ -124,6 +125,7 @@ namespace Project.Gameplay
 				case "Position Settings/Height":
 					height = (float)value;
 					break;
+
 				case "Position Settings/H_Offset":
 					hOffset = (float)value;
 					break;
@@ -187,6 +189,7 @@ namespace Project.Gameplay
 		public float backstepDistanceAddition;
 		/// <summary> Position offset. </summary>
 		public float height;
+
 		/// <summary> Horizontal view offset. Translation based on camera's orientation. </summary>
 		public float hOffset;
 		/// <summary> Vertical view offset. Translation based on camera's orientation. </summary>

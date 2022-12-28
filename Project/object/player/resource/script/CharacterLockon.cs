@@ -24,7 +24,7 @@ namespace Project.Gameplay
 		private bool monitoringPerfectHomingAttack;
 		public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
 		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
-		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalPosition - GlobalPosition).Normalized() : this.Back();
+		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
 		public void HomingAttack()
 		{

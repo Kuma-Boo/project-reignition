@@ -19,10 +19,10 @@ namespace Project.Gameplay
 			Array<Dictionary> properties = new Array<Dictionary>();
 
 			properties.Add(ExtensionMethods.CreateProperty("Starting Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
-			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, "None,Objective,Rings,Pearls,Enemies,Race"));
+			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, MissionType.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty("Time Limit", Variant.Type.Int, PropertyHint.Range, "0,640"));
 
-			if (MissionType != MissionTypes.None)
+			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race)
 				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
 
 			properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Activation Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));

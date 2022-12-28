@@ -127,7 +127,7 @@ namespace Project.Gameplay.Objects
 			isActive = true;
 			isRecentered = false;
 			recenterVelocity = Vector3.Zero;
-			Character.MovementAngle = CharacterController.CalculateForwardAngle(this.Forward());
+			Character.MovementAngle = Character.CalculateForwardAngle(this.Forward());
 		}
 
 		private void OnExited(Area3D a)

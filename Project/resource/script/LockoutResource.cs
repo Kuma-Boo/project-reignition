@@ -15,13 +15,14 @@ namespace Project.Gameplay
 			Array<Dictionary> properties = new Array<Dictionary>();
 
 			properties.Add(ExtensionMethods.CreateProperty("General/Lockout Length", Variant.Type.Float, PropertyHint.Range, "0,20,.1"));
-			properties.Add(ExtensionMethods.CreateProperty("General/Reset On Land", Variant.Type.Bool));
-			properties.Add(ExtensionMethods.CreateProperty("General/Reset Actions", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("General/Recenter Player", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("General/Invincible", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("General/Priority", Variant.Type.Int, PropertyHint.Range, "0, 32"));
 
-			properties.Add(ExtensionMethods.CreateProperty("Controls/Disable Actions", Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty("Actions/Reset Actions", Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty("Actions/Disable Actions", Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty("Actions/Reset Flags", Variant.Type.Int, PropertyHint.Flags, resetFlags.EnumToString()));
+
 			properties.Add(ExtensionMethods.CreateProperty("Controls/Override Speed", Variant.Type.Bool));
 			if (overrideSpeed)
 			{
@@ -31,12 +32,12 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Ignore Slopes", Variant.Type.Bool));
 			}
 
-			properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle Type", Variant.Type.Int, PropertyHint.Enum, "Free,Strafe,Replace"));
-			if (overrideMode == OverrideMode.Strafe || overrideMode == OverrideMode.Replace)
+			properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Type", Variant.Type.Int, PropertyHint.Enum, movementMode.EnumToString()));
+			if (movementMode == MovementModes.Strafe || movementMode == MovementModes.Replace)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Controls/Allow Reversing", Variant.Type.Bool));
-				properties.Add(ExtensionMethods.CreateProperty("Controls/Direction Space", Variant.Type.Int, PropertyHint.Enum, "Camera,Pathfollower,Local,Global"));
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle", Variant.Type.Float, PropertyHint.Range, "-180,180"));
+				properties.Add(ExtensionMethods.CreateProperty("Controls/Direction Space", Variant.Type.Int, PropertyHint.Enum, spaceMode.EnumToString()));
+				properties.Add(ExtensionMethods.CreateProperty("Controls/Allow Reversing", Variant.Type.Bool));
 			}
 			return properties;
 		}
@@ -51,12 +52,6 @@ namespace Project.Gameplay
 				case "General/Recenter Player":
 					recenterPlayer = (bool)value;
 					break;
-				case "General/Reset On Land":
-					resetOnLand = (bool)value;
-					break;
-				case "General/Reset Actions":
-					resetActions = (bool)value;
-					break;
 				case "General/Invincible":
 					invincible = (bool)value;
 					break;
@@ -64,8 +59,11 @@ namespace Project.Gameplay
 					priority = (int)value;
 					break;
 
-				case "Controls/Disable Actions":
+				case "Actions/Disable Actions":
 					disableActions = (bool)value;
+					break;
+				case "Actions/Reset Flags":
+					resetFlags = (ResetFlags)(int)value;
 					break;
 
 				case "Controls/Override Speed":
@@ -85,18 +83,18 @@ namespace Project.Gameplay
 					ignoreSlopes = (bool)value;
 					break;
 
-				case "Controls/Movement Angle Type":
-					overrideMode = (OverrideMode)(int)value;
+				case "Controls/Movement Type":
+					movementMode = (MovementModes)(int)value;
 					NotifyPropertyListChanged();
 					break;
 				case "Controls/Allow Reversing":
 					allowReversing = (bool)value;
 					break;
 				case "Controls/Direction Space":
-					spaceMode = (SpaceMode)(int)value;
+					spaceMode = (SpaceModes)(int)value;
 					break;
 				case "Controls/Movement Angle":
-					overrideAngle = (float)value;
+					movementAngle = (float)value;
 					break;
 
 				default:
@@ -114,17 +112,15 @@ namespace Project.Gameplay
 					return length;
 				case "General/Recenter Player":
 					return recenterPlayer;
-				case "General/Reset On Land":
-					return resetOnLand;
-				case "General/Reset Actions":
-					return resetActions;
 				case "General/Invincible":
 					return invincible;
 				case "General/Priority":
 					return priority;
 
-				case "Controls/Disable Actions":
+				case "Actions/Disable Actions":
 					return disableActions;
+				case "Actions/Reset Flags":
+					return (int)resetFlags;
 
 				case "Controls/Override Speed":
 					return overrideSpeed;
@@ -137,14 +133,14 @@ namespace Project.Gameplay
 				case "Controls/Ignore Slopes":
 					return ignoreSlopes;
 
-				case "Controls/Movement Angle Type":
-					return (int)overrideMode;
+				case "Controls/Movement Type":
+					return (int)movementMode;
 				case "Controls/Allow Reversing":
 					return allowReversing;
 				case "Controls/Direction Space":
 					return (int)spaceMode;
 				case "Controls/Movement Angle":
-					return overrideAngle;
+					return movementAngle;
 			}
 			return base._Get(property);
 		}
@@ -152,17 +148,11 @@ namespace Project.Gameplay
 
 		/// <summary> How long to remain locked out. Set this to 0 to determine with trigger nodes. </summary>
 		public float length;
-		/// <summary> Allows the player to regain control from landing. </summary>
-		public bool resetOnLand;
-		/// <summary> Resets any action the player may be doing (i.e. Sliding, Backflipping, etc)</summary>
-		public bool resetActions;
 		/// <summary> Lockouts with lower priorities will be unable to override higher priority lockouts. Priorities of -1 will be removed when overridden. </summary>
 		public int priority;
 		/// <summary> Collided enemies will be destroyed if this is enabled. Otherwise, the player can still take damage.</summary>
 		public bool invincible;
 
-		/// <summary> Don't let the player perform (particularly ground) actions while active </summary>
-		public bool disableActions;
 		/// <summary> Overriding speed? </summary>
 		public bool overrideSpeed;
 		/// <summary> Ratio compared to character's normal top speed. Character will move to this speed ratio </summary>
@@ -173,37 +163,46 @@ namespace Project.Gameplay
 		public float frictionMultiplier;
 		/// <summary> Don't use slope physics when calculating speed </summary>
 		public bool ignoreSlopes;
-		public OverrideMode overrideMode;
-		public enum OverrideMode
+		public MovementModes movementMode;
+		public enum MovementModes
 		{
 			Free, //Allows free rotation-based movement
 			Strafe, //Enable this to use strafing instead of rotation. Works best when DirectionSpaceMode is set to pathfollower
-			Replace, //Replace movement direction with movementAngle,
+			Replace, //Replace movement direction with movementAngle
 		}
 		/// <summary> Allow the player to move backwards when overriding movement angle? </summary>
 		public bool allowReversing;
 		/// <summary> Returns the player to the center of the path </summary>
 		public bool recenterPlayer;
 		/// <summary> What to override movement angle to </summary>
-		public float overrideAngle;
-		public enum SpaceMode
+		public float movementAngle;
+		/// <summary> What "space" to calculate the movement direction in. </summary>
+		public SpaceModes spaceMode;
+		public enum SpaceModes
 		{
 			Camera,
 			PathFollower,
-			Local,
 			Global,
+			Local,
 		}
-		/// <summary> What "space" to calculate the movement direction in. </summary>
-		public SpaceMode spaceMode;
+
+		/// <summary> Don't let the player perform (particularly ground) actions while active </summary>
+		public bool disableActions;
+		/// <summary> How can this lockout be reset? </summary>
+		public ResetFlags resetFlags;
+		public enum ResetFlags
+		{
+			OnJump = 1,
+			OnLand = 2,
+		}
 
 		public LockoutResource()
 		{
 			length = 0;
 			priority = 0;
-			resetOnLand = false;
-			resetActions = false;
-			invincible = false;
 
+			invincible = false;
+			resetFlags = 0;
 			disableActions = false;
 
 			speedRatio = 1;
@@ -211,9 +210,9 @@ namespace Project.Gameplay
 			frictionMultiplier = 1;
 			ignoreSlopes = false;
 
-			overrideMode = OverrideMode.Free;
-			spaceMode = SpaceMode.Camera;
-			overrideAngle = 0f;
+			movementMode = MovementModes.Free;
+			spaceMode = SpaceModes.Camera;
+			movementAngle = 0f;
 		}
 
 		//Compares two lockout resources based on their priority

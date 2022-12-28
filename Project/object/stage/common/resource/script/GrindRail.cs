@@ -239,17 +239,22 @@ namespace Project.Gameplay
 
 			Character.ResetActionState(); //Cancel stomps, jumps, etc
 			Character.StartExternal(this, pathFollower);
+
 			Character.IsOnGround = true; //Rail counts as being on the ground
-			Character.MoveSpeed = Skills.grindSettings.speed;
+			Character.MoveSpeed = Skills.grindSettings.speed; //Start at the correct speed
 			Character.VerticalSpd = 0f;
-			Character.Connect(CharacterController.SignalName.ExternalControlFinished, new Callable(this, MethodName.DisconnectFromRail), (uint)ConnectFlags.OneShot);
+
+			Character.Animator.ExternalAngle = 0; //Rail modifies Character's Transform directly, animator angle is unused.
+			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); //Snap
+
+			Character.Connect(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail), (uint)ConnectFlags.OneShot);
 		}
 
 		private void UpdateRail()
 		{
 			if (alignCamera) //Align the camera to follow movement direction
 			{
-				float targetDirection = CharacterController.CalculateForwardAngle(pathFollower.Forward());
+				float targetDirection = Character.CalculateForwardAngle(pathFollower.Forward());
 				Camera.OverrideYaw(targetDirection, .4f);
 			}
 
@@ -262,33 +267,32 @@ namespace Project.Gameplay
 
 			//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), Character.MovementAngle);
-
 			if (Controller.jumpButton.wasPressed)
 			{
-				DisconnectFromRail();
-
 				//Check if the player is holding a direction parallel to rail.
 				Character.IsGrindstepJump = !Character.IsHoldingDirection(Character.MovementAngle, true) && !Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi, true);
 				if (Character.IsGrindstepJump) //Grindstep
 				{
 					//Calculate how far player is trying to go
 					float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
-					horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxis.Length()); //Give some smoothing based on controller strength
-					Vector2 movementVector = new Vector2(horizontalTarget, Character.MoveSpeed);
+					horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
 
-					Character.MovementAngle += movementVector.AngleTo(Vector2.Down);
+					Character.MovementAngle += Mathf.Pi * .5f * Mathf.Sign(inputDeltaAngle);
 					Character.VerticalSpd = RuntimeConstants.GetJumpPower(GRIND_STEP_HEIGHT);
-					Character.MoveSpeed = movementVector.Length();
+					Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
+
 					Character.IsOnGround = false; //Disconnect from the ground
 					Character.CanJumpDash = false; //Disable jumpdashing
 				}
 				else //Jump normally
 					Character.Jump(true);
 
+				DisconnectFromRail();
 				return;
 			}
 
-			Character.MovementAngle = CharacterController.CalculateForwardAngle(pathFollower.Forward());
+			Character.UpDirection = pathFollower.Up();
+			Character.MovementAngle = Character.CalculateForwardAngle(pathFollower.Forward());
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 
 			//TODO Disable the ability to shuffle accelerate during player's shuffle animation
@@ -335,13 +339,17 @@ namespace Project.Gameplay
 
 			isActive = false;
 			isInteractingWithPlayer = false;
-			Character.ResetMovementState();
-
 			if (isInvisibleRail)
 				railModel.Visible = false;
 
-			if (Character.IsConnected(CharacterController.SignalName.ExternalControlFinished, new Callable(this, MethodName.DisconnectFromRail)))
-				Character.Disconnect(CharacterController.SignalName.ExternalControlFinished, new Callable(this, MethodName.DisconnectFromRail));
+			Character.ResetMovementState();
+			Character.Animator.SnapRotation(Character.MovementAngle);
+
+			GD.Print($"{Character.MovementAngle}, {Character.Animator.Rotation.y}, {Character.Rotation.y}");
+
+			//Disconnect signals
+			if (Character.IsConnected(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail)))
+				Character.Disconnect(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail));
 		}
 
 		private RaycastHit CheckWall(float movementDelta)

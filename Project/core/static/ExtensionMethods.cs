@@ -214,6 +214,26 @@ namespace Project
 			return output;
 		}
 
+		/// <summary>
+		/// Returns a string containing all enum values. For Inspector.
+		/// </summary>
+		public static string EnumToString<T>(this T e)
+		{
+			System.Type t = e.GetType();
+			string[] names = System.Enum.GetNames(t);
+			string output = "";
+
+			for (int i = 0; i < names.Length; i++)
+			{
+				if (i != 0)
+					output += ",";
+
+				output += names[i];
+			}
+
+			return output;
+		}
+
 		//For flag modification
 		public static bool IsSet<T>(this T flags, T flag) where T : struct
 		{

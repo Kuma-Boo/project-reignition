@@ -54,24 +54,39 @@ namespace Project.Core
 
 		public struct Controller
 		{
+			/// <summary> Horizontal input axis. </summary>
 			public Axis horizontalAxis;
+			/// <summary> Vertical input axis. </summary>
 			public Axis verticalAxis;
+			/// <summary> Modifer button (for keyboards). </summary>
 			public Button movementModifier;
+			/// <summary> Move inputs, clamped to a length of 1. </summary>
 			public Vector2 MovementAxis { get; private set; }
+			/// <summary> How much is the stick being pressed? </summary>
+			public float MovementAxisLength { get; private set; }
+			/// <summary> Is the control stick currently not holding a direction? </summary>
+			public bool IsHoldingNeutral { get; private set; }
+			private const float DEADZONE = .4f;
 
+			/// <summary> [Confirm, Jump] button. </summary>
 			public Button jumpButton;
+			/// <summary> [Cancel, Action] button. </summary>
 			public Button actionButton;
+			/// <summary> Time break button. </summary>
 			public Button breakButton;
+			/// <summary> Speed break button. </summary>
 			public Button boostButton;
 
+			/// <summary> Start/Pause button. </summary>
 			public Button pauseButton;
 			public Mapping keyboardMapping;
 			public Mapping gamepadMapping;
 
-			public int activeGamepad; //The current gamepad being used. -1 for keyboard, indexing starts at 0.
+			/// <summary> The current gamepad being used. -1 for keyboard, indexing starts at 0. </summary>
+			public int activeGamepad;
 			public Mapping ActiveMapping => IsUsingGamepad ? gamepadMapping : keyboardMapping;
-			public bool IsUsingGamepad => activeGamepad != -1; //-1 if the player is using a keyboard.
-			private const float DEADZONE = .4f;
+			/// <summary> -1 if the player is using a keyboard. </summary>
+			public bool IsUsingGamepad => activeGamepad != -1;
 
 			public void Update(float delta)
 			{
@@ -96,8 +111,13 @@ namespace Project.Core
 				pauseButton.Update(ButtonHeld(ActiveMapping.pauseBinding));
 
 				MovementAxis = new Vector2(horizontalAxis.value, verticalAxis.value).LimitLength(1f);
-				if (MovementAxis.Length() < DEADZONE)
+				MovementAxisLength = MovementAxis.Length();
+				IsHoldingNeutral = MovementAxisLength < DEADZONE;
+				if (IsHoldingNeutral)
+				{
+					MovementAxisLength = 0;
 					MovementAxis = Vector2.Zero;
+				}
 			}
 
 			//Returns true when any of the action buttons were pressed

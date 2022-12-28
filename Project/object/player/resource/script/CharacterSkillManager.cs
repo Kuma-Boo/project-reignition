@@ -48,11 +48,16 @@ namespace Project.Gameplay
 		[Export]
 		public MovementResource grindSettings; //Settings for grinding on rails
 
+
+		//While there aren't any upgrades for the following movement skills, they're here for consistancy
 		[Export]
-		private MovementResource backstepSettings; //While there aren't any upgrades for backstepping, it's here for consistancy
+		private MovementResource backflipSettings;
+		[Export]
+		private MovementResource backstepSettings;
 
 		public MovementResource GroundSettings { get; private set; }
 		public MovementResource AirSettings { get; private set; }
+		public MovementResource BackflipSettings { get; private set; }
 		public MovementResource BackstepSettings { get; private set; }
 
 		private void SetUpStats() //Stuff like upgradable speed, increased handling, etc.
@@ -60,8 +65,8 @@ namespace Project.Gameplay
 			//TODO Interpolate values based on skill ring settings
 			GroundSettings = baseGroundSettings;
 			AirSettings = baseAirSettings;
+			BackflipSettings = backflipSettings;
 			BackstepSettings = backstepSettings;
-
 		}
 		#endregion
 
