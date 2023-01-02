@@ -17,23 +17,21 @@ size = Vector3(5, 10, 5)
 
 [node name="Crusher" type="Node3D" node_paths=PackedStringArray("light")]
 script = ExtResource("1_x3xhd")
-travelLength = 0.5
-waitLength = 1.0
 light = NodePath("Bottom/CrusherBloom")
-top = NodePath("Top")
+crusher = NodePath("Crusher")
 
-[node name="Top" type="StaticBody3D" parent="." groups=["crusher", "floor", "wall"]]
+[node name="Crusher" type="StaticBody3D" parent="." groups=["crusher", "floor", "wall"]]
 
-[node name="CrusherTop" parent="Top" instance=ExtResource("2_cjxtl")]
+[node name="CrusherTop" parent="Crusher" instance=ExtResource("2_cjxtl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
-[node name="PlatformTrigger" parent="Top/CrusherTop" instance=ExtResource("2_xg4rx")]
+[node name="PlatformTrigger" parent="Crusher/CrusherTop" instance=ExtResource("2_xg4rx")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Top/CrusherTop/PlatformTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crusher/CrusherTop/PlatformTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_igssf")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Top"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crusher"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 shape = SubResource("BoxShape3D_bcj72")
 

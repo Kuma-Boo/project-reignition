@@ -1,13 +1,29 @@
-[gd_scene load_steps=8 format=3 uid="uid://bqvtcp8tkbfyt"]
+[gd_scene load_steps=9 format=3 uid="uid://bqvtcp8tkbfyt"]
 
 [ext_resource type="PackedScene" uid="uid://bpd06h3747m1d" path="res://object/stage/common/resource/model/SpikeBall.gltf" id="1"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/SpikeBall.cs" id="2"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="1_q51ix"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="2_k2q3r"]
 
 [sub_resource type="SphereShape3D" id="3"]
 radius = 0.85
 
 [sub_resource type="SphereShape3D" id="2"]
 radius = 0.9
+
+[sub_resource type="Animation" id="Animation_pujat"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpikeBall:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_6mi5p"]
 resource_name = "idle-loop"
@@ -25,52 +41,46 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_pujat"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpikeBall:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jat4b"]
 _data = {
 "RESET": SubResource("Animation_pujat"),
 "idle-loop": SubResource("Animation_6mi5p")
 }
 
-[node name="SpikeBall" type="StaticBody3D" groups=["damage boat"]]
+[node name="SpikeBall" type="Node3D" node_paths=PackedStringArray("TargetObject")]
+script = ExtResource("1_q51ix")
+Movement/Mode = 1
+"Movement/Cycle Length" = 0.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 0.0
+Movement/Angle = 0.0
+"Vertical Orientation" = false
+TargetObject = NodePath("Root")
+
+[node name="Root" type="StaticBody3D" parent="." groups=["damage boat"]]
 collision_layer = 8
 collision_mask = 0
-script = ExtResource("2")
-root = NodePath("SpikeBall")
+script = ExtResource("2_k2q3r")
 
-[node name="SpikeBall" parent="." instance=ExtResource("1")]
+[node name="SpikeBall" parent="Root" instance=ExtResource("1")]
 transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
 shape = SubResource("3")
 
-[node name="Hitbox" type="Area3D" parent="."]
+[node name="Hitbox" type="Area3D" parent="Root"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Hitbox"]
 shape = SubResource("2")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root"]
 autoplay = "idle-loop"
 libraries = {
 "": SubResource("AnimationLibrary_jat4b")
 }
 
-[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Root/Hitbox" to="Root" method="OnEntered"]
+[connection signal="area_exited" from="Root/Hitbox" to="Root" method="OnExited"]

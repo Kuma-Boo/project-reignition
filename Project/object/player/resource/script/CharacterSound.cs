@@ -215,6 +215,11 @@ namespace Project.Gameplay
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
 		}
 
+		public readonly StringName JUMP_SFX = "jump";
+
+
+
+
 		//Important note: DO NOT reorder keys, otherwise stream data will become desynced
 		//Actions (Jumping, sliding, etc)
 		[ExportGroup("Actions")]

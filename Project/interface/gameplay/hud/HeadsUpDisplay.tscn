@@ -45,23 +45,6 @@ tracks/2/keys = {
 "values": [Vector2(128, 64)]
 }
 
-[sub_resource type="Animation" id="45"]
-resource_name = "ringless"
-loop_mode = 1
-step = 0.0416667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CurrentAmount:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(0.5, 0.5, 1),
-"update": 0,
-"values": [Color(1, 0, 0, 1), Color(1, 0, 0, 0.588235), Color(1, 0, 0, 1)]
-}
-
 [sub_resource type="Animation" id="1"]
 resource_name = "collect"
 step = 0.0416667
@@ -104,6 +87,23 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(2, 0.428709, 0.4, 0.4, 1),
 "update": 0,
 "values": [Vector2(128, 64), Vector2(128, 32), Vector2(136, 56), Vector2(116, 72), Vector2(128, 64)]
+}
+
+[sub_resource type="Animation" id="45"]
+resource_name = "ringless"
+loop_mode = 1
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CurrentAmount:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 0, 0, 0.588235), Color(1, 0, 0, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kw3qf"]
@@ -250,7 +250,7 @@ tracks/4/keys = {
 tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SFX")
+tracks/5/path = NodePath("SoulGauge/SFX")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -380,30 +380,32 @@ ringAnimator = NodePath("RingCounter/CurrentRing/AnimationPlayer")
 time = NodePath("Values/Time")
 score = NodePath("Values/Score")
 bonusAnimator = NodePath("Bonus/AnimationPlayer")
-bonusLabels = [NodePath("Bonus/LatestBonus"), NodePath("Bonus/List/Bonus"), NodePath("Bonus/List/Bonus2"), NodePath("Bonus/List/Bonus3"), NodePath("Bonus/List/Bonus4"), NodePath("Bonus/List/Bonus5"), NodePath("Bonus/List/Bonus6")]
-objectiveSprite = NodePath("Objective")
-objectiveValue = NodePath("Objective/Value")
-objectiveMaxValue = NodePath("Objective/MaxValue")
+bonusLabels = [NodePath("Bonus/LatestBonus"), NodePath("Bonus/List/Bonus1"), NodePath("Bonus/List/Bonus2"), NodePath("Bonus/List/Bonus3"), NodePath("Bonus/List/Bonus4"), NodePath("Bonus/List/Bonus5"), NodePath("Bonus/List/Bonus6")]
+objectiveSprite = NodePath("ObjectiveCounter/ObjectiveSprite")
+objectiveValue = NodePath("ObjectiveCounter/Value")
+objectiveMaxValue = NodePath("ObjectiveCounter/MaxValue")
 soulGauge = NodePath("SoulGauge/SoulGauge")
 soulGaugeRoot = NodePath("SoulGauge")
 soulGaugeFill = NodePath("SoulGauge/SoulGauge/Background/Fill")
 soulGaugeBackground = NodePath("SoulGauge/SoulGauge/Background")
 soulGaugeAnimator = NodePath("SoulGauge/AnimationPlayer")
+metadata/_edit_lock_ = true
 
 [node name="RingCounter" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 128.0
 offset_top = 64.0
-offset_right = 512.0
+offset_right = 544.0
 offset_bottom = 192.0
+metadata/_edit_lock_ = true
 
 [node name="RingMax" type="Label" parent="RingCounter"]
 layout_mode = 0
-offset_left = 256.0
+offset_left = 288.0
 offset_top = 48.0
-offset_right = 397.0
-offset_bottom = 112.0
+offset_right = 429.0
+offset_bottom = 115.0
 scale = Vector2(0.85, 0.85)
 theme_override_fonts/font = ExtResource("2_lj78h")
 text = "100"
@@ -411,7 +413,7 @@ vertical_alignment = 1
 clip_text = true
 
 [node name="Divider" type="Sprite2D" parent="RingCounter"]
-position = Vector2(248, 64)
+position = Vector2(280, 64)
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("7")
 region_enabled = true
@@ -420,9 +422,9 @@ region_rect = Rect2(120, 168, 64, 104)
 [node name="CurrentRing" type="Control" parent="RingCounter"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 128.0
+offset_left = 160.0
 offset_top = 64.0
-offset_right = 128.0
+offset_right = 160.0
 offset_bottom = 64.0
 
 [node name="Ring" type="TextureRect" parent="RingCounter/CurrentRing"]
@@ -449,41 +451,49 @@ libraries = {
 "": SubResource("AnimationLibrary_kw3qf")
 }
 
-[node name="Objective" type="TextureRect" parent="."]
-layout_mode = 0
+[node name="ObjectiveCounter" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
 offset_left = 96.0
-offset_top = 256.0
-offset_right = 192.0
-offset_bottom = 352.0
+offset_top = 192.0
+offset_right = 512.0
+offset_bottom = 320.0
+metadata/_edit_lock_ = true
+
+[node name="ObjectiveSprite" type="TextureRect" parent="ObjectiveCounter"]
+layout_mode = 0
+offset_top = 16.0
+offset_right = 96.0
+offset_bottom = 112.0
 pivot_offset = Vector2(0, 48)
 
-[node name="Value" type="Label" parent="Objective"]
+[node name="Value" type="Label" parent="ObjectiveCounter"]
 layout_mode = 0
 offset_left = 96.0
-offset_top = 16.0
+offset_top = 32.0
 offset_right = 192.0
-offset_bottom = 83.0
+offset_bottom = 99.0
 theme_override_fonts/font = ExtResource("2_lj78h")
 text = "00"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="MaxValue" type="Label" parent="Objective"]
+[node name="MaxValue" type="Label" parent="ObjectiveCounter"]
 layout_mode = 0
 offset_left = 216.0
-offset_top = 16.0
+offset_top = 32.0
 offset_right = 312.0
-offset_bottom = 83.0
+offset_bottom = 99.0
 theme_override_fonts/font = ExtResource("2_lj78h")
 text = "22"
 vertical_alignment = 1
 
-[node name="Divider" type="Label" parent="Objective"]
+[node name="Divider" type="Label" parent="ObjectiveCounter"]
 layout_mode = 0
 offset_left = 184.0
-offset_top = 16.0
+offset_top = 32.0
 offset_right = 232.0
-offset_bottom = 83.0
+offset_bottom = 99.0
 theme_override_fonts/font = ExtResource("2_lj78h")
 text = "/"
 horizontal_alignment = 1
@@ -492,10 +502,11 @@ vertical_alignment = 1
 [node name="Values" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 1432.0
-offset_top = 80.0
-offset_right = 1432.0
-offset_bottom = 80.0
+offset_left = 1408.0
+offset_top = 64.0
+offset_right = 1792.0
+offset_bottom = 192.0
+metadata/_edit_lock_ = true
 
 [node name="Score" type="Label" parent="Values"]
 layout_mode = 0
@@ -517,16 +528,13 @@ vertical_alignment = 1
 [node name="SoulGauge" type="Control" parent="."]
 layout_mode = 1
 anchor_left = 0.867
-anchor_top = 0.119
+anchor_top = 0.237
 anchor_right = 0.933
 anchor_bottom = 0.889
-offset_left = -0.640137
-offset_top = -0.520004
-offset_right = 0.639893
-offset_bottom = -0.120056
+metadata/_edit_lock_ = true
 
 [node name="BurstPoint" type="Sprite2D" parent="SoulGauge"]
-position = Vector2(64.0001, 680)
+position = Vector2(64, 552)
 scale = Vector2(1.25, 1.25)
 texture = ExtResource("7")
 region_enabled = true
@@ -534,12 +542,10 @@ region_rect = Rect2(112, 120, 88, 24)
 
 [node name="SoulGauge" type="NinePatchRect" parent="SoulGauge"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 504.0
-offset_right = -0.00012207
-offset_bottom = 6.10352e-05
+offset_top = 384.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7")
@@ -647,7 +653,7 @@ flip_v = true
 [node name="SparkleBottom" type="Node2D" parent="SoulGauge"]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("57")
-position = Vector2(64.0001, 832)
+position = Vector2(64, 704)
 
 [node name="SparkleBottom1" type="Sprite2D" parent="SoulGauge/SparkleBottom"]
 use_parent_material = true
@@ -696,11 +702,14 @@ bus = &"SFX"
 
 [node name="Bonus" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 0
-offset_left = 128.0
-offset_top = 320.0
-offset_right = 128.0
-offset_bottom = 320.0
+anchor_left = 0.067
+anchor_top = 0.296
+anchor_right = 0.067
+anchor_bottom = 0.296
+offset_left = -0.639999
+offset_top = 0.320007
+offset_right = 383.36
+offset_bottom = 320.32
 
 [node name="LatestBonus" type="Label" parent="Bonus"]
 modulate = Color(1, 1, 1, 0)
@@ -712,9 +721,9 @@ text = "Perfect Homing Attack"
 [node name="List" type="VBoxContainer" parent="Bonus"]
 layout_mode = 0
 offset_right = 384.0
-offset_bottom = 328.0
+offset_bottom = 320.0
 
-[node name="Bonus" type="Label" parent="Bonus/List"]
+[node name="Bonus1" type="Label" parent="Bonus/List"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 text = "Bonus"

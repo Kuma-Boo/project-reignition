@@ -144,15 +144,15 @@ namespace Project.Core
 
 		#region Game data
 		public static GameData ActiveGameData { get; private set; }
-		public partial class GameData
+		public class GameData
 		{
 			//public bool[] worldRingsCollected;
 			public int exp;
 			public int level;
 			public float playTime;
 
-
-			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f; //Soul gauge's level, normalized from 0 -> 1
+			/// <summary> Soul gauge's level, normalized from [0 -> 1] </summary>
+			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f;
 			public SkillRing skillRing;
 		}
 
@@ -173,7 +173,7 @@ namespace Project.Core
 		#endregion
 
 		#region Skills
-		public partial class SkillRing
+		public class SkillRing
 		{
 			public Skills equippedSkills;
 

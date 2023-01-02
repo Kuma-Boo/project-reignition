@@ -349,7 +349,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			UpdateMoveSpd();
+			UpdateMoveSpeed();
 			UpdateTurning();
 			UpdateSlopeSpd();
 			UpdateActions();
@@ -372,8 +372,8 @@ namespace Project.Gameplay
 		private const float STRAFE_TURNAROUND_SPEED = .12f; //How quickly to recenter
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
-		/// <summary> Updates MoveSpd. What else do you need know? </summary>
-		private void UpdateMoveSpd()
+		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
+		private void UpdateMoveSpeed()
 		{
 			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); //Store this for turning function
 
@@ -422,7 +422,7 @@ namespace Project.Gameplay
 				}
 			}
 
-			IsMovingBackward = MoveSpeed > 0 && ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > MAX_TURNAROUND_ANGLE; //Moving backwards, limit speed
+			IsMovingBackward = ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > MAX_TURNAROUND_ANGLE; //Moving backwards
 		}
 
 		/// <summary> True when the player's MoveSpeed was zero </summary>
@@ -430,6 +430,8 @@ namespace Project.Gameplay
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
+			if (ActionState == ActionStates.Backflip) return;
+
 			float targetMovementAngle = GetTargetMovementAngle();
 			bool overrideFacingDirection = Skills.IsSpeedBreakActive || (IsLockoutActive &&
 			(ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace ||
@@ -651,10 +653,12 @@ namespace Project.Gameplay
 			canLandingBoost = Skills.isLandingDashEnabled;
 			ActionState = ActionStates.Jumping;
 			VerticalSpd = RuntimeConstants.GetJumpPower(jumpHeight);
-			Sound.PlayActionSFX("jump");
 
 			if (IsMovingBackward || MoveSpeed < 0) //Kill speed when jumping backwards
 				MoveSpeed = 0;
+
+			Sound.PlayActionSFX(Sound.JUMP_SFX);
+			Animator.Jump();
 		}
 
 		private void UpdateJump()
@@ -684,6 +688,7 @@ namespace Project.Gameplay
 				VerticalSpd *= jumpCurve; //Kill jump height
 
 			currentJumpTime += PhysicsManager.physicsDelta;
+
 			CheckStomp();
 		}
 		#endregion
@@ -791,6 +796,14 @@ namespace Project.Gameplay
 		{
 			if (actionBufferTimer != 0) //Stomp
 			{
+				//Don't allow instant stomps
+				if ((ActionState == ActionStates.Jumping || ActionState == ActionStates.AccelJump) &&
+				currentJumpTime < .1f)
+				{
+					actionBufferTimer = 0;
+					return;
+				}
+
 				actionBufferTimer = 0;
 				ResetVelocity();
 
@@ -838,10 +851,12 @@ namespace Project.Gameplay
 			MovementAngle = GetTargetInputAngle();
 
 			VerticalSpd = RuntimeConstants.GetJumpPower(backflipHeight);
-			Sound.PlayActionSFX("jump");
 
 			IsOnGround = false;
 			ActionState = ActionStates.Backflip;
+
+			Sound.PlayActionSFX(Sound.JUMP_SFX);
+			Animator.Backflip();
 		}
 		#endregion
 		#endregion

@@ -9,87 +9,110 @@ namespace Project.Gameplay
 		[Export(PropertyHint.Range, "0, 10")]
 		private int height;
 		[Export]
-		private float travelLength;
+		private float travelTime; //How long to take to crush/rise
 		[Export]
-		private float waitLength; //How long to wait between movements
+		private float openTime; //How long to remain open.
 		[Export]
-		private float fallenWaitLengthOverride = -1; //How long to wait when on the floor. -1 to ignore.
+		private float closedTime = -1; //How long to stay closed. -1 to use the same value as openLength.
+		[Export(PropertyHint.Range, "0,1,.1")]
+		private float currentRatio; //Set this from the editor to change where the initial timer is
 		[Export]
-		private float currentTime; //Set this from the editor to change where the initial timer is
-		[Export]
-		private bool isWaiting;
-		[Export]
-		private bool isFalling;
-		[Export]
-		private Curve travelCurve;
+		private States currentState;
+		private enum States
+		{
+			Open,
+			Falling,
+			Closed,
+			Rising,
+		}
 
 		[Export]
 		private Node3D light;
 		[Export]
-		private NodePath top;
-		private Node3D _top;
+		private NodePath crusher;
+		private Node3D _crusher;
 
 		public override void _Ready()
 		{
 			if (Engine.IsEditorHint()) return;
 
-			_top = GetNode<Node3D>(top);
-			_top.Position = Vector3.Up * height; //Start at the top
+			//Start crusher at the correct position
+			_crusher = GetNode<Node3D>(crusher);
+			UpdateCrusherPosition();
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (Engine.IsEditorHint())
+			if (Engine.IsEditorHint()) //Position crusher for easier editing
 			{
-				_top = GetNodeOrNull<Node3D>(top);
-				if (_top != null)
-					_top.Position = Vector3.Up * height;
+				_crusher = GetNodeOrNull<Node3D>(crusher);
+				if (_crusher != null)
+					UpdateCrusherPosition();
 
 				return;
 			}
 
-			if (Mathf.IsZeroApprox(travelLength)) return; //Static
+			light.Visible = currentState == States.Falling;
 
-			light.Visible = isFalling;
-			if (isWaiting)
+			switch (currentState)
 			{
-				currentTime += PhysicsManager.physicsDelta;
-				if ((fallenWaitLengthOverride > 0 && isFalling && currentTime >= fallenWaitLengthOverride) || currentTime >= waitLength)
-				{
-					isWaiting = false;
-					isFalling = !isFalling;
-					currentTime = isFalling ? travelLength : 0;
-				}
-			}
-			else
-			{
-				if (isFalling)
-					currentTime = Mathf.MoveToward(currentTime, 0, PhysicsManager.physicsDelta);
-				else
-					currentTime = Mathf.MoveToward(currentTime, travelLength, PhysicsManager.physicsDelta);
-
-				float t = currentTime / travelLength;
-				if (travelCurve == null)
-				{
-					if (t > .5f)
-						t = Mathf.SmoothStep(0, 1, t);
-				}
-				else
-					t = travelCurve.Sample(t);
-
-				_top.Position = Vector3.Up * t * height;
-
-				if (Mathf.IsZeroApprox(currentTime) || Mathf.IsEqualApprox(currentTime, travelLength))
-				{
-					if ((fallenWaitLengthOverride > 0 && isFalling) || !Mathf.IsZeroApprox(waitLength))
+				case States.Open:
+					if (IsStateCompleted(openTime)) //Start Falling
+						currentState = States.Falling;
+					break;
+				case States.Closed:
+					if (IsStateCompleted(closedTime)) //Start rising
+						currentState = States.Rising;
+					break;
+				default:
+					if (IsStateCompleted(travelTime))
 					{
-						currentTime = 0;
-						isWaiting = true;
+						if (currentState == States.Falling && !Mathf.IsZeroApprox(closedTime))
+							currentState = States.Closed;
+						else
+							currentState = States.Open;
 					}
-					else
-						isFalling = !isFalling;
-				}
+					break;
 			}
+
+			UpdateCrusherPosition();
+		}
+
+		/// <summary>
+		/// Updates the state timer, returns True if state is over.
+		/// </summary>
+		private bool IsStateCompleted(float t)
+		{
+			currentRatio += (1f / t) * PhysicsManager.physicsDelta;
+			if (currentRatio >= 1f) //Start falling
+			{
+				currentRatio = 0;
+				return true;
+			}
+
+			return false;
+		}
+
+		private void UpdateCrusherPosition()
+		{
+			float ratio = 0f;
+			switch (currentState)
+			{
+				case States.Open:
+					ratio = 1;
+					break;
+				case States.Closed:
+					ratio = 0;
+					break;
+				case States.Falling:
+					ratio = 1f - currentRatio;
+					break;
+				case States.Rising:
+					ratio = currentRatio;
+					break;
+			}
+
+			_crusher.Position = Vector3.Up * height * Mathf.SmoothStep(0, 1, ratio);
 		}
 	}
 }

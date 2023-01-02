@@ -38,6 +38,7 @@ namespace Project.Gameplay
 		}
 
 		#region Rings
+		[ExportSubgroup("Rings")]
 		[Export]
 		private Label ringLabel;
 		[Export]
@@ -81,6 +82,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Time and Score
+		[ExportSubgroup("Time & Score")]
 		[Export]
 		private Label time;
 		private void UpdateTime() => time.Text = Stage.DisplayTime;
@@ -91,6 +93,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Bonuses
+		[ExportSubgroup("Bonuses")]
 		[Export]
 		private AnimationPlayer bonusAnimator;
 		[Export]
@@ -168,6 +171,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Objectives
+		[ExportSubgroup("Objective Counter")]
 		[Export]
 		private TextureRect objectiveSprite;
 		[Export]
@@ -189,6 +193,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Soul Gauge
+		[ExportSubgroup("Soul Gauge")]
 		[Export]
 		private Control soulGauge;
 		[Export]
@@ -199,14 +204,15 @@ namespace Project.Gameplay
 		private Control soulGaugeBackground;
 		[Export]
 		private AnimationPlayer soulGaugeAnimator;
+		/// <summary>
+		/// Set soul gauge size based on player's level.
+		/// </summary>
 		private void InitializeSoulGauge()
 		{
-			//Initialize soul gauge
 			soulGaugeBackground = soulGaugeFill.GetParent<Control>();
 
 			//Resize the soul gauge
-			int lerpFrom = Mathf.RoundToInt(soulGaugeRoot.Size.y - soulGauge.GetMinimumSize().y); //Smallest gauge size
-			soulGauge.OffsetTop = Mathf.Lerp(lerpFrom, 0, SaveManager.ActiveGameData.SoulGaugeLevel); //Set the soul gauge to the correct size
+			soulGauge.OffsetTop = Mathf.Lerp(soulGauge.OffsetTop, 0, SaveManager.ActiveGameData.SoulGaugeLevel);
 			ModifySoulGauge(0f, false);
 		}
 

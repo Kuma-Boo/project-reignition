@@ -44,7 +44,7 @@ namespace Project.Gameplay
 				targetSpeed = 0;
 				delta = friction;
 			}
-			else if (spd != 0 && Mathf.Sign(input) != Mathf.Sign(spd)) //Turnaround
+			else if (!Mathf.IsZeroApprox(spd) && Mathf.Sign(targetSpeed) != Mathf.Sign(speed)) //Turnaround
 			{
 				delta = turnaround;
 				if (clampTurnaround)

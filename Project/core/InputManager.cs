@@ -156,10 +156,10 @@ namespace Project.Core
 				//Default to keyboard
 				keyboardMapping = new Mapping()
 				{
-					upBinding = (int)Key.Up,
-					downBinding = (int)Key.Down,
-					leftBinding = (int)Key.Left,
-					rightBinding = (int)Key.Right,
+					upBinding = (int)Key.I,
+					downBinding = (int)Key.K,
+					leftBinding = (int)Key.J,
+					rightBinding = (int)Key.L,
 					movementModifierBinding = (int)Key.Shift,
 
 					//Disable joystick axis

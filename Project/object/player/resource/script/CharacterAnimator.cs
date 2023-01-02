@@ -12,23 +12,22 @@ namespace Project.Gameplay
 		private AnimationTree animator;
 		private CharacterController Character => CharacterController.instance;
 
-		public override void _Ready()
-		{
-			animator.Active = true;
-		}
+		public override void _Ready() => animator.Active = true; //Activate animator
 
-		private const string COUNTDOWN_PARAMETER = "parameters/countdown/active";
+		#region Oneshot event animations
+		private readonly StringName COUNTDOWN_PARAMETER = "parameters/countdown/active";
 		public void Countdown()
 		{
 			animator.Set(COUNTDOWN_PARAMETER, true);
 		}
+		#endregion
 
 		public void PlayAnimation(string anim) //Play a specific animation
 		{
 
 		}
 
-		#region Grinding Animation
+		#region Grinding and Balancing Animations
 		private const string IS_BALANCING_STATE = "parameters/balancing/current";
 		private const string BALANCE_STATE_PARAMETER = "parameters/balance_state/active";
 		private const string BALANCE_LEFT_STATE_PARAMETER = "parameters/balance_state/balance_left/blend_position";
@@ -50,55 +49,45 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Normal Animation
-		private float strafeTilt;
-		private const string CROUCH_PARAMETER = "parameters/ground_state/IsCrouching/current";
+		private readonly StringName NORMAL_STATE_PARAMETER = "parameters/normal_state/playback";
+		/// <summary> Gets the normal state's StateMachinePlayback </summary>
+		private AnimationNodeStateMachinePlayback NormalState => (AnimationNodeStateMachinePlayback)animator.Get(NORMAL_STATE_PARAMETER);
 
-		private const string JUMP_TRIGGER_PARAMETER = "parameters/air_state/jump/active";
-		private const string JUMPING_PARAMETER = "parameters/air_state/IsJumping/current";
-		private const string JUMPDASH_PARAMETER = "parameters/air_state/IsJumpDashing/current";
-		private const string FALL_TRIGGER_PARAMETER = "parameters/air_state/fall/active";
-		private const string FALL_RESET_PARAMETER = "parameters/air_state/fall_reset/seek_position";
-		private const string JUMP_CANCEL_TIME_PARAMETER = "parameters/air_state/jump_cancel_time/scale";
+		private readonly StringName FALL_STATE_PARAMETER = "fall";
+		private readonly StringName JUMP_CANCEL_TIME_PARAMETER = "parameters/air_state/jump_cancel_time/scale";
 
+		private bool isJumping;
+		private readonly StringName JUMP_STATE_PARAMETER = "jump";
 		public void Jump()
 		{
-			animator.Set(JUMPING_PARAMETER, 1);
-			animator.Set(JUMP_TRIGGER_PARAMETER, true);
+			isJumping = true;
+			NormalState.Start(JUMP_STATE_PARAMETER);
 		}
 
-		private const string BACKFLIP_TRIGGER_PARAMETER = "parameters/air_state/backflip/active";
+		private readonly StringName BACKFLIP_STATE_PARAMETER = "backflip";
 		public void Backflip()
 		{
-			animator.Set(BACKFLIP_TRIGGER_PARAMETER, true);
-			animator.Set(FALL_TRIGGER_PARAMETER, false);
-			animator.Set(FALL_RESET_PARAMETER, 0);
-			//ResetLocalRotation();
+			NormalState.Start(BACKFLIP_STATE_PARAMETER);
 		}
 
 		public void JumpAccel()
 		{
-
 		}
 
 		public void Stomp()
 		{
-			FallAnimation();
 			animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
 		}
 
-		public void FallAnimation()
-		{
-			animator.Set(JUMPING_PARAMETER, 0);
-			animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1f);
-			animator.Set(FALL_TRIGGER_PARAMETER, true);
-			animator.Set(FALL_RESET_PARAMETER, 0);
-		}
-
-		private const string GROUND_PARAMETER = "parameters/IsGrounded/current";
+		private readonly StringName GROUND_STATE_PARAMETER = "ground_tree";
+		private readonly StringName AIR_STATE_PARAMETER = "air_tree";
 		private const float MOVEMENT_DEADZONE = .2f;
 		public void UpdateAnimation()
 		{
-			animator.Set(GROUND_PARAMETER, Character.IsOnGround ? 0 : 1);
+			//TODO Play landing animation
+			if (Character.JustLandedOnGround)
+				NormalState.Start(GROUND_STATE_PARAMETER);
+
 			if (Character.IsOnGround)
 				GroundAnimations();
 			else
@@ -106,6 +95,70 @@ namespace Project.Gameplay
 
 			UpdateRotation();
 		}
+
+		private readonly StringName JOG_BLEND_PARAMETER = "parameters/normal_state/ground_tree/jog_blend/blend_position";
+		private readonly StringName RUN_BLEND_PARAMETER = "parameters/normal_state/ground_tree/run_blend/blend_position";
+		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/move_transition/current";
+		private readonly StringName MOVE_SPEED_PARAMETER = "parameters/normal_state/ground_tree/move_speed/scale";
+
+		[Export]
+		private Curve movementAnimationSpeedCurve;
+		/// <summary> What speedratio should be considered as fully running? </summary>
+		private const float RUN_RATIO = .9f;
+		/// <summary> How much should the animation speed be smoothed by? </summary>
+		private const float SPEED_SMOOTHING = .1f;
+		private void GroundAnimations()
+		{
+			//TODO Speed break animation
+			if (Character.Skills.IsSpeedBreakActive)
+			{
+				return;
+			}
+
+			float speedRatio = Mathf.Abs(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed));
+			float animationSpeed = 1f;
+			int targetMoveState = 0; //Default to idling
+
+			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
+			{
+				if (Character.IsMovingBackward) //Backstep
+				{
+					targetMoveState = 1;
+					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
+					animationSpeed = 1.2f + speedRatio * .4f;
+				}
+				else if (speedRatio >= RUN_RATIO) //Running
+				{
+					targetMoveState = 3;
+					animationSpeed = Mathf.Clamp(animationSpeed, 2f + (speedRatio - RUN_RATIO), 2.5f);
+				}
+				else //Jogging
+				{
+					targetMoveState = 2;
+					speedRatio = speedRatio / RUN_RATIO; //Normalize speed ratio
+					animationSpeed = movementAnimationSpeedCurve.Sample(speedRatio);
+					animator.Set(JOG_BLEND_PARAMETER, speedRatio);
+				}
+			}
+
+			animator.Set(MOVE_TRANSITION_PARAMETER, targetMoveState);
+			animator.Set(MOVE_SPEED_PARAMETER, Mathf.Lerp((float)animator.Get(MOVE_SPEED_PARAMETER), animationSpeed, SPEED_SMOOTHING));
+		}
+
+		private void AirAnimations()
+		{
+			bool isJumpDashing = Character.ActionState == CharacterController.ActionStates.JumpDash || Character.ActionState == CharacterController.ActionStates.AccelJump;
+
+			if (isJumping)
+			{
+				if (Character.ActionState != CharacterController.ActionStates.Jumping || Character.VerticalSpd <= 5f)
+				{
+					isJumping = false;
+					NormalState.Travel(FALL_STATE_PARAMETER);
+				}
+			}
+		}
+		#endregion
 
 		#region Visual Rotation
 		/// <summary> Angle to use when character's MovementState is CharacterController.MovementStates.External. </summary>
@@ -138,7 +191,7 @@ namespace Project.Gameplay
 
 			if (Character.Lockon.IsHomingAttacking) //Face target
 				targetRotation = Character.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
-			else if (Character.Skills.IsSpeedBreakActive) //Speed break, use path's forward direction
+			else if (Character.Skills.IsSpeedBreakActive || Character.IsMovingBackward) //Speed break, use path's forward direction
 				targetRotation = Character.PathFollower.ForwardAngle;
 			else if (Character.MovementState == CharacterController.MovementStates.External)
 				targetRotation = ExternalAngle;
@@ -151,62 +204,6 @@ namespace Project.Gameplay
 		/// Apply currentRotation on Transform.
 		/// </summary>
 		private void ApplyRotation() => Rotation = Vector3.Up * VisualAngle;
-		#endregion
-
-		private float strafeVelocity;
-		private const string MOVEMENT_STATE_PARAMETER = "parameters/ground_state/MoveState/current";
-		private void GroundAnimations()
-		{
-			/*
-			int transition = 1; //Idle
-			if (Character.MoveSpeed < 0) //Backstep
-				transition = 0;
-			else if (Character.SpeedRatio >= 1) //Running
-				transition = 3;
-			else if (!IsIdling) //Walk -> Jog
-				transition = 2;
-
-			_animator.Set(MOVEMENT_STATE_PARAMETER, transition);
-			_animator.Set(CROUCH_PARAMETER, Character.IsCrouching ? 1 : 0);
-
-			float targetStrafeTilt = 0;
-
-			if (Character.ControlLockoutData == null && Character.Controller.MovementAxis != Vector2.Zero)
-			{
-				float targetDirection = new Vector2(Character.GetStrafeInputValue(), -Mathf.Abs(Character.GetMovementInputValue())).AngleTo(Vector2.Up);
-				targetStrafeTilt = -Mathf.Clamp((targetDirection - Rotation.y) / Mathf.Pi * .5f, -1, 1);
-			}
-			strafeTilt = ExtensionMethods.SmoothDamp(strafeTilt, targetStrafeTilt, ref strafeVelocity, .2f);
-
-			float moveAnimationSpeed = 1f;
-
-			if (Character.IsFreeMovementActive)
-				moveAnimationSpeed = Character.SpeedRatio;
-			else if (Character.SpeedRatio < 0)
-				moveAnimationSpeed = .8f * Mathf.Abs(Character.backstepSettings.GetSpeedRatio(Character.MoveSpeed));
-			else if (!IsIdling)
-				moveAnimationSpeed = Mathf.Max(Character.SpeedRatio, Mathf.Abs(Character.runningStrafeSettings.GetSpeedRatioClamped(Character.StrafeSpeed)));
-
-			_animator.Set("parameters/ground_state/Jog/blend_position", Character.SpeedRatio);//new Vector2(strafeTilt, moveAnimationSpeed));
-			_animator.Set("parameters/ground_state/Run/blend_position", strafeTilt);
-
-
-			moveAnimationSpeed = Mathf.Clamp((moveAnimationSpeed - .5f) / .5f, 0f, 1f);
-			_animator.Set("parameters/ground_state/MoveSpeed/scale", Mathf.Lerp(1.2f, 2f, moveAnimationSpeed));
-			*/
-		}
-
-		private void AirAnimations()
-		{
-			bool isJumpDashing = Character.ActionState == CharacterController.ActionStates.JumpDash || Character.ActionState == CharacterController.ActionStates.AccelJump;
-			animator.Set(JUMPDASH_PARAMETER, isJumpDashing ? 1 : 0);
-
-			if ((int)animator.Get(JUMPING_PARAMETER) == 1)
-			{
-				if (Character.ActionState != CharacterController.ActionStates.Jumping || Character.VerticalSpd <= 5f)
-					FallAnimation();
-			}
-		}
 		#endregion
 	}
 }
