@@ -43,7 +43,7 @@ namespace Project.Gameplay
 			if (Character.ActionState == CharacterController.ActionStates.JumpDash || Character.Lockon.IsHomingAttacking)
 				Character.Lockon.StartBounce();
 			else
-				Character.TakeDamage(this);
+				Character.Knockback();
 
 			Explode();
 		}

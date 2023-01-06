@@ -193,10 +193,17 @@ namespace Project.Gameplay
 				CheckRailActivation();
 		}
 
-		private float chargeAmount;
-		private readonly float GRIND_RAIL_CHARGE_LENGTH = .5f; //How long a full charge is.
-		private readonly float GRIND_RAIL_SNAPPING = .5f; //How "magnetic" the rail is. Early 3D Sonic games tended to put this too low.
-		private readonly float GRINDSTEP_RAIL_SNAPPING = 1.2f; //For when the player is stomping
+		/// <summary> Timer to keep track of shuffles. </summary>
+		private float shuffleTimer;
+		/// <summary> Is a shuffle currently being buffered? </summary>
+		private float shuffleBufferTimer;
+		private const float SHUFFLE_BUFFER_LENGTH = .2f;
+		/// <summary> How long a shuffle takes. </summary>
+		private const float GRIND_RAIL_SHUFFLE_LENGTH = .5f;
+		/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
+		private const float GRIND_RAIL_SNAPPING = .5f;
+		/// <summary> Rail snapping is more generous when performing a grind step. </summary>
+		private const float GRINDSTEP_RAIL_SNAPPING = 1.2f;
 		private Vector3 closestPoint;
 		private void CheckRailActivation()
 		{
@@ -224,7 +231,6 @@ namespace Project.Gameplay
 		private void ActivateRail()
 		{
 			isActive = true;
-			chargeAmount = 0;
 			Character.IsGrindstepJump = false; //Reset grind step
 
 			isFadingSFX = false;
@@ -237,14 +243,19 @@ namespace Project.Gameplay
 				UpdateInvisibleRailPosition();
 			}
 
+			shuffleBufferTimer = 0; //Reset buffer timer
+			shuffleTimer = GRIND_RAIL_SHUFFLE_LENGTH; //Character starts with a shuffle
+
 			Character.ResetActionState(); //Cancel stomps, jumps, etc
 			Character.StartExternal(this, pathFollower);
 
-			Character.IsOnGround = true; //Rail counts as being on the ground
+			Character.IsMovingBackward = false;
+			Character.LandOnGround(); //Rail counts as being on the ground
 			Character.MoveSpeed = Skills.grindSettings.speed; //Start at the correct speed
 			Character.VerticalSpd = 0f;
 
 			Character.Animator.ExternalAngle = 0; //Rail modifies Character's Transform directly, animator angle is unused.
+			Character.Animator.StartBalancing();
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); //Snap
 
 			Character.Connect(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail), (uint)ConnectFlags.OneShot);
@@ -269,6 +280,8 @@ namespace Project.Gameplay
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), Character.MovementAngle);
 			if (Controller.jumpButton.wasPressed)
 			{
+				DisconnectFromRail();
+
 				//Check if the player is holding a direction parallel to rail.
 				Character.IsGrindstepJump = !Character.IsHoldingDirection(Character.MovementAngle, true) && !Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi, true);
 				if (Character.IsGrindstepJump) //Grindstep
@@ -283,11 +296,11 @@ namespace Project.Gameplay
 
 					Character.IsOnGround = false; //Disconnect from the ground
 					Character.CanJumpDash = false; //Disable jumpdashing
+
+					Character.Animator.StartGrindStep();
 				}
 				else //Jump normally
 					Character.Jump(true);
-
-				DisconnectFromRail();
 				return;
 			}
 
@@ -295,21 +308,29 @@ namespace Project.Gameplay
 			Character.MovementAngle = Character.CalculateForwardAngle(pathFollower.Forward());
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 
-			//TODO Disable the ability to shuffle accelerate during player's shuffle animation
-			if (Controller.actionButton.isHeld) //Charge up!
+			//Update shuffling
+			if (Controller.actionButton.wasPressed)
 			{
-				chargeAmount = Mathf.MoveToward(chargeAmount, GRIND_RAIL_CHARGE_LENGTH, PhysicsManager.physicsDelta);
+				if (Mathf.IsZeroApprox(shuffleTimer))
+					StartShuffle(false); //Mistimed shuffle
+				else if (Mathf.IsZeroApprox(shuffleBufferTimer))
+					shuffleBufferTimer = SHUFFLE_BUFFER_LENGTH;
+				else //Don't allow button mashers
+					shuffleBufferTimer = -SHUFFLE_BUFFER_LENGTH;
 			}
-			else
-			{
-				if (chargeAmount > 0f)
-				{
-					float t = Mathf.SmoothStep(0, 1, chargeAmount / GRIND_RAIL_CHARGE_LENGTH);
-					Character.MoveSpeed = Mathf.Lerp(Skills.unchargedGrindSpeed, Skills.chargedGrindSpeed, t);
-					sfx.Play();
-				}
 
-				chargeAmount = 0f;
+			if (shuffleTimer > 0)
+			{
+				shuffleTimer = Mathf.MoveToward(shuffleTimer, 0, PhysicsManager.physicsDelta);
+				shuffleBufferTimer = Mathf.MoveToward(shuffleBufferTimer, 0, PhysicsManager.physicsDelta);
+
+				if (Mathf.IsZeroApprox(shuffleBufferTimer))
+				{
+					if (shuffleBufferTimer > 0)
+						StartShuffle(true);
+
+					shuffleBufferTimer = 0;
+				}
 			}
 
 			if (isInvisibleRail)
@@ -326,9 +347,20 @@ namespace Project.Gameplay
 
 			pathFollower.Progress += movementDelta;
 			Character.UpdateExternalControl();
+			Character.Animator.UpdateBalancing();
 
 			if (pathFollower.ProgressRatio >= 1 || Mathf.IsZeroApprox(Character.MoveSpeed)) //Disconnect from the rail
 				DisconnectFromRail();
+		}
+
+		private void StartShuffle(bool isPerfectShuffle)
+		{
+			shuffleTimer = GRIND_RAIL_SHUFFLE_LENGTH;
+
+			sfx.Play();
+
+			Character.MoveSpeed = isPerfectShuffle ? Skills.perfectShuffleSpeed : Skills.grindSettings.speed;
+			Character.Animator.StartGrindShuffle();
 		}
 
 		private void DisconnectFromRail()
@@ -343,9 +375,8 @@ namespace Project.Gameplay
 				railModel.Visible = false;
 
 			Character.ResetMovementState();
+			Character.Animator.ResetState(.1f);
 			Character.Animator.SnapRotation(Character.MovementAngle);
-
-			GD.Print($"{Character.MovementAngle}, {Character.Animator.Rotation.y}, {Character.Rotation.y}");
 
 			//Disconnect signals
 			if (Character.IsConnected(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail)))

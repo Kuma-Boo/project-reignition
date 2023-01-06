@@ -7,15 +7,13 @@ namespace Project
 	public static class ExtensionMethods
 	{
 		/// <summary> Casts a ray from a Node3D </summary>
-		public static RaycastHit CastRay(this Node3D s, Vector3 pos, Vector3 dir, uint mask = 2147483647, bool hitArea = false, Array ex = null)
+		public static RaycastHit CastRay(this Node3D s, Vector3 pos, Vector3 dir, uint mask = 2147483647, bool hitArea = false, Array<PhysicsBody3D> ex = null)
 		{
 			if (ex != null) //Reduce memory leaks
 			{
 				Array<RID> excluded = new Array<RID>();
-				excluded.Add(new RID(s));
-
 				for (int i = 0; i < ex.Count; i++)
-					excluded.Add(new RID((Node)ex[i]));
+					excluded.Add(ex[i].GetRid());
 
 				return PhysicsManager.CastRay(pos, dir, hitArea, mask, excluded);
 			}

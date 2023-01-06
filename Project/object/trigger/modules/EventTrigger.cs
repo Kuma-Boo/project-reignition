@@ -58,7 +58,7 @@ namespace Project.Gameplay.Triggers
 		/// <summary>
 		/// Call this to play a specific animation on the player
 		/// </summary>
-		public void PlayCharacterAnimation(string anim) => Character.Animator.PlayAnimation(anim);
+		public void PlayCharacterAnimation(int animationIndex) => Character.Animator.PlayOneshotAnimation(animationIndex);
 		/// <summary>
 		/// Call this to reset character's movement state
 		/// </summary>

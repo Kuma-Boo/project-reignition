@@ -20,7 +20,7 @@ namespace Project.Gameplay.Hazards
 		{
 			if (!isDisabled && isInteractingWithPlayer)
 			{
-				Character.TakeDamage(this);
+				Character.Knockback();
 				EmitSignal(SignalName.DamagedPlayer);
 			}
 		}

@@ -110,7 +110,7 @@ namespace Project.Gameplay
 					Character.Lockon.StartBounce();
 				}
 				else if (damagePlayer)
-					Character.TakeDamage(this);
+					Character.Knockback();
 			}
 		}
 

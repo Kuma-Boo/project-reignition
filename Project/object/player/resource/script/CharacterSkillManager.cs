@@ -41,13 +41,6 @@ namespace Project.Gameplay
 		[Export]
 		public float accelerationJumpSpeed;
 
-		[Export]
-		public float unchargedGrindSpeed;
-		[Export]
-		public float chargedGrindSpeed;
-		[Export]
-		public MovementResource grindSettings; //Settings for grinding on rails
-
 
 		//While there aren't any upgrades for the following movement skills, they're here for consistancy
 		[Export]
@@ -55,6 +48,14 @@ namespace Project.Gameplay
 		[Export]
 		private MovementResource backstepSettings;
 
+		[ExportSubgroup("Grind Settings")]
+		[Export]
+		public float perfectShuffleSpeed;
+		[Export]
+		public MovementResource grindSettings; //Settings for grinding on rails
+
+
+		//References to the actual values being used
 		public MovementResource GroundSettings { get; private set; }
 		public MovementResource AirSettings { get; private set; }
 		public MovementResource BackflipSettings { get; private set; }

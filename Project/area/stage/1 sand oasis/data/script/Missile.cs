@@ -49,7 +49,7 @@ namespace Project.Gameplay.Bosses
 		public void OnAreaEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			CharacterController.instance.TakeDamage(this);
+			CharacterController.instance.Knockback();
 		}
 	}
 }
