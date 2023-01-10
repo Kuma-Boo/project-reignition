@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://br688ytf45e8c"]
+[gd_scene load_steps=59 format=3 uid="uid://br688ytf45e8c"]
 
 [ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
 [ext_resource type="PackedScene" uid="uid://efrfjkjxlfc8" path="res://area/stage/1 sand oasis/act 1/environment/01Opening.tscn" id="2_eyaqr"]
@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://c1tblqj07pix8" path="res://area/stage/1 sand oasis/act 1/environment/07Beach.tscn" id="8_owf84"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="9_bc5dk"]
 [ext_resource type="PackedScene" uid="uid://ckpkxovh854hl" path="res://area/stage/1 sand oasis/act 1/environment/08End.tscn" id="9_pbgai"]
-[ext_resource type="PackedScene" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="11_hwlgd"]
+[ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="11_hwlgd"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="12_lqbp2"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/stage/1 sand oasis/data/skybox/Skybox.tscn" id="12_qxfqh"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="13_3nlok"]
@@ -39,6 +39,8 @@
 [ext_resource type="PackedScene" uid="uid://cbwcphc75t0y7" path="res://effect/buffer/DepthRenderer.tscn" id="27_ypwqo"]
 [ext_resource type="PackedScene" uid="uid://bb0wbyqxrs175" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="28_5kt56"]
 [ext_resource type="Material" uid="uid://5wxyrpeo8ycq" path="res://area/stage/1 sand oasis/data/environment/model/material/Water.tres" id="29_lfji7"]
+[ext_resource type="Curve3D" uid="uid://cxojb3jeprrl" path="res://area/stage/1 sand oasis/act 1/environment/path/UTurnPath.tres" id="35_l4txy"]
+[ext_resource type="Curve3D" uid="uid://vu8iedqckwj5" path="res://area/stage/1 sand oasis/act 1/environment/path/WallClimbPath.tres" id="36_hdewb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_luq3i"]
 size = Vector3(12, 14, 9.6)
@@ -148,10 +150,10 @@ shape = SubResource("60")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8509, 6, -15.9712)
 shape = SubResource("335")
 
-[node name="UTurnTrigger" parent="Trigger" instance=ExtResource("8_esmag")]
+[node name="UTurnTrigger" parent="Trigger" node_paths=PackedStringArray("automationPath") instance=ExtResource("8_esmag")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -74.3558, -45, -295.905)
-distanceToTravel = 45.0
-startingPoint = 2185.0
+distanceToTravel = 65.0
+automationPath = NodePath("../../Path/UTurnPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/UTurnTrigger"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
@@ -182,10 +184,10 @@ script = ExtResource("9_bc5dk")
 shape = SubResource("252")
 disabled = true
 
-[node name="WallClimbTrigger" parent="Trigger" instance=ExtResource("8_esmag")]
+[node name="WallClimbTrigger" parent="Trigger" node_paths=PackedStringArray("automationPath") instance=ExtResource("8_esmag")]
 transform = Transform3D(-4.37114e-08, 0.34202, -0.939693, 0, 0.939693, 0.34202, 1, 1.49502e-08, -4.10752e-08, -657.997, -37.9341, -640.405)
-distanceToTravel = 55.0
-startingPoint = 2992.0
+distanceToTravel = 62.0
+automationPath = NodePath("../../Path/WallClimbPath")
 ignoreDirection = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/WallClimbTrigger"]
@@ -589,6 +591,14 @@ curve = ExtResource("23_0ws1h")
 [node name="Island03" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.955, -48.063, -435.953)
 curve = ExtResource("24_myiv4")
+
+[node name="UTurnPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70.868, -45.002, -319.62)
+curve = ExtResource("35_l4txy")
+
+[node name="WallClimbPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -649.012, -40, -640.435)
+curve = ExtResource("36_hdewb")
 
 [node name="Lighting" type="Node3D" parent="."]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dqb313n3ldim8"]
+[gd_scene load_steps=14 format=3 uid="uid://dqb313n3ldim8"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterSkillManager.cs" id="1_rj66u"]
 [ext_resource type="Resource" uid="uid://b0pl4vxr6ryfl" path="res://object/player/resource/movement settings/stats/GrindSettings.tres" id="2_17xxn"]
@@ -7,21 +7,37 @@
 [ext_resource type="Resource" uid="uid://bsdyr3nwbjt2s" path="res://object/player/resource/movement settings/stats/AirSettings.tres" id="3_0p6yb"]
 [ext_resource type="AudioStream" uid="uid://dgg82ed3pd114" path="res://sound/sfx/player/speed break end.wav" id="3_di5ls"]
 [ext_resource type="Resource" uid="uid://cqw88rpig8x58" path="res://object/player/resource/movement settings/stats/BackflipSettings.tres" id="3_nrdcd"]
+[ext_resource type="Script" path="res://resource/script/MovementResource.cs" id="3_sunyc"]
 [ext_resource type="Resource" uid="uid://bijq2wxw8v0nx" path="res://object/player/resource/movement settings/stats/BackstepSettings.tres" id="4_nrknj"]
 [ext_resource type="AudioStream" uid="uid://clst2fobk8mpm" path="res://sound/sfx/player/time break.wav" id="5_mafsj"]
-[ext_resource type="Resource" uid="uid://66c26qpkrrsa" path="res://object/player/resource/movement settings/stats/StrafeSettings.tres" id="6_6av8s"]
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="10_fl25x"]
+
+[sub_resource type="Resource" id="Resource_1hwfr"]
+script = ExtResource("3_sunyc")
+clampTurnaround = false
+speed = 64
+traction = 96
+friction = 64
+overspeedFriction = 54
+turnaround = 128
+
+[sub_resource type="Curve" id="Curve_jakcp"]
+_data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
+point_count = 4
 
 [node name="Skills" type="Node" node_paths=PackedStringArray("breakSkillSfx", "heartbeatSfx")]
 script = ExtResource("1_rj66u")
 baseGroundSettings = ExtResource("2_tfp0s")
-strafeSettings = ExtResource("6_6av8s")
+strafeSettings = SubResource("Resource_1hwfr")
 baseAirSettings = ExtResource("3_0p6yb")
-accelerationJumpSpeed = 28.0
+accelerationJumpSpeed = 36.0
+baseSlideFriction = 8.0
+maxSlideFriction = 2.0
 backflipSettings = ExtResource("3_nrdcd")
 backstepSettings = ExtResource("4_nrknj")
 perfectShuffleSpeed = 34.0
 grindSettings = ExtResource("2_17xxn")
+sidleMovementCurve = SubResource("Curve_jakcp")
 isCountdownBoostEnabled = true
 countdownBoostSpeed = 32.0
 landingDashSpeed = 32.0

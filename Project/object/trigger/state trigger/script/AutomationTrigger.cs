@@ -57,8 +57,11 @@ namespace Project.Gameplay.Triggers
 				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
 
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			Character.MovementAngle = Character.PathFollower.ForwardAngle;
+
 			Character.UpdateExternalControl();
-			Character.Animator.ExternalAngle = Character.MovementAngle = Character.PathFollower.ForwardAngle;
+
+			Character.Animator.ExternalAngle = 0;
 		}
 
 		private bool IsActivationValid()
@@ -92,6 +95,8 @@ namespace Project.Gameplay.Triggers
 			float initialVelocity = Character.MoveSpeed;
 			Character.StartExternal(this, Character.PathFollower, .05f, true);
 			Character.MoveSpeed = initialVelocity;
+			Character.Animator.SnapRotation(0);
+			Character.IsMovingBackward = false; //Prevent getting stuck in backstep animation
 
 			isActive = true;
 			EmitSignal(SignalName.Activated);
@@ -99,15 +104,16 @@ namespace Project.Gameplay.Triggers
 
 		private void Deactivate()
 		{
-			//Revert to previous path
-			if (automationPath != null)
-				Character.PathFollower.SetActivePath(initialPath);
-
 			isActive = false;
 			Character.PathFollower.Resync();
 
 			Character.ResetMovementState();
 			Character.UpDirection = Character.PathFollower.Up();
+			Character.Animator.SnapRotation(Character.MovementAngle);
+
+			//Revert to previous path
+			if (automationPath != null)
+				Character.PathFollower.SetActivePath(initialPath);
 
 			EmitSignal(SignalName.Deactivated);
 		}

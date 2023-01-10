@@ -32,7 +32,7 @@ namespace Project.Gameplay.Triggers
 		[Export(PropertyHint.Range, "1, 10")]
 		private int slideDistance = 10;
 		/// <summary> Entrance speed (ratio) required to start a drift. </summary>
-		private const float ENTRANCE_SPEED_RATIO = .5f;
+		private const float ENTRANCE_SPEED_RATIO = .9f;
 
 		[ExportSubgroup("Components")]
 		[Export]

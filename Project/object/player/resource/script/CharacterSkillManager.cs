@@ -41,6 +41,10 @@ namespace Project.Gameplay
 		[Export]
 		public float accelerationJumpSpeed;
 
+		[Export]
+		public float baseSlideFriction; //Shortest slide
+		[Export]
+		public float maxSlideFriction; //Longest slide
 
 		//While there aren't any upgrades for the following movement skills, they're here for consistancy
 		[Export]
@@ -48,18 +52,23 @@ namespace Project.Gameplay
 		[Export]
 		private MovementResource backstepSettings;
 
-		[ExportSubgroup("Grind Settings")]
+		[ExportCategory("Grind Settings")]
 		[Export]
 		public float perfectShuffleSpeed;
 		[Export]
 		public MovementResource grindSettings; //Settings for grinding on rails
 
+		[ExportCategory("Sidle Settings")]
+		[Export]
+		public Curve sidleMovementCurve;
 
 		//References to the actual values being used
 		public MovementResource GroundSettings { get; private set; }
 		public MovementResource AirSettings { get; private set; }
 		public MovementResource BackflipSettings { get; private set; }
 		public MovementResource BackstepSettings { get; private set; }
+
+		public float SlideFriction { get; private set; }
 
 		private void SetUpStats() //Stuff like upgradable speed, increased handling, etc.
 		{
@@ -68,6 +77,8 @@ namespace Project.Gameplay
 			AirSettings = baseAirSettings;
 			BackflipSettings = backflipSettings;
 			BackstepSettings = backstepSettings;
+
+			SlideFriction = baseSlideFriction;
 		}
 		#endregion
 

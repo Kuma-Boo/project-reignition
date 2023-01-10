@@ -1,5 +1,4 @@
 using Godot;
-using Project.Core;
 
 namespace Project.Gameplay
 {
@@ -22,6 +21,8 @@ namespace Project.Gameplay
 
 			animationRoot = animator.TreeRoot as AnimationNodeBlendTree;
 			animationStateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
+
+			normalState = (AnimationNodeStateMachinePlayback)animator.Get("parameters/normal_state/playback");
 		}
 
 		/// <summary>
@@ -29,10 +30,6 @@ namespace Project.Gameplay
 		/// </summary>
 		public void UpdateAnimation()
 		{
-			//TODO Play landing animation
-			if (Character.JustLandedOnGround)
-				NormalState.Start(GROUND_STATE_PARAMETER);
-
 			if (Character.IsOnGround)
 				GroundAnimations();
 			else
@@ -94,33 +91,37 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Normal Animations
-		private readonly StringName NORMAL_STATE_PARAMETER = "parameters/normal_state/playback";
 		/// <summary> Gets the normal state's StateMachinePlayback </summary>
-		private AnimationNodeStateMachinePlayback NormalState => (AnimationNodeStateMachinePlayback)animator.Get(NORMAL_STATE_PARAMETER);
+		private AnimationNodeStateMachinePlayback normalState;
 
 		private bool canTransitionToFalling;
 		private readonly StringName FALL_STATE_PARAMETER = "fall";
 		private readonly StringName JUMP_CANCEL_TIME_PARAMETER = "parameters/air_state/jump_cancel_time/scale";
 
 		private readonly StringName JUMP_STATE_PARAMETER = "jump";
-		/// <summary> When to start transition to falling animation from a jump. </summary>
-		private const float JUMP_TRANSITION_VERTICAL_SPEED = 15f;
 		public void Jump()
 		{
 			canTransitionToFalling = true;
-			NormalState.Start(JUMP_STATE_PARAMETER);
+			normalState.Travel(JUMP_STATE_PARAMETER);
 		}
 
 		private readonly StringName AIR_DASH_PARAMETER = "jump-accel";
 		private readonly StringName LAUNCH_PARAMETER = "jump-launch";
-
-		public void AirAttackAnimation() => NormalState.Travel(AIR_DASH_PARAMETER);
-		public void LaunchAnimation() => NormalState.Travel(LAUNCH_PARAMETER);
+		public void AirAttackAnimation()
+		{
+			canTransitionToFalling = false;
+			normalState.Travel(AIR_DASH_PARAMETER);
+		}
+		public void LaunchAnimation()
+		{
+			canTransitionToFalling = false;
+			normalState.Travel(LAUNCH_PARAMETER);
+		}
 
 		private readonly StringName BACKFLIP_STATE_PARAMETER = "backflip";
 		public void Backflip()
 		{
-			NormalState.Travel(BACKFLIP_STATE_PARAMETER);
+			normalState.Travel(BACKFLIP_STATE_PARAMETER);
 		}
 
 		public void Stomp()
@@ -132,11 +133,17 @@ namespace Project.Gameplay
 		private readonly StringName AIR_STATE_PARAMETER = "air_tree";
 		private const float MOVEMENT_DEADZONE = .2f;
 
+		private readonly StringName BACKSTEP_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/backstep_transition/current";
+
 		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/move_transition/current";
 		private readonly StringName MOVE_SPEED_PARAMETER = "parameters/normal_state/ground_tree/move_speed/scale";
+		private readonly StringName MOVE_SEEK_PARAMETER = "parameters/normal_state/ground_tree/move_seek/seek_position";
 		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/move_blend/blend_position";
 
 		private readonly StringName TURN_BLEND_PARAMETER = "parameters/normal_state/ground_tree/turn_blend/blend_position";
+
+		private readonly StringName LAND_TRIGGER_PARAMETER = "parameters/normal_state/ground_tree/land_trigger/active";
+
 
 		private float idleTransitionTimer;
 
@@ -162,6 +169,13 @@ namespace Project.Gameplay
 			float targetAnimationSpeed = 1f;
 			float targetTurnRatio = 0;
 
+			if (Character.JustLandedOnGround) //Play landing animation
+			{
+				animator.Set(MOVE_SEEK_PARAMETER, 0);
+				animator.Set(LAND_TRIGGER_PARAMETER, true);
+				normalState.Travel(GROUND_STATE_PARAMETER);
+			}
+
 			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 			{
 				targetState = 1;
@@ -169,11 +183,13 @@ namespace Project.Gameplay
 
 				if (Character.IsMovingBackward) //Backstep
 				{
+					animator.Set(BACKSTEP_TRANSITION_PARAMETER, 0);
 					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
-					targetAnimationSpeed = 1.2f + speedRatio * .4f;
+					targetAnimationSpeed = 1.2f + speedRatio;
 				}
 				else //Moving
 				{
+					animator.Set(BACKSTEP_TRANSITION_PARAMETER, 1);
 					if (speedRatio >= RUN_RATIO) //Running
 					{
 						float extraSpeed = Mathf.Clamp((speedRatio - RUN_RATIO) / .2f, 0f, 1.4f);
@@ -193,7 +209,11 @@ namespace Project.Gameplay
 			animator.Set(MOVE_BLEND_PARAMETER, speedRatio);
 			animator.Set(MOVE_SPEED_PARAMETER, Mathf.Lerp((float)animator.Get(MOVE_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
 
-			targetTurnRatio = Mathf.Lerp(((Vector2)animator.Get(TURN_BLEND_PARAMETER)).x, targetTurnRatio, TURN_SMOOTHING);
+			if (Character.MovementState == CharacterController.MovementStates.External) //Disable turning when controlled externally
+				targetTurnRatio = 0;
+			else
+				targetTurnRatio = Mathf.Lerp(((Vector2)animator.Get(TURN_BLEND_PARAMETER)).x, targetTurnRatio, TURN_SMOOTHING);
+
 			animator.Set(TURN_BLEND_PARAMETER, new Vector2(targetTurnRatio, speedRatio));
 		}
 
@@ -201,10 +221,13 @@ namespace Project.Gameplay
 		{
 			if (canTransitionToFalling)
 			{
-				if (Character.ActionState != CharacterController.ActionStates.Jumping || Character.VerticalSpd <= JUMP_TRANSITION_VERTICAL_SPEED)
+				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
+
+				if (Character.ActionState != CharacterController.ActionStates.Jumping ||
+				Character.VerticalSpd <= 0)
 				{
 					canTransitionToFalling = false;
-					NormalState.Travel(FALL_STATE_PARAMETER);
+					normalState.Travel(FALL_STATE_PARAMETER);
 				}
 			}
 		}
@@ -302,6 +325,25 @@ namespace Project.Gameplay
 
 			animator.Set(WIND_BLEND_PARAMETER, currentSpeed);
 			animator.Set(BALANCE_SPEED_PARAMETER, 1f + currentSpeed);
+		}
+		#endregion
+
+
+		#region Sidle
+		private const int SIDLE_STATE_INDEX = 2;
+
+		private readonly string STRAFE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_position";
+		private readonly string STRAFE_DIRECTION_PARAMETER = "parameters/sidle_tree/facing_right/current";
+
+		public void StartSidle(bool facingRight)
+		{
+			SetStateXfade(0.1f); //Quick crossfade into sidle
+			animator.Set(STATE_PARAMETER, SIDLE_STATE_INDEX);
+		}
+
+		public void UpdateSidle(float cyclePosition)
+		{
+			animator.Set(STRAFE_SEEK_PARAMETER, cyclePosition * .8f); //Sidle animation length is .8 seconds, so normalize cycle position.
 		}
 		#endregion
 	}

@@ -70,6 +70,11 @@ namespace Project.Gameplay.Objects
 			LaunchData launchData = GetLaunchData();
 			Character.StartLauncher(launchData, this, true);
 
+			if (GetLaunchDirection().Dot(Vector3.Up) > .9f)
+				Character.Animator.Jump();
+			else
+				Character.Animator.LaunchAnimation();
+
 			EmitSignal(SignalName.Activated);
 		}
 

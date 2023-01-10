@@ -327,6 +327,9 @@ namespace Project.Gameplay
 		/// </summary>
 		public void UpdateExternalControl()
 		{
+			if (JustLandedOnGround) //Bugfix: Don't let animator get stuck playing landing animation
+				JustLandedOnGround = false;
+
 			isCustomPhysicsEnabled = true;
 			externalOffset = externalOffset.Lerp(Vector3.Zero, externalSmoothing); //Smooth out entry
 
@@ -656,7 +659,7 @@ namespace Project.Gameplay
 		public float jumpHeight;
 		[Export]
 		public float jumpCurve = .95f;
-		private bool isJumpClamped; //True after the player releases the jump button
+		public bool IsJumpClamped { get; private set; } //True after the player releases the jump button
 		/// <summary> Is the player switching between rails? </summary>
 		public bool IsGrindstepJump { get; set; }
 		private bool isAccelerationJumpQueued;
@@ -665,7 +668,7 @@ namespace Project.Gameplay
 		public void Jump(bool disableAccelerationJump = default)
 		{
 			currentJumpTime = disableAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
-			isJumpClamped = false;
+			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
 			canLandingBoost = Skills.isLandingDashEnabled;
@@ -694,11 +697,11 @@ namespace Project.Gameplay
 				isAccelerationJumpQueued = false; //Stop listening for an acceleration jump
 			}
 
-			if (!isJumpClamped)
+			if (!IsJumpClamped)
 			{
 				if (!Controller.jumpButton.isHeld)
 				{
-					isJumpClamped = true;
+					IsJumpClamped = true;
 					if (currentJumpTime <= ACCELERATION_JUMP_LENGTH) //Listen for acceleration jump
 						isAccelerationJumpQueued = true;
 				}
@@ -707,7 +710,6 @@ namespace Project.Gameplay
 				VerticalSpd *= jumpCurve; //Kill jump height
 
 			currentJumpTime += PhysicsManager.physicsDelta;
-
 			CheckStomp();
 		}
 		#endregion
@@ -793,16 +795,15 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		#region Crouch
-		private const float SLIDE_FRICTION = 8f;
+		#region Crouch & Slide
 		private void StartCrouching()
 		{
 			ActionState = ActionStates.Crouching;
 		}
 
-		private void UpdateCrouching()
+		public void UpdateCrouching()
 		{
-			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, SLIDE_FRICTION * PhysicsManager.physicsDelta);
+			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Skills.SlideFriction * PhysicsManager.physicsDelta); //Slow down
 
 			if (Controller.actionButton.wasReleased)
 				ResetActionState();
@@ -1246,7 +1247,7 @@ namespace Project.Gameplay
 			IsOnGround = true;
 			VerticalSpd = 0;
 
-			isJumpClamped = false;
+			IsJumpClamped = false;
 			CanJumpDash = false;
 			IsGrindstepJump = false;
 			isAccelerationJumpQueued = false;

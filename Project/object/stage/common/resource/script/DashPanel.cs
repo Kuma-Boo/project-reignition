@@ -35,39 +35,36 @@ namespace Project.Gameplay.Objects
 			//Only apply speed boost when player is moving slower. Don't slow them down!
 			bool applyBoost = Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio;
 
-			//Apply boost during automation
-			if (Character.MovementState == CharacterController.MovementStates.External &&
-			 Character.ExternalController != null && Character.ExternalController is Triggers.AutomationTrigger)
-			{
-				if (applyBoost)
-					Character.MoveSpeed = Character.GroundSettings.speed * speedRatio;
+			//Apply boost
+			if (applyBoost)
+				Character.MoveSpeed = Character.GroundSettings.speed * speedRatio;
 
-				return;
+			if (Character.MovementState != CharacterController.MovementStates.External) //Add lockout if not in automation
+			{
+				LockoutResource lockout = new LockoutResource()
+				{
+					movementMode = LockoutResource.MovementModes.Replace,
+					spaceMode = LockoutResource.SpaceModes.Camera,
+					movementAngle = Character.CalculateForwardAngle(this.Back()),
+					speedRatio = speedRatio,
+					disableActions = true,
+					overrideSpeed = applyBoost,
+					tractionMultiplier = 0f,
+					length = length,
+					priority = -1, //Not using priority
+				};
+
+				if (alignToPath)
+				{
+					lockout.movementAngle = 0f;
+					lockout.spaceMode = LockoutResource.SpaceModes.PathFollower;
+					Character.MovementAngle = Character.PathFollower.ForwardAngle;
+				}
+				else
+					Character.MovementAngle = lockout.movementAngle;
+
+				Character.AddLockoutData(lockout);
 			}
-
-			LockoutResource lockout = new LockoutResource()
-			{
-				movementMode = LockoutResource.MovementModes.Replace,
-				spaceMode = LockoutResource.SpaceModes.Camera,
-				movementAngle = Character.CalculateForwardAngle(this.Back()),
-				speedRatio = speedRatio,
-				disableActions = true,
-				overrideSpeed = applyBoost,
-				tractionMultiplier = 0f,
-				length = length,
-				priority = -1, //Not using priority
-			};
-
-			if (alignToPath)
-			{
-				lockout.movementAngle = 0f;
-				lockout.spaceMode = LockoutResource.SpaceModes.PathFollower;
-				Character.MovementAngle = Character.PathFollower.ForwardAngle;
-			}
-			else
-				Character.MovementAngle = lockout.movementAngle;
-
-			Character.AddLockoutData(lockout);
 		}
 	}
 }
