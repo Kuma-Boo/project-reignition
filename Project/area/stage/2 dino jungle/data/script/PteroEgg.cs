@@ -30,7 +30,7 @@ namespace Project.Gameplay.Objects
 		{
 			spawnData = new SpawnData(GetParent(), Transform);
 
-			StageSettings.instance.ConnectRespawnSignal(this);
+			LevelSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)

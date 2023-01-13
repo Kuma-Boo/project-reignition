@@ -11,6 +11,7 @@ namespace Project.Gameplay
 	public partial class CameraController : Node3D
 	{
 		public static CameraController instance;
+		public Node3D ExternalController { get; set; } //Node3D to follow (i.e. in a cutscene)
 
 		[ExportSubgroup("Gameplay Camera")]
 		[Export]
@@ -24,8 +25,6 @@ namespace Project.Gameplay
 		[Export]
 		private Camera3D camera;
 		public Camera3D Camera => camera;
-		[Export]
-		private RayCast3D backstepCheck;
 
 		[Export]
 		private TextureRect _crossfade;
@@ -52,6 +51,12 @@ namespace Project.Gameplay
 
 		public override void _PhysicsProcess(double _)
 		{
+			if (ExternalController != null)
+			{
+				cameraRoot.GlobalTransform = ExternalController.GlobalTransform;
+				return;
+			}
+
 			UpdateGameplayCamera();
 
 			if (OS.IsDebugBuild())
@@ -63,7 +68,6 @@ namespace Project.Gameplay
 		[Export]
 		public CameraSettingsResource defaultSettings; //Default settings to use when nothing is set
 		public CameraSettingsResource ActiveSettings => BlendSettingsList.Count == 0 ? null : BlendSettingsList[BlendSettingsList.Count - 1]; //Settings to transition to
-
 
 		/// <summary> Ratio [0 <-> 1] of transition that has been completed. </summary>
 		private readonly List<float> LinearBlendRatioList = new List<float>();
@@ -196,10 +200,7 @@ namespace Project.Gameplay
 			Camera.HOffset = viewOffset.x;
 			Camera.VOffset = viewOffset.y;
 			if (!freeCamEnabled) //Apply transform
-			{
-				cameraRoot.GlobalTransform = calculationRoot.GlobalTransform;
-				cameraGimbal.GlobalTransform = calculationGimbal.GlobalTransform;
-			}
+				SyncCameraTransforms();
 
 			//Update input transformation angle
 			xformAngle = CalculateXform(BlendSettingsList[0]);
@@ -211,6 +212,12 @@ namespace Project.Gameplay
 
 			if (SnapFlag) //Reset flag
 				SnapFlag = false;
+		}
+
+		private void SyncCameraTransforms()
+		{
+			cameraRoot.GlobalTransform = calculationRoot.GlobalTransform;
+			cameraGimbal.GlobalTransform = calculationGimbal.GlobalTransform;
 		}
 
 		private float CalculateXform(CameraSettingsResource settings)

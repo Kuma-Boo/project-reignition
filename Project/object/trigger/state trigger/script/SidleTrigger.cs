@@ -32,7 +32,7 @@ namespace Project.Gameplay.Triggers
 		private InputManager.Controller Controller => InputManager.controller;
 
 		/// <summary> Maximum amount of cycles in a single second. </summary>
-		private const float CYCLE_FREQUENCY = 3.4f;
+		private const float CYCLE_FREQUENCY = 3.2f;
 		/// <summary> Smoothing to apply when accelerating.  </summary>
 		private const float TRACTION_SMOOTHING = .1f;
 		/// <summary> Smoothing to apply when slowing down.  </summary>
@@ -95,6 +95,23 @@ namespace Project.Gameplay.Triggers
 			Character.UpdateExternalControl();
 		}
 
+		private void StopSidle()
+		{
+			if (!isActive) return; //Already deactivated
+
+			isActive = false;
+			Character.RemoveLockoutData(lockout);
+
+			Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.BackAngle : Character.PathFollower.ForwardAngle;
+			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
+
+			if (Character.ExternalController == this)
+				Character.ResetMovementState();
+
+			Character.Animator.ResetState(.1f);
+			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
+		}
+
 		private void UpdateSidleDamage()
 		{
 		}
@@ -112,7 +129,7 @@ namespace Project.Gameplay.Triggers
 			isInteractingWithPlayer = true;
 
 			//Apply state
-			Character.Skills.IsSpeedBreakEnabled = false;
+			Character.Skills.IsSpeedBreakEnabled = false; //Disable speed break
 			Character.AddLockoutData(lockout);
 
 			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, Character.PathFollower.ForwardAngle);
@@ -129,18 +146,8 @@ namespace Project.Gameplay.Triggers
 			if (!a.IsInGroup("player")) return;
 
 			Instance = null;
-			isActive = false;
 			isInteractingWithPlayer = false;
-			Character.RemoveLockoutData(lockout);
-
-			if (Character.ExternalController != this) return; //Overridden by a different controller
-
-			Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.BackAngle : Character.PathFollower.ForwardAngle;
-			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
-			Character.ResetMovementState();
-
-			Character.Animator.ResetState(.1f);
-			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
+			StopSidle();
 		}
 	}
 }

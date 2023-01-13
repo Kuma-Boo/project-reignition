@@ -265,7 +265,7 @@ namespace Project.Gameplay
 
 			if (IsTimeBreakActive)
 			{
-				Character.Sound.PlayVoice("time break");
+				Character.Effect.PlayVoice("time break");
 				BGMPlayer.SetStageMusicVolume(-80f);
 
 				//Reset volume and play
@@ -293,7 +293,7 @@ namespace Project.Gameplay
 
 			if (IsSpeedBreakActive)
 			{
-				Character.Sound.PlayVoice("speed break");
+				Character.Effect.PlayVoice("speed break");
 				Character.CollisionMask = RuntimeConstants.Instance.environmentMask; //Don't collide with any objects
 			}
 			else

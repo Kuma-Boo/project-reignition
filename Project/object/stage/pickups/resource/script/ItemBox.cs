@@ -156,7 +156,7 @@ namespace Project.Gameplay.Objects
 				GD.PrintErr("Item box can't spawn anything!");
 
 			base.SetUp();
-			Stage.ConnectUnloadSignal(this);
+			Level.ConnectUnloadSignal(this);
 		}
 
 		public void Unload() //Prevent memory leak

@@ -13,6 +13,7 @@ namespace Project.Gameplay
 
 		public CameraController Camera => CameraController.instance;
 		public InputManager.Controller Controller => InputManager.controller;
+		public LevelSettings Level => LevelSettings.instance;
 		public StageSettings Stage => StageSettings.instance;
 
 		public override void _EnterTree() => instance = this; //Override Singleton
@@ -21,9 +22,9 @@ namespace Project.Gameplay
 		{
 			CallDeferred(MethodName.ResetOrientation); //Start with proper orientation
 
-			Stage.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
-			Stage.Connect(StageSettings.SignalName.StageCompleted, new Callable(this, MethodName.OnStageCompleted));
-			PathFollower.SetActivePath(Stage.StartingPath); //Attempt to autoload the stage's default path
+			Level.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
+			Level.Connect(LevelSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
+			PathFollower.SetActivePath(Stage.mainPath); //Attempt to autoload the stage's default path
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -678,7 +679,7 @@ namespace Project.Gameplay
 			if (IsMovingBackward || MoveSpeed < 0) //Kill speed when jumping backwards
 				MoveSpeed = 0;
 
-			Sound.PlayActionSFX(Sound.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JUMP_SFX);
 			Animator.Jump();
 		}
 
@@ -752,7 +753,7 @@ namespace Project.Gameplay
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
 			if (CanJumpDash)
-				Sound.PlayActionSFX("jump dash");
+				Effect.PlayActionSFX("jump dash");
 
 			IsMovingBackward = false; //Can't jumpdash backwards!
 			MoveSpeed = jumpDashSpeed;
@@ -884,7 +885,7 @@ namespace Project.Gameplay
 			IsOnGround = false;
 			ActionState = ActionStates.Backflip;
 
-			Sound.PlayActionSFX(Sound.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JUMP_SFX);
 			Animator.Backflip();
 		}
 		#endregion
@@ -991,13 +992,13 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
-			GlobalPosition = Stage.CurrentCheckpoint.GlobalPosition;
-			PathFollower.SetActivePath(Stage.CheckpointPath); //Revert path
+			GlobalPosition = Level.CurrentCheckpoint.GlobalPosition;
+			PathFollower.SetActivePath(Level.CheckpointPath); //Revert path
 			ResetVelocity();
 			ResetOrientation();
 
 			Camera.SnapFlag = true;
-			Stage.RespawnObjects(true); //Respawn Objects
+			Level.RespawnObjects(true); //Respawn Objects
 
 			CallDeferred(MethodName.SnapToGround);
 
@@ -1203,7 +1204,7 @@ namespace Project.Gameplay
 				else //Update world direction
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f).Normalized();
 
-				Sound.UpdateGroundType(groundHit.collidedObject);
+				Effect.UpdateGroundType(groundHit.collidedObject);
 
 				float snapDistance = groundHit.distance - CollisionRadius;
 				if (JustLandedOnGround && Mathf.Abs(groundHit.normal.Dot(Vector3.Up)) < .9f) //Slanted ground fix
@@ -1251,15 +1252,15 @@ namespace Project.Gameplay
 			CanJumpDash = false;
 			IsGrindstepJump = false;
 			isAccelerationJumpQueued = false;
-			JustLandedOnGround = true;
 
 			ResetActionState();
 			Lockon.ResetLockonTarget();
 
-			if (!IsCountdownActive && !IsRespawning) //Don't do this stuff during countdown
+			if (!IsCountdownActive && !IsRespawning) //Don't do this stuff during countdown or respawn
 			{
+				JustLandedOnGround = true;
 				CheckLandingBoost(); //Landing boost skill
-				Sound.PlayLandingSFX();
+				Effect.PlayLandingFX();
 			}
 		}
 
@@ -1356,10 +1357,10 @@ namespace Project.Gameplay
 		{
 			UpDirection = Vector3.Up;
 
-			if (Stage.CurrentCheckpoint == null) //Default to parent node's position
+			if (Level.CurrentCheckpoint == null) //Default to parent node's position
 				Transform = Transform3D.Identity;
 			else
-				GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
+				GlobalTransform = Level.CurrentCheckpoint.GlobalTransform;
 
 			MovementAngle = PathFollower.ForwardAngle; //Reset movement angle
 			Animator.SnapRotation(MovementAngle);
@@ -1416,6 +1417,7 @@ namespace Project.Gameplay
 
 		#region Signals
 		private bool IsCountdownActive => Interface.Countdown.IsCountdownActive;
+
 		private float countdownBoostTimer;
 		private readonly float COUNTDOWN_BOOST_WINDOW = .4f;
 
@@ -1423,22 +1425,42 @@ namespace Project.Gameplay
 		{
 			if (Controller.actionButton.wasPressed)
 				actionBufferTimer = 1f;
-
 			actionBufferTimer -= PhysicsManager.physicsDelta;
+
+			PathFollower.Resync();
+			MovementAngle = PathFollower.ForwardAngle;
+
+			Animator.SnapRotation(PathFollower.ForwardAngle);
+			Animator.PlayCountdown();
 		}
 
-		public void CountdownCompleted()
+		public void OnCountdownLanded() => Effect.PlayLandingFX();
+
+		public void OnCountdownFinished()
 		{
 			if (Skills.isCountdownBoostEnabled && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) //Successful starting boost
 			{
 				MoveSpeed = Skills.countdownBoostSpeed;
+				AddLockoutData(new LockoutResource()
+				{
+					length = .5f,
+					overrideSpeed = true,
+					speedRatio = Skills.countdownBoostSpeed,
+					resetFlags = LockoutResource.ResetFlags.OnJump
+				});
 				GD.Print("Successful countdown boost");
 			}
+
+			Animator.CancelOneshot();
+
+			//Snap camera to gameplay
+			Camera.SnapFlag = true;
+			Camera.ExternalController = null;
 
 			actionBufferTimer = 0; //Reset action buffer from starting boost
 		}
 
-		private void OnStageCompleted(bool _)
+		private void OnLevelCompleted(bool _)
 		{
 			//Disable everything
 			Lockon.IsMonitoring = false;
@@ -1497,7 +1519,7 @@ namespace Project.Gameplay
 		[Export]
 		public CharacterAnimator Animator { get; private set; }
 		[Export]
-		public CharacterSound Sound { get; private set; }
+		public CharacterEffect Effect { get; private set; }
 		[Export]
 		public CharacterSkillManager Skills { get; private set; }
 		[Export]

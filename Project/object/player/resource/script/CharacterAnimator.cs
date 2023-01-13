@@ -8,7 +8,10 @@ namespace Project.Gameplay
 	public partial class CharacterAnimator : Node3D
 	{
 		[Export]
-		private AnimationTree animator;
+		private AnimationTree animatorTree;
+		[Export]
+		private AnimationPlayer extraAnimationPlayer;
+
 		/// <summary> Reference to the root blend tree of the animation tree. </summary>
 		private AnimationNodeBlendTree animationRoot;
 		/// <summary> Transition node for switching between states (normal, balancing, sidling, etc) </summary>
@@ -17,12 +20,14 @@ namespace Project.Gameplay
 
 		public override void _Ready()
 		{
-			animator.Active = true; //Activate animator
+			animatorTree.Active = true; //Activate animator
 
-			animationRoot = animator.TreeRoot as AnimationNodeBlendTree;
+			animationRoot = animatorTree.TreeRoot as AnimationNodeBlendTree;
 			animationStateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
 
-			normalState = (AnimationNodeStateMachinePlayback)animator.Get("parameters/normal_state/playback");
+			oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
+
+			normalState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/normal_state/playback");
 		}
 
 		/// <summary>
@@ -59,17 +64,37 @@ namespace Project.Gameplay
 		}
 
 		#region Oneshot Animations
+		private AnimationNodeOneShot oneShotTransition;
 		/// <summary> Animation index for countdown animation. </summary>
 		private const int COUNTDOWN_INDEX = 0;
-		public void Countdown() => PlayOneshotAnimation(COUNTDOWN_INDEX);
+		[Export]
+		private Node3D countdownCameraController;
+
+		public void PlayCountdown()
+		{
+			PlayOneshotAnimation(COUNTDOWN_INDEX);
+			extraAnimationPlayer.Play("countdown-flame");
+
+			//Prevent sluggish transitions into gameplay
+			disableSpeedSmoothing = true;
+			oneShotTransition.FadeinTime = oneShotTransition.FadeoutTime = 0;
+			Character.Camera.ExternalController = countdownCameraController;
+		}
 
 		private readonly StringName ONESHOT_TRIGGER = "parameters/oneshot_trigger/active";
-		private readonly StringName ONESHOT_TRANSITION = "parameters/oneshot_tree/oneshot_transition/current";
+		private readonly StringName ONESHOT_SEEK_PARAMETER = "parameters/oneshot_tree/oneshot_seek/current";
+		private readonly StringName ONESHOT_TRANSITION_PARAMETER = "parameters/oneshot_tree/oneshot_transition/current";
 		public void PlayOneshotAnimation(int index) //Play a specific one-shot animation
 		{
-			animator.Set(ONESHOT_TRIGGER, true);
-			animator.Set(ONESHOT_TRANSITION, 0);
+			animatorTree.Set(ONESHOT_TRIGGER, true);
+			animatorTree.Set(ONESHOT_SEEK_PARAMETER, 0);
+			animatorTree.Set(ONESHOT_TRANSITION_PARAMETER, index);
 		}
+
+		/// <summary>
+		/// Cancels the oneshot animation early.
+		/// </summary>
+		public void CancelOneshot() => animatorTree.Set(ONESHOT_TRIGGER, false);
 		#endregion
 
 		#region States
@@ -77,7 +102,7 @@ namespace Project.Gameplay
 		public void ResetState(float xfadeTime = -1) //Reset any state, while optionally setting the xfade time
 		{
 			SetStateXfade(xfadeTime);
-			animator.Set(STATE_PARAMETER, 0); //Revert to normal state
+			animatorTree.Set(STATE_PARAMETER, 0); //Revert to normal state
 		}
 
 		/// <summary>
@@ -126,12 +151,11 @@ namespace Project.Gameplay
 
 		public void Stomp()
 		{
-			animator.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
+			animatorTree.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
 		}
 
 		private readonly StringName GROUND_STATE_PARAMETER = "ground_tree";
 		private readonly StringName AIR_STATE_PARAMETER = "air_tree";
-		private const float MOVEMENT_DEADZONE = .2f;
 
 		private readonly StringName BACKSTEP_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/backstep_transition/current";
 
@@ -141,12 +165,10 @@ namespace Project.Gameplay
 		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/move_blend/blend_position";
 
 		private readonly StringName TURN_BLEND_PARAMETER = "parameters/normal_state/ground_tree/turn_blend/blend_position";
-
 		private readonly StringName LAND_TRIGGER_PARAMETER = "parameters/normal_state/ground_tree/land_trigger/active";
 
-
-		private float idleTransitionTimer;
-
+		/// <summary> Disables speed smoothing. </summary>
+		private bool disableSpeedSmoothing;
 		[Export]
 		private Curve movementAnimationSpeedCurve;
 		/// <summary> What speedratio should be considered as fully running? </summary>
@@ -171,25 +193,24 @@ namespace Project.Gameplay
 
 			if (Character.JustLandedOnGround) //Play landing animation
 			{
-				animator.Set(MOVE_SEEK_PARAMETER, 0);
-				animator.Set(LAND_TRIGGER_PARAMETER, true);
+				animatorTree.Set(MOVE_SEEK_PARAMETER, 0);
+				animatorTree.Set(LAND_TRIGGER_PARAMETER, true);
 				normalState.Travel(GROUND_STATE_PARAMETER);
 			}
 
 			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 			{
 				targetState = 1;
-				idleTransitionTimer = .2f;
 
 				if (Character.IsMovingBackward) //Backstep
 				{
-					animator.Set(BACKSTEP_TRANSITION_PARAMETER, 0);
+					animatorTree.Set(BACKSTEP_TRANSITION_PARAMETER, 0);
 					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
 					targetAnimationSpeed = 1.2f + speedRatio;
 				}
 				else //Moving
 				{
-					animator.Set(BACKSTEP_TRANSITION_PARAMETER, 1);
+					animatorTree.Set(BACKSTEP_TRANSITION_PARAMETER, 1);
 					if (speedRatio >= RUN_RATIO) //Running
 					{
 						float extraSpeed = Mathf.Clamp((speedRatio - RUN_RATIO) / .2f, 0f, 1.4f);
@@ -205,16 +226,23 @@ namespace Project.Gameplay
 				}
 			}
 
-			animator.Set(MOVE_TRANSITION_PARAMETER, targetState);
-			animator.Set(MOVE_BLEND_PARAMETER, speedRatio);
-			animator.Set(MOVE_SPEED_PARAMETER, Mathf.Lerp((float)animator.Get(MOVE_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
+			animatorTree.Set(MOVE_TRANSITION_PARAMETER, targetState);
+			animatorTree.Set(MOVE_BLEND_PARAMETER, speedRatio);
+
+			if (disableSpeedSmoothing)
+			{
+				animatorTree.Set(MOVE_SPEED_PARAMETER, targetAnimationSpeed);
+				disableSpeedSmoothing = false;
+			}
+			else
+				animatorTree.Set(MOVE_SPEED_PARAMETER, Mathf.Lerp((float)animatorTree.Get(MOVE_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
 
 			if (Character.MovementState == CharacterController.MovementStates.External) //Disable turning when controlled externally
 				targetTurnRatio = 0;
 			else
-				targetTurnRatio = Mathf.Lerp(((Vector2)animator.Get(TURN_BLEND_PARAMETER)).x, targetTurnRatio, TURN_SMOOTHING);
+				targetTurnRatio = Mathf.Lerp(((Vector2)animatorTree.Get(TURN_BLEND_PARAMETER)).x, targetTurnRatio, TURN_SMOOTHING);
 
-			animator.Set(TURN_BLEND_PARAMETER, new Vector2(targetTurnRatio, speedRatio));
+			animatorTree.Set(TURN_BLEND_PARAMETER, new Vector2(targetTurnRatio, speedRatio));
 		}
 
 		private void AirAnimations()
@@ -291,10 +319,10 @@ namespace Project.Gameplay
 		public void StartBalancing()
 		{
 			SetStateXfade(0); //Don't blend into state
-			animator.Set(STATE_PARAMETER, BALANCE_STATE_INDEX); //Turn on balancing animations
+			animatorTree.Set(STATE_PARAMETER, BALANCE_STATE_INDEX); //Turn on balancing animations
 
 			//Reset current balance
-			animator.Set(BALANCE_RIGHT_STATE_PARAMETER, 0);
+			animatorTree.Set(BALANCE_RIGHT_STATE_PARAMETER, 0);
 			UpdateBalanceSpeed();
 		}
 
@@ -311,8 +339,8 @@ namespace Project.Gameplay
 		public void UpdateBalancing()
 		{
 			float targetBalance = CalculateTurnRatio();
-			targetBalance = Mathf.Lerp(((float)animator.Get(BALANCE_RIGHT_STATE_PARAMETER)), targetBalance, TURN_SMOOTHING);
-			animator.Set(BALANCE_RIGHT_STATE_PARAMETER, targetBalance);
+			targetBalance = Mathf.Lerp(((float)animatorTree.Get(BALANCE_RIGHT_STATE_PARAMETER)), targetBalance, TURN_SMOOTHING);
+			animatorTree.Set(BALANCE_RIGHT_STATE_PARAMETER, targetBalance);
 
 			UpdateBalanceSpeed(true);
 		}
@@ -321,10 +349,10 @@ namespace Project.Gameplay
 		{
 			float currentSpeed = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
 			if (enableSmoothing)
-				currentSpeed = Mathf.Lerp((float)animator.Get(WIND_BLEND_PARAMETER), currentSpeed, SPEED_SMOOTHING);
+				currentSpeed = Mathf.Lerp((float)animatorTree.Get(WIND_BLEND_PARAMETER), currentSpeed, SPEED_SMOOTHING);
 
-			animator.Set(WIND_BLEND_PARAMETER, currentSpeed);
-			animator.Set(BALANCE_SPEED_PARAMETER, 1f + currentSpeed);
+			animatorTree.Set(WIND_BLEND_PARAMETER, currentSpeed);
+			animatorTree.Set(BALANCE_SPEED_PARAMETER, 1f + currentSpeed);
 		}
 		#endregion
 
@@ -338,12 +366,13 @@ namespace Project.Gameplay
 		public void StartSidle(bool facingRight)
 		{
 			SetStateXfade(0.1f); //Quick crossfade into sidle
-			animator.Set(STATE_PARAMETER, SIDLE_STATE_INDEX);
+			animatorTree.Set(STATE_PARAMETER, SIDLE_STATE_INDEX);
+			animatorTree.Set(STRAFE_DIRECTION_PARAMETER, facingRight ? 0 : 1);
 		}
 
 		public void UpdateSidle(float cyclePosition)
 		{
-			animator.Set(STRAFE_SEEK_PARAMETER, cyclePosition * .8f); //Sidle animation length is .8 seconds, so normalize cycle position.
+			animatorTree.Set(STRAFE_SEEK_PARAMETER, cyclePosition * .8f); //Sidle animation length is .8 seconds, so normalize cycle position.
 		}
 		#endregion
 	}

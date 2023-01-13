@@ -7,55 +7,71 @@ namespace Project.Interface
 	{
 		public static bool IsCountdownActive { get; private set; }
 
+		[Signal]
+		public delegate void CountdownStartedEventHandler();
+		[Signal]
+		public delegate void CountdownFinishedEventHandler();
+		/// <summary> Signal that gets called when the player "lands". </summary>
+		[Signal]
+		public delegate void CountdownLandedEventHandler();
+
 		[Export]
 		private Node2D tickParent;
 		[Export]
 		private AnimationPlayer animator;
 
-		[Signal]
-		public delegate void CountdownCompleteEventHandler();
-
-		public override void _EnterTree() => IsCountdownActive = true;
 		public override void _Ready()
 		{
-			if (!CheatManager.SkipCountdown)
+			if (CheatManager.SkipCountdown)
 			{
-				BGMPlayer.StartStageMusic();
-				animator.Play("countdown");
-				TweenCountdownTicks();
-			}
-			else
 				FinishCountdown();
+				return;
+			}
+
+			BGMPlayer.StartStageMusic();
+			animator.Play("countdown");
+			TweenCountdownTicks();
+
+			IsCountdownActive = true;
+			EmitSignal(SignalName.CountdownStarted);
 		}
+
+		/// <summary>
+		/// Play vfx/sfx during countdown.
+		/// </summary>
+		public void CountdownCharacterLanded() => EmitSignal(SignalName.CountdownLanded);
 
 		public void FinishCountdown()
 		{
 			IsCountdownActive = false;
-			EmitSignal(SignalName.CountdownComplete);
+			EmitSignal(SignalName.CountdownFinished);
 		}
 
 		//The ring animation is too tedious to animate by hand, so I'm using a tween instead.
 		private void TweenCountdownTicks()
 		{
 			//Tween seems to create a temporary "memory leak" but the garbage collector cleans it up later
-			Tween countdownTweener = CreateTween().SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.InOut).SetParallel(true);
+			Tween countdownTweener = CreateTween().SetTrans(Tween.TransitionType.Sine).SetParallel(true);
 
 			for (int i = 0; i < tickParent.GetChildCount(); i++)
 			{
 				Node2D tick = tickParent.GetChild<Node2D>(i);
 
-				float delay = i * .04f + .6f;
-				Vector2 targetPosition = tick.Position + (tick.Position.Normalized() * 48f);
-				countdownTweener.TweenProperty(tick, "position", targetPosition, .2f).SetDelay(delay);
-				countdownTweener.TweenProperty(tick, "modulate", Colors.Transparent, .2f).SetDelay(delay);
+				float delay = i * (1f / tickParent.GetChildCount()) + .65f;
+				Vector2 targetPosition = tick.Position + (tick.Position.Normalized() * 25f);
+				countdownTweener.TweenProperty(tick, "position", targetPosition, .1f).SetDelay(delay);
+				countdownTweener.TweenProperty(tick, "position", tick.Position, .2f).From(targetPosition).SetDelay(delay + .1f);
+				countdownTweener.TweenProperty(tick, "modulate", Colors.Transparent, .25f).SetDelay(delay);
 
 				delay += 1;
-				countdownTweener.TweenProperty(tick, "position", tick.Position, .2f).From(targetPosition).SetDelay(delay);
-				countdownTweener.TweenProperty(tick, "modulate", Colors.White, .2f).From(Colors.Transparent).SetDelay(delay);
+				countdownTweener.TweenProperty(tick, "position", targetPosition, .1f).SetDelay(delay);
+				countdownTweener.TweenProperty(tick, "position", tick.Position, .2f).From(targetPosition).SetDelay(delay + .1f);
+				countdownTweener.TweenProperty(tick, "modulate", Colors.White, .25f).From(Colors.Transparent).SetDelay(delay);
 
 				delay += 1;
-				countdownTweener.TweenProperty(tick, "position", targetPosition, .2f).SetDelay(delay);
-				countdownTweener.TweenProperty(tick, "modulate", Colors.Transparent, .2f).SetDelay(delay);
+				countdownTweener.TweenProperty(tick, "position", targetPosition, .1f).SetDelay(delay);
+				countdownTweener.TweenProperty(tick, "position", tick.Position, .2f).From(targetPosition).SetDelay(delay + .1f);
+				countdownTweener.TweenProperty(tick, "modulate", Colors.Transparent, .25f).SetDelay(delay);
 			}
 		}
 	}

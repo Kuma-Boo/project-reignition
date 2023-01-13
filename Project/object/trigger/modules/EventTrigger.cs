@@ -17,13 +17,20 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private LockoutResource lockout;
 
+		private bool wasActivated;
 		[Signal]
 		public delegate void ActivatedEventHandler();
-		private bool wasActivated;
 
 		public override void _Ready()
 		{
-			StageSettings.instance.ConnectRespawnSignal(this);
+			LevelSettings.instance.ConnectRespawnSignal(this);
+		}
+
+		public override void _PhysicsProcess(double _)
+		{
+			if (playerStandin != null &&
+			 Character.MovementState == CharacterController.MovementStates.External && Character.ExternalController == this)
+				Character.UpdateExternalControl();
 		}
 
 		public void Respawn()
@@ -66,7 +73,11 @@ namespace Project.Gameplay.Triggers
 		{
 			Character.MoveSpeed = moveSpeed;
 			Character.VerticalSpd = fallSpeed;
+
 			Character.ResetMovementState();
+
+			Character.MovementAngle = Character.CalculateForwardAngle(playerStandin.Forward());
+			Character.Animator.SnapRotation(Character.MovementAngle);
 
 			if (lockout != null)
 				Character.AddLockoutData(lockout);

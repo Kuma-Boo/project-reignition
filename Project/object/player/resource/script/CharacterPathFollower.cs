@@ -71,55 +71,6 @@ namespace Project.Gameplay
 			Debug.DrawRay(GlobalPosition, UpAxis, Colors.Green);
 		}
 
-		/*
-		/// <summary>
-		/// GetClosestOffset() seems to be broken in 4.0, so here's a more accurate (allbeit slower) method.
-		/// Loops over all baked points in a path, so try to restrict it's usage as much as possible.
-		/// UPDATE v4.0.beta8.mono.official [45cac42c0] seems to have fixed this. Leaving this as a fallback.
-		/// </summary>
-		private void UpdatePosition()
-		{
-			Vector3 targetPosition = Character.GlobalPosition - ActivePath.GlobalPosition;
-			Vector3[] points = ActivePath.Curve.GetBakedPoints();
-			float closestPointDistance = Mathf.Inf;
-			int closestPointIndex = -1;
-
-			//Get the closest baked point
-			for (int i = 0; i < points.Length; i++)
-			{
-				float distance = points[i].DistanceTo(targetPosition);
-				if (distance < closestPointDistance)
-				{
-					closestPointIndex = i;
-					closestPointDistance = distance;
-				}
-			}
-
-			Progress = ActivePath.Curve.GetClosestOffset(targetPosition); //Estimate for external objects to reference
-
-			if (closestPointIndex >= points.Length - 1) //Limit point index
-				closestPointIndex--;
-
-			//Assign transform
-			Vector3 position = points[closestPointIndex];
-			Vector3 nextPoint = points[closestPointIndex + 1];
-			Vector3 forwardDirection = (position - nextPoint).Normalized();
-
-			//Attempt to interpolate between baked points (Spaghetti code that seems to work alright)
-			if (closestPointIndex != 0 && closestPointIndex != points.Length)
-			{
-				float nextDistance = nextPoint.DistanceTo(position);
-				targetPosition = (targetPosition - position).Rotated(Vector3.Up, -forwardDirection.SignedAngleTo(Vector3.Forward, Vector3.Up));
-
-				float t = 1.0f - Mathf.Clamp(targetPosition.x / nextDistance, 0f, 1f);
-				position = position.Lerp(nextPoint, t);
-			}
-
-			position += ActivePath.GlobalPosition;
-			LookAtFromPosition(position, position + forwardDirection, this.Up());
-		}
-		*/
-
 		//Is the pathfollower ahead of the reference point?
 		public bool IsAheadOfPoint(Vector3 globalPosition) => Mathf.Sign(Progress - ActivePath.Curve.GetClosestOffset(globalPosition - ActivePath.GlobalPosition)) > 0;
 	}

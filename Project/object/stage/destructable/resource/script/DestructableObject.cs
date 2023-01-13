@@ -80,19 +80,17 @@ namespace Project.Gameplay.Objects
 			}
 
 			Respawn();
-			StageSettings.instance.ConnectRespawnSignal(this);
-			StageSettings.instance.ConnectUnloadSignal(this);
+			LevelSettings.instance.ConnectRespawnSignal(this);
+			LevelSettings.instance.ConnectUnloadSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
-			/*
 			if (isShattered && pieceRoot.IsInsideTree())
 			{
 				for (int i = 0; i < pieces.Count; i++)
 					Core.Debug.DrawRay(pieces[i].rigidbody.GlobalPosition, pieces[i].rigidbody.LinearVelocity * Core.PhysicsManager.physicsDelta, Colors.Red);
 			}
-			*/
 
 			if (isShattered || !isInteractingWithPlayer) return;
 

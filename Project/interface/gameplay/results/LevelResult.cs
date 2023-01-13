@@ -4,7 +4,7 @@ using Project.Gameplay;
 
 namespace Project.Interface
 {
-	public partial class StageResult : Node
+	public partial class LevelResult : Node
 	{
 		[Export]
 		private Label score;
@@ -23,14 +23,14 @@ namespace Project.Interface
 
 		private bool isProcessingInputs;
 		private InputManager.Controller Controller => InputManager.controller;
-		private StageSettings Stage => StageSettings.instance;
+		private LevelSettings Level => LevelSettings.instance;
 		private const string TECHNICAL_FORMATTING = "0.0";
 		private const string MENU_SCENE_PATH = "res://interface/menu/Menu.tscn";
 
 		public override void _Ready()
 		{
-			if (Stage != null)
-				Stage.Connect(nameof(StageSettings.StageCompleted), new Callable(this, nameof(StartResults)));
+			if (Level != null)
+				Level.Connect(nameof(LevelSettings.LevelCompleted), new Callable(this, nameof(StartResults)));
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -61,20 +61,20 @@ namespace Project.Interface
 		{
 			animator.Play(wasSuccessful ? "complete-start" : "fail-start");
 
-			score.Text = Stage.DisplayScore;
-			time.Text = Stage.DisplayTime;
+			score.Text = Level.DisplayScore;
+			time.Text = Level.DisplayTime;
 
-			int enemyBonus = 0; //Stage.CurrentEnemyCount * 50;
+			int enemyBonus = 0; //Level.CurrentEnemyCount * 50;
 			enemy.Text = enemyBonus.ToString();
 
-			int ringBonus = Stage.CurrentRingCount * 10;
+			int ringBonus = Level.CurrentRingCount * 10;
 			ring.Text = ringBonus.ToString();
 
 			float technicalBonus = 1.0f;
 			technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
 
-			Stage.ChangeScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.ScoreFunction.Add);
-			total.Text = Stage.DisplayScore;
+			Level.ChangeScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), LevelSettings.ScoreFunction.Add);
+			total.Text = Level.DisplayScore;
 		}
 
 		public void SetInputProcessing(bool value) => isProcessingInputs = value;

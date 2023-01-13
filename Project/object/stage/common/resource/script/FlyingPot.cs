@@ -64,7 +64,7 @@ namespace Project.Gameplay.Objects
 			if (Engine.IsEditorHint()) return;
 
 			startPosition = GlobalPosition;
-			StageSettings.instance.ConnectRespawnSignal(this);
+			LevelSettings.instance.ConnectRespawnSignal(this);
 
 			if (customCameraSettings != null)
 				cameraTrigger.settings = customCameraSettings;

@@ -31,7 +31,7 @@ namespace Project.Core
 
 			debugHud.Update(Input.IsKeyPressed(Key.Tab));
 			debugPause.Update(Input.IsKeyPressed(Key.P));
-			debugAdvance.Update(Input.IsKeyPressed(Key.F1));
+			debugAdvance.Update(Input.IsKeyPressed(Key.Equal));
 			debugRestart.Update(Input.IsKeyPressed(Key.F5));
 			debugTurbo.Update(Input.IsKeyPressed(Key.Tab));
 		}

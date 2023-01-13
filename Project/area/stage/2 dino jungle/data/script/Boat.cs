@@ -45,7 +45,7 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
-			StageSettings.instance.ConnectRespawnSignal(this);
+			LevelSettings.instance.ConnectRespawnSignal(this);
 			spawnData = new SpawnData(GetParent(), Transform);
 		}
 

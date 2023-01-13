@@ -33,13 +33,11 @@ namespace Project.Gameplay
 		private DialogTrigger currentDialog;
 		public void PlayDialog(DialogTrigger dialog)
 		{
-			if (dialog.IsInvalid()) return;
-
 			IsDialogActive = true;
 			subtitleLabel.Text = string.Empty;
 
 			currentDialog = dialog;
-			currentDialogIndex = currentDialog.randomizeLine ? RuntimeConstants.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1) : 0;
+			currentDialogIndex = 0;
 			UpdateDialog(true);
 		}
 
@@ -65,12 +63,6 @@ namespace Project.Gameplay
 
 		public void OnDialogFinished()
 		{
-			if (currentDialog.randomizeLine) //Only single lines are supported in this mode
-			{
-				CallDeferred(nameof(DisableDialog));
-				return;
-			}
-
 			currentDialogIndex++;
 			if (currentDialogIndex < currentDialog.DialogCount)
 			{
@@ -112,18 +104,16 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (currentDialog.randomizeLine || currentDialogIndex == 0)
+			if (currentDialogIndex == 0)
 				subtitleAnimator.Play("activate");
 			else
 				subtitleAnimator.Play("activate-text");
 
-			if (currentDialog.HasAudio(currentDialogIndex)) //Using audio
+			string key = currentDialog.textKeys[currentDialogIndex];
+			AudioStream targetStream = StageSettings.instance.dialogLibrary.GetStream(key, SaveManager.UseEnglishVoices ? 0 : 1);
+			if (targetStream != null) //Using audio
 			{
-				if (SaveManager.UseEnglishVoices)
-					dialogChannel.Stream = currentDialog.englishVoiceClips[currentDialogIndex];
-				else
-					dialogChannel.Stream = currentDialog.japaneseVoiceClips[currentDialogIndex];
-
+				dialogChannel.Stream = targetStream;
 				subtitleLabel.Text = Tr(currentDialog.textKeys[currentDialogIndex]);
 				dialogChannel.Play();
 				if (!currentDialog.HasLength(currentDialogIndex))//Use audio length
@@ -143,7 +133,6 @@ namespace Project.Gameplay
 
 				dialogChannel.Stream = null; //Disable dialog channel
 
-				string key = currentDialog.textKeys[currentDialogIndex];
 				if (string.IsNullOrEmpty(key) || key.EndsWith("*")) //Cutscene Support - To avoid busywork in editor
 					key = currentDialog.textKeys[0].Replace("*", (currentDialogIndex + 1).ToString());
 				subtitleLabel.Text = Tr(key); //Update subtitles

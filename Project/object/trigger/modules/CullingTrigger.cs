@@ -20,7 +20,7 @@ namespace Project.Gameplay.Triggers
 		private bool isStageVisuals; //Take cheat into account?
 		private SpawnData spawnData; //Data for tree modification
 		private Callable ProcessCheckpointCallable => new Callable(this, MethodName.ProcessCheckpoint);
-		private StageSettings Stage => StageSettings.instance;
+		private LevelSettings Level => LevelSettings.instance;
 
 		private bool DebugDisableCulling => isStageVisuals && CheatManager.DisableStageCulling;
 
@@ -30,8 +30,8 @@ namespace Project.Gameplay.Triggers
 
 			if (saveVisibilityOnCheckpoint)
 			{
-				if (!Stage.IsConnected(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
-					Stage.Connect(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
+				if (!Level.IsConnected(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
+					Level.Connect(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
 			}
 
 			if (modifyTree) //Save spawn data
@@ -43,14 +43,14 @@ namespace Project.Gameplay.Triggers
 			}
 
 			Respawn();
-			Stage.ConnectRespawnSignal(this);
-			Stage.ConnectUnloadSignal(this);
+			Level.ConnectRespawnSignal(this);
+			Level.ConnectUnloadSignal(this);
 		}
 
 		public void Unload()
 		{
-			if (Stage.IsConnected(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
-				Stage.Disconnect(StageSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
+			if (Level.IsConnected(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
+				Level.Disconnect(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
 
 			if (modifyTree && !targetNode.IsQueuedForDeletion())
 				targetNode.QueueFree();

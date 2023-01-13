@@ -19,10 +19,10 @@ namespace Project.Gameplay.Triggers
 		{
 			//TODO Play VFX
 			Character.Kill();
-			Character.Sound.PlayVoice("fall");
+			Character.Effect.PlayVoice("fall");
 
 			if (triggerType == TriggerType.Water)
-				Character.Sound.PlayActionSFX("splash");
+				Character.Effect.PlayActionSFX("splash");
 		}
 	}
 }

@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://15w5fdq35eni"]
+
+[ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
+[ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
+[ext_resource type="PackedScene" uid="uid://i81n7t8n3vmf" path="res://effect/particle/LandingDustParticle.tscn" id="5_58bv7"]
+[ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
+[ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
+
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "landingDustParticle", "footstepChannel", "landingChannel", "voiceChannel")]
+script = ExtResource("1_udd16")
+actionSFXLibrary = ExtResource("2_fxiha")
+actionChannel = NodePath("SFX/ActionChannel")
+materialSFXLibrary = ExtResource("5_h4i1s")
+landingDustParticle = NodePath("VFX/LandingDustParticle")
+footstepChannel = NodePath("SFX/FootstepChannel")
+landingChannel = NodePath("SFX/LandingChannel")
+voiceLibrary = ExtResource("33_pyanb")
+voiceChannel = NodePath("SFX/VoiceChannel")
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="VoiceChannel" type="AudioStreamPlayer" parent="SFX"]
+bus = &"VOICE"
+
+[node name="ActionChannel" type="AudioStreamPlayer" parent="SFX"]
+bus = &"SFX"
+
+[node name="LandingChannel" type="AudioStreamPlayer" parent="SFX"]
+volume_db = 3.0
+bus = &"SFX"
+
+[node name="FootstepChannel" type="AudioStreamPlayer" parent="SFX"]
+bus = &"SFX"
+
+[node name="VFX" type="Node3D" parent="."]
+
+[node name="LandingDustParticle" parent="VFX" instance=ExtResource("5_58bv7")]

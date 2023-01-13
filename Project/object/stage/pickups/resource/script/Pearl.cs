@@ -63,7 +63,7 @@ namespace Project.Gameplay.Objects
 			else
 				Sound.PlayRichPearlSFX();
 
-			StageSettings.instance.ChangeScore(isRichPearl ? 5 : 1, StageSettings.ScoreFunction.Add);
+			LevelSettings.instance.ChangeScore(isRichPearl ? 5 : 1, LevelSettings.ScoreFunction.Add);
 			isCollected = true;
 			base.Collect();
 		}

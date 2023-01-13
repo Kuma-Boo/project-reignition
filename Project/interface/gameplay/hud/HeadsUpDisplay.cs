@@ -10,7 +10,7 @@ namespace Project.Gameplay
 	public partial class HeadsUpDisplay : Control
 	{
 		public static HeadsUpDisplay instance;
-		private StageSettings Stage => StageSettings.instance;
+		private LevelSettings Level => LevelSettings.instance;
 
 		public override void _Ready()
 		{
@@ -21,13 +21,13 @@ namespace Project.Gameplay
 			InitializeObjectives();
 			InitializeSoulGauge();
 
-			if (Stage != null) //Decouple from stage settings
+			if (Level != null) //Decouple from level settings
 			{
-				Stage.Connect(nameof(StageSettings.RingChanged), new Callable(this, nameof(UpdateRingCount)));
-				Stage.Connect(nameof(StageSettings.TimeChanged), new Callable(this, nameof(UpdateTime)));
-				Stage.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, nameof(UpdateScore)));
-				Stage.Connect(nameof(StageSettings.BonusAdded), new Callable(this, nameof(AddBonus)));
-				Stage.Connect(nameof(StageSettings.StageCompleted), new Callable(this, nameof(StageComplete))); //Hide interface
+				Level.Connect(nameof(LevelSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
+				Level.Connect(nameof(LevelSettings.TimeChanged), new Callable(this, MethodName.UpdateTime));
+				Level.Connect(nameof(LevelSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
+				Level.Connect(nameof(LevelSettings.BonusAdded), new Callable(this, MethodName.AddBonus));
+				Level.Connect(nameof(LevelSettings.LevelCompleted), new Callable(this, MethodName.LevelComplete)); //Hide interface
 			}
 		}
 
@@ -52,14 +52,14 @@ namespace Project.Gameplay
 		private void InitializeRings()
 		{
 			//Initialize ring counter
-			if (Stage != null)
+			if (Level != null)
 			{
-				maxRingLabel.Visible = ringDividerSprite.Visible = Stage.MissionType == StageSettings.MissionTypes.Ring; //Show/Hide max ring count
+				maxRingLabel.Visible = ringDividerSprite.Visible = Level.MissionType == LevelSettings.MissionTypes.Ring; //Show/Hide max ring count
 				if (maxRingLabel.Visible)
-					maxRingLabel.Text = Stage.ObjectiveCount.ToString(RING_LABEL_FORMAT);
+					maxRingLabel.Text = Level.ObjectiveCount.ToString(RING_LABEL_FORMAT);
 
-				ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
-				if (Stage.CurrentRingCount == 0) //Starting in a ringless state
+				ringLabel.Text = Level.CurrentRingCount.ToString(RING_LABEL_FORMAT);
+				if (Level.CurrentRingCount == 0) //Starting in a ringless state
 					ringAnimator.Play("ringless");
 			}
 		}
@@ -74,10 +74,10 @@ namespace Project.Gameplay
 			else
 			{
 				ringAnimator.Play("damaged");
-				ringAnimator.AnimationSetNext("damaged", Stage.CurrentRingCount == 0 ? "ringless" : "RESET");
+				ringAnimator.AnimationSetNext("damaged", Level.CurrentRingCount == 0 ? "ringless" : "RESET");
 			}
 
-			ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
+			ringLabel.Text = Level.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 		}
 		#endregion
 
@@ -85,11 +85,11 @@ namespace Project.Gameplay
 		[ExportSubgroup("Time & Score")]
 		[Export]
 		private Label time;
-		private void UpdateTime() => time.Text = Stage.DisplayTime;
+		private void UpdateTime() => time.Text = Level.DisplayTime;
 
 		[Export]
 		private Label score;
-		private void UpdateScore() => score.Text = Stage.DisplayScore;
+		private void UpdateScore() => score.Text = Level.DisplayScore;
 		#endregion
 
 		#region Bonuses
@@ -100,7 +100,7 @@ namespace Project.Gameplay
 		private Array<NodePath> bonusLabels;
 		private Label[] _bonusLabels;
 		private int bonusCount = -1;
-		private readonly Array<StageSettings.BonusType> bonusQueue = new Array<StageSettings.BonusType>();
+		private readonly Array<LevelSettings.BonusType> bonusQueue = new Array<LevelSettings.BonusType>();
 		private const int MAX_BONUS_COUNT = 5; //How many bonuses can be onscreen at once
 		private void InitializeBonuses()
 		{
@@ -113,7 +113,7 @@ namespace Project.Gameplay
 			}
 		}
 
-		private void AddBonus(StageSettings.BonusType type)
+		private void AddBonus(LevelSettings.BonusType type)
 		{
 			if (bonusAnimator.IsPlaying())
 			{
@@ -180,16 +180,16 @@ namespace Project.Gameplay
 		private Label objectiveMaxValue;
 		private void InitializeObjectives()
 		{
-			if (Stage == null || Stage.MissionType != StageSettings.MissionTypes.Objective) return; //Don't do anything when not set to objective based mission
+			if (Level == null || Level.MissionType != LevelSettings.MissionTypes.Objective) return; //Don't do anything when not set to objective based mission
 
 			objectiveSprite.Visible = true;
-			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
-			objectiveMaxValue.Text = Stage.ObjectiveCount.ToString("00");
+			objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");
+			objectiveMaxValue.Text = Level.ObjectiveCount.ToString("00");
 
-			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+			Level.Connect(nameof(LevelSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}
 
-		private void UpdateObjective() => objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+		private void UpdateObjective() => objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");
 		#endregion
 
 		#region Soul Gauge
@@ -249,7 +249,7 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		public void StageComplete(bool _) => SetVisibility(false); //Ignore parameter
+		public void LevelComplete(bool _) => SetVisibility(false); //Ignore parameter
 		public void SetVisibility(bool value) => Visible = value;
 	}
 }

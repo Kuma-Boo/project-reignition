@@ -1,7 +1,9 @@
-[gd_scene load_steps=59 format=3 uid="uid://br688ytf45e8c"]
+[gd_scene load_steps=61 format=3 uid="uid://br688ytf45e8c"]
 
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
 [ext_resource type="PackedScene" uid="uid://efrfjkjxlfc8" path="res://area/stage/1 sand oasis/act 1/environment/01Opening.tscn" id="2_eyaqr"]
+[ext_resource type="Resource" uid="uid://b57nulf6d3pq4" path="res://sound/voice/sand oasis/DialogLibrary.tres" id="2_qgupw"]
 [ext_resource type="PackedScene" uid="uid://bu2kguc4ygtbo" path="res://area/stage/1 sand oasis/act 1/environment/02Slope.tscn" id="3_b4ate"]
 [ext_resource type="PackedScene" uid="uid://cq0d65qpud85m" path="res://area/stage/1 sand oasis/act 1/environment/03Oasis.tscn" id="4_qddv3"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_4sfp2"]
@@ -49,7 +51,7 @@ size = Vector3(12, 14, 9.6)
 size = Vector3(42, 13.4, 38)
 
 [sub_resource type="BoxShape3D" id="335"]
-size = Vector3(12, 14, 16)
+size = Vector3(12, 14, 22)
 
 [sub_resource type="SphereShape3D" id="159"]
 radius = 2.0
@@ -64,7 +66,7 @@ size = Vector3(14, 2, 120)
 radius = 8.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8dg41"]
-size = Vector3(10, 10, 118)
+size = Vector3(10, 10, 120)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nbeq0"]
 size = Vector3(20, 26, 4)
@@ -92,7 +94,10 @@ size = Vector3(10, 20, 5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_njmjg"]
 
-[node name="Static" type="Node3D"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+script = ExtResource("1_0njhg")
+mainPath = NodePath("Path/MainPath")
+dialogLibrary = ExtResource("2_qgupw")
 
 [node name="Collision" parent="." instance=ExtResource("1_pkods")]
 visible = false
@@ -147,7 +152,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.31558, 6, -6.65269)
 shape = SubResource("60")
 
 [node name="EndCollider" type="CollisionShape3D" parent="Trigger/ZipperRecenterLockout"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8509, 6, -15.9712)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8509, 6, -11.9712)
 shape = SubResource("335")
 
 [node name="UTurnTrigger" parent="Trigger" node_paths=PackedStringArray("automationPath") instance=ExtResource("8_esmag")]
@@ -194,7 +199,7 @@ ignoreDirection = true
 shape = SubResource("SphereShape3D_u4oqf")
 
 [node name="SidleTrigger" parent="Trigger" instance=ExtResource("11_hwlgd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -705)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -707)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/SidleTrigger"]
 shape = SubResource("BoxShape3D_8dg41")
@@ -265,7 +270,7 @@ settings = ExtResource("24_qtnck")
 shape = SubResource("BoxShape3D_65k0u")
 
 [node name="OasisTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -199.2, -44.4, -99.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -199.2, -44.4, -93.5)
 triggerMode = 2
 exitMode = 2
 
@@ -360,7 +365,7 @@ transform = Transform3D(1, 0, 0, 0, 1, -8.35188e-23, 0, 0, 1, 0, 9, 0)
 shape = SubResource("BoxShape3D_65k0u")
 
 [node name="SidleTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -705)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -707)
 triggerMode = 2
 exitMode = 2
 

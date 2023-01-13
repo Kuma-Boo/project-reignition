@@ -26,7 +26,7 @@ namespace Project.Gameplay
 		protected virtual void SetUp()
 		{
 			spawnData = new SpawnData(GetParent(), Transform);
-			StageSettings.instance.ConnectRespawnSignal(this);
+			LevelSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
 
