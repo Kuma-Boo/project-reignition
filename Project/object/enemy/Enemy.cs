@@ -11,13 +11,13 @@ namespace Project.Gameplay
 		protected CollisionShape3D collider; //Environmental collider. Disabled when defeated (For death animations, etc)
 		[Export]
 		protected Area3D hurtbox; //Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
-		[Export]
-		public int maxHealth;
+		[Export(PropertyHint.Range, "1, 10")]
+		public int maxHealth = 1;
 		protected int currentHealth;
 		[Export]
 		public bool damagePlayer; //Does this enemy hurt the player on touch?
 
-		private SpawnData spawnData;
+		protected SpawnData SpawnData { get; private set; }
 		protected CharacterController Character => CharacterController.instance;
 
 		protected bool IsDefeated => currentHealth <= 0;
@@ -25,7 +25,7 @@ namespace Project.Gameplay
 		public override void _Ready() => SetUp();
 		protected virtual void SetUp()
 		{
-			spawnData = new SpawnData(GetParent(), Transform);
+			SpawnData = new SpawnData(GetParent(), Transform);
 			LevelSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
@@ -42,17 +42,10 @@ namespace Project.Gameplay
 
 		public virtual void Respawn()
 		{
-			spawnData.Respawn(this);
-
+			SpawnData.Respawn(this);
 			currentHealth = maxHealth;
 
-			if (collider != null)
-				collider.SetDeferred("disabled", false);
-			if (hurtbox != null)
-			{
-				hurtbox.SetDeferred("monitorable", true);
-				hurtbox.SetDeferred("monitoring", true);
-			}
+			PhysicsMonitoring = true;
 		}
 
 		public virtual void Despawn()
@@ -77,20 +70,30 @@ namespace Project.Gameplay
 		//Called when the enemy is defeated
 		protected virtual void Defeat()
 		{
-			//Stop colliding/monitoring
-			if (collider != null)
-				collider.SetDeferred("disabled", true);
-			if (hurtbox != null)
-			{
-				hurtbox.SetDeferred("monitorable", false);
-				hurtbox.SetDeferred("monitoring", false);
-			}
-
+			PhysicsMonitoring = false;
 			OnExited(null);
 			EmitSignal(SignalName.Defeated);
 		}
 
-		protected bool isActivated; //Is the enemy being processed?
+		protected bool PhysicsMonitoring
+		{
+			set
+			{
+				//Update environment collider
+				if (collider != null)
+					collider.SetDeferred("disabled", !value);
+
+				//Update hurtbox
+				if (hurtbox != null)
+				{
+					hurtbox.SetDeferred("monitorable", value);
+					hurtbox.SetDeferred("monitoring", value);
+				}
+			}
+		}
+
+		/// <summary> Is the enemy being processed? Can be set from a trigger or a sub-class. </summary>
+		protected bool IsActivated { get; set; }
 		protected virtual void Activate() { }
 		protected virtual void Deactivate() { }
 
@@ -132,7 +135,7 @@ namespace Project.Gameplay
 		{
 			if (!a.IsInGroup("player")) return;
 
-			isActivated = true;
+			IsActivated = true;
 			Activate();
 		}
 
@@ -140,7 +143,7 @@ namespace Project.Gameplay
 		{
 			if (!a.IsInGroup("player")) return;
 
-			isActivated = false;
+			IsActivated = false;
 			Deactivate();
 		}
 	}

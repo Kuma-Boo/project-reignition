@@ -24,7 +24,6 @@ namespace Project.Gameplay
 
 			animationRoot = animatorTree.TreeRoot as AnimationNodeBlendTree;
 			animationStateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
-
 			oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
 
 			normalState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/normal_state/playback");

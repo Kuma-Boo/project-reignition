@@ -155,6 +155,9 @@ namespace Project.Gameplay
 			IsHomingAttacking = false;
 
 			bounceTimer = BOUNCE_LOCKOUT_TIME;
+
+			if (LockonTarget != null)
+				Character.GlobalPosition = LockonTarget.GlobalPosition;
 			ResetLockonTarget();
 
 			Character.CanJumpDash = true;

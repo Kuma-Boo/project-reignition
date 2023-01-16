@@ -1,8 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4rnb8sumd88f"]
+[gd_scene load_steps=7 format=3 uid="uid://c0wwow83r4jry"]
 
-[ext_resource type="PackedScene" uid="uid://b01dbeptkooh3" path="res://object/enemy/majin/Majin.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://4og62m21tndg" path="res://object/enemy/majin/data/sand oasis/model/BlueMajin.gltf" id="2"]
+[ext_resource type="PackedScene" uid="uid://5mu00v1h311g" path="res://object/enemy/majin/Majin.tscn" id="1_kms6u"]
+[ext_resource type="PackedScene" uid="uid://bb3uq4s0e62xd" path="res://object/enemy/majin/data/sand oasis/model/BlueMajin.gltf" id="2_l70on"]
+[ext_resource type="AnimationLibrary" uid="uid://8q8k3xrn0vmg" path="res://object/enemy/majin/data/animation/blue majin/MajinLibrary.gltf" id="3_lbjko"]
 
-[node name="BlueMajin" instance=ExtResource("1")]
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_arwfs"]
 
-[node name="BlueMajin" parent="." index="0" instance=ExtResource("2")]
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_gv023"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_358l7"]
+
+[node name="BlueMajin" instance=ExtResource("1_kms6u")]
+
+[node name="BlueMajin" parent="Root" index="0" instance=ExtResource("2_l70on")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root/BlueMajin" index="1"]
+libraries = {
+"MajinLibrary": ExtResource("3_lbjko")
+}
+
+[node name="AnimationTree" parent="." index="5"]
+anim_player = NodePath("../Root/BlueMajin/AnimationPlayer")
+parameters/defeat_state/playback = SubResource("AnimationNodeStateMachinePlayback_arwfs")
+parameters/fire_state/playback = SubResource("AnimationNodeStateMachinePlayback_gv023")
+parameters/spin_state/playback = SubResource("AnimationNodeStateMachinePlayback_358l7")

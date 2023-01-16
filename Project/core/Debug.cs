@@ -54,7 +54,6 @@ namespace Project.Core
 			if (InputManager.debugRestart.wasPressed)
 				TransitionManager.QueueSceneChange(string.Empty, true);
 
-
 			if (line3d.Count + line2d.Count != 0 && !IsPaused)
 				QueueRedraw();
 		}

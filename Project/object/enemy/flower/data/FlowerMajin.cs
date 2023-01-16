@@ -106,7 +106,7 @@ namespace Project.Gameplay
 		{
 			if (IsDefeated) return;
 
-			if (isActivated || currentState != States.Passive)
+			if (IsActivated || currentState != States.Passive)
 			{
 				UpdateRotation();
 				UpdateState();
@@ -159,7 +159,7 @@ namespace Project.Gameplay
 				case States.PreAttack:
 					if (stateTimer >= preAttackLength)
 					{
-						if (isActivated)
+						if (IsActivated)
 						{
 							animator.Play("attack");
 							currentState = States.Attack;

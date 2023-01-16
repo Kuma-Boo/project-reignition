@@ -258,6 +258,7 @@ namespace Project.Gameplay
 		}
 
 		private bool isRecentered; //Is the recenter complete?
+		private const float RECENTER_POWER = .1f;
 		/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
 		private void UpdateRecenter()
 		{
@@ -268,7 +269,7 @@ namespace Project.Gameplay
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
 			{
-				movementOffset = Mathf.MoveToward(movementOffset, 0, GroundSettings.GetSpeedRatio(MoveSpeed) * PhysicsManager.physicsDelta);
+				movementOffset = Mathf.MoveToward(movementOffset, 0, Mathf.Abs(MoveSpeed) * RECENTER_POWER * PhysicsManager.physicsDelta);
 				if (Mathf.IsZeroApprox(movementOffset))
 					isRecentered = true;
 				movementOffset = currentOffset - movementOffset;
@@ -1370,13 +1371,10 @@ namespace Project.Gameplay
 		{
 			if (MovementState == MovementStates.External) return; //Externally controlled
 
-			Transform3D t = GlobalTransform;
-			t.basis.z = Vector3.Back;
-			t.basis.y = UpDirection;
-			t.basis.x = t.basis.y.Cross(t.basis.z).Normalized();
-			t.basis = t.basis.Orthonormalized();
-
-			GlobalTransform = t;
+			//Untested! This may end up breaking in certain scenarios
+			GlobalRotation = Vector3.Zero;
+			Vector3 cross = Vector3.Left.Rotated(Vector3.Up, UpDirection.Flatten().AngleTo(Vector2.Down));
+			GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));
 		}
 		#endregion
 
@@ -1389,9 +1387,11 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive) //Follow pathfollower more accurately when speedbreaking
 				return pathFollowerForward;
 
-			Vector3 flatForward = this.Forward().Rotated(UpDirection, MovementAngle);
 			if (!Camera.ActiveSettings.isRollEnabled) //Flat terrain
+			{
+				Vector3 flatForward = this.Forward().Rotated(UpDirection, MovementAngle);
 				return flatForward; //Normally this is good enough
+			}
 
 			//Tilted ground fix
 			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
@@ -1412,7 +1412,7 @@ namespace Project.Gameplay
 				forwardDirection = -forwardDirection.Rotated(axis, angle);
 			}
 
-			return forwardDirection.Flatten().AngleTo(Vector2.Down);
+			return forwardDirection.Flatten().Normalized().AngleTo(Vector2.Down);
 		}
 
 		#region Signals

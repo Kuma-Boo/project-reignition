@@ -141,8 +141,7 @@ namespace Project.Gameplay
 
 		/// <summary> Current travel time. </summary>
 		private float currentTime;
-
-		/// <summary> Time scale for processing </summary>
+		/// <summary> Time scale for processing. </summary>
 		public float TimeScale = 1f;
 		/// <summary> Starting offset of the object. </summary>
 		public float StartingOffset { get; private set; }
@@ -153,8 +152,7 @@ namespace Project.Gameplay
 		public override void _EnterTree()
 		{
 			if (Engine.IsEditorHint()) return;
-
-			currentTime = StartingOffset * Mathf.Abs(cycleLength);
+			Reset();
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -166,9 +164,12 @@ namespace Project.Gameplay
 			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) //Rollover
 				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength);
 
-			if (TargetObject != null)
+			if (TargetObject != null && TargetObject.IsInsideTree())
 				TargetObject.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
 		}
+
+		/// <summary> Resets currentTime to StartingOffset. </summary>
+		public void Reset() => currentTime = StartingOffset * Mathf.Abs(cycleLength);
 
 		public Vector3 InterpolatePosition(float ratio)
 		{
@@ -180,7 +181,7 @@ namespace Project.Gameplay
 				ratio = Mathf.SmoothStep(0, 1, 1f - Mathf.Abs(linearRatio));
 
 				targetPosition = Vector3.Forward.Rotated(Vector3.Up, Mathf.DegToRad(angle));
-				targetPosition *= distance * Mathf.SmoothStep(0, 1, ratio);
+				targetPosition *= distance * Mathf.Lerp(0, 1, ratio);
 			}
 			else if (movementMode == MovementModes.Circle)
 			{

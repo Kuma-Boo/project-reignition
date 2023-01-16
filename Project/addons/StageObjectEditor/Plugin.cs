@@ -3,7 +3,6 @@ using Godot.Collections;
 using Project.Gameplay;
 using Project.Gameplay.Triggers;
 using Project.Gameplay.Objects;
-using Project.Gameplay.Hazards;
 
 namespace Project.Editor
 {
@@ -37,7 +36,7 @@ namespace Project.Editor
 
 		public override void _Forward3dDrawOverViewport(Control overlay)
 		{
-			if (!IsInstanceValid(target)) return;
+			if (!IsInstanceValid(target) || !target.IsInsideTree() || !IsInstanceValid(editorCam)) return;
 
 			if (target is Launcher)
 				DrawLaunchData(overlay, (target as Launcher).GetLaunchData(), DEFAULT_DRAW_COLOR);
@@ -181,7 +180,7 @@ namespace Project.Editor
 			if (t.spawnOffset == Vector3.Zero) return;
 
 			Vector3 s = t.GlobalPosition;
-			Vector3 e = s + t.spawnOffset;
+			Vector3 e = s + t.Basis * t.spawnOffset;
 			if (editorCam.IsPositionBehind(s) ||
 			editorCam.IsPositionBehind(e))
 				return;

@@ -279,12 +279,17 @@ namespace Project.Gameplay
 			else
 				targetPosition += PathFollower.UpAxis * settings.height;
 
-			if (settings.IsFieldCamera) //Horizontal tracking
+			bool trackHorizontally = settings.IsFieldCamera || settings.IsHallCamera;
+			if (trackHorizontally) //Horizontal tracking
 			{
+				float trackingAmount = settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.x : PathFollower.FlatPlayerPositionDelta.x;
+				if (settings.IsHallCamera)
+					trackingAmount = Mathf.Clamp(trackingAmount, -settings.hallWidth, settings.hallWidth);
+
 				if (settings.isRollEnabled)
-					targetPosition += PathFollower.Right() * PathFollower.TruePlayerPositionDelta.x;
+					targetPosition += PathFollower.Right() * trackingAmount;
 				else
-					targetPosition += PathFollower.Forward().Rotated(Vector3.Up, Mathf.Pi * .5f).RemoveVertical().Normalized() * PathFollower.FlatPlayerPositionDelta.x;
+					targetPosition += PathFollower.Forward().Rotated(Vector3.Up, Mathf.Pi * .5f).RemoveVertical().Normalized() * trackingAmount;
 			}
 
 			if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Move) //Vertical tracking

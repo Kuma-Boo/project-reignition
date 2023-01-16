@@ -27,6 +27,9 @@ namespace Project.Gameplay
 			}
 			else
 			{
+				if (cameraMode == CameraModes.Hall)
+					properties.Add(ExtensionMethods.CreateProperty("Hall Width", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+
 				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Distance", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Backstep Distance Addition", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Height", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
@@ -57,6 +60,8 @@ namespace Project.Gameplay
 
 				case "Camera Mode":
 					return (int)cameraMode;
+				case "Hall Width":
+					return hallWidth;
 				case "Position Settings/Autoset Position":
 					return autosetStaticPosition;
 				case "Position Settings/Static Position":
@@ -107,6 +112,9 @@ namespace Project.Gameplay
 				case "Camera Mode":
 					cameraMode = (CameraModes)(int)value;
 					NotifyPropertyListChanged();
+					break;
+				case "Hall Width":
+					hallWidth = (float)value;
 					break;
 				case "Position Settings/Autoset Position":
 					autosetStaticPosition = (bool)value;
@@ -173,6 +181,7 @@ namespace Project.Gameplay
 			Static,
 		}
 
+
 		public bool IsHallCamera => cameraMode == CameraSettingsResource.CameraModes.Hall;
 		public bool IsFieldCamera => cameraMode == CameraSettingsResource.CameraModes.Field;
 		public bool IsStaticCamera => cameraMode == CameraSettingsResource.CameraModes.Static;
@@ -183,6 +192,12 @@ namespace Project.Gameplay
 		public Vector3 staticPosition;
 
 		//Dynamic camera settings
+		/// <summary>
+		/// How much strafing to ignore when using hall mode.
+		/// Note: a value of zero will disable horizontal tracking completely.
+		/// Use CameraModes.Field to always track the player. 
+		/// </summary>
+		public float hallWidth;
 		/// <summary> Distance from the player. </summary>
 		public float distance = 1.5f;
 		/// <summary> Distance to add when backstepping. </summary>
