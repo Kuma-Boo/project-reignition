@@ -9,6 +9,11 @@ namespace Project.Gameplay.Triggers
 	[Tool]
 	public partial class DriftTrigger : Area3D
 	{
+		[Signal]
+		public delegate void DriftStartedEventHandler();
+		[Signal]
+		public delegate void DriftCompletedEventHandler();
+
 		[Export]
 		private bool isRightTurn; //Which way is the corner?
 
@@ -52,6 +57,7 @@ namespace Project.Gameplay.Triggers
 
 				return; //Inactive
 			}
+
 			UpdateDrift();
 		}
 
@@ -83,6 +89,8 @@ namespace Project.Gameplay.Triggers
 
 			Character.StartExternal(this);
 			Character.Animator.ExternalAngle = Character.MovementAngle;
+
+			EmitSignal(SignalName.DriftStarted);
 		}
 
 		private void UpdateDrift()
@@ -99,7 +107,7 @@ namespace Project.Gameplay.Triggers
 
 			if (Controller.jumpButton.wasPressed) //Allow character to jump out of drift at any time
 			{
-				FinishDrift();
+				CompleteDrift();
 
 				ApplyBonus(false);
 				Character.Jump();
@@ -121,24 +129,25 @@ namespace Project.Gameplay.Triggers
 					Character.GlobalPosition = new Vector3(targetPosition.x, Character.GlobalPosition.y, targetPosition.z);
 					Character.AddLockoutData(lockout); //Apply lockout
 
-					FinishDrift();
+					CompleteDrift();
 				}
 			}
 			else if (distance < .1f) //Drift was failed
 			{
 				Character.MoveSpeed = 0f; //Reset Movespeed
 				ApplyBonus(false);
-				FinishDrift();
+				CompleteDrift();
 			}
 
 			Character.PathFollower.Resync(); //Resync
 		}
 
-		private void FinishDrift()
+		private void CompleteDrift()
 		{
 			isProcessing = false;
 			Character.ResetMovementState();
 			isFadingSFX = true; //Fade sound effect
+			EmitSignal(SignalName.DriftCompleted);
 		}
 
 		private bool wasBonusApplied; //Was this corner attempted before?

@@ -11,6 +11,7 @@ namespace Project.Gameplay.Objects
 		private CollisionShape3D collider;
 		private bool isCollected;
 
+		private Tween tweener;
 		private SoundManager Sound => SoundManager.instance;
 
 		protected override void SetUp()
@@ -21,6 +22,9 @@ namespace Project.Gameplay.Objects
 
 		public override void Respawn()
 		{
+			if (tweener != null)
+				tweener.Kill();
+
 			isCollected = false;
 			base.Respawn();
 		}
@@ -33,9 +37,11 @@ namespace Project.Gameplay.Objects
 			GetParent().RemoveChild(this);
 			Character.AddChild(this);
 			GlobalTransform = t;
-			Scale = Vector3.One;
 
-			Tween tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
+			if (tweener != null)
+				tweener.Kill();
+
+			tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
 			//Collection tween
 			int travelDirection = RuntimeConstants.randomNumberGenerator.RandiRange(-1, 1);
 			bool reverseDirection = Mathf.Sign(Character.Forward().Dot(Position)) < 0; //True when collecting a pearl behind us

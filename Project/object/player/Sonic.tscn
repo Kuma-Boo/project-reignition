@@ -427,7 +427,7 @@ node_connections = [&"output", 0, &"oneshot_trigger", &"land_speed", 0, &"land_a
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_5h3hv"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("environmentCollider", "PathFollower", "Animator", "Effect", "Skills", "Lockon") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("environmentCollider", "areaTrigger", "PathFollower", "Animator", "Effect", "Skills", "Lockon") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -443,6 +443,7 @@ jumpDashGravity = 18.0
 jumpDashMaxGravity = -24.0
 backflipHeight = 2.4
 environmentCollider = NodePath("CollisionShape3D")
+areaTrigger = NodePath("Components/AreaTrigger/CollisionShape3D")
 PathFollower = NodePath("Components/PathFollower")
 Animator = NodePath("Components/Sonic")
 Effect = NodePath("Components/Effect")
@@ -472,12 +473,12 @@ animatorTree = NodePath("../../AnimationTree")
 
 [node name="Lockon" parent="Components" instance=ExtResource("7")]
 
-[node name="ObjectTrigger" type="Area3D" parent="Components" groups=["player"]]
+[node name="AreaTrigger" type="Area3D" parent="Components" groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
 collision_layer = 2
 collision_mask = 9
 
-[node name="Trigger" type="CollisionShape3D" parent="Components/ObjectTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Components/AreaTrigger"]
 shape = SubResource("SphereShape3D_uookt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -514,5 +515,5 @@ parameters/sidle_tree/sidle_seek/seek_position = -1.0
 parameters/sidle_tree/sidle_speed/scale = 0.0
 parameters/state_transition/current = 0
 
-[connection signal="body_entered" from="Components/ObjectTrigger" to="." method="OnObjectCollisionEnter"]
-[connection signal="body_exited" from="Components/ObjectTrigger" to="." method="OnObjectCollisionExit"]
+[connection signal="body_entered" from="Components/AreaTrigger" to="." method="OnObjectCollisionEnter"]
+[connection signal="body_exited" from="Components/AreaTrigger" to="." method="OnObjectCollisionExit"]

@@ -29,6 +29,12 @@ namespace Project.Core
 		private void StartCut() => EmitSignal(SignalName.TransitionProcess);
 		private void StartFade()
 		{
+			if (IsTransitionActive)
+			{
+				GD.Print("Transition is already active!");
+				return;
+			}
+
 			IsTransitionActive = true;
 			fade.Color = CurrentTransitionData.color;
 			animator.Play("fade");

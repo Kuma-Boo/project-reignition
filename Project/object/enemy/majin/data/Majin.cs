@@ -143,8 +143,8 @@ namespace Project.Gameplay
 		[Export]
 		private Vector3 defeatLaunchDirection;
 
-		/// <summary> Responsible for handling position tweens (i.e. Spawning/Default launching) </summary>
-		private Tween positionTweener;
+		/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>
+		private Tween tweener;
 
 		/// <summary> Should this majin rotate to face the player? </summary>
 		private bool trackPlayer = true;
@@ -183,8 +183,6 @@ namespace Project.Gameplay
 		{
 			if (Engine.IsEditorHint()) return; //In Editor
 
-			base.SetUp();
-
 			animationTree.Active = true;
 			animatorRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
 			moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
@@ -197,12 +195,16 @@ namespace Project.Gameplay
 			if (attackType == AttackTypes.Spin) //Try to get movement controller parent
 				movementController = GetParentOrNull<MovingObject>();
 
-			CallDeferred(MethodName.Respawn);
+			base.SetUp();
 		}
 
 		public override void Respawn()
 		{
+			if (tweener != null) //Kill any active tweens
+				tweener.Kill();
+
 			isSpawned = false;
+			isSpawning = false;
 			SpawnData.Respawn(this);
 			currentHealth = maxHealth;
 
@@ -220,8 +222,6 @@ namespace Project.Gameplay
 				currentRotation = spawnOffsetFlat.AngleTo(Vector2.Up);
 			else
 				currentRotation = spawnRotation;
-			fireRoot.GlobalRotation = Vector3.Up * currentRotation;
-			root.GlobalRotation = new Vector3(root.GlobalRotation.x, currentRotation, root.GlobalRotation.z);
 
 			if (movementController != null) //Reset/Pause movement
 			{
@@ -251,13 +251,13 @@ namespace Project.Gameplay
 
 			if (!defeatLaunchDirection.IsEqualApprox(Vector3.Zero))
 			{
-				if (positionTweener != null) //Kill any existing tween
-					positionTweener.Kill();
+				if (tweener != null) //Kill any existing tween
+					tweener.Kill();
 
 				//Get knocked back
-				positionTweener = CreateTween().SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
-				positionTweener.TweenProperty(this, "global_transform:origin", GlobalPosition + defeatLaunchDirection, .5f);
-				positionTweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(.5f);
+				tweener = CreateTween().SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
+				tweener.TweenProperty(this, "global_transform:origin", GlobalPosition + defeatLaunchDirection, .5f);
+				tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(.5f);
 			}
 			else
 				Despawn();
@@ -281,14 +281,18 @@ namespace Project.Gameplay
 			else if (!Mathf.IsZeroApprox(rotationTime))
 				currentRotation = ExtensionMethods.ModAngle(currentRotation + PhysicsManager.physicsDelta * rotationVelocity);
 
-			fireRoot.GlobalRotation = Vector3.Up * currentRotation;
-			root.GlobalRotation = new Vector3(root.GlobalRotation.x, currentRotation, root.GlobalRotation.z);
-
+			UpdateRotation();
 
 			if (!IsActivated || attackType == AttackTypes.Disabled)
 			{
 				//TODO Update idle animations
 			}
+		}
+
+		private void UpdateRotation()
+		{
+			fireRoot.GlobalRotation = Vector3.Up * currentRotation;
+			root.GlobalRotation = new Vector3(root.GlobalRotation.x, currentRotation, root.GlobalRotation.z);
 		}
 
 		private void UpdateFlameAttack()
@@ -339,37 +343,37 @@ namespace Project.Gameplay
 			flameTimer = 0; //Reset timer
 		}
 
+		/// <summary> Overload activation method to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal. </summary>
+		private void Activate(Area3D _) => Spawn();
 		protected override void Activate()
 		{
-			if (isSpawning || isSpawned) return;
 			if (spawnMode == SpawnModes.External) return;
-
 			Spawn();
 		}
 
-		/// <summary> Overload activation method to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal. </summary>
-		private void Spawn(Area3D _) => Spawn();
 		private void Spawn()
 		{
+			if (isSpawning || isSpawned) return;
+
 			isSpawning = true;
 			SetDeferred("visible", true);
 
-			if (positionTweener != null)
-				positionTweener.Kill();
-			positionTweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
+			if (tweener != null)
+				tweener.Kill();
+			tweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
 
 			if (SpawnTravelDisabled) //Spawn instantly
 			{
 				animationPlayer.Play("spawn");
 				animationTree.Set(TELEPORT_PARAMETER, true);
 
-				positionTweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(1.0f); //Delay by length of teleport animation
+				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(1.0f); //Delay by length of teleport animation
 			}
 			else //Travel
 			{
 				GlobalPosition = SpawnPosition;
-				positionTweener.TweenProperty(this, "transform:origin", OriginalPosition, spawnTravelTime).From(SpawnPosition);
-				positionTweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
+				tweener.TweenProperty(this, "transform:origin", OriginalPosition, spawnTravelTime).From(SpawnPosition);
+				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
 
 				moveTransition.XfadeTime = 0;
 				if (!Mathf.IsZeroApprox(spawnOffset.x) || !Mathf.IsZeroApprox(spawnOffset.z))
@@ -392,11 +396,11 @@ namespace Project.Gameplay
 			{
 				animationTree.Set(STATE_TRANSITION_PARAMETER, 1);
 
-				if (positionTweener != null)
-					positionTweener.Kill();
+				if (tweener != null)
+					tweener.Kill();
 
-				positionTweener = CreateTween();
-				positionTweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); //Delay spin activation by windup animation length
+				tweener = CreateTween();
+				tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); //Delay spin activation by windup animation length
 			}
 			else
 				animationTree.Set(STATE_TRANSITION_PARAMETER, 0); //Idle

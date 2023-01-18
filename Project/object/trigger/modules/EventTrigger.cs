@@ -36,6 +36,7 @@ namespace Project.Gameplay.Triggers
 		public void Respawn()
 		{
 			wasActivated = false;
+
 			if (animator.HasAnimation("RESET"))
 				animator.Play("RESET"); //Reset event
 			else if (!string.IsNullOrEmpty(animator.Autoplay)) //Fallback to autoplay animation

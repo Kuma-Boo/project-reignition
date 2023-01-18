@@ -22,9 +22,9 @@ namespace Project.Gameplay
 		{
 			CallDeferred(MethodName.ResetOrientation); //Start with proper orientation
 
+			PathFollower.SetActivePath(Stage.mainPath); //Attempt to autoload the stage's default path
 			Level.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
 			Level.Connect(LevelSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
-			PathFollower.SetActivePath(Stage.mainPath); //Attempt to autoload the stage's default path
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -34,7 +34,7 @@ namespace Project.Gameplay
 			UpdatePhysics();
 
 			Animator.UpdateAnimation();
-			//Skills.UpdateSoulSkills();
+			Skills.UpdateSoulSkills();
 		}
 
 		#region State Machine
@@ -281,9 +281,9 @@ namespace Project.Gameplay
 
 		#region External Control, Automation and Events
 		[Signal]
-		public delegate void OnStartedExternalControlEventHandler();
+		public delegate void ExternalControlStartedEventHandler();
 		[Signal]
-		public delegate void OnFinishedExternalControlEventHandler();
+		public delegate void ExternalControlCompletedEventHandler();
 
 		/// <summary> Reference to the external object currently controlling the player </summary>
 		public Node ExternalController { get; private set; }
@@ -313,7 +313,7 @@ namespace Project.Gameplay
 			ResetVelocity();
 			UpdateExternalControl();
 
-			EmitSignal(SignalName.OnStartedExternalControl);
+			EmitSignal(SignalName.ExternalControlStarted);
 		}
 
 		public void StopExternal()
@@ -321,7 +321,7 @@ namespace Project.Gameplay
 			MovementState = MovementStates.Normal; //Needs to be set to normal BEFORE orientation is reset
 
 			UpdateOrientation();
-			EmitSignal(SignalName.OnFinishedExternalControl);
+			EmitSignal(SignalName.ExternalControlCompleted);
 		}
 
 		/// <summary>
@@ -756,9 +756,9 @@ namespace Project.Gameplay
 			if (CanJumpDash)
 				Effect.PlayActionSFX("jump dash");
 
+			CanJumpDash = false;
 			IsMovingBackward = false; //Can't jumpdash backwards!
 			MoveSpeed = jumpDashSpeed;
-			CanJumpDash = false; //Don't use get/set so we keep our target monitoring.
 			ActionState = ActionStates.JumpDash;
 
 			if (Lockon.LockonTarget == null) //Normal jumpdash
@@ -768,7 +768,7 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				Lockon.HomingAttack(); //Start Homing attack
+				Lockon.StartHomingAttack(); //Start Homing attack
 				Animator.AirAttackAnimation();
 			}
 		}
@@ -779,6 +779,7 @@ namespace Project.Gameplay
 			{
 				if (Lockon.LockonTarget == null) //Target disappeared. Transition to jumpdash
 				{
+					MovementAngle = PathFollower.ForwardAngle;
 					Lockon.IsHomingAttacking = false;
 					StartJumpDash();
 					return;
@@ -786,7 +787,7 @@ namespace Project.Gameplay
 
 				isCustomPhysicsEnabled = true;
 				VerticalSpd = 0;
-				Velocity = Lockon.HomingAttackDirection.Normalized() * Lockon.homingAttackSpeed;
+				Velocity = Lockon.HomingAttackDirection.Normalized() * Skills.homingAttackSpeed;
 				MoveAndSlide();
 				PathFollower.Resync();
 			}
@@ -951,7 +952,6 @@ namespace Project.Gameplay
 						break;
 				}
 			}
-
 		}
 
 		public enum KnockbackMode
@@ -961,28 +961,27 @@ namespace Project.Gameplay
 			Forward, //Bump the player forward
 		}
 
+		/// <summary> Is the player currently respawning? </summary>
+		public bool IsRespawning { get; private set; }
 		/// <summary>
-		/// Called when the player loses a life, be it from falling or getting hit without rings.
+		/// Called when the player is returning to a checkpoint.
 		/// </summary>
-		public void Kill()
+		public void StartRespawn()
 		{
-			//TODO Check deathless mission modifier/Play death animation
-			StartRespawn();
-		}
+			if (IsRespawning) return;
 
-		public bool IsRespawning { get; private set; } //Is the player currently respawning?
-		private void StartRespawn() //Fade screen out, enable respawn flag, and connect signals
-		{
+			//Fade screen out, enable respawn flag, and connect signals
 			IsRespawning = true;
 			TransitionManager.StartTransition(new TransitionData()
 			{
 				inSpeed = .5f,
 				outSpeed = .5f,
-				color = Colors.Black
+				color = Colors.Black //Use Colors.Transparent for debugging
 			});
 
+			//ProcessMode = ProcessModeEnum.Disabled;
 			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.ProcessRespawn), (uint)ConnectFlags.OneShot);
-			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionFinish, new Callable(this, MethodName.FinishRespawn), (uint)ConnectFlags.OneShot);
+			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionFinish, new Callable(this, MethodName.OnRespawnFinished), (uint)ConnectFlags.OneShot);
 		}
 
 		/// <summary>
@@ -995,45 +994,58 @@ namespace Project.Gameplay
 
 			GlobalPosition = Level.CurrentCheckpoint.GlobalPosition;
 			PathFollower.SetActivePath(Level.CheckpointPath); //Revert path
+			PathFollower.Resync();
+
 			ResetVelocity();
 			ResetOrientation();
 
-			Camera.SnapFlag = true;
-			Level.RespawnObjects(true); //Respawn Objects
+			Camera.UpdateCameraSettings(Level.CheckpointCamera, 0); //Revert camera settings
 
-			CallDeferred(MethodName.SnapToGround);
+			//"Flicker" area collider to re-trigger any area the player happens to be respawning in
+			areaTrigger.Disabled = true;
+			//Wait a single physics frame to ensure objects reset properly
+			GetTree().CreateTimer(PhysicsManager.physicsDelta).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
+		}
+
+		/// <summary>
+		/// Final step of the respawn process. Re-enable area collider and finish transition.
+		/// </summary>
+		private void FinishRespawn()
+		{
+			Level.RespawnObjects();
+			SnapToGround();
+			areaTrigger.Disabled = false;
 
 			//TODO Play respawn animation/sfx
 			TransitionManager.FinishTransition();
 		}
 
 		/// <summary>
-		/// Force the player onto the ground by setting VerticalSpeed to a high value, then immediately checking the ground.
+		/// Disable respawn flags and allow the game to continue.
+		/// </summary>
+		private void OnRespawnFinished() => IsRespawning = false;
+
+		/// <summary>
+		/// Attempts to snap the player to the ground and sets IsOnGround to true.
 		/// </summary>
 		private void SnapToGround()
 		{
-			VerticalSpd = -100f;
-			CheckGround();
+			RaycastHit groundHit = this.CastRay(CenterPosition, Vector3.Down * 100.0f, CollisionMask);
+			Debug.DrawRay(CenterPosition, Vector3.Down * 100.0f, groundHit ? Colors.Red : Colors.White);
 
-			if (!IsOnGround)
+			if (groundHit)
 			{
-				VerticalSpd = 0f;
-				GD.Print("Couldn't find ground to snap to!");
+				GlobalPosition -= groundHit.normal * (groundHit.distance - CollisionRadius); //Snap to ground
+				LandOnGround();
 			}
-		}
-
-		/// <summary>
-		/// Disable respawn flags and allow the game to continue on normally
-		/// </summary>
-		private void FinishRespawn()
-		{
-			IsRespawning = false;
+			else
+				GD.Print("Couldn't find ground to snap to!");
 		}
 		#endregion
 
 		#region Launchers and Jumps
 		[Signal]
-		public delegate void LauncherFinishedEventHandler();
+		public delegate void LaunchFinishedEventHandler();
 
 		private float launcherTime;
 		private Objects.Launcher activeLauncher;
@@ -1090,12 +1102,17 @@ namespace Project.Gameplay
 
 		private void FinishLauncher()
 		{
-			if (activeLauncher != null && !IsOnGround)
-				CanJumpDash = activeLauncher.allowJumpDashing;
+			if (activeLauncher != null)
+			{
+				activeLauncher.Deactivate();
+
+				if (!IsOnGround)
+					CanJumpDash = activeLauncher.allowJumpDashing;
+				activeLauncher = null;
+			}
 
 			ResetMovementState();
-			activeLauncher = null;
-			EmitSignal(SignalName.LauncherFinished);
+			EmitSignal(SignalName.LaunchFinished);
 		}
 
 		public void JumpTo(Vector3 destination, float midHeight = 0f, bool relativeToEnd = false) //Generic JumpTo
@@ -1106,8 +1123,12 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Physics
+		/// <summary> Collision shape used for colliding with the environment. </summary>
 		[Export]
 		private CollisionShape3D environmentCollider;
+		/// <summary> Collision shape used for triggering objects. </summary>
+		[Export]
+		private CollisionShape3D areaTrigger;
 		/// <summary> Size to use for collision checks. </summary>
 		public float CollisionRadius => (environmentCollider.Shape as SphereShape3D).Radius;
 		public bool IsEnvironmentColliderEnabled
@@ -1176,7 +1197,6 @@ namespace Project.Gameplay
 				castLength = -.1f; //Reduce snapping when moving upwards
 
 			Vector3 castVector = -UpDirection * castLength;
-
 			RaycastHit groundHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
 			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
 
@@ -1295,7 +1315,7 @@ namespace Project.Gameplay
 		}
 
 
-		private void CheckCeiling() //Checks the ceiling.
+		public void CheckCeiling() //Checks the ceiling.
 		{
 			Vector3 castOrigin = CenterPosition;
 			float castLength = CollisionRadius;
@@ -1309,6 +1329,15 @@ namespace Project.Gameplay
 
 			if (ceilingHit)
 			{
+				GD.Print("Hit " + ceilingHit.collidedObject.Name);
+				if (ceilingHit.collidedObject.IsInGroup("crusher") && IsOnGround) //Check if the player is being crushed
+				{
+					GD.Print($"Crushed by {ceilingHit.collidedObject.Name}");
+					AddCollisionExceptionWith(ceilingHit.collidedObject); //Avoid clipping through the ground
+					Knockback();
+					return;
+				}
+
 				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * CollisionRadius));
 
 				if (VerticalSpd > 0)
@@ -1475,9 +1504,11 @@ namespace Project.Gameplay
 			Ensure all crushers' animationplayers are using the PHYSICS update mode
 			If this is true, then proceed to panic.
 			*/
+			/*
+			Old crusher check - Moved to CheckCeiling().
 			if (body.IsInGroup("crusher"))
 			{
-				//Check whether we're ACTUALLy being crushed and not just running into the side of the crusher
+				//Check whether we're ACTUALLY being crushed and not just running into the side of the crusher
 				float checkLength = CollisionRadius * 5f; //Needs to be long enough to guarantee hitting the target
 				RaycastHit hit = this.CastRay(CenterPosition, UpDirection * checkLength, CollisionMask, false);
 				if (hit.collidedObject == body)
@@ -1487,6 +1518,7 @@ namespace Project.Gameplay
 					Knockback();
 				}
 			}
+			*/
 
 			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))
 			{

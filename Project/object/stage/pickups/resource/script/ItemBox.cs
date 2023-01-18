@@ -175,7 +175,9 @@ namespace Project.Gameplay.Objects
 			isOpened = false;
 			isMovingObjects = false;
 			currentTravelTime = 0;
+
 			animator.Play("RESET");
+			animator.Seek(0, true);
 
 			for (int i = 0; i < objectPool.Count; i++)
 				objectPool[i].Respawn();

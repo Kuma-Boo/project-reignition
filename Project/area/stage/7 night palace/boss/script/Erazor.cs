@@ -152,7 +152,7 @@ namespace Project.Gameplay.Bosses
 
 									currentDistance = ExtensionMethods.SmoothDamp(currentDistance, -20f, ref distanceVelocity, DUEL_SMOOTHING, MAX_DUEL_SPEED);
 									if (Character.Lockon.IsHomingAttacking)
-										currentDistance -= Character.Lockon.homingAttackSpeed * PhysicsManager.physicsDelta;
+										currentDistance -= Character.Skills.homingAttackSpeed * PhysicsManager.physicsDelta;
 
 									if (currentDistance <= 0)
 									{

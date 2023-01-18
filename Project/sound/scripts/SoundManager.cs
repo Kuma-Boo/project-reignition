@@ -54,8 +54,8 @@ namespace Project.Gameplay
 
 				if (isSonicSpeaking)
 				{
-					EmitSignal(nameof(SonicSpeechEndEventHandler));
 					isSonicSpeaking = false;
+					EmitSignal(SignalName.SonicSpeechEnd);
 				}
 			}
 		}
@@ -79,14 +79,14 @@ namespace Project.Gameplay
 			subtitleAnimator.Play("deactivate");
 
 			//Disconnect signals
-			if (delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogDelayComplete))))
-				delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogDelayComplete)));
+			if (delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogDelayComplete)))
+				delayTimer.Disconnect("timeout", new Callable(this, MethodName.OnDialogDelayComplete));
 
-			if (delayTimer.IsConnected("timeout", new Callable(this, nameof(OnDialogFinished))))
-				delayTimer.Disconnect("timeout", new Callable(this, nameof(OnDialogFinished)));
+			if (delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogFinished)))
+				delayTimer.Disconnect("timeout", new Callable(this, MethodName.OnDialogFinished));
 
-			if (dialogChannel.IsConnected("finished", new Callable(this, nameof(OnDialogFinished))))
-				dialogChannel.Disconnect("finished", new Callable(this, nameof(OnDialogFinished)));
+			if (dialogChannel.IsConnected("finished", new Callable(this, MethodName.OnDialogFinished)))
+				dialogChannel.Disconnect("finished", new Callable(this, MethodName.OnDialogFinished));
 		}
 
 		private void UpdateDialog(bool processDelay)

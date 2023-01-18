@@ -121,7 +121,7 @@ namespace Project.Gameplay.Objects
 			if (pieceRoot.IsInsideTree())
 				pieceRoot.GetParent().CallDeferred(MethodName.RemoveChild, pieceRoot); //Start with the piece parent despawned
 
-			if (!root.IsInsideTree())
+			if (IsInsideTree() && root.GetParent() != this)
 			{
 				AddChild(root);
 				root.Transform = Transform3D.Identity;

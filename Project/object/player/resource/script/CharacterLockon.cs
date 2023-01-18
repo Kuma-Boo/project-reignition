@@ -12,13 +12,24 @@ namespace Project.Gameplay
 	{
 		private CharacterController Character => CharacterController.instance;
 
-		public Node3D LockonTarget { get; private set; } //Active lockon target
+		/// <summary> Active lockon target shown on the HUD. </summary>
+		public Node3D LockonTarget
+		{
+			get => lockonTarget;
+			private set
+			{
+				lockonTarget = value;
+				wasTargetChanged = true;
+			}
+		}
+		private Node3D lockonTarget;
+		/// <summary> Was lockonTarget changed this frame? </summary>
+		private bool wasTargetChanged;
 		private readonly Array<Node3D> activeTargets = new Array<Node3D>(); //List of targetable objects
 
+		/// <summary> Enables detection of new lockonTargets. </summary>
 		public bool IsMonitoring { get; set; }
 
-		[Export]
-		public float homingAttackSpeed;
 		public bool IsHomingAttacking { get; set; }
 		public bool IsPerfectHomingAttack { get; private set; }
 		private bool monitoringPerfectHomingAttack;
@@ -26,7 +37,7 @@ namespace Project.Gameplay
 		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
-		public void HomingAttack()
+		public void StartHomingAttack()
 		{
 			IsHomingAttacking = true;
 			IsPerfectHomingAttack = monitoringPerfectHomingAttack;
@@ -36,10 +47,9 @@ namespace Project.Gameplay
 
 		public void UpdateLockonTargets()
 		{
+			wasTargetChanged = false;
 			GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
-			bool isTargetChanged = false;
 
-			//Update homing attack
 			if (IsMonitoring)
 			{
 				int currentTarget = -1; //Index of the current target
@@ -63,25 +73,24 @@ namespace Project.Gameplay
 				}
 
 				if (currentTarget != -1 && activeTargets[currentTarget] != LockonTarget) //Target has changed
-				{
 					LockonTarget = activeTargets[currentTarget];
-					isTargetChanged = true;
-				}
 				else if (LockonTarget != null && IsTargetValid(LockonTarget) != TargetState.Valid) //Validate current lockon target
-				{
 					LockonTarget = null;
-					isTargetChanged = true;
-				}
+			}
+			else if (IsHomingAttacking) //Validate homing attack target
+			{
+				TargetState state = IsTargetValid(LockonTarget);
+				if (state == TargetState.NotInList)
+					LockonTarget = null;
 			}
 
-			//Disable Homing Attack
-			if (LockonTarget == null && isTargetChanged)
-				DisableLockonReticle();
-			else if (LockonTarget != null)
+			if (LockonTarget != null)
 			{
 				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(LockonTarget.GlobalPosition);
-				UpdateLockonReticle(screenPos, isTargetChanged);
+				UpdateLockonReticle(screenPos, wasTargetChanged);
 			}
+			else if (wasTargetChanged) //Disable UI
+				DisableLockonReticle();
 		}
 
 		private enum TargetState

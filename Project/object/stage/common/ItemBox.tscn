@@ -9,7 +9,7 @@
 size = Vector3(1.6, 1.4, 1.2)
 
 [sub_resource type="Animation" id="Animation_bg4xx"]
-length = 0.1
+length = 0.001
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -47,30 +47,22 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/3/type = "method"
+tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ItemBox/AnimationPlayer")
+tracks/3/path = NodePath(".:monitorable")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"values": [{
-"args": ["item-open", -1, 1.0, false],
-"method": &"play"
-}, {
-"args": [true],
-"method": &"stop"
-}, {
-"args": [0.0, true],
-"method": &"seek"
-}]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath(".:monitorable")
+tracks/4/path = NodePath(".:monitoring")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -79,17 +71,19 @@ tracks/4/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/5/type = "value"
+tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath(".:monitoring")
+tracks/5/path = NodePath("ItemBox/AnimationPlayer")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [{
+"args": [&"RESET", -1, 1.0, false],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_hxe17"]
@@ -228,7 +222,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="Skeleton3D" parent="ItemBox/ItemBoxRoot" index="0"]
 bones/1/rotation = Quaternion(0, 0, 1, 0)
-bones/2/position = Vector3(7.04355e-15, -0.540149, 0.560705)
 
 [node name="ItemBoxGlowMesh" parent="ItemBox/ItemBoxRoot/Skeleton3D" index="0"]
 visible = false
@@ -240,11 +233,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 shape = SubResource("6")
 
 [node name="Collision" type="StaticBody3D" parent="." groups=["floor", "wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 shape = SubResource("6")
 disabled = true
 

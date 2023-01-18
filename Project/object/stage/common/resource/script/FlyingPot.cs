@@ -75,7 +75,6 @@ namespace Project.Gameplay.Objects
 			angle = 0f;
 			velocity = 0f;
 			position = Vector2.Zero;
-			GlobalPosition = startPosition;
 
 			lockonArea.SetDeferred("monitorable", true);
 		}
@@ -112,7 +111,7 @@ namespace Project.Gameplay.Objects
 			Character.Skills.IsSpeedBreakEnabled = false; //Disable speed break
 
 			Character.Lockon.ResetLockonTarget();
-			Character.Connect(CharacterController.SignalName.LauncherFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
+			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
 
 			//Update camera
 			if (cameraTrigger != null)

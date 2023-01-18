@@ -41,7 +41,7 @@ namespace Project.Gameplay
 		private float xformAngle;
 		public float TransformAngle(float angle) => xformAngle + angle;
 
-		public override void _Ready()
+		public override void _EnterTree()
 		{
 			if (Engine.IsEditorHint()) return;
 
@@ -320,11 +320,6 @@ namespace Project.Gameplay
 				}
 			}
 
-			if (isYawOverrideActive) //Yaw override (for Grindrails, needs to be deprecated)
-			{
-				targetYaw = targetYawOverride;
-				isYawOverrideActive = false;
-			}
 			CurrentTilt = targetTilt;
 			CurrentYaw = targetYaw;
 
@@ -351,22 +346,6 @@ namespace Project.Gameplay
 			angle.z = 0;
 
 			return angle.Normalized().SignedAngleTo(Vector3.Up, Vector3.Forward);
-		}
-
-		private bool isYawOverrideActive;
-		private float targetYawOverride; //In Radians
-		/// <summary>
-		/// Use this for stage objects that want to override yaw without modifying the other camera settings.
-		/// Must be called every frame.
-		/// </summary>
-		public void OverrideYaw(float angle, float smoothing = 0)
-		{
-			isYawOverrideActive = true;
-
-			if (Mathf.IsZeroApprox(smoothing))
-				targetYawOverride = angle;
-			else
-				targetYawOverride = Mathf.LerpAngle(CurrentYaw, angle, smoothing);
 		}
 
 		/// <summary>

@@ -364,7 +364,11 @@ namespace Project.Gameplay
 
 		public void StartSidle(bool facingRight)
 		{
-			SetStateXfade(0.1f); //Quick crossfade into sidle
+			if (Character.IsRespawning) //Cut directly
+				SetStateXfade(0);
+			else //Quick crossfade into sidle
+				SetStateXfade(0.1f);
+
 			animatorTree.Set(STATE_PARAMETER, SIDLE_STATE_INDEX);
 			animatorTree.Set(STRAFE_DIRECTION_PARAMETER, facingRight ? 0 : 1);
 		}

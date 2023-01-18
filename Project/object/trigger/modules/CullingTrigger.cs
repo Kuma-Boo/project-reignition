@@ -5,20 +5,12 @@ namespace Project.Gameplay.Triggers
 {
 	public partial class CullingTrigger : StageTriggerModule
 	{
-		/// <summary>
-		/// Target node to affect. Can't be the CullingTrigger object when set to CullMode.ModifyTree.
-		/// </summary>
-		[Export]
-		private Node3D targetNode;
 		[Export]
 		private bool startEnabled; //Generally things should start culled
-		[Export]
-		private bool modifyTree; //Should the SceneTree be modified when target object is culled?
 		[Export]
 		private bool saveVisibilityOnCheckpoint;
 		[Export]
 		private bool isStageVisuals; //Take cheat into account?
-		private SpawnData spawnData; //Data for tree modification
 		private Callable ProcessCheckpointCallable => new Callable(this, MethodName.ProcessCheckpoint);
 		private LevelSettings Level => LevelSettings.instance;
 
@@ -28,37 +20,29 @@ namespace Project.Gameplay.Triggers
 		{
 			if (DebugDisableCulling) return;
 
+			Respawn();
+			Level.ConnectRespawnSignal(this);
+			Level.ConnectUnloadSignal(this);
+
 			if (saveVisibilityOnCheckpoint)
 			{
 				if (!Level.IsConnected(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
 					Level.Connect(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
+
+				//Cache starting checkpoint state
+				ProcessCheckpoint();
 			}
-
-			if (modifyTree) //Save spawn data
-			{
-				if (targetNode == this) //The results of this configuration is that once the culling trigger gets despawned, it'll never be respawned again
-					GD.PrintErr($"{Name}: Target Node cannot be the same object as CullingTrigger.cs when using CullMode.ModifyTree!");
-
-				spawnData = new SpawnData(targetNode.GetParent(), targetNode.Transform);
-			}
-
-			Respawn();
-			Level.ConnectRespawnSignal(this);
-			Level.ConnectUnloadSignal(this);
 		}
 
 		public void Unload()
 		{
 			if (Level.IsConnected(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable))
 				Level.Disconnect(LevelSettings.SignalName.OnTriggeredCheckpoint, ProcessCheckpointCallable);
-
-			if (modifyTree && !targetNode.IsQueuedForDeletion())
-				targetNode.QueueFree();
 		}
 
 		private bool useCheckpointVisibility;
 		private bool visibleOnCheckpoint; //Saves the current visiblity when player passes a checkpoint
-		private void ProcessCheckpoint() => visibleOnCheckpoint = targetNode.Visible;
+		private void ProcessCheckpoint() => visibleOnCheckpoint = Visible;
 
 		private void Respawn()
 		{
@@ -88,32 +72,16 @@ namespace Project.Gameplay.Triggers
 		{
 			if (DebugDisableCulling) return;
 
-			if (modifyTree)
-			{
-				GD.Print($"Respawned " + Name);
-				spawnData.Respawn(targetNode);
-			}
-
-			targetNode.Visible = true;
-			targetNode.SetProcess(true);
-			targetNode.SetPhysicsProcess(true);
+			Visible = true;
+			ProcessMode = ProcessModeEnum.Inherit;
 		}
 
 		public override void Deactivate()
 		{
 			if (DebugDisableCulling) return;
 
-			if (modifyTree)
-			{
-				if (!targetNode.IsInsideTree()) return;
-
-				spawnData.parentNode.CallDeferred("remove_child", targetNode);
-				return;
-			}
-
-			targetNode.Visible = false;
-			targetNode.SetProcess(false);
-			targetNode.SetPhysicsProcess(false);
+			Visible = false;
+			ProcessMode = ProcessModeEnum.Disabled;
 		}
 	}
 }

@@ -52,7 +52,12 @@ namespace Project.Core
 			}
 
 			if (InputManager.debugRestart.wasPressed)
-				TransitionManager.QueueSceneChange(string.Empty, true);
+			{
+				if (!Input.IsKeyPressed(Key.Shift))
+					Gameplay.CharacterController.instance.StartRespawn();
+				else
+					TransitionManager.QueueSceneChange(string.Empty, true);
+			}
 
 			if (line3d.Count + line2d.Count != 0 && !IsPaused)
 				QueueRedraw();

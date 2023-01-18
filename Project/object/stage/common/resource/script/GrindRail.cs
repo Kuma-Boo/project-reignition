@@ -17,7 +17,6 @@ namespace Project.Gameplay
 
 			properties.Add(ExtensionMethods.CreateProperty("Rail Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
 			properties.Add(ExtensionMethods.CreateProperty("Invisible Rail Settings/Enabled", Variant.Type.Bool));
-			properties.Add(ExtensionMethods.CreateProperty("Align Camera", Variant.Type.Bool));
 
 			if (isInvisibleRail)
 			{
@@ -39,8 +38,6 @@ namespace Project.Gameplay
 			{
 				case "Rail Path":
 					return railPath;
-				case "Align Camera":
-					return alignCamera;
 
 				case "Invisible Rail Settings/Enabled":
 					return isInvisibleRail;
@@ -69,9 +66,6 @@ namespace Project.Gameplay
 			{
 				case "Rail Path":
 					railPath = (NodePath)value;
-					break;
-				case "Align Camera":
-					alignCamera = (bool)value;
 					break;
 
 				case "Invisible Rail Settings/Enabled":
@@ -107,7 +101,11 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		private bool alignCamera = true;
+		[Signal]
+		public delegate void GrindStartedEventHandler();
+		[Signal]
+		public delegate void GrindCompletedEventHandler();
+
 		private Path3D rail;
 		private NodePath railPath;
 		private PathFollow3D pathFollower;
@@ -258,17 +256,14 @@ namespace Project.Gameplay
 			Character.Animator.StartBalancing();
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); //Snap
 
-			Character.Connect(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail), (uint)ConnectFlags.OneShot);
+			Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail));
+			Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail));
+
+			EmitSignal(SignalName.GrindStarted);
 		}
 
 		private void UpdateRail()
 		{
-			if (alignCamera) //Align the camera to follow movement direction
-			{
-				float targetDirection = Character.CalculateForwardAngle(pathFollower.Forward());
-				Camera.OverrideYaw(targetDirection, .4f);
-			}
-
 			if (Character.MovementState != CharacterController.MovementStates.External ||
 				Character.ExternalController != this) //Player must have disconnected from the rail
 			{
@@ -276,16 +271,19 @@ namespace Project.Gameplay
 				return;
 			}
 
+			float railAngle = Character.CalculateForwardAngle(pathFollower.Forward());
+
 			//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
-			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), Character.MovementAngle);
 			if (Controller.jumpButton.wasPressed)
 			{
 				DisconnectFromRail();
 
 				//Check if the player is holding a direction parallel to rail.
-				Character.IsGrindstepJump = !Character.IsHoldingDirection(Character.MovementAngle, true) && !Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi, true);
+				Character.IsGrindstepJump = Character.IsHoldingDirection(railAngle + Mathf.Pi * .5f) ||
+				 Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f);
 				if (Character.IsGrindstepJump) //Grindstep
 				{
+					float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), railAngle);
 					//Calculate how far player is trying to go
 					float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
 					horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
@@ -301,12 +299,14 @@ namespace Project.Gameplay
 				}
 				else //Jump normally
 					Character.Jump(true);
+
 				return;
 			}
 
 			Character.UpDirection = pathFollower.Up();
-			Character.MovementAngle = Character.CalculateForwardAngle(pathFollower.Forward());
+			Character.MovementAngle = railAngle;
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
+			Character.CheckCeiling(); //Check for crushers
 
 			//Update shuffling
 			if (Controller.actionButton.wasPressed)
@@ -379,8 +379,12 @@ namespace Project.Gameplay
 			Character.Animator.SnapRotation(Character.MovementAngle);
 
 			//Disconnect signals
-			if (Character.IsConnected(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail)))
-				Character.Disconnect(CharacterController.SignalName.OnFinishedExternalControl, new Callable(this, MethodName.DisconnectFromRail));
+			if (Character.IsConnected(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail)))
+				Character.Disconnect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail));
+			if (Character.IsConnected(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail)))
+				Character.Disconnect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail));
+
+			EmitSignal(SignalName.GrindCompleted);
 		}
 
 		private RaycastHit CheckWall(float movementDelta)

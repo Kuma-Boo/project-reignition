@@ -11,6 +11,8 @@ namespace Project.Gameplay.Objects
 	{
 		[Signal]
 		public delegate void ActivatedEventHandler();
+		[Signal]
+		public delegate void DeactivatedEventHandler(); //Called after character finishes processing this launcher.
 
 		[Export]
 		private float startingHeight; //Height at the beginning of the arc
@@ -91,8 +93,10 @@ namespace Project.Gameplay.Objects
 			return pos;
 		}
 
+		public void Deactivate() => EmitSignal(SignalName.Deactivated);
+
 		[Export]
-		private AudioStreamPlayer3D sfxPlayer;
+		private AudioStreamPlayer3D sfxPlayer; //Optional SFX field
 	}
 
 	public struct LaunchData

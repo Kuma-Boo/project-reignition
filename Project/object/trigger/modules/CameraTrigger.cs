@@ -9,6 +9,8 @@ namespace Project.Gameplay.Triggers
 	{
 		[Export(PropertyHint.Range, "0,2,0.1")]
 		public float transitionTime; //How long the transition is (in seconds). Use a transition time of 0 to perform an instant cut.
+		[Export(PropertyHint.Range, "-1,2,0.1")]
+		public float deactivationTransitionTime = -1; //Override for deactivation
 		[Export]
 		public TransitionType transitionType;
 		public enum TransitionType
@@ -19,6 +21,7 @@ namespace Project.Gameplay.Triggers
 
 		[Export]
 		public CameraSettingsResource settings; //Must be assigned to something.
+		[Export]
 		private CameraSettingsResource previousSettings; //Reference to the camera data that was being used when this trigger was entered.
 		private Vector3 previousStaticPosition;
 		private CameraController CameraController => Character.Camera;
@@ -46,15 +49,14 @@ namespace Project.Gameplay.Triggers
 
 		public override void Deactivate()
 		{
-			if (previousSettings.IsStaticCamera)
-
-				if (previousSettings == null || settings == null) return;
+			if (previousSettings == null || settings == null) return;
 			if (CameraController.ActiveSettings != settings) return; //Already overridden by a different trigger
 
+			if (Character.IsRespawning) return;
 			if (previousSettings.IsStaticCamera && previousSettings.autosetStaticPosition) //Reset static position
 				previousSettings.staticPosition = previousStaticPosition;
 
-			CameraController.UpdateCameraSettings(previousSettings, transitionTime);
+			CameraController.UpdateCameraSettings(previousSettings, Mathf.IsEqualApprox(deactivationTransitionTime, -1) ? transitionTime : deactivationTransitionTime);
 		}
 	}
 }

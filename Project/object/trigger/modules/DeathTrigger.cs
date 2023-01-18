@@ -18,7 +18,7 @@ namespace Project.Gameplay.Triggers
 		public override void Activate()
 		{
 			//TODO Play VFX
-			Character.Kill();
+			Character.StartRespawn();
 			Character.Effect.PlayVoice("fall");
 
 			if (triggerType == TriggerType.Water)

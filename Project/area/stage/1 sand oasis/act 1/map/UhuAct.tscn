@@ -1,10 +1,11 @@
-[gd_scene load_steps=23 format=3 uid="uid://y6svol6wrwis"]
+[gd_scene load_steps=24 format=3 uid="uid://y6svol6wrwis"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_xkwa4"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_1ul40"]
 [ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="2_jytk8"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="3_lnd4x"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="4_f3m4h"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_ncewo"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_nopxn"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="6_ckw71"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="6_ucvst"]
@@ -14,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://k8xn2ebin3c2" path="res://area/stage/1 sand oasis/data/environment/object/pillar/SquarePillarMid.tscn" id="11_evogq"]
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="12_v7tgu"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="13_7eemm"]
-[ext_resource type="PackedScene" uid="uid://br688ytf45e8c" path="res://area/stage/1 sand oasis/act 1/Static.tscn" id="15_cc3yv"]
+[ext_resource type="PackedScene" uid="uid://dgew0sa6l55q3" path="res://area/stage/1 sand oasis/act 1/Static.tscn" id="15_cc3yv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_iynow"]
 size = Vector3(10, 10, 2)
@@ -139,6 +140,8 @@ metadata/_edit_lock_ = true
 [node name="CharacterSpawn" parent="UhuAct/SpawnPosition" instance=ExtResource("2_jytk8")]
 
 [node name="Start" type="Node3D" parent="UhuAct"]
+script = ExtResource("4_ncewo")
+saveVisibilityOnCheckpoint = true
 
 [node name="DriftTrigger" parent="UhuAct/Start" instance=ExtResource("3_lnd4x")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 70.175, 75, -52.1)
@@ -647,6 +650,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.703845, -0.511373, 0)
 
 [node name="Oasis" type="Node3D" parent="UhuAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
+script = ExtResource("4_ncewo")
+saveVisibilityOnCheckpoint = true
 
 [node name="DashPanelM1" parent="UhuAct/Oasis" instance=ExtResource("6_ckw71")]
 transform = Transform3D(-0.883737, -0.0118025, 0.467835, 0.0455648, 0.992762, 0.111117, -0.46576, 0.119515, -0.876803, 64.3456, -4.28308, 50.9162)

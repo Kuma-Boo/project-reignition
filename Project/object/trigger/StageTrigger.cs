@@ -109,10 +109,7 @@ namespace Project.Gameplay.Triggers
 			EmitSignal(SignalName.Activated);
 		}
 
-		private void Deactivate()
-		{
-			EmitSignal(SignalName.Deactivated);
-		}
+		private void Deactivate() => EmitSignal(SignalName.Deactivated);
 
 		public void EnableMonitoring() => Monitoring = true;
 		public void DisableMonitoring() => Monitoring = false;

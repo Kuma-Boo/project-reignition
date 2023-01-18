@@ -4,7 +4,7 @@ using Project.Core;
 namespace Project.Gameplay
 {
 	/// <summary>
-	/// Handles the Soul Gauge & Skills.
+	/// Handles the Soul Gauge, Skills, and Stats.
 	/// </summary>
 	public partial class CharacterSkillManager : Node
 	{
@@ -40,6 +40,8 @@ namespace Project.Gameplay
 		private MovementResource maxAirSettings; //Fastest Sonic
 		[Export]
 		public float accelerationJumpSpeed;
+		[Export]
+		public float homingAttackSpeed;
 
 		[Export]
 		public float baseSlideFriction; //Shortest slide

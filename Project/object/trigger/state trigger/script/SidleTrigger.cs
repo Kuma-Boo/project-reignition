@@ -59,6 +59,7 @@ namespace Project.Gameplay.Triggers
 		{
 			isActive = true;
 			Character.StartExternal(this, Character.PathFollower, .2f);
+			Character.IsOnGround = true;
 			Character.Animator.ExternalAngle = 0;
 			Character.Animator.SnapRotation(0);
 			Character.Animator.StartSidle(isFacingRight);

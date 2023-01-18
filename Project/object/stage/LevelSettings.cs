@@ -305,7 +305,7 @@ namespace Project.Gameplay
 		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
 		private void UpdateTime()
 		{
-			if (isLevelFinished || Interface.Countdown.IsCountdownActive || CharacterController.instance.IsRespawning) return;
+			if (isLevelFinished || Interface.Countdown.IsCountdownActive) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; //Add current time
 			if (TimeLimit == 0) //No time limit
@@ -363,12 +363,15 @@ namespace Project.Gameplay
 		//Checkpoint data
 		public Node3D CurrentCheckpoint { get; private set; }
 		public Path3D CheckpointPath { get; private set; }
+		public CameraSettingsResource CheckpointCamera;
 		public void SetCheckpoint(Node3D newCheckpoint)
 		{
 			if (newCheckpoint == CurrentCheckpoint) return; //Already at this checkpoint
 
 			CurrentCheckpoint = newCheckpoint; //Position transform
 			CheckpointPath = CharacterController.instance.PathFollower.ActivePath; //Store current path
+			CheckpointCamera = CameraController.instance.ActiveSettings;
+
 			EmitSignal(SignalName.OnTriggeredCheckpoint);
 		}
 		[Signal]
@@ -392,7 +395,6 @@ namespace Project.Gameplay
 
 		[Signal]
 		public delegate void OnRespawnedEventHandler();
-		public static bool IsRespawnedFromPlayer; //Did the level respawn from the player dying?
 		private const string RESPAWN_FUNCTION = "Respawn"; //Default name of respawn functions
 		public void ConnectRespawnSignal(Node node)
 		{
@@ -403,12 +405,11 @@ namespace Project.Gameplay
 			}
 
 			if (!IsConnected(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION)))
-				Connect(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION));
+				Connect(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
 		}
 
-		public void RespawnObjects(bool fromPlayer)
+		public void RespawnObjects()
 		{
-			IsRespawnedFromPlayer = fromPlayer;
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
 			EmitSignal(SignalName.OnRespawned);
 		}
@@ -460,7 +461,7 @@ namespace Project.Gameplay
 
 			//Cycle items
 			if (itemCycleRespawnEnabled)
-				RespawnObjects(false);
+				RespawnObjects();
 
 			if (_itemCycles[itemCycleIndex] != null) //Despawn current item cycle
 				_itemCyclesSpawnData[itemCycleIndex].parentNode.CallDeferred(MethodName.RemoveChild, _itemCycles[itemCycleIndex]);
