@@ -72,6 +72,6 @@ namespace Project.Gameplay
 		}
 
 		//Is the pathfollower ahead of the reference point?
-		public bool IsAheadOfPoint(Vector3 globalPosition) => Mathf.Sign(Progress - ActivePath.Curve.GetClosestOffset(globalPosition - ActivePath.GlobalPosition)) > 0;
+		public bool IsAheadOfPoint(Vector3 globalPosition) => Progress > ActivePath.Curve.GetClosestOffset(globalPosition - ActivePath.GlobalPosition);
 	}
 }

@@ -1,9 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://f0cevncrba8v"]
+[gd_scene load_steps=8 format=3 uid="uid://f0cevncrba8v"]
 
 [ext_resource type="PackedScene" uid="uid://cjoacvuft1jwx" path="res://area/stage/1 sand oasis/data/environment/object/model/platform/Drawbridge.gltf" id="1_wy6av"]
 
 [sub_resource type="BoxShape3D" id="5"]
-size = Vector3(1.6, 4, 4)
+size = Vector3(0.8, 3, 3)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_it28g"]
+height = 1.0
+radius = 1.5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2lb7c"]
 size = Vector3(3.4, 1.8, 44)
@@ -94,17 +98,26 @@ _data = {
 }
 
 [node name="Drawbridge" type="StaticBody3D" groups=["floor", "wall"]]
-collision_mask = 0
 
 [node name="Drawbridge" parent="." instance=ExtResource("1_wy6av")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35, 0, 0)
+[node name="CubeR" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95, 0, 0)
 shape = SubResource("5")
 
-[node name="CollisionShape2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35, 0, 0)
+[node name="CubeL" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0, 0)
 shape = SubResource("5")
+
+[node name="Wheels" type="StaticBody3D" parent="." groups=["wall"]]
+
+[node name="WheelL" type="CollisionShape3D" parent="Wheels"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -2.75, 5.24537e-08, 0)
+shape = SubResource("CylinderShape3D_it28g")
+
+[node name="WheelR" type="CollisionShape3D" parent="Wheels"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.75, 2.92866e-07, 0)
+shape = SubResource("CylinderShape3D_it28g")
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 22)

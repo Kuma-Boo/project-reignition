@@ -12,10 +12,7 @@ namespace Project.Core
 		public static readonly Vector2i HALF_SCREEN_SIZE = (Vector2i)((Vector2)SCREEN_SIZE * .5f);
 
 		public override void _EnterTree() => Instance = this;
-		public override void _Process(double _)
-		{
-			UpdateShaderTime();
-		}
+		public override void _Process(double _) => UpdateShaderTime();
 
 		[Export(PropertyHint.Layers3dPhysics)]
 		public uint environmentMask;
@@ -39,10 +36,14 @@ namespace Project.Core
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_TIME, shaderTime);
 		}
 
-		//Pearl collision shapes
-		[Export]
+		//Pearl stuff
 		public SphereShape3D PearlCollisionShape = new SphereShape3D();
 		public SphereShape3D RichPearlCollisionShape = new SphereShape3D();
+		[Export]
+		public AnimatedTexture pearlTexture;
+		[Export]
+		public AnimatedTexture richPearlTexture;
+
 		private const float PEARL_NORMAL_COLLISION = .4f;
 		private const float RICH_PEARL_NORMAL_COLLISION = .6f;
 		public void UpdatePearlCollisionShapes(float sizeMultiplier = 1f)

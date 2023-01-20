@@ -16,6 +16,16 @@ namespace Project.Gameplay.Triggers
 		private Node3D cameraStandin;
 		[Export]
 		private LockoutResource lockout;
+		[Export(PropertyHint.Flags)]
+		private ResetModes resetMode;
+
+		private enum ResetModes
+		{
+			PlayerSpawnsBefore, //Only respawn if the player is respawned BEFORE the object. (Default)
+			PlayerSpawnsAfter, //Only respawn if the player is respawned AFTER the object.
+			Always, //Always reset
+			Disabled, //Never reset
+		}
 
 		private bool wasActivated;
 		[Signal]
@@ -23,7 +33,8 @@ namespace Project.Gameplay.Triggers
 
 		public override void _Ready()
 		{
-			LevelSettings.instance.ConnectRespawnSignal(this);
+			if (resetMode != ResetModes.Disabled)
+				LevelSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -35,15 +46,38 @@ namespace Project.Gameplay.Triggers
 
 		public void Respawn()
 		{
-			wasActivated = false;
+			bool respawnValid = true;
 
-			if (animator.HasAnimation("RESET"))
-				animator.Play("RESET"); //Reset event
-			else if (!string.IsNullOrEmpty(animator.Autoplay)) //Fallback to autoplay animation
+			if (resetMode != ResetModes.Always) //Check if respawn is valid
 			{
-				animator.Play(animator.Autoplay);
-				animator.Stop();
-				animator.Seek(0.0, true);
+				//Is the player's target respawn position in front of this event node?
+				float eventPosition = StageSettings.instance.GetProgress(GlobalPosition);
+				float checkpointPosition = StageSettings.instance.GetProgress(LevelSettings.instance.CurrentCheckpoint.GlobalPosition);
+				bool isRespawningAhead = checkpointPosition > eventPosition;
+				if ((resetMode == ResetModes.PlayerSpawnsBefore && isRespawningAhead) ||
+				(resetMode == ResetModes.PlayerSpawnsAfter && !isRespawningAhead))
+					respawnValid = false;
+			}
+
+			if (respawnValid)
+			{
+				if (animator.HasAnimation("RESET")) //Only reset if a RESET animation exists.
+				{
+					wasActivated = false;
+					animator.Play("RESET"); //Reset event
+				}
+				else
+					GD.PrintErr(Name + " doesn't have a RESET animation.");
+
+				/*
+				else if (!string.IsNullOrEmpty(animator.Autoplay)) //DEPRECATED. Fallback to autoplay animation
+				{
+					animator.Play(animator.Autoplay);
+					animator.Stop();
+					animator.Seek(0.0, true);
+					wasActivated = false;
+				}
+				*/
 			}
 		}
 

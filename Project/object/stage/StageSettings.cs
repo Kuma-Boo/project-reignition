@@ -12,6 +12,8 @@ namespace Project.Gameplay
 		/// <summary> Pathfollower automatically assigns this path when level starts. </summary>
 		[Export]
 		public Path3D mainPath;
+		/// <summary> Returns the position of a given position, from [0 <-> 1]. </summary>
+		public float GetProgress(Vector3 pos) => mainPath.Curve.GetClosestOffset(pos);
 
 		[Export]
 		public Node3D completionDemoNode;

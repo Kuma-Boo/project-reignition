@@ -1,7 +1,7 @@
-[gd_scene load_steps=61 format=3 uid="uid://dgew0sa6l55q3"]
+[gd_scene load_steps=62 format=3 uid="uid://dl3d4fyyg4ojl"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
-[ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
+[ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
 [ext_resource type="PackedScene" uid="uid://efrfjkjxlfc8" path="res://area/stage/1 sand oasis/act 1/environment/01Opening.tscn" id="2_eyaqr"]
 [ext_resource type="Resource" uid="uid://b57nulf6d3pq4" path="res://sound/voice/sand oasis/DialogLibrary.tres" id="2_qgupw"]
 [ext_resource type="PackedScene" uid="uid://bu2kguc4ygtbo" path="res://area/stage/1 sand oasis/act 1/environment/02Slope.tscn" id="3_b4ate"]
@@ -31,15 +31,16 @@
 [ext_resource type="Resource" uid="uid://brknjxuaah7xr" path="res://resource/preset/camera/common/HallFloorCloseCam.tres" id="23_aljpv"]
 [ext_resource type="Resource" uid="uid://dwqo3vphilbs6" path="res://area/stage/1 sand oasis/act 1/trigger/camera/SidleCam.tres" id="23_g7g12"]
 [ext_resource type="Resource" uid="uid://dq3y0ns7mcco5" path="res://area/stage/1 sand oasis/act 1/trigger/camera/OasisCam.tres" id="23_vlc8n"]
-[ext_resource type="Resource" uid="uid://dd0ulcjl72sfi" path="res://area/stage/1 sand oasis/act 1/trigger/camera/WallForwardCam.tres" id="24_exm6d"]
 [ext_resource type="Resource" uid="uid://dx47u8sre674v" path="res://area/stage/1 sand oasis/act 1/trigger/camera/SidleCornerCam.tres" id="24_nfyes"]
-[ext_resource type="Resource" uid="uid://cfbyfp0sae1jm" path="res://area/stage/1 sand oasis/act 1/trigger/camera/HallPositionCam.tres" id="24_qtnck"]
-[ext_resource type="Resource" uid="uid://uu106ennix16" path="res://area/stage/1 sand oasis/act 1/trigger/camera/WallBackstepCam.tres" id="24_ujg2m"]
+[ext_resource type="Resource" uid="uid://cfbyfp0sae1jm" path="res://area/stage/1 sand oasis/act 1/trigger/camera/HallCam.tres" id="24_qtnck"]
 [ext_resource type="PackedScene" uid="uid://cbwcphc75t0y7" path="res://effect/buffer/DepthRenderer.tscn" id="27_ypwqo"]
+[ext_resource type="Resource" uid="uid://dd0ulcjl72sfi" path="res://resource/preset/camera/common/WallForwardCam.tres" id="27_ywd2q"]
 [ext_resource type="PackedScene" uid="uid://bb0wbyqxrs175" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="28_5kt56"]
+[ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="28_ximg0"]
 [ext_resource type="Resource" uid="uid://dbjigcuhmxju0" path="res://area/stage/1 sand oasis/act 1/trigger/camera/ForestCam.tres" id="29_gte7b"]
 [ext_resource type="Material" uid="uid://5wxyrpeo8ycq" path="res://area/stage/1 sand oasis/data/environment/model/material/Water.tres" id="29_lfji7"]
 [ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/stage/1 sand oasis/act 1/trigger/camera/InteriorCam.tres" id="31_l0kwc"]
+[ext_resource type="Resource" uid="uid://drgk50yomyihb" path="res://resource/preset/camera/common/OverheadCam.tres" id="34_ubrmr"]
 [ext_resource type="Curve3D" uid="uid://gbvjc2ii4w2x" path="res://area/stage/1 sand oasis/act 1/environment/path/IslandPath.tres" id="35_8ng3c"]
 [ext_resource type="Curve3D" uid="uid://df5sfpy8wxctf" path="res://area/stage/1 sand oasis/act 1/environment/path/UTurnPath.tres" id="35_l4txy"]
 [ext_resource type="Curve3D" uid="uid://derjw2ctbo60n" path="res://area/stage/1 sand oasis/act 1/environment/path/WallClimbPath.tres" id="36_hdewb"]
@@ -288,7 +289,7 @@ triggerMode = 2
 [node name="CameraTrigger" type="Node3D" parent="StaticCameraTriggers/WallForwardTrigger"]
 script = ExtResource("13_3nlok")
 transitionTime = 0.6
-settings = ExtResource("24_exm6d")
+settings = ExtResource("27_ywd2q")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/WallForwardTrigger"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 1, 0.399994)
@@ -301,7 +302,7 @@ triggerMode = 2
 [node name="CameraTrigger" type="Node3D" parent="StaticCameraTriggers/WallBackstepTrigger"]
 script = ExtResource("13_3nlok")
 transitionTime = 0.6
-settings = ExtResource("24_ujg2m")
+settings = ExtResource("28_ximg0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/WallBackstepTrigger"]
 shape = SubResource("BoxShape3D_jsp8v")
@@ -442,6 +443,45 @@ shape = SubResource("BoxShape3D_tlhfy")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticCameraTriggers/SidleCornerTrigger"]
 shape = SubResource("BoxShape3D_tlhfy")
+
+[node name="PillarTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -630, -30, -765)
+triggerMode = 2
+exitMode = 2
+
+[node name="Camera" type="Node3D" parent="StaticCameraTriggers/PillarTrigger"]
+script = ExtResource("13_3nlok")
+transitionTime = 0.5
+settings = ExtResource("24_qtnck")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/PillarTrigger"]
+shape = SubResource("BoxShape3D_wu12k")
+
+[node name="PierTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -527.5, -20.6, -820)
+triggerMode = 2
+exitMode = 2
+
+[node name="Camera" type="Node3D" parent="StaticCameraTriggers/PierTrigger"]
+script = ExtResource("13_3nlok")
+transitionTime = 0.5
+settings = ExtResource("34_ubrmr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/PierTrigger"]
+shape = SubResource("BoxShape3D_wu12k")
+
+[node name="TownTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -330.333, -20.4, -738.055)
+triggerMode = 2
+exitMode = 2
+
+[node name="Camera" type="Node3D" parent="StaticCameraTriggers/TownTrigger"]
+script = ExtResource("13_3nlok")
+transitionTime = 0.5
+settings = ExtResource("24_qtnck")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/TownTrigger"]
+shape = SubResource("BoxShape3D_wu12k")
 
 [node name="Checkpoints" type="Node3D" parent="."]
 

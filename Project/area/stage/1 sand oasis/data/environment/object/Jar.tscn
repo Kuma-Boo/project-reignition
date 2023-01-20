@@ -1,9 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://bo653wt3gh2hq"]
+[gd_scene load_steps=10 format=3 uid="uid://bo653wt3gh2hq"]
 
 [ext_resource type="PackedScene" uid="uid://dxaspwoin7dr1" path="res://area/stage/1 sand oasis/data/environment/object/model/Jar.gltf" id="1_qspct"]
 [ext_resource type="PackedScene" uid="uid://cnhlb8lynqjln" path="res://area/stage/1 sand oasis/data/environment/object/model/JarPieces.gltf" id="2_2vdbn"]
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="2_l0n6o"]
 [ext_resource type="AudioStream" uid="uid://1rnhdwqarpwj" path="res://sound/sfx/stage/sand oasis/jar.wav" id="4_040ue"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yxr3g"]
+radius = 0.75
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v3ose"]
 radius = 0.8
@@ -14,7 +17,7 @@ resource_name = "RESET"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:disabled")
+tracks/0/path = NodePath("Root/CollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -26,7 +29,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Jar:visible")
+tracks/1/path = NodePath("Root:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -42,7 +45,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:disabled")
+tracks/0/path = NodePath("Root/CollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -54,7 +57,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Jar:visible")
+tracks/1/path = NodePath("Root:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -84,25 +87,33 @@ _data = {
 "shatter": SubResource("Animation_wtc5q")
 }
 
-[node name="Jar" type="Area3D" node_paths=PackedStringArray("animator")]
-collision_layer = 4
-collision_mask = 2
-monitorable = false
+[node name="Jar" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("2_l0n6o")
 explosionStrength = 20.0
 pieceMass = 0.6
 stopPlayerOnShatter = true
-rootPath = NodePath("Jar")
-pieceRootPath = NodePath("JarPieces")
+root = NodePath("Root")
+pieceRoot = NodePath("JarPieces")
 animator = NodePath("AnimationPlayer")
 shatterFlags = 31
 
-[node name="Jar" parent="." instance=ExtResource("1_qspct")]
+[node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("SphereShape3D_yxr3g")
+
+[node name="Jar" parent="Root" instance=ExtResource("1_qspct")]
 
 [node name="JarPieces" parent="." instance=ExtResource("2_2vdbn")]
 visible = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("CapsuleShape3D_v3ose")
 
@@ -118,5 +129,5 @@ libraries = {
 "": SubResource("AnimationLibrary_f43ij")
 }
 
-[connection signal="area_entered" from="." to="." method="OnEntered"]
-[connection signal="area_exited" from="." to="." method="OnExited"]
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]

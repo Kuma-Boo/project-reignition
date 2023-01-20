@@ -53,7 +53,7 @@ namespace Project.Core
 
 			if (InputManager.debugRestart.wasPressed)
 			{
-				if (!Input.IsKeyPressed(Key.Shift))
+				if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(Gameplay.CharacterController.instance))
 					Gameplay.CharacterController.instance.StartRespawn();
 				else
 					TransitionManager.QueueSceneChange(string.Empty, true);

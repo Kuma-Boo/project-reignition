@@ -10,6 +10,7 @@ namespace Project.Core
 	public partial class TransitionManager : Node
 	{
 		public static TransitionManager instance;
+		public const string MENU_SCENE_PATH = "res://interface/menu/Menu.tscn";
 
 		[Export]
 		private ColorRect fade;

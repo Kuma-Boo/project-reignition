@@ -308,6 +308,8 @@ namespace Project.Gameplay
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 			Character.CheckCeiling(); //Check for crushers
 
+			sfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed)); //Fade volume based on speed
+
 			//Update shuffling
 			if (Controller.actionButton.wasPressed)
 			{

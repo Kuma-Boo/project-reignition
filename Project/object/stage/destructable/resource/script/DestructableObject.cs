@@ -18,11 +18,12 @@ namespace Project.Gameplay.Objects
 		private bool stopPlayerOnShatter; //Stop the player when being shattered?
 
 		[Export]
-		private NodePath rootPath;
+		private bool disableRespawn; //Skip respawning this object. Call Respawn() manually instead.
+
+		[Export]
 		private Node3D root;
 		[Export]
-		private NodePath pieceRootPath; //Parent node of pieces
-		private Node3D pieceRoot;
+		private Node3D pieceRoot; //Parent node of pieces
 		[Export]
 		protected AnimationPlayer animator;
 		[Export(PropertyHint.Flags, "PlayerCollision,ObjectCollision,AttackSkill,HomingAttack,SpeedBreak")]
@@ -56,9 +57,6 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
-			root = GetNode<Node3D>(rootPath);
-			pieceRoot = GetNode<Node3D>(pieceRootPath);
-
 			for (int i = 0; i < pieceRoot.GetChildCount(); i++)
 			{
 				RigidBody3D rigidbody = pieceRoot.GetChildOrNull<RigidBody3D>(i);
@@ -80,7 +78,10 @@ namespace Project.Gameplay.Objects
 			}
 
 			Respawn();
-			LevelSettings.instance.ConnectRespawnSignal(this);
+
+			if (!disableRespawn)
+				LevelSettings.instance.ConnectRespawnSignal(this);
+
 			LevelSettings.instance.ConnectUnloadSignal(this);
 		}
 
@@ -99,33 +100,49 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Respawn()
 		{
-			//Reset animator
-			if (animator != null && animator.HasAnimation("RESET"))
-				animator.Play("RESET");
+			isShattered = false;
 
 			if (tween != null)
 				tween.Kill();
 
-			isShattered = false;
-
 			//Reset Pieces
 			for (int i = 0; i < pieces.Count; i++)
 			{
-				pieces[i].rigidbody.SetDeferred("transform", pieces[i].spawnTransform);
 				pieces[i].rigidbody.Freeze = true;
 				pieces[i].rigidbody.LinearVelocity = pieces[i].rigidbody.AngularVelocity = Vector3.Zero; //Reset velocity
-				pieces[i].mesh.Transparency = 0f; //Reset fade
 				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.On; //Reset Shadows
 			}
 
-			if (pieceRoot.IsInsideTree())
-				pieceRoot.GetParent().CallDeferred(MethodName.RemoveChild, pieceRoot); //Start with the piece parent despawned
-
-			if (IsInsideTree() && root.GetParent() != this)
-			{
+			if (root.GetParent() != this) //Make sure root node exists
 				AddChild(root);
-				root.Transform = Transform3D.Identity;
+
+			if (root is RigidBody3D)
+			{
+				RigidBody3D rb = root as RigidBody3D;
+				rb.LinearVelocity = rb.AngularVelocity = Vector3.Zero;
 			}
+
+			//Wait an extra physics frame for rigidbody to freeze to allow updating transforms
+			GetTree().CreateTimer(Core.PhysicsManager.physicsDelta, true, true).Connect(SceneTreeTimer.SignalName.Timeout,
+			new Callable(this, MethodName.ResetNodeTransforms));
+		}
+
+		private void ResetNodeTransforms()
+		{
+			if (pieceRoot.IsInsideTree())
+				pieceRoot.GetParent().RemoveChild(pieceRoot); //Start with the piece parent despawned
+
+			//Reset animator
+			if (animator != null && animator.HasAnimation("RESET"))
+				animator.Play("RESET");
+
+			for (int i = 0; i < pieces.Count; i++)
+			{
+				pieces[i].rigidbody.Transform = pieces[i].spawnTransform;
+				pieces[i].mesh.Transparency = 0f; //Reset fade
+			}
+
+			root.Transform = Transform3D.Identity;
 		}
 
 		public virtual void Despawn()
@@ -143,7 +160,7 @@ namespace Project.Gameplay.Objects
 				animator.Play("shatter");
 
 			AddChild(pieceRoot);
-			pieceRoot.Visible = true;
+			pieceRoot.Visible = true; //Make sure piece root is visible
 			pieceRoot.GlobalTransform = root.GlobalTransform;
 			Vector3 shatterPoint = root.GlobalPosition;
 			float shatterStrength = explosionStrength;
@@ -165,7 +182,7 @@ namespace Project.Gameplay.Objects
 				pieces[i].rigidbody.Freeze = false;
 				pieces[i].rigidbody.AddExplosionForce(shatterPoint, shatterStrength);
 				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off; //Particles don't cast shadows when shattering
-				tween.TweenProperty(pieces[i].mesh, "transparency", 1f, 1f);
+				tween.TweenProperty(pieces[i].mesh, "transparency", 1f, 1f).From(0f);
 			}
 
 			isShattered = true;

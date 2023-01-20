@@ -173,6 +173,7 @@ namespace Project.Gameplay
 		public float speedBreakSpeed; //Movement speed during speed break
 		public bool IsTimeBreakActive { get; private set; }
 		public bool IsSpeedBreakActive { get; private set; }
+		public bool IsSpeedBreakCharging => IsSpeedBreakActive && !Mathf.IsZeroApprox(breakTimer);
 		public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
 
 		private float breakTimer = 0; //Timer for break skills
@@ -226,7 +227,7 @@ namespace Project.Gameplay
 		{
 			if (IsSpeedBreakActive)
 			{
-				if (breakTimer == 0)
+				if (Mathf.IsZeroApprox(breakTimer))
 				{
 					if (breakSkillSfx.Stream != speedBreakActivate) //Play sfx when boost starts
 					{
@@ -246,7 +247,7 @@ namespace Project.Gameplay
 
 				return;
 			}
-			else if (breakTimer != 0) return; //Cooldown
+			else if (!Mathf.IsZeroApprox(breakTimer)) return; //Cooldown
 
 			//Check whether we can start speed break
 			if (Character.Controller.boostButton.wasPressed && !IsTimeBreakActive)

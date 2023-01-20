@@ -25,7 +25,6 @@ namespace Project.Interface
 		private InputManager.Controller Controller => InputManager.controller;
 		private LevelSettings Level => LevelSettings.instance;
 		private const string TECHNICAL_FORMATTING = "0.0";
-		private const string MENU_SCENE_PATH = "res://interface/menu/Menu.tscn";
 
 		public override void _Ready()
 		{
@@ -46,7 +45,7 @@ namespace Project.Interface
 			else if (Controller.jumpButton.wasPressed || Controller.actionButton.wasPressed)
 			{
 				//Determine which scene to load
-				TransitionManager.QueueSceneChange(Controller.jumpButton.wasPressed ? MENU_SCENE_PATH : string.Empty, false);
+				TransitionManager.QueueSceneChange(Controller.jumpButton.wasPressed ? TransitionManager.MENU_SCENE_PATH : string.Empty, false);
 
 				TransitionManager.StartTransition(new TransitionData()
 				{

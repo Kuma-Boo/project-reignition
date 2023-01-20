@@ -1,0 +1,483 @@
+[gd_scene load_steps=20 format=3 uid="uid://c5uepoa8prl6f"]
+
+[ext_resource type="Script" path="res://interface/gameplay/pause/PauseMenu.cs" id="1"]
+[ext_resource type="Texture2D" uid="uid://tbukuwdkqg5w" path="res://interface/gameplay/pause/texture/paper.png" id="2_6a5br"]
+[ext_resource type="Texture2D" uid="uid://bth3tgyk56iu5" path="res://interface/gameplay/pause/texture/tile000.png" id="3_v8w6m"]
+[ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/Greco Std DB.otf" id="4_p3s4p"]
+[ext_resource type="AudioStream" uid="uid://dc6pp0ugxo4e3" path="res://sound/sfx/system/menu pause.wav" id="5_wducq"]
+[ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="6_mgwkx"]
+[ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="7_f2emr"]
+[ext_resource type="AudioStream" uid="uid://cruu5h1jr78lr" path="res://sound/sfx/system/menu screen change.wav" id="7_m12c2"]
+
+[sub_resource type="CanvasItemMaterial" id="61"]
+blend_mode = 1
+
+[sub_resource type="Animation" id="Animation_vpj2a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cursor:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.2, 1.2)]
+}
+
+[sub_resource type="Animation" id="Animation_u8ec1"]
+resource_name = "hide"
+length = 0.26667
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cursor:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2),
+"transitions": PackedFloat32Array(0.5, 1, 1),
+"update": 0,
+"values": [Vector2(1.2, 1.2), Vector2(1.4, 1.4), Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"UpdateCursorPosition"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../SFX/SelectionSFX")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_8g051"]
+resource_name = "show"
+length = 0.26667
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cursor:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0.8, 2), Vector2(1.4, 1), Vector2(1.2, 1.2)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableCursorMovement"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qllxi"]
+_data = {
+"RESET": SubResource("Animation_vpj2a"),
+"hide": SubResource("Animation_u8ec1"),
+"show": SubResource("Animation_8g051")
+}
+
+[sub_resource type="CanvasItemMaterial" id="82"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Animation" id="59"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Paper:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1e-05, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.705882)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../PauseLabel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="58"]
+resource_name = "pause"
+length = 0.333337
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Paper:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 0.125),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1), Vector2(1.1, 1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.125),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.705882)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../PauseLabel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("..")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableInteraction"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../SFX/PauseSFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_l4bov"]
+resource_name = "screen-change"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../SFX/ScreenChangeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="60"]
+resource_name = "unpause"
+length = 0.416671
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.705882), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../PauseLabel:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableInteraction"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../SFX/CancelSFX")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oiknc"]
+_data = {
+"RESET": SubResource("59"),
+"pause": SubResource("58"),
+"screen-change": SubResource("Animation_l4bov"),
+"unpause": SubResource("60")
+}
+
+[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("pauseAnimator", "cursorNode", "cursorAnimator")]
+process_mode = 3
+layer = 64
+script = ExtResource("1")
+pauseAnimator = NodePath("AnimationPlayer")
+cursorNode = NodePath("Pause/CursorAnchor/Cursor")
+cursorAnimator = NodePath("Pause/CursorAnchor/AnimationPlayer")
+
+[node name="Pause" type="ColorRect" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.705882)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="CursorAnchor" type="Control" parent="Pause"]
+anchors_preset = 0
+offset_left = 192.0
+offset_top = 664.0
+offset_right = 192.0
+offset_bottom = 664.0
+
+[node name="Cursor" type="TextureRect" parent="Pause/CursorAnchor"]
+material = SubResource("61")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1395
+anchor_top = 0.757259
+anchor_right = 0.1395
+anchor_bottom = 0.757259
+offset_right = 128.0
+offset_bottom = 128.0
+scale = Vector2(1.2, 1.2)
+pivot_offset = Vector2(64, 96)
+texture = ExtResource("3_v8w6m")
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/CursorAnchor"]
+playback_speed = 1.5
+libraries = {
+"": SubResource("AnimationLibrary_qllxi")
+}
+
+[node name="Paper" type="TextureRect" parent="Pause"]
+material = SubResource("82")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1e-05, 1)
+pivot_offset = Vector2(960, 540)
+texture = ExtResource("2_6a5br")
+metadata/_edit_lock_ = true
+
+[node name="PauseLabel" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_right = 1920.0
+offset_bottom = 1080.0
+theme_override_fonts/font = ExtResource("4_p3s4p")
+theme_override_font_sizes/font_size = 72
+text = "pause"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="Options" type="Control" parent="PauseLabel"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 320.0
+offset_top = 760.0
+offset_right = 824.0
+offset_bottom = 992.0
+
+[node name="Continue" type="Label" parent="PauseLabel/Options"]
+layout_mode = 0
+offset_right = 504.0
+offset_bottom = 48.0
+theme_override_font_sizes/font_size = 32
+text = "continue"
+uppercase = true
+
+[node name="Restart" type="Label" parent="PauseLabel/Options"]
+layout_mode = 0
+offset_top = 56.0
+offset_right = 504.0
+offset_bottom = 104.0
+theme_override_font_sizes/font_size = 32
+text = "restart"
+uppercase = true
+
+[node name="Status" type="Label" parent="PauseLabel/Options"]
+layout_mode = 0
+offset_top = 112.0
+offset_right = 504.0
+offset_bottom = 160.0
+theme_override_font_sizes/font_size = 32
+text = "status"
+uppercase = true
+
+[node name="Quit" type="Label" parent="PauseLabel/Options"]
+layout_mode = 0
+offset_top = 168.0
+offset_right = 504.0
+offset_bottom = 216.0
+theme_override_font_sizes/font_size = 32
+text = "quit"
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+process_mode = 3
+root_node = NodePath("../Pause")
+libraries = {
+"": SubResource("AnimationLibrary_oiknc")
+}
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="PauseSFX" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("5_wducq")
+bus = &"SFX"
+
+[node name="CancelSFX" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("6_mgwkx")
+bus = &"SFX"
+
+[node name="SelectionSFX" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("7_f2emr")
+bus = &"SFX"
+
+[node name="ScreenChangeSFX" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("7_m12c2")
+bus = &"SFX"

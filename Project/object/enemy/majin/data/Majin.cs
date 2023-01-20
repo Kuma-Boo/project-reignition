@@ -117,6 +117,7 @@ namespace Project.Gameplay
 		private AnimationNodeBlendTree animatorRoot;
 		private AnimationNodeTransition moveTransition;
 		private AnimationNodeTransition stateTransition;
+		private AnimationNodeStateMachinePlayback spinState;
 		private AnimationNodeStateMachinePlayback fireState;
 
 		private SpawnModes spawnMode;
@@ -135,7 +136,6 @@ namespace Project.Gameplay
 		/// <summary> Local Position to be after spawning is complete. </summary>
 		private Vector3 OriginalPosition => SpawnData.spawnTransform.origin;
 		private Vector3 SpawnPosition => OriginalPosition + Basis * spawnOffset;
-		private float spawnRotation;
 		private bool isSpawned;
 		private bool isSpawning;
 
@@ -172,6 +172,9 @@ namespace Project.Gameplay
 		/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
 		private MovingObject movementController;
 
+		[Export]
+		private bool log;
+
 		//Animation parameters
 		private const float MOVE_TRANSITION_LENGTH = .2f;
 		private readonly StringName SEEK_PARAMETER = "parameters/seek/seek_position";
@@ -188,9 +191,9 @@ namespace Project.Gameplay
 			moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
 			stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
 			fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
+			spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
 
-			spawnRotation = GlobalRotation.y;
-			root.Rotation = Vector3.Right * Mathf.Pi * .5f; //For some reason, animation retargeting needs this.
+			root.Rotation = Vector3.Right * Mathf.Pi * .5f; //Required for animation retargeting
 
 			if (attackType == AttackTypes.Spin) //Try to get movement controller parent
 				movementController = GetParentOrNull<MovingObject>();
@@ -218,10 +221,11 @@ namespace Project.Gameplay
 				rotationVelocity = 0;
 
 			Vector2 spawnOffsetFlat = spawnOffset.Flatten();
-			if (!SpawnTravelDisabled && !spawnOffsetFlat.IsEqualApprox(Vector2.Zero))
+			if (!SpawnTravelDisabled && !spawnOffsetFlat.IsZeroApprox())
 				currentRotation = spawnOffsetFlat.AngleTo(Vector2.Up);
 			else
-				currentRotation = spawnRotation;
+				currentRotation = 0;
+			UpdateRotation();
 
 			if (movementController != null) //Reset/Pause movement
 			{
@@ -276,6 +280,7 @@ namespace Project.Gameplay
 			if (trackPlayer) //Rotate to face player
 			{
 				float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
+				targetRotation -= GlobalRotation.y; //Rotation is in local space
 				currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, ROTATION_SMOOTHING);
 			}
 			else if (!Mathf.IsZeroApprox(rotationTime))
@@ -291,8 +296,8 @@ namespace Project.Gameplay
 
 		private void UpdateRotation()
 		{
-			fireRoot.GlobalRotation = Vector3.Up * currentRotation;
-			root.GlobalRotation = new Vector3(root.GlobalRotation.x, currentRotation, root.GlobalRotation.z);
+			root.Rotation = new Vector3(root.Rotation.x, currentRotation, root.Rotation.z);
+			fireRoot.Rotation = Vector3.Up * currentRotation;
 		}
 
 		private void UpdateFlameAttack()
@@ -343,14 +348,16 @@ namespace Project.Gameplay
 			flameTimer = 0; //Reset timer
 		}
 
-		/// <summary> Overload activation method to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal. </summary>
-		private void Activate(Area3D _) => Spawn();
 		protected override void Activate()
 		{
 			if (spawnMode == SpawnModes.External) return;
 			Spawn();
 		}
 
+		/// <summary>
+		/// Overload function to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal.
+		/// </summary>
+		private void Spawn(Area3D _) => Spawn();
 		private void Spawn()
 		{
 			if (isSpawning || isSpawned) return;
@@ -394,6 +401,7 @@ namespace Project.Gameplay
 
 			if (attackType == AttackTypes.Spin)
 			{
+				spinState.Travel("attack-spin-start");
 				animationTree.Set(STATE_TRANSITION_PARAMETER, 1);
 
 				if (tweener != null)

@@ -57,6 +57,9 @@ namespace Project.Gameplay
 				return;
 			}
 
+			//Don't update the camera when the player is defeated
+			if (Character.IsDefeated) return;
+
 			UpdateGameplayCamera();
 
 			if (OS.IsDebugBuild())
@@ -163,7 +166,7 @@ namespace Project.Gameplay
 			{
 				if (Character.IsMovingBackward)
 					isBackstepActive = true;
-				else if (Character.IsHoldingDirection(PathFollower.ForwardAngle))
+				else if (Character.Skills.IsSpeedBreakActive || Character.IsHoldingDirection(PathFollower.ForwardAngle))
 					isBackstepActive = false;
 			}
 

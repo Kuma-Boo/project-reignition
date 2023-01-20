@@ -673,6 +673,7 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
+			disableGroundSnap = true;
 			canLandingBoost = Skills.isLandingDashEnabled;
 			ActionState = ActionStates.Jumping;
 			VerticalSpd = RuntimeConstants.GetJumpPower(jumpHeight);
@@ -788,6 +789,7 @@ namespace Project.Gameplay
 				isCustomPhysicsEnabled = true;
 				VerticalSpd = 0;
 				Velocity = Lockon.HomingAttackDirection.Normalized() * Skills.homingAttackSpeed;
+				MovementAngle = CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
 				PathFollower.Resync();
 			}
@@ -826,25 +828,25 @@ namespace Project.Gameplay
 
 		private void CheckStomp()
 		{
-			if (actionBufferTimer != 0) //Stomp
+			if (Mathf.IsZeroApprox(actionBufferTimer)) return;
+
+			//Don't allow instant stomps
+			if ((ActionState == ActionStates.Jumping || ActionState == ActionStates.AccelJump) &&
+			currentJumpTime < .1f)
 			{
-				//Don't allow instant stomps
-				if ((ActionState == ActionStates.Jumping || ActionState == ActionStates.AccelJump) &&
-				currentJumpTime < .1f)
-				{
-					actionBufferTimer = 0;
-					return;
-				}
-
 				actionBufferTimer = 0;
-				ResetVelocity();
-
-				canLandingBoost = true;
-				Lockon.ResetLockonTarget();
-				Lockon.IsMonitoring = false;
-
-				ActionState = ActionStates.Stomping;
+				return;
 			}
+
+			//Stomp
+			actionBufferTimer = 0;
+			ResetVelocity();
+
+			canLandingBoost = true;
+			Lockon.ResetLockonTarget();
+			Lockon.IsMonitoring = false;
+
+			ActionState = ActionStates.Stomping;
 		}
 		#endregion
 
@@ -885,6 +887,7 @@ namespace Project.Gameplay
 			VerticalSpd = RuntimeConstants.GetJumpPower(backflipHeight);
 
 			IsOnGround = false;
+			disableGroundSnap = true;
 			ActionState = ActionStates.Backflip;
 
 			Effect.PlayActionSFX(Effect.JUMP_SFX);
@@ -918,6 +921,12 @@ namespace Project.Gameplay
 
 		[Signal]
 		public delegate void DamagedEventHandler(); //This signal is called anytime a hitbox collides with the player, regardless of invincibilty.
+		public enum KnockbackMode
+		{
+			Disabled,
+			Backward, //Bump the player back
+			Forward, //Bump the player forward
+		}
 
 		/// <summary>
 		/// Called when the player takes damage or is being knocked around.
@@ -945,22 +954,19 @@ namespace Project.Gameplay
 					case KnockbackMode.Backward:
 						MoveSpeed = -8f;
 						VerticalSpd = RuntimeConstants.GetJumpPower(3f);
+						disableGroundSnap = true;
 						break;
 					case KnockbackMode.Forward:
 						MoveSpeed = 8f;
 						VerticalSpd = RuntimeConstants.GetJumpPower(3f);
+						disableGroundSnap = true;
 						break;
 				}
 			}
 		}
 
-		public enum KnockbackMode
-		{
-			Disabled,
-			Backward, //Bump the player back
-			Forward, //Bump the player forward
-		}
-
+		/// <summary> True after the player is defeated, but hasn't respawned yet. </summary>
+		public bool IsDefeated { get; private set; }
 		/// <summary> Is the player currently respawning? </summary>
 		public bool IsRespawning { get; private set; }
 		/// <summary>
@@ -971,6 +977,7 @@ namespace Project.Gameplay
 			if (IsRespawning) return;
 
 			//Fade screen out, enable respawn flag, and connect signals
+			IsDefeated = true;
 			IsRespawning = true;
 			TransitionManager.StartTransition(new TransitionData()
 			{
@@ -989,6 +996,7 @@ namespace Project.Gameplay
 		/// </summary>
 		private void ProcessRespawn()
 		{
+			IsDefeated = false;
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
@@ -1180,6 +1188,8 @@ namespace Project.Gameplay
 
 		public bool IsOnGround { get; set; }
 		public bool JustLandedOnGround { get; private set; } //Flag for doing stuff on land
+		/// <summary> Disable ground snapping for a single frame. </summary>
+		private bool disableGroundSnap;
 
 		private const int GROUND_CHECK_AMOUNT = 8; //How many "whiskers" to use when checking the ground
 		private void CheckGround()
@@ -1193,8 +1203,11 @@ namespace Project.Gameplay
 				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpd < 0)
 				castLength += Mathf.Abs(VerticalSpd) * PhysicsManager.physicsDelta;
-			else if (VerticalSpd > 0)
-				castLength = -.1f; //Reduce snapping when moving upwards
+			else if (disableGroundSnap)
+			{
+				castLength = -.1f; //Reduce snapping when jumping
+				disableGroundSnap = false;
+			}
 
 			Vector3 castVector = -UpDirection * castLength;
 			RaycastHit groundHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
@@ -1223,7 +1236,7 @@ namespace Project.Gameplay
 					LandOnGround();
 				}
 				else //Update world direction
-					UpDirection = UpDirection.Lerp(groundHit.normal, .2f).Normalized();
+					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized();
 
 				Effect.UpdateGroundType(groundHit.collidedObject);
 
@@ -1232,8 +1245,11 @@ namespace Project.Gameplay
 				{
 					Vector3 offsetVector = groundHit.point - GlobalPosition;
 					Vector3 axis = offsetVector.Cross(Vector3.Up).Normalized();
-					offsetVector = offsetVector.Rotated(axis, offsetVector.SignedAngleTo(Vector3.Up, axis));
-					snapDistance = offsetVector.y;
+					if (axis.IsNormalized())
+					{
+						offsetVector = offsetVector.Rotated(axis, offsetVector.SignedAngleTo(Vector3.Up, axis));
+						snapDistance = offsetVector.y;
+					}
 				}
 				GlobalPosition -= groundHit.normal * snapDistance; //Snap to ground
 				FloorMaxAngle = Mathf.Pi * .25f; //Allow KinematicBody to deal with slopes
@@ -1314,15 +1330,16 @@ namespace Project.Gameplay
 			return hit;
 		}
 
-
 		public void CheckCeiling() //Checks the ceiling.
 		{
 			Vector3 castOrigin = CenterPosition;
 			float castLength = CollisionRadius;
+			if (VerticalSpd > 0)
+				castLength += VerticalSpd * PhysicsManager.physicsDelta;
 
 			Vector3 castVector = UpDirection * castLength;
-			if (VerticalSpd > 0)
-				castVector.y += VerticalSpd * PhysicsManager.physicsDelta;
+			if (ActionState == ActionStates.Backflip) //Improve collision detection when backflipping
+				castVector += GetMovementDirection() * MoveSpeed * PhysicsManager.physicsDelta;
 
 			RaycastHit ceilingHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
 			Debug.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
@@ -1340,8 +1357,20 @@ namespace Project.Gameplay
 
 				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * CollisionRadius));
 
-				if (VerticalSpd > 0)
-					VerticalSpd = 0;
+				float maxVerticalSpeed = 0;
+				if (ActionState == ActionStates.Backflip) //Fix backflipping into slanted ceilings
+				{
+					float ceilingAngle = ceilingHit.normal.AngleTo(Vector3.Down);
+					if (ceilingAngle > Mathf.Pi * .1f)
+					{
+						//Use the dot product to determine the sign of the angle
+						ceilingAngle *= Mathf.Sign(ceilingHit.normal.Flatten().Dot(castVector.Flatten()));
+						maxVerticalSpeed = Mathf.Sin(ceilingAngle) * MoveSpeed;
+					}
+				}
+
+				if (VerticalSpd > maxVerticalSpeed)
+					VerticalSpd = maxVerticalSpeed;
 			}
 		}
 
@@ -1416,11 +1445,13 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive) //Follow pathfollower more accurately when speedbreaking
 				return pathFollowerForward;
 
-			if (!Camera.ActiveSettings.isRollEnabled) //Flat terrain
+			/*
+			if (!Camera.ActiveSettings.isRollEnabled) //Old method
 			{
 				Vector3 flatForward = this.Forward().Rotated(UpDirection, MovementAngle);
 				return flatForward; //Normally this is good enough
 			}
+			*/
 
 			//Tilted ground fix
 			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);

@@ -1,11 +1,19 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://8imymng7so3h"]
 
-[ext_resource type="PackedScene" uid="uid://defrn8e4ov2hg" path="res://object/enemy/majin/data/dino jungle/model/BlueMajin.gltf" id="1"]
-[ext_resource type="PackedScene" uid="uid://b01dbeptkooh3" path="res://object/enemy/majin/Majin.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dniysttyivv52" path="res://object/enemy/majin/data/dino jungle/model/BlueMajin.gltf" id="1"]
+[ext_resource type="PackedScene" uid="uid://5mu00v1h311g" path="res://object/enemy/majin/Majin.tscn" id="2"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_3xpti"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_as3tg"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_55mt6"]
 
 [node name="BlueMajin" instance=ExtResource("2")]
 
 [node name="BlueMajin" parent="." index="0" instance=ExtResource("1")]
 
-[node name="AnimationPlayer" parent="." index="4"]
-root_node = NodePath("../BlueMajin")
+[node name="AnimationTree" parent="." index="6"]
+parameters/defeat_state/playback = SubResource("AnimationNodeStateMachinePlayback_3xpti")
+parameters/fire_state/playback = SubResource("AnimationNodeStateMachinePlayback_as3tg")
+parameters/spin_state/playback = SubResource("AnimationNodeStateMachinePlayback_55mt6")

@@ -180,10 +180,7 @@ namespace Project.Gameplay
 		private void GroundAnimations()
 		{
 			//TODO Speed break animation
-			if (Character.Skills.IsSpeedBreakActive)
-			{
-				return;
-			}
+			if (Character.Skills.IsSpeedBreakCharging) return;
 
 			int targetState = 0;
 			float speedRatio = Mathf.Abs(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed));
