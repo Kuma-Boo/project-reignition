@@ -46,7 +46,7 @@
 [ext_resource type="PackedScene" uid="uid://bv4jb0g2xlerj" path="res://area/stage/1 sand oasis/data/environment/particle/WaterSplatterParticle.tscn" id="40_kqtnl"]
 [ext_resource type="PackedScene" uid="uid://cy3vl475eat3m" path="res://area/stage/1 sand oasis/data/environment/object/Spear.tscn" id="44_fid73"]
 [ext_resource type="PackedScene" uid="uid://bmkr6inltjqhf" path="res://area/stage/1 sand oasis/data/environment/particle/FallingSandDustParticle.tscn" id="47_wmlkn"]
-[ext_resource type="PackedScene" uid="uid://dgcc6vcmyfa81" path="res://area/stage/1 sand oasis/data/environment/object/FlameShooter.tscn" id="48_1uj15"]
+[ext_resource type="PackedScene" uid="uid://cmhphw4qibyto" path="res://area/stage/1 sand oasis/data/environment/object/FlameShooter.tscn" id="48_1uj15"]
 [ext_resource type="PackedScene" path="res://area/stage/1 sand oasis/data/environment/object/BedrockBlock.tscn" id="49_s7svc"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="50_3dco7"]
 [ext_resource type="PackedScene" uid="uid://dqm1d4odqynle" path="res://object/stage/common/SpikePanel.tscn" id="50_g5bro"]
@@ -9190,6 +9190,18 @@ tracks/4/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear1:isDisabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_1xost"]
 resource_name = "event"
@@ -9283,6 +9295,18 @@ tracks/6/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear1:isDisabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p3aly"]
 _data = {
@@ -9354,6 +9378,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear1:isDisabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_hspqj"]
@@ -9431,7 +9467,7 @@ tracks/5/path = NodePath("Rock1Particle1:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.266666),
+"times": PackedFloat32Array(0, 0.266667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -9447,6 +9483,18 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear1:isDisabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dqpux"]
@@ -10403,7 +10451,7 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0q2l6"]
-size = Vector3(5, 20, 10)
+size = Vector3(5, 20, 20)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_brhdk"]
 height = 10.0
@@ -11214,15 +11262,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_p184d")]
-transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, -388.177, -122.524, -273.329)
 
 [node name="ObjectCullMap" type="Node3D" parent="MainAct"]
 
 [node name="StartUnload" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-0.482963, -0.12941, 0.866025, -0.258819, 0.965926, -5.96046e-08, -0.836516, -0.224144, -0.5, -291.28, -49.3, -122.296)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/StartUnload"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, -2.98023e-08, -7.45058e-09, 1, 0, 9, 0)
@@ -11230,9 +11276,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="OasisLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -200.7, -43, -154.5)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/OasisLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -11240,9 +11285,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="OasisUnload" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-0.413597, 0, -0.91046, 0, 1, 0, 0.91046, 0, -0.413597, -273.7, -39.7, -264.5)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/OasisUnload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11250,9 +11294,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="PlainLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.707072, 0.707072, 0.00993061, -0.707107, 0.707107, -1.70413e-08, -0.00702232, -0.00702226, 0.999951, -400.72, -48.1, -193.315)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/PlainLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11260,9 +11303,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="PlainUnload" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.0797, -48.1, -174.815)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/PlainUnload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11270,9 +11312,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="IslandLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.0797, -40.1, -154.915)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/IslandLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11280,9 +11321,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="IslandUnload" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.92025, -45.1, -437.815)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/IslandUnload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11290,9 +11330,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="HallwayLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 96.0798, -51, -435.915)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/HallwayLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11300,9 +11339,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="HallwayUnload" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -127.971, -63.1, -342.865)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/HallwayUnload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11310,9 +11348,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="InteriorLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -116.345, -51, -330.491)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/InteriorLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11320,9 +11357,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="InteriorUnload" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -336.8, -50.3, -448.84)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/InteriorUnload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11330,9 +11366,8 @@ shape = SubResource("BoxShape3D_6vt8a")
 
 [node name="BeachLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -309.031, -65, -420.505)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/BeachLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11340,9 +11375,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="BeachUnload" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 5.96046e-07, 0, 1, 0, -5.96046e-07, 0, 1, -663.765, 10.1, -665.121)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/BeachUnload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11350,9 +11384,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="SidleLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(5.96046e-08, 0, 1, 0, 1, 0, -1, 0, 5.96046e-08, -649.715, -40, -640.416)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/SidleLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11360,9 +11393,8 @@ shape = SubResource("BoxShape3D_5m618")
 
 [node name="EndLoad" parent="MainAct/ObjectCullMap" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 7.15295e-08, 0, 1, 0, -7.15295e-08, 0, 1, -663.715, 10, -760.916)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/ObjectCullMap/EndLoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, 0)
@@ -11373,7 +11405,9 @@ shape = SubResource("BoxShape3D_5m618")
 [node name="KingDialogTrigger" parent="MainAct/Trigger" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.135, 75, -26.21)
 collision_layer = 0
-activationMode = 2
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/KingDialogTrigger"]
 script = ExtResource("7_cud8b")
@@ -11387,7 +11421,9 @@ shape = SubResource("305")
 [node name="PillarDialogTrigger" parent="MainAct/Trigger" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.992404, 0.0868241, -0.0871557, -0.032067, 0.866528, 0.498097, 0.11877, -0.491519, 0.86273, -332.826, -45.3962, -119.226)
 collision_layer = 0
-activationMode = 2
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/PillarDialogTrigger"]
 transform = Transform3D(1, 0, 0, 7.45058e-09, 1, 0, -7.45058e-09, 2.98023e-08, 1, 0, 0, 0)
@@ -11402,7 +11438,9 @@ shape = SubResource("66")
 [node name="UTurnDialogTrigger" parent="MainAct/Trigger" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -67.2441, -45, -343.051)
 collision_layer = 0
-activationMode = 2
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/UTurnDialogTrigger"]
 script = ExtResource("7_cud8b")
@@ -11416,7 +11454,9 @@ shape = SubResource("333")
 [node name="InteriorDialogTrigger" parent="MainAct/Trigger" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.707106, 0, 0.707106, 0, 1, 0, -0.707106, 0, 0.707106, -142.831, -66.4, -356.894)
 collision_layer = 0
-activationMode = 2
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/InteriorDialogTrigger"]
 script = ExtResource("7_cud8b")
@@ -11430,7 +11470,9 @@ shape = SubResource("333")
 [node name="SandfallEvent" parent="MainAct/Trigger" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -663.74, 10, -765.01)
 collision_layer = 0
-activationMode = 1
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Trigger/SandfallEvent" node_paths=PackedStringArray("animator", "playerStandin", "cameraStandin")]
 script = ExtResource("18_yb8xw")
@@ -11455,7 +11497,9 @@ shape = SubResource("306")
 [node name="PierDialogTrigger" parent="MainAct/Trigger" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -533, -31, -820)
 collision_layer = 0
-activationMode = 2
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/PierDialogTrigger"]
 script = ExtResource("7_cud8b")
@@ -11469,7 +11513,9 @@ shape = SubResource("334")
 [node name="PalaceDialogTrigger" parent="MainAct/Trigger" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, -230, -40.1, -721)
 collision_layer = 0
-activationMode = 2
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/PalaceDialogTrigger"]
 script = ExtResource("7_cud8b")
@@ -12243,7 +12289,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.647214, -0.470228, 0)
 [node name="Oasis" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
 script = ExtResource("23_j40ed")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="DashPanel" parent="MainAct/Oasis" instance=ExtResource("15_54g8l")]
@@ -12255,6 +12300,8 @@ alignToPath = true
 [node name="CircularPillarGroup1" parent="MainAct/Oasis" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.992404, 0.0868241, -0.0871557, -0.032067, 0.866528, 0.498097, 0.11877, -0.491519, 0.86273, -5.82599, -1.39619, 73.7745)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CircularPillarGroup1"]
 transform = Transform3D(1, 3.72529e-09, 0, 1.11759e-08, 1, 0, -7.45058e-09, 5.96046e-08, 1, 0, 0, 0)
@@ -12312,6 +12359,8 @@ libraries = {
 [node name="SquarePillarTallGroup" parent="MainAct/Oasis" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.04, -4.4, -13.11)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/SquarePillarTallGroup"]
 transform = Transform3D(0.493937, 0.639104, -0.589553, -0.00362637, 0.679547, 0.733623, 0.86949, -0.360226, 0.337971, 0.214325, 3.00381, 52.8845)
@@ -12418,6 +12467,8 @@ libraries = {
 [node name="SquarePillarMidGroup" parent="MainAct/Oasis" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -74.315, -3.6, -52.055)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Oasis/SquarePillarMidGroup" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039978, 0, 54.61)
@@ -12488,6 +12539,8 @@ shape = SubResource("66")
 [node name="CircularPillarGroup2" parent="MainAct/Oasis" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -56.93, -3.6, -105.774)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/CircularPillarGroup2"]
 transform = Transform3D(-0.659739, 0.435596, -0.612372, -0.0473671, 0.789149, 0.612373, 0.75, 0.433013, -0.5, 0.0399475, 3.004, 54.61)
@@ -12554,6 +12607,8 @@ libraries = {
 [node name="FallingPillarGroup" parent="MainAct/Oasis" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.354, -3.6, -78.994)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Oasis/FallingPillarGroup"]
 transform = Transform3D(-0.973597, 0.109191, -0.20046, -0.020731, 0.832249, 0.554014, 0.227326, 0.543543, -0.808012, 0.0400085, 3.004, 0.610016)
@@ -12641,7 +12696,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -12)
 
 [node name="HiddenSpring" parent="MainAct/Oasis/FallingPillarGroup" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.454, 2.6, 4.29401)
-activationMode = 2
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Culler" type="Node3D" parent="MainAct/Oasis/FallingPillarGroup/HiddenSpring"]
 script = ExtResource("23_j40ed")
@@ -12817,6 +12873,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 [node name="RisingPillarGroup" parent="MainAct/Plain" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 7.31915, 1, 10.0591)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Plain/RisingPillarGroup" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -12992,6 +13050,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40.5)
 [node name="FallingPillarGroup" parent="MainAct/Plain" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 56.0537, 0, 32.9674)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Plain/FallingPillarGroup" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -14126,6 +14186,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.4543, 0.829441, 17.1307)
 [node name="SpikeBallTrigger" parent="MainAct/Hallway" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.766045, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766045, 29.5761, 5, -60.5752)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Hallway/SpikeBallTrigger" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -14293,14 +14355,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13853, 0.632401, 7.40668)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.22372, 0.68541, 9.93219)
 
 [node name="RedMajin1" parent="MainAct/Hallway" instance=ExtResource("39_nxvxx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 0.5, -13.9)
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 4.1, 0.5, -13.9)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Inactive Time" = 5.0
 
 [node name="RedMajin2" parent="MainAct/Hallway" instance=ExtResource("39_nxvxx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, 0, -6.40002)
-"Attack Settings/Flame Inactive Time" = 1.0
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -1.3, 0.5, -6.39999)
+"Attack Settings/Flame Inactive Time" = 5.0
 
 [node name="Jar3" parent="MainAct/Hallway" instance=ExtResource("27_fr3rd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0999985, 0, 1.20001)
@@ -14389,6 +14451,8 @@ length = 0.5
 
 [node name="SpearGroup1" parent="MainAct/Hallway" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -6, 0, 45.2)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Hallway/SpearGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -14447,6 +14511,8 @@ shape = SubResource("BoxShape3D_ljdqf")
 
 [node name="WallSpearGroup" parent="MainAct/Hallway" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.1615, 16.5072, 62.8543)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Hallway/WallSpearGroup" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
@@ -14477,6 +14543,8 @@ shape = SubResource("BoxShape3D_o5mw7")
 
 [node name="SpearGroup2" parent="MainAct/Hallway" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -20.9, 5, 51)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Hallway/SpearGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
@@ -14535,6 +14603,8 @@ shape = SubResource("BoxShape3D_ljdqf")
 
 [node name="SpearGroup3" parent="MainAct/Hallway" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -17.434, 5, 32.362)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Hallway/SpearGroup3" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0, 0)
@@ -14612,6 +14682,8 @@ shape = SubResource("BoxShape3D_ljdqf")
 
 [node name="SpearGroup4" parent="MainAct/Hallway" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.5, 0, 32.5)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Hallway/SpearGroup4" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28882e-05, 0, -3.05176e-05)
@@ -14837,6 +14909,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.699966, 0, -28.4)
 
 [node name="FlameShooter3" parent="MainAct/Interior/FlameGroup1" instance=ExtResource("48_1uj15")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.700089, 0, -50.0999)
+"Start Time" = 0.4
+startingTime = 0.4
 
 [node name="FlameShooter4" parent="MainAct/Interior/FlameGroup1" instance=ExtResource("48_1uj15")]
 transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.49992, 0.699997, -74.0999)
@@ -15090,6 +15164,7 @@ transform = Transform3D(0, 0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, 6.1
 [node name="DoorCrumble" parent="MainAct/Interior" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -62.979, 0, 13.8947)
 collision_layer = 0
+"Enter Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Interior/DoorCrumble" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4001, 0, 3.05176e-05)
@@ -15184,6 +15259,7 @@ length = 0.5
 [node name="Beach" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -410, -50, -540)
 script = ExtResource("23_j40ed")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Beach"]
@@ -15247,6 +15323,8 @@ transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 
 
 [node name="SpearGroup1" parent="MainAct/Beach" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 0, 64)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Beach/SpearGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -15326,23 +15404,38 @@ shape = SubResource("BoxShape3D_6vt8a")
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 43.174, -0.0999985, 56.673)
 
 [node name="SpikePanel1" parent="MainAct/Beach/SpikeGroup1" instance=ExtResource("50_g5bro")]
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel2" parent="MainAct/Beach/SpikeGroup1" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel3" parent="MainAct/Beach/SpikeGroup1" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel4" parent="MainAct/Beach/SpikeGroup1" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel5" parent="MainAct/Beach/SpikeGroup1" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="PearlRing1" type="Node3D" parent="MainAct/Beach"]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 34.5542, 0.328968, 36.2674)
@@ -15372,6 +15465,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
 [node name="SpearGroup2" parent="MainAct/Beach" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 33.5321, 0, 34.5042)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Beach/SpearGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0, 0)
@@ -15467,23 +15562,38 @@ shape = SubResource("BoxShape3D_6vt8a")
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 28.492, -0.0999985, 35.1039)
 
 [node name="SpikePanel1" parent="MainAct/Beach/SpikeGroup2" instance=ExtResource("50_g5bro")]
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel2" parent="MainAct/Beach/SpikeGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel3" parent="MainAct/Beach/SpikeGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel4" parent="MainAct/Beach/SpikeGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel5" parent="MainAct/Beach/SpikeGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="PearlRing2" type="Node3D" parent="MainAct/Beach"]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 23.7752, 0.328968, 21.6053)
@@ -15515,23 +15625,38 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 17.5945, -0.0999985, 24.6591)
 
 [node name="SpikePanel1" parent="MainAct/Beach/SpikeGroup3" instance=ExtResource("50_g5bro")]
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel2" parent="MainAct/Beach/SpikeGroup3" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel3" parent="MainAct/Beach/SpikeGroup3" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel4" parent="MainAct/Beach/SpikeGroup3" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="SpikePanel5" parent="MainAct/Beach/SpikeGroup3" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
-inactiveLength = 1.0
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [1.0, 0.0, 0.1]
 
 [node name="GrindrailM2" parent="MainAct/Beach" instance=ExtResource("30_5pm2k")]
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 15.2055, 0.150002, 13.1707)
@@ -15564,6 +15689,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
 [node name="SpearGroup3" parent="MainAct/Beach" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 12.5345, 0, 10.079)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Beach/SpearGroup3" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -15658,26 +15785,43 @@ shape = SubResource("BoxShape3D_6vt8a")
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 3.87161, -0.0999985, 13.227)
 
 [node name="SpikePanel1" parent="MainAct/Beach/SpikeGroup4" instance=ExtResource("50_g5bro")]
-inactiveLength = 0.4
+"State Lengths/inactive" = 0.2
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [0.2, 0.0, 0.1]
 
 [node name="SpikePanel2" parent="MainAct/Beach/SpikeGroup4" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
-inactiveLength = 0.4
+"State Lengths/inactive" = 0.2
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [0.2, 0.0, 0.1]
 
 [node name="SpikePanel3" parent="MainAct/Beach/SpikeGroup4" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
-inactiveLength = 0.4
+"State Lengths/inactive" = 0.2
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [0.2, 0.0, 0.1]
 
 [node name="SpikePanel4" parent="MainAct/Beach/SpikeGroup4" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
-inactiveLength = 0.4
+"State Lengths/inactive" = 0.2
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [0.2, 0.0, 0.1]
 
 [node name="SpikePanel5" parent="MainAct/Beach/SpikeGroup4" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
-inactiveLength = 0.4
+"State Lengths/inactive" = 0.2
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.1
+stateLengths = [0.2, 0.0, 0.1]
 
 [node name="FallingPillarGroup1" parent="MainAct/Beach" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, 0.573576, 2, -0.0999985, 0.799988)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Beach/FallingPillarGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -15747,6 +15891,8 @@ transform = Transform3D(0.984808, 4.89766e-09, 0.173648, -3.8097e-09, 1, -6.5985
 
 [node name="FallingPillarGroup2" parent="MainAct/Beach" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, 0.573576, -40.4664, 0, -2.57642)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Beach/FallingPillarGroup2" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -15791,6 +15937,8 @@ shape = SubResource("BoxShape3D_6vt8a")
 
 [node name="FallingPillarGroup3" parent="MainAct/Beach" instance=ExtResource("3_88wfl")]
 transform = Transform3D(0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, 0.573576, -53.4664, 0, -33.5764)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Beach/FallingPillarGroup3" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -16312,10 +16460,15 @@ length = 0.5
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -664, 10, -705)
 script = ExtResource("23_j40ed")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SpearGroup1" parent="MainAct/Sidle" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 58)
+OneShot = true
+"Respawn Mode" = 0
+"Trigger Mode" = 1
+"Exit Mode" = 1
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup1" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 0, 0, 1, 0, 0, 0)
@@ -16339,11 +16492,15 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Sidle/SpearGroup1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2, 0)
 shape = SubResource("BoxShape3D_0rd0k")
 
 [node name="SpearGroup2" parent="MainAct/Sidle" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 56)
+OneShot = true
+"Respawn Mode" = 0
+"Trigger Mode" = 1
+"Exit Mode" = 1
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 0, 0, 1, 0, 0, 0)
@@ -16369,7 +16526,7 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Sidle/SpearGroup2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2, 0)
 shape = SubResource("BoxShape3D_0rd0k")
 
 [node name="Rings1" type="Node3D" parent="MainAct/Sidle"]
@@ -16455,17 +16612,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4)
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0.8, 25.4)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SpikePanelGroup1" instance=ExtResource("50_g5bro")]
-inactiveLength = 1.5
-warningLength = 0.4
-activeLength = 0.6
-startingOffset = 0.4
+"Start Time" = 2.0
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+startingTime = 2.0
+stateLengths = [2.0, 0.5, 0.5]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SpikePanelGroup1" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.5)
-inactiveLength = 1.5
-warningLength = 0.4
-activeLength = 0.6
-startingOffset = 0.2
+"Start Time" = 1.5
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+startingTime = 1.5
+stateLengths = [2.0, 0.5, 0.5]
 
 [node name="FootholdTrigger" parent="MainAct/Sidle/SpikePanelGroup1" instance=ExtResource("59_ike03")]
 transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 1.3, 1, 0.5)
@@ -16614,28 +16775,72 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.59998, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 1, 0)
 shape = SubResource("254")
 
-[node name="SpikePanel" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
+[node name="SpikePanel1" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
+"Start Time" = 3.0
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+startingTime = 3.0
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+"Start Time" = 3.0
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+startingTime = 3.0
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="SpikePanel3" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.69995)
+"Start Time" = 2.0
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+startingTime = 2.0
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="SpikePanel4" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.69995)
+"Start Time" = 2.0
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+startingTime = 2.0
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="SpikePanel5" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.39996)
+"Start Time" = 1.0
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+startingTime = 1.0
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="SpikePanel6" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -3.39996)
+"Start Time" = 1.0
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+startingTime = 1.0
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="SpikePanel7" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.09991)
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="SpikePanel8" parent="MainAct/Sidle/SpikePanelGroup2" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -5.09991)
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.6
+stateLengths = [3.0, 0.4, 0.6]
 
 [node name="Rings6" type="Node3D" parent="MainAct/Sidle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.599976, 0.8, -19.4)
@@ -16702,15 +16907,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("255")
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SpikePanelGroup3" instance=ExtResource("50_g5bro")]
+"Current State" = 1
+"Start Time" = 0.2
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 2.0
+currentStateIndex = 1
+startingTime = 0.2
+stateLengths = [2.0, 0.4, 2.0]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SpikePanelGroup3" instance=ExtResource("50_g5bro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+"Current State" = 1
+"Start Time" = 0.2
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 2.0
+currentStateIndex = 1
+startingTime = 0.2
+stateLengths = [2.0, 0.4, 2.0]
 
 [node name="SpikePanel3" parent="MainAct/Sidle/SpikePanelGroup3" instance=ExtResource("50_g5bro")]
 transform = Transform3D(0.999999, -7.10543e-15, 0, 7.10543e-15, 0.999999, 0, 0, 0, 1, 0, 0, -3.99994)
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 2.0
+stateLengths = [2.0, 0.4, 2.0]
 
 [node name="SpikePanel4" parent="MainAct/Sidle/SpikePanelGroup3" instance=ExtResource("50_g5bro")]
 transform = Transform3D(0.999999, -7.10543e-15, 0, 7.10543e-15, 0.999999, 0, 0, 0, 1, -1.5, 0, -3.99994)
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 2.0
+stateLengths = [2.0, 0.4, 2.0]
 
 [node name="Rings7" type="Node3D" parent="MainAct/Sidle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.599976, 0.8, -39)
@@ -16737,6 +16966,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.1)
 
 [node name="SpearGroup3" parent="MainAct/Sidle" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, -45.2)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup3" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.984808, -0.173648, 0, 0.173648, 0.984808, 0, 0, 0, 1, 0, 0, 0)
@@ -16762,11 +16993,13 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Sidle/SpearGroup3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.20001, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.2, 0)
 shape = SubResource("BoxShape3D_0rd0k")
 
 [node name="SpearGroup4" parent="MainAct/Sidle" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, -47.8)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup4" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.939693, -0.34202, 0, 0.34202, 0.939693, 0, 0, 0, 1, 0, 0, 0)
@@ -16792,11 +17025,13 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Sidle/SpearGroup4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.2, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.2, 0)
 shape = SubResource("BoxShape3D_0rd0k")
 
 [node name="SpearGroup5" parent="MainAct/Sidle" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, -50.7)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup5" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -16958,6 +17193,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, -1.7, -5.60004)
 
 [node name="PillarGroup1" parent="MainAct/End" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -154.2, 15, 54.9)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/End/PillarGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -17010,6 +17247,8 @@ shape = SubResource("BoxShape3D_0q2l6")
 
 [node name="PillarGroup2" parent="MainAct/End" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -154.2, 15, 54.9)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/End/PillarGroup2" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -17059,6 +17298,8 @@ shape = SubResource("BoxShape3D_0q2l6")
 
 [node name="PillarGroup3" parent="MainAct/End" instance=ExtResource("3_88wfl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -154.2, 15, 54.9)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/End/PillarGroup3" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -17131,6 +17372,8 @@ shape = SubResource("1")
 
 [node name="FallingPieceGroup" parent="MainAct/End" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -105, 16, 0)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/End/FallingPieceGroup" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")
@@ -17479,6 +17722,8 @@ fireSoulIndex = 3
 
 [node name="DrawbridgeGroup" parent="MainAct/End" instance=ExtResource("3_88wfl")]
 transform = Transform3D(-0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866026, 85.7282, 20, 79.1528)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Event" type="Node3D" parent="MainAct/End/DrawbridgeGroup" node_paths=PackedStringArray("animator")]
 script = ExtResource("18_yb8xw")

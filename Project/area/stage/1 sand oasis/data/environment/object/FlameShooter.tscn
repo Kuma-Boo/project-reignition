@@ -1,15 +1,91 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgcc6vcmyfa81"]
+[gd_scene load_steps=12 format=3 uid="uid://cmhphw4qibyto"]
 
+[ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
 [ext_resource type="PackedScene" uid="uid://b1tirama0dt1b" path="res://area/stage/1 sand oasis/data/environment/object/model/FlameShooter.gltf" id="1_wwv3q"]
+[ext_resource type="Material" uid="uid://ctuy7p86d2mal" path="res://area/stage/1 sand oasis/data/environment/particle/material/Flame Shooter Base Process Material.tres" id="3_eag34"]
+[ext_resource type="Material" uid="uid://dxetsvnu13n6n" path="res://area/stage/1 sand oasis/data/environment/particle/material/Flame Shooter Base.tres" id="3_g1efs"]
 
-[node name="FlameShooter" type="Node3D"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_hqwbi"]
+radius = 0.4
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_sotvg"]
+height = 5.0
+radius = 0.4
+
+[sub_resource type="QuadMesh" id="QuadMesh_dr313"]
+material = ExtResource("3_g1efs")
+size = Vector2(1, 1.5)
+center_offset = Vector3(0, 0.75, 0)
+
+[sub_resource type="Animation" id="Animation_2aw77"]
+resource_name = "RESET"
+
+[sub_resource type="Animation" id="Animation_q4mhx"]
+resource_name = "active"
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_1683u"]
+resource_name = "inactive"
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i4sv0"]
+_data = {
+"RESET": SubResource("Animation_2aw77"),
+"active": SubResource("Animation_q4mhx"),
+"inactive": SubResource("Animation_1683u")
+}
+
+[node name="FlameShooter" type="Node3D" node_paths=PackedStringArray("animator", "timer")]
+script = ExtResource("1_srdx0")
+"Current State" = 0
+"Start Time" = 0.0
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+stateNames = [&"inactive", &"active"]
+stateLengths = [1.0, 1.0]
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
 
 [node name="FlameShooter" parent="." instance=ExtResource("1_wwv3q")]
 
-[node name="FlameShooterEffect1" parent="FlameShooter" index="0"]
-layers = 32768
+[node name="Hitbox" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
 
-[node name="FlameShooterEffect2" parent="FlameShooter" index="1"]
-layers = 32768
+[node name="StaticHitbox" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("SphereShape3D_hqwbi")
 
-[editable path="FlameShooter"]
+[node name="FlameHitbox" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_sotvg")
+disabled = true
+
+[node name="VFX" type="Node3D" parent="."]
+
+[node name="BaseFlame" type="GPUParticles3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+cast_shadow = 0
+gi_mode = 0
+amount = 4
+lifetime = 0.8
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.4, -0.5, -0.5, 0.8, 3, 1)
+local_coords = true
+process_material = ExtResource("3_eag34")
+draw_pass_1 = SubResource("QuadMesh_dr313")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_i4sv0")
+}
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[connection signal="timeout" from="Timer" to="." method="OnTimerCompleted"]

@@ -81,7 +81,10 @@ namespace Project.Gameplay
 			if (!isOpen)
 			{
 				if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+				{
 					Character.Lockon.StartBounce();
+					Character.Lockon.LockonEnemy = this;
+				}
 			}
 			else
 				base.UpdateInteraction();

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://dqm1d4odqynle"]
 
 [ext_resource type="PackedScene" uid="uid://cum3u35ksu1pb" path="res://object/stage/common/resource/model/SpikePanel.gltf" id="1"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/SpikePanel.cs" id="3"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_q6aoq"]
 
 [sub_resource type="BoxShape3D" id="3"]
 size = Vector3(1, 1.2, 1)
@@ -177,9 +177,13 @@ _data = {
 }
 
 [node name="SpikePanel" type="Node3D" node_paths=PackedStringArray("animator", "timer")]
-script = ExtResource("3")
+script = ExtResource("1_q6aoq")
+"Current State" = 0
+"Start Time" = 0.0
+stateNames = [&"inactive", &"warning", &"active"]
+stateLengths = [0.0, 0.0, 0.0]
 animator = NodePath("AnimationPlayer")
-timer = NodePath("AnimationTimer")
+timer = NodePath("Timer")
 
 [node name="SpikePanel" parent="." instance=ExtResource("1")]
 
@@ -202,10 +206,11 @@ libraries = {
 "": SubResource("AnimationLibrary_vh2p2")
 }
 
-[node name="AnimationTimer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="area_entered" from="SpikePanel/Spikes/Hitbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="SpikePanel/Spikes/Hitbox" to="." method="OnExited"]
-[connection signal="timeout" from="AnimationTimer" to="." method="TimerCompleted"]
+[connection signal="timeout" from="Timer" to="." method="OnTimerCompleted"]
 
 [editable path="SpikePanel"]

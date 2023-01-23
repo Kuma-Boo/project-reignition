@@ -58,8 +58,11 @@ namespace Project.Gameplay.Triggers
 		private void StartSidle()
 		{
 			isActive = true;
-			Character.StartExternal(this, Character.PathFollower, .2f);
+			currentCyclePosition = 0;
+
 			Character.IsOnGround = true;
+			Character.StartExternal(this, Character.PathFollower, .2f);
+
 			Character.Animator.ExternalAngle = 0;
 			Character.Animator.SnapRotation(0);
 			Character.Animator.StartSidle(isFacingRight);

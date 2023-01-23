@@ -27,8 +27,8 @@ namespace Project.Gameplay
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
 			if (attackType == AttackTypes.Fire) //Show relevant fire-related settings
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,3,.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,3,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
 			}
 
 			return properties;
@@ -53,9 +53,9 @@ namespace Project.Gameplay
 				case "Attack Settings/Attack Type":
 					return (int)attackType;
 				case "Attack Settings/Flame Active Time":
-					return (float)flameActiveTime;
+					return flameActiveTime;
 				case "Attack Settings/Flame Inactive Time":
-					return (float)flameInactiveTime;
+					return flameInactiveTime;
 			}
 
 			return base._Get(property);
@@ -151,6 +151,7 @@ namespace Project.Gameplay
 		/// <summary> How long to complete a rotation cycle when trackPlayer is false. </summary>
 		private float rotationTime;
 		private float currentRotation;
+		private float rotationAmount;
 		private float rotationVelocity;
 		private const float ROTATION_SMOOTHING = .2f;
 
@@ -176,11 +177,17 @@ namespace Project.Gameplay
 		private bool log;
 
 		//Animation parameters
+		private readonly StringName IDLE_STATE = "idle";
+		private readonly StringName SPIN_STATE = "spin";
+		private readonly StringName FIRE_STATE = "fire";
+		private readonly StringName STATE_REQUEST_PARAMETER = "parameters/state_transition/transition_request";
+
+		private readonly StringName ENABLED_STATE = "enabled";
+		private readonly StringName DISABLED_STATE = "disabled";
+		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/move_transition/transition_request";
+		private readonly StringName TELEPORT_PARAMETER = "parameters/teleport_trigger/request";
+
 		private const float MOVE_TRANSITION_LENGTH = .2f;
-		private readonly StringName SEEK_PARAMETER = "parameters/seek/seek_position";
-		private readonly StringName STATE_TRANSITION_PARAMETER = "parameters/state_transition/current";
-		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/move_transition/current";
-		private readonly StringName TELEPORT_PARAMETER = "parameters/teleport_trigger/active";
 
 		protected override void SetUp()
 		{
@@ -194,7 +201,6 @@ namespace Project.Gameplay
 			spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
 
 			root.Rotation = Vector3.Right * Mathf.Pi * .5f; //Required for animation retargeting
-
 			if (attackType == AttackTypes.Spin) //Try to get movement controller parent
 				movementController = GetParentOrNull<MovingObject>();
 
@@ -215,11 +221,10 @@ namespace Project.Gameplay
 			animationPlayer.Advance(0);
 
 			//Reset rotation
-			if (!trackPlayer && !Mathf.IsZeroApprox(rotationTime)) //Precalculate rotation velocity
-				rotationVelocity = Mathf.Tau / rotationTime;
-			else
-				rotationVelocity = 0;
+			if (!trackPlayer && !Mathf.IsZeroApprox(rotationTime)) //Precalculate rotation amount
+				rotationAmount = Mathf.Tau / rotationTime;
 
+			rotationVelocity = 0;
 			Vector2 spawnOffsetFlat = spawnOffset.Flatten();
 			if (!SpawnTravelDisabled && !spawnOffsetFlat.IsZeroApprox())
 				currentRotation = spawnOffsetFlat.AngleTo(Vector2.Up);
@@ -277,21 +282,31 @@ namespace Project.Gameplay
 				UpdateFlameAttack();
 
 			//Update rotation
-			if (trackPlayer) //Rotate to face player
+			if (IsActivated)
 			{
-				float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
-				targetRotation -= GlobalRotation.y; //Rotation is in local space
-				currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, ROTATION_SMOOTHING);
+				if (trackPlayer) //Rotate to face player
+				{
+					float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
+					targetRotation -= GlobalRotation.y; //Rotation is in local space
+					currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, ROTATION_SMOOTHING);
+				}
+				else if (!Mathf.IsZeroApprox(rotationTime))
+				{
+					rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, ROTATION_SMOOTHING);
+					currentRotation = ExtensionMethods.ModAngle(currentRotation + PhysicsManager.physicsDelta * rotationVelocity);
+				}
 			}
-			else if (!Mathf.IsZeroApprox(rotationTime))
-				currentRotation = ExtensionMethods.ModAngle(currentRotation + PhysicsManager.physicsDelta * rotationVelocity);
+			else
+			{
+				currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, ROTATION_SMOOTHING);
+
+				if (attackType != AttackTypes.Spin)
+				{
+					//TODO Update idle animations
+				}
+			}
 
 			UpdateRotation();
-
-			if (!IsActivated || attackType == AttackTypes.Disabled)
-			{
-				//TODO Update idle animations
-			}
 		}
 
 		private void UpdateRotation()
@@ -304,7 +319,6 @@ namespace Project.Gameplay
 		{
 			if (!IsActivated) //Out of range
 			{
-				flameTimer = 0;
 				if (isFlameActive)
 					ToggleFlameAttack();
 
@@ -336,13 +350,14 @@ namespace Project.Gameplay
 				animationPlayer.Play("fire-start");
 				fireState.Travel("attack-fire-start");
 				stateTransition.XfadeTime = 0.1;
-				animationTree.Set(STATE_TRANSITION_PARAMETER, 2);
+				animationTree.Set(STATE_REQUEST_PARAMETER, FIRE_STATE);
 			}
 			else //Stop flame attack
 			{
 				animationPlayer.Play("fire-end");
 				fireState.Travel("attack-fire-end");
-				stateTransition.XfadeTime = 0;
+				stateTransition.XfadeTime = 0.4;
+				animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE);
 			}
 
 			flameTimer = 0; //Reset timer
@@ -369,11 +384,11 @@ namespace Project.Gameplay
 				tweener.Kill();
 			tweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
 
+			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); //Idle
 			if (SpawnTravelDisabled) //Spawn instantly
 			{
 				animationPlayer.Play("spawn");
-				animationTree.Set(TELEPORT_PARAMETER, true);
-
+				animationTree.Set(TELEPORT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(1.0f); //Delay by length of teleport animation
 			}
 			else //Travel
@@ -384,9 +399,9 @@ namespace Project.Gameplay
 
 				moveTransition.XfadeTime = 0;
 				if (!Mathf.IsZeroApprox(spawnOffset.x) || !Mathf.IsZeroApprox(spawnOffset.z))
-					animationTree.Set(MOVE_TRANSITION_PARAMETER, 0); //Travel animation
+					animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); //Travel animation
 				else
-					animationTree.Set(MOVE_TRANSITION_PARAMETER, 1); //Immediately idle
+					animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); //Immediately idle
 			}
 		}
 
@@ -396,13 +411,16 @@ namespace Project.Gameplay
 			isSpawned = true;
 			PhysicsMonitoring = true;
 
-			moveTransition.XfadeTime = MOVE_TRANSITION_LENGTH;
-			animationTree.Set(MOVE_TRANSITION_PARAMETER, 1); //Stopped moving
+			if (!SpawnTravelDisabled)
+			{
+				moveTransition.XfadeTime = MOVE_TRANSITION_LENGTH;
+				animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); //Stopped moving
+			}
 
 			if (attackType == AttackTypes.Spin)
 			{
 				spinState.Travel("attack-spin-start");
-				animationTree.Set(STATE_TRANSITION_PARAMETER, 1);
+				animationTree.Set(STATE_REQUEST_PARAMETER, SPIN_STATE);
 
 				if (tweener != null)
 					tweener.Kill();
@@ -410,8 +428,6 @@ namespace Project.Gameplay
 				tweener = CreateTween();
 				tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); //Delay spin activation by windup animation length
 			}
-			else
-				animationTree.Set(STATE_TRANSITION_PARAMETER, 0); //Idle
 		}
 
 		/// <summary>

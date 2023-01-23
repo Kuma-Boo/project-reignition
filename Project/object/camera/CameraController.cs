@@ -150,40 +150,69 @@ namespace Project.Gameplay
 			}
 		}
 
+		/// <summary> Is the lockon camera currently active? </summary>
+		private bool isLockonActive;
+		/// <summary> 0 -> Don't use lockon camera, 1 -> Use lockon camera. </summary>
+		private float lockonBlend;
+		private float lockonBlendVelocity;
+		/// <summary> Value of the lockon object's last known position. Used in case Lockon becomes null before lockon blend finishes. </summary>
+		private Vector3 lastLockonPosition;
+		private readonly float LOCKON_TRANSITION_SPEED = .2f;
+		/// <summary> Add some extra height while homing attacking </summary>
+		private readonly float LOCKON_HEIGHT = 2f;
+		/// <summary> Add some extra distance while homing attacking </summary>
+		private readonly float LOCKON_DISTANCE = 1f;
+		/// <summary> Limit how much the lockon camera can rotate </summary>
+		private readonly float MAX_LOCKON_PITCH = Mathf.Pi * .3f;
+
+		/// <summary> Is backstep camera currently active? </summary>
+		private bool isBackstepActive;
 		/// <summary> 0 -> Don't use backstep, 1 -> Use backstep. </summary>
 		private float backstepBlend;
 		private float backstepBlendVelocity;
-		/// <summary> Doesn't update when the Character isn't moving. </summary>
-		private bool isBackstepActive;
 		private readonly float BACKSTEP_TRANSITION_SPEED = .4f;
 
 		/// <summary>
-		///Updates whether backstep distance should be used.
+		///Updates whether backstep/lockon should be used.
 		/// </summary>
-		private void UpdateBackstepCamera()
+		private void UpdateTrackingSettings()
 		{
-			if (Character.MoveSpeed != 0)
+			if (!Character.IsOnGround && Character.Lockon.LockonEnemy != null)
+			{
+				isLockonActive = true;
+				lastLockonPosition = Character.Lockon.LockonEnemy.GlobalPosition;
+			}
+			else
+				isLockonActive = false;
+
+			if (Character.MoveSpeed != 0) // Doesn't update when Character isn't moving.
 			{
 				if (Character.IsMovingBackward)
 					isBackstepActive = true;
-				else if (Character.Skills.IsSpeedBreakActive || Character.IsHoldingDirection(PathFollower.ForwardAngle))
+				else if (Character.Skills.IsSpeedBreakActive || Character.Lockon.IsHomingAttacking ||
+				Character.IsHoldingDirection(PathFollower.ForwardAngle))
 					isBackstepActive = false;
 			}
 
 			if (SnapFlag)
 			{
+				lockonBlend = isLockonActive ? 1 : 0;
+
 				backstepBlend = isBackstepActive ? 1 : 0;
-				backstepBlendVelocity = 0;
+				lockonBlendVelocity = backstepBlendVelocity = 0;
 			}
 			else
+			{
+				lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, isLockonActive ? 1 : 0, ref lockonBlendVelocity, LOCKON_TRANSITION_SPEED);
 				backstepBlend = ExtensionMethods.SmoothDamp(backstepBlend, isBackstepActive ? 1 : 0, ref backstepBlendVelocity, BACKSTEP_TRANSITION_SPEED);
+			}
 		}
 		#endregion
 
 		private void UpdateGameplayCamera()
 		{
 			UpdateTransitionTimer();
-			UpdateBackstepCamera();
+			UpdateTrackingSettings();
 
 			UpdatePosition();
 			UpdateRotation();
@@ -266,21 +295,21 @@ namespace Project.Gameplay
 				return settings.staticPosition;
 
 			Vector3 targetPosition = PathFollower.GlobalPosition;
-
-			//Add Distance
+			float height = settings.height;
 			float distance = settings.distance;
-			distance += Mathf.Lerp(0, settings.backstepDistanceAddition, backstepBlend);
+
+			//Add tracking modifiers
+			distance += Mathf.Lerp(0, settings.backstepDistance, backstepBlend);
+			if (settings.isLockonTrackingEnabled)
+			{
+				height += Mathf.Lerp(0, LOCKON_HEIGHT, lockonBlend);
+				distance += Mathf.Lerp(0, LOCKON_DISTANCE, lockonBlend);
+			}
 
 			if (settings.yawMode != CameraSettingsResource.OverrideModes.Override)
 				targetPosition += PathFollower.Back() * distance;
 			else
 				targetPosition += Vector3.Forward.Rotated(Vector3.Up, settings.yawAngle) * distance;
-
-			//Add Height
-			if (settings.isRollEnabled)
-				targetPosition += PathFollower.Up() * settings.height;
-			else
-				targetPosition += PathFollower.UpAxis * settings.height;
 
 			bool trackHorizontally = settings.IsFieldCamera || settings.IsHallCamera;
 			if (trackHorizontally) //Horizontal tracking
@@ -295,13 +324,14 @@ namespace Project.Gameplay
 					targetPosition += PathFollower.Forward().Rotated(Vector3.Up, Mathf.Pi * .5f).RemoveVertical().Normalized() * trackingAmount;
 			}
 
+			//Calculate Height
 			if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Move) //Vertical tracking
-			{
-				if (settings.isRollEnabled)
-					targetPosition += PathFollower.Up() * PathFollower.TruePlayerPositionDelta.y;
-				else
-					targetPosition += PathFollower.UpAxis * PathFollower.FlatPlayerPositionDelta.y;
-			}
+				height += settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.y : PathFollower.FlatPlayerPositionDelta.y;
+
+			if (settings.isRollEnabled)
+				targetPosition += PathFollower.Up() * height;
+			else
+				targetPosition += PathFollower.UpAxis * height;
 
 			return targetPosition;
 		}
@@ -387,8 +417,18 @@ namespace Project.Gameplay
 
 			Vector3 upAxis = settings.isRollEnabled ? PathFollower.Up() : PathFollower.UpAxis;
 			Vector3 targetLookAtPosition = Character.GlobalPosition + upAxis * settings.height;
+			float playerPitch = CalculatePitchAngle(targetLookAtPosition, settings);
 
 			//Tracking
+			if (settings.isLockonTrackingEnabled)
+			{
+				float enemyPitch = CalculatePitchAngle(lastLockonPosition + PathFollower.Forward() * LOCKON_DISTANCE, settings) - settings.pitchAngle;
+				if (Mathf.Abs(enemyPitch) > MAX_LOCKON_PITCH) //Incase the player decides to just ignore the enemy and keep moving forward
+					enemyPitch = Mathf.Sign(enemyPitch) * MAX_LOCKON_PITCH;
+
+				return Mathf.Lerp(playerPitch, enemyPitch, lockonBlend);
+			}
+
 			if (!Character.IsOnGround && settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Rotate)
 			{
 				float leadAmount = Character.VerticalSpd * PhysicsManager.physicsDelta;
@@ -406,7 +446,7 @@ namespace Project.Gameplay
 				return pathPitch + maxFOV * factor;
 			}
 
-			return CalculatePitchAngle(targetLookAtPosition, settings);
+			return playerPitch;
 		}
 
 		private float CalculatePitchAngle(Vector3 lookAt, CameraSettingsResource settings)

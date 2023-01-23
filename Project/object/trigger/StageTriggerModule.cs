@@ -12,5 +12,6 @@ namespace Project.Gameplay.Triggers
 
 		public virtual void Activate() { }
 		public virtual void Deactivate() { }
+		public virtual void Respawn() { }
 	}
 }

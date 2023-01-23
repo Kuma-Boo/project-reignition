@@ -19,7 +19,6 @@ namespace Project.Gameplay
 		public Path3D ActivePath { get; private set; }
 		/// <summary> Local delta to player position. </summary>
 		public Vector3 FlatPlayerPositionDelta { get; private set; }
-		/// <summary> "True" local delta to player position using Basis.Inverse(). </summary>
 		public Vector3 TruePlayerPositionDelta { get; private set; }
 
 		/// <summary> Custom up axis. Equal to Forward() rotated 90 degrees around RightAxis. </summary>
@@ -55,7 +54,7 @@ namespace Project.Gameplay
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			FlatPlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
-			TruePlayerPositionDelta = Basis.Inverse() * (Character.GlobalPosition - GlobalPosition);
+			TruePlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
 
 			//Update custom orientations
 			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();
@@ -71,7 +70,10 @@ namespace Project.Gameplay
 			Debug.DrawRay(GlobalPosition, UpAxis, Colors.Green);
 		}
 
-		//Is the pathfollower ahead of the reference point?
+		/// <summary> Is the pathfollower ahead of the reference point? </summary>
 		public bool IsAheadOfPoint(Vector3 globalPosition) => Progress > ActivePath.Curve.GetClosestOffset(globalPosition - ActivePath.GlobalPosition);
+
+		/// <summary> Calculates the delta position using Basis.Inverse(). </summary>
+		public Vector3 CalculateDeltaPosition(Vector3 globalPostition) => Basis.Inverse() * (globalPostition - GlobalPosition);
 	}
 }

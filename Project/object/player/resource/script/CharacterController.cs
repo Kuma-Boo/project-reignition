@@ -430,6 +430,13 @@ namespace Project.Gameplay
 					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, inputLength); //Accelerate based on input strength/input direction
 				}
 			}
+
+			if (MoveSpeed < 0) //Don't allow negative movespeed
+			{
+				MoveSpeed = Mathf.Abs(MoveSpeed);
+				IsMovingBackward = !IsMovingBackward;
+				MovementAngle += Mathf.Pi;
+			}
 		}
 
 		/// <summary> True when the player's MoveSpeed was zero </summary>
@@ -762,7 +769,7 @@ namespace Project.Gameplay
 			MoveSpeed = jumpDashSpeed;
 			ActionState = ActionStates.JumpDash;
 
-			if (Lockon.LockonTarget == null) //Normal jumpdash
+			if (Lockon.Target == null) //Normal jumpdash
 			{
 				VerticalSpd = jumpDashPower;
 				Animator.LaunchAnimation();
@@ -778,10 +785,10 @@ namespace Project.Gameplay
 		{
 			if (Lockon.IsHomingAttacking) //Homing attack
 			{
-				if (Lockon.LockonTarget == null) //Target disappeared. Transition to jumpdash
+				if (Lockon.Target == null) //Target disappeared. Transition to jumpdash
 				{
 					MovementAngle = PathFollower.ForwardAngle;
-					Lockon.IsHomingAttacking = false;
+					Lockon.StopHomingAttack();
 					StartJumpDash();
 					return;
 				}
@@ -934,6 +941,9 @@ namespace Project.Gameplay
 		public void Knockback(bool disableDamage = false, KnockbackMode knockbackMode = KnockbackMode.Backward)
 		{
 			EmitSignal(SignalName.Damaged);
+
+			if (Lockon.IsHomingAttacking)
+				Lockon.StopHomingAttack();
 
 			//Apply invincibility and drop rings
 			if (!IsInvincible && !disableDamage)
@@ -1555,11 +1565,8 @@ namespace Project.Gameplay
 			{
 				if (Skills.isSplashJumpEnabled) //Perform a splash jump
 					Skills.SplashJump();
-				else //Cancel HomingAttack/JumpDash
-				{
-					Lockon.IsHomingAttacking = false;
-					ResetActionState();
-				}
+				else //Cancel HomingAttack
+					Lockon.StopHomingAttack();
 			}
 		}
 

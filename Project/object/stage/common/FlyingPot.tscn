@@ -69,6 +69,7 @@ animation = &"wing"
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_hyf8p"]
 enabled_inputs = 2
 xfade_time = 0.2
+reset = false
 input_0/name = "Flap"
 input_0/auto_advance = false
 input_1/name = "Fall"
@@ -77,7 +78,7 @@ input_1/auto_advance = false
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_51t0f"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_v4aem"]
-graph_offset = Vector2(-351.65, 62.3835)
+graph_offset = Vector2(-590.122, 48.2207)
 nodes/action_anim/node = SubResource("AnimationNodeAnimation_wgyli")
 nodes/action_anim/position = Vector2(-32, 352)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_hr07p")
@@ -96,7 +97,7 @@ nodes/wing_anim/position = Vector2(-704, 48)
 nodes/wing_seek/node = SubResource("AnimationNodeTimeSeek_3mvxk")
 nodes/wing_seek/position = Vector2(-544, 48)
 nodes/wing_state/node = SubResource("AnimationNodeTransition_hyf8p")
-nodes/wing_state/position = Vector2(-192, 64)
+nodes/wing_state/position = Vector2(-192, 48)
 nodes/wing_time_scale/node = SubResource("AnimationNodeTimeScale_51t0f")
 nodes/wing_time_scale/position = Vector2(-400, 48)
 node_connections = [&"output", 0, &"action_trigger", &"action_trigger", 0, &"flap_trigger", &"action_trigger", 1, &"action_anim", &"flap_seek", 0, &"flap_anim", &"flap_trigger", 0, &"wing_state", &"flap_trigger", 1, &"flap_seek", &"wing_seek", 0, &"wing_anim", &"wing_state", 0, &"wing_time_scale", &"wing_state", 1, &"fall_anim", &"wing_time_scale", 0, &"wing_seek"]
@@ -106,14 +107,14 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimationTree:parameters/action_trigger/active")
+tracks/0/path = NodePath("AnimationTree:parameters/action_trigger/request")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [2]
 }
 
 [sub_resource type="Animation" id="Animation_fs06l"]
@@ -123,7 +124,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimationTree:parameters/action_trigger/active")
+tracks/0/path = NodePath("AnimationTree:parameters/action_trigger/request")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -181,7 +182,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimationTree:parameters/action_trigger/active")
+tracks/0/path = NodePath("AnimationTree:parameters/action_trigger/request")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -217,14 +218,14 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimationTree:parameters/wing_state/current")
+tracks/0/path = NodePath("AnimationTree:active")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -241,7 +242,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("AnimationTree:active")
+tracks/2/path = NodePath("VFX/FeatherParticles:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -253,7 +254,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("AnimationTree:parameters/flap_trigger/active")
+tracks/3/path = NodePath("VFX/DustParticles:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -265,7 +266,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("VFX/FeatherParticles:emitting")
+tracks/4/path = NodePath(".:isFalling")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -277,26 +278,26 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("VFX/DustParticles:emitting")
+tracks/5/path = NodePath("AnimationTree:parameters/flap_trigger/request")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [2]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath(".:isFalling")
+tracks/6/path = NodePath("AnimationTree:parameters/wing_state/transition_request")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": ["Flap"]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -329,14 +330,14 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimationTree:parameters/wing_state/current")
+tracks/0/path = NodePath("AnimationTree:parameters/wing_state/transition_request")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": ["Fall"]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -370,14 +371,14 @@ step = 0.0416667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimationTree:parameters/flap_trigger/active")
+tracks/0/path = NodePath("AnimationTree:parameters/flap_trigger/request")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [1]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -420,38 +421,38 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("AnimationTree:parameters/wing_state/current")
+tracks/4/path = NodePath("AnimationTree:parameters/wing_seek/seek_position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.0416667),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:canTransitionToFalling")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("AnimationTree:parameters/wing_seek/seek_position")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
 "times": PackedFloat32Array(0.0833333),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AnimationTree:parameters/wing_state/transition_request")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.0416667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Flap"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".:canTransitionToFalling")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_ws0l1"]
@@ -476,14 +477,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AnimationTree:parameters/wing_state/current")
+tracks/1/path = NodePath("AnimationTree:parameters/wing_state/transition_request")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": ["Flap"]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -649,10 +650,14 @@ attenuation_filter_cutoff_hz = 10000.0
 tree_root = SubResource("AnimationNodeBlendTree_v4aem")
 anim_player = NodePath("../Flying Pot/AnimationPlayer")
 parameters/action_trigger/active = false
+parameters/action_trigger/request = 0
 parameters/flap_seek/seek_position = -1.0
 parameters/flap_trigger/active = false
+parameters/flap_trigger/request = 2
 parameters/wing_seek/seek_position = 0.0
-parameters/wing_state/current = 0
+parameters/wing_state/current_state = "Flap"
+parameters/wing_state/transition_request = "Flap"
+parameters/wing_state/current_index = 0
 parameters/wing_time_scale/scale = 0.5
 
 [node name="InteractionAnimator" type="AnimationPlayer" parent="."]

@@ -1,8 +1,12 @@
-[gd_scene load_steps=19 format=3 uid="uid://l2uoabrmrkg3"]
+[gd_scene load_steps=23 format=3 uid="uid://l2uoabrmrkg3"]
 
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/Numbers.fnt" id="2_lj78h"]
+[ext_resource type="Texture2D" uid="uid://d0le4lri64mpt" path="res://interface/gameplay/hud/soul gauge/blue/fill/FillTexture.tres" id="5_vr31j"]
+[ext_resource type="Texture2D" uid="uid://46fjg4qe6ode" path="res://interface/gameplay/hud/soul gauge/blue/surface/SurfaceTexture.tres" id="6_b8vd0"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/Sprites.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://ct0masmpsfy21" path="res://interface/gameplay/hud/soul gauge/orange/surface/SurfaceTexture.tres" id="7_0as1b"]
 [ext_resource type="Texture2D" uid="uid://bn7bhmfqmn5i8" path="res://interface/gameplay/hud/soul gauge/Background.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://comwfaowhnt8d" path="res://interface/gameplay/hud/soul gauge/orange/fill/FillTexture.tres" id="8_w3mjo"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
 [ext_resource type="Script" path="res://interface/gameplay/hud/HeadsUpDisplay.cs" id="13"]
 
@@ -132,7 +136,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [null]
+"values": [ExtResource("5_vr31j")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -144,7 +148,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [null]
+"values": [ExtResource("6_b8vd0")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -156,7 +160,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [null]
+"values": [ExtResource("6_b8vd0")]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -197,7 +201,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [null]
+"values": [ExtResource("8_w3mjo")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -209,7 +213,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [null]
+"values": [ExtResource("7_0as1b")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -221,7 +225,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [null]
+"values": [ExtResource("7_0as1b")]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -600,13 +604,15 @@ anchors_preset = -1
 anchor_top = 0.024
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 48.0
-offset_top = 48.128
-offset_right = -48.0
-offset_bottom = -48.0
+offset_left = 46.0
+offset_top = 48.3162
+offset_right = -48.7201
+offset_bottom = -48.16
 texture = ExtResource("8")
+expand_mode = 1
 
 [node name="Fill" type="TextureRect" parent="SoulGauge/SoulGauge/Background"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -618,6 +624,7 @@ offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
+texture = ExtResource("5_vr31j")
 stretch_mode = 1
 
 [node name="Surface" type="TextureRect" parent="SoulGauge/SoulGauge/Background/Fill"]
@@ -632,6 +639,7 @@ offset_bottom = 16.0
 grow_horizontal = 2
 scale = Vector2(0.8, 0.4)
 pivot_offset = Vector2(16, 16)
+texture = ExtResource("6_b8vd0")
 stretch_mode = 3
 
 [node name="SurfaceGlow" type="TextureRect" parent="SoulGauge/SoulGauge/Background/Fill"]
@@ -646,6 +654,7 @@ offset_bottom = 16.0
 grow_horizontal = 2
 scale = Vector2(0.8, 0.4)
 pivot_offset = Vector2(16, 16)
+texture = ExtResource("6_b8vd0")
 stretch_mode = 3
 flip_v = true
 

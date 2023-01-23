@@ -4,7 +4,9 @@ uniform vec2 blur_direction;
 const float blur_strength = 12.0;
 const int blur_iterations = 8;
 
-vec4 blur(sampler2D screen_tex, vec2 screen_uv, vec2 pixel_size)
+uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
+
+vec4 blur(vec2 screen_uv, vec2 pixel_size)
 {
 	vec4 col = vec4(0, 0, 0, 0);
 	
@@ -24,6 +26,6 @@ vec4 blur(sampler2D screen_tex, vec2 screen_uv, vec2 pixel_size)
 
 void fragment()
 {
-	vec4 blurred_col = blur(SCREEN_TEXTURE, SCREEN_UV, SCREEN_PIXEL_SIZE);
+	vec4 blurred_col = blur(SCREEN_UV, SCREEN_PIXEL_SIZE);
 	COLOR = blurred_col;
 }

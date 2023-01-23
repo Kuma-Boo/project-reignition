@@ -77,6 +77,7 @@ namespace Project.Interface
 		{
 			_subtitles = new Gameplay.Triggers.DialogTrigger()
 			{
+				isCutscene = true,
 				delays = new Array<float>(),
 				displayLength = new Array<float>(),
 				textKeys = new Array<string>(),

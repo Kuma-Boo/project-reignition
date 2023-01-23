@@ -12,17 +12,19 @@ namespace Project.Gameplay
 	{
 		private CharacterController Character => CharacterController.instance;
 
+		/// <summary> Used by the CameraController to focus onto multi-HP enemies. </summary>
+		public Enemy LockonEnemy { get; set; }
 		/// <summary> Active lockon target shown on the HUD. </summary>
-		public Node3D LockonTarget
+		public Node3D Target
 		{
-			get => lockonTarget;
+			get => target;
 			private set
 			{
-				lockonTarget = value;
+				target = value;
 				wasTargetChanged = true;
 			}
 		}
-		private Node3D lockonTarget;
+		private Node3D target;
 		/// <summary> Was lockonTarget changed this frame? </summary>
 		private bool wasTargetChanged;
 		private readonly Array<Node3D> activeTargets = new Array<Node3D>(); //List of targetable objects
@@ -35,7 +37,7 @@ namespace Project.Gameplay
 		private bool monitoringPerfectHomingAttack;
 		public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
 		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
-		public Vector3 HomingAttackDirection => LockonTarget != null ? (LockonTarget.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
+		public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
 		public void StartHomingAttack()
 		{
@@ -43,6 +45,13 @@ namespace Project.Gameplay
 			IsPerfectHomingAttack = monitoringPerfectHomingAttack;
 			if (IsPerfectHomingAttack)
 				LevelSettings.instance.AddBonus(LevelSettings.BonusType.PerfectHomingAttack);
+		}
+
+		public void StopHomingAttack()
+		{
+			IsHomingAttacking = false;
+			Character.ResetActionState();
+			ResetLockonTarget();
 		}
 
 		public void UpdateLockonTargets()
@@ -54,8 +63,8 @@ namespace Project.Gameplay
 			{
 				int currentTarget = -1; //Index of the current target
 				float closestDistance = Mathf.Inf; //Current closest target
-				if (LockonTarget != null) //Current lockon target starts as the closest target
-					closestDistance = LockonTarget.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
+				if (Target != null) //Current lockon target starts as the closest target
+					closestDistance = Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 
 				//Check whether to pick a new target
 				for (int i = 0; i < activeTargets.Count; i++)
@@ -72,21 +81,21 @@ namespace Project.Gameplay
 					currentTarget = i;
 				}
 
-				if (currentTarget != -1 && activeTargets[currentTarget] != LockonTarget) //Target has changed
-					LockonTarget = activeTargets[currentTarget];
-				else if (LockonTarget != null && IsTargetValid(LockonTarget) != TargetState.Valid) //Validate current lockon target
-					LockonTarget = null;
+				if (currentTarget != -1 && activeTargets[currentTarget] != Target) //Target has changed
+					Target = activeTargets[currentTarget];
+				else if (Target != null && IsTargetValid(Target) != TargetState.Valid) //Validate current lockon target
+					Target = null;
 			}
 			else if (IsHomingAttacking) //Validate homing attack target
 			{
-				TargetState state = IsTargetValid(LockonTarget);
+				TargetState state = IsTargetValid(Target);
 				if (state == TargetState.NotInList)
-					LockonTarget = null;
+					Target = null;
 			}
 
-			if (LockonTarget != null)
+			if (Target != null)
 			{
-				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(LockonTarget.GlobalPosition);
+				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 				UpdateLockonReticle(screenPos, wasTargetChanged);
 			}
 			else if (wasTargetChanged) //Disable UI
@@ -129,12 +138,13 @@ namespace Project.Gameplay
 
 		public void ResetLockonTarget()
 		{
+			LockonEnemy = null;
 			IsHomingAttacking = false;
 			IsPerfectHomingAttack = false;
 
-			if (LockonTarget != null) //Reset Active Target
+			if (Target != null) //Reset Active Target
 			{
-				LockonTarget = null;
+				Target = null;
 				DisableLockonReticle();
 			}
 		}
@@ -159,14 +169,13 @@ namespace Project.Gameplay
 			Character.VerticalSpd -= RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta;
 		}
 
-		public void StartBounce() //Bounce the character up and back (So they can target the same enemy again)
+		public void StartBounce() //Bounce the character up and back (So they can target an enemy again)
 		{
 			IsHomingAttacking = false;
-
 			bounceTimer = BOUNCE_LOCKOUT_TIME;
 
-			if (LockonTarget != null)
-				Character.GlobalPosition = LockonTarget.GlobalPosition;
+			if (Target != null)
+				Character.GlobalPosition = Target.GlobalPosition;
 			ResetLockonTarget();
 
 			Character.CanJumpDash = true;

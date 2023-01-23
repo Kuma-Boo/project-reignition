@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 namespace Project.Gameplay.Triggers
 {
@@ -6,46 +7,117 @@ namespace Project.Gameplay.Triggers
 	/// Extended Area3D node that can determine the direction the player enters.
 	/// Automatically sets up signals for children that inherit from StageTriggerModule.
 	/// </summary>
+	[Tool]
 	public partial class StageTrigger : Area3D
 	{
-		[Export]
-		public ActivationMode activationMode;
-		public enum ActivationMode
+		#region Editor
+		public override Array<Dictionary> _GetPropertyList()
 		{
-			Always, //Always activate this trigger
-			Oneshot, //Only activate once per level load
-			OneshotRespawnable, //Activate once each respawn
-		}
-		private bool wasTriggered; //For oneshot triggers
+			Array<Dictionary> properties = new Array<Dictionary>();
 
-		[Export]
-		public TriggerMode triggerMode; //How should this area be activated?
-		public enum TriggerMode
+			properties.Add(ExtensionMethods.CreateProperty("OneShot", Variant.Type.Bool));
+			if (isOneShot)
+				properties.Add(ExtensionMethods.CreateProperty("Respawn Mode", Variant.Type.Int, PropertyHint.Enum, respawnMode.EnumToString()));
+
+			properties.Add(ExtensionMethods.CreateProperty("Trigger Mode", Variant.Type.Int, PropertyHint.Enum, triggerMode.EnumToString()));
+			if (triggerMode != TriggerModes.OnExit)
+				properties.Add(ExtensionMethods.CreateProperty("Enter Mode", Variant.Type.Int, PropertyHint.Enum, enterMode.EnumToString()));
+			if (triggerMode != TriggerModes.OnEnter)
+				properties.Add(ExtensionMethods.CreateProperty("Exit Mode", Variant.Type.Int, PropertyHint.Enum, exitMode.EnumToString()));
+
+			return properties;
+		}
+
+		public override Variant _Get(StringName property)
+		{
+			switch ((string)property)
+			{
+				case "OneShot":
+					return isOneShot;
+				case "Respawn Mode":
+					return (int)respawnMode;
+				case "Trigger Mode":
+					return (int)triggerMode;
+				case "Enter Mode":
+					return (int)enterMode;
+				case "Exit Mode":
+					return (int)exitMode;
+			}
+
+			return base._Get(property);
+		}
+
+		public override bool _Set(StringName property, Variant value)
+		{
+			switch ((string)property)
+			{
+				case "OneShot":
+					isOneShot = (bool)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Respawn Mode":
+					respawnMode = (RespawnModes)(int)value;
+					break;
+				case "Trigger Mode":
+					triggerMode = (TriggerModes)(int)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Enter Mode":
+					enterMode = (ActivationMode)(int)value;
+					break;
+				case "Exit Mode":
+					exitMode = (ActivationMode)(int)value;
+					break;
+				default:
+					return false;
+			}
+
+			return true;
+		}
+		#endregion
+
+		/// <summary> Only activate this StageTrigger once per respawn? </summary>
+		private bool isOneShot = false;
+		/// <summary> For keeping track of oneshot triggers. </summary>
+		private bool wasTriggered;
+		private RespawnModes respawnMode = RespawnModes.CheckpointBefore;
+		private enum RespawnModes
+		{
+			CheckpointBefore, //Only respawn if the current checkpoint is BEFORE the object (Default)
+			CheckpointAfter, //Only respawn if the current checkpoint AFTER the object
+			Always, //Always respawn
+			Disabled, //Never Respawn
+		}
+
+		private TriggerModes triggerMode = TriggerModes.OnEnter; //How should this area be activated?
+		private enum TriggerModes
 		{
 			OnEnter, //Activate on enter
 			OnExit, //Activate on exit
 			OnStay, //Activate on enter, Deactivate on exit.
 		}
 
-		[Export]
-		public InteractionMode enterMode;
-		[Export]
-		public InteractionMode exitMode;
-		public enum InteractionMode
+		private ActivationMode enterMode = ActivationMode.MovingForward;
+		private ActivationMode exitMode = ActivationMode.MovingBackward;
+		private enum ActivationMode
 		{
-			BothWays,
-			MovingForward,
-			MovingBackward,
+			BothWays, //Valid both ways
+			MovingForward, //Only valid when the player leaves the trigger moving forward
+			MovingBackward, //Only valid when the player leaves the trigger moving backward
 		}
 
 		[Signal]
 		public delegate void ActivatedEventHandler();
 		[Signal]
 		public delegate void DeactivatedEventHandler();
+		[Signal]
+		public delegate void RespawnedEventHandler();
 		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
 
 		public override void _Ready()
 		{
+			if (Engine.IsEditorHint()) return;
+
 			//Connect child modules
 			for (int i = 0; i < GetChildCount(); i++)
 			{
@@ -53,28 +125,45 @@ namespace Project.Gameplay.Triggers
 				if (module == null) continue;
 
 				//Connect signals
-				Connect(SignalName.Activated, new Callable(module, MethodName.Activate));
-				Connect(SignalName.Deactivated, new Callable(module, MethodName.Deactivate));
+				Connect(SignalName.Activated, new Callable(module, StageTriggerModule.MethodName.Activate));
+				Connect(SignalName.Deactivated, new Callable(module, StageTriggerModule.MethodName.Deactivate));
+				Connect(SignalName.Respawned, new Callable(module, StageTriggerModule.MethodName.Respawn));
 			}
 
-			if (activationMode == ActivationMode.OneshotRespawnable)
+			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
 				LevelSettings.instance.ConnectRespawnSignal(this);
 		}
 
-		public void Respawn() => wasTriggered = false;
+		public void Respawn()
+		{
+			if (respawnMode != RespawnModes.Always) //Validate respawn
+			{
+				//Compare the currentCheckpoint progress compared to this StageTrigger
+				float eventPosition = StageSettings.instance.GetProgress(GlobalPosition);
+				float checkpointPosition = StageSettings.instance.GetProgress(LevelSettings.instance.CurrentCheckpoint.GlobalPosition);
+				bool isRespawningAhead = checkpointPosition > eventPosition;
+
+				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||
+				(respawnMode == RespawnModes.CheckpointAfter && !isRespawningAhead)) //Invalid Respawn
+					return;
+			}
+
+			wasTriggered = false;
+			EmitSignal(SignalName.Respawned);
+		}
 
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
 
 			//Determine whether activation is successful
-			if (triggerMode == TriggerMode.OnExit)
+			if (triggerMode == TriggerModes.OnExit)
 				return;
 
-			if (enterMode != InteractionMode.BothWays)
+			if (enterMode != ActivationMode.BothWays)
 			{
 				bool isEnteringForward = !PathFollower.IsAheadOfPoint(GlobalPosition);
-				if ((enterMode == InteractionMode.MovingForward && !isEnteringForward) || (enterMode == InteractionMode.MovingBackward && isEnteringForward))
+				if ((enterMode == ActivationMode.MovingForward && !isEnteringForward) || (enterMode == ActivationMode.MovingBackward && isEnteringForward))
 					return;
 			}
 
@@ -86,24 +175,27 @@ namespace Project.Gameplay.Triggers
 			if (!a.IsInGroup("player")) return;
 
 			//Determine whether deactivation is successful
-			if (triggerMode == TriggerMode.OnEnter)
+			if (triggerMode == TriggerModes.OnEnter)
 				return;
 
-			if (exitMode != InteractionMode.BothWays)
+			if (exitMode != ActivationMode.BothWays)
 			{
 				bool isExitingForward = PathFollower.IsAheadOfPoint(GlobalPosition);
-				if ((exitMode == InteractionMode.MovingForward && !isExitingForward) || (exitMode == InteractionMode.MovingBackward && isExitingForward))
+				if ((exitMode == ActivationMode.MovingForward && !isExitingForward) || (exitMode == ActivationMode.MovingBackward && isExitingForward))
 					return;
 			}
 
-			Deactivate();
+			if (triggerMode == TriggerModes.OnExit)
+				Activate();
+			else
+				Deactivate();
 		}
 
 		private void Activate()
 		{
 			if (wasTriggered) return;
 
-			if (activationMode != ActivationMode.Always)
+			if (isOneShot)
 				wasTriggered = true;
 
 			EmitSignal(SignalName.Activated);

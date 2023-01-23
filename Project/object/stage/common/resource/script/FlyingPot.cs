@@ -25,7 +25,6 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private CameraTrigger cameraTrigger;
 
-
 		[ExportSubgroup("Animation")]
 		[Export]
 		private AnimationPlayer interactionAnimator;
@@ -75,6 +74,7 @@ namespace Project.Gameplay.Objects
 			angle = 0f;
 			velocity = 0f;
 			position = Vector2.Zero;
+			ApplyMovement();
 
 			lockonArea.SetDeferred("monitorable", true);
 		}
@@ -137,10 +137,15 @@ namespace Project.Gameplay.Objects
 
 			velocity = 0f; //Kill all velocity
 
+			float angleRatio = angle / MAX_ANGLE;
+			Character.MovementAngle = Character.CalculateForwardAngle(this.Back());
+			Character.StrafeSpeed = Character.Skills.AirSettings.speed * angleRatio;
 			Character.VerticalSpd = RuntimeConstants.GetJumpPower(Character.jumpHeight);
-			Character.StrafeSpeed = Character.Skills.AirSettings.speed * (angle / MAX_ANGLE);
-			Character.ResetMovementState();
+
 			Character.Animator.Visible = true;
+			Character.Animator.SnapRotation(Character.MovementAngle - Mathf.Pi * angleRatio);
+			Character.ResetMovementState();
+
 			interactionAnimator.Play("exit");
 
 			if (cameraTrigger != null)

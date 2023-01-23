@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://c4kdj2x0c8h4m"]
+[gd_scene load_steps=90 format=3 uid="uid://c4kdj2x0c8h4m"]
 
 [ext_resource type="PackedScene" path="res://object/player/resource/model/Sonic.tscn" id="3_qo3fe"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
@@ -107,16 +107,6 @@ animation = &"fall"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0v11u"]
 animation = &"backstep"
 
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_d55ma"]
-sync = true
-enabled_inputs = 2
-xfade_time = 0.1
-from_start = false
-input_0/name = "enabled"
-input_0/auto_advance = false
-input_1/name = "disabled"
-input_1/auto_advance = false
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4ig5s"]
 animation = &"idle"
 
@@ -164,13 +154,15 @@ sync = true
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_pev3d"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_3ixi1"]
-enabled_inputs = 2
-xfade_time = 0.1
-from_start = false
+enabled_inputs = 3
+xfade_time = 0.15
+reset = false
 input_0/name = "idle"
 input_0/auto_advance = false
-input_1/name = "move"
+input_1/name = "forward"
 input_1/auto_advance = false
+input_2/name = "backward"
+input_2/auto_advance = false
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_qscfu"]
 filter_enabled = true
@@ -216,33 +208,31 @@ min_space = Vector2(-1, 0)
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_vw7yp"]
-graph_offset = Vector2(-618.779, 38.4453)
-nodes/Animation/node = SubResource("AnimationNodeAnimation_0v11u")
-nodes/Animation/position = Vector2(-864, 96)
-nodes/backstep_transition/node = SubResource("AnimationNodeTransition_d55ma")
-nodes/backstep_transition/position = Vector2(-576, 176)
+graph_offset = Vector2(-700.777, 40.1348)
+nodes/backstep_anim/node = SubResource("AnimationNodeAnimation_0v11u")
+nodes/backstep_anim/position = Vector2(-880, 336)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_4ig5s")
-nodes/idle_anim/position = Vector2(-240, -64)
+nodes/idle_anim/position = Vector2(-752, -48)
 nodes/land_anim/node = SubResource("AnimationNodeAnimation_me7fr")
-nodes/land_anim/position = Vector2(-128, 272)
+nodes/land_anim/position = Vector2(-144, 320)
 nodes/land_speed/node = SubResource("AnimationNodeTimeScale_f46vi")
-nodes/land_speed/position = Vector2(16, 272)
+nodes/land_speed/position = Vector2(0, 320)
 nodes/land_trigger/node = SubResource("AnimationNodeOneShot_4jhgi")
 nodes/land_trigger/position = Vector2(176, 96)
 nodes/move_blend/node = SubResource("AnimationNodeBlendSpace1D_jet85")
-nodes/move_blend/position = Vector2(-1056, 240)
+nodes/move_blend/position = Vector2(-1072, 128)
 nodes/move_seek/node = SubResource("AnimationNodeTimeSeek_pf45a")
-nodes/move_seek/position = Vector2(-368, 144)
+nodes/move_seek/position = Vector2(-320, 80)
 nodes/move_speed/node = SubResource("AnimationNodeTimeScale_pev3d")
-nodes/move_speed/position = Vector2(-224, 144)
+nodes/move_speed/position = Vector2(-176, 80)
 nodes/move_transition/node = SubResource("AnimationNodeTransition_3ixi1")
-nodes/move_transition/position = Vector2(-32, 96)
+nodes/move_transition/position = Vector2(-544, 80)
 nodes/output/position = Vector2(352, 96)
 nodes/turn_add/node = SubResource("AnimationNodeAdd2_qscfu")
-nodes/turn_add/position = Vector2(-864, 240)
+nodes/turn_add/position = Vector2(-880, 128)
 nodes/turn_blend/node = SubResource("AnimationNodeBlendSpace2D_pei0v")
-nodes/turn_blend/position = Vector2(-1056, 368)
-node_connections = [&"output", 0, &"land_trigger", &"backstep_transition", 0, &"Animation", &"backstep_transition", 1, &"turn_add", &"land_speed", 0, &"land_anim", &"land_trigger", 0, &"move_transition", &"land_trigger", 1, &"land_speed", &"move_seek", 0, &"backstep_transition", &"move_speed", 0, &"move_seek", &"move_transition", 0, &"idle_anim", &"move_transition", 1, &"move_speed", &"turn_add", 0, &"move_blend", &"turn_add", 1, &"turn_blend"]
+nodes/turn_blend/position = Vector2(-1072, 256)
+node_connections = [&"output", 0, &"land_trigger", &"land_speed", 0, &"land_anim", &"land_trigger", 0, &"move_speed", &"land_trigger", 1, &"land_speed", &"move_speed", 0, &"move_seek", &"move_transition", 0, &"idle_anim", &"move_transition", 1, &"turn_add", &"move_transition", 2, &"backstep_anim", &"turn_add", 0, &"move_blend", &"turn_add", 1, &"turn_blend", &"move_seek", 0, &"move_transition"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pjy3d"]
 animation = &"jump-accel-loop"
@@ -309,13 +299,13 @@ switch_mode = 1
 states/End/position = Vector2(540.8, 83.136)
 states/Start/position = Vector2(301.197, 11.6533)
 states/backflip/node = SubResource("AnimationNodeAnimation_m3yux")
-states/backflip/position = Vector2(-105.778, 9.20369)
+states/backflip/position = Vector2(-107.378, 7.17294)
 states/fall/node = SubResource("AnimationNodeAnimation_ndh67")
 states/fall/position = Vector2(62.153, 82.4287)
 states/fall-loop/node = SubResource("AnimationNodeAnimation_kh4no")
-states/fall-loop/position = Vector2(62.4769, 9.80827)
+states/fall-loop/position = Vector2(61.558, 6.63835)
 states/ground_tree/node = SubResource("AnimationNodeBlendTree_vw7yp")
-states/ground_tree/position = Vector2(300.254, 83.4976)
+states/ground_tree/position = Vector2(300.967, 83.1505)
 states/jump/node = SubResource("AnimationNodeAnimation_qm7rg")
 states/jump/position = Vector2(-253.476, 82.3987)
 states/jump-accel/node = SubResource("AnimationNodeAnimation_r14q7")
@@ -329,7 +319,7 @@ states/jump-launch-loop/position = Vector2(134.63, 225.63)
 states/jump-loop/node = SubResource("AnimationNodeAnimation_o72mp")
 states/jump-loop/position = Vector2(-252.58, 8.06525)
 transitions = ["jump", "jump-loop", SubResource("AnimationNodeStateMachineTransition_dyroj"), "jump-loop", "fall", SubResource("AnimationNodeStateMachineTransition_gsw68"), "fall", "fall-loop", SubResource("AnimationNodeStateMachineTransition_itkwq"), "backflip", "fall-loop", SubResource("AnimationNodeStateMachineTransition_ri2be"), "Start", "ground_tree", SubResource("AnimationNodeStateMachineTransition_sdmv7"), "jump-accel", "jump-accel-loop", SubResource("AnimationNodeStateMachineTransition_22ttm"), "jump-accel-loop", "fall", SubResource("AnimationNodeStateMachineTransition_246cn"), "jump-launch", "jump-launch-loop", SubResource("AnimationNodeStateMachineTransition_q0wob"), "jump-launch-loop", "fall", SubResource("AnimationNodeStateMachineTransition_s44ac"), "jump-accel-loop", "jump-launch-loop", SubResource("AnimationNodeStateMachineTransition_ebnxd"), "jump-accel-loop", "jump-launch", SubResource("AnimationNodeStateMachineTransition_oycie"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_7v1gm"), "jump", "jump-accel", SubResource("AnimationNodeStateMachineTransition_cgfve")]
-graph_offset = Vector2(-162.913, -11)
+graph_offset = Vector2(-223.913, -43)
 
 [sub_resource type="AnimationNodeAnimation" id="131"]
 animation = &"countdown"
@@ -396,13 +386,13 @@ node_connections = [&"output", 0, &"sidle_seek", &"facing_right", 0, &"sidle_rig
 enabled_inputs = 3
 input_0/name = "normal"
 input_0/auto_advance = false
-input_1/name = "balancing"
+input_1/name = "balance"
 input_1/auto_advance = false
 input_2/name = "sidle"
 input_2/auto_advance = false
 
 [sub_resource type="AnimationNodeBlendTree" id="37"]
-graph_offset = Vector2(-783.17, 211.639)
+graph_offset = Vector2(-957.541, 113.701)
 nodes/balance_state/node = SubResource("AnimationNodeStateMachine_w7hoj")
 nodes/balance_state/position = Vector2(-768, 368)
 nodes/land_anim/node = SubResource("AnimationNodeAnimation_hlmdu")
@@ -488,7 +478,6 @@ shape = SubResource("80")
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("37")
 anim_player = NodePath("../Components/Sonic/AnimationPlayer")
-process_callback = 0
 parameters/balance_state/playback = SubResource("AnimationNodeStateMachinePlayback_uyu7t")
 parameters/balance_state/lean_right_tree/balance_blend/blend_position = 0.0
 parameters/balance_state/lean_right_tree/balance_seek/seek_position = -1.0
@@ -497,23 +486,33 @@ parameters/balance_state/lean_right_tree/wind_add/add_amount = 1.0
 parameters/balance_state/lean_right_tree/wind_blend/blend_position = 0.0
 parameters/land_speed/scale = 1.2
 parameters/land_trigger/active = false
+parameters/land_trigger/request = 0
 parameters/normal_state/playback = SubResource("AnimationNodeStateMachinePlayback_5h3hv")
-parameters/normal_state/ground_tree/backstep_transition/current = 1
 parameters/normal_state/ground_tree/land_speed/scale = 1.2
 parameters/normal_state/ground_tree/land_trigger/active = false
+parameters/normal_state/ground_tree/land_trigger/request = 0
 parameters/normal_state/ground_tree/move_blend/blend_position = 0.0
 parameters/normal_state/ground_tree/move_seek/seek_position = -1.0
 parameters/normal_state/ground_tree/move_speed/scale = 1.0
-parameters/normal_state/ground_tree/move_transition/current = 0
+parameters/normal_state/ground_tree/move_transition/current_state = "idle"
+parameters/normal_state/ground_tree/move_transition/transition_request = ""
+parameters/normal_state/ground_tree/move_transition/current_index = 0
 parameters/normal_state/ground_tree/turn_add/add_amount = 1.0
 parameters/normal_state/ground_tree/turn_blend/blend_position = Vector2(0, 0)
 parameters/oneshot_tree/oneshot_seek/seek_position = -1.0
-parameters/oneshot_tree/oneshot_transition/current = 0
+parameters/oneshot_tree/oneshot_transition/current_state = ""
+parameters/oneshot_tree/oneshot_transition/transition_request = ""
+parameters/oneshot_tree/oneshot_transition/current_index = 0
 parameters/oneshot_trigger/active = false
-parameters/sidle_tree/facing_right/current = 0
+parameters/oneshot_trigger/request = 0
+parameters/sidle_tree/facing_right/current_state = ""
+parameters/sidle_tree/facing_right/transition_request = ""
+parameters/sidle_tree/facing_right/current_index = 0
 parameters/sidle_tree/sidle_seek/seek_position = -1.0
 parameters/sidle_tree/sidle_speed/scale = 0.0
-parameters/state_transition/current = 0
+parameters/state_transition/current_state = "normal"
+parameters/state_transition/transition_request = ""
+parameters/state_transition/current_index = 0
 
 [connection signal="body_entered" from="Components/AreaTrigger" to="." method="OnObjectCollisionEnter"]
 [connection signal="body_exited" from="Components/AreaTrigger" to="." method="OnObjectCollisionExit"]

@@ -16,26 +16,10 @@ namespace Project.Gameplay.Triggers
 		private Node3D cameraStandin;
 		[Export]
 		private LockoutResource lockout;
-		[Export(PropertyHint.Flags)]
-		private ResetModes resetMode;
-
-		private enum ResetModes
-		{
-			PlayerSpawnsBefore, //Only respawn if the player is respawned BEFORE the object. (Default)
-			PlayerSpawnsAfter, //Only respawn if the player is respawned AFTER the object.
-			Always, //Always reset
-			Disabled, //Never reset
-		}
 
 		private bool wasActivated;
 		[Signal]
 		public delegate void ActivatedEventHandler();
-
-		public override void _Ready()
-		{
-			if (resetMode != ResetModes.Disabled)
-				LevelSettings.instance.ConnectRespawnSignal(this);
-		}
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -44,41 +28,25 @@ namespace Project.Gameplay.Triggers
 				Character.UpdateExternalControl();
 		}
 
-		public void Respawn()
+		public override void Respawn()
 		{
-			bool respawnValid = true;
-
-			if (resetMode != ResetModes.Always) //Check if respawn is valid
+			if (animator.HasAnimation("RESET")) //Only reset if a RESET animation exists.
 			{
-				//Is the player's target respawn position in front of this event node?
-				float eventPosition = StageSettings.instance.GetProgress(GlobalPosition);
-				float checkpointPosition = StageSettings.instance.GetProgress(LevelSettings.instance.CurrentCheckpoint.GlobalPosition);
-				bool isRespawningAhead = checkpointPosition > eventPosition;
-				if ((resetMode == ResetModes.PlayerSpawnsBefore && isRespawningAhead) ||
-				(resetMode == ResetModes.PlayerSpawnsAfter && !isRespawningAhead))
-					respawnValid = false;
+				wasActivated = false;
+				animator.Play("RESET"); //Reset event
 			}
+			else
+				GD.PrintErr(Name + " doesn't have a RESET animation.");
 
-			if (respawnValid)
+			/*
+			else if (!string.IsNullOrEmpty(animator.Autoplay)) //DEPRECATED. Fallback to autoplay animation
 			{
-				if (animator.HasAnimation("RESET")) //Only reset if a RESET animation exists.
-				{
-					wasActivated = false;
-					animator.Play("RESET"); //Reset event
-				}
-				else
-					GD.PrintErr(Name + " doesn't have a RESET animation.");
-
-				/*
-				else if (!string.IsNullOrEmpty(animator.Autoplay)) //DEPRECATED. Fallback to autoplay animation
-				{
-					animator.Play(animator.Autoplay);
-					animator.Stop();
-					animator.Seek(0.0, true);
-					wasActivated = false;
-				}
-				*/
+				animator.Play(animator.Autoplay);
+				animator.Stop();
+				animator.Seek(0.0, true);
+				wasActivated = false;
 			}
+			*/
 		}
 
 		public override void Activate()
@@ -100,7 +68,7 @@ namespace Project.Gameplay.Triggers
 		/// <summary>
 		/// Call this to play a specific animation on the player
 		/// </summary>
-		public void PlayCharacterAnimation(int animationIndex) => Character.Animator.PlayOneshotAnimation(animationIndex);
+		public void PlayCharacterAnimation(StringName animationName) => Character.Animator.PlayOneshotAnimation(animationName);
 		/// <summary>
 		/// Call this to reset character's movement state
 		/// </summary>

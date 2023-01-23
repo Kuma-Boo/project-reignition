@@ -18,6 +18,9 @@ namespace Project.Gameplay
 		private AnimationNodeTransition animationStateTransition;
 		private CharacterController Character => CharacterController.instance;
 
+		private readonly StringName ENABLED_STATE = "enabled";
+		private readonly StringName DISABLED_STATE = "disabled";
+
 		public override void _Ready()
 		{
 			animatorTree.Active = true; //Activate animator
@@ -65,13 +68,13 @@ namespace Project.Gameplay
 		#region Oneshot Animations
 		private AnimationNodeOneShot oneShotTransition;
 		/// <summary> Animation index for countdown animation. </summary>
-		private const int COUNTDOWN_INDEX = 0;
+		private readonly StringName COUNTDOWN_ANIMATION = "countdown";
 		[Export]
 		private Node3D countdownCameraController;
 
 		public void PlayCountdown()
 		{
-			PlayOneshotAnimation(COUNTDOWN_INDEX);
+			PlayOneshotAnimation(COUNTDOWN_ANIMATION);
 			extraAnimationPlayer.Play("countdown-flame");
 
 			//Prevent sluggish transitions into gameplay
@@ -80,28 +83,33 @@ namespace Project.Gameplay
 			Character.Camera.ExternalController = countdownCameraController;
 		}
 
-		private readonly StringName ONESHOT_TRIGGER = "parameters/oneshot_trigger/active";
+		private readonly StringName ONESHOT_TRIGGER = "parameters/oneshot_trigger/request";
 		private readonly StringName ONESHOT_SEEK_PARAMETER = "parameters/oneshot_tree/oneshot_seek/current";
-		private readonly StringName ONESHOT_TRANSITION_PARAMETER = "parameters/oneshot_tree/oneshot_transition/current";
-		public void PlayOneshotAnimation(int index) //Play a specific one-shot animation
+		private readonly StringName ONESHOT_TRANSITION_PARAMETER = "parameters/oneshot_tree/oneshot_transition/transition_request";
+		public void PlayOneshotAnimation(StringName animation) //Play a specific one-shot animation
 		{
-			animatorTree.Set(ONESHOT_TRIGGER, true);
+			animatorTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			animatorTree.Set(ONESHOT_SEEK_PARAMETER, 0);
-			animatorTree.Set(ONESHOT_TRANSITION_PARAMETER, index);
+			animatorTree.Set(ONESHOT_TRANSITION_PARAMETER, animation);
 		}
 
 		/// <summary>
 		/// Cancels the oneshot animation early.
 		/// </summary>
-		public void CancelOneshot() => animatorTree.Set(ONESHOT_TRIGGER, false);
+		public void CancelOneshot() => animatorTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		#endregion
 
 		#region States
-		private const string STATE_PARAMETER = "parameters/state_transition/current";
+		private readonly StringName NORMAL_STATE = "normal";
+		private readonly StringName BALANCE_STATE = "balance";
+		private readonly StringName SIDLE_STATE = "sidle";
+
+		private readonly StringName STATE_PARAMETER = "parameters/state_transition/transition_request";
+
 		public void ResetState(float xfadeTime = -1) //Reset any state, while optionally setting the xfade time
 		{
 			SetStateXfade(xfadeTime);
-			animatorTree.Set(STATE_PARAMETER, 0); //Revert to normal state
+			animatorTree.Set(STATE_PARAMETER, NORMAL_STATE); //Revert to normal state
 		}
 
 		/// <summary>
@@ -153,18 +161,20 @@ namespace Project.Gameplay
 			animatorTree.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
 		}
 
-		private readonly StringName GROUND_STATE_PARAMETER = "ground_tree";
-		private readonly StringName AIR_STATE_PARAMETER = "air_tree";
+		private readonly StringName GROUND_TREE = "ground_tree";
 
-		private readonly StringName BACKSTEP_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/backstep_transition/current";
+		private readonly StringName IDLE_STATE = "idle";
+		private readonly StringName MOVE_FORWARD_STATE = "forward";
+		private readonly StringName MOVE_BACK_STATE = "backward";
 
-		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/move_transition/current";
+		private readonly StringName MOVE_CURRENT_PARAMETER = "parameters/normal_state/ground_tree/move_transition/current_state";
+		private readonly StringName MOVE_REQUEST_PARAMETER = "parameters/normal_state/ground_tree/move_transition/transition_request";
 		private readonly StringName MOVE_SPEED_PARAMETER = "parameters/normal_state/ground_tree/move_speed/scale";
 		private readonly StringName MOVE_SEEK_PARAMETER = "parameters/normal_state/ground_tree/move_seek/seek_position";
 		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/move_blend/blend_position";
 
 		private readonly StringName TURN_BLEND_PARAMETER = "parameters/normal_state/ground_tree/turn_blend/blend_position";
-		private readonly StringName LAND_TRIGGER_PARAMETER = "parameters/normal_state/ground_tree/land_trigger/active";
+		private readonly StringName LAND_TRIGGER_PARAMETER = "parameters/normal_state/ground_tree/land_trigger/request";
 
 		/// <summary> Disables speed smoothing. </summary>
 		private bool disableSpeedSmoothing;
@@ -182,7 +192,7 @@ namespace Project.Gameplay
 			//TODO Speed break animation
 			if (Character.Skills.IsSpeedBreakCharging) return;
 
-			int targetState = 0;
+			StringName targetMoveState = IDLE_STATE;
 			float speedRatio = Mathf.Abs(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed));
 			float targetAnimationSpeed = 1f;
 			float targetTurnRatio = 0;
@@ -190,23 +200,22 @@ namespace Project.Gameplay
 			if (Character.JustLandedOnGround) //Play landing animation
 			{
 				animatorTree.Set(MOVE_SEEK_PARAMETER, 0);
-				animatorTree.Set(LAND_TRIGGER_PARAMETER, true);
-				normalState.Travel(GROUND_STATE_PARAMETER);
+				animatorTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				normalState.Travel(GROUND_TREE);
 			}
 
 			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 			{
-				targetState = 1;
-
 				if (Character.IsMovingBackward) //Backstep
 				{
-					animatorTree.Set(BACKSTEP_TRANSITION_PARAMETER, 0);
+					targetMoveState = MOVE_BACK_STATE;
 					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
 					targetAnimationSpeed = 1.2f + speedRatio;
 				}
 				else //Moving
 				{
-					animatorTree.Set(BACKSTEP_TRANSITION_PARAMETER, 1);
+					targetMoveState = MOVE_FORWARD_STATE;
+
 					if (speedRatio >= RUN_RATIO) //Running
 					{
 						float extraSpeed = Mathf.Clamp((speedRatio - RUN_RATIO) / .2f, 0f, 1.4f);
@@ -222,9 +231,10 @@ namespace Project.Gameplay
 				}
 			}
 
-			animatorTree.Set(MOVE_TRANSITION_PARAMETER, targetState);
-			animatorTree.Set(MOVE_BLEND_PARAMETER, speedRatio);
+			if ((StringName)animatorTree.Get(MOVE_CURRENT_PARAMETER) != targetMoveState)
+				animatorTree.Set(MOVE_REQUEST_PARAMETER, targetMoveState);
 
+			animatorTree.Set(MOVE_BLEND_PARAMETER, speedRatio);
 			if (disableSpeedSmoothing)
 			{
 				animatorTree.Set(MOVE_SPEED_PARAMETER, targetAnimationSpeed);
@@ -308,17 +318,16 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Grinding and Balancing Animations
-		private const int BALANCE_STATE_INDEX = 1;
-		private const string BALANCE_RIGHT_STATE_PARAMETER = "parameters/balance_state/lean_right_tree/balance_blend/blend_position";
-		private const string WIND_BLEND_PARAMETER = "parameters/balance_state/lean_right_tree/wind_blend/blend_position";
-		private const string BALANCE_SPEED_PARAMETER = "parameters/balance_state/lean_right_tree/balance_speed/scale";
+		private readonly StringName BALANCE_RIGHT_STATE_PARAMETER = "parameters/balance_state/lean_right_tree/balance_blend/blend_position";
+		private readonly StringName WIND_BLEND_PARAMETER = "parameters/balance_state/lean_right_tree/wind_blend/blend_position";
+		private readonly StringName BALANCE_SPEED_PARAMETER = "parameters/balance_state/lean_right_tree/balance_speed/scale";
 		public void StartBalancing()
 		{
 			SetStateXfade(0); //Don't blend into state
-			animatorTree.Set(STATE_PARAMETER, BALANCE_STATE_INDEX); //Turn on balancing animations
+			animatorTree.Set(STATE_PARAMETER, BALANCE_STATE); //Turn on balancing animations
 
 			//Reset current balance
-			animatorTree.Set(BALANCE_RIGHT_STATE_PARAMETER, 0);
+			animatorTree.Set(BALANCE_RIGHT_STATE_PARAMETER, ENABLED_STATE);
 			UpdateBalanceSpeed();
 		}
 
@@ -352,12 +361,9 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-
 		#region Sidle
-		private const int SIDLE_STATE_INDEX = 2;
-
-		private readonly string STRAFE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_position";
-		private readonly string STRAFE_DIRECTION_PARAMETER = "parameters/sidle_tree/facing_right/current";
+		private readonly StringName STRAFE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_position";
+		private readonly StringName STRAFE_DIRECTION_PARAMETER = "parameters/sidle_tree/facing_right/current";
 
 		public void StartSidle(bool facingRight)
 		{
@@ -366,7 +372,7 @@ namespace Project.Gameplay
 			else //Quick crossfade into sidle
 				SetStateXfade(0.1f);
 
-			animatorTree.Set(STATE_PARAMETER, SIDLE_STATE_INDEX);
+			animatorTree.Set(STATE_PARAMETER, SIDLE_STATE);
 			animatorTree.Set(STRAFE_DIRECTION_PARAMETER, facingRight ? 0 : 1);
 		}
 

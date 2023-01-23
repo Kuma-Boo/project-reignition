@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode unshaded, cull_front, depth_draw_never, depth_test_disabled;
 
 uniform float far_clip_distance;
+uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
 
 void vertex()
 {

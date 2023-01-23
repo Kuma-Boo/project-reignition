@@ -10,6 +10,7 @@ namespace Project.Gameplay.Triggers
 	{
 		public override void Activate() => SoundManager.instance.PlayDialog(this);
 
+		public bool isCutscene;
 		public int DialogCount => textKeys.Count;
 		public bool HasDelay(int index) => delays != null && delays.Count > index && !Mathf.IsZeroApprox(delays[index]);
 		public bool HasLength(int index) => displayLength != null && displayLength.Count > index && !Mathf.IsZeroApprox(displayLength[index]);
