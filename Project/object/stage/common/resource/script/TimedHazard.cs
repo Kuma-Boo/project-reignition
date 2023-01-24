@@ -20,9 +20,9 @@ namespace Project.Gameplay.Hazards
 			if (currentStateIndex < stateLengths.Count)
 			{
 				maxStartingTime = stateLengths[currentStateIndex];
-				startingTime = Mathf.Clamp(startingTime, 0, maxStartingTime);
+				startingTime = Mathf.Clamp(startingTime, -maxStartingTime, maxStartingTime);
 			}
-			properties.Add(ExtensionMethods.CreateProperty("Start Time", Variant.Type.Float, PropertyHint.Range, $"0,{maxStartingTime},.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Start Time", Variant.Type.Float, PropertyHint.Range, $"{-maxStartingTime},{maxStartingTime},.1"));
 
 			for (int i = 0; i < stateNames.Count; i++)
 				properties.Add(ExtensionMethods.CreateProperty("State Lengths/" + stateNames[i], Variant.Type.Float, PropertyHint.Range, $"0,9,.1"));
@@ -139,7 +139,9 @@ namespace Project.Gameplay.Hazards
 
 			currentStateIndex = Mathf.Clamp(currentStateIndex, 0, stateNames.Count);
 			if (currentStateIndex < stateLengths.Count)
+			{
 				StartTimer(stateLengths[currentStateIndex] - startingTime);
+			}
 			else
 				OnTimerCompleted();
 		}

@@ -41,6 +41,7 @@ namespace Project.Gameplay
 
 				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Track Lockon", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Backstep Distance", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Use Pathfollower Distance", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Vertical Tracking Mode", Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
 			}
 
@@ -91,6 +92,8 @@ namespace Project.Gameplay
 
 				case "Tracking Settings/Track Lockon":
 					return isLockonTrackingEnabled;
+				case "Tracking Settings/Use Pathfollower Distance":
+					return usePathfollowerDistance;
 				case "Tracking Settings/Vertical Tracking Mode":
 					return (int)verticalTrackingMode;
 				case "Tracking Settings/Backstep Distance":
@@ -160,6 +163,9 @@ namespace Project.Gameplay
 				case "Tracking Settings/Track Lockon":
 					isLockonTrackingEnabled = (bool)value;
 					break;
+				case "Tracking Settings/Use Pathfollower Distance":
+					usePathfollowerDistance = (bool)value;
+					break;
 				case "Tracking Settings/Vertical Tracking Mode":
 					verticalTrackingMode = (TrackingModes)(int)value;
 					break;
@@ -216,6 +222,8 @@ namespace Project.Gameplay
 
 		/// <summary> Distance to add when backstepping. </summary>
 		public float backstepDistance;
+		/// <summary> Use the pathfollower's progress value to calculate distance? </summary>
+		public bool usePathfollowerDistance;
 		/// <summary> Rotate the camera and add some extra distance when locking onto an enemy. </summary>
 		public bool isLockonTrackingEnabled;
 		/// <summary> How should the camera track the player vertical position? </summary>

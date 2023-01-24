@@ -245,7 +245,8 @@ namespace Project.Gameplay
 		{
 			PerfectHomingAttack, //Obtained by attacking an enemy using a perfect homing attack
 			DriftBonus, //Obtained by performing a Drift
-			Grind, //Obtained by continuously grinding
+			GrindShuffle, //Obtained by performing a grind shuffle
+			PerfectGrindShuffle, //Obtained by performing a perfect grind shuffle
 			GrindStep, //Obtained by using the Grind Step
 		}
 		[Signal]
@@ -257,7 +258,6 @@ namespace Project.Gameplay
 				default:
 					break;
 			}
-
 
 			EmitSignal(SignalName.BonusAdded, (int)type);
 		}

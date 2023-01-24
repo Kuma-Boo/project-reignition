@@ -32,7 +32,9 @@ namespace Project.Gameplay
 		private MovementResource maxGroundSettings; //Fastest Sonic
 
 		[Export]
-		public MovementResource strafeSettings; //Strafe settings used during speed break, or strafe sections
+		public MovementResource strafeSettings; //Strafe settings used during strafe sections
+		[Export]
+		public MovementResource speedbreakStrafeSettings; //Strafe settings used during speed break
 
 		[Export]
 		private MovementResource baseAirSettings; //Slowest Sonic
@@ -99,6 +101,7 @@ namespace Project.Gameplay
 			GD.Print("Splash Jump isn't implemented yet.");
 		}
 
+		/// <summary> Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster. </summary>
 		[Export]
 		public float landingDashSpeed;
 		[Export]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://dl3d4fyyg4ojl"]
+[gd_scene load_steps=63 format=3 uid="uid://dr7scqws8wi3j"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -33,6 +33,7 @@
 [ext_resource type="Resource" uid="uid://dq3y0ns7mcco5" path="res://area/stage/1 sand oasis/act 1/trigger/camera/OasisCam.tres" id="23_vlc8n"]
 [ext_resource type="Resource" uid="uid://dx47u8sre674v" path="res://area/stage/1 sand oasis/act 1/trigger/camera/SidleCornerCam.tres" id="24_nfyes"]
 [ext_resource type="Resource" uid="uid://cfbyfp0sae1jm" path="res://area/stage/1 sand oasis/act 1/trigger/camera/HallCam.tres" id="24_qtnck"]
+[ext_resource type="Resource" uid="uid://dl0lpv0hj8rji" path="res://area/stage/1 sand oasis/act 1/trigger/camera/SlopeCam.tres" id="25_j1udv"]
 [ext_resource type="PackedScene" uid="uid://cbwcphc75t0y7" path="res://effect/buffer/DepthRenderer.tscn" id="27_ypwqo"]
 [ext_resource type="Resource" uid="uid://dd0ulcjl72sfi" path="res://resource/preset/camera/common/WallForwardCam.tres" id="27_ywd2q"]
 [ext_resource type="PackedScene" uid="uid://bb0wbyqxrs175" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="28_5kt56"]
@@ -174,6 +175,7 @@ settings = ExtResource("20_0g5qj")
 
 [node name="WaterTrigger" parent="Trigger" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49, -51, -289)
+"Enter Mode" = 0
 
 [node name="DeathTrigger" type="Node3D" parent="Trigger/WaterTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49, 51, 289)
@@ -245,8 +247,21 @@ settings = ExtResource("23_aljpv")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/StartingTrigger"]
 shape = SubResource("SphereShape3D_drc5w")
 
+[node name="SlopeTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0.422618, 0.906308, 0, 0.906308, -0.422618, -1, -1.84732e-08, -3.9616e-08, 58.0498, 75, -62.1495)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CameraTrigger" type="Node3D" parent="StaticCameraTriggers/SlopeTrigger"]
+script = ExtResource("13_3nlok")
+settings = ExtResource("25_j1udv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/SlopeTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, 8.6, 0)
+shape = SubResource("BoxShape3D_65k0u")
+
 [node name="Hall1Trigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(-4.37114e-08, 3.82137e-15, -1, 8.74228e-08, 1, 0, 1, -8.74228e-08, -4.37114e-08, -123.844, -45, -62.1165)
+transform = Transform3D(-4.37114e-08, -0.642788, -0.766044, 8.74228e-08, 0.766044, -0.642788, 1, -9.50669e-08, 2.27094e-08, -123.844, -45, -62.1165)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -440,7 +455,7 @@ shape = SubResource("BoxShape3D_8dg41")
 [node name="SidleCornerTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -705)
 "Trigger Mode" = 2
-"Exit Mode" = 2
+"Exit Mode" = 0
 
 [node name="Camera" type="Node3D" parent="StaticCameraTriggers/SidleCornerTrigger"]
 script = ExtResource("13_3nlok")
@@ -606,7 +621,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
 [node name="StageCulling" type="Node3D" parent="."]
-visible = false
 
 [node name="SlopeCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 75, -48)
@@ -618,7 +632,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_s3nwt")
 
 [node name="OasisCullTrigger" parent="StageCulling" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 18, 100, -62)
+transform = Transform3D(-4.37114e-08, 0.707107, 0.707107, 0, 0.707107, -0.707107, -1, -3.09086e-08, -3.09086e-08, 25.0994, 93.287, -62)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 

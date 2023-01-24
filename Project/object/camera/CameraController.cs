@@ -172,11 +172,25 @@ namespace Project.Gameplay
 		private float backstepBlendVelocity;
 		private readonly float BACKSTEP_TRANSITION_SPEED = .4f;
 
+		/// <summary> Helps more accurate resyncing. </summary>
+		public Vector3 PathResyncFix { get; private set; }
+		private Vector3 pathResyncFixVelocity;
+		private readonly float PATH_RESYNC_SMOOTHING = .1f;
+
 		/// <summary>
 		///Updates whether backstep/lockon should be used.
 		/// </summary>
 		private void UpdateTrackingSettings()
 		{
+			//Update path resync fix
+			Vector3 targetPathResyncFix = Vector3.Zero;
+			if (ActiveSettings.usePathfollowerDistance)
+			{
+				targetPathResyncFix = Character.Up();
+				if (Mathf.Abs(PathFollower.Forward().y) > .5f)
+					targetPathResyncFix = PathFollower.UpAxis;
+			}
+
 			if (!Character.IsOnGround && Character.Lockon.LockonEnemy != null)
 			{
 				isLockonActive = true;
@@ -186,26 +200,31 @@ namespace Project.Gameplay
 				isLockonActive = false;
 
 			if (Character.MoveSpeed != 0) // Doesn't update when Character isn't moving.
-			{
-				if (Character.IsMovingBackward)
-					isBackstepActive = true;
-				else if (Character.Skills.IsSpeedBreakActive || Character.Lockon.IsHomingAttacking ||
-				Character.IsHoldingDirection(PathFollower.ForwardAngle))
-					isBackstepActive = false;
-			}
+				isBackstepActive = Character.IsMovingBackward;
 
 			if (SnapFlag)
 			{
-				lockonBlend = isLockonActive ? 1 : 0;
-
-				backstepBlend = isBackstepActive ? 1 : 0;
 				lockonBlendVelocity = backstepBlendVelocity = 0;
+				pathResyncFixVelocity = Vector3.Zero;
+
+				lockonBlend = isLockonActive ? 1 : 0;
+				backstepBlend = isBackstepActive ? 1 : 0;
+				PathResyncFix = targetPathResyncFix;
 			}
 			else
 			{
 				lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, isLockonActive ? 1 : 0, ref lockonBlendVelocity, LOCKON_TRANSITION_SPEED);
 				backstepBlend = ExtensionMethods.SmoothDamp(backstepBlend, isBackstepActive ? 1 : 0, ref backstepBlendVelocity, BACKSTEP_TRANSITION_SPEED);
+				PathResyncFix = PathResyncFix.SmoothDamp(targetPathResyncFix, ref pathResyncFixVelocity, PATH_RESYNC_SMOOTHING);
 			}
+		}
+
+		public void Respawn()
+		{
+			UpdateCameraSettings(LevelSettings.instance.CheckpointCamera, 0); //Revert camera settings
+
+			isLockonActive = false;
+			isBackstepActive = false;
 		}
 		#endregion
 
@@ -294,7 +313,6 @@ namespace Project.Gameplay
 			if (settings.IsStaticCamera) //Static camera
 				return settings.staticPosition;
 
-			Vector3 targetPosition = PathFollower.GlobalPosition;
 			float height = settings.height;
 			float distance = settings.distance;
 
@@ -306,10 +324,27 @@ namespace Project.Gameplay
 				distance += Mathf.Lerp(0, LOCKON_DISTANCE, lockonBlend);
 			}
 
-			if (settings.yawMode != CameraSettingsResource.OverrideModes.Override)
-				targetPosition += PathFollower.Back() * distance;
-			else
+			Vector3 targetPosition = PathFollower.GlobalPosition;
+
+			if (settings.yawMode == CameraSettingsResource.OverrideModes.Override)
 				targetPosition += Vector3.Forward.Rotated(Vector3.Up, settings.yawAngle) * distance;
+			else
+			{
+				if (settings.usePathfollowerDistance)
+				{
+					float currentProgress = PathFollower.Progress;
+					PathFollower.Progress -= distance;
+					targetPosition = PathFollower.GlobalPosition;
+					PathFollower.Progress = currentProgress;
+					if (distance > currentProgress)
+						distance = Mathf.Abs(currentProgress - distance);
+					else
+						distance = 0;
+				}
+
+				targetPosition += PathFollower.Back() * distance;
+			}
+
 
 			bool trackHorizontally = settings.IsFieldCamera || settings.IsHallCamera;
 			if (trackHorizontally) //Horizontal tracking

@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://cgyyc25paxacd"]
+
+[ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="1_8mnk3"]
+
+[sub_resource type="Gradient" id="Gradient_xonva"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_k7plw"]
+gradient = SubResource("Gradient_xonva")
+width = 64
+
+[sub_resource type="Curve" id="Curve_omd8m"]
+_data = [Vector2(0, 0), 0.0, 9.55266, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_sx00t"]
+width = 64
+curve = SubResource("Curve_omd8m")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4ppof"]
+direction = Vector3(0, 0.1, -1)
+spread = 20.0
+flatness = 0.5
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_sx00t")
+color_ramp = SubResource("GradientTexture1D_k7plw")
+
+[sub_resource type="QuadMesh" id="QuadMesh_qnfqm"]
+material = ExtResource("1_8mnk3")
+size = Vector2(0.05, 1)
+center_offset = Vector3(0, 0.4, 0)
+
+[node name="GrindrailSparksParticle" type="GPUParticles3D"]
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 32
+lifetime = 0.4
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_4ppof")
+draw_pass_1 = SubResource("QuadMesh_qnfqm")

@@ -421,7 +421,9 @@ namespace Project.Gameplay
 					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, -1);
 				else
 				{
-					if (inputDot < .8f)
+					if (IsLockoutActive && ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) //Zipper exception
+						inputLength *= Mathf.Clamp(inputDot + .5f, 0, 1f); //Arbitrary math to make it easier to maintain speed
+					else if (inputDot < .8f) //Slow down while turning
 						inputLength *= inputDot;
 
 					if (IsMovingBackward && !IsOnGround) //Greatly reduce input strength when jumping backwards
@@ -461,7 +463,11 @@ namespace Project.Gameplay
 
 				//Reduce strafe speed when moving slowly
 				strafeAmount *= (IsOnGround ? GroundSettings.GetSpeedRatioClamped(MoveSpeed) : AirSettings.GetSpeedRatioClamped(MoveSpeed)) + .1f;
-				StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, strafeAmount);
+
+				if (Skills.IsSpeedBreakActive)
+					StrafeSpeed = Skills.speedbreakStrafeSettings.Interpolate(StrafeSpeed, strafeAmount);
+				else
+					StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, strafeAmount);
 			}
 
 			if (overrideFacingDirection)
@@ -648,8 +654,6 @@ namespace Project.Gameplay
 
 		private void ApplyGravity() => VerticalSpd = Mathf.MoveToward(VerticalSpd, RuntimeConstants.MAX_GRAVITY, RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta);
 
-		[Export]
-		public float landingBoost; //Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster.
 		private bool canLandingBoost;
 		private void CheckLandingBoost()
 		{
@@ -659,8 +663,8 @@ namespace Project.Gameplay
 			if (MovementState != MovementStates.Normal) return;
 
 			//Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
-			if (IsHoldingDirection(PathFollower.ForwardAngle) && MoveSpeed < landingBoost)
-				MoveSpeed = landingBoost;
+			if (IsHoldingDirection(PathFollower.ForwardAngle) && MoveSpeed < Skills.landingDashSpeed)
+				MoveSpeed = Skills.landingDashSpeed;
 		}
 
 		#region Jump
@@ -680,7 +684,6 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			disableGroundSnap = true;
 			canLandingBoost = Skills.isLandingDashEnabled;
 			ActionState = ActionStates.Jumping;
 			VerticalSpd = RuntimeConstants.GetJumpPower(jumpHeight);
@@ -894,7 +897,6 @@ namespace Project.Gameplay
 			VerticalSpd = RuntimeConstants.GetJumpPower(backflipHeight);
 
 			IsOnGround = false;
-			disableGroundSnap = true;
 			ActionState = ActionStates.Backflip;
 
 			Effect.PlayActionSFX(Effect.JUMP_SFX);
@@ -938,15 +940,18 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Called when the player takes damage or is being knocked around.
 		/// </summary>
-		public void Knockback(bool disableDamage = false, KnockbackMode knockbackMode = KnockbackMode.Backward)
+		public void Knockback(KnockbackMode knockbackMode = KnockbackMode.Backward)
 		{
 			EmitSignal(SignalName.Damaged);
 
 			if (Lockon.IsHomingAttacking)
 				Lockon.StopHomingAttack();
 
+			if (Skills.IsSpeedBreakActive) //Disable speedbreak
+				Skills.ToggleSpeedBreak();
+
 			//Apply invincibility and drop rings
-			if (!IsInvincible && !disableDamage)
+			if (!IsInvincible)
 			{
 				ActionState = ActionStates.Damaged;
 				invincibliltyTimer = INVINCIBILITY_LENGTH;
@@ -958,18 +963,17 @@ namespace Project.Gameplay
 				IsOnGround = false;
 
 				MovementAngle = PathFollower.ForwardAngle; //Prevent being knocked sideways
+				Animator.Hurt();
 
 				switch (knockbackMode)
 				{
 					case KnockbackMode.Backward:
 						MoveSpeed = -8f;
 						VerticalSpd = RuntimeConstants.GetJumpPower(3f);
-						disableGroundSnap = true;
 						break;
 					case KnockbackMode.Forward:
 						MoveSpeed = 8f;
 						VerticalSpd = RuntimeConstants.GetJumpPower(3f);
-						disableGroundSnap = true;
 						break;
 				}
 			}
@@ -1017,7 +1021,7 @@ namespace Project.Gameplay
 			ResetVelocity();
 			ResetOrientation();
 
-			Camera.UpdateCameraSettings(Level.CheckpointCamera, 0); //Revert camera settings
+			Camera.Respawn();
 
 			//"Flicker" area collider to re-trigger any area the player happens to be respawning in
 			areaTrigger.Disabled = true;
@@ -1054,6 +1058,7 @@ namespace Project.Gameplay
 			if (groundHit)
 			{
 				GlobalPosition -= groundHit.normal * (groundHit.distance - CollisionRadius); //Snap to ground
+				Animator.Respawn();
 				LandOnGround();
 			}
 			else
@@ -1181,12 +1186,14 @@ namespace Project.Gameplay
 			CheckGround();
 
 			Vector3 movementDirection = GetMovementDirection();
+			Vector3 strafeDirection = movementDirection.Cross(UpDirection);
 			CheckMainWall(movementDirection);
+			CheckStrafeWall(strafeDirection);
 
 			if (ActionState == ActionStates.JumpDash) //Jump dash ignores slopes
 				movementDirection = movementDirection.RemoveVertical().Normalized();
 
-			Velocity = movementDirection * MoveSpeed + movementDirection.Cross(UpDirection) * StrafeSpeed;
+			Velocity = movementDirection * MoveSpeed + strafeDirection * StrafeSpeed;
 			Velocity += UpDirection * VerticalSpd;
 
 			MoveAndSlide();
@@ -1198,8 +1205,6 @@ namespace Project.Gameplay
 
 		public bool IsOnGround { get; set; }
 		public bool JustLandedOnGround { get; private set; } //Flag for doing stuff on land
-		/// <summary> Disable ground snapping for a single frame. </summary>
-		private bool disableGroundSnap;
 
 		private const int GROUND_CHECK_AMOUNT = 8; //How many "whiskers" to use when checking the ground
 		private void CheckGround()
@@ -1213,11 +1218,6 @@ namespace Project.Gameplay
 				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpd < 0)
 				castLength += Mathf.Abs(VerticalSpd) * PhysicsManager.physicsDelta;
-			else if (disableGroundSnap)
-			{
-				castLength = -.1f; //Reduce snapping when jumping
-				disableGroundSnap = false;
-			}
 
 			Vector3 castVector = -UpDirection * castLength;
 			RaycastHit groundHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
@@ -1239,35 +1239,45 @@ namespace Project.Gameplay
 
 			if (groundHit) //Successful ground hit
 			{
-				if (!IsOnGround) //Landing on the ground
+				float snapDistance = groundHit.distance - CollisionRadius;
+				if (!IsOnGround && VerticalSpd < 0) //Landing on the ground
 				{
 					UpDirection = groundHit.normal;
 					UpdateOrientation();
 					LandOnGround();
-				}
-				else //Update world direction
-					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized();
+					Effect.PlayLandingFX();
 
-				Effect.UpdateGroundType(groundHit.collidedObject);
-
-				float snapDistance = groundHit.distance - CollisionRadius;
-				if (JustLandedOnGround && Mathf.Abs(groundHit.normal.Dot(Vector3.Up)) < .9f) //Slanted ground fix
-				{
-					Vector3 offsetVector = groundHit.point - GlobalPosition;
-					Vector3 axis = offsetVector.Cross(Vector3.Up).Normalized();
-					if (axis.IsNormalized())
+					if (Mathf.Abs(groundHit.normal.Dot(Vector3.Up)) < .9f) //Slanted ground fix
 					{
-						offsetVector = offsetVector.Rotated(axis, offsetVector.SignedAngleTo(Vector3.Up, axis));
-						snapDistance = offsetVector.y;
+						Vector3 offsetVector = groundHit.point - GlobalPosition;
+						Vector3 axis = offsetVector.Cross(Vector3.Up).Normalized();
+						if (axis.IsNormalized())
+						{
+							offsetVector = offsetVector.Rotated(axis, offsetVector.SignedAngleTo(Vector3.Up, axis));
+							snapDistance = offsetVector.y;
+						}
 					}
 				}
+
 				GlobalPosition -= groundHit.normal * snapDistance; //Snap to ground
 				FloorMaxAngle = Mathf.Pi * .25f; //Allow KinematicBody to deal with slopes
-				UpdateSlopeInfluence(groundHit.normal);
+
+				if (IsOnGround)
+				{
+					//Update world direction
+					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized();
+
+					Effect.UpdateGroundType(groundHit.collidedObject);
+					UpdateSlopeInfluence(groundHit.normal);
+				}
 			}
 			else
 			{
-				IsOnGround = false;
+				if (IsOnGround) //Leave ground
+				{
+					IsOnGround = false;
+					Animator.Fall();
+				}
 
 				//Smooth world direction based on vertical speed
 				float orientationResetFactor = 0;
@@ -1303,12 +1313,10 @@ namespace Project.Gameplay
 			ResetActionState();
 			Lockon.ResetLockonTarget();
 
-			if (!IsCountdownActive && !IsRespawning) //Don't do this stuff during countdown or respawn
-			{
-				JustLandedOnGround = true;
-				CheckLandingBoost(); //Landing boost skill
-				Effect.PlayLandingFX();
-			}
+			if (IsCountdownActive || IsRespawning) return; //Don't do this stuff during countdown or respawn
+
+			JustLandedOnGround = true;
+			CheckLandingBoost(); //Landing boost skill
 		}
 
 		private bool ValidateGroundCast(ref RaycastHit hit) //Don't count walls as the ground
@@ -1419,6 +1427,21 @@ namespace Project.Gameplay
 					}
 				}
 			}
+		}
+
+		private void CheckStrafeWall(Vector3 castVector)
+		{
+			if (Mathf.IsZeroApprox(StrafeSpeed)) //Strafing disabled
+				return;
+
+			castVector *= Mathf.Sign(StrafeSpeed);
+			float castLength = CollisionRadius + COLLISION_PADDING + Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
+
+			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
+			Debug.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
+
+			if (ValidateWallCast(ref wallHit))
+				StrafeSpeed = 0;
 		}
 
 		private const float ORIENTATION_SMOOTHING = .4f;
@@ -1544,21 +1567,8 @@ namespace Project.Gameplay
 			Note for when I come back wondering why the player is being pushed through the floor
 			Ensure all crushers' animationplayers are using the PHYSICS update mode
 			If this is true, then proceed to panic.
-			*/
-			/*
-			Old crusher check - Moved to CheckCeiling().
-			if (body.IsInGroup("crusher"))
-			{
-				//Check whether we're ACTUALLY being crushed and not just running into the side of the crusher
-				float checkLength = CollisionRadius * 5f; //Needs to be long enough to guarantee hitting the target
-				RaycastHit hit = this.CastRay(CenterPosition, UpDirection * checkLength, CollisionMask, false);
-				if (hit.collidedObject == body)
-				{
-					GD.Print($"Crushed by {body.Name}");
-					AddCollisionExceptionWith(body); //Avoid clipping through the ground
-					Knockback();
-				}
-			}
+
+			Crusher check has been moved to CheckCeiling().
 			*/
 
 			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))

@@ -100,7 +100,7 @@ namespace Project.Gameplay
 		private AudioStreamPlayer voiceChannel;
 		public void PlayVoice(StringName key)
 		{
-			voiceChannel.Stream = voiceLibrary.GetStream(key);
+			voiceChannel.Stream = voiceLibrary.GetStream(key, SoundManager.LanguageIndex);
 			voiceChannel.Play();
 		}
 
@@ -115,5 +115,12 @@ namespace Project.Gameplay
 			voiceChannel.Stop();
 			voiceChannel.VolumeDb = 0f;
 		}
+
+
+		[ExportGroup("VFX")]
+		[Export]
+		public GPUParticles3D grindrailVFX;
+		public void StartGrindrail() => grindrailVFX.Emitting = true;
+		public void StopGrindrail() => grindrailVFX.Emitting = false;
 	}
 }

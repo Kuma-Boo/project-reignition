@@ -37,16 +37,6 @@ namespace Project.Gameplay.Triggers
 			}
 			else
 				GD.PrintErr(Name + " doesn't have a RESET animation.");
-
-			/*
-			else if (!string.IsNullOrEmpty(animator.Autoplay)) //DEPRECATED. Fallback to autoplay animation
-			{
-				animator.Play(animator.Autoplay);
-				animator.Stop();
-				animator.Seek(0.0, true);
-				wasActivated = false;
-			}
-			*/
 		}
 
 		public override void Activate()

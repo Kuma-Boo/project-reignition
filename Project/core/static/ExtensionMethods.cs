@@ -259,6 +259,7 @@ namespace Project
 
 		public static bool IsLoopingPath(this Path3D path) => path.Curve.GetPointPosition(0).IsEqualApprox(path.Curve.GetPointPosition(path.Curve.PointCount - 1));
 
+		/*
 		/// <summary>
 		/// Converts Decibels to Linear.
 		/// </summary>
@@ -268,5 +269,6 @@ namespace Project
 		/// Converts Linear to Decibels.
 		/// </summary>
 		public static float LinearToDB(float linearVolume) => Mathf.Log(linearVolume) * 8.6858896380650365530225783783321f;
+		*/
 	}
 }

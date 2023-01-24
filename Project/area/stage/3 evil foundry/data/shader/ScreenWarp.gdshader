@@ -7,6 +7,8 @@ uniform float intensity = 128.0;
 uniform vec2 scroll_speed = vec2(1, 1);
 uniform vec2 scale = vec2(1, 1);
 
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+
 uniform float bias;
 
 void fragment()

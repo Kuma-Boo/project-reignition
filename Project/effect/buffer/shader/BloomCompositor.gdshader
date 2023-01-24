@@ -1,5 +1,6 @@
 shader_type canvas_item;
 
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 uniform sampler2D bloom_texture : source_color, hint_default_transparent;
 uniform bool multiply;
 

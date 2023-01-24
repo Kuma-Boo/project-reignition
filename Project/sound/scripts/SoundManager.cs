@@ -8,6 +8,7 @@ namespace Project.Gameplay
 	public partial class SoundManager : Node
 	{
 		public static SoundManager instance;
+		public static int LanguageIndex => SaveManager.UseEnglishVoices ? 0 : 1;
 
 		public override void _Ready()
 		{
@@ -113,7 +114,7 @@ namespace Project.Gameplay
 				subtitleAnimator.Play("activate-text");
 
 			string key = currentDialog.textKeys[currentDialogIndex];
-			AudioStream targetStream = StageSettings.instance.dialogLibrary.GetStream(key, SaveManager.UseEnglishVoices ? 0 : 1);
+			AudioStream targetStream = StageSettings.instance.dialogLibrary.GetStream(key, LanguageIndex);
 			if (targetStream != null) //Using audio
 			{
 				dialogChannel.Stream = targetStream;
@@ -236,7 +237,7 @@ namespace Project.Gameplay
 				PearlSoundEffectIndex = pearlSFXList.Count - 1;
 
 			float volume = ((PearlSoundEffectIndex - 1f) / pearlSFXList.Count) * PEARL_AUDIO_DUCK_STRENGTH;
-			volume = ExtensionMethods.LinearToDB(1 - volume);
+			volume = Mathf.LinearToDb(1 - volume);
 
 			for (int i = 0; i < pearlSFXList.Count; i++) //Audio Ducking
 			{

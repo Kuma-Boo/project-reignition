@@ -191,13 +191,9 @@ namespace Project.Gameplay
 				CheckRailActivation();
 		}
 
-		/// <summary> Timer to keep track of shuffles. </summary>
-		private float shuffleTimer;
 		/// <summary> Is a shuffle currently being buffered? </summary>
 		private float shuffleBufferTimer;
-		private const float SHUFFLE_BUFFER_LENGTH = .2f;
-		/// <summary> How long a shuffle takes. </summary>
-		private const float GRIND_RAIL_SHUFFLE_LENGTH = .5f;
+		private const float SHUFFLE_BUFFER_LENGTH = .4f;
 		/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
 		private const float GRIND_RAIL_SNAPPING = .5f;
 		/// <summary> Rail snapping is more generous when performing a grind step. </summary>
@@ -242,7 +238,6 @@ namespace Project.Gameplay
 			}
 
 			shuffleBufferTimer = 0; //Reset buffer timer
-			shuffleTimer = GRIND_RAIL_SHUFFLE_LENGTH; //Character starts with a shuffle
 
 			Character.ResetActionState(); //Cancel stomps, jumps, etc
 			Character.StartExternal(this, pathFollower);
@@ -255,6 +250,7 @@ namespace Project.Gameplay
 			Character.Animator.ExternalAngle = 0; //Rail modifies Character's Transform directly, animator angle is unused.
 			Character.Animator.StartBalancing();
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); //Snap
+			Character.Effect.StartGrindrail(); //Start creating sparks
 
 			Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail));
 			Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail));
@@ -273,36 +269,6 @@ namespace Project.Gameplay
 
 			float railAngle = Character.CalculateForwardAngle(pathFollower.Forward());
 
-			//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
-			if (Controller.jumpButton.wasPressed)
-			{
-				DisconnectFromRail();
-
-				//Check if the player is holding a direction parallel to rail.
-				Character.IsGrindstepJump = Character.IsHoldingDirection(railAngle + Mathf.Pi * .5f) ||
-				 Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f);
-				if (Character.IsGrindstepJump) //Grindstep
-				{
-					float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), railAngle);
-					//Calculate how far player is trying to go
-					float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
-					horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
-
-					Character.MovementAngle += Mathf.Pi * .5f * Mathf.Sign(inputDeltaAngle);
-					Character.VerticalSpd = RuntimeConstants.GetJumpPower(GRIND_STEP_HEIGHT);
-					Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
-
-					Character.IsOnGround = false; //Disconnect from the ground
-					Character.CanJumpDash = false; //Disable jumpdashing
-
-					Character.Animator.StartGrindStep();
-				}
-				else //Jump normally
-					Character.Jump(true);
-
-				return;
-			}
-
 			Character.UpDirection = pathFollower.Up();
 			Character.MovementAngle = railAngle;
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
@@ -313,25 +279,50 @@ namespace Project.Gameplay
 			//Update shuffling
 			if (Controller.actionButton.wasPressed)
 			{
-				if (Mathf.IsZeroApprox(shuffleTimer))
-					StartShuffle(false); //Mistimed shuffle
+				if (!Character.Animator.IsBalanceShuffleActive)
+					StartShuffle(false); //Shuffle was performed slightly late
 				else if (Mathf.IsZeroApprox(shuffleBufferTimer))
 					shuffleBufferTimer = SHUFFLE_BUFFER_LENGTH;
 				else //Don't allow button mashers
 					shuffleBufferTimer = -SHUFFLE_BUFFER_LENGTH;
 			}
 
-			if (shuffleTimer > 0)
+			shuffleBufferTimer = Mathf.MoveToward(shuffleBufferTimer, 0, PhysicsManager.physicsDelta);
+			if (!Character.Animator.IsBalanceShuffleActive)
 			{
-				shuffleTimer = Mathf.MoveToward(shuffleTimer, 0, PhysicsManager.physicsDelta);
-				shuffleBufferTimer = Mathf.MoveToward(shuffleBufferTimer, 0, PhysicsManager.physicsDelta);
+				if (shuffleBufferTimer > 0)
+					StartShuffle(true);
 
-				if (Mathf.IsZeroApprox(shuffleBufferTimer))
+				shuffleBufferTimer = 0;
+
+				if (Controller.jumpButton.wasPressed) //Jumping off rail can only happen when not shuffling
 				{
-					if (shuffleBufferTimer > 0)
-						StartShuffle(true);
+					DisconnectFromRail();
 
-					shuffleBufferTimer = 0;
+					//Check if the player is holding a direction parallel to rail.
+					Character.IsGrindstepJump = Character.IsHoldingDirection(railAngle + Mathf.Pi * .5f) ||
+					 Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f);
+					if (Character.IsGrindstepJump) //Grindstep
+					{
+						//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
+						float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), railAngle);
+						//Calculate how far player is trying to go
+						float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
+						horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
+
+						Character.MovementAngle += Mathf.Pi * .5f * Mathf.Sign(inputDeltaAngle);
+						Character.VerticalSpd = RuntimeConstants.GetJumpPower(GRIND_STEP_HEIGHT);
+						Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
+
+						Character.IsOnGround = false; //Disconnect from the ground
+						Character.CanJumpDash = false; //Disable jumpdashing
+
+						Character.Animator.StartGrindStep();
+					}
+					else //Jump normally
+						Character.Jump(true);
+
+					return;
 				}
 			}
 
@@ -357,9 +348,9 @@ namespace Project.Gameplay
 
 		private void StartShuffle(bool isPerfectShuffle)
 		{
-			shuffleTimer = GRIND_RAIL_SHUFFLE_LENGTH;
+			shuffleBufferTimer = 0; //Reset input buffer
 
-			sfx.Play();
+			LevelSettings.instance.AddBonus(isPerfectShuffle ? LevelSettings.BonusType.PerfectGrindShuffle : LevelSettings.BonusType.GrindShuffle);
 
 			Character.MoveSpeed = isPerfectShuffle ? Skills.perfectShuffleSpeed : Skills.grindSettings.speed;
 			Character.Animator.StartGrindShuffle();
@@ -377,8 +368,9 @@ namespace Project.Gameplay
 				railModel.Visible = false;
 
 			Character.ResetMovementState();
-			Character.Animator.ResetState(.1f);
+			Character.Animator.ResetState(.2f);
 			Character.Animator.SnapRotation(Character.MovementAngle);
+			Character.Effect.StopGrindrail(); //Stop creating sparks
 
 			//Disconnect signals
 			if (Character.IsConnected(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail)))

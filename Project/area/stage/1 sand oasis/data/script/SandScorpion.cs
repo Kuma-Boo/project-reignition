@@ -500,7 +500,7 @@ namespace Project.Gameplay.Bosses
 			if (Character.Skills.IsSpeedBreakActive)
 			{
 				Character.Skills.ToggleSpeedBreak();
-				Character.Knockback(true); //No damage, just knockback
+				Character.Knockback(); //TODO No damage, just knockback
 			}
 			else
 				Character.Knockback();

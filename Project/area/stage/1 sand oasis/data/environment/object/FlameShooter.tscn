@@ -1,9 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://cmhphw4qibyto"]
+[gd_scene load_steps=14 format=3 uid="uid://cmhphw4qibyto"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
 [ext_resource type="PackedScene" uid="uid://b1tirama0dt1b" path="res://area/stage/1 sand oasis/data/environment/object/model/FlameShooter.gltf" id="1_wwv3q"]
 [ext_resource type="Material" uid="uid://ctuy7p86d2mal" path="res://area/stage/1 sand oasis/data/environment/particle/material/Flame Shooter Base Process Material.tres" id="3_eag34"]
-[ext_resource type="Material" uid="uid://dxetsvnu13n6n" path="res://area/stage/1 sand oasis/data/environment/particle/material/Flame Shooter Base.tres" id="3_g1efs"]
+[ext_resource type="Material" path="res://effect/particle/material/flame/Countdown Flame.tres" id="4_o08uw"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hqwbi"]
 radius = 0.4
@@ -12,8 +12,13 @@ radius = 0.4
 height = 5.0
 radius = 0.4
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mjgc0"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_yafsv"]
+material = SubResource("StandardMaterial3D_mjgc0")
+
 [sub_resource type="QuadMesh" id="QuadMesh_dr313"]
-material = ExtResource("3_g1efs")
+material = ExtResource("4_o08uw")
 size = Vector2(1, 1.5)
 center_offset = Vector3(0, 0.75, 0)
 
@@ -63,6 +68,11 @@ shape = SubResource("CylinderShape3D_sotvg")
 disabled = true
 
 [node name="VFX" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("QuadMesh_yafsv")
+skeleton = NodePath("../BaseFlame")
 
 [node name="BaseFlame" type="GPUParticles3D" parent="VFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

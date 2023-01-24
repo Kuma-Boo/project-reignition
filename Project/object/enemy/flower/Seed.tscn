@@ -1,12 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://oopb0pp2lp6a"]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" uid="uid://e2x7vee4w5gg" path="res://object/enemy/flower/data/model/Seed.gltf" id="1_vd2ic"]
 [ext_resource type="Script" path="res://object/enemy/flower/data/Seed.cs" id="2_ay1nr"]
 [ext_resource type="Material" uid="uid://b3cw6w8vrp87n" path="res://object/enemy/flower/data/model/material/Seed Base Particle.tres" id="3_6k1j1"]
-[ext_resource type="Material" uid="uid://dp6kaviyk8cpk" path="res://object/enemy/flower/data/model/material/Seed Dust.tres" id="4_2cnih"]
+[ext_resource type="Material" path="res://effect/particle/material/environment/pavement/Pavement Dust Add.tres" id="4_gep6e"]
 [ext_resource type="Material" uid="uid://dfexukcpmjne8" path="res://object/enemy/flower/data/model/material/Seed Ember Particle.tres" id="5_j5d2c"]
 [ext_resource type="Material" uid="uid://c3jne04l667ho" path="res://object/enemy/flower/data/model/material/Seed Center Particle.tres" id="5_kuphg"]
-[ext_resource type="Material" uid="uid://c534ikwvcgb58" path="res://object/enemy/flower/data/model/material/Seed Ember.tres" id="5_omixy"]
+[ext_resource type="Material" path="res://effect/particle/material/Ember Blue.tres" id="7_0a8cb"]
 [ext_resource type="AudioStream" uid="uid://bten5v4c2la5m" path="res://sound/sfx/enemy/flower/flower seed.wav" id="8_k4dfh"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tlqsk"]
@@ -207,11 +207,14 @@ _data = {
 }
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_pj74e"]
-material = ExtResource("4_2cnih")
+material = ExtResource("4_gep6e")
 orientation = 2
 
+[sub_resource type="QuadMesh" id="QuadMesh_l8ruh"]
+material = ExtResource("4_gep6e")
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_d078f"]
-material = ExtResource("5_omixy")
+material = ExtResource("7_0a8cb")
 orientation = 2
 
 [node name="Seed" type="Area3D" node_paths=PackedStringArray("animator")]
@@ -248,6 +251,8 @@ draw_pass_1 = SubResource("PlaneMesh_pj74e")
 
 [node name="Center" type="GPUParticles3D" parent="VFX"]
 layers = 32
+cast_shadow = 0
+gi_mode = 0
 emitting = false
 amount = 32
 lifetime = 0.6
@@ -256,7 +261,7 @@ explosiveness = 1.0
 fixed_fps = 0
 interpolate = false
 process_material = ExtResource("5_kuphg")
-draw_pass_1 = SubResource("PlaneMesh_pj74e")
+draw_pass_1 = SubResource("QuadMesh_l8ruh")
 
 [node name="Ember" type="GPUParticles3D" parent="VFX"]
 layers = 32

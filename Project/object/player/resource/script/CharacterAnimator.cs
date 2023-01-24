@@ -16,6 +16,7 @@ namespace Project.Gameplay
 		private AnimationNodeBlendTree animationRoot;
 		/// <summary> Transition node for switching between states (normal, balancing, sidling, etc) </summary>
 		private AnimationNodeTransition animationStateTransition;
+
 		private CharacterController Character => CharacterController.instance;
 
 		private readonly StringName ENABLED_STATE = "enabled";
@@ -30,6 +31,14 @@ namespace Project.Gameplay
 			oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
 
 			normalState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/normal_state/playback");
+			balanceState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/balance_tree/balance_state/playback");
+		}
+
+		/// <summary> Called when the player respawns. Resets all animations. </summary>
+		public void Respawn()
+		{
+			normalState.Travel(GROUND_TREE);
+
 		}
 
 		/// <summary>
@@ -54,6 +63,9 @@ namespace Project.Gameplay
 		/// </summary>
 		private float CalculateTurnRatio()
 		{
+			if (Character.Skills.IsSpeedBreakActive) //Use strafe/movespeed
+				return Character.Skills.strafeSettings.GetSpeedRatio(Character.StrafeSpeed);
+
 			float delta;
 			float inputAngle = Character.GetTargetInputAngle();
 			delta = ExtensionMethods.SignedDeltaAngleRad(Character.MovementAngle, inputAngle);
@@ -129,12 +141,22 @@ namespace Project.Gameplay
 		private bool canTransitionToFalling;
 		private readonly StringName FALL_STATE_PARAMETER = "fall";
 		private readonly StringName JUMP_CANCEL_TIME_PARAMETER = "parameters/air_state/jump_cancel_time/scale";
+		public void Fall()
+		{
+			canTransitionToFalling = true;
+		}
 
 		private readonly StringName JUMP_STATE_PARAMETER = "jump";
 		public void Jump()
 		{
 			canTransitionToFalling = true;
 			normalState.Travel(JUMP_STATE_PARAMETER);
+		}
+
+		private readonly StringName HURT_STATE_PARAMETER = "hurt";
+		public void Hurt()
+		{
+			normalState.Travel(HURT_STATE_PARAMETER);
 		}
 
 		private readonly StringName AIR_DASH_PARAMETER = "jump-accel";
@@ -302,7 +324,7 @@ namespace Project.Gameplay
 				targetRotation = ExternalAngle;
 			else if (Character.Lockon.IsHomingAttacking) //Face target
 				targetRotation = Character.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
-			else if (Character.Skills.IsSpeedBreakActive || Character.IsMovingBackward) //Speed break, use path's forward direction
+			else if (Character.IsMovingBackward) //Backstepping
 				targetRotation = Character.PathFollower.ForwardAngle;
 			else if (Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer)
 				targetRotation = Character.PathFollower.ForwardAngle;
@@ -318,16 +340,40 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Grinding and Balancing Animations
-		private readonly StringName BALANCE_RIGHT_STATE_PARAMETER = "parameters/balance_state/lean_right_tree/balance_blend/blend_position";
-		private readonly StringName WIND_BLEND_PARAMETER = "parameters/balance_state/lean_right_tree/wind_blend/blend_position";
-		private readonly StringName BALANCE_SPEED_PARAMETER = "parameters/balance_state/lean_right_tree/balance_speed/scale";
+		/// <summary> Is the shuffling animation currently active? </summary>
+		public bool IsBalanceShuffleActive { get; private set; }
+
+		private bool isBalancingRight;
+		private float balanceTurnVelocity;
+
+		/// <summary> Reference to the balance state's StateMachinePlayback </summary>
+		private AnimationNodeStateMachinePlayback balanceState;
+
+		private readonly StringName SHUFFLE_RIGHT_PARAMETER = "balance-right-shuffle";
+		private readonly StringName SHUFFLE_LEFT_PARAMETER = "balance-left-shuffle";
+		private readonly StringName BALANCE_RIGHT_PARAMETER = "balance_right_blend";
+		private readonly StringName BALANCE_LEFT_PARAMETER = "balance_left_blend";
+
+		private readonly StringName BALANCE_SPEED_PARAMETER = "parameters/balance_tree/balance_speed/scale";
+		private readonly StringName BALANCE_RIGHT_LEAN_PARAMETER = "parameters/balance_tree/balance_state/balance_right_blend/blend_position";
+		private readonly StringName BALANCE_LEFT_LEAN_PARAMETER = "parameters/balance_tree/balance_state/balance_left_blend/blend_position";
+
+		/// <summary> How much should the balancing animation be smoothed by? </summary>
+		private const float BALANCE_TURN_SMOOTHING = .15f;
+
 		public void StartBalancing()
 		{
-			SetStateXfade(0); //Don't blend into state
+			SetStateXfade(0.1f); //Don't blend into state?
 			animatorTree.Set(STATE_PARAMETER, BALANCE_STATE); //Turn on balancing animations
 
+			IsBalanceShuffleActive = true;
+			isBalancingRight = true; //Default to facing right
+			balanceState.Start(SHUFFLE_RIGHT_PARAMETER, true); //Start with a shuffle
+
 			//Reset current balance
-			animatorTree.Set(BALANCE_RIGHT_STATE_PARAMETER, ENABLED_STATE);
+			animatorTree.Set(BALANCE_LEFT_LEAN_PARAMETER, 0);
+			animatorTree.Set(BALANCE_RIGHT_LEAN_PARAMETER, 0);
+
 			UpdateBalanceSpeed();
 		}
 
@@ -338,26 +384,36 @@ namespace Project.Gameplay
 
 		public void StartGrindShuffle()
 		{
-
+			IsBalanceShuffleActive = true;
+			isBalancingRight = !isBalancingRight;
+			balanceState.Travel(isBalancingRight ? SHUFFLE_RIGHT_PARAMETER : SHUFFLE_LEFT_PARAMETER);
 		}
 
 		public void UpdateBalancing()
 		{
-			float targetBalance = CalculateTurnRatio();
-			targetBalance = Mathf.Lerp(((float)animatorTree.Get(BALANCE_RIGHT_STATE_PARAMETER)), targetBalance, TURN_SMOOTHING);
-			animatorTree.Set(BALANCE_RIGHT_STATE_PARAMETER, targetBalance);
+			float targetBalance = 0;
 
-			UpdateBalanceSpeed(true);
+			StringName currentNode = balanceState.GetCurrentNode();
+			IsBalanceShuffleActive = currentNode == SHUFFLE_LEFT_PARAMETER || currentNode == SHUFFLE_RIGHT_PARAMETER;
+			if (IsBalanceShuffleActive)
+			{
+				if ((isBalancingRight && currentNode == BALANCE_RIGHT_PARAMETER) ||
+				(!isBalancingRight && currentNode == BALANCE_LEFT_PARAMETER))
+					IsBalanceShuffleActive = false;
+			}
+			else
+				targetBalance = CalculateTurnRatio();
+
+			targetBalance = ExtensionMethods.SmoothDamp((float)animatorTree.Get(BALANCE_RIGHT_LEAN_PARAMETER), targetBalance, ref balanceTurnVelocity, BALANCE_TURN_SMOOTHING);
+			animatorTree.Set(BALANCE_RIGHT_LEAN_PARAMETER, targetBalance);
+			animatorTree.Set(BALANCE_LEFT_LEAN_PARAMETER, -targetBalance);
+			UpdateBalanceSpeed();
 		}
 
-		private void UpdateBalanceSpeed(bool enableSmoothing = false)
+		private void UpdateBalanceSpeed()
 		{
 			float currentSpeed = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
-			if (enableSmoothing)
-				currentSpeed = Mathf.Lerp((float)animatorTree.Get(WIND_BLEND_PARAMETER), currentSpeed, SPEED_SMOOTHING);
-
-			animatorTree.Set(WIND_BLEND_PARAMETER, currentSpeed);
-			animatorTree.Set(BALANCE_SPEED_PARAMETER, 1f + currentSpeed);
+			animatorTree.Set(BALANCE_SPEED_PARAMETER, currentSpeed + .8f);
 		}
 		#endregion
 

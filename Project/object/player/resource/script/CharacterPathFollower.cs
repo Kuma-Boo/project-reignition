@@ -46,6 +46,7 @@ namespace Project.Gameplay
 			if (ActivePath == null) return;
 
 			Vector3 syncPoint = Character.GlobalPosition;
+			syncPoint -= CameraController.instance.PathResyncFix * TruePlayerPositionDelta.y;
 			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
 
 			float newForwardAngle = Character.CalculateForwardAngle(this.Forward());
