@@ -239,6 +239,7 @@ namespace Project.Gameplay
 
 			shuffleBufferTimer = 0; //Reset buffer timer
 
+			Character.Skills.IsSpeedBreakEnabled = false;
 			Character.ResetActionState(); //Cancel stomps, jumps, etc
 			Character.StartExternal(this, pathFollower);
 
@@ -367,6 +368,7 @@ namespace Project.Gameplay
 			if (isInvisibleRail)
 				railModel.Visible = false;
 
+			Character.Skills.IsSpeedBreakEnabled = true;
 			Character.ResetMovementState();
 			Character.Animator.ResetState(.2f);
 			Character.Animator.SnapRotation(Character.MovementAngle);

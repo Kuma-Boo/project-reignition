@@ -8,10 +8,17 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class SidleTrigger : Area3D
 	{
+		[Signal]
+		public delegate void ActivatedEventHandler();
+		[Signal]
+		public delegate void DeactivatedEventHandler();
+
 		/// <summary> Reference to the active sidle trigger. </summary>
 		public static SidleTrigger Instance { get; private set; }
 		/// <summary> Reference to the active foothold. </summary>
 		public static FootholdTrigger CurrentFoothold { get; set; }
+		/// <summary> Should the player grab a foot hold when taking damage? </summary>
+		private bool IsOverFoothold => CurrentFoothold != null;
 
 		/// <summary> Which way to sidle? </summary>
 		[Export]
@@ -19,15 +26,11 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private LockoutResource lockout;
 
-		/// <summary> Reference to the current rail. </summary>
-		private Node3D currentRailing;
 		private float velocity;
 		private float currentCyclePosition;
 
 		private bool isActive;
 		private bool isInteractingWithPlayer;
-		/// <summary> Should the player grab a foot hold when taking damage? </summary>
-		private bool IsOverFoothold => CurrentFoothold != null;
 		private CharacterController Character => CharacterController.instance;
 		private InputManager.Controller Controller => InputManager.controller;
 
@@ -45,11 +48,16 @@ namespace Project.Gameplay.Triggers
 			if (!isInteractingWithPlayer) return;
 
 			if (isActive)
-				UpdateSidle();
+			{
+				if (isDamaged)
+					UpdateSidleDamage();
+				else
+					UpdateSidle();
+			}
 			else if (Character.IsOnGround)
 			{
 				if (Character.ActionState == CharacterController.ActionStates.Normal)
-					StartSidle(); //Allows player to skip section if they know what they're doing
+					StartSidle(); //Allows player to slide through sidle section if they know what they're doing
 				else if (Character.ActionState == CharacterController.ActionStates.Crouching && Mathf.IsZeroApprox(Character.MoveSpeed))
 					Character.ResetActionState();
 			}
@@ -66,6 +74,9 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.ExternalAngle = 0;
 			Character.Animator.SnapRotation(0);
 			Character.Animator.StartSidle(isFacingRight);
+
+			Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged));
+			EmitSignal(SignalName.Activated);
 		}
 
 		private void UpdateSidle()
@@ -114,16 +125,54 @@ namespace Project.Gameplay.Triggers
 
 			Character.Animator.ResetState(.1f);
 			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
+
+			isDamaged = false;
+			Character.Disconnect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged));
+
+			EmitSignal(SignalName.Deactivated);
 		}
 
+		#region Damage
+		/// <summary> Is the player currently being damaged? </summary>
+		private bool isDamaged;
+		private const float DAMAGE_HANG_LENGTH = 5f; //How long can the player hang onto the rail?
+
+		/// <summary>
+		/// Called when the player hits a hazard.
+		/// </summary>
+		private void OnPlayerDamaged()
+		{
+			if (isDamaged) return; //Damage routine has already started
+
+			isDamaged = true;
+			currentCyclePosition = 0;
+			Character.Animator.SidleDamage(IsOverFoothold);
+		}
+
+		/// <summary>
+		/// Processes player when being damaged
+		/// </summary>
 		private void UpdateSidleDamage()
 		{
-		}
+			if (Character.Animator.IsSidleHanging) //Process inputs
+			{
+				currentCyclePosition += PhysicsManager.physicsDelta;
+				if (currentCyclePosition >= DAMAGE_HANG_LENGTH) //Fall
+				{
 
-		private void UpdateSidleHang()
-		{
+				}
 
+				if (Controller.jumpButton.wasPressed) //Jump back to the ledge
+				{
+					currentCyclePosition = 0;
+					Character.Animator.SidleRecovery();
+				}
+			}
+
+			if (Character.Animator.IsSidleMoving) //Finished
+				isDamaged = false;
 		}
+		#endregion
 
 		public void OnEntered(Area3D a)
 		{

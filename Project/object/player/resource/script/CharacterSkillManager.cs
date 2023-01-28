@@ -221,6 +221,7 @@ namespace Project.Gameplay
 
 			if (Character.Controller.breakButton.wasPressed && !IsSpeedBreakActive)
 			{
+				if (!IsTimeBreakEnabled) return;
 				if (!IsSoulGaugeCharged) return;
 				ToggleTimeBreak();
 			}
@@ -256,6 +257,7 @@ namespace Project.Gameplay
 			if (Character.Controller.boostButton.wasPressed && !IsTimeBreakActive)
 			{
 				if (!IsSoulGaugeCharged) return;
+				if (!IsSpeedBreakEnabled) return;
 				if (Character.MovementState == CharacterController.MovementStates.Launcher) return; //Can't speed break during launchers
 				if (!Character.IsOnGround) return;
 

@@ -30,8 +30,15 @@ namespace Project.Gameplay
 			animationStateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
 			oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
 
+			//Get normal state
 			normalState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/normal_state/playback");
+
+			//Get balance state
 			balanceState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/balance_tree/balance_state/playback");
+
+			//Get sidle states
+			sidleRightState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/sidle_tree/sidle_right_state/playback");
+			sidleLeftState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/sidle_tree/sidle_left_state/playback");
 		}
 
 		/// <summary> Called when the player respawns. Resets all animations. </summary>
@@ -52,29 +59,6 @@ namespace Project.Gameplay
 				AirAnimations();
 
 			UpdateVisualRotation();
-		}
-
-		/// <summary> How much should the turning animation be smoothed by? </summary>
-		private const float TURN_SMOOTHING = .2f;
-		/// <summary> Max amount of turning allowed. </summary>
-		private readonly float MAX_TURN_ANGLE = Mathf.Pi * .4f;
-		/// <summary>
-		/// Calculates turn ratio based on current input with -1 being left and 1 being right.
-		/// </summary>
-		private float CalculateTurnRatio()
-		{
-			if (Character.Skills.IsSpeedBreakActive) //Use strafe/movespeed
-				return Character.Skills.strafeSettings.GetSpeedRatio(Character.StrafeSpeed);
-
-			float delta;
-			float inputAngle = Character.GetTargetInputAngle();
-			delta = ExtensionMethods.SignedDeltaAngleRad(Character.MovementAngle, inputAngle);
-
-			if (ExtensionMethods.DotAngle(Character.MovementAngle, inputAngle) < 0) //Input is backwards
-				delta = -ExtensionMethods.SignedDeltaAngleRad(Character.MovementAngle + Mathf.Pi, inputAngle);
-
-			delta = Mathf.Clamp(delta, -MAX_TURN_ANGLE, MAX_TURN_ANGLE);
-			return delta / MAX_TURN_ANGLE;
 		}
 
 		#region Oneshot Animations
@@ -140,7 +124,6 @@ namespace Project.Gameplay
 
 		private bool canTransitionToFalling;
 		private readonly StringName FALL_STATE_PARAMETER = "fall";
-		private readonly StringName JUMP_CANCEL_TIME_PARAMETER = "parameters/air_state/jump_cancel_time/scale";
 		public void Fall()
 		{
 			canTransitionToFalling = true;
@@ -178,11 +161,6 @@ namespace Project.Gameplay
 			normalState.Travel(BACKFLIP_STATE_PARAMETER);
 		}
 
-		public void Stomp()
-		{
-			animatorTree.Set(JUMP_CANCEL_TIME_PARAMETER, 1.5f);
-		}
-
 		private readonly StringName GROUND_TREE = "ground_tree";
 
 		private readonly StringName IDLE_STATE = "idle";
@@ -209,6 +187,8 @@ namespace Project.Gameplay
 		/// <summary> How much should the transition from idling be smoothed by? </summary>
 		private const float IDLE_SMOOTHING = .2f;
 
+
+
 		private void GroundAnimations()
 		{
 			//TODO Speed break animation
@@ -217,7 +197,7 @@ namespace Project.Gameplay
 			StringName targetMoveState = IDLE_STATE;
 			float speedRatio = Mathf.Abs(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed));
 			float targetAnimationSpeed = 1f;
-			float targetTurnRatio = 0;
+			groundTurnRatio = 0;
 
 			if (Character.JustLandedOnGround) //Play landing animation
 			{
@@ -240,17 +220,22 @@ namespace Project.Gameplay
 
 					if (speedRatio >= RUN_RATIO) //Running
 					{
-						float extraSpeed = Mathf.Clamp((speedRatio - RUN_RATIO) / .2f, 0f, 1.4f);
-						targetAnimationSpeed = 2f + extraSpeed;
+						if (Character.Skills.IsSpeedBreakActive)
+							targetAnimationSpeed = 2.5f;
+						else
+						{
+							float extraSpeed = Mathf.Clamp((speedRatio - RUN_RATIO) / .2f, 0f, 1.4f);
+							targetAnimationSpeed = 2f + extraSpeed;
+						}
 					}
 					else //Jogging
 						targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RUN_RATIO); //Normalize speed ratio
-
-					if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
-						targetTurnRatio = 0;
-					else
-						targetTurnRatio = CalculateTurnRatio();
 				}
+
+				if (Character.MovementState == CharacterController.MovementStates.External) //Disable turning when controlled externally
+					groundTurnRatio = 0;
+				else if (!Character.IsLockoutActive || Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Free)
+					groundTurnRatio = CalculateTurnRatio();
 			}
 
 			if ((StringName)animatorTree.Get(MOVE_CURRENT_PARAMETER) != targetMoveState)
@@ -265,12 +250,12 @@ namespace Project.Gameplay
 			else
 				animatorTree.Set(MOVE_SPEED_PARAMETER, Mathf.Lerp((float)animatorTree.Get(MOVE_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
 
-			if (Character.MovementState == CharacterController.MovementStates.External) //Disable turning when controlled externally
-				targetTurnRatio = 0;
-			else
-				targetTurnRatio = Mathf.Lerp(((Vector2)animatorTree.Get(TURN_BLEND_PARAMETER)).x, targetTurnRatio, TURN_SMOOTHING);
+			groundTurnRatio = Mathf.Lerp(((Vector2)animatorTree.Get(TURN_BLEND_PARAMETER)).x, groundTurnRatio, TURN_SMOOTHING); //Blend from animator
 
-			animatorTree.Set(TURN_BLEND_PARAMETER, new Vector2(targetTurnRatio, speedRatio));
+			if (Character.IsMovingBackward)
+				animatorTree.Set(TURN_BLEND_PARAMETER, new Vector2(groundTurnRatio, 0));
+			else
+				animatorTree.Set(TURN_BLEND_PARAMETER, new Vector2(groundTurnRatio, speedRatio));
 		}
 
 		private void AirAnimations()
@@ -286,6 +271,31 @@ namespace Project.Gameplay
 					normalState.Travel(FALL_STATE_PARAMETER);
 				}
 			}
+		}
+
+		/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
+		private float groundTurnRatio;
+		/// <summary> How much should the turning animation be smoothed by? </summary>
+		private const float TURN_SMOOTHING = .1f;
+		/// <summary> Max amount of turning allowed. </summary>
+		private readonly float MAX_TURN_ANGLE = Mathf.Pi * .4f;
+		/// <summary>
+		/// Calculates turn ratio based on current input with -1 being left and 1 being right.
+		/// </summary>
+		private float CalculateTurnRatio()
+		{
+			if (Character.Skills.IsSpeedBreakActive) //Use strafe/movespeed
+				return Character.Skills.strafeSettings.GetSpeedRatio(Character.StrafeSpeed * 1.5f);
+
+			float referenceAngle = Character.IsMovingBackward ? Character.PathFollower.ForwardAngle : Character.MovementAngle;
+			float inputAngle = Character.GetTargetInputAngle();
+			float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
+
+			if (ExtensionMethods.DotAngle(referenceAngle, inputAngle) < 0) //Input is backwards
+				delta = -ExtensionMethods.SignedDeltaAngleRad(referenceAngle + Mathf.Pi, inputAngle);
+
+			delta = Mathf.Clamp(delta, -MAX_TURN_ANGLE, MAX_TURN_ANGLE);
+			return delta / MAX_TURN_ANGLE;
 		}
 		#endregion
 
@@ -325,7 +335,7 @@ namespace Project.Gameplay
 			else if (Character.Lockon.IsHomingAttacking) //Face target
 				targetRotation = Character.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
 			else if (Character.IsMovingBackward) //Backstepping
-				targetRotation = Character.PathFollower.ForwardAngle;
+				targetRotation = Character.PathFollower.ForwardAngle + groundTurnRatio * Mathf.Pi * .15f;
 			else if (Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer)
 				targetRotation = Character.PathFollower.ForwardAngle;
 
@@ -355,6 +365,7 @@ namespace Project.Gameplay
 		private readonly StringName BALANCE_LEFT_PARAMETER = "balance_left_blend";
 
 		private readonly StringName BALANCE_SPEED_PARAMETER = "parameters/balance_tree/balance_speed/scale";
+		private readonly StringName BALANCE_WIND_BLEND_PARAMETER = "parameters/balance_tree/wind_blend/blend_position";
 		private readonly StringName BALANCE_RIGHT_LEAN_PARAMETER = "parameters/balance_tree/balance_state/balance_right_blend/blend_position";
 		private readonly StringName BALANCE_LEFT_LEAN_PARAMETER = "parameters/balance_tree/balance_state/balance_left_blend/blend_position";
 
@@ -363,7 +374,7 @@ namespace Project.Gameplay
 
 		public void StartBalancing()
 		{
-			SetStateXfade(0.1f); //Don't blend into state?
+			SetStateXfade(0); //Don't blend into state
 			animatorTree.Set(STATE_PARAMETER, BALANCE_STATE); //Turn on balancing animations
 
 			IsBalanceShuffleActive = true;
@@ -414,12 +425,23 @@ namespace Project.Gameplay
 		{
 			float currentSpeed = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
 			animatorTree.Set(BALANCE_SPEED_PARAMETER, currentSpeed + .8f);
+			animatorTree.Set(BALANCE_WIND_BLEND_PARAMETER, currentSpeed);
 		}
 		#endregion
 
 		#region Sidle
-		private readonly StringName STRAFE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_position";
-		private readonly StringName STRAFE_DIRECTION_PARAMETER = "parameters/sidle_tree/facing_right/current";
+		public bool IsSidleHanging => sidleRightState.GetCurrentNode() == SIDLE_HANG_STATE_PARAMETER;
+		public bool IsSidleMoving => sidleRightState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER;
+
+		private AnimationNodeStateMachinePlayback sidleRightState;
+		private AnimationNodeStateMachinePlayback sidleLeftState;
+
+		private readonly StringName SIDLE_LOOP_STATE_PARAMETER = "sidle-loop";
+		private readonly StringName SIDLE_HANG_STATE_PARAMETER = "sidle-hang-loop";
+
+		private readonly StringName SIDLE_SPEED_PARAMETER = "parameters/sidle_tree/sidle_speed/scale";
+		private readonly StringName SIDLE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_position";
+		private readonly StringName SIDLE_DIRECTION_PARAMETER = "parameters/sidle_tree/facing_right/current";
 
 		public void StartSidle(bool facingRight)
 		{
@@ -428,13 +450,37 @@ namespace Project.Gameplay
 			else //Quick crossfade into sidle
 				SetStateXfade(0.1f);
 
+			sidleRightState.Start(SIDLE_LOOP_STATE_PARAMETER);
+			sidleLeftState.Start(SIDLE_LOOP_STATE_PARAMETER);
 			animatorTree.Set(STATE_PARAMETER, SIDLE_STATE);
-			animatorTree.Set(STRAFE_DIRECTION_PARAMETER, facingRight ? 0 : 1);
+			animatorTree.Set(SIDLE_DIRECTION_PARAMETER, facingRight ? 0 : 1);
 		}
 
 		public void UpdateSidle(float cyclePosition)
 		{
-			animatorTree.Set(STRAFE_SEEK_PARAMETER, cyclePosition * .8f); //Sidle animation length is .8 seconds, so normalize cycle position.
+			animatorTree.Set(SIDLE_SPEED_PARAMETER, 0f);
+			animatorTree.Set(SIDLE_SEEK_PARAMETER, cyclePosition * .8f); //Sidle animation length is .8 seconds, so normalize cycle position.
+		}
+
+		public void SidleDamage(bool isHanging)
+		{
+			animatorTree.Set(SIDLE_SPEED_PARAMETER, 1f);
+			animatorTree.Set(SIDLE_SEEK_PARAMETER, -1);
+
+			if (isHanging)
+			{
+				sidleRightState.Travel(SIDLE_HANG_STATE_PARAMETER);
+				sidleLeftState.Travel(SIDLE_HANG_STATE_PARAMETER);
+			}
+		}
+
+		/// <summary>
+		/// Recover back to the ledge.
+		/// </summary>
+		public void SidleRecovery()
+		{
+			sidleRightState.Travel(SIDLE_LOOP_STATE_PARAMETER);
+			sidleLeftState.Travel(SIDLE_LOOP_STATE_PARAMETER);
 		}
 		#endregion
 	}

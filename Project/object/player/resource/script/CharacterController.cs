@@ -828,8 +828,8 @@ namespace Project.Gameplay
 		#region Stomp
 		/// <summary> How fast to fall when stomping </summary>
 		private const int STOMP_SPEED = -32;
-		/// <summary> How much gravity to add each frame </summary>
-		private const int STOMP_GRAVITY = 320;
+		/// <summary> How much gravity to add each frame. </summary>
+		private const int STOMP_GRAVITY = 180;
 		private void UpdateStomp()
 		{
 			MoveSpeed = StrafeSpeed = 0; //Go STRAIGHT down
@@ -843,20 +843,20 @@ namespace Project.Gameplay
 			//Don't allow instant stomps
 			if ((ActionState == ActionStates.Jumping || ActionState == ActionStates.AccelJump) &&
 			currentJumpTime < .1f)
-			{
-				actionBufferTimer = 0;
 				return;
-			}
 
 			//Stomp
 			actionBufferTimer = 0;
-			ResetVelocity();
+			MoveSpeed = StrafeSpeed = 0; //Kill horizontal speed
 
 			canLandingBoost = true;
 			Lockon.ResetLockonTarget();
 			Lockon.IsMonitoring = false;
 
 			ActionState = ActionStates.Stomping;
+
+			//TODO Play a separate stomping animation if using a stomp skill
+			Animator.Fall();
 		}
 		#endregion
 
@@ -1174,7 +1174,7 @@ namespace Project.Gameplay
 		public float StrafeSpeed { get; set; }
 		/// <summary> Used for jumping and falling. </summary>
 		public float VerticalSpd { get; set; }
-		/// <summary> Resets all speed values to zero </summary>
+		/// <summary> Resets all speed values to zero. </summary>
 		private void ResetVelocity() => MoveSpeed = StrafeSpeed = VerticalSpd = 0;
 
 		private void UpdatePhysics()
@@ -1259,8 +1259,9 @@ namespace Project.Gameplay
 					}
 				}
 
+				//Despite the name, floating seems to works better on the ground and grounded works better in the air
+				MotionMode = MotionModeEnum.Floating;
 				GlobalPosition -= groundHit.normal * snapDistance; //Snap to ground
-				FloorMaxAngle = Mathf.Pi * .25f; //Allow KinematicBody to deal with slopes
 
 				if (IsOnGround)
 				{
@@ -1295,7 +1296,7 @@ namespace Project.Gameplay
 				else
 					orientationResetFactor = (VerticalSpd * .2f / RuntimeConstants.MAX_GRAVITY) - .05f;
 
-				FloorMaxAngle = 0; //Treat everything as a wall when in the air
+				MotionMode = MotionModeEnum.Grounded;
 				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
@@ -1376,14 +1377,18 @@ namespace Project.Gameplay
 				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * CollisionRadius));
 
 				float maxVerticalSpeed = 0;
-				if (ActionState == ActionStates.Backflip) //Fix backflipping into slanted ceilings
+				if (ActionState == ActionStates.Backflip) //Workaround for backflipping into slanted ceilings
 				{
 					float ceilingAngle = ceilingHit.normal.AngleTo(Vector3.Down);
-					if (ceilingAngle > Mathf.Pi * .1f)
+
+					if (ceilingAngle > Mathf.Pi * .1f) //Only slanted ceilings need this workaround
 					{
-						//Use the dot product to determine the sign of the angle
-						ceilingAngle *= Mathf.Sign(ceilingHit.normal.Flatten().Dot(castVector.Flatten()));
-						maxVerticalSpeed = Mathf.Sin(ceilingAngle) * MoveSpeed;
+						float deltaAngle = ExtensionMethods.DeltaAngleRad(PathFollower.ForwardAngle, CalculateForwardAngle(ceilingHit.normal));
+						if (deltaAngle > Mathf.Pi * .1f) //Wall isn't aligned to the path
+							return;
+
+						//Slide down the wall if it's aligned with the path direction
+						maxVerticalSpeed = -Mathf.Sin(ceilingAngle) * MoveSpeed;
 					}
 				}
 
@@ -1409,20 +1414,20 @@ namespace Project.Gameplay
 
 			if (ValidateWallCast(ref wallHit))
 			{
-				if (wallHit && ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
+				if (ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
 				{
-					float wallRatio = Mathf.Abs(wallHit.normal.Dot(castVector));
-					if (wallRatio > .9f) //Running into wall head-on
+					float wallDelta = ExtensionMethods.DeltaAngleRad(CalculateForwardAngle(wallHit.normal), MovementAngle);
+					if (wallDelta >= Mathf.Pi * .95f) //Running into wall head-on
 					{
 						if (Skills.IsSpeedBreakActive) //Cancel speed break
 							Skills.ToggleSpeedBreak();
 
-						if (wallHit.distance < CollisionRadius + COLLISION_PADDING)
+						if (wallHit.distance <= CollisionRadius + COLLISION_PADDING)
 							MoveSpeed = 0; //Kill speed
 					}
-					else //Reduce MoveSpd when moving against walls
+					else if (!IsMovingBackward) //Reduce MoveSpd when moving against walls
 					{
-						float speedClamp = Mathf.Clamp(1.2f - wallRatio * .4f, 0f, 1f); //Arbitrary formula that works well
+						float speedClamp = Mathf.Clamp(1.2f - (wallDelta / Mathf.Pi) * .4f, 0f, 1f); //Arbitrary formula that works well
 						MoveSpeed *= speedClamp;
 					}
 				}

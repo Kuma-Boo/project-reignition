@@ -8,26 +8,23 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class AutomationTrigger : Area3D
 	{
-		[Export]
-		private float distanceToTravel; //How far to travel. Set at 0 to travel the entire path
-		[Export]
-		private float startingPoint;
-		[Export]
-		private Path3D automationPath; //Leave NULL to use the player's current path.
-		private Path3D initialPath; //Reference to the player's initial path
-		[Export]
-		private bool ignoreDirection; //Always activate, regardless of which way the player entered/moves
-
 		[Signal]
 		public delegate void ActivatedEventHandler();
 		[Signal]
 		public delegate void DeactivatedEventHandler();
 
+		[Export]
+		private float distanceToTravel; //How far to travel. Set at 0 to travel the entire path
+		[Export]
+		private float startingPoint;
+		[Export]
+		private bool ignoreDirection; //Always activate, regardless of which way the player entered/moves
+
 		private bool isEntered;
 		private bool isActive;
 
 		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingPoint);
-		private bool IsFinished => (distanceToTravel > 0 && DistanceTraveled >= distanceToTravel) || (automationPath != null && DistanceTraveled >= automationPath.Curve.GetBakedLength());
+		private bool IsFinished => (distanceToTravel > 0 && DistanceTraveled >= distanceToTravel) || DistanceTraveled >= Character.PathFollower.ActivePath.Curve.GetBakedLength();
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _PhysicsProcess(double _)
@@ -84,12 +81,6 @@ namespace Project.Gameplay.Triggers
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.priority == -1)
 				Character.RemoveLockoutData(Character.ActiveLockoutData);
 
-			if (automationPath != null)
-			{
-				initialPath = Character.PathFollower.ActivePath;
-				Character.PathFollower.SetActivePath(automationPath);
-			}
-
 			Character.PathFollower.Resync();
 
 			float initialVelocity = Character.MoveSpeed;
@@ -110,10 +101,6 @@ namespace Project.Gameplay.Triggers
 			Character.ResetMovementState();
 			Character.UpDirection = Character.PathFollower.Up();
 			Character.Animator.SnapRotation(Character.MovementAngle);
-
-			//Revert to previous path
-			if (automationPath != null)
-				Character.PathFollower.SetActivePath(initialPath);
 
 			EmitSignal(SignalName.Deactivated);
 		}

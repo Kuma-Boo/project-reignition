@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://dr7scqws8wi3j"]
+[gd_scene load_steps=64 format=3 uid="uid://dr7scqws8wi3j"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -45,6 +45,7 @@
 [ext_resource type="Curve3D" uid="uid://gbvjc2ii4w2x" path="res://area/stage/1 sand oasis/act 1/environment/path/IslandPath.tres" id="35_8ng3c"]
 [ext_resource type="Curve3D" uid="uid://df5sfpy8wxctf" path="res://area/stage/1 sand oasis/act 1/environment/path/UTurnPath.tres" id="35_l4txy"]
 [ext_resource type="Curve3D" uid="uid://derjw2ctbo60n" path="res://area/stage/1 sand oasis/act 1/environment/path/WallClimbPath.tres" id="36_hdewb"]
+[ext_resource type="Curve3D" path="res://area/stage/1 sand oasis/act 1/environment/path/SidlePath.tres" id="41_2kxa5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_luq3i"]
 size = Vector3(12, 14, 9.6)
@@ -114,6 +115,7 @@ startEnabled = true
 [node name="03Oasis" parent="Visuals" instance=ExtResource("4_qddv3")]
 
 [node name="04Forest" parent="Visuals" instance=ExtResource("5_i1spc")]
+startEnabled = true
 
 [node name="05Islands" parent="Visuals" instance=ExtResource("6_5pcm3")]
 
@@ -159,19 +161,22 @@ shape = SubResource("60")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8509, 6, -11.9712)
 shape = SubResource("335")
 
-[node name="UTurnTrigger" parent="Trigger" node_paths=PackedStringArray("automationPath") instance=ExtResource("8_esmag")]
+[node name="UTurnTrigger" parent="Trigger" instance=ExtResource("8_esmag")]
 transform = Transform3D(0.989442, 0, -0.144932, 0, 1, 0, 0.144932, 0, 0.989442, -74.3558, -45, -295.905)
 distanceToTravel = 65.0
-automationPath = NodePath("../../Path/UTurnPath")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/UTurnTrigger"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
-shape = SubResource("159")
+[node name="Path" type="Node3D" parent="Trigger/UTurnTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("19_gytq8")
+path = NodePath("../../../Path/UTurnPath")
 
 [node name="Camera" type="Node3D" parent="Trigger/UTurnTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 14, -5)
 script = ExtResource("13_3nlok")
 settings = ExtResource("20_0g5qj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/UTurnTrigger"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("159")
 
 [node name="WaterTrigger" parent="Trigger" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49, -51, -289)
@@ -199,17 +204,25 @@ script = ExtResource("9_bc5dk")
 shape = SubResource("252")
 disabled = true
 
-[node name="WallClimbTrigger" parent="Trigger" node_paths=PackedStringArray("automationPath") instance=ExtResource("8_esmag")]
+[node name="WallClimbTrigger" parent="Trigger" instance=ExtResource("8_esmag")]
 transform = Transform3D(-4.37114e-08, 0.34202, -0.939693, 0, 0.939693, 0.34202, 1, 1.49502e-08, -4.10752e-08, -657.997, -37.9341, -640.405)
 distanceToTravel = 62.0
-automationPath = NodePath("../../Path/WallClimbPath")
 ignoreDirection = true
+
+[node name="Path" type="Node3D" parent="Trigger/WallClimbTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, -6.14081e-16, 0, -6.14083e-16, 1, 0, 0, 0)
+script = ExtResource("19_gytq8")
+path = NodePath("../../../Path/WallClimbPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/WallClimbTrigger"]
 shape = SubResource("SphereShape3D_u4oqf")
 
 [node name="SidleTrigger" parent="Trigger" instance=ExtResource("11_hwlgd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, 15, -707)
+
+[node name="Path" type="Node3D" parent="Trigger/SidleTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("19_gytq8")
+path = NodePath("../../../Path/SidlePath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/SidleTrigger"]
 shape = SubResource("BoxShape3D_8dg41")
@@ -254,6 +267,7 @@ transform = Transform3D(-4.37114e-08, 0.422618, 0.906308, 0, 0.906308, -0.422618
 
 [node name="CameraTrigger" type="Node3D" parent="StaticCameraTriggers/SlopeTrigger"]
 script = ExtResource("13_3nlok")
+transitionTime = 0.2
 settings = ExtResource("25_j1udv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/SlopeTrigger"]
@@ -712,6 +726,10 @@ curve = ExtResource("35_l4txy")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -649.012, -40, -640.435)
 curve = ExtResource("36_hdewb")
 
+[node name="SidlePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660.67, 10, -640.435)
+curve = ExtResource("41_2kxa5")
+
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="ExteriorLighting" type="DirectionalLight3D" parent="Lighting"]
@@ -775,6 +793,12 @@ reflectionMaterials = [ExtResource("29_lfji7")]
 reflectorHeight = -50.0
 
 [connection signal="Activated" from="Trigger/UTurnTrigger" to="Trigger/UTurnTrigger/Camera" method="Activate"]
+[connection signal="Activated" from="Trigger/UTurnTrigger" to="Trigger/UTurnTrigger/Path" method="Activate"]
+[connection signal="Deactivated" from="Trigger/UTurnTrigger" to="Trigger/UTurnTrigger/Path" method="Deactivate"]
+[connection signal="Activated" from="Trigger/WallClimbTrigger" to="Trigger/WallClimbTrigger/Path" method="Activate"]
+[connection signal="Deactivated" from="Trigger/WallClimbTrigger" to="Trigger/WallClimbTrigger/Path" method="Deactivate"]
+[connection signal="Activated" from="Trigger/SidleTrigger" to="Trigger/SidleTrigger/Path" method="Activate"]
+[connection signal="Deactivated" from="Trigger/SidleTrigger" to="Trigger/SidleTrigger/Path" method="Deactivate"]
 [connection signal="Activated" from="StageCulling/SlopeCullTrigger" to="Visuals/02Slope" method="Activate"]
 [connection signal="Deactivated" from="StageCulling/SlopeCullTrigger" to="Visuals/02Slope" method="Deactivate"]
 [connection signal="Activated" from="StageCulling/OasisCullTrigger" to="Visuals/01Opening" method="Deactivate"]
