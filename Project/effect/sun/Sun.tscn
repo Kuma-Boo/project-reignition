@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://co2akledxygt2"]
+[gd_scene load_steps=12 format=3 uid="uid://co2akledxygt2"]
 
 [ext_resource type="Script" path="res://effect/sun/script/Sun.cs" id="1_wrbwf"]
 [ext_resource type="Material" uid="uid://c0oinwdqfmb1f" path="res://effect/sun/material/Base.tres" id="2_128fb"]
@@ -7,15 +7,15 @@
 [ext_resource type="Material" uid="uid://jjlounorqqn8" path="res://effect/sun/material/Glow.tres" id="6_q30rt"]
 [ext_resource type="Material" uid="uid://b8p44u7keaph6" path="res://effect/sun/material/Ray 1.tres" id="7_1wjt8"]
 [ext_resource type="Material" uid="uid://dk01p6t8xigxa" path="res://effect/sun/material/Ray 2.tres" id="8_jw0f7"]
+[ext_resource type="Shader" path="res://effect/sun/shader/SunLens.gdshader" id="8_qeh76"]
 [ext_resource type="Texture2D" uid="uid://uhr1jsl10415" path="res://effect/sun/texture/lens flare.png" id="10_c4481"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ye86b"]
 size = Vector2(800, 800)
 orientation = 2
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_oku0r"]
-blend_mode = 1
-light_mode = 1
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v0rbb"]
+shader = ExtResource("8_qeh76")
 
 [node name="Sun" type="Node3D" node_paths=PackedStringArray("lensFlareBase")]
 script = ExtResource("1_wrbwf")
@@ -72,7 +72,7 @@ gi_mode = 0
 mesh = SubResource("PlaneMesh_ye86b")
 
 [node name="LensFlare" type="Node2D" parent="Occluded"]
-material = SubResource("CanvasItemMaterial_oku0r")
+material = SubResource("ShaderMaterial_v0rbb")
 position = Vector2(960, 540)
 
 [node name="LensFlare01" type="Sprite2D" parent="Occluded/LensFlare"]

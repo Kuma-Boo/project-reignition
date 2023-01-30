@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://dr7scqws8wi3j"]
+[gd_scene load_steps=65 format=3 uid="uid://dr7scqws8wi3j"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/stage/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -34,7 +34,7 @@
 [ext_resource type="Resource" uid="uid://dx47u8sre674v" path="res://area/stage/1 sand oasis/act 1/trigger/camera/SidleCornerCam.tres" id="24_nfyes"]
 [ext_resource type="Resource" uid="uid://cfbyfp0sae1jm" path="res://area/stage/1 sand oasis/act 1/trigger/camera/HallCam.tres" id="24_qtnck"]
 [ext_resource type="Resource" uid="uid://dl0lpv0hj8rji" path="res://area/stage/1 sand oasis/act 1/trigger/camera/SlopeCam.tres" id="25_j1udv"]
-[ext_resource type="PackedScene" uid="uid://cbwcphc75t0y7" path="res://effect/buffer/DepthRenderer.tscn" id="27_ypwqo"]
+[ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="27_ypwqo"]
 [ext_resource type="Resource" uid="uid://dd0ulcjl72sfi" path="res://resource/preset/camera/common/WallForwardCam.tres" id="27_ywd2q"]
 [ext_resource type="PackedScene" uid="uid://bb0wbyqxrs175" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="28_5kt56"]
 [ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="28_ximg0"]
@@ -88,6 +88,9 @@ size = Vector3(40, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tlhfy"]
 size = Vector3(10, 10, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8ncqm"]
+size = Vector3(40, 40, 5)
 
 [sub_resource type="BoxShape3D" id="144"]
 size = Vector3(34, 22, 2)
@@ -485,8 +488,7 @@ shape = SubResource("BoxShape3D_tlhfy")
 
 [node name="PillarTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -630, -30, -765)
-"Trigger Mode" = 2
-"Exit Mode" = 2
+"Enter Mode" = 0
 
 [node name="Camera" type="Node3D" parent="StaticCameraTriggers/PillarTrigger"]
 script = ExtResource("13_3nlok")
@@ -494,7 +496,8 @@ transitionTime = 0.5
 settings = ExtResource("24_qtnck")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticCameraTriggers/PillarTrigger"]
-shape = SubResource("BoxShape3D_wu12k")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_8ncqm")
 
 [node name="PierTrigger" parent="StaticCameraTriggers" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -527.5, -20.6, -820)
@@ -602,14 +605,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("144")
 
 [node name="Checkpoint8" parent="Checkpoints" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(-1, 3.78552e-08, -1.50996e-07, 3.78552e-08, 1, -2.18557e-08, 1.50996e-07, -2.18557e-08, -1, -663.675, 10, -648)
+transform = Transform3D(-1, 3.78552e-08, -1.50996e-07, 3.78552e-08, 1, -2.18557e-08, 1.50996e-07, -2.18557e-08, -1, -663.725, 10, -648)
 "Enter Mode" = 0
 
 [node name="Checkpoint" type="Node3D" parent="Checkpoints/Checkpoint8"]
+transform = Transform3D(1, 2.52591e-16, 0, 2.5259e-16, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("12_lqbp2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoints/Checkpoint8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+transform = Transform3D(1, 2.52591e-16, 0, 2.5259e-16, 1, 0, 0, 0, 1, 0, 5, 1)
 shape = SubResource("144")
 
 [node name="Checkpoint9" parent="Checkpoints" instance=ExtResource("5_4sfp2")]
@@ -792,8 +796,8 @@ renderMask = 18
 reflectionMaterials = [ExtResource("29_lfji7")]
 reflectorHeight = -50.0
 
-[connection signal="Activated" from="Trigger/UTurnTrigger" to="Trigger/UTurnTrigger/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/UTurnTrigger" to="Trigger/UTurnTrigger/Path" method="Activate"]
+[connection signal="Activated" from="Trigger/UTurnTrigger" to="Trigger/UTurnTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/UTurnTrigger" to="Trigger/UTurnTrigger/Path" method="Deactivate"]
 [connection signal="Activated" from="Trigger/WallClimbTrigger" to="Trigger/WallClimbTrigger/Path" method="Activate"]
 [connection signal="Deactivated" from="Trigger/WallClimbTrigger" to="Trigger/WallClimbTrigger/Path" method="Deactivate"]

@@ -5,9 +5,6 @@ using Project.Gameplay;
 
 namespace Project
 {
-	/// <summary>
-	/// Requires the DepthRenderer to be enabled to function properly.
-	/// </summary>
 	public partial class Sun : Node3D
 	{
 		[Export]
@@ -27,7 +24,7 @@ namespace Project
 		private bool isOccluded = true; //Start occluded
 		private float currentOcclusion;
 		private float currentOcclusionVelocity;
-		private readonly float OCCLUSION_SMOOTHING = .2f;
+		private readonly float OCCLUSION_SMOOTHING = .5f;
 		private readonly float MOVEMENT_SMOOTHING = 4.0f;
 
 		private CameraController MainCamera => CameraController.instance;

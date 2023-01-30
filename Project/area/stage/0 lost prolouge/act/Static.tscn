@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://chat15514g2ma"]
+[gd_scene load_steps=19 format=3 uid="uid://chat15514g2ma"]
 
 [ext_resource type="PackedScene" uid="uid://cwbhcy53ii8or" path="res://area/stage/0 lost prolouge/act/environment/collision/Collision.tscn" id="1_qgh10"]
 [ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/stage/0 lost prolouge/data/environment/Environment.tres" id="2_ooith"]
@@ -16,7 +16,6 @@
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="14_4p6kh"]
 [ext_resource type="PackedScene" uid="uid://dq1kdx05lgtf" path="res://area/stage/0 lost prolouge/data/environment/BGM.tscn" id="15_cd8jc"]
 [ext_resource type="PackedScene" uid="uid://0j7em28kpvio" path="res://effect/buffer/BloomRenderer.tscn" id="16_p3ew2"]
-[ext_resource type="PackedScene" uid="uid://cbwcphc75t0y7" path="res://effect/buffer/DepthRenderer.tscn" id="17_dudtb"]
 
 [sub_resource type="BoxShape3D" id="12"]
 size = Vector3(90, 20, 10)
@@ -71,7 +70,8 @@ curve = ExtResource("10_g3fe8")
 
 [node name="TightropeLockout" parent="Trigger" instance=ExtResource("11_lsqhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.02, 0, -319.99)
-triggerMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="TightropeLockout" type="Node3D" parent="Trigger/TightropeLockout"]
 script = ExtResource("12_og3aq")
@@ -83,7 +83,8 @@ shape = SubResource("12")
 
 [node name="FallTrigger" parent="Trigger" instance=ExtResource("11_lsqhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140, -35, 75)
-triggerMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Fall" type="Node3D" parent="Trigger/FallTrigger"]
 script = ExtResource("14_4p6kh")
@@ -94,8 +95,6 @@ shape = SubResource("13")
 
 [node name="BGM" parent="." instance=ExtResource("15_cd8jc")]
 bus = &"BGM"
-
-[node name="DepthRenderer" parent="." instance=ExtResource("17_dudtb")]
 
 [node name="BloomRenderer" parent="." instance=ExtResource("16_p3ew2")]
 compositeMode = 1

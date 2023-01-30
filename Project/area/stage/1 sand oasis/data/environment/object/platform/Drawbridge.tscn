@@ -1,13 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://f0cevncrba8v"]
+[gd_scene load_steps=9 format=3 uid="uid://f0cevncrba8v"]
 
 [ext_resource type="PackedScene" uid="uid://cjoacvuft1jwx" path="res://area/stage/1 sand oasis/data/environment/object/model/platform/Drawbridge.gltf" id="1_wy6av"]
 
 [sub_resource type="BoxShape3D" id="5"]
-size = Vector3(0.8, 3, 3)
+size = Vector3(0.75, 3, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_npyb8"]
+size = Vector3(0.75, 2.2, 1.6)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_it28g"]
-height = 1.0
-radius = 1.5
+height = 0.8
+radius = 1.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2lb7c"]
 size = Vector3(3.4, 1.8, 44)
@@ -102,21 +105,29 @@ _data = {
 [node name="Drawbridge" parent="." instance=ExtResource("1_wy6av")]
 
 [node name="CubeR" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.925, 0, 0)
 shape = SubResource("5")
 
 [node name="CubeL" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.925, 0, 0)
 shape = SubResource("5")
+
+[node name="CubeR2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.625, 0, 0)
+shape = SubResource("BoxShape3D_npyb8")
+
+[node name="CubeL2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.625, 0, 0)
+shape = SubResource("BoxShape3D_npyb8")
 
 [node name="Wheels" type="StaticBody3D" parent="." groups=["wall"]]
 
 [node name="WheelL" type="CollisionShape3D" parent="Wheels"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -2.75, 5.24537e-08, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -2.7, 0, 0)
 shape = SubResource("CylinderShape3D_it28g")
 
 [node name="WheelR" type="CollisionShape3D" parent="Wheels"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.75, 2.92866e-07, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.7, 0, 0)
 shape = SubResource("CylinderShape3D_it28g")
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]

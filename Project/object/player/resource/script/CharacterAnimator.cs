@@ -430,13 +430,13 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Sidle
-		public bool IsSidleHanging => sidleRightState.GetCurrentNode() == SIDLE_HANG_STATE_PARAMETER;
-		public bool IsSidleMoving => sidleRightState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER;
+		public bool IsSidleMoving => sidleRightState.GetFadingFromNode().IsEmpty && sidleRightState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER;
 
 		private AnimationNodeStateMachinePlayback sidleRightState;
 		private AnimationNodeStateMachinePlayback sidleLeftState;
 
 		private readonly StringName SIDLE_LOOP_STATE_PARAMETER = "sidle-loop";
+		private readonly StringName SIDLE_DAMAGE_STATE_PARAMETER = "sidle-damage-loop";
 		private readonly StringName SIDLE_HANG_STATE_PARAMETER = "sidle-hang-loop";
 
 		private readonly StringName SIDLE_SPEED_PARAMETER = "parameters/sidle_tree/sidle_speed/scale";
@@ -462,16 +462,25 @@ namespace Project.Gameplay
 			animatorTree.Set(SIDLE_SEEK_PARAMETER, cyclePosition * .8f); //Sidle animation length is .8 seconds, so normalize cycle position.
 		}
 
-		public void SidleDamage(bool isHanging)
+		/// <summary>
+		/// Starts damage (stagger) animation.
+		/// </summary>
+		public void SidleDamage()
 		{
 			animatorTree.Set(SIDLE_SPEED_PARAMETER, 1f);
 			animatorTree.Set(SIDLE_SEEK_PARAMETER, -1);
 
-			if (isHanging)
-			{
-				sidleRightState.Travel(SIDLE_HANG_STATE_PARAMETER);
-				sidleLeftState.Travel(SIDLE_HANG_STATE_PARAMETER);
-			}
+			sidleRightState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
+			sidleLeftState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
+		}
+
+		/// <summary>
+		/// Start hanging onto the ledge.
+		/// </summary>
+		public void SidleHang()
+		{
+			sidleRightState.Travel(SIDLE_HANG_STATE_PARAMETER);
+			sidleLeftState.Travel(SIDLE_HANG_STATE_PARAMETER);
 		}
 
 		/// <summary>

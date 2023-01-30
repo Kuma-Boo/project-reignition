@@ -27,6 +27,7 @@ namespace Project.Gameplay
 		{
 			SpawnData = new SpawnData(GetParent(), Transform);
 			LevelSettings.instance.ConnectRespawnSignal(this);
+			LevelSettings.instance.ConnectUnloadSignal(this);
 			Respawn();
 		}
 
@@ -40,6 +41,7 @@ namespace Project.Gameplay
 				UpdateInteraction();
 		}
 
+		public virtual void Unload() => QueueFree();
 		public virtual void Respawn()
 		{
 			SpawnData.Respawn(this);

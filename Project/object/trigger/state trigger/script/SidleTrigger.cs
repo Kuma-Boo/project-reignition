@@ -26,14 +26,13 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private LockoutResource lockout;
 
-		private float velocity;
-		private float currentCyclePosition;
-
 		private bool isActive;
 		private bool isInteractingWithPlayer;
 		private CharacterController Character => CharacterController.instance;
 		private InputManager.Controller Controller => InputManager.controller;
 
+		private float velocity;
+		private float cycleTimer;
 		/// <summary> Maximum amount of cycles in a single second. </summary>
 		private const float CYCLE_FREQUENCY = 3.2f;
 		/// <summary> Smoothing to apply when accelerating.  </summary>
@@ -43,16 +42,18 @@ namespace Project.Gameplay.Triggers
 		/// <summary> How much to move each cycle.  </summary>
 		private const float CYCLE_DISTANCE = 3.2f;
 
+		public override void _Ready() => LevelSettings.instance.ConnectRespawnSignal(this);
+
 		public override void _PhysicsProcess(double _)
 		{
 			if (!isInteractingWithPlayer) return;
 
 			if (isActive)
 			{
-				if (isDamaged)
-					UpdateSidleDamage();
-				else
+				if (damageState == DamageStates.Disabled)
 					UpdateSidle();
+				else
+					UpdateSidleDamage();
 			}
 			else if (Character.IsOnGround)
 			{
@@ -66,7 +67,9 @@ namespace Project.Gameplay.Triggers
 		private void StartSidle()
 		{
 			isActive = true;
-			currentCyclePosition = 0;
+			velocity = 0;
+			cycleTimer = 0;
+			damageState = DamageStates.Disabled;
 
 			Character.IsOnGround = true;
 			Character.StartExternal(this, Character.PathFollower, .2f);
@@ -75,8 +78,8 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.SnapRotation(0);
 			Character.Animator.StartSidle(isFacingRight);
 
-			Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged));
-			EmitSignal(SignalName.Activated);
+			if (!Character.IsConnected(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged)))
+				Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged));
 		}
 
 		private void UpdateSidle()
@@ -95,17 +98,16 @@ namespace Project.Gameplay.Triggers
 			if (hit) //Kill speed
 				velocity = (hit.distance - Character.CollisionRadius) * Mathf.Sign(velocity);
 
-			if (Mathf.IsZeroApprox(velocity))
-				return;
+			if (Mathf.IsZeroApprox(velocity)) return;
 
-			currentCyclePosition += velocity * PhysicsManager.physicsDelta;
-			if (currentCyclePosition >= 1)
-				currentCyclePosition--;
-			else if (currentCyclePosition < 0)
-				currentCyclePosition++;
+			cycleTimer += velocity * PhysicsManager.physicsDelta;
+			if (cycleTimer >= 1)
+				cycleTimer--;
+			else if (cycleTimer < 0)
+				cycleTimer++;
 
-			Character.Animator.UpdateSidle(currentCyclePosition);
-			Character.MoveSpeed = Character.Skills.sidleMovementCurve.Sample(currentCyclePosition) * velocity * CYCLE_DISTANCE;
+			Character.Animator.UpdateSidle(cycleTimer);
+			Character.MoveSpeed = Character.Skills.sidleMovementCurve.Sample(cycleTimer) * velocity * CYCLE_DISTANCE;
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 			Character.UpdateExternalControl();
 		}
@@ -126,51 +128,110 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.ResetState(.1f);
 			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
 
-			isDamaged = false;
+			damageState = DamageStates.Disabled;
 			Character.Disconnect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged));
-
-			EmitSignal(SignalName.Deactivated);
 		}
 
 		#region Damage
 		/// <summary> Is the player currently being damaged? </summary>
-		private bool isDamaged;
-		private const float DAMAGE_HANG_LENGTH = 5f; //How long can the player hang onto the rail?
+		private DamageStates damageState;
+		private enum DamageStates
+		{
+			Disabled, //Normal sidle movement
+			Stagger, //Playing stagger animation
+			Falling, //Falling to rail
+			Hanging, //Jump recovery allowed
+			Recovery, //Recovering back to the ledge
+			Respawning, //No railing, or hung for too long
+		}
+
+		private const float DAMAGE_STAGGER_LENGTH = .8f; //How long does the stagger animation last?
+		private const float DAMAGE_HANG_LENGTH = 10f; //How long can the player hang onto the rail?
+		private const float DAMAGE_TRANSITION_LENGTH = .4f; //How long is the transition from staggering to hanging?
 
 		/// <summary>
 		/// Called when the player hits a hazard.
 		/// </summary>
 		private void OnPlayerDamaged()
 		{
-			if (isDamaged) return; //Damage routine has already started
+			if (damageState != DamageStates.Disabled) return; //Damage routine has already started
 
-			isDamaged = true;
-			currentCyclePosition = 0;
-			Character.Animator.SidleDamage(IsOverFoothold);
+			damageState = DamageStates.Stagger;
+			velocity = 0;
+			cycleTimer = 0;
+			Character.Animator.SidleDamage();
 		}
 
 		/// <summary>
-		/// Processes player when being damaged
+		/// Processes player when being damaged.
 		/// </summary>
 		private void UpdateSidleDamage()
 		{
-			if (Character.Animator.IsSidleHanging) //Process inputs
+			cycleTimer += PhysicsManager.physicsDelta;
+			switch (damageState)
 			{
-				currentCyclePosition += PhysicsManager.physicsDelta;
-				if (currentCyclePosition >= DAMAGE_HANG_LENGTH) //Fall
-				{
+				case DamageStates.Hanging:
+					if (cycleTimer >= DAMAGE_HANG_LENGTH) //Fall
+						StartRespawn();
+					else if (Controller.jumpButton.wasPressed) //Process inputs
+					{
+						//Jump back to the ledge
+						cycleTimer = 0;
+						damageState = DamageStates.Recovery;
+						Character.Animator.SidleRecovery();
+					}
+					break;
 
-				}
+				case DamageStates.Stagger:
+					if (cycleTimer >= DAMAGE_STAGGER_LENGTH) //Fall
+					{
+						cycleTimer = 0;
+						if (IsOverFoothold)
+						{
+							damageState = DamageStates.Falling;
+							Character.Animator.SidleHang();
+						}
+						else
+							StartRespawn();
+					}
+					break;
 
-				if (Controller.jumpButton.wasPressed) //Jump back to the ledge
-				{
-					currentCyclePosition = 0;
-					Character.Animator.SidleRecovery();
-				}
+				case DamageStates.Falling:
+					if (cycleTimer >= DAMAGE_TRANSITION_LENGTH)
+					{
+						cycleTimer = 0;
+						damageState = DamageStates.Hanging;
+					}
+					break;
+
+				case DamageStates.Recovery:
+					cycleTimer = 0;
+					if (Character.Animator.IsSidleMoving) //Finished
+					{
+						damageState = DamageStates.Disabled;
+						Character.Animator.UpdateSidle(cycleTimer);
+					}
+					break;
 			}
+		}
 
-			if (Character.Animator.IsSidleMoving) //Finished
-				isDamaged = false;
+		/// <summary>
+		/// Tells the player to start respawning.
+		/// </summary>
+		private void StartRespawn()
+		{
+			damageState = DamageStates.Respawning;
+
+			Character.StartRespawn();
+			//TODO play falling animation
+		}
+
+		public void Respawn()
+		{
+			if (!isActive) return;
+
+			StartSidle();
+			Character.Animator.UpdateSidle(cycleTimer);
 		}
 		#endregion
 
@@ -192,6 +253,8 @@ namespace Project.Gameplay.Triggers
 				Character.MovementAngle = Character.PathFollower.ForwardAngle;
 				Character.PathFollower.Resync();
 			}
+
+			EmitSignal(SignalName.Activated);
 		}
 
 		public void OnExited(Area3D a)
@@ -200,7 +263,9 @@ namespace Project.Gameplay.Triggers
 
 			Instance = null;
 			isInteractingWithPlayer = false;
+
 			StopSidle();
+			EmitSignal(SignalName.Deactivated);
 		}
 	}
 }

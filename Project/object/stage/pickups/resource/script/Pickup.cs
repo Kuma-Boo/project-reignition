@@ -25,6 +25,7 @@ namespace Project.Gameplay.Objects
 
 			spawnData = new SpawnData(GetParent(), Transform);
 			Level.ConnectRespawnSignal(this);
+			Level.ConnectUnloadSignal(this);
 		}
 
 		public void OnEntered(Area3D a)
@@ -33,6 +34,7 @@ namespace Project.Gameplay.Objects
 			CallDeferred(MethodName.Collect);
 		}
 
+		public virtual void Unload() => QueueFree();
 		public virtual void Respawn()
 		{
 			if (DisableAutoRespawning) return;

@@ -68,7 +68,7 @@ namespace Project.Gameplay
 			bloomViewport.Size = compositeViewport.Size = RuntimeConstants.HALF_SCREEN_SIZE;
 			bloomViewport.RenderTargetUpdateMode = compositeViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 
-			bloomMaterial.Set(DepthRenderer.FAR_CLIP_PARAMETER, MainCamera.Far);
+			//bloomMaterial.Set(DepthRenderer.FAR_CLIP_PARAMETER, MainCamera.Far);
 		}
 
 		private void ApplyTexture()
@@ -76,7 +76,7 @@ namespace Project.Gameplay
 			BloomTexture = compositeViewport.GetTexture();
 			compositeMaterial.Set(BLOOM_PARAMETER, BloomTexture);
 
-			bloomMaterial.Set(DepthRenderer.DEPTH_PARAMETER, DepthRenderer.DepthTexture);
+			//bloomMaterial.Set(DepthRenderer.DEPTH_PARAMETER, DepthRenderer.DepthTexture);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://nqx0bjqkjd1w"]
+[gd_scene load_steps=37 format=3 uid="uid://nqx0bjqkjd1w"]
 
 [ext_resource type="PackedScene" uid="uid://b2fffn2iil26i" path="res://area/stage/1 sand oasis/data/environment/object/foothold/FootholdLeft.tscn" id="2_ri5sn"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="3_eweob"]
@@ -392,6 +392,9 @@ _data = {
 "RESET": SubResource("Animation_pek3q"),
 "event": SubResource("Animation_hspqj")
 }
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xbkcs"]
+size = Vector3(8.4, 5, 2)
 
 [sub_resource type="BoxShape3D" id="253"]
 size = Vector3(8.4, 5, 2)
@@ -1207,6 +1210,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7)
 [node name="Child03" parent="MainAct/Sidle/Rings2" instance=ExtResource("13_dxojj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4)
 
+[node name="SpikePanelGroup1" type="Node3D" parent="MainAct/Sidle"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.275024, 0.8, 25.4)
+
+[node name="SpikePanel1" parent="MainAct/Sidle/SpikePanelGroup1" instance=ExtResource("53_h11v0")]
+"Start Time" = 2.0
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+startingTime = 2.0
+stateLengths = [2.0, 0.5, 0.5]
+
+[node name="SpikePanel2" parent="MainAct/Sidle/SpikePanelGroup1" instance=ExtResource("53_h11v0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.5)
+"Start Time" = 1.5
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+startingTime = 1.5
+stateLengths = [2.0, 0.5, 0.5]
+
 [node name="FootholdTrigger1" parent="MainAct/Sidle" instance=ExtResource("58_p0yqd")]
 transform = Transform3D(-4.37114e-08, 1.91069e-15, 1, 4.37114e-08, 1, -8.35188e-23, -1, 4.37114e-08, -4.37114e-08, 0, 0, 25.9)
 
@@ -1242,27 +1265,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 8.35187e-23, 0, 8.35187e-23, 1, 7.59998, 
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Sidle/FootholdTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 1, 0)
-shape = SubResource("253")
-
-[node name="SpikePanelGroup1" type="Node3D" parent="MainAct/Sidle"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.275024, 0.8, 25.4)
-
-[node name="SpikePanel1" parent="MainAct/Sidle/SpikePanelGroup1" instance=ExtResource("53_h11v0")]
-"Start Time" = 2.0
-"State Lengths/inactive" = 2.0
-"State Lengths/warning" = 0.5
-"State Lengths/active" = 0.5
-startingTime = 2.0
-stateLengths = [2.0, 0.5, 0.5]
-
-[node name="SpikePanel2" parent="MainAct/Sidle/SpikePanelGroup1" instance=ExtResource("53_h11v0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.5)
-"Start Time" = 1.5
-"State Lengths/inactive" = 2.0
-"State Lengths/warning" = 0.5
-"State Lengths/active" = 0.5
-startingTime = 1.5
-stateLengths = [2.0, 0.5, 0.5]
+shape = SubResource("BoxShape3D_xbkcs")
 
 [node name="Rings3" type="Node3D" parent="MainAct/Sidle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.324951, 0.8, 17.6)

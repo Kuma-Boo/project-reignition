@@ -87,11 +87,13 @@ namespace Project.Gameplay.Objects
 
 		public override void _PhysicsProcess(double _)
 		{
+			/*
 			if (isShattered && pieceRoot.IsInsideTree())
 			{
 				for (int i = 0; i < pieces.Count; i++)
 					Core.Debug.DrawRay(pieces[i].rigidbody.GlobalPosition, pieces[i].rigidbody.LinearVelocity * Core.PhysicsManager.physicsDelta, Colors.Red);
 			}
+			*/
 
 			if (isShattered || !isInteractingWithPlayer) return;
 

@@ -12,6 +12,8 @@ namespace Project.Gameplay.Objects
 
 		protected override void SetUp() //TODO Check save data
 		{
+			base.SetUp();
+
 			if (isCollected)
 				Despawn();
 		}

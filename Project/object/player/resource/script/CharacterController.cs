@@ -373,9 +373,9 @@ namespace Project.Gameplay
 		public bool IsMovingBackward { get; set; }
 
 		private const float TURNING_SPEED_LOSS = .04f; //How much speed to lose when turning sharply
-		private const float MIN_TURN_SPEED = .12f; //How much to turn when moving slowly
-		private const float MAX_TURN_SPEED = .32f; //How much to turn when moving at top speed
-		private const float STRAFE_TURNAROUND_SPEED = .2f; //How quickly to turnaround when at top speed
+		private const float MIN_TURN_AMOUNT = .12f; //How much to turn when moving slowly
+		private const float MAX_TURN_AMOUNT = .4f; //How much to turn when moving at top speed
+		private const float STRAFE_TURNAROUND_SPEED = .24f; //How quickly to turnaround when at top speed
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
@@ -479,15 +479,15 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Backflip) return;
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) return; //Turning around
 
-			float maxTurnSpeed = MAX_TURN_SPEED;
+			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			if (IsHoldingDirection(PathFollower.ForwardAngle) &&
 			(Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle)))
-				maxTurnSpeed = STRAFE_TURNAROUND_SPEED;
+				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
 
 			float speedRatio = IsOnGround ? GroundSettings.GetSpeedRatio(MoveSpeed) : AirSettings.GetSpeedRatio(MoveSpeed);
-			float turnDelta = Mathf.Lerp(MIN_TURN_SPEED, maxTurnSpeed, speedRatio);
+			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
 
 			if (turnInstantly) //Instantly set movement angle to target movement angle
 			{
@@ -1022,9 +1022,6 @@ namespace Project.Gameplay
 			ResetOrientation();
 
 			Camera.Respawn();
-
-			//"Flicker" area collider to re-trigger any area the player happens to be respawning in
-			areaTrigger.Disabled = true;
 			//Wait a single physics frame to ensure objects reset properly
 			GetTree().CreateTimer(PhysicsManager.physicsDelta).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
 		}
@@ -1036,7 +1033,6 @@ namespace Project.Gameplay
 		{
 			Level.RespawnObjects();
 			SnapToGround();
-			areaTrigger.Disabled = false;
 
 			//TODO Play respawn animation/sfx
 			TransitionManager.FinishTransition();
@@ -1093,7 +1089,10 @@ namespace Project.Gameplay
 			Lockon.ResetLockonTarget();
 
 			if (useAutoAlignment)
-				MovementAngle = CalculateForwardAngle(launchData.launchDirection);
+			{
+				MovementAngle = CalculateForwardAngle(launchData.InitialVelocity.RemoveVertical());
+				Animator.SnapRotation(MovementAngle);
+			}
 		}
 
 		private void UpdateLauncher()
@@ -1296,7 +1295,11 @@ namespace Project.Gameplay
 				else
 					orientationResetFactor = (VerticalSpd * .2f / RuntimeConstants.MAX_GRAVITY) - .05f;
 
-				MotionMode = MotionModeEnum.Grounded;
+				if (ActionState == ActionStates.JumpDash || ActionState == ActionStates.Backflip || VerticalSpd > 0)
+					MotionMode = MotionModeEnum.Grounded;
+				else
+					MotionMode = MotionModeEnum.Floating;
+
 				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
@@ -1351,8 +1354,9 @@ namespace Project.Gameplay
 
 		public void CheckCeiling() //Checks the ceiling.
 		{
-			Vector3 castOrigin = CenterPosition;
-			float castLength = CollisionRadius;
+			//Ceiling check casts from the root position, to allow more accurate crusher detection
+			Vector3 castOrigin = GlobalPosition;
+			float castLength = CollisionRadius * 2f;
 			if (VerticalSpd > 0)
 				castLength += VerticalSpd * PhysicsManager.physicsDelta;
 
@@ -1365,7 +1369,6 @@ namespace Project.Gameplay
 
 			if (ceilingHit)
 			{
-				GD.Print("Hit " + ceilingHit.collidedObject.Name);
 				if (ceilingHit.collidedObject.IsInGroup("crusher") && IsOnGround) //Check if the player is being crushed
 				{
 					GD.Print($"Crushed by {ceilingHit.collidedObject.Name}");
@@ -1417,7 +1420,7 @@ namespace Project.Gameplay
 				if (ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
 				{
 					float wallDelta = ExtensionMethods.DeltaAngleRad(CalculateForwardAngle(wallHit.normal), MovementAngle);
-					if (wallDelta >= Mathf.Pi * .95f) //Running into wall head-on
+					if (wallDelta >= Mathf.Pi * .9f) //Running into wall head-on
 					{
 						if (Skills.IsSpeedBreakActive) //Cancel speed break
 							Skills.ToggleSpeedBreak();

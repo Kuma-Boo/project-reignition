@@ -43,10 +43,12 @@ namespace Project.Gameplay
 			base.SetUp();
 		}
 
-		public void Unload()
+		public override void Unload()
 		{
 			for (int i = 0; i < seedPool.Length; i++) //Clear memory
 				seedPool[i].QueueFree();
+
+			base.Unload();
 		}
 
 		protected override void Activate()

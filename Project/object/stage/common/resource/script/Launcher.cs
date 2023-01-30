@@ -72,7 +72,7 @@ namespace Project.Gameplay.Objects
 			LaunchData launchData = GetLaunchData();
 			Character.StartLauncher(launchData, this, true);
 
-			if (GetLaunchDirection().Dot(Vector3.Up) > .9f)
+			if (launchData.InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 				Character.Animator.Jump();
 			else
 				Character.Animator.LaunchAnimation();

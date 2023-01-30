@@ -159,13 +159,15 @@ namespace Project.Gameplay.Objects
 			Level.ConnectUnloadSignal(this);
 		}
 
-		public void Unload() //Prevent memory leak
+		public override void Unload() //Prevent memory leak
 		{
 			for (int i = objectPool.Count - 1; i >= 0; i--)
 				objectPool[i].QueueFree();
 
 			objectPool.Clear();
 			objectLaunchData.Clear();
+
+			base.Unload();
 		}
 
 		public override void Respawn()
