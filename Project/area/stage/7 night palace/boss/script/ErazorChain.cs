@@ -43,11 +43,11 @@ namespace Project.Gameplay.Bosses
 			}
 
 			Transform3D transform = GlobalTransform;
-			transform.basis.y = -delta.Normalized();
+			transform.Basis.Y = -delta.Normalized();
 			//Rotate Chain
-			transform.basis.x = parent.Back();
-			transform.basis.z = parent.Right();
-			transform.origin = targetPosition;
+			transform.Basis.X = parent.Back();
+			transform.Basis.Z = parent.Right();
+			transform.Origin = targetPosition;
 			transform = transform.Orthonormalized();
 			GlobalTransform = transform;
 			Scale = -parent.Scale;

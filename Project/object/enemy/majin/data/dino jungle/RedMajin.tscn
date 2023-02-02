@@ -1,13 +1,27 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3 uid="uid://dermptym044v8"]
 
-[ext_resource type="PackedScene" uid="uid://b01dbeptkooh3" path="res://object/enemy/majin/Majin.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://bfl6eqh0reia5" path="res://object/enemy/majin/data/dino jungle/model/RedMajin.gltf" id="2"]
+[ext_resource type="PackedScene" uid="uid://rh85bh20fk6r" path="res://object/enemy/majin/Majin.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://cdmlgxgiytwcu" path="res://object/enemy/majin/data/dino jungle/model/RedMajin.gltf" id="2"]
+[ext_resource type="AnimationLibrary" uid="uid://duuj6x0f00ny7" path="res://object/enemy/majin/data/animation/red majin/MajinLibrary.gltf" id="3_kspgr"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_3e5ek"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_m4ebb"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_lvwa8"]
 
 [node name="RedMajin" instance=ExtResource("1")]
 maxHealth = 2
-damagePlayer = true
 
-[node name="RedMajin" parent="." index="0" instance=ExtResource("2")]
+[node name="RedMajin" parent="Root" index="0" instance=ExtResource("2")]
 
-[node name="AnimationPlayer" parent="." index="4"]
-root_node = NodePath("../RedMajin")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root/RedMajin" index="1"]
+libraries = {
+"MajinLibrary": ExtResource("3_kspgr")
+}
+
+[node name="AnimationTree" parent="." index="5"]
+anim_player = NodePath("../Root/RedMajin/AnimationPlayer")
+parameters/defeat_state/playback = SubResource("AnimationNodeStateMachinePlayback_3e5ek")
+parameters/fire_state/playback = SubResource("AnimationNodeStateMachinePlayback_m4ebb")
+parameters/spin_state/playback = SubResource("AnimationNodeStateMachinePlayback_lvwa8")

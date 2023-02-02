@@ -187,7 +187,7 @@ namespace Project.Gameplay
 			if (ActiveSettings.usePathfollowerDistance)
 			{
 				targetPathResyncFix = Character.Up();
-				if (Mathf.Abs(PathFollower.Forward().y) > .5f)
+				if (Mathf.Abs(PathFollower.Forward().Y) > .5f)
 					targetPathResyncFix = PathFollower.UpAxis;
 			}
 
@@ -248,8 +248,8 @@ namespace Project.Gameplay
 				}
 			}
 
-			Camera.HOffset = viewOffset.x;
-			Camera.VOffset = viewOffset.y;
+			Camera.HOffset = viewOffset.X;
+			Camera.VOffset = viewOffset.Y;
 			if (!freeCamEnabled) //Apply transform
 				SyncCameraTransforms();
 
@@ -349,7 +349,7 @@ namespace Project.Gameplay
 			bool trackHorizontally = settings.IsFieldCamera || settings.IsHallCamera;
 			if (trackHorizontally) //Horizontal tracking
 			{
-				float trackingAmount = settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.x : PathFollower.FlatPlayerPositionDelta.x;
+				float trackingAmount = settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.X : PathFollower.FlatPlayerPositionDelta.X;
 				if (settings.IsHallCamera)
 					trackingAmount = Mathf.Clamp(trackingAmount, -settings.hallWidth, settings.hallWidth);
 
@@ -361,7 +361,7 @@ namespace Project.Gameplay
 
 			//Calculate Height
 			if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Move) //Vertical tracking
-				height += settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.y : PathFollower.FlatPlayerPositionDelta.y;
+				height += settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.Y : PathFollower.FlatPlayerPositionDelta.Y;
 
 			if (settings.isRollEnabled)
 				targetPosition += PathFollower.Up() * height;
@@ -411,7 +411,7 @@ namespace Project.Gameplay
 
 			//Rotate the z axis along PathFollower's forward, by angle of the ground direction
 			Vector3 angle = PathFollower.Up().Rotated(Vector3.Up, -PathFollower.ForwardAngle);
-			angle.z = 0;
+			angle.Z = 0;
 
 			return angle.Normalized().SignedAngleTo(Vector3.Up, Vector3.Forward);
 		}
@@ -489,7 +489,7 @@ namespace Project.Gameplay
 			Vector3 delta = CalculatePosition(settings) - lookAt;
 			delta = delta.Rotated(Vector3.Up, -CalculateYaw(settings));
 			delta = delta.Rotated(Vector3.Forward, CalculateTilt(settings));
-			delta.x = 0;
+			delta.X = 0;
 
 			float targetPitch = Vector3.Forward.SignedAngleTo(delta.Normalized(), Vector3.Right);
 			if (!settings.IsStaticCamera)
@@ -554,8 +554,8 @@ namespace Project.Gameplay
 			{
 				if (freeCamRotating)
 				{
-					cameraRoot.Rotation += Vector3.Up * Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.x) * MOUSE_SENSITIVITY;
-					cameraGimbal.Rotation += Vector3.Right * Mathf.DegToRad((e as InputEventMouseMotion).Relative.y) * MOUSE_SENSITIVITY;
+					cameraRoot.Rotation += Vector3.Up * Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY;
+					cameraGimbal.Rotation += Vector3.Right * Mathf.DegToRad((e as InputEventMouseMotion).Relative.Y) * MOUSE_SENSITIVITY;
 				}
 			}
 			else if (e is InputEventMouseButton emb)

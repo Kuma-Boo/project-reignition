@@ -173,11 +173,11 @@ namespace Project.Gameplay.Objects
 				distance = delta.Flatten().Length(),
 				startingHeight = 0f,
 				middleHeight = h,
-				finalHeight = delta.y,
+				finalHeight = delta.Y,
 			};
 
 			if (relativeToEnd)
-				data.middleHeight += delta.y;
+				data.middleHeight += delta.Y;
 
 			data.Calculate();
 			return data;

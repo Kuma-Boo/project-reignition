@@ -57,7 +57,7 @@ namespace Project.Gameplay.Bosses
 		public delegate void DuelCompletedEventHandler(); //Called when a duel attack ends. Resets positions to allow infinte hallway
 
 		private CharacterController Character => CharacterController.instance;
-		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.x;
+		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.X;
 
 		//Animation parameters
 		private const string TELEPORT_SPEED = "parameters/TeleportSpeed/scale";
@@ -148,7 +148,7 @@ namespace Project.Gameplay.Bosses
 								{
 									//Update Camera3D
 									duelCamera.distance = Mathf.Lerp(15, 35, Mathf.Clamp(currentDistance / DUEL_DISTANCE, 0f, 1f));
-									duelCamera.staticPosition.z = -currentDistance * .5f;
+									duelCamera.staticPosition.Z = -currentDistance * .5f;
 
 									currentDistance = ExtensionMethods.SmoothDamp(currentDistance, -20f, ref distanceVelocity, DUEL_SMOOTHING, MAX_DUEL_SPEED);
 									if (Character.Lockon.IsHomingAttacking)
@@ -229,7 +229,7 @@ namespace Project.Gameplay.Bosses
 
 			//Update camera
 			duelCamera.distance = 35f;
-			duelCamera.staticPosition.z = -DUEL_DISTANCE * .5f;
+			duelCamera.staticPosition.Z = -DUEL_DISTANCE * .5f;
 			Character.Camera.UpdateCameraSettings(duelCamera, 0f);
 
 			//TODO Toggle sidescrolling
@@ -324,7 +324,7 @@ namespace Project.Gameplay.Bosses
 			return -1;
 		}
 
-		private partial class ErazorAttack : Object
+		private partial class ErazorAttack : GodotObject
 		{
 			public int AttackType { get; set; } //What kind of attack is it?
 			public float Delay { get; set; } //How long before the attack animation actually starts?

@@ -134,7 +134,7 @@ namespace Project.Gameplay
 		/// <summary> Where to spawn from (Added with OriginalPosition) </summary>
 		public Vector3 spawnOffset;
 		/// <summary> Local Position to be after spawning is complete. </summary>
-		private Vector3 OriginalPosition => SpawnData.spawnTransform.origin;
+		private Vector3 OriginalPosition => SpawnData.spawnTransform.Origin;
 		private Vector3 SpawnPosition => OriginalPosition + Basis * spawnOffset;
 		private bool isSpawned;
 		private bool isSpawning;
@@ -200,7 +200,6 @@ namespace Project.Gameplay
 			fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
 			spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
 
-			root.Rotation = Vector3.Right * Mathf.Pi * .5f; //Required for animation retargeting
 			if (attackType == AttackTypes.Spin) //Try to get movement controller parent
 				movementController = GetParentOrNull<MovingObject>();
 
@@ -287,7 +286,7 @@ namespace Project.Gameplay
 				if (trackPlayer) //Rotate to face player
 				{
 					float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
-					targetRotation -= GlobalRotation.y; //Rotation is in local space
+					targetRotation -= GlobalRotation.Y; //Rotation is in local space
 					currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, ROTATION_SMOOTHING);
 				}
 				else if (!Mathf.IsZeroApprox(rotationTime))
@@ -311,7 +310,7 @@ namespace Project.Gameplay
 
 		private void UpdateRotation()
 		{
-			root.Rotation = new Vector3(root.Rotation.x, currentRotation, root.Rotation.z);
+			root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z);
 			fireRoot.Rotation = Vector3.Up * currentRotation;
 		}
 
@@ -398,7 +397,7 @@ namespace Project.Gameplay
 				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
 
 				moveTransition.XfadeTime = 0;
-				if (!Mathf.IsZeroApprox(spawnOffset.x) || !Mathf.IsZeroApprox(spawnOffset.z))
+				if (!Mathf.IsZeroApprox(spawnOffset.X) || !Mathf.IsZeroApprox(spawnOffset.Z))
 					animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); //Travel animation
 				else
 					animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); //Immediately idle

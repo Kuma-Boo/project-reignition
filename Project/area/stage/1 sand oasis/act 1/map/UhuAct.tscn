@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_xkwa4"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_1ul40"]
-[ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="2_jytk8"]
+[ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="2_jytk8"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="3_lnd4x"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="4_f3m4h"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_ncewo"]
@@ -15,9 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://k8xn2ebin3c2" path="res://area/stage/1 sand oasis/data/environment/object/pillar/SquarePillarMid.tscn" id="11_evogq"]
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="12_v7tgu"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="13_7eemm"]
-[ext_resource type="PackedScene" uid="uid://dgew0sa6l55q3" path="res://area/stage/1 sand oasis/act 1/Static.tscn" id="15_cc3yv"]
+[ext_resource type="PackedScene" uid="uid://dr7scqws8wi3j" path="res://area/stage/1 sand oasis/act 1/Static.tscn" id="15_cc3yv"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_iynow"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_jrik0"]
 size = Vector3(10, 10, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uxgup"]
@@ -141,14 +141,15 @@ metadata/_edit_lock_ = true
 
 [node name="Start" type="Node3D" parent="UhuAct"]
 script = ExtResource("4_ncewo")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="DriftTrigger" parent="UhuAct/Start" instance=ExtResource("3_lnd4x")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 70.175, 75, -52.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.175, 75, -52.1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="UhuAct/Start/DriftTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("BoxShape3D_iynow")
+shape = SubResource("BoxShape3D_jrik0")
 
 [node name="RingM1" type="Node3D" parent="UhuAct/Start"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 64.935, 76, -62.11)
@@ -180,62 +181,75 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="DashPanelM1" parent="UhuAct/Start/SlopeDashPanels" instance=ExtResource("6_ckw71")]
 transform = Transform3D(-4.80475e-08, -0.830897, 0.556426, 2.90378e-09, 0.556426, 0.830897, -1, 4.15383e-08, -2.43222e-08, -8.17929, 97.7242, -62)
+speedRatio = 1.2
+length = 0.4
 
 [node name="DashPanelM2" parent="UhuAct/Start/SlopeDashPanels" instance=ExtResource("6_ckw71")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -59.025, 35, -62)
+speedRatio = 1.2
+length = 0.4
 
 [node name="DashPanelR1" parent="UhuAct/Start/SlopeDashPanels" instance=ExtResource("6_ckw71")]
 transform = Transform3D(-4.37114e-08, -0.830984, 0.556296, 0, 0.556296, 0.830984, -1, 3.63235e-08, -2.43165e-08, -88.8883, 0.171143, -63)
+speedRatio = 1.2
+length = 0.4
 
 [node name="DashPanelL1" parent="UhuAct/Start/SlopeDashPanels" instance=ExtResource("6_ckw71")]
 transform = Transform3D(-4.37114e-08, -0.830984, 0.556296, 0, 0.556296, 0.830984, -1, 3.63235e-08, -2.43165e-08, -103.018, -20.9359, -61)
+speedRatio = 1.2
+length = 0.4
 
 [node name="DashPanelR2" parent="UhuAct/Start/SlopeDashPanels" instance=ExtResource("6_ckw71")]
 transform = Transform3D(-4.30547e-08, -0.172686, 0.984977, -7.54832e-09, 0.984977, 0.172686, -1, 0, -4.37114e-08, -127.946, -46.347, -63)
+speedRatio = 1.2
+length = 0.4
 
 [node name="ZipperPearls" type="Node3D" parent="UhuAct/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -141.35, -47.9, -64.99)
 
 [node name="Pearls1" type="Node3D" parent="UhuAct/Start/ZipperPearls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.400002, -1.5)
 script = ExtResource("4_f3m4h")
 Generate = false
-Source = null
+Source = ExtResource("6_ucvst")
 Amount = 10
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Follow Path Y" = false
 Spacing = 1.9
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Pearl" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.040329, 0.289291, -0.113678)
+[node name="Child01" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.57764e-05, 7.62939e-06, 3.05176e-05)
 
-[node name="Pearl2" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44646, 0.124603, -1.23698)
+[node name="Child02" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41823, -0.188744, -1.23932)
 
-[node name="Pearl3" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.79794, -0.0195236, -2.52605)
+[node name="Child03" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.71924, -0.350189, -2.60398)
 
-[node name="Pearl4" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.01205, -0.145386, -3.9575)
+[node name="Child04" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.89838, -0.485687, -4.07763)
 
-[node name="Pearl5" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.08604, -0.254898, -5.49737)
+[node name="Child05" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.95503, -0.597237, -5.64338)
 
-[node name="Pearl6" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.98413, -0.346039, -7.13226)
+[node name="Child06" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.89195, -0.687157, -7.28515)
 
-[node name="Pearl7" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60988, -0.409218, -8.89115)
+[node name="Child07" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.71436, -0.757904, -8.98851)
 
-[node name="Pearl8" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.00819, -0.449356, -10.726)
+[node name="Child08" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.42882, -0.811874, -10.7409)
 
-[node name="Pearl9" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.23961, -0.473061, -12.5978)
+[node name="Child09" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.04269, -0.851341, -12.5319)
 
-[node name="Pearl10" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.36208, -0.486572, -14.4809)
+[node name="Child10" parent="UhuAct/Start/ZipperPearls/Pearls1" instance=ExtResource("6_ucvst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.56337, -0.878357, -14.3528)
 
 [node name="Pearls2" type="Node3D" parent="UhuAct/Start/ZipperPearls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.70001, 0, -31.3)

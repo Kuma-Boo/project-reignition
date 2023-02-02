@@ -227,7 +227,7 @@ namespace Project.Gameplay
 		private const int SOUL_GAUGE_FILL_OFFSET = 15;
 		private void UpdateSoulGauge()
 		{
-			Vector2 end = Vector2.Down * Mathf.Lerp(soulGaugeBackground.Size.y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
+			Vector2 end = Vector2.Down * Mathf.Lerp(soulGaugeBackground.Size.Y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
 			soulGaugeFill.Position = ExtensionMethods.SmoothDamp(soulGaugeFill.Position, end, ref soulGaugeVelocity, 0.1f);
 		}
 

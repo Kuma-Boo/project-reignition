@@ -21,7 +21,7 @@ namespace Project.Editor
 				target = (Node)var.Obj;
 		}
 
-		public override long _Forward3dGuiInput(Camera3D cam, InputEvent e)
+		public override int _Forward3DGuiInput(Camera3D cam, InputEvent e)
 		{
 			if (cam != null)
 			{
@@ -29,12 +29,12 @@ namespace Project.Editor
 				UpdateOverlays();
 			}
 
-			return base._Forward3dGuiInput(cam, e);
+			return base._Forward3DGuiInput(cam, e);
 		}
 
 		private const int PREVIEW_RESOLUTION = 32;
 
-		public override void _Forward3dDrawOverViewport(Control overlay)
+		public override void _Forward3DDrawOverViewport(Control overlay)
 		{
 			if (!IsInstanceValid(target) || !target.IsInsideTree() || !IsInstanceValid(editorCam)) return;
 
@@ -84,11 +84,11 @@ namespace Project.Editor
 			Array<Vector3> points = new Array<Vector3>();
 			FlyingPot pot = (target as FlyingPot);
 
-			Vector3 bottomRight = pot.GlobalPosition + pot.Right() * pot.travelBounds.x;
-			Vector3 bottomLeft = pot.GlobalPosition + pot.Left() * pot.travelBounds.x;
+			Vector3 bottomRight = pot.GlobalPosition + pot.Right() * pot.travelBounds.X;
+			Vector3 bottomLeft = pot.GlobalPosition + pot.Left() * pot.travelBounds.X;
 			points.Add(bottomRight);
-			points.Add(bottomRight + Vector3.Up * pot.travelBounds.y);
-			points.Add(bottomLeft + Vector3.Up * pot.travelBounds.y);
+			points.Add(bottomRight + Vector3.Up * pot.travelBounds.Y);
+			points.Add(bottomLeft + Vector3.Up * pot.travelBounds.Y);
 			points.Add(bottomLeft);
 
 			Vector2[] pointsList = new Vector2[points.Count];
@@ -125,7 +125,7 @@ namespace Project.Editor
 
 			DrawLaunchData(overlay, box.GetLaunchData(), DEFAULT_DRAW_COLOR);
 			if (box.spawnAmount > 1)
-				DrawPerspectiveCircle(overlay, box.EndPosition, box.GlobalTransform.basis, box.spawnRadius, Vector3.Forward, Vector3.Up, DEFAULT_DRAW_COLOR);
+				DrawPerspectiveCircle(overlay, box.EndPosition, box.GlobalTransform.Basis, box.spawnRadius, Vector3.Forward, Vector3.Up, DEFAULT_DRAW_COLOR);
 		}
 
 		private void UpdateMovingObject(Control overlay)

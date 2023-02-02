@@ -62,7 +62,7 @@ namespace Project.Gameplay.Objects
 			{
 				if (isEjectingPlayer) //Launch the player at the right time
 				{
-					if (armNode.Rotation.x > Mathf.Pi * .5f)
+					if (armNode.Rotation.X > Mathf.Pi * .5f)
 						LaunchPlayer();
 				}
 				else //Update Controls
@@ -76,7 +76,7 @@ namespace Project.Gameplay.Objects
 						EjectPlayer(false);
 
 					float targetRotation = Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);
-					armNode.Rotation = Vector3.Right * Mathf.Lerp(armNode.Rotation.x, targetRotation, POWER_SMOOTHING_SPEED);
+					armNode.Rotation = Vector3.Right * Mathf.Lerp(armNode.Rotation.X, targetRotation, POWER_SMOOTHING_SPEED);
 
 					Character.UpdateExternalControl();
 				}

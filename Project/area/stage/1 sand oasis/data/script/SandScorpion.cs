@@ -37,7 +37,7 @@ namespace Project.Gameplay.Bosses
 
 		private bool isActive; //Process the boss?
 		private CharacterController Character => CharacterController.instance;
-		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.x;
+		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.X;
 
 		public override void _Ready()
 		{
@@ -271,7 +271,7 @@ namespace Project.Gameplay.Bosses
 			Vector3 targetPosition = pathFollower.GlobalPosition;
 			pathFollower.Progress = progress; //Reset progress
 			pathFollower.HOffset = 0; //Reset HOffset
-			targetPosition.y = 0; //Make sure missiles end up on the floor
+			targetPosition.Y = 0; //Make sure missiles end up on the floor
 
 			return targetPosition;
 		}
@@ -463,7 +463,7 @@ namespace Project.Gameplay.Bosses
 		public void SetImpactPosition(NodePath n)
 		{
 			Vector3 p = GetNode<Node3D>(n).GlobalPosition;
-			p.y = 0;
+			p.Y = 0;
 			impactEffect.GlobalPosition = p;
 		}
 		#endregion

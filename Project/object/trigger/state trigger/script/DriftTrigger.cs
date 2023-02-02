@@ -126,7 +126,7 @@ namespace Project.Gameplay.Triggers
 					Character.Animator.ExternalAngle = Character.MovementAngle;
 
 					//Snap to target position (Except on the Y-axis)
-					Character.GlobalPosition = new Vector3(targetPosition.x, Character.GlobalPosition.y, targetPosition.z);
+					Character.GlobalPosition = new Vector3(targetPosition.X, Character.GlobalPosition.Y, targetPosition.Z);
 					Character.AddLockoutData(lockout); //Apply lockout
 
 					CompleteDrift();

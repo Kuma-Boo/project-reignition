@@ -72,17 +72,17 @@ namespace Project
 		{
 			if (updateTimer <= 0f)
 			{
-				if (MainCamera.IsBehindCamera(GlobalPosition) || screenUV.x < 0.0f || screenUV.x > 1.0f || screenUV.y < 0.0f || screenUV.y > 1.0f)
+				if (MainCamera.IsBehindCamera(GlobalPosition) || screenUV.X < 0.0f || screenUV.X > 1.0f || screenUV.Y < 0.0f || screenUV.Y > 1.0f)
 					isOccluded = true; //Always occluded when the camera faces away
 				else if (MainCamera.IsOnScreen(GlobalPosition))
 				{
 					//Sample texture. VERY SLOW!!!
 					Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
-					Vector2i samplePosition = (Vector2i)(screenUV * depthBuffer.GetSize());
-					samplePosition = samplePosition.Clamp(Vector2i.Zero, depthBuffer.GetSize() - Vector2i.One);
+					Vector2I samplePosition = (Vector2I)(screenUV * depthBuffer.GetSize());
+					samplePosition = samplePosition.Clamp(Vector2I.Zero, depthBuffer.GetSize() - Vector2I.One);
 
 					//Since the sun is so far away, a simple alpha check can determine occlusion.
-					float alpha = depthBuffer.GetPixelv(samplePosition).a;
+					float alpha = depthBuffer.GetPixelv(samplePosition).A;
 					isOccluded = !Mathf.IsZeroApprox(alpha);
 					depthBuffer.Dispose(); //Don't forget to dispose the image!
 				}

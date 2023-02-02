@@ -101,7 +101,7 @@ namespace Project.Gameplay.Objects
 			isEnteringPot = true;
 			environmentCollider.Disabled = true;
 
-			float jumpHeight = (GlobalPosition.y + 1) - Character.GlobalPosition.y;
+			float jumpHeight = (GlobalPosition.Y + 1) - Character.GlobalPosition.Y;
 			jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
 			Character.JumpTo(GlobalPosition, jumpHeight, true);
 
@@ -116,7 +116,7 @@ namespace Project.Gameplay.Objects
 			//Update camera
 			if (cameraTrigger != null)
 			{
-				cameraTrigger.settings.yawAngle = (GlobalRotation.y + Mathf.Pi) % Mathf.Tau; //Sync viewAngle to current flying pot's rotation
+				cameraTrigger.settings.yawAngle = (GlobalRotation.Y + Mathf.Pi) % Mathf.Tau; //Sync viewAngle to current flying pot's rotation
 				cameraTrigger.Activate();
 			}
 		}
@@ -187,9 +187,9 @@ namespace Project.Gameplay.Objects
 			else
 				position += Vector2.Down * velocity * PhysicsManager.physicsDelta;
 
-			position.x = Mathf.Clamp(position.x, -travelBounds.x, travelBounds.x);
-			position.y = Mathf.Clamp(position.y, 0f, travelBounds.y);
-			if (Mathf.IsZeroApprox(position.y))
+			position.X = Mathf.Clamp(position.X, -travelBounds.X, travelBounds.X);
+			position.Y = Mathf.Clamp(position.Y, 0f, travelBounds.Y);
+			if (Mathf.IsZeroApprox(position.Y))
 			{
 				velocity = 0;
 
@@ -207,14 +207,14 @@ namespace Project.Gameplay.Objects
 			if (!isControllingPlayer)
 				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
 
-			GlobalPosition = startPosition + Vector3.Up * position.y + this.Right() * position.x;
+			GlobalPosition = startPosition + Vector3.Up * position.Y + this.Right() * position.X;
 			root.Rotation = Vector3.Forward * angle;
 
 			if (isControllingPlayer)
 				Character.UpdateExternalControl(); //Sync player object
 
 			if (lockonArea.Monitorable && !interactingWithPlayer)
-				isProcessing = !Mathf.IsZeroApprox(position.y) || !Mathf.IsZeroApprox(angle); //Update sleeping status
+				isProcessing = !Mathf.IsZeroApprox(position.Y) || !Mathf.IsZeroApprox(angle); //Update sleeping status
 		}
 
 		public void PlayerEntered(Area3D _)

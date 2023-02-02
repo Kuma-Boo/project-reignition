@@ -47,13 +47,13 @@ namespace Project.Gameplay.Objects
 			bool reverseDirection = Mathf.Sign(Character.Forward().Dot(Position)) < 0; //True when collecting a pearl behind us
 
 			Vector3 endPoint = new Vector3(0, .5f, 0);
-			Vector3 midPoint = new Vector3(travelDirection * .7f, (Position.y + endPoint.y) * .5f, 0);
+			Vector3 midPoint = new Vector3(travelDirection * .7f, (Position.Y + endPoint.Y) * .5f, 0);
 
 			if (reverseDirection)
 			{
-				endPoint.z *= -1;
-				midPoint.x *= -1;
-				midPoint.z *= -1;
+				endPoint.Z *= -1;
+				midPoint.X *= -1;
+				midPoint.Z *= -1;
 			}
 
 			tweener.TweenProperty(this, "position", midPoint, .2f);

@@ -164,8 +164,6 @@ namespace Project.Gameplay
 		private AudioStream speedBreakActivate;
 		[Export]
 		private AudioStream speedBreakDeactivate;
-		[Export]
-		private AudioStream timeBreakActivate;
 		//Audio players
 		[Export]
 		private AudioStreamPlayer breakSkillSfx;
@@ -279,9 +277,6 @@ namespace Project.Gameplay
 				//Reset volume and play
 				heartbeatSfx.VolumeDb = 0f;
 				heartbeatSfx.Play();
-
-				breakSkillSfx.Stream = timeBreakActivate;
-				breakSkillSfx.Play();
 			}
 			else
 			{

@@ -212,7 +212,7 @@ namespace Project.Gameplay
 			//Check walls
 			if (CheckWall(Skills.grindSettings.speed * PhysicsManager.physicsDelta)) return;
 
-			float horizontalOffset = Mathf.Abs(pathFollower.GetLocalPosition(Character.GlobalPosition).x); //Get local offset
+			float horizontalOffset = Mathf.Abs(pathFollower.GetLocalPosition(Character.GlobalPosition).X); //Get local offset
 
 			if (Character.VerticalSpd <= 0f)
 			{
@@ -298,11 +298,11 @@ namespace Project.Gameplay
 
 				if (Controller.jumpButton.wasPressed) //Jumping off rail can only happen when not shuffling
 				{
-					DisconnectFromRail();
-
 					//Check if the player is holding a direction parallel to rail.
 					Character.IsGrindstepJump = Character.IsHoldingDirection(railAngle + Mathf.Pi * .5f) ||
-					 Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f);
+						Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f);
+					DisconnectFromRail();
+
 					if (Character.IsGrindstepJump) //Grindstep
 					{
 						//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
@@ -370,7 +370,9 @@ namespace Project.Gameplay
 
 			Character.Skills.IsSpeedBreakEnabled = true;
 			Character.ResetMovementState();
-			Character.Animator.ResetState(.2f);
+
+			if (!Character.IsGrindstepJump)
+				Character.Animator.ResetState(.2f);
 			Character.Animator.SnapRotation(Character.MovementAngle);
 			Character.Effect.StopGrindrail(); //Stop creating sparks
 
@@ -394,8 +396,8 @@ namespace Project.Gameplay
 		private void UpdateInvisibleRailPosition()
 		{
 			railModel.GlobalPosition = Character.GlobalPosition;
-			railModel.Position = new Vector3(0, railModel.Position.y, railModel.Position.z); //Ignore player's x-offset
-			railMaterial.Set("uv_offset", railModel.Position.z % 1);
+			railModel.Position = new Vector3(0, railModel.Position.Y, railModel.Position.Z); //Ignore player's x-offset
+			railMaterial.Set("uv_offset", railModel.Position.Z % 1);
 		}
 
 		private void UpdateInvisibleRailLength()

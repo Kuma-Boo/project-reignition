@@ -1,6 +1,7 @@
-[gd_scene load_steps=54 format=3 uid="uid://dci1nlrc52f8x"]
+[gd_scene load_steps=53 format=3 uid="uid://dci1nlrc52f8x"]
 
 [ext_resource type="PackedScene" path="res://area/stage/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
 [ext_resource type="PackedScene" path="res://area/stage/2 dino jungle/act 1/environment/collision/DinoLeftCollision.tscn" id="2_bnu7f"]
 [ext_resource type="PackedScene" path="res://area/stage/2 dino jungle/act 1/environment/collision/DinoRightCollision.tscn" id="3_mgxrj"]
 [ext_resource type="Environment" path="res://area/stage/2 dino jungle/data/environment/Environment.tres" id="4_gsi68"]
@@ -18,25 +19,23 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="15_86eng"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="16_vyk20"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="17_18ult"]
-[ext_resource type="AudioStream" uid="uid://co4q20ch6prur" path="res://sound/voice/dinosaur jungle/sonic/en/DIN01_E08_SN.wav" id="18_0ewbe"]
-[ext_resource type="AudioStream" uid="uid://4ld4muvn54bs" path="res://sound/voice/dinosaur jungle/sonic/en/DIN01_E09_SN.wav" id="19_c41q5"]
-[ext_resource type="AudioStream" uid="uid://b0yq2rwlye2x4" path="res://sound/voice/dinosaur jungle/sonic/ja/DIN01_E08_SN.wav" id="20_dl0qv"]
-[ext_resource type="AudioStream" uid="uid://dt5xdgs5iq8ki" path="res://sound/voice/dinosaur jungle/sonic/ja/DIN01_E09_SN.wav" id="21_khaem"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="22_vku8w"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="23_rku1n"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="24_0y0cf"]
 [ext_resource type="PackedScene" uid="uid://b1xxprpqpebky" path="res://area/stage/2 dino jungle/data/environment/object/dino/DinoApatos.tscn" id="25_s85nr"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="26_d64di"]
-[ext_resource type="Curve3D" uid="uid://bmk4fd8ewvg2r" path="res://area/stage/2 dino jungle/act 1/environment/path/MainPath.tres" id="27_tm360"]
+[ext_resource type="Curve3D" path="res://area/stage/2 dino jungle/act 1/environment/path/MainPath.tres" id="27_tm360"]
 [ext_resource type="Curve3D" uid="uid://csp5ffuayd117" path="res://area/stage/2 dino jungle/act 1/environment/path/CaveLeftPath.tres" id="28_t1ofp"]
 [ext_resource type="Curve3D" uid="uid://dw630kxbepoc1" path="res://area/stage/2 dino jungle/act 1/environment/path/CaveRightPath.tres" id="29_uuyxq"]
 [ext_resource type="Curve3D" uid="uid://dlnbgcn5mxkuq" path="res://area/stage/2 dino jungle/act 1/environment/path/DinoLeftPath.tres" id="30_3m7r1"]
 [ext_resource type="Curve3D" uid="uid://bd4u0fcvtfbem" path="res://area/stage/2 dino jungle/act 1/environment/path/DinoRightPath.tres" id="31_5iw22"]
 [ext_resource type="Curve3D" uid="uid://b0iuvlb5xb8bd" path="res://area/stage/2 dino jungle/act 1/environment/path/TreePath.tres" id="32_5bcog"]
-[ext_resource type="PackedScene" uid="uid://dcyu1iuvha2k3" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="33_q44ch"]
+[ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="33_q44ch"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="34_eyh5k"]
+[ext_resource type="PackedScene" uid="uid://bb0wbyqxrs175" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="35_c15gk"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="35_vf0rg"]
-[ext_resource type="PackedScene" uid="uid://c3yfeneeeu8kk" path="res://area/stage/2 dino jungle/data/environment/BGM.tscn" id="36_8otvo"]
+[ext_resource type="Material" uid="uid://d0klutkn8da67" path="res://area/stage/2 dino jungle/data/environment/model/material/Water.tres" id="36_7bv1x"]
+[ext_resource type="PackedScene" path="res://area/stage/2 dino jungle/data/environment/BGM.tscn" id="36_8otvo"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0h2id"]
 radius = 2.0
@@ -245,7 +244,9 @@ size = Vector3(218, 2, 244)
 [sub_resource type="BoxShape3D" id="BoxShape3D_3jd5o"]
 size = Vector3(14, 30, 2)
 
-[node name="Static" type="Node"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+script = ExtResource("1_hpjme")
+mainPath = NodePath("Path/MainPath")
 
 [node name="Collision" type="Node3D" parent="."]
 visible = false
@@ -331,25 +332,25 @@ bone_name = "player"
 bone_idx = 8
 
 [node name="Player" type="Node3D" parent="Event/RiverEvent/RiverEvent/RiverEventRoot/Skeleton3D/PlayerBone"]
-transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 1.49012e-08, 8.19564e-08, 0, -1, 0, 0, 0)
 
 [node name="Camera" type="BoneAttachment3D" parent="Event/RiverEvent/RiverEvent/RiverEventRoot/Skeleton3D" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -185.129, -34.637, -472.886)
 bone_name = "camera"
 bone_idx = 9
 
-[node name="SpiralAutomationTrigger" parent="Event" node_paths=PackedStringArray("automationPath") instance=ExtResource("14_lokxv")]
+[node name="AnimationPlayer" parent="Event/RiverEvent/RiverEvent" index="1"]
+playback_process_mode = 0
+
+[node name="SpiralAutomationTrigger" parent="Event" instance=ExtResource("14_lokxv")]
 transform = Transform3D(-0.980615, 0, 0.195946, 0, 1, 0, -0.195946, 0, -0.980615, -439.622, -219.5, -845.88)
 distanceToTravel = 360.0
 startingPoint = 1586.0
-automationPath = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Event/SpiralAutomationTrigger"]
 shape = SubResource("SphereShape3D_0h2id")
 
-[node name="LogAutomationTrigger" parent="Event" node_paths=PackedStringArray("automationPath") instance=ExtResource("14_lokxv")]
+[node name="LogAutomationTrigger" parent="Event" instance=ExtResource("14_lokxv")]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -391.653, -263.264, -937.308)
-automationPath = NodePath("../../Path/TreePath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Event/LogAutomationTrigger"]
 shape = SubResource("SphereShape3D_iq0gp")
@@ -390,8 +391,6 @@ script = ExtResource("17_18ult")
 delays = [0.0, 0.5]
 displayLength = []
 textKeys = ["din_event_apato_so", "din_event_apato_so2"]
-englishVoiceClips = [ExtResource("18_0ewbe"), ExtResource("19_c41q5")]
-japaneseVoiceClips = [ExtResource("20_dl0qv"), ExtResource("21_khaem")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Event/Apatos/FirstApatos/Dino1Trigger/EventTrigger"]
 root_node = NodePath("../../..")
@@ -413,7 +412,8 @@ shape = SubResource("BoxShape3D_ktr8b")
 
 [node name="Dino1RecenterTrigger" parent="Event/Apatos/FirstApatos" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.999992, 0, -0.00394452, 0, 1, 0, 0.00394452, 0, 0.999992, -0.0780487, 32.392, -6.11658)
-triggerMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="RecenterLockout" type="Node3D" parent="Event/Apatos/FirstApatos/Dino1RecenterTrigger"]
 script = ExtResource("23_rku1n")
@@ -444,16 +444,12 @@ bones/10/rotation = Quaternion(0.00360799, -0.0112675, 0.048036, 0.998776)
 [node name="AnimationPlayer" parent="Event/Apatos/SecondApatos/DinoApatos" index="1"]
 autoplay = "apato-2"
 
-[node name="LeftPathCull" type="Node3D" parent="Event/Apatos/SecondApatos" node_paths=PackedStringArray("targetNode")]
+[node name="LeftPathCull" type="Node3D" parent="Event/Apatos/SecondApatos"]
 script = ExtResource("26_d64di")
-targetNode = NodePath("../../../../Collision/DinoLeftCollision")
-modifyTree = true
 startEnabled = true
 
-[node name="RightPathCull" type="Node3D" parent="Event/Apatos/SecondApatos" node_paths=PackedStringArray("targetNode")]
+[node name="RightPathCull" type="Node3D" parent="Event/Apatos/SecondApatos"]
 script = ExtResource("26_d64di")
-targetNode = NodePath("../../../../Collision/DinoRightCollision")
-modifyTree = true
 
 [node name="ResetEvent" type="Node3D" parent="Event/Apatos/SecondApatos" node_paths=PackedStringArray("animator")]
 script = ExtResource("16_vyk20")
@@ -549,6 +545,11 @@ shape = SubResource("BoxShape3D_3jd5o")
 environment = ExtResource("4_gsi68")
 
 [node name="BGM" parent="." instance=ExtResource("36_8otvo")]
+
+[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("35_c15gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -310, -237, -718)
+renderMask = 23
+reflectionMaterials = [ExtResource("36_7bv1x")]
 
 [editable path="Event/RiverEvent/RiverEvent"]
 [editable path="Event/Apatos/FirstApatos/DinoApatos"]

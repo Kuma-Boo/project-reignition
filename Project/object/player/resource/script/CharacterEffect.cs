@@ -50,7 +50,7 @@ namespace Project.Gameplay
 		private SFXLibraryResource materialSFXLibrary;
 		/// <summary> VFX for landing with a dust cloud. </summary>
 		[Export]
-		private GPUParticles3D landingDustParticle;
+		private GpuParticles3D landingDustParticle;
 		[Export]
 		private AudioStreamPlayer footstepChannel;
 		[Export]
@@ -119,7 +119,7 @@ namespace Project.Gameplay
 
 		[ExportGroup("VFX")]
 		[Export]
-		public GPUParticles3D grindrailVFX;
+		public GpuParticles3D grindrailVFX;
 		public void StartGrindrail() => grindrailVFX.Emitting = true;
 		public void StopGrindrail() => grindrailVFX.Emitting = false;
 	}

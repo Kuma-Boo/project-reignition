@@ -1,12 +1,12 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=10 format=3 uid="uid://c6vlrltnp4jhp"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_iec1i"]
-[ext_resource type="PackedScene" path="res://area/stage/2 dino jungle/act 1/StaticChaseOnly.tscn" id="1_tj0dc"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_tlcwl"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="3_5ajvl"]
 [ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/AutorunLockout.tres" id="4_dlj7f"]
-[ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="5_4dy7b"]
+[ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="5_4dy7b"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="6_k35aj"]
+[ext_resource type="PackedScene" uid="uid://dci1nlrc52f8x" path="res://area/stage/2 dino jungle/act 1/Static.tscn" id="7_85nhw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibixj"]
 size = Vector3(100, 100, 250)
@@ -18,7 +18,6 @@ size = Vector3(14, 12, 8)
 
 [node name="RingAct" type="Node3D" parent="."]
 script = ExtResource("1_iec1i")
-"Starting Path" = NodePath("../StaticChaseOnly/Path/MainPath")
 "Mission Type" = 2
 "Time Limit" = 0.0
 "Objective Count" = 100
@@ -32,13 +31,13 @@ script = ExtResource("1_iec1i")
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = null
-Completion/Animator = NodePath("")
 
 [node name="SpawnPosition" type="Node3D" parent="RingAct"]
 metadata/_edit_lock_ = true
 
 [node name="AutorunLockout" parent="RingAct/SpawnPosition" instance=ExtResource("2_tlcwl")]
-triggerMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Autorun" type="Node3D" parent="RingAct/SpawnPosition/AutorunLockout"]
 script = ExtResource("3_5ajvl")
@@ -65,4 +64,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193, -32, -505)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 5)
 shape = SubResource("BoxShape3D_kvbov")
 
-[node name="StaticChaseOnly" parent="." instance=ExtResource("1_tj0dc")]
+[node name="Static" parent="." instance=ExtResource("7_85nhw")]

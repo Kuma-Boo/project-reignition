@@ -73,7 +73,7 @@ namespace Project.Core
 					line2d.RemoveAt(i);
 				}
 
-				Camera3D cam = GetViewport().GetCamera3d();
+				Camera3D cam = GetViewport().GetCamera3D();
 				if (cam == null) return; //NO CAMERA
 
 				for (int i = line3d.Count - 1; i >= 0; i--)

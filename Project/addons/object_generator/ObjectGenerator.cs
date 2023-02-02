@@ -220,9 +220,9 @@ namespace Project.Editor
 					path.AddChild(follow);
 					follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
 
-					Vector3 offset = follow.GlobalTransform.Inverse().basis * (GlobalPosition - follow.GlobalPosition);
-					follow.HOffset = offset.x;
-					follow.VOffset = offset.y;
+					Vector3 offset = follow.GlobalTransform.Inverse().Basis * (GlobalPosition - follow.GlobalPosition);
+					follow.HOffset = offset.X;
+					follow.VOffset = offset.Y;
 
 					for (int i = 0; i < amount; i++)
 					{
@@ -233,9 +233,9 @@ namespace Project.Editor
 						if (vOffsetCurve != null)
 						{
 							if (followPathY)
-								spawnPosition.y += vOffsetCurve.Sample(i / divider);
+								spawnPosition.Y += vOffsetCurve.Sample(i / divider);
 							else
-								spawnPosition.y = GlobalPosition.y + vOffsetCurve.Sample(i / divider);
+								spawnPosition.Y = GlobalPosition.Y + vOffsetCurve.Sample(i / divider);
 						}
 
 						Spawn(spawnPosition, true);

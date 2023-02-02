@@ -11,7 +11,7 @@ namespace Project
 		{
 			if (ex != null) //Reduce memory leaks
 			{
-				Array<RID> excluded = new Array<RID>();
+				Array<Rid> excluded = new Array<Rid>();
 				for (int i = 0; i < ex.Count; i++)
 					excluded.Add(ex[i].GetRid());
 
@@ -33,15 +33,15 @@ namespace Project
 		}
 
 		//Global Directions
-		public static Vector3 Up(this Node3D s) => s.GlobalTransform.basis.y.Normalized();
-		public static Vector3 Down(this Node3D s) => -s.GlobalTransform.basis.y.Normalized();
-		public static Vector3 Forward(this Node3D s) => s.GlobalTransform.basis.z.Normalized();
-		public static Vector3 Back(this Node3D s) => -s.GlobalTransform.basis.z.Normalized();
-		public static Vector3 Right(this Node3D s) => s.GlobalTransform.basis.x.Normalized();
-		public static Vector3 Left(this Node3D s) => -s.GlobalTransform.basis.x.Normalized();
+		public static Vector3 Up(this Node3D s) => s.GlobalTransform.Basis.Y.Normalized();
+		public static Vector3 Down(this Node3D s) => -s.GlobalTransform.Basis.Y.Normalized();
+		public static Vector3 Forward(this Node3D s) => s.GlobalTransform.Basis.Z.Normalized();
+		public static Vector3 Back(this Node3D s) => -s.GlobalTransform.Basis.Z.Normalized();
+		public static Vector3 Right(this Node3D s) => s.GlobalTransform.Basis.X.Normalized();
+		public static Vector3 Left(this Node3D s) => -s.GlobalTransform.Basis.X.Normalized();
 
-		public static Vector3 RemoveVertical(this Vector3 v) => new Vector3(v.x, 0, v.z);
-		public static Vector2 Flatten(this Vector3 v) => new Vector2(v.x, v.z);
+		public static Vector3 RemoveVertical(this Vector3 v) => new Vector3(v.X, 0, v.Z);
+		public static Vector2 Flatten(this Vector3 v) => new Vector2(v.X, v.Z);
 
 		public static float InverseLerp(this Vector3 a, Vector3 b, Vector3 v)
 		{
@@ -67,7 +67,7 @@ namespace Project
 		/// </summary>
 		public static Vector3 GetLocalPosition(this Node3D p, Vector3 pos)
 		{
-			Vector3 localPosition = p.GlobalTransform.basis.Inverse() * (pos - p.GlobalPosition);
+			Vector3 localPosition = p.GlobalTransform.Basis.Inverse() * (pos - p.GlobalPosition);
 			return localPosition;
 		}
 
@@ -200,15 +200,15 @@ namespace Project
 		}
 		public static Vector2 SmoothDamp(this Vector2 current, Vector2 target, ref Vector2 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
-			Vector2 output = new Vector2(SmoothDamp(current.x, target.x, ref currentVelocity.x, smoothTime, maxSpeed),
-				SmoothDamp(current.y, target.y, ref currentVelocity.y, smoothTime, maxSpeed));
+			Vector2 output = new Vector2(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
+				SmoothDamp(current.Y, target.Y, ref currentVelocity.Y, smoothTime, maxSpeed));
 			return output;
 		}
 		public static Vector3 SmoothDamp(this Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
-			Vector3 output = new Vector3(SmoothDamp(current.x, target.x, ref currentVelocity.x, smoothTime, maxSpeed),
-				SmoothDamp(current.y, target.y, ref currentVelocity.y, smoothTime, maxSpeed),
-				SmoothDamp(current.z, target.z, ref currentVelocity.z, smoothTime, maxSpeed));
+			Vector3 output = new Vector3(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
+				SmoothDamp(current.Y, target.Y, ref currentVelocity.Y, smoothTime, maxSpeed),
+				SmoothDamp(current.Z, target.Z, ref currentVelocity.Z, smoothTime, maxSpeed));
 			return output;
 		}
 

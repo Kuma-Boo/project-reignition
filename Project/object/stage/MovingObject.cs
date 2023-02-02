@@ -62,10 +62,10 @@ namespace Project.Gameplay
 					break;
 
 				case "Movement/Horizontal Size":
-					size.x = (float)value;
+					size.X = (float)value;
 					break;
 				case "Movement/Vertical Size":
-					size.y = (float)value;
+					size.Y = (float)value;
 					break;
 				case "Movement/Radius":
 					radius = (float)value;
@@ -100,9 +100,9 @@ namespace Project.Gameplay
 					return angle;
 
 				case "Movement/Horizontal Size":
-					return size.x;
+					return size.X;
 				case "Movement/Vertical Size":
-					return size.y;
+					return size.Y;
 				case "Movement/Radius":
 					return radius;
 
@@ -187,8 +187,8 @@ namespace Project.Gameplay
 			{
 				Vector3 direction = Vector3.Forward.Rotated(Vector3.Up, Mathf.Tau * ratio);
 				targetPosition = direction * radius;
-				targetPosition.x += size.x * direction.x * .5f;
-				targetPosition.z += size.y * direction.z * .5f;
+				targetPosition.X += size.X * direction.X * .5f;
+				targetPosition.Z += size.Y * direction.Z * .5f;
 			}
 
 			if (verticalOrientation)

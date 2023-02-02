@@ -18,7 +18,7 @@ namespace Project.Core
 
 		private void UpdatePhysicsState()
 		{
-			physicsState = GetWorld3d().DirectSpaceState; //Update world's physics space
+			physicsState = GetWorld3D().DirectSpaceState; //Update world's physics space
 			EmitSignal(SignalName.PhysicsUpdated); //Emit signal
 		}
 
@@ -40,7 +40,7 @@ namespace Project.Core
 		private const string RAYCAST_NORMAL = "normal";
 		private const string RAYCAST_COLLIDER = "collider";
 
-		public static RaycastHit CastRay(Vector3 pos, Vector3 dir, bool hitAreas, uint mask = 2147483647, Array<RID> ex = null)
+		public static RaycastHit CastRay(Vector3 pos, Vector3 dir, bool hitAreas, uint mask = 2147483647, Array<Rid> ex = null)
 		{
 			Vector3 endPos = pos + dir;
 

@@ -18,7 +18,7 @@ namespace Project.Gameplay.Objects
 		private AnimationPlayer animator;
 		[Export]
 		private CameraSettingsResource cameraSettings;
-		[Export(PropertyHint.Layers3dPhysics)]
+		[Export(PropertyHint.Layers3DPhysics)]
 		private uint environmentMask;
 
 		private bool isActive;
@@ -119,11 +119,11 @@ namespace Project.Gameplay.Objects
 
 			float targetAngle = Character.PathFollower.ForwardAngle + Character.PathFollower.DeltaAngle;
 			Transform3D t = GlobalTransform;
-			t.basis.z = Vector3.Back;
-			t.basis.y = (frontOrientationChecker.GetCollisionNormal() + rearOrientationChecker.GetCollisionNormal()) * .5f;
-			t.basis.x = -t.basis.z.Cross(t.basis.y);
-			t.basis = GlobalTransform.basis.Slerp(t.basis.Orthonormalized(), .1f);
-			targetAngle -= Character.CalculateForwardAngle(t.basis.z);
+			t.Basis.Z = Vector3.Back;
+			t.Basis.Y = (frontOrientationChecker.GetCollisionNormal() + rearOrientationChecker.GetCollisionNormal()) * .5f;
+			t.Basis.X = -t.Basis.Z.Cross(t.Basis.Y);
+			t.Basis = GlobalTransform.Basis.Slerp(t.Basis.Orthonormalized(), .1f);
+			targetAngle -= Character.CalculateForwardAngle(t.Basis.Z);
 			t = t.RotatedLocal(Vector3.Up, targetAngle);
 			GlobalTransform = t.Orthonormalized();
 

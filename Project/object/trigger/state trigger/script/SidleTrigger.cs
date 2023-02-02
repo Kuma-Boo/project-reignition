@@ -84,7 +84,7 @@ namespace Project.Gameplay.Triggers
 
 		private void UpdateSidle()
 		{
-			float targetVelocity = (isFacingRight ? Controller.MovementAxis.x : -Controller.MovementAxis.x) * CYCLE_FREQUENCY;
+			float targetVelocity = (isFacingRight ? Controller.MovementAxis.X : -Controller.MovementAxis.X) * CYCLE_FREQUENCY;
 			if (Mathf.IsZeroApprox(velocity) || Mathf.Sign(targetVelocity) == Mathf.Sign(velocity))
 				velocity = Mathf.Lerp(velocity, targetVelocity, TRACTION_SMOOTHING);
 			else
@@ -142,11 +142,11 @@ namespace Project.Gameplay.Triggers
 			Falling, //Falling to rail
 			Hanging, //Jump recovery allowed
 			Recovery, //Recovering back to the ledge
-			Respawning, //No railing, or hung for too long
+			Respawning
 		}
 
 		private const float DAMAGE_STAGGER_LENGTH = .8f; //How long does the stagger animation last?
-		private const float DAMAGE_HANG_LENGTH = 10f; //How long can the player hang onto the rail?
+		private const float DAMAGE_HANG_LENGTH = 5f; //How long can the player hang onto the rail?
 		private const float DAMAGE_TRANSITION_LENGTH = .4f; //How long is the transition from staggering to hanging?
 
 		/// <summary>
@@ -172,7 +172,10 @@ namespace Project.Gameplay.Triggers
 			{
 				case DamageStates.Hanging:
 					if (cycleTimer >= DAMAGE_HANG_LENGTH) //Fall
+					{
 						StartRespawn();
+						Character.Animator.SidleHangFall();
+					}
 					else if (Controller.jumpButton.wasPressed) //Process inputs
 					{
 						//Jump back to the ledge
@@ -192,7 +195,10 @@ namespace Project.Gameplay.Triggers
 							Character.Animator.SidleHang();
 						}
 						else
+						{
 							StartRespawn();
+							Character.Animator.SidleFall();
+						}
 					}
 					break;
 
@@ -212,6 +218,11 @@ namespace Project.Gameplay.Triggers
 						Character.Animator.UpdateSidle(cycleTimer);
 					}
 					break;
+
+				case DamageStates.Respawning:
+					if (cycleTimer > .5f)
+						Character.StartRespawn();
+					break;
 			}
 		}
 
@@ -220,10 +231,8 @@ namespace Project.Gameplay.Triggers
 		/// </summary>
 		private void StartRespawn()
 		{
+			cycleTimer = 0;
 			damageState = DamageStates.Respawning;
-
-			Character.StartRespawn();
-			//TODO play falling animation
 		}
 
 		public void Respawn()

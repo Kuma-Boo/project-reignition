@@ -11,12 +11,12 @@ namespace Project.Gameplay
 	/// 2. Near clipping cannot be aligned to the surface, so objects underneath will still be rendered (looking for a fix)
 	/// </summary>
 	[Tool]
-	public partial class PlanarReflectionRenderer : Node
+	public partial class PlanarReflectionRenderer : Node3D
 	{
 		public static ViewportTexture ReflectionTexture { get; private set; }
 		public static readonly StringName REFLECTION_PARAMETER = "reflection_texture"; //All shaders that use reflections must have this parameter
 
-		[Export(PropertyHint.Layers3dRender)]
+		[Export(PropertyHint.Layers3DRender)]
 		private uint renderMask;
 
 		[Export]
@@ -28,16 +28,12 @@ namespace Project.Gameplay
 		private SubViewport reflectionViewport;
 		[Export]
 		private float nearClip = .05f;
-		[Export]
-		private bool editorPreview;
 
 		[Export]
 		public Array<ShaderMaterial> reflectionMaterials; //List of materials that use reflection_texture
 
 		[Export]
-		private Node3D reflectorNode; //Plane to reflect against. Must be facing up
-		[Export]
-		private float reflectorHeight; //Alternatively, specify reflection Y point here
+		private bool editorPreview; //Render in the editor?
 		private Vector3 previousCapturePosition;
 		private Vector3 previousCaptureRotation;
 
@@ -101,10 +97,8 @@ namespace Project.Gameplay
 			reflectionCamera.Far = mainCamera.Far;
 
 			//Update reflectionCamera's position
-			float reflectionHeight = reflectorHeight;
-			if (reflectorNode != null)
-				reflectionHeight = reflectorNode.GlobalPosition.y;
-			Vector3 projection = Vector3.Down * (mainCamera.GlobalPosition.y - reflectionHeight);
+			float reflectionHeight = GlobalPosition.Y;
+			Vector3 projection = Vector3.Down * (mainCamera.GlobalPosition.Y - reflectionHeight);
 			Vector3 targetPosition = mainCamera.GlobalPosition + projection * 2f;
 
 			//Update reflectionCamera's rotation

@@ -265,7 +265,7 @@ namespace Project.Gameplay
 			if (!IsLockoutActive || !ActiveLockoutData.recenterPlayer) return;
 
 			Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
-			float currentOffset = -PathFollower.FlatPlayerPositionDelta.x;
+			float currentOffset = -PathFollower.FlatPlayerPositionDelta.X;
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
 			{
@@ -548,7 +548,7 @@ namespace Project.Gameplay
 
 			float rotationAmount = PathFollower.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
 			Vector3 slopeDirection = groundNormal.Rotated(Vector3.Up, rotationAmount).Normalized();
-			slopeInfluence = slopeDirection.z * SLOPE_INFLUENCE_STRENGTH;
+			slopeInfluence = slopeDirection.Z * SLOPE_INFLUENCE_STRENGTH;
 		}
 
 		private void UpdateSlopeSpd()
@@ -856,6 +856,9 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Stomping;
 
 			//TODO Play a separate stomping animation if using a stomp skill
+
+			if (IsGrindstepJump)
+				Animator.ResetState(.1f);
 			Animator.Fall();
 		}
 		#endregion
@@ -1090,8 +1093,12 @@ namespace Project.Gameplay
 
 			if (useAutoAlignment)
 			{
-				MovementAngle = CalculateForwardAngle(launchData.InitialVelocity.RemoveVertical());
-				Animator.SnapRotation(MovementAngle);
+				Vector3 launchDirection = launchData.InitialVelocity.RemoveVertical();
+				if (!launchDirection.IsEqualApprox(Vector3.Zero))
+				{
+					MovementAngle = CalculateForwardAngle(launchDirection);
+					Animator.SnapRotation(MovementAngle);
+				}
 			}
 		}
 
@@ -1103,7 +1110,7 @@ namespace Project.Gameplay
 			else
 			{
 				Vector3 targetPosition = launchData.InterpolatePositionTime(launcherTime);
-				float heightDelta = targetPosition.y - GlobalPosition.y;
+				float heightDelta = targetPosition.Y - GlobalPosition.Y;
 				GlobalPosition = targetPosition;
 
 				if (heightDelta < 0) //Only check ground when falling
@@ -1186,6 +1193,7 @@ namespace Project.Gameplay
 
 			Vector3 movementDirection = GetMovementDirection();
 			Vector3 strafeDirection = movementDirection.Cross(UpDirection);
+
 			CheckMainWall(movementDirection);
 			CheckStrafeWall(strafeDirection);
 
@@ -1253,13 +1261,11 @@ namespace Project.Gameplay
 						if (axis.IsNormalized())
 						{
 							offsetVector = offsetVector.Rotated(axis, offsetVector.SignedAngleTo(Vector3.Up, axis));
-							snapDistance = offsetVector.y;
+							snapDistance = offsetVector.Y;
 						}
 					}
 				}
 
-				//Despite the name, floating seems to works better on the ground and grounded works better in the air
-				MotionMode = MotionModeEnum.Floating;
 				GlobalPosition -= groundHit.normal * snapDistance; //Snap to ground
 
 				if (IsOnGround)
@@ -1286,7 +1292,7 @@ namespace Project.Gameplay
 					orientationResetFactor = .2f;
 				else if (ActionState == ActionStates.Backflip)
 				{
-					float pathFollowerPitch = PathFollower.Forward().y;
+					float pathFollowerPitch = PathFollower.Forward().Y;
 					if (pathFollowerPitch >= -.4f) //Backflipping downhill; reset faster
 						orientationResetFactor = Mathf.Clamp(pathFollowerPitch, .1f, .2f);
 				}
@@ -1295,12 +1301,10 @@ namespace Project.Gameplay
 				else
 					orientationResetFactor = (VerticalSpd * .2f / RuntimeConstants.MAX_GRAVITY) - .05f;
 
-				if (ActionState == ActionStates.JumpDash || ActionState == ActionStates.Backflip || VerticalSpd > 0)
-					MotionMode = MotionModeEnum.Grounded;
-				else
-					MotionMode = MotionModeEnum.Floating;
-
-				UpDirection = UpDirection.Lerp(Vector3.Up, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
+				Vector3 targetUp = Vector3.Up;
+				if (Camera.ActiveSettings.isRollEnabled) //Use PathFollower.Up when on a tilted path.
+					targetUp = PathFollower.Up();
+				UpDirection = UpDirection.Lerp(targetUp, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
 
@@ -1311,8 +1315,15 @@ namespace Project.Gameplay
 
 			IsJumpClamped = false;
 			CanJumpDash = false;
-			IsGrindstepJump = false;
+
 			isAccelerationJumpQueued = false;
+			if (IsGrindstepJump)
+			{
+				StrafeSpeed = 0;
+				IsGrindstepJump = false;
+				MovementAngle = Animator.VisualAngle;
+				Animator.ResetState(.2f);
+			}
 
 			ResetActionState();
 			Lockon.ResetLockonTarget();
@@ -1420,6 +1431,7 @@ namespace Project.Gameplay
 				if (ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
 				{
 					float wallDelta = ExtensionMethods.DeltaAngleRad(CalculateForwardAngle(wallHit.normal), MovementAngle);
+
 					if (wallDelta >= Mathf.Pi * .9f) //Running into wall head-on
 					{
 						if (Skills.IsSpeedBreakActive) //Cancel speed break
@@ -1505,7 +1517,7 @@ namespace Project.Gameplay
 			float dot = forwardDirection.Dot(Vector3.Up);
 			if (Mathf.Abs(dot) > .9f) //Moving vertically
 			{
-				float angle = new Vector2(forwardDirection.x + forwardDirection.z, forwardDirection.y).Angle();
+				float angle = new Vector2(forwardDirection.X + forwardDirection.Z, forwardDirection.Y).Angle();
 				Vector3 axis = PathFollower.RightAxis; //Fallback
 				if (IsOnGround)
 					axis = forwardDirection.Cross(UpDirection).Normalized();

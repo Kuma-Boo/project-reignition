@@ -8,17 +8,17 @@ namespace Project.Core
 
 		public static RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
 
-		public static readonly Vector2i SCREEN_SIZE = new Vector2i(1920, 1080); //Working resolution is 1080p
-		public static readonly Vector2i HALF_SCREEN_SIZE = (Vector2i)((Vector2)SCREEN_SIZE * .5f);
+		public static readonly Vector2I SCREEN_SIZE = new Vector2I(1920, 1080); //Working resolution is 1080p
+		public static readonly Vector2I HALF_SCREEN_SIZE = (Vector2I)((Vector2)SCREEN_SIZE * .5f);
 
 		public override void _EnterTree() => Instance = this;
 		public override void _Process(double _) => UpdateShaderTime();
 
-		[Export(PropertyHint.Layers3dPhysics)]
+		[Export(PropertyHint.Layers3DPhysics)]
 		public uint environmentMask;
-		[Export(PropertyHint.Layers3dPhysics)]
+		[Export(PropertyHint.Layers3DPhysics)]
 		public uint particleCollisionLayer; //Collision layer for destructable particle effects
-		[Export(PropertyHint.Layers3dPhysics)]
+		[Export(PropertyHint.Layers3DPhysics)]
 		public uint particleCollisionMask; //Collision mask for destructable particle effects
 
 		public static readonly float GRAVITY = 28.0f;

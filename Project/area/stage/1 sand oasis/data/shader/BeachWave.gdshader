@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode specular_disabled, blend_add;
+render_mode specular_disabled;
 
 global uniform float time;
 uniform sampler2D main_tex : source_color, filter_linear;
@@ -23,5 +23,5 @@ void fragment()
 	
 	col *= COLOR;
 	ALBEDO = col.rgb;
-	ALPHA = col.a * .6;
+	ALPHA = col.a;
 }

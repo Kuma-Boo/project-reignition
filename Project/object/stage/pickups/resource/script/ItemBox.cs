@@ -99,7 +99,7 @@ namespace Project.Gameplay.Objects
 		private Vector3 spawnPosition; //Relative to ItemBox's orientation
 
 		private Vector3 LaunchPosition => GlobalPosition + Vector3.Up * .5f;
-		public Vector3 EndPosition => LaunchPosition + GlobalTransform.basis * spawnPosition;
+		public Vector3 EndPosition => LaunchPosition + GlobalTransform.Basis * spawnPosition;
 
 		public LaunchData GetLaunchData() => LaunchData.Create(LaunchPosition, EndPosition, arcHeight);
 
