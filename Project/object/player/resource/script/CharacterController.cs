@@ -23,7 +23,9 @@ namespace Project.Gameplay
 			CallDeferred(MethodName.ResetOrientation); //Start with proper orientation
 
 			PathFollower.SetActivePath(Stage.mainPath); //Attempt to autoload the stage's default path
+
 			Level.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
+			Level.UpdateRingCount(Skills.StartingRingCount, LevelSettings.MathModeEnum.Replace); //Start with the proper ring count
 			Level.Connect(LevelSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
 		}
 
@@ -72,6 +74,7 @@ namespace Project.Gameplay
 			JumpDash, //Also includes homing attack
 			Stomping, //Jump cancel
 			Backflip,
+			Grindstep, //Grind stepping
 		}
 
 		/// <summary>
@@ -80,15 +83,15 @@ namespace Project.Gameplay
 		public void ResetActionState() => ActionState = ActionStates.Normal;
 		private void UpdateStateMachine()
 		{
-			if (IsRespawning) return;
-
 			if (IsCountdownActive)
 			{
 				UpdateCountdown();
 				return;
 			}
 
-			UpdateInputs();
+			if (!IsRespawning)
+				UpdateInputs();
+
 			isCustomPhysicsEnabled = false;
 
 			switch (MovementState)
@@ -673,8 +676,6 @@ namespace Project.Gameplay
 		[Export]
 		public float jumpCurve = .95f;
 		public bool IsJumpClamped { get; private set; } //True after the player releases the jump button
-		/// <summary> Is the player switching between rails? </summary>
-		public bool IsGrindstepJump { get; set; }
 		private bool isAccelerationJumpQueued;
 		private float currentJumpTime; //Amount of time the jump button was held
 		private const float ACCELERATION_JUMP_LENGTH = .08f; //How fast the jump button needs to be released for an "acceleration jump"
@@ -845,6 +846,9 @@ namespace Project.Gameplay
 			currentJumpTime < .1f)
 				return;
 
+			if (IsGrindstepping)
+				StopGrindstep();
+
 			//Stomp
 			actionBufferTimer = 0;
 			MoveSpeed = StrafeSpeed = 0; //Kill horizontal speed
@@ -852,13 +856,10 @@ namespace Project.Gameplay
 			canLandingBoost = true;
 			Lockon.ResetLockonTarget();
 			Lockon.IsMonitoring = false;
-
 			ActionState = ActionStates.Stomping;
 
 			//TODO Play a separate stomping animation if using a stomp skill
 
-			if (IsGrindstepJump)
-				Animator.ResetState(.1f);
 			Animator.Fall();
 		}
 		#endregion
@@ -906,46 +907,81 @@ namespace Project.Gameplay
 			Animator.Backflip();
 		}
 		#endregion
+
+		#region GrindStep
+		public bool IsGrindstepping => ActionState == ActionStates.Grindstep;
+
+		public void StartGrindstep()
+		{
+			ActionState = ActionStates.Grindstep;
+			Animator.StartGrindStep();
+		}
+
+		public void StopGrindstep()
+		{
+			Animator.ResetState(.1f);
+			ResetActionState();
+		}
 		#endregion
 		#endregion
 
+		#endregion
+
 		#region Damage & Invincibility
-		public bool IsInvincible => invincibliltyTimer != 0;
-		private float invincibliltyTimer;
-		private const float INVINCIBILITY_LENGTH = 3f;
+		public bool IsInvincible => invincibilityTimer != 0;
+		private float invincibilityTimer;
+		private const float INVINCIBILITY_LENGTH = 5f;
+
+		public void StartInvincibility()
+		{
+			invincibilityTimer = INVINCIBILITY_LENGTH;
+			Animator.StartInvincibility();
+		}
 
 		private void UpdateInvincibility()
 		{
 			if (IsInvincible)
-				invincibliltyTimer = Mathf.MoveToward(invincibliltyTimer, 0, PhysicsManager.physicsDelta);
+				invincibilityTimer = Mathf.MoveToward(invincibilityTimer, 0, PhysicsManager.physicsDelta);
 		}
 
+		private const float DAMAGE_FRICTION = 20f;
 		private void UpdateDamage()
 		{
-			if (IsOnGround)
+			if (Mathf.IsZeroApprox(MoveSpeed) ||
+				(!previousKnockbackData.stayOnGround && IsOnGround))
 			{
 				ResetActionState();
 				return;
 			}
 
 			VerticalSpd -= RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta;
+			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, DAMAGE_FRICTION * PhysicsManager.physicsDelta);
 		}
 
 		[Signal]
-		public delegate void DamagedEventHandler(); //This signal is called anytime a hitbox collides with the player, regardless of invincibilty.
-		public enum KnockbackMode
+		public delegate void KnockbackEventHandler(); //This signal is called anytime a hitbox collides with the player, regardless of invincibilty.
+		public struct KnockbackData
 		{
-			Disabled,
-			Backward, //Bump the player back
-			Forward, //Bump the player forward
+			/// <summary> Should the player be knocked forward? Default is false. </summary>
+			public bool knockForward;
+			/// <summary> Knock the player around without bouncing them into the air. </summary>
+			public bool stayOnGround;
+			/// <summary> Apply knockback even when invincible? </summary>
+			public bool ignoreInvincibility;
+			/// <summary> Don't damage the player? </summary>
+			public bool disableDamage;
+			/// <summary> Always apply knockback, regardless of invincibility or state. </summary>
+			public bool forceActivation;
 		}
+		private KnockbackData previousKnockbackData;
 
 		/// <summary>
 		/// Called when the player takes damage or is being knocked around.
 		/// </summary>
-		public void Knockback(KnockbackMode knockbackMode = KnockbackMode.Backward)
+		public void StartKnockback(KnockbackData knockbackData = new KnockbackData())
 		{
-			EmitSignal(SignalName.Damaged);
+			EmitSignal(SignalName.Knockback); //Emit signal FIRST so external controllers can be alerted
+			if (IsInvincible && !knockbackData.ignoreInvincibility) return;
 
 			if (Lockon.IsHomingAttacking)
 				Lockon.StopHomingAttack();
@@ -953,31 +989,34 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive) //Disable speedbreak
 				Skills.ToggleSpeedBreak();
 
+			MovementAngle = PathFollower.ForwardAngle; //Prevent being knocked sideways
+
+			if (MovementState == MovementStates.Normal || knockbackData.forceActivation)
+			{
+				Animator.Hurt();
+				previousKnockbackData = knockbackData;
+
+				MoveSpeed = knockbackData.knockForward ? 8f : -8f;
+				if (!knockbackData.stayOnGround)
+				{
+					IsOnGround = false;
+					VerticalSpd = RuntimeConstants.GetJumpPower(1);
+				}
+			}
+
 			//Apply invincibility and drop rings
 			if (!IsInvincible)
 			{
-				ActionState = ActionStates.Damaged;
-				invincibliltyTimer = INVINCIBILITY_LENGTH;
-			}
+				StartInvincibility();
 
-			if (MovementState == MovementStates.Normal)
-			{
-				IsGrindstepJump = false;
-				IsOnGround = false;
-
-				MovementAngle = PathFollower.ForwardAngle; //Prevent being knocked sideways
-				Animator.Hurt();
-
-				switch (knockbackMode)
+				if (!knockbackData.disableDamage)
 				{
-					case KnockbackMode.Backward:
-						MoveSpeed = -8f;
-						VerticalSpd = RuntimeConstants.GetJumpPower(3f);
-						break;
-					case KnockbackMode.Forward:
-						MoveSpeed = 8f;
-						VerticalSpd = RuntimeConstants.GetJumpPower(3f);
-						break;
+					ActionState = ActionStates.Damaged;
+
+					if (Level.CurrentRingCount == 0) //No rings left!
+						StartRespawn();
+					else
+						Level.UpdateRingCount(20, LevelSettings.MathModeEnum.Subtract);
 				}
 			}
 		}
@@ -1017,12 +1056,16 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;
 
+			invincibilityTimer = 0;
 			GlobalPosition = Level.CurrentCheckpoint.GlobalPosition;
 			PathFollower.SetActivePath(Level.CheckpointPath); //Revert path
 			PathFollower.Resync();
 
 			ResetVelocity();
 			ResetOrientation();
+
+			Level.IncrementRespawnCount();
+			Level.UpdateRingCount(Skills.RespawnRingCount, LevelSettings.MathModeEnum.Replace, true); //Reset ring count
 
 			Camera.Respawn();
 			//Wait a single physics frame to ensure objects reset properly
@@ -1317,12 +1360,11 @@ namespace Project.Gameplay
 			CanJumpDash = false;
 
 			isAccelerationJumpQueued = false;
-			if (IsGrindstepJump)
+			if (IsGrindstepping)
 			{
 				StrafeSpeed = 0;
-				IsGrindstepJump = false;
+				StopGrindstep();
 				MovementAngle = Animator.VisualAngle;
-				Animator.ResetState(.2f);
 			}
 
 			ResetActionState();
@@ -1384,7 +1426,10 @@ namespace Project.Gameplay
 				{
 					GD.Print($"Crushed by {ceilingHit.collidedObject.Name}");
 					AddCollisionExceptionWith(ceilingHit.collidedObject); //Avoid clipping through the ground
-					Knockback();
+					StartKnockback(new KnockbackData()
+					{
+						ignoreInvincibility = true,
+					});
 					return;
 				}
 
@@ -1573,12 +1618,14 @@ namespace Project.Gameplay
 			actionBufferTimer = 0; //Reset action buffer from starting boost
 		}
 
-		private void OnLevelCompleted(bool _)
+		private void OnLevelCompleted()
 		{
 			//Disable everything
 			Lockon.IsMonitoring = false;
 			Skills.IsTimeBreakEnabled = false;
 			Skills.IsSpeedBreakEnabled = false;
+
+			AddLockoutData(Level.completionLockout);
 		}
 
 		public void OnObjectCollisionEnter(Node3D body)

@@ -1,12 +1,10 @@
 using Godot;
 using Project.Core;
 
-namespace Project.Interface.Menu
+namespace Project.Interface.Menus
 {
 	public partial class MainMenu : Menu
 	{
-		public static string KEY = "Main Menu"; //Menu dictionary key
-
 		[Export]
 		private AnimationPlayer animator;
 
@@ -22,30 +20,8 @@ namespace Project.Interface.Menu
 				TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.Hide), (uint)ConnectFlags.OneShot);
 				DisableProcessing();
 			}
-		}
-
-		public override void Show()
-		{
-			base.Show();
-
-			if (!memory.ContainsKey(KEY))
-				memory.Add(KEY, -1);
-
-			if (memory[KEY] != 0)
-				//_animator.Play("Show");
-
-				memory[KEY] = 0;
-		}
-
-		public override void Hide()
-		{
-			if (memory[KEY] == 0) //Returning to title screen
-			{
-				parentMenu.Show();
-				TransitionManager.FinishTransition();
-			}
-
-			base.Hide();
+			else
+				base.ProcessMenu();
 		}
 	}
 }

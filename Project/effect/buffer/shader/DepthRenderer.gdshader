@@ -4,7 +4,6 @@ render_mode unshaded, depth_draw_never, depth_test_disabled;
 global uniform float render_distance;
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
 
-
 void fragment()
 {
 	float depth = texture(DEPTH_TEXTURE, SCREEN_UV).x;

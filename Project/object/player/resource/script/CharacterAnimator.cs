@@ -10,7 +10,7 @@ namespace Project.Gameplay
 		[Export]
 		private AnimationTree animatorTree;
 		[Export]
-		private AnimationPlayer extraAnimationPlayer;
+		private AnimationPlayer eventAnimationPlayer;
 
 		/// <summary> Reference to the root blend tree of the animation tree. </summary>
 		private AnimationNodeBlendTree animationRoot;
@@ -38,10 +38,17 @@ namespace Project.Gameplay
 			sidleLeftState = (AnimationNodeStateMachinePlayback)animatorTree.Get("parameters/sidle_tree/sidle_left_state/playback");
 		}
 
+		public void StartInvincibility()
+		{
+			eventAnimationPlayer.Play("invincibility");
+			eventAnimationPlayer.Seek(0.0, true);
+		}
+
 		/// <summary> Called when the player respawns. Resets all animations. </summary>
 		public void Respawn()
 		{
 			normalState.Travel(GROUND_TREE);
+			eventAnimationPlayer.Play("respawn");
 		}
 
 		/// <summary>
@@ -67,7 +74,7 @@ namespace Project.Gameplay
 		public void PlayCountdown()
 		{
 			PlayOneshotAnimation(COUNTDOWN_ANIMATION);
-			extraAnimationPlayer.Play("countdown-flame");
+			eventAnimationPlayer.Play(COUNTDOWN_ANIMATION);
 
 			//Prevent sluggish transitions into gameplay
 			disableSpeedSmoothing = true;
@@ -318,7 +325,7 @@ namespace Project.Gameplay
 		/// </summary>
 		private void UpdateVisualRotation()
 		{
-			if (Character.IsGrindstepJump) return; //Use the same angle as the grindrail
+			if (Character.IsGrindstepping) return; //Use the same angle as the grindrail
 
 			//Don't update directions when externally controlled or on launchers
 			float targetRotation = Character.MovementAngle;

@@ -1,14 +1,23 @@
-[gd_scene load_steps=8 format=3 uid="uid://drjj80rcyaax8"]
+[gd_scene load_steps=10 format=3 uid="uid://bles7flo4fxjk"]
 
-[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/sprite/Background.png" id="1"]
-[ext_resource type="PackedScene" uid="uid://dvsnm477jfuyw" path="res://interface/menu/flames/Flames.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_4dqph"]
 [ext_resource type="Script" path="res://interface/menu/main/MainMenu.cs" id="3"]
 [ext_resource type="Texture2D" uid="uid://bwisxibidol7c" path="res://interface/menu/main/reference.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://juxc0jedx8xn" path="res://interface/menu/main/sprite/text/base en.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://cwptosd4ygb8j" path="res://interface/menu/main/sprite/text/highlight en.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://juxc0jedx8xn" path="res://interface/menu/main/texture/text/base en.png" id="5"]
+[ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="5_ken8k"]
+[ext_resource type="Texture2D" uid="uid://cwptosd4ygb8j" path="res://interface/menu/main/texture/text/highlight en.png" id="6"]
 
-[sub_resource type="CanvasItemMaterial" id="1"]
-blend_mode = 1
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a7agv"]
+shader = ExtResource("5_ken8k")
+shader_parameter/flash_amount = 1.0
+
+[sub_resource type="Animation" id="Animation_j7krn"]
+resource_name = "RESET"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bi2r3"]
+_data = {
+"RESET": SubResource("Animation_j7krn")
+}
 
 [node name="MainMenu" type="Control" node_paths=PackedStringArray("animator")]
 layout_mode = 3
@@ -23,10 +32,9 @@ submenus = []
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
-texture = ExtResource("1")
+texture = ExtResource("2_4dqph")
 
-[node name="RefCounted" type="TextureRect" parent="."]
-visible = false
+[node name="Reference" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
@@ -39,8 +47,8 @@ texture = ExtResource("5")
 region_enabled = true
 region_rect = Rect2(0, 0, 1024, 140)
 
-[node name="Highlight" type="Sprite2D" parent="Adventure"]
-material = SubResource("1")
+[node name="Glow" type="Sprite2D" parent="Adventure"]
+material = SubResource("ShaderMaterial_a7agv")
 texture = ExtResource("6")
 region_enabled = true
 region_rect = Rect2(0, 0, 1024, 140)
@@ -53,10 +61,10 @@ texture = ExtResource("5")
 region_enabled = true
 region_rect = Rect2(0, 140, 1024, 130)
 
-[node name="Highlight" type="Sprite2D" parent="Party"]
+[node name="Glow" type="Sprite2D" parent="Party"]
 visible = false
 self_modulate = Color(1, 1, 1, 0.392157)
-material = SubResource("1")
+material = SubResource("ShaderMaterial_a7agv")
 texture = ExtResource("6")
 region_enabled = true
 region_rect = Rect2(0, 140, 1024, 130)
@@ -69,10 +77,10 @@ texture = ExtResource("5")
 region_enabled = true
 region_rect = Rect2(0, 270, 1024, 120)
 
-[node name="Highlight" type="Sprite2D" parent="Book"]
+[node name="Glow" type="Sprite2D" parent="Book"]
 visible = false
 self_modulate = Color(1, 1, 1, 0.392157)
-material = SubResource("1")
+material = SubResource("ShaderMaterial_a7agv")
 texture = ExtResource("6")
 region_enabled = true
 region_rect = Rect2(0, 270, 1024, 120)
@@ -84,14 +92,14 @@ texture = ExtResource("5")
 region_enabled = true
 region_rect = Rect2(0, 390, 1024, 120)
 
-[node name="Highlight" type="Sprite2D" parent="Options"]
+[node name="Glow" type="Sprite2D" parent="Options"]
 visible = false
-material = SubResource("1")
+material = SubResource("ShaderMaterial_a7agv")
 texture = ExtResource("6")
 region_enabled = true
 region_rect = Rect2(0, 390, 1024, 120)
 
-[node name="Flames" parent="." instance=ExtResource("2")]
-layout_mode = 1
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bi2r3")
+}

@@ -1,7 +1,9 @@
-[gd_scene load_steps=24 format=3 uid="uid://l2uoabrmrkg3"]
+[gd_scene load_steps=37 format=3 uid="uid://l2uoabrmrkg3"]
 
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/Numbers.fnt" id="2_lj78h"]
+[ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="2_y70id"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/tile000.png" id="4_qopjr"]
+[ext_resource type="SpriteFrames" uid="uid://dyapcyhxvxwbp" path="res://interface/gameplay/hud/rings/RingSpriteFrames.tres" id="5_u8bqk"]
 [ext_resource type="Texture2D" uid="uid://d0le4lri64mpt" path="res://interface/gameplay/hud/soul gauge/blue/fill/FillTexture.tres" id="5_vr31j"]
 [ext_resource type="Texture2D" uid="uid://46fjg4qe6ode" path="res://interface/gameplay/hud/soul gauge/blue/surface/SurfaceTexture.tres" id="6_b8vd0"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/Sprites.png" id="7"]
@@ -16,7 +18,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
+tracks/0/path = NodePath("Current:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -28,26 +30,50 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CurrentAmount:modulate")
+tracks/1/path = NodePath("Loss/LossAmount:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("..:position")
+tracks/2/path = NodePath("Loss/LossAmount:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(128, 64)]
+"values": [Vector2(-136, -64)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Current/CurrentAmount:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Current:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(184, 64)]
 }
 
 [sub_resource type="Animation" id="1"]
@@ -56,7 +82,7 @@ step = 0.0416667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
+tracks/0/path = NodePath("Current:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -68,7 +94,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CurrentAmount:modulate")
+tracks/1/path = NodePath("Current/CurrentAmount:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -79,29 +105,82 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Animation" id="46"]
-resource_name = "damaged"
+resource_name = "damage"
 step = 0.0416667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("..:position")
+tracks/0/path = NodePath("Current:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0833333, 0.166667, 0.25, 0.291667),
+"times": PackedFloat32Array(0, 0.0834, 0.166667, 0.2502, 0.291667),
 "transitions": PackedFloat32Array(2, 0.428709, 0.4, 0.4, 1),
 "update": 0,
-"values": [Vector2(128, 64), Vector2(128, 32), Vector2(136, 56), Vector2(116, 72), Vector2(128, 64)]
+"values": [Vector2(184, 64), Vector2(184, 32), Vector2(192, 56), Vector2(172, 72), Vector2(184, 64)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Loss/LossAmount:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.416667, 0.666667),
+"transitions": PackedFloat32Array(0.5, 1, 2, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Loss/LossAmount:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.416667, 0.666667),
+"transitions": PackedFloat32Array(0.6, 1, 2, 1),
+"update": 0,
+"values": [Vector2(-300, -64), Vector2(400, -64), Vector2(400, -64), Vector2(960, -64)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Loss/RingLossSFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
-[sub_resource type="Animation" id="45"]
-resource_name = "ringless"
-loop_mode = 1
-step = 0.0416667
+[sub_resource type="Animation" id="Animation_dq8eb"]
+resource_name = "ring"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CurrentAmount:modulate")
+tracks/0/path = NodePath("Current/CurrentAmount:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_kv36n"]
+resource_name = "ringless"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Current/CurrentAmount:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -115,9 +194,62 @@ tracks/0/keys = {
 _data = {
 "RESET": SubResource("2"),
 "collect": SubResource("1"),
-"damaged": SubResource("46"),
-"ringless": SubResource("45")
+"damage": SubResource("46"),
+"ring": SubResource("Animation_dq8eb"),
+"ringless": SubResource("Animation_kv36n")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rarei"]
+animation = &"collect"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_jee8d"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0dnn"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1ry72"]
+animation = &"damage"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_wda3x"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nrpip"]
+animation = &"ring"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_akfrn"]
+animation = &"ringless"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ml7me"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_8ld87"]
+xfade_time = 0.05
+input_0/name = "enabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "disabled"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_06lyc"]
+graph_offset = Vector2(-447.538, 31.8623)
+nodes/gain-anim/node = SubResource("AnimationNodeAnimation_rarei")
+nodes/gain-anim/position = Vector2(-480, 96)
+nodes/gain_trigger/node = SubResource("AnimationNodeOneShot_jee8d")
+nodes/gain_trigger/position = Vector2(-304, 0)
+nodes/hold-anim/node = SubResource("AnimationNodeAnimation_n0dnn")
+nodes/hold-anim/position = Vector2(-480, -16)
+nodes/loss-anim/node = SubResource("AnimationNodeAnimation_1ry72")
+nodes/loss-anim/position = Vector2(-304, 224)
+nodes/loss_trigger/node = SubResource("AnimationNodeOneShot_wda3x")
+nodes/loss_trigger/position = Vector2(-96, 96)
+nodes/ring-anim/node = SubResource("AnimationNodeAnimation_nrpip")
+nodes/ring-anim/position = Vector2(-480, 464)
+nodes/ringless-anim/node = SubResource("AnimationNodeAnimation_akfrn")
+nodes/ringless-anim/position = Vector2(-480, 352)
+nodes/ringless_add/node = SubResource("AnimationNodeAdd2_ml7me")
+nodes/ringless_add/position = Vector2(80, 144)
+nodes/ringless_transition/node = SubResource("AnimationNodeTransition_8ld87")
+nodes/ringless_transition/position = Vector2(-160, 352)
+node_connections = [&"output", 0, &"ringless_add", &"gain_trigger", 0, &"hold-anim", &"gain_trigger", 1, &"gain-anim", &"loss_trigger", 0, &"gain_trigger", &"loss_trigger", 1, &"loss-anim", &"ringless_add", 0, &"loss_trigger", &"ringless_add", 1, &"ringless_transition", &"ringless_transition", 0, &"ringless-anim", &"ringless_transition", 1, &"ring-anim"]
 
 [sub_resource type="CanvasItemMaterial" id="57"]
 blend_mode = 1
@@ -370,7 +502,7 @@ _data = {
 "RESET": SubResource("60")
 }
 
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringDividerSprite", "ringAnimator", "time", "score", "bonusAnimator", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "time", "score", "bonusAnimator", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -378,17 +510,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("13")
-ringLabel = NodePath("RingCounter/CurrentRing/CurrentAmount")
-maxRingLabel = NodePath("RingCounter/RingMax")
-ringDividerSprite = NodePath("RingCounter/Divider")
-ringAnimator = NodePath("RingCounter/CurrentRing/AnimationPlayer")
+ringLabel = NodePath("Rings/Current/CurrentAmount")
+maxRingLabel = NodePath("Rings/Current/RingMax")
+ringLossLabel = NodePath("Rings/Loss/LossAmount")
+ringDividerSprite = NodePath("Rings/Current/Divider")
+ringAnimator = NodePath("Rings/AnimationTree")
 time = NodePath("Values/Time")
 score = NodePath("Values/Score")
 bonusAnimator = NodePath("Bonus/AnimationPlayer")
 bonusLabels = [NodePath("Bonus/LatestBonus"), NodePath("Bonus/List/Bonus1"), NodePath("Bonus/List/Bonus2"), NodePath("Bonus/List/Bonus3"), NodePath("Bonus/List/Bonus4"), NodePath("Bonus/List/Bonus5"), NodePath("Bonus/List/Bonus6")]
-objectiveSprite = NodePath("ObjectiveCounter/ObjectiveSprite")
-objectiveValue = NodePath("ObjectiveCounter/Value")
-objectiveMaxValue = NodePath("ObjectiveCounter/MaxValue")
+objectiveRoot = NodePath("Objectives")
+objectiveSprite = NodePath("Objectives/ObjectiveSprite")
+objectiveValue = NodePath("Objectives/Value")
+objectiveMaxValue = NodePath("Objectives/MaxValue")
 soulGauge = NodePath("SoulGauge/SoulGauge")
 soulGaugeRoot = NodePath("SoulGauge")
 soulGaugeFill = NodePath("SoulGauge/SoulGauge/Background/Fill")
@@ -396,7 +530,7 @@ soulGaugeBackground = NodePath("SoulGauge/SoulGauge/Background")
 soulGaugeAnimator = NodePath("SoulGauge/AnimationPlayer")
 metadata/_edit_lock_ = true
 
-[node name="RingCounter" type="Control" parent="."]
+[node name="Rings" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 128.0
@@ -405,67 +539,111 @@ offset_right = 544.0
 offset_bottom = 192.0
 metadata/_edit_lock_ = true
 
-[node name="RingMax" type="Label" parent="RingCounter"]
+[node name="Current" type="Control" parent="Rings"]
+anchors_preset = 0
+offset_left = 184.0
+offset_top = 64.0
+offset_right = 184.0
+offset_bottom = 64.0
+
+[node name="Ring" type="TextureRect" parent="Rings/Current"]
 layout_mode = 0
-offset_left = 288.0
-offset_top = 48.0
-offset_right = 429.0
-offset_bottom = 115.0
+offset_left = -184.0
+offset_top = -49.6
+offset_right = -88.0
+offset_bottom = 46.4
+scale = Vector2(1.2, 1.2)
+pivot_offset = Vector2(48, 48)
+texture = ExtResource("4_qopjr")
+
+[node name="CurrentAmount" type="Label" parent="Rings/Current"]
+layout_mode = 0
+offset_left = -88.0
+offset_top = -41.6
+offset_right = 56.0
+offset_bottom = 25.4
+scale = Vector2(1.2, 1.2)
+theme_override_fonts/font = ExtResource("2_lj78h")
+text = "000"
+vertical_alignment = 1
+
+[node name="RingMax" type="Label" parent="Rings/Current"]
+layout_mode = 0
+offset_left = 128.0
+offset_top = -16.0
+offset_right = 288.0
+offset_bottom = 56.0
 scale = Vector2(0.85, 0.85)
 theme_override_fonts/font = ExtResource("2_lj78h")
 text = "100"
 vertical_alignment = 1
 clip_text = true
 
-[node name="Divider" type="Sprite2D" parent="RingCounter"]
-position = Vector2(280, 64)
+[node name="Divider" type="Sprite2D" parent="Rings/Current"]
+position = Vector2(110.4, -1.6)
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("7")
 region_enabled = true
 region_rect = Rect2(120, 168, 64, 104)
 
-[node name="CurrentRing" type="Control" parent="RingCounter"]
-layout_mode = 1
+[node name="Loss" type="Control" parent="Rings"]
 anchors_preset = 0
-offset_left = 160.0
+offset_left = 48.0
 offset_top = 64.0
-offset_right = 160.0
+offset_right = 48.0
 offset_bottom = 64.0
 
-[node name="Ring" type="TextureRect" parent="RingCounter/CurrentRing"]
+[node name="LossAmount" type="Label" parent="Rings/Loss"]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 0, 0, 1)
 layout_mode = 0
-offset_left = -160.0
-offset_top = -48.0
-offset_right = -64.0
-offset_bottom = 48.0
-pivot_offset = Vector2(48, 48)
-texture = ExtResource("4_qopjr")
-
-[node name="CurrentAmount" type="Label" parent="RingCounter/CurrentRing"]
-layout_mode = 0
-offset_left = -64.0
-offset_top = -40.0
-offset_right = 80.0
-offset_bottom = 27.0
-scale = Vector2(1.2, 1.2)
+offset_left = -136.0
+offset_top = -64.0
+offset_right = 8.0
+offset_bottom = 3.0
+scale = Vector2(0.85, 0.85)
 theme_override_fonts/font = ExtResource("2_lj78h")
-text = "000"
+text = "-20"
 vertical_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="RingCounter/CurrentRing"]
+[node name="RingLossSFX" type="AudioStreamPlayer" parent="Rings/Loss"]
+stream = ExtResource("2_y70id")
+bus = &"SFX"
+
+[node name="RingsRoot" type="Node2D" parent="Rings/Loss"]
+visible = false
+
+[node name="Ring1" type="AnimatedSprite2D" parent="Rings/Loss/RingsRoot"]
+sprite_frames = ExtResource("5_u8bqk")
+autoplay = "default"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Rings"]
 libraries = {
 "": SubResource("AnimationLibrary_kw3qf")
 }
 
-[node name="ObjectiveCounter" type="Control" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="Rings"]
+tree_root = SubResource("AnimationNodeBlendTree_06lyc")
+anim_player = NodePath("../AnimationPlayer")
+parameters/gain_trigger/active = false
+parameters/gain_trigger/request = 0
+parameters/loss_trigger/active = false
+parameters/loss_trigger/request = 0
+parameters/ringless_add/add_amount = 1.0
+parameters/ringless_transition/current_state = "disabled"
+parameters/ringless_transition/transition_request = ""
+parameters/ringless_transition/current_index = 1
+
+[node name="Objectives" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 128.0
 offset_top = 192.0
 offset_right = 544.0
 offset_bottom = 320.0
+metadata/_edit_lock_ = true
 
-[node name="ObjectiveSprite" type="TextureRect" parent="ObjectiveCounter"]
+[node name="ObjectiveSprite" type="TextureRect" parent="Objectives"]
 layout_mode = 0
 offset_top = 16.0
 offset_right = 96.0
@@ -473,7 +651,7 @@ offset_bottom = 112.0
 pivot_offset = Vector2(0, 48)
 texture = ExtResource("4_qopjr")
 
-[node name="Value" type="Label" parent="ObjectiveCounter"]
+[node name="Value" type="Label" parent="Objectives"]
 layout_mode = 0
 offset_left = 96.0
 offset_top = 40.0
@@ -486,7 +664,7 @@ text = "00"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="MaxValue" type="Label" parent="ObjectiveCounter"]
+[node name="MaxValue" type="Label" parent="Objectives"]
 layout_mode = 0
 offset_left = 200.0
 offset_top = 40.0
@@ -497,7 +675,7 @@ theme_override_fonts/font = ExtResource("2_lj78h")
 text = "22"
 vertical_alignment = 1
 
-[node name="Divider" type="Label" parent="ObjectiveCounter"]
+[node name="Divider" type="Label" parent="Objectives"]
 layout_mode = 0
 offset_left = 168.0
 offset_top = 40.0

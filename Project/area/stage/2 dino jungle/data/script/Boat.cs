@@ -163,7 +163,7 @@ namespace Project.Gameplay.Objects
 			{
 				moveSpeed = speedVelocity = 0; //Kill speed
 				hitstunTimer = HITSTUN_LENGTH;
-				Character.Knockback();
+				Character.StartKnockback();
 			}
 			else //Knock the player off and respawn
 			{

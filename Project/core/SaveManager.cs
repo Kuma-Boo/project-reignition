@@ -146,7 +146,24 @@ namespace Project.Core
 		public static GameData ActiveGameData { get; private set; }
 		public class GameData
 		{
-			//public bool[] worldRingsCollected;
+			public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.IsSet(ConvertIntToWorldEnum(worldIndex));
+			public bool IsWorldRingUnlocked(int worldIndex) => worldRingsCollected.IsSet(ConvertIntToWorldEnum(worldIndex));
+
+			/// <summary>
+			/// Converts worldIndex to WorldEnum. World index starts at zero.
+			/// </summary>
+			private WorldEnum ConvertIntToWorldEnum(int worldIndex)
+			{
+				int returnIndex = 1;
+				for (int i = 0; i < worldIndex; i++)
+					returnIndex *= 2;
+
+				return (WorldEnum)returnIndex;
+			}
+
+			public WorldEnum worldRingsCollected;
+			public WorldEnum worldsUnlocked;
+
 			public int exp;
 			public int level;
 			public float playTime;
@@ -155,6 +172,20 @@ namespace Project.Core
 			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f;
 			public SkillRing skillRing;
 		}
+
+		[Flags]
+		public enum WorldEnum
+		{
+			LostPrologue = 1,
+			SandOasis = 2,
+			DinosaurJungle = 4,
+			EvilFoundry = 8,
+			LevitatedRuin = 16,
+			PirateStorm = 32,
+			SkeletonDome = 64,
+			NightPalace = 128
+		}
+		public const int WORLD_COUNT = 8;
 
 		public void SaveGame()
 		{
@@ -168,6 +199,7 @@ namespace Project.Core
 			{
 				level = 0,
 				skillRing = new SkillRing(),
+				worldsUnlocked = WorldEnum.LostPrologue + (int)WorldEnum.SandOasis + (int)WorldEnum.DinosaurJungle + (int)WorldEnum.LevitatedRuin
 			};
 		}
 		#endregion

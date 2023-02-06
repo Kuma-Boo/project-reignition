@@ -46,7 +46,8 @@ namespace Project.Gameplay.Triggers
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (!isInteractingWithPlayer) return;
+			if (!isInteractingWithPlayer ||
+			(Character.IsRespawning && Character.ActionState == CharacterController.ActionStates.Damaged)) return;
 
 			if (isActive)
 			{
@@ -78,8 +79,8 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.SnapRotation(0);
 			Character.Animator.StartSidle(isFacingRight);
 
-			if (!Character.IsConnected(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged)))
-				Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged));
+			if (!Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged)))
+				Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
 		}
 
 		private void UpdateSidle()
@@ -129,7 +130,7 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
 
 			damageState = DamageStates.Disabled;
-			Character.Disconnect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.OnPlayerDamaged));
+			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
 		}
 
 		#region Damage
@@ -147,7 +148,8 @@ namespace Project.Gameplay.Triggers
 
 		private const float DAMAGE_STAGGER_LENGTH = .8f; //How long does the stagger animation last?
 		private const float DAMAGE_HANG_LENGTH = 5f; //How long can the player hang onto the rail?
-		private const float DAMAGE_TRANSITION_LENGTH = .4f; //How long is the transition from staggering to hanging?
+		private const float DAMAGE_TRANSITION_LENGTH = 1f; //How long is the transition from staggering to hanging?
+		private const float RECOVERY_LENGTH = .84f; //How long does the recovery take?
 
 		/// <summary>
 		/// Called when the player hits a hazard.
@@ -156,9 +158,18 @@ namespace Project.Gameplay.Triggers
 		{
 			if (damageState != DamageStates.Disabled) return; //Damage routine has already started
 
+			if (LevelSettings.instance.CurrentRingCount == 0)
+			{
+				StopSidle();
+				Character.StartKnockback(new CharacterController.KnockbackData());
+				return;
+			}
+
 			damageState = DamageStates.Stagger;
 			velocity = 0;
 			cycleTimer = 0;
+
+			Character.Effect.PlayVoice("sidle hurt");
 			Character.Animator.SidleDamage();
 		}
 
@@ -181,6 +192,8 @@ namespace Project.Gameplay.Triggers
 						//Jump back to the ledge
 						cycleTimer = 0;
 						damageState = DamageStates.Recovery;
+
+						Character.Effect.PlayVoice("grunt");
 						Character.Animator.SidleRecovery();
 					}
 					break;
@@ -192,6 +205,7 @@ namespace Project.Gameplay.Triggers
 						if (IsOverFoothold)
 						{
 							damageState = DamageStates.Falling;
+							Character.IsOnGround = false;
 							Character.Animator.SidleHang();
 						}
 						else
@@ -211,6 +225,15 @@ namespace Project.Gameplay.Triggers
 					break;
 
 				case DamageStates.Recovery:
+					if (!Character.IsOnGround)
+					{
+						if (cycleTimer < RECOVERY_LENGTH)
+							return;
+
+						Character.IsOnGround = true;
+						Character.Effect.PlayLandingFX();
+					}
+
 					cycleTimer = 0;
 					if (Character.Animator.IsSidleMoving) //Finished
 					{

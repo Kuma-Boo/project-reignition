@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://ddkvne7im0v53" path="res://area/stage/0 lost prologue/data/environment/object/model/wonder/WonderBar5.gltf" id="1_g0qdb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q7ekq"]
+size = Vector3(5, 0.5, 0.5)
+
+[node name="WonderBar5" type="StaticBody3D" groups=["floor", "wall"]]
+
+[node name="WonderBar5" parent="." instance=ExtResource("1_g0qdb")]
+
+[node name="WonderBar5BloomMesh" parent="WonderBar5" index="1"]
+layers = 32768
+
+[node name="WonderBar5ZWriteMesh" parent="WonderBar5" index="2"]
+layers = 262144
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("BoxShape3D_q7ekq")
+
+[editable path="WonderBar5"]

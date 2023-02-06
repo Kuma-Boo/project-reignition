@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://d2qwu830cmisl" path="res://area/stage/0 lost prologue/data/environment/object/model/wonder/WonderBlock2.gltf" id="1_6cf36"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q7ekq"]
+size = Vector3(5, 2, 5)
+
+[node name="WonderBlock2" type="StaticBody3D" groups=["floor", "wall"]]
+
+[node name="WonderBlock2" parent="." instance=ExtResource("1_6cf36")]
+
+[node name="WonderBlock2BloomMesh" parent="WonderBlock2" index="1"]
+layers = 32768
+
+[node name="WonderBlock2ZWriteMesh" parent="WonderBlock2" index="2"]
+layers = 262144
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_q7ekq")
+
+[editable path="WonderBlock2"]

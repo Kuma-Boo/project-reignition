@@ -15,5 +15,8 @@ namespace Project.Core
 
 		/// <summary> Always keep stage geometry visible. </summary>
 		public static bool DisableStageCulling => EnableCheats && true;
+
+		/// <summary> Have all stages unlocked </summary>
+		public static bool UnlockAllStages => EnableCheats && true;
 	}
 }

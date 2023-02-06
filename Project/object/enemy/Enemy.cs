@@ -117,7 +117,7 @@ namespace Project.Gameplay
 					TakeDamage();
 				}
 				else if (damagePlayer)
-					Character.Knockback();
+					Character.StartKnockback();
 			}
 		}
 

@@ -44,10 +44,19 @@ namespace Project.Gameplay
 		[Export]
 		private Label maxRingLabel;
 		[Export]
+		private Label ringLossLabel;
+		[Export]
 		private Sprite2D ringDividerSprite;
 		[Export]
-		private AnimationPlayer ringAnimator;
+		private AnimationTree ringAnimator;
+
 		private const string RING_LABEL_FORMAT = "000";
+		private readonly StringName ENABLED_PARAMETER = "enabled";
+		private readonly StringName DISABLED_PARAMETER = "disabled";
+
+		private readonly StringName RING_GAIN_PARAMETER = "parameters/gain_trigger/request";
+		private readonly StringName RING_LOSS_PARAMETER = "parameters/loss_trigger/request";
+		private readonly StringName RINGLESS_PARAMETER = "parameters/ringless_transition/transition_request";
 
 		private void InitializeRings()
 		{
@@ -58,25 +67,26 @@ namespace Project.Gameplay
 				if (maxRingLabel.Visible)
 					maxRingLabel.Text = Level.ObjectiveCount.ToString(RING_LABEL_FORMAT);
 
-				ringLabel.Text = Level.CurrentRingCount.ToString(RING_LABEL_FORMAT);
-				if (Level.CurrentRingCount == 0) //Starting in a ringless state
-					ringAnimator.Play("ringless");
+				ringAnimator.Active = true;
+				UpdateRingCount(0, true);
 			}
 		}
 
-		private void UpdateRingCount(int amount)
+		private void UpdateRingCount(int amount, bool disableAnimations)
 		{
-			if (amount > 0) //Play animation
+			if (!disableAnimations && amount != 0) //Play animation
 			{
-				ringAnimator.Play("collect");
-				ringAnimator.Seek(0.0f, true);
-			}
-			else
-			{
-				ringAnimator.Play("damaged");
-				ringAnimator.AnimationSetNext("damaged", Level.CurrentRingCount == 0 ? "ringless" : "RESET");
+				if (amount > 0)
+					ringAnimator.Set(RING_GAIN_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				else
+				{
+					ringLossLabel.Text = amount.ToString();
+					GD.Print(ringLossLabel.Text);
+					ringAnimator.Set(RING_LOSS_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				}
 			}
 
+			ringAnimator.Set(RINGLESS_PARAMETER, Level.CurrentRingCount == 0 ? ENABLED_PARAMETER : DISABLED_PARAMETER);
 			ringLabel.Text = Level.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 		}
 		#endregion
@@ -173,6 +183,8 @@ namespace Project.Gameplay
 		#region Objectives
 		[ExportSubgroup("Objective Counter")]
 		[Export]
+		private Control objectiveRoot;
+		[Export]
 		private TextureRect objectiveSprite;
 		[Export]
 		private Label objectiveValue;
@@ -180,7 +192,8 @@ namespace Project.Gameplay
 		private Label objectiveMaxValue;
 		private void InitializeObjectives()
 		{
-			if (Level == null || Level.MissionType != LevelSettings.MissionTypes.Objective) return; //Don't do anything when not set to objective based mission
+			objectiveRoot.Visible = Level != null && Level.MissionType == LevelSettings.MissionTypes.Objective;
+			if (!objectiveRoot.Visible) return; //Don't do anything when objective counter isn't visible
 
 			objectiveSprite.Visible = true;
 			objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");
@@ -249,7 +262,7 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		public void LevelComplete(bool _) => SetVisibility(false); //Ignore parameter
+		public void LevelComplete() => SetVisibility(false); //Ignore parameter
 		public void SetVisibility(bool value) => Visible = value;
 	}
 }

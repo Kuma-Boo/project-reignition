@@ -11,7 +11,11 @@ namespace Project.Core
 		public static readonly Vector2I SCREEN_SIZE = new Vector2I(1920, 1080); //Working resolution is 1080p
 		public static readonly Vector2I HALF_SCREEN_SIZE = (Vector2I)((Vector2)SCREEN_SIZE * .5f);
 
-		public override void _EnterTree() => Instance = this;
+		public override void _EnterTree()
+		{
+			Instance = this;
+			Interface.Menus.Menu.InitializeMemory();
+		}
 		public override void _Process(double _) => UpdateShaderTime();
 
 		[Export(PropertyHint.Layers3DPhysics)]

@@ -33,15 +33,15 @@ namespace Project.Gameplay
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool));
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Float, PropertyHint.Range, "0,10,.05"));
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Float, PropertyHint.Range, "0,10,.05"));
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Float, PropertyHint.Range, "0,10,.05"));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Int));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Int));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int));
 
 			if (!skipScore)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,10"));
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,10"));
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,10"));
+				properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
+				properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
+				properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,4,.1"));
@@ -128,13 +128,13 @@ namespace Project.Gameplay
 					NotifyPropertyListChanged();
 					break;
 				case "Ranking/Gold Time":
-					goldTime = (float)value;
+					goldTime = (int)value;
 					break;
 				case "Ranking/Silver Time":
-					silverTime = (float)value;
+					silverTime = (int)value;
 					break;
 				case "Ranking/Bronze Time":
-					bronzeTime = (float)value;
+					bronzeTime = (int)value;
 					break;
 				case "Ranking/Gold Score":
 					goldScore = (int)value;
@@ -180,14 +180,49 @@ namespace Project.Gameplay
 		#region Level Settings
 		private bool skipScore; //Don't use score when ranking (i.e. for bosses)
 
-		//Requirements for time rank. Format is in minutes. (.5 is 30 seconds)
-		private float goldTime;
-		private float silverTime;
-		private float bronzeTime;
+		//Requirements for time rank. Format is in seconds.
+		private int goldTime;
+		private int silverTime;
+		private int bronzeTime;
 		//Requirement for score rank
 		private int goldScore;
 		private int silverScore;
 		private int bronzeScore;
+
+		/// <summary>
+		/// Calculates the rank, from -1 <-> 3.
+		/// </summary>
+		public int CalculateRank()
+		{
+			if (LevelState == LevelStateEnum.Failed)
+				return -1;
+
+			int rank = 0; //DEFAULT - No rank
+
+			if (skipScore)
+			{
+				if (CurrentTime <= goldTime)
+					rank = 3;
+				else if (CurrentTime <= silverTime)
+					rank = 2;
+				else if (CurrentTime <= bronzeTime)
+					rank = 1;
+			}
+			else if (CurrentTime <= bronzeTime && CurrentScore >= bronzeScore)
+			{
+				if (CurrentTime <= goldTime && CurrentScore >= silverScore)
+					rank = 3;
+				else if (CurrentTime >= silverTime || CurrentScore <= silverScore)
+					rank = 1;
+				else
+					rank = 2;
+			}
+
+			if (rank >= 3 && RespawnCount != 0) //Limit to silver if a respawn occured
+				rank = 2;
+
+			return rank;
+		}
 
 		private float TimeLimit { get; set; } //Level time limit, in seconds
 		public int ObjectiveCount { get; private set; } //What's the target amount for the current objective?
@@ -204,38 +239,47 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Level Data
-		public int CurrentScore { get; private set; } //How high is the current score?
-		public string DisplayScore { get; private set; } //Current score formatted to eight zeros
-		[Signal]
-		public delegate void ScoreChangedEventHandler(); //Score has changed, normally occours from a bonus
-		public enum ScoreFunction //List of ways the score can be modified
+		public enum MathModeEnum //List of ways the score can be modified
 		{
 			Add,
 			Subtract,
 			Multiply,
 			Replace
 		}
-		private const string SCORE_FORMATTING = "00000000";
-		public void ChangeScore(int amount, ScoreFunction func)
+		/// <summary>
+		/// Calculates value based on provided MathMode.
+		/// </summary>
+		private int CalculateMath(int value, int amount, MathModeEnum mode)
 		{
-			switch (func)
+			switch (mode)
 			{
-				case ScoreFunction.Add:
-					CurrentScore += amount;
+				case MathModeEnum.Add:
+					value += amount;
 					break;
-				case ScoreFunction.Subtract:
-					CurrentScore -= amount;
-					if (CurrentScore < 0)
-						CurrentScore = 0;
+				case MathModeEnum.Subtract:
+					value -= amount;
+					if (value < 0) //Clamp to zero
+						value = 0;
 					break;
-				case ScoreFunction.Multiply:
-					CurrentScore *= amount;
+				case MathModeEnum.Multiply:
+					value *= amount;
 					break;
-				case ScoreFunction.Replace:
-					CurrentScore = amount;
+				case MathModeEnum.Replace:
+					value = amount;
 					break;
 			}
+			return value;
+		}
 
+		public int CurrentScore { get; private set; } //How high is the current score?
+		public string DisplayScore { get; private set; } //Current score formatted to eight zeros
+		[Signal]
+		public delegate void ScoreChangedEventHandler(); //Score has changed, normally occours from a bonus
+
+		private const string SCORE_FORMATTING = "00000000";
+		public void UpdateScore(int amount, MathModeEnum mode)
+		{
+			CurrentScore = CalculateMath(CurrentScore, amount, mode);
 			DisplayScore = CurrentScore.ToString(SCORE_FORMATTING);
 			EmitSignal(SignalName.ScoreChanged);
 		}
@@ -262,6 +306,9 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.BonusAdded, (int)type);
 		}
 
+		public int RespawnCount { get; private set; } //How high many times did the player have to respawn?
+		public void IncrementRespawnCount() => RespawnCount++;
+
 		//Objectives
 		public int CurrentObjectiveCount { get; private set; } //How much has the player currently completed?
 		[Signal]
@@ -281,31 +328,30 @@ namespace Project.Gameplay
 		public int CurrentRingCount { get; private set; } //How many rings is the player currently holding?
 		[Signal]
 		public delegate void RingChangedEventHandler(int change); //Ring count has changed
-		public void UpdateRingCount(int amount)
+		public void UpdateRingCount(int amount, MathModeEnum mode, bool disableAnimations = false)
 		{
-			CurrentRingCount += amount;
-			if (CurrentRingCount < 0) //Clamp to zero
-				CurrentRingCount = 0;
-			else if (MissionType == MissionTypes.Ring && CurrentRingCount >= ObjectiveCount) //For ring based missions
+			int previousAmount = CurrentRingCount;
+			CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
+			if (MissionType == MissionTypes.Ring && CurrentRingCount >= ObjectiveCount) //For ring based missions
 			{
 				CurrentRingCount = ObjectiveCount; //Clamp
 				FinishLevel(true);
 			}
 
-			EmitSignal(SignalName.RingChanged, amount);
+			EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 		}
 
 		//Time
 		[Signal]
 		public delegate void TimeChangedEventHandler(); //Time has changed.
 
-		public float CurrentTime { get; private set; } //How long has the player been on this level?
+		public float CurrentTime { get; private set; } //How long has the player been on this level? (In Seconds)
 		public string DisplayTime { get; private set; } //Current time formatted in mm:ss.ff
 
 		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
 		private void UpdateTime()
 		{
-			if (isLevelFinished || Interface.Countdown.IsCountdownActive) return;
+			if (IsLevelFinished || Interface.Countdown.IsCountdownActive) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; //Add current time
 			if (TimeLimit == 0) //No time limit
@@ -317,8 +363,8 @@ namespace Project.Gameplay
 			{
 				TimeSpan time = TimeSpan.FromSeconds(Mathf.Clamp(TimeLimit - CurrentTime, 0, TimeLimit));
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
-				if (CurrentTime > TimeLimit)
-					FinishLevel(false); //Time's up!
+				if (CurrentTime >= TimeLimit) //Time's up!
+					FinishLevel(true);
 			}
 
 			EmitSignal(SignalName.TimeChanged);
@@ -326,16 +372,21 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Level Completion
-		private bool isLevelFinished;
+		public LockoutResource completionLockout;
+		public enum LevelStateEnum
+		{
+			Incomplete,
+			Failed,
+			Success,
+		}
+		public LevelStateEnum LevelState { get; private set; }
+		private bool IsLevelFinished => LevelState != LevelStateEnum.Incomplete;
 		private float completionDelay;
-		private LockoutResource completionLockout;
 
 		[Signal]
-		public delegate void LevelCompletedEventHandler(bool isSuccess); //Called when level is completed
-		public void FinishLevel(bool isSuccess)
+		public delegate void LevelCompletedEventHandler(); //Called when level is completed
+		public void FinishLevel(bool wasSuccessful)
 		{
-			CharacterController.instance.AddLockoutData(completionLockout); //Lockout player
-
 			//TODO Calculate rank
 			//GameplayInterface.instance.Score;
 			if (StageSettings.instance.StartCompletionDemo()) //Attempt to start the completion demo
@@ -352,8 +403,8 @@ namespace Project.Gameplay
 				}
 			}
 
-			isLevelFinished = true;
-			EmitSignal(SignalName.LevelCompleted, isSuccess);
+			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
+			EmitSignal(SignalName.LevelCompleted);
 		}
 
 		#endregion

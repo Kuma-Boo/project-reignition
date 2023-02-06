@@ -139,7 +139,7 @@ namespace Project.Gameplay.Objects
 		public void DamagePlayer()
 		{
 			DropPlayer();
-			Character.Knockback();
+			Character.StartKnockback();
 		}
 	}
 }

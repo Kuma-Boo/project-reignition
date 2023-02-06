@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 
 namespace Project.Gameplay
 {
@@ -16,6 +15,7 @@ namespace Project.Gameplay
 		public override void _Ready()
 		{
 			/*
+			//Use this code snippet to figure out the hint key for arrays
 			foreach (Dictionary item in GetPropertyList())
 			{
 				if ((string)item["name"] == "test")
@@ -23,9 +23,6 @@ namespace Project.Gameplay
 			}
 			*/
 
-			/*
-			//Use this code snippet to figure out the hint key for arrays
-			*/
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechStart, new Callable(this, MethodName.MuteGameplayVoice));
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
 		}

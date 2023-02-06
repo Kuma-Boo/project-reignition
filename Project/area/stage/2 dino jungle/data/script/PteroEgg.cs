@@ -87,7 +87,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (!a.IsInGroup("player")) return;
 
-			Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.Frighten), (uint)ConnectFlags.OneShot);
+			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Frighten), (uint)ConnectFlags.OneShot);
 			PteroEggManager.PickUpEgg(this);
 		}
 

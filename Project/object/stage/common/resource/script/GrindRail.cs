@@ -217,7 +217,7 @@ namespace Project.Gameplay
 			if (Character.VerticalSpd <= 0f)
 			{
 				if (horizontalOffset < GRIND_RAIL_SNAPPING ||
-					(Character.IsGrindstepJump && horizontalOffset < GRINDSTEP_RAIL_SNAPPING)) //Start grinding
+					(Character.IsGrindstepping && horizontalOffset < GRINDSTEP_RAIL_SNAPPING)) //Start grinding
 					ActivateRail();
 			}
 		}
@@ -225,7 +225,7 @@ namespace Project.Gameplay
 		private void ActivateRail()
 		{
 			isActive = true;
-			Character.IsGrindstepJump = false; //Reset grind step
+			Character.ResetActionState(); //Reset grind step
 
 			isFadingSFX = false;
 			sfx.VolumeDb = 0f; //Reset volume
@@ -253,7 +253,7 @@ namespace Project.Gameplay
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); //Snap
 			Character.Effect.StartGrindrail(); //Start creating sparks
 
-			Character.Connect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail));
+			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.DisconnectFromRail));
 			Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail));
 
 			EmitSignal(SignalName.GrindStarted);
@@ -298,12 +298,14 @@ namespace Project.Gameplay
 
 				if (Controller.jumpButton.wasPressed) //Jumping off rail can only happen when not shuffling
 				{
-					//Check if the player is holding a direction parallel to rail.
-					Character.IsGrindstepJump = Character.IsHoldingDirection(railAngle + Mathf.Pi * .5f) ||
-						Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f);
+					//Check if the player is holding a direction parallel to rail and perform a grindstep
+					if (Character.IsHoldingDirection(railAngle + Mathf.Pi * .5f) ||
+						Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f))
+						Character.StartGrindstep();
+
 					DisconnectFromRail();
 
-					if (Character.IsGrindstepJump) //Grindstep
+					if (Character.IsGrindstepping) //Grindstep
 					{
 						//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
 						float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), railAngle);
@@ -371,14 +373,14 @@ namespace Project.Gameplay
 			Character.Skills.IsSpeedBreakEnabled = true;
 			Character.ResetMovementState();
 
-			if (!Character.IsGrindstepJump)
+			if (!Character.IsGrindstepping)
 				Character.Animator.ResetState(.2f);
 			Character.Animator.SnapRotation(Character.MovementAngle);
 			Character.Effect.StopGrindrail(); //Stop creating sparks
 
 			//Disconnect signals
-			if (Character.IsConnected(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail)))
-				Character.Disconnect(CharacterController.SignalName.Damaged, new Callable(this, MethodName.DisconnectFromRail));
+			if (Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.DisconnectFromRail)))
+				Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.DisconnectFromRail));
 			if (Character.IsConnected(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail)))
 				Character.Disconnect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail));
 

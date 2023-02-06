@@ -1,0 +1,120 @@
+[gd_scene load_steps=16 format=3 uid="uid://bp1rsbmvddu8o"]
+
+[ext_resource type="Texture2D" uid="uid://b0njep2cg6tgy" path="res://interface/transition/autosave/autosave.png" id="1_ek1qk"]
+[ext_resource type="Texture2D" uid="uid://csb6m1pewriyf" path="res://interface/transition/autosave/spark.png" id="2_jre2l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lrggo"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(0, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy643"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(42, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qr1jp"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(84, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1f107"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(0, 42, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72x5e"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(42, 42, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yema7"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(84, 42, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvnr7"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(0, 84, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_78jpu"]
+atlas = ExtResource("1_ek1qk")
+region = Rect2(42, 84, 42, 42)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_anpr1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lrggo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy643")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qr1jp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1f107")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_72x5e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yema7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fvnr7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_78jpu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 24.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_s3kno"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_38f7c"]
+offsets = PackedFloat32Array(0, 0.194346, 0.784452, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nhq5y"]
+gradient = SubResource("Gradient_38f7c")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_evsq5"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(15, 25, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 0.25
+color_ramp = SubResource("GradientTexture1D_nhq5y")
+
+[node name="Autosave" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadingSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(1792, 960)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_anpr1")
+autoplay = "default"
+
+[node name="Sparks" type="GPUParticles2D" parent="LoadingSprite"]
+material = SubResource("CanvasItemMaterial_s3kno")
+amount = 4
+process_material = SubResource("ParticleProcessMaterial_evsq5")
+texture = ExtResource("2_jre2l")
+randomness = 0.6
+fixed_fps = 0
+interpolate = false
+fract_delta = false
+visibility_rect = Rect2(-50, -50, 100, 100)

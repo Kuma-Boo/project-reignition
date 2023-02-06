@@ -1,7 +1,7 @@
 using Godot;
 using Project.Core;
 
-namespace Project.Interface.Menu
+namespace Project.Interface.Menus
 {
 	/// <summary>
 	/// Press start. Also plays an intro cutscene if you wait long enough.
@@ -15,10 +15,7 @@ namespace Project.Interface.Menu
 		private float cutsceneTimer;
 		private const float CUTSCENE_TIME_LENGTH = 5f;
 
-		protected override void SetUp()
-		{
-			Show();
-		}
+		protected override void SetUp() => ShowMenu();
 
 		protected override void ProcessMenu()
 		{
@@ -26,33 +23,30 @@ namespace Project.Interface.Menu
 			{
 				if (Controller.pauseButton.wasPressed || Controller.jumpButton.wasPressed)
 					FinishCutscene();
-
-				return;
 			}
-
-			cutsceneTimer += PhysicsManager.physicsDelta;
-			if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
-			{
-				StartCutscene();
-				return;
-			}
-
-			if (Controller.AnyButtonPressed)
+			else if (Controller.AnyButtonPressed)
 			{
 				//Change menu
-				animator.Play("MenuTransition");
-				_submenus[0].Show(); //Activate main menu (submenu 0)
+				animator.Play("confirm");
+				_submenus[0].ShowMenu(); //Activate main menu (submenu 0)
 				DisableProcessing();
+			}
+			else
+			{
+				cutsceneTimer += PhysicsManager.physicsDelta;
+				if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
+				{
+					StartCutscene();
+					return;
+				}
 			}
 		}
 
-		public override void Show()
+		public override void ShowMenu()
 		{
-			base.Show();
-
 			animator.Play("RESET");
-			animator.Advance(0);
-			animator.Play("TitleSpawn");
+			animator.Seek(0, true);
+			animator.Play("show");
 
 			cutsceneTimer = 0;
 		}
@@ -60,16 +54,14 @@ namespace Project.Interface.Menu
 		private void StartCutscene()
 		{
 			isCutsceneActive = true;
-			animator.Play("CutsceneTransition");
+			animator.Play("cutscene-start");
 		}
 
 		private void FinishCutscene()
 		{
 			cutsceneTimer = 0;
 			isCutsceneActive = false;
-			animator.Play("RESET");
-			animator.Advance(0);
-			animator.Play("CutsceneFinishTransition");
+			animator.Play("cutscene-finish");
 		}
 	}
 }
