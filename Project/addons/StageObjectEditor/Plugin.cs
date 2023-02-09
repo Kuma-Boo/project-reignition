@@ -121,7 +121,6 @@ namespace Project.Editor
 		private void UpdateItemBox(Control overlay)
 		{
 			ItemBox box = (target as ItemBox);
-			if (box.autoCollect) return; //No paths
 
 			DrawLaunchData(overlay, box.GetLaunchData(), DEFAULT_DRAW_COLOR);
 			if (box.spawnAmount > 1)

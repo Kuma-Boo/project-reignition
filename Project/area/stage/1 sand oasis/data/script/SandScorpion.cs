@@ -251,7 +251,7 @@ namespace Project.Gameplay.Bosses
 				GetTree().Root.AddChild(missilePool[i]);
 			}
 
-			int spawnFrom = RuntimeConstants.randomNumberGenerator.RandiRange(0, 2);
+			int spawnFrom = Runtime.randomNumberGenerator.RandiRange(0, 2);
 			Vector3 spawnPosition = missilePositions[spawnFrom].GlobalPosition;
 			missilePool[i].Launch(Objects.LaunchData.Create(spawnPosition, GetTargetMissilePosition(i), 5));
 		}
@@ -266,7 +266,7 @@ namespace Project.Gameplay.Bosses
 			pathFollower.Progress = Character.PathFollower.Progress + offsetPrediction;
 			pathFollower.HOffset = LocalPlayerPosition; //Works since the path is flat
 			if (i != 0 && i < MISSILE_COUNT - 1) //Slightly randomize the middle missiles
-				pathFollower.HOffset += RuntimeConstants.randomNumberGenerator.RandfRange(-1f, 1f);
+				pathFollower.HOffset += Runtime.randomNumberGenerator.RandfRange(-1f, 1f);
 
 			Vector3 targetPosition = pathFollower.GlobalPosition;
 			pathFollower.Progress = progress; //Reset progress

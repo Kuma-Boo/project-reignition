@@ -173,7 +173,7 @@ namespace Project.Gameplay.Bosses
 							else if (timer >= DUEL_DIALOG_DELAY) //Hint
 							{
 								duelCharged = true;
-								duelVoices[RuntimeConstants.randomNumberGenerator.RandiRange(3, 5)].Activate();
+								duelVoices[Runtime.randomNumberGenerator.RandiRange(3, 5)].Activate();
 							}
 						}
 						else if (timer >= CurrentAttack.Startup)
@@ -225,7 +225,7 @@ namespace Project.Gameplay.Bosses
 			duelCharged = false;
 			isNearPlayer = true;
 			distanceVelocity = 0;
-			duelVoices[RuntimeConstants.randomNumberGenerator.RandiRange(0, 1)].Activate(); //Play audio clip
+			duelVoices[Runtime.randomNumberGenerator.RandiRange(0, 1)].Activate(); //Play audio clip
 
 			//Update camera
 			duelCamera.distance = 35f;

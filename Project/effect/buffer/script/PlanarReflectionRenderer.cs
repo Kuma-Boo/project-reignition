@@ -110,7 +110,7 @@ namespace Project.Gameplay
 			if (Engine.IsEditorHint())
 				reflectionViewport.Size = (Vector2I)mainCamera.GetViewport().GetVisibleRect().Size;
 			else
-				reflectionViewport.Size = RuntimeConstants.HALF_SCREEN_SIZE;
+				reflectionViewport.Size = Runtime.HALF_SCREEN_SIZE;
 
 			reflectionViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 		}

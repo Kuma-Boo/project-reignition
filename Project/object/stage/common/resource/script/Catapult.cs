@@ -35,7 +35,7 @@ namespace Project.Gameplay.Objects
 		private Node3D launchNode;
 		[Export]
 		private Node3D armNode;
-		private Tween armTween;
+		private Tween tweener;
 
 		public LaunchData GetLaunchData()
 		{
@@ -91,31 +91,28 @@ namespace Project.Gameplay.Objects
 			launchPower = 1f;
 			launchPowerVelocity = 0f;
 
-			if (armTween != null)
-			{
-				armTween.Kill();
-				armTween.Dispose();
-			}
+			if (tweener != null)
+				tweener.Kill();
 		}
 
 		private void EjectPlayer(bool isCancel)
 		{
 			isEjectingPlayer = true;
 
-			armTween = CreateTween();
+			tweener = CreateTween();
 
 			if (isCancel)
 			{
-				armTween.TweenProperty(armNode, "rotation", Vector3.Zero, .2f * (1 - launchPower)).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
-				armTween.TweenCallback(new Callable(this, MethodName.CancelCatapult));
+				tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .2f * (1 - launchPower)).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+				tweener.TweenCallback(new Callable(this, MethodName.CancelCatapult));
 			}
 			else
 			{
-				armTween.TweenProperty(armNode, "rotation", Vector3.Right * Mathf.Pi, .25f * (launchPower + 1)).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-				armTween.TweenProperty(armNode, "rotation", Vector3.Zero, .4f).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+				tweener.TweenProperty(armNode, "rotation", Vector3.Right * Mathf.Pi, .25f * (launchPower + 1)).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+				tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .4f).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
 			}
 
-			armTween.TweenCallback(new Callable(this, MethodName.StopProcessing));
+			tweener.TweenCallback(new Callable(this, MethodName.StopProcessing));
 		}
 
 		private void StopProcessing() => isProcessing = false;

@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay
 {

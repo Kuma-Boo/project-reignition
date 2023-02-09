@@ -1,9 +1,8 @@
 using Godot;
 using Godot.Collections;
-using Project.Core;
 using Project.Gameplay.Triggers;
 
-namespace Project.Gameplay
+namespace Project.Core
 {
 	public partial class SoundManager : Node
 	{
@@ -114,7 +113,10 @@ namespace Project.Gameplay
 				subtitleAnimator.Play("activate-text");
 
 			string key = currentDialog.textKeys[currentDialogIndex];
-			AudioStream targetStream = StageSettings.instance.dialogLibrary.GetStream(key, LanguageIndex);
+			AudioStream targetStream = null;
+			if (Gameplay.StageSettings.instance != null)
+				targetStream = Gameplay.StageSettings.instance.dialogLibrary.GetStream(key, LanguageIndex);
+
 			if (targetStream != null) //Using audio
 			{
 				dialogChannel.Stream = targetStream;
@@ -183,21 +185,23 @@ namespace Project.Gameplay
 
 		#region SFX
 		/// <summary>
-		/// Fade a sound effect player to -80f, then stop the sfx. Returns true if the sfx is still playing.
+		/// Fade a sound to -80f, then stop the sfx. Returns true if the sfx is still playing.
 		/// </summary>
-		public bool FadeSFX(AudioStreamPlayer sfx, float fadeSpeed = 40f)
+		public static bool FadeSFX(AudioStreamPlayer sfx, float fadeTime = 1.0f)
 		{
-			if (!sfx.Playing) //Already stopped playing
-				return false;
-
-			sfx.VolumeDb = Mathf.MoveToward(sfx.VolumeDb, -80f, fadeSpeed * PhysicsManager.physicsDelta);
-			if (Mathf.IsEqualApprox(sfx.VolumeDb, -80f))
+			if (sfx.Playing) //Already stopped playing
 			{
-				sfx.Stop();
-				return false;
+				if (Mathf.IsZeroApprox(fadeTime))
+					sfx.Stop();
+				else
+				{
+					sfx.VolumeDb = Mathf.MoveToward(sfx.VolumeDb, -80, 80 * (1.0f / fadeTime) * PhysicsManager.physicsDelta);
+					if (Mathf.IsEqualApprox(sfx.VolumeDb, -80))
+						sfx.Stop();
+				}
 			}
 
-			return true;
+			return sfx.Playing;
 		}
 
 		// Item pickups are played in the SoundManager to avoid volume increase when collecting more than one at a time.

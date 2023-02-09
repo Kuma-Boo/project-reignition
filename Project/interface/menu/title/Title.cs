@@ -15,21 +15,18 @@ namespace Project.Interface.Menus
 		private float cutsceneTimer;
 		private const float CUTSCENE_TIME_LENGTH = 5f;
 
-		protected override void SetUp() => ShowMenu();
-
 		protected override void ProcessMenu()
 		{
 			if (isCutsceneActive)
 			{
+				SoundManager.FadeSFX(bgm, .2f);
 				if (Controller.pauseButton.wasPressed || Controller.jumpButton.wasPressed)
 					FinishCutscene();
 			}
-			else if (Controller.AnyButtonPressed)
+			else if (Controller.AnyButtonPressed) //Change menu
 			{
-				//Change menu
 				animator.Play("confirm");
-				_submenus[0].ShowMenu(); //Activate main menu (submenu 0)
-				DisableProcessing();
+				return;
 			}
 			else
 			{
@@ -41,6 +38,9 @@ namespace Project.Interface.Menus
 				}
 			}
 		}
+
+		//Activate main menu (submenu 0);
+		public override void OpenSubmenu() => _submenus[0].ShowMenu();
 
 		public override void ShowMenu()
 		{

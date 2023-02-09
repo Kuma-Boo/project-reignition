@@ -140,7 +140,7 @@ namespace Project.Gameplay.Objects
 			float angleRatio = angle / MAX_ANGLE;
 			Character.MovementAngle = Character.CalculateForwardAngle(this.Back());
 			Character.StrafeSpeed = Character.Skills.AirSettings.speed * angleRatio;
-			Character.VerticalSpd = RuntimeConstants.GetJumpPower(Character.jumpHeight);
+			Character.VerticalSpd = Runtime.GetJumpPower(Character.jumpHeight);
 
 			Character.Animator.Visible = true;
 			Character.Animator.SnapRotation(Character.MovementAngle - Mathf.Pi * angleRatio);
@@ -200,7 +200,7 @@ namespace Project.Gameplay.Objects
 				wingAnimator.Play("fall"); //Start fall animation
 
 			//Update velocity
-			velocity -= RuntimeConstants.GRAVITY * GRAVITY_SCALE * PhysicsManager.physicsDelta; //Floaty fall
+			velocity -= Runtime.GRAVITY * GRAVITY_SCALE * PhysicsManager.physicsDelta; //Floaty fall
 			if (velocity < MAX_GRAVITY)
 				velocity = MAX_GRAVITY;
 

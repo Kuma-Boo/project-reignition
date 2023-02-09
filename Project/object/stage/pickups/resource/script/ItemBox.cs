@@ -13,17 +13,15 @@ namespace Project.Gameplay.Objects
 		{
 			Array<Dictionary> properties = new Array<Dictionary>();
 
-			properties.Add(ExtensionMethods.CreateProperty("Auto Collect", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Amount", Variant.Type.Int, PropertyHint.Range, "1,100"));
 			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Time", Variant.Type.Float, PropertyHint.Range, "0.2,2,0.1"));
 
-			if (!autoCollect)
+			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Pearls", Variant.Type.Bool));
+
+			if (!spawnPearls)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Arc Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Position", Variant.Type.Vector3));
-
-				//if (spawnAmount > 1)
-				//properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Time Offset", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
 			}
 
 			if (spawnAmount > 1)
@@ -36,8 +34,8 @@ namespace Project.Gameplay.Objects
 		{
 			switch ((string)property)
 			{
-				case "Auto Collect":
-					autoCollect = (bool)value;
+				case "Spawn Settings/Spawn Pearls":
+					spawnPearls = (bool)value;
 					NotifyPropertyListChanged();
 					break;
 				case "Spawn Settings/Amount":
@@ -56,9 +54,6 @@ namespace Project.Gameplay.Objects
 				case "Spawn Settings/Radius":
 					spawnRadius = (float)value;
 					break;
-				//case "Spawn Settings/Time Offset":
-				//timeOffset = (float)value;
-				//break;
 
 				default:
 					return false;
@@ -71,8 +66,8 @@ namespace Project.Gameplay.Objects
 		{
 			switch ((string)property)
 			{
-				case "Auto Collect":
-					return autoCollect;
+				case "Spawn Settings/Spawn Pearls":
+					return spawnPearls;
 				case "Spawn Settings/Amount":
 					return spawnAmount;
 				case "Spawn Settings/Travel Time":
@@ -83,16 +78,16 @@ namespace Project.Gameplay.Objects
 					return spawnPosition;
 				case "Spawn Settings/Radius":
 					return spawnRadius;
-					//case "Spawn Settings/Time Offset":
-					//return timeOffset;
 			}
 			return base._Get(property);
 		}
 		#endregion
 
+		/// <summary> Use RuntimeConstants method for pearls? </summary>
+		private bool spawnPearls;
 		[Export]
 		private PackedScene targetObject;
-		public bool autoCollect; //For pearls
+
 		public int spawnAmount = 1; //How many objects to spawn
 		private float travelTime = 1;
 		private float arcHeight;
@@ -140,20 +135,23 @@ namespace Project.Gameplay.Objects
 			wings.Visible = isFlying;
 			rotationInterval = Mathf.Tau / spawnAmount;
 
-			if (targetObject != null)
+			if (!spawnPearls)
 			{
-				//Pool objects
-				for (int i = 0; i < spawnAmount; i++)
+				if (targetObject != null)
 				{
-					Pickup pickup = targetObject.Instantiate<Pickup>();
+					//Pool objects
+					for (int i = 0; i < spawnAmount; i++)
+					{
+						Pickup pickup = targetObject.Instantiate<Pickup>();
 
-					pickup.DisableAutoRespawning = true;
-					objectPool.Add(pickup);
-					objectLaunchData.Add(LaunchData.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), arcHeight));
+						pickup.DisableAutoRespawning = true;
+						objectPool.Add(pickup);
+						objectLaunchData.Add(LaunchData.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), arcHeight));
+					}
 				}
+				else
+					GD.PrintErr("Item box can't spawn anything!");
 			}
-			else
-				GD.PrintErr("Item box can't spawn anything!");
 
 			base.SetUp();
 			Level.ConnectUnloadSignal(this);
@@ -192,6 +190,8 @@ namespace Project.Gameplay.Objects
 			if (isFlying)
 				chest.GlobalPosition = rootPosition.GlobalPosition;
 
+			if (spawnPearls) return;
+
 			if (isOpened && isMovingObjects) //Interpolate objects
 			{
 				currentTravelTime += PhysicsManager.physicsDelta;
@@ -205,20 +205,26 @@ namespace Project.Gameplay.Objects
 					objectPool[i].GlobalPosition = objectLaunchData[i].InterpolatePositionRatio(t);
 					objectPool[i].Scale = Vector3.One * t;
 					objectPool[i].Monitoring = objectPool[i].Monitorable = t >= 1f;
-
-					if (autoCollect && t >= 1f)
-						objectPool[i].CallDeferred(Pickup.MethodName.Collect);
 				}
 			}
 		}
 
 		protected override void Collect()
 		{
+			base.Collect();
+
 			if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 				Character.Lockon.StartBounce();
 
 			animator.Play("open");
 			isOpened = true;
+
+			if (spawnPearls)
+			{
+				Runtime.Instance.SpawnPearls(spawnAmount, GlobalPosition, new Vector2(spawnRadius, .5f));
+				return;
+			}
+
 			isMovingObjects = true;
 			currentTravelTime = 0;
 
@@ -229,8 +235,6 @@ namespace Project.Gameplay.Objects
 				objectPool[i].Monitoring = objectPool[i].Monitorable = false; //Disable collision temporarily
 				objectPool[i].SetDeferred("global_position", LaunchPosition);
 			}
-
-			base.Collect();
 		}
 	}
 }

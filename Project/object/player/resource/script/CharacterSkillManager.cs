@@ -118,12 +118,11 @@ namespace Project.Gameplay
 		public float pearlAttractorMultiplier = 2f; //Collision multiplier when PearlAttractor skill is enabled
 		[Export]
 		private bool isPearlAttractionEnabled;
-		private const int ENEMY_PEARL_AMOUNT = 16; //How many pearls are obtained when defeating an enemy
 
 		private void LoadSkillsFromSaveData()
 		{
-			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.LandingBoost);
-			isPearlAttractionEnabled = SaveManager.ActiveGameData.skillRing.equippedSkills.IsSet(SaveManager.SkillRing.Skills.PearlAttractor);
+			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.LandingBoost);
+			isPearlAttractionEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.PearlAttractor);
 		}
 
 		private void SetUpSkills()
@@ -133,9 +132,9 @@ namespace Project.Gameplay
 
 			//Expand hitbox if skills is equipped
 			if (isPearlAttractionEnabled)
-				RuntimeConstants.Instance.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
+				Runtime.Instance.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
 			else
-				RuntimeConstants.Instance.UpdatePearlCollisionShapes();
+				Runtime.Instance.UpdatePearlCollisionShapes();
 		}
 		#endregion
 
@@ -218,7 +217,7 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				SoundManager.instance.FadeSFX(heartbeatSfx, 80f); //Fade out sfx
+				SoundManager.FadeSFX(heartbeatSfx, .2f); //Fade out sfx
 				if (breakTimer != 0) return; //Cooldown
 			}
 
@@ -302,7 +301,7 @@ namespace Project.Gameplay
 			if (IsSpeedBreakActive)
 			{
 				Character.Effect.PlayVoice("speed break");
-				Character.CollisionMask = RuntimeConstants.Instance.environmentMask; //Don't collide with any objects
+				Character.CollisionMask = Runtime.Instance.environmentMask; //Don't collide with any objects
 			}
 			else
 			{

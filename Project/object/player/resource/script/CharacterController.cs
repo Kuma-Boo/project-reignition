@@ -655,7 +655,7 @@ namespace Project.Gameplay
 			ApplyGravity(); //Always apply gravity when in the air
 		}
 
-		private void ApplyGravity() => VerticalSpd = Mathf.MoveToward(VerticalSpd, RuntimeConstants.MAX_GRAVITY, RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta);
+		private void ApplyGravity() => VerticalSpd = Mathf.MoveToward(VerticalSpd, Runtime.MAX_GRAVITY, Runtime.GRAVITY * PhysicsManager.physicsDelta);
 
 		private bool canLandingBoost;
 		private void CheckLandingBoost()
@@ -687,7 +687,7 @@ namespace Project.Gameplay
 			CanJumpDash = true;
 			canLandingBoost = Skills.isLandingDashEnabled;
 			ActionState = ActionStates.Jumping;
-			VerticalSpd = RuntimeConstants.GetJumpPower(jumpHeight);
+			VerticalSpd = Runtime.GetJumpPower(jumpHeight);
 
 			if (IsMovingBackward || MoveSpeed < 0) //Kill speed when jumping backwards
 				MoveSpeed = 0;
@@ -898,7 +898,7 @@ namespace Project.Gameplay
 			IsMovingBackward = true;
 			MovementAngle = GetTargetInputAngle();
 
-			VerticalSpd = RuntimeConstants.GetJumpPower(backflipHeight);
+			VerticalSpd = Runtime.GetJumpPower(backflipHeight);
 
 			IsOnGround = false;
 			ActionState = ActionStates.Backflip;
@@ -954,7 +954,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			VerticalSpd -= RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta;
+			VerticalSpd -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
 			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, DAMAGE_FRICTION * PhysicsManager.physicsDelta);
 		}
 
@@ -1000,7 +1000,7 @@ namespace Project.Gameplay
 				if (!knockbackData.stayOnGround)
 				{
 					IsOnGround = false;
-					VerticalSpd = RuntimeConstants.GetJumpPower(1);
+					VerticalSpd = Runtime.GetJumpPower(1);
 				}
 			}
 
@@ -1342,7 +1342,7 @@ namespace Project.Gameplay
 				else if (VerticalSpd > 0)
 					orientationResetFactor = .01f;
 				else
-					orientationResetFactor = (VerticalSpd * .2f / RuntimeConstants.MAX_GRAVITY) - .05f;
+					orientationResetFactor = (VerticalSpd * .2f / Runtime.MAX_GRAVITY) - .05f;
 
 				Vector3 targetUp = Vector3.Up;
 				if (Camera.ActiveSettings.isRollEnabled) //Use PathFollower.Up when on a tilted path.

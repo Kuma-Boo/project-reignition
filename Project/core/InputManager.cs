@@ -46,9 +46,8 @@ namespace Project.Core
 			e.Dispose();
 		}
 
-		public static void DefaultControls()
+		public static void LoadControls(string inputConfiguration)
 		{
-			controller = new Controller();
 			controller.DefaultControls();
 		}
 

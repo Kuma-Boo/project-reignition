@@ -9,20 +9,28 @@ namespace Project.Interface.Menus
 	/// </summary>
 	public partial class Menu : Control
 	{
-		public static Dictionary<MenuKeys, int> menuMemory = new Dictionary<MenuKeys, int>(); //Use this for determining which menu is open/which option is selected
-		public enum MenuKeys
+		public static Dictionary<MemoryKeys, int> menuMemory = new Dictionary<MemoryKeys, int>(); //Use this for determining which menu is open/which option is selected
+		public enum MemoryKeys
 		{
 			MainMenu,
+			SaveSelect,
 			WorldSelect,
 			LevelSelect,
+
+			SpecialBook,
+
+			ActiveMenu,
 			Max
 		}
-		public static void InitializeMemory()
+
+		public static void SetUpMemory()
 		{
-			for (int i = 0; i < (int)MenuKeys.Max; i++) //Initialize all memory to 0.
-				menuMemory.Add((MenuKeys)i, 0);
+			for (int i = 0; i < (int)MemoryKeys.Max; i++) //Initialize all memory to 0.
+				menuMemory.Add((MemoryKeys)i, 0);
 		}
 
+		[Export]
+		protected AudioStreamPlayer bgm;
 		[Export]
 		protected Menu parentMenu;
 		[Export]
@@ -44,7 +52,6 @@ namespace Project.Interface.Menus
 				{
 					Menu submenu = GetNode<Menu>(submenus[i]);
 					_submenus.Add(submenu);
-					submenu.parentMenu = this;
 				}
 			}
 
@@ -134,7 +141,7 @@ namespace Project.Interface.Menus
 		protected virtual void Cancel() { }
 
 		/// <summary>
-		/// Wraps a selection around max selection
+		/// Wraps a selection around max selection.
 		/// </summary>
 		protected int WrapSelection(int currentSelection, int maxSelection)
 		{
@@ -145,6 +152,14 @@ namespace Project.Interface.Menus
 				currentSelection -= maxSelection;
 
 			return currentSelection;
+		}
+
+		public void PlayBGM()
+		{
+			if (bgm.Playing) return;
+
+			bgm.VolumeDb = 0.0f; //Reset volume
+			bgm.Play();
 		}
 	}
 }

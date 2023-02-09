@@ -79,10 +79,10 @@ namespace Project.Gameplay.Objects
 		private Array<int> _excludedTypes = new Array<int>(); //Eggs that have already been generated
 		private int GenerateEggType()
 		{
-			int type = RuntimeConstants.randomNumberGenerator.RandiRange(0, 8);
+			int type = Runtime.randomNumberGenerator.RandiRange(0, 8);
 			while (_excludedTypes.Contains(type)) //Regenerate type if it's already been taken
 			{
-				type = RuntimeConstants.randomNumberGenerator.RandiRange(0, 8);
+				type = Runtime.randomNumberGenerator.RandiRange(0, 8);
 			}
 
 			_excludedTypes.Add(type);
@@ -91,10 +91,10 @@ namespace Project.Gameplay.Objects
 
 		private int GenerateEggPair(int eggIndex) //Determines which egg belongs to which nest
 		{
-			int index = RuntimeConstants.randomNumberGenerator.RandiRange(0, _eggs.Count - 1);
+			int index = Runtime.randomNumberGenerator.RandiRange(0, _eggs.Count - 1);
 			while (_nests[index].AssignedEgg != null) //Nest is already taken
 			{
-				index = RuntimeConstants.randomNumberGenerator.RandiRange(0, _eggs.Count - 1);
+				index = Runtime.randomNumberGenerator.RandiRange(0, _eggs.Count - 1);
 			}
 
 			_nests[index].AssignedEgg = _eggs[eggIndex];

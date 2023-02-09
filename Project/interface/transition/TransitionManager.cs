@@ -105,7 +105,7 @@ namespace Project.Core
 		private string queuedScene;
 		private void ApplySceneChange()
 		{
-			Gameplay.SoundManager.instance.CancelDialog(); //Cancel any active dialog
+			SoundManager.instance.CancelDialog(); //Cancel any active dialog
 			if (string.IsNullOrEmpty(queuedScene)) //Reload the current scene
 				GetTree().ReloadCurrentScene();
 			else

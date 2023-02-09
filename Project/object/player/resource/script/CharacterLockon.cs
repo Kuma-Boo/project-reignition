@@ -127,7 +127,7 @@ namespace Project.Gameplay
 			if (Character.VerticalSpd < 0)
 				castPosition += Character.UpDirection * Character.VerticalSpd * PhysicsManager.physicsDelta;
 			Vector3 castVector = t.GlobalPosition - castPosition;
-			RaycastHit h = this.CastRay(castPosition, castVector, RuntimeConstants.Instance.environmentMask);
+			RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
 			Debug.DrawRay(castPosition, castVector, Colors.Magenta);
 
 			if (h && h.collidedObject != t)
@@ -166,7 +166,7 @@ namespace Project.Gameplay
 			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
 
 			Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.friction * PhysicsManager.physicsDelta);
-			Character.VerticalSpd -= RuntimeConstants.GRAVITY * PhysicsManager.physicsDelta;
+			Character.VerticalSpd -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
 		}
 
 		public void StartBounce() //Bounce the character up and back (So they can target an enemy again)

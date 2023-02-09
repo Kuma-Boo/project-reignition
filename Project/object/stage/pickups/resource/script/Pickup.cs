@@ -21,10 +21,12 @@ namespace Project.Gameplay.Objects
 
 		protected virtual void SetUp()
 		{
-			if (DisableAutoRespawning) return; //Don't respawn automatically
+			if (DisableAutoRespawning) //Don't respawn automatically
+			{
+				spawnData = new SpawnData(GetParent(), Transform);
+				Level.ConnectRespawnSignal(this);
+			}
 
-			spawnData = new SpawnData(GetParent(), Transform);
-			Level.ConnectRespawnSignal(this);
 			Level.ConnectUnloadSignal(this);
 		}
 

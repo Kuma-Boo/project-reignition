@@ -8,7 +8,7 @@ namespace Project.Gameplay.Objects
 	/// </summary>
 	public partial class DestructableObject : Node3D
 	{
-		private Tween tween;
+		private Tween tweener;
 
 		[Export]
 		private float explosionStrength;
@@ -66,8 +66,8 @@ namespace Project.Gameplay.Objects
 				MeshInstance3D mesh = rigidbody.GetChildOrNull<MeshInstance3D>(0); //NOTE mesh must be the FIRST child of the rigidbody.
 
 				rigidbody.Mass = pieceMass;
-				rigidbody.CollisionLayer = Core.RuntimeConstants.Instance.particleCollisionLayer;
-				rigidbody.CollisionMask = Core.RuntimeConstants.Instance.particleCollisionMask;
+				rigidbody.CollisionLayer = Core.Runtime.Instance.particleCollisionLayer;
+				rigidbody.CollisionMask = Core.Runtime.Instance.particleCollisionMask;
 
 				pieces.Add(new Piece()
 				{
@@ -104,8 +104,8 @@ namespace Project.Gameplay.Objects
 		{
 			isShattered = false;
 
-			if (tween != null)
-				tween.Kill();
+			if (tweener != null)
+				tweener.Kill();
 
 			//Reset Pieces
 			for (int i = 0; i < pieces.Count; i++)
@@ -178,13 +178,13 @@ namespace Project.Gameplay.Objects
 					shatterStrength *= Mathf.Clamp(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed), .5f, 1f);
 			}
 
-			tween = CreateTween().SetParallel(true);
+			tweener = CreateTween().SetParallel(true);
 			for (int i = 0; i < pieces.Count; i++)
 			{
 				pieces[i].rigidbody.Freeze = false;
 				pieces[i].rigidbody.AddExplosionForce(shatterPoint, shatterStrength);
 				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off; //Particles don't cast shadows when shattering
-				tween.TweenProperty(pieces[i].mesh, "transparency", 1f, 1f).From(0f);
+				tweener.TweenProperty(pieces[i].mesh, "transparency", 1f, 1f).From(0f);
 			}
 
 			isShattered = true;

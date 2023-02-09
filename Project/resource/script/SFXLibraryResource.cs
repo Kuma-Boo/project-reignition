@@ -193,7 +193,7 @@ namespace Project.Gameplay
 			if (maxIndex == 1) //Randomization isn't possible with only one sfx.
 				sfxIndex = 0;
 			else if (sfxIndex == -1) //Randomize sfx
-				sfxIndex = RuntimeConstants.randomNumberGenerator.RandiRange(0, maxIndex - 1);
+				sfxIndex = Runtime.randomNumberGenerator.RandiRange(0, maxIndex - 1);
 
 			return streams[channel][keyIndex][sfxIndex];
 		}

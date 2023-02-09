@@ -1,9 +1,8 @@
-[gd_scene load_steps=45 format=3 uid="uid://45d6rgmhhlc4"]
+[gd_scene load_steps=45 format=3 uid="uid://dv6hngvoiankc"]
 
 [ext_resource type="Texture2D" uid="uid://chvedyxbnb0fh" path="res://interface/menu/title/sprite/logos/logo en.png" id="1"]
 [ext_resource type="VideoStream" path="res://video/event/stream/event0.ogv" id="2"]
 [ext_resource type="AudioStream" uid="uid://crnh8q3fup5o7" path="res://video/event/opening.ogg" id="4"]
-[ext_resource type="Texture2D" uid="uid://c4qhy86v8gdjt" path="res://interface/menu/flames/bottom flame/flames.tres" id="5"]
 [ext_resource type="Texture2D" uid="uid://bfwjdnmqpjcvd" path="res://interface/menu/title/sprite/Decal.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://ci31vwpumdkfo" path="res://interface/menu/title/sprite/Background.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://cmg0230lkyvho" path="res://interface/menu/title/sprite/transition/tile018.png" id="8"]
@@ -27,13 +26,13 @@
 [ext_resource type="Texture2D" uid="uid://capfcj7po32av" path="res://interface/menu/title/sprite/transition/tile005.png" id="26"]
 [ext_resource type="Texture2D" uid="uid://bdkci8ujhbjp7" path="res://interface/menu/title/sprite/transition/tile001.png" id="27"]
 [ext_resource type="Texture2D" uid="uid://dnqgph4h7p47a" path="res://interface/menu/title/sprite/transition/tile007.png" id="28"]
-[ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/Greco Std DB.otf" id="28_g60da"]
+[ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/otf/Greco Std DB.otf" id="28_g60da"]
 [ext_resource type="Texture2D" uid="uid://c5w26bctx2s2w" path="res://interface/menu/title/sprite/transition/tile010.png" id="29"]
 [ext_resource type="Texture2D" uid="uid://ckd0rqyao1ktq" path="res://interface/menu/title/sprite/transition/tile013.png" id="30"]
 [ext_resource type="Texture2D" uid="uid://cw8fc6nqbs4s6" path="res://interface/menu/title/sprite/transition/tile009.png" id="31"]
+[ext_resource type="SpriteFrames" uid="uid://mcf4xjlise6g" path="res://effect/particle/material/flame/Flame Menu Footer.tres" id="31_ah02w"]
 [ext_resource type="Texture2D" uid="uid://vbh7a47k4llw" path="res://interface/menu/title/sprite/transition/transition fade.png" id="32"]
-[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="33"]
-[ext_resource type="AudioStream" uid="uid://cib0n7jo2ae8f" path="res://sound/ost/treasure disc/2 Sandstorm.mp3" id="34"]
+[ext_resource type="AudioStream" uid="uid://cruu5h1jr78lr" path="res://sound/sfx/system/menu screen change.wav" id="34_nycgp"]
 [ext_resource type="Script" path="res://interface/menu/title/Title.cs" id="35"]
 
 [sub_resource type="SpriteFrames" id="11"]
@@ -116,8 +115,9 @@ animations = [{
 "speed": 24.0
 }]
 
-[sub_resource type="CanvasItemMaterial" id="4"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_kmqa8"]
 blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Animation" id="9"]
 length = 0.001
@@ -256,19 +256,19 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("MenuBGM:volume_db")
+tracks/11/path = NodePath("Flames:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Flames:modulate")
+tracks/12/path = NodePath(".:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -284,292 +284,6 @@ tracks/13/path = NodePath(".:visible")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="15"]
-resource_name = "cutscene-finish"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Cutscene:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Cutscene/CutscenePlayer")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"stop"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"DisableProcessing"
-}, {
-"args": [],
-"method": &"EnableProcessing"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Cutscene/CutscenePlayer:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Cutscene/CutsceneAudio")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"stop"
-}]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("MenuBGM:volume_db")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("MenuBGM")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Play"
-}]
-}
-
-[sub_resource type="Animation" id="14"]
-resource_name = "cutscene-start"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Cutscene:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"DisableProcessing"
-}, {
-"args": [],
-"method": &"EnableProcessing"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Cutscene/CutscenePlayer")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.9),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"play"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Cutscene/CutscenePlayer:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.9, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Cutscene/CutsceneAudio")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.9),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("MenuBGM:volume_db")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.0, -80.0, -80.0, 0.0]
-}
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("MenuBGM")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.6),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"stop"
-}]
-}
-
-[sub_resource type="Animation" id="10"]
-resource_name = "loop"
-length = 2.8
-loop_mode = 1
-
-[sub_resource type="Animation" id="8"]
-resource_name = "show"
-length = 1.5
-step = 0.0416667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Press Start:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.666667),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Footer:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1, 1.375),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 1.45833),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"DisableProcessing"
-}, {
-"args": [],
-"method": &"EnableProcessing"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Flames:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = false
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 1, 1.25),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 0), Vector2(1, 0), Vector2(1, 1)]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("MenuBGM")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Play"
-}]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -699,6 +413,314 @@ tracks/9/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SFX/Start")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.7515),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"OpenSubmenu"
+}]
+}
+
+[sub_resource type="Animation" id="15"]
+resource_name = "cutscene-finish"
+length = 0.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cutscene:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cutscene/CutscenePlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Cutscene/CutscenePlayer:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Cutscene/CutsceneAudio")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayBGM"
+}]
+}
+
+[sub_resource type="Animation" id="14"]
+resource_name = "cutscene-start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cutscene:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cutscene/CutscenePlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Cutscene/CutscenePlayer:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Cutscene/CutsceneAudio")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_mexqn"]
+resource_name = "init"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="10"]
+resource_name = "loop"
+length = 2.8
+loop_mode = 1
+
+[sub_resource type="Animation" id="8"]
+resource_name = "show"
+length = 1.45834
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Press Start:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Footer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 1.375),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Flames:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = false
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1, 1.25),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 0), Vector2(1, 0), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.45833),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayBGM"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dvawa"]
 _data = {
@@ -706,12 +728,14 @@ _data = {
 "confirm": SubResource("12"),
 "cutscene-finish": SubResource("15"),
 "cutscene-start": SubResource("14"),
+"init": SubResource("Animation_mexqn"),
 "loop": SubResource("10"),
 "show": SubResource("8")
 }
 
 [node name="Title" type="Control" node_paths=PackedStringArray("animator")]
-visible = false
+z_index = 1000
+z_as_relative = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1920.0
@@ -818,6 +842,7 @@ layout_mode = 2
 text = "Remake by PauZ"
 
 [node name="Flames" type="Control" parent="."]
+material = SubResource("CanvasItemMaterial_kmqa8")
 layout_mode = 1
 anchors_preset = 0
 offset_left = 960.0
@@ -826,13 +851,12 @@ offset_right = 960.0
 offset_bottom = 1080.0
 scale = Vector2(1, 1e-05)
 
-[node name="Flames" type="TextureRect" parent="Flames"]
-material = SubResource("4")
-layout_mode = 0
-offset_left = -960.0
-offset_top = -376.0
-offset_right = 960.0
-texture = ExtResource("5")
+[node name="Flames" type="AnimatedSprite2D" parent="Flames"]
+use_parent_material = true
+position = Vector2(3.05176e-05, -184)
+scale = Vector2(7.5, 6)
+sprite_frames = ExtResource("31_ah02w")
+autoplay = "default"
 
 [node name="Cutscene" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -847,22 +871,25 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 stream = ExtResource("2")
 expand = true
+buffering_msec = 10
 
 [node name="CutsceneAudio" type="AudioStreamPlayer" parent="Cutscene"]
 stream = ExtResource("4")
-bus = &"CUTSCENE"
+volume_db = 6.0
+bus = &"BGM"
 
 [node name="SFX" type="Node" parent="."]
 
-[node name="MenuBGM" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("34")
-bus = &"BGM"
-script = ExtResource("33")
-loopStartPosition = 39.68
-loopEndPosition = 103.68
+[node name="Start" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("34_nycgp")
+bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "show"
+autoplay = "init"
 libraries = {
 "": SubResource("AnimationLibrary_dvawa")
 }
+next/cutscene-finish = &"loop"
+next/show = &"loop"
+
+[connection signal="finished" from="Cutscene/CutscenePlayer" to="." method="FinishCutscene"]

@@ -2,7 +2,7 @@ using Godot;
 using Godot.Collections;
 using Project.Core;
 
-namespace Project.Interface
+namespace Project.Interface.Menus
 {
 	/// <summary>
 	/// Plays an event (cutscene) with the correct audio depending on the localization settings
@@ -26,6 +26,8 @@ namespace Project.Interface
 		private VideoStreamPlayer videoPlayer;
 
 		private InputManager.Controller Controller => InputManager.controller;
+		private float skipTimer;
+		private const float SKIP_LENGTH = 1f; //How long the pause button needs to be held to skip the cutscene
 
 		public override void _Ready()
 		{
@@ -47,13 +49,21 @@ namespace Project.Interface
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (Controller.pauseButton.wasPressed) //Skip cutscene
+			if (Controller.pauseButton.isHeld) //Skip cutscene
 			{
-
+				skipTimer = Mathf.MoveToward(skipTimer, 1, PhysicsManager.physicsDelta);
+				if (Mathf.IsEqualApprox(skipTimer, 1))
+				{
+					//Skip
+				}
 			}
-			else if (Controller.actionButton.wasPressed) //Check if we're in the cutscene viewer, and return to the menu
-			{
+			else
+				skipTimer = Mathf.MoveToward(skipTimer, 0, PhysicsManager.physicsDelta);
 
+			if (Menu.menuMemory[Menu.MemoryKeys.ActiveMenu] == (int)Menu.MemoryKeys.SpecialBook &&
+			Controller.actionButton.wasPressed) //Only do this when viewing from the special book
+			{
+				//Return to the special book menu
 			}
 		}
 

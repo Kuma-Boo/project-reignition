@@ -51,7 +51,7 @@ namespace Project.Gameplay
 			depthCamera.Far = MainCamera.Far;
 			depthCamera.GlobalTransform = MainCamera.GlobalTransform;
 
-			depthViewport.Size = RuntimeConstants.HALF_SCREEN_SIZE;
+			depthViewport.Size = Runtime.HALF_SCREEN_SIZE;
 			depthViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 
 			depthMaterial.Set(FAR_CLIP_PARAMETER, depthCamera.Far);

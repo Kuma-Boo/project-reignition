@@ -398,7 +398,7 @@ namespace Project.Gameplay
 		private readonly int GRINDSTEP_ANIMATION_VARIATION_COUNT = 4;
 		public void StartGrindStep()
 		{
-			int index = Core.RuntimeConstants.randomNumberGenerator.RandiRange(1, GRINDSTEP_ANIMATION_VARIATION_COUNT);
+			int index = Core.Runtime.randomNumberGenerator.RandiRange(1, GRINDSTEP_ANIMATION_VARIATION_COUNT);
 			string targetPose = IsBalancingRight ? "step-right-0" : "step-left-0";
 			animatorTree.Set(BALANCE_GRINDSTEP_TRANSITION_PARAMETER, targetPose + index.ToString());
 			animatorTree.Set(BALANCE_GRINDSTEP_ACTIVE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);

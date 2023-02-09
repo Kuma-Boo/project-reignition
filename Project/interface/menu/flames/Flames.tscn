@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvsnm477jfuyw"]
+[gd_scene load_steps=5 format=3 uid="uid://doso3qhadnp7p"]
 
-[ext_resource type="Texture2D" uid="uid://c4qhy86v8gdjt" path="res://interface/menu/flames/bottom flame/flames.tres" id="1"]
+[ext_resource type="SpriteFrames" uid="uid://mcf4xjlise6g" path="res://effect/particle/material/flame/Flame Menu Footer.tres" id="1_mmyxp"]
 
 [sub_resource type="CanvasItemMaterial" id="4"]
 blend_mode = 1
@@ -28,6 +28,7 @@ _data = {
 }
 
 [node name="Flames" type="Control"]
+material = SubResource("4")
 layout_mode = 3
 anchors_preset = 0
 offset_left = 960.0
@@ -35,13 +36,12 @@ offset_top = 1080.0
 offset_right = 960.0
 offset_bottom = 1080.0
 
-[node name="Flames" type="TextureRect" parent="."]
-material = SubResource("4")
-layout_mode = 0
-offset_left = -960.0
-offset_top = -376.0
-offset_right = 960.0
-texture = ExtResource("1")
+[node name="Flames" type="AnimatedSprite2D" parent="."]
+use_parent_material = true
+position = Vector2(3.05176e-05, -184)
+scale = Vector2(7.5, 6)
+sprite_frames = ExtResource("1_mmyxp")
+autoplay = "default"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "spawn"

@@ -1,0 +1,222 @@
+[gd_scene load_steps=9 format=3 uid="uid://dk6qdykjn185j"]
+
+[ext_resource type="Texture2D" uid="uid://cjgl0xkvxm887" path="res://interface/menu/save select/texture/background.png" id="1_f5kj5"]
+[ext_resource type="Script" path="res://interface/menu/save select/SaveOption.cs" id="2_lb1d2"]
+[ext_resource type="FontFile" uid="uid://dk0elybbyvsvw" path="res://interface/font/Save Slot Numbers.fnt" id="3_q3h6p"]
+[ext_resource type="Texture2D" uid="uid://bokmpqe3qfali" path="res://interface/menu/save select/texture/save atlas.png" id="3_rmdpm"]
+[ext_resource type="Texture2D" uid="uid://c03fq02jkng5h" path="res://interface/menu/save select/texture/text/location en.png" id="4_ryw03"]
+[ext_resource type="FontFile" uid="uid://cxewxaneg1b8b" path="res://interface/font/Save Select Numbers.fnt" id="6_j4dl3"]
+[ext_resource type="Texture2D" uid="uid://badl30j1ar0mn" path="res://interface/menu/save select/texture/text/save en.png" id="7_c1lef"]
+[ext_resource type="FontFile" uid="uid://d3hb1ogknp6yh" path="res://interface/font/Save Slot Shadows.fnt" id="8_tqwj0"]
+
+[node name="SaveOption" type="Control" node_paths=PackedStringArray("newData", "existingData", "worldIcon", "slotLabel", "slotShadowLabel", "levelLabel", "timeLabel")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("2_lb1d2")
+newData = NodePath("Background/Data/New")
+existingData = NodePath("Background/Data/Existing")
+worldRingObtainedRegion = Rect2(0, 88, 120, 100)
+worldRingMissionRegion = Rect2(120, 88, 120, 100)
+worldIcon = NodePath("Background/Data/Existing/WorldIcon")
+worldIconRegions = [Rect2(0, 0, 400, 240), Rect2(400, 0, 400, 240), Rect2(0, 260, 400, 240), Rect2(400, 260, 400, 240), Rect2(0, 520, 400, 240), Rect2(400, 520, 400, 240), Rect2(0, 780, 400, 240), Rect2(400, 780, 400, 240)]
+slotLabel = NodePath("Background/Data/SlotLabel")
+slotShadowLabel = NodePath("Background/Data/SlotLabel/SlotShadowLabel")
+levelLabel = NodePath("Background/Data/Existing/LevelLabel")
+timeLabel = NodePath("Background/Data/Existing/TimeLabel")
+worldRings = [NodePath("Background/Data/Existing/WorldRingBackground/YellowRing"), NodePath("Background/Data/Existing/WorldRingBackground/GreenRing"), NodePath("Background/Data/Existing/WorldRingBackground/RedRing"), NodePath("Background/Data/Existing/WorldRingBackground/BlueRing"), NodePath("Background/Data/Existing/WorldRingBackground/AquaRing"), NodePath("Background/Data/Existing/WorldRingBackground/WhiteRing"), NodePath("Background/Data/Existing/WorldRingBackground/PurpleRing")]
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -680.0
+offset_top = -100.0
+offset_right = 680.0
+offset_bottom = 484.0
+texture = ExtResource("1_f5kj5")
+stretch_mode = 5
+
+[node name="Data" type="Control" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Existing" type="Control" parent="Background/Data"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldRingBackground" type="NinePatchRect" parent="Background/Data/Existing"]
+self_modulate = Color(0.784314, 0.784314, 0.784314, 0.784314)
+layout_mode = 0
+offset_left = 512.0
+offset_top = 208.0
+offset_right = 1256.0
+offset_bottom = 324.0
+texture = ExtResource("3_rmdpm")
+region_rect = Rect2(15, 192, 430, 112)
+patch_margin_left = 24
+patch_margin_right = 24
+metadata/_edit_group_ = true
+
+[node name="YellowRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
+position = Vector2(68, 62)
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(120, 88, 120, 100)
+
+[node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/YellowRing"]
+visible = false
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(185, 8, 90, 80)
+
+[node name="GreenRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
+position = Vector2(168, 62)
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(120, 88, 120, 100)
+
+[node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/GreenRing"]
+visible = false
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(275, 8, 90, 80)
+
+[node name="RedRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
+position = Vector2(268, 62)
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(120, 88, 120, 100)
+
+[node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/RedRing"]
+visible = false
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(10, 8, 90, 80)
+
+[node name="BlueRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
+position = Vector2(368, 62)
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(120, 88, 120, 100)
+
+[node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/BlueRing"]
+visible = false
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(100, 8, 90, 80)
+
+[node name="AquaRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
+position = Vector2(468, 62)
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(120, 88, 120, 100)
+
+[node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/AquaRing"]
+visible = false
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(455, 8, 90, 80)
+
+[node name="WhiteRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
+position = Vector2(568, 62)
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(120, 88, 120, 100)
+
+[node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/WhiteRing"]
+visible = false
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(365, 8, 90, 80)
+
+[node name="PurpleRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
+position = Vector2(668, 62)
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(120, 88, 120, 100)
+
+[node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/PurpleRing"]
+visible = false
+texture = ExtResource("3_rmdpm")
+region_enabled = true
+region_rect = Rect2(545, 8, 90, 80)
+
+[node name="WorldIcon" type="Sprite2D" parent="Background/Data/Existing"]
+position = Vector2(304, 236)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("4_ryw03")
+region_enabled = true
+region_rect = Rect2(0, 0, 400, 240)
+
+[node name="LevelText" type="Sprite2D" parent="Background/Data/Existing"]
+position = Vector2(600, 164)
+scale = Vector2(2, 2)
+texture = ExtResource("7_c1lef")
+region_enabled = true
+region_rect = Rect2(20, 90, 60, 40)
+
+[node name="LevelLabel" type="Label" parent="Background/Data/Existing"]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 132.0
+offset_right = 792.0
+offset_bottom = 168.0
+scale = Vector2(2, 2)
+theme_override_fonts/font = ExtResource("6_j4dl3")
+text = ":01"
+vertical_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="Background/Data/Existing"]
+layout_mode = 0
+offset_left = 880.0
+offset_top = 132.0
+offset_right = 1060.0
+offset_bottom = 168.0
+scale = Vector2(2, 2)
+theme_override_fonts/font = ExtResource("6_j4dl3")
+text = "00:00:00"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="New" type="Sprite2D" parent="Background/Data"]
+visible = false
+position = Vector2(680, 232)
+scale = Vector2(2.4, 2.4)
+texture = ExtResource("7_c1lef")
+region_enabled = true
+region_rect = Rect2(10, 30, 340, 60)
+
+[node name="SlotLabel" type="Label" parent="Background/Data"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 108.0
+offset_right = 88.0
+offset_bottom = 144.0
+scale = Vector2(2, 2)
+theme_override_fonts/font = ExtResource("3_q3h6p")
+text = "00"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SlotShadowLabel" type="Label" parent="Background/Data/SlotLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_tqwj0")
+text = "00"
+horizontal_alignment = 2
+vertical_alignment = 1

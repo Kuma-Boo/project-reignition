@@ -16,7 +16,7 @@ namespace Project.Gameplay.Objects
 
 		protected override void SetUp()
 		{
-			collider.Shape = isRichPearl ? RuntimeConstants.Instance.RichPearlCollisionShape : RuntimeConstants.Instance.PearlCollisionShape;
+			collider.Shape = isRichPearl ? Runtime.Instance.RichPearlCollisionShape : Runtime.Instance.PearlCollisionShape;
 			base.SetUp();
 		}
 
@@ -26,6 +26,8 @@ namespace Project.Gameplay.Objects
 				tweener.Kill();
 
 			isCollected = false;
+			Basis = Basis.Identity;
+
 			base.Respawn();
 		}
 
@@ -43,11 +45,10 @@ namespace Project.Gameplay.Objects
 
 			tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
 			//Collection tween
-			int travelDirection = RuntimeConstants.randomNumberGenerator.RandiRange(-1, 1);
 			bool reverseDirection = Mathf.Sign(Character.Forward().Dot(Position)) < 0; //True when collecting a pearl behind us
 
 			Vector3 endPoint = new Vector3(0, .5f, 0);
-			Vector3 midPoint = new Vector3(travelDirection * .7f, (Position.Y + endPoint.Y) * .5f, 0);
+			Vector3 midPoint = new Vector3(Runtime.randomNumberGenerator.Randfn(0, .4f), (Position.Y + endPoint.Y) * .5f, 0);
 
 			if (reverseDirection)
 			{
@@ -61,7 +62,7 @@ namespace Project.Gameplay.Objects
 			tweener.Parallel().TweenProperty(this, "scale", Vector3.One * .001f, .2f).SetEase(Tween.EaseType.In);
 
 			//TODO Modify soul gauge
-			//tweener.TweenCallback(new Callable(Character.Soul, CharacterSoulSkill.MethodName.ModifySoulGauge)).SetDelay(.1f);
+			tweener.TweenCallback(Callable.From(() => Character.Skills.ModifySoulGauge(isRichPearl ? 20 : 1))).SetDelay(.1f);
 			tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(3f);
 
 			if (!isRichPearl) //Play the correct sfx

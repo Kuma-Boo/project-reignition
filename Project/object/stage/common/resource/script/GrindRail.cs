@@ -183,7 +183,7 @@ namespace Project.Gameplay
 			}
 
 			if (isFadingSFX)
-				isFadingSFX = SoundManager.instance.FadeSFX(sfx);
+				isFadingSFX = SoundManager.FadeSFX(sfx);
 
 			if (isActive)
 				UpdateRail();
@@ -314,7 +314,7 @@ namespace Project.Gameplay
 						horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
 
 						Character.MovementAngle += Mathf.Pi * .5f * Mathf.Sign(inputDeltaAngle);
-						Character.VerticalSpd = RuntimeConstants.GetJumpPower(GRIND_STEP_HEIGHT);
+						Character.VerticalSpd = Runtime.GetJumpPower(GRIND_STEP_HEIGHT);
 						Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
 
 						Character.IsOnGround = false; //Disconnect from the ground

@@ -53,7 +53,7 @@ namespace Project.Gameplay.Triggers
 			if (!isProcessing)
 			{
 				if (isFadingSFX)
-					isFadingSFX = SoundManager.instance.FadeSFX(sfx);
+					isFadingSFX = SoundManager.FadeSFX(sfx);
 
 				return; //Inactive
 			}

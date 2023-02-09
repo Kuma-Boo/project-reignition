@@ -65,7 +65,7 @@ namespace Project.Gameplay
 			bloomCamera.Far = MainCamera.Far;
 			bloomCamera.GlobalTransform = MainCamera.GlobalTransform;
 
-			bloomViewport.Size = compositeViewport.Size = RuntimeConstants.HALF_SCREEN_SIZE;
+			bloomViewport.Size = compositeViewport.Size = Runtime.HALF_SCREEN_SIZE;
 			bloomViewport.RenderTargetUpdateMode = compositeViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 
 			//bloomMaterial.Set(DepthRenderer.FAR_CLIP_PARAMETER, MainCamera.Far);

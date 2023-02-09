@@ -94,7 +94,7 @@ namespace Project.Gameplay.Triggers
 			//Check walls
 			Vector3 castVector = Character.PathFollower.Forward() * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
 			castVector *= Mathf.Sign(velocity);
-			RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, RuntimeConstants.Instance.environmentMask);
+			RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
 			Debug.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 			if (hit) //Kill speed
 				velocity = (hit.distance - Character.CollisionRadius) * Mathf.Sign(velocity);

@@ -14,7 +14,8 @@ namespace Project.Interface.Menus
 		[Export]
 		private Control cursor;
 		private int cursorPosition;
-		private Vector2 cursorVelocity;
+		private Vector2 cursorWidthVelocity;
+		private Vector2 cursorSizeVelocity;
 
 		[Export]
 		private Control options;
@@ -26,7 +27,7 @@ namespace Project.Interface.Menus
 		private int scrollAmount;
 		private float scrollRatio;
 		private Vector2 scrollVelocity;
-		private const float SCROLL_SMOOTHING = 2.0f;
+		private const float SCROLL_SMOOTHING = .05f;
 
 		protected override void SetUp()
 		{
@@ -40,16 +41,15 @@ namespace Project.Interface.Menus
 		protected override void ProcessMenu()
 		{
 			base.ProcessMenu();
-			UpdateListPosition(SCROLL_SMOOTHING * PhysicsManager.physicsDelta);
+			UpdateListPosition(SCROLL_SMOOTHING);
 		}
-
 
 		protected override void Confirm() => animator.Play("confirm");
 		protected override void Cancel() => animator.Play("cancel");
 
 		public override void ShowMenu()
 		{
-			VerticalSelection = menuMemory[MenuKeys.LevelSelect];
+			VerticalSelection = menuMemory[MemoryKeys.LevelSelect];
 			RecalculateListPosition();
 			UpdateListPosition(0);
 
@@ -61,7 +61,6 @@ namespace Project.Interface.Menus
 		}
 		public override void HideMenu()
 		{
-			animator.Play("hide");
 			for (int i = 0; i < levelOptions.Count; i++)
 				levelOptions[i].HideOption();
 		}
@@ -71,7 +70,7 @@ namespace Project.Interface.Menus
 			if (Mathf.IsZeroApprox(Controller.verticalAxis.value)) return;
 
 			VerticalSelection = WrapSelection(VerticalSelection + Controller.verticalAxis.sign, levelOptions.Count);
-			menuMemory[MenuKeys.LevelSelect] = VerticalSelection;
+			menuMemory[MemoryKeys.LevelSelect] = VerticalSelection;
 			animator.Play("select");
 			animator.Seek(0, true);
 			UpdateDescription();
@@ -112,7 +111,12 @@ namespace Project.Interface.Menus
 
 		private void UpdateListPosition(float smoothing)
 		{
-			cursor.Position = cursor.Position.SmoothDamp(new Vector2(cursor.Position.X, 220 + 96 * cursorPosition), ref cursorVelocity, smoothing);
+			float targetCursorPosition = levelOptions[VerticalSelection].isSideMission ? 552 : 424;
+			float targetCursorWidth = levelOptions[VerticalSelection].isSideMission ? 882 : 1012;
+
+			cursor.Position = cursor.Position.SmoothDamp(new Vector2(targetCursorPosition, 220 + 96 * cursorPosition), ref cursorWidthVelocity, smoothing);
+			cursor.Size = cursor.Size.SmoothDamp(new Vector2(targetCursorWidth, cursor.Size.Y), ref cursorSizeVelocity, smoothing);
+
 			options.Position = options.Position.SmoothDamp(Vector2.Up * (96 * scrollAmount - 8), ref optionVelocity, smoothing);
 			scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * (160 * scrollRatio - 80), ref scrollVelocity, smoothing);
 		}

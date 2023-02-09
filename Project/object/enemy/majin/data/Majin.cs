@@ -172,9 +172,7 @@ namespace Project.Gameplay
 
 		/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
 		private MovingObject movementController;
-
-		[Export]
-		private bool log;
+		private const int ENEMY_PEARL_AMOUNT = 16; //How many pearls are obtained when defeating enemy is defeated
 
 		//Animation parameters
 		private readonly StringName IDLE_STATE = "idle";
@@ -255,7 +253,7 @@ namespace Project.Gameplay
 		{
 			base.Defeat();
 
-			//TODO Create pearls
+			Runtime.Instance.SpawnPearls(ENEMY_PEARL_AMOUNT, GlobalPosition + Vector3.Up * .5f, new Vector2(2, .2f));
 
 			if (!defeatLaunchDirection.IsEqualApprox(Vector3.Zero))
 			{

@@ -1,5 +1,5 @@
 using Godot;
-using Project.Core;
+using Godot.Collections;
 
 namespace Project.Interface.Menus
 {
@@ -7,21 +7,71 @@ namespace Project.Interface.Menus
 	{
 		[Export]
 		private AnimationPlayer animator;
+		[Export]
+		private Node2D optionParent;
+		private readonly Array<Node2D> options = new Array<Node2D>();
+		[Export]
+		private Node2D cursor;
+		private Vector2 cursorVelocity;
+		private const float CURSOR_SMOOTHING = .08f;
 
-		protected override void ProcessMenu()
+		private int currentSelection;
+
+		public override void ShowMenu()
 		{
-			if (Controller.actionButton.wasPressed)
-			{
-				TransitionManager.StartTransition(new TransitionData()
-				{
-					inSpeed = 2f,
-					color = Colors.Black,
-				});
-				TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.Hide), (uint)ConnectFlags.OneShot);
-				DisableProcessing();
-			}
-			else
-				base.ProcessMenu();
+			animator.Play("show");
+			cursorVelocity = Vector2.Zero;
+			cursor.Position = options[currentSelection].Position;
 		}
+
+		protected override void SetUp()
+		{
+			for (int i = 0; i < optionParent.GetChildCount(); i++)
+				options.Add(optionParent.GetChild<Node2D>(i));
+
+			currentSelection = menuMemory[MemoryKeys.MainMenu];
+			HorizontalSelection = currentSelection % 2;
+			VerticalSelection = currentSelection / 2;
+		}
+
+		public override void _PhysicsProcess(double _)
+		{
+			base._PhysicsProcess(_);
+
+			if (IsVisibleInTree())
+				cursor.Position = cursor.Position.SmoothDamp(options[currentSelection].Position, ref cursorVelocity, CURSOR_SMOOTHING);
+		}
+
+		protected override void UpdateSelection()
+		{
+			HorizontalSelection = Mathf.Clamp(HorizontalSelection + Controller.horizontalAxis.sign, 0, 1);
+			VerticalSelection = Mathf.Clamp(VerticalSelection + Controller.verticalAxis.sign, 0, 1);
+
+			int targetSelection = HorizontalSelection + (VerticalSelection * 2);
+			if (targetSelection != currentSelection)
+			{
+				currentSelection = targetSelection;
+				menuMemory[MemoryKeys.MainMenu] = currentSelection;
+				animator.Play($"select");
+				animator.Seek(0.0, true);
+				AnimateSelection();
+			}
+		}
+
+		protected override void Confirm()
+		{
+			//Ignore unimplemented menus.
+			if (currentSelection != 0) return;
+			animator.Play("confirm");
+		}
+		protected override void Cancel() => animator.Play("cancel");
+
+		public override void OpenSubmenu()
+		{
+			if (currentSelection == 0)
+				_submenus[currentSelection].ShowMenu();
+		}
+
+		public void AnimateSelection() => animator.Play($"select-{currentSelection}");
 	}
 }

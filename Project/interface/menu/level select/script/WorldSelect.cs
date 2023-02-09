@@ -9,18 +9,20 @@ namespace Project.Interface.Menus
 		[Export]
 		private AnimationPlayer animator;
 
-		[ExportSubgroup("Demo Video Settings")]
+		[ExportSubgroup("Media Settings")]
 		[Export]
-		private VideoStreamPlayer videoPlayer;
+		private VideoStreamPlayer primaryVideoPlayer;
 		[Export]
-		private TextureRect videoCrossfade;
+		private VideoStreamPlayer secondaryVideoPlayer;
 		[Export]
-		private Array<VideoStreamTheora> videoStreams = new Array<VideoStreamTheora>();
-		private bool isChangingVideo;
+		private Array<StringName> videoStreamPaths = new Array<StringName>();
+		private VideoStream[] videoStreams;
+		private VideoStreamPlayer ActiveVideoPlayer { get; set; }
+		private VideoStreamPlayer PreviousVideoPlayer { get; set; }
 
 		private Color crossfadeColor;
 		private float videoFadeFactor;
-		private const float VIDEO_FADE_SPEED = 2.0f;
+		private const float VIDEO_FADE_SPEED = 5.0f;
 
 		[ExportSubgroup("Selection Settings")]
 		[Export]
@@ -44,29 +46,37 @@ namespace Project.Interface.Menus
 			for (int i = 0; i < levelGlowSprites.Count; i++)
 				_levelGlowSprites.Add(GetNode<Sprite2D>(levelGlowSprites[i]));
 
-			VerticalSelection = menuMemory[MenuKeys.WorldSelect];
+			VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
+			videoStreams = new VideoStream[videoStreamPaths.Count];
+			CallDeferred(MethodName.LoadVideos);
 		}
 
-		public override void _PhysicsProcess(double _)
+		/// <summary>
+		/// Load videos a frame after scene is set up to prevent crashing
+		/// </summary>
+		private void LoadVideos()
 		{
-			base._PhysicsProcess(_);
+			for (int i = 0; i < videoStreams.Length; i++)
+				videoStreams[i] = ResourceLoader.Load<VideoStream>(videoStreamPaths[i]);
+		}
 
-			if (IsVisibleInTree())
+		public override void _Process(double _)
+		{
+			if (primaryVideoPlayer.IsVisibleInTree())
 			{
 				UpdateVideo();
-				if (videoPlayer.Stream != null)
+				if (ActiveVideoPlayer.Stream != null)
 				{
-					if (!videoPlayer.IsPlaying())
-						videoPlayer.CallDeferred(VideoStreamPlayer.MethodName.Play);
+					if (!ActiveVideoPlayer.IsPlaying())
+						ActiveVideoPlayer.CallDeferred(VideoStreamPlayer.MethodName.Play);
 					else
-						videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VIDEO_FADE_SPEED * PhysicsManager.physicsDelta);
-
-					if (isChangingVideo)
-						isChangingVideo = false;
+						videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VIDEO_FADE_SPEED * PhysicsManager.normalDelta);
 				}
 
-				videoPlayer.Modulate = Colors.Transparent.Lerp(Colors.White, videoFadeFactor);
-				videoCrossfade.Modulate = crossfadeColor.Lerp(Colors.Transparent, videoFadeFactor);
+				ActiveVideoPlayer.Modulate = Colors.Transparent.Lerp(Colors.White, videoFadeFactor);
+
+				if (PreviousVideoPlayer != null)
+					PreviousVideoPlayer.Modulate = crossfadeColor.Lerp(Colors.Transparent, videoFadeFactor);
 			}
 		}
 
@@ -74,12 +84,12 @@ namespace Project.Interface.Menus
 		{
 			if (Controller.verticalAxis.sign != 0)
 			{
-				VerticalSelection = WrapSelection(VerticalSelection + Controller.verticalAxis.sign, SaveManager.WORLD_COUNT);
-				menuMemory[MenuKeys.WorldSelect] = VerticalSelection;
-				menuMemory[MenuKeys.LevelSelect] = 0; //Reset level selection
+				VerticalSelection = WrapSelection(VerticalSelection + Controller.verticalAxis.sign, (int)SaveManager.WorldEnum.Max);
+				menuMemory[MemoryKeys.WorldSelect] = VerticalSelection;
+				menuMemory[MemoryKeys.LevelSelect] = 0; //Reset level selection
 
 				bool isScrollingUp = Controller.verticalAxis.sign < 0;
-				int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, SaveManager.WORLD_COUNT);
+				int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, (int)SaveManager.WorldEnum.Max);
 				UpdateSpriteRegion(3, transitionIndex); //Update level text
 
 				animator.Play(isScrollingUp ? "scroll-up" : "scroll-down");
@@ -97,44 +107,41 @@ namespace Project.Interface.Menus
 		}
 
 		protected override void Cancel() => animator.Play("cancel");
-
 		public override void ShowMenu() => animator.Play("show");
-		public override void OpenSubmenu() => _submenus[VerticalSelection].ShowMenu();
+
+		public override void OpenParentMenu()
+		{
+			base.OpenParentMenu();
+			ActiveVideoPlayer.Stop();
+
+			SaveManager.SaveGame();
+			SaveManager.ActiveSaveSlotIndex = -1;
+		}
+		public override void OpenSubmenu()
+		{
+			SaveManager.ActiveGameData.lastPlayedWorld = (SaveManager.WorldEnum)VerticalSelection;
+			_submenus[VerticalSelection].ShowMenu();
+		}
 
 		private void UpdateVideo()
 		{
-			//Don't change video
-			if (!SaveManager.ActiveGameData.IsWorldUnlocked(VerticalSelection) ||
-			videoPlayer.Stream == videoStreams[VerticalSelection] || !Controller.IsHoldingNeutral) return;
+			//Don't change video?
+			if (ActiveVideoPlayer != null && ActiveVideoPlayer.Stream == videoStreams[VerticalSelection]) return;
+			if (!SaveManager.ActiveGameData.IsWorldUnlocked(VerticalSelection)) return; //World is locked
+			if (!Mathf.IsZeroApprox(Controller.verticalAxis.value)) return; //Still scrolling
 
-			if (videoPlayer.IsPlaying())
+			if (ActiveVideoPlayer != null && ActiveVideoPlayer.IsPlaying())
 			{
-				if (videoPlayer.GetVideoTexture() != null)
-				{
-					if (videoCrossfade.Texture != null)
-					{
-						videoCrossfade.Texture.Dispose();
-						videoCrossfade.Texture = null;
-					}
+				videoFadeFactor = 0;
+				crossfadeColor = ActiveVideoPlayer.Modulate;
 
-					videoFadeFactor = 0;
-					crossfadeColor = videoPlayer.Modulate;
-					videoCrossfade.Texture = (Texture2D)videoPlayer.GetVideoTexture().Duplicate();
-				}
-
-				videoPlayer.Stop();
+				PreviousVideoPlayer = ActiveVideoPlayer;
+				PreviousVideoPlayer.Paused = true;
 			}
 
-			videoPlayer.Stream = null;
-			CallDeferred(MethodName.ChangeVideo);
-		}
-
-		private void ChangeVideo()
-		{
-			if (isChangingVideo) return;
-
-			isChangingVideo = true;
-			videoPlayer.SetDeferred("stream", videoStreams[VerticalSelection]);
+			ActiveVideoPlayer = ActiveVideoPlayer == secondaryVideoPlayer ? primaryVideoPlayer : secondaryVideoPlayer;
+			ActiveVideoPlayer.Stream = videoStreams[VerticalSelection];
+			ActiveVideoPlayer.Paused = false;
 		}
 
 		public void UpdateLevelText()
@@ -149,7 +156,7 @@ namespace Project.Interface.Menus
 
 		private void UpdateSpriteRegion(int spriteIndex, int selectionIndex)
 		{
-			selectionIndex = WrapSelection(selectionIndex, SaveManager.WORLD_COUNT);
+			selectionIndex = WrapSelection(selectionIndex, (int)SaveManager.WorldEnum.Max);
 			if (!SaveManager.ActiveGameData.IsWorldUnlocked(selectionIndex)) //World isn't unlocked.
 				selectionIndex = levelSpriteRegions.Count - 1;
 

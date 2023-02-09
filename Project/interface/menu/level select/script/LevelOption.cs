@@ -65,7 +65,7 @@ namespace Project.Interface.Menus
 		private string levelPath;
 
 		[Export]
-		private bool isSideMission; //Should this mission be indented on the mission screen?
+		public bool isSideMission; //Should this mission be indented on the mission screen?
 		[Export]
 		private bool hasFireSouls;
 		[Export]

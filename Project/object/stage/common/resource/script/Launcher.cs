@@ -120,7 +120,7 @@ namespace Project.Gameplay.Objects
 		public float TotalTravelTime { get; private set; }
 
 		public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
-		private float GRAVITY => -RuntimeConstants.GRAVITY; //Use the same gravity as the character controller
+		private float GRAVITY => -Runtime.GRAVITY; //Use the same gravity as the character controller
 
 		/// <summary>
 		/// Get the current position, using t -> [0 <-> 1]. Lerps when launch data is invalid.
