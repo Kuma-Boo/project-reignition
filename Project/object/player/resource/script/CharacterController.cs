@@ -1269,26 +1269,36 @@ namespace Project.Gameplay
 			else if (VerticalSpd < 0)
 				castLength += Mathf.Abs(VerticalSpd) * PhysicsManager.physicsDelta;
 
+			Vector3 checkOffset = Vector3.Zero;
+			RaycastHit groundHit = new RaycastHit();
 			Vector3 castVector = -UpDirection * castLength;
-			RaycastHit groundHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
-			Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
+			int raysHit = 0;
+			//RaycastHit groundHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
+			//Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
 
-			if (!ValidateGroundCast(ref groundHit))
+			//Whisker casts (For smoother collision)
+			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
+			Vector3 castOffset = this.Forward() * (CollisionRadius - COLLISION_PADDING);
+			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 			{
-				//Whisker casts (For slanted walls and ground)
-				float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
-				Vector3 castOffset = this.Forward() * (CollisionRadius - COLLISION_PADDING);
-				for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
+				castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * CollisionRadius;
+				RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
+				Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
+				if (ValidateGroundCast(ref hit))
 				{
-					castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * CollisionRadius;
-					groundHit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
-					Debug.DrawRay(castOrigin + castOffset, castVector, groundHit ? Colors.Red : Colors.White);
-					if (ValidateGroundCast(ref groundHit)) break; //Found the floor
+					if (!groundHit)
+						groundHit = hit;
+					else
+						groundHit.Add(hit);
+					checkOffset += castOffset;
+					raysHit++;
 				}
 			}
 
 			if (groundHit) //Successful ground hit
 			{
+				groundHit.Divide(raysHit);
+
 				float snapDistance = groundHit.distance - CollisionRadius;
 				if (!IsOnGround && VerticalSpd < 0) //Landing on the ground
 				{

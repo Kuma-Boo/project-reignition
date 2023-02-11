@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay.Objects
@@ -30,8 +31,8 @@ namespace Project.Gameplay.Objects
 		}
 
 		[Export]
-		private NodePath[] pieces;
-		private Node3D[] _pieces;
+		private Array<NodePath> pieces;
+		private readonly Array<Node3D> _pieces = new Array<Node3D>();
 		private readonly int PIECE_COUNT = 16;
 		private readonly float RING_SIZE = 2.2f;
 
@@ -50,12 +51,13 @@ namespace Project.Gameplay.Objects
 		public override void _Ready()
 		{
 			if (Engine.IsEditorHint()) return;
+
 			InitializePieces();
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (Engine.IsEditorHint())
+			if (Engine.IsEditorHint() && pieces.Count != _pieces.Count)
 				InitializePieces();
 
 			UpdatePieces();
@@ -95,20 +97,16 @@ namespace Project.Gameplay.Objects
 
 		private void InitializePieces()
 		{
-			_pieces = new Node3D[pieces.Length];
-
-			for (int i = 0; i < pieces.Length; i++)
-			{
-				_pieces[i] = GetNodeOrNull<Node3D>(pieces[i]);
-			}
+			for (int i = 0; i < pieces.Count; i++)
+				_pieces.Add(GetNode<Node3D>(pieces[i]));
 		}
 
 		private void UpdatePieces()
 		{
-			if (_pieces.Length == 0) return;
+			if (_pieces.Count == 0) return;
 
 			float interval = Mathf.Tau / PIECE_COUNT;
-			for (int i = 0; i < _pieces.Length; i++)
+			for (int i = 0; i < _pieces.Count; i++)
 			{
 				if (_pieces[i] == null) continue;
 

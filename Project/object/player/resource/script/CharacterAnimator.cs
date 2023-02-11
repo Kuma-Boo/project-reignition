@@ -16,6 +16,8 @@ namespace Project.Gameplay
 		private AnimationNodeBlendTree animationRoot;
 		/// <summary> Transition node for switching between states (normal, balancing, sidling, etc) </summary>
 		private AnimationNodeTransition animationStateTransition;
+		private readonly StringName ENABLED_PARAMETER = "enabled";
+		private readonly StringName DISABLED_PARAMETER = "disabled";
 
 		private CharacterController Character => CharacterController.instance;
 
@@ -51,6 +53,7 @@ namespace Project.Gameplay
 			eventAnimationPlayer.Play("respawn");
 		}
 
+		private readonly StringName PLAYER_POSITION_SHADER_PARAMETER = "player_position";
 		/// <summary>
 		/// Called every frame. Only updates normal animations and visual rotation.
 		/// </summary>
@@ -62,6 +65,9 @@ namespace Project.Gameplay
 				AirAnimations();
 
 			UpdateVisualRotation();
+
+			//Update player position for shaders
+			RenderingServer.GlobalShaderParameterSet(PLAYER_POSITION_SHADER_PARAMETER, GlobalPosition);
 		}
 
 		#region Oneshot Animations
@@ -173,7 +179,7 @@ namespace Project.Gameplay
 		private readonly StringName MOVE_CURRENT_PARAMETER = "parameters/normal_state/ground_tree/move_transition/current_state";
 		private readonly StringName MOVE_REQUEST_PARAMETER = "parameters/normal_state/ground_tree/move_transition/transition_request";
 		private readonly StringName MOVE_SPEED_PARAMETER = "parameters/normal_state/ground_tree/move_speed/scale";
-		private readonly StringName MOVE_SEEK_PARAMETER = "parameters/normal_state/ground_tree/move_seek/seek_position";
+		private readonly StringName MOVE_SEEK_PARAMETER = "parameters/normal_state/ground_tree/move_seek/seek_request";
 		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/move_blend/blend_position";
 
 		private readonly StringName TURN_BLEND_PARAMETER = "parameters/normal_state/ground_tree/turn_blend/blend_position";
@@ -458,8 +464,8 @@ namespace Project.Gameplay
 		private readonly StringName SIDLE_FALL_STATE_PARAMETER = "sidle-fall";
 
 		private readonly StringName SIDLE_SPEED_PARAMETER = "parameters/sidle_tree/sidle_speed/scale";
-		private readonly StringName SIDLE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_position";
-		private readonly StringName SIDLE_DIRECTION_PARAMETER = "parameters/sidle_tree/facing_right/current";
+		private readonly StringName SIDLE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_request";
+		private readonly StringName SIDLE_DIRECTION_PARAMETER = "parameters/sidle_tree/facing_right/transition_request";
 
 		public void StartSidle(bool facingRight)
 		{
@@ -471,7 +477,7 @@ namespace Project.Gameplay
 			sidleRightState.Start(SIDLE_LOOP_STATE_PARAMETER);
 			sidleLeftState.Start(SIDLE_LOOP_STATE_PARAMETER);
 			animatorTree.Set(STATE_PARAMETER, SIDLE_STATE);
-			animatorTree.Set(SIDLE_DIRECTION_PARAMETER, facingRight ? 0 : 1);
+			animatorTree.Set(SIDLE_DIRECTION_PARAMETER, facingRight ? ENABLED_PARAMETER : DISABLED_PARAMETER);
 		}
 
 		public void UpdateSidle(float cyclePosition)

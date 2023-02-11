@@ -67,18 +67,18 @@ animation = &"wing"
 [sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_3mvxk"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_hyf8p"]
-enabled_inputs = 2
 xfade_time = 0.2
-reset = false
 input_0/name = "Flap"
 input_0/auto_advance = false
+input_0/reset = true
 input_1/name = "Fall"
 input_1/auto_advance = false
+input_1/reset = true
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_51t0f"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_v4aem"]
-graph_offset = Vector2(-590.122, 48.2207)
+graph_offset = Vector2(-548.114, 22.2995)
 nodes/action_anim/node = SubResource("AnimationNodeAnimation_wgyli")
 nodes/action_anim/position = Vector2(-32, 352)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_hr07p")
@@ -302,7 +302,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("AnimationTree:parameters/wing_seek/seek_position")
+tracks/7/path = NodePath("AnimationTree:parameters/wing_seek/seek_request")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -314,7 +314,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("AnimationTree:parameters/flap_seek/seek_position")
+tracks/8/path = NodePath("AnimationTree:parameters/flap_seek/seek_request")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -650,11 +650,11 @@ attenuation_filter_cutoff_hz = 10000.0
 tree_root = SubResource("AnimationNodeBlendTree_v4aem")
 anim_player = NodePath("../Flying Pot/AnimationPlayer")
 parameters/action_trigger/active = false
-parameters/action_trigger/request = 0
-parameters/flap_seek/seek_position = -1.0
+parameters/action_trigger/request = 2
+parameters/flap_seek/seek_request = -1.0
 parameters/flap_trigger/active = false
 parameters/flap_trigger/request = 2
-parameters/wing_seek/seek_position = 0.0
+parameters/wing_seek/seek_request = -1.0
 parameters/wing_state/current_state = "Flap"
 parameters/wing_state/transition_request = "Flap"
 parameters/wing_state/current_index = 0

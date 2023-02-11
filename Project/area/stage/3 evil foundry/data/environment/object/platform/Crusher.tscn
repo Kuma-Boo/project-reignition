@@ -1,46 +1,23 @@
-[gd_scene load_steps=9 format=3 uid="uid://d0iuxivh5my1w"]
+[gd_scene load_steps=5 format=3 uid="uid://d0iuxivh5my1w"]
 
-[ext_resource type="PackedScene" uid="uid://cvaotbr7v4f1s" path="res://area/stage/3 evil foundry/data/environment/object/model/platform/CrusherBloom.gltf" id="1_vgd83"]
+[ext_resource type="PackedScene" uid="uid://oq1anfcpifuh" path="res://area/stage/3 evil foundry/data/environment/object/model/platform/Crusher.gltf" id="1_tdd7l"]
 [ext_resource type="Script" path="res://area/stage/3 evil foundry/data/script/Crusher.cs" id="1_x3xhd"]
-[ext_resource type="PackedScene" uid="uid://cfy1y1u2tm3qj" path="res://area/stage/3 evil foundry/data/environment/object/model/platform/CrusherTop.gltf" id="2_cjxtl"]
-[ext_resource type="PackedScene" uid="uid://cosocodwyr4th" path="res://object/trigger/PlatformTrigger.tscn" id="2_xg4rx"]
-[ext_resource type="PackedScene" uid="uid://vyhxljap4avc" path="res://area/stage/3 evil foundry/data/environment/object/model/platform/CrusherBottom.gltf" id="3_ycc87"]
+[ext_resource type="Script" path="res://object/trigger/modules/PlatformTrigger.cs" id="3_tb3pl"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_igssf"]
-size = Vector3(5, 1, 5)
+[sub_resource type="BoxShape3D" id="BoxShape3D_8xdkw"]
+size = Vector3(5, 2, 5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_bcj72"]
-size = Vector3(5, 8, 5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_iid5c"]
-size = Vector3(5, 10, 5)
-
-[node name="Crusher" type="Node3D" node_paths=PackedStringArray("light")]
+[node name="Crusher" node_paths=PackedStringArray("light") instance=ExtResource("1_tdd7l")]
 script = ExtResource("1_x3xhd")
-light = NodePath("Bottom/CrusherBloom")
-crusher = NodePath("Crusher")
+light = NodePath("CrusherBloomMesh")
+crusher = NodePath("CrusherTopMesh")
 
-[node name="Crusher" type="StaticBody3D" parent="." groups=["crusher", "floor", "wall"]]
-
-[node name="CrusherTop" parent="Crusher" instance=ExtResource("2_cjxtl")]
+[node name="CrusherTopMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
-[node name="PlatformTrigger" parent="Crusher/CrusherTop" instance=ExtResource("2_xg4rx")]
+[node name="PlatformTrigger" type="Area3D" parent="CrusherTopMesh" index="1"]
+monitorable = false
+script = ExtResource("3_tb3pl")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Crusher/CrusherTop/PlatformTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("BoxShape3D_igssf")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Crusher"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-shape = SubResource("BoxShape3D_bcj72")
-
-[node name="Bottom" type="StaticBody3D" parent="."]
-
-[node name="CrusherBloom" parent="Bottom" instance=ExtResource("1_vgd83")]
-
-[node name="CrusherBottom" parent="Bottom" instance=ExtResource("3_ycc87")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Bottom"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
-shape = SubResource("BoxShape3D_iid5c")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CrusherTopMesh/PlatformTrigger" index="0"]
+shape = SubResource("BoxShape3D_8xdkw")

@@ -1,0 +1,53 @@
+[gd_scene load_steps=11 format=3 uid="uid://dek7ebkdr5k2b"]
+
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_6j01u"]
+[ext_resource type="PackedScene" uid="uid://d0xv0mvk7e2rd" path="res://area/stage/7 night palace/act 2/environment/model/NPAct2.gltf" id="1_cof7f"]
+[ext_resource type="Curve3D" uid="uid://c87yklkwfa334" path="res://area/stage/7 night palace/act 2/environment/path/MainPath.tres" id="2_gnax0"]
+[ext_resource type="PackedScene" uid="uid://b4gexcm5wctiv" path="res://area/stage/7 night palace/act 2/environment/collision/Collision.tscn" id="3_1m48j"]
+[ext_resource type="PackedScene" path="res://area/stage/7 night palace/data/common/BGM.tscn" id="3_j1s7w"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_jkftw"]
+[ext_resource type="PackedScene" uid="uid://d4ivgn14opv12" path="res://area/stage/7 night palace/data/skybox/SpaceSkybox.tscn" id="4_0qu5p"]
+[ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="4_o2jba"]
+[ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/stage/7 night palace/data/common/Environment.tres" id="6_2mfa1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4glpy"]
+size = Vector3(686, 13.2, 502)
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+script = ExtResource("1_6j01u")
+mainPath = NodePath("Path/MainPath")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="NPAct2" parent="Visuals" instance=ExtResource("1_cof7f")]
+
+[node name="SpaceSkybox" parent="Visuals" instance=ExtResource("4_0qu5p")]
+metadata/_edit_lock_ = true
+
+[node name="Collision" parent="." instance=ExtResource("3_1m48j")]
+visible = false
+
+[node name="FallTrigger" parent="." instance=ExtResource("3_jkftw")]
+
+[node name="Fall" type="Node3D" parent="FallTrigger"]
+script = ExtResource("4_o2jba")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(0.997236, 0.0742999, 0, -0.0742999, 0.997236, 0, 0, 0, 1, 118.3, -26.8085, 76)
+shape = SubResource("BoxShape3D_4glpy")
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="MainPath" type="Path3D" parent="Path"]
+curve = ExtResource("2_gnax0")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = ExtResource("6_2mfa1")
+
+[node name="BGM" parent="." instance=ExtResource("3_j1s7w")]
+bus = &"BGM"

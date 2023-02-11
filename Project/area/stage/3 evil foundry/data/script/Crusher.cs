@@ -31,6 +31,7 @@ namespace Project.Gameplay
 		[Export]
 		private NodePath crusher;
 		private Node3D _crusher;
+		private readonly int POSITION_OFFSET = 8;
 
 		public override void _Ready()
 		{
@@ -112,7 +113,7 @@ namespace Project.Gameplay
 					break;
 			}
 
-			_crusher.Position = Vector3.Up * height * Mathf.SmoothStep(0, 1, ratio);
+			_crusher.Position = Vector3.Up * (height * Mathf.SmoothStep(0, 1, ratio) + POSITION_OFFSET);
 		}
 	}
 }

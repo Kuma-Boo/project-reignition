@@ -166,28 +166,6 @@ namespace Project.Gameplay.Hazards
 			}
 
 			StartTimer(targetWaitTime);
-
-			/*
-			switch (attackState)
-			{
-				case AttackState.Active:
-					attackState = AttackState.Inactive;
-					targetWaitTime = inactiveLength;
-					animator.Play("inactive");
-					break;
-				case AttackState.Inactive:
-					attackState = AttackState.Warning;
-					targetWaitTime = warningLength;
-					animator.Play("warning");
-					break;
-				case AttackState.Warning:
-					attackState = AttackState.Active;
-					targetWaitTime = activeLength;
-					animator.Play("active");
-					break;
-			}
-			*/
-
 		}
 
 		private void StartTimer(double time)

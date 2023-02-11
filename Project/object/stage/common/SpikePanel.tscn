@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dqm1d4odqynle"]
+[gd_scene load_steps=9 format=3 uid="uid://xeuluo21g3tw"]
 
-[ext_resource type="PackedScene" uid="uid://cum3u35ksu1pb" path="res://object/stage/common/resource/model/SpikePanel.gltf" id="1"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_q6aoq"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_araiw"]
+[ext_resource type="PackedScene" uid="uid://cum3u35ksu1pb" path="res://object/stage/common/resource/model/SpikePanel.gltf" id="2_wces2"]
 
 [sub_resource type="BoxShape3D" id="3"]
 size = Vector3(1, 1.2, 1)
@@ -177,31 +177,34 @@ _data = {
 }
 
 [node name="SpikePanel" type="Node3D" node_paths=PackedStringArray("animator", "timer")]
-script = ExtResource("1_q6aoq")
+script = ExtResource("1_araiw")
 "Current State" = 0
 "Start Time" = 0.0
+"State Lengths/inactive" = 0.0
+"State Lengths/warning" = 0.0
+"State Lengths/active" = 0.0
 stateNames = [&"inactive", &"warning", &"active"]
 stateLengths = [0.0, 0.0, 0.0]
-animator = NodePath("AnimationPlayer")
+animator = NodePath("SpikePanel/AnimationPlayer")
 timer = NodePath("Timer")
 
-[node name="SpikePanel" parent="." instance=ExtResource("1")]
+[node name="SpikePanel" parent="." instance=ExtResource("2_wces2")]
 
 [node name="Spikes" parent="SpikePanel" index="1"]
 visible = false
 
 [node name="Hitbox" type="Area3D" parent="SpikePanel/Spikes" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.4032, 0)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SpikePanel/Spikes/Hitbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 shape = SubResource("3")
 disabled = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../SpikePanel")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SpikePanel"]
 libraries = {
 "": SubResource("AnimationLibrary_vh2p2")
 }

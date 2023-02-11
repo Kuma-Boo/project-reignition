@@ -1,6 +1,8 @@
-[gd_scene load_steps=28 format=3]
+[gd_scene load_steps=31 format=3 uid="uid://buyoqr4c07iaa"]
 
-[ext_resource type="PackedScene" uid="uid://dcyu1iuvha2k3" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="1_6j3jw"]
+[ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="1_6j3jw"]
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_ur5y1"]
+[ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="2_dcaq6"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_tyjcn"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="3_vxws3"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="4_dvx8k"]
@@ -21,13 +23,16 @@
 [ext_resource type="Curve3D" uid="uid://6njaomok24xp" path="res://area/stage/3 evil foundry/act 2/environment/path/MainPath.tres" id="19_nj7w8"]
 [ext_resource type="Curve3D" uid="uid://uv3wyso600ck" path="res://area/stage/3 evil foundry/act 2/environment/path/GrindPath.tres" id="20_4coev"]
 [ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/stage/3 evil foundry/data/environment/Environment.tres" id="21_u5nl1"]
-[ext_resource type="PackedScene" uid="uid://dsn3vorf5nwjm" path="res://area/stage/3 evil foundry/data/environment/BGM.tscn" id="22_jn25t"]
+[ext_resource type="PackedScene" path="res://area/stage/3 evil foundry/data/environment/BGM.tscn" id="22_jn25t"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5gu7"]
 size = Vector3(10, 10, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fkw0b"]
 size = Vector3(10, 10, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_heg8k"]
+size = Vector3(78, 10, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0yj8a"]
 size = Vector3(8, 15, 1)
@@ -38,7 +43,9 @@ size = Vector3(90, 10, 92)
 [sub_resource type="BoxShape3D" id="BoxShape3D_deuli"]
 size = Vector3(14, 8, 38)
 
-[node name="Static" type="Node"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+script = ExtResource("1_ur5y1")
+mainPath = NodePath("Paths/MainPath")
 
 [node name="Collision" parent="." instance=ExtResource("18_vaeni")]
 visible = false
@@ -48,7 +55,7 @@ visible = false
 [node name="Drifts" type="Node3D" parent="Triggers"]
 
 [node name="DriftTrigger1" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 165, 10.001, -184.125)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 165, 10.001, -184.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -57,7 +64,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger2" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160, 10.001, -209.125)
+transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, 160, 10.001, -209.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -66,7 +73,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger3" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 195, 15.001, -214.125)
+transform = Transform3D(-4.37112e-08, 0, -1, 0, 1, 0, 1, 0, -4.37112e-08, 195, 15.001, -214.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -75,7 +82,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger4" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, 200, 15.001, -164.125)
+transform = Transform3D(-1, 0, 8.74232e-08, 0, 1, 0, -8.74232e-08, 0, -1, 200, 15.001, -164.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -84,7 +91,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger5" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-2.18557e-07, 0, -1, 0, 1, 0, 1, 0, -2.18557e-07, 150, 20.001, -159.125)
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 150, 20.001, -159.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -93,7 +100,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger6" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, 145, 20.001, -224.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 145, 20.001, -224.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -102,7 +109,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger7" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(3.0598e-07, 0, 1, 0, 1, 0, -1, 0, 3.0598e-07, 210, 30.001, -229.125)
+transform = Transform3D(-2.18557e-07, 0, -1, 0, 1, 0, 1, 0, -2.18557e-07, 210, 30.001, -229.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -111,7 +118,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger8" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(1, 0, -3.49691e-07, 0, 1, 0, 3.49691e-07, 0, 1, 215, 30.001, -199.125)
+transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, 215, 30.001, -199.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -120,7 +127,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger9" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-3.93403e-07, 0, -1, 0, 1, 0, 1, 0, -3.93403e-07, 125, 40.001, -194.125)
+transform = Transform3D(3.0598e-07, 0, 1, 0, 1, 0, -1, 0, 3.0598e-07, 125, 40.001, -194.125)
 isRightTurn = true
 slideDistance = 5
 
@@ -129,7 +136,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger10" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-1, 0, 4.37114e-07, 0, 1, 0, -4.37114e-07, 0, -1, 120, 40.001, -242.525)
+transform = Transform3D(1, 0, -3.49691e-07, 0, 1, 0, 3.49691e-07, 0, 1, 120, 40.001, -242.525)
 isRightTurn = true
 slideDistance = 5
 
@@ -138,7 +145,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger11" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-3.93403e-07, 0, -1, 0, 1, 0, 1, 0, -3.93403e-07, 125, 40.001, -332.525)
+transform = Transform3D(3.0598e-07, 0, 1, 0, 1, 0, -1, 0, 3.0598e-07, 125, 40.001, -332.525)
 isRightTurn = true
 slideDistance = 5
 
@@ -147,7 +154,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger12" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-1, 0, 4.37114e-07, 0, 1, 0, -4.37114e-07, 0, -1, 120, 40.001, -445.025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40.001, -445.025)
 slideDistance = 5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger12"]
@@ -155,7 +162,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger13" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-1, 0, 4.37114e-07, 0, 1, 0, -4.37114e-07, 0, -1, 120, 40.001, -445.025)
+transform = Transform3D(3.0598e-07, 0, 1, 0, 1, 0, -1, 0, 3.0598e-07, 25, 40.001, -450.025)
 slideDistance = 5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger13"]
@@ -163,7 +170,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger14" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-3.93403e-07, 0, -1, 0, 1, 0, 1, 0, -3.93403e-07, 25, 40.001, -450.025)
+transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, 20, 40.001, -237.025)
 slideDistance = 5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger14"]
@@ -171,7 +178,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger15" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(1, 0, -3.49691e-07, 0, 1, 0, 3.49691e-07, 0, 1, 20, 40.001, -237.025)
+transform = Transform3D(-2.18557e-07, 0, -1, 0, 1, 0, 1, 0, -2.18557e-07, 57.2, 40.001, -232.025)
+isRightTurn = true
 slideDistance = 5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger15"]
@@ -179,7 +187,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger16" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(3.0598e-07, 0, 1, 0, 1, 0, -1, 0, 3.0598e-07, 57.2, 40.001, -232.025)
+transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, 62.2, 40.001, -195.025)
 isRightTurn = true
 slideDistance = 5
 
@@ -187,17 +195,8 @@ slideDistance = 5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
-[node name="DriftTrigger16 2" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(1, 0, -3.49691e-07, 0, 1, 0, 3.49691e-07, 0, 1, 62.2, 40.001, -195.025)
-isRightTurn = true
-slideDistance = 5
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger16 2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("BoxShape3D_c5gu7")
-
 [node name="DriftTrigger17" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-2.18557e-07, 0, -1, 0, 1, 0, 1, 0, -2.18557e-07, -95, -59.999, -190.025)
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -95, -59.999, -190.025)
 slideDistance = 5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger17"]
@@ -205,7 +204,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger18" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, -100, -29.999, -130.025)
+transform = Transform3D(-1, 0, 8.74232e-08, 0, 1, 0, -8.74232e-08, 0, -1, -100, -29.999, -130.025)
 isRightTurn = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger18"]
@@ -213,7 +212,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger19" parent="Triggers/Drifts" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-2.18557e-07, 0, -1, 0, 1, 0, 1, 0, -2.18557e-07, -145, -29.999, -120.025)
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -145, -29.999, -120.025)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Drifts/DriftTrigger19"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -290,6 +289,14 @@ script = ExtResource("3_vxws3")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/Checkpoint7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_fkw0b")
+
+[node name="SidleTrigger" parent="Triggers" instance=ExtResource("2_dcaq6")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 160.6, 40, -290)
+isFacingRight = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/SidleTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_heg8k")
 
 [node name="Paths" type="Node3D" parent="Triggers"]
 

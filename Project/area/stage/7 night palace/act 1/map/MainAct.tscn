@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1xx4j66jyirx"]
+
+[ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
+[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
+[ext_resource type="PackedScene" uid="uid://dff0tq06ihohv" path="res://area/stage/7 night palace/act 1/Static.tscn" id="3_ksvvu"]
+
+[node name="World" type="Node"]
+
+[node name="MainAct" type="Node3D" parent="."]
+script = ExtResource("1_lgy0w")
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = null
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
+
+[node name="Static" parent="." instance=ExtResource("3_ksvvu")]

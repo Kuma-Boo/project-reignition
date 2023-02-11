@@ -18,14 +18,15 @@ namespace Project.Gameplay.Objects
 
 			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Pearls", Variant.Type.Bool));
 
+			if (spawnAmount > 1)
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Radius", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
+
 			if (!spawnPearls)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Arc Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Position", Variant.Type.Vector3));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Object", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"));
 			}
-
-			if (spawnAmount > 1)
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Radius", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
 
 			return properties;
 		}
@@ -54,6 +55,9 @@ namespace Project.Gameplay.Objects
 				case "Spawn Settings/Radius":
 					spawnRadius = (float)value;
 					break;
+				case "Spawn Settings/Object":
+					customObject = (PackedScene)value;
+					break;
 
 				default:
 					return false;
@@ -78,6 +82,8 @@ namespace Project.Gameplay.Objects
 					return spawnPosition;
 				case "Spawn Settings/Radius":
 					return spawnRadius;
+				case "Spawn Settings/Object":
+					return customObject;
 			}
 			return base._Get(property);
 		}
@@ -85,8 +91,8 @@ namespace Project.Gameplay.Objects
 
 		/// <summary> Use RuntimeConstants method for pearls? </summary>
 		private bool spawnPearls;
-		[Export]
-		private PackedScene targetObject;
+		/// <summary> Scene to spawn when spawning custom object. </summary>
+		private PackedScene customObject;
 
 		public int spawnAmount = 1; //How many objects to spawn
 		private float travelTime = 1;
@@ -108,7 +114,6 @@ namespace Project.Gameplay.Objects
 			return this.Forward().Rotated(this.Up(), i * rotationInterval);
 		}
 
-		[ExportGroup("Item Box Settings")]
 		[Export]
 		private bool isFlying;
 		[Export]
@@ -137,12 +142,12 @@ namespace Project.Gameplay.Objects
 
 			if (!spawnPearls)
 			{
-				if (targetObject != null)
+				if (customObject != null)
 				{
 					//Pool objects
 					for (int i = 0; i < spawnAmount; i++)
 					{
-						Pickup pickup = targetObject.Instantiate<Pickup>();
+						Pickup pickup = customObject.Instantiate<Pickup>();
 
 						pickup.DisableAutoRespawning = true;
 						objectPool.Add(pickup);
