@@ -15,9 +15,6 @@ namespace Project.Gameplay.Bosses
 		private Node3D sky;
 
 		[Export]
-		private Node3D reflection; //High quality reflection
-
-		[Export]
 		private Node3D itemBundle; //Respawn the same object multiple times since only one item bundle is ever present
 		[Export]
 		public Array<int> itemBundleLocations;
@@ -34,16 +31,13 @@ namespace Project.Gameplay.Bosses
 
 		[Signal]
 		public delegate void ResetHallEventHandler(); //Called when a duel attack ends. Resets positions and respawns objects.
+		[Signal]
+		public delegate void RespawnItemBundleEventHandler(); //Called when item bundle is respawned.
 
 		public override void _PhysicsProcess(double _)
 		{
 			float extraRotation = Character.PathFollower.ProgressRatio * Mathf.Pi;
 			sky.Rotation = Vector3.Up * (Mathf.DegToRad(-65) + extraRotation);
-			reflection.GlobalPosition = Character.PathFollower.GlobalPosition;
-
-			Debug.DrawRay(reflection.GlobalPosition, reflection.Up() * 10, Colors.Green);
-			Debug.DrawRay(reflection.GlobalPosition, Character.PathFollower.Back() * 10, Colors.Blue);
-			reflection.Rotation = new Vector3(-Mathf.Pi * .5f, Character.PathFollower.Back().SignedAngleTo(Vector3.Forward, Vector3.Down), 0);
 		}
 
 		public void ResetHallway()
@@ -51,22 +45,20 @@ namespace Project.Gameplay.Bosses
 			hallRoot.GlobalTransform = Transform3D.Identity; //Reset hallway
 			primaryCollision.GlobalTransform = Transform3D.Identity;
 			secondaryCollision.GlobalTransform = Transform3D.Identity;
-			MovePiece(secondaryCollision);
+			MoveNode(secondaryCollision);
 
 			//TODO Reset item bundle
 		}
 
-		//Advances the visuals of the hallway to create the illusion of infinity
+		/// <summary>
+		/// Called from a signal. 
+		/// Advances the visuals of the hallway to create the illusion of infinity.
+		/// </summary>
 		public void AdvanceHall()
 		{
 			itemBundleCounter--;
-
 			if (itemBundleCounter <= 0)
 			{
-				//Item bundle object is configured to respawn whenever the visibility is changed
-				itemBundle.Visible = false;
-				itemBundle.Visible = true;
-
 				itemBundleCounter = itemBundleLocations[Erazor.CurrentPattern];
 
 				if (itemBundleCounter == 0) //Don't spawn item bundle anymore
@@ -75,26 +67,34 @@ namespace Project.Gameplay.Bosses
 					return;
 				}
 
+				EmitSignal(SignalName.RespawnItemBundle);
+
 				itemBundle.GlobalTransform = hallRoot.GlobalTransform;
-				for (int i = 0; i < itemBundleCounter; i++)
-					MovePiece(itemBundle);
+				for (int i = 0; i < itemBundleCounter; i++) //Move item bundle the correct distance away
+					MoveNode(itemBundle); //Each iteration moves the item bundle one chunk
 			}
 
-			MovePiece(hallRoot);
+			MoveNode(hallRoot);
 		}
 
-		//Collision is advanced separately since teleporting a collision piece the player is standing on causing jittering for a single frame
-		public void AdvanceCollision(bool teleportFirstPiece)
+		/// <summary>
+		/// Called from a signal. 
+		/// Collision only advances after player stops colliding with it to avoid jittering.
+		/// </summary>
+		public void AdvanceCollision(bool isPrimaryPiece)
 		{
-			Node3D targetPiece = teleportFirstPiece ? primaryCollision : secondaryCollision;
+			Node3D targetPiece = isPrimaryPiece ? primaryCollision : secondaryCollision;
 			for (int i = 0; i < 2; i++) //Perform twice to skip over the current collision piece
-				MovePiece(targetPiece);
+				MoveNode(targetPiece);
 		}
 
-		private void MovePiece(Node3D piece)
+		/// <summary>
+		/// Moves the given node one chunk forward.
+		/// </summary>
+		private void MoveNode(Node3D node)
 		{
-			piece.GlobalPosition += piece.Back() * COLLISION_PIECE_SPACING;
-			piece.GlobalRotate(Vector3.Up, Mathf.DegToRad(COLLISION_PIECE_ROTATION));
+			node.GlobalPosition += node.Forward() * COLLISION_PIECE_SPACING;
+			node.Rotation += Vector3.Up * Mathf.DegToRad(COLLISION_PIECE_ROTATION);
 		}
 	}
 }

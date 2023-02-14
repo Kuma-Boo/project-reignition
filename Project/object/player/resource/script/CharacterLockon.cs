@@ -63,7 +63,7 @@ namespace Project.Gameplay
 			{
 				int currentTarget = -1; //Index of the current target
 				float closestDistance = Mathf.Inf; //Current closest target
-				if (Target != null) //Current lockon target starts as the closest target
+				if (Target != null && Target.IsInsideTree()) //Current lockon target starts as the closest target
 					closestDistance = Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 
 				//Check whether to pick a new target

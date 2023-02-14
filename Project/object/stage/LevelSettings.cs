@@ -552,10 +552,10 @@ namespace Project.Gameplay
 		{
 			if (n.GetParent() != parentNode)
 			{
-				if (n.IsInsideTree()) //Object needs to be unparented first.
-					n.GetParent().CallDeferred("remove_child", n);
+				if (n.IsInsideTree()) //Object needs to be reparented first.
+					n.GetParent().RemoveChild(n);
 
-				parentNode.CallDeferred("add_child", n);
+				parentNode.CallDeferred(Node.MethodName.AddChild, n);
 			}
 
 			n.SetDeferred("transform", spawnTransform);

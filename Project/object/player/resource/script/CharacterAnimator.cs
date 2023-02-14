@@ -213,6 +213,15 @@ namespace Project.Gameplay
 				normalState.Travel(GROUND_TREE);
 			}
 
+			if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
+				speedRatio < .5f)
+			{
+				//Use the pythagorean theorem to get true movespeed
+				float trueSpeed = Mathf.Pow(Character.MoveSpeed, 2) + Mathf.Pow(Character.StrafeSpeed, 2);
+				trueSpeed = Mathf.Sqrt(trueSpeed);
+				speedRatio = Character.GroundSettings.GetSpeedRatio(trueSpeed);
+			}
+
 			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 			{
 				if (Character.IsMovingBackward) //Backstep
@@ -349,8 +358,12 @@ namespace Project.Gameplay
 					targetRotation = Character.PathFollower.ForwardAngle;
 				else if (Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
 				{
+					if (Mathf.IsZeroApprox(Character.MoveSpeed)) return;
 					float angle = Vector2.Down.AngleTo(new Vector2(Character.StrafeSpeed, Character.MoveSpeed));
-					float ratio = Mathf.Clamp(1 - Character.Skills.GroundSettings.GetSpeedRatioClamped(Character.MoveSpeed), 0, 1);
+					float ratio = Mathf.Clamp(1.0f - Character.Skills.GroundSettings.GetSpeedRatioClamped(Character.MoveSpeed), 0, 1);
+					if (!Character.IsOnGround)
+						ratio = 1;
+
 					targetRotation += angle * ratio;
 				}
 			}

@@ -345,7 +345,6 @@ namespace Project.Gameplay
 				targetPosition += PathFollower.Back() * distance;
 			}
 
-
 			bool trackHorizontally = settings.IsFieldCamera || settings.IsHallCamera;
 			if (trackHorizontally) //Horizontal tracking
 			{

@@ -1,17 +1,38 @@
-[gd_scene load_steps=11 format=3 uid="uid://dek7ebkdr5k2b"]
+[gd_scene load_steps=18 format=3 uid="uid://dek7ebkdr5k2b"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_6j01u"]
-[ext_resource type="PackedScene" uid="uid://d0xv0mvk7e2rd" path="res://area/stage/7 night palace/act 2/environment/model/NPAct2.gltf" id="1_cof7f"]
 [ext_resource type="Curve3D" uid="uid://c87yklkwfa334" path="res://area/stage/7 night palace/act 2/environment/path/MainPath.tres" id="2_gnax0"]
+[ext_resource type="PackedScene" uid="uid://baa0itya2nvqn" path="res://area/stage/7 night palace/act 2/environment/NPAct2.tscn" id="2_la3f2"]
 [ext_resource type="PackedScene" uid="uid://b4gexcm5wctiv" path="res://area/stage/7 night palace/act 2/environment/collision/Collision.tscn" id="3_1m48j"]
 [ext_resource type="PackedScene" path="res://area/stage/7 night palace/data/common/BGM.tscn" id="3_j1s7w"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_jkftw"]
 [ext_resource type="PackedScene" uid="uid://d4ivgn14opv12" path="res://area/stage/7 night palace/data/skybox/SpaceSkybox.tscn" id="4_0qu5p"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="4_o2jba"]
-[ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/stage/7 night palace/data/common/Environment.tres" id="6_2mfa1"]
+[ext_resource type="Environment" uid="uid://qjcvqav7rmjr" path="res://area/stage/7 night palace/data/common/SpaceEnvironment.tres" id="8_6epym"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4glpy"]
 size = Vector3(686, 13.2, 502)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uevov"]
+size = Vector3(160, 10, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h616v"]
+size = Vector3(86, 10, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2crdr"]
+size = Vector3(150, 10, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b4ph1"]
+size = Vector3(70, 10, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4v5yl"]
+size = Vector3(180, 10, 70)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dtgo4"]
+size = Vector3(120, 10, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5st8l"]
+size = Vector3(70, 10, 60)
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
 script = ExtResource("1_6j01u")
@@ -19,22 +40,54 @@ mainPath = NodePath("Path/MainPath")
 
 [node name="Visuals" type="Node3D" parent="."]
 
-[node name="NPAct2" parent="Visuals" instance=ExtResource("1_cof7f")]
+[node name="NPAct2" parent="Visuals" instance=ExtResource("2_la3f2")]
 
 [node name="SpaceSkybox" parent="Visuals" instance=ExtResource("4_0qu5p")]
-metadata/_edit_lock_ = true
 
 [node name="Collision" parent="." instance=ExtResource("3_1m48j")]
 visible = false
 
 [node name="FallTrigger" parent="." instance=ExtResource("3_jkftw")]
+"Enter Mode" = 0
 
 [node name="Fall" type="Node3D" parent="FallTrigger"]
 script = ExtResource("4_o2jba")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FallTrigger"]
+[node name="Base" type="CollisionShape3D" parent="FallTrigger"]
 transform = Transform3D(0.997236, 0.0742999, 0, -0.0742999, 0.997236, 0, 0, 0, 1, 118.3, -26.8085, 76)
 shape = SubResource("BoxShape3D_4glpy")
+
+[node name="1" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, -8, 0)
+shape = SubResource("BoxShape3D_uevov")
+
+[node name="2" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 184, -19, -40)
+shape = SubResource("BoxShape3D_h616v")
+
+[node name="3" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 301, -28, 11)
+shape = SubResource("BoxShape3D_2crdr")
+
+[node name="4" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 243, -23, 99)
+shape = SubResource("BoxShape3D_h616v")
+
+[node name="5" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, -8, 60)
+shape = SubResource("BoxShape3D_b4ph1")
+
+[node name="6" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 3, 178)
+shape = SubResource("BoxShape3D_4v5yl")
+
+[node name="7" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -63.9, -2, 123.6)
+shape = SubResource("BoxShape3D_dtgo4")
+
+[node name="8" type="CollisionShape3D" parent="FallTrigger"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -30.9, -2, 61.6)
+shape = SubResource("BoxShape3D_5st8l")
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -44,10 +97,20 @@ curve = ExtResource("2_gnax0")
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-0.984808, 7.5904e-09, -0.173648, 0.173648, 4.30473e-08, -0.984808, 0, -1, -4.37114e-08, 0, 0, 0)
+light_color = Color(0.901961, 1, 1, 1)
+light_energy = 1.4
+light_cull_mask = 4293918727
+
+[node name="EnvironmentLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-0.984808, -2.27712e-08, 0.173648, 0.173648, -1.29142e-07, 0.984808, 7.64274e-15, 1, 1.31134e-07, 0, 0, 0)
+layers = 6
+light_color = Color(0.92549, 0.882353, 0.752941, 1)
+light_energy = 0.4
+light_cull_mask = 4293918727
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
-environment = ExtResource("6_2mfa1")
+environment = ExtResource("8_6epym")
 
 [node name="BGM" parent="." instance=ExtResource("3_j1s7w")]
 bus = &"BGM"

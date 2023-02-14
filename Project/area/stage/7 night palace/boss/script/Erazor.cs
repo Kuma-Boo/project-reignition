@@ -35,8 +35,6 @@ namespace Project.Gameplay.Bosses
 
 		[Export]
 		private AnimationPlayer duelAnimator;
-		[Export]
-		public Array<Triggers.DialogTrigger> duelVoices;
 		private bool duelCharged; //Ready to strike?
 
 		private float currentDistance = 30f; //Current distance from the player
@@ -173,7 +171,10 @@ namespace Project.Gameplay.Bosses
 							else if (timer >= DUEL_DIALOG_DELAY) //Hint
 							{
 								duelCharged = true;
-								duelVoices[Runtime.randomNumberGenerator.RandiRange(3, 5)].Activate();
+								/*
+								TODO Play anticipation sfx
+								StageSettings.instance.dialogLibrary.GetStream("");
+								*/
 							}
 						}
 						else if (timer >= CurrentAttack.Startup)
@@ -225,7 +226,8 @@ namespace Project.Gameplay.Bosses
 			duelCharged = false;
 			isNearPlayer = true;
 			distanceVelocity = 0;
-			duelVoices[Runtime.randomNumberGenerator.RandiRange(0, 1)].Activate(); //Play audio clip
+
+			//TODO Play audio
 
 			//Update camera
 			duelCamera.distance = 35f;

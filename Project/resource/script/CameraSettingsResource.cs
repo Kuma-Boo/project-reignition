@@ -41,6 +41,7 @@ namespace Project.Gameplay
 
 				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Track Lockon", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Backstep Distance", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Use Player Position", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Use Pathfollower Distance", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Vertical Tracking Mode", Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
 			}

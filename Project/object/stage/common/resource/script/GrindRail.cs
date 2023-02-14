@@ -313,7 +313,8 @@ namespace Project.Gameplay
 						float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
 						horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
 
-						Character.MovementAngle += Mathf.Pi * .5f * Mathf.Sign(inputDeltaAngle);
+						//Keep some speed forward
+						Character.MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
 						Character.VerticalSpd = Runtime.GetJumpPower(GRIND_STEP_HEIGHT);
 						Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
 
@@ -324,8 +325,6 @@ namespace Project.Gameplay
 					}
 					else //Jump normally
 						Character.Jump(true);
-
-					return;
 				}
 			}
 
@@ -392,6 +391,10 @@ namespace Project.Gameplay
 			float castLength = movementDelta + Character.CollisionRadius;
 			RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Character.CollisionMask);
 			Debug.DrawRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, hit ? Colors.Red : Colors.White);
+
+			//Allow grindrails to travel through certain walls
+			if (hit && hit.collidedObject.IsInGroup("allow grindrail")) return new RaycastHit();
+
 			return hit;
 		}
 

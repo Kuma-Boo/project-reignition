@@ -114,7 +114,6 @@ namespace Project.Gameplay
 			voiceChannel.VolumeDb = 0f;
 		}
 
-
 		[ExportGroup("VFX")]
 		[Export]
 		public GpuParticles3D grindrailVFX;

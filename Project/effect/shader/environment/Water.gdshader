@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode shadows_disabled, diffuse_burley;
+render_mode shadows_disabled;
 
 global uniform float time;
 
@@ -35,5 +35,5 @@ void fragment()
 	ROUGHNESS = 0.0;
 	
 	ALBEDO = col.rgb;
-	ALPHA = opacity * COLOR.a;
+	ALPHA = clamp(opacity + COLOR.a, 0.0, 1.0);
 }

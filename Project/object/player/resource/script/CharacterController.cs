@@ -16,7 +16,7 @@ namespace Project.Gameplay
 		public LevelSettings Level => LevelSettings.instance;
 		public StageSettings Stage => StageSettings.instance;
 
-		public override void _EnterTree() => instance = this; //Override Singleton
+		public override void _EnterTree() => instance = this; //Always Override Singleton
 
 		public override void _Ready()
 		{
@@ -449,7 +449,7 @@ namespace Project.Gameplay
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
-			if (ActionState == ActionStates.Backflip) return;
+			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			bool overrideFacingDirection = Skills.IsSpeedBreakActive || (IsLockoutActive &&
@@ -465,7 +465,9 @@ namespace Project.Gameplay
 				strafeAmount *= Controller.MovementAxisLength; //Analog inputs
 
 				//Reduce strafe speed when moving slowly
-				strafeAmount *= (IsOnGround ? GroundSettings.GetSpeedRatioClamped(MoveSpeed) : AirSettings.GetSpeedRatioClamped(MoveSpeed)) + .1f;
+				float strafeFactor = IsOnGround ? GroundSettings.GetSpeedRatioClamped(MoveSpeed) : AirSettings.GetSpeedRatioClamped(MoveSpeed);
+				strafeFactor += .1f;
+				strafeAmount *= strafeFactor;
 
 				if (Skills.IsSpeedBreakActive)
 					StrafeSpeed = Skills.speedbreakStrafeSettings.Interpolate(StrafeSpeed, strafeAmount);
@@ -590,7 +592,7 @@ namespace Project.Gameplay
 
 		private void UpdateGroundActions()
 		{
-			if (IsLockoutActive) //Controls locked out.
+			if (IsLockoutActive) //Controls locked out
 			{
 				if (ExtensionMethods.IsSet<LockoutResource.ResetFlags>(LockoutResource.ResetFlags.OnLand, ActiveLockoutData.resetFlags) && JustLandedOnGround) //Cancel lockout
 					RemoveLockoutData(ActiveLockoutData);
@@ -667,7 +669,10 @@ namespace Project.Gameplay
 
 			//Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
 			if (IsHoldingDirection(PathFollower.ForwardAngle) && MoveSpeed < Skills.landingDashSpeed)
+			{
+				MovementAngle = PathFollower.ForwardAngle;
 				MoveSpeed = Skills.landingDashSpeed;
+			}
 		}
 
 		#region Jump
@@ -1443,10 +1448,13 @@ namespace Project.Gameplay
 					return;
 				}
 
+				if (!ceilingHit.collidedObject.IsInGroup("ceiling")) return;
+
 				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * CollisionRadius));
 
 				float maxVerticalSpeed = 0;
-				if (ActionState == ActionStates.Backflip) //Workaround for backflipping into slanted ceilings
+				//Workaround for backflipping into slanted ceilings
+				if (ActionState == ActionStates.Backflip)
 				{
 					float ceilingAngle = ceilingHit.normal.AngleTo(Vector3.Down);
 
@@ -1573,9 +1581,9 @@ namespace Project.Gameplay
 			if (Mathf.Abs(dot) > .9f) //Moving vertically
 			{
 				float angle = new Vector2(forwardDirection.X + forwardDirection.Z, forwardDirection.Y).Angle();
-				Vector3 axis = PathFollower.RightAxis; //Fallback
-				if (IsOnGround)
-					axis = forwardDirection.Cross(UpDirection).Normalized();
+				Vector3 axis = forwardDirection.Cross(UpDirection).Normalized();
+				if (!IsOnGround || !axis.IsNormalized()) //Fallback
+					axis = PathFollower.RightAxis;
 
 				forwardDirection = -forwardDirection.Rotated(axis, angle);
 			}

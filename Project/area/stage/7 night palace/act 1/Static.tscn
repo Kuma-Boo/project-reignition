@@ -1,15 +1,12 @@
-[gd_scene load_steps=54 format=3 uid="uid://dff0tq06ihohv"]
+[gd_scene load_steps=52 format=3 uid="uid://dff0tq06ihohv"]
 
-[ext_resource type="PackedScene" path="res://area/stage/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
+[ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/stage/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
-[ext_resource type="PackedScene" uid="uid://bp8gt4flctlvu" path="res://area/stage/7 night palace/data/environment/model/NPRotatingRoomNormal.gltf" id="2_c8h1q"]
-[ext_resource type="PackedScene" uid="uid://bmskyt77qsnyt" path="res://area/stage/7 night palace/data/environment/model/NPRotatingRoomRight.gltf" id="3_cv7pm"]
-[ext_resource type="PackedScene" uid="uid://pgquxqnnki01" path="res://area/stage/7 night palace/data/environment/model/NPRotatingRoomInverted.gltf" id="4_hrmxa"]
+[ext_resource type="PackedScene" uid="uid://1mlq23jb6byp" path="res://area/stage/7 night palace/data/skybox/Skybox.tscn" id="3_dbu0p"]
 [ext_resource type="PackedScene" uid="uid://dpva41a84ra2r" path="res://area/stage/7 night palace/data/environment/model/NPSpace1.gltf" id="5_6vqe2"]
 [ext_resource type="PackedScene" uid="uid://bs3nbq1qd8g7u" path="res://area/stage/7 night palace/data/environment/model/NPSpace2.gltf" id="6_7m8t3"]
 [ext_resource type="PackedScene" uid="uid://b8k7dh7ijlk57" path="res://area/stage/7 night palace/data/environment/model/NPSpace3.gltf" id="7_73d1y"]
 [ext_resource type="PackedScene" uid="uid://drnl4cfuh1x6q" path="res://area/stage/7 night palace/data/environment/model/NPSpaceBonus.gltf" id="8_ttsrt"]
-[ext_resource type="PackedScene" uid="uid://cetc5ifhxhrdg" path="res://area/stage/7 night palace/data/environment/model/NPGasRoom.gltf" id="9_0snov"]
 [ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/stage/7 night palace/data/common/Environment.tres" id="10_jp8di"]
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/act 1/environment/path/MainPath1.tres" id="11_ji1lh"]
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/act 1/environment/path/MainPath2.tres" id="12_gech5"]
@@ -25,6 +22,7 @@
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/act 1/environment/path/BonusPath.tres" id="22_la356"]
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/act 1/environment/path/RoomNormalPath.tres" id="23_5dsom"]
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/act 1/environment/path/RoomRightPath.tres" id="24_fjfs6"]
+[ext_resource type="Material" uid="uid://sc8upcny5n7i" path="res://area/stage/7 night palace/data/environment/model/material/Effect Reflection.tres" id="25_6jp1c"]
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/act 1/environment/path/RoomInvertedPath.tres" id="25_l1504"]
 [ext_resource type="Curve3D" path="res://area/stage/7 night palace/act 1/environment/path/GasRoomPath.tres" id="26_vos63"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="27_lklb2"]
@@ -210,17 +208,11 @@ mainPath = NodePath("Path/MainPath1")
 
 [node name="01Start" parent="Visuals/MainSection" instance=ExtResource("1_c3xql")]
 
+[node name="Skybox" parent="Visuals/MainSection" instance=ExtResource("3_dbu0p")]
+
 [node name="SpaceSection" type="Node3D" parent="Visuals"]
 
 [node name="RotatingRooms" type="Node3D" parent="Visuals/SpaceSection"]
-
-[node name="NPRotatingRoomNormal" parent="Visuals/SpaceSection/RotatingRooms" instance=ExtResource("2_c8h1q")]
-
-[node name="NPRotatingRoomRight" parent="Visuals/SpaceSection/RotatingRooms" instance=ExtResource("3_cv7pm")]
-visible = false
-
-[node name="NPRotatingRoomInverted" parent="Visuals/SpaceSection/RotatingRooms" instance=ExtResource("4_hrmxa")]
-visible = false
 
 [node name="SpaceRoads" type="Node3D" parent="Visuals/SpaceSection"]
 
@@ -234,9 +226,6 @@ visible = false
 visible = false
 
 [node name="NPSpaceBonus" parent="Visuals/SpaceSection/SpaceRoads" instance=ExtResource("8_ttsrt")]
-visible = false
-
-[node name="NPGasRoom" parent="Visuals/SpaceSection" instance=ExtResource("9_0snov")]
 visible = false
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Visuals/SpaceSection"]
@@ -442,6 +431,9 @@ visible = false
 curve = ExtResource("26_vos63")
 
 [node name="PlanarReflectionRenderer" parent="." instance=ExtResource("27_lklb2")]
+renderMask = 7
+reflectionMaterials = [ExtResource("25_6jp1c")]
+editorPreview = true
 
 [node name="BGM" parent="." instance=ExtResource("28_dk7mm")]
 bus = &"BGM"

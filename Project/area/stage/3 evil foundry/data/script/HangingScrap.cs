@@ -1,34 +1,38 @@
 using Godot;
-using System;
 
 namespace Project.Gameplay
 {
+	/// <summary>
+	/// Hanging scrap found in Evil Foundry.
+	/// </summary>
 	public partial class HangingScrap : Node3D
 	{
-
 		[Export]
 		private AnimationPlayer animator;
 		private CharacterController Character => CharacterController.instance;
+		private bool isInteractingWithPlayer;
 
-		public override void _Ready()
-		{
-			LevelSettings.instance.ConnectRespawnSignal(this);
-		}
+		public override void _Ready() => LevelSettings.instance.ConnectRespawnSignal(this);
+		public void Respawn() => animator.Play("RESET");
 
-		public void Respawn()
+		public override void _PhysicsProcess(double _)
 		{
-			animator.Play("RESET");
+			if (!isInteractingWithPlayer || Character.IsOnGround) return;
+
+			animator.Play("drop");
+			Character.Lockon.StartBounce();
 		}
 
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
+			isInteractingWithPlayer = true;
+		}
 
-			if (Character.Lockon.IsHomingAttacking)
-			{
-				animator.Play("drop");
-				Character.Lockon.StartBounce();
-			}
+		public void OnExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			isInteractingWithPlayer = false;
 		}
 	}
 }

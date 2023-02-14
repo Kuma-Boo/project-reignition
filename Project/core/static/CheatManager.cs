@@ -11,7 +11,7 @@ namespace Project.Core
 		public static bool UseEditorSkillValues => EnableCheats && true;
 
 		/// <summary> Infinite soul gauge. </summary>
-		public static bool InfiniteSoulGauge => EnableCheats && false;
+		public static bool InfiniteSoulGauge => EnableCheats && true;
 		/// <summary> Skip countdowns for faster debugging. </summary>
 		public static bool SkipCountdown => EnableCheats && true;
 

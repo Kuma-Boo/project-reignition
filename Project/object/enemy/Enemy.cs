@@ -111,6 +111,8 @@ namespace Project.Gameplay
 
 				if (Character.Skills.IsSpeedBreakActive) //For now, speed break kills enemies instantly
 					Defeat();
+				else if (Character.MovementState == CharacterController.MovementStates.Launcher) //Launcher kills enemies instantly
+					Defeat();
 				else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 				{
 					Character.Lockon.StartBounce(); //Important! Bounce must occur first for camera to work properly

@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_add;
+render_mode unshaded, blend_add, cull_disabled;
 
 uniform float uv_offset;
 uniform sampler2D albedo : hint_default_black;

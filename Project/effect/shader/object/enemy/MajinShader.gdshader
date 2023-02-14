@@ -3,10 +3,10 @@ render_mode diffuse_burley;
 
 uniform sampler2D albedo : hint_default_transparent, source_color;
 uniform sampler2D detail : hint_default_black, source_color;
-uniform sampler2D specular : hint_default_black;
+uniform sampler2D specular : hint_default_white;
 uniform float roughness : hint_range(0, 1) = .8;
 const float RIM_BIAS = .4;
-const float RIM_MULTIPLIER = .8;
+const float RIM_MULTIPLIER = .6;
 const float SPECULAR_MULTIPLIER = 2.5;
 
 void fragment()
@@ -27,9 +27,9 @@ void fragment()
 	rim = clamp(rim, 0, 1);
 	
 	//Calculate specularity
-	spec *= view;
+	spec *= view * SPECULAR_MULTIPLIER;
 	ROUGHNESS = roughness;
-	SPECULAR = clamp(spec * SPECULAR_MULTIPLIER, 0, 1);
+	SPECULAR = spec;
 	ALBEDO = col.rgb;
-	EMISSION = vec3(rim);
+	EMISSION = clamp((col.rgb + vec3(rim)) * rim * .5, vec3(0.0), vec3(1.0));
 }

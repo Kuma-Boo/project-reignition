@@ -122,6 +122,8 @@ namespace Project.Editor
 		{
 			ItemBox box = (target as ItemBox);
 
+			if (box.spawnPearls) return;
+
 			DrawLaunchData(overlay, box.GetLaunchData(), DEFAULT_DRAW_COLOR);
 			if (box.spawnAmount > 1)
 				DrawPerspectiveCircle(overlay, box.EndPosition, box.GlobalTransform.Basis, box.spawnRadius, Vector3.Forward, Vector3.Up, DEFAULT_DRAW_COLOR);

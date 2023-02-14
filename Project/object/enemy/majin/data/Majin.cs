@@ -22,7 +22,7 @@ namespace Project.Gameplay
 
 			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
 			if (!trackPlayer)
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float, PropertyHint.Range, "-5,5,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
 
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
 			if (attackType == AttackTypes.Fire) //Show relevant fire-related settings
@@ -85,7 +85,7 @@ namespace Project.Gameplay
 					NotifyPropertyListChanged();
 					break;
 				case "Rotation Settings/Rotation Time":
-					rotationTime = (float)value;
+					rotationTime = Mathf.RoundToInt((float)value * 10.0f) * .1f;
 					break;
 
 				case "Attack Settings/Attack Type":
@@ -253,7 +253,7 @@ namespace Project.Gameplay
 		{
 			base.Defeat();
 
-			Runtime.Instance.SpawnPearls(ENEMY_PEARL_AMOUNT, GlobalPosition + Vector3.Up * .5f, new Vector2(2, .2f));
+			Runtime.Instance.SpawnPearls(ENEMY_PEARL_AMOUNT, Character.CenterPosition, new Vector2(2, 1.5f), 1.5f);
 
 			if (!defeatLaunchDirection.IsEqualApprox(Vector3.Zero))
 			{

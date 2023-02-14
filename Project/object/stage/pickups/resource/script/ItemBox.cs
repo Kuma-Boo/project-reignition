@@ -18,14 +18,14 @@ namespace Project.Gameplay.Objects
 
 			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Pearls", Variant.Type.Bool));
 
-			if (spawnAmount > 1)
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Radius", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
-
 			if (!spawnPearls)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Arc Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Position", Variant.Type.Vector3));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Object", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"));
+
+				if (spawnAmount > 1)
+					properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Radius", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
 			}
 
 			return properties;
@@ -90,7 +90,7 @@ namespace Project.Gameplay.Objects
 		#endregion
 
 		/// <summary> Use RuntimeConstants method for pearls? </summary>
-		private bool spawnPearls;
+		public bool spawnPearls;
 		/// <summary> Scene to spawn when spawning custom object. </summary>
 		private PackedScene customObject;
 
@@ -128,6 +128,8 @@ namespace Project.Gameplay.Objects
 		private bool isOpened;
 		private bool isMovingObjects;
 		private float currentTravelTime;
+
+		private readonly Vector2 PEARL_SPAWN_RADIUS = new Vector2(2.0f, 1.0f);
 
 		//Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
 		private readonly List<Pickup> objectPool = new List<Pickup>();
@@ -226,7 +228,7 @@ namespace Project.Gameplay.Objects
 
 			if (spawnPearls)
 			{
-				Runtime.Instance.SpawnPearls(spawnAmount, GlobalPosition, new Vector2(spawnRadius, .5f));
+				Runtime.Instance.SpawnPearls(spawnAmount, GlobalPosition, PEARL_SPAWN_RADIUS, 2.0f);
 				return;
 			}
 

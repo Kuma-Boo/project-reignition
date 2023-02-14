@@ -156,7 +156,7 @@ namespace Project.Gameplay.Triggers
 		/// </summary>
 		private void OnPlayerDamaged()
 		{
-			if (damageState != DamageStates.Disabled) return; //Damage routine has already started
+			if (Character.IsInvincible || damageState != DamageStates.Disabled) return; //Damage routine has already started
 
 			if (LevelSettings.instance.CurrentRingCount == 0)
 			{

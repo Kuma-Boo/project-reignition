@@ -21,7 +21,7 @@ namespace Project.Gameplay.Objects
 
 		protected virtual void SetUp()
 		{
-			if (DisableAutoRespawning) //Don't respawn automatically
+			if (!DisableAutoRespawning) //Setup respawn settings
 			{
 				spawnData = new SpawnData(GetParent(), Transform);
 				Level.ConnectRespawnSignal(this);

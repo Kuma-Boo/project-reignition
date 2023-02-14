@@ -87,11 +87,11 @@ namespace Project.Core
 		}
 
 		private const float PEARL_MIN_TRAVEL_TIME = .2f;
-		private const float PEARL_MAX_TRAVEL_TIME = .3f;
-		public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius)
+		private const float PEARL_MAX_TRAVEL_TIME = .4f;
+		public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius, float heightOffset = 0)
 		{
 			GD.Print($"Spawned {amount} pearls.");
-			Tween tween = CreateTween().SetParallel(true);
+			Tween tween = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Cubic);
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -111,6 +111,7 @@ namespace Project.Core
 				Vector3 spawnOffset = new Vector3(randomNumberGenerator.RandfRange(-radius.X, radius.X),
 					randomNumberGenerator.RandfRange(-radius.Y, radius.Y),
 					randomNumberGenerator.RandfRange(-radius.X, radius.X));
+				spawnOffset.Y += heightOffset;
 
 				float travelTime = randomNumberGenerator.RandfRange(PEARL_MIN_TRAVEL_TIME, PEARL_MAX_TRAVEL_TIME);
 				tween.TweenProperty(pearl, "global_position", spawnPosition + spawnOffset, travelTime).From(spawnPosition);

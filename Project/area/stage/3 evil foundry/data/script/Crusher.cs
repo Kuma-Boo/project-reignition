@@ -9,11 +9,13 @@ namespace Project.Gameplay
 		[Export(PropertyHint.Range, "0, 10")]
 		private int height;
 		[Export]
-		private float travelTime; //How long to take to crush/rise
+		private float fallingTime; //How long does falling take?
 		[Export]
 		private float openTime; //How long to remain open.
 		[Export]
-		private float closedTime = -1; //How long to stay closed. -1 to use the same value as openLength.
+		private float risingTime; //How long does rising take?
+		[Export]
+		private float closedTime; //How long to stay closed.
 		[Export(PropertyHint.Range, "0,1,.1")]
 		private float currentRatio; //Set this from the editor to change where the initial timer is
 		[Export]
@@ -61,18 +63,17 @@ namespace Project.Gameplay
 					if (IsStateCompleted(openTime)) //Start Falling
 						currentState = States.Falling;
 					break;
+				case States.Falling:
+					if (IsStateCompleted(fallingTime))
+						currentState = States.Closed;
+					break;
 				case States.Closed:
 					if (IsStateCompleted(closedTime)) //Start rising
 						currentState = States.Rising;
 					break;
-				default:
-					if (IsStateCompleted(travelTime))
-					{
-						if (currentState == States.Falling && !Mathf.IsZeroApprox(closedTime))
-							currentState = States.Closed;
-						else
-							currentState = States.Open;
-					}
+				case States.Rising:
+					if (IsStateCompleted(risingTime))
+						currentState = States.Open;
 					break;
 			}
 
