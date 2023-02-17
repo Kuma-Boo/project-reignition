@@ -297,6 +297,7 @@ namespace Project.Core
 			LandingBoost = 1, //Gives a speed boost when landing
 			PearlAttractor = 2, //Makes collecting pearls easier
 			SplashJump = 4, //Bounces the player when JumpDashing an obstacle
+			ManualDrift = 8, //Manually perform a drift for more speed and points/exp
 		}
 
 		public enum LevelStateEnum

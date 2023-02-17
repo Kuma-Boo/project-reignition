@@ -45,7 +45,7 @@ namespace Project.Gameplay.Objects
 				{
 					movementMode = LockoutResource.MovementModes.Replace,
 					spaceMode = LockoutResource.SpaceModes.Camera,
-					movementAngle = Character.CalculateForwardAngle(this.Back()),
+					movementAngle = Character.CalculateForwardAngle(this.Forward()),
 					speedRatio = speedRatio,
 					disableActions = true,
 					overrideSpeed = applyBoost,

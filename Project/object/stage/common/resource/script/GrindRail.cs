@@ -165,7 +165,7 @@ namespace Project.Gameplay
 				//Generate curve and collision
 				collider.Shape = new BoxShape3D()
 				{
-					Size = new Vector3(.5f, .5f, RailLength)
+					Size = new Vector3(2f, .5f, RailLength)
 				};
 				collider.Position = Vector3.Forward * RailLength * .5f + Vector3.Down * .05f;
 				rail.Curve = new Curve3D();
@@ -191,13 +191,16 @@ namespace Project.Gameplay
 				CheckRailActivation();
 		}
 
+		/// <summary> Is a jump currently being buffered? </summary>
+		private float jumpBufferTimer;
 		/// <summary> Is a shuffle currently being buffered? </summary>
 		private float shuffleBufferTimer;
+		private const float JUMP_BUFFER_LENGTH = .2f;
 		private const float SHUFFLE_BUFFER_LENGTH = .4f;
 		/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
-		private const float GRIND_RAIL_SNAPPING = .5f;
+		private const float GRIND_RAIL_SNAPPING = .6f;
 		/// <summary> Rail snapping is more generous when performing a grind step. </summary>
-		private const float GRINDSTEP_RAIL_SNAPPING = 1.2f;
+		private const float GRINDSTEP_RAIL_SNAPPING = 1.4f;
 		private Vector3 closestPoint;
 		private void CheckRailActivation()
 		{
@@ -225,6 +228,7 @@ namespace Project.Gameplay
 		private void ActivateRail()
 		{
 			isActive = true;
+			jumpBufferTimer = 0;
 			Character.ResetActionState(); //Reset grind step
 
 			isFadingSFX = false;
@@ -273,7 +277,6 @@ namespace Project.Gameplay
 			Character.UpDirection = pathFollower.Up();
 			Character.MovementAngle = railAngle;
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
-			Character.CheckCeiling(); //Check for crushers
 
 			sfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed)); //Fade volume based on speed
 
@@ -288,7 +291,12 @@ namespace Project.Gameplay
 					shuffleBufferTimer = -SHUFFLE_BUFFER_LENGTH;
 			}
 
+			if (Controller.jumpButton.wasPressed)
+				jumpBufferTimer = JUMP_BUFFER_LENGTH;
+
 			shuffleBufferTimer = Mathf.MoveToward(shuffleBufferTimer, 0, PhysicsManager.physicsDelta);
+			jumpBufferTimer = Mathf.MoveToward(jumpBufferTimer, 0, PhysicsManager.physicsDelta);
+
 			if (!Character.Animator.IsBalanceShuffleActive)
 			{
 				if (shuffleBufferTimer > 0)
@@ -296,8 +304,10 @@ namespace Project.Gameplay
 
 				shuffleBufferTimer = 0;
 
-				if (Controller.jumpButton.wasPressed) //Jumping off rail can only happen when not shuffling
+				if (jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
 				{
+					jumpBufferTimer = 0;
+
 					//Check if the player is holding a direction parallel to rail and perform a grindstep
 					if (Character.IsHoldingDirection(railAngle + Mathf.Pi * .5f) ||
 						Character.IsHoldingDirection(railAngle - Mathf.Pi * .5f))
@@ -336,9 +346,11 @@ namespace Project.Gameplay
 			RaycastHit hit = CheckWall(movementDelta);
 			if (hit && hit.collidedObject is StaticBody3D) //Stop player when colliding with a static body
 			{
-				movementDelta = hit.distance; //Limit movement distance
+				movementDelta = 0; //Limit movement distance
 				Character.MoveSpeed = 0f;
 			}
+			else //No walls, Check for crushers
+				Character.CheckCeiling();
 
 			pathFollower.Progress += movementDelta;
 			Character.UpdateExternalControl();
@@ -363,6 +375,9 @@ namespace Project.Gameplay
 			if (!isActive) return;
 
 			isFadingSFX = true; //Start fading sound effect
+
+			if (jumpBufferTimer > 0) //Player buffered jump late; cyote time
+				Character.Jump(true);
 
 			isActive = false;
 			isInteractingWithPlayer = false;

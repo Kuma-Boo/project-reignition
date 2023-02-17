@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, depth_draw_never, blend_add, cull_back;
+render_mode depth_draw_never, blend_add, cull_disabled;
 
 global uniform float bloom_amount;
 uniform vec2 direction;
@@ -18,6 +18,7 @@ void vertex()
 void fragment()
 {
 	ALBEDO = COLOR.rgb; //Use vertex color
+	EMISSION = COLOR.rgb;
 	ALPHA = COLOR.a * .5;
 	ALPHA *= clamp(smoothstep(distance_fade_min, distance_fade_max, -VERTEX.z), 0.0, 1.0);
 }

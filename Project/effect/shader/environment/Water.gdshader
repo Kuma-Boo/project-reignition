@@ -35,5 +35,5 @@ void fragment()
 	ROUGHNESS = 0.0;
 	
 	ALBEDO = col.rgb;
-	ALPHA = clamp(opacity + COLOR.a, 0.0, 1.0);
+	ALPHA = clamp(opacity * COLOR.a, 0.0, 1.0);
 }

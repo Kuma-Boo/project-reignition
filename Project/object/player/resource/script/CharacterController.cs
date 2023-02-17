@@ -74,7 +74,6 @@ namespace Project.Gameplay
 			JumpDash, //Also includes homing attack
 			Stomping, //Jump cancel
 			Backflip,
-			Grindstep, //Grind stepping
 		}
 
 		/// <summary>
@@ -156,7 +155,7 @@ namespace Project.Gameplay
 				if (ActiveLockoutData.allowReversing) //Check if we're trying to turn around
 				{
 					if (turnInstantly)
-						IsMovingBackward = ExtensionMethods.DeltaAngleRad(inputAngle, PathFollower.ForwardAngle) > Mathf.Pi * .54f;
+						IsMovingBackward = IsHoldingDirection(PathFollower.BackAngle);
 
 					if (IsMovingBackward)
 						targetAngle += Mathf.Pi; //Flip targetAngle when moving backwards
@@ -358,7 +357,7 @@ namespace Project.Gameplay
 
 			UpdateMoveSpeed();
 			UpdateTurning();
-			IsMovingBackward = ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > Mathf.Pi * .54f; //Moving backwards
+			IsMovingBackward = ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.BackAngle) < Mathf.Pi * .46f; //Moving backwards
 
 			UpdateSlopeSpd();
 			UpdateActions();
@@ -852,7 +851,7 @@ namespace Project.Gameplay
 				return;
 
 			if (IsGrindstepping)
-				StopGrindstep();
+				Animator.ResetState(.1f);
 
 			//Stomp
 			actionBufferTimer = 0;
@@ -914,18 +913,18 @@ namespace Project.Gameplay
 		#endregion
 
 		#region GrindStep
-		public bool IsGrindstepping => ActionState == ActionStates.Grindstep;
+		public bool IsGrindstepping { get; private set; }
 
 		public void StartGrindstep()
 		{
-			ActionState = ActionStates.Grindstep;
+			IsGrindstepping = true;
 			Animator.StartGrindStep();
 		}
 
 		public void StopGrindstep()
 		{
+			IsGrindstepping = false;
 			Animator.ResetState(.1f);
-			ResetActionState();
 		}
 		#endregion
 		#endregion
@@ -1136,7 +1135,8 @@ namespace Project.Gameplay
 			IsOnGround = false;
 			launcherTime = 0;
 
-			CanJumpDash = false;
+			CanJumpDash = data.canJumpDash;
+			Lockon.IsMonitoring = false; //Disable lockon monitoring while launch is active
 			Lockon.ResetLockonTarget();
 
 			if (useAutoAlignment)
@@ -1189,6 +1189,8 @@ namespace Project.Gameplay
 			}
 
 			ResetMovementState();
+
+			Lockon.IsMonitoring = CanJumpDash;
 			EmitSignal(SignalName.LaunchFinished);
 		}
 
@@ -1278,8 +1280,6 @@ namespace Project.Gameplay
 			RaycastHit groundHit = new RaycastHit();
 			Vector3 castVector = -UpDirection * castLength;
 			int raysHit = 0;
-			//RaycastHit groundHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
-			//Debug.DrawRay(castOrigin, castVector, groundHit ? Colors.Red : Colors.White);
 
 			//Whisker casts (For smoother collision)
 			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
@@ -1395,14 +1395,14 @@ namespace Project.Gameplay
 		{
 			if (hit)
 			{
-				//Unless the collider is supposed to be both
-				if (hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("floor"))
+				if (!hit.collidedObject.IsInGroup("floor"))
 					hit = new RaycastHit();
 				else if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) //Limit angle collision
 					hit = new RaycastHit();
-				else if (!IsOnGround && hit.collidedObject.IsInGroup("wall")) //Be more strict on objects tagged as a wall
+				else if (!IsOnGround &&
+					hit.collidedObject.IsInGroup("wall")) //Be more strict on objects tagged as a wall
 				{
-					if (hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .1f)
+					if (hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .2f)
 						hit = new RaycastHit();
 				}
 			}
@@ -1445,6 +1445,7 @@ namespace Project.Gameplay
 					{
 						ignoreInvincibility = true,
 					});
+
 					return;
 				}
 

@@ -4,7 +4,8 @@
 [ext_resource type="Script" path="res://area/stage/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
 [ext_resource type="PackedScene" uid="uid://cptiijnhwgwjm" path="res://area/stage/3 evil foundry/data/environment/object/model/scrap/HangingScrap.gltf" id="2_rhjaa"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_wydx8"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhikk"]
+size = Vector3(4.5, 1.4, 4.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yocea"]
 size = Vector3(4, 1.2, 4)
@@ -41,7 +42,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Area3D/CollisionShape3D:disabled")
+tracks/2/path = NodePath("Hitbox/CollisionShape3D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -131,7 +132,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Area3D/CollisionShape3D:disabled")
+tracks/3/path = NodePath("Hitbox/CollisionShape3D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -177,16 +178,18 @@ animator = NodePath("AnimationPlayer")
 
 [node name="ScrapClaw" parent="." instance=ExtResource("1_7go6u")]
 
-[node name="Area3D" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.7, 0)
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.8, 0)
 collision_layer = 4
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-shape = SubResource("SphereShape3D_wydx8")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("BoxShape3D_hhikk")
 
 [node name="Collision" type="StaticBody3D" parent="." groups=["floor", "wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.9, 0)
+collision_layer = 8
+collision_mask = 8
 
 [node name="HangingScrap" parent="Collision" instance=ExtResource("2_rhjaa")]
 
@@ -199,5 +202,5 @@ libraries = {
 "": SubResource("AnimationLibrary_uxish")
 }
 
-[connection signal="area_entered" from="Area3D" to="." method="OnEntered"]
-[connection signal="area_exited" from="Area3D" to="." method="OnExited"]
+[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]

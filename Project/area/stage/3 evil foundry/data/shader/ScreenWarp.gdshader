@@ -3,20 +3,20 @@ shader_type canvas_item;
 global uniform float time;
 
 uniform sampler2D distortion : source_color, repeat_enable;
-uniform float intensity = 128.0;
 uniform vec2 scroll_speed = vec2(1, 1);
 uniform vec2 scale = vec2(1, 1);
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
-uniform float bias;
+const float bias = -28.0;
+const float intensity = 0.01;
 
 void fragment()
 {
-	vec2 uv = UV * scale + scroll_speed * time;
+	vec2 uv = (UV + scroll_speed * time) * scale;
 	vec4 warp = texture(distortion, uv);
-	
-	uv = SCREEN_UV + (vec2((warp.g * intensity) + bias, 0) * SCREEN_PIXEL_SIZE.x);
+	uv = vec2(0.5 - warp.g, 0) * intensity;
+	uv = SCREEN_UV + uv;
 	
 	vec4 col = texture(SCREEN_TEXTURE, uv);
 	COLOR = col;

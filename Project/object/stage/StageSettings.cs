@@ -24,6 +24,10 @@ namespace Project.Gameplay
 		[Export]
 		public SFXLibraryResource dialogLibrary;
 
+		[Export]
+		/// <summary> Reference to active area's WorldEnvironment node. </summary>
+		public WorldEnvironment environment;
+
 		public override void _EnterTree()
 		{
 			instance = this; //Always override previous instance

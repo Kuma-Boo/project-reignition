@@ -11,15 +11,15 @@ void fragment()
 	vec2 uv = UV;
 	
 	vec4 col = texture(albedo, uv) * COLOR;
-	float view = dot(NORMAL, VIEW);
-	
-	//Calculate rim lighting
-	vec4 spec_col = texture(specular, uv);
-	float spec = spec_col.r * spec_col.a;
 	
 	//Calculate specularity
+	vec4 spec_col = texture(specular, uv);
+	float spec = spec_col.r * spec_col.a;
+	float view = dot(NORMAL, VIEW);
 	spec *= view;
+	spec = clamp(spec * specular_multiplier, 0, 1);
+	
 	ROUGHNESS = roughness;
-	SPECULAR = clamp(spec * specular_multiplier, 0, 1);
+	SPECULAR = spec;
 	ALBEDO = col.rgb;
 }

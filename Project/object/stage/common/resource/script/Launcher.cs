@@ -101,6 +101,7 @@ namespace Project.Gameplay.Objects
 
 	public struct LaunchData
 	{
+		//Physics data
 		public Vector3 launchDirection;
 		public Vector3 endPosition;
 		public Vector3 startPosition;
@@ -156,6 +157,10 @@ namespace Project.Gameplay.Objects
 
 			InitialVelocity = launchDirection.RemoveVertical().Normalized() * HorizontalVelocity + Vector3.Up * InitialVerticalVelocity;
 		}
+
+		//Control Data
+		/// <summary> Allow the player to jumpdash after launch is completed? </summary>
+		public bool canJumpDash;
 
 		/// <summary>
 		/// Creates new launch data.

@@ -307,7 +307,7 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Calculates the (offset) position for a given CameraSettingResource.
 		/// </summary>
-		private Vector3 CalculatePosition(CameraSettingsResource settings)
+		private Vector3 CalculatePosition(CameraSettingsResource settings, bool disableTracking = false)
 		{
 			if (settings == null) return Vector3.Zero;
 			if (settings.IsStaticCamera) //Static camera
@@ -344,6 +344,9 @@ namespace Project.Gameplay
 
 				targetPosition += PathFollower.Back() * distance;
 			}
+
+			if (disableTracking) //Return the "base" position, without any tracking applied
+				return targetPosition;
 
 			bool trackHorizontally = settings.IsFieldCamera || settings.IsHallCamera;
 			if (trackHorizontally) //Horizontal tracking
@@ -428,8 +431,8 @@ namespace Project.Gameplay
 			if (settings.yawMode == CameraSettingsResource.OverrideModes.Override)
 				return settings.yawAngle; //Override view direction
 
-			//Forward direction is based on PathFollower's orientation
-			return PathFollower.ForwardAngle + settings.yawAngle; //Add
+			Vector3 forwardDirection = (PathFollower.GlobalPosition - CalculatePosition(settings, true)).Normalized();
+			return Character.CalculateForwardAngle(forwardDirection) + settings.yawAngle;
 		}
 
 		private readonly float PITCH_DEADZONE = .6f; //Don't bother rotating when the player's screen ratio is less than this

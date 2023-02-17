@@ -112,6 +112,9 @@ namespace Project.Gameplay
 		[Export]
 		public bool isLandingDashEnabled;
 
+		[Export]
+		public bool isManualDriftEnabled; //Automatically clear corners?
+
 		public bool IsAttacking { get; set; } //Is the player using an attack skill? (i.e Any of the fire skills)
 
 		[Export(PropertyHint.Range, "1,5,.1")]
@@ -123,6 +126,8 @@ namespace Project.Gameplay
 		{
 			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.LandingBoost);
 			isPearlAttractionEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.PearlAttractor);
+
+			isManualDriftEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.ManualDrift);
 		}
 
 		private void SetUpSkills()
@@ -199,8 +204,14 @@ namespace Project.Gameplay
 
 		private int timeBreakDrainTimer;
 		private const int TIME_BREAK_SOUL_DRAIN_INTERVAL = 3; //Drain 1 point every x frames
+		private const float SATURATION_ADJUSTMENT_SPEED = 10.0f;
 		private void UpdateTimeBreak()
 		{
+			//Update timebreak satutration visuals
+			float targetSaturation = IsTimeBreakActive ? 0.1f : 1.0f;
+			StageSettings.instance.environment.Environment.AdjustmentSaturation =
+				Mathf.MoveToward(StageSettings.instance.environment.Environment.AdjustmentSaturation, targetSaturation, SATURATION_ADJUSTMENT_SPEED * PhysicsManager.physicsDelta);
+
 			if (IsTimeBreakActive)
 			{
 				if (timeBreakDrainTimer <= 0)

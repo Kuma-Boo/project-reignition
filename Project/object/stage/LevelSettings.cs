@@ -364,7 +364,7 @@ namespace Project.Gameplay
 				TimeSpan time = TimeSpan.FromSeconds(Mathf.Clamp(TimeLimit - CurrentTime, 0, TimeLimit));
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
 				if (CurrentTime >= TimeLimit) //Time's up!
-					FinishLevel(true);
+					FinishLevel(false);
 			}
 
 			EmitSignal(SignalName.TimeChanged);

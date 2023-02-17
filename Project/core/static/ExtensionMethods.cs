@@ -132,9 +132,7 @@ namespace Project
 		/// <summary> Returns the delta between two angles (in radians) </summary>
 		public static float SignedDeltaAngleRad(float firstAngle, float secondAngle)
 		{
-			firstAngle %= Mathf.Tau;
-			secondAngle %= Mathf.Tau;
-			float delta = firstAngle - secondAngle;
+			float delta = ModAngle(firstAngle) - ModAngle(secondAngle);
 			if (delta > Mathf.Pi)
 				delta -= Mathf.Tau;
 			else if (delta < -Mathf.Pi)

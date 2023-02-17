@@ -27,7 +27,9 @@ namespace Project.Gameplay.Objects
 			float endHeight = Mathf.Lerp(closeEndHeight, farEndHeight, launchPower);
 			float distance = Mathf.Lerp(closeDistance, farDistance, launchPower);
 			Vector3 endPoint = GlobalPosition + (this.Forward() * distance + Vector3.Up * endHeight);
-			return LaunchData.Create(GlobalPosition, endPoint, midHeight);
+			LaunchData data = LaunchData.Create(GlobalPosition, endPoint, midHeight);
+			data.canJumpDash = true;
+			return data;
 		}
 
 		[Export]
@@ -69,12 +71,14 @@ namespace Project.Gameplay.Objects
 				if (isRecentered)
 				{
 					if (Controller.jumpButton.wasPressed) //Disable launcher
+					{
 						DropPlayer();
+						Character.CanJumpDash = false;
+					}
 					else if (Controller.actionButton.wasPressed)
 					{
 						DropPlayer();
 						Character.StartLauncher(GetLaunchData());
-						Character.CanJumpDash = true;
 					}
 				}
 				else //Recenter player
@@ -126,6 +130,10 @@ namespace Project.Gameplay.Objects
 			isRecentered = false;
 			recenterVelocity = Vector3.Zero;
 			Character.MovementAngle = Character.CalculateForwardAngle(this.Forward());
+
+			//Disable homing reticle
+			Character.Lockon.IsMonitoring = false;
+			Character.Lockon.ResetLockonTarget();
 		}
 
 		private void OnExited(Area3D a)
