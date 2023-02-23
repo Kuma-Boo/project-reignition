@@ -1,0 +1,328 @@
+[gd_scene load_steps=5 format=3 uid="uid://efrfjkjxlfc8"]
+
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="1_5ixjs"]
+[ext_resource type="PackedScene" uid="uid://bbceaj0i3h310" path="res://area/1 sand oasis/act 1/environment/model/01Opening.gltf" id="1_j448r"]
+[ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_rkhi3"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fvupk"]
+
+[node name="01Opening" type="Node3D"]
+script = ExtResource("1_5ixjs")
+saveVisibilityOnCheckpoint = true
+isStageVisuals = true
+
+[node name="01Opening" parent="." instance=ExtResource("1_j448r")]
+
+[node name="stg010_o04_Mesh_0000" parent="01Opening" index="0"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0001" parent="01Opening" index="1"]
+layers = 4
+cast_shadow = 0
+lod_bias = 128.0
+
+[node name="stg010_o04_Mesh_0002" parent="01Opening" index="2"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0003" parent="01Opening" index="3"]
+layers = 4
+
+[node name="stg010_o04_Mesh_0004" parent="01Opening" index="4"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0005" parent="01Opening" index="5"]
+layers = 4
+cast_shadow = 2
+lod_bias = 10.0
+
+[node name="stg010_o04_Mesh_0006" parent="01Opening" index="6"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0007" parent="01Opening" index="7"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0008" parent="01Opening" index="8"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0009" parent="01Opening" index="9"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0010" parent="01Opening" index="10"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0012" parent="01Opening" index="11"]
+layers = 4
+cast_shadow = 2
+
+[node name="stg010_o04_Mesh_0013" parent="01Opening" index="12"]
+layers = 4
+
+[node name="stg010_o04_Mesh_0014" parent="01Opening" index="13"]
+layers = 4
+
+[node name="stg010_o04_Mesh_0015" parent="01Opening" index="14"]
+layers = 4
+
+[node name="stg010_o05_Mesh_0011" parent="01Opening" index="15"]
+layers = 4
+cast_shadow = 0
+
+[node name="stg010_p04_Mesh_0000" parent="01Opening" index="16"]
+layers = 4
+cast_shadow = 0
+
+[node name="stg010_p04_Mesh_0001" parent="01Opening" index="17"]
+layers = 4
+cast_shadow = 2
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="ExteriorLight" type="DirectionalLight3D" parent="Lights"]
+transform = Transform3D(0.0174524, -0.532795, 0.846064, -2.32831e-10, 0.846193, 0.532876, -0.999848, -0.00929996, 0.0147681, 97, 82, -57)
+layers = 1024
+light_color = Color(1, 0.843137, 0.639216, 1)
+light_cull_mask = 4293918724
+shadow_enabled = true
+shadow_bias = 0.02
+directional_shadow_mode = 0
+
+[node name="BounceLight" type="DirectionalLight3D" parent="Lights"]
+transform = Transform3D(-0.0919132, -0.17301, 0.980622, 0.146591, 0.97171, 0.185177, -0.984918, 0.16077, -0.0639514, 97, 82, -57)
+layers = 1024
+light_color = Color(0.639216, 0.639216, 0.639216, 1)
+light_energy = 0.6
+light_cull_mask = 4293918724
+directional_shadow_mode = 0
+
+[node name="BounceProbe" type="ReflectionProbe" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57, 98, -20)
+visible = false
+layers = 1024
+size = Vector3(120, 82, 108)
+interior = true
+cull_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.309804, 0.333333, 0.443137, 1)
+
+[node name="Lantern1" parent="Lights" instance=ExtResource("3_rkhi3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5, 80, 23.9)
+
+[node name="Lantern2" parent="Lights" instance=ExtResource("3_rkhi3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.934, 80, -19.1)
+
+[node name="Lantern3" parent="Lights" instance=ExtResource("3_rkhi3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.934, 80, -36.3)
+
+[node name="Lantern5" parent="Lights" instance=ExtResource("3_rkhi3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.934, 80, -53.576)
+
+[node name="Windows" type="Node3D" parent="Lights"]
+
+[node name="WindowL1" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, 10)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowL2" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, 3.5)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowL3" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -7)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowL4" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -13.7)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowL5" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -24.3)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowL6" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -31)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowL7" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -41.5)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowL8" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -48.2)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowR1" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 27.2)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowR2" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 20.5)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowR3" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 10.1)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowR4" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 3.4)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowR5" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, -7.1)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowR6" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, -13.8)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowM1" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-1, 9.27259e-08, -4.90145e-08, 3.09086e-08, 0.707107, 0.707107, 1.00226e-07, 0.707107, -0.707107, 70.2505, 104, -88)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="WindowM2" type="SpotLight3D" parent="Lights/Windows"]
+transform = Transform3D(-1, 9.27259e-08, -4.90145e-08, 3.09086e-08, 0.707107, 0.707107, 1.00226e-07, 0.707107, -0.707107, 63.5505, 104, -88)
+layers = 1024
+light_energy = 1.5
+light_cull_mask = 4293918724
+shadow_enabled = true
+spot_range = 50.0
+spot_attenuation = 1e-05
+spot_angle = 10.0
+spot_angle_attenuation = 1e-05
+
+[node name="Blockers" type="Node3D" parent="Lights"]
+
+[node name="Blocker1" type="MeshInstance3D" parent="Lights/Blockers"]
+transform = Transform3D(4.97884e-07, 0.759351, -9.76022, 15, -4.37114e-08, -3.03908e-14, -4.26633e-07, -0.650682, -11.3903, 47.9197, 87.059, 25.7987)
+layers = 4
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_fvupk")
+skeleton = NodePath("../..")
+
+[node name="Blocker2" type="MeshInstance3D" parent="Lights/Blockers"]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 25, 142.72, 108.2, 10.8881)
+layers = 4
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_fvupk")
+skeleton = NodePath("../..")
+
+[node name="Blocker3" type="MeshInstance3D" parent="Lights/Blockers"]
+transform = Transform3D(29.9314, 0.0675974, 5.90955e-08, 0, -4.37114e-08, 20, 2.02792, -0.997713, -8.72228e-07, 70.32, 86, 29.1887)
+layers = 4
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_fvupk")
+skeleton = NodePath("../..")
+
+[editable path="01Opening"]

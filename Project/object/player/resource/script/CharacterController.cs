@@ -22,7 +22,7 @@ namespace Project.Gameplay
 		{
 			CallDeferred(MethodName.ResetOrientation); //Start with proper orientation
 
-			PathFollower.SetActivePath(Stage.mainPath); //Attempt to autoload the stage's default path
+			PathFollower.SetActivePath(Stage.CalculateStartingPath(GlobalPosition)); //Attempt to autoload the stage's default path
 
 			Level.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
 			Level.UpdateRingCount(Skills.StartingRingCount, LevelSettings.MathModeEnum.Replace); //Start with the proper ring count
@@ -289,7 +289,7 @@ namespace Project.Gameplay
 
 		/// <summary> Reference to the external object currently controlling the player </summary>
 		public Node ExternalController { get; private set; }
-		private Node3D externalParent;
+		public Node3D ExternalParent { get; private set; }
 		private Vector3 externalOffset;
 		private float externalSmoothing;
 
@@ -306,11 +306,11 @@ namespace Project.Gameplay
 
 			Skills.IsSpeedBreakEnabled = allowSpeedBreak;
 
-			externalParent = followObject;
+			ExternalParent = followObject;
 			externalOffset = Vector3.Zero; //Reset offset
 			externalSmoothing = smoothing;
-			if (externalParent != null && !Mathf.IsZeroApprox(smoothing)) //Smooth out transition
-				externalOffset = GlobalPosition - externalParent.GlobalPosition;
+			if (ExternalParent != null && !Mathf.IsZeroApprox(smoothing)) //Smooth out transition
+				externalOffset = GlobalPosition - ExternalParent.GlobalPosition;
 
 			ResetVelocity();
 			UpdateExternalControl();
@@ -329,7 +329,7 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Moves the player to externalParent. Must be called after external controller has been processed.
 		/// </summary>
-		public void UpdateExternalControl()
+		public void UpdateExternalControl(bool autoResync = false)
 		{
 			if (JustLandedOnGround) //Bugfix: Don't let animator get stuck playing landing animation
 				JustLandedOnGround = false;
@@ -337,11 +337,15 @@ namespace Project.Gameplay
 			isCustomPhysicsEnabled = true;
 			externalOffset = externalOffset.Lerp(Vector3.Zero, externalSmoothing); //Smooth out entry
 
-			if (externalParent != null)
-				GlobalTransform = externalParent.GlobalTransform;
+			if (ExternalParent != null)
+				GlobalTransform = ExternalParent.GlobalTransform;
 
 			GlobalPosition += externalOffset;
-			PathFollower.Resync();
+
+			if (autoResync)
+				PathFollower.Resync();
+			else
+				PathFollower.RecalculateData();
 		}
 		#endregion
 		#endregion
@@ -490,7 +494,7 @@ namespace Project.Gameplay
 			(Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle)))
 				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
 
-			float speedRatio = IsOnGround ? GroundSettings.GetSpeedRatio(MoveSpeed) : AirSettings.GetSpeedRatio(MoveSpeed);
+			float speedRatio = GroundSettings.GetSpeedRatio(MoveSpeed);
 			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
 
 			if (turnInstantly) //Instantly set movement angle to target movement angle
@@ -509,7 +513,7 @@ namespace Project.Gameplay
 			}
 
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
-			if (Camera.ActiveSettings.isRollEnabled) //Only do this when camera is rolling
+			if (Camera.ActiveSettings.followPathTilt) //Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * 1.84f; //Random number that seems pretty accurate.
 		}
 
@@ -587,6 +591,15 @@ namespace Project.Gameplay
 				UpdateGroundActions();
 			else
 				UpdateAirActions();
+
+			if (CheatManager.EnableMoonJump && !Mathf.IsZeroApprox(jumpBufferTimer))
+			{
+				bool allowJumpDash = VerticalSpd > 0;
+				Jump();
+				CanJumpDash = allowJumpDash;
+				jumpBufferTimer = 0;
+				return;
+			}
 		}
 
 		private void UpdateGroundActions()
@@ -754,7 +767,9 @@ namespace Project.Gameplay
 
 		private void CheckJumpDash()
 		{
-			if (CanJumpDash && jumpBufferTimer != 0)
+			if (Mathf.IsZeroApprox(jumpBufferTimer)) return;
+
+			if (CanJumpDash)
 			{
 				StartJumpDash();
 				jumpBufferTimer = 0;
@@ -1008,21 +1023,29 @@ namespace Project.Gameplay
 				}
 			}
 
+			if (MovementState == MovementStates.External) return; //Only allow autorespawning when not using external controller
+
 			//Apply invincibility and drop rings
 			if (!IsInvincible)
 			{
 				StartInvincibility();
 
 				if (!knockbackData.disableDamage)
-				{
-					ActionState = ActionStates.Damaged;
-
-					if (Level.CurrentRingCount == 0) //No rings left!
-						StartRespawn();
-					else
-						Level.UpdateRingCount(20, LevelSettings.MathModeEnum.Subtract);
-				}
+					TakeDamage();
 			}
+		}
+
+		/// <summary>
+		/// Removes 20 rings from the player, or begins a respawn when no rings are left.
+		/// </summary>
+		public void TakeDamage()
+		{
+			ActionState = ActionStates.Damaged;
+
+			if (Level.CurrentRingCount == 0)
+				StartRespawn();
+			else
+				Level.UpdateRingCount(20, LevelSettings.MathModeEnum.Subtract);
 		}
 
 		/// <summary> True after the player is defeated, but hasn't respawned yet. </summary>
@@ -1360,7 +1383,7 @@ namespace Project.Gameplay
 					orientationResetFactor = (VerticalSpd * .2f / Runtime.MAX_GRAVITY) - .05f;
 
 				Vector3 targetUp = Vector3.Up;
-				if (Camera.ActiveSettings.isRollEnabled) //Use PathFollower.Up when on a tilted path.
+				if (Camera.ActiveSettings.followPathTilt) //Use PathFollower.Up when on a tilted path.
 					targetUp = PathFollower.Up();
 				UpDirection = UpDirection.Lerp(targetUp, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
@@ -1632,7 +1655,7 @@ namespace Project.Gameplay
 
 			//Snap camera to gameplay
 			Camera.SnapFlag = true;
-			Camera.ExternalController = null;
+			Camera.EventController = null;
 
 			actionBufferTimer = 0; //Reset action buffer from starting boost
 		}

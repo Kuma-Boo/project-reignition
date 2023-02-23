@@ -1,0 +1,171 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fvbu3"]
+[ext_resource type="Script" path="res://area/7 night palace/boss/script/InfiniteHallway.cs" id="2_wuoms"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="3_3wins"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="4_8p504"]
+[ext_resource type="PackedScene" uid="uid://dabbmb7ger5ba" path="res://area/7 night palace/boss/environment/NPBoss.tscn" id="4_dw3fh"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="5_702qt"]
+[ext_resource type="PackedScene" uid="uid://tdw4f3w4e2vb" path="res://area/7 night palace/boss/environment/NPBossLOD.tscn" id="5_h1u78"]
+[ext_resource type="PackedScene" uid="uid://bu03uey4xyy57" path="res://area/7 night palace/boss/environment/model/NPBossLOD.gltf" id="6_wn7b0"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_xov83"]
+[ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/7 night palace/data/Environment.tres" id="8_metfr"]
+[ext_resource type="PackedScene" uid="uid://1mlq23jb6byp" path="res://area/7 night palace/data/skybox/Skybox.tscn" id="9_aohgx"]
+[ext_resource type="PackedScene" path="res://area/7 night palace/boss/environment/collision/Collision.tscn" id="9_tnd5i"]
+[ext_resource type="Curve3D" path="res://area/7 night palace/boss/environment/path/MainPath.tres" id="10_7yaqk"]
+[ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="11_gi0oh"]
+[ext_resource type="PackedScene" path="res://area/7 night palace/data/BGMBoss.tscn" id="11_s0jtr"]
+[ext_resource type="Material" uid="uid://sc8upcny5n7i" path="res://area/7 night palace/data/material/Effect Reflection.tres" id="12_6xu5p"]
+
+[sub_resource type="BoxShape3D" id="10"]
+size = Vector3(16, 28, 2)
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+script = ExtResource("1_fvbu3")
+mainPath = NodePath("Path/MainPath")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="InfiniteHall" type="Node3D" parent="Visuals" node_paths=PackedStringArray("hallRoot", "sky", "itemBundle", "primaryCollision", "secondaryCollision")]
+script = ExtResource("2_wuoms")
+hallRoot = NodePath("HallRoot")
+sky = NodePath("../Skybox")
+itemBundle = NodePath("ItemBundle")
+itemBundleLocations = [6, 18, 0]
+primaryCollision = NodePath("../../Collision/PrimaryCollision")
+secondaryCollision = NodePath("../../Collision/SecondaryCollision")
+
+[node name="ItemBundle" type="Node3D" parent="Visuals/InfiniteHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -58)
+
+[node name="RichRing" parent="Visuals/InfiniteHall/ItemBundle" instance=ExtResource("3_3wins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Rings" type="Node3D" parent="Visuals/InfiniteHall/ItemBundle"]
+
+[node name="Ring1" parent="Visuals/InfiniteHall/ItemBundle/Rings" instance=ExtResource("4_8p504")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+
+[node name="Ring2" parent="Visuals/InfiniteHall/ItemBundle/Rings" instance=ExtResource("4_8p504")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7, 0)
+
+[node name="Ring3" parent="Visuals/InfiniteHall/ItemBundle/Rings" instance=ExtResource("4_8p504")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 0)
+
+[node name="Ring4" parent="Visuals/InfiniteHall/ItemBundle/Rings" instance=ExtResource("4_8p504")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.1, 0)
+
+[node name="Pearls" type="Node3D" parent="Visuals/InfiniteHall/ItemBundle"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.6, 0)
+
+[node name="RichPearl1" parent="Visuals/InfiniteHall/ItemBundle/Pearls" instance=ExtResource("5_702qt")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -1.74846e-07, 0, -1)
+
+[node name="RichPearl2" parent="Visuals/InfiniteHall/ItemBundle/Pearls" instance=ExtResource("5_702qt")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.951057, 0, -0.309017)
+
+[node name="RichPearl3" parent="Visuals/InfiniteHall/ItemBundle/Pearls" instance=ExtResource("5_702qt")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.587785, 0, 0.809017)
+
+[node name="RichPearl4" parent="Visuals/InfiniteHall/ItemBundle/Pearls" instance=ExtResource("5_702qt")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0.587785, 0, 0.809017)
+
+[node name="RichPearl5" parent="Visuals/InfiniteHall/ItemBundle/Pearls" instance=ExtResource("5_702qt")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0.951056, 0, -0.309017)
+
+[node name="HallRoot" parent="Visuals/InfiniteHall" instance=ExtResource("4_dw3fh")]
+
+[node name="Hall2" parent="Visuals/InfiniteHall/HallRoot" instance=ExtResource("4_dw3fh")]
+transform = Transform3D(0.999848, 0, 0.0174526, 0, 1, 0, -0.0174524, 0, 0.999858, 0, 0, -87)
+
+[node name="Hall3" parent="Visuals/InfiniteHall/HallRoot/Hall2" instance=ExtResource("4_dw3fh")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 0, 0, -87)
+
+[node name="Hall4" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3" instance=ExtResource("4_dw3fh")]
+transform = Transform3D(0.999849, 0, 0.0174512, 0, 1, 0, -0.0174515, 0, 0.999829, -0.000182629, 0, -86.9957)
+
+[node name="Hall5" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4" instance=ExtResource("4_dw3fh")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, -6.67572e-06, 0, -87)
+
+[node name="Hall6" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4/Hall5" instance=ExtResource("4_dw3fh")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, -1.51836, 0, -86.9868)
+
+[node name="LOD1" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4/Hall5/Hall6" instance=ExtResource("5_h1u78")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 9.53674e-06, 0, -87)
+
+[node name="LOD2" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4/Hall5/Hall6/LOD1" instance=ExtResource("5_h1u78")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, -5.72205e-06, 0, -87.0001)
+
+[node name="LOD3" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4/Hall5/Hall6/LOD1/LOD2" instance=ExtResource("6_wn7b0")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, -3.8147e-06, 0, -87)
+
+[node name="LOD4" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4/Hall5/Hall6/LOD1/LOD2/LOD3" instance=ExtResource("5_h1u78")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 0, 0, -87.0001)
+
+[node name="AdvanceTrigger" parent="Visuals/InfiniteHall/HallRoot/Hall2" instance=ExtResource("7_xov83")]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, -0.628286, -1, -36.0057)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/InfiniteHall/HallRoot/Hall2/AdvanceTrigger"]
+transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, 0, 15, 0)
+shape = SubResource("10")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
+environment = ExtResource("8_metfr")
+
+[node name="Moonlight" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(2.54519e-06, -0.548177, 0.836362, -3.01604e-07, 0.836362, 0.548177, -1, -1.64747e-06, 1.96337e-06, 12.4917, 3, -7.73828)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_blend_splits = true
+
+[node name="Skybox" parent="Visuals" instance=ExtResource("9_aohgx")]
+metadata/_edit_lock_ = true
+
+[node name="Collision" type="Node3D" parent="."]
+visible = false
+
+[node name="PrimaryCollision" parent="Collision" instance=ExtResource("9_tnd5i")]
+
+[node name="AdvanceTrigger" parent="Collision/PrimaryCollision" instance=ExtResource("7_xov83")]
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 0, -1, -97)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision/PrimaryCollision/AdvanceTrigger"]
+transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, 0, 15, 0)
+shape = SubResource("10")
+
+[node name="SecondaryCollision" parent="Collision" instance=ExtResource("9_tnd5i")]
+transform = Transform3D(0.999847, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999847, 0, 0, -87)
+
+[node name="AdvanceTrigger" parent="Collision/SecondaryCollision" instance=ExtResource("7_xov83")]
+transform = Transform3D(1, 0, -1.67638e-08, 0, 1, 0, 1.67638e-08, 0, 1, 0.867561, -1, -107.001)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision/SecondaryCollision/AdvanceTrigger"]
+transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, 0, 15, 0)
+shape = SubResource("10")
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="MainPath" type="Path3D" parent="Path"]
+curve = ExtResource("10_7yaqk")
+
+[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("11_gi0oh")]
+renderMask = 19
+reflectionMaterials = [ExtResource("12_6xu5p")]
+
+[node name="BGM" parent="." instance=ExtResource("11_s0jtr")]
+autoplay = true
+bus = &"Master"
+
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/RichRing" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Rings/Ring1" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Rings/Ring2" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Rings/Ring3" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Rings/Ring4" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Pearls/RichPearl1" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Pearls/RichPearl2" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Pearls/RichPearl3" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Pearls/RichPearl4" method="Respawn"]
+[connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Pearls/RichPearl5" method="Respawn"]
+[connection signal="Activated" from="Visuals/InfiniteHall/HallRoot/Hall2/AdvanceTrigger" to="Visuals/InfiniteHall" method="AdvanceHall"]
+[connection signal="Activated" from="Collision/PrimaryCollision/AdvanceTrigger" to="Visuals/InfiniteHall" method="AdvanceCollision" binds= [true]]
+[connection signal="Activated" from="Collision/SecondaryCollision/AdvanceTrigger" to="Visuals/InfiniteHall" method="AdvanceCollision" binds= [false]]

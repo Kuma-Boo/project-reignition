@@ -353,7 +353,7 @@ namespace Project.Gameplay
 				Character.CheckCeiling();
 
 			pathFollower.Progress += movementDelta;
-			Character.UpdateExternalControl();
+			Character.UpdateExternalControl(true);
 			Character.Animator.UpdateBalancing();
 
 			if (pathFollower.ProgressRatio >= 1 || Mathf.IsZeroApprox(Character.MoveSpeed)) //Disconnect from the rail

@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Material" uid="uid://bbd8sroj6bubr" path="res://area/1 sand oasis/data/particle/material/Splatter Process Material.tres" id="1_kgduh"]
+[ext_resource type="Material" path="res://area/1 sand oasis/data/particle/material/Water Splatter.tres" id="2_06ilo"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rb18b"]
+material = ExtResource("2_06ilo")
+size = Vector2(1, 1)
+orientation = 2
+
+[node name="WaterSplatterParticle" type="GPUParticles3D"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(-10, -5, -10, 20, 20, 20)
+process_material = ExtResource("1_kgduh")
+draw_pass_1 = SubResource("PlaneMesh_rb18b")

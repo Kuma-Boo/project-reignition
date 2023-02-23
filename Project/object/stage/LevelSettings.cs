@@ -413,14 +413,14 @@ namespace Project.Gameplay
 		//Checkpoint data
 		public Node3D CurrentCheckpoint { get; private set; }
 		public Path3D CheckpointPath { get; private set; }
-		public CameraSettingsResource CheckpointCamera;
+		public CameraSettingsResource CheckpointCameraSettings;
 		public void SetCheckpoint(Node3D newCheckpoint)
 		{
 			if (newCheckpoint == CurrentCheckpoint) return; //Already at this checkpoint
 
 			CurrentCheckpoint = newCheckpoint; //Position transform
 			CheckpointPath = CharacterController.instance.PathFollower.ActivePath; //Store current path
-			CheckpointCamera = CameraController.instance.ActiveSettings;
+			CheckpointCameraSettings = CameraController.instance.ActiveSettings;
 
 			EmitSignal(SignalName.OnTriggeredCheckpoint);
 		}

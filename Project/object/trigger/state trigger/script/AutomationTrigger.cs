@@ -27,6 +27,9 @@ namespace Project.Gameplay.Triggers
 		private bool IsFinished => (distanceToTravel > 0 && DistanceTraveled >= distanceToTravel) || DistanceTraveled >= Character.PathFollower.ActivePath.Curve.GetBakedLength();
 		private CharacterController Character => CharacterController.instance;
 
+		/// <summary> Extra acceleration applied when the player is moving too slow. </summary>
+		private const float LOW_SPEED_ACCELERATION = 80.0f;
+
 		public override void _PhysicsProcess(double _)
 		{
 			if (isActive)
@@ -51,13 +54,16 @@ namespace Project.Gameplay.Triggers
 		private void UpdateAutomation()
 		{
 			if (!Character.Skills.IsSpeedBreakActive)
+			{
+				if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < .8f) //Accelerate quicker to reduce low-speed jank
+					Character.MoveSpeed += LOW_SPEED_ACCELERATION * PhysicsManager.physicsDelta;
 				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
+			}
 
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 
-			Character.UpdateExternalControl();
-
+			Character.UpdateExternalControl(false);
 			Character.Animator.ExternalAngle = 0;
 		}
 

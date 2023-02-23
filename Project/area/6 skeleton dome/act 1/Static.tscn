@@ -1,0 +1,70 @@
+[gd_scene load_steps=15 format=3 uid="uid://dqaocdk5pgugg"]
+
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0tght"]
+[ext_resource type="Curve3D" uid="uid://bbpem0cnj3ewa" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
+[ext_resource type="PackedScene" uid="uid://cm6t7ujinia4o" path="res://area/6 skeleton dome/act 1/environment/01Opening.tscn" id="2_2hxrj"]
+[ext_resource type="Curve3D" uid="uid://bfcrdnk238ytn" path="res://area/6 skeleton dome/act 1/environment/path/SidePath.tres" id="2_clbvh"]
+[ext_resource type="PackedScene" uid="uid://cpap2vq8on6er" path="res://area/6 skeleton dome/act 1/environment/collision/Collision.tscn" id="2_w0uof"]
+[ext_resource type="Curve3D" uid="uid://d0d8wrf8qqy5j" path="res://area/6 skeleton dome/act 1/environment/path/LoopPath.tres" id="3_8uh60"]
+[ext_resource type="Curve3D" uid="uid://sv4wlv8cmlxp" path="res://area/6 skeleton dome/act 1/environment/path/SpiralPath.tres" id="4_acebk"]
+[ext_resource type="Curve3D" uid="uid://sl5i4l15j0wd" path="res://area/6 skeleton dome/act 1/environment/path/SidlePath.tres" id="5_0tm4x"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/ThronePath.tres" id="6_b4i3e"]
+[ext_resource type="Curve3D" uid="uid://bwokarspcisn1" path="res://area/6 skeleton dome/act 1/environment/path/HallAPath.tres" id="6_h1wty"]
+[ext_resource type="Curve3D" uid="uid://wkpdihx4mjps" path="res://area/6 skeleton dome/act 1/environment/path/HallBPath.tres" id="7_qm4ek"]
+[ext_resource type="Curve3D" uid="uid://c51cb1jfoigp7" path="res://area/6 skeleton dome/act 1/environment/path/HallCPath.tres" id="8_5gt6c"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/HallTreasurePath.tres" id="9_yis2j"]
+[ext_resource type="PackedScene" uid="uid://de7hiy11unhl3" path="res://area/6 skeleton dome/data/BGM.tscn" id="14_yuo0o"]
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+script = ExtResource("1_0tght")
+mainPath = NodePath("Path/ExteriorPath")
+
+[node name="Collision" parent="." instance=ExtResource("2_w0uof")]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="01Opening" parent="Visuals" instance=ExtResource("2_2hxrj")]
+startEnabled = true
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="ExteriorPath" type="Path3D" parent="Path"]
+curve = ExtResource("1_h00gj")
+
+[node name="SidePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.102, 39.832, -802.321)
+curve = ExtResource("2_clbvh")
+
+[node name="LoopPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118.286, 40, -1037.58)
+curve = ExtResource("3_8uh60")
+
+[node name="SpiralPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 489.579, 20, -1129.92)
+curve = ExtResource("4_acebk")
+
+[node name="SidlePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 779.746, -6.417, -1299.89)
+curve = ExtResource("5_0tm4x")
+
+[node name="ThronePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -485.371)
+curve = ExtResource("6_b4i3e")
+
+[node name="HallAPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -485.371)
+curve = ExtResource("6_h1wty")
+
+[node name="HallBPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -485.371)
+curve = ExtResource("7_qm4ek")
+
+[node name="HallCPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -485.371)
+curve = ExtResource("8_5gt6c")
+
+[node name="HallTreasurePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -485.371)
+curve = ExtResource("9_yis2j")
+
+[node name="BGM" parent="." instance=ExtResource("14_yuo0o")]

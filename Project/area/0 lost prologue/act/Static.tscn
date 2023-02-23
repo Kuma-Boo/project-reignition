@@ -1,0 +1,96 @@
+[gd_scene load_steps=18 format=3 uid="uid://dax0mun2bjm1v"]
+
+[ext_resource type="PackedScene" uid="uid://bdqp0wj6evtuh" path="res://area/0 lost prologue/act/environment/collision/Collision.tscn" id="1_qgh10"]
+[ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/0 lost prologue/data/Environment.tres" id="2_ooith"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/01Opening.tscn" id="3_gpjv8"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/02Hall.tscn" id="4_ut2gb"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/03Tightrope.tscn" id="5_tqcp0"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/04Ribbon.tscn" id="6_8fneh"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/05Island.tscn" id="7_yq26j"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/06End.tscn" id="8_2nkob"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/data/skybox/Skybox.tscn" id="9_8xbja"]
+[ext_resource type="Curve3D" uid="uid://wi3y53rkn4sj" path="res://area/0 lost prologue/act/environment/path/MainPath.tres" id="10_g3fe8"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="11_lsqhg"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="12_og3aq"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="13_nr4fr"]
+[ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="14_4p6kh"]
+[ext_resource type="PackedScene" path="res://area/0 lost prologue/data/BGM.tscn" id="15_cd8jc"]
+
+[sub_resource type="BoxShape3D" id="12"]
+size = Vector3(90, 20, 10)
+
+[sub_resource type="BoxShape3D" id="13"]
+size = Vector3(153.4, 20, 251.8)
+
+[node name="Static" type="Node"]
+
+[node name="Collision" parent="." instance=ExtResource("1_qgh10")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="01Opening" parent="Visuals" instance=ExtResource("3_gpjv8")]
+
+[node name="02Hall" parent="Visuals" instance=ExtResource("4_ut2gb")]
+
+[node name="03Tightrope" parent="Visuals" instance=ExtResource("5_tqcp0")]
+
+[node name="04Ribbon" parent="Visuals" instance=ExtResource("6_8fneh")]
+
+[node name="05Island" parent="Visuals" instance=ExtResource("7_yq26j")]
+
+[node name="06End" parent="Visuals" instance=ExtResource("8_2nkob")]
+
+[node name="Skybox" parent="Visuals" instance=ExtResource("9_8xbja")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 0.0348995, 0.999391, 0, -0.999391, 0.0348995, 0, 2.00365, -0.209397)
+light_color = Color(0.99, 0.8316, 0.6732, 1)
+light_energy = 0.6
+light_cull_mask = 4293918723
+shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.9
+directional_shadow_max_distance = 200.0
+directional_shadow_pancake_size = 0.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = ExtResource("2_ooith")
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="MainPath" type="Path3D" parent="Path"]
+curve = ExtResource("10_g3fe8")
+
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="TightropeLockout" parent="Trigger" instance=ExtResource("11_lsqhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.02, 0, -319.99)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="TightropeLockout" type="Node3D" parent="Trigger/TightropeLockout"]
+script = ExtResource("12_og3aq")
+lockoutData = ExtResource("13_nr4fr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/TightropeLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("12")
+
+[node name="FallTrigger" parent="Trigger" instance=ExtResource("11_lsqhg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140, -35, 75)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Fall" type="Node3D" parent="Trigger/FallTrigger"]
+script = ExtResource("14_4p6kh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("13")
+
+[node name="BGM" parent="." instance=ExtResource("15_cd8jc")]
+bus = &"BGM"

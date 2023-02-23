@@ -8,46 +8,45 @@ namespace Project.Gameplay
 	public partial class CameraSettingsResource : Resource
 	{
 		#region Editor
+		private const string STATIC_CAMERA_KEY = "Static Camera Enabled";
+
+		private const string DISTANCE_KEY = "Distance/Distance";
+		private const string BACKSTEP_DISTANCE_KEY = "Distance/Backstep Distance";
+		private const string DISTANCE_MODE_KEY = "Distance/Distance Calculation Mode";
+
+		private const string PITCH_ANGLE_KEY = "Rotation/Pitch Angle";
+		private const string YAW_ANGLE_KEY = "Rotation/Yaw Angle";
+		private const string PITCH_OVERRIDE_KEY = "Rotation/Pitch Override Mode";
+		private const string YAW_OVERRIDE_KEY = "Rotation/Yaw Override Mode";
+		private const string TILT_KEY = "Rotation/Follow Path Tilt";
+
+		private const string VIEW_OFFSET_KEY = "Screen/View Offset";
+
+		private const string HORIZONTAL_TRACKING_KEY = "Tracking/Horizontal Tracking Enabled";
+		private const string VERTICAL_TRACKING_KEY = "Tracking/Vertical Tracking Enabled";
+
 		public override Array<Dictionary> _GetPropertyList()
 		{
 			Array<Dictionary> properties = new Array<Dictionary>();
 
-			properties.Add(ExtensionMethods.CreateProperty("Custom FOV", Variant.Type.Bool));
-			if (useCustomFOV)
-				properties.Add(ExtensionMethods.CreateProperty("FOV", Variant.Type.Float, PropertyHint.Range, "1,179,0.1"));
-
-			properties.Add(ExtensionMethods.CreateProperty("Camera Mode", Variant.Type.Int, PropertyHint.Enum, cameraMode.EnumToString()));
-
-			if (cameraMode == CameraModes.Static)
+			properties.Add(ExtensionMethods.CreateProperty(STATIC_CAMERA_KEY, Variant.Type.Bool));
+			if (!isStaticCamera)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Autoset Position", Variant.Type.Bool));
+				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+				properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_MODE_KEY, Variant.Type.Int, PropertyHint.Enum, distanceCalculationMode.EnumToString()));
 
-				if (!autosetStaticPosition)
-					properties.Add(ExtensionMethods.CreateProperty("Position Settings/Static Position", Variant.Type.Vector3));
-			}
-			else
-			{
-				if (cameraMode == CameraModes.Hall)
-					properties.Add(ExtensionMethods.CreateProperty("Hall Width", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
-
-				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Distance", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Position Settings/Height", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
-
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Pitch Mode", Variant.Type.Int, PropertyHint.Enum, pitchMode.EnumToString()));
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Yaw Mode", Variant.Type.Int, PropertyHint.Enum, yawMode.EnumToString()));
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Pitch Angle", Variant.Type.Float, PropertyHint.Range, "-360,360,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Yaw Angle", Variant.Type.Float, PropertyHint.Range, "-360,360,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Allow Rolling", Variant.Type.Bool));
-
-				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Track Lockon", Variant.Type.Bool));
-				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Backstep Distance", Variant.Type.Float, PropertyHint.Range, "0,32,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Use Player Position", Variant.Type.Bool));
-				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Use Pathfollower Distance", Variant.Type.Bool));
-				properties.Add(ExtensionMethods.CreateProperty("Tracking Settings/Vertical Tracking Mode", Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
+				properties.Add(ExtensionMethods.CreateProperty(HORIZONTAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, horizontalTrackingMode.EnumToString()));
+				properties.Add(ExtensionMethods.CreateProperty(VERTICAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
 			}
 
-			properties.Add(ExtensionMethods.CreateProperty("Position Settings/H_Offset", Variant.Type.Float));
-			properties.Add(ExtensionMethods.CreateProperty("Position Settings/V_Offset", Variant.Type.Float));
+			properties.Add(ExtensionMethods.CreateProperty(PITCH_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
+			properties.Add(ExtensionMethods.CreateProperty(YAW_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
+			properties.Add(ExtensionMethods.CreateProperty(PITCH_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
+			properties.Add(ExtensionMethods.CreateProperty(YAW_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
+			properties.Add(ExtensionMethods.CreateProperty(TILT_KEY, Variant.Type.Bool));
+
+			properties.Add(ExtensionMethods.CreateProperty(VIEW_OFFSET_KEY, Variant.Type.Vector2));
 
 			return properties;
 		}
@@ -56,49 +55,34 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Custom FOV":
-					return useCustomFOV;
-				case "FOV":
-					return fov;
+				case STATIC_CAMERA_KEY:
+					return isStaticCamera;
 
-				case "Camera Mode":
-					return (int)cameraMode;
-				case "Hall Width":
-					return hallWidth;
-				case "Position Settings/Autoset Position":
-					return autosetStaticPosition;
-				case "Position Settings/Static Position":
-					return staticPosition;
-
-				case "Position Settings/Distance":
+				case DISTANCE_KEY:
 					return distance;
-				case "Position Settings/Height":
-					return height;
-
-				case "Position Settings/H_Offset":
-					return hOffset;
-				case "Position Settings/V_Offset":
-					return vOffset;
-
-				case "Rotation Settings/Pitch Mode":
-					return (int)pitchMode;
-				case "Rotation Settings/Yaw Mode":
-					return (int)yawMode;
-				case "Rotation Settings/Pitch Angle":
-					return Mathf.RadToDeg(pitchAngle);
-				case "Rotation Settings/Yaw Angle":
-					return Mathf.RadToDeg(yawAngle);
-				case "Rotation Settings/Allow Rolling":
-					return isRollEnabled;
-
-				case "Tracking Settings/Track Lockon":
-					return isLockonTrackingEnabled;
-				case "Tracking Settings/Use Pathfollower Distance":
-					return usePathfollowerDistance;
-				case "Tracking Settings/Vertical Tracking Mode":
-					return (int)verticalTrackingMode;
-				case "Tracking Settings/Backstep Distance":
+				case BACKSTEP_DISTANCE_KEY:
 					return backstepDistance;
+				case DISTANCE_MODE_KEY:
+					return (int)distanceCalculationMode;
+
+				case PITCH_ANGLE_KEY:
+					return Mathf.RadToDeg(pitchAngle);
+				case YAW_ANGLE_KEY:
+					return Mathf.RadToDeg(yawAngle);
+				case PITCH_OVERRIDE_KEY:
+					return (int)pitchOverrideMode;
+				case YAW_OVERRIDE_KEY:
+					return (int)yawOverrideMode;
+				case TILT_KEY:
+					return followPathTilt;
+
+				case VIEW_OFFSET_KEY:
+					return viewportOffset;
+
+				case HORIZONTAL_TRACKING_KEY:
+					return (int)horizontalTrackingMode;
+				case VERTICAL_TRACKING_KEY:
+					return (int)verticalTrackingMode;
 			}
 
 			return base._Get(property);
@@ -108,70 +92,46 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Custom FOV":
-					useCustomFOV = (bool)value;
+				case STATIC_CAMERA_KEY:
+					isStaticCamera = (bool)value;
 					NotifyPropertyListChanged();
-					break;
-				case "FOV":
-					fov = (float)value;
 					break;
 
-				case "Camera Mode":
-					cameraMode = (CameraModes)(int)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Hall Width":
-					hallWidth = (float)value;
-					break;
-				case "Position Settings/Autoset Position":
-					autosetStaticPosition = (bool)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Position Settings/Static Position":
-					staticPosition = (Vector3)value;
-					break;
-
-				case "Position Settings/Distance":
+				case DISTANCE_KEY:
 					distance = (float)value;
 					break;
-				case "Position Settings/Height":
-					height = (float)value;
+				case BACKSTEP_DISTANCE_KEY:
+					backstepDistance = (float)value;
+					break;
+				case DISTANCE_MODE_KEY:
+					distanceCalculationMode = (DistanceModeEnum)(int)value;
 					break;
 
-				case "Position Settings/H_Offset":
-					hOffset = (float)value;
-					break;
-				case "Position Settings/V_Offset":
-					vOffset = (float)value;
-					break;
-
-				case "Rotation Settings/Pitch Mode":
-					pitchMode = (OverrideModes)(int)value;
-					break;
-				case "Rotation Settings/Yaw Mode":
-					yawMode = (OverrideModes)(int)value;
-					break;
-				case "Rotation Settings/Pitch Angle":
+				case PITCH_ANGLE_KEY:
 					pitchAngle = Mathf.DegToRad((float)value);
 					break;
-				case "Rotation Settings/Yaw Angle":
+				case YAW_ANGLE_KEY:
 					yawAngle = Mathf.DegToRad((float)value);
 					break;
-				case "Rotation Settings/Allow Rolling":
-					isRollEnabled = (bool)value;
+				case PITCH_OVERRIDE_KEY:
+					pitchOverrideMode = (OverrideModeEnum)(int)value;
+					break;
+				case YAW_OVERRIDE_KEY:
+					yawOverrideMode = (OverrideModeEnum)(int)value;
+					break;
+				case TILT_KEY:
+					followPathTilt = (bool)value;
 					break;
 
-				case "Tracking Settings/Track Lockon":
-					isLockonTrackingEnabled = (bool)value;
+				case VIEW_OFFSET_KEY:
+					viewportOffset = (Vector2)value;
 					break;
-				case "Tracking Settings/Use Pathfollower Distance":
-					usePathfollowerDistance = (bool)value;
+
+				case HORIZONTAL_TRACKING_KEY:
+					horizontalTrackingMode = (TrackingModeEnum)(int)value;
 					break;
-				case "Tracking Settings/Vertical Tracking Mode":
-					verticalTrackingMode = (TrackingModes)(int)value;
-					break;
-				case "Tracking Settings/Backstep Distance":
-					backstepDistance = (float)value;
+				case VERTICAL_TRACKING_KEY:
+					verticalTrackingMode = (TrackingModeEnum)(int)value;
 					break;
 
 				default:
@@ -182,75 +142,50 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		public bool useCustomFOV;
-		/// <summary> Camera's FOV. </summary>
-		public float fov;
+		/// <summary> Keep the camera's position at a specific point? </summary>
+		public bool isStaticCamera;
 
-		public CameraModes cameraMode;
-		public enum CameraModes
-		{
-			Hall,
-			Field,
-			Static,
-		}
-
-
-		public bool IsHallCamera => cameraMode == CameraSettingsResource.CameraModes.Hall;
-		public bool IsFieldCamera => cameraMode == CameraSettingsResource.CameraModes.Field;
-		public bool IsStaticCamera => cameraMode == CameraSettingsResource.CameraModes.Static;
-
-		/// <summary> Is staticPosition automatically set from a CameraTrigger.cs? </summary>
-		public bool autosetStaticPosition;
-		/// <summary> Position to view from. Only valid when isStaticCamera is true. </summary>
-		public Vector3 staticPosition;
-
-		//Dynamic camera settings
-		/// <summary>
-		/// How much strafing to ignore when using hall mode.
-		/// Note: a value of zero will disable horizontal tracking completely.
-		/// Use CameraModes.Field to always track the player. 
-		/// </summary>
-		public float hallWidth;
-		/// <summary> Distance from the player. </summary>
-		public float distance = 1.5f;
-		/// <summary> Position offset. </summary>
-		public float height;
-
-		/// <summary> Horizontal view offset. Translation based on camera's orientation. </summary>
-		public float hOffset;
-		/// <summary> Vertical view offset. Translation based on camera's orientation. </summary>
-		public float vOffset;
-
-		/// <summary> Distance to add when backstepping. </summary>
-		public float backstepDistance;
-		/// <summary> Use the pathfollower's progress value to calculate distance? </summary>
-		public bool usePathfollowerDistance;
-		/// <summary> Rotate the camera and add some extra distance when locking onto an enemy. </summary>
-		public bool isLockonTrackingEnabled;
-		/// <summary> How should the camera track the player vertical position? </summary>
-		public TrackingModes verticalTrackingMode;
-		public enum TrackingModes
-		{
-			Move, //Move the camera
-			Rotate, //Rotate the camera
-			Disable, //Ignore vertical
-		}
-
-		//Rotation settings
-		public enum OverrideModes
-		{
-			Add,
-			Override,
-		}
-		/// <summary> Override mode for pitch (x-axis rotation). </summary>
-		public OverrideModes pitchMode;
-		/// <summary> Override mode for yaw (y-axis rotation). </summary>
-		public OverrideModes yawMode;
-		/// <summary> Pitch (x-axis rotation) angle, in radians. </summary>
+		/// <summary> Angle (in radians) of pitch (X rotation). </summary>
 		public float pitchAngle;
-		/// <summary> Yaw (y-axis rotation) angle, in radians. </summary>
+		/// <summary> Angle (in radians) of yaw (Y rotation). </summary>
 		public float yawAngle;
-		/// <summary> Should the camera roll (z-axis rotation) to match the ground's angle? </summary>
-		public bool isRollEnabled;
+		/// <summary> Should the camera tilt (Z rotation) with the path? </summary>
+		public bool followPathTilt;
+		/// <summary> How should pitch be applied? </summary>
+		public OverrideModeEnum pitchOverrideMode;
+		/// <summary> How should yaw be applied? </summary>
+		public OverrideModeEnum yawOverrideMode;
+		public enum OverrideModeEnum
+		{
+			Add, //Add the value
+			Replace //Replace the value
+		}
+
+		/// <summary> How far to stay from the player. </summary>
+		public float distance;
+		/// <summary> Extra distance to add when backstepping. </summary>
+		public float backstepDistance;
+		/// <summary> How to calculate distance. </summary>
+		public DistanceModeEnum distanceCalculationMode;
+		public enum DistanceModeEnum
+		{
+			Offset, //Add distance * PathFollower.Back() (Better for sharp corners)
+			Sample, //Physically sample to move pathfollower's progress by distance (Better for slopes)
+		}
+
+		/// <summary> Viewport offset. Use this offset height or lead the player (sidescrolling) </summary>
+		public Vector2 viewportOffset;
+
+		/// <summary> Is horizontal tracking enabled? </summary>
+		public TrackingModeEnum horizontalTrackingMode;
+		/// <summary> Is vertical tracking enabled? </summary>
+		public TrackingModeEnum verticalTrackingMode;
+
+		public enum TrackingModeEnum
+		{
+			Move,
+			Rotate,
+			Disable
+		}
 	}
 }

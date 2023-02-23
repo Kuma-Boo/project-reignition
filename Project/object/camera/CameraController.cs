@@ -7,21 +7,16 @@ namespace Project.Gameplay
 	/// <summary>
 	/// Follows the player based on the settings provided from CameraSettingsResource.cs
 	/// </summary>
-	//Undergoing complete rewrite...Again.
 	public partial class CameraController : Node3D
 	{
 		public static CameraController instance;
-		public Node3D ExternalController { get; set; } //Node3D to follow (i.e. in a cutscene)
+		public Node3D EventController { get; set; } //Node3D to follow (i.e. in a cutscene)
 
 		[ExportSubgroup("Gameplay Camera")]
 		[Export]
-		private Node3D calculationRoot; //Responsible for pitch rotation
-		[Export]
-		private Node3D calculationGimbal; //Responsible for yaw rotation
-		[Export]
 		private Node3D cameraRoot;
 		[Export]
-		private Node3D cameraGimbal;
+		private Node3D debugMesh;
 		[Export]
 		private Camera3D camera;
 		public Camera3D Camera => camera;
@@ -46,14 +41,18 @@ namespace Project.Gameplay
 			if (Engine.IsEditorHint()) return;
 
 			instance = this;
-			UpdateCameraSettings(defaultSettings, 0f); //Apply default settings
+
+			UpdateCameraSettings(new CameraBlendData()
+			{
+				SettingsResource = defaultSettings,
+			}); //Apply default settings
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (ExternalController != null)
+			if (EventController != null)
 			{
-				cameraRoot.GlobalTransform = ExternalController.GlobalTransform;
+				cameraRoot.GlobalTransform = EventController.GlobalTransform;
 				return;
 			}
 
@@ -69,16 +68,14 @@ namespace Project.Gameplay
 		#region Gameplay Camera
 		#region Transitions and Settings
 		[Export]
-		public CameraSettingsResource defaultSettings; //Default settings to use when nothing is set
-		public CameraSettingsResource ActiveSettings => BlendSettingsList.Count == 0 ? null : BlendSettingsList[BlendSettingsList.Count - 1]; //Settings to transition to
-
-		/// <summary> Ratio [0 <-> 1] of transition that has been completed. </summary>
-		private readonly List<float> LinearBlendRatioList = new List<float>();
-		/// <summary> Smoothstep transition time. </summary>
-		private readonly List<float> SmoothBlendRatioList = new List<float>();
-		/// <summary> Speed of transition (in seconds). </summary>
-		private readonly List<float> BlendTimeList = new List<float>();
-		private readonly List<CameraSettingsResource> BlendSettingsList = new List<CameraSettingsResource>();
+		/// <summary> Default camera settings to use when nothing is set </summary>
+		public CameraSettingsResource defaultSettings;
+		/// <summary> Reference to active CameraBlendData. </summary>
+		public CameraBlendData ActiveBlendData => CameraBlendList[CameraBlendList.Count - 1];
+		/// <summary> Reference to active CameraSettingsResource. </summary>
+		public CameraSettingsResource ActiveSettings => ActiveBlendData.SettingsResource;
+		/// <summary> A list of all camera settings that are influencing camera. </summary>
+		private readonly List<CameraBlendData> CameraBlendList = new List<CameraBlendData>();
 
 		public void StartCrossfade()
 		{
@@ -91,23 +88,22 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Change the current camera settings.
 		/// </summary>
-		public void UpdateCameraSettings(CameraSettingsResource data, float blendTime = .2f, bool useCrossfade = false)
+		public void UpdateCameraSettings(CameraBlendData data)
 		{
-			if (data == null) return;
+			if (data.SettingsResource == null) return; //No Data
 
-			if (Mathf.IsZeroApprox(blendTime)) //Cut transition
+			if (Mathf.IsZeroApprox(data.BlendTime)) //Cut transition
 				SnapFlag = true;
-			else if (useCrossfade) //Crossfade transition
+			else if (data.IsCrossfadeEnabled) //Crossfade transition
 			{
 				StartCrossfade();
 				SnapFlag = true;
 			}
+			else
+				data.CalculateBlendSpeed(); //Cache blend speed so we don't have to do it every frame
 
 			//Add current data
-			BlendSettingsList.Add(data);
-			LinearBlendRatioList.Add(0);
-			SmoothBlendRatioList.Add(0);
-			BlendTimeList.Add(blendTime);
+			CameraBlendList.Add(data);
 		}
 
 		/// <summary> Set to true to skip smoothing. </summary>
@@ -120,415 +116,267 @@ namespace Project.Gameplay
 			//Clear all lists (except active one) when snapping
 			if (SnapFlag)
 			{
-				for (int i = BlendSettingsList.Count - 2; i >= 0; i--)
+				//Remove all blend data except the latest (active)
+				for (int i = CameraBlendList.Count - 2; i >= 0; i--)
 				{
-					BlendSettingsList.RemoveAt(i);
-					LinearBlendRatioList.RemoveAt(i);
-					SmoothBlendRatioList.RemoveAt(i);
-					BlendTimeList.RemoveAt(i);
+					CameraBlendList[i].Free();
+					CameraBlendList.RemoveAt(i);
 				}
 
-				LinearBlendRatioList[0] = SmoothBlendRatioList[0] = 1;
+				//Remaining blend data is active, so it's influence gets set to 1
+				CameraBlendList[0].SetInfluence(1);
 			}
 			else
 			{
-				for (int i = BlendSettingsList.Count - 1; i >= 0; i--)
+				for (int i = CameraBlendList.Count - 1; i >= 0; i--)
 				{
-					//Remove completed blends
-					if (i < BlendSettingsList.Count - 2 && Mathf.IsEqualApprox(LinearBlendRatioList[i + 1], 1.0f))
+					//Remove completed blends (Except for active blend data)
+					if (i < CameraBlendList.Count - 1
+						&& Mathf.IsEqualApprox(CameraBlendList[i + 1].LinearInfluence, 1.0f))
 					{
-						BlendSettingsList.RemoveAt(i);
-						LinearBlendRatioList.RemoveAt(i);
-						SmoothBlendRatioList.RemoveAt(i);
-						BlendTimeList.RemoveAt(i);
+						CameraBlendList[i].Free();
+						CameraBlendList.RemoveAt(i);
 						continue;
 					}
 
-					LinearBlendRatioList[i] = Mathf.MoveToward(LinearBlendRatioList[i], 1f, (1f / BlendTimeList[i]) * PhysicsManager.physicsDelta);
-					SmoothBlendRatioList[i] = Mathf.SmoothStep(0, 1f, LinearBlendRatioList[i]);
+					float influence = Mathf.MoveToward(CameraBlendList[i].LinearInfluence, 1f,
+						CameraBlendList[i].BlendSpeed * PhysicsManager.physicsDelta);
+					CameraBlendList[i].SetInfluence(influence);
 				}
-			}
-		}
-
-		/// <summary> Is the lockon camera currently active? </summary>
-		private bool isLockonActive;
-		/// <summary> 0 -> Don't use lockon camera, 1 -> Use lockon camera. </summary>
-		private float lockonBlend;
-		private float lockonBlendVelocity;
-		/// <summary> Value of the lockon object's last known position. Used in case Lockon becomes null before lockon blend finishes. </summary>
-		private Vector3 lastLockonPosition;
-		private readonly float LOCKON_TRANSITION_SPEED = .2f;
-		/// <summary> Add some extra height while homing attacking </summary>
-		private readonly float LOCKON_HEIGHT = 2f;
-		/// <summary> Add some extra distance while homing attacking </summary>
-		private readonly float LOCKON_DISTANCE = 1f;
-		/// <summary> Limit how much the lockon camera can rotate </summary>
-		private readonly float MAX_LOCKON_PITCH = Mathf.Pi * .3f;
-
-		/// <summary> Is backstep camera currently active? </summary>
-		private bool isBackstepActive;
-		/// <summary> 0 -> Don't use backstep, 1 -> Use backstep. </summary>
-		private float backstepBlend;
-		private float backstepBlendVelocity;
-		private readonly float BACKSTEP_TRANSITION_SPEED = .4f;
-
-		/// <summary> Helps more accurate resyncing. </summary>
-		public Vector3 PathResyncFix { get; private set; }
-		private Vector3 pathResyncFixVelocity;
-		private readonly float PATH_RESYNC_SMOOTHING = .1f;
-
-		/// <summary>
-		///Updates whether backstep/lockon should be used.
-		/// </summary>
-		private void UpdateTrackingSettings()
-		{
-			//Update path resync fix
-			Vector3 targetPathResyncFix = Vector3.Zero;
-			if (ActiveSettings.usePathfollowerDistance)
-			{
-				targetPathResyncFix = Character.Up();
-				if (Mathf.Abs(PathFollower.Forward().Y) > .5f)
-					targetPathResyncFix = PathFollower.UpAxis;
-			}
-
-			if (!Character.IsOnGround && Character.Lockon.LockonEnemy != null)
-			{
-				isLockonActive = true;
-				lastLockonPosition = Character.Lockon.LockonEnemy.GlobalPosition;
-			}
-			else
-				isLockonActive = false;
-
-			if (Character.MoveSpeed != 0) // Doesn't update when Character isn't moving.
-				isBackstepActive = Character.IsMovingBackward;
-
-			if (SnapFlag)
-			{
-				lockonBlendVelocity = backstepBlendVelocity = 0;
-				pathResyncFixVelocity = Vector3.Zero;
-
-				lockonBlend = isLockonActive ? 1 : 0;
-				backstepBlend = isBackstepActive ? 1 : 0;
-				PathResyncFix = targetPathResyncFix;
-			}
-			else
-			{
-				lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, isLockonActive ? 1 : 0, ref lockonBlendVelocity, LOCKON_TRANSITION_SPEED);
-				backstepBlend = ExtensionMethods.SmoothDamp(backstepBlend, isBackstepActive ? 1 : 0, ref backstepBlendVelocity, BACKSTEP_TRANSITION_SPEED);
-				PathResyncFix = PathResyncFix.SmoothDamp(targetPathResyncFix, ref pathResyncFixVelocity, PATH_RESYNC_SMOOTHING);
 			}
 		}
 
 		public void Respawn()
 		{
-			UpdateCameraSettings(LevelSettings.instance.CheckpointCamera, 0); //Revert camera settings
-
-			isLockonActive = false;
-			isBackstepActive = false;
+			//Revert camera settings
+			UpdateCameraSettings(new CameraBlendData()
+			{
+				SettingsResource = LevelSettings.instance.CheckpointCameraSettings,
+			});
 		}
 		#endregion
 
 		private void UpdateGameplayCamera()
 		{
 			UpdateTransitionTimer();
-			UpdateTrackingSettings();
-
-			UpdatePosition();
-			UpdateRotation();
-
-			//Update FOV and view offsets
-			Camera.Fov = CalculateTargetFOV(BlendSettingsList[0]);
-			Vector2 viewOffset = CalculateViewOffset(BlendSettingsList[0]);
-			if (BlendSettingsList.Count > 1)
+			CameraPositionData data = new CameraPositionData()
 			{
-				for (int i = 1; i < BlendSettingsList.Count; i++)
-				{
-					Camera.Fov = Mathf.Lerp(Camera.Fov, CalculateTargetFOV(BlendSettingsList[i]), SmoothBlendRatioList[i]);
-					viewOffset = viewOffset.Lerp(CalculateViewOffset(BlendSettingsList[i]), SmoothBlendRatioList[i]);
-				}
+				offsetBasis = Basis.Identity,
+				blendData = ActiveBlendData
+			};
+
+			float staticBlendRatio = 0; //Blend value of whether to use static camera positions or not
+			Vector2 viewportOffset = Vector2.Zero;
+			Vector3 staticPosition = Vector3.Zero;
+
+			for (int i = 0; i < CameraBlendList.Count; i++) //Simulate each blend data separately
+			{
+				CameraPositionData iData = CalculateCameraTransform(i);
+				data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
+				data.precalculatedPosition = data.precalculatedPosition.Lerp(iData.precalculatedPosition, CameraBlendList[i].SmoothedInfluence);
+
+				data.yawTrackingRotation = Mathf.LerpAngle(data.yawTrackingRotation, iData.yawTrackingRotation, CameraBlendList[i].SmoothedInfluence);
+				data.pitchTrackingRotation = Mathf.Lerp(data.pitchTrackingRotation, iData.pitchTrackingRotation, CameraBlendList[i].SmoothedInfluence);
+
+				data.horizontalTrackingOffset = Mathf.Lerp(data.horizontalTrackingOffset, iData.horizontalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
+				data.verticalTrackingOffset = Mathf.Lerp(data.verticalTrackingOffset, iData.verticalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
+
+				data.distance = Mathf.Lerp(data.distance, iData.distance, CameraBlendList[i].SmoothedInfluence);
+
+				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.isStaticCamera ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
+				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 			}
 
-			Camera.HOffset = viewOffset.X;
-			Camera.VOffset = viewOffset.Y;
-			if (!freeCamEnabled) //Apply transform
-				SyncCameraTransforms();
+			//Recalculate non-static camera positions for better transition rotations.
+			Transform3D cameraTransform = new Transform3D(data.offsetBasis, CalculatePosition(data).Lerp(data.precalculatedPosition, staticBlendRatio));
+			cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTrackingRotation);
+			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTrackingRotation);
+			cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 
-			//Update input transformation angle
-			xformAngle = CalculateXform(BlendSettingsList[0]);
-			if (BlendSettingsList.Count > 1)
-			{
-				for (int i = 1; i < BlendSettingsList.Count; i++)
-					xformAngle = Mathf.LerpAngle(xformAngle, CalculateXform(BlendSettingsList[i]), SmoothBlendRatioList[i]);
-			}
+			cameraRoot.GlobalTransform = cameraTransform; //Update transform
 
-			if (SnapFlag) //Reset flag
+			//Update view offset
+			camera.HOffset = viewportOffset.X;
+			camera.VOffset = viewportOffset.Y;
+			debugMesh.Position = new Vector3(viewportOffset.X, viewportOffset.Y, 0); //Update debug mesh
+
+			xformAngle = Character.CalculateForwardAngle(-data.offsetBasis.Z);
+
+			if (SnapFlag) //Reset flag after camera was updating
 				SnapFlag = false;
 		}
 
-		private void SyncCameraTransforms()
+		private Vector3 AddTrackingOffset(Vector3 position, CameraPositionData data)
 		{
-			cameraRoot.GlobalTransform = calculationRoot.GlobalTransform;
-			cameraGimbal.GlobalTransform = calculationGimbal.GlobalTransform;
+			position += data.offsetBasis.X.Normalized() * data.horizontalTrackingOffset;
+			position += Vector3.Up * data.verticalTrackingOffset; //Use Pathfollower's up axis for vertical offset
+			return position;
 		}
 
-		private float CalculateXform(CameraSettingsResource settings)
+		private Vector3 CalculatePosition(CameraPositionData data)
 		{
-			if (settings == null) return 0;
-
-			if (settings.IsStaticCamera)
-				return CalculateYaw(settings);
-
-			return Character.CalculateForwardAngle(calculationRoot.Forward());
-		}
-
-		private float CalculateTargetFOV(CameraSettingsResource settings)
-		{
-			if (settings == null || !settings.useCustomFOV) return Camera.Fov;
-			return settings.fov;
-		}
-		private Vector2 CalculateViewOffset(CameraSettingsResource settings)
-		{
-			if (settings == null) return Vector2.Zero;
-			return new Vector2(settings.hOffset, settings.vOffset);
-		}
-
-		private void UpdatePosition()
-		{
-			Vector3 targetPosition = CalculatePosition(BlendSettingsList[0]);
-			if (BlendSettingsList.Count > 1)
-			{
-				for (int i = 1; i < BlendSettingsList.Count; i++)
-					targetPosition = targetPosition.Lerp(CalculatePosition(BlendSettingsList[i]), SmoothBlendRatioList[i]);
-			}
-
-			calculationRoot.GlobalPosition = targetPosition;
+			Vector3 position = data.offsetBasis.Z.Normalized() * data.distance;
+			position += PathFollower.GlobalPosition;
+			return position;
 		}
 
 		/// <summary>
-		/// Calculates the (offset) position for a given CameraSettingResource.
+		/// Simulates a camera setting and returns the Transform of where it would end up.
 		/// </summary>
-		private Vector3 CalculatePosition(CameraSettingsResource settings, bool disableTracking = false)
+		private CameraPositionData CalculateCameraTransform(int index)
 		{
-			if (settings == null) return Vector3.Zero;
-			if (settings.IsStaticCamera) //Static camera
-				return settings.staticPosition;
-
-			float height = settings.height;
-			float distance = settings.distance;
-
-			//Add tracking modifiers
-			distance += Mathf.Lerp(0, settings.backstepDistance, backstepBlend);
-			if (settings.isLockonTrackingEnabled)
+			CameraSettingsResource settings = CameraBlendList[index].SettingsResource;
+			CameraPositionData data = new CameraPositionData()
 			{
-				height += Mathf.Lerp(0, LOCKON_HEIGHT, lockonBlend);
-				distance += Mathf.Lerp(0, LOCKON_DISTANCE, lockonBlend);
-			}
+				offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi),
+				blendData = CameraBlendList[index],
+			};
 
-			Vector3 targetPosition = PathFollower.GlobalPosition;
+			float yawAngle = settings.yawAngle;
+			float pitchAngle = settings.pitchAngle;
 
-			if (settings.yawMode == CameraSettingsResource.OverrideModes.Override)
-				targetPosition += Vector3.Forward.Rotated(Vector3.Up, settings.yawAngle) * distance;
-			else
+			if (!settings.isStaticCamera) //ALL BROKEN :(
 			{
-				if (settings.usePathfollowerDistance)
+				data.distance = settings.distance;
+
+				//TODO add extra distance based on backstep
+				if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Offset)
 				{
-					float currentProgress = PathFollower.Progress;
-					PathFollower.Progress -= distance;
-					targetPosition = PathFollower.GlobalPosition;
-					PathFollower.Progress = currentProgress;
-					if (distance > currentProgress)
-						distance = Mathf.Abs(currentProgress - distance);
-					else
-						distance = 0;
+					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						yawAngle += PathFollower.ForwardAngle;
+
+					if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						pitchAngle += PathFollower.Forward().AngleTo(PathFollower.Forward().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Forward().Y);
 				}
-
-				targetPosition += PathFollower.Back() * distance;
-			}
-
-			if (disableTracking) //Return the "base" position, without any tracking applied
-				return targetPosition;
-
-			bool trackHorizontally = settings.IsFieldCamera || settings.IsHallCamera;
-			if (trackHorizontally) //Horizontal tracking
-			{
-				float trackingAmount = settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.X : PathFollower.FlatPlayerPositionDelta.X;
-				if (settings.IsHallCamera)
-					trackingAmount = Mathf.Clamp(trackingAmount, -settings.hallWidth, settings.hallWidth);
-
-				if (settings.isRollEnabled)
-					targetPosition += PathFollower.Right() * trackingAmount;
 				else
-					targetPosition += PathFollower.Forward().Rotated(Vector3.Up, Mathf.Pi * .5f).RemoveVertical().Normalized() * trackingAmount;
-			}
-
-			//Calculate Height
-			if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Move) //Vertical tracking
-				height += settings.isRollEnabled ? PathFollower.TruePlayerPositionDelta.Y : PathFollower.FlatPlayerPositionDelta.Y;
-
-			if (settings.isRollEnabled)
-				targetPosition += PathFollower.Up() * height;
-			else
-				targetPosition += PathFollower.UpAxis * height;
-
-			return targetPosition;
-		}
-
-		public float CurrentPitch { get; private set; }
-		public float CurrentYaw { get; private set; }
-		public float CurrentTilt { get; private set; }
-		private void UpdateRotation()
-		{
-			//Calculate target angles
-			float targetTilt = CalculateTilt(BlendSettingsList[0]);
-			float targetYaw = CalculateYaw(BlendSettingsList[0]);
-			if (BlendSettingsList.Count > 1)
-			{
-				for (int i = 1; i < BlendSettingsList.Count; i++)
 				{
-					targetTilt = Mathf.Lerp(targetTilt, CalculateTilt(BlendSettingsList[i]), SmoothBlendRatioList[i]);
-					targetYaw = Mathf.LerpAngle(targetYaw, CalculateYaw(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+					float currentProgress = PathFollower.Progress; //Cache progress
+
+					float extrapolatedDistance = settings.distance - PathFollower.Progress; //Used to prevent the camera getting stuck at the beginning of paths
+					if (extrapolatedDistance < 0)
+						extrapolatedDistance = 0;
+					PathFollower.Progress -= settings.distance;
+					Vector3 sampledForward = PathFollower.Forward();
+					Vector3 sampledDelta = PathFollower.GlobalPosition + PathFollower.Back() * extrapolatedDistance;
+					PathFollower.Progress = currentProgress; //Revert progress
+					sampledDelta -= PathFollower.GlobalPosition;
+
+					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						yawAngle += Character.CalculateForwardAngle(-sampledDelta.Normalized());
+
+					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						pitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
 				}
+
+				data.offsetBasis = data.offsetBasis.Rotated(Vector3.Up, yawAngle);
+				data.offsetBasis = data.offsetBasis.Rotated(data.offsetBasis.X.Normalized(), pitchAngle);
+
+				if (settings.followPathTilt)
+				{
+					float tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.RightAxis, PathFollower.Forward());
+					data.offsetBasis = data.offsetBasis.Rotated(data.offsetBasis.Z.Normalized(), tiltAngle);
+				}
+
+				//Update Tracking
+				//Calculate position for tracking calculations
+				data.precalculatedPosition = data.offsetBasis.Z.Normalized() * data.distance;
+				data.precalculatedPosition += PathFollower.GlobalPosition;
+
+				Vector3 globalDelta = Character.GlobalPosition - data.precalculatedPosition;
+				Vector3 delta = data.offsetBasis.Inverse() * globalDelta;
+
+				if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Move)
+					data.horizontalTrackingOffset = delta.X;
+				else if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
+					data.yawTrackingRotation = delta.Normalized().Flatten().AngleTo(Vector2.Up);
+
+				if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Move)
+					data.verticalTrackingOffset = globalDelta.Y;
+				else if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) //Rotational tracking
+					data.pitchTrackingRotation = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+
+				//Recalculate position after applying rotational tracking
+				data.precalculatedPosition = data.offsetBasis.Z.Normalized() * data.distance;
+				data.precalculatedPosition += PathFollower.GlobalPosition;
+				data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
 			}
-
-			CurrentTilt = targetTilt;
-			CurrentYaw = targetYaw;
-
-			calculationRoot.GlobalRotation = new Vector3(0, CurrentYaw, CurrentTilt);
-
-			//Pitch has to be calculated after yaw and tilt rotation was applied
-			float targetPitch = CalculatePitch(BlendSettingsList[0]);
-			if (BlendSettingsList.Count > 1)
+			else
 			{
-				for (int i = 1; i < BlendSettingsList.Count; i++)
-					targetPitch = Mathf.Lerp(targetPitch, CalculatePitch(BlendSettingsList[i]), SmoothBlendRatioList[i]);
+				data.precalculatedPosition = data.blendData.StaticPosition;
+
+				Vector3 delta = Character.GlobalPosition - data.precalculatedPosition;
+				data.distance = delta.Length();
+				delta = delta.Normalized();
+
+				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+					yawAngle += delta.Flatten().AngleTo(Vector2.Up) + Mathf.Pi;
+				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+					pitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+
+				data.offsetBasis = data.offsetBasis.Rotated(Vector3.Up, yawAngle);
+				data.offsetBasis = data.offsetBasis.Rotated(data.offsetBasis.X.Normalized(), pitchAngle);
 			}
 
-			CurrentPitch = targetPitch;
-			calculationGimbal.Rotation = Vector3.Right * CurrentPitch;
+			return data;
 		}
 
-		private float CalculateTilt(CameraSettingsResource settings)
+		private struct CameraPositionData
 		{
-			if (settings == null || !settings.isRollEnabled || settings.IsStaticCamera) return 0;
+			/// <summary> Rotation data used for offset calculation. </summary>
+			public Basis offsetBasis;
 
-			//Rotate the z axis along PathFollower's forward, by angle of the ground direction
-			Vector3 angle = PathFollower.Up().Rotated(Vector3.Up, -PathFollower.ForwardAngle);
-			angle.Z = 0;
+			/// <summary> How much to offset. </summary>
+			public float distance;
 
-			return angle.Normalized().SignedAngleTo(Vector3.Up, Vector3.Forward);
-		}
+			/// <summary> Yaw rotation data used for tracking. </summary>
+			public float yawTrackingRotation;
+			/// <summary> Pitch rotation data used for tracking. </summary>
+			public float pitchTrackingRotation;
 
-		/// <summary>
-		/// Calculates yaw (y-axis rotation) of a given CameraSettingsResource.
-		/// </summary>
-		private float CalculateYaw(CameraSettingsResource settings)
-		{
-			if (settings == null) return 0; //Invalid resource
+			/// <summary> How much to move camera for horizontal tracking. </summary>
+			public float horizontalTrackingOffset;
+			/// <summary> How much to move camera for vertical tracking. </summary>
+			public float verticalTrackingOffset;
 
-			if (settings.IsStaticCamera)
-				return (Character.GlobalPosition - settings.staticPosition).Flatten().AngleTo(Vector2.Down);
+			/// <summary> Only used when blending with a static camera. </summary>
+			public Vector3 precalculatedPosition;
 
-			if (settings.yawMode == CameraSettingsResource.OverrideModes.Override)
-				return settings.yawAngle; //Override view direction
-
-			Vector3 forwardDirection = (PathFollower.GlobalPosition - CalculatePosition(settings, true)).Normalized();
-			return Character.CalculateForwardAngle(forwardDirection) + settings.yawAngle;
-		}
-
-		private readonly float PITCH_DEADZONE = .6f; //Don't bother rotating when the player's screen ratio is less than this
-		private readonly float PITCH_RISING_LEAD_RATIO = .2f;
-		private readonly float PITCH_FALLING_LEAD_RATIO = .4f;
-		private readonly float PITCH_MAX_LEAD_AMOUNT = 5f;
-		/// <summary>
-		/// Calculates pitch (x-axis rotation) of a given CameraSettingsResource.
-		/// </summary>
-		private float CalculatePitch(CameraSettingsResource settings)
-		{
-			if (settings == null) return 0;
-
-			if (settings.IsStaticCamera)
-				return CalculatePitchAngle(Character.GlobalPosition, settings);
-
-			if (settings.pitchMode == CameraSettingsResource.OverrideModes.Override)
-				return settings.pitchAngle; //Override view direction
-
-			Vector3 upAxis = settings.isRollEnabled ? PathFollower.Up() : PathFollower.UpAxis;
-			Vector3 targetLookAtPosition = Character.GlobalPosition + upAxis * settings.height;
-			float playerPitch = CalculatePitchAngle(targetLookAtPosition, settings);
-
-			//Tracking
-			if (settings.isLockonTrackingEnabled)
-			{
-				float enemyPitch = CalculatePitchAngle(lastLockonPosition + PathFollower.Forward() * LOCKON_DISTANCE, settings) - settings.pitchAngle;
-				if (Mathf.Abs(enemyPitch) > MAX_LOCKON_PITCH) //Incase the player decides to just ignore the enemy and keep moving forward
-					enemyPitch = Mathf.Sign(enemyPitch) * MAX_LOCKON_PITCH;
-
-				return Mathf.Lerp(playerPitch, enemyPitch, lockonBlend);
-			}
-
-			if (!Character.IsOnGround && settings.verticalTrackingMode == CameraSettingsResource.TrackingModes.Rotate)
-			{
-				float leadAmount = Character.VerticalSpd * PhysicsManager.physicsDelta;
-				leadAmount *= Character.VerticalSpd > 0 ? PITCH_RISING_LEAD_RATIO : PITCH_FALLING_LEAD_RATIO;
-				leadAmount = Mathf.Clamp(leadAmount, -PITCH_MAX_LEAD_AMOUNT, PITCH_MAX_LEAD_AMOUNT);
-				targetLookAtPosition += Character.UpDirection * leadAmount;
-
-				//For better framing
-				float maxFOV = Mathf.DegToRad(CalculateTargetFOV(settings) * .5f);
-				float pathPitch = CalculatePitchAngle(PathFollower.GlobalPosition + upAxis * settings.height, settings);
-				float characterPitch = CalculatePitchAngle(targetLookAtPosition, settings) - pathPitch;
-				float factor = characterPitch / maxFOV;
-				factor = Mathf.Abs(factor) <= PITCH_DEADZONE ? 0 : (factor - Mathf.Sign(factor) * PITCH_DEADZONE);
-
-				return pathPitch + maxFOV * factor;
-			}
-
-			return playerPitch;
-		}
-
-		private float CalculatePitchAngle(Vector3 lookAt, CameraSettingsResource settings)
-		{
-			Vector3 delta = CalculatePosition(settings) - lookAt;
-			delta = delta.Rotated(Vector3.Up, -CalculateYaw(settings));
-			delta = delta.Rotated(Vector3.Forward, CalculateTilt(settings));
-			delta.X = 0;
-
-			float targetPitch = Vector3.Forward.SignedAngleTo(delta.Normalized(), Vector3.Right);
-			if (!settings.IsStaticCamera)
-				targetPitch += settings.pitchAngle; //Add
-
-			return targetPitch;
+			/// <summary> Reference to the CameraBlendData being used. </summary>
+			public CameraBlendData blendData;
 		}
 		#endregion
 
 		#region Free Cam
 		private float freecamMovespeed = 20;
-		private const float MOUSE_SENSITIVITY = .2f;
+		private const float MOUSE_SENSITIVITY = .1f;
 
-		private bool freeCamEnabled;
+		private bool isFreeCamEnabled;
 		private bool freeCamRotating;
+		private bool freeCamTilting;
 
 		private void UpdateFreeCam()
 		{
 			if (Input.IsKeyPressed(Key.R))
 			{
-				freeCamEnabled = freeCamRotating = false;
-				calculationRoot.Visible = false;
-				SnapFlag = true;
+				isFreeCamEnabled = freeCamRotating = false;
+				camera.Transform = Transform3D.Identity;
 			}
 
 			freeCamRotating = Input.IsMouseButtonPressed(MouseButton.Left);
-			if (freeCamRotating)
+			freeCamTilting = Input.IsMouseButtonPressed(MouseButton.Right);
+			if (freeCamRotating || freeCamTilting)
 			{
-				freeCamEnabled = true;
-				calculationRoot.Visible = true;
+				isFreeCamEnabled = true;
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 			else
+			{
 				Input.MouseMode = Input.MouseModeEnum.Visible;
+			}
 
-			if (!freeCamEnabled) return;
+			debugMesh.Visible = isFreeCamEnabled;
 
+			if (!isFreeCamEnabled) return;
 			float targetMoveSpeed = freecamMovespeed;
 
 			if (Input.IsKeyPressed(Key.Shift))
@@ -537,17 +385,17 @@ namespace Project.Gameplay
 				targetMoveSpeed *= .5f;
 
 			if (Input.IsKeyPressed(Key.E))
-				cameraRoot.GlobalTranslate(camera.Up() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				camera.GlobalTranslate(camera.Up() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.Q))
-				cameraRoot.GlobalTranslate(camera.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				camera.GlobalTranslate(camera.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.W))
-				cameraRoot.GlobalTranslate(camera.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				camera.GlobalTranslate(camera.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.S))
-				cameraRoot.GlobalTranslate(camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				camera.GlobalTranslate(camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.D))
-				cameraRoot.GlobalTranslate(camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				camera.GlobalTranslate(camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.A))
-				cameraRoot.GlobalTranslate(camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				camera.GlobalTranslate(camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
 		}
 
 		public override void _Input(InputEvent e)
@@ -556,9 +404,11 @@ namespace Project.Gameplay
 			{
 				if (freeCamRotating)
 				{
-					cameraRoot.Rotation += Vector3.Up * Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY;
-					cameraGimbal.Rotation += Vector3.Right * Mathf.DegToRad((e as InputEventMouseMotion).Relative.Y) * MOUSE_SENSITIVITY;
+					camera.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
+					camera.RotateObjectLocal(Vector3.Right, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.Y) * MOUSE_SENSITIVITY);
 				}
+				else if (freeCamTilting)
+					camera.RotateObjectLocal(Vector3.Forward, Mathf.DegToRad((e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
 			}
 			else if (e is InputEventMouseButton emb)
 			{
@@ -582,5 +432,34 @@ namespace Project.Gameplay
 			e.Dispose();
 		}
 		#endregion
+	}
+
+	public partial class CameraBlendData : GodotObject
+	{
+		/// <summary> Use crossfading? </summary>
+		public bool IsCrossfadeEnabled { get; set; }
+
+		/// <summary> Ratio [0 <-> 1] of how much influence this blend has. </summary>
+		public float LinearInfluence { get; private set; }
+		/// <summary> Influence, smoothed with Mathf.Smoothstep. </summary>
+		public float SmoothedInfluence { get; private set; }
+		/// <summary> Actual amount to blend each frame. </summary>
+		public float BlendSpeed { get; private set; }
+
+		/// <summary> How long blending takes in seconds. </summary>
+		public float BlendTime { get; set; }
+		/// <summary> Camera's static position. Only used when CameraSettingsResource.isStaticCamera is true. </summary>
+		public Vector3 StaticPosition { get; set; }
+
+		/// <summary> CameraSettingsResource for this camera setting. </summary>
+		public CameraSettingsResource SettingsResource { get; set; }
+
+		public void SetInfluence(float rawInfluence)
+		{
+			LinearInfluence = rawInfluence;
+			SmoothedInfluence = Mathf.SmoothStep(0.0f, 1.0f, rawInfluence);
+		}
+
+		public void CalculateBlendSpeed() => BlendSpeed = 1f / BlendTime;
 	}
 }

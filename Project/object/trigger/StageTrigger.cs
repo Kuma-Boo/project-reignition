@@ -139,8 +139,8 @@ namespace Project.Gameplay.Triggers
 			if (respawnMode != RespawnModes.Always) //Validate respawn
 			{
 				//Compare the currentCheckpoint progress compared to this StageTrigger
-				float eventPosition = StageSettings.instance.GetProgress(GlobalPosition);
-				float checkpointPosition = StageSettings.instance.GetProgress(LevelSettings.instance.CurrentCheckpoint.GlobalPosition);
+				float eventPosition = PathFollower.GetProgress(GlobalPosition);
+				float checkpointPosition = PathFollower.GetProgress(LevelSettings.instance.CurrentCheckpoint.GlobalPosition);
 				bool isRespawningAhead = checkpointPosition > eventPosition;
 
 				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||

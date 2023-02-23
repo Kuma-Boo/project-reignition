@@ -81,7 +81,6 @@ namespace Project.Gameplay
 				else
 				{
 					ringLossLabel.Text = amount.ToString();
-					GD.Print(ringLossLabel.Text);
 					ringAnimator.Set(RING_LOSS_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				}
 			}

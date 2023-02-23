@@ -14,11 +14,11 @@ namespace Project.Editor
 		private Node target;
 		public static Camera3D editorCam;
 
-		public override bool _Handles(Variant var) => true;
-		public override void _Edit(Variant var)
+		public override bool _Handles(GodotObject var) => true;
+		public override void _Edit(GodotObject var)
 		{
-			if (var.Obj is Node)
-				target = (Node)var.Obj;
+			if (var is Node)
+				target = (Node)var;
 		}
 
 		public override int _Forward3DGuiInput(Camera3D cam, InputEvent e)

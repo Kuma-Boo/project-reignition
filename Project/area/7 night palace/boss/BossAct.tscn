@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3 uid="uid://b7cm7w2yj6rtx"]
+
+[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_vx3gx"]
+[ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="2_sdhlk"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_wb1og"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="5_u52xy"]
+[ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/AutorunLockout.tres" id="6_g0tcn"]
+[ext_resource type="PackedScene" uid="uid://jcjfoll5abdq" path="res://area/7 night palace/boss/Static.tscn" id="9_iemq6"]
+
+[sub_resource type="SphereShape3D" id="9"]
+radius = 3.0
+
+[node name="Stage" type="Node"]
+
+[node name="BossAct" type="Node3D" parent="."]
+script = ExtResource("1_vx3gx")
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = null
+
+[node name="CharacterSpawn" parent="BossAct" instance=ExtResource("2_sdhlk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -49)
+
+[node name="AutorunTrigger" parent="BossAct/CharacterSpawn" instance=ExtResource("3_wb1og")]
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Lockout" type="Node3D" parent="BossAct/CharacterSpawn/AutorunTrigger"]
+script = ExtResource("5_u52xy")
+lockoutData = ExtResource("6_g0tcn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/CharacterSpawn/AutorunTrigger"]
+shape = SubResource("9")
+
+[node name="Static" parent="." instance=ExtResource("9_iemq6")]

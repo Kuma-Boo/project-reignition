@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 namespace Project.Gameplay
 {
@@ -9,11 +10,38 @@ namespace Project.Gameplay
 	{
 		public static StageSettings instance;
 
-		/// <summary> Pathfollower automatically assigns this path when level starts. </summary>
 		[Export]
-		public Path3D mainPath;
-		/// <summary> Returns the position of a given position, from [0 <-> 1]. </summary>
-		public float GetProgress(Vector3 pos) => mainPath.Curve.GetClosestOffset(pos - mainPath.GlobalPosition);
+		public Node3D pathParent;
+		/// <summary> List of all level paths contained for this level. </summary>
+		private readonly Array<Path3D> pathList = new Array<Path3D>();
+
+		/// <summary>
+		/// Returns the path the player is currently the closest to.
+		/// Allows placing the player anywhere in the editor without needing to manually assign paths.
+		/// </summary>
+		public Path3D CalculateStartingPath(Vector3 globalPosition)
+		{
+			int closestPathIndex = -1;
+			float closestDistanceSquared = Mathf.Inf;
+
+			for (int i = 0; i < pathList.Count; i++)
+			{
+				Vector3 closestPoint = pathList[i].Curve.GetClosestPoint(globalPosition - pathList[i].GlobalPosition);
+				closestPoint += pathList[i].GlobalPosition;
+				float dstSquared = globalPosition.DistanceSquaredTo(closestPoint);
+
+				if (dstSquared < closestDistanceSquared)
+				{
+					closestPathIndex = i;
+					closestDistanceSquared = dstSquared;
+				}
+			}
+
+			if (closestPathIndex == -1)
+				return null;
+
+			return pathList[closestPathIndex];
+		}
 
 		[Export]
 		public Node3D completionDemoNode;
@@ -31,6 +59,13 @@ namespace Project.Gameplay
 		public override void _EnterTree()
 		{
 			instance = this; //Always override previous instance
+
+			for (int i = 0; i < pathParent.GetChildCount(); i++)
+			{
+				Path3D path = pathParent.GetChildOrNull<Path3D>(i);
+				if (path != null)
+					pathList.Add(path);
+			}
 		}
 
 		public bool StartCompletionDemo()

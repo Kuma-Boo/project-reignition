@@ -156,7 +156,8 @@ namespace Project.Gameplay.Triggers
 		/// </summary>
 		private void OnPlayerDamaged()
 		{
-			if (Character.IsInvincible || damageState != DamageStates.Disabled) return; //Damage routine has already started
+			//Invincible/Damage routine has already started
+			if (Character.IsInvincible || damageState != DamageStates.Disabled) return;
 
 			if (LevelSettings.instance.CurrentRingCount == 0)
 			{
@@ -164,6 +165,9 @@ namespace Project.Gameplay.Triggers
 				Character.StartKnockback(new CharacterController.KnockbackData());
 				return;
 			}
+
+			Character.TakeDamage();
+			Character.StartInvincibility();
 
 			damageState = DamageStates.Stagger;
 			velocity = 0;

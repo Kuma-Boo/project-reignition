@@ -5,6 +5,9 @@ namespace Project.Core
 		/// <summary> Don't forget to set this to false for the final build. </summary>
 		private static bool EnableCheats => true;
 
+		/// <summary> Allow the player to jump in the air. </summary>
+		public static bool EnableMoonJump => EnableCheats && true;
+
 		/// <summary> Use a custom save. </summary>
 		public static bool UseDebugSave => EnableCheats && true;
 		/// <summary> Don't load skills from save data, use inspector values instead. </summary>

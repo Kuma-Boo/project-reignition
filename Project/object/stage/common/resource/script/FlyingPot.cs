@@ -116,7 +116,7 @@ namespace Project.Gameplay.Objects
 			//Update camera
 			if (cameraTrigger != null)
 			{
-				cameraTrigger.settings.yawAngle = (GlobalRotation.Y + Mathf.Pi) % Mathf.Tau; //Sync viewAngle to current flying pot's rotation
+				cameraTrigger.settings.yawAngle = ExtensionMethods.ModAngle(GlobalRotation.Y + Mathf.Pi); //Sync viewAngle to current flying pot's rotation
 				cameraTrigger.Activate();
 			}
 		}

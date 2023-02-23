@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" uid="uid://dpn0xh20405yp" path="res://area/1 sand oasis/object/model/pillar/CircularPillar.gltf" id="1_vyixv"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_todym"]
+height = 0.8
+radius = 0.8
+
+[sub_resource type="CylinderShape3D" id="2"]
+height = 8.0
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_caygg"]
+points = PackedVector3Array(-0.8, -1.5, -0.8, -0.8, -1.5, 0.8, 0.8, -1.5, 0.8, 0.8, -1.5, -0.8, -0.8, 0, -0.8, -0.8, 0, 0.8, 0.8, 0, 0.8, 0.8, 0, -0.8, 0.25, 1.5, -0.25, 0.25, 1.5, 0.25, -0.25, 1.5, 0.25, -0.25, 1.5, -0.25)
+
+[node name="CircularPillar" type="StaticBody3D" groups=["floor", "splash jump", "wall"]]
+
+[node name="CircularPillar" parent="." instance=ExtResource("1_vyixv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="Top" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.6, 0)
+shape = SubResource("CylinderShape3D_todym")
+
+[node name="Wall" type="StaticBody3D" parent="." groups=["splash jump", "wall"]]
+
+[node name="Middle" type="CollisionShape3D" parent="Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+shape = SubResource("2")
+
+[node name="Base" type="CollisionShape3D" parent="Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("ConvexPolygonShape3D_caygg")

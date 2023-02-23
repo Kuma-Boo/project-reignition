@@ -24,7 +24,7 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private CameraSettingsResource previousSettings; //Reference to the camera data that was being used when this trigger was entered.
 		private Vector3 previousStaticPosition;
-		private CameraController CameraController => Character.Camera;
+		private CameraController Camera => Character.Camera;
 
 		public override void Activate()
 		{
@@ -36,27 +36,31 @@ namespace Project.Gameplay.Triggers
 
 			if (previousSettings == null)
 			{
-				previousSettings = CameraController.ActiveSettings;
-				if (previousSettings.IsStaticCamera && previousSettings.autosetStaticPosition) //Cache static position
-					previousStaticPosition = previousSettings.staticPosition;
+				previousSettings = Camera.ActiveSettings;
+				previousStaticPosition = Camera.ActiveBlendData.StaticPosition; //Cache static position
 			}
 
-			if (settings.IsStaticCamera && settings.autosetStaticPosition)
-				settings.staticPosition = GlobalPosition;
-
-			CameraController.UpdateCameraSettings(settings, transitionTime, transitionType == TransitionType.Crossfade);
+			Camera.UpdateCameraSettings(new CameraBlendData()
+			{
+				BlendTime = transitionTime,
+				SettingsResource = settings,
+				StaticPosition = GlobalPosition,
+				IsCrossfadeEnabled = transitionType == TransitionType.Crossfade
+			});
 		}
 
 		public override void Deactivate()
 		{
 			if (previousSettings == null || settings == null) return;
-			if (CameraController.ActiveSettings != settings) return; //Already overridden by a different trigger
-
+			if (Camera.ActiveSettings != settings) return; //Already overridden by a different trigger
 			if (Character.IsRespawning) return;
-			if (previousSettings.IsStaticCamera && previousSettings.autosetStaticPosition) //Reset static position
-				previousSettings.staticPosition = previousStaticPosition;
 
-			CameraController.UpdateCameraSettings(previousSettings, Mathf.IsEqualApprox(deactivationTransitionTime, -1) ? transitionTime : deactivationTransitionTime);
+			Camera.UpdateCameraSettings(new CameraBlendData()
+			{
+				BlendTime = Mathf.IsEqualApprox(deactivationTransitionTime, -1) ? transitionTime : deactivationTransitionTime,
+				SettingsResource = previousSettings,
+				StaticPosition = previousStaticPosition, //Restore cached static position
+			});
 		}
 	}
 }

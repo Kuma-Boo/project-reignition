@@ -10,15 +10,17 @@ namespace Project.Gameplay
 	{
 		public CharacterController Character => CharacterController.instance;
 
+		public Path3D ActivePath { get; private set; }
+
 		/// <summary> Current rotation of the pathfollower, in global radians. </summary>
 		public float ForwardAngle { get; private set; }
 		/// <summary> Current backwards rotation of the pathfollower, always equal to ForwardAngle + Mathf.Pi. </summary>
 		public float BackAngle { get; private set; }
 		/// <summary> Delta between last frame and current frame. Updates on Resync(). </summary>
 		public float DeltaAngle { get; private set; }
-		public Path3D ActivePath { get; private set; }
 		/// <summary> Local delta to player position. </summary>
 		public Vector3 FlatPlayerPositionDelta { get; private set; }
+		/// <summary> Absolute delta to player position. </summary>
 		public Vector3 TruePlayerPositionDelta { get; private set; }
 
 		/// <summary> Custom up axis. Equal to Forward() rotated 90 degrees around RightAxis. </summary>
@@ -37,7 +39,7 @@ namespace Project.Gameplay
 			newPath.AddChild(this);
 
 			ActivePath = newPath;
-			CallDeferred(MethodName.Resync);
+			Resync();
 		}
 
 		public void Resync()
@@ -45,10 +47,14 @@ namespace Project.Gameplay
 			if (!IsInsideTree()) return;
 			if (ActivePath == null) return;
 
-			Vector3 syncPoint = Character.GlobalPosition;
-			syncPoint -= CameraController.instance.PathResyncFix * TruePlayerPositionDelta.Y;
+			Vector3 syncPoint = Character.GlobalPosition;// + Vector3.Down * TruePlayerPositionDelta.Y;
 			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
 
+			RecalculateData();
+		}
+
+		public void RecalculateData()
+		{
 			float newForwardAngle = Character.CalculateForwardAngle(this.Forward());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f;
 			ForwardAngle = newForwardAngle;
@@ -65,16 +71,15 @@ namespace Project.Gameplay
 			else //Moving straight up/down
 				RightAxis = this.Back().Cross(ForwardAxis).Normalized();
 			UpAxis = this.Forward().Rotated(RightAxis, Mathf.Pi * .5f).Normalized();
-
-			Debug.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
-			Debug.DrawRay(GlobalPosition, RightAxis, Colors.Red);
-			Debug.DrawRay(GlobalPosition, UpAxis, Colors.Green);
 		}
 
-		/// <summary> Is the pathfollower ahead of the reference point? </summary>
-		public bool IsAheadOfPoint(Vector3 globalPosition) => Progress > ActivePath.Curve.GetClosestOffset(globalPosition - ActivePath.GlobalPosition);
-
 		/// <summary> Calculates the delta position using Basis.Inverse(). </summary>
-		public Vector3 CalculateDeltaPosition(Vector3 globalPostition) => Basis.Inverse() * (globalPostition - GlobalPosition);
+		public Vector3 CalculateDeltaPosition(Vector3 globalPosition) => Basis.Inverse() * (globalPosition - GlobalPosition);
+
+		/// <summary> Is the pathfollower ahead of the reference point? </summary>
+		public bool IsAheadOfPoint(Vector3 pos) => Progress > GetProgress(pos);
+
+		/// <summary> Returns the progress of a given position, from [0 <-> PathLength]. </summary>
+		public float GetProgress(Vector3 pos) => ActivePath.Curve.GetClosestOffset(pos - ActivePath.GlobalPosition);
 	}
 }

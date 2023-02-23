@@ -1,0 +1,98 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="1_31uq6"]
+[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_63goe"]
+[ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="1_iilpd"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/data/BGMBoss.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_a25lg"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="3_5wtt0"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/boss/environment/collision/Collision.tscn" id="3_iwrff"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/boss/environment/path/MainPath.tres" id="4_3rr76"]
+[ext_resource type="PackedScene" uid="uid://756omvmukmd8" path="res://area/3 evil foundry/boss/environment/model/EFBoss.gltf" id="5_gh5ff"]
+[ext_resource type="Material" path="res://area/3 evil foundry/data/material/Lava.tres" id="7_pf467"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_niea5"]
+radius = 5.0
+
+[sub_resource type="PlaneMesh" id="3"]
+material = ExtResource("7_pf467")
+size = Vector2(100, 100)
+
+[node name="World" type="Node"]
+
+[node name="BossAct" type="Node3D" parent="."]
+script = ExtResource("1_63goe")
+"Starting Path" = NodePath("")
+"Mission Type" = 0
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0.0
+"Ranking/Silver Time" = 0.0
+"Ranking/Bronze Time" = 0.0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = null
+Completion/Animator = NodePath("")
+
+[node name="SpawnPosition" type="Node3D" parent="BossAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_iilpd")]
+
+[node name="StageTrigger" parent="BossAct/SpawnPosition" instance=ExtResource("2_a25lg")]
+isOneShot = true
+
+[node name="MainPath" type="Node3D" parent="BossAct/SpawnPosition/StageTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("3_5wtt0")
+path = NodePath("../../../../Static/Path/MainPath")
+isSideScrollingPath = true
+isFacingRight = true
+loopPath = true
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="BossAct/SpawnPosition/StageTrigger"]
+shape = SubResource("SphereShape3D_niea5")
+
+[node name="Static" type="Node3D" parent="."]
+
+[node name="Visuals" type="Node3D" parent="Static"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Static/Visuals"]
+environment = ExtResource("1_31uq6")
+
+[node name="EFBoss" parent="Static/Visuals" instance=ExtResource("5_gh5ff")]
+
+[node name="Lava" type="MeshInstance3D" parent="Static/Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+mesh = SubResource("3")
+
+[node name="OmniLight" type="OmniLight3D" parent="Static/Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+light_color = Color(0.45098, 0.2, 0, 1)
+light_energy = 1.2
+shadow_enabled = true
+omni_range = 100.0
+omni_attenuation = 0.15529
+
+[node name="DirectionalLight" type="DirectionalLight3D" parent="Static/Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -5, 0)
+light_color = Color(0.976471, 0.443137, 0, 1)
+light_energy = 2.4
+
+[node name="DirectionalLight2" type="DirectionalLight3D" parent="Static/Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1.31134e-07, 1, 0, -1, 1.31134e-07, 0, -5, 0)
+light_color = Color(1, 0.623529, 0.14902, 1)
+light_energy = 0.4
+
+[node name="Collision" parent="Static" instance=ExtResource("3_iwrff")]
+visible = false
+
+[node name="Path" type="Node3D" parent="Static"]
+
+[node name="MainPath" type="Path3D" parent="Static/Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
+curve = ExtResource("4_3rr76")
+
+[node name="BGM" parent="Static" instance=ExtResource("2")]

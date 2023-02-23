@@ -202,10 +202,6 @@ namespace Project.Gameplay.Triggers
 			if (wasBonusApplied) return; //Bonus was already applied
 
 			wasBonusApplied = true;
-			/*
-			if (wasDriftSuccessful)
-				HeadsUpDisplay.instance.AddBonus(HeadsUpDisplay.BonusTypes.Drift);
-			*/
 		}
 
 		public void OnEntered(Area3D _)

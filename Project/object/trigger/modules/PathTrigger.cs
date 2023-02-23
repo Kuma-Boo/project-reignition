@@ -14,13 +14,13 @@ namespace Project.Gameplay.Triggers
 		public override void Activate()
 		{
 			previousPath = Character.PathFollower.ActivePath;
-			Character.PathFollower.CallDeferred(CharacterPathFollower.MethodName.SetActivePath, path);
+			Character.PathFollower.SetActivePath(path);
 		}
 
 		public override void Deactivate()
 		{
 			if (Character.PathFollower.ActivePath != path) return; //Already changed
-			Character.PathFollower.CallDeferred(CharacterPathFollower.MethodName.SetActivePath, previousPath);
+			Character.PathFollower.SetActivePath(previousPath);
 		}
 	}
 }

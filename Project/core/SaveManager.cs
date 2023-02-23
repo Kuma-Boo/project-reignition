@@ -81,18 +81,21 @@ namespace Project.Core
 
 		public void LoadConfig()
 		{
-			FileAccess configFile = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE, FileAccess.ModeFlags.Read);
+			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE, FileAccess.ModeFlags.Read);
 
 			//Attempt to load.
 			if (FileAccess.GetOpenError() == Error.Ok) //Load Default settings
-				settings = (ConfigData)Json.ParseString(configFile.GetAsText());
+			{
+				settings = (ConfigData)Json.ParseString(file.GetAsText());
+				file.Close();
+			}
 			else
 			{
 				settings = new ConfigData();
 
 				if (OS.IsDebugBuild())
 				{
-					settings.screenResolution = 0;
+					settings.screenResolution = 1;
 					settings.bgmVolume = 0;
 					settings.masterVolume = 0f;
 				}
@@ -115,8 +118,9 @@ namespace Project.Core
 
 		public void SaveConfig()
 		{
-			FileAccess configFile = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE, FileAccess.ModeFlags.Write);
-			configFile.StoreString(Json.Stringify(settings));
+			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE, FileAccess.ModeFlags.Write);
+			file.StoreString(Json.Stringify(settings));
+			file.Close();
 		}
 
 		private void ApplyLocalization()
@@ -319,7 +323,7 @@ namespace Project.Core
 			if (FileAccess.GetOpenError() == Error.Ok)
 			{
 				file.StoreString(Json.Stringify(ActiveGameData.SaveDictionary(), "\t"));
-				file.Flush();
+				file.Close();
 			}
 			else
 			{
@@ -339,7 +343,7 @@ namespace Project.Core
 				if (FileAccess.GetOpenError() == Error.Ok)
 				{
 					GameSaveSlots[i].LoadFromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
-					file.Flush();
+					file.Close();
 				}
 			}
 
