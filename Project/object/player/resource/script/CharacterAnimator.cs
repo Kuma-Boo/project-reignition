@@ -197,7 +197,7 @@ namespace Project.Gameplay
 		/// <summary> What speedratio should be considered as fully running? </summary>
 		private const float RUN_RATIO = .9f;
 		/// <summary> How much should the animation speed be smoothed by? </summary>
-		private const float SPEED_SMOOTHING = .04f;
+		private const float SPEED_SMOOTHING = .06f;
 		/// <summary> How much should the transition from idling be smoothed by? </summary>
 		private const float IDLE_SMOOTHING = .2f;
 
@@ -250,7 +250,18 @@ namespace Project.Gameplay
 						}
 					}
 					else //Jogging
+					{
 						targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RUN_RATIO); //Normalize speed ratio
+
+						//Only use walking animation when player is pressing control stick softly
+						if (Character.Controller.MovementAxisLength >= .8f &&
+							speedRatio < Character.GroundSettings.GetSpeedRatio(Character.BackstepSettings.speed))
+						{
+							if (speedRatio < .3f)
+								speedRatio = .3f;
+							targetAnimationSpeed += 1.0f;
+						}
+					}
 				}
 
 				if (Character.MovementState == CharacterController.MovementStates.External) //Disable turning when controlled externally

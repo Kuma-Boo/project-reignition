@@ -21,7 +21,7 @@ namespace Project.Gameplay
 		/// <summary> Local delta to player position. </summary>
 		public Vector3 FlatPlayerPositionDelta { get; private set; }
 		/// <summary> Absolute delta to player position. </summary>
-		public Vector3 TruePlayerPositionDelta { get; private set; }
+		public Vector3 GlobalPlayerPositionDelta { get; private set; }
 
 		/// <summary> Custom up axis. Equal to Forward() rotated 90 degrees around RightAxis. </summary>
 		public Vector3 UpAxis { get; private set; }
@@ -56,12 +56,12 @@ namespace Project.Gameplay
 		public void RecalculateData()
 		{
 			float newForwardAngle = Character.CalculateForwardAngle(this.Forward());
-			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .5f;
+			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .575f; //Abitrary blend amount that seems to work
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			FlatPlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
-			TruePlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
+			GlobalPlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
 
 			//Update custom orientations
 			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();

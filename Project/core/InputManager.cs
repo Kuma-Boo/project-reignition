@@ -63,9 +63,14 @@ namespace Project.Core
 			public Vector2 MovementAxis { get; private set; }
 			/// <summary> How much is the stick being pressed? </summary>
 			public float MovementAxisLength { get; private set; }
+			/// <summary> Strength of movement axis, smoothed. </summary>
+			public float SmoothedMovementAxisLength { get; private set; }
+			private float axisLengthVelocity;
+
 			/// <summary> Is the control stick currently not holding a direction? </summary>
 			public bool IsHoldingNeutral { get; private set; }
 			private const float DEADZONE = .4f;
+			private const float AXIS_SMOOTHING = .5f;
 
 			/// <summary> [Confirm, Jump] button. </summary>
 			public Button jumpButton;
@@ -117,6 +122,8 @@ namespace Project.Core
 					MovementAxisLength = 0;
 					MovementAxis = Vector2.Zero;
 				}
+
+				SmoothedMovementAxisLength = ExtensionMethods.SmoothDamp(SmoothedMovementAxisLength, MovementAxisLength, ref axisLengthVelocity, AXIS_SMOOTHING * PhysicsManager.physicsDelta);
 			}
 
 			//Returns true when any of the action buttons were pressed

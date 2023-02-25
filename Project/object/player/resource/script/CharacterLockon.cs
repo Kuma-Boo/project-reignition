@@ -12,8 +12,6 @@ namespace Project.Gameplay
 	{
 		private CharacterController Character => CharacterController.instance;
 
-		/// <summary> Used by the CameraController to focus onto multi-HP enemies. </summary>
-		public Enemy LockonEnemy { get; set; }
 		/// <summary> Active lockon target shown on the HUD. </summary>
 		public Node3D Target
 		{
@@ -138,7 +136,8 @@ namespace Project.Gameplay
 
 		public void ResetLockonTarget()
 		{
-			LockonEnemy = null;
+			Character.Camera.LockonTarget = null;
+
 			IsHomingAttacking = false;
 			IsPerfectHomingAttack = false;
 

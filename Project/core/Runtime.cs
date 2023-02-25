@@ -16,7 +16,6 @@ namespace Project.Core
 		{
 			Instance = this;
 			Interface.Menus.Menu.SetUpMemory();
-			SetUpPearls();
 		}
 
 		public override void _Process(double _)
@@ -61,7 +60,6 @@ namespace Project.Core
 
 		/// <summary> Pool of auto-collected pearls used whenever enemies are defeated or itemboxes are opened. </summary>
 		private readonly Array<Gameplay.Objects.Pearl> pearlPool = new Array<Gameplay.Objects.Pearl>();
-		private int PEARL_POOL_SIZE = 100; //How many pearls to pool
 
 		private const float PEARL_NORMAL_COLLISION = .4f;
 		private const float RICH_PEARL_NORMAL_COLLISION = .6f;
@@ -69,12 +67,6 @@ namespace Project.Core
 		{
 			PearlCollisionShape.Radius = PEARL_NORMAL_COLLISION * sizeMultiplier;
 			RichPearlCollisionShape.Radius = RICH_PEARL_NORMAL_COLLISION * sizeMultiplier;
-		}
-
-		private void SetUpPearls()
-		{
-			for (int i = 0; i < PEARL_POOL_SIZE; i++)
-				pearlPool.Add(SpawnPearl());
 		}
 
 		private Gameplay.Objects.Pearl SpawnPearl()
@@ -90,20 +82,19 @@ namespace Project.Core
 		private const float PEARL_MAX_TRAVEL_TIME = .4f;
 		public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius, float heightOffset = 0)
 		{
-			GD.Print($"Spawned {amount} pearls.");
 			Tween tween = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Cubic);
 
 			for (int i = 0; i < amount; i++)
 			{
 				Gameplay.Objects.Pearl pearl;
 
-				if (pearlPool.Count != 0)
+				if (pearlPool.Count != 0) //Reuse pearls if possible.
 				{
 					pearl = pearlPool[0];
 					pearlPool.RemoveAt(0);
 				}
 				else
-					pearl = SpawnPearl(); //In the rare case where pearlPool is empty
+					pearl = SpawnPearl(); //Otherwise create new pearls.
 
 				AddChild(pearl);
 				pearl.Respawn();

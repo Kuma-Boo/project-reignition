@@ -34,13 +34,13 @@ namespace Project.Gameplay.Triggers
 		private float velocity;
 		private float cycleTimer;
 		/// <summary> Maximum amount of cycles in a single second. </summary>
-		private const float CYCLE_FREQUENCY = 3.2f;
+		private const float CYCLE_FREQUENCY = 3.4f;
+		/// <summary> How much to move each cycle.  </summary>
+		private const float CYCLE_DISTANCE = 3.8f;
 		/// <summary> Smoothing to apply when accelerating.  </summary>
 		private const float TRACTION_SMOOTHING = .1f;
 		/// <summary> Smoothing to apply when slowing down.  </summary>
 		private const float FRICTION_SMOOTHING = .4f;
-		/// <summary> How much to move each cycle.  </summary>
-		private const float CYCLE_DISTANCE = 3.2f;
 
 		public override void _Ready() => LevelSettings.instance.ConnectRespawnSignal(this);
 

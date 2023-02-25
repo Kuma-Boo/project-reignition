@@ -85,7 +85,7 @@ namespace Project.Gameplay
 				if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 				{
 					Character.Lockon.StartBounce();
-					Character.Lockon.LockonEnemy = this;
+					Character.Camera.LockonTarget = this;
 				}
 			}
 			else

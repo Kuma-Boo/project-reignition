@@ -11,7 +11,8 @@ namespace Project.Gameplay.Objects
 		[Signal]
 		public delegate void DespawnedEventHandler();
 
-		public bool DisableAutoRespawning { get; set; } //Used for ItemBoxes to allow manual respawning
+		/// <summary> Used for runtime items (Enemy Pearls, Item Box Contents, etc) to allow manual respawning. </summary>
+		public bool DisableAutoRespawning { get; set; }
 		private SpawnData spawnData;
 
 		protected LevelSettings Level => LevelSettings.instance;
@@ -25,9 +26,8 @@ namespace Project.Gameplay.Objects
 			{
 				spawnData = new SpawnData(GetParent(), Transform);
 				Level.ConnectRespawnSignal(this);
+				Level.ConnectUnloadSignal(this);
 			}
-
-			Level.ConnectUnloadSignal(this);
 		}
 
 		public void OnEntered(Area3D a)

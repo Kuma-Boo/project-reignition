@@ -66,7 +66,7 @@ namespace Project.Gameplay
 			if (IsDefeated)
 				Defeat();
 			else
-				Character.Lockon.LockonEnemy = this;
+				Character.Camera.LockonTarget = this;
 		}
 
 		protected virtual void UpdateEnemy() { }
@@ -115,7 +115,7 @@ namespace Project.Gameplay
 					Defeat();
 				else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 				{
-					Character.Lockon.StartBounce(); //Important! Bounce must occur first for camera to work properly
+					Character.Lockon.StartBounce(); //Important! Bounce must occur first
 					TakeDamage();
 				}
 				else if (damagePlayer)

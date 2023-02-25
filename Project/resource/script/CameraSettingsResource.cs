@@ -22,8 +22,10 @@ namespace Project.Gameplay
 
 		private const string VIEW_OFFSET_KEY = "Screen/View Offset";
 
-		private const string HORIZONTAL_TRACKING_KEY = "Tracking/Horizontal Tracking Enabled";
-		private const string VERTICAL_TRACKING_KEY = "Tracking/Vertical Tracking Enabled";
+		private const string HORIZONTAL_TRACKING_KEY = "Tracking/Horizontal Tracking Mode";
+		private const string VERTICAL_TRACKING_KEY = "Tracking/Vertical Tracking Mode";
+		private const string HALL_WIDTH_KEY = "Tracking/Hall Width";
+		private const string HALL_ROTATION_KEY = "Tracking/Hall Rotation Tracking Enabled";
 
 		public override Array<Dictionary> _GetPropertyList()
 		{
@@ -38,6 +40,12 @@ namespace Project.Gameplay
 
 				properties.Add(ExtensionMethods.CreateProperty(HORIZONTAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, horizontalTrackingMode.EnumToString()));
 				properties.Add(ExtensionMethods.CreateProperty(VERTICAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
+
+				if (horizontalTrackingMode == TrackingModeEnum.Move)
+				{
+					properties.Add(ExtensionMethods.CreateProperty(HALL_WIDTH_KEY, Variant.Type.Float));
+					properties.Add(ExtensionMethods.CreateProperty(HALL_ROTATION_KEY, Variant.Type.Bool));
+				}
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty(PITCH_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
@@ -83,6 +91,10 @@ namespace Project.Gameplay
 					return (int)horizontalTrackingMode;
 				case VERTICAL_TRACKING_KEY:
 					return (int)verticalTrackingMode;
+				case HALL_WIDTH_KEY:
+					return hallWidth;
+				case HALL_ROTATION_KEY:
+					return isHallRotationEnabled;
 			}
 
 			return base._Get(property);
@@ -129,9 +141,18 @@ namespace Project.Gameplay
 
 				case HORIZONTAL_TRACKING_KEY:
 					horizontalTrackingMode = (TrackingModeEnum)(int)value;
+					NotifyPropertyListChanged();
 					break;
 				case VERTICAL_TRACKING_KEY:
 					verticalTrackingMode = (TrackingModeEnum)(int)value;
+					break;
+				case HALL_WIDTH_KEY:
+					hallWidth = (float)value;
+					if (hallWidth < 0) //Can't have a negative hall width!
+						hallWidth = 0;
+					break;
+				case HALL_ROTATION_KEY:
+					isHallRotationEnabled = (bool)value;
 					break;
 
 				default:
@@ -169,6 +190,7 @@ namespace Project.Gameplay
 		public DistanceModeEnum distanceCalculationMode;
 		public enum DistanceModeEnum
 		{
+			Auto, //Use offset when moving forward, and sample when moving backwards
 			Offset, //Add distance * PathFollower.Back() (Better for sharp corners)
 			Sample, //Physically sample to move pathfollower's progress by distance (Better for slopes)
 		}
@@ -180,6 +202,11 @@ namespace Project.Gameplay
 		public TrackingModeEnum horizontalTrackingMode;
 		/// <summary> Is vertical tracking enabled? </summary>
 		public TrackingModeEnum verticalTrackingMode;
+
+		/// <summary> Limit horizontal tracking to this value. </summary>
+		public float hallWidth;
+		/// <summary> Rotationally track the player when they go beyond the hall width. </summary>
+		public bool isHallRotationEnabled;
 
 		public enum TrackingModeEnum
 		{

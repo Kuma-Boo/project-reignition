@@ -10,7 +10,6 @@ namespace Project.Gameplay
 	public partial class CameraController : Node3D
 	{
 		public static CameraController instance;
-		public Node3D EventController { get; set; } //Node3D to follow (i.e. in a cutscene)
 
 		[ExportSubgroup("Gameplay Camera")]
 		[Export]
@@ -20,6 +19,9 @@ namespace Project.Gameplay
 		[Export]
 		private Camera3D camera;
 		public Camera3D Camera => camera;
+		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => camera.UnprojectPosition(worldSpace);
+		public bool IsOnScreen(Vector3 worldSpace) => camera.IsPositionInFrustum(worldSpace);
+		public bool IsBehindCamera(Vector3 worldSpace) => camera.IsPositionBehind(worldSpace);
 
 		[Export]
 		private TextureRect _crossfade;
@@ -28,10 +30,8 @@ namespace Project.Gameplay
 
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PathFollower => Character.PathFollower;
+		public Node3D EventController { get; set; } //Node3D to follow (i.e. in a cutscene)
 
-		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => camera.UnprojectPosition(worldSpace);
-		public bool IsOnScreen(Vector3 worldSpace) => camera.IsPositionInFrustum(worldSpace);
-		public bool IsBehindCamera(Vector3 worldSpace) => camera.IsPositionBehind(worldSpace);
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
 		private float xformAngle;
 		public float TransformAngle(float angle) => xformAngle + angle;
@@ -156,15 +156,48 @@ namespace Project.Gameplay
 		}
 		#endregion
 
+		/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
+		public Node3D LockonTarget { get; set; }
+		/// <summary> [0 -> 1] ratio of how much to focus onto LockonTarget. </summary>
+		private float lockonBlend;
+		private float lockonBlendVelocity;
+		/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
+		private const float LOCKON_BLEND_IN_SMOOTHING = 10.0f;
+		/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
+		private const float LOCKON_BLEND_OUT_SMOOTHING = 40.0f;
+		/// <summary> Max blend between player and lockon target. (Higher - Bias towards target, Lower - Bias towards player) </summary>
+		private const float MAX_LOCKON_BLEND = .6f;
+		private void UpdateLockonTarget()
+		{
+			float targetBlend = 0.0f;
+			float smoothing = LOCKON_BLEND_OUT_SMOOTHING;
+
+			if (LockonTarget != null)
+			{
+				if (LockonTarget.IsInsideTree()) //Validate lockon target
+				{
+					targetBlend = MAX_LOCKON_BLEND;
+					smoothing = LOCKON_BLEND_IN_SMOOTHING;
+				}
+				else
+					LockonTarget = null; //Invalid LockonTarget
+			}
+
+			lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing * PhysicsManager.physicsDelta);
+		}
+
 		private void UpdateGameplayCamera()
 		{
 			UpdateTransitionTimer();
+			UpdateLockonTarget();
+
 			CameraPositionData data = new CameraPositionData()
 			{
 				offsetBasis = Basis.Identity,
 				blendData = ActiveBlendData
 			};
 
+			float distance = 0;
 			float staticBlendRatio = 0; //Blend value of whether to use static camera positions or not
 			Vector2 viewportOffset = Vector2.Zero;
 			Vector3 staticPosition = Vector3.Zero;
@@ -173,24 +206,27 @@ namespace Project.Gameplay
 			{
 				CameraPositionData iData = CalculateCameraTransform(i);
 				data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
+				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
+
 				data.precalculatedPosition = data.precalculatedPosition.Lerp(iData.precalculatedPosition, CameraBlendList[i].SmoothedInfluence);
 
-				data.yawTrackingRotation = Mathf.LerpAngle(data.yawTrackingRotation, iData.yawTrackingRotation, CameraBlendList[i].SmoothedInfluence);
-				data.pitchTrackingRotation = Mathf.Lerp(data.pitchTrackingRotation, iData.pitchTrackingRotation, CameraBlendList[i].SmoothedInfluence);
+				data.yawTracking = Mathf.LerpAngle(data.yawTracking, iData.yawTracking, CameraBlendList[i].SmoothedInfluence);
+				data.pitchTracking = Mathf.Lerp(data.pitchTracking, iData.pitchTracking, CameraBlendList[i].SmoothedInfluence);
 
 				data.horizontalTrackingOffset = Mathf.Lerp(data.horizontalTrackingOffset, iData.horizontalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
 				data.verticalTrackingOffset = Mathf.Lerp(data.verticalTrackingOffset, iData.verticalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
-
-				data.distance = Mathf.Lerp(data.distance, iData.distance, CameraBlendList[i].SmoothedInfluence);
 
 				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.isStaticCamera ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 			}
 
 			//Recalculate non-static camera positions for better transition rotations.
-			Transform3D cameraTransform = new Transform3D(data.offsetBasis, CalculatePosition(data).Lerp(data.precalculatedPosition, staticBlendRatio));
-			cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTrackingRotation);
-			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTrackingRotation);
+			Vector3 position = data.offsetBasis.Z.Normalized() * distance;
+			position += Character.CenterPosition;
+
+			Transform3D cameraTransform = new Transform3D(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
+			cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
+			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
 			cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 
 			cameraRoot.GlobalTransform = cameraTransform; //Update transform
@@ -208,15 +244,8 @@ namespace Project.Gameplay
 
 		private Vector3 AddTrackingOffset(Vector3 position, CameraPositionData data)
 		{
-			position += data.offsetBasis.X.Normalized() * data.horizontalTrackingOffset;
-			position += Vector3.Up * data.verticalTrackingOffset; //Use Pathfollower's up axis for vertical offset
-			return position;
-		}
-
-		private Vector3 CalculatePosition(CameraPositionData data)
-		{
-			Vector3 position = data.offsetBasis.Z.Normalized() * data.distance;
-			position += PathFollower.GlobalPosition;
+			position += PathFollower.Right() * data.horizontalTrackingOffset;
+			position += PathFollower.Up() * data.verticalTrackingOffset; //Use Pathfollower's up axis for vertical offset
 			return position;
 		}
 
@@ -228,94 +257,142 @@ namespace Project.Gameplay
 			CameraSettingsResource settings = CameraBlendList[index].SettingsResource;
 			CameraPositionData data = new CameraPositionData()
 			{
-				offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi),
 				blendData = CameraBlendList[index],
 			};
 
-			float yawAngle = settings.yawAngle;
-			float pitchAngle = settings.pitchAngle;
+			float targetYawAngle = settings.yawAngle;
+			float targetPitchAngle = settings.pitchAngle;
 
-			if (!settings.isStaticCamera) //ALL BROKEN :(
+			if (!settings.isStaticCamera)
 			{
-				data.distance = settings.distance;
-
-				//TODO add extra distance based on backstep
-				if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Offset)
+				//Calculate distance
+				float targetDistance = settings.distance;
+				if (Character.IsMovingBackward)
 				{
-					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-						yawAngle += PathFollower.ForwardAngle;
-
-					if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-						pitchAngle += PathFollower.Forward().AngleTo(PathFollower.Forward().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Forward().Y);
+					if (PathFollower.Progress < settings.backstepDistance)
+						targetDistance += settings.backstepDistance - (settings.backstepDistance - PathFollower.Progress);
+					else
+						targetDistance += settings.backstepDistance;
 				}
+				data.blendData.DistanceSmoothDamp(targetDistance, SnapFlag);
+
+				//Calculate targetAngles when DistanceMode is set to Sample.
+				float sampledTargetYawAngle = targetYawAngle;
+				float sampledTargetPitchAngle = targetPitchAngle;
+
+				float currentProgress = PathFollower.Progress; //Cache progress
+				PathFollower.Progress -= data.blendData.distance;
+				Vector3 sampledPosition = PathFollower.GlobalPosition;
+				PathFollower.Progress = currentProgress; //Revert progress
+				Vector3 sampledForward = (PathFollower.GlobalPosition - sampledPosition).Normalized();
+
+				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+					sampledTargetYawAngle += Character.CalculateForwardAngle(sampledForward);
+				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+					sampledTargetPitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
+
+				//Calculate target angles when DistanceMode is set to Offset
+				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+					targetYawAngle += PathFollower.ForwardAngle;
+				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+					targetPitchAngle += PathFollower.Forward().AngleTo(PathFollower.Forward().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Forward().Y);
+
+				if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Auto) //Fixes slope changes
+				{
+					//Negative number -> Concave, Positive number -> Convex.
+					float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
+					if (Mathf.Abs(slopeDifference) > .1f) //Deadzone to prevent jittering
+						data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
+				}
+				else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)
+					data.blendData.SampleBlend = 1.0f;
 				else
-				{
-					float currentProgress = PathFollower.Progress; //Cache progress
+					data.blendData.SampleBlend = 0.0f;
 
-					float extrapolatedDistance = settings.distance - PathFollower.Progress; //Used to prevent the camera getting stuck at the beginning of paths
-					if (extrapolatedDistance < 0)
-						extrapolatedDistance = 0;
-					PathFollower.Progress -= settings.distance;
-					Vector3 sampledForward = PathFollower.Forward();
-					Vector3 sampledDelta = PathFollower.GlobalPosition + PathFollower.Back() * extrapolatedDistance;
-					PathFollower.Progress = currentProgress; //Revert progress
-					sampledDelta -= PathFollower.GlobalPosition;
-
-					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-						yawAngle += Character.CalculateForwardAngle(-sampledDelta.Normalized());
-
-					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-						pitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
-				}
-
-				data.offsetBasis = data.offsetBasis.Rotated(Vector3.Up, yawAngle);
-				data.offsetBasis = data.offsetBasis.Rotated(data.offsetBasis.X.Normalized(), pitchAngle);
-
-				if (settings.followPathTilt)
-				{
-					float tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.RightAxis, PathFollower.Forward());
-					data.offsetBasis = data.offsetBasis.Rotated(data.offsetBasis.Z.Normalized(), tiltAngle);
-				}
+				//Interpolate angles
+				data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend);
+				data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
+				if (settings.followPathTilt) //Calculate tilt
+					data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.RightAxis, PathFollower.Forward()); //Update tilt
 
 				//Update Tracking
 				//Calculate position for tracking calculations
-				data.precalculatedPosition = data.offsetBasis.Z.Normalized() * data.distance;
-				data.precalculatedPosition += PathFollower.GlobalPosition;
+				data.CalculateBasis();
+				data.CalculatePosition(PathFollower.GlobalPosition);
 
-				Vector3 globalDelta = Character.GlobalPosition - data.precalculatedPosition;
+				Vector3 globalDelta = Character.CenterPosition - data.precalculatedPosition;
 				Vector3 delta = data.offsetBasis.Inverse() * globalDelta;
 
-				if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Move)
-					data.horizontalTrackingOffset = delta.X;
-				else if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
-					data.yawTrackingRotation = delta.Normalized().Flatten().AngleTo(Vector2.Up);
+				if (settings.horizontalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
+				{
+					data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X;
 
-				if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Move)
-					data.verticalTrackingOffset = globalDelta.Y;
-				else if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) //Rotational tracking
-					data.pitchTrackingRotation = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+					if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
+						data.yawTracking = delta.Normalized().Flatten().AngleTo(Vector2.Up);
+				}
+				else if (!Mathf.IsZeroApprox(settings.hallWidth)) //Process hall width
+				{
+					float positionTracking = Mathf.Clamp(PathFollower.GlobalPlayerPositionDelta.X, -settings.hallWidth, settings.hallWidth);
+					data.blendData.HallSmoothDamp(positionTracking, SnapFlag);
+
+					data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X; //Recenter
+					data.horizontalTrackingOffset += data.blendData.hallPosition; //Add clamped position tracking
+
+					if (settings.isHallRotationEnabled)
+					{
+						float rotationTracking = (delta + Vector3.Right * data.blendData.hallPosition).Normalized().Flatten().AngleTo(Vector2.Up);
+						data.yawTracking = rotationTracking;
+					}
+				}
+
+				float targetPitchTracking = 0.0f;
+				if (settings.verticalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
+				{
+					//Stay on the floor
+					data.verticalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.Y;
+
+					if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) //Rotational tracking
+					{
+						delta.X = 0; //Ignore x axis for pitch tracking
+						data.pitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+						targetPitchTracking = data.pitchTracking;
+					}
+				}
+
+				//Track lockon
+				if (LockonTarget != null) //Update lockon tracking
+				{
+					data.CalculatePosition(Character.CenterPosition);
+					globalDelta = LockonTarget.GlobalPosition - data.precalculatedPosition;
+					data.lockonPitchTracking = globalDelta.Normalized().AngleTo(globalDelta.RemoveVertical().Normalized()) * Mathf.Sign(globalDelta.Y);
+				}
+
+				data.pitchTracking = Mathf.Lerp(targetPitchTracking, data.lockonPitchTracking, lockonBlend);
 
 				//Recalculate position after applying rotational tracking
-				data.precalculatedPosition = data.offsetBasis.Z.Normalized() * data.distance;
-				data.precalculatedPosition += PathFollower.GlobalPosition;
+				data.CalculatePosition(Character.CenterPosition);
 				data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
 			}
 			else
 			{
 				data.precalculatedPosition = data.blendData.StaticPosition;
 
-				Vector3 delta = Character.GlobalPosition - data.precalculatedPosition;
-				data.distance = delta.Length();
+				Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
+				data.blendData.distance = delta.Length();
 				delta = delta.Normalized();
 
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					yawAngle += delta.Flatten().AngleTo(Vector2.Up) + Mathf.Pi;
+					targetYawAngle += delta.Flatten().AngleTo(Vector2.Up) + Mathf.Pi;
 				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					pitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+					targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 
-				data.offsetBasis = data.offsetBasis.Rotated(Vector3.Up, yawAngle);
-				data.offsetBasis = data.offsetBasis.Rotated(data.offsetBasis.X.Normalized(), pitchAngle);
+				data.blendData.yawAngle = targetYawAngle;
+				data.blendData.pitchAngle = targetPitchAngle;
+				data.CalculateBasis();
 			}
+
+			if (!data.blendData.WasInitialized)
+				data.blendData.WasInitialized = true;
 
 			return data;
 		}
@@ -324,14 +401,21 @@ namespace Project.Gameplay
 		{
 			/// <summary> Rotation data used for offset calculation. </summary>
 			public Basis offsetBasis;
-
-			/// <summary> How much to offset. </summary>
-			public float distance;
+			public void CalculateBasis()
+			{
+				offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi);
+				offsetBasis = offsetBasis.Rotated(Vector3.Up, blendData.yawAngle);
+				offsetBasis = offsetBasis.Rotated(offsetBasis.X.Normalized(), blendData.pitchAngle);
+				offsetBasis = offsetBasis.Rotated(offsetBasis.Z.Normalized(), blendData.tiltAngle);
+			}
 
 			/// <summary> Yaw rotation data used for tracking. </summary>
-			public float yawTrackingRotation;
+			public float yawTracking;
 			/// <summary> Pitch rotation data used for tracking. </summary>
-			public float pitchTrackingRotation;
+			public float pitchTracking;
+
+			/// <summary> Last frame's lockon pitch tracking </summary>
+			public float lockonPitchTracking;
 
 			/// <summary> How much to move camera for horizontal tracking. </summary>
 			public float horizontalTrackingOffset;
@@ -340,6 +424,11 @@ namespace Project.Gameplay
 
 			/// <summary> Only used when blending with a static camera. </summary>
 			public Vector3 precalculatedPosition;
+			public void CalculatePosition(Vector3 referencePosition)
+			{
+				precalculatedPosition = offsetBasis.Z.Normalized() * blendData.distance;
+				precalculatedPosition += referencePosition;
+			}
 
 			/// <summary> Reference to the CameraBlendData being used. </summary>
 			public CameraBlendData blendData;
@@ -446,10 +535,58 @@ namespace Project.Gameplay
 		/// <summary> Actual amount to blend each frame. </summary>
 		public float BlendSpeed { get; private set; }
 
+		/// <summary> Hall tracking position. </summary>
+		public float hallPosition;
+		/// <summary> Hall tracking velocity. </summary>
+		private float hallVelocity;
+		public const float HALL_SMOOTHING = 5.0f;
+		public void HallSmoothDamp(float target, bool snap)
+		{
+			if (snap || !WasInitialized)
+			{
+				hallPosition = target;
+				hallVelocity = 0;
+				return;
+			}
+
+			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.physicsDelta);
+		}
+
+		/// <summary> [0 -> 1] Blend between offset and sample. </summary>
+		public float SampleBlend { get; set; }
+
 		/// <summary> How long blending takes in seconds. </summary>
 		public float BlendTime { get; set; }
 		/// <summary> Camera's static position. Only used when CameraSettingsResource.isStaticCamera is true. </summary>
 		public Vector3 StaticPosition { get; set; }
+
+		/// <summary> Current pitch angle. </summary>
+		public float pitchAngle;
+		/// <summary> Current yaw angle. </summary>
+		public float yawAngle;
+		/// <summary> Current tilt angle. </summary>
+		public float tiltAngle;
+
+		/// <summary> How far the camera should be. </summary>
+		public float distance;
+		/// <summary> Distance smoothdamp velocity. </summary>
+		private float distanceVelocity;
+		public const float DISTANCE_SMOOTHING = 20.0f;
+
+		public void DistanceSmoothDamp(float target, bool snap)
+		{
+			if (snap || !WasInitialized)
+			{
+				distance = target;
+				distanceVelocity = 0;
+				return;
+			}
+
+			distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DISTANCE_SMOOTHING * PhysicsManager.physicsDelta);
+		}
+
+		/// <summary> Has this blend data been processed before? </summary>
+		public bool WasInitialized { get; set; }
 
 		/// <summary> CameraSettingsResource for this camera setting. </summary>
 		public CameraSettingsResource SettingsResource { get; set; }

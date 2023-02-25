@@ -393,7 +393,7 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive) return; //Overridden to max speed
 
 			float inputAngle = GetTargetInputAngle();
-			float inputLength = Controller.MovementAxisLength; //Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
+			float inputLength = Controller.SmoothedMovementAxisLength; //Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			MovementResource activeMovementResource = GetActiveMovementSettings();
 
@@ -434,6 +434,9 @@ namespace Project.Gameplay
 
 					if (IsMovingBackward && !IsOnGround) //Greatly reduce input strength when jumping backwards
 						inputLength *= .2f;
+
+					if (MoveSpeed < BackstepSettings.speed) //Accelerate faster when at low speeds
+						MoveSpeed = Mathf.Lerp(MoveSpeed, activeMovementResource.speed * activeMovementResource.GetSpeedRatio(BackstepSettings.speed), .05f * inputLength);
 
 					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, inputLength); //Accelerate based on input strength/input direction
 				}
@@ -477,11 +480,11 @@ namespace Project.Gameplay
 				else
 					StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, strafeAmount);
 			}
+			else
+				StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, 0); //Reset strafe when not in use
 
 			if (overrideFacingDirection)
 				MovementAngle = targetMovementAngle;
-
-			StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, 0); //Reset strafe when not in use
 
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			if (ActionState == ActionStates.Backflip) return;
@@ -542,7 +545,7 @@ namespace Project.Gameplay
 		}
 
 		private float slopeInfluence; //Current influence of the slope
-		private const float SLOPE_INFLUENCE_STRENGTH = .2f; //How much should slope affect player?
+		private const float SLOPE_INFLUENCE_STRENGTH = .4f; //How much should slope affect player?
 		private const float SLOPE_THRESHOLD = .02f; //Ignore slopes that are shallower than Mathf.PI * threshold
 		private void UpdateSlopeInfluence(Vector3 groundNormal)
 		{
@@ -554,7 +557,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			float rotationAmount = PathFollower.Forward().SignedAngleTo(Vector3.Forward, Vector3.Up);
+			float rotationAmount = GetMovementDirection().SignedAngleTo(Vector3.Forward, Vector3.Up);
 			Vector3 slopeDirection = groundNormal.Rotated(Vector3.Up, rotationAmount).Normalized();
 			slopeInfluence = slopeDirection.Z * SLOPE_INFLUENCE_STRENGTH;
 		}
@@ -1366,25 +1369,25 @@ namespace Project.Gameplay
 					Animator.Fall();
 				}
 
-				//Smooth world direction based on vertical speed
+				//Smoothly reset world direction
 				float orientationResetFactor = 0;
+				Vector3 targetUp = Vector3.Up;
+				if (Camera.ActiveSettings.followPathTilt) //Use PathFollower.Up when on a tilted path.
+					targetUp = PathFollower.Up();
+
 				if (ActionState == ActionStates.Stomping ||
 				ActionState == ActionStates.JumpDash) //Quickly reset when stomping/homing attacking
 					orientationResetFactor = .2f;
 				else if (ActionState == ActionStates.Backflip)
 				{
-					float pathFollowerPitch = PathFollower.Forward().Y;
-					if (pathFollowerPitch >= -.4f) //Backflipping downhill; reset faster
-						orientationResetFactor = Mathf.Clamp(pathFollowerPitch, .1f, .2f);
+					targetUp = PathFollower.Up();
+					orientationResetFactor = VerticalSpd > 0 ? .2f : .2f;
 				}
 				else if (VerticalSpd > 0)
 					orientationResetFactor = .01f;
 				else
 					orientationResetFactor = (VerticalSpd * .2f / Runtime.MAX_GRAVITY) - .05f;
 
-				Vector3 targetUp = Vector3.Up;
-				if (Camera.ActiveSettings.followPathTilt) //Use PathFollower.Up when on a tilted path.
-					targetUp = PathFollower.Up();
 				UpDirection = UpDirection.Lerp(targetUp, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
@@ -1594,7 +1597,7 @@ namespace Project.Gameplay
 			*/
 
 			//Tilted ground fix
-			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
+			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle + PathFollower.DeltaAngle, PathFollower.ForwardAngle);
 			return PathFollower.Forward().Rotated(UpDirection, fixAngle);
 		}
 
