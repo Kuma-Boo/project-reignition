@@ -229,6 +229,10 @@ namespace Project.Gameplay
 				currentRotation = 0;
 			UpdateRotation();
 
+			//Reset idle movement
+			idleFactorVelocity = 0;
+			animationTree.Set(IDLE_FACTOR_PARAMETER, 0);
+
 			if (movementController != null) //Reset/Pause movement
 			{
 				movementController.Reset();
@@ -273,7 +277,7 @@ namespace Project.Gameplay
 		{
 			if (Engine.IsEditorHint()) return; //In Editor
 			if (!isSpawned) return; //Hasn't spawned yet
-			if (attackType == AttackTypes.Spin) return;
+			if (attackType == AttackTypes.Spin) return; //No need to process when in AttackTypes.Spin
 
 			if (attackType == AttackTypes.Fire)
 				UpdateFlameAttack();
@@ -294,16 +298,62 @@ namespace Project.Gameplay
 				}
 			}
 			else
-			{
 				currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, ROTATION_SMOOTHING);
 
-				if (attackType != AttackTypes.Spin)
+			UpdateRotation();
+			UpdateFidgets();
+		}
+
+		private float idleFactorVelocity;
+		private const float IDLE_FACTOR_SMOOTHING = 30.0f; //Idle movement strength smoothing
+
+
+		private bool isFidgetActive;
+		private int fidgetIndex; //Index of the current fidget animation.
+		private float fidgetTimer; //Keeps track of how long it's been since the last fidget
+
+		private readonly StringName[] FIDGET_ANIMATIONS = {
+			"flip",
+			"fight"
+		};
+
+		private readonly StringName IDLE_FACTOR_PARAMETER = "parameters/idle_movement_factor/add_amount";
+		private readonly StringName FIDGET_TRANSITION_PARAMETER = "parameters/fidget_transition/transition_request"; //Sets the fidget animation
+		private readonly StringName FIDGET_TRIGGER_PARAMETER = "parameters/fidget_trigger/request"; //Currently fidgeting? Set StringName
+		private readonly StringName FIDGET_TRIGGER_STATE_PARAMETER = "parameters/fidget_trigger/active"; //Get StringName
+		private const float FIDGET_FREQUENCY = 3f; //How often to fidget
+
+		/// <summary>
+		/// Updates fidgets and idle movement.
+		/// </summary>
+		private void UpdateFidgets()
+		{
+			float targetIdleFactor = 1.0f;
+			if (isFidgetActive) //Adjust movement strength based on fidget
+			{
+				if (fidgetIndex == 0)
+					targetIdleFactor = 0.0f;
+				else if (fidgetIndex == 1)
+					targetIdleFactor = 0.5f;
+
+				isFidgetActive = (bool)animationTree.Get(FIDGET_TRIGGER_STATE_PARAMETER);
+			}
+			else if (attackType != AttackTypes.Fire || !IsActivated) //Wait for fidget to start
+			{
+				fidgetTimer += PhysicsManager.physicsDelta;
+				if (fidgetTimer > FIDGET_FREQUENCY) //Start fidget
 				{
-					//TODO Update idle animations
+					fidgetTimer = 0; //Reset timer
+					fidgetIndex = Runtime.randomNumberGenerator.RandiRange(0, FIDGET_ANIMATIONS.Length - 1);
+					animationTree.Set(FIDGET_TRANSITION_PARAMETER, FIDGET_ANIMATIONS[fidgetIndex]);
+					animationTree.Set(FIDGET_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+					isFidgetActive = true;
 				}
 			}
 
-			UpdateRotation();
+			float idleFactor = (float)animationTree.Get(IDLE_FACTOR_PARAMETER);
+			idleFactor = ExtensionMethods.SmoothDamp(idleFactor, targetIdleFactor, ref idleFactorVelocity, IDLE_FACTOR_SMOOTHING * PhysicsManager.physicsDelta);
+			animationTree.Set(IDLE_FACTOR_PARAMETER, idleFactor);
 		}
 
 		private void UpdateRotation()
@@ -314,7 +364,7 @@ namespace Project.Gameplay
 
 		private void UpdateFlameAttack()
 		{
-			if (!IsActivated) //Out of range
+			if (!IsActivated || isFidgetActive) //Out of range or fidget is active
 			{
 				if (isFlameActive)
 					ToggleFlameAttack();

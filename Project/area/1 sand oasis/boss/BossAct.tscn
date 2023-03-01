@@ -1,27 +1,30 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=21 format=3 uid="uid://bl2bi526ywy3j"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_1385a"]
-[ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="2_ks0kr"]
+[ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="2_ks0kr"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_uy78v"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_omywj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="5_h54m5"]
-[ext_resource type="Resource" uid="uid://c06k4gxe3e5nt" path="res://resource/preset/camera/boss/SandScorpionCamera.tres" id="6_04ty8"]
+[ext_resource type="Resource" uid="uid://c06k4gxe3e5nt" path="res://resource/preset/camera/boss/SandScorpionCam.tres" id="5_rh8lw"]
+[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="7_v1fdf"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="8_atfm6"]
+[ext_resource type="PackedScene" uid="uid://b3folnh8hcqs" path="res://area/1 sand oasis/boss/boss/SandScorpion.tscn" id="8_sawvf"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="9_7ca06"]
-[ext_resource type="PackedScene" uid="uid://brrlwgituvkc8" path="res://area/1 sand oasis/boss/Static.tscn" id="9_qrt26"]
+[ext_resource type="PackedScene" uid="uid://brtel7tjfbqu1" path="res://area/1 sand oasis/boss/Static.tscn" id="9_qrt26"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="10_a21kh"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_i8rmg"]
 radius = 4.0
 
 [sub_resource type="Curve" id="Curve_5arqb"]
-max_value = 1.5
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, 9.0, 1, 0, Vector2(0.5, 1.5), 0.0, 0.0, 0, 0, Vector2(1, 1.5), 0.0, 0.0, 0, 0]
+max_value = 2.5
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, 15.0, 1, 0, Vector2(0.5, 2.5), 0.0, 0.0, 0, 0, Vector2(1, 2.5), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="Curve" id="Curve_4t8qg"]
-min_value = -1.5
+[sub_resource type="Curve" id="Curve_ner7o"]
+min_value = -2.5
 max_value = 0.0
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, -10.0, 1, 0, Vector2(0.5, -1.5), 0.0, 0.0, 0, 0, Vector2(1, -1.5), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, -20.0, 1, 0, Vector2(0.5, -2.5), 0.0, 0.0, 0, 0, Vector2(1, -2.5), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="Curve" id="Curve_2qi3h"]
@@ -53,38 +56,39 @@ size = Vector3(24, 20, 4)
 
 [node name="BossAct" type="Node3D" parent="."]
 script = ExtResource("1_1385a")
-"Starting Path" = NodePath("../Static/Path/MainPath")
 "Mission Type" = 0
 "Time Limit" = 0.0
 "Item Cycling/Activation Trigger" = NodePath("ItemCyclePoint")
 "Item Cycling/Halfway Trigger" = NodePath("ItemHalfwayPoint")
 "Item Cycling/Enable Respawning" = true
 "Item Cycling/Item Cycles" = [NodePath("Lap01"), NodePath("Lap02"), NodePath("Lap03"), NodePath("")]
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0.0
-"Ranking/Silver Time" = 0.0
-"Ranking/Bronze Time" = 0.0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = null
-Completion/Animator = NodePath("")
+"Ranking/Skip Score" = true
+"Ranking/Gold Time" = 50
+"Ranking/Silver Time" = 70
+"Ranking/Bronze Time" = 100
+Completion/Delay = 2.0
+Completion/Lockout = ExtResource("2_uy78v")
 
 [node name="SpawnPosition" type="Node3D" parent="BossAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("2_ks0kr")]
 
-[node name="Start" parent="BossAct/SpawnPosition/CharacterSpawn" instance=ExtResource("3_omywj")]
+[node name="Start" parent="BossAct/SpawnPosition" instance=ExtResource("3_omywj")]
 
-[node name="CameraSettings" type="Node3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start"]
+[node name="Checkpoint" type="Node3D" parent="BossAct/SpawnPosition/Start"]
+script = ExtResource("7_v1fdf")
+
+[node name="CameraSettings" type="Node3D" parent="BossAct/SpawnPosition/Start"]
 script = ExtResource("5_h54m5")
-cameraData = ExtResource("6_04ty8")
+settings = ExtResource("5_rh8lw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SpawnPosition/CharacterSpawn/Start"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SpawnPosition/Start"]
 shape = SubResource("SphereShape3D_i8rmg")
+
+[node name="SandScorpion" parent="BossAct" node_paths=PackedStringArray("bossPathFollower") instance=ExtResource("8_sawvf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
+bossPathFollower = NodePath("../../Static/Path/MainPath/BossPathFollower")
 
 [node name="Lap01" type="Node3D" parent="BossAct"]
 
@@ -167,40 +171,40 @@ Spacing = 2.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="Child03" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.437151, 0, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.728586, 0, -4)
 
 [node name="Child04" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.909315, 0, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.51553, 0, -6)
 
 [node name="Child05" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2253, 0, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04217, 0, -8)
 
 [node name="Child06" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.41071, 0, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35118, 0, -10)
 
 [node name="Child07" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49115, 0, -12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.48524, 0, -12)
 
 [node name="Child08" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -14)
 
 [node name="Child09" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -16)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -16)
 
 [node name="Child10" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -18)
 
 [node name="Child11" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -20)
 
 [node name="Child12" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -22)
 
 [node name="Child13" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -24)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -24)
 
 [node name="Child14" parent="BossAct/Lap01/Rings01/RingR02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -26)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -26)
 
 [node name="RingL02" type="Node3D" parent="BossAct/Lap01/Rings01"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.6, -22)
@@ -211,7 +215,7 @@ Amount = 14
 Shape = 0
 Orientation = 0
 Spacing = 2.0
-"Horizontal Offset" = SubResource("Curve_4t8qg")
+"Horizontal Offset" = SubResource("Curve_ner7o")
 "Vertical Offset" = null
 
 [node name="Child01" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
@@ -220,40 +224,40 @@ Spacing = 2.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="Child03" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.477476, 0, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.93021, 0, -4)
 
 [node name="Child04" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.968558, 0, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.81174, 0, -6)
 
 [node name="Child05" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27331, 0, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2822, 0, -8)
 
 [node name="Child06" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43439, 0, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4696, 0, -10)
 
 [node name="Child07" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49449, 0, -12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.50196, 0, -12)
 
 [node name="Child08" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -14)
 
 [node name="Child09" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -16)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -16)
 
 [node name="Child10" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -18)
 
 [node name="Child11" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -20)
 
 [node name="Child12" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -22)
 
 [node name="Child13" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -24)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -24)
 
 [node name="Child14" parent="BossAct/Lap01/Rings01/RingL02" instance=ExtResource("9_7ca06")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -26)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -26)
 
 [node name="Pearls01" type="Node3D" parent="BossAct/Lap01"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -128)

@@ -48,6 +48,22 @@ namespace Project.Gameplay
 			}); //Apply default settings
 		}
 
+		public override void _Ready()
+		{
+			if (Engine.IsEditorHint()) return;
+
+			Character.Connect(CharacterController.SignalName.Respawn, new Callable(this, MethodName.Respawn));
+		}
+
+		public void Respawn()
+		{
+			//Revert camera settings
+			UpdateCameraSettings(new CameraBlendData()
+			{
+				SettingsResource = LevelSettings.instance.CheckpointCameraSettings,
+			});
+		}
+
 		public override void _PhysicsProcess(double _)
 		{
 			if (EventController != null)
@@ -144,15 +160,6 @@ namespace Project.Gameplay
 					CameraBlendList[i].SetInfluence(influence);
 				}
 			}
-		}
-
-		public void Respawn()
-		{
-			//Revert camera settings
-			UpdateCameraSettings(new CameraBlendData()
-			{
-				SettingsResource = LevelSettings.instance.CheckpointCameraSettings,
-			});
 		}
 		#endregion
 

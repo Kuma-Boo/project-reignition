@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=28 format=3 uid="uid://byf5qdjpi8ur4"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=36 format=3 uid="uid://byf5qdjpi8ur4"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_iamvr"]
 animation = &"MajinLibrary/defeat-loop"
@@ -29,6 +29,19 @@ input_0/reset = true
 input_1/name = "disabled"
 input_1/auto_advance = false
 input_1/reset = true
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6q5eo"]
+allow_transition_to_self = true
+input_0/name = "flip"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "fight"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_88o5w"]
+fadein_time = 0.2
+fadeout_time = 0.6
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_axquc"]
 animation = &"MajinLibrary/attack-fire-end"
@@ -68,6 +81,24 @@ fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h3dgx"]
 animation = &"MajinLibrary/idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_baplv"]
+animation = &"MajinLibrary/idle-fight"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rn6ui"]
+animation = &"MajinLibrary/idle-flip"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c5l80"]
+animation = &"MajinLibrary/idle-horizontal"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_0et4u"]
+sync = true
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_d34v2"]
+sync = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yc27y"]
+animation = &"MajinLibrary/idle-vertical"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bnjf1"]
 animation = &"MajinLibrary/move"
@@ -122,11 +153,15 @@ animation = &"MajinLibrary/teleport"
 fadeout_time = 0.2
 
 [resource]
-graph_offset = Vector2(-883.831, 162.603)
+graph_offset = Vector2(-1520.61, -99.373)
 nodes/defeat_state/node = SubResource("AnimationNodeStateMachine_att3v")
 nodes/defeat_state/position = Vector2(-864, 96)
 nodes/defeat_transition/node = SubResource("AnimationNodeTransition_aicuk")
 nodes/defeat_transition/position = Vector2(-688, 192)
+nodes/fidget_transition/node = SubResource("AnimationNodeTransition_6q5eo")
+nodes/fidget_transition/position = Vector2(-2432, 16)
+nodes/fidget_trigger/node = SubResource("AnimationNodeOneShot_88o5w")
+nodes/fidget_trigger/position = Vector2(-1904, -128)
 nodes/fire_state/node = SubResource("AnimationNodeStateMachine_0x208")
 nodes/fire_state/position = Vector2(-1232, 432)
 nodes/hit_anim/node = SubResource("AnimationNodeAnimation_e0qho")
@@ -134,7 +169,19 @@ nodes/hit_anim/position = Vector2(-368, 384)
 nodes/hit_trigger/node = SubResource("AnimationNodeOneShot_k8g0y")
 nodes/hit_trigger/position = Vector2(-160, 144)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_h3dgx")
-nodes/idle_anim/position = Vector2(-1232, 192)
+nodes/idle_anim/position = Vector2(-2176, -144)
+nodes/idle_fight/node = SubResource("AnimationNodeAnimation_baplv")
+nodes/idle_fight/position = Vector2(-2688, 16)
+nodes/idle_flip/node = SubResource("AnimationNodeAnimation_rn6ui")
+nodes/idle_flip/position = Vector2(-2912, -32)
+nodes/idle_horizontal_animation/node = SubResource("AnimationNodeAnimation_c5l80")
+nodes/idle_horizontal_animation/position = Vector2(-2080, 336)
+nodes/idle_horizontal_factor/node = SubResource("AnimationNodeAdd2_0et4u")
+nodes/idle_horizontal_factor/position = Vector2(-1760, 208)
+nodes/idle_movement_factor/node = SubResource("AnimationNodeAdd2_d34v2")
+nodes/idle_movement_factor/position = Vector2(-1488, 64)
+nodes/idle_vertical_animation/node = SubResource("AnimationNodeAnimation_yc27y")
+nodes/idle_vertical_animation/position = Vector2(-2080, 224)
 nodes/move_anim/node = SubResource("AnimationNodeAnimation_bnjf1")
 nodes/move_anim/position = Vector2(-592, 48)
 nodes/move_transition/node = SubResource("AnimationNodeTransition_undkq")
@@ -150,4 +197,4 @@ nodes/teleport_anim/node = SubResource("AnimationNodeAnimation_0vt8q")
 nodes/teleport_anim/position = Vector2(-112, 352)
 nodes/teleport_trigger/node = SubResource("AnimationNodeOneShot_j3fwe")
 nodes/teleport_trigger/position = Vector2(144, 144)
-node_connections = [&"output", 0, &"teleport_trigger", &"defeat_transition", 0, &"defeat_state", &"defeat_transition", 1, &"state_transition", &"hit_trigger", 0, &"move_transition", &"hit_trigger", 1, &"hit_anim", &"move_transition", 0, &"move_anim", &"move_transition", 1, &"seek", &"seek", 0, &"defeat_transition", &"state_transition", 0, &"idle_anim", &"state_transition", 1, &"spin_state", &"state_transition", 2, &"fire_state", &"teleport_trigger", 0, &"hit_trigger", &"teleport_trigger", 1, &"teleport_anim"]
+node_connections = [&"output", 0, &"teleport_trigger", &"defeat_transition", 0, &"defeat_state", &"defeat_transition", 1, &"state_transition", &"hit_trigger", 0, &"move_transition", &"hit_trigger", 1, &"hit_anim", &"idle_movement_factor", 0, &"fidget_trigger", &"idle_movement_factor", 1, &"idle_horizontal_factor", &"move_transition", 0, &"move_anim", &"move_transition", 1, &"seek", &"seek", 0, &"defeat_transition", &"state_transition", 0, &"idle_movement_factor", &"state_transition", 1, &"spin_state", &"state_transition", 2, &"fire_state", &"teleport_trigger", 0, &"hit_trigger", &"teleport_trigger", 1, &"teleport_anim", &"fidget_trigger", 0, &"idle_anim", &"fidget_trigger", 1, &"fidget_transition", &"fidget_transition", 0, &"idle_flip", &"fidget_transition", 1, &"idle_fight", &"idle_horizontal_factor", 0, &"idle_vertical_animation", &"idle_horizontal_factor", 1, &"idle_horizontal_animation"]

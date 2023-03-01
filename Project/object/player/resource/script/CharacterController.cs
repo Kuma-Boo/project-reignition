@@ -1051,6 +1051,10 @@ namespace Project.Gameplay
 				Level.UpdateRingCount(20, LevelSettings.MathModeEnum.Subtract);
 		}
 
+		[Signal]
+		/// <summary> Use this instead of LevelSettings.SignalName.Respawn to only respawn when the player is defeated. </summary>
+		public delegate void RespawnEventHandler();
+
 		/// <summary> True after the player is defeated, but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
 		/// <summary> Is the player currently respawning? </summary>
@@ -1062,6 +1066,7 @@ namespace Project.Gameplay
 		{
 			if (IsRespawning) return;
 
+			Lockon.IsMonitoring = false;
 			//Fade screen out, enable respawn flag, and connect signals
 			IsDefeated = true;
 			IsRespawning = true;
@@ -1097,8 +1102,9 @@ namespace Project.Gameplay
 			Level.IncrementRespawnCount();
 			Level.UpdateRingCount(Skills.RespawnRingCount, LevelSettings.MathModeEnum.Replace, true); //Reset ring count
 
-			Camera.Respawn();
-			//Wait a single physics frame to ensure objects reset properly
+			EmitSignal(SignalName.Respawn);
+
+			//Wait a single physics frame to ensure objects update properly
 			GetTree().CreateTimer(PhysicsManager.physicsDelta).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
 		}
 

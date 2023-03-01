@@ -1,9 +1,9 @@
-[gd_scene load_steps=105 format=3 uid="uid://b3folnh8hcqs"]
+[gd_scene load_steps=104 format=3 uid="uid://b3folnh8hcqs"]
 
 [ext_resource type="PackedScene" uid="uid://cyme78kdqgxjq" path="res://area/1 sand oasis/boss/boss/model/SandScorpion.gltf" id="1_k7ra0"]
 [ext_resource type="Script" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_mewmp"]
 [ext_resource type="PackedScene" uid="uid://clp2chcp7c1au" path="res://area/1 sand oasis/boss/boss/model/EyeLarge.gltf" id="2_0m58c"]
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/boss/boss/Missile.tscn" id="2_6mjm1"]
+[ext_resource type="PackedScene" uid="uid://b8irusmhs8rjm" path="res://area/1 sand oasis/boss/boss/Missile.tscn" id="2_6mjm1"]
 [ext_resource type="PackedScene" uid="uid://bjidkwtacvmue" path="res://area/1 sand oasis/boss/boss/model/FlyingEye.gltf" id="2_8luog"]
 [ext_resource type="PackedScene" uid="uid://wsxigaddy57x" path="res://area/1 sand oasis/boss/boss/model/EyeSmall.gltf" id="2_a5gic"]
 [ext_resource type="Material" uid="uid://hf3nxsn25ii5" path="res://area/1 sand oasis/boss/effect/process material/Dust.tres" id="6_xp45h"]
@@ -17,24 +17,28 @@
 [ext_resource type="Material" uid="uid://m71xjneqipn" path="res://area/1 sand oasis/boss/effect/process material/Shockwave.tres" id="12_n0grb"]
 [ext_resource type="Material" path="res://area/1 sand oasis/boss/effect/material/Shockwave.tres" id="13_65rq6"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_c08po"]
-radius = 1.8
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_i57o6"]
 radius = 2.2
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1nx1v"]
 animation = &"bite"
 
+[sub_resource type="Curve" id="Curve_fkora"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.9, 0.9), 3.15351, 3.15351, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_1l0xm"]
-enabled_inputs = 3
 xfade_time = 0.2
-input_0/name = "Inactive"
+xfade_curve = SubResource("Curve_fkora")
+input_0/name = "disabled"
 input_0/auto_advance = false
-input_1/name = "Bite"
+input_0/reset = true
+input_1/name = "bite"
 input_1/auto_advance = false
-input_2/name = "Retreat"
+input_1/reset = true
+input_2/name = "retreat"
 input_2/auto_advance = false
+input_2/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_54dah"]
 animation = &"RESET"
@@ -43,27 +47,41 @@ animation = &"RESET"
 animation = &"eye-retreat"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_6uq47"]
-graph_offset = Vector2(-962.6, -180.759)
-nodes/BiteAnimation/node = SubResource("AnimationNodeAnimation_1nx1v")
-nodes/BiteAnimation/position = Vector2(-208, 240)
-nodes/EyeState/node = SubResource("AnimationNodeTransition_1l0xm")
-nodes/EyeState/position = Vector2(48, 112)
-nodes/RESET/node = SubResource("AnimationNodeAnimation_54dah")
-nodes/RESET/position = Vector2(-208, 112)
-nodes/RetreatAnimation/node = SubResource("AnimationNodeAnimation_wbwml")
-nodes/RetreatAnimation/position = Vector2(-208, 368)
+graph_offset = Vector2(-319.795, 60.4794)
+nodes/bite_animation/node = SubResource("AnimationNodeAnimation_1nx1v")
+nodes/bite_animation/position = Vector2(-224, 240)
+nodes/eye_transition/node = SubResource("AnimationNodeTransition_1l0xm")
+nodes/eye_transition/position = Vector2(32, 112)
 nodes/output/position = Vector2(304, 112)
-node_connections = [&"output", 0, &"EyeState", &"EyeState", 0, &"RESET", &"EyeState", 1, &"BiteAnimation", &"EyeState", 2, &"RetreatAnimation"]
+nodes/reset_animation/node = SubResource("AnimationNodeAnimation_54dah")
+nodes/reset_animation/position = Vector2(-224, 112)
+nodes/retreat_animation/node = SubResource("AnimationNodeAnimation_wbwml")
+nodes/retreat_animation/position = Vector2(-224, 368)
+node_connections = [&"output", 0, &"eye_transition", &"eye_transition", 0, &"reset_animation", &"eye_transition", 1, &"bite_animation", &"eye_transition", 2, &"retreat_animation"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_g3iia"]
 material = ExtResource("7_2o7i1")
 orientation = 2
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_icvc0"]
-size = Vector3(4, 8, 16)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_apgua"]
-size = Vector3(22, 8, 20)
+size = Vector3(30, 7, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nm141"]
+size = Vector3(4.5, 4, 5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kcnvy"]
+radius = 2.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xrasm"]
+radius = 1.5
+height = 5.6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_066p4"]
+radius = 3.0
+height = 12.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_c08po"]
+radius = 1.8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lgbap"]
 radius = 0.8
@@ -72,7 +90,7 @@ radius = 0.8
 radius = 1.2
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_v7gw7"]
-radius = 1.5
+radius = 1.3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0bw7n"]
 size = Vector3(0.6, 2.5, 0.4)
@@ -121,35 +139,105 @@ material = ExtResource("12_6ym8d")
 size = Vector2(0.2, 2)
 orientation = 2
 
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_acwjk"]
-enabled_inputs = 3
-xfade_time = 0.2
-input_0/name = "Inactive"
-input_0/auto_advance = false
-input_1/name = "Strike"
-input_1/auto_advance = false
-input_2/name = "Recovery"
-input_2/auto_advance = true
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4tl1j"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wsiw7"]
 animation = &"l-attack-heavy-end"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yu1tj"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l4m58"]
 animation = &"l-attack-heavy-start"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uigcs"]
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_scp4q"]
+xfade_time = 0.2
+input_0/name = "disabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "strike"
+input_1/auto_advance = false
+input_1/reset = true
+input_2/name = "recovery"
+input_2/auto_advance = true
+input_2/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rkaaq"]
 animation = &"l-idle"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_lxnow"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fsf7x"]
+animation = &"l-attack-center-light"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_74x3e"]
+animation = &"l-attack-out-light"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fawrf"]
+animation = &"l-attack-in-light"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_i4j8h"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_fsf7x")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_74x3e")
+blend_point_1/pos = -1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_fawrf")
+blend_point_2/pos = 1.0
+sync = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_qqvto"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_lwv08"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wjd4q"]
+graph_offset = Vector2(-420.32, 12.5899)
+nodes/heavy_attack_end_animation/node = SubResource("AnimationNodeAnimation_wsiw7")
+nodes/heavy_attack_end_animation/position = Vector2(-448, 432)
+nodes/heavy_attack_start_animation/node = SubResource("AnimationNodeAnimation_l4m58")
+nodes/heavy_attack_start_animation/position = Vector2(-448, 320)
+nodes/heavy_attack_transition/node = SubResource("AnimationNodeTransition_scp4q")
+nodes/heavy_attack_transition/position = Vector2(-96, 160)
+nodes/idle_animation/node = SubResource("AnimationNodeAnimation_rkaaq")
+nodes/idle_animation/position = Vector2(-864, 64)
+nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_lxnow")
+nodes/intro_trigger/position = Vector2(192, 160)
+nodes/light_attack_blend/node = SubResource("AnimationNodeBlendSpace1D_i4j8h")
+nodes/light_attack_blend/position = Vector2(-864, 192)
+nodes/light_attack_trigger/node = SubResource("AnimationNodeOneShot_qqvto")
+nodes/light_attack_trigger/position = Vector2(-480, 64)
+nodes/movespeed/node = SubResource("AnimationNodeTimeScale_lwv08")
+nodes/movespeed/position = Vector2(-688, 64)
+nodes/output/position = Vector2(384, 144)
+node_connections = [&"output", 0, &"intro_trigger", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"heavy_attack_transition", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"idle_animation"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4tl1j"]
+animation = &"r-attack-heavy-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yu1tj"]
+animation = &"r-attack-heavy-start"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_acwjk"]
+xfade_time = 0.2
+input_0/name = "disabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "strike"
+input_1/auto_advance = false
+input_1/reset = true
+input_2/name = "recovery"
+input_2/auto_advance = true
+input_2/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uigcs"]
+animation = &"r-idle"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_5sogy"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x1leq"]
-animation = &"l-attack-center-light"
+animation = &"r-attack-center-light"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w81nj"]
-animation = &"l-attack-out-light"
+animation = &"r-attack-out-light"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_drb8w"]
-animation = &"l-attack-in-light"
+animation = &"r-attack-in-light"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_htkjp"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_x1leq")
@@ -166,90 +254,26 @@ fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_jx0dx"]
 
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_75wli"]
-graph_offset = Vector2(-430.614, 32.1393)
-nodes/HeavyAttackState/node = SubResource("AnimationNodeTransition_acwjk")
-nodes/HeavyAttackState/position = Vector2(-96, 160)
-nodes/HeavyRecoveryAnimation/node = SubResource("AnimationNodeAnimation_4tl1j")
-nodes/HeavyRecoveryAnimation/position = Vector2(-448, 464)
-nodes/HeavyStrikeAnimation/node = SubResource("AnimationNodeAnimation_yu1tj")
-nodes/HeavyStrikeAnimation/position = Vector2(-448, 352)
-nodes/IdleAnimation/node = SubResource("AnimationNodeAnimation_uigcs")
-nodes/IdleAnimation/position = Vector2(-624, 160)
-nodes/Intro/node = SubResource("AnimationNodeOneShot_5sogy")
-nodes/Intro/position = Vector2(128, 160)
-nodes/LightAnimation/node = SubResource("AnimationNodeBlendSpace1D_htkjp")
-nodes/LightAnimation/position = Vector2(-624, 288)
-nodes/LightAttack/node = SubResource("AnimationNodeOneShot_sgp5k")
-nodes/LightAttack/position = Vector2(-288, 160)
-nodes/MoveSpeed/node = SubResource("AnimationNodeTimeScale_jx0dx")
-nodes/MoveSpeed/position = Vector2(-448, 160)
-node_connections = [&"output", 0, &"Intro", &"HeavyAttackState", 0, &"LightAttack", &"HeavyAttackState", 1, &"HeavyStrikeAnimation", &"HeavyAttackState", 2, &"HeavyRecoveryAnimation", &"Intro", 0, &"HeavyAttackState", &"LightAttack", 0, &"MoveSpeed", &"LightAttack", 1, &"LightAnimation", &"MoveSpeed", 0, &"IdleAnimation"]
-
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_nhopx"]
-enabled_inputs = 3
-xfade_time = 0.2
-input_0/name = "Inactive"
-input_0/auto_advance = false
-input_1/name = "Strike"
-input_1/auto_advance = false
-input_2/name = "Recovery"
-input_2/auto_advance = true
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0phv0"]
-animation = &"r-attack-heavy-end"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_em3lq"]
-animation = &"r-attack-heavy-start"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4cjbg"]
-animation = &"r-idle"
-
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_otdh0"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mabsk"]
-animation = &"r-attack-center-light"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c63xu"]
-animation = &"r-attack-out-light"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qo1cf"]
-animation = &"r-attack-in-light"
-
-[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_4l0nk"]
-blend_point_0/node = SubResource("AnimationNodeAnimation_mabsk")
-blend_point_0/pos = 0.0
-blend_point_1/node = SubResource("AnimationNodeAnimation_c63xu")
-blend_point_1/pos = -1.0
-blend_point_2/node = SubResource("AnimationNodeAnimation_qo1cf")
-blend_point_2/pos = 1.0
-sync = true
-
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ywr4y"]
-fadein_time = 0.2
-fadeout_time = 0.2
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_gnxwo"]
-
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_7466l"]
-graph_offset = Vector2(-513.938, 80.0083)
-nodes/HeavyAttackState/node = SubResource("AnimationNodeTransition_nhopx")
-nodes/HeavyAttackState/position = Vector2(-96, 160)
-nodes/HeavyRecoveryAnimation/node = SubResource("AnimationNodeAnimation_0phv0")
-nodes/HeavyRecoveryAnimation/position = Vector2(-448, 464)
-nodes/HeavyStrikeAnimation/node = SubResource("AnimationNodeAnimation_em3lq")
-nodes/HeavyStrikeAnimation/position = Vector2(-448, 352)
-nodes/IdleAnimation/node = SubResource("AnimationNodeAnimation_4cjbg")
-nodes/IdleAnimation/position = Vector2(-624, 160)
-nodes/Intro/node = SubResource("AnimationNodeOneShot_otdh0")
-nodes/Intro/position = Vector2(128, 160)
-nodes/LightAnimation/node = SubResource("AnimationNodeBlendSpace1D_4l0nk")
-nodes/LightAnimation/position = Vector2(-624, 288)
-nodes/LightAttack/node = SubResource("AnimationNodeOneShot_ywr4y")
-nodes/LightAttack/position = Vector2(-288, 160)
-nodes/MoveSpeed/node = SubResource("AnimationNodeTimeScale_gnxwo")
-nodes/MoveSpeed/position = Vector2(-448, 160)
-node_connections = [&"output", 0, &"Intro", &"HeavyAttackState", 0, &"LightAttack", &"HeavyAttackState", 1, &"HeavyStrikeAnimation", &"HeavyAttackState", 2, &"HeavyRecoveryAnimation", &"Intro", 0, &"HeavyAttackState", &"LightAttack", 0, &"MoveSpeed", &"LightAttack", 1, &"LightAnimation", &"MoveSpeed", 0, &"IdleAnimation"]
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m1chd"]
+graph_offset = Vector2(-560.395, 43.2182)
+nodes/heavy_attack_end_animation/node = SubResource("AnimationNodeAnimation_4tl1j")
+nodes/heavy_attack_end_animation/position = Vector2(-448, 432)
+nodes/heavy_attack_start_animation/node = SubResource("AnimationNodeAnimation_yu1tj")
+nodes/heavy_attack_start_animation/position = Vector2(-448, 320)
+nodes/heavy_attack_transition/node = SubResource("AnimationNodeTransition_acwjk")
+nodes/heavy_attack_transition/position = Vector2(-96, 160)
+nodes/idle_animation/node = SubResource("AnimationNodeAnimation_uigcs")
+nodes/idle_animation/position = Vector2(-864, 64)
+nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_5sogy")
+nodes/intro_trigger/position = Vector2(192, 160)
+nodes/light_attack_blend/node = SubResource("AnimationNodeBlendSpace1D_htkjp")
+nodes/light_attack_blend/position = Vector2(-864, 192)
+nodes/light_attack_trigger/node = SubResource("AnimationNodeOneShot_sgp5k")
+nodes/light_attack_trigger/position = Vector2(-480, 64)
+nodes/movespeed/node = SubResource("AnimationNodeTimeScale_jx0dx")
+nodes/movespeed/position = Vector2(-688, 64)
+nodes/output/position = Vector2(384, 144)
+node_connections = [&"output", 0, &"intro_trigger", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"heavy_attack_transition", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"idle_animation"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o15kk"]
 material = ExtResource("11_npy58")
@@ -320,126 +344,100 @@ material = ExtResource("12_6ym8d")
 size = Vector2(0.2, 2)
 orientation = 2
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lnhkb"]
+animation = &"attack-heavy"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tmtda"]
 animation = &"flying-eye-active"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ujr7v"]
-animation = &"flying-eye-inactive"
-
-[sub_resource type="Curve" id="Curve_0clkj"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.14286, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_xbhmw"]
-enabled_inputs = 2
-xfade_time = 0.2
-xfade_curve = SubResource("Curve_0clkj")
-input_0/name = "Inactive"
-input_0/auto_advance = false
-input_1/name = "Active"
-input_1/auto_advance = false
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_amt6k"]
 filter_enabled = true
 filters = ["ScorpionRoot/Skeleton3D:head", "ScorpionRoot/Skeleton3D:jaw"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lnhkb"]
-animation = &"attack-heavy"
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ujr7v"]
+animation = &"flying-eye-inactive"
+
+[sub_resource type="Curve" id="Curve_0clkj"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.875, 0.925), 2.0, 2.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_xbhmw"]
+xfade_time = 0.2
+xfade_curve = SubResource("Curve_0clkj")
+input_0/name = "disabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "enabled"
+input_1/auto_advance = false
+input_1/reset = true
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ga0lp"]
+mix_mode = 1
 fadein_time = 0.2
 fadeout_time = 0.2
-
-[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_miudd"]
-filters = ["ScorpionRoot/Skeleton3D:hip"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2npr5"]
 animation = &"idle"
 
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_rxdcg"]
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_spdmi"]
 animation = &"RESET"
 
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_tgoy3"]
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_rxdcg"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3v80a"]
+animation = &"move"
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_1i5cf"]
-enabled_inputs = 2
 xfade_time = 0.4
-input_0/name = "Idle"
+input_0/name = "idle"
 input_0/auto_advance = false
-input_1/name = "Walking"
+input_0/reset = true
+input_1/name = "move"
 input_1/auto_advance = false
+input_1/reset = true
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_neprv"]
-animation = &"RESET"
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_tgoy3"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6gmxk"]
+animation = &"phase-two-active"
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ax5ah"]
 filter_enabled = true
 filters = ["ScorpionRoot/Skeleton3D:head", "ScorpionRoot/Skeleton3D:hip", "ScorpionRoot/Skeleton3D:jaw"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6gmxk"]
-animation = &"phase-override"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jnmhk"]
-animation = &"RESET"
-
-[sub_resource type="Curve" id="Curve_ofb30"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_h4dsh"]
-enabled_inputs = 2
-xfade_time = 0.4
-xfade_curve = SubResource("Curve_ofb30")
-input_0/name = "Inactive"
-input_0/auto_advance = false
-input_1/name = "Active"
-input_1/auto_advance = false
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3v80a"]
-animation = &"walk"
+sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_kv6lr"]
-graph_offset = Vector2(-825.738, 427.113)
-nodes/EyeActiveAnimation/node = SubResource("AnimationNodeAnimation_tmtda")
-nodes/EyeActiveAnimation/position = Vector2(-1152, 896)
-nodes/EyeInactiveAnimation/node = SubResource("AnimationNodeAnimation_ujr7v")
-nodes/EyeInactiveAnimation/position = Vector2(-1152, 784)
-nodes/EyeState/node = SubResource("AnimationNodeTransition_xbhmw")
-nodes/EyeState/position = Vector2(-864, 752)
-nodes/FlyingEye/node = SubResource("AnimationNodeAdd2_amt6k")
-nodes/FlyingEye/position = Vector2(-624, 640)
-nodes/HeavyAnimation/node = SubResource("AnimationNodeAnimation_lnhkb")
-nodes/HeavyAnimation/position = Vector2(-912, 320)
-nodes/HeavyAttack/node = SubResource("AnimationNodeOneShot_ga0lp")
-nodes/HeavyAttack/position = Vector2(-720, 192)
-nodes/HeavyAttackAdd/node = SubResource("AnimationNodeAdd2_miudd")
-nodes/HeavyAttackAdd/position = Vector2(-504.421, 94.3315)
-nodes/IdleAnimation/node = SubResource("AnimationNodeAnimation_2npr5")
-nodes/IdleAnimation/position = Vector2(-1232, -16)
-nodes/Intro/node = SubResource("AnimationNodeOneShot_rxdcg")
-nodes/Intro/position = Vector2(240, 368)
-nodes/IntroAnimation/node = SubResource("AnimationNodeAnimation_spdmi")
-nodes/IntroAnimation/position = Vector2(0, 496)
-nodes/MoveSpeed/node = SubResource("AnimationNodeTimeScale_tgoy3")
-nodes/MoveSpeed/position = Vector2(-1056, 112)
-nodes/MovementState/node = SubResource("AnimationNodeTransition_1i5cf")
-nodes/MovementState/position = Vector2(-896, 32)
-nodes/ResetAnimation/node = SubResource("AnimationNodeAnimation_neprv")
-nodes/ResetAnimation/position = Vector2(-912, 208)
-nodes/SecondPhase/node = SubResource("AnimationNodeAdd2_ax5ah")
-nodes/SecondPhase/position = Vector2(-160, 304)
-nodes/SecondPhaseActive/node = SubResource("AnimationNodeAnimation_6gmxk")
-nodes/SecondPhaseActive/position = Vector2(-1072, 608)
-nodes/SecondPhaseInactive/node = SubResource("AnimationNodeAnimation_jnmhk")
-nodes/SecondPhaseInactive/position = Vector2(-816, 512)
-nodes/SecondPhaseState/node = SubResource("AnimationNodeTransition_h4dsh")
-nodes/SecondPhaseState/position = Vector2(-416, 496)
-nodes/WalkAnimation/node = SubResource("AnimationNodeAnimation_3v80a")
-nodes/WalkAnimation/position = Vector2(-1232, 112)
-nodes/output/position = Vector2(640, 240)
-node_connections = [&"output", 0, &"Intro", &"EyeState", 0, &"EyeInactiveAnimation", &"EyeState", 1, &"EyeActiveAnimation", &"FlyingEye", 0, &"SecondPhaseActive", &"FlyingEye", 1, &"EyeState", &"HeavyAttack", 0, &"ResetAnimation", &"HeavyAttack", 1, &"HeavyAnimation", &"HeavyAttackAdd", 0, &"MovementState", &"HeavyAttackAdd", 1, &"HeavyAttack", &"Intro", 0, &"SecondPhase", &"Intro", 1, &"IntroAnimation", &"MoveSpeed", 0, &"WalkAnimation", &"MovementState", 0, &"IdleAnimation", &"MovementState", 1, &"MoveSpeed", &"SecondPhase", 0, &"HeavyAttackAdd", &"SecondPhase", 1, &"SecondPhaseState", &"SecondPhaseState", 0, &"SecondPhaseInactive", &"SecondPhaseState", 1, &"FlyingEye"]
+graph_offset = Vector2(-1040.67, -9.10049)
+nodes/attack_heavy_animation/node = SubResource("AnimationNodeAnimation_lnhkb")
+nodes/attack_heavy_animation/position = Vector2(-1200, 304)
+nodes/flying_eye_active_animation/node = SubResource("AnimationNodeAnimation_tmtda")
+nodes/flying_eye_active_animation/position = Vector2(-896, 672)
+nodes/flying_eye_add/node = SubResource("AnimationNodeAdd2_amt6k")
+nodes/flying_eye_add/position = Vector2(-368, 416)
+nodes/flying_eye_inactive_animation/node = SubResource("AnimationNodeAnimation_ujr7v")
+nodes/flying_eye_inactive_animation/position = Vector2(-896, 560)
+nodes/flying_eye_transition/node = SubResource("AnimationNodeTransition_xbhmw")
+nodes/flying_eye_transition/position = Vector2(-608, 528)
+nodes/heavy_attack_trigger/node = SubResource("AnimationNodeOneShot_ga0lp")
+nodes/heavy_attack_trigger/position = Vector2(-720, 80)
+nodes/idle_animation/node = SubResource("AnimationNodeAnimation_2npr5")
+nodes/idle_animation/position = Vector2(-1440, 0)
+nodes/intro_animation/node = SubResource("AnimationNodeAnimation_spdmi")
+nodes/intro_animation/position = Vector2(80, 384)
+nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_rxdcg")
+nodes/intro_trigger/position = Vector2(320, 256)
+nodes/move_animation/node = SubResource("AnimationNodeAnimation_3v80a")
+nodes/move_animation/position = Vector2(-1456, 128)
+nodes/movement_transition/node = SubResource("AnimationNodeTransition_1i5cf")
+nodes/movement_transition/position = Vector2(-1088, 0)
+nodes/movespeed/node = SubResource("AnimationNodeTimeScale_tgoy3")
+nodes/movespeed/position = Vector2(-1264, 128)
+nodes/output/position = Vector2(560, 208)
+nodes/phase_two_active_animation/node = SubResource("AnimationNodeAnimation_6gmxk")
+nodes/phase_two_active_animation/position = Vector2(-752, 384)
+nodes/phase_two_add/node = SubResource("AnimationNodeAdd2_ax5ah")
+nodes/phase_two_add/position = Vector2(-112, 288)
+node_connections = [&"output", 0, &"intro_trigger", &"flying_eye_add", 0, &"phase_two_active_animation", &"flying_eye_add", 1, &"flying_eye_transition", &"flying_eye_transition", 0, &"flying_eye_inactive_animation", &"flying_eye_transition", 1, &"flying_eye_active_animation", &"heavy_attack_trigger", 0, &"movement_transition", &"heavy_attack_trigger", 1, &"attack_heavy_animation", &"intro_trigger", 0, &"phase_two_add", &"intro_trigger", 1, &"intro_animation", &"movement_transition", 0, &"idle_animation", &"movement_transition", 1, &"movespeed", &"movespeed", 0, &"move_animation", &"phase_two_add", 0, &"heavy_attack_trigger", &"phase_two_add", 1, &"flying_eye_add"]
 
 [sub_resource type="Animation" id="Animation_74b1e"]
 resource_name = "RESET"
@@ -531,7 +529,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/7/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitoring")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -543,7 +541,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/8/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitorable")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -555,19 +553,19 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Attachments/LTail/Tail/Eye02/Charge:emitting")
+tracks/9/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/ScorpionMesh:mesh:surface_0/material:shader_parameter/damage_flash")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [0.0]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/ScorpionMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/10/path = NodePath("Attachments/BackEye/EyeLarge/EyeLargeMesh:mesh:surface_0/material:shader_parameter/damage_flash")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -579,22 +577,34 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Attachments/BackEye/EyeLarge/EyeLargeMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/11/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
+"update": 1,
+"values": [false]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Attachments/RTail/Tail/Eye02/EyeSmall/Lockon:monitoring")
+tracks/12/path = NodePath("Attachments/LTail/Tail/Eye02/Charge:emitting")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Attachments/RTail/Tail/Eye02/Charge:emitting")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -604,29 +614,30 @@ tracks/12/keys = {
 [sub_resource type="Animation" id="Animation_7vnlo"]
 resource_name = "damage"
 length = 0.2
+step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/ScorpionMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/ScorpionMesh:mesh:surface_0/material:shader_parameter/damage_flash")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(2, 1),
+"times": PackedFloat32Array(0, 0.01, 0.2),
+"transitions": PackedFloat32Array(1, 2, 1),
 "update": 0,
-"values": [1.0, 0.0]
+"values": [0.0, 1.0, 0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Attachments/BackEye/EyeLarge/EyeLargeMesh:mesh:surface_1/material:shader_parameter/damage_flash")
+tracks/1/path = NodePath("Attachments/BackEye/EyeLarge/EyeLargeMesh:mesh:surface_0/material:shader_parameter/damage_flash")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(2, 1),
+"times": PackedFloat32Array(0, 0.01, 0.2),
+"transitions": PackedFloat32Array(1, 2, 1),
 "update": 0,
-"values": [1.0, 0.0]
+"values": [0.0, 1.0, 0.0]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -679,7 +690,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/6/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitoring")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -691,7 +702,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/7/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitorable")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -754,7 +765,7 @@ resource_name = "defeat"
 
 [sub_resource type="Animation" id="Animation_yiv12"]
 resource_name = "disable-hurtbox-01"
-length = 0.2
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -806,7 +817,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_vg5tu"]
 resource_name = "disable-hurtbox-02"
-length = 0.2
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -906,7 +917,7 @@ tracks/7/keys = {
 
 [sub_resource type="Animation" id="Animation_pyyk2"]
 resource_name = "disable-hurtbox-03"
-length = 0.2
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -958,7 +969,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitoring")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -970,7 +981,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitorable")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -1086,7 +1097,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitoring")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -1098,7 +1109,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitorable")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -1148,14 +1159,11 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.792, 1.53333, 1.66667, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0.792, 1.66667, 1.998),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"StartStrike"
-}, {
-"args": [NodePath("Attachments/LTail/Tail/Eye02")],
-"method": &"SetImpactPosition"
 }, {
 "args": [],
 "method": &"StopStrike"
@@ -1204,6 +1212,20 @@ tracks/4/keys = {
 "values": [{
 "args": [],
 "method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [NodePath("Attachments/LTail/Tail/Eye02")],
+"method": &"SetImpactPosition"
 }]
 }
 
@@ -1262,7 +1284,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitoring")
+tracks/4/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitoring")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -1274,7 +1296,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Lockon:monitorable")
+tracks/5/path = NodePath("Attachments/BackEye/EyeLarge/Hurtbox:monitorable")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -1324,14 +1346,11 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.792, 1.53333, 1.66667, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0.792, 1.66667, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"StartStrike"
-}, {
-"args": [NodePath("Attachments/RTail/Tail/Eye02")],
-"method": &"SetImpactPosition"
 }, {
 "args": [],
 "method": &"StopStrike"
@@ -1382,6 +1401,20 @@ tracks/4/keys = {
 "method": &"restart"
 }]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.53333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [NodePath("Attachments/RTail/Tail/Eye02")],
+"method": &"SetImpactPosition"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6oscl"]
 _data = {
@@ -1398,19 +1431,18 @@ _data = {
 "r-light-attack": SubResource("Animation_7ofif")
 }
 
-[node name="SandScorpion" type="Node3D" node_paths=PackedStringArray("rootAnimator", "lTailAnimator", "rTailAnimator", "eyeAnimator", "eventAnimator", "impactEffect", "flyingEye", "flyingEyeHurtbox", "flyingEyeRoot", "flyingEyeBone")]
+[node name="SandScorpion" type="Node3D" node_paths=PackedStringArray("rootAnimationTree", "lTailAnimationTree", "rTailAnimationTree", "flyingEyeAnimationTree", "eventAnimator", "impactEffect", "flyingEyeHitbox", "flyingEyeRoot", "flyingEyeBone")]
 script = ExtResource("1_mewmp")
-rootAnimator = NodePath("RootAnimationTree")
-lTailAnimator = NodePath("Attachments/LTail/LTailAnimationTree")
-rTailAnimator = NodePath("Attachments/RTail/RTailAnimationTree")
-eyeAnimator = NodePath("Attachments/FlyingEye/FlyingEye/EyeAnimationTree")
+rootAnimationTree = NodePath("RootAnimationTree")
+lTailAnimationTree = NodePath("Attachments/LTail/LTailAnimationTree")
+rTailAnimationTree = NodePath("Attachments/RTail/RTailAnimationTree")
+flyingEyeAnimationTree = NodePath("Attachments/FlyingEye/FlyingEye/FlyingEyeAnimationTree")
 eventAnimator = NodePath("EventAnimator")
-missilePositions = [NodePath("Attachments/LMissile"), NodePath("Attachments/Missile"), NodePath("Attachments/RMissile")]
+missilePositionPaths = Array[NodePath]([NodePath("Attachments/LMissile"), NodePath("Attachments/Missile"), NodePath("Attachments/RMissile")])
 missileScene = ExtResource("2_6mjm1")
 impactEffect = NodePath("ImpactEffect")
-eyePaths = [NodePath("Attachments/BackEye"), NodePath("Attachments/LTail/Tail/Eye01"), NodePath("Attachments/LTail/Tail/Eye02"), NodePath("Attachments/RTail/Tail/Eye01"), NodePath("Attachments/RTail/Tail/Eye02")]
-flyingEye = NodePath("Attachments/FlyingEye/FlyingEye/Eye/EyeLarge")
-flyingEyeHurtbox = NodePath("Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Lockon")
+eyePaths = Array[NodePath]([NodePath("Attachments/FlyingEye/FlyingEye/Eye/EyeLarge"), NodePath("Attachments/BackEye/EyeLarge"), NodePath("Attachments/LTail/Tail/Eye01/EyeSmall"), NodePath("Attachments/LTail/Tail/Eye02/EyeSmall"), NodePath("Attachments/RTail/Tail/Eye01/EyeSmall"), NodePath("Attachments/RTail/Tail/Eye02/EyeSmall")])
+flyingEyeHitbox = NodePath("Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox")
 flyingEyeRoot = NodePath("Attachments/FlyingEye/FlyingEye")
 flyingEyeBone = NodePath("Attachments/FlyingEye")
 
@@ -1426,7 +1458,7 @@ use_external_skeleton = true
 external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
 
 [node name="FlyingEye" parent="Attachments/FlyingEye" instance=ExtResource("2_8luog")]
-transform = Transform3D(1, -8.07794e-28, 0, -8.15901e-22, 1, 2.27374e-13, 0, -2.27374e-13, 1, 0, 0, 0)
+transform = Transform3D(1, -1.61559e-27, 0, -1.66293e-21, 1, 4.54747e-13, 0, -4.54747e-13, 1, 0, 0, 0)
 
 [node name="Eye" type="BoneAttachment3D" parent="Attachments/FlyingEye/FlyingEye"]
 transform = Transform3D(1, -4.33431e-13, -3.55271e-15, 4.33431e-13, 1, 2.27374e-13, 3.55271e-15, -2.27374e-13, 1, 6.53998e-13, 0, 0)
@@ -1436,31 +1468,23 @@ use_external_skeleton = true
 external_skeleton = NodePath("../FlyingEyeRoot/Skeleton3D")
 
 [node name="EyeLarge" parent="Attachments/FlyingEye/FlyingEye/Eye" instance=ExtResource("2_0m58c")]
-transform = Transform3D(1, 2.00603e-21, 5.29396e-23, -7.88404e-21, 1, 0, -2.5411e-21, 0, 1, 0, 0, 0)
-
-[node name="Lockon" type="Area3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge"]
-collision_layer = 12
-collision_mask = 2
-monitoring = false
-monitorable = false
-
-[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Lockon"]
-shape = SubResource("SphereShape3D_c08po")
 
 [node name="Hitbox" type="Area3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge"]
 transform = Transform3D(1, 2.00603e-21, 5.29396e-23, -7.88404e-21, 1, -2.27374e-13, -8.47033e-22, 2.27374e-13, 1, 0, 0, 0)
-collision_layer = 8
+collision_layer = 4
 collision_mask = 2
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox"]
 shape = SubResource("SphereShape3D_i57o6")
 
-[node name="EyeAnimationTree" type="AnimationTree" parent="Attachments/FlyingEye/FlyingEye"]
+[node name="FlyingEyeAnimationTree" type="AnimationTree" parent="Attachments/FlyingEye/FlyingEye"]
 tree_root = SubResource("AnimationNodeBlendTree_6uq47")
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/EyeState/current = 0
+parameters/eye_transition/current_state = "disabled"
+parameters/eye_transition/transition_request = ""
+parameters/eye_transition/current_index = 0
 
 [node name="Root" type="BoneAttachment3D" parent="Attachments"]
 transform = Transform3D(1, 0, 0, 0, 3.51667e-06, 1, 0, -1, 3.51667e-06, 0, 0, 0)
@@ -1480,21 +1504,54 @@ local_coords = true
 process_material = ExtResource("6_xp45h")
 draw_pass_1 = SubResource("PlaneMesh_g3iia")
 
-[node name="Hitbox" type="Area3D" parent="Attachments/Root"]
-transform = Transform3D(1, 0, 0, 0, 3.51667e-06, -1, 0, 1, 3.51667e-06, 0, 1.40667e-05, 4)
-collision_layer = 8
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/Root/Hitbox"]
-shape = SubResource("BoxShape3D_icvc0")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Attachments/Root"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 3)
+[node name="StaticBody3D" type="StaticBody3D" parent="Attachments/Root" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1, 3)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/Root/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 3.56038e-06, 0, -3.56038e-06, 1, 0, 0, 5)
 shape = SubResource("BoxShape3D_apgua")
+
+[node name="Hip" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 0, 0, 0, -0.0636966, 0.997969, 0, -0.997969, -0.0636966, 0, 2.7, 9.49502e-06)
+bone_name = "hip"
+bone_idx = 20
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/Hip"]
+transform = Transform3D(1, 0, 0, 0, -0.0636966, -0.997969, 0, 0.997969, -0.0636966, 0, 3, 0.5)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/Hip/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -0.2)
+shape = SubResource("BoxShape3D_nm141")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Attachments/Hip/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, -2.6)
+shape = SubResource("SphereShape3D_kcnvy")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Attachments/Hip/Hitbox"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 4.37114e-08, -0.2, -4.6)
+shape = SubResource("CapsuleShape3D_xrasm")
+
+[node name="Chest" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 7.20004e-15, 1.50996e-07, 1.50996e-07, -3.61204e-06, -1, 5.38203e-13, 1, -3.61204e-06, 0, 2.7, 9.49502e-06)
+bone_name = "chest"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
+
+[node name="Hitbox" type="Area3D" parent="Attachments/Chest"]
+transform = Transform3D(1, 0, -1.94401e-18, 0, 1, 0, -1.94401e-18, 0, 1, 0, 3.499, -0.25)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/Chest/Hitbox"]
+transform = Transform3D(1, 0, 1.89696e-18, 0, -1, -8.74227e-08, -1.94401e-18, 8.74227e-08, -1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_066p4")
 
 [node name="LMissile" type="BoneAttachment3D" parent="Attachments"]
 transform = Transform3D(1, -3.17865e-08, -6.35733e-08, 3.17863e-08, 1, -3.49283e-06, 6.35734e-08, 3.49283e-06, 1, 1.8, 4.9, 0.600018)
@@ -1526,13 +1583,13 @@ external_skeleton = NodePath("../../SandScorpion/ScorpionRoot/Skeleton3D")
 
 [node name="EyeLarge" parent="Attachments/BackEye" instance=ExtResource("2_0m58c")]
 
-[node name="Lockon" type="Area3D" parent="Attachments/BackEye/EyeLarge"]
+[node name="Hurtbox" type="Area3D" parent="Attachments/BackEye/EyeLarge"]
 collision_layer = 4
 collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/BackEye/EyeLarge/Lockon"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/BackEye/EyeLarge/Hurtbox"]
 shape = SubResource("SphereShape3D_c08po")
 
 [node name="LTail" type="BoneAttachment3D" parent="Attachments"]
@@ -1625,7 +1682,7 @@ collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye01/EyeSmall/Lockon"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye01/EyeSmall/Lockon"]
 shape = SubResource("SphereShape3D_6gfpm")
 
 [node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/Eye01"]
@@ -1634,7 +1691,7 @@ collision_layer = 8
 collision_mask = 2
 monitorable = false
 
-[node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye01/Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye01/Hitbox"]
 transform = Transform3D(1, -3.99971e-14, 0, 4.52685e-14, 1, -9.09495e-13, 0, 9.09495e-13, 1, 0, 0, 0)
 shape = SubResource("SphereShape3D_v7gw7")
 
@@ -1654,7 +1711,7 @@ collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3d" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/EyeSmall/Lockon"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/EyeSmall/Lockon"]
 shape = SubResource("SphereShape3D_6gfpm")
 
 [node name="Hitbox" type="Area3D" parent="Attachments/LTail/Tail/Eye02"]
@@ -1668,7 +1725,7 @@ transform = Transform3D(1, 3.97528e-08, -2.72043e-08, 4.04128e-08, -0.38502, 0.9
 shape = SubResource("BoxShape3D_0bw7n")
 
 [node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/Hitbox"]
-transform = Transform3D(0.85, -4.91825e-14, 2.13163e-14, 4.06951e-14, 1, -2.27374e-13, 0, 9.09495e-13, 1, 0, -0.0999999, 0)
+transform = Transform3D(1, -4.78766e-14, 3.26576e-26, 4.78766e-14, 1, -9.09495e-13, 1.08859e-26, 9.09495e-13, 1, 0, -0.0999999, 0)
 shape = SubResource("SphereShape3D_v7gw7")
 
 [node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="Attachments/LTail/Tail/Eye02/Hitbox"]
@@ -1698,13 +1755,17 @@ process_material = SubResource("ParticleProcessMaterial_0ysei")
 draw_pass_1 = SubResource("PlaneMesh_elby2")
 
 [node name="LTailAnimationTree" type="AnimationTree" parent="Attachments/LTail"]
-tree_root = SubResource("AnimationNodeBlendTree_75wli")
+tree_root = SubResource("AnimationNodeBlendTree_wjd4q")
 anim_player = NodePath("../Tail/AnimationPlayer")
-parameters/HeavyAttackState/current = 0
-parameters/Intro/active = false
-parameters/LightAnimation/blend_position = 0.0
-parameters/LightAttack/active = false
-parameters/MoveSpeed/scale = 1.0
+parameters/heavy_attack_transition/current_state = "disabled"
+parameters/heavy_attack_transition/transition_request = ""
+parameters/heavy_attack_transition/current_index = 0
+parameters/intro_trigger/active = false
+parameters/intro_trigger/request = 0
+parameters/light_attack_blend/blend_position = 0.0
+parameters/light_attack_trigger/active = false
+parameters/light_attack_trigger/request = 0
+parameters/movespeed/scale = 1.0
 
 [node name="RTail" type="BoneAttachment3D" parent="Attachments"]
 transform = Transform3D(1, 1.11022e-16, -2.14253e-09, -7.57727e-15, 1, -3.39746e-06, 2.14253e-09, 3.39746e-06, 1, -3.8, 2.50003, -7.39999)
@@ -1801,12 +1862,12 @@ monitorable = false
 shape = SubResource("SphereShape3D_6gfpm")
 
 [node name="Hitbox" type="Area3D" parent="Attachments/RTail/Tail/Eye01"]
-transform = Transform3D(1, 2.63635e-15, 1.13687e-13, -1.15749e-14, 1, 2.27374e-13, 0, -2.27374e-13, 1, 0, 0, 0)
+transform = Transform3D(1, 2.63678e-15, 2.27374e-13, -2.57858e-14, 1, 4.54747e-13, 0, -4.54747e-13, 1, 0, 0, 0)
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 
-[node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye01/Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye01/Hitbox"]
 transform = Transform3D(1, -3.99971e-14, 0, 4.52685e-14, 1, -9.09495e-13, 0, 9.09495e-13, 1, 0, 0, 0)
 shape = SubResource("SphereShape3D_v7gw7")
 
@@ -1840,7 +1901,7 @@ transform = Transform3D(1, 3.97528e-08, -2.72043e-08, 4.04128e-08, -0.38502, 0.9
 shape = SubResource("BoxShape3D_0bw7n")
 
 [node name="BallCollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye02/Hitbox"]
-transform = Transform3D(0.85, -4.91825e-14, 2.13163e-14, 4.06951e-14, 1, -2.27374e-13, 0, 9.09495e-13, 1, 0, -0.0999999, 0)
+transform = Transform3D(1, -4.78766e-14, 3.26576e-26, 4.78766e-14, 1, -9.09495e-13, 1.08859e-26, 9.09495e-13, 1, 0, -0.0999999, 0)
 shape = SubResource("SphereShape3D_v7gw7")
 
 [node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="Attachments/RTail/Tail/Eye02/Hitbox"]
@@ -1870,13 +1931,17 @@ process_material = SubResource("ParticleProcessMaterial_0ysei")
 draw_pass_1 = SubResource("PlaneMesh_elby2")
 
 [node name="RTailAnimationTree" type="AnimationTree" parent="Attachments/RTail"]
-tree_root = SubResource("AnimationNodeBlendTree_7466l")
+tree_root = SubResource("AnimationNodeBlendTree_m1chd")
 anim_player = NodePath("../Tail/AnimationPlayer")
-parameters/HeavyAttackState/current = 0
-parameters/Intro/active = false
-parameters/LightAnimation/blend_position = 0
-parameters/LightAttack/active = false
-parameters/MoveSpeed/scale = 1.0
+parameters/heavy_attack_transition/current_state = "strike"
+parameters/heavy_attack_transition/transition_request = ""
+parameters/heavy_attack_transition/current_index = 1
+parameters/intro_trigger/active = false
+parameters/intro_trigger/request = 0
+parameters/light_attack_blend/blend_position = 0.0
+parameters/light_attack_trigger/active = false
+parameters/light_attack_trigger/request = 0
+parameters/movespeed/scale = 1.0
 
 [node name="ImpactEffect" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
@@ -1923,38 +1988,58 @@ draw_pass_1 = SubResource("PlaneMesh_w00fi")
 [node name="RootAnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_kv6lr")
 anim_player = NodePath("../SandScorpion/AnimationPlayer")
-parameters/EyeState/current = 0
-parameters/FlyingEye/add_amount = 1.0
-parameters/HeavyAttack/active = false
-parameters/HeavyAttackAdd/add_amount = 1.0
-parameters/Intro/active = false
-parameters/MoveSpeed/scale = 1.0
-parameters/MovementState/current = 0
-parameters/SecondPhase/add_amount = 1.0
-parameters/SecondPhaseState/current = 1
+parameters/flying_eye_add/add_amount = 1.0
+parameters/flying_eye_transition/current_state = "disabled"
+parameters/flying_eye_transition/transition_request = ""
+parameters/flying_eye_transition/current_index = 0
+parameters/heavy_attack_trigger/active = false
+parameters/heavy_attack_trigger/request = 0
+parameters/intro_trigger/active = false
+parameters/intro_trigger/request = 0
+parameters/movement_transition/current_state = "idle"
+parameters/movement_transition/transition_request = ""
+parameters/movement_transition/current_index = 0
+parameters/movespeed/scale = 1.0
+parameters/phase_two_add/add_amount = 0.0
 
 [node name="EventAnimator" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_6oscl")
 }
 
-[connection signal="area_entered" from="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Lockon" to="." method="OnHurtboxCollision"]
-[connection signal="area_entered" from="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/Root/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/BackEye/EyeLarge/Lockon" to="." method="OnHurtboxCollision"]
-[connection signal="area_entered" from="Attachments/LTail/Tail/LTail01/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/LTail/Tail/LTail02/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/LTail/Tail/LTail03/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/LTail/Tail/LTail04/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox" to="." method="OnFlyingEyeEntered"]
+[connection signal="area_exited" from="Attachments/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox" to="." method="OnFlyingEyeExited"]
+[connection signal="area_entered" from="Attachments/Hip/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/Hip/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/Chest/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/Chest/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/BackEye/EyeLarge/Hurtbox" to="." method="OnBackEyeEntered"]
+[connection signal="area_exited" from="Attachments/BackEye/EyeLarge/Hurtbox" to="." method="OnBackEyeExited"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail01/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/LTail/Tail/LTail01/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail02/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/LTail/Tail/LTail02/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail03/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/LTail/Tail/LTail03/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/LTail04/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/LTail/Tail/LTail04/Hitbox" to="." method="OnHitboxExited"]
 [connection signal="area_entered" from="Attachments/LTail/Tail/Eye01/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [false]]
-[connection signal="area_entered" from="Attachments/LTail/Tail/Eye01/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/Eye01/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/LTail/Tail/Eye01/Hitbox" to="." method="OnHitboxExited"]
 [connection signal="area_entered" from="Attachments/LTail/Tail/Eye02/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
-[connection signal="area_entered" from="Attachments/LTail/Tail/Eye02/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/RTail/Tail/RTail01/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/RTail/Tail/RTail02/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/RTail/Tail/RTail03/Hitbox" to="." method="OnHitboxCollision"]
-[connection signal="area_entered" from="Attachments/RTail/Tail/RTail04/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/LTail/Tail/Eye02/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/LTail/Tail/Eye02/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail01/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/RTail/Tail/RTail01/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail02/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/RTail/Tail/RTail02/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail03/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/RTail/Tail/RTail03/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/RTail04/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/RTail/Tail/RTail04/Hitbox" to="." method="OnHitboxExited"]
 [connection signal="area_entered" from="Attachments/RTail/Tail/Eye01/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [false]]
-[connection signal="area_entered" from="Attachments/RTail/Tail/Eye01/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/Eye01/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/RTail/Tail/Eye01/Hitbox" to="." method="OnHitboxExited"]
 [connection signal="area_entered" from="Attachments/RTail/Tail/Eye02/EyeSmall/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
-[connection signal="area_entered" from="Attachments/RTail/Tail/Eye02/Hitbox" to="." method="OnHitboxCollision"]
+[connection signal="area_entered" from="Attachments/RTail/Tail/Eye02/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="Attachments/RTail/Tail/Eye02/Hitbox" to="." method="OnHitboxExited"]

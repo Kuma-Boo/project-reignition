@@ -43,8 +43,6 @@ namespace Project.Gameplay
 			return pathList[closestPathIndex];
 		}
 
-		[Export]
-		public Node3D completionDemoNode;
 		/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
 		[Export]
 		public AnimationPlayer completionDemoAnimator;
@@ -70,7 +68,7 @@ namespace Project.Gameplay
 
 		public bool StartCompletionDemo()
 		{
-			if (completionDemoNode == null || completionDemoAnimator == null) return false;
+			if (completionDemoAnimator == null) return false;
 
 			OnCameraDemoAdvance();
 

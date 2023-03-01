@@ -387,8 +387,6 @@ namespace Project.Gameplay
 		public delegate void LevelCompletedEventHandler(); //Called when level is completed
 		public void FinishLevel(bool wasSuccessful)
 		{
-			//TODO Calculate rank
-			//GameplayInterface.instance.Score;
 			if (StageSettings.instance.StartCompletionDemo()) //Attempt to start the completion demo
 			{
 				//Hide everything so shadows don't render

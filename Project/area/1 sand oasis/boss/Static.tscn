@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3 uid="uid://brtel7tjfbqu1"]
 
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="1_sibja"]
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_usvxm"]
 [ext_resource type="PackedScene" uid="uid://l2gs3bhjao6b" path="res://area/1 sand oasis/boss/environment/SOBoss.tscn" id="1_xgd2p"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="2_xu7fo"]
 [ext_resource type="PackedScene" uid="uid://0dl0qnex82mi" path="res://area/1 sand oasis/boss/environment/collision/Collision.tscn" id="3_7yi4a"]
@@ -289,11 +290,16 @@ _data = {
 "demo3": SubResource("Animation_5pere")
 }
 
-[node name="Static" type="Node3D"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionDemoAnimator", "environment")]
+script = ExtResource("1_usvxm")
+pathParent = NodePath("Path")
+completionDemoAnimator = NodePath("DemoCamera/AnimationPlayer")
+environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("3_7yi4a")]
+visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
-
-[node name="DepthRenderer" parent="Visuals" instance=ExtResource("1_sibja")]
 
 [node name="Sun" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(0.882457, -0.469216, -0.0332494, -0.270536, -0.564081, 0.780143, -0.384811, -0.679448, -0.624717, 0, 0, 0)
@@ -307,15 +313,12 @@ directional_shadow_max_distance = 250.0
 
 [node name="Skybox" parent="Visuals" instance=ExtResource("2_xu7fo")]
 
-[node name="Collision" parent="." instance=ExtResource("3_7yi4a")]
-visible = false
-
 [node name="Path" type="Node3D" parent="."]
 
 [node name="MainPath" type="Path3D" parent="Path"]
 curve = ExtResource("4_nrma0")
 
-[node name="BossPathFollow" type="PathFollow3D" parent="Path/MainPath"]
+[node name="BossPathFollower" type="PathFollow3D" parent="Path/MainPath"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -60)
 progress = 60.0
 rotation_mode = 4
@@ -325,7 +328,6 @@ cubic_interp = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, -3, -225)
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
@@ -336,6 +338,8 @@ next/demo2 = &"demo3"
 next/demo3 = &"demo1"
 
 [node name="BGM" parent="." instance=ExtResource("5_kljp1")]
+
+[node name="DepthRenderer" parent="." instance=ExtResource("1_sibja")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("6_tfkrh")

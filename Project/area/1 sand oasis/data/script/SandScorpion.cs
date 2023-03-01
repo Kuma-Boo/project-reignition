@@ -7,7 +7,7 @@ namespace Project.Gameplay.Bosses
 	/// <summary> Controls the first boss of the game, the Sand Scorpion. </summary>
 	/*
 	Behaviour:
-	Runs away from the player, unless the player is far away and backing up, in which case walk towards the player to maintain distance.
+	Runs away from the player, unless the player is far away and backstepping, in which case Sand Scorpion will walk towards the player to maintain distance.
 	-Remains idle until the player moves-
 	When far away, shoot missiles. When really far, one of these missiles locks onto the player's current position, to force the player to keep moving.
 	When close, attack depending on which side the player is on. Attack Pattern: Two hit light attacks, heavy attack.
@@ -19,54 +19,94 @@ namespace Project.Gameplay.Bosses
 	public partial class SandScorpion : Node3D
 	{
 		[Export]
-		private PathFollow3D pathFollower;
+		/// <summary> Boss's path follower. </summary>
+		private PathFollow3D bossPathFollower;
 
-		private int currentHealth;
-		private readonly int MAX_HEALTH = 5;
+		/// <summary> Is the boss being processed? </summary>
+		private bool isActive;
+		private readonly float STARTING_POSITION = 60;
 
-		[Export]
-		private AnimationTree rootAnimator;
-		[Export]
-		private AnimationTree lTailAnimator;
-		[Export]
-		private AnimationTree rTailAnimator;
-		[Export]
-		private AnimationTree eyeAnimator;
-		[Export]
-		private AnimationPlayer eventAnimator; //Additive animator that manages stuff like damage flashing, hitboxes, etc
-
-		private bool isActive; //Process the boss?
 		private CharacterController Character => CharacterController.instance;
-		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.X;
+		private CharacterPathFollower PathFollower => Character.PathFollower;
+
+		[ExportGroup("Animation")]
+		[Export]
+		private AnimationTree rootAnimationTree;
+		[Export]
+		private AnimationTree lTailAnimationTree;
+		[Export]
+		private AnimationTree rTailAnimationTree;
+		[Export]
+		private AnimationTree flyingEyeAnimationTree;
+		[Export]
+		private AnimationPlayer eventAnimator; //Extra animator that manages stuff like damage flashing, hitboxes, etc
+		private readonly StringName DISABLED_STATE = "disabled";
+		private readonly StringName ENABLED_STATE = "enabled";
 
 		public override void _Ready()
 		{
-			rootAnimator.Active = lTailAnimator.Active = rTailAnimator.Active = true; //Activate animation trees
+			rootAnimationTree.Active = lTailAnimationTree.Active = rTailAnimationTree.Active = true; //Activate animation trees
 
-			eyes = new Node3D[eyePaths.Length];
-			for (int i = 0; i < eyePaths.Length; i++)
-			{
-				eyes[i] = GetNode<Node3D>(eyePaths[i]);
-			}
-			//_eventAnimator.Play("intro");
-
+			SetUpEyes();
 			SetUpMissiles();
 
+			//_eventAnimator.Play("intro"); Intro animation isn't animated yet.
 			GD.Print("Skipping intro animation.");
+
+			LevelSettings.instance.ConnectUnloadSignal(this);
+			Character.Connect(CharacterController.SignalName.Respawn, new Callable(this, MethodName.Respawn));
 			Respawn();
-			ProgressPhase();
 		}
 
 		public void Respawn()
 		{
+			isActive = false;
 			currentHealth = MAX_HEALTH;
-			GlobalPosition = Vector3.Forward * 60;
+
+			bossPathFollower.Progress = STARTING_POSITION;
+			GlobalPosition = Vector3.Forward * STARTING_POSITION;
 			GlobalRotation = Vector3.Up * Mathf.Pi;
 
-			isSecondPhaseActive = false;
+			//Reset animations
+			isPhaseTwoActive = false;
+			lTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, DISABLED_STATE);
+			rTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, DISABLED_STATE);
+
+			lTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			rTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+
+			flyingEyeAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE);
+
+			//Reset movement
+			MoveSpeed = 0;
+			moveSpeedVelocity = 0;
+			rootAnimationTree.Set(MOVESTATE_PARAMETER, IDLE_STATE);
+
+			//Reset phase
+			phaseTwoBlend = 0;
+			phaseTwoBlendVelocity = 0;
+			rootAnimationTree.Set(PHASE_TWO_PARAMETER, phaseTwoBlend);
+			rootAnimationTree.Set(HEAVY_ATTACK_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			impactEffect.Visible = false;
+
+			eventAnimator.Play("RESET");
+
+			//Reset attacks
+			flyingEyeBlend = 0;
+			attackTimer = 0;
+			attackCounter = 0;
+			isAttacking = false;
+			isStriking = false;
+
+
+			//Reset flying eye
+			flyingEyeRoot.Position = Vector3.Zero;
+			flyingEyeRoot.Rotation = Vector3.Zero;
+
+			RespawnMissiles();
 		}
 
-		public override void _ExitTree()
+		public void Unload()
 		{
 			//Cleanup orphan nodes
 			for (int i = 0; i < missilePool.Count; i++)
@@ -85,72 +125,73 @@ namespace Project.Gameplay.Bosses
 				isActive = true;
 			}
 
+			UpdatePhase();
 			UpdatePosition();
-			UpdateRotation();
 			UpdateMissiles();
 			UpdateAttacks();
+			UpdateHitboxes();
 		}
 
-
-		private bool isSecondPhaseActive;
-		private float phaseRotation;
-		private float phaseRotationVelocity;
-		private readonly float PHASE_TRANSITION_SPEED = .6f;
-		private readonly string PHASE_PARAMETER = "parameters/SecondPhaseState/current";
-		private void ProgressPhase() //Advance to phase two
-		{
-			isSecondPhaseActive = true;
-			rootAnimator.Set(PHASE_PARAMETER, 1);
-		}
+		/// <summary> Fastest possible movement speed, based on the player's top speed. </summary>
+		private float CharacterTopSpeed => Character.Skills.GroundSettings.speed;
 
 		private float MoveSpeed { get; set; }
-		private float spdVelocity;
-		private readonly float STRIKE_TRACTION = .4f;
-		private readonly float TRACTION = .2f;
-		private readonly float FRICTION = .8f;
-		private readonly float HITSTUN_FRICTION = .4f;
-		private readonly float MOVESPEED = 40.0f;
-		private readonly string MOVESPEED_PARAMETER = "parameters/MoveSpeed/scale";
-		private readonly string MOVESTATE_PARAMETER = "parameters/MovementState/current";
+		private float moveSpeedVelocity;
 
-		private float currentDistance; //Current distance to the player
-		private readonly float STRIKE_DISTANCE = 8.0f; //Target distance when attacking
-		private readonly float CHASE_DISTANCE = 24.0f; //Minimum distance to aim for
-		private readonly float ATTACK_DISTANCE = 30.0f; //Distance to start using close range attacks
-		private readonly float RETREAT_DISTANCE = 55.0f; //Distance to start running away from the player
-		private readonly float ADVANCE_DISTANCE = 65.0f; //Distance to start advancing the player
+		private readonly StringName IDLE_STATE = "idle";
+		private readonly StringName MOVE_STATE = "move";
+		private readonly StringName MOVESPEED_PARAMETER = "parameters/movespeed/scale";
+		private readonly StringName MOVESTATE_PARAMETER = "parameters/movement_transition/transition_request";
+
+		/// <summary> Current distance to the player. </summary>
+		private float currentDistance;
+		/// <summary> Ideal distance when attacking. </summary>
+		private const float STRIKE_DISTANCE = 8.0f;
+		/// <summary> Always try to keep at least this much distance between the player. (Unless boss is attacking) </summary>
+		private const float CHASE_DISTANCE = 20.0f;
+		/// <summary> Distance to start using close range attacks. </summary>
+		private const float ATTACK_DISTANCE = 25.0f;
+		/// <summary> Distance to start running away from the player. </summary>
+		private const float RETREAT_DISTANCE = 55.0f;
+		/// <summary> Distance to start advancing towards the player. </summary>
+		private const float ADVANCE_DISTANCE = 65.0f;
+
+		/// <summary> Traction amount to use when attacking. </summary>
+		private const float STRIKE_TRACTION = 20.0f;
+		private const float TRACTION = .2f;
+		private const float FRICTION = .8f;
+		private const float HITSTUN_FRICTION = .4f;
+
 		private float CalculateDistance() //Calculate the distance between the player and the boss based on their respective pathfollowers.
 		{
-			float bossProgress = pathFollower.Progress + MoveSpeed * PhysicsManager.physicsDelta;
-			float playerProgress = Character.PathFollower.Progress + Character.MoveSpeed * PhysicsManager.physicsDelta;
+			float bossProgress = bossPathFollower.Progress + MoveSpeed * PhysicsManager.physicsDelta;
+			float playerProgress = PathFollower.Progress + Character.MoveSpeed * PhysicsManager.physicsDelta;
 			if (bossProgress < playerProgress)
-				bossProgress += Character.PathFollower.ActivePath.Curve.GetBakedLength();
+				bossProgress += PathFollower.ActivePath.Curve.GetBakedLength();
 
 			return bossProgress - playerProgress;
 		}
 
 		private void UpdatePosition()
 		{
-			if (pathFollower == null) return;
-
-			if (damageState != DamageState.Normal && !isSecondPhaseActive)
+			if (damageState != DamageState.None && !isPhaseTwoActive) //Knockback/hitstun
 			{
-				MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, 0, ref spdVelocity, HITSTUN_FRICTION); //Slow down
+				MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, 0, ref moveSpeedVelocity, HITSTUN_FRICTION); //Slow down
 
 				if (damageState == DamageState.Knockback)
 				{
-					if (MoveSpeed < 5.0f) //Because transitioning from speed 0 looks laggy
+					if (MoveSpeed < 5.0f) //Because transitioning from speed 0 feels laggy
 					{
 						if (currentHealth <= 3) //Check for second phase
-							ProgressPhase();
+							isPhaseTwoActive = true;
 
-						damageState = DamageState.Normal;
+						damageState = DamageState.None;
 					}
 				}
 				else if (Character.IsOnGround) //Player canceled their assault, resume movement
 				{
 					FinishHeavyAttack(true);
-					damageState = DamageState.Normal;
+					damageState = DamageState.None;
 				}
 			}
 			else
@@ -158,71 +199,115 @@ namespace Project.Gameplay.Bosses
 				currentDistance = CalculateDistance();
 
 				if (currentDistance >= RETREAT_DISTANCE && currentDistance <= ADVANCE_DISTANCE) //Waiting for the player
-					MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, 0, ref spdVelocity, FRICTION);
+					MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, 0, ref moveSpeedVelocity, FRICTION);
 				else
 				{
-					if (isStriking && currentDistance < ATTACK_DISTANCE && !isSecondPhaseActive)
+					if (isStriking && currentDistance < ATTACK_DISTANCE && !isPhaseTwoActive) //Attempt to match distance for more consistant attacks
 					{
 						float delta = currentDistance - STRIKE_DISTANCE;
-						MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, Mathf.Clamp(MoveSpeed - delta, 0f, MOVESPEED), ref spdVelocity, STRIKE_TRACTION);
+						MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, Mathf.Clamp(MoveSpeed - delta, 0f, CharacterTopSpeed), ref moveSpeedVelocity, STRIKE_TRACTION * PhysicsManager.physicsDelta);
 					}
 					else
 					{
 						float speedFactor;
 						if (currentDistance < RETREAT_DISTANCE)
-							speedFactor = 1f - Mathf.Clamp((currentDistance - CHASE_DISTANCE) / (RETREAT_DISTANCE - CHASE_DISTANCE), 0f, 1f);
+							speedFactor = 1f - (currentDistance - CHASE_DISTANCE) / (RETREAT_DISTANCE - CHASE_DISTANCE);
 						else
 							speedFactor = -Mathf.Clamp((currentDistance - ADVANCE_DISTANCE) * .1f, 0f, 1f);
 
-						MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, MOVESPEED * speedFactor, ref spdVelocity, TRACTION);
+						MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, CharacterTopSpeed * speedFactor, ref moveSpeedVelocity, TRACTION);
 					}
 				}
 			}
 
-			pathFollower.Progress += MoveSpeed * PhysicsManager.physicsDelta;
+			bossPathFollower.Progress += MoveSpeed * PhysicsManager.physicsDelta;
 
-			float speedRatio = (MoveSpeed / MOVESPEED) * 1.5f + 1f;
-			if (damageState == DamageState.Knockback) //TODO? Add a separate animation for being knocked back
+			float speedRatio = 1f + (MoveSpeed / CharacterTopSpeed) * 1.2f;
+			if (damageState == DamageState.Knockback)
 				speedRatio = 0f;
-			rootAnimator.Set(MOVESPEED_PARAMETER, speedRatio);
-			rootAnimator.Set(MOVESTATE_PARAMETER, Mathf.Abs(MoveSpeed) <= 2f ? 0 : 1);
+			rootAnimationTree.Set(MOVESPEED_PARAMETER, speedRatio);
+			rootAnimationTree.Set(MOVESTATE_PARAMETER, Mathf.Abs(MoveSpeed) <= 2f ? IDLE_STATE : MOVE_STATE);
 
-			GlobalPosition = pathFollower.GlobalPosition;
+			GlobalPosition = bossPathFollower.GlobalPosition;
 		}
 
-		private void UpdateRotation()
+		/// <summary> Math.PI during the first phase, 0 during the phase two. </summary>
+		private float phaseRotation;
+		/// <summary> Used to smoothdamp phaseRotation. </summary>
+		private float phaseRotationVelocity;
+		/// <summary> How much smoothing to apply when the phase changes. </summary>
+		private readonly float PHASE_ROTATION_SMOOTHING = 30.0f;
+
+		/// <summary> Has phase two started? </summary>
+		private bool isPhaseTwoActive;
+		private float phaseTwoBlend;
+		private float phaseTwoBlendVelocity;
+		private readonly StringName PHASE_TWO_PARAMETER = "parameters/phase_two_add/add_amount";
+		private readonly float PHASE_TWO_BLEND_SMOOTHING = 30.0f;
+
+		private void UpdatePhase()
 		{
-			if (damageState == DamageState.Normal)
+			if (damageState == DamageState.None)
 			{
-				if (isSecondPhaseActive)
-					phaseRotation = ExtensionMethods.SmoothDampAngle(phaseRotation, 0, ref phaseRotationVelocity, PHASE_TRANSITION_SPEED);
+				if (isPhaseTwoActive)
+					phaseRotation = ExtensionMethods.SmoothDampAngle(phaseRotation, 0, ref phaseRotationVelocity, PHASE_ROTATION_SMOOTHING * PhysicsManager.physicsDelta);
 				else
 					phaseRotation = Mathf.Pi;
 			}
 
-			float facingAngle = pathFollower.Back().Flatten().AngleTo(Vector2.Down) - phaseRotation;
+			float facingAngle = bossPathFollower.Back().Flatten().AngleTo(Vector2.Down) - phaseRotation;
 			GlobalRotation = Vector3.Up * facingAngle;
+
+			if (isPhaseTwoActive)
+			{
+				phaseTwoBlend = ExtensionMethods.SmoothDamp(phaseTwoBlend, 1.0f, ref phaseTwoBlendVelocity, PHASE_TWO_BLEND_SMOOTHING * PhysicsManager.physicsDelta);
+				rootAnimationTree.Set(PHASE_TWO_PARAMETER, phaseTwoBlend);
+			}
 		}
 
 		#region Attacks
+		[ExportGroup("Missiles")]
 		[Export]
+		private Array<NodePath> missilePositionPaths;
 		private Node3D[] missilePositions; //Where to fire missiles from
 		[Export]
-		private PackedScene missileScene; //Missile prefab
+		private PackedScene missileScene; //Missile packed scene
 		private readonly Array<Missile> missilePool = new Array<Missile>(); //Pool of missiles
-		private readonly int MISSILE_COUNT = 5; //Same as the original game, only 5 missiles can be fired at a time
+		private readonly int MAX_MISSILE_COUNT = 5; //Same as the original game, only 5 missiles can be fired at a time
 
 		private void SetUpMissiles()
 		{
-			for (int i = 0; i < MISSILE_COUNT; i++)
+			missilePositions = new Node3D[missilePositionPaths.Count];
+			for (int i = 0; i < missilePositionPaths.Count; i++)
+				missilePositions[i] = GetNode<Node3D>(missilePositionPaths[i]);
+
+			for (int i = 0; i < MAX_MISSILE_COUNT; i++) //Pool missiles
 				missilePool.Add(missileScene.Instantiate<Missile>());
+		}
+
+		private void RespawnMissiles()
+		{
+			for (int i = 0; i < MAX_MISSILE_COUNT; i++)
+			{
+				if (missilePool[missileIndex].IsInsideTree()) //Remove all missiles from the scene tree
+					missilePool[missileIndex].GetParent().RemoveChild(missilePool[missileIndex]);
+			}
+
+			missileTimer = MISSILE_DELAY;
 		}
 
 		private bool missileGroupReset = true;
 		private int missileIndex;
-		private float missileTimer = 1.5f; //Start with some time so it doesn't fire immediately
-		private readonly float MISSILE_INTERVAL = .1f; //How long between missile shots
-		private readonly float MISSILE_GROUP_SPACING = 2.5f; //How long between missile groups
+		private float missileTimer;
+		/// <summary> How long between each individual missile shots. </summary>
+		private const float MISSILE_INTERVAL = .1f;
+		/// <summary> Interval length between missile groups. </summary>
+		private const float MISSILE_GROUP_INTERVAL = 2.5f;
+		/// <summary> How much horizontal spread to allow. </summary>
+		private const float MISSILE_SPREAD = 1.5f;
+		/// <summary> Starting delay so missiles don't fire immediately. </summary>
+		private const float MISSILE_DELAY = 1.5f;
+
 		private void UpdateMissiles()
 		{
 			if (missileGroupReset && currentDistance < ATTACK_DISTANCE) //Too close for missiles
@@ -233,98 +318,110 @@ namespace Project.Gameplay.Bosses
 			//Spawn a Missile
 			if (missileTimer <= 0)
 			{
-				SpawnMissile(missileIndex);
-				missileIndex++;
+				SpawnMissile();
 
 				//Wait for the next missile group?
-				missileGroupReset = missileIndex >= MISSILE_COUNT;
-				missileTimer = missileGroupReset ? MISSILE_GROUP_SPACING : MISSILE_INTERVAL;
+				missileGroupReset = missileIndex >= MAX_MISSILE_COUNT;
+				missileTimer = missileGroupReset ? MISSILE_GROUP_INTERVAL : MISSILE_INTERVAL;
 				if (missileGroupReset) //Loop missile index
 					missileIndex = 0;
 			}
 		}
 
-		private void SpawnMissile(int i)
+		/// <summary>
+		/// Spawns a missle.
+		/// </summary>
+		private void SpawnMissile()
 		{
-			if (!missilePool[i].IsInsideTree())
-			{
-				GetTree().Root.AddChild(missilePool[i]);
-			}
+			if (!missilePool[missileIndex].IsInsideTree()) //Add missile to the tree if it isn't already added
+				GetTree().Root.AddChild(missilePool[missileIndex]);
 
-			int spawnFrom = Runtime.randomNumberGenerator.RandiRange(0, 2);
-			Vector3 spawnPosition = missilePositions[spawnFrom].GlobalPosition;
-			missilePool[i].Launch(Objects.LaunchData.Create(spawnPosition, GetTargetMissilePosition(i), 5));
+			int spawnFrom = Runtime.randomNumberGenerator.RandiRange(0, 2); //Figure out which position to spawn from
+			Vector3 spawnPosition = missilePositions[spawnFrom].GlobalPosition; //Move missile to the spawn position
+			missilePool[missileIndex].Launch(Objects.LaunchData.Create(spawnPosition, GetMissileTargetPosition(missileIndex), 5)); //Recalculate trajectory
+
+			missileIndex++;
 		}
 
-		private Vector3 GetTargetMissilePosition(int i)
+		/// <summary>
+		/// Gets the position where the missile will target based on how fast the player is moving.
+		/// </summary>
+		private Vector3 GetMissileTargetPosition(int i)
 		{
-			float progress = pathFollower.Progress; //Cache current progress
+			float progress = bossPathFollower.Progress; //Cache current progress
 
 			//Try to predict where the player will be when the missile lands
-			float dot = Character.GetMovementDirection().Dot(Character.PathFollower.Forward());
-			float offsetPrediction = Character.MoveSpeed * 2f * dot;
-			pathFollower.Progress = Character.PathFollower.Progress + offsetPrediction;
-			pathFollower.HOffset = LocalPlayerPosition; //Works since the path is flat
-			if (i != 0 && i < MISSILE_COUNT - 1) //Slightly randomize the middle missiles
-				pathFollower.HOffset += Runtime.randomNumberGenerator.RandfRange(-1f, 1f);
+			float dot = Character.GetMovementDirection().Dot(PathFollower.Forward());
+			float offsetPrediction = Character.MoveSpeed * Runtime.randomNumberGenerator.RandfRange(1f, 2f) * dot;
+			bossPathFollower.Progress = PathFollower.Progress + offsetPrediction;
+			bossPathFollower.HOffset = PathFollower.FlatPlayerPositionDelta.X; //Works since the path is flat
+			if (i != 0 && i < MAX_MISSILE_COUNT - 1) //Slightly randomize the middle missile's spread
+				bossPathFollower.HOffset += Runtime.randomNumberGenerator.RandfRange(-MISSILE_SPREAD, MISSILE_SPREAD);
 
-			Vector3 targetPosition = pathFollower.GlobalPosition;
-			pathFollower.Progress = progress; //Reset progress
-			pathFollower.HOffset = 0; //Reset HOffset
+			Vector3 targetPosition = bossPathFollower.GlobalPosition;
+			bossPathFollower.Progress = progress; //Reset progress
+			bossPathFollower.HOffset = 0; //Reset HOffset
 			targetPosition.Y = 0; //Make sure missiles end up on the floor
 
 			return targetPosition;
 		}
 
-		[Export]
-		public Node3D impactEffect;
-
+		/// <summary> Is the boss currently attacking? </summary>
 		private bool isAttacking;
+		/// <summary> Is the boss in the damaging part of the attack? </summary>
 		private bool isStriking;
-		private int attackSide; //-1 for left, 1 for right
+		/// <summary> Which side is the boss attacking? -1 for left, 1 for right. </summary>
+		private int attackSide;
+		/// <summary> How many attacks has the boss done since giving an opening? </summary>
 		private int attackCounter;
-		private float attackTimer; //Timer for attacks
-		private readonly float ATTACK_INTERVAL = .8f; //How long to wait between attacks
+		/// <summary> Timer for attacks. </summary>
+		private float attackTimer;
+		/// <summary> How long to wait between phase one attacks. </summary>
+		private readonly float PHASE_ONE_ATTACK_INTERVAL = .8f;
+		/// <summary> How long to wait between phase two attacks </summary>
+		private readonly float PHASE_TWO_ATTACK_INTERVAL = 1.4f;
 
-		private float flyingEyePosition; //Lerp value, from 0 - 1
-		private float flyingEyeVelocity;
-		private readonly float FLYING_EYE_ATTACK_SPEED = .2f; //How fast does the eye move when attacking?
-		private readonly float FLYING_EYE_RETREAT_SPEED = .1f; //How fast does the eye move when retreating?
+		/// <summary> Target position of the flying eye when sent out. </summary>
+		private Vector3 flyingEyeTarget;
+		/// <summary> 0 - 1 value blend value. </summary>
+		private float flyingEyeBlend;
+		private readonly float FLYING_EYE_ATTACK_SPEED = 0.6f; //How fast does the eye move when attacking?
+		private readonly float FLYING_EYE_RETREAT_SPEED = 0.4f; //How fast does the eye move when retreating?
 		private readonly float FLYING_EYE_KNOCKBACK = 200.0f; //How quickly to knock the eye back
 
 		private void UpdateAttacks()
 		{
-			if (damageState != DamageState.Normal) return;
+			if (damageState != DamageState.None) return; //Boss is too busy getting owned
 
 			if (isAttacking) //Process the current attack
 			{
-				if (isSecondPhaseActive) //Eye attack
+				if (isPhaseTwoActive) //Eye attack
 				{
-					//TODO Improve how flying eye tracks player
-					Vector3 targetPosition = isStriking ? Character.GlobalPosition : flyingEyeBone.GlobalPosition;
-					Vector2 delta = (targetPosition - flyingEyeRoot.GlobalPosition).Flatten();
-					float distance = delta.Length();
-
 					if (isStriking)
 					{
-						flyingEyeRoot.GlobalRotation = Vector3.Up * delta.AngleTo(Vector2.Down);
-						flyingEyePosition = Mathf.MoveToward(flyingEyePosition, 1f, FLYING_EYE_ATTACK_SPEED * PhysicsManager.physicsDelta);
-						if (Mathf.IsEqualApprox(flyingEyePosition, 1f))
+						UpdateFlyingEyeTarget();
+
+						flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 1f, FLYING_EYE_ATTACK_SPEED * PhysicsManager.physicsDelta);
+						if (Mathf.IsEqualApprox(flyingEyeBlend, 1f))
 						{
 							isStriking = false;
-							eyeAnimator.Set(EYE_PARAMETER, 2);
-							flyingEyeHurtbox.Monitorable = flyingEyeHurtbox.Monitoring = true;
+							flyingEyeAnimationTree.Set(EYE_PARAMETER, EYE_RETREAT_STATE);
+							flyingEyeHitbox.Monitorable = true;
 						}
 					}
 					else
 					{
-						flyingEyePosition = Mathf.MoveToward(flyingEyePosition, 0, FLYING_EYE_RETREAT_SPEED * PhysicsManager.physicsDelta);
-						if (Mathf.IsZeroApprox(flyingEyePosition))
+						flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_RETREAT_SPEED * PhysicsManager.physicsDelta);
+						if (Mathf.IsZeroApprox(flyingEyeBlend))
 							FinishEyeAttack();
 					}
 
-					float t = Mathf.SmoothStep(0, 1, flyingEyePosition);
-					flyingEyeRoot.GlobalPosition = flyingEyeBone.GlobalPosition.Lerp(Character.GlobalPosition, t);
+					float t = Mathf.SmoothStep(0, 1, flyingEyeBlend);
+					flyingEyeRoot.GlobalPosition = flyingEyeBone.GlobalPosition.Lerp(flyingEyeTarget, t);
+
+					//Update rotation
+					Vector2 delta = (flyingEyeTarget - flyingEyeBone.GlobalPosition).Flatten();
+					flyingEyeRoot.GlobalRotation = Vector3.Up * Mathf.LerpAngle(flyingEyeBone.GlobalRotation.Y, delta.AngleTo(Vector2.Down), t);
 				}
 				else if (!IsHeavyAttackActive) //Light Attack
 				{
@@ -332,16 +429,16 @@ namespace Project.Gameplay.Bosses
 						attackSide = 0;
 					else if (attackSide != 0) //Track the player's position
 					{
-						float current = (float)lTailAnimator.Get(LIGHT_ATTACK_POSITION_PARAMETER);
-						float pos = LocalPlayerPosition;
+						float current = (float)lTailAnimationTree.Get(LIGHT_ATTACK_POSITION_PARAMETER);
+						float pos = PathFollower.FlatPlayerPositionDelta.X;
 						if ((attackSide == -1 && pos < 0) || (attackSide == 1 && pos > 0))
 							pos = 0;
 
 						pos = 2 * -Mathf.Abs(pos / 4) + 1;
 						current = Mathf.Lerp(current, pos, .2f);
 
-						lTailAnimator.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
-						rTailAnimator.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
+						lTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
+						rTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
 					}
 				}
 
@@ -353,10 +450,13 @@ namespace Project.Gameplay.Bosses
 			attackTimer -= PhysicsManager.physicsDelta;
 			if (attackTimer < 0)
 			{
-				attackTimer = ATTACK_INTERVAL;
-				if (isSecondPhaseActive) //Send eye out
-					EyeAttack();
-				else if (attackCounter < 1)
+				attackTimer = PHASE_ONE_ATTACK_INTERVAL;
+				if (isPhaseTwoActive) //Send eye out
+				{
+					attackTimer = PHASE_TWO_ATTACK_INTERVAL;
+					StartEyeAttack();
+				}
+				else if (attackCounter <= 1)
 					LightAttack();
 				else
 					HeavyAttack();
@@ -365,53 +465,53 @@ namespace Project.Gameplay.Bosses
 
 		public void StartStrike() => isStriking = true;
 		public void StopStrike() => isStriking = false;
-		public void FinishAttack()
-		{
-			GD.Print("ATTACKIN FINISHED");
-			isAttacking = false;
-		}
+		public void FinishAttack() => isAttacking = false;
 
-		private readonly string LIGHT_ATTACK_PARAMETER = "parameters/LightAttack/active";
-		private readonly string LIGHT_ATTACK_POSITION_PARAMETER = "parameters/LightAnimation/blend_position";
+		private readonly StringName LIGHT_ATTACK_PARAMETER = "parameters/light_attack_trigger/request";
+		private readonly StringName LIGHT_ATTACK_POSITION_PARAMETER = "parameters/light_attack_blend/blend_position";
 		private void LightAttack()
 		{
 			attackCounter++;
 			isAttacking = true;
-			if (LocalPlayerPosition > 0) //Left Attack
+			if (PathFollower.FlatPlayerPositionDelta.X > 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-light-attack");
-				lTailAnimator.Set(LIGHT_ATTACK_PARAMETER, true);
+				lTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
 			else
 			{
 				attackSide = 1;
 				eventAnimator.Play("r-light-attack");
-				rTailAnimator.Set(LIGHT_ATTACK_PARAMETER, true);
+				rTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
 		}
 
 		private bool IsHeavyAttackActive => isAttacking && attackCounter == 0;
-		private readonly string HEAVY_ATTACK_PARAMETER = "parameters/HeavyAttackState/current";
-		private readonly string ROOT_HEAVY_ATTACK_PARAMETER = "parameters/HeavyAttack/active";
+
+		private readonly StringName HEAVY_STRIKE_STATE = "strike";
+		private readonly StringName HEAVY_RECOVERY_STATE = "recovery";
+		private readonly StringName HEAVY_ATTACK_PARAMETER = "parameters/heavy_attack_transition/transition_request";
+		private readonly StringName HEAVY_ATTACK_TRIGGER_PARAMETER = "parameters/heavy_attack_trigger/request";
+
 		private void HeavyAttack()
 		{
 			attackCounter = 0;
 			isAttacking = true;
-			if (LocalPlayerPosition > 0) //Left Attack
+			if (PathFollower.FlatPlayerPositionDelta.X > 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-heavy-attack");
-				lTailAnimator.Set(HEAVY_ATTACK_PARAMETER, 1);
+				lTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, HEAVY_STRIKE_STATE);
 			}
 			else
 			{
 				attackSide = 1;
 				eventAnimator.Play("r-heavy-attack");
-				rTailAnimator.Set(HEAVY_ATTACK_PARAMETER, 1);
+				rTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, HEAVY_STRIKE_STATE);
 			}
 
-			rootAnimator.Set(ROOT_HEAVY_ATTACK_PARAMETER, true);
+			rootAnimationTree.Set(HEAVY_ATTACK_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		}
 
 		public void FinishHeavyAttack(bool forced = default)
@@ -423,122 +523,266 @@ namespace Project.Gameplay.Bosses
 
 			//Disables all hurtboxes
 			eventAnimator.Play("disable-hurtbox-03");
-			eventAnimator.Advance(0);
 
 			if (attackSide == 1)
-				rTailAnimator.Set(HEAVY_ATTACK_PARAMETER, 2);
+				rTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, HEAVY_RECOVERY_STATE);
 			else if (attackSide == -1)
-				lTailAnimator.Set(HEAVY_ATTACK_PARAMETER, 2);
-
+				lTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, HEAVY_RECOVERY_STATE);
 		}
 
-		private readonly string EYE_PARAMETER = "parameters/EyeState/current";
-		private void EyeAttack()
-		{
-			eyeAnimator.Set(EYE_PARAMETER, 1); //Start biting
-			rootAnimator.Set(EYE_PARAMETER, 1); //Open eye cage
-
-			//Unparent eye
-			flyingEyeRoot.GetParent().CallDeferred("remove_child", flyingEyeRoot);
-			GetTree().Root.CallDeferred("add_child", flyingEyeRoot);
-			flyingEyeRoot.SetDeferred("global_transform", flyingEyeRoot.GlobalTransform);
-
-			isAttacking = true;
-			isStriking = true;
-		}
-
-		private void FinishEyeAttack()
-		{
-			eyeAnimator.Set(EYE_PARAMETER, 0); //Reset
-			rootAnimator.Set(EYE_PARAMETER, 0); //Close eye cage
-
-			flyingEyeRoot.GetParent().CallDeferred("remove_child", flyingEyeRoot);
-			flyingEyeBone.CallDeferred("add_child", flyingEyeRoot);
-			flyingEyeRoot.SetDeferred("transform", Transform3D.Identity);
-			flyingEyeHurtbox.Monitorable = flyingEyeHurtbox.Monitoring = false;
-
-			FinishAttack();
-		}
-
+		[ExportGroup("Effects")]
+		[Export]
+		public Node3D impactEffect;
 		public void SetImpactPosition(NodePath n)
 		{
+			impactEffect.Visible = true;
 			Vector3 p = GetNode<Node3D>(n).GlobalPosition;
 			p.Y = 0;
 			impactEffect.GlobalPosition = p;
 		}
 		#endregion
 
+		#region Eyes
+		[ExportGroup("Eyes")]
 		[Export]
-		private NodePath[] eyePaths;
-		private Node3D[] eyes; //Generic eyes that always track the player
-		[Export]
-		private Node3D flyingEye; //Actual eyeball
-		[Export]
-		private Area3D flyingEyeHurtbox; //Eyeball hurtbox
-		[Export]
-		private Node3D flyingEyeRoot; //Position of the entire flying eye
-		[Export]
-		private Node3D flyingEyeBone; //Position in the body
+		private Array<NodePath> eyePaths;
+		/// <summary> Eyes that track the player. </summary>
+		private Node3D[] eyes;
 
+		private void SetUpEyes()
+		{
+			eyes = new Node3D[eyePaths.Count];
+			for (int i = 0; i < eyePaths.Count; i++)
+				eyes[i] = GetNode<Node3D>(eyePaths[i]);
+		}
+
+		/// <summary>
+		/// Updates the eyes to look at the player's position.
+		/// </summary>
 		private void UpdateEyes()
 		{
 			//Update the eyes to always look at the player
-			Vector3 delta = GlobalPosition - Character.GlobalPosition;
-			float angle = this.Forward().Flatten().AngleTo(delta.Flatten());
-
 			for (int i = 0; i < eyes.Length; i++)
-				eyes[i].LookAt(Character.GlobalPosition);
+			{
+				if ((eyes[i].GlobalPosition - Character.GlobalPosition).LengthSquared() < 1f) //Failsafe
+					continue;
 
-			flyingEye.LookAt(Character.GlobalPosition);
+				eyes[i].LookAt(Character.GlobalPosition, Vector3.Up);
+			}
 		}
 
-		public void OnHitboxCollision(Area3D a) //Player hit the boss's hitbox
+		[Export]
+		/// <summary> Hurtbox of the flying eye. </summary>
+		private Area3D flyingEyeHitbox;
+		[Export]
+		/// <summary> Flying eye, only accessible during phase two. </summary>
+		private Node3D flyingEyeRoot;
+		[Export]
+		/// <summary> Position in the body. </summary>
+		private Node3D flyingEyeBone;
+		/// <summary> Target position of the flying eye attack, based on the pathfollower. </summary>
+		private Vector2 flyingEyeAttackPosition;
+		/// <summary> Maximum amount the flying eye can track the player. Lower values make the attack easier to avoid. </summary>
+		private const float FLYING_EYE_MAX_TRACKING = 2.0f;
+		/// <summary> Used to prevent the flying eye clipping into the ground. </summary>
+		private const float FLYING_EYE_RADIUS = 2f;
+		private void UpdateFlyingEyeTarget()
+		{
+			//Calculate
+			float horizontalTracking = flyingEyeAttackPosition.X - PathFollower.FlatPlayerPositionDelta.X;
+			horizontalTracking = Mathf.Clamp(horizontalTracking, -FLYING_EYE_MAX_TRACKING, FLYING_EYE_MAX_TRACKING);
+			flyingEyeTarget = Character.PathFollower.GlobalPosition + Vector3.Up * flyingEyeAttackPosition.Y;
+			flyingEyeTarget += Character.PathFollower.Right() * (flyingEyeAttackPosition.X - horizontalTracking);
+			flyingEyeTarget += Character.PathFollower.Forward() * FLYING_EYE_RADIUS;
+		}
+
+
+		private readonly StringName EYE_BITE_STATE = "bite";
+		private readonly StringName EYE_RETREAT_STATE = "retreat";
+		private readonly StringName EYE_PARAMETER = "parameters/eye_transition/transition_request";
+		private void StartEyeAttack()
+		{
+			isAttacking = true;
+			isStriking = true;
+
+			//Cache current player position delta
+			flyingEyeAttackPosition = new Vector2(PathFollower.FlatPlayerPositionDelta.X, FLYING_EYE_RADIUS);
+
+			rootAnimationTree.Set(EYE_PARAMETER, ENABLED_STATE); //Open eye cage
+			flyingEyeAnimationTree.Set(EYE_PARAMETER, EYE_BITE_STATE); //Start biting
+		}
+
+		private void FinishEyeAttack()
+		{
+			flyingEyeAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); //Reset
+			rootAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); //Close eye cage
+
+			flyingEyeHitbox.Monitorable = false;
+			FinishAttack();
+		}
+		#endregion
+
+		#region Hitboxes
+		private int currentHealth;
+		private readonly int MAX_HEALTH = 5;
+
+		private enum DamageState
+		{
+			None, //Not taking any damage
+			Hitstun, //Player is bouncing on the tail
+			Knockback //Sliding backwards
+		}
+		private DamageState damageState;
+		/// <summary> How much force to knockback the boss back with when taking damage. </summary>
+		private readonly float KNOCKBACK = 80.0f;
+
+		/// <summary>
+		/// Deals damage to the boss. Returns True if the boss is defeated.
+		/// </summary>
+		private bool TakeDamage()
+		{
+			currentHealth--;
+			if (currentHealth <= 0)
+			{
+				//eventAnimator.Play("defeat");
+				GD.Print("Boss Defeated.");
+			}
+			else
+				eventAnimator.Play("damage");
+
+			return currentHealth == 0;
+		}
+
+		private void UpdateHitboxes()
+		{
+			if (isCollidingWithBackEye)
+			{
+				ProcessBackEyeCollision();
+				return;
+			}
+
+			if (isCollidingWithFlyingEye)
+			{
+				ProcessFlyingEyeCollision();
+				return;
+			}
+
+			if (IsCollidingWithBoss)
+				ProcessHitboxCollision();
+		}
+
+		/// <summary> Keeps track of how many of the boss's hitboxes the player is colliding with. </summary>
+		private int bossHitboxCounter;
+		private bool IsCollidingWithBoss => bossHitboxCounter != 0;
+		/// <summary>
+		/// Called when the player enters one of the boss's hitboxes.
+		/// </summary>
+		public void OnHitboxEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			if ((damageState == DamageState.Hitstun && Character.VerticalSpd >= 0) || Character.Lockon.IsHomingAttacking) return; //Player's homing attack always takes priority.
+			bossHitboxCounter++;
+		}
+
+		public void OnHitboxExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			bossHitboxCounter--;
+		}
+
+		public void ProcessHitboxCollision()
+		{
+			if (Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncing) return; //Player's homing attack always takes priority.
+			if (damageState == DamageState.Knockback) return; //Boss is in knockback and can't damage the player.
 
 			if (Character.Skills.IsSpeedBreakActive)
 			{
 				Character.Skills.ToggleSpeedBreak();
-				Character.StartKnockback(); //TODO No damage, just knockback
+				Character.StartKnockback(new CharacterController.KnockbackData()
+				{
+					disableDamage = true
+				});
 			}
 			else
 				Character.StartKnockback();
 		}
 
-		private enum DamageState
-		{
-			Normal, //Not taking any damage
-			Hitstun, //Player is bouncing on the tail
-			Knockback //Sliding backwards
-		}
-		private DamageState damageState;
-		private readonly float KNOCKBACK = 80.0f;
-		public void OnHurtboxCollision(Area3D a) //Player hit the boss's hurtbox
+		/// <summary> Is the player currently colliding with the flying eye? </summary>
+		private bool isCollidingWithFlyingEye;
+		/// <summary>
+		/// Called when the player enters the flying eye.
+		/// </summary>
+		public void OnFlyingEyeEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			if (!Character.Lockon.IsHomingAttacking) return; //Player isn't attacking
+			isCollidingWithFlyingEye = true;
+		}
 
-			currentHealth--; //Take damage
-			if (currentHealth == 0) //Check for defeat
+		/// <summary>
+		/// Called when the player exits the flying eye.
+		/// </summary>
+		public void OnFlyingEyeExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			isCollidingWithFlyingEye = false;
+		}
+
+		private void ProcessFlyingEyeCollision()
+		{
+			if (Character.Lockon.IsBouncing) return; //Player just finished a homing attack
+
+			if (Character.Skills.IsSpeedBreakActive) // Special attack
 			{
 				return;
 			}
 
-			if (!isSecondPhaseActive)
+			if (!Character.Lockon.IsHomingAttacking) //Player isn't attacking
 			{
-				MoveSpeed = KNOCKBACK; //Add some knockback
-				damageState = DamageState.Knockback;
-
-				if (IsHeavyAttackActive)
-					FinishHeavyAttack(true);
+				Character.StartKnockback();
+				return;
 			}
 
-			eventAnimator.Play("damage");
-			Character.Lockon.StartBounce();
+			if (!TakeDamage())
+				Character.Lockon.StartBounce();
 		}
 
-		public void OnTraversalHurtboxCollision(Area3D a, bool hitFarEye) //Hit one of the eyes on the tail. Doesn't deal damage.
+		/// <summary> Is the player currently colliding with the eye on the boss's back? </summary>
+		private bool isCollidingWithBackEye;
+		/// <summary>
+		/// Called when the player enters with the eye on the boss's back.
+		/// </summary>
+		public void OnBackEyeEntered(Area3D area)
+		{
+			if (!area.IsInGroup("player")) return;
+			isCollidingWithBackEye = true;
+		}
+
+		/// <summary>
+		/// Called when the player leavesthe eye on the boss's back.
+		/// </summary>
+		public void OnBackEyeExited(Area3D area)
+		{
+			if (!area.IsInGroup("player")) return;
+			isCollidingWithBackEye = false;
+		}
+
+		public void ProcessBackEyeCollision()
+		{
+			if (!Character.Lockon.IsHomingAttacking) return; //Player isn't attacking
+
+			if (IsHeavyAttackActive) //End active heavy attack
+				FinishHeavyAttack(true);
+
+			TakeDamage();
+			Character.Lockon.StartBounce(); //Bounce the player
+
+			MoveSpeed = KNOCKBACK; //Start knockback
+			damageState = DamageState.Knockback;
+		}
+
+		/// <summary>
+		/// Called when the player hits one of the eyes on the tail. No damage is actually dealt.
+		/// </summary>
+		public void OnTraversalHurtboxCollision(Area3D a, bool hitFarEye)
 		{
 			if (!a.IsInGroup("player")) return;
 			if (!Character.Lockon.IsHomingAttacking) return; //Player isn't attacking
@@ -548,7 +792,7 @@ namespace Project.Gameplay.Bosses
 
 			//Disable hurtboxes so the player can't just bounce on the same eye infinitely
 			eventAnimator.Play(hitFarEye ? "disable-hurtbox-01" : "disable-hurtbox-02");
-			eventAnimator.Advance(0);
 		}
+		#endregion
 	}
 }
