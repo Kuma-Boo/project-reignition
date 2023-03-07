@@ -91,7 +91,7 @@ namespace Project.Gameplay.Objects
 					StartJump();
 			}
 			else if (!lockonArea.Monitorable) //Re-enable lockon
-				lockonArea.SetDeferred("monitorable", Character.VerticalSpd < 0f);
+				lockonArea.SetDeferred("monitorable", Character.VerticalSpeed < 0f);
 
 			ApplyMovement();
 		}
@@ -103,7 +103,12 @@ namespace Project.Gameplay.Objects
 
 			float jumpHeight = (GlobalPosition.Y + 1) - Character.GlobalPosition.Y;
 			jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
-			Character.JumpTo(GlobalPosition, jumpHeight, true);
+			Character.JumpTo(new JumpSettings()
+			{
+				destination = GlobalPosition,
+				jumpHeight = jumpHeight,
+				relativeToEnd = true,
+			});
 
 			lockonArea.SetDeferred("monitorable", false);
 
@@ -140,7 +145,7 @@ namespace Project.Gameplay.Objects
 			float angleRatio = angle / MAX_ANGLE;
 			Character.MovementAngle = Character.CalculateForwardAngle(this.Back());
 			Character.StrafeSpeed = Character.Skills.AirSettings.speed * angleRatio;
-			Character.VerticalSpd = Runtime.GetJumpPower(Character.jumpHeight);
+			Character.VerticalSpeed = Runtime.CalculateJumpPower(Character.jumpHeight);
 
 			Character.Animator.Visible = true;
 			Character.Animator.SnapRotation(Character.MovementAngle - Mathf.Pi * angleRatio);

@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://b0uekqdfkbg6h"]
+[gd_scene load_steps=8 format=3 uid="uid://b0uekqdfkbg6h"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/ItemBox.cs" id="2"]
-[ext_resource type="PackedScene" uid="uid://dpqfrq4sc5frh" path="res://object/stage/common/resource/model/ItemBoxWings.gltf" id="2_6rpn3"]
 [ext_resource type="PackedScene" uid="uid://bl0hh6rrv7hxo" path="res://object/stage/common/resource/model/ItemBox.gltf" id="3"]
 [ext_resource type="AudioStream" uid="uid://c3benwqxr66t4" path="res://sound/sfx/objects/treasure chest.wav" id="4_o2niv"]
 
@@ -188,34 +187,16 @@ _data = {
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("2")
-"Auto Collect" = false
 "Spawn Settings/Amount" = 1
 "Spawn Settings/Travel Time" = 1.0
+"Spawn Settings/Spawn Pearls" = false
 "Spawn Settings/Arc Height" = 0.0
 "Spawn Settings/Position" = Vector3(0, 0, 0)
-rootPosition = NodePath("ItemBoxWings/ItemBoxWingsRoot/Skeleton3D/RootPosition/Position")
-wings = NodePath("ItemBoxWings")
+"Spawn Settings/Object" = null
+rootPosition = NodePath("")
+wings = NodePath("")
 chest = NodePath("ItemBox")
 animator = NodePath("AnimationPlayer")
-
-[node name="ItemBoxWings" parent="." instance=ExtResource("2_6rpn3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-visible = false
-
-[node name="Skeleton3D" parent="ItemBoxWings/ItemBoxWingsRoot" index="0"]
-bones/0/position = Vector3(0, -0.0352, 0)
-bones/1/rotation = Quaternion(0.413111, -0.573881, 0.573881, 0.413111)
-bones/2/rotation = Quaternion(-6.73486e-07, 1.69663e-06, 0.446424, 0.894821)
-bones/3/rotation = Quaternion(0.413111, 0.573881, -0.573881, 0.413111)
-bones/4/rotation = Quaternion(-6.73486e-07, -1.69663e-06, -0.446424, 0.894821)
-
-[node name="RootPosition" type="BoneAttachment3D" parent="ItemBoxWings/ItemBoxWingsRoot/Skeleton3D" index="1"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.0352, 0)
-bone_name = "root"
-bone_idx = 0
-
-[node name="Position" type="Node3D" parent="ItemBoxWings/ItemBoxWingsRoot/Skeleton3D/RootPosition"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 
 [node name="ItemBox" parent="." instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -252,5 +233,4 @@ libraries = {
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 
-[editable path="ItemBoxWings"]
 [editable path="ItemBox"]

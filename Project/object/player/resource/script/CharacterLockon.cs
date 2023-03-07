@@ -122,8 +122,8 @@ namespace Project.Gameplay
 
 			//Raycast for obstacles
 			Vector3 castPosition = Character.GlobalPosition;
-			if (Character.VerticalSpd < 0)
-				castPosition += Character.UpDirection * Character.VerticalSpd * PhysicsManager.physicsDelta;
+			if (Character.VerticalSpeed < 0)
+				castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
 			Vector3 castVector = t.GlobalPosition - castPosition;
 			RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
 			Debug.DrawRay(castPosition, castVector, Colors.Magenta);
@@ -165,7 +165,7 @@ namespace Project.Gameplay
 			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
 
 			Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.friction * PhysicsManager.physicsDelta);
-			Character.VerticalSpd -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
+			Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
 		}
 
 		public void StartBounce() //Bounce the character up and back (So they can target an enemy again)
@@ -173,13 +173,15 @@ namespace Project.Gameplay
 			IsHomingAttacking = false;
 			bounceTimer = BOUNCE_LOCKOUT_TIME;
 
+			/*
 			if (Target != null)
 				Character.GlobalPosition = Target.GlobalPosition;
+			*/
 			ResetLockonTarget();
 
 			Character.CanJumpDash = true;
 			Character.MoveSpeed = bounceSpeed;
-			Character.VerticalSpd = bouncePower;
+			Character.VerticalSpeed = bouncePower;
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();
 		}

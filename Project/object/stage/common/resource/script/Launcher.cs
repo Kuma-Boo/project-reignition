@@ -4,7 +4,7 @@ using Project.Core;
 namespace Project.Gameplay.Objects
 {
 	/// <summary>
-	/// Launches the player. Use <see cref="CreateLaunchData(Vector3, Vector3, float, bool)"/> to bypass needing a Launcher node.
+	/// Launches the player. Use <see cref="CreateLaunchSettings(Vector3, Vector3, float, bool)"/> to bypass needing a Launcher node.
 	/// </summary>
 	[Tool]
 	public partial class Launcher : Area3D //Similar to Character.JumpTo(), but jumps between static points w/ custom sfx support
@@ -25,9 +25,9 @@ namespace Project.Gameplay.Objects
 
 		private Vector3 travelDirection; //Direction the player should face when being launched
 
-		public LaunchData GetLaunchData()
+		public LaunchSettings GetLaunchSettings()
 		{
-			LaunchData data = new LaunchData
+			LaunchSettings data = new LaunchSettings
 			{
 				launchDirection = GetLaunchDirection(),
 
@@ -69,10 +69,10 @@ namespace Project.Gameplay.Objects
 				sfxPlayer.Play();
 
 			IsCharacterCentered = recenterSpeed == 0;
-			LaunchData launchData = GetLaunchData();
-			Character.StartLauncher(launchData, this, true);
+			LaunchSettings LaunchSettings = GetLaunchSettings();
+			Character.StartLauncher(LaunchSettings, this, true);
 
-			if (launchData.InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
+			if (LaunchSettings.InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 				Character.Animator.Jump();
 			else
 				Character.Animator.LaunchAnimation();
@@ -98,8 +98,12 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private AudioStreamPlayer3D sfxPlayer; //Optional SFX field
 	}
+}
 
-	public struct LaunchData
+
+namespace Project.Gameplay
+{
+	public struct LaunchSettings
 	{
 		//Physics data
 		public Vector3 launchDirection;
@@ -166,10 +170,10 @@ namespace Project.Gameplay.Objects
 		/// Creates new launch data.
 		/// s -> starting position, e -> ending position, h -> height, relativeToEnd -> Is the height relative to the end, or start?
 		/// </summary>
-		public static LaunchData Create(Vector3 s, Vector3 e, float h, bool relativeToEnd = false)
+		public static LaunchSettings Create(Vector3 s, Vector3 e, float h, bool relativeToEnd = false)
 		{
 			Vector3 delta = e - s;
-			LaunchData data = new LaunchData()
+			LaunchSettings data = new LaunchSettings()
 			{
 				startPosition = s,
 				endPosition = e,

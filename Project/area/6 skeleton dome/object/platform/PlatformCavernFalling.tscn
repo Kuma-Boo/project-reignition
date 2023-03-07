@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfejcc3m08i2r"]
+
+[ext_resource type="PackedScene" uid="uid://bd2vgdlj4fx6i" path="res://area/6 skeleton dome/object/model/platform/PlatformCavernFalling.gltf" id="1_irr62"]
+[ext_resource type="Script" path="res://object/trigger/modules/PlatformTrigger.cs" id="2_3cnit"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p4jqh"]
+size = Vector3(1, 1, 2)
+
+[node name="PlatformCavernFalling" instance=ExtResource("1_irr62")]
+
+[node name="StaticBody3D" parent="PlatformCavernFallingMesh" index="0" groups=["floor", "wall"]]
+
+[node name="PlatformTrigger" type="Area3D" parent="." index="1"]
+script = ExtResource("2_3cnit")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlatformTrigger" index="0"]
+shape = SubResource("BoxShape3D_p4jqh")
+
+[connection signal="area_entered" from="PlatformTrigger" to="PlatformTrigger" method="OnEntered"]
+[connection signal="area_exited" from="PlatformTrigger" to="PlatformTrigger" method="OnExited"]

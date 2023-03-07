@@ -21,13 +21,13 @@ namespace Project.Gameplay.Objects
 		public float farEndHeight;
 		[Export(PropertyHint.Range, "0, 1")]
 		public float launchPower;
-		public LaunchData GetLaunchData()
+		public LaunchSettings GetLaunchSettings()
 		{
 			float midHeight = Mathf.Lerp(closeMidHeight, farMidHeight, launchPower);
 			float endHeight = Mathf.Lerp(closeEndHeight, farEndHeight, launchPower);
 			float distance = Mathf.Lerp(closeDistance, farDistance, launchPower);
-			Vector3 endPoint = GlobalPosition + (this.Forward() * distance + Vector3.Up * endHeight);
-			LaunchData data = LaunchData.Create(GlobalPosition, endPoint, midHeight);
+			Vector3 endPoint = GlobalPosition + (this.Forward().RemoveVertical().Normalized() * distance + Vector3.Up * endHeight);
+			LaunchSettings data = LaunchSettings.Create(GlobalPosition, endPoint, midHeight);
 			data.canJumpDash = true;
 			return data;
 		}
@@ -78,7 +78,7 @@ namespace Project.Gameplay.Objects
 					else if (Controller.actionButton.wasPressed)
 					{
 						DropPlayer();
-						Character.StartLauncher(GetLaunchData());
+						Character.StartLauncher(GetLaunchSettings());
 					}
 				}
 				else //Recenter player

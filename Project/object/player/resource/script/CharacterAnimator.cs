@@ -221,9 +221,8 @@ namespace Project.Gameplay
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
 				speedRatio < .5f)
 			{
-				//Use the pythagorean theorem to get true movespeed
-				float trueSpeed = Mathf.Pow(Character.MoveSpeed, 2) + Mathf.Pow(Character.StrafeSpeed, 2);
-				trueSpeed = Mathf.Sqrt(trueSpeed);
+				//Calculate true movespeed
+				float trueSpeed = new Vector2(Character.MoveSpeed, Character.StrafeSpeed).Length();
 				speedRatio = Character.GroundSettings.GetSpeedRatio(trueSpeed);
 			}
 
@@ -253,9 +252,9 @@ namespace Project.Gameplay
 					{
 						targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RUN_RATIO); //Normalize speed ratio
 
-						//Only use walking animation when player is pressing control stick softly
+						//Only use walking animation when player is pressing control stick softly and not moving against the wall
 						if (Character.Controller.MovementAxisLength >= .8f &&
-							speedRatio < Character.GroundSettings.GetSpeedRatio(Character.BackstepSettings.speed))
+							speedRatio < Character.GroundSettings.GetSpeedRatio(Character.BackstepSettings.speed) && !Character.IsOnWall())
 						{
 							if (speedRatio < .3f)
 								speedRatio = .3f;
@@ -295,7 +294,7 @@ namespace Project.Gameplay
 				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
 
 				if (Character.ActionState != CharacterController.ActionStates.Jumping ||
-				Character.VerticalSpd <= 0)
+				Character.VerticalSpeed <= 0)
 				{
 					canTransitionToFalling = false;
 					normalState.Travel(FALL_STATE_PARAMETER);
@@ -318,7 +317,7 @@ namespace Project.Gameplay
 				return Character.Skills.strafeSettings.GetSpeedRatio(Character.StrafeSpeed * 1.5f);
 
 			float referenceAngle = Character.IsMovingBackward ? Character.PathFollower.ForwardAngle : Character.MovementAngle;
-			float inputAngle = Character.GetTargetInputAngle();
+			float inputAngle = Character.GetInputAngle();
 			float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
 
 			if (ExtensionMethods.DotAngle(referenceAngle, inputAngle) < 0) //Input is backwards
@@ -382,6 +381,7 @@ namespace Project.Gameplay
 				}
 			}
 
+			VisualAngle = ExtensionMethods.ClampAngleRange(VisualAngle, Character.PathFollower.ForwardAngle, Mathf.Pi);
 			VisualAngle = ExtensionMethods.SmoothDampAngle(VisualAngle, targetRotation, ref rotationVelocity, MOVEMENT_ROTATION_SMOOTHING);
 			ApplyVisualRotation();
 		}

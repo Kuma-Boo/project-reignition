@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://cxb1fxhrsja13"]
+
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="2_4f10c"]
+[ext_resource type="PackedScene" uid="uid://bpd06h3747m1d" path="res://object/stage/common/resource/model/SpikeBall.gltf" id="3_dofjj"]
+
+[sub_resource type="SphereShape3D" id="3"]
+radius = 0.85
+
+[sub_resource type="SphereShape3D" id="2"]
+radius = 0.9
+
+[node name="SpikeBallStatic" type="StaticBody3D" groups=["damage boat"]]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_4f10c")
+
+[node name="SpikeBall" parent="." instance=ExtResource("3_dofjj")]
+transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("3")
+
+[node name="Hitbox" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("2")
+
+[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]

@@ -35,7 +35,7 @@ namespace Project.Core
 
 		public static readonly float GRAVITY = 28.0f;
 		public static readonly float MAX_GRAVITY = -48.0f;
-		public static float GetJumpPower(float height) => Mathf.Sqrt(2 * Runtime.GRAVITY * height);
+		public static float CalculateJumpPower(float height) => Mathf.Sqrt(2 * Runtime.GRAVITY * height);
 
 		private float shaderTime;
 		private const float SHADER_ROLLOVER = 3600f;

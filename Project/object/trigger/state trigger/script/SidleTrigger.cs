@@ -162,7 +162,7 @@ namespace Project.Gameplay.Triggers
 			if (LevelSettings.instance.CurrentRingCount == 0)
 			{
 				StopSidle();
-				Character.StartKnockback(new CharacterController.KnockbackData());
+				Character.StartKnockback(new CharacterController.KnockbackSettings());
 				return;
 			}
 

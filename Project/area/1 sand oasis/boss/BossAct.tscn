@@ -1,20 +1,14 @@
-[gd_scene load_steps=21 format=3 uid="uid://bl2bi526ywy3j"]
+[gd_scene load_steps=17 format=3 uid="uid://bl2bi526ywy3j"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_1385a"]
 [ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="2_ks0kr"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_uy78v"]
-[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_omywj"]
-[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="5_h54m5"]
 [ext_resource type="Resource" uid="uid://c06k4gxe3e5nt" path="res://resource/preset/camera/boss/SandScorpionCam.tres" id="5_rh8lw"]
-[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="7_v1fdf"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="8_atfm6"]
 [ext_resource type="PackedScene" uid="uid://b3folnh8hcqs" path="res://area/1 sand oasis/boss/boss/SandScorpion.tscn" id="8_sawvf"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="9_7ca06"]
 [ext_resource type="PackedScene" uid="uid://brtel7tjfbqu1" path="res://area/1 sand oasis/boss/Static.tscn" id="9_qrt26"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="10_a21kh"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_i8rmg"]
-radius = 4.0
 
 [sub_resource type="Curve" id="Curve_5arqb"]
 max_value = 2.5
@@ -73,18 +67,6 @@ Completion/Lockout = ExtResource("2_uy78v")
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("2_ks0kr")]
-
-[node name="Start" parent="BossAct/SpawnPosition" instance=ExtResource("3_omywj")]
-
-[node name="Checkpoint" type="Node3D" parent="BossAct/SpawnPosition/Start"]
-script = ExtResource("7_v1fdf")
-
-[node name="CameraSettings" type="Node3D" parent="BossAct/SpawnPosition/Start"]
-script = ExtResource("5_h54m5")
-settings = ExtResource("5_rh8lw")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SpawnPosition/Start"]
-shape = SubResource("SphereShape3D_i8rmg")
 
 [node name="SandScorpion" parent="BossAct" node_paths=PackedStringArray("bossPathFollower") instance=ExtResource("8_sawvf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
@@ -2319,3 +2301,4 @@ monitorable = false
 shape = SubResource("BoxShape3D_h301n")
 
 [node name="Static" parent="." instance=ExtResource("9_qrt26")]
+initialCameraSettings = ExtResource("5_rh8lw")

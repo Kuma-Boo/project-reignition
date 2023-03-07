@@ -58,8 +58,9 @@ namespace Project
 			if (Mathf.IsZeroApprox(distance)) return;
 			float invDistance = 1 / distance;
 			float impulseMag = power * invDistance * invDistance;
-			body.ApplyCentralImpulse(impulseMag * blastDir.Normalized());
-			body.ApplyTorqueImpulse(blastDir);
+			//body.ApplyCentralImpulse(impulseMag * blastDir.Normalized());
+			body.LinearVelocity = impulseMag * blastDir.Normalized();
+			body.AngularVelocity = blastDir.Normalized() * impulseMag;
 		}
 
 		/// <summary>
@@ -230,30 +231,12 @@ namespace Project
 			return output;
 		}
 
-		//For flag modification
-		public static bool IsSet<T>(this T flags, T flag) where T : struct
-		{
-			int flagsValue = (int)(object)flags;
-			int flagValue = (int)(object)flag;
 
-			return (flagsValue & flagValue) != 0;
-		}
-
-		public static void Set<T>(this T flags, T flag) where T : struct
-		{
-			int flagsValue = (int)(object)flags;
-			int flagValue = (int)(object)flag;
-
-			flags = (T)(object)(flagsValue | flagValue);
-		}
-
-		public static void Unset<T>(this T flags, T flag) where T : struct
-		{
-			int flagsValue = (int)(object)flags;
-			int flagValue = (int)(object)flag;
-
-			flags = (T)(object)(flagsValue & (~flagValue));
-		}
+		/// <summary>
+		/// Checks if a uint flag is set.
+		/// Note: Flags must be set/unset manually. Use "flags |= flag" to set and "flags &= ~flag" to unset.
+		/// </summary>
+		public static bool HasFlag(this uint flags, uint flag) => (flags & flag) != 0;
 
 		public static bool IsLoopingPath(this Path3D path) => path.Curve.GetPointPosition(0).IsEqualApprox(path.Curve.GetPointPosition(path.Curve.PointCount - 1));
 	}

@@ -39,13 +39,13 @@ namespace Project.Editor
 			if (!IsInstanceValid(target) || !target.IsInsideTree() || !IsInstanceValid(editorCam)) return;
 
 			if (target is Launcher)
-				DrawLaunchData(overlay, (target as Launcher).GetLaunchData(), DEFAULT_DRAW_COLOR);
+				DrawLaunchSettings(overlay, (target as Launcher).GetLaunchSettings(), DEFAULT_DRAW_COLOR);
 			else if (target is JumpTrigger)
-				DrawLaunchData(overlay, (target as JumpTrigger).GetLaunchData(), DEFAULT_DRAW_COLOR);
+				DrawLaunchSettings(overlay, (target as JumpTrigger).GetLaunchSettings(), DEFAULT_DRAW_COLOR);
 			else if (target is Catapult)
-				DrawLaunchData(overlay, (target as Catapult).GetLaunchData(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as Catapult).launchPower));
+				DrawLaunchSettings(overlay, (target as Catapult).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as Catapult).launchPower));
 			else if (target is LaunchRing)
-				DrawLaunchData(overlay, (target as LaunchRing).GetLaunchData(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as LaunchRing).launchPower));
+				DrawLaunchSettings(overlay, (target as LaunchRing).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as LaunchRing).launchPower));
 			else if (target is ItemBox)
 				UpdateItemBox(overlay);
 			else if (target is FlyingPot)
@@ -60,14 +60,14 @@ namespace Project.Editor
 
 		private readonly Color DEFAULT_DRAW_COLOR = Colors.Blue;
 		private readonly Color SPECIAL_DRAW_COLOR = Colors.Red;
-		private void DrawLaunchData(Control overlay, LaunchData launchData, Color overrideColor)
+		private void DrawLaunchSettings(Control overlay, LaunchSettings LaunchSettings, Color overrideColor)
 		{
 			Array<Vector2> points = new Array<Vector2>();
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
 				float simulationRatio = i / ((float)PREVIEW_RESOLUTION - 1);
-				Vector3 position = launchData.InterpolatePositionRatio(simulationRatio);
+				Vector3 position = LaunchSettings.InterpolatePositionRatio(simulationRatio);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
 			}
@@ -124,7 +124,7 @@ namespace Project.Editor
 
 			if (box.spawnPearls) return;
 
-			DrawLaunchData(overlay, box.GetLaunchData(), DEFAULT_DRAW_COLOR);
+			DrawLaunchSettings(overlay, box.GetLaunchSettings(), DEFAULT_DRAW_COLOR);
 			if (box.spawnAmount > 1)
 				DrawPerspectiveCircle(overlay, box.EndPosition, box.GlobalTransform.Basis, box.spawnRadius, Vector3.Forward, Vector3.Up, DEFAULT_DRAW_COLOR);
 		}

@@ -11,7 +11,10 @@ namespace Project.Gameplay
 		public static StageSettings instance;
 
 		[Export]
+		public CameraSettingsResource initialCameraSettings;
+		[Export]
 		public Node3D pathParent;
+
 		/// <summary> List of all level paths contained for this level. </summary>
 		private readonly Array<Path3D> pathList = new Array<Path3D>();
 

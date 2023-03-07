@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Project.Gameplay.Objects
 {
 	/// <summary>
-	/// Object that shatters when destroyed. All pieces must be a child of this object.
+	/// Object that shatters when destroyed. All pieces must be a child of pieceRoot.
 	/// </summary>
 	public partial class DestructableObject : Node3D
 	{
@@ -15,15 +15,22 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private float pieceMass;
 		[Export]
-		private bool stopPlayerOnShatter; //Stop the player when being shattered?
+		/// <summary> Stop the player when being shattered? </summary>
+		private bool stopPlayerOnShatter;
 
 		[Export]
-		private bool disableRespawn; //Skip respawning this object. Call Respawn() manually instead.
+		/// <summary> Don't collide with the environment? </summary>
+		private bool disableEnvironmentCollision;
+		[Export]
+		/// <summary> Don't automatically respawn this object. Call Respawn() manually instead. </summary>
+		private bool disableRespawn;
 
 		[Export]
+		/// <summary> Unshattered model. </summary>
 		private Node3D root;
 		[Export]
-		private Node3D pieceRoot; //Parent node of pieces
+		/// <summary> Parent node of all the pieces. </summary>
+		private Node3D pieceRoot;
 		[Export]
 		protected AnimationPlayer animator;
 		[Export(PropertyHint.Flags, "PlayerCollision,ObjectCollision,AttackSkill,HomingAttack,SpeedBreak")]
@@ -52,7 +59,9 @@ namespace Project.Gameplay.Objects
 		{
 			public RigidBody3D rigidbody;
 			public MeshInstance3D mesh;
-			public Transform3D spawnTransform; //Local transform to spawn with
+			public CollisionShape3D collider;
+			public Vector3 scale;
+			public Vector3 position; //Local transform to spawn with
 		}
 
 		public override void _Ready()
@@ -63,17 +72,23 @@ namespace Project.Gameplay.Objects
 				if (rigidbody == null) //Pieces must be a rigidbody
 					continue;
 
-				MeshInstance3D mesh = rigidbody.GetChildOrNull<MeshInstance3D>(0); //NOTE mesh must be the FIRST child of the rigidbody.
+				MeshInstance3D mesh = rigidbody.GetChildOrNull<MeshInstance3D>(0); //mesh must be the FIRST child of the rigidbody.
+				CollisionShape3D collider = rigidbody.GetChildOrNull<CollisionShape3D>(1); //collider must be the SECOND child of the rigidbody.
 
 				rigidbody.Mass = pieceMass;
 				rigidbody.CollisionLayer = Core.Runtime.Instance.particleCollisionLayer;
 				rigidbody.CollisionMask = Core.Runtime.Instance.particleCollisionMask;
 
+				if (disableEnvironmentCollision)
+					rigidbody.CollisionMask &= ~Core.Runtime.Instance.environmentMask;
+
 				pieces.Add(new Piece()
 				{
 					rigidbody = rigidbody,
 					mesh = mesh,
-					spawnTransform = rigidbody.Transform
+					collider = collider,
+					scale = pieceRoot.GlobalTransform.Basis.Scale,
+					position = rigidbody.Position
 				});
 			}
 
@@ -88,9 +103,9 @@ namespace Project.Gameplay.Objects
 		public override void _PhysicsProcess(double _)
 		{
 			/*
-			if (isShattered && pieceRoot.IsInsideTree())
+			if (isShattered && pieceRoot.Visible)
 			{
-				for (int i = 0; i < pieces.Count; i++)
+				for (int i = 0; i < pieces.Count; i++) //Use this to visualize piece tradjectory
 					Core.Debug.DrawRay(pieces[i].rigidbody.GlobalPosition, pieces[i].rigidbody.LinearVelocity * Core.PhysicsManager.physicsDelta, Colors.Red);
 			}
 			*/
@@ -115,8 +130,9 @@ namespace Project.Gameplay.Objects
 				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.On; //Reset Shadows
 			}
 
-			if (root.GetParent() != this) //Make sure root node exists
-				AddChild(root);
+
+			//Enable root
+			root.ProcessMode = ProcessModeEnum.Inherit;
 
 			if (root is RigidBody3D)
 			{
@@ -131,8 +147,9 @@ namespace Project.Gameplay.Objects
 
 		private void ResetNodeTransforms()
 		{
-			if (pieceRoot.IsInsideTree())
-				pieceRoot.GetParent().RemoveChild(pieceRoot); //Start with the piece parent despawned
+			//Start with the piece parent disabled
+			pieceRoot.Visible = false;
+			pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 
 			//Reset animator
 			if (animator != null && animator.HasAnimation("RESET"))
@@ -140,7 +157,14 @@ namespace Project.Gameplay.Objects
 
 			for (int i = 0; i < pieces.Count; i++)
 			{
-				pieces[i].rigidbody.Transform = pieces[i].spawnTransform;
+				//Update mesh/collider transforms, due to rigidbody resetting scales
+				pieces[i].mesh.Transform = Transform3D.Identity.ScaledLocal(pieces[i].scale);
+				pieces[i].collider.Transform = Transform3D.Identity.ScaledLocal(pieces[i].scale);
+
+				pieces[i].rigidbody.GlobalTransform = Transform3D.Identity; //Reset location, rotation and scale
+				pieces[i].rigidbody.Position = pieces[i].position; //Use local position
+				pieces[i].rigidbody.GlobalRotation = pieceRoot.GlobalRotation; //Sync rotation
+
 				pieces[i].mesh.Transparency = 0f; //Reset fade
 			}
 
@@ -149,8 +173,11 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Despawn()
 		{
-			root.GetParent().CallDeferred(MethodName.RemoveChild, root);
-			pieceRoot.GetParent().CallDeferred(MethodName.RemoveChild, pieceRoot);
+			pieceRoot.Visible = true;
+			root.ProcessMode = ProcessModeEnum.Disabled;
+
+			pieceRoot.Visible = true;
+			pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 		}
 
 		public virtual void Shatter() //Call this from a signal
@@ -161,9 +188,9 @@ namespace Project.Gameplay.Objects
 			if (animator != null && animator.HasAnimation("shatter"))
 				animator.Play("shatter");
 
-			AddChild(pieceRoot);
 			pieceRoot.Visible = true; //Make sure piece root is visible
-			pieceRoot.GlobalTransform = root.GlobalTransform;
+			pieceRoot.ProcessMode = ProcessModeEnum.Inherit;
+
 			Vector3 shatterPoint = root.GlobalPosition;
 			float shatterStrength = explosionStrength;
 			if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) //Directional shatter
@@ -191,12 +218,8 @@ namespace Project.Gameplay.Objects
 			EmitSignal(SignalName.Shattered);
 		}
 
-		public void Unload() //Prevent memory leakage
-		{
-			root.QueueFree();
-			pieceRoot.QueueFree();
-			pieces.Clear();
-		}
+		//Prevent memory leakage
+		public void Unload() => pieces.Clear();
 
 		public void OnEntered(Area3D a)
 		{
@@ -204,7 +227,7 @@ namespace Project.Gameplay.Objects
 
 			if (!a.IsInGroup("player") && !a.IsInGroup("stackable"))
 			{
-				if (FlagSetting.IsSet(ShatterFlags.ObjectCollision))
+				if (FlagSetting.HasFlag(ShatterFlags.ObjectCollision))
 					Shatter();
 
 				return;
@@ -221,13 +244,16 @@ namespace Project.Gameplay.Objects
 
 		private void ProcessPlayerCollision()
 		{
-			if (FlagSetting.IsSet(ShatterFlags.PlayerCollision))
+			if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
 				Shatter();
-			else if (FlagSetting.IsSet(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
+			else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
 				Shatter();
-			else if (FlagSetting.IsSet(ShatterFlags.HomingAttack) && Character.ActionState == CharacterController.ActionStates.JumpDash)
+			else if (FlagSetting.HasFlag(ShatterFlags.HomingAttack) && Character.Lockon.IsHomingAttacking)
+			{
 				Shatter();
-			else if (FlagSetting.IsSet(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
+				Character.Lockon.StartBounce();
+			}
+			else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
 				Shatter();
 		}
 
@@ -235,7 +261,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (isShattered) return;
 
-			if (FlagSetting.IsSet(ShatterFlags.ObjectCollision))
+			if (FlagSetting.HasFlag(ShatterFlags.ObjectCollision))
 			{
 				if (b.IsInGroup("crusher") || b.IsInGroup("enemy"))
 					Shatter();

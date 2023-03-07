@@ -41,16 +41,21 @@ namespace Project.Gameplay
 			if (Engine.IsEditorHint()) return;
 
 			instance = this;
+		}
+
+		public void Initialize()
+		{
+			if (Engine.IsEditorHint()) return;
+
+			//Apply default settings
+			CameraSettingsResource targetSettings = defaultSettings;
+			if (StageSettings.instance != null && StageSettings.instance.initialCameraSettings != null)
+				targetSettings = StageSettings.instance.initialCameraSettings;
 
 			UpdateCameraSettings(new CameraBlendData()
 			{
-				SettingsResource = defaultSettings,
-			}); //Apply default settings
-		}
-
-		public override void _Ready()
-		{
-			if (Engine.IsEditorHint()) return;
+				SettingsResource = targetSettings,
+			});
 
 			Character.Connect(CharacterController.SignalName.Respawn, new Callable(this, MethodName.Respawn));
 		}
@@ -64,7 +69,7 @@ namespace Project.Gameplay
 			});
 		}
 
-		public override void _PhysicsProcess(double _)
+		public void UpdateCamera()
 		{
 			if (EventController != null)
 			{
@@ -308,7 +313,7 @@ namespace Project.Gameplay
 				{
 					//Negative number -> Concave, Positive number -> Convex.
 					float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
-					if (Mathf.Abs(slopeDifference) > .1f) //Deadzone to prevent jittering
+					if (Mathf.Abs(slopeDifference) > .01f) //Deadzone to prevent jittering
 						data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
 				}
 				else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)

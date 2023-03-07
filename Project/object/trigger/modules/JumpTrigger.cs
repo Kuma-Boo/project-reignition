@@ -1,37 +1,50 @@
 using Godot;
-using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
 	/// <summary>
-	/// Force the player to jump to a point, specified by <see cref="targetNode"/> or <see cref="targetPosition"/>
+	/// Force the player to jump to the StageTriggerModule's position.
 	/// </summary>
 	[Tool]
 	public partial class JumpTrigger : StageTriggerModule
 	{
 		[Export]
-		private NodePath targetNode;
-		private Node3D _targetNode; //Leaving this empty will use targetPosition exclusively.
-		[Export]
-		private Vector3 targetPosition; //Position to jump to. (Added to targetNode's position)
-		[Export]
-		public float peakHeight; //How high to jump.
+		public float jumpHeight; //How high to jump.
 
-		private Vector3 GetTargetPosition()
+		public LaunchSettings GetLaunchSettings() => JumpSettings.CreateLaunchSettings(GetParent<Node3D>().GlobalPosition);
+		private JumpSettings JumpSettings => new JumpSettings()
 		{
-			Vector3 returnPosition = targetPosition;
-			_targetNode = GetNodeOrNull<Node3D>(targetNode);
-			if (_targetNode != null)
-				returnPosition += _targetNode.GlobalPosition;
-			return returnPosition;
-		}
+			destination = GlobalPosition,
+			jumpHeight = jumpHeight,
+			isJump = true
+		};
 
 		public override void Activate()
 		{
-			Character.JumpTo(GetTargetPosition(), peakHeight);
+			Character.JumpTo(JumpSettings);
 			Character.CanJumpDash = false;
 		}
+	}
+}
 
-		public Objects.LaunchData GetLaunchData() => Objects.LaunchData.Create(GlobalPosition, GetTargetPosition(), peakHeight);
+
+namespace Project.Gameplay
+{
+	/// <summary>
+	/// Jump settings used in CharacterController.JumpTo()
+	/// </summary>
+	public struct JumpSettings
+	{
+		/// <summary> Jump's destination. </summary>
+		public Vector3 destination;
+		/// <summary> Jump's height. </summary>
+		public float jumpHeight;
+		/// <summary> Is jump height relative to the starting position or the ending position? </summary>
+		public bool relativeToEnd;
+
+		/// <summary> CharacterController will play jump animations/sfx when this is True. </summary>
+		public bool isJump;
+
+		public LaunchSettings CreateLaunchSettings(Vector3 startPosition) => LaunchSettings.Create(startPosition, destination, jumpHeight, relativeToEnd);
 	}
 }

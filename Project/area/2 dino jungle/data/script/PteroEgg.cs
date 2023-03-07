@@ -22,7 +22,7 @@ namespace Project.Gameplay.Objects
 
 		private float returnTravelRatio;
 		private SpawnData spawnData;
-		private LaunchData returnArc; //The path to follow when returning to the nest
+		private LaunchSettings returnArc; //The path to follow when returning to the nest
 		private CharacterController Character => CharacterController.instance;
 		private readonly float FOLLOW_DISTANCE = 1f;
 
@@ -103,7 +103,7 @@ namespace Project.Gameplay.Objects
 			SetDeferred("global_position", nest.GlobalPosition + delta);
 
 			returnTravelRatio = 0f;
-			returnArc = LaunchData.Create(GlobalPosition, nest.GlobalPosition + Vector3.Up * 0.6f, 4f, true);
+			returnArc = LaunchSettings.Create(GlobalPosition, nest.GlobalPosition + Vector3.Up * 0.6f, 4f, true);
 		}
 	}
 }

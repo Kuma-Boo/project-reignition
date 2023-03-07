@@ -124,10 +124,10 @@ namespace Project.Gameplay
 
 		private void LoadSkillsFromSaveData()
 		{
-			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.LandingBoost);
-			isPearlAttractionEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.PearlAttractor);
+			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.LandingBoost);
+			isPearlAttractionEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.PearlAttractor);
 
-			isManualDriftEnabled = SaveManager.ActiveGameData.skillRing.IsSet(SaveManager.SkillEnum.ManualDrift);
+			isManualDriftEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.ManualDrift);
 		}
 
 		private void SetUpSkills()

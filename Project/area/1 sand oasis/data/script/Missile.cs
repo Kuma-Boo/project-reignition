@@ -13,7 +13,7 @@ namespace Project.Gameplay.Bosses
 		public bool IsActive { get; private set; } //Is the missile currently traveling?
 		private float travelInterpolation;
 
-		private LaunchData launchData { get; set; }
+		private LaunchSettings LaunchSettings { get; set; }
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -24,23 +24,23 @@ namespace Project.Gameplay.Bosses
 
 		private void UpdatePosition()
 		{
-			GlobalPosition = launchData.InterpolatePositionTime(travelInterpolation);
+			GlobalPosition = LaunchSettings.InterpolatePositionTime(travelInterpolation);
 			travelInterpolation += PhysicsManager.physicsDelta;
 
 			//Reached the ground
-			if (travelInterpolation >= launchData.TotalTravelTime)
+			if (travelInterpolation >= LaunchSettings.TotalTravelTime)
 			{
 				animator.Play("impact"); //Impact effect
 				IsActive = false;
 			}
 		}
 
-		public void Launch(LaunchData data)
+		public void Launch(LaunchSettings settings)
 		{
 			IsActive = true;
 			travelInterpolation = 0;
 
-			launchData = data;
+			LaunchSettings = settings;
 			animator.Play("launch");
 
 			UpdatePosition();

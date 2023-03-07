@@ -338,7 +338,7 @@ namespace Project.Gameplay.Bosses
 
 			int spawnFrom = Runtime.randomNumberGenerator.RandiRange(0, 2); //Figure out which position to spawn from
 			Vector3 spawnPosition = missilePositions[spawnFrom].GlobalPosition; //Move missile to the spawn position
-			missilePool[missileIndex].Launch(Objects.LaunchData.Create(spawnPosition, GetMissileTargetPosition(missileIndex), 5)); //Recalculate trajectory
+			missilePool[missileIndex].Launch(LaunchSettings.Create(spawnPosition, GetMissileTargetPosition(missileIndex), 5)); //Recalculate trajectory
 
 			missileIndex++;
 		}
@@ -697,7 +697,7 @@ namespace Project.Gameplay.Bosses
 			if (Character.Skills.IsSpeedBreakActive)
 			{
 				Character.Skills.ToggleSpeedBreak();
-				Character.StartKnockback(new CharacterController.KnockbackData()
+				Character.StartKnockback(new CharacterController.KnockbackSettings()
 				{
 					disableDamage = true
 				});

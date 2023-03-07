@@ -33,6 +33,8 @@ namespace Project.Gameplay.Objects
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
+			if (Character.IsRespawning) return; //Don't allow collecting things when respawning
+
 			CallDeferred(MethodName.Collect);
 		}
 

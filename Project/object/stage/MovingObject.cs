@@ -163,7 +163,7 @@ namespace Project.Gameplay
 			if (Engine.IsEditorHint()) return;
 			if (IsMovementInvalid()) return; //No movement
 
-			currentTime += (1f / cycleLength) * PhysicsManager.physicsDelta * TimeScale;
+			currentTime += PhysicsManager.physicsDelta * TimeScale;
 			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) //Rollover
 				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength);
 

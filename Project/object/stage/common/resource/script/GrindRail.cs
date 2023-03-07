@@ -198,15 +198,18 @@ namespace Project.Gameplay
 		private const float JUMP_BUFFER_LENGTH = .2f;
 		private const float SHUFFLE_BUFFER_LENGTH = .4f;
 		/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
-		private const float GRIND_RAIL_SNAPPING = .6f;
+		private const float GRIND_RAIL_SNAPPING = 1.0f;
 		/// <summary> Rail snapping is more generous when performing a grind step. </summary>
 		private const float GRINDSTEP_RAIL_SNAPPING = 1.4f;
 		private Vector3 closestPoint;
 		private void CheckRailActivation()
 		{
 			if (Character.IsOnGround && !Character.JustLandedOnGround) return; //Can't start grinding from the ground
-			if (Character.Lockon.IsHomingAttacking) return; //Character is targeting something
 			if (Character.MovementState != CharacterController.MovementStates.Normal) return; //Character is busy
+
+			//Cancel any active homing attack
+			if (Character.Lockon.IsHomingAttacking)
+				Character.Lockon.StopHomingAttack();
 
 			//Sync rail pathfollower
 			Vector3 delta = rail.GetLocalPosition(Character.GlobalPosition);
@@ -216,8 +219,7 @@ namespace Project.Gameplay
 			if (CheckWall(Skills.grindSettings.speed * PhysicsManager.physicsDelta)) return;
 
 			float horizontalOffset = Mathf.Abs(pathFollower.GetLocalPosition(Character.GlobalPosition).X); //Get local offset
-
-			if (Character.VerticalSpd <= 0f)
+			if (Character.VerticalSpeed <= 0f)
 			{
 				if (horizontalOffset < GRIND_RAIL_SNAPPING ||
 					(Character.IsGrindstepping && horizontalOffset < GRINDSTEP_RAIL_SNAPPING)) //Start grinding
@@ -250,7 +252,7 @@ namespace Project.Gameplay
 			Character.IsMovingBackward = false;
 			Character.LandOnGround(); //Rail counts as being on the ground
 			Character.MoveSpeed = Skills.grindSettings.speed; //Start at the correct speed
-			Character.VerticalSpd = 0f;
+			Character.VerticalSpeed = 0f;
 
 			Character.Animator.ExternalAngle = 0; //Rail modifies Character's Transform directly, animator angle is unused.
 			Character.Animator.StartBalancing();
@@ -318,14 +320,14 @@ namespace Project.Gameplay
 					if (Character.IsGrindstepping) //Grindstep
 					{
 						//Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
-						float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetTargetInputAngle(), railAngle);
+						float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetInputAngle(), railAngle);
 						//Calculate how far player is trying to go
 						float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
 						horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
 
 						//Keep some speed forward
 						Character.MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
-						Character.VerticalSpd = Runtime.GetJumpPower(GRIND_STEP_HEIGHT);
+						Character.VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
 						Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
 
 						Character.IsOnGround = false; //Disconnect from the ground

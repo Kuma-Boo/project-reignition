@@ -1,0 +1,26 @@
+[gd_scene load_steps=7 format=3 uid="uid://ctkxmjdylid4k"]
+
+[ext_resource type="PackedScene" uid="uid://rh85bh20fk6r" path="res://object/enemy/majin/Majin.tscn" id="1_bp81x"]
+[ext_resource type="PackedScene" uid="uid://xt47ehund2gc" path="res://object/enemy/majin/data/skeleton dome/model/GreenMajin.gltf" id="2_fhdp0"]
+[ext_resource type="AnimationLibrary" uid="uid://bh1trop5ft0h8" path="res://object/enemy/majin/data/animation/green majin/MajinLibrary.gltf" id="3_dsukg"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_5ix2e"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_olssv"]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_hcr5y"]
+
+[node name="GreenMajin" instance=ExtResource("1_bp81x")]
+
+[node name="GreenMajin" parent="Root" index="0" instance=ExtResource("2_fhdp0")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root/GreenMajin" index="1"]
+libraries = {
+"MajinLibrary": ExtResource("3_dsukg")
+}
+
+[node name="AnimationTree" parent="." index="5"]
+anim_player = NodePath("../Root/GreenMajin/AnimationPlayer")
+parameters/defeat_state/playback = SubResource("AnimationNodeStateMachinePlayback_5ix2e")
+parameters/fire_state/playback = SubResource("AnimationNodeStateMachinePlayback_olssv")
+parameters/spin_state/playback = SubResource("AnimationNodeStateMachinePlayback_hcr5y")

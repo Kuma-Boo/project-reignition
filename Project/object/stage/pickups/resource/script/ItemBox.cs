@@ -102,7 +102,7 @@ namespace Project.Gameplay.Objects
 		private Vector3 LaunchPosition => GlobalPosition + Vector3.Up * .5f;
 		public Vector3 EndPosition => LaunchPosition + GlobalTransform.Basis * spawnPosition;
 
-		public LaunchData GetLaunchData() => LaunchData.Create(LaunchPosition, EndPosition, arcHeight);
+		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(LaunchPosition, EndPosition, arcHeight);
 
 		//Only effective if spawnAmount is greater than 1
 		//private float timeOffset; //How much to offset each object when traveling
@@ -115,14 +115,6 @@ namespace Project.Gameplay.Objects
 		}
 
 		[Export]
-		private bool isFlying;
-		[Export]
-		private Node3D rootPosition;
-		[Export]
-		private Node3D wings;
-		[Export]
-		private Node3D chest;
-		[Export]
 		private AnimationPlayer animator;
 
 		private bool isOpened;
@@ -133,13 +125,12 @@ namespace Project.Gameplay.Objects
 
 		//Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
 		private readonly List<Pickup> objectPool = new List<Pickup>();
-		private readonly List<LaunchData> objectLaunchData = new List<LaunchData>();
+		private readonly List<LaunchSettings> objectLaunchSettings = new List<LaunchSettings>();
 
 		protected override void SetUp()
 		{
 			if (Engine.IsEditorHint()) return;
 
-			wings.Visible = isFlying;
 			rotationInterval = Mathf.Tau / spawnAmount;
 
 			if (!spawnPearls)
@@ -153,7 +144,7 @@ namespace Project.Gameplay.Objects
 
 						pickup.DisableAutoRespawning = true;
 						objectPool.Add(pickup);
-						objectLaunchData.Add(LaunchData.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), arcHeight));
+						objectLaunchSettings.Add(LaunchSettings.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), arcHeight));
 					}
 				}
 				else
@@ -170,7 +161,7 @@ namespace Project.Gameplay.Objects
 				objectPool[i].QueueFree();
 
 			objectPool.Clear();
-			objectLaunchData.Clear();
+			objectLaunchSettings.Clear();
 
 			base.Unload();
 		}
@@ -194,9 +185,6 @@ namespace Project.Gameplay.Objects
 		{
 			if (Engine.IsEditorHint() || !IsVisibleInTree()) return;
 
-			if (isFlying)
-				chest.GlobalPosition = rootPosition.GlobalPosition;
-
 			if (spawnPearls) return;
 
 			if (isOpened && isMovingObjects) //Interpolate objects
@@ -209,7 +197,7 @@ namespace Project.Gameplay.Objects
 				{
 					if (!objectPool[i].IsInsideTree()) continue; //Already collected?
 
-					objectPool[i].GlobalPosition = objectLaunchData[i].InterpolatePositionRatio(t);
+					objectPool[i].GlobalPosition = objectLaunchSettings[i].InterpolatePositionRatio(t);
 					objectPool[i].Scale = Vector3.One * t;
 					objectPool[i].Monitoring = objectPool[i].Monitorable = t >= 1f;
 				}

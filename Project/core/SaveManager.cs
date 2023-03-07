@@ -190,8 +190,8 @@ namespace Project.Core
 			/// <summary> Is this a new file? </summary>
 			public bool IsNewFile => level == 0; //Since the player must at least be level one, a level zero file can be assumed to be empty.
 
-			public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.IsSet(ConvertIntToWorldEnum(worldIndex));
-			public bool IsWorldRingObtained(int worldIndex) => worldRingsCollected.IsSet(ConvertIntToWorldEnum(worldIndex));
+			public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
+			public bool IsWorldRingObtained(int worldIndex) => worldRingsCollected.HasFlag(ConvertIntToWorldEnum(worldIndex));
 			/// <summary> Soul gauge's level, normalized from [0 -> 1] </summary>
 			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f;
 			/// <summary>

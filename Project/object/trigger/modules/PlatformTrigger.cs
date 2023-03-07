@@ -12,12 +12,6 @@ namespace Project.Gameplay.Triggers
 
 		private CharacterController Character => CharacterController.instance;
 
-		public override void _Ready()
-		{
-			Connect(SignalName.AreaEntered, new Callable(this, MethodName.OnEntered));
-			Connect(SignalName.AreaExited, new Callable(this, MethodName.OnExited));
-		}
-
 		public override void _Process(double _)
 		{
 			if (isInteractingWithPlayer)
@@ -30,7 +24,7 @@ namespace Project.Gameplay.Triggers
 
 			if (Character.GlobalPosition.Y < GlobalPosition.Y || Character.IsOnGround)
 				Character.GlobalTranslate(Vector3.Up * (GlobalPosition.Y - Character.GlobalPosition.Y));
-			else if (Character.VerticalSpd < 0) //Player is falling
+			else if (Character.VerticalSpeed < 0) //Player is falling
 				isActive = false;
 		}
 

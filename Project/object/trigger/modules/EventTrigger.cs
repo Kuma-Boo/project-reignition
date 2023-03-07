@@ -65,7 +65,7 @@ namespace Project.Gameplay.Triggers
 		public void FinishEvent(float moveSpeed, float fallSpeed)
 		{
 			Character.MoveSpeed = moveSpeed;
-			Character.VerticalSpd = fallSpeed;
+			Character.VerticalSpeed = fallSpeed;
 
 			Character.ResetMovementState();
 

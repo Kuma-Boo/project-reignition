@@ -40,5 +40,10 @@ namespace Project.Gameplay.Objects
 
 			base.Collect();
 		}
+
+		public void OnBodyEntered(Node3D other)
+		{
+			GD.Print(other.IsInGroup("player"));
+		}
 	}
 }

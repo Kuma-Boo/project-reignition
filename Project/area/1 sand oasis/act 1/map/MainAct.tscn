@@ -1,4 +1,4 @@
-[gd_scene load_steps=205 format=3 uid="uid://c3uw5orpq1c4p"]
+[gd_scene load_steps=202 format=3 uid="uid://c3uw5orpq1c4p"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_jxthg"]
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_q36gh"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="6_gjqoq"]
 [ext_resource type="Resource" uid="uid://u3vm4ffkr5ox" path="res://area/1 sand oasis/act 1/trigger/SandfallLockout.tres" id="7_7q2au"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="8_w6s07"]
-[ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="9_aodes"]
 [ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="10_1plec"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="11_o53jp"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="12_s1yxw"]
@@ -38,7 +37,6 @@
 [ext_resource type="Resource" uid="uid://bbt61isk2fytx" path="res://area/1 sand oasis/act 1/trigger/camera/IslandSpringCam.tres" id="37_la88i"]
 [ext_resource type="Resource" uid="uid://bm0kd4uf60rv1" path="res://area/1 sand oasis/act 1/trigger/camera/IslandJumpEndCam.tres" id="38_6q18u"]
 [ext_resource type="Resource" uid="uid://cg68afq5jr66c" path="res://area/1 sand oasis/act 1/trigger/camera/IslandCam.tres" id="38_p6c8c"]
-[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="39_k3p3b"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="39_utd5h"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="40_jisem"]
 [ext_resource type="PackedScene" path="res://area/1 sand oasis/object/grindrail/Grindrail03.tscn" id="41_b8mr3"]
@@ -156,9 +154,6 @@ _data = {
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_rpmii"]
 radius = 1.0
-
-[sub_resource type="BoxShape3D" id="1"]
-size = Vector3(10, 10, 2)
 
 [sub_resource type="Curve" id="Curve_6xxi5"]
 min_value = -1.0
@@ -11539,13 +11534,6 @@ script = ExtResource("8_w6s07")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
-[node name="DriftTrigger" parent="MainAct/Start" instance=ExtResource("9_aodes")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 70.175, 75, -52.1)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Start/DriftTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("1")
-
 [node name="RingM1" type="Node3D" parent="MainAct/Start"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 64.935, 76, -62.11)
 script = ExtResource("10_1plec")
@@ -12297,6 +12285,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.647214, -0.470228, 0)
 [node name="Oasis" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
 script = ExtResource("8_w6s07")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="DashPanel" parent="MainAct/Oasis" instance=ExtResource("13_3qijt")]
@@ -13651,19 +13640,6 @@ path = NodePath("../../../../Static/Path/IslandEndPath")
 script = ExtResource("33_j15gn")
 transitionTime = 0.4
 settings = ExtResource("38_6q18u")
-
-[node name="DriftTrigger" parent="MainAct/Island" instance=ExtResource("9_aodes")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -29.85, 0, 170)
-
-[node name="DriftCamera" type="Node3D" parent="MainAct/Island/DriftTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.42999, 0.299999, -12)
-script = ExtResource("33_j15gn")
-deactivationTransitionTime = 1.0
-settings = ExtResource("39_k3p3b")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Island/DriftTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("1")
 
 [node name="JumpPanel1" parent="MainAct/Island" instance=ExtResource("40_jisem")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -19.8859, 0, 132.889)
@@ -15304,14 +15280,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="Ring7" parent="MainAct/Interior/Rings3" instance=ExtResource("11_o53jp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-
-[node name="DriftTrigger" parent="MainAct/Interior" instance=ExtResource("9_aodes")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -69.1289, 0, 20.429)
-isRightTurn = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Interior/DriftTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("1")
 
 [node name="DashPanel1" parent="MainAct/Interior" instance=ExtResource("13_3qijt")]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -95.2211, 0, 9.89304)
@@ -17430,14 +17398,6 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.39996, 8.5, -0.799988)
 shape = SubResource("BoxShape3D_0q2l6")
 
-[node name="DriftTrigger" parent="MainAct/End" instance=ExtResource("9_aodes")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -140, 20, 10)
-isRightTurn = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/DriftTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("1")
-
 [node name="FallingPieceGroup" parent="MainAct/End" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -105, 16, 0)
 OneShot = true
@@ -18198,8 +18158,6 @@ shape = SubResource("65")
 [connection signal="Defeated" from="MainAct/Plain/BlueMajin1" to="MainAct/Plain/GreenMajin1" method="Spawn"]
 [connection signal="Defeated" from="MainAct/Plain/GreenMajin1" to="MainAct/Plain/GreenMajin2" method="Spawn"]
 [connection signal="Defeated" from="MainAct/Plain/GreenMajin2" to="MainAct/Plain/EnemyStone" method="IncrementCounter"]
-[connection signal="DriftCompleted" from="MainAct/Island/DriftTrigger" to="MainAct/Island/DriftTrigger/DriftCamera" method="Deactivate"]
-[connection signal="DriftStarted" from="MainAct/Island/DriftTrigger" to="MainAct/Island/DriftTrigger/DriftCamera" method="Activate"]
 [connection signal="Activated" from="MainAct/Island/JumpPanel1" to="MainAct/Island/TriggerData/JumpCamera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Island/JumpPanel1" to="MainAct/Island/TriggerData/JumpCamera" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Island/JumpPanel2" to="MainAct/Island/TriggerData/JumpCamera" method="Activate"]
@@ -18213,5 +18171,7 @@ shape = SubResource("65")
 [connection signal="Activated" from="MainAct/Hallway/Button" to="MainAct/Hallway/Button/EventTrigger" method="Activate"]
 [connection signal="Respawned" from="MainAct/Hallway/Button" to="MainAct/Hallway/Button/EventTrigger" method="Respawn"]
 [connection signal="Respawned" from="MainAct/Hallway/Button" to="MainAct/Hallway/Button/EventTrigger/EventTrigger" method="Respawn"]
+[connection signal="area_entered" from="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnEntered"]
+[connection signal="area_exited" from="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnExited"]
 [connection signal="Defeated" from="MainAct/Hallway/Button/EventTrigger/BlueMajin1" to="MainAct/Hallway/Button/EventTrigger/EventTrigger" method="Activate"]
 [connection signal="Shattered" from="MainAct/End/JarGroup3/JarM2" to="MainAct/End/JarGroup3/GreenMajin" method="Spawn"]

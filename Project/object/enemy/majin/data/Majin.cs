@@ -413,6 +413,7 @@ namespace Project.Gameplay
 		protected override void Activate()
 		{
 			if (spawnMode == SpawnModes.External) return;
+
 			Spawn();
 		}
 

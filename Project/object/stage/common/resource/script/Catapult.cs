@@ -37,13 +37,13 @@ namespace Project.Gameplay.Objects
 		private Node3D armNode;
 		private Tween tweener;
 
-		public LaunchData GetLaunchData()
+		public LaunchSettings GetLaunchSettings()
 		{
 			Vector3 launchPoint = GetLaunchPosition();
 			float distance = Mathf.Lerp(closeDistance, farDistance, launchPower);
 			float midHeight = Mathf.Lerp(closeMidHeight, farMidHeight, launchPower);
 			float endHeight = Mathf.Lerp(closeEndHeight, farEndHeight, launchPower);
-			return LaunchData.Create(launchPoint, launchPoint + this.Forward() * distance + Vector3.Up * endHeight, midHeight);
+			return LaunchSettings.Create(launchPoint, launchPoint + this.Forward() * distance + Vector3.Up * endHeight, midHeight);
 		}
 
 		private readonly float CLOSE_WINDUP_ANGLE = Mathf.DegToRad(45f);
@@ -120,7 +120,7 @@ namespace Project.Gameplay.Objects
 		private void LaunchPlayer()
 		{
 			isControllingPlayer = false;
-			Character.StartLauncher(GetLaunchData(), null, true);
+			Character.StartLauncher(GetLaunchSettings(), null, true);
 		}
 
 		private void CancelCatapult()
@@ -129,7 +129,11 @@ namespace Project.Gameplay.Objects
 			isControllingPlayer = false;
 
 			Vector3 destination = this.Back().RemoveVertical() * 2f + Vector3.Down * 2f;
-			Character.JumpTo(Character.GlobalPosition + destination, 1f);
+			Character.JumpTo(new JumpSettings()
+			{
+				destination = Character.GlobalPosition + destination,
+				jumpHeight = 1f,
+			});
 		}
 
 		public void OnEntered(Area3D a)
@@ -142,8 +146,12 @@ namespace Project.Gameplay.Objects
 			isEnteringCatapult = true;
 
 			Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = false; //Disable break skills
-			Character.JumpTo(launchNode.GlobalPosition, 2f);
 			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
+			Character.JumpTo(new JumpSettings()
+			{
+				destination = launchNode.GlobalPosition,
+				jumpHeight = 2f,
+			});
 		}
 	}
 }
