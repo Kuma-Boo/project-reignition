@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://2npi4fgvupgn"]
+[gd_scene load_steps=40 format=3 uid="uid://2npi4fgvupgn"]
 
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="1_6j3jw"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_ur5y1"]
@@ -49,9 +49,6 @@ size = Vector3(10, 20, 2.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_0yj8a"]
 size = Vector3(8, 15, 1)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_3vdk6"]
-radius = 10.0
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_roccu"]
 size = Vector3(5, 20, 7)
 
@@ -61,8 +58,10 @@ size = Vector3(20, 20, 5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_007vp"]
 size = Vector3(15, 20, 5)
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("environment")]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
 script = ExtResource("1_ur5y1")
+initialCameraSettings = ExtResource("11_b7tyc")
+pathParent = NodePath("Paths")
 environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("18_vaeni")]
@@ -377,18 +376,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_0yj8a")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
-
-[node name="Start" parent="Trigger/Camera" instance=ExtResource("2_tyjcn")]
-transform = Transform3D(-4.37114e-08, -4.37114e-08, -1, 4.37114e-08, 1, -4.37114e-08, 1, -4.37114e-08, -4.37114e-08, 177.9, 10, -184.1)
-"Enter Mode" = 0
-
-[node name="Camera" type="Node3D" parent="Trigger/Camera/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, -1.64203e-15, 0, -1.64203e-15, 1, 0, 0, 0)
-script = ExtResource("7_3mnh5")
-settings = ExtResource("11_b7tyc")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Start"]
-shape = SubResource("SphereShape3D_3vdk6")
 
 [node name="SidleEnd" parent="Trigger/Camera" instance=ExtResource("2_tyjcn")]
 transform = Transform3D(-4.37114e-08, -4.37114e-08, -1, 4.37114e-08, 1, -4.37114e-08, 1, -4.37114e-08, -4.37114e-08, 161.7, 40, -332.5)

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://qmsgr6kswk87"]
+
+[ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="1_v2y6p"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_f0gyp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_t4t3r"]
+size = Vector3(0.5, 0.1, 1)
+
+[node name="PathFollower" type="PathFollow3D"]
+visible = false
+loop = false
+script = ExtResource("1_v2y6p")
+
+[node name="Debug" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_f0gyp")
+
+[node name="Tilt" type="MeshInstance3D" parent="Debug"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+mesh = SubResource("BoxMesh_t4t3r")

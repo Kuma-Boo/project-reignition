@@ -30,8 +30,10 @@ namespace Project.Editor
 
 		public NodePath _path;
 		public Path3D path;
-		public float progressOffset; //Used whenever path isn't getting the proper point
-		public bool followPathY; //Enable this to use path's Y position
+		/// <summary> Use this if the default sampling is inaccurate. </summary>
+		public float progressOffset;
+		/// <summary> Disable following the path's Y position? </summary>
+		public bool disablePathY;
 		public Curve hOffsetCurve;
 		public Curve vOffsetCurve;
 
@@ -52,7 +54,7 @@ namespace Project.Editor
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
 				properties.Add(ExtensionMethods.CreateProperty("Path Progress Offset", Variant.Type.Float, PropertyHint.Range, "-64,64,.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Follow Path Y", Variant.Type.Bool));
+				properties.Add(ExtensionMethods.CreateProperty("Disable Path Y", Variant.Type.Bool));
 			}
 			else
 				properties.Add(ExtensionMethods.CreateProperty("Orientation", Variant.Type.Int, PropertyHint.Enum, orientation.EnumToString()));
@@ -107,8 +109,8 @@ namespace Project.Editor
 				case "Path Progress Offset":
 					progressOffset = (float)value;
 					break;
-				case "Follow Path Y":
-					followPathY = (bool)value;
+				case "Disable Path Y":
+					disablePathY = (bool)value;
 					break;
 
 				case "Horizontal Offset":
@@ -149,8 +151,8 @@ namespace Project.Editor
 					return _path;
 				case "Path Progress Offset":
 					return progressOffset;
-				case "Follow Path Y":
-					return followPathY;
+				case "Disable Path Y":
+					return disablePathY;
 
 				case "Horizontal Offset":
 					return hOffsetCurve;
@@ -221,22 +223,20 @@ namespace Project.Editor
 					follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
 
 					Vector3 offset = follow.GlobalTransform.Inverse().Basis * (GlobalPosition - follow.GlobalPosition);
-					follow.HOffset = offset.X;
-					follow.VOffset = offset.Y;
-
 					for (int i = 0; i < amount; i++)
 					{
+						follow.HOffset = offset.X;
+						follow.VOffset = offset.Y;
+
 						if (hOffsetCurve != null)
-							follow.HOffset = hOffsetCurve.Sample((float)i / divider);
+							follow.HOffset += hOffsetCurve.Sample((float)i / divider);
 
 						Vector3 spawnPosition = follow.GlobalPosition;
+						if (disablePathY)
+							spawnPosition.Y = GlobalPosition.Y;
+
 						if (vOffsetCurve != null)
-						{
-							if (followPathY)
-								spawnPosition.Y += vOffsetCurve.Sample(i / divider);
-							else
-								spawnPosition.Y = GlobalPosition.Y + vOffsetCurve.Sample(i / divider);
-						}
+							spawnPosition.Y += vOffsetCurve.Sample(i / divider);
 
 						Spawn(spawnPosition, true);
 						follow.Progress += spacing;

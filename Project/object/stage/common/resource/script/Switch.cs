@@ -11,12 +11,15 @@ namespace Project.Gameplay.Objects
 		[Signal]
 		public delegate void RespawnedEventHandler();
 
-		[Export]
+		[Export(PropertyHint.Range, "0,10,.1")]
+		/// <summary> How long should activation last? </summary>
 		private float activationLength;
 		[Export]
-		private bool startActive; //Used for when you want a switch to start enabled
+		/// <summary> Used for when you want a switch to start enabled. </summary>
+		private bool startActive;
 		[Export]
-		private bool isToggleable; //Allow the switch to be toggled on/off?
+		/// <summary> Allow the switch to be toggled on/off? </summary>
+		private bool isToggleable;
 		[Export]
 		private AnimationPlayer animator;
 		private bool isActive;

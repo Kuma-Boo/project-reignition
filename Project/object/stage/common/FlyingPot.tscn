@@ -78,7 +78,6 @@ input_1/reset = true
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_51t0f"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_v4aem"]
-graph_offset = Vector2(-548.114, 22.2995)
 nodes/action_anim/node = SubResource("AnimationNodeAnimation_wgyli")
 nodes/action_anim/position = Vector2(-32, 352)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_hr07p")
@@ -230,7 +229,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:canTransitionToFalling")
+tracks/1/path = NodePath("../.:canTransitionToFalling")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -266,7 +265,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath(".:isFalling")
+tracks/4/path = NodePath("../.:isFalling")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -342,7 +341,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:isFalling")
+tracks/1/path = NodePath("../.:isFalling")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -354,7 +353,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath(".:canTransitionToFalling")
+tracks/2/path = NodePath("../.:canTransitionToFalling")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -397,7 +396,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath(".:isFalling")
+tracks/2/path = NodePath("../.:isFalling")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -445,7 +444,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath(".:canTransitionToFalling")
+tracks/6/path = NodePath("../.:canTransitionToFalling")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -489,7 +488,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath(".:canTransitionToFalling")
+tracks/2/path = NodePath("../.:canTransitionToFalling")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -543,41 +542,43 @@ _data = {
 "wing-loop": SubResource("Animation_ws0l1")
 }
 
-[node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "environmentCollider", "lockonArea", "cameraTrigger", "interactionAnimator", "wingAnimator")]
+[node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "cameraTrigger", "environmentCollider", "interactionAnimator", "wingAnimator")]
 script = ExtResource("2")
 customCameraSettings = ExtResource("2_gdkjt")
-root = NodePath("Flying Pot")
-environmentCollider = NodePath("Collision/CollisionShape3D")
-lockonArea = NodePath("LockonTarget")
+root = NodePath("Root")
+lockonArea = NodePath("Root/LockonTarget")
 cameraTrigger = NodePath("Camera")
-interactionAnimator = NodePath("InteractionAnimator")
-wingAnimator = NodePath("WingAnimator")
+environmentCollider = NodePath("Root/Collision/CollisionShape3D")
+interactionAnimator = NodePath("Root/InteractionAnimator")
+wingAnimator = NodePath("Root/WingAnimator")
 
 [node name="Camera" type="Node3D" parent="."]
 script = ExtResource("14_0wd1l")
 transitionTime = 0.2
 
-[node name="Flying Pot" parent="." instance=ExtResource("1")]
+[node name="Root" type="Node3D" parent="."]
 
-[node name="Collision" type="StaticBody3D" parent="." groups=["wall"]]
+[node name="Flying Pot" parent="Root" instance=ExtResource("1")]
+
+[node name="Collision" type="StaticBody3D" parent="Root" groups=["wall"]]
 collision_layer = 8
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("3")
 
-[node name="LockonTarget" type="Area3D" parent="."]
+[node name="LockonTarget" type="Area3D" parent="Root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 collision_layer = 4
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LockonTarget"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/LockonTarget"]
 shape = SubResource("1")
 
-[node name="VFX" type="Node3D" parent="."]
+[node name="VFX" type="Node3D" parent="Root"]
 
-[node name="FeatherParticles" type="GPUParticles3D" parent="VFX"]
+[node name="FeatherParticles" type="GPUParticles3D" parent="Root/VFX"]
 layers = 32
 emitting = false
 amount = 12
@@ -589,7 +590,7 @@ transform_align = 3
 process_material = ExtResource("4_8d8qk")
 draw_pass_1 = SubResource("PlaneMesh_18vhs")
 
-[node name="DustParticles" type="GPUParticles3D" parent="VFX"]
+[node name="DustParticles" type="GPUParticles3D" parent="Root/VFX"]
 layers = 32
 emitting = false
 lifetime = 1.5
@@ -599,7 +600,7 @@ interpolate = false
 process_material = ExtResource("6_s7d7r")
 draw_pass_1 = SubResource("PlaneMesh_x18td")
 
-[node name="ShineParticles" type="GPUParticles3D" parent="VFX"]
+[node name="ShineParticles" type="GPUParticles3D" parent="Root/VFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 layers = 32
 emitting = false
@@ -612,7 +613,7 @@ interpolate = false
 process_material = ExtResource("8_5bysa")
 draw_pass_1 = SubResource("PlaneMesh_eilr1")
 
-[node name="SparkParticles" type="GPUParticles3D" parent="VFX"]
+[node name="SparkParticles" type="GPUParticles3D" parent="Root/VFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 layers = 32
 emitting = false
@@ -625,19 +626,19 @@ interpolate = false
 process_material = ExtResource("8_m5xym")
 draw_pass_1 = SubResource("PlaneMesh_x428s")
 
-[node name="SFX" type="Node3D" parent="."]
+[node name="SFX" type="Node3D" parent="Root"]
 
-[node name="EnterSFX" type="AudioStreamPlayer" parent="SFX"]
+[node name="EnterSFX" type="AudioStreamPlayer" parent="Root/SFX"]
 stream = ExtResource("12_0cgd7")
 volume_db = -6.0
 bus = &"SFX"
 
-[node name="ExitSFX" type="AudioStreamPlayer" parent="SFX"]
+[node name="ExitSFX" type="AudioStreamPlayer" parent="Root/SFX"]
 stream = ExtResource("13_43524")
 volume_db = -6.0
 bus = &"SFX"
 
-[node name="WingSFX" type="AudioStreamPlayer3D" parent="SFX"]
+[node name="WingSFX" type="AudioStreamPlayer3D" parent="Root/SFX"]
 stream = ExtResource("14_uh57a")
 max_db = 0.0
 max_distance = 50.0
@@ -646,7 +647,7 @@ panning_strength = 0.2
 bus = &"SFX"
 attenuation_filter_cutoff_hz = 10000.0
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="Root"]
 tree_root = SubResource("AnimationNodeBlendTree_v4aem")
 anim_player = NodePath("../Flying Pot/AnimationPlayer")
 parameters/action_trigger/active = false
@@ -660,12 +661,12 @@ parameters/wing_state/transition_request = "Flap"
 parameters/wing_state/current_index = 0
 parameters/wing_time_scale/scale = 0.5
 
-[node name="InteractionAnimator" type="AnimationPlayer" parent="."]
+[node name="InteractionAnimator" type="AnimationPlayer" parent="Root"]
 libraries = {
 "": SubResource("AnimationLibrary_3b38y")
 }
 
-[node name="WingAnimator" type="AnimationPlayer" parent="."]
+[node name="WingAnimator" type="AnimationPlayer" parent="Root"]
 autoplay = "wing-loop"
 method_call_mode = 1
 libraries = {
@@ -673,5 +674,5 @@ libraries = {
 }
 next/flap = &"wing-loop"
 
-[connection signal="area_entered" from="LockonTarget" to="." method="PlayerEntered"]
-[connection signal="area_exited" from="LockonTarget" to="." method="PlayerExited"]
+[connection signal="area_entered" from="Root/LockonTarget" to="." method="PlayerEntered"]
+[connection signal="area_exited" from="Root/LockonTarget" to="." method="PlayerExited"]

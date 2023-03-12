@@ -11,9 +11,9 @@ namespace Project.Gameplay.Objects
 		private Tween tweener;
 
 		[Export]
-		private float explosionStrength;
-		[Export]
 		private float pieceMass;
+		[Export(PropertyHint.Range, "-128,128")]
+		private float gravityScale = 1;
 		[Export]
 		/// <summary> Stop the player when being shattered? </summary>
 		private bool stopPlayerOnShatter;
@@ -44,6 +44,7 @@ namespace Project.Gameplay.Objects
 			HomingAttack = 8, //Break when player is homing attacking. Must be enabled even if AttackSkill is active.
 			SpeedBreak = 16, //Break when speedbreak is active. Must be enabled even if AttackSkill is active.
 		}
+		private const float SHATTER_STRENGTH = 10.0f;
 
 		private ShatterFlags FlagSetting => (ShatterFlags)shatterFlags;
 		private CharacterController Character => CharacterController.instance;
@@ -75,6 +76,7 @@ namespace Project.Gameplay.Objects
 				MeshInstance3D mesh = rigidbody.GetChildOrNull<MeshInstance3D>(0); //mesh must be the FIRST child of the rigidbody.
 				CollisionShape3D collider = rigidbody.GetChildOrNull<CollisionShape3D>(1); //collider must be the SECOND child of the rigidbody.
 
+				rigidbody.GravityScale = gravityScale;
 				rigidbody.Mass = pieceMass;
 				rigidbody.CollisionLayer = Core.Runtime.Instance.particleCollisionLayer;
 				rigidbody.CollisionMask = Core.Runtime.Instance.particleCollisionMask;
@@ -130,7 +132,6 @@ namespace Project.Gameplay.Objects
 				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.On; //Reset Shadows
 			}
 
-
 			//Enable root
 			root.ProcessMode = ProcessModeEnum.Inherit;
 
@@ -152,8 +153,15 @@ namespace Project.Gameplay.Objects
 			pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 
 			//Reset animator
-			if (animator != null && animator.HasAnimation("RESET"))
-				animator.Play("RESET");
+			if (animator != null)
+			{
+				if (animator.HasAnimation("RESET"))
+					animator.Play("RESET");
+
+				//Attempt to queue autoplay animation
+				if (!string.IsNullOrEmpty(animator.Autoplay))
+					animator.Queue(animator.Autoplay);
+			}
 
 			for (int i = 0; i < pieces.Count; i++)
 			{
@@ -192,7 +200,7 @@ namespace Project.Gameplay.Objects
 			pieceRoot.ProcessMode = ProcessModeEnum.Inherit;
 
 			Vector3 shatterPoint = root.GlobalPosition;
-			float shatterStrength = explosionStrength;
+			float shatterStrength = SHATTER_STRENGTH;
 			if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) //Directional shatter
 			{
 				//Kill character's speed

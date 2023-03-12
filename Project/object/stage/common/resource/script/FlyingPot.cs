@@ -19,11 +19,11 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private Node3D root;
 		[Export]
-		private CollisionShape3D environmentCollider;
-		[Export]
 		private Area3D lockonArea;
 		[Export]
 		private CameraTrigger cameraTrigger;
+		[Export]
+		private CollisionShape3D environmentCollider;
 
 		[ExportSubgroup("Animation")]
 		[Export]
@@ -44,8 +44,7 @@ namespace Project.Gameplay.Objects
 		private float flapTimer;
 		private float angle;
 		private float velocity;
-		private Vector2 position;
-		private Vector3 startPosition;
+		private Vector2 localPosition;
 
 		private const float MAX_GRAVITY = -10.0f;
 		private const float GRAVITY_SCALE = 0.26f;
@@ -62,7 +61,6 @@ namespace Project.Gameplay.Objects
 		{
 			if (Engine.IsEditorHint()) return;
 
-			startPosition = GlobalPosition;
 			LevelSettings.instance.ConnectRespawnSignal(this);
 
 			if (customCameraSettings != null)
@@ -73,7 +71,7 @@ namespace Project.Gameplay.Objects
 		{
 			angle = 0f;
 			velocity = 0f;
-			position = Vector2.Zero;
+			localPosition = Vector2.Zero;
 			ApplyMovement();
 
 			lockonArea.SetDeferred("monitorable", true);
@@ -105,7 +103,7 @@ namespace Project.Gameplay.Objects
 			jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
 			Character.JumpTo(new JumpSettings()
 			{
-				destination = GlobalPosition,
+				destination = root.GlobalPosition,
 				jumpHeight = jumpHeight,
 				relativeToEnd = true,
 			});
@@ -130,7 +128,7 @@ namespace Project.Gameplay.Objects
 		{
 			flapTimer = 0;
 			isControllingPlayer = true;
-			Character.StartExternal(this, this);
+			Character.StartExternal(this, root);
 			Character.Animator.Visible = false;
 			interactionAnimator.Play("enter");
 		}
@@ -188,13 +186,13 @@ namespace Project.Gameplay.Objects
 		private void ApplyMovement()
 		{
 			if (velocity > 0)
-				position += Vector2.Down.Rotated(-angle) * velocity * PhysicsManager.physicsDelta;
+				localPosition += Vector2.Down.Rotated(-angle) * velocity * PhysicsManager.physicsDelta;
 			else
-				position += Vector2.Down * velocity * PhysicsManager.physicsDelta;
+				localPosition += Vector2.Down * velocity * PhysicsManager.physicsDelta;
 
-			position.X = Mathf.Clamp(position.X, -travelBounds.X, travelBounds.X);
-			position.Y = Mathf.Clamp(position.Y, 0f, travelBounds.Y);
-			if (Mathf.IsZeroApprox(position.Y))
+			localPosition.X = Mathf.Clamp(localPosition.X, -travelBounds.X, travelBounds.X);
+			localPosition.Y = Mathf.Clamp(localPosition.Y, 0f, travelBounds.Y);
+			if (Mathf.IsZeroApprox(localPosition.Y))
 			{
 				velocity = 0;
 
@@ -212,14 +210,14 @@ namespace Project.Gameplay.Objects
 			if (!isControllingPlayer)
 				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
 
-			GlobalPosition = startPosition + Vector3.Up * position.Y + this.Right() * position.X;
+			root.Position = new Vector3(localPosition.X, localPosition.Y, 0);
 			root.Rotation = Vector3.Forward * angle;
 
 			if (isControllingPlayer)
 				Character.UpdateExternalControl(); //Sync player object
 
 			if (lockonArea.Monitorable && !interactingWithPlayer)
-				isProcessing = !Mathf.IsZeroApprox(position.Y) || !Mathf.IsZeroApprox(angle); //Update sleeping status
+				isProcessing = !Mathf.IsZeroApprox(localPosition.Y) || !Mathf.IsZeroApprox(angle); //Update sleeping status
 		}
 
 		public void PlayerEntered(Area3D _)

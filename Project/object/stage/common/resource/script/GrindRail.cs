@@ -330,9 +330,7 @@ namespace Project.Gameplay
 						Character.VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
 						Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
 
-						Character.IsOnGround = false; //Disconnect from the ground
 						Character.CanJumpDash = false; //Disable jumpdashing
-
 						Character.Animator.StartGrindStep();
 					}
 					else //Jump normally
@@ -386,8 +384,14 @@ namespace Project.Gameplay
 			if (isInvisibleRail)
 				railModel.Visible = false;
 
+			Character.IsOnGround = false; //Disconnect from the ground
 			Character.Skills.IsSpeedBreakEnabled = true;
 			Character.ResetMovementState();
+
+			//Preserve speed
+			float launchAngle = pathFollower.Up().AngleTo(Vector3.Up) * Mathf.Sign(pathFollower.Up().Y);
+			Character.VerticalSpeed = Mathf.Sin(launchAngle) * -Character.MoveSpeed;
+			Character.MoveSpeed = Mathf.Cos(launchAngle) * Character.MoveSpeed;
 
 			if (!Character.IsGrindstepping)
 				Character.Animator.ResetState(.2f);

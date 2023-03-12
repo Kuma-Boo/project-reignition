@@ -146,15 +146,21 @@ namespace Project.Gameplay
 		/// <summary> Starting offset of the object. </summary>
 		public float StartingOffset { get; private set; }
 		[Export]
-		private NodePath targetObject;
 		/// <summary> Object to actually move. </summary>
-		private Node3D _targetObject;
+		private Node3D root;
+		[Export]
+		/// <summary> Object to actually move. </summary>
+		private AnimationPlayer animator;
+		[Export(PropertyHint.Range, "0,2,.1")]
+		private float animatorSpeedScale = 1.0f;
 
 		public override void _EnterTree()
 		{
 			if (Engine.IsEditorHint()) return;
 
-			_targetObject = GetNode<Node3D>(targetObject);
+			if (animator != null)
+				animator.SpeedScale = animatorSpeedScale;
+
 			Reset();
 		}
 
@@ -167,8 +173,8 @@ namespace Project.Gameplay
 			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) //Rollover
 				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength);
 
-			if (_targetObject != null && _targetObject.IsInsideTree())
-				_targetObject.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
+			if (root != null && root.IsInsideTree())
+				root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
 		}
 
 		/// <summary> Resets currentTime to StartingOffset. </summary>

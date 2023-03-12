@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay.Triggers
 {
@@ -7,25 +8,34 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class PlatformTrigger : Area3D
 	{
+		[Signal]
+		public delegate void PlatformInteractedEventHandler();
+
 		private bool isActive;
 		private bool isInteractingWithPlayer;
+		[Export]
+		public Node3D parentCollider;
 
 		private CharacterController Character => CharacterController.instance;
 
-		public override void _Process(double _)
+		public override void _PhysicsProcess(double _)
 		{
-			if (isInteractingWithPlayer)
+			if (!isInteractingWithPlayer) return;
+
+			if (!isActive && Character.IsOnGround)
 			{
-				if (Character.IsOnGround && Character.GlobalPosition.Y >= GlobalPosition.Y)
-					isActive = true;
+				isActive = true;
+				EmitSignal(SignalName.PlatformInteracted);
 			}
 
 			if (!isActive) return;
 
-			if (Character.GlobalPosition.Y < GlobalPosition.Y || Character.IsOnGround)
-				Character.GlobalTranslate(Vector3.Up * (GlobalPosition.Y - Character.GlobalPosition.Y));
-			else if (Character.VerticalSpeed < 0) //Player is falling
+			float checkLength = Mathf.Abs(Character.GlobalPosition.Y - GlobalPosition.Y) + Character.CollisionRadius * 2.0f;
+			KinematicCollision3D collision = Character.MoveAndCollide(Vector3.Down * checkLength, true);
+			if (collision == null || (Node3D)collision.GetCollider() != parentCollider)
 				isActive = false;
+			else if (Character.IsOnGround)
+				Character.GlobalTranslate(Vector3.Up * (GlobalPosition.Y - Character.GlobalPosition.Y));
 		}
 
 		public void OnEntered(Area3D a)

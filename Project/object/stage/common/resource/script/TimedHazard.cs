@@ -64,7 +64,7 @@ namespace Project.Gameplay.Hazards
 				}
 			}
 
-			switch ((string)property)
+			switch (propertyName)
 			{
 				case "Current State":
 					currentStateIndex = (int)value;

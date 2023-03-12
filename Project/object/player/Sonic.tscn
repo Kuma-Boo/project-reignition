@@ -1,20 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://c4kdj2x0c8h4m"]
+[gd_scene load_steps=10 format=3 uid="uid://c4kdj2x0c8h4m"]
 
+[ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="2_ijgvj"]
 [ext_resource type="PackedScene" uid="uid://wfh54hnc028k" path="res://object/player/resource/model/Sonic.tscn" id="3_t0hx8"]
-[ext_resource type="Script" path="res://object/player/resource/script/CharacterPathFollower.cs" id="6_80hf8"]
 [ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://gp7nom61rmtj" path="res://object/player/resource/component/Effect.tscn" id="8_ni1dd"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterController.cs" id="10"]
-[ext_resource type="PackedScene" uid="uid://dqb313n3ldim8" path="res://object/player/resource/component/Skills.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://object/player/resource/component/Skills.tscn" id="13"]
 
 [sub_resource type="Curve" id="Curve_0y4at"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.225, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.5), 6.0, 5.5, 0, 0, Vector2(0.7, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 5
-
-[sub_resource type="SphereMesh" id="SphereMesh_f0gyp"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_t4t3r"]
-size = Vector3(0.5, 0.1, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uookt"]
 radius = 0.4
@@ -45,17 +40,7 @@ Lockon = NodePath("Components/Lockon")
 
 [node name="Components" type="Node3D" parent="."]
 
-[node name="PathFollower" type="PathFollow3D" parent="Components"]
-visible = false
-loop = false
-script = ExtResource("6_80hf8")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower"]
-mesh = SubResource("SphereMesh_f0gyp")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Components/PathFollower/MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
-mesh = SubResource("BoxMesh_t4t3r")
+[node name="PathFollower" parent="Components" instance=ExtResource("2_ijgvj")]
 
 [node name="Sonic" parent="Components" instance=ExtResource("3_t0hx8")]
 

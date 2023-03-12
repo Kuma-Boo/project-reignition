@@ -58,9 +58,7 @@ namespace Project
 			if (Mathf.IsZeroApprox(distance)) return;
 			float invDistance = 1 / distance;
 			float impulseMag = power * invDistance * invDistance;
-			//body.ApplyCentralImpulse(impulseMag * blastDir.Normalized());
-			body.LinearVelocity = impulseMag * blastDir.Normalized();
-			body.AngularVelocity = blastDir.Normalized() * impulseMag;
+			body.ApplyImpulse(impulseMag * blastDir.Normalized());
 		}
 
 		/// <summary>

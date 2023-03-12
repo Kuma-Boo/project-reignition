@@ -1,16 +1,18 @@
 using Godot;
-using Project.Core;
 
 namespace Project.Gameplay
 {
 	/// <summary>
-	/// Helps keep track of where the player is relative to the level's path
+	/// Helps keep track of where the player is relative to the level's path.
 	/// </summary>
 	public partial class CharacterPathFollower : PathFollow3D
 	{
 		public CharacterController Character => CharacterController.instance;
 
+		/// <summary> PathFollower's current path. </summary>
 		public Path3D ActivePath { get; private set; }
+		/// <summary> PathFollower's previous path. </summary>
+		public Path3D PreviousPath { get; private set; }
 
 		/// <summary> Current rotation of the pathfollower, in global radians. </summary>
 		public float ForwardAngle { get; private set; }
@@ -38,6 +40,7 @@ namespace Project.Gameplay
 				GetParent().RemoveChild(this);
 			newPath.AddChild(this);
 
+			PreviousPath = ActivePath;
 			ActivePath = newPath;
 			Resync();
 		}
@@ -47,7 +50,7 @@ namespace Project.Gameplay
 			if (!IsInsideTree()) return;
 			if (ActivePath == null) return;
 
-			Vector3 syncPoint = Character.GlobalPosition;// + Vector3.Down * TruePlayerPositionDelta.Y;
+			Vector3 syncPoint = Character.GlobalPosition;
 			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
 
 			RecalculateData();

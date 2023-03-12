@@ -6,7 +6,7 @@ namespace Project.Core
 		private static bool EnableCheats => true;
 
 		/// <summary> Allow the player to jump in the air. </summary>
-		public static bool EnableMoonJump => EnableCheats && true;
+		public static bool EnableMoonJump => EnableCheats && false;
 
 		/// <summary> Use a custom save. </summary>
 		public static bool UseDebugSave => EnableCheats && true;

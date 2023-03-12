@@ -23,7 +23,11 @@ namespace Project.Gameplay
 			CallDeferred(MethodName.ResetOrientation); //Start with proper orientation
 
 			Camera.Initialize();
-			PathFollower.SetActivePath(Stage.CalculateStartingPath(GlobalPosition)); //Attempt to autoload the stage's default path
+			Skills.Initialize();
+
+			Path3D startingPath = Stage.CalculateStartingPath(GlobalPosition);
+			PathFollower.SetActivePath(startingPath); //Attempt to autoload the stage's default path
+			Camera.PathFollower.SetActivePath(startingPath);
 
 			Level.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
 			Level.UpdateRingCount(Skills.StartingRingCount, LevelSettings.MathModeEnum.Replace); //Start with the proper ring count
@@ -90,11 +94,11 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (!IsRespawning)
-				UpdateInputs();
+			if (IsRespawning) return;
+
+			UpdateInputs();
 
 			isCustomPhysicsEnabled = false;
-
 			switch (MovementState)
 			{
 				case MovementStates.Normal:
@@ -221,6 +225,8 @@ namespace Project.Gameplay
 				else
 					ProcessCurrentLockoutData();
 			}
+			else if (ActiveLockoutData == resource) //Reset lockout timer
+				lockoutTimer = 0;
 		}
 
 		/// <summary>
@@ -676,10 +682,12 @@ namespace Project.Gameplay
 					break;
 
 				default: //Normal air actions
-					if (Lockon.IsBouncing)
+					if (Lockon.IsBouncingLockoutActive)
 					{
 						Lockon.UpdateBounce();
-						return;
+
+						if (!Lockon.CanInterruptBounce)
+							return;
 					}
 
 					CheckStomp();
@@ -813,6 +821,9 @@ namespace Project.Gameplay
 			MoveSpeed = jumpDashSpeed;
 			ActionState = ActionStates.JumpDash;
 
+			if (Lockon.IsBouncingLockoutActive) //Interrupt lockout
+				RemoveLockoutData(Lockon.bounceLockoutSettings);
+
 			if (Lockon.Target == null) //Normal jumpdash
 			{
 				VerticalSpeed = jumpDashPower;
@@ -842,6 +853,7 @@ namespace Project.Gameplay
 				Velocity = Lockon.HomingAttackDirection.Normalized() * Skills.homingAttackSpeed;
 				MovementAngle = CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
+
 				PathFollower.Resync();
 			}
 			else //Normal Jump dash; Apply gravity
@@ -1095,7 +1107,6 @@ namespace Project.Gameplay
 				color = Colors.Black //Use Colors.Transparent for debugging
 			});
 
-			//ProcessMode = ProcessModeEnum.Disabled;
 			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.ProcessRespawn), (uint)ConnectFlags.OneShot);
 			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionFinish, new Callable(this, MethodName.OnRespawnFinished), (uint)ConnectFlags.OneShot);
 		}
@@ -1111,7 +1122,8 @@ namespace Project.Gameplay
 
 			invincibilityTimer = 0;
 			Teleport(Level.CurrentCheckpoint.GlobalPosition, TeleportSettings.RespawnSettings);
-			PathFollower.SetActivePath(Level.CheckpointPath); //Revert path
+			PathFollower.SetActivePath(Level.CheckpointPlayerPath); //Revert path
+			Camera.PathFollower.SetActivePath(Level.CheckpointCameraPath);
 			PathFollower.Resync();
 
 			ResetVelocity();
@@ -1162,17 +1174,12 @@ namespace Project.Gameplay
 		/// </summary>
 		private void SnapToGround()
 		{
-			RaycastHit groundHit = this.CastRay(CenterPosition, Vector3.Down * 100.0f, CollisionMask);
-			Debug.DrawRay(CenterPosition, Vector3.Down * 100.0f, groundHit ? Colors.Red : Colors.White);
+			KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 100.0f, true);
+			if (collision == null) return;
 
-			if (groundHit)
-			{
-				GlobalPosition -= groundHit.normal * (groundHit.distance - CollisionRadius); //Snap to ground
-				Animator.Respawn();
-				LandOnGround();
-			}
-			else
-				GD.Print("Couldn't find ground to snap to!");
+			GlobalPosition = collision.GetPosition();
+			Animator.Respawn();
+			LandOnGround();
 		}
 		#endregion
 
@@ -1318,7 +1325,8 @@ namespace Project.Gameplay
 			Velocity = movementDirection * MoveSpeed + strafeDirection * StrafeSpeed;
 			Velocity += UpDirection * VerticalSpeed;
 
-			TrueVelocity = GlobalPosition; //Calculates the actual amount moved to prevent player running in place
+			//Store the current position to calculate true velocity later
+			TrueVelocity = GlobalPosition;
 
 			MoveAndSlide();
 
@@ -1329,6 +1337,7 @@ namespace Project.Gameplay
 			CheckGround();
 			CheckCeiling();
 
+			//Calculate true velocity after physics were processed.
 			TrueVelocity = PathFollower.Basis.Inverse() * (TrueVelocity - GlobalPosition);
 			if (IsOnGround && IsOnWall() && Mathf.IsZeroApprox(TrueVelocity.LengthSquared()))
 			{
@@ -1756,7 +1765,7 @@ namespace Project.Gameplay
 		{
 			if (!(body is PhysicsBody3D)) return;
 
-			if (body.IsInGroup("crusher") && GetCollisionExceptions().Contains(body as PhysicsBody3D))
+			if (GetCollisionExceptions().Contains(body as PhysicsBody3D))
 			{
 				GD.Print($"Stopped ignoring {body.Name}");
 				RemoveCollisionExceptionWith(body);

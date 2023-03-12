@@ -25,27 +25,13 @@ namespace Project.Gameplay
 		private readonly StringName RIGHT_CONSTANT = "right";
 		private readonly StringName LEFT_CONSTANT = "left";
 
-		public override void _Ready()
+		public override void _EnterTree()
 		{
 			animationTree.Active = true; //Activate animator
 
 			animationRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
 			animationStateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
 			oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
-
-			//Get normal state
-			normalState = animationTree.Get("parameters/normal_state/playback").Obj as AnimationNodeStateMachinePlayback;
-
-			//Get drift state
-			driftLeftState = animationTree.Get("parameters/normal_state/drift_tree/left_state/playback").Obj as AnimationNodeStateMachinePlayback;
-			driftRightState = animationTree.Get("parameters/normal_state/drift_tree/right_state/playback").Obj as AnimationNodeStateMachinePlayback;
-
-			//Get balance state
-			balanceState = animationTree.Get("parameters/balance_tree/balance_state/playback").Obj as AnimationNodeStateMachinePlayback;
-
-			//Get sidle states
-			sidleRightState = animationTree.Get("parameters/sidle_tree/sidle_right_state/playback").Obj as AnimationNodeStateMachinePlayback;
-			sidleLeftState = animationTree.Get("parameters/sidle_tree/sidle_left_state/playback").Obj as AnimationNodeStateMachinePlayback;
 		}
 
 		public void StartInvincibility()
@@ -57,7 +43,7 @@ namespace Project.Gameplay
 		/// <summary> Called when the player respawns. Resets all animations. </summary>
 		public void Respawn()
 		{
-			normalState.Travel(GROUND_TREE_STATE);
+			NormalState.Start(GROUND_TREE_STATE, true);
 			eventAnimationPlayer.Play("respawn");
 		}
 
@@ -135,7 +121,8 @@ namespace Project.Gameplay
 
 		#region Normal Animations
 		/// <summary> Gets the normal state's StateMachinePlayback </summary>
-		private AnimationNodeStateMachinePlayback normalState;
+		private AnimationNodeStateMachinePlayback NormalState => animationTree.Get(NORMAL_STATE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+		private readonly StringName NORMAL_STATE_PLAYBACK = "parameters/normal_state/playback";
 
 		private bool canTransitionToFalling;
 		private readonly StringName FALL_STATE_PARAMETER = "fall";
@@ -148,13 +135,13 @@ namespace Project.Gameplay
 		public void Jump()
 		{
 			canTransitionToFalling = true;
-			normalState.Travel(JUMP_STATE_PARAMETER);
+			NormalState.Travel(JUMP_STATE_PARAMETER);
 		}
 
 		private readonly StringName HURT_STATE_PARAMETER = "hurt";
 		public void Hurt()
 		{
-			normalState.Travel(HURT_STATE_PARAMETER);
+			NormalState.Travel(HURT_STATE_PARAMETER);
 		}
 
 		private readonly StringName AIR_DASH_PARAMETER = "jump-accel";
@@ -162,18 +149,18 @@ namespace Project.Gameplay
 		public void AirAttackAnimation()
 		{
 			canTransitionToFalling = false;
-			normalState.Travel(AIR_DASH_PARAMETER);
+			NormalState.Travel(AIR_DASH_PARAMETER);
 		}
 		public void LaunchAnimation()
 		{
 			canTransitionToFalling = false;
-			normalState.Travel(LAUNCH_PARAMETER);
+			NormalState.Travel(LAUNCH_PARAMETER);
 		}
 
 		private readonly StringName BACKFLIP_STATE_PARAMETER = "backflip";
 		public void Backflip()
 		{
-			normalState.Travel(BACKFLIP_STATE_PARAMETER);
+			NormalState.Travel(BACKFLIP_STATE_PARAMETER);
 		}
 
 		private readonly StringName GROUND_TREE_STATE = "ground_tree";
@@ -215,7 +202,7 @@ namespace Project.Gameplay
 			{
 				animationTree.Set(MOVE_SEEK_PARAMETER, 0);
 				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				normalState.Travel(GROUND_TREE_STATE);
+				NormalState.Travel(GROUND_TREE_STATE);
 			}
 
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
@@ -297,7 +284,7 @@ namespace Project.Gameplay
 				Character.VerticalSpeed <= 0)
 				{
 					canTransitionToFalling = false;
-					normalState.Travel(FALL_STATE_PARAMETER);
+					NormalState.Travel(FALL_STATE_PARAMETER);
 				}
 			}
 		}
@@ -394,8 +381,11 @@ namespace Project.Gameplay
 
 		#region Drift
 		private readonly StringName DRIFT_STATE = "drift_tree";
-		private AnimationNodeStateMachinePlayback driftLeftState;
-		private AnimationNodeStateMachinePlayback driftRightState;
+		private AnimationNodeStateMachinePlayback DriftLeftState => animationTree.Get(DRIFT_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+		private AnimationNodeStateMachinePlayback DriftRightState => animationTree.Get(DRIFT_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+
+		private readonly StringName DRIFT_LEFT_PLAYBACK = "parameters/normal_state/drift_tree/left_state/playback";
+		private readonly StringName DRIFT_RIGHT_PLAYBACK = "parameters/normal_state/drift_tree/right_state/playback";
 
 		private readonly StringName DRIFT_DIRECTION_PARAMETER = "parameters/normal_state/drift_tree/direction_transition/transition_request";
 		private readonly StringName DRIFT_START_STATE = "drift-start";
@@ -403,29 +393,30 @@ namespace Project.Gameplay
 
 		public void StartDrift(bool isRightTurn)
 		{
-			driftLeftState.Start(DRIFT_START_STATE);
-			driftRightState.Start(DRIFT_START_STATE);
+			DriftLeftState.Start(DRIFT_START_STATE);
+			DriftRightState.Start(DRIFT_START_STATE);
 
-			normalState.Travel(DRIFT_STATE);
+			NormalState.Travel(DRIFT_STATE);
 			animationTree.Set(DRIFT_DIRECTION_PARAMETER, isRightTurn ? RIGHT_CONSTANT : LEFT_CONSTANT);
 		}
 
 		public void LaunchDrift()
 		{
-			driftLeftState.Travel(DRIFT_LAUNCH_STATE);
-			driftRightState.Travel(DRIFT_LAUNCH_STATE);
+			DriftLeftState.Travel(DRIFT_LAUNCH_STATE);
+			DriftRightState.Travel(DRIFT_LAUNCH_STATE);
 		}
 
 		public void StopDrift()
 		{
-			normalState.Travel(GROUND_TREE_STATE);
+			NormalState.Travel(GROUND_TREE_STATE);
 			animationRoot.Set(MOVE_SEEK_PARAMETER, 0);
 		}
 		#endregion
 
 		#region Grinding and Balancing Animations
 		/// <summary> Reference to the balance state's StateMachinePlayback </summary>
-		private AnimationNodeStateMachinePlayback balanceState;
+		private AnimationNodeStateMachinePlayback BalanceState => animationTree.Get(BALANCE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+		private readonly StringName BALANCE_PLAYBACK = "parameters/balance_tree/balance_state/playback";
 
 		/// <summary> Is the current balancing direction facing right? </summary>
 		private bool IsBalancingRight { get; set; }
@@ -444,7 +435,7 @@ namespace Project.Gameplay
 		{
 			IsBalanceShuffleActive = true;
 			IsBalancingRight = true; //Default to facing right
-			balanceState.Start(SHUFFLE_RIGHT_PARAMETER, true); //Start with a shuffle
+			BalanceState.Start(SHUFFLE_RIGHT_PARAMETER, true); //Start with a shuffle
 
 			//Reset current balance
 			animationTree.Set(BALANCE_LEFT_LEAN_PARAMETER, 0);
@@ -473,7 +464,7 @@ namespace Project.Gameplay
 		{
 			IsBalanceShuffleActive = true;
 			IsBalancingRight = !IsBalancingRight;
-			balanceState.Travel(IsBalancingRight ? SHUFFLE_RIGHT_PARAMETER : SHUFFLE_LEFT_PARAMETER);
+			BalanceState.Travel(IsBalancingRight ? SHUFFLE_RIGHT_PARAMETER : SHUFFLE_LEFT_PARAMETER);
 		}
 
 		private float balanceTurnVelocity;
@@ -483,7 +474,7 @@ namespace Project.Gameplay
 		{
 			float targetBalance = 0;
 
-			StringName currentNode = balanceState.GetCurrentNode();
+			StringName currentNode = BalanceState.GetCurrentNode();
 			IsBalanceShuffleActive = currentNode == SHUFFLE_LEFT_PARAMETER || currentNode == SHUFFLE_RIGHT_PARAMETER;
 			if (IsBalanceShuffleActive)
 			{
@@ -511,10 +502,14 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Sidle
-		public bool IsSidleMoving => sidleRightState.GetFadingFromNode().IsEmpty && sidleRightState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER;
+		public bool IsSidleMoving => SidleRightState.GetFadingFromNode().IsEmpty && SidleRightState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER;
 
-		private AnimationNodeStateMachinePlayback sidleRightState;
-		private AnimationNodeStateMachinePlayback sidleLeftState;
+		private AnimationNodeStateMachinePlayback SidleRightState => animationTree.Get(SIDLE_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+		private AnimationNodeStateMachinePlayback SidleLeftState => animationTree.Get(SIDLE_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+
+		//Get sidle states
+		private readonly StringName SIDLE_RIGHT_PLAYBACK = "parameters/sidle_tree/sidle_right_state/playback";
+		private readonly StringName SIDLE_LEFT_PLAYBACK = "parameters/sidle_tree/sidle_left_state/playback";
 
 		private readonly StringName SIDLE_LOOP_STATE_PARAMETER = "sidle-loop";
 		private readonly StringName SIDLE_DAMAGE_STATE_PARAMETER = "sidle-damage-loop";
@@ -533,8 +528,8 @@ namespace Project.Gameplay
 			else //Quick crossfade into sidle
 				SetStateXfade(0.1f);
 
-			sidleRightState.Start(SIDLE_LOOP_STATE_PARAMETER);
-			sidleLeftState.Start(SIDLE_LOOP_STATE_PARAMETER);
+			SidleRightState.Start(SIDLE_LOOP_STATE_PARAMETER);
+			SidleLeftState.Start(SIDLE_LOOP_STATE_PARAMETER);
 			animationTree.Set(STATE_PARAMETER, SIDLE_STATE);
 			animationTree.Set(SIDLE_DIRECTION_PARAMETER, facingRight ? RIGHT_CONSTANT : LEFT_CONSTANT);
 		}
@@ -553,8 +548,8 @@ namespace Project.Gameplay
 			animationTree.Set(SIDLE_SPEED_PARAMETER, 1f);
 			animationTree.Set(SIDLE_SEEK_PARAMETER, -1);
 
-			sidleRightState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
-			sidleLeftState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
+			SidleRightState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
+			SidleLeftState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
 		}
 
 		/// <summary>
@@ -562,8 +557,8 @@ namespace Project.Gameplay
 		/// </summary>
 		public void SidleHang()
 		{
-			sidleRightState.Travel(SIDLE_HANG_STATE_PARAMETER);
-			sidleLeftState.Travel(SIDLE_HANG_STATE_PARAMETER);
+			SidleRightState.Travel(SIDLE_HANG_STATE_PARAMETER);
+			SidleLeftState.Travel(SIDLE_HANG_STATE_PARAMETER);
 		}
 
 		/// <summary>
@@ -571,8 +566,8 @@ namespace Project.Gameplay
 		/// </summary>
 		public void SidleHangFall()
 		{
-			sidleRightState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);
-			sidleLeftState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);
+			SidleRightState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);
+			SidleLeftState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);
 		}
 
 		/// <summary>
@@ -580,8 +575,8 @@ namespace Project.Gameplay
 		/// </summary>
 		public void SidleFall()
 		{
-			sidleRightState.Travel(SIDLE_FALL_STATE_PARAMETER);
-			sidleLeftState.Travel(SIDLE_FALL_STATE_PARAMETER);
+			SidleRightState.Travel(SIDLE_FALL_STATE_PARAMETER);
+			SidleLeftState.Travel(SIDLE_FALL_STATE_PARAMETER);
 		}
 
 		/// <summary>
@@ -589,8 +584,8 @@ namespace Project.Gameplay
 		/// </summary>
 		public void SidleRecovery()
 		{
-			sidleRightState.Travel(SIDLE_LOOP_STATE_PARAMETER);
-			sidleLeftState.Travel(SIDLE_LOOP_STATE_PARAMETER);
+			SidleRightState.Travel(SIDLE_LOOP_STATE_PARAMETER);
+			SidleLeftState.Travel(SIDLE_LOOP_STATE_PARAMETER);
 		}
 		#endregion
 	}

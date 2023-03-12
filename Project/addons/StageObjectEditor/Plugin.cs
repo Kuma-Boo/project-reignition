@@ -45,7 +45,7 @@ namespace Project.Editor
 			else if (target is Catapult)
 				DrawLaunchSettings(overlay, (target as Catapult).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as Catapult).launchPower));
 			else if (target is LaunchRing)
-				DrawLaunchSettings(overlay, (target as LaunchRing).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as LaunchRing).launchPower));
+				DrawLaunchSettings(overlay, (target as LaunchRing).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as LaunchRing).LaunchRatio));
 			else if (target is ItemBox)
 				UpdateItemBox(overlay);
 			else if (target is FlyingPot)

@@ -1,11 +1,13 @@
-[gd_scene load_steps=26 format=3 uid="uid://clxss7c077sde"]
+[gd_scene load_steps=52 format=3 uid="uid://clxss7c077sde"]
 
-[ext_resource type="PackedScene" uid="uid://dqaocdk5pgugg" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6irkq"]
+[ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6irkq"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_yisij"]
-[ext_resource type="PackedScene" uid="uid://dm3cwd75hg84f" path="res://object/player/CharacterSpawn.tscn" id="2_4su1b"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_4su1b"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="3_4cg0m"]
 [ext_resource type="PackedScene" uid="uid://rfun0ekg6spj" path="res://area/6 skeleton dome/object/platform/PlatformCavernSmall.tscn" id="3_6m2nv"]
+[ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="3_7v3mk"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="3_8skno"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_jp0k2"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="4_ia1t0"]
 [ext_resource type="PackedScene" uid="uid://cfejcc3m08i2r" path="res://area/6 skeleton dome/object/platform/PlatformCavernFalling.tscn" id="4_w5q3l"]
 [ext_resource type="PackedScene" uid="uid://b1daf70kelhld" path="res://area/6 skeleton dome/object/platform/PlatformCavernLarge.tscn" id="5_5f5sv"]
@@ -25,6 +27,103 @@
 [ext_resource type="PackedScene" uid="uid://dn3adwr4o4kux" path="res://area/6 skeleton dome/object/grindrail/Grindrail03.tscn" id="13_fnrre"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="13_v0glh"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="15_hvsse"]
+[ext_resource type="PackedScene" uid="uid://d0v2jlqmfqwkb" path="res://area/6 skeleton dome/object/destructable/Tail.tscn" id="19_yspvn"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="20_wqeg3"]
+[ext_resource type="PackedScene" uid="uid://3kra1mtg86nd" path="res://area/6 skeleton dome/object/destructable/Leg.tscn" id="21_hn86o"]
+[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="22_l3dvj"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_6pbex"]
+[ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="23_11llw"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="25_4vuwu"]
+[ext_resource type="Resource" uid="uid://dm4x1eupq13eq" path="res://area/6 skeleton dome/act 1/trigger/camera/ExteriorCamera.tres" id="26_t7xhw"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="34_d0kwn"]
+[ext_resource type="PackedScene" uid="uid://qxfca8v0ndfq" path="res://area/6 skeleton dome/object/grindrail/Grindrail02.tscn" id="34_sbk4a"]
+[ext_resource type="PackedScene" uid="uid://0jj0alw37l1s" path="res://area/6 skeleton dome/object/grindrail/Grindrail04.tscn" id="36_3kt84"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="39_jvpkb"]
+[ext_resource type="PackedScene" uid="uid://vqw834asl36p" path="res://area/6 skeleton dome/object/obstacle/Gate.tscn" id="39_rd1gs"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="40_5lq2h"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="40_dipor"]
+[ext_resource type="PackedScene" uid="uid://cra2x0w3qbcxv" path="res://area/6 skeleton dome/object/destructable/Skull.tscn" id="40_y1kxl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pbtmc"]
+size = Vector3(15, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4a5p7"]
+size = Vector3(40, 20, 2.5)
+
+[sub_resource type="Curve" id="Curve_au1dj"]
+max_value = 3.0
+_data = [Vector2(0, 0), 0.0, 9.6, 0, 0, Vector2(0.6, 3), 0.0, 0.0, 0, 0, Vector2(1, 1.5), -9.6, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Animation" id="Animation_je4uv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spring02:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spring02:process_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="Animation" id="Animation_sc1yd"]
+resource_name = "event"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spring02:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spring02:process_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fhfve"]
+_data = {
+"RESET": SubResource("Animation_je4uv"),
+"event": SubResource("Animation_sc1yd")
+}
+
+[sub_resource type="Curve" id="Curve_rygae"]
+min_value = -5.0
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 1.75, 0, 0, Vector2(0.350575, -2.1444), -12.4783, -12.4783, 0, 0, Vector2(0.7, -3.5), 0.0, 0.0, 0, 0, Vector2(1, -2.625), -0.120962, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cnw7t"]
+size = Vector3(65, 7, 9)
 
 [node name="Stage" type="Node"]
 
@@ -47,9 +146,45 @@ Completion/Lockout = null
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_4su1b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 2.8, -148)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 198, 0, -901)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
+
+[node name="OverpassLoad" parent="MainAct/CullingMap" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.7296, -2.3, -265.527)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/OverpassLoad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="OpeningUnload" parent="MainAct/CullingMap" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, -11.3124, -1.5, -335.205)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/OpeningUnload"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="FieldLoad" parent="MainAct/CullingMap" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -19.6134, -1.04308e-07, -602.125)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/FieldLoad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="CavernLoad" parent="MainAct/CullingMap" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, 91.638, 0.0999999, -791.254)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/CavernLoad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4a5p7")
 
 [node name="Opening" type="Node3D" parent="MainAct"]
 script = ExtResource("3_4cg0m")
@@ -71,7 +206,7 @@ Amount = 5
 Shape = 2
 Path = NodePath("../../../../Static/Path/ExteriorPath")
 "Path Progress Offset" = 0.0
-"Follow Path Y" = false
+"Disable Path Y" = false
 Spacing = 2.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -100,7 +235,7 @@ Amount = 5
 Shape = 2
 Path = NodePath("../../../../Static/Path/ExteriorPath")
 "Path Progress Offset" = 0.0
-"Follow Path Y" = false
+"Disable Path Y" = false
 Spacing = 2.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -153,7 +288,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
 transform = Transform3D(1.14715, 0, 1.6383, 0, 2, 0, -1.6383, 0, 1.14715, -18.1912, 9.6, -182.459)
 
 [node name="Head" parent="MainAct/Opening/Start/Ribcage2" instance=ExtResource("9_7b1j8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52588e-05, 0, -2.49998)
 
 [node name="SpikeBallStatic2" parent="MainAct/Opening/Start" instance=ExtResource("8_psd5w")]
 transform = Transform3D(0.96225, -0.258819, -0.084186, 0.0871557, -4.28408e-08, 0.996194, -0.257834, -0.965925, 0.0225575, -24.3973, 3.86972, -178.537)
@@ -212,7 +347,7 @@ Amount = 5
 Shape = 2
 Path = NodePath("../../../../Static/Path/ExteriorPath")
 "Path Progress Offset" = 0.0
-"Follow Path Y" = false
+"Disable Path Y" = false
 Spacing = 3.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -241,7 +376,7 @@ Amount = 5
 Shape = 2
 Path = NodePath("../../../../Static/Path/ExteriorPath")
 "Path Progress Offset" = 0.0
-"Follow Path Y" = false
+"Disable Path Y" = false
 Spacing = 2.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -265,7 +400,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.676804, -0.888816, -9.88579
 transform = Transform3D(-0.517637, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517637, -4.73917, 7.6, -8.12798)
 
 [node name="Head" parent="MainAct/Opening/Lower/Ribcage1" instance=ExtResource("9_7b1j8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 0, -2.5)
 
 [node name="Ribcage2" parent="MainAct/Opening/Lower" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("10_jiv87")]
 transform = Transform3D(1.2578, 0, 1.55497, 0, 2, 0, -1.55497, 0, 1.2578, 11.5856, 7.4, -14.5286)
@@ -274,7 +409,7 @@ pieceRoot = NodePath("../Ribcage1/RibcagePieces")
 animator = NodePath("../Ribcage1/AnimationPlayer")
 
 [node name="Head" parent="MainAct/Opening/Lower/Ribcage2" instance=ExtResource("9_7b1j8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.28882e-05, 0, -2.50004)
 
 [node name="SpikeBallStatic1" parent="MainAct/Opening/Lower" instance=ExtResource("8_psd5w")]
 transform = Transform3D(0.912329, 0.409303, -0.0112593, -0.400146, 0.897076, 0.18745, 0.086824, -0.16651, 0.98221, 1.74395, 3.75531, -8.77394)
@@ -312,7 +447,7 @@ Amount = 5
 Shape = 2
 Path = NodePath("../../../../Static/Path/ExteriorPath")
 "Path Progress Offset" = 0.0
-"Follow Path Y" = false
+"Disable Path Y" = false
 Spacing = 3.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
@@ -333,26 +468,1703 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.407898, 0.263131, -8.95193)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.747681, 0.429691, -11.9111)
 
 [node name="Overpass" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -318)
 script = ExtResource("3_4cg0m")
+saveVisibilityOnCheckpoint = true
+
+[node name="Bridge" type="Node3D" parent="MainAct/Overpass"]
+
+[node name="SpikeBall1" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
+transform = Transform3D(0.879125, -0.474778, 0.0415377, 0, 0.0871558, 0.996195, -0.476591, -0.87578, 0.0766208, -10.1895, -3, -17.6726)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.1
+"Movement/Horizontal Size" = 2.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+animatorSpeedScale = 0.8
+
+[node name="SpikeGroup1" type="Node3D" parent="MainAct/Overpass/Bridge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3047, -0.159808, -24.3888)
+
+[node name="Head" parent="MainAct/Overpass/Bridge/SpikeGroup1" instance=ExtResource("9_7b1j8")]
+transform = Transform3D(-0.349144, 0.0870968, -0.933013, -0.482963, 0.836516, 0.258819, 0.803023, 0.540976, -0.25, 0, 0, 0)
+
+[node name="Ring" type="Node3D" parent="MainAct/Overpass/Bridge/SpikeGroup1"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 1.8547, 2.15981, 3.67542)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_au1dj")
+
+[node name="Child01" parent="MainAct/Overpass/Bridge/SpikeGroup1/Ring" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Overpass/Bridge/SpikeGroup1/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.63111, -1.5)
+
+[node name="Child03" parent="MainAct/Overpass/Bridge/SpikeGroup1/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.64889, -3)
+
+[node name="Child04" parent="MainAct/Overpass/Bridge/SpikeGroup1/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -4.5)
+
+[node name="Child05" parent="MainAct/Overpass/Bridge/SpikeGroup1/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.73, -6)
+
+[node name="Child06" parent="MainAct/Overpass/Bridge/SpikeGroup1/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7.5)
+
+[node name="SpikeBall" parent="MainAct/Overpass/Bridge/SpikeGroup1" instance=ExtResource("6_21sva")]
+transform = Transform3D(-0.866025, 0.498097, 0.0435779, 7.6194e-09, -0.0871558, 0.996195, 0.5, 0.86273, 0.0754791, 0.156596, -1.23391, 0.949341)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.9
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.5
+animatorSpeedScale = 0.8
+
+[node name="SpikeBall2" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
+transform = Transform3D(1.29904, -0.75, 0, -3.27835e-08, -5.67828e-08, 1.5, -0.75, -1.29904, -6.55671e-08, -23.1497, -1.07872, -38.3431)
+Movement/Mode = 2
+"Movement/Cycle Length" = 6.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+animatorSpeedScale = 0.6
+
+[node name="SpikeBall3" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
+transform = Transform3D(1.29904, -0.75, 0, -3.27835e-08, -5.67828e-08, 1.5, -0.75, -1.29904, -6.55671e-08, -25.3997, -1.07872, -42.2403)
+Movement/Mode = 2
+"Movement/Cycle Length" = 10.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+animatorSpeedScale = 0.4
+
+[node name="SpikeGroup2" type="Node3D" parent="MainAct/Overpass/Bridge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.6047, 0.840192, -49.7888)
+
+[node name="Head" parent="MainAct/Overpass/Bridge/SpikeGroup2" instance=ExtResource("9_7b1j8")]
+transform = Transform3D(-0.803023, -0.489345, 0.340141, -0.482963, 0.868751, 0.109627, -0.349144, -0.0762424, -0.933962, 0, 0, 0)
+
+[node name="Ring" type="Node3D" parent="MainAct/Overpass/Bridge/SpikeGroup2"]
+transform = Transform3D(0.906307, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906307, 1.97034, 2.15981, 3.57114)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_au1dj")
+
+[node name="Child01" parent="MainAct/Overpass/Bridge/SpikeGroup2/Ring" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Overpass/Bridge/SpikeGroup2/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.63111, -1.5)
+
+[node name="Child03" parent="MainAct/Overpass/Bridge/SpikeGroup2/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.64889, -3)
+
+[node name="Child04" parent="MainAct/Overpass/Bridge/SpikeGroup2/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -4.5)
+
+[node name="Child05" parent="MainAct/Overpass/Bridge/SpikeGroup2/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.73, -6)
+
+[node name="Child06" parent="MainAct/Overpass/Bridge/SpikeGroup2/Ring" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7.5)
+
+[node name="SpikeBall" parent="MainAct/Overpass/Bridge/SpikeGroup2" instance=ExtResource("6_21sva")]
+transform = Transform3D(0.904879, -0.425669, 4.41942e-08, -4.10466e-09, 1.97175e-08, 1, -0.425669, -0.904879, -1.49012e-08, 0.155918, -1.32827, 0.413696)
+Movement/Mode = 2
+"Movement/Cycle Length" = 10.0
+"Movement/Horizontal Size" = 2.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+animatorSpeedScale = 0.6
+
+[node name="SpikeBall4" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
+transform = Transform3D(-0.973595, 0.228283, -4.46866e-08, -4.32601e-09, 1.15908e-08, 1, 0.228283, 0.973595, 1.33521e-08, -33.2301, -0.48808, -59.7491)
+Movement/Mode = 2
+"Movement/Cycle Length" = 6.0
+"Movement/Horizontal Size" = 1.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+animatorSpeedScale = 0.6
+
+[node name="SpikeGroup3" type="Node3D" parent="MainAct/Overpass/Bridge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.6047, 1.14019, -72.5888)
+
+[node name="Head3" parent="MainAct/Overpass/Bridge/SpikeGroup3" instance=ExtResource("9_7b1j8")]
+transform = Transform3D(-0.349144, -0.0762424, -0.933962, -0.482963, 0.868751, 0.109627, 0.803023, 0.489345, -0.340141, 0, 0, 0)
+
+[node name="Ring3" type="Node3D" parent="MainAct/Overpass/Bridge/SpikeGroup3"]
+transform = Transform3D(0.997727, 1.38338e-08, 0.0673886, -7.60756e-09, 1, 1.47321e-08, -0.0673886, -1.45287e-08, 0.997727, 0.201294, 2.85983, 4.10861)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_au1dj")
+
+[node name="Child01" parent="MainAct/Overpass/Bridge/SpikeGroup3/Ring3" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Overpass/Bridge/SpikeGroup3/Ring3" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.63111, -1.5)
+
+[node name="Child03" parent="MainAct/Overpass/Bridge/SpikeGroup3/Ring3" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.64889, -3)
+
+[node name="Child04" parent="MainAct/Overpass/Bridge/SpikeGroup3/Ring3" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -4.5)
+
+[node name="Child05" parent="MainAct/Overpass/Bridge/SpikeGroup3/Ring3" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.73, -6)
+
+[node name="Child06" parent="MainAct/Overpass/Bridge/SpikeGroup3/Ring3" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7.5)
+
+[node name="SpikeBall" parent="MainAct/Overpass/Bridge/SpikeGroup3" instance=ExtResource("6_21sva")]
+transform = Transform3D(0.99844, -0.0558215, -2.44004e-09, 0, -4.37114e-08, 1, -0.0558215, -0.998441, -4.36432e-08, -0.169617, -1.62827, 1.03821)
+Movement/Mode = 2
+"Movement/Cycle Length" = 6.0
+"Movement/Horizontal Size" = 1.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+animatorSpeedScale = 0.6
+
+[node name="SpikeBall5" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
+transform = Transform3D(1.49766, -0.0837322, -3.66005e-09, 0, -6.55671e-08, 1.5, -0.0837322, -1.49766, -6.54648e-08, -34.7301, -0.48808, -75.1491)
+Movement/Mode = 2
+"Movement/Cycle Length" = 10.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+animatorSpeedScale = 0.4
+
+[node name="SpikeBall6" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
+transform = Transform3D(-1.49766, 0.0837321, 3.66005e-09, 0, -6.55671e-08, 1.5, 0.0837321, 1.49766, 6.54648e-08, -34.7301, -0.48808, -78.0491)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+animatorSpeedScale = 0.8
+
+[node name="Hall" type="Node3D" parent="MainAct/Overpass"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -36.9, 1.35, -90)
+
+[node name="Ring1" type="Node3D" parent="MainAct/Overpass/Hall"]
+transform = Transform3D(0.999904, 0.00424403, 0.0132107, -0.00499121, 0.998359, 0.0570499, -0.0129469, -0.0571104, 0.998285, 0.999695, 0.699501, -12.9927)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Overpass/Hall/Ring1" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Overpass/Hall/Ring1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Overpass/Hall/Ring1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Overpass/Hall/Ring1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Overpass/Hall/Ring1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="MajinGroup1" type="Node3D" parent="MainAct/Overpass/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0842, -2, -53.7347)
+
+[node name="MajinActivation" type="Area3D" parent="MainAct/Overpass/Hall/MajinGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.37483, 1.8, 42.5971)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Overpass/Hall/MajinGroup1/MajinActivation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="BlueMajin1" parent="MainAct/Overpass/Hall/MajinGroup1" instance=ExtResource("8_tlcu6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8147e-06, 0, 3.05176e-05)
+"Spawn Settings/Spawn Trigger Mode" = 1
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 25, 0)
+
+[node name="BlueMajin2" parent="MainAct/Overpass/Hall/MajinGroup1" instance=ExtResource("8_tlcu6")]
+transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, 4.15909, 0, -1.64389)
+"Spawn Settings/Spawn Trigger Mode" = 1
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 25, 0)
+
+[node name="BlueMajin3" parent="MainAct/Overpass/Hall/MajinGroup1" instance=ExtResource("8_tlcu6")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 5.82962, 0, -4.41498)
+"Spawn Settings/Spawn Trigger Mode" = 1
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 25, 0)
+
+[node name="SpikeBallSpawner1" parent="MainAct/Overpass/Hall" instance=ExtResource("3_7v3mk")]
+transform = Transform3D(-0.0871557, 0, -0.996194, 0, 1, 0, 0.996194, 0, -0.0871557, 45.1479, 17.25, -75.4525)
+maxSpawnAmount = 10
+lifetime = 8.0
+spawnInterval = 1.5
+
+[node name="Ribcage1" parent="MainAct/Overpass/Hall" instance=ExtResource("10_jiv87")]
+transform = Transform3D(1.97209, -0.196699, 0.268653, 0.0949474, 1.87892, 0.678706, -0.319139, -0.65648, 1.86204, 25.2937, -4.33139, -86.1781)
+
+[node name="Tail" parent="MainAct/Overpass/Hall/Ribcage1" instance=ExtResource("19_yspvn")]
+transform = Transform3D(-0.4, -3.11993e-08, 7.45058e-09, -1.49012e-08, 0.375877, 0.136808, -4.47035e-08, 0.136808, -0.375877, 3.05176e-05, 0.429726, 2.67252)
+
+[node name="Ribcage2" parent="MainAct/Overpass/Hall" instance=ExtResource("10_jiv87")]
+transform = Transform3D(-0.544459, 0, 1.92446, 0, 2, 0, -1.92446, 0, -0.544459, 31.0805, -1.3, -94.2455)
+
+[node name="Head" parent="MainAct/Overpass/Hall/Ribcage2" instance=ExtResource("9_7b1j8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.15527e-05, 0, -2.50002)
+
+[node name="Ribcage3" parent="MainAct/Overpass/Hall" instance=ExtResource("10_jiv87")]
+transform = Transform3D(1.26414, 0, 1.54982, 0, 2, 0, -1.54982, 0, 1.26414, 31.8019, -1.3, -102.573)
+
+[node name="Head" parent="MainAct/Overpass/Hall/Ribcage3" instance=ExtResource("9_7b1j8")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -4.57764e-05, 0, -2.50002)
+
+[node name="Pearl" type="Node3D" parent="MainAct/Overpass/Hall"]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 26.1899, -5.3, -102.923)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("20_wqeg3")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../../Static/Path/ExteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.57764e-05, 3.8147e-06, 0.00216675)
+
+[node name="Child02" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0619659, -0.00372291, -1.08163)
+
+[node name="Child03" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.209015, -0.00408888, -2.15628)
+
+[node name="Child04" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43734, -0.00087738, -3.2132)
+
+[node name="Child05" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.740189, 0.00605106, -4.24533)
+
+[node name="Child06" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.10854, 0.0167651, -5.24805)
+
+[node name="Child07" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53249, 0.0312815, -6.2193)
+
+[node name="Child08" parent="MainAct/Overpass/Hall/Pearl" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.00174, 0.049593, -7.15924)
+
+[node name="SpikeBallSpawner2" parent="MainAct/Overpass/Hall" instance=ExtResource("3_7v3mk")]
+transform = Transform3D(-0.0871557, 0, -0.996194, 0, 1, 0, 0.996194, 0, -0.0871557, 60.911, 11.25, -117.94)
+maxSpawnAmount = 10
+lifetime = 8.0
+spawnInterval = 2.5
+
+[node name="SpikeBallSpawner3" parent="MainAct/Overpass/Hall" instance=ExtResource("3_7v3mk")]
+transform = Transform3D(-0.0871557, 0, -0.996194, 0, 1, 0, 0.996194, 0, -0.0871557, 60.911, 14.25, -117.94)
+maxSpawnAmount = 10
+lifetime = 8.0
+spawnInterval = 1.5
+
+[node name="SpikeBallStatic1" parent="MainAct/Overpass/Hall" instance=ExtResource("8_psd5w")]
+transform = Transform3D(0.940406, -0.27327, 0.202389, 0.252224, 0.95971, 0.123851, -0.22808, -0.0654222, 0.971442, 43.3662, -4.60886, -119.598)
+collision_layer = 24
+
+[node name="SpikeBallStatic2" parent="MainAct/Overpass/Hall" instance=ExtResource("8_psd5w")]
+transform = Transform3D(0.984808, 8.3819e-09, 0.173648, 0.0301537, 0.984808, -0.17101, -0.17101, 0.173648, 0.969846, 42.6348, -4.7342, -121.406)
+collision_layer = 24
+
+[node name="Ring2" type="Node3D" parent="MainAct/Overpass/Hall"]
+transform = Transform3D(0.841924, 0.0446275, 0.53775, 0.00283342, 0.996195, -0.0871098, -0.539591, 0.0748634, 0.838594, 36.7798, -2.67414, -132.385)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Overpass/Hall/Ring2" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Overpass/Hall/Ring2" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Overpass/Hall/Ring2" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Overpass/Hall/Ring2" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Overpass/Hall/Ring2" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Leg1" parent="MainAct/Overpass/Hall" instance=ExtResource("21_hn86o")]
+transform = Transform3D(-1.99239, -0.174311, -1.78814e-07, -0.174311, 1.99239, 0, 8.9407e-08, 9.31323e-09, -2, 28.329, 0.0954581, -143.389)
+
+[node name="Leg2" parent="MainAct/Overpass/Hall" instance=ExtResource("21_hn86o")]
+transform = Transform3D(-0.996195, -0.0871558, 1.73205, -0.174311, 1.99239, -3.10862e-15, -1.72546, -0.150958, -1, 29.4883, 0.196219, -147.479)
+
+[node name="Leg3" parent="MainAct/Overpass/Hall" instance=ExtResource("21_hn86o")]
+transform = Transform3D(-1.81535, 0.660733, 0.517639, 0.684041, 1.87938, -1.54089e-08, -0.486423, 0.177043, -1.93185, 26.3595, 0.445276, -148.953)
+
+[node name="Leg4" parent="MainAct/Overpass/Hall" instance=ExtResource("21_hn86o")]
+transform = Transform3D(-2.00001, -1.24345e-14, 1.78814e-07, 0, -2, -1.74846e-07, 1.78814e-07, -1.74846e-07, 2, 26.9289, 1.49002, -153.262)
+
+[node name="MajinGroup2" type="Node3D" parent="MainAct/Overpass/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, -160)
+
+[node name="BlueMajin1" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("8_tlcu6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.698555, -0.5, -2.24756)
+
+[node name="RedMajin1" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("22_l3dvj")]
+transform = Transform3D(-0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, 1.3048, -0.1, -5.89752)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 4.0
+"Attack Settings/Flame Active Time" = 5.5
+"Attack Settings/Flame Inactive Time" = 0.5
+
+[node name="BlueMajin2" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("8_tlcu6")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 2.48689, 0.4, -13.2689)
+
+[node name="BlueMajin3" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("8_tlcu6")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 6.67982, 0.2, -21.0668)
+
+[node name="RedMajin2" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("22_l3dvj")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 8.8392, -0.5, -30.9059)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 10.0
+"Attack Settings/Flame Inactive Time" = 0.5
+
+[node name="RedMajin3" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("22_l3dvj")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 13.0284, -0.5, -40.6614)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 2.0
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
+
+[node name="SpikeGroup" type="Node3D" parent="MainAct/Overpass/Hall"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 48.4, -1.4, -223.001)
+
+[node name="SpikePanel1" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_6pbex")]
+transform = Transform3D(0.991445, 0.130526, -1.42109e-14, -0.130526, 0.991445, 0, 1.42109e-14, 0, 1, -0.489512, 0.19945, 14.3)
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 0.5
+stateLengths = [0.5, 0.0, 0.5]
+
+[node name="SpikePanel2" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_6pbex")]
+transform = Transform3D(1, 0, -7.81597e-14, 0, 1, 0, 7.81597e-14, 0, 1, 1, 0.1, 14.3)
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 0.5
+stateLengths = [0.5, 0.0, 0.5]
+
+[node name="SpikePanel3" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_6pbex")]
+transform = Transform3D(0.991445, -0.130526, -2.84217e-14, 0.130526, 0.991445, 0, 2.84217e-14, 0, 1, 2.48696, 0.199144, 14.3)
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 0.5
+stateLengths = [0.5, 0.0, 0.5]
+
+[node name="Stone1" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 0, -1.42109e-13, 0, 1, 0, 1.42109e-13, 0, 1, -0.999993, -0.1, 12.5)
+
+[node name="Stone2" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 0, -1.56319e-13, 0, 1, 0, 1.56319e-13, 0, 1, 1, -0.3, 12.5)
+
+[node name="Stone3" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 0, -1.63425e-13, 0, 1, 0, 1.63425e-13, 0, 1, 3.00002, 0, 12.5)
+
+[node name="BlockGroup" type="Node3D" parent="MainAct/Overpass/Hall"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 48.4, -1.4, -223.001)
+
+[node name="Stone1" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 0, -2.27374e-13, 0, 1, 0, 2.27374e-13, 0, 1, -2, 1, 0)
+
+[node name="Ring" parent="MainAct/Overpass/Hall/BlockGroup/Stone1" instance=ExtResource("6_i636b")]
+
+[node name="Stone2" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(-4.37112e-08, 0, 1, 0, 1, 0, -1, 0, -4.37112e-08, 0, 1, 0)
+
+[node name="Ring" parent="MainAct/Overpass/Hall/BlockGroup/Stone2" instance=ExtResource("6_i636b")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="Stone3" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(-1.42109e-14, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 1.42109e-14, 2.11758e-22, 2, 1, 0)
+
+[node name="Ring" parent="MainAct/Overpass/Hall/BlockGroup/Stone3" instance=ExtResource("6_i636b")]
+transform = Transform3D(-4.37114e-08, -2.11758e-22, 1, 1, -4.37114e-08, 4.37114e-08, 4.37114e-08, 1, -2.11758e-22, 0, 0, 0)
+
+[node name="Stone4" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 1.74845e-07, 2.11758e-22, 0, -4.37114e-08, -1, -1.74845e-07, 1, -4.37114e-08, -2, 3, 0)
+
+[node name="Stone5" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 2.70006e-13, -4.57398e-20, 0, 1.31134e-07, 1, 2.70006e-13, -1, 1.31134e-07, 2, 3, 0)
+
+[node name="Stone6" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 0, -5.68434e-14, 0, 1, 0, 5.68434e-14, 0, 1, -1.99999, 5, 0)
+
+[node name="Stone7" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_11llw")]
+transform = Transform3D(1, 0, -2.77112e-13, 0, 1, 0, 2.77112e-13, 0, 1, 2, 5, 0)
+
+[node name="EnemyStone1" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("25_4vuwu")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, 0, 3, 0)
+enemyCount = 1
+
+[node name="Ring" parent="MainAct/Overpass/Hall/BlockGroup/EnemyStone1" instance=ExtResource("6_i636b")]
+
+[node name="EnemyStone2" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("25_4vuwu")]
+transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 0, 5, 0)
+enemyCount = 1
+
+[node name="RedMajin" parent="MainAct/Overpass/Hall/BlockGroup" instance=ExtResource("22_l3dvj")]
+transform = Transform3D(1, 0, -1.06581e-13, 0, 1, 0, 1.06581e-13, 0, 1, 0.900012, 0.4, 6)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.5
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 0.4
+
+[node name="Field" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -643)
+script = ExtResource("3_4cg0m")
+saveVisibilityOnCheckpoint = true
+
+[node name="UpperPath" type="Node3D" parent="MainAct/Field"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 15, -70)
+
+[node name="Platform1" type="Node3D" parent="MainAct/Field/UpperPath"]
+transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
+
+[node name="PlatformExteriorEnd" parent="MainAct/Field/UpperPath/Platform1" instance=ExtResource("12_ndgdv")]
+
+[node name="PlatformExterior1" parent="MainAct/Field/UpperPath/Platform1" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+
+[node name="PlatformExterior2" parent="MainAct/Field/UpperPath/Platform1" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.5)
+
+[node name="PlatformExterior3" parent="MainAct/Field/UpperPath/Platform1" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
+
+[node name="PlatformExterior4" parent="MainAct/Field/UpperPath/Platform1" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.5)
+
+[node name="Spring01" parent="MainAct/Field/UpperPath" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("4_ia1t0")]
+transform = Transform3D(0.208328, 0.0182263, 0.977889, -0.0871557, 0.996195, -4.18539e-09, -0.974168, -0.0852287, 0.209124, 35.5, 2, 1)
+middleHeight = 5.0
+distance = 5.0
+sfxPlayer = NodePath("../Grindrail1/Spring02/SFX")
+
+[node name="Grindrail1" parent="MainAct/Field/UpperPath" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.951057, 0.0483409, -0.305212, 0, 0.987688, 0.156434, 0.309017, -0.148778, 0.939348, 35.3, 1.7, 0)
+
+[node name="Spring02" parent="MainAct/Field/UpperPath/Grindrail1" instance=ExtResource("4_ia1t0")]
+transform = Transform3D(0.997644, -0.0483408, 0.0486609, 0.0486508, 0.998802, -0.00520743, -0.0483509, 0.00756256, 0.998801, 1.52588e-05, 0.200005, -25.9997)
+middleHeight = 5.0
+finalHeight = 0.5
+distance = 2.5
+
+[node name="Platform2" type="Node3D" parent="MainAct/Field/UpperPath"]
+transform = Transform3D(0.174312, 0, 1.99239, 0, 2, 0, -1.99239, 0, 0.174312, 0.651377, -4, -31.0152)
+
+[node name="PlatformExteriorEnd" parent="MainAct/Field/UpperPath/Platform2" instance=ExtResource("12_ndgdv")]
+
+[node name="PlatformExterior1" parent="MainAct/Field/UpperPath/Platform2" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+
+[node name="PlatformExterior2" parent="MainAct/Field/UpperPath/Platform2" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.5)
+
+[node name="PlatformExterior3" parent="MainAct/Field/UpperPath/Platform2" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
+
+[node name="PlatformExterior4" parent="MainAct/Field/UpperPath/Platform2" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.5)
+
+[node name="PlatformExterior5" parent="MainAct/Field/UpperPath/Platform2" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.5)
+
+[node name="GreenMajin1" parent="MainAct/Field/UpperPath" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 44.58, -1.77097, -34.9466)
+
+[node name="Grindrail2" parent="MainAct/Field/UpperPath" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.995397, -0.0126762, -0.0950038, 0, 0.991215, -0.132256, 0.0958458, 0.131647, 0.986652, 44.2, -2.3, -31)
+
+[node name="Spring03" parent="MainAct/Field/UpperPath/Grindrail2" instance=ExtResource("4_ia1t0")]
+transform = Transform3D(0.999999, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984807, 0.0383301, 0.252655, -28.6054)
+finalHeight = 6.0
+distance = 1.0
+
+[node name="Platform3" type="Node3D" parent="MainAct/Field/UpperPath"]
+transform = Transform3D(0.347296, 0, 1.96962, 0, 2, 0, -1.96962, 0, 0.347296, 13.8473, 0, -67.9696)
+
+[node name="PlatformExteriorEnd" parent="MainAct/Field/UpperPath/Platform3" instance=ExtResource("12_ndgdv")]
+
+[node name="PlatformExterior1" parent="MainAct/Field/UpperPath/Platform3" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+
+[node name="PlatformExterior2" parent="MainAct/Field/UpperPath/Platform3" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.5)
+
+[node name="PlatformExterior3" parent="MainAct/Field/UpperPath/Platform3" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
+
+[node name="PlatformExterior4" parent="MainAct/Field/UpperPath/Platform3" instance=ExtResource("11_fjgqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.5)
+
+[node name="GreenMajin2" parent="MainAct/Field/UpperPath" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.951057, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.951057, 46.5293, 4.60923, -62.0205)
+
+[node name="GreenMajin3" parent="MainAct/Field/UpperPath" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.951057, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.951057, 48.8471, 3.30923, -62.0713)
+
+[node name="RedMajin" parent="MainAct/Field/UpperPath" instance=ExtResource("22_l3dvj")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 47.2276, 2.7, -64.4283)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 4.0
+
+[node name="JumpPanel" parent="MainAct/Field/UpperPath" instance=ExtResource("34_d0kwn")]
+transform = Transform3D(-0.956305, 0, 0.292372, 0, 1, 0, -0.292372, 0, -0.956305, 47.9439, 1.9, -65.6236)
+middleHeight = 40.0
+finalHeight = 24.0
+distance = 52.0
+
+[node name="LowerPath" type="Node3D" parent="MainAct/Field"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="JumpPanelGroup" type="Node3D" parent="MainAct/Field/LowerPath"]
+transform = Transform3D(-0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, -0.984808, 21.1216, 0, -27.3107)
+
+[node name="GreenMajin01" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("5_danjg")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 1.73642, 0, -9.84778)
+
+[node name="GreenMajin02" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("5_danjg")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 3.35869, 0, -7.53058)
+
+[node name="RedMajin" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("22_l3dvj")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0.955063, 1.5, -5.41644)
+"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 40, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
+
+[node name="EnemyStone" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("25_4vuwu")]
+transform = Transform3D(-2.5, 0, 4.52987e-07, 0, 1.5, 0, -3.77489e-07, 0, -3, 0, 1.5, 0)
+enemyCount = 1
+
+[node name="JumpPanel" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("34_d0kwn")]
+middleHeight = 24.0
+finalHeight = 18.0
+distance = 32.0
+
+[node name="GrindrailGroup" type="Node3D" parent="MainAct/Field/LowerPath"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 3.5, 0.3, -6)
+
+[node name="GrindrailL1" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("36_3kt84")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -3.60803, 0, -18.0674)
+
+[node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -20)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="SpikeBallStatic" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1" instance=ExtResource("8_psd5w")]
+transform = Transform3D(1.89467, 0.379892, 0.515668, -0.19468, 1.87561, -0.666469, -0.61019, 0.581174, 1.81381, 0, 0, -60)
+
+[node name="GrindrailM1" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("34_sbk4a")]
+
+[node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -3)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="GrindrailM2" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("36_3kt84")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -1.52588e-05, 0, -20.0001)
+
+[node name="GrindrailM3" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.984807, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984807, -10.4189, 0, -79.0887)
+
+[node name="GrindrailM4" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, -5.20944, 0, -108.633)
+
+[node name="GrindrailR1" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, -2.62119, 0, -105.355)
+
+[node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.000183105, 1.1, -2.99988)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="RichRing" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1" instance=ExtResource("8_rlt0f")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.000244141, 1.2, -27.9998)
+
+[node name="SpikeBallStatic1" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1" instance=ExtResource("8_psd5w")]
+transform = Transform3D(1.96962, 0.345975, -0.030269, -0.300767, 1.61209, -1.14486, -0.173648, 1.13202, 1.63963, 0, 0, -32)
+
+[node name="SpikeBallStatic2" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1" instance=ExtResource("8_psd5w")]
+transform = Transform3D(0.809457, 0.432816, 0.3968, -0.150384, 0.806045, -0.57243, -0.567596, 0.403685, 0.717547, 6.99048, -0.114165, -25.9227)
+
+[node name="GrindrailM5" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, 0.5, 11.9979, 0, -133.208)
+
+[node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 1.1, -2.99997)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="GrindrailM6" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 37.9786, 0, -148.208)
+
+[node name="SpikeBallStatic" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM6" instance=ExtResource("8_psd5w")]
+transform = Transform3D(2, 0, 0, 0, 1.96962, 0.347296, 0, -0.347296, 1.96962, 0, 0, -34)
+
+[node name="GrindrailR2" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 37.6884, 0, -144.095)
+
+[node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -10)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="GrindrailL2" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("36_3kt84")]
+transform = Transform3D(0.642788, 0, -0.766046, 0, 1, 0, 0.766046, 0, 0.642788, -17.3082, 0, -118.497)
+
+[node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 1.1, -8)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 6.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -42)
+
+[node name="SpikeBallStatic" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2" instance=ExtResource("8_psd5w")]
+transform = Transform3D(2, 0, 0, 0, 1.73205, -0.999999, 0, 0.999999, 1.73205, 0, 0, -60)
+
+[node name="SpringGroup1" type="Node3D" parent="MainAct/Field/LowerPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0.2, -97)
+
+[node name="GreenMajin1" parent="MainAct/Field/LowerPath/SpringGroup1" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -8.96271, -0.2, 25.3323)
+
+[node name="GreenMajin2" parent="MainAct/Field/LowerPath/SpringGroup1" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -7.76382, -0.2, 18.9255)
+
+[node name="GreenMajin3" parent="MainAct/Field/LowerPath/SpringGroup1" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -5.42488, -0.2, 10.8812)
+
+[node name="GreenMajin4" parent="MainAct/Field/LowerPath/SpringGroup1" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.01823, -0.2, 2.83075)
+
+[node name="EnemyStone" parent="MainAct/Field/LowerPath/SpringGroup1" instance=ExtResource("25_4vuwu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+enemyCount = 4
+
+[node name="Spring" parent="MainAct/Field/LowerPath/SpringGroup1" instance=ExtResource("4_ia1t0")]
+finalHeight = 16.0
+
+[node name="PearlRing1" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup1/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("20_wqeg3")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing1" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="PearlRing2" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup1/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("20_wqeg3")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing2" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="PearlRing3" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup1/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("20_wqeg3")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing3" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="PearlRing4" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup1/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14, 0)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("20_wqeg3")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Field/LowerPath/SpringGroup1/Spring/PearlRing4" instance=ExtResource("20_wqeg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="SpringGroup2" type="Node3D" parent="MainAct/Field/LowerPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, -119)
+
+[node name="GreenMajin1" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -2.96824, 0, 12.224)
+
+[node name="GreenMajin2" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("5_danjg")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -2.1, 0, 7.29999)
+
+[node name="RedMajin" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("22_l3dvj")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -1, 0, 3)
+"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 40, 0)
+"Attack Settings/Flame Active Time" = 2.5
+"Attack Settings/Flame Inactive Time" = 0.5
+
+[node name="Spring01" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("4_ia1t0")]
+transform = Transform3D(0.970296, 0.00211114, -0.241913, 0, 0.999962, 0.00872653, 0.241922, -0.00846732, 0.970259, 0, 0.2, 0)
+middleHeight = 20.0
+finalHeight = 18.0
+distance = 4.0
+
+[node name="EnemyStone1" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("25_4vuwu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+enemyCount = 1
+
+[node name="EnemyStone2" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("25_4vuwu")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 0, 3, 0)
+enemyCount = 1
+
+[node name="SpringEvent" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup2" node_paths=PackedStringArray("animator")]
+script = ExtResource("40_dipor")
+animator = NodePath("AnimationPlayer")
+
+[node name="Spring02" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent" instance=ExtResource("4_ia1t0")]
+process_mode = 4
+transform = Transform3D(-0.433659, 0.0361618, 0.900351, 0, 0.999195, -0.0401318, -0.901077, -0.0174035, -0.43331, 0.979138, 17.0653, -3.92712)
+visible = false
+middleHeight = 20.0
+finalHeight = 10.0
+distance = 6.0
+
+[node name="Ring1" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent/Spring02" instance=ExtResource("6_i636b")]
+transform = Transform3D(-0.433659, 0, -0.901077, 0.0361618, 0.999194, -0.0174035, 0.900351, -0.0401318, -0.43331, 0, 11, 0.75)
+
+[node name="Ring2" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent/Spring02" instance=ExtResource("6_i636b")]
+transform = Transform3D(-0.433659, 0, -0.901077, 0.0361618, 0.999194, -0.0174035, 0.900351, -0.0401318, -0.43331, -6.10352e-05, 13, 0.899994)
+
+[node name="Ring3" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent/Spring02" instance=ExtResource("6_i636b")]
+transform = Transform3D(-0.433659, 0, -0.901077, 0.0361618, 0.999194, -0.0174035, 0.900351, -0.0401318, -0.43331, -6.10352e-05, 15, 1.10001)
+
+[node name="Ring4" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent/Spring02" instance=ExtResource("6_i636b")]
+transform = Transform3D(-0.433659, 0, -0.901077, 0.0361618, 0.999194, -0.0174035, 0.900351, -0.0401318, -0.43331, -6.10352e-05, 17, 1.39996)
+
+[node name="Ring5" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent/Spring02" instance=ExtResource("6_i636b")]
+transform = Transform3D(-0.433659, 0, -0.901077, 0.0361618, 0.999193, -0.0174035, 0.900351, -0.0401318, -0.43331, -6.10352e-05, 19, 2)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_fhfve")
+}
+
+[node name="SpiralPath" type="Node3D" parent="MainAct/Field"]
+transform = Transform3D(0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573576, 24, 40, -175)
+
+[node name="Rings" type="Node3D" parent="MainAct/Field/SpiralPath"]
+transform = Transform3D(0.955683, 0.0130101, -0.29411, -0.00191191, 0.999276, 0.0379909, 0.294392, -0.035745, 0.955017, 10.4957, 1, -45.9478)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Field/SpiralPath/Rings" instance=ExtResource("6_i636b")]
+
+[node name="Child02" parent="MainAct/Field/SpiralPath/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Field/SpiralPath/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Field/SpiralPath/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Field/SpiralPath/Rings" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Switch" parent="MainAct/Field/SpiralPath" instance=ExtResource("39_jvpkb")]
+transform = Transform3D(0.999893, -0.0146693, 0.000496656, 0.0144478, 0.989635, 0.142874, -0.00258735, -0.142852, 0.989741, 14.299, -0.807083, -61.8133)
+
+[node name="Gate" parent="MainAct/Field/SpiralPath" instance=ExtResource("39_rd1gs")]
+transform = Transform3D(0.964182, 0, 0.766045, 0, 1, 0, -1.14907, 0, 0.642788, 8.69287, -3.00708, -72.0129)
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 330.9, 0, -900)
 script = ExtResource("3_4cg0m")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="Hall" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -204.4, 0, 78)
+
+[node name="SwitchGroup1" type="Node3D" parent="MainAct/Cavern/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.1, 3)
+
+[node name="SpikeBall" parent="MainAct/Cavern/Hall/SwitchGroup1" instance=ExtResource("6_21sva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 0.8
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.5
+
+[node name="BlueMajin" parent="MainAct/Cavern/Hall/SwitchGroup1" instance=ExtResource("8_tlcu6")]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 0, 0.6, 0)
+
+[node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup1" instance=ExtResource("39_jvpkb")]
+
+[node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup1" instance=ExtResource("39_rd1gs")]
+transform = Transform3D(1.08253, 0, 0.5, 0, 1, 0, -0.625, 0, 0.866025, -4.5, 0, -7.33)
+
+[node name="Rings1" type="Node3D" parent="MainAct/Cavern/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.8, -10)
+script = ExtResource("5_p0cpw")
+Generate = false
+Source = ExtResource("6_i636b")
+Amount = 18
+Shape = 2
+Path = NodePath("../../../../Static/Path/ExteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = true
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_rygae")
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 0, 0.00164795)
+
+[node name="Child02" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.20517, 0, -2.64691)
+
+[node name="Child03" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.864502, 0, -5.26874)
+
+[node name="Child04" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97185, 0, -7.72083)
+
+[node name="Child05" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.45226, 0, -9.91925)
+
+[node name="Child06" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.20308, 0, -11.8499)
+
+[node name="Child07" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.13368, 0, -13.57)
+
+[node name="Child08" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.04016, 0, -15.2789)
+
+[node name="Child09" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7856, 0, -17.1397)
+
+[node name="Child10" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3536, 0, -19.182)
+
+[node name="Child11" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7194, 0, -21.4003)
+
+[node name="Child12" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8652, 0, -23.7634)
+
+[node name="Child13" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.793, 0, -26.2286)
+
+[node name="Child14" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.4171, 0, -28.7822)
+
+[node name="Child15" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.725, 0, -31.3795)
+
+[node name="Child16" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.8076, 0, -33.97)
+
+[node name="Child17" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.7651, 0, -36.5349)
+
+[node name="Child18" parent="MainAct/Cavern/Hall/Rings1" instance=ExtResource("6_i636b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.6979, 0, -39.078)
+
+[node name="SwitchGroup2" type="Node3D" parent="MainAct/Cavern/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1, 0, -57.4)
+
+[node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup2" instance=ExtResource("39_rd1gs")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.689362, 0, -9.87842)
+
+[node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup2" instance=ExtResource("39_jvpkb")]
+
+[node name="SwitchGroup3" type="Node3D" parent="MainAct/Cavern/Hall"]
+transform = Transform3D(0.384247, 0, -0.92323, 0, 1, 0, 0.92323, 0, 0.384247, 27.6972, 0, -84.5345)
+
+[node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup3" instance=ExtResource("39_rd1gs")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.129333, 0, -5.48291)
+
+[node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup3" instance=ExtResource("39_jvpkb")]
+
+[node name="ItemBoxFlying" parent="MainAct/Cavern/Hall/SwitchGroup3" instance=ExtResource("15_hvsse")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 1.594, 4, -6.966)
+"Spawn Settings/Amount" = 50
+"Spawn Settings/Spawn Pearls" = true
+
+[node name="SwitchGroup4" type="Node3D" parent="MainAct/Cavern/Hall"]
+transform = Transform3D(-0.208356, 0, -0.978053, 0, 1, 0, 0.978053, 0, -0.208356, 44.5345, 0, -84.2283)
+
+[node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup4" instance=ExtResource("39_rd1gs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19995, 0, -5)
+
+[node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup4" instance=ExtResource("39_jvpkb")]
+
+[node name="ItemBoxFlying" parent="MainAct/Cavern/Hall/SwitchGroup4" instance=ExtResource("15_hvsse")]
+transform = Transform3D(0.999517, 0, -0.0310968, 0, 1, 0, 0.0310968, 0, 0.999517, 0.361, 4, -7.801)
+"Spawn Settings/Amount" = 50
+"Spawn Settings/Spawn Pearls" = true
+
+[node name="SwitchGroup5" type="Node3D" parent="MainAct/Cavern/Hall"]
+transform = Transform3D(-0.18021, 0, -0.983628, 0, 1, 0, 0.983628, 0, -0.18021, 60.0447, 0, -80.3896)
+
+[node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup5" instance=ExtResource("39_rd1gs")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1, 0, -5)
+
+[node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup5" instance=ExtResource("39_jvpkb")]
+
+[node name="ItemBoxFlying" parent="MainAct/Cavern/Hall/SwitchGroup5" instance=ExtResource("15_hvsse")]
+transform = Transform3D(0.998495, 0, 0.0548631, 0, 1, 0, -0.0548631, 0, 0.998495, -0.2, 4, -7.989)
+"Spawn Settings/Amount" = 50
+"Spawn Settings/Spawn Pearls" = true
+
+[node name="MainPath" type="Node3D" parent="MainAct/Cavern"]
+
+[node name="StaticPlatformGroup1" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -110, 0, 0)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+
+[node name="PlatformCavernSmall2" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="PlatformCavernSmall3" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="PlatformCavernSmall4" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="PlatformCavernSmall5" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="PlatformCavernSmall6" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PlatformCavernSmall7" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="PlatformCavernSmall8" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PlatformCavernSmall9" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="PlatformCavernSmall10" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="PlatformCavernSmall11" parent="MainAct/Cavern/MainPath/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="FallingPlatformGroup1" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -85.5, -1.5, 0)
+
+[node name="PlatformCavernFalling1" parent="MainAct/Cavern/MainPath/FallingPlatformGroup1" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 2.8, 0, 0, 0.1)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/FallingPlatformGroup1" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 1.5, -4.10999)
+
+[node name="PlatformCavernFalling2" parent="MainAct/Cavern/MainPath/FallingPlatformGroup1" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 2.5, 0, 2.5, -8.5)
+
+[node name="PlatformCavernLarge" parent="MainAct/Cavern/MainPath" instance=ExtResource("5_5f5sv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 1, 0)
+
+[node name="StaticPlatformGroup2" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 1, -72, 0, -3.5)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+
+[node name="PlatformCavernSmall2" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="PlatformCavernSmall3" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="PlatformCavernSmall4" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="PlatformCavernSmall5" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="PlatformCavernSmall6" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PlatformCavernSmall7" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="PlatformCavernSmall8" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PlatformCavernSmall9" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="PlatformCavernSmall10" parent="MainAct/Cavern/MainPath/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="FallingPlatformGroup2" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -72.5, 0, -24)
+
+[node name="PlatformCavernFalling1" parent="MainAct/Cavern/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
+
+[node name="PlatformCavernFalling2" parent="MainAct/Cavern/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.25, 0)
+
+[node name="PlatformCavernFalling3" parent="MainAct/Cavern/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="PlatformCavernFalling4" parent="MainAct/Cavern/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 0)
+
+[node name="StaticPlatformGroup3" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -68.3, 0, -30)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+
+[node name="PlatformCavernSmall2" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="PlatformCavernSmall3" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="PlatformCavernSmall4" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="PlatformCavernSmall5" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="PlatformCavernSmall6" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PlatformCavernSmall7" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="PlatformCavernSmall8" parent="MainAct/Cavern/MainPath/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="LaunchRingSpike1" parent="MainAct/Cavern/MainPath" instance=ExtResource("6_ii6j5")]
+transform = Transform3D(-4.37114e-08, -0.996195, 0.0871558, 0, 0.0871558, 0.996195, -1, 4.35451e-08, -3.8097e-09, -51.3, -7.6, -30)
+Settings/Distance = 4.5
+"Settings/Middle Height" = 15.0
+"Settings/End Height" = 9.8
+
+[node name="StaticPlatformGroup4" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -47.8, 2, -30)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
+
+[node name="PlatformCavernSmall2" parent="MainAct/Cavern/MainPath/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="PlatformCavernSmall3" parent="MainAct/Cavern/MainPath/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="PlatformCavernSmall4" parent="MainAct/Cavern/MainPath/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="PlatformCavernSmall5" parent="MainAct/Cavern/MainPath/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="PlatformCavernSmall6" parent="MainAct/Cavern/MainPath/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="StaticPlatformGroup5" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -38.8, -4, -30)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
+
+[node name="PlatformCavernSmall2" parent="MainAct/Cavern/MainPath/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="PlatformCavernSmall3" parent="MainAct/Cavern/MainPath/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="PlatformCavernSmall4" parent="MainAct/Cavern/MainPath/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="PlatformCavernSmall5" parent="MainAct/Cavern/MainPath/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="PlatformCavernSmall6" parent="MainAct/Cavern/MainPath/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="FlyingPot" parent="MainAct/Cavern/MainPath" instance=ExtResource("6_86hu3")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -25.3, -5, -30)
+travelBounds = Vector2(2, 5)
+
+[node name="RichRing" parent="MainAct/Cavern/MainPath" instance=ExtResource("8_rlt0f")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -23.3, 4, -30)
+
+[node name="PlatformCavernLarge2" parent="MainAct/Cavern/MainPath" instance=ExtResource("5_5f5sv")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -21.8, 0, -30)
+
+[node name="StaticPlatformGroup6" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-3, 0, -1.50996e-07, 0, 3, 0, 4.52987e-07, 0, -1, -21.8, 0, -26.5)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
+
+[node name="PlatformCavernSmall2" parent="MainAct/Cavern/MainPath/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="PlatformCavernSmall3" parent="MainAct/Cavern/MainPath/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="PlatformCavernSmall4" parent="MainAct/Cavern/MainPath/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="PlatformCavernSmall5" parent="MainAct/Cavern/MainPath/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="PlatformCavernSmall6" parent="MainAct/Cavern/MainPath/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="LaunchRingSpike2" parent="MainAct/Cavern/MainPath" instance=ExtResource("6_ii6j5")]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, -21.8, -6.6, -11.7)
+Settings/Distance = 17.0
+"Settings/Middle Height" = 20.0
+"Settings/End Height" = 15.0
+
+[node name="StaticPlatformGroup7" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-3, 0, 1.50996e-07, 0, 3, 0, -4.52987e-07, 0, -1, -21.8, 2, -7)
+
+[node name="PlatformCavernSmall1" parent="MainAct/Cavern/MainPath/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
+
+[node name="PlatformCavernSmall2" parent="MainAct/Cavern/MainPath/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="PlatformCavernSmall3" parent="MainAct/Cavern/MainPath/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="PlatformCavernSmall4" parent="MainAct/Cavern/MainPath/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="FallingPlatformGroup3" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(-3, 0, 4.52987e-07, 0, 3, 0, -4.52987e-07, 0, -3, -21.8, 2, 5.5)
+
+[node name="PlatformCavernFalling1" parent="MainAct/Cavern/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
+
+[node name="PlatformCavernFalling2" parent="MainAct/Cavern/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 0, -0.5, -2.79999)
+
+[node name="PlatformCavernFalling3" parent="MainAct/Cavern/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, -4.26326e-14, 0, 1, 0, 4.26326e-14, 0, 1, 0, 0, -5.5)
+
+[node name="PlatformCavernFalling4" parent="MainAct/Cavern/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, -4.26326e-14, 0, 1, 0, 4.26326e-14, 0, 1, 0, 2, -0.5)
+
+[node name="PlatformCavernLarge3" parent="MainAct/Cavern/MainPath" instance=ExtResource("5_5f5sv")]
+transform = Transform3D(1.25, 0, 0, 0, 1, 0, 0, 0, 1.5, -21.75, 0, 32.5)
+
+[node name="PlatformCavernLarge4" parent="MainAct/Cavern/MainPath" instance=ExtResource("5_5f5sv")]
+transform = Transform3D(1.25, 0, 0, 0, 1, 0, 0, 0, 1.5, -15.5, 0, 32.5)
+
+[node name="SkullGroup" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.8, 0, 33.5)
+
+[node name="Skull1" parent="MainAct/Cavern/MainPath/SkullGroup" instance=ExtResource("40_y1kxl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 2, 0)
+
+[node name="Skull2" parent="MainAct/Cavern/MainPath/SkullGroup" instance=ExtResource("40_y1kxl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 1.5)
+
+[node name="Skull3" parent="MainAct/Cavern/MainPath/SkullGroup" instance=ExtResource("40_y1kxl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 5, -2)
+
+[node name="GreenMajin1" parent="MainAct/Cavern/MainPath/SkullGroup" instance=ExtResource("5_danjg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 50, 0.5, 0)
+
+[node name="GreenMajin2" parent="MainAct/Cavern/MainPath/SkullGroup" instance=ExtResource("5_danjg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 57, -2, 0)
+
+[node name="EnemyStone" parent="MainAct/Cavern/MainPath/SkullGroup" instance=ExtResource("25_4vuwu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1, 1, 0.300049)
+enemyCount = 1
+
+[node name="Spring" parent="MainAct/Cavern/MainPath/SkullGroup/EnemyStone" instance=ExtResource("4_ia1t0")]
+transform = Transform3D(0.840803, 0.046315, -0.539357, 3.37626e-09, 0.996333, 0.085556, 0.541341, -0.0719358, 0.83772, 0, -0.8, 0)
+middleHeight = 5.0
+distance = 3.5
+
+[node name="PlatformCavernLarge5" parent="MainAct/Cavern/MainPath" instance=ExtResource("5_5f5sv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5, -1, 32.5)
+
+[node name="FallingPlatformGroup4" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 44.5, -1, 28.2)
+
+[node name="PlatformCavernFalling1" parent="MainAct/Cavern/MainPath/FallingPlatformGroup4" instance=ExtResource("4_w5q3l")]
+
+[node name="PlatformCavernFalling2" parent="MainAct/Cavern/MainPath/FallingPlatformGroup4" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.99997)
+
+[node name="FallingPlatformGroup5" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 44.5, 0, 18.7)
+
+[node name="PlatformCavernFalling1" parent="MainAct/Cavern/MainPath/FallingPlatformGroup5" instance=ExtResource("4_w5q3l")]
+
+[node name="PlatformCavernFalling2" parent="MainAct/Cavern/MainPath/FallingPlatformGroup5" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.99997)
+
+[node name="PlatformCavernLarge6" parent="MainAct/Cavern/MainPath" instance=ExtResource("5_5f5sv")]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1, 46.25, 0, 9.5)
+
+[node name="FallingPlatformGroup6" type="Node3D" parent="MainAct/Cavern/MainPath"]
+transform = Transform3D(1.64, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 51.5, 0, 10)
+
+[node name="PlatformCavernFalling1" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="PlatformCavernFalling2" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2, 0, 0)
+
+[node name="PlatformCavernFalling3" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 4, 0, 0)
+
+[node name="PlatformCavernFalling4" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 0, 0)
+
+[node name="PlatformCavernFalling5" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 8, 0, 0)
+
+[node name="PlatformCavernFalling6" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10, 0, 0)
+
+[node name="PlatformCavernFalling7" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12, 0, 0)
+
+[node name="PlatformCavernFalling8" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14, 0, 0)
+
+[node name="PlatformCavernFalling9" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16, 0, 0)
+
+[node name="PlatformCavernFalling10" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 18, 0, 0)
+
+[node name="PlatformCavernFalling11" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 20, 0, 0)
+
+[node name="PlatformCavernFalling12" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 22, 0, 0)
+
+[node name="PlatformCavernFalling13" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24, 0, 0)
+
+[node name="PlatformCavernFalling14" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 26, 0, 0)
+
+[node name="PlatformCavernFalling15" parent="MainAct/Cavern/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 28, 0, 0)
 
 [node name="AlternatePath" type="Node3D" parent="MainAct/Cavern"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -113, 0, 0)
 
+[node name="PathTrigger" parent="MainAct/Cavern/AlternatePath" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, -6, 0)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="MainAct/Cavern/AlternatePath/PathTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 6, 0)
+script = ExtResource("40_5lq2h")
+path = NodePath("../../../../../Static/Path/CavernSidePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/AlternatePath/PathTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 0)
+shape = SubResource("BoxShape3D_cnw7t")
+
 [node name="InvisibleGrindrail1" parent="MainAct/Cavern/AlternatePath" instance=ExtResource("3_8skno")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 20, -6, 0)
-"Invisible Rail Settings/Length" = 35
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 17, -6, 0)
+"Invisible Rail Settings/Length" = 38
 
 [node name="Spring" parent="MainAct/Cavern/AlternatePath/InvisibleGrindrail1" instance=ExtResource("4_ia1t0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -34)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -37)
+monitorable = false
 finalHeight = 15.0
 
 [node name="GreenMajin1" parent="MainAct/Cavern/AlternatePath" instance=ExtResource("5_danjg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 68, 2, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 67, 1, 0)
 "Spawn Settings/Spawn Trigger Mode" = 1
 
 [node name="GreenMajin2" parent="MainAct/Cavern/AlternatePath" instance=ExtResource("5_danjg")]
@@ -372,320 +2184,17 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 87, 9, 0)
 Movement/Mode = 0
 
 [node name="InvisibleGrindrail2" parent="MainAct/Cavern/AlternatePath" instance=ExtResource("3_8skno")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 91.25, -7, -4)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 91.25, -7, -3.5)
 "Invisible Rail Settings/Length" = 32
+
+[node name="Path" type="Node3D" parent="MainAct/Cavern/AlternatePath/InvisibleGrindrail2" node_paths=PackedStringArray("path")]
+script = ExtResource("40_5lq2h")
+path = NodePath("../../../../../Static/Path/CavernPath")
 
 [node name="Spring" parent="MainAct/Cavern/AlternatePath/InvisibleGrindrail2" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -31)
+monitorable = false
 finalHeight = 10.0
-
-[node name="StaticPlatformGroup1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -110, 0, 0)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-
-[node name="PlatformCavernSmall2" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernSmall3" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="PlatformCavernSmall4" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="PlatformCavernSmall5" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="PlatformCavernSmall6" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="PlatformCavernSmall7" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-
-[node name="PlatformCavernSmall8" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
-
-[node name="PlatformCavernSmall9" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-
-[node name="PlatformCavernSmall10" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
-
-[node name="PlatformCavernSmall11" parent="MainAct/Cavern/StaticPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-
-[node name="FallingPlatformGroup1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -85.5, -1.5, 0)
-
-[node name="PlatformCavernFalling1" parent="MainAct/Cavern/FallingPlatformGroup1" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 2.25, 0, 0, -1)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/FallingPlatformGroup1" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 1.5, -4.75)
-
-[node name="PlatformCavernFalling2" parent="MainAct/Cavern/FallingPlatformGroup1" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 2.25, 0, 2.5, -8.75)
-
-[node name="PlatformCavernLarge" parent="MainAct/Cavern" instance=ExtResource("5_5f5sv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 1, 0)
-
-[node name="StaticPlatformGroup2" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 1, -72, 0, -3.5)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-
-[node name="PlatformCavernSmall2" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernSmall3" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="PlatformCavernSmall4" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="PlatformCavernSmall5" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="PlatformCavernSmall6" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="PlatformCavernSmall7" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-
-[node name="PlatformCavernSmall8" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
-
-[node name="PlatformCavernSmall9" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-
-[node name="PlatformCavernSmall10" parent="MainAct/Cavern/StaticPlatformGroup2" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
-
-[node name="FallingPlatformGroup2" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -72.5, 0, -24)
-
-[node name="PlatformCavernFalling1" parent="MainAct/Cavern/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
-
-[node name="PlatformCavernFalling2" parent="MainAct/Cavern/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.25, 0)
-
-[node name="PlatformCavernFalling3" parent="MainAct/Cavern/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
-
-[node name="PlatformCavernFalling4" parent="MainAct/Cavern/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 0)
-
-[node name="StaticPlatformGroup3" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -68.3, 0, -30)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-
-[node name="PlatformCavernSmall2" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernSmall3" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="PlatformCavernSmall4" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="PlatformCavernSmall5" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="PlatformCavernSmall6" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="PlatformCavernSmall7" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-
-[node name="PlatformCavernSmall8" parent="MainAct/Cavern/StaticPlatformGroup3" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
-
-[node name="LaunchRingSpike1" parent="MainAct/Cavern" instance=ExtResource("6_ii6j5")]
-transform = Transform3D(0.996195, -1.66335e-10, 0.0871558, -0.0871558, -3.8097e-09, 0.996195, 1.66335e-10, -1, -3.8097e-09, -51.3, -7.6, -30)
-closeDistance = 3.5
-closeMidHeight = 16.0
-closeEndHeight = 10.0
-
-[node name="StaticPlatformGroup4" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -47.8, 2, -30)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
-
-[node name="PlatformCavernSmall2" parent="MainAct/Cavern/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernSmall3" parent="MainAct/Cavern/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="PlatformCavernSmall4" parent="MainAct/Cavern/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="PlatformCavernSmall5" parent="MainAct/Cavern/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="PlatformCavernSmall6" parent="MainAct/Cavern/StaticPlatformGroup4" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="StaticPlatformGroup5" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -38.8, -3, -30)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
-
-[node name="PlatformCavernSmall2" parent="MainAct/Cavern/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernSmall3" parent="MainAct/Cavern/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="PlatformCavernSmall4" parent="MainAct/Cavern/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="PlatformCavernSmall5" parent="MainAct/Cavern/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="PlatformCavernSmall6" parent="MainAct/Cavern/StaticPlatformGroup5" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="FlyingPot" parent="MainAct/Cavern" instance=ExtResource("6_86hu3")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -25.3, -4, -30)
-travelBounds = Vector2(2, 5)
-
-[node name="RichRing" parent="MainAct/Cavern" instance=ExtResource("8_rlt0f")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -23.3, 4, -30)
-
-[node name="PlatformCavernLarge2" parent="MainAct/Cavern" instance=ExtResource("5_5f5sv")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -21.8, -2, -30)
-
-[node name="StaticPlatformGroup6" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-3, 0, -1.50996e-07, 0, 3, 0, 4.52987e-07, 0, -1, -21.8, -2, -26.5)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
-
-[node name="PlatformCavernSmall2" parent="MainAct/Cavern/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernSmall3" parent="MainAct/Cavern/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="PlatformCavernSmall4" parent="MainAct/Cavern/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="PlatformCavernSmall5" parent="MainAct/Cavern/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="PlatformCavernSmall6" parent="MainAct/Cavern/StaticPlatformGroup6" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="LaunchRingSpike2" parent="MainAct/Cavern" instance=ExtResource("6_ii6j5")]
-transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, -21.8, -8.6, -11.7)
-closeDistance = 17.0
-closeMidHeight = 28.0
-closeEndHeight = 15.0
-
-[node name="StaticPlatformGroup7" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-3, 0, 1.50996e-07, 0, 3, 0, -4.52987e-07, 0, -1, -21.8, 0, -7)
-
-[node name="PlatformCavernSmall1" parent="MainAct/Cavern/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
-
-[node name="PlatformCavernSmall2" parent="MainAct/Cavern/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernSmall3" parent="MainAct/Cavern/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="PlatformCavernSmall4" parent="MainAct/Cavern/StaticPlatformGroup7" instance=ExtResource("3_6m2nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="FallingPlatformGroup3" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-3, 0, 4.52987e-07, 0, 3, 0, -4.52987e-07, 0, -3, -21.8, 0, 5.5)
-
-[node name="PlatformCavernFalling1" parent="MainAct/Cavern/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
-
-[node name="PlatformCavernFalling2" parent="MainAct/Cavern/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 0, -0.5, -2.79999)
-
-[node name="PlatformCavernFalling3" parent="MainAct/Cavern/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, -4.26326e-14, 0, 1, 0, 4.26326e-14, 0, 1, 0, 0, -5.5)
-
-[node name="PlatformCavernFalling4" parent="MainAct/Cavern/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, -4.26326e-14, 0, 1, 0, 4.26326e-14, 0, 1, 0, 2, -0.5)
-
-[node name="PlatformCavernLarge3" parent="MainAct/Cavern" instance=ExtResource("5_5f5sv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.5, -21.8, -2, 32.5)
-
-[node name="PlatformCavernLarge4" parent="MainAct/Cavern" instance=ExtResource("5_5f5sv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.5, -16.8, -2, 32.5)
-
-[node name="PlatformCavernLarge5" parent="MainAct/Cavern" instance=ExtResource("5_5f5sv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, -1, 33.5)
-
-[node name="FallingPlatformGroup4" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 44.5, -1, 29.5)
-
-[node name="PlatformCavernFalling1" parent="MainAct/Cavern/FallingPlatformGroup4" instance=ExtResource("4_w5q3l")]
-
-[node name="PlatformCavernFalling2" parent="MainAct/Cavern/FallingPlatformGroup4" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="FallingPlatformGroup5" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 44.5, 0, 20.5)
-
-[node name="PlatformCavernFalling1" parent="MainAct/Cavern/FallingPlatformGroup5" instance=ExtResource("4_w5q3l")]
-
-[node name="PlatformCavernFalling2" parent="MainAct/Cavern/FallingPlatformGroup5" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="PlatformCavernLarge6" parent="MainAct/Cavern" instance=ExtResource("5_5f5sv")]
-transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1, 46.25, 0, 9.5)
-
-[node name="FallingPlatformGroup6" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(1.64, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 51.5, 0, 10)
-
-[node name="PlatformCavernFalling1" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
-
-[node name="PlatformCavernFalling2" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2, 0, 0)
-
-[node name="PlatformCavernFalling3" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 4, 0, 0)
-
-[node name="PlatformCavernFalling4" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 0, 0)
-
-[node name="PlatformCavernFalling5" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 8, 0, 0)
-
-[node name="PlatformCavernFalling6" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10, 0, 0)
-
-[node name="PlatformCavernFalling7" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12, 0, 0)
-
-[node name="PlatformCavernFalling8" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14, 0, 0)
-
-[node name="PlatformCavernFalling9" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16, 0, 0)
-
-[node name="PlatformCavernFalling10" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 18, 0, 0)
-
-[node name="PlatformCavernFalling11" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 20, 0, 0)
-
-[node name="PlatformCavernFalling12" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 22, 0, 0)
-
-[node name="PlatformCavernFalling13" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24, 0, 0)
-
-[node name="PlatformCavernFalling14" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 26, 0, 0)
-
-[node name="PlatformCavernFalling15" parent="MainAct/Cavern/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 28, 0, 0)
 
 [node name="HallA" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -488)
@@ -700,8 +2209,43 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -488)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -488)
 
 [node name="Static" parent="." instance=ExtResource("1_6irkq")]
+initialCameraSettings = ExtResource("26_t7xhw")
 
+[connection signal="Activated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/OpeningUnload" to="MainAct/Opening" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/OpeningUnload" to="MainAct/Opening" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/FieldLoad" to="MainAct/Field" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/FieldLoad" to="MainAct/Field" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/CavernLoad" to="MainAct/Cavern" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/CavernLoad" to="MainAct/Cavern" method="Deactivate"]
+[connection signal="area_entered" from="MainAct/Overpass/Hall/MajinGroup1/MajinActivation" to="MainAct/Overpass/Hall/MajinGroup1/BlueMajin1" method="Spawn"]
+[connection signal="area_entered" from="MainAct/Overpass/Hall/MajinGroup1/MajinActivation" to="MainAct/Overpass/Hall/MajinGroup1/BlueMajin2" method="Spawn"]
+[connection signal="area_entered" from="MainAct/Overpass/Hall/MajinGroup1/MajinActivation" to="MainAct/Overpass/Hall/MajinGroup1/BlueMajin3" method="Spawn"]
+[connection signal="Shattered" from="MainAct/Overpass/Hall/Ribcage1" to="MainAct/Overpass/Hall/Ribcage1/Tail" method="Shatter"]
+[connection signal="Shattered" from="MainAct/Overpass/Hall/BlockGroup/Stone1" to="MainAct/Overpass/Hall/BlockGroup/Stone4" method="Shatter"]
+[connection signal="Shattered" from="MainAct/Overpass/Hall/BlockGroup/Stone3" to="MainAct/Overpass/Hall/BlockGroup/Stone5" method="Shatter"]
+[connection signal="Shattered" from="MainAct/Overpass/Hall/BlockGroup/Stone4" to="MainAct/Overpass/Hall/BlockGroup/Stone6" method="Shatter"]
+[connection signal="Shattered" from="MainAct/Overpass/Hall/BlockGroup/Stone5" to="MainAct/Overpass/Hall/BlockGroup/Stone7" method="Shatter"]
+[connection signal="Defeated" from="MainAct/Overpass/Hall/BlockGroup/RedMajin" to="MainAct/Overpass/Hall/BlockGroup/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Overpass/Hall/BlockGroup/RedMajin" to="MainAct/Overpass/Hall/BlockGroup/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Field/LowerPath/JumpPanelGroup/RedMajin" to="MainAct/Field/LowerPath/JumpPanelGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Field/LowerPath/SpringGroup1/GreenMajin1" to="MainAct/Field/LowerPath/SpringGroup1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Field/LowerPath/SpringGroup1/GreenMajin2" to="MainAct/Field/LowerPath/SpringGroup1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Field/LowerPath/SpringGroup1/GreenMajin3" to="MainAct/Field/LowerPath/SpringGroup1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Field/LowerPath/SpringGroup1/GreenMajin4" to="MainAct/Field/LowerPath/SpringGroup1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Field/LowerPath/SpringGroup2/RedMajin" to="MainAct/Field/LowerPath/SpringGroup2/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Field/LowerPath/SpringGroup2/RedMajin" to="MainAct/Field/LowerPath/SpringGroup2/EnemyStone2" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Field/LowerPath/SpringGroup2/Spring01" to="MainAct/Field/LowerPath/SpringGroup2/SpringEvent" method="Activate"]
+[connection signal="Activated" from="MainAct/Field/SpiralPath/Switch" to="MainAct/Field/SpiralPath/Gate" method="Activate"]
+[connection signal="Activated" from="MainAct/Cavern/Hall/SwitchGroup1/Switch" to="MainAct/Cavern/Hall/SwitchGroup1/Gate" method="Activate"]
+[connection signal="Activated" from="MainAct/Cavern/Hall/SwitchGroup2/Switch" to="MainAct/Cavern/Hall/SwitchGroup2/Gate" method="Activate"]
+[connection signal="Activated" from="MainAct/Cavern/Hall/SwitchGroup3/Switch" to="MainAct/Cavern/Hall/SwitchGroup3/Gate" method="Activate"]
+[connection signal="Activated" from="MainAct/Cavern/Hall/SwitchGroup4/Switch" to="MainAct/Cavern/Hall/SwitchGroup4/Gate" method="Activate"]
+[connection signal="Activated" from="MainAct/Cavern/Hall/SwitchGroup5/Switch" to="MainAct/Cavern/Hall/SwitchGroup5/Gate" method="Activate"]
+[connection signal="Defeated" from="MainAct/Cavern/MainPath/SkullGroup/GreenMajin1" to="MainAct/Cavern/MainPath/SkullGroup/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Cavern/AlternatePath/InvisibleGrindrail1/Spring" to="MainAct/Cavern/AlternatePath/GreenMajin1" method="Spawn"]
 [connection signal="Defeated" from="MainAct/Cavern/AlternatePath/GreenMajin1" to="MainAct/Cavern/AlternatePath/GreenMajin2" method="Spawn"]
 [connection signal="Defeated" from="MainAct/Cavern/AlternatePath/GreenMajin1" to="MainAct/Cavern/AlternatePath/GreenMajin3" method="Spawn"]
 [connection signal="Defeated" from="MainAct/Cavern/AlternatePath/GreenMajin3" to="MainAct/Cavern/AlternatePath/GreenMajin4" method="Spawn"]
+[connection signal="GrindStarted" from="MainAct/Cavern/AlternatePath/InvisibleGrindrail2" to="MainAct/Cavern/AlternatePath/InvisibleGrindrail2/Path" method="Activate"]

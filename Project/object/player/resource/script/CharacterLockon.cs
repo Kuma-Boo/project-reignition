@@ -114,7 +114,7 @@ namespace Project.Gameplay
 			if (!activeTargets.Contains(t)) //Not in target list anymore (target hitbox may have been disabled)
 				return TargetState.NotInList;
 
-			if (Character.ActionState == CharacterController.ActionStates.Damaged || IsBouncing) //Character is busy
+			if (Character.ActionState == CharacterController.ActionStates.Damaged) //Character is busy
 				return TargetState.PlayerBusy;
 
 			if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalPosition)) //Not visible
@@ -154,15 +154,19 @@ namespace Project.Gameplay
 		[Export]
 		public float bounceSpeed;
 		[Export]
-		public float bouncePower;
+		public float bounceHeight;
 
-		private float bounceTimer;
-		public bool IsBouncing => bounceTimer != 0;
-		private const float BOUNCE_LOCKOUT_TIME = .15f;
+		/// <summary> Used to determine whether targeting is enabled or not. </summary>
+		private float bounceInterruptTimer;
+		/// <summary> Used to determine whether character's lockout is active. </summary>
+		public bool IsBouncingLockoutActive => Character.ActiveLockoutData == bounceLockoutSettings;
+		public bool CanInterruptBounce { get; private set; }
 
 		public void UpdateBounce()
 		{
-			bounceTimer = Mathf.MoveToward(bounceTimer, 0, PhysicsManager.physicsDelta);
+			bounceInterruptTimer = Mathf.MoveToward(bounceInterruptTimer, 0, PhysicsManager.physicsDelta);
+			if (Mathf.IsZeroApprox(bounceInterruptTimer))
+				CanInterruptBounce = true;
 
 			Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.friction * PhysicsManager.physicsDelta);
 			Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
@@ -171,17 +175,17 @@ namespace Project.Gameplay
 		public void StartBounce() //Bounce the character up and back (So they can target an enemy again)
 		{
 			IsHomingAttacking = false;
-			bounceTimer = BOUNCE_LOCKOUT_TIME;
+			CanInterruptBounce = false;
+			bounceInterruptTimer = bounceLockoutSettings.length - .5f;
 
-			/*
 			if (Target != null)
 				Character.GlobalPosition = Target.GlobalPosition;
-			*/
+
 			ResetLockonTarget();
 
 			Character.CanJumpDash = true;
 			Character.MoveSpeed = bounceSpeed;
-			Character.VerticalSpeed = bouncePower;
+			Character.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();
 		}

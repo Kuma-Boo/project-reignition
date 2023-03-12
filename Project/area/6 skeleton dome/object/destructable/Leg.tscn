@@ -1,0 +1,169 @@
+[gd_scene load_steps=8 format=3 uid="uid://3kra1mtg86nd"]
+
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_lly64"]
+[ext_resource type="PackedScene" uid="uid://cbocidprif4ds" path="res://area/6 skeleton dome/object/model/destructable/Leg.gltf" id="2_kvnd6"]
+[ext_resource type="PackedScene" uid="uid://dsrcqhnnxurcu" path="res://area/6 skeleton dome/object/model/destructable/LegPieces.gltf" id="3_if8xa"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ovs24"]
+size = Vector3(1.04283, 3.7, 0.7)
+
+[sub_resource type="Animation" id="Animation_uuo4r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Lockon:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/Lockon:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Root/Leg/LegMesh/StaticBody3D:collision_layer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+
+[sub_resource type="Animation" id="Animation_0mcy5"]
+resource_name = "shatter"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Lockon:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/Lockon:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Root/Leg/LegMesh/StaticBody3D:collision_layer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rd8ot"]
+_data = {
+"RESET": SubResource("Animation_uuo4r"),
+"shatter": SubResource("Animation_0mcy5")
+}
+
+[node name="Leg" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_lly64")
+pieceMass = 0.2
+disableEnvironmentCollision = true
+root = NodePath("Root")
+pieceRoot = NodePath("LegPieces")
+animator = NodePath("AnimationPlayer")
+shatterFlags = 24
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Leg" parent="Root" instance=ExtResource("2_kvnd6")]
+
+[node name="StaticBody3D" parent="Root/Leg/LegMesh" index="0" groups=["wall"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="Lockon" type="Area3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 0.999117, 0.0420152, 0, -0.0420152, 0.999117, 0, 0, -0.05)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Lockon"]
+shape = SubResource("BoxShape3D_ovs24")
+
+[node name="LegPieces" parent="." instance=ExtResource("3_if8xa")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rd8ot")
+}
+
+[connection signal="area_entered" from="Root/Lockon" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/Lockon" to="." method="OnExited"]
+
+[editable path="Root/Leg"]

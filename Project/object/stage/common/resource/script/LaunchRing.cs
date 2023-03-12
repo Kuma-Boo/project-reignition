@@ -7,31 +7,130 @@ namespace Project.Gameplay.Objects
 	[Tool]
 	public partial class LaunchRing : Area3D
 	{
-		[Export]
-		public float closeDistance;
-		[Export]
-		public float closeMidHeight;
-		[Export]
-		public float closeEndHeight;
-		[Export]
-		public float farDistance;
-		[Export]
-		public float farMidHeight;
-		[Export]
-		public float farEndHeight;
+		#region Editor
+		public override Array<Dictionary> _GetPropertyList()
+		{
+			Array<Dictionary> properties = new Array<Dictionary>();
+
+			properties.Add(ExtensionMethods.CreateProperty("Editor/Spike Variant", Variant.Type.Bool));
+
+			properties.Add(ExtensionMethods.CreateProperty("Settings/Distance", Variant.Type.Float));
+			properties.Add(ExtensionMethods.CreateProperty("Settings/Middle Height", Variant.Type.Float));
+			properties.Add(ExtensionMethods.CreateProperty("Settings/End Height", Variant.Type.Float));
+
+			if (!isSpikeVariant)
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Settings/Min Distance", Variant.Type.Float));
+				properties.Add(ExtensionMethods.CreateProperty("Settings/Min Middle Height", Variant.Type.Float));
+				properties.Add(ExtensionMethods.CreateProperty("Settings/Min End Height", Variant.Type.Float));
+			}
+
+			return properties;
+		}
+
+		public override Variant _Get(StringName property)
+		{
+			switch ((string)property)
+			{
+				case "Editor/Spike Variant":
+					return isSpikeVariant;
+
+				case "Settings/Distance":
+					return distance;
+				case "Settings/Middle Height":
+					return middleHeight;
+				case "Settings/End Height":
+					return endHeight;
+
+				case "Settings/Min Distance":
+					return minDistance;
+				case "Settings/Min Middle Height":
+					return minMiddleHeight;
+				case "Settings/Min End Height":
+					return minEndHeight;
+			}
+
+			return base._Get(property);
+		}
+
+		public override bool _Set(StringName property, Variant value)
+		{
+			switch ((string)property)
+			{
+				case "Editor/Spike Variant":
+					isSpikeVariant = (bool)value;
+					NotifyPropertyListChanged();
+					break;
+
+				case "Settings/Distance":
+					distance = (float)value;
+					distance = Mathf.RoundToInt(distance * 10f) * .1f;
+					if (distance < 0)
+						distance = 0;
+					if (distance < minDistance)
+						minDistance = distance;
+					break;
+				case "Settings/Middle Height":
+					middleHeight = (float)value;
+					middleHeight = Mathf.RoundToInt(middleHeight * 10f) * .1f;
+					break;
+				case "Settings/End Height":
+					endHeight = (float)value;
+					endHeight = Mathf.RoundToInt(endHeight * 10f) * .1f;
+					break;
+
+				case "Settings/Min Distance":
+					minDistance = (float)value;
+					minDistance = Mathf.RoundToInt(minDistance * 10f) * .1f;
+					if (minDistance < 0)
+						minDistance = 0;
+					if (minDistance > distance)
+						distance = minDistance;
+					break;
+				case "Settings/Min Middle Height":
+					minMiddleHeight = (float)value;
+					minMiddleHeight = Mathf.RoundToInt(minMiddleHeight * 10f) * .1f;
+					break;
+				case "Settings/Min End Height":
+					minEndHeight = (float)value;
+					minEndHeight = Mathf.RoundToInt(minEndHeight * 10f) * .1f;
+					break;
+				default:
+					return false;
+			}
+
+			return true;
+		}
+		#endregion
+
+		/// <summary> Is this the spike variant? </summary>
+		private bool isSpikeVariant;
 		[Export(PropertyHint.Range, "0, 1")]
-		public float launchPower;
+		/// <summary> Change this in the editor to visualize launch paths. </summary>
+		private float launchPower;
+		public float LaunchRatio => isSpikeVariant ? 1f : launchPower;
+
+		//Min
+		private float minDistance;
+		private float minMiddleHeight;
+		private float minEndHeight;
+
+		//Max/Spike settings
+		private float distance;
+		private float middleHeight;
+		private float endHeight;
 		public LaunchSettings GetLaunchSettings()
 		{
-			float midHeight = Mathf.Lerp(closeMidHeight, farMidHeight, launchPower);
-			float endHeight = Mathf.Lerp(closeEndHeight, farEndHeight, launchPower);
-			float distance = Mathf.Lerp(closeDistance, farDistance, launchPower);
-			Vector3 endPoint = GlobalPosition + (this.Forward().RemoveVertical().Normalized() * distance + Vector3.Up * endHeight);
-			LaunchSettings data = LaunchSettings.Create(GlobalPosition, endPoint, midHeight);
+			float currentDistance = Mathf.Lerp(minDistance, distance, LaunchRatio);
+			float currentMidHeight = Mathf.Lerp(minMiddleHeight, middleHeight, LaunchRatio);
+			float currentEndHeight = Mathf.Lerp(minEndHeight, endHeight, LaunchRatio);
+			Vector3 endPoint = GlobalPosition + (this.Forward().RemoveVertical().Normalized() * currentDistance + Vector3.Up * currentEndHeight);
+			LaunchSettings data = LaunchSettings.Create(GlobalPosition, endPoint, currentMidHeight);
 			data.canJumpDash = true;
 			return data;
 		}
 
+		[ExportGroup("Editor")]
 		[Export]
 		private Array<NodePath> pieces;
 		private readonly Array<Node3D> _pieces = new Array<Node3D>();
@@ -68,7 +167,10 @@ namespace Project.Gameplay.Objects
 
 			if (isActive)
 			{
-				if (isRecentered)
+				//Recenter player
+				Character.CenterPosition = ExtensionMethods.SmoothDamp(Character.CenterPosition, GlobalPosition, ref recenterVelocity, RECENTER_SPEED);
+
+				if (Character.CenterPosition.DistanceSquaredTo(GlobalPosition) < .5f) //Close enough; Allow inputs
 				{
 					if (Controller.jumpButton.wasPressed) //Disable launcher
 					{
@@ -79,15 +181,6 @@ namespace Project.Gameplay.Objects
 					{
 						DropPlayer();
 						Character.StartLauncher(GetLaunchSettings());
-					}
-				}
-				else //Recenter player
-				{
-					Character.CenterPosition = ExtensionMethods.SmoothDamp(Character.CenterPosition, GlobalPosition, ref recenterVelocity, RECENTER_SPEED);
-					if (Character.CenterPosition.DistanceSquaredTo(GlobalPosition) < .5f) //Law of close enough
-					{
-						Character.CenterPosition = GlobalPosition;
-						isRecentered = true;
 					}
 				}
 			}
@@ -130,6 +223,7 @@ namespace Project.Gameplay.Objects
 			isRecentered = false;
 			recenterVelocity = Vector3.Zero;
 			Character.MovementAngle = Character.CalculateForwardAngle(this.Forward());
+			Character.Animator.ExternalAngle = Character.MovementAngle;
 
 			//Disable homing reticle
 			Character.Lockon.IsMonitoring = false;
@@ -145,7 +239,11 @@ namespace Project.Gameplay.Objects
 		public void DamagePlayer()
 		{
 			DropPlayer();
-			Character.StartKnockback();
+			Character.StartKnockback(new CharacterController.KnockbackSettings()
+			{
+				stayOnGround = true,
+				forceActivation = true,
+			});
 		}
 	}
 }

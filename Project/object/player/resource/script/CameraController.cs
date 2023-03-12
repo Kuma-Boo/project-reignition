@@ -28,8 +28,11 @@ namespace Project.Gameplay
 		[Export]
 		private AnimationPlayer _crossfadeAnimator;
 
+		[Export]
+		/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>
+		public CharacterPathFollower PathFollower { get; private set; }
+
 		private CharacterController Character => CharacterController.instance;
-		private CharacterPathFollower PathFollower => Character.PathFollower;
 		public Node3D EventController { get; set; } //Node3D to follow (i.e. in a cutscene)
 
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
@@ -71,6 +74,8 @@ namespace Project.Gameplay
 
 		public void UpdateCamera()
 		{
+			PathFollower.Resync();
+
 			if (EventController != null)
 			{
 				cameraRoot.GlobalTransform = EventController.GlobalTransform;
@@ -471,11 +476,12 @@ namespace Project.Gameplay
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 			else
-			{
 				Input.MouseMode = Input.MouseModeEnum.Visible;
-			}
 
+			//Update visibilities
 			debugMesh.Visible = isFreeCamEnabled;
+			PathFollower.Visible = isFreeCamEnabled;
+			Character.PathFollower.Visible = isFreeCamEnabled;
 
 			if (!isFreeCamEnabled) return;
 			float targetMoveSpeed = freecamMovespeed;

@@ -14,17 +14,16 @@ namespace Project.Gameplay.Triggers
 		public delegate void DeactivatedEventHandler();
 
 		[Export]
-		private float distanceToTravel; //How far to travel. Set at 0 to travel the entire path
+		/// <summary> Where to stop automation. </summary>
+		private float endPoint; //How far to travel. Set at 0 to travel the entire path
 		[Export]
-		private float startingPoint;
-		[Export]
-		private bool ignoreDirection; //Always activate, regardless of which way the player entered/moves
+		/// <summary> Always activate, regardless of which way the player entered/moves. </summary>
+		private bool ignoreDirection;
 
 		private bool isEntered;
 		private bool isActive;
 
-		private float DistanceTraveled => Mathf.Abs(Character.PathFollower.Progress - startingPoint);
-		private bool IsFinished => (distanceToTravel > 0 && DistanceTraveled >= distanceToTravel) || DistanceTraveled >= Character.PathFollower.ActivePath.Curve.GetBakedLength();
+		private bool IsFinished => Character.PathFollower.Progress >= endPoint;
 		private CharacterController Character => CharacterController.instance;
 
 		/// <summary> Extra acceleration applied when the player is moving too slow. </summary>

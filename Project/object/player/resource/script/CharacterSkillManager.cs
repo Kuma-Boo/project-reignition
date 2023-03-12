@@ -10,7 +10,7 @@ namespace Project.Gameplay
 	{
 		private CharacterController Character => CharacterController.instance;
 
-		public override void _Ready()
+		public void Initialize()
 		{
 			//Determine the size of the soul gauge
 			float levelRatio = SaveManager.ActiveGameData.SoulGaugeLevel; //Current ratio (0 -> 10) compared to the soul gauge level cap (50)

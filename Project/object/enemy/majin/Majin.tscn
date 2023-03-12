@@ -15,9 +15,11 @@ radius = 0.4
 height = 1.4
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vs3xy"]
+radius = 0.8
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_8px8v"]
-radius = 50.0
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_n6ikd"]
+height = 15.0
+radius = 20.0
 
 [sub_resource type="PlaneMesh" id="16"]
 material = ExtResource("3_6ikv1")
@@ -66,7 +68,7 @@ radius = 0.2
 height = 4.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ft0xj"]
-radius = 1.0
+radius = 0.8
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_balcf"]
 material = ExtResource("4_p44e7")
@@ -169,43 +171,43 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Hurtbox/CollisionShape3D:shape:radius")
+tracks/7/path = NodePath("Particles/FireRoot/FlameCharge:rotation")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.5]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Particles/FireRoot/FlameCharge:rotation")
+tracks/8/path = NodePath("Particles/FireRoot/FlameHitbox/Near:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
+"update": 1,
+"values": [false]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Particles/FireRoot/FlameHitbox/Near:disabled")
+tracks/9/path = NodePath("Particles/FireRoot/FlameHitbox/Mid:disabled")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Particles/FireRoot/FlameHitbox/Mid:disabled")
+tracks/10/path = NodePath("Particles/FireRoot/FlameHitbox/Far:disabled")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -217,26 +219,26 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Particles/FireRoot/FlameHitbox/Far:disabled")
+tracks/11/path = NodePath("Particles/FireRoot/FlameAttack:transparency")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [0.0]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Particles/FireRoot/FlameAttack:transparency")
+tracks/12/path = NodePath("Hurtbox/CollisionShape3D:scale")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Vector3(1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_thps5"]
@@ -543,14 +545,14 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Hurtbox/CollisionShape3D:shape:radius")
+tracks/0/path = NodePath("Hurtbox/CollisionShape3D:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0]
+"values": [Vector3(1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
@@ -592,6 +594,7 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 shape = SubResource("CapsuleShape3D_vs3xy")
 
 [node name="ActivationTrigger" type="Area3D" parent="."]
@@ -601,13 +604,15 @@ collision_mask = 2
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationTrigger"]
-shape = SubResource("SphereShape3D_8px8v")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("CylinderShape3D_n6ikd")
 
 [node name="Particles" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="FireRoot" type="Node3D" parent="Particles"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+visible = false
 
 [node name="EmberCharge" type="GPUParticles3D" parent="Particles/FireRoot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)

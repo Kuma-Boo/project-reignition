@@ -27,7 +27,6 @@ namespace Project.Gameplay.Triggers
 	}
 }
 
-
 namespace Project.Gameplay
 {
 	/// <summary>

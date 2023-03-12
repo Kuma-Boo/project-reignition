@@ -3,7 +3,7 @@ using Godot;
 namespace Project.Gameplay.Triggers
 {
 	/// <summary>
-	/// Triggers a non-playable cutscene.
+	/// Triggers environment effects/cutscenes.
 	/// For gameplay automated sections (such as loops), see <see cref="AutomationTrigger"/>.
 	/// </summary>
 	public partial class EventTrigger : StageTriggerModule
@@ -17,9 +17,21 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private LockoutResource lockout;
 
+		[Export]
+		private bool autoRespawn;
+		[Export]
+		/// <summary> Only allow event to play once? </summary>
+		private bool isOneShot = true;
+
 		private bool wasActivated;
 		[Signal]
 		public delegate void ActivatedEventHandler();
+
+		public override void _Ready()
+		{
+			if (autoRespawn)
+				LevelSettings.instance.ConnectRespawnSignal(this);
+		}
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -51,7 +63,9 @@ namespace Project.Gameplay.Triggers
 			if (playerStandin != null)
 				Character.StartExternal(this, playerStandin, .2f);
 
-			wasActivated = true;
+			if (isOneShot)
+				wasActivated = true;
+
 			EmitSignal(SignalName.Activated);
 		}
 

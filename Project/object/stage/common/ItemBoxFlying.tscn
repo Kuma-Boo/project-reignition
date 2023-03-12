@@ -208,7 +208,7 @@ _data = {
 "open": SubResource("Animation_hxe17")
 }
 
-[node name="ItemBoxFlying" type="Area3D" node_paths=PackedStringArray("rootPosition", "wings", "chest", "animator")]
+[node name="ItemBoxFlying" type="Area3D" node_paths=PackedStringArray("animator")]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_oatmb")
@@ -218,22 +218,20 @@ script = ExtResource("1_oatmb")
 "Spawn Settings/Arc Height" = 0.0
 "Spawn Settings/Position" = Vector3(0, 0, 0)
 "Spawn Settings/Object" = null
-rootPosition = NodePath("ItemBoxWings/ItemBoxWingsRoot/Skeleton3D/RootPosition/Position")
-wings = NodePath("ItemBoxWings")
-chest = NodePath("ItemBoxWings/ItemBoxWingsRoot/Skeleton3D/RootPosition/ItemBox")
 animator = NodePath("AnimationPlayer")
 
 [node name="ItemBoxWings" parent="." instance=ExtResource("2_dsovg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="Skeleton3D" parent="ItemBoxWings/ItemBoxWingsRoot" index="0"]
-bones/1/rotation = Quaternion(0.413111, -0.573881, 0.573881, 0.413111)
-bones/2/rotation = Quaternion(-6.73486e-07, 1.69663e-06, 0.446424, 0.894821)
-bones/3/rotation = Quaternion(0.413111, 0.573881, -0.573881, 0.413111)
-bones/4/rotation = Quaternion(-6.73486e-07, -1.69663e-06, -0.446424, 0.894821)
+bones/0/position = Vector3(0, -0.0969388, 0)
+bones/1/rotation = Quaternion(0.695228, -0.129067, 0.129066, 0.695228)
+bones/2/rotation = Quaternion(-5.19484e-07, 1.61988e-06, -0.0574779, 0.998347)
+bones/3/rotation = Quaternion(0.695228, 0.129067, -0.129066, 0.695228)
+bones/4/rotation = Quaternion(-5.19484e-07, -1.61988e-06, 0.0574779, 0.998347)
 
 [node name="RootPosition" type="BoneAttachment3D" parent="ItemBoxWings/ItemBoxWingsRoot/Skeleton3D" index="1"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.0352, 0)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.0969388, 0)
 bone_name = "root"
 bone_idx = 0
 
@@ -250,6 +248,9 @@ bones/1/rotation = Quaternion(0, 0, 1, 0)
 visible = false
 transparency = 1.0
 cast_shadow = 0
+
+[node name="AnimationPlayer" parent="ItemBoxWings" index="1"]
+autoplay = "wing"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)

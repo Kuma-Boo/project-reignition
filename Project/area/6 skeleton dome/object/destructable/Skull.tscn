@@ -1,0 +1,176 @@
+[gd_scene load_steps=10 format=3 uid="uid://cra2x0w3qbcxv"]
+
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_3vi3t"]
+[ext_resource type="PackedScene" uid="uid://ddqpbpt4nebvh" path="res://area/6 skeleton dome/object/model/destructable/Skull.gltf" id="2_64ltn"]
+[ext_resource type="PackedScene" uid="uid://bgfnfvoem5dks" path="res://area/6 skeleton dome/object/model/destructable/SkullPieces.gltf" id="3_vl65g"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lp6gg"]
+radius = 0.9
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mhxvr"]
+radius = 1.5
+
+[sub_resource type="Animation" id="Animation_nqmoj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skull:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skull/StaticBody3D/CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Skull/Lockon/CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_1kxya"]
+resource_name = "loop"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_45kur"]
+resource_name = "shatter"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skull:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skull/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skull/Lockon/CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nj5im"]
+_data = {
+"RESET": SubResource("Animation_nqmoj"),
+"loop": SubResource("Animation_1kxya"),
+"shatter": SubResource("Animation_45kur")
+}
+
+[node name="Skull" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_3vi3t")
+pieceMass = 0.3
+root = NodePath("Skull")
+pieceRoot = NodePath("SkullPieces")
+animator = NodePath("AnimationPlayer")
+shatterFlags = 24
+
+[node name="Skull" parent="." instance=ExtResource("2_64ltn")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Skull" groups=["wall"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Skull/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("SphereShape3D_lp6gg")
+
+[node name="Lockon" type="Area3D" parent="Skull"]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Skull/Lockon"]
+shape = SubResource("SphereShape3D_mhxvr")
+
+[node name="SkullPieces" parent="." instance=ExtResource("3_vl65g")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "loop"
+libraries = {
+"": SubResource("AnimationLibrary_nj5im")
+}
+
+[connection signal="area_entered" from="Skull/Lockon" to="." method="OnEntered"]
+[connection signal="area_exited" from="Skull/Lockon" to="." method="OnExited"]

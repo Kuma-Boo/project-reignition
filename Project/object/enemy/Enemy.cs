@@ -107,7 +107,7 @@ namespace Project.Gameplay
 		{
 			if (isInteractingWithPlayer)
 			{
-				if (Character.Lockon.IsBouncing) return;
+				if (Character.Lockon.IsBouncingLockoutActive) return;
 
 				if (Character.Skills.IsSpeedBreakActive) //For now, speed break kills enemies instantly
 					Defeat();
