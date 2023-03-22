@@ -17,5 +17,6 @@ void fragment()
 	col = clamp(col, 0, 1) * COLOR;
 	
 	ALBEDO = col.rgb;
+	SPECULAR = col.a;
 	ALPHA = col.a;
 }

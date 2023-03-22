@@ -139,12 +139,17 @@ namespace Project.Gameplay
 			Circle, //Move around origin. Stretch by size
 		}
 
+
 		/// <summary> Current travel time. </summary>
 		private float currentTime;
 		/// <summary> Time scale for processing. </summary>
 		public float TimeScale = 1f;
 		/// <summary> Starting offset of the object. </summary>
 		public float StartingOffset { get; private set; }
+
+		/// <summary> Is movement paused? </summary>
+		public bool IsPaused { get; private set; }
+
 		[Export]
 		/// <summary> Object to actually move. </summary>
 		private Node3D root;
@@ -168,6 +173,7 @@ namespace Project.Gameplay
 		{
 			if (Engine.IsEditorHint()) return;
 			if (IsMovementInvalid()) return; //No movement
+			if (IsPaused) return;
 
 			currentTime += PhysicsManager.physicsDelta * TimeScale;
 			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) //Rollover
@@ -177,8 +183,15 @@ namespace Project.Gameplay
 				root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
 		}
 
+		public void Pause() => IsPaused = true;
+		public void Unpause() => IsPaused = false;
+
 		/// <summary> Resets currentTime to StartingOffset. </summary>
-		public void Reset() => currentTime = StartingOffset * Mathf.Abs(cycleLength);
+		public void Reset()
+		{
+			Unpause();
+			currentTime = StartingOffset * Mathf.Abs(cycleLength);
+		}
 
 		public Vector3 InterpolatePosition(float ratio)
 		{
@@ -203,7 +216,7 @@ namespace Project.Gameplay
 			if (verticalOrientation)
 				targetPosition = targetPosition.Rotated(Vector3.Right, Mathf.Pi * .5f);
 
-			return GlobalPosition + Basis * targetPosition;
+			return GlobalPosition + GlobalTransform.Basis * targetPosition;
 		}
 	}
 }

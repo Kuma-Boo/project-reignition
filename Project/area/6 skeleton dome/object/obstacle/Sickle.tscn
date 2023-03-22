@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://d21ummt57uq4a"]
+
+[ext_resource type="PackedScene" uid="uid://ck54rrm4x5ped" path="res://area/6 skeleton dome/object/model/obstacle/SickleBase.gltf" id="1_ffr4p"]
+[ext_resource type="Script" path="res://area/6 skeleton dome/data/script/Sickle.cs" id="1_uaaaq"]
+[ext_resource type="PackedScene" uid="uid://dwq4y4ikxpatn" path="res://area/6 skeleton dome/object/model/obstacle/SickleHead.gltf" id="2_bc5ee"]
+[ext_resource type="PackedScene" uid="uid://cabdisubyyw42" path="res://area/6 skeleton dome/object/model/obstacle/SickleChain.gltf" id="2_drsr8"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="4_j2r0i"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y3xwk"]
+size = Vector3(3, 2, 0.5)
+
+[node name="Sickle" type="Node3D" node_paths=PackedStringArray("sparkParticles")]
+script = ExtResource("1_uaaaq")
+rotationAmount = 30.0
+isSwingingRight = true
+root = NodePath("Root")
+head = NodePath("Root/SickleHead")
+sparkParticles = NodePath("Root/SickleHead/Sparks")
+chainScene = ExtResource("2_drsr8")
+chainLength = 1
+
+[node name="SickleBase" parent="." instance=ExtResource("1_ffr4p")]
+
+[node name="StaticBody3D" parent="SickleBase/SickleBaseMesh" index="0" groups=["wall"]]
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="SickleHead" parent="Root" instance=ExtResource("2_bc5ee")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+
+[node name="StaticBody3D" parent="Root/SickleHead/SickleHeadMesh" index="0" groups=["wall"]]
+
+[node name="Hitbox" type="Area3D" parent="Root/SickleHead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+script = ExtResource("4_j2r0i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SickleHead/Hitbox"]
+shape = SubResource("BoxShape3D_y3xwk")
+
+[node name="Sparks" type="GPUParticles3D" parent="Root/SickleHead"]
+visibility_aabb = AABB(-7, -4, -2, 14, 8, 4)
+local_coords = true
+
+[connection signal="area_entered" from="Root/SickleHead/Hitbox" to="Root/SickleHead/Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Root/SickleHead/Hitbox" to="Root/SickleHead/Hitbox" method="OnExited"]
+
+[editable path="SickleBase"]
+[editable path="Root/SickleHead"]

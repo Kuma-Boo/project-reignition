@@ -20,12 +20,15 @@ namespace Project.Gameplay.Objects
 
 			if (!spawnPearls)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Arc Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Position", Variant.Type.Vector3));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Object", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Pickup Parent", Variant.Type.NodePath));
 
 				if (spawnAmount > 1)
-					properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Radius", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
+				{
+					properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Delay", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
+					properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Radius", Variant.Type.Float, PropertyHint.Range, "0,5,0.1"));
+				}
 			}
 
 			return properties;
@@ -46,13 +49,17 @@ namespace Project.Gameplay.Objects
 				case "Spawn Settings/Travel Time":
 					travelTime = (float)value;
 					break;
-				case "Spawn Settings/Arc Height":
-					arcHeight = (float)value;
+				case "Spawn Settings/Travel Height":
+					travelHeight = (float)value;
 					break;
-				case "Spawn Settings/Position":
-					spawnPosition = (Vector3)value;
+				case "Spawn Settings/Travel Delay":
+					travelDelay = (float)value;
 					break;
-				case "Spawn Settings/Radius":
+				case "Spawn Settings/Pickup Parent":
+					pickupParentPath = (NodePath)value;
+					pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
+					break;
+				case "Spawn Settings/Spawn Radius":
 					spawnRadius = (float)value;
 					break;
 				case "Spawn Settings/Object":
@@ -76,11 +83,13 @@ namespace Project.Gameplay.Objects
 					return spawnAmount;
 				case "Spawn Settings/Travel Time":
 					return travelTime;
-				case "Spawn Settings/Arc Height":
-					return arcHeight;
-				case "Spawn Settings/Position":
-					return spawnPosition;
-				case "Spawn Settings/Radius":
+				case "Spawn Settings/Travel Height":
+					return travelHeight;
+				case "Spawn Settings/Travel Delay":
+					return travelDelay;
+				case "Spawn Settings/Pickup Parent":
+					return pickupParentPath;
+				case "Spawn Settings/Spawn Radius":
 					return spawnRadius;
 				case "Spawn Settings/Object":
 					return customObject;
@@ -94,24 +103,34 @@ namespace Project.Gameplay.Objects
 		/// <summary> Scene to spawn when spawning custom object. </summary>
 		private PackedScene customObject;
 
-		public int spawnAmount = 1; //How many objects to spawn
+		/// <summary> Position to spawn nodes. </summary>
+		private NodePath pickupParentPath;
+		private Node3D pickupParent;
+
+		/// <summary> How many objects to spawn. </summary>
+		public int spawnAmount = 1;
+		/// <summary> How long to travel for. </summary>
 		private float travelTime = 1;
-		private float arcHeight;
-		private Vector3 spawnPosition; //Relative to ItemBox's orientation
+		/// <summary> How high to travel. </summary>
+		private float travelHeight = 2;
+		/// <summary> Maximum amount to delay travel by. </summary>
+		private float travelDelay;
+
 
 		private Vector3 LaunchPosition => GlobalPosition + Vector3.Up * .5f;
-		public Vector3 EndPosition => LaunchPosition + GlobalTransform.Basis * spawnPosition;
+		public Vector3 EndPosition => pickupParent == null ? GlobalPosition : pickupParent.GlobalPosition;
 
-		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(LaunchPosition, EndPosition, arcHeight);
+		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(LaunchPosition, EndPosition, travelHeight);
 
 		//Only effective if spawnAmount is greater than 1
-		//private float timeOffset; //How much to offset each object when traveling
-		public float spawnRadius; //How wide of a ring to create
+		/// <summary> How wide of a ring to create. </summary>
+		public float spawnRadius;
+		/// <summary> Pre-calculated rotation interval. </summary>
 		private float rotationInterval;
 		private Vector3 GetSpawnOffset(int i)
 		{
 			if (spawnAmount == 1) return Vector3.Zero;
-			return this.Forward().Rotated(this.Up(), i * rotationInterval);
+			return this.Forward().Rotated(this.Up(), i * rotationInterval) * spawnRadius;
 		}
 
 		[Export]
@@ -119,36 +138,46 @@ namespace Project.Gameplay.Objects
 
 		private bool isOpened;
 		private bool isMovingObjects;
-		private float currentTravelTime;
 
 		private readonly Vector2 PEARL_SPAWN_RADIUS = new Vector2(2.0f, 1.0f);
 
 		//Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
+		private readonly List<float> travelTimes = new List<float>();
 		private readonly List<Pickup> objectPool = new List<Pickup>();
 		private readonly List<LaunchSettings> objectLaunchSettings = new List<LaunchSettings>();
 
 		protected override void SetUp()
 		{
+			pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
+
 			if (Engine.IsEditorHint()) return;
 
 			rotationInterval = Mathf.Tau / spawnAmount;
 
 			if (!spawnPearls)
 			{
-				if (customObject != null)
-				{
-					//Pool objects
-					for (int i = 0; i < spawnAmount; i++)
-					{
-						Pickup pickup = customObject.Instantiate<Pickup>();
-
-						pickup.DisableAutoRespawning = true;
-						objectPool.Add(pickup);
-						objectLaunchSettings.Add(LaunchSettings.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), arcHeight));
-					}
-				}
-				else
+				if (customObject == null)
 					GD.PrintErr("Item box can't spawn anything!");
+
+				if (pickupParent == null)
+					GD.PrintErr("spawnNode is null!");
+
+				//Pool objects
+				for (int i = 0; i < spawnAmount; i++)
+				{
+					Pickup pickup = customObject.Instantiate<Pickup>();
+					pickup.DisableAutoRespawning = true;
+
+					travelTimes.Add(0);
+					objectPool.Add(pickup);
+					objectLaunchSettings.Add(new LaunchSettings());
+
+					pickupParent.AddChild(pickup);
+				}
+
+				//Disable node parent
+				pickupParent.Visible = false;
+				pickupParent.ProcessMode = ProcessModeEnum.Disabled;
 			}
 
 			base.SetUp();
@@ -172,7 +201,6 @@ namespace Project.Gameplay.Objects
 
 			isOpened = false;
 			isMovingObjects = false;
-			currentTravelTime = 0;
 
 			animator.Play("RESET");
 			animator.Seek(0, true);
@@ -188,20 +216,36 @@ namespace Project.Gameplay.Objects
 			if (spawnPearls) return;
 
 			if (isOpened && isMovingObjects) //Interpolate objects
+				UpdateObjects();
+		}
+
+		private void UpdateObjects()
+		{
+			bool isMovementComplete = true;
+
+			for (int i = 0; i < objectPool.Count; i++)
 			{
-				currentTravelTime += PhysicsManager.physicsDelta;
-				float t = Mathf.Clamp(currentTravelTime, 0, travelTime) / travelTime;
-				isMovingObjects = t < 1f;
+				travelTimes[i] += PhysicsManager.physicsDelta;
+				float currentTime = Mathf.Clamp(travelTimes[i], 0, travelTime) / travelTime;
+				if (currentTime < 1f)
+					isMovementComplete = false; //Still moving objects
 
-				for (int i = 0; i < objectPool.Count; i++)
+				if (!objectPool[i].IsInsideTree()) continue; //Already collected?
+
+				objectPool[i].Visible = !Mathf.IsZeroApprox(currentTime);
+				objectPool[i].Monitoring = objectPool[i].Monitorable = currentTime >= 1f;
+
+				if (objectPool[i].Visible)
 				{
-					if (!objectPool[i].IsInsideTree()) continue; //Already collected?
+					if (!objectLaunchSettings[i].IsInitialized)
+						objectLaunchSettings[i] = LaunchSettings.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), travelHeight);
 
-					objectPool[i].GlobalPosition = objectLaunchSettings[i].InterpolatePositionRatio(t);
-					objectPool[i].Scale = Vector3.One * t;
-					objectPool[i].Monitoring = objectPool[i].Monitorable = t >= 1f;
+					objectPool[i].GlobalPosition = objectLaunchSettings[i].InterpolatePositionRatio(currentTime);
+					objectPool[i].Scale = Vector3.One * Mathf.Clamp(currentTime, 0.5f, 1f);
 				}
 			}
+
+			isMovingObjects = !isMovementComplete;
 		}
 
 		protected override void Collect()
@@ -221,14 +265,17 @@ namespace Project.Gameplay.Objects
 			}
 
 			isMovingObjects = true;
-			currentTravelTime = 0;
+
+			pickupParent.Visible = true;
+			pickupParent.ProcessMode = ProcessModeEnum.Inherit;
 
 			//Spawn objects
 			for (int i = 0; i < objectPool.Count; i++)
 			{
-				AddChild(objectPool[i]);
+				travelTimes[i] = Runtime.randomNumberGenerator.RandfRange(-travelDelay, 0);
 				objectPool[i].Monitoring = objectPool[i].Monitorable = false; //Disable collision temporarily
-				objectPool[i].SetDeferred("global_position", LaunchPosition);
+				objectLaunchSettings[i] = new LaunchSettings(); //Set as uninitialized LaunchSettings
+				CallDeferred(MethodName.UpdateObjects);
 			}
 		}
 	}

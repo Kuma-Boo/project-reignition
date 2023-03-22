@@ -460,12 +460,24 @@ namespace Project.Gameplay
 		private bool freeCamRotating;
 		private bool freeCamTilting;
 
+		private bool isFreeCamLocked;
+		private Vector3 freeCamLockedPosition;
+
 		private void UpdateFreeCam()
 		{
-			if (Input.IsKeyPressed(Key.R))
+			if (Input.IsActionJustPressed("debug_free_cam_reset"))
 			{
+				isFreeCamLocked = false;
 				isFreeCamEnabled = freeCamRotating = false;
 				camera.Transform = Transform3D.Identity;
+				GD.Print($"Free cam disabled.");
+			}
+
+			if (Input.IsActionJustPressed("debug_free_cam_lock"))
+			{
+				isFreeCamLocked = !isFreeCamLocked;
+				freeCamLockedPosition = camera.GlobalPosition;
+				GD.Print($"Free cam lock set to {isFreeCamLocked}.");
 			}
 
 			freeCamRotating = Input.IsMouseButtonPressed(MouseButton.Left);
@@ -503,6 +515,9 @@ namespace Project.Gameplay
 				camera.GlobalTranslate(camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
 			if (Input.IsKeyPressed(Key.A))
 				camera.GlobalTranslate(camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
+
+			if (isFreeCamLocked)
+				camera.GlobalPosition = freeCamLockedPosition;
 		}
 
 		public override void _Input(InputEvent e)

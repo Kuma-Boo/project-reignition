@@ -44,8 +44,8 @@ namespace Project.Gameplay.Objects
 				LockoutResource lockout = new LockoutResource()
 				{
 					movementMode = LockoutResource.MovementModes.Replace,
-					spaceMode = LockoutResource.SpaceModes.Camera,
-					movementAngle = Character.CalculateForwardAngle(this.Forward()),
+					spaceMode = LockoutResource.SpaceModes.Local,
+					movementAngle = 0,
 					speedRatio = speedRatio,
 					disableActions = true,
 					overrideSpeed = applyBoost,
@@ -61,7 +61,7 @@ namespace Project.Gameplay.Objects
 					Character.MovementAngle = Character.PathFollower.ForwardAngle;
 				}
 				else
-					Character.MovementAngle = lockout.movementAngle;
+					Character.MovementAngle = Character.CalculateForwardAngle(this.Forward());
 
 				Character.AddLockoutData(lockout);
 			}

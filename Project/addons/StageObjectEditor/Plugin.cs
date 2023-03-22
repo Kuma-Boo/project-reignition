@@ -84,8 +84,8 @@ namespace Project.Editor
 			Array<Vector3> points = new Array<Vector3>();
 			FlyingPot pot = (target as FlyingPot);
 
-			Vector3 bottomRight = pot.GlobalPosition + pot.Right() * pot.travelBounds.X;
-			Vector3 bottomLeft = pot.GlobalPosition + pot.Left() * pot.travelBounds.X;
+			Vector3 bottomRight = pot.GlobalPosition + pot.Right() * (pot.travelBounds.X + pot.boundOffset);
+			Vector3 bottomLeft = pot.GlobalPosition + pot.Left() * (pot.travelBounds.X - pot.boundOffset);
 			points.Add(bottomRight);
 			points.Add(bottomRight + Vector3.Up * pot.travelBounds.Y);
 			points.Add(bottomLeft + Vector3.Up * pot.travelBounds.Y);

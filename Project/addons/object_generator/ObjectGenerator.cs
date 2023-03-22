@@ -217,7 +217,7 @@ namespace Project.Editor
 
 					PathFollow3D follow = new PathFollow3D
 					{
-						RotationMode = PathFollow3D.RotationModeEnum.Oriented
+						RotationMode = PathFollow3D.RotationModeEnum.Xyz
 					};
 					path.AddChild(follow);
 					follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
@@ -231,12 +231,12 @@ namespace Project.Editor
 						if (hOffsetCurve != null)
 							follow.HOffset += hOffsetCurve.Sample((float)i / divider);
 
+						if (vOffsetCurve != null)
+							follow.VOffset += vOffsetCurve.Sample(i / divider);
+
 						Vector3 spawnPosition = follow.GlobalPosition;
 						if (disablePathY)
 							spawnPosition.Y = GlobalPosition.Y;
-
-						if (vOffsetCurve != null)
-							spawnPosition.Y += vOffsetCurve.Sample(i / divider);
 
 						Spawn(spawnPosition, true);
 						follow.Progress += spacing;

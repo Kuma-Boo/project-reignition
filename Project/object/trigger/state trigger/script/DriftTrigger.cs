@@ -91,6 +91,11 @@ namespace Project.Gameplay.Triggers
 			if (!Character.IsOnGround || Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < ENTRANCE_SPEED_RATIO) return false; //In air/too slow
 			if (Character.MovementState == CharacterController.MovementStates.External) return false; //Player is already busy
 
+			//Check for any obstructions
+			RaycastHit hit = Character.CastRay(Character.CenterPosition, this.Back() * slideDistance, Runtime.Instance.environmentMask);
+			if (hit)
+				return false;
+
 			return true; //Valid drift
 		}
 

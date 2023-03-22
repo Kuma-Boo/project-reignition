@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://cynl6p33qypud"]
+
+[ext_resource type="PackedScene" uid="uid://cp8owtrig0i60" path="res://area/6 skeleton dome/object/model/obstacle/WarpBase.gltf" id="1_ratfe"]
+[ext_resource type="PackedScene" uid="uid://cd68e1r8fc1jq" path="res://area/6 skeleton dome/object/model/obstacle/WarpHead.gltf" id="2_hyl1c"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_84q1u"]
+radius = 1.25
+height = 3.4
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4wqqd"]
+height = 3.0
+radius = 1.5
+
+[node name="WarpRed" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="WarpBase" parent="." instance=ExtResource("1_ratfe")]
+
+[node name="WarpBaseCollision" parent="WarpBase" index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="WarpBase/WarpBaseCollision" index="0" groups=["wall"]]
+
+[node name="WarpHead" parent="." instance=ExtResource("2_hyl1c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0.5)
+
+[node name="WarpHeadMesh" parent="WarpHead" index="0"]
+cast_shadow = 0
+
+[node name="WarpRedMesh" parent="WarpHead" index="1"]
+cast_shadow = 0
+
+[node name="WarpWhiteMesh" parent="WarpHead" index="2"]
+visible = false
+cast_shadow = 0
+
+[node name="StaticBody3D" type="StaticBody3D" parent="WarpHead" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WarpHead/StaticBody3D"]
+shape = SubResource("CapsuleShape3D_84q1u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("CylinderShape3D_4wqqd")
+
+[editable path="WarpBase"]
+[editable path="WarpHead"]

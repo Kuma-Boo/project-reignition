@@ -13,6 +13,9 @@ namespace Project.Gameplay.Objects
 		[Export]
 		public Vector2 travelBounds;
 		[Export]
+		public float boundOffset;
+
+		[Export]
 		private CameraSettingsResource customCameraSettings;
 
 		[ExportSubgroup("Components")]
@@ -101,12 +104,9 @@ namespace Project.Gameplay.Objects
 
 			float jumpHeight = (GlobalPosition.Y + 1) - Character.GlobalPosition.Y;
 			jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
-			Character.JumpTo(new JumpSettings()
-			{
-				destination = root.GlobalPosition,
-				jumpHeight = jumpHeight,
-				relativeToEnd = true,
-			});
+			LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, root.GlobalPosition, jumpHeight, true);
+			settings.IsJump = true;
+			Character.StartLauncher(settings);
 
 			lockonArea.SetDeferred("monitorable", false);
 
@@ -190,7 +190,7 @@ namespace Project.Gameplay.Objects
 			else
 				localPosition += Vector2.Down * velocity * PhysicsManager.physicsDelta;
 
-			localPosition.X = Mathf.Clamp(localPosition.X, -travelBounds.X, travelBounds.X);
+			localPosition.X = Mathf.Clamp(localPosition.X, -travelBounds.X + boundOffset, travelBounds.X + boundOffset);
 			localPosition.Y = Mathf.Clamp(localPosition.Y, 0f, travelBounds.Y);
 			if (Mathf.IsZeroApprox(localPosition.Y))
 			{

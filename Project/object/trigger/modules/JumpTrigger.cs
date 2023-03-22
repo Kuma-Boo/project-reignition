@@ -9,41 +9,25 @@ namespace Project.Gameplay.Triggers
 	public partial class JumpTrigger : StageTriggerModule
 	{
 		[Export]
-		public float jumpHeight; //How high to jump.
+		/// <summary> How high to jump. </summary>
+		public float jumpHeight;
+		[Export]
+		/// <summary> Auto align jump direction? </summary>
+		public bool autoAlign;
 
-		public LaunchSettings GetLaunchSettings() => JumpSettings.CreateLaunchSettings(GetParent<Node3D>().GlobalPosition);
-		private JumpSettings JumpSettings => new JumpSettings()
+		public LaunchSettings GetLaunchSettings()
 		{
-			destination = GlobalPosition,
-			jumpHeight = jumpHeight,
-			isJump = true
-		};
+			Vector3 startPosition = Character != null ? Character.GlobalPosition : GetParent<Node3D>().GlobalPosition;
+			LaunchSettings settings = LaunchSettings.Create(startPosition, GlobalPosition, jumpHeight);
+			settings.IsJump = true;
+			settings.UseAutoAlign = autoAlign;
+			return settings;
+		}
 
 		public override void Activate()
 		{
-			Character.JumpTo(JumpSettings);
+			Character.StartLauncher(GetLaunchSettings());
 			Character.CanJumpDash = false;
 		}
-	}
-}
-
-namespace Project.Gameplay
-{
-	/// <summary>
-	/// Jump settings used in CharacterController.JumpTo()
-	/// </summary>
-	public struct JumpSettings
-	{
-		/// <summary> Jump's destination. </summary>
-		public Vector3 destination;
-		/// <summary> Jump's height. </summary>
-		public float jumpHeight;
-		/// <summary> Is jump height relative to the starting position or the ending position? </summary>
-		public bool relativeToEnd;
-
-		/// <summary> CharacterController will play jump animations/sfx when this is True. </summary>
-		public bool isJump;
-
-		public LaunchSettings CreateLaunchSettings(Vector3 startPosition) => LaunchSettings.Create(startPosition, destination, jumpHeight, relativeToEnd);
 	}
 }

@@ -126,7 +126,7 @@ namespace Project.Gameplay.Objects
 			float currentEndHeight = Mathf.Lerp(minEndHeight, endHeight, LaunchRatio);
 			Vector3 endPoint = GlobalPosition + (this.Forward().RemoveVertical().Normalized() * currentDistance + Vector3.Up * currentEndHeight);
 			LaunchSettings data = LaunchSettings.Create(GlobalPosition, endPoint, currentMidHeight);
-			data.canJumpDash = true;
+			data.AllowJumpDash = true;
 			return data;
 		}
 

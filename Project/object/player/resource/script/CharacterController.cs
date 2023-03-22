@@ -911,7 +911,6 @@ namespace Project.Gameplay
 			ActionState = ActionStates.Stomping;
 
 			//TODO Play a separate stomping animation if using a stomp skill
-
 			Animator.Fall();
 		}
 		#endregion
@@ -1126,6 +1125,7 @@ namespace Project.Gameplay
 			Camera.PathFollower.SetActivePath(Level.CheckpointCameraPath);
 			PathFollower.Resync();
 
+			IsMovingBackward = false;
 			ResetVelocity();
 			ResetOrientation();
 
@@ -1190,7 +1190,7 @@ namespace Project.Gameplay
 		private float launcherTime;
 		private LaunchSettings LaunchSettings;
 		private Objects.Launcher activeLauncher;
-		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null, bool useAutoAlignment = false)
+		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null)
 		{
 			if (activeLauncher != null && activeLauncher == newLauncher) return; //Already launching that!
 
@@ -1206,11 +1206,11 @@ namespace Project.Gameplay
 			IsOnGround = false;
 			launcherTime = 0;
 
-			CanJumpDash = data.canJumpDash;
+			CanJumpDash = data.AllowJumpDash;
 			Lockon.IsMonitoring = false; //Disable lockon monitoring while launch is active
 			Lockon.ResetLockonTarget();
 
-			if (useAutoAlignment)
+			if (data.UseAutoAlign)
 			{
 				Vector3 launchDirection = LaunchSettings.InitialVelocity.RemoveVertical();
 				if (!launchDirection.IsEqualApprox(Vector3.Zero))
@@ -1218,6 +1218,12 @@ namespace Project.Gameplay
 					MovementAngle = CalculateForwardAngle(launchDirection);
 					Animator.SnapRotation(MovementAngle);
 				}
+			}
+
+			if (data.IsJump) //Play jump effects
+			{
+				Animator.Jump();
+				Effect.PlayActionSFX(Effect.JUMP_SFX);
 			}
 		}
 
@@ -1263,20 +1269,6 @@ namespace Project.Gameplay
 
 			Lockon.IsMonitoring = CanJumpDash;
 			EmitSignal(SignalName.LaunchFinished);
-		}
-
-		/// <summary>
-		/// Forces the player to jump to a specific destination.
-		/// </summary>
-		public void JumpTo(JumpSettings settings)
-		{
-			StartLauncher(settings.CreateLaunchSettings(GlobalPosition));
-
-			if (settings.isJump) //Play jump effects
-			{
-				Animator.Jump();
-				Effect.PlayActionSFX(Effect.JUMP_SFX);
-			}
 		}
 		#endregion
 

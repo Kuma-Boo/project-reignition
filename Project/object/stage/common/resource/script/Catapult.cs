@@ -39,11 +39,15 @@ namespace Project.Gameplay.Objects
 
 		public LaunchSettings GetLaunchSettings()
 		{
-			Vector3 launchPoint = GetLaunchPosition();
 			float distance = Mathf.Lerp(closeDistance, farDistance, launchPower);
 			float midHeight = Mathf.Lerp(closeMidHeight, farMidHeight, launchPower);
 			float endHeight = Mathf.Lerp(closeEndHeight, farEndHeight, launchPower);
-			return LaunchSettings.Create(launchPoint, launchPoint + this.Forward() * distance + Vector3.Up * endHeight, midHeight);
+			Vector3 startPoint = GetLaunchPosition();
+			Vector3 endPoint = startPoint + this.Forward() * distance + Vector3.Up * endHeight;
+
+			LaunchSettings settings = LaunchSettings.Create(startPoint, endPoint, midHeight);
+			settings.UseAutoAlign = true;
+			return settings;
 		}
 
 		private readonly float CLOSE_WINDUP_ANGLE = Mathf.DegToRad(45f);
@@ -120,7 +124,7 @@ namespace Project.Gameplay.Objects
 		private void LaunchPlayer()
 		{
 			isControllingPlayer = false;
-			Character.StartLauncher(GetLaunchSettings(), null, true);
+			Character.StartLauncher(GetLaunchSettings(), null);
 		}
 
 		private void CancelCatapult()
@@ -129,11 +133,11 @@ namespace Project.Gameplay.Objects
 			isControllingPlayer = false;
 
 			Vector3 destination = this.Back().RemoveVertical() * 2f + Vector3.Down * 2f;
-			Character.JumpTo(new JumpSettings()
-			{
-				destination = Character.GlobalPosition + destination,
-				jumpHeight = 1f,
-			});
+			destination += Character.GlobalPosition;
+
+			LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, destination, 1f);
+			settings.IsJump = true;
+			Character.StartLauncher(settings);
 		}
 
 		public void OnEntered(Area3D a)
@@ -147,11 +151,10 @@ namespace Project.Gameplay.Objects
 
 			Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = false; //Disable break skills
 			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
-			Character.JumpTo(new JumpSettings()
-			{
-				destination = launchNode.GlobalPosition,
-				jumpHeight = 2f,
-			});
+
+			LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, launchNode.GlobalPosition, 2f);
+			settings.IsJump = true;
+			Character.StartLauncher(settings);
 		}
 	}
 }

@@ -63,6 +63,9 @@ namespace Project.Gameplay.Hazards
 		private float timer;
 
 		[Export]
+		public bool isPaused;
+
+		[Export]
 		/// <summary> The spikeball to make copies of. </summary>
 		public RigidBody3D spikeBall;
 		private readonly List<SpikeBallData> spikeBallPool = new List<SpikeBallData>();
@@ -103,6 +106,8 @@ namespace Project.Gameplay.Hazards
 
 		public override void _PhysicsProcess(double _)
 		{
+			if (isPaused) return;
+
 			timer += PhysicsManager.physicsDelta;
 
 			if (timer >= spawnInterval)
