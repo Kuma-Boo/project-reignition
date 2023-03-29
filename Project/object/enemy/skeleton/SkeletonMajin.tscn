@@ -1,7 +1,437 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7s3kkj8pq6ox"]
+[gd_scene load_steps=37 format=3 uid="uid://c7s3kkj8pq6ox"]
 
+[ext_resource type="Script" path="res://object/enemy/skeleton/data/SkeletonMajin.cs" id="1_73oxv"]
 [ext_resource type="PackedScene" uid="uid://chpp4pf0r6nsb" path="res://object/enemy/skeleton/data/model/SkeletonMajin.gltf" id="1_84j8u"]
+[ext_resource type="PackedScene" uid="uid://dwlm87ss0cwxm" path="res://object/enemy/skeleton/data/model/MajinPieces.gltf" id="3_742ge"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="3_e8p5l"]
 
-[node name="SkeletonMajin" type="Node3D"]
+[sub_resource type="Curve" id="Curve_2u1g0"]
+max_value = 8.0
+bake_resolution = 1
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0), 0.0, 0.0, 0, 0, Vector2(0.8, 1.8), 18.0, 18.0, 0, 0, Vector2(1, 8), 0.0, 0.0, 0, 0]
+point_count = 4
 
-[node name="SkeletonMajin" parent="." instance=ExtResource("1_84j8u")]
+[sub_resource type="SphereShape3D" id="SphereShape3D_xm0ol"]
+radius = 0.4
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4f7fu"]
+radius = 0.15
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fg78d"]
+height = 0.8
+radius = 0.4
+
+[sub_resource type="Animation" id="Animation_o56xt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SkeletonMajin:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_t78yr"]
+resource_name = "shatter"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SkeletonMajin:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4k2km"]
+_data = {
+"RESET": SubResource("Animation_o56xt"),
+"shatter": SubResource("Animation_t78yr")
+}
+
+[sub_resource type="Animation" id="Animation_iwcfl"]
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetHitboxStatus"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetAttackStatus"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_met4l"]
+resource_name = "attack"
+length = 2.13334
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.13333),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [true],
+"method": &"SetAttackStatus"
+}, {
+"args": [false],
+"method": &"SetAttackStatus"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_tc6on"]
+resource_name = "damage"
+length = 0.500003
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetHitboxStatus"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_matxo"]
+resource_name = "defeat"
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Shatter"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"SpawnPearls"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_0s5s3"]
+resource_name = "spawn"
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [false],
+"method": &"SetHitboxStatus"
+}, {
+"args": [true],
+"method": &"SetHitboxStatus"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetAttackStatus"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0cax5"]
+_data = {
+"RESET": SubResource("Animation_iwcfl"),
+"attack": SubResource("Animation_met4l"),
+"damage": SubResource("Animation_tc6on"),
+"defeat": SubResource("Animation_matxo"),
+"spawn": SubResource("Animation_0s5s3")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kbpyb"]
+animation = &"attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ekin1"]
+animation = &"damage"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e2dlr"]
+animation = &"defeat"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_csure"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wpuis"]
+animation = &"shatter-reset"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hutrf"]
+animation = &"spawn"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_h360r"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xhd0m"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a0bdl"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qbqno"]
+xfade_time = 0.05
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ugjua"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2a0q7"]
+xfade_time = 0.05
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kw7dt"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nj5sa"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lsm8l"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_7hob3"]
+states/attack/node = SubResource("AnimationNodeAnimation_kbpyb")
+states/attack/position = Vector2(363.812, 308.413)
+states/damage/node = SubResource("AnimationNodeAnimation_ekin1")
+states/damage/position = Vector2(497.103, 240.136)
+states/defeat/node = SubResource("AnimationNodeAnimation_e2dlr")
+states/defeat/position = Vector2(215.003, 240.243)
+states/idle/node = SubResource("AnimationNodeAnimation_csure")
+states/idle/position = Vector2(362.653, 240.2)
+states/shatter-reset/node = SubResource("AnimationNodeAnimation_wpuis")
+states/shatter-reset/position = Vector2(361.6, 99.44)
+states/spawn/node = SubResource("AnimationNodeAnimation_hutrf")
+states/spawn/position = Vector2(361.44, 166.8)
+transitions = ["Start", "shatter-reset", SubResource("AnimationNodeStateMachineTransition_h360r"), "shatter-reset", "spawn", SubResource("AnimationNodeStateMachineTransition_xhd0m"), "attack", "damage", SubResource("AnimationNodeStateMachineTransition_a0bdl"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_qbqno"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_ugjua"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_2a0q7"), "idle", "damage", SubResource("AnimationNodeStateMachineTransition_kw7dt"), "idle", "defeat", SubResource("AnimationNodeStateMachineTransition_nj5sa"), "attack", "defeat", SubResource("AnimationNodeStateMachineTransition_lsm8l")]
+graph_offset = Vector2(-91, 166)
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_gu02r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u22e4"]
+radius = 0.4
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_6u6cp"]
+height = 15.0
+radius = 25.0
+
+[node name="SkeletonMajin" type="StaticBody3D" node_paths=PackedStringArray("root", "collider", "hurtbox", "rangeCollider", "animationTree", "animationPlayer")]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_73oxv")
+attackDelayCurve = SubResource("Curve_2u1g0")
+pearlAmount = 15
+damagePlayer = true
+root = NodePath("Root")
+collider = NodePath("CollisionShape3D")
+hurtbox = NodePath("Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Head/Hurtbox")
+rangeCollider = NodePath("Range/CollisionShape3D")
+animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("AnimationPlayer")
+
+[node name="Root" type="Node3D" parent="." node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("3_e8p5l")
+pieceMass = 5.0
+root = NodePath("SkeletonMajin")
+pieceRoot = NodePath("MajinPieces")
+animator = NodePath("ShatterAnimator")
+
+[node name="SkeletonMajin" parent="Root" instance=ExtResource("1_84j8u")]
+
+[node name="Skeleton3D" parent="Root/SkeletonMajin/SkeletonMajinRoot" index="0"]
+bones/3/scale = Vector3(1, 1, 0.999996)
+bones/9/scale = Vector3(1, 1.00001, 0.999994)
+bones/11/scale = Vector3(1.00001, 1, 0.999989)
+
+[node name="Head" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="1"]
+transform = Transform3D(1, -1.00691e-07, 3.39117e-07, 1.00689e-07, 0.999971, 6.50808e-06, -3.39115e-07, 5.23031e-06, 1.00002, -6.89642e-08, 2.44999, -0.109997)
+bone_name = "head"
+bone_idx = 5
+
+[node name="Hurtbox" type="Area3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Head"]
+transform = Transform3D(1, -1.7087e-16, 0, 3.14505e-15, 1, 0, 0, -1.81899e-12, 1, -2.84217e-14, 0.0999997, 0.1)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Head/Hurtbox"]
+transform = Transform3D(1, -1.71304e-16, 0, 3.14505e-15, 1, 0, 0, -4.54747e-13, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_xm0ol")
+
+[node name="LSword" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="2"]
+transform = Transform3D(1.55317e-07, 1.00001, -3.24242e-08, 0.999982, -2.11139e-07, -5.13245e-06, 6.61336e-06, -3.3817e-08, -1, 1.14498, 2.09402, 1.42594e-06)
+bone_name = "l_arm02"
+bone_idx = 9
+
+[node name="Hitbox" type="Area3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/LSword"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/LSword/Hitbox"]
+transform = Transform3D(1, 2.61943e-15, 0, 3.324e-14, 1, 7.10543e-15, 0, -4.54747e-13, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_4f7fu")
+
+[node name="RSword" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="3"]
+transform = Transform3D(1.67656e-07, -1.00001, 3.39434e-08, -0.999992, -2.22645e-07, -5.13615e-06, -6.60969e-06, -3.53229e-08, -0.999993, -1.14498, 2.09402, 1.43022e-06)
+bone_name = "r_arm02"
+bone_idx = 11
+
+[node name="Hitbox" type="Area3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/RSword"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/RSword/Hitbox"]
+transform = Transform3D(1, 2.61943e-15, 0, 3.324e-14, 1, 7.10543e-15, 0, -4.54747e-13, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_4f7fu")
+
+[node name="Chest" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="4"]
+transform = Transform3D(1, -3.87004e-09, 4.00409e-09, 4.00444e-09, 0.999402, -0.0342846, -3.86931e-09, 0.0342969, 0.999418, 5.80306e-09, 1.74, -0.13)
+bone_name = "chest"
+bone_idx = 3
+
+[node name="Hitbox" type="Area3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Chest"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Chest/Hitbox"]
+shape = SubResource("CylinderShape3D_fg78d")
+disabled = true
+
+[node name="Root" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="5"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+bone_name = "root"
+bone_idx = 0
+
+[node name="Hitbox" type="Area3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Root/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_fg78d")
+
+[node name="MajinPieces" parent="Root" instance=ExtResource("3_742ge")]
+visible = false
+
+[node name="ShatterAnimator" type="AnimationPlayer" parent="Root"]
+libraries = {
+"": SubResource("AnimationLibrary_4k2km")
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Root")
+libraries = {
+"": SubResource("AnimationLibrary_0cax5")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_7hob3")
+anim_player = NodePath("../Root/SkeletonMajin/AnimationPlayer")
+parameters/playback = SubResource("AnimationNodeStateMachinePlayback_gu02r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_u22e4")
+
+[node name="Range" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("CylinderShape3D_6u6cp")
+
+[connection signal="area_entered" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnHurtboxEntered"]
+[connection signal="area_exited" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnHurtboxExited"]
+[connection signal="area_entered" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/LSword/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/LSword/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/RSword/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/RSword/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Chest/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Chest/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Root/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D/Root/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
+[connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
+
+[editable path="Root/SkeletonMajin"]

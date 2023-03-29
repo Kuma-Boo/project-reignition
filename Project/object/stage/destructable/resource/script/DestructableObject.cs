@@ -190,6 +190,8 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Shatter() //Call this from a signal
 		{
+			GD.Print("Shattered");
+
 			if (isShattered) return;
 
 			//Play particle effects, sfx, etc

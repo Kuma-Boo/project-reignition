@@ -17,8 +17,8 @@ height = 1.4
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vs3xy"]
 radius = 0.8
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_n6ikd"]
-height = 15.0
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ilenc"]
+height = 30.0
 radius = 50.0
 
 [sub_resource type="PlaneMesh" id="16"]
@@ -231,7 +231,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Hurtbox/CollisionShape3D:scale")
+tracks/12/path = NodePath("Hitbox/CollisionShape3D:scale")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -545,7 +545,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Hurtbox/CollisionShape3D:scale")
+tracks/0/path = NodePath("Hitbox/CollisionShape3D:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -564,21 +564,23 @@ _data = {
 "spin": SubResource("Animation_1nwld")
 }
 
-[node name="Majin" type="StaticBody3D" node_paths=PackedStringArray("animationTree", "animationPlayer", "fireRoot", "root", "collider", "hurtbox") groups=["enemy", "wall"]]
+[node name="Majin" type="StaticBody3D" node_paths=PackedStringArray("fireRoot", "root", "collider", "hurtbox", "rangeCollider", "animationTree", "animationPlayer") groups=["enemy", "wall"]]
 collision_layer = 8
 collision_mask = 8
 script = ExtResource("1")
-"Spawn Settings/Spawn Trigger Mode" = 0
 "Spawn Settings/Spawn Travel Time" = 0.0
 "Rotation Settings/Track Player" = true
 "Attack Settings/Attack Type" = 0
-animationTree = NodePath("AnimationTree")
-animationPlayer = NodePath("AnimationPlayer")
+"Defeat Settings/Enable Enemy Launching" = false
 fireRoot = NodePath("Particles/FireRoot")
+pearlAmount = 15
+damagePlayer = true
 root = NodePath("Root")
 collider = NodePath("CollisionShape3D")
-hurtbox = NodePath("Hurtbox")
-damagePlayer = true
+hurtbox = NodePath("Hitbox")
+rangeCollider = NodePath("Range/CollisionShape3D")
+animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("AnimationPlayer")
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -586,25 +588,25 @@ damagePlayer = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_qrrup")
 
-[node name="Hurtbox" type="Area3D" parent="."]
+[node name="Hitbox" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 collision_layer = 4
 collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 shape = SubResource("CapsuleShape3D_vs3xy")
 
-[node name="ActivationTrigger" type="Area3D" parent="."]
+[node name="Range" type="Area3D" parent="."]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("CylinderShape3D_n6ikd")
+shape = SubResource("CylinderShape3D_ilenc")
 
 [node name="Particles" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -734,9 +736,9 @@ libraries = {
 "": SubResource("AnimationLibrary_stb46")
 }
 
-[connection signal="area_entered" from="Hurtbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Hurtbox" to="." method="OnExited"]
-[connection signal="area_entered" from="ActivationTrigger" to="." method="OnRangeEntered"]
-[connection signal="area_exited" from="ActivationTrigger" to="." method="OnRangeExited"]
+[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
+[connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 [connection signal="area_entered" from="Particles/FireRoot/FlameHitbox" to="Particles/FireRoot/FlameHitbox" method="OnEntered" flags=18]
 [connection signal="area_exited" from="Particles/FireRoot/FlameHitbox" to="Particles/FireRoot/FlameHitbox" method="OnExited" flags=18]

@@ -34,11 +34,14 @@ namespace Project.Gameplay.Objects
 		{
 			Forward,
 			Up,
+			Flatten,
 		}
 		public virtual Vector3 GetLaunchDirection()
 		{
 			if (launchDirection == LaunchDirection.Forward)
 				return this.Forward();
+			else if (launchDirection == LaunchDirection.Flatten)
+				return this.Up().RemoveVertical().Normalized();
 
 			return this.Up();
 		}

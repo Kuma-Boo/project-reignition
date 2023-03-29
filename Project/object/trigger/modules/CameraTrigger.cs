@@ -16,7 +16,7 @@ namespace Project.Gameplay.Triggers
 		public enum TransitionType
 		{
 			Blend, //Interpolate between states
-			Crossfade, //Crossfade scenes
+			Crossfade, //Crossfade states
 		}
 
 		[Export]

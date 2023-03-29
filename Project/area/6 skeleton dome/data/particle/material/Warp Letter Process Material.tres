@@ -1,0 +1,46 @@
+[gd_resource type="ShaderMaterial" load_steps=9 format=3 uid="uid://b0qpi6d2okk12"]
+
+[ext_resource type="Shader" path="res://effect/particle/shader/ParticleSpiral.gdshader" id="1_4nhmy"]
+
+[sub_resource type="Gradient" id="Gradient_l4ka5"]
+offsets = PackedFloat32Array(0, 0.168776, 0.35443, 0.578059, 0.763713, 0.911392)
+colors = PackedColorArray(0, 0, 0, 1, 0, 1, 1, 1, 0.152941, 0.219608, 0.858824, 1, 0.831373, 0.176471, 0.772549, 1, 1, 0, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ddtke"]
+gradient = SubResource("Gradient_l4ka5")
+width = 64
+
+[sub_resource type="Curve" id="Curve_60ocd"]
+max_value = 2.0
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(1, 0.6), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ljbk0"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_60ocd")
+
+[sub_resource type="Curve" id="Curve_105os"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_psqvp"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), -2.2, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_p224c"]
+width = 64
+curve_x = SubResource("Curve_105os")
+curve_y = SubResource("Curve_psqvp")
+curve_z = SubResource("Curve_105os")
+
+[resource]
+shader = ExtResource("1_4nhmy")
+shader_parameter/height = 5.0
+shader_parameter/rotation_bias = -0.8
+shader_parameter/rotation_speed = 5.0
+shader_parameter/radius_randomness = 0.4
+shader_parameter/radius_randomness_bias = 0.2
+shader_parameter/radius_curve = SubResource("CurveTexture_ljbk0")
+shader_parameter/scale_curve = SubResource("CurveXYZTexture_p224c")
+shader_parameter/color_ramp = SubResource("GradientTexture1D_ddtke")

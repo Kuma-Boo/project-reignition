@@ -109,6 +109,9 @@ namespace Project.Gameplay
 			tex.SetImage(GetViewport().GetTexture().GetImage());
 			_crossfade.Texture = tex;
 			_crossfadeAnimator.Play("activate"); //Play crossfade animation
+
+			SnapFlag = true;
+			UpdateGameplayCamera();
 		}
 
 		/// <summary>
@@ -121,10 +124,7 @@ namespace Project.Gameplay
 			if (Mathf.IsZeroApprox(data.BlendTime)) //Cut transition
 				SnapFlag = true;
 			else if (data.IsCrossfadeEnabled) //Crossfade transition
-			{
 				StartCrossfade();
-				SnapFlag = true;
-			}
 			else
 				data.CalculateBlendSpeed(); //Cache blend speed so we don't have to do it every frame
 

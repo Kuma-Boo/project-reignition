@@ -1,7 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://cynl6p33qypud"]
+[gd_scene load_steps=12 format=3 uid="uid://63pn4rd1drw0"]
 
+[ext_resource type="Script" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_lddwh"]
 [ext_resource type="PackedScene" uid="uid://cp8owtrig0i60" path="res://area/6 skeleton dome/object/model/obstacle/WarpBase.gltf" id="1_ratfe"]
 [ext_resource type="PackedScene" uid="uid://cd68e1r8fc1jq" path="res://area/6 skeleton dome/object/model/obstacle/WarpHead.gltf" id="2_hyl1c"]
+[ext_resource type="Material" uid="uid://b0qpi6d2okk12" path="res://area/6 skeleton dome/data/particle/material/Warp Letter Process Material.tres" id="3_qgo8t"]
+[ext_resource type="Material" uid="uid://ctdj5e2cjls1u" path="res://area/6 skeleton dome/data/particle/material/Warp Letter.tres" id="4_ugmi6"]
+[ext_resource type="Material" uid="uid://cq48sw8xbwanh" path="res://area/6 skeleton dome/data/particle/material/Warp Light Process Material.tres" id="5_jk6p4"]
+[ext_resource type="Material" uid="uid://ct04pw4arjmdd" path="res://area/6 skeleton dome/data/particle/material/Warp Light.tres" id="6_qk1ch"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_84q1u"]
 radius = 1.25
@@ -11,10 +16,19 @@ height = 3.4
 height = 3.0
 radius = 1.5
 
+[sub_resource type="QuadMesh" id="QuadMesh_k2gfi"]
+material = ExtResource("4_ugmi6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wkeqr"]
+material = ExtResource("6_qk1ch")
+
 [node name="WarpRed" type="Area3D"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
+script = ExtResource("1_lddwh")
+enableStartFX = true
+crossfade = true
 
 [node name="WarpBase" parent="." instance=ExtResource("1_ratfe")]
 
@@ -45,6 +59,37 @@ shape = SubResource("CapsuleShape3D_84q1u")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("CylinderShape3D_4wqqd")
+
+[node name="Letters" type="GPUParticles3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.25, 0)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 48
+lifetime = 2.5
+preprocess = 5.0
+fixed_fps = 60
+interpolate = false
+fract_delta = false
+visibility_aabb = AABB(-4, -2, -4, 8, 10, 8)
+local_coords = true
+process_material = ExtResource("3_qgo8t")
+draw_pass_1 = SubResource("QuadMesh_k2gfi")
+
+[node name="Light" type="GPUParticles3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.25, 0)
+cast_shadow = 0
+gi_mode = 0
+explosiveness = 0.8
+fixed_fps = 60
+interpolate = false
+fract_delta = false
+visibility_aabb = AABB(-2, 0, -2, 4, 8, 4)
+local_coords = true
+process_material = ExtResource("5_jk6p4")
+draw_pass_1 = SubResource("QuadMesh_wkeqr")
+
+[connection signal="area_entered" from="." to="." method="Activate"]
 
 [editable path="WarpBase"]
 [editable path="WarpHead"]

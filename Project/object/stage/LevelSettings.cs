@@ -409,11 +409,11 @@ namespace Project.Gameplay
 
 		#region Object Spawning
 		//Checkpoint data
-		public Node3D CurrentCheckpoint { get; private set; }
+		public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
 		public Path3D CheckpointPlayerPath { get; private set; }
 		public Path3D CheckpointCameraPath { get; private set; }
 		public CameraSettingsResource CheckpointCameraSettings;
-		public void SetCheckpoint(Node3D newCheckpoint)
+		public void SetCheckpoint(Triggers.CheckpointTrigger newCheckpoint)
 		{
 			if (newCheckpoint == CurrentCheckpoint) return; //Already at this checkpoint
 

@@ -3,45 +3,36 @@ using Godot;
 namespace Project.Gameplay.Triggers
 {
 	/// <summary>
-	/// Teleports the player to the StageTriggerModule's position.
+	/// Teleports the player.
 	/// </summary>
 	public partial class TeleportTrigger : StageTriggerModule
 	{
-		[Export]
-		public bool enableFX;
-		[Export]
-		public bool resetMovement;
-		[Export]
-		public bool crossfade = true;
+		[Signal]
+		public delegate void TeleportEventHandler();
 
-		public override void Activate() => Character.Teleport(GlobalPosition, new TeleportSettings()
-		{
-			enableFX = enableFX,
-			resetMovement = resetMovement,
-			crossfade = crossfade
-		});
-	}
-}
-
-namespace Project.Gameplay
-{
-	public struct TeleportSettings
-	{
-		/// <summary> Should sound/visual effects be used? </summary>
-		public bool enableFX;
+		[Export]
+		/// <summary> Should sound/visual effects be used when starting the teleport? </summary>
+		public bool enableStartFX;
+		[Export]
+		/// <summary> Should sound/visual effects be used when finishing the teleport? </summary>
+		public bool enableEndFX = true;
+		[Export]
 		/// <summary> Reset movespeed? </summary>
-		public bool resetMovement;
+		public bool resetMovespeed = true;
+		[Export]
 		/// <summary> Use a crossfade? </summary>
 		public bool crossfade;
+		[Export]
+		/// <summary> Target to warp to. </summary>
+		private Node3D warpTarget;
+		public Vector3 WarpPosition => warpTarget == null ? GlobalPosition : warpTarget.GlobalPosition;
 
-		/// <summary>
-		/// Teleport settings used when respawning the player.
-		/// </summary>
-		public static TeleportSettings RespawnSettings => new TeleportSettings()
-		{
-			enableFX = true,
-			resetMovement = true,
-			crossfade = false,
-		};
+		public override void Activate() => Character.Teleport(this);
+
+		/// <summary> Emits signal when warp actually occours. </summary>
+		public void ApplyTeleport() => EmitSignal(SignalName.Teleport);
+
+		/// <summary> Overload method for connecting directly from Area3D. </summary>
+		public void Activate(Area3D a) => Activate();
 	}
 }

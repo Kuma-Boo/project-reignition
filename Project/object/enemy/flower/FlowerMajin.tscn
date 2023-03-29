@@ -2,19 +2,19 @@
 
 [ext_resource type="PackedScene" uid="uid://ci1q4ubgknkjc" path="res://object/enemy/flower/data/model/FlowerMajin.gltf" id="1_g4mq2"]
 [ext_resource type="Script" path="res://object/enemy/flower/data/FlowerMajin.cs" id="2_14l8s"]
-[ext_resource type="PackedScene" path="res://object/enemy/flower/Seed.tscn" id="3_xwrdv"]
+[ext_resource type="PackedScene" uid="uid://biftp4y6c0gex" path="res://object/enemy/flower/Seed.tscn" id="3_xwrdv"]
 [ext_resource type="AudioStream" uid="uid://d24exv6ljc387" path="res://sound/sfx/enemy/flower/flower show.wav" id="4_rhe6s"]
 [ext_resource type="AudioStream" uid="uid://bts22xjnayshr" path="res://sound/sfx/enemy/flower/flower aggressive.wav" id="4_wnk87"]
 [ext_resource type="AudioStream" uid="uid://0viimwo4ungd" path="res://sound/sfx/enemy/flower/flower attack.wav" id="5_6oumr"]
 [ext_resource type="AudioStream" uid="uid://djkjwq28o5v4k" path="res://sound/sfx/enemy/flower/flower defeated.wav" id="5_ijj0t"]
 [ext_resource type="AudioStream" uid="uid://bageplss4yb7m" path="res://sound/sfx/enemy/flower/flower hit.wav" id="5_qbppd"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_4r0or"]
+radius = 0.4
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iip0l"]
 radius = 0.2
 height = 3.2
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_4r0or"]
-radius = 0.4
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8u2yo"]
 animation = &"RESET"
@@ -60,14 +60,15 @@ fadeout_time = 0.1
 animation = &"show"
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_swlia"]
-enabled_inputs = 3
-reset = false
 input_0/name = "passive"
 input_0/auto_advance = false
+input_0/reset = true
 input_1/name = "aggressive"
 input_1/auto_advance = false
+input_1/reset = true
 input_2/name = "static"
 input_2/auto_advance = false
+input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_efgxh"]
 graph_offset = Vector2(-985.313, 78.8122)
@@ -678,52 +679,51 @@ _data = {
 "spawn": SubResource("Animation_cw5io")
 }
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_6ic35"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1avlv"]
+height = 15.0
 radius = 30.0
 
-[node name="FlowerMajin" type="StaticBody3D" node_paths=PackedStringArray("root", "animator", "collider", "hurtbox")]
+[node name="FlowerMajin" type="StaticBody3D" node_paths=PackedStringArray("root", "collider", "hurtbox", "rangeCollider", "animationTree", "animationPlayer")]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("2_14l8s")
-activateInstantly = true
 passiveLength = 5.0
 preAttackLength = 3.0
 postAttackLength = 3.0
 isInHitstun = true
-root = NodePath("FlowerMajin")
-animator = NodePath("AnimationPlayer")
 seed = ExtResource("3_xwrdv")
-collider = NodePath("CollisionShape3D")
-hurtbox = NodePath("HeadAttachment/Hurtbox")
 maxHealth = 3
+root = NodePath("FlowerMajin")
+collider = NodePath("CollisionShape3D")
+hurtbox = NodePath("FlowerMajin/FlowerMajinRoot/Skeleton3D/HeadAttachment/Hurtbox")
+rangeCollider = NodePath("Range/CollisionShape3D")
+animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("AnimationPlayer")
 
 [node name="FlowerMajin" parent="." instance=ExtResource("1_g4mq2")]
 
 [node name="Skeleton3D" parent="FlowerMajin/FlowerMajinRoot" index="0"]
-bones/8/rotation = Quaternion(0.34726, 0.687727, 0.533292, -0.349347)
 bones/18/rotation = Quaternion(1, -2.7093e-08, -2.7093e-08, -1.76105e-06)
 bones/19/rotation = Quaternion(0.0167342, 2.26178e-08, 1.54639e-08, 0.99986)
 bones/20/rotation = Quaternion(-0.0311811, -1.31099e-12, 1.0463e-08, 0.999514)
 bones/21/rotation = Quaternion(0.999995, -4.83984e-08, -4.83984e-08, -0.00308345)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-shape = SubResource("CapsuleShape3D_iip0l")
-
-[node name="HeadAttachment" type="BoneAttachment3D" parent="."]
+[node name="HeadAttachment" type="BoneAttachment3D" parent="FlowerMajin/FlowerMajinRoot/Skeleton3D" index="2"]
 transform = Transform3D(1, -5.5299e-08, 5.5299e-08, 5.5299e-08, 1, -1.23323e-08, -5.5299e-08, 1.23323e-08, 1, -1.55756e-08, 2.65659, 8.23438e-06)
 bone_name = "head"
 bone_idx = 3
-use_external_skeleton = true
-external_skeleton = NodePath("../FlowerMajin/FlowerMajinRoot/Skeleton3D")
 
-[node name="Hurtbox" type="Area3D" parent="HeadAttachment"]
+[node name="Hurtbox" type="Area3D" parent="FlowerMajin/FlowerMajinRoot/Skeleton3D/HeadAttachment"]
 transform = Transform3D(1, 5.5299e-08, -5.5299e-08, -5.5299e-08, 1, 2.46649e-08, 5.5299e-08, -2.46649e-08, 1, 0, 0.25, 0)
 collision_layer = 12
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HeadAttachment/Hurtbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowerMajin/FlowerMajinRoot/Skeleton3D/HeadAttachment/Hurtbox"]
 shape = SubResource("SphereShape3D_4r0or")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+shape = SubResource("CapsuleShape3D_iip0l")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_efgxh")
@@ -736,7 +736,7 @@ parameters/hide/active = false
 parameters/hide/request = 0
 parameters/hit/active = false
 parameters/hit/request = 0
-parameters/seek/seek_position = -1.0
+parameters/seek/seek_request = -1.0
 parameters/show/active = false
 parameters/show/request = 0
 parameters/state_transition/current_state = "static"
@@ -749,13 +749,14 @@ libraries = {
 "": SubResource("AnimationLibrary_gytq4")
 }
 
-[node name="ActivationRange" type="Area3D" parent="."]
+[node name="Range" type="Area3D" parent="."]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationRange"]
-shape = SubResource("SphereShape3D_6ic35")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("CylinderShape3D_1avlv")
 
 [node name="SFX" type="Node3D" parent="."]
 
@@ -791,9 +792,9 @@ max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
 
-[connection signal="area_entered" from="HeadAttachment/Hurtbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="HeadAttachment/Hurtbox" to="." method="OnExited"]
-[connection signal="area_entered" from="ActivationRange" to="." method="OnRangeEntered"]
-[connection signal="area_exited" from="ActivationRange" to="." method="OnRangeExited"]
+[connection signal="area_entered" from="FlowerMajin/FlowerMajinRoot/Skeleton3D/HeadAttachment/Hurtbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="FlowerMajin/FlowerMajinRoot/Skeleton3D/HeadAttachment/Hurtbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
+[connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 
 [editable path="FlowerMajin"]

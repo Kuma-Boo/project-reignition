@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=63 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://m68asxsb3okb" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -77,6 +77,12 @@ size = Vector3(20, 20, 80)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sxb4t"]
 size = Vector3(15, 40, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kkdvi"]
+size = Vector3(40, 20, 150)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7hn3n"]
+size = Vector3(40, 20, 30)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_blxyp"]
 size = Vector3(40, 20, 2.5)
@@ -323,6 +329,9 @@ path = NodePath("../../../../Path/LoopPath")
 [node name="Teleport" type="Node3D" parent="Trigger/Object/LoopTeleport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.1, -2.32711, -151.1)
 script = ExtResource("7_4goht")
+enableEndFX = false
+resetMovespeed = false
+crossfade = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/LoopTeleport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -437,6 +446,66 @@ path = NodePath("../../../../Path/InteriorPath")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Interior"]
 shape = SubResource("BoxShape3D_gbf13")
 
+[node name="HallA" parent="Trigger/Path" instance=ExtResource("3_gut3n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -558)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/HallA" node_paths=PackedStringArray("path")]
+script = ExtResource("7_pc1yy")
+path = NodePath("../../../../Path/HallAPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_kkdvi")
+
+[node name="HallB" parent="Trigger/Path" instance=ExtResource("3_gut3n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -558)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/HallB" node_paths=PackedStringArray("path")]
+script = ExtResource("7_pc1yy")
+path = NodePath("../../../../Path/HallBPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_kkdvi")
+
+[node name="HallC" parent="Trigger/Path" instance=ExtResource("3_gut3n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -558)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/HallC" node_paths=PackedStringArray("path")]
+script = ExtResource("7_pc1yy")
+path = NodePath("../../../../Path/HallCPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallC"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_kkdvi")
+
+[node name="HallT" parent="Trigger/Path" instance=ExtResource("3_gut3n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -558)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/HallT" node_paths=PackedStringArray("path")]
+script = ExtResource("7_pc1yy")
+path = NodePath("../../../../Path/HallTreasurePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallT"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_kkdvi")
+
+[node name="Throne" parent="Trigger/Path" instance=ExtResource("3_gut3n")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 934, 0, -1000)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/Throne" node_paths=PackedStringArray("path")]
+script = ExtResource("7_pc1yy")
+path = NodePath("../../../../Path/ThronePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Throne"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_7hn3n")
+
 [node name="Camera" type="Node3D" parent="Trigger"]
 
 [node name="LoopLinear" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
@@ -458,7 +527,6 @@ shape = SubResource("BoxShape3D_mow5f")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
-visible = false
 
 [node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("3_gut3n")]
 transform = Transform3D(0.972174, 7.5904e-09, 0.23426, -7.53476e-09, 1, -1.13253e-09, -0.23426, -6.64075e-10, 0.972174, -25.2, 3, -162.3)
@@ -532,7 +600,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="05AUnload-07Load" parent="Visuals/CullingMap" instance=ExtResource("3_gut3n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 498.565, 7.79944, -964.823)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 473.965, 5.00211, -934.947)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -564,6 +632,15 @@ transform = Transform3D(1, -1.13133e-08, -2.98023e-08, 1.13133e-08, 1, 1.48943e-
 "Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/08Unload"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="16Load-14Unload" parent="Visuals/CullingMap" instance=ExtResource("3_gut3n")]
+transform = Transform3D(0.707107, -1.13133e-08, -0.707107, 9.0529e-09, 1, -6.94653e-09, 0.707107, -1.48943e-09, 0.707107, 1119.89, -0.000597, -1039.86)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/16Load-14Unload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
@@ -668,7 +745,6 @@ layers = 1024
 light_cull_mask = 4293918727
 shadow_enabled = true
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 50.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("50_cio3r")
@@ -711,3 +787,7 @@ environment = ExtResource("50_cio3r")
 [connection signal="Deactivated" from="Visuals/CullingMap/09Load-07Unload" to="Visuals/09Spiral" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/08Unload" to="Visuals/08Exterior" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/08Unload" to="Visuals/08Exterior" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/14Arena" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/14Arena" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Deactivate"]

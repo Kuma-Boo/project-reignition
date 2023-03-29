@@ -40,12 +40,8 @@ namespace Project.Gameplay
 			eventAnimationPlayer.Seek(0.0, true);
 		}
 
-		/// <summary> Called when the player respawns. Resets all animations. </summary>
-		public void Respawn()
-		{
-			NormalState.Start(GROUND_TREE_STATE, true);
-			eventAnimationPlayer.Play("respawn");
-		}
+		/// <summary> Forces the player's animation back to the grounded state. </summary>
+		public void SnapToGround() => NormalState.Start(GROUND_TREE_STATE, true);
 
 		private readonly StringName PLAYER_POSITION_SHADER_PARAMETER = "player_position";
 		/// <summary>

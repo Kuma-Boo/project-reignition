@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://d3k11b5qyl4an"]
+[gd_scene load_steps=4 format=3 uid="uid://d3k11b5qyl4an"]
 
 [ext_resource type="PackedScene" uid="uid://brh2qcbs8htal" path="res://area/6 skeleton dome/act 1/environment/model/03Field.gltf" id="1_6k3ju"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_o1ejs"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fc1m5"]
 
 [node name="03Field" instance=ExtResource("1_6k3ju")]
 script = ExtResource("2_o1ejs")
@@ -50,7 +52,7 @@ gi_mode = 1
 
 [node name="stg040_o07_Mesh_0002" parent="." index="8"]
 layers = 2
-cast_shadow = 2
+cast_shadow = 0
 gi_mode = 1
 
 [node name="stg040_o07_Mesh_0003" parent="." index="9"]
@@ -106,3 +108,19 @@ gi_mode = 1
 [node name="stg040_p07_Mesh_0000" parent="." index="19"]
 layers = 2
 gi_mode = 1
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 112.341, 41, -702.873)
+layers = 4
+size = Vector3(357, 96, 446)
+interior = true
+cull_mask = 2
+ambient_mode = 2
+ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 0.5
+
+[node name="Shadow" type="MeshInstance3D" parent="." index="21"]
+transform = Transform3D(12, 0, 0, 0, 5, 0, 0, 0, 5, 133.51, 10.8779, -810)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_fc1m5")

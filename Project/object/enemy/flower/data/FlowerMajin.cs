@@ -8,7 +8,7 @@ namespace Project.Gameplay
 	{
 		[ExportSubgroup("Enemy Settings")]
 		[Export]
-		private bool activateInstantly; //Skip passive phase when activated?
+		private bool attackInstantly; //Skip passive phase when activated?
 		[Export]
 		private float passiveLength; //How long to remain passive
 		[Export]
@@ -21,10 +21,6 @@ namespace Project.Gameplay
 		private bool isOpen; //Can the flower be damaged?
 		[Export]
 		private bool isInHitstun; //Is this enemy being clobbered by a homing attack?
-		[Export]
-		private Node3D root;
-		[Export]
-		private AnimationPlayer animator;
 		[Export]
 		private PackedScene seed;
 		private int seedIndex;
@@ -51,24 +47,25 @@ namespace Project.Gameplay
 			base.Unload();
 		}
 
-		protected override void Activate()
+		protected override void Spawn()
 		{
-			if (activateInstantly && currentState == States.Passive) //Skip passive phase
+			if (attackInstantly && currentState == States.Passive) //Skip passive phase
 				stateTimer = passiveLength;
+
+			base.Spawn();
 		}
 
 		public override void Respawn()
 		{
 			base.Respawn();
 
-			animator.Play("spawn");
-			animator.Seek(0.0, true);
+			animationPlayer.Play("spawn");
+			animationPlayer.Seek(0.0, true);
 
 			stateTimer = 0;
 			currentState = States.Passive;
 
 			rotationVelocity = 0;
-			forwardAngle = targetAngle = 0;
 
 			seedIndex = 0;
 			for (int i = 0; i < MAX_SEED_COUNT; i++)
@@ -98,11 +95,11 @@ namespace Project.Gameplay
 
 			if (IsDefeated)
 			{
-				animator.Play("defeat");
+				animationPlayer.Play("defeat");
 				return;
 			}
 
-			animator.Play("hit");
+			animationPlayer.Play("hit");
 			if (currentState == States.Attack)
 				currentState = States.PostAttack;
 		}
@@ -111,29 +108,24 @@ namespace Project.Gameplay
 		{
 			if (IsDefeated) return;
 
-			if (IsActivated || currentState != States.Passive)
+			if (IsInRange || currentState != States.Passive)
 			{
 				UpdateRotation();
 				UpdateState();
 			}
 		}
 
-		private float targetAngle;
-		private float forwardAngle;
-		private float rotationVelocity;
-		private const float ROTATION_SPEED = .2f; //How quickly to rotate towards the player
 		private void UpdateRotation()
 		{
 			if (isOpen)
 			{
 				//Rotate towards the player
-				targetAngle = Vector2.Up.AngleTo((GlobalPosition - Character.GlobalPosition).Flatten());
+				TrackPlayer();
 
 				//Update movement
 			}
 
-			forwardAngle = ExtensionMethods.SmoothDampAngle(forwardAngle, targetAngle, ref rotationVelocity, ROTATION_SPEED);
-			root.GlobalRotation = Vector3.Up * -forwardAngle;
+			root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z);
 		}
 
 		private float stateTimer;
@@ -155,7 +147,7 @@ namespace Project.Gameplay
 				case States.Passive:
 					if (stateTimer >= passiveLength)
 					{
-						animator.Play("show");
+						animationPlayer.Play("show");
 
 						stateTimer = 0;
 						currentState = States.PreAttack;
@@ -164,14 +156,14 @@ namespace Project.Gameplay
 				case States.PreAttack:
 					if (stateTimer >= preAttackLength)
 					{
-						if (IsActivated)
+						if (IsInRange)
 						{
-							animator.Play("attack");
+							animationPlayer.Play("attack");
 							currentState = States.Attack;
 						}
 						else //Player is out of range
 						{
-							animator.Play("hide");
+							animationPlayer.Play("hide");
 							currentState = States.Passive;
 						}
 
@@ -181,7 +173,7 @@ namespace Project.Gameplay
 				case States.PostAttack:
 					if (stateTimer >= postAttackLength)
 					{
-						animator.Play("hide");
+						animationPlayer.Play("hide");
 						currentState = States.Passive;
 						stateTimer = 0;
 					}
@@ -199,8 +191,8 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				animator.Play("attack");
-				animator.Seek(0.0, true);
+				animationPlayer.Play("attack");
+				animationPlayer.Seek(0.0, true);
 			}
 		}
 

@@ -104,7 +104,7 @@ namespace Project.Gameplay.Objects
 
 			float jumpHeight = (GlobalPosition.Y + 1) - Character.GlobalPosition.Y;
 			jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
-			LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, root.GlobalPosition, jumpHeight, true);
+			LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, root.GlobalPosition, jumpHeight, false);
 			settings.IsJump = true;
 			Character.StartLauncher(settings);
 

@@ -19,7 +19,7 @@ namespace Project.Core
 		public static bool SkipCountdown => EnableCheats && true;
 
 		/// <summary> Always keep stage geometry visible. </summary>
-		public static bool DisableStageCulling => EnableCheats && true;
+		public static bool DisableStageCulling => EnableCheats && false;
 
 		/// <summary> Have all stages unlocked </summary>
 		public static bool UnlockAllStages => EnableCheats && true;

@@ -29,7 +29,7 @@ namespace Project.Gameplay
 			PathFollower.SetActivePath(startingPath); //Attempt to autoload the stage's default path
 			Camera.PathFollower.SetActivePath(startingPath);
 
-			Level.SetCheckpoint(GetParent<Node3D>()); //Initial checkpoint configuration
+			Level.SetCheckpoint(GetParent<Triggers.CheckpointTrigger>()); //Initial checkpoint configuration
 			Level.UpdateRingCount(Skills.StartingRingCount, LevelSettings.MathModeEnum.Replace); //Start with the proper ring count
 			Level.Connect(LevelSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
 		}
@@ -698,7 +698,12 @@ namespace Project.Gameplay
 			ApplyGravity(); //Always apply gravity when in the air
 		}
 
-		private void ApplyGravity() => VerticalSpeed = Mathf.MoveToward(VerticalSpeed, Runtime.MAX_GRAVITY, Runtime.GRAVITY * PhysicsManager.physicsDelta);
+		private void ApplyGravity()
+		{
+			if (Lockon.IsBouncingLockoutActive) return; //Don't apply gravity when bouncing!
+
+			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, Runtime.MAX_GRAVITY, Runtime.GRAVITY * PhysicsManager.physicsDelta);
+		}
 
 		private bool canLandingBoost;
 		private void CheckLandingBoost()
@@ -725,9 +730,9 @@ namespace Project.Gameplay
 		private bool isAccelerationJumpQueued;
 		private float currentJumpTime; //Amount of time the jump button was held
 		private const float ACCELERATION_JUMP_LENGTH = .08f; //How fast the jump button needs to be released for an "acceleration jump"
-		public void Jump(bool disableAccelerationJump = default)
+		public void Jump(bool ignoreAccelerationJump = default)
 		{
-			currentJumpTime = disableAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
+			currentJumpTime = ignoreAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
@@ -1096,6 +1101,8 @@ namespace Project.Gameplay
 			if (IsRespawning) return;
 
 			Lockon.IsMonitoring = false;
+			areaTrigger.SetDeferred("disabled", true);
+
 			//Fade screen out, enable respawn flag, and connect signals
 			IsDefeated = true;
 			IsRespawning = true;
@@ -1120,7 +1127,7 @@ namespace Project.Gameplay
 			MovementState = MovementStates.Normal;
 
 			invincibilityTimer = 0;
-			Teleport(Level.CurrentCheckpoint.GlobalPosition, TeleportSettings.RespawnSettings);
+			Teleport(Level.CurrentCheckpoint);
 			PathFollower.SetActivePath(Level.CheckpointPlayerPath); //Revert path
 			Camera.PathFollower.SetActivePath(Level.CheckpointCameraPath);
 			PathFollower.Resync();
@@ -1129,6 +1136,7 @@ namespace Project.Gameplay
 			ResetVelocity();
 			ResetOrientation();
 
+			Level.RespawnObjects();
 			Level.IncrementRespawnCount();
 			Level.UpdateRingCount(Skills.RespawnRingCount, LevelSettings.MathModeEnum.Replace, true); //Reset ring count
 
@@ -1143,8 +1151,8 @@ namespace Project.Gameplay
 		/// </summary>
 		private void FinishRespawn()
 		{
-			Level.RespawnObjects();
 			SnapToGround();
+			areaTrigger.Disabled = false;
 
 			//TODO Play respawn animation/sfx
 			TransitionManager.FinishTransition();
@@ -1155,17 +1163,30 @@ namespace Project.Gameplay
 		/// </summary>
 		private void OnRespawnFinished() => IsRespawning = false;
 
+		private const float TELEPORT_FX_LENGTH = .2f;
 		/// <summary>
 		/// Teleports the player to a specific location. Use TeleportSettings to have more control of how teleport occurs.
 		/// </summary>
-		public void Teleport(Vector3 targetPosition, TeleportSettings settings)
+		public async void Teleport(Triggers.TeleportTrigger trigger)
 		{
-			GlobalPosition = targetPosition;
+			if (trigger.enableStartFX)
+			{
+				//TODO Play FX
+				await ToSignal(GetTree().CreateTimer(TELEPORT_FX_LENGTH), SceneTreeTimer.SignalName.Timeout);
+			}
 
-			if (settings.enableFX)
-				GD.Print("Teleport effects aren't implemented yet!");
+			GlobalPosition = trigger.WarpPosition;
+			SnapToGround();
 
-			if (settings.crossfade)
+			trigger.ApplyTeleport(); //Apply any signals/path changes
+
+			MovementAngle = PathFollower.ForwardAngle;
+			Animator.SnapRotation(PathFollower.ForwardAngle);
+
+			if (trigger.resetMovespeed)
+				ResetVelocity();
+
+			if (trigger.crossfade)
 				Camera.StartCrossfade();
 		}
 
@@ -1178,7 +1199,7 @@ namespace Project.Gameplay
 			if (collision == null) return;
 
 			GlobalPosition = collision.GetPosition();
-			Animator.Respawn();
+			Animator.SnapToGround();
 			LandOnGround();
 		}
 		#endregion
@@ -1330,7 +1351,7 @@ namespace Project.Gameplay
 			CheckCeiling();
 
 			//Calculate true velocity after physics were processed.
-			TrueVelocity = PathFollower.Basis.Inverse() * (TrueVelocity - GlobalPosition);
+			TrueVelocity = TrueVelocity - GlobalPosition;
 			if (IsOnGround && IsOnWall() && Mathf.IsZeroApprox(TrueVelocity.LengthSquared()))
 			{
 				MoveSpeed = 0;
@@ -1648,14 +1669,6 @@ namespace Project.Gameplay
 
 			if (Skills.IsSpeedBreakActive) //Follow pathfollower more accurately when speedbreaking
 				return pathFollowerForward;
-
-			/*
-			if (!Camera.ActiveSettings.isRollEnabled) //Old method
-			{
-				Vector3 flatForward = this.Forward().Rotated(UpDirection, MovementAngle);
-				return flatForward; //Normally this is good enough
-			}
-			*/
 
 			//Tilted ground fix
 			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle + PathFollower.DeltaAngle, PathFollower.ForwardAngle);

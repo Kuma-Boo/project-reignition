@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dofbsovgw60gd"]
+[gd_scene load_steps=4 format=3 uid="uid://dofbsovgw60gd"]
 
 [ext_resource type="PackedScene" uid="uid://cu1x2jitx1ds0" path="res://area/6 skeleton dome/act 1/environment/model/04Hall.gltf" id="1_ku6ax"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_isvu6"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_da1cb"]
 
 [node name="04Hall" instance=ExtResource("1_ku6ax")]
 script = ExtResource("2_isvu6")
@@ -61,3 +63,8 @@ interior = true
 cull_mask = 4
 ambient_mode = 2
 ambient_color = Color(1, 1, 1, 1)
+
+[node name="Shadow" type="MeshInstance3D" parent="." index="10"]
+transform = Transform3D(54, 0, 0, 0, 1, 0, 0, 0, 54, 161, 10, -864)
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_da1cb")

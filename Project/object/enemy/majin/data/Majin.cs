@@ -15,10 +15,12 @@ namespace Project.Gameplay
 		{
 			Array<Dictionary> properties = new Array<Dictionary>();
 
-			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Trigger Mode", Variant.Type.Int, PropertyHint.Enum, spawnMode.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Travel Time", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
 			if (!SpawnTravelDisabled)
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Delay", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Offset", Variant.Type.Vector3));
+			}
 
 			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
 			if (!trackPlayer)
@@ -31,6 +33,15 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
 			}
 
+			properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
+
+			if (isDefeatLaunchEnabled)
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Time", Variant.Type.Float, PropertyHint.Range, "0.1,1,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Direction", Variant.Type.Vector3));
+				properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Local Transform", Variant.Type.Bool));
+			}
+
 			return properties;
 		}
 
@@ -38,10 +49,10 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Spawn Settings/Spawn Trigger Mode":
-					return (int)spawnMode;
 				case "Spawn Settings/Spawn Travel Time":
 					return spawnTravelTime;
+				case "Spawn Settings/Spawn Delay":
+					return spawnDelay;
 				case "Spawn Settings/Spawn Offset":
 					return spawnOffset;
 
@@ -56,6 +67,15 @@ namespace Project.Gameplay
 					return flameActiveTime;
 				case "Attack Settings/Flame Inactive Time":
 					return flameInactiveTime;
+
+				case "Defeat Settings/Enable Enemy Launching":
+					return isDefeatLaunchEnabled;
+				case "Defeat Settings/Launch Time":
+					return defeatLaunchTime;
+				case "Defeat Settings/Launch Direction":
+					return defeatLaunchDirection;
+				case "Defeat Settings/Local Transform":
+					return isDefeatLocalTransform;
 			}
 
 			return base._Get(property);
@@ -65,16 +85,15 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Spawn Settings/Spawn Trigger Mode":
-					spawnMode = (SpawnModes)(int)value;
-					NotifyPropertyListChanged();
-					break;
 				case "Spawn Settings/Spawn Travel Time":
 					bool toggle = SpawnTravelDisabled != Mathf.IsZeroApprox((float)value);
 					spawnTravelTime = (float)value;
 
 					if (toggle)
 						NotifyPropertyListChanged();
+					break;
+				case "Spawn Settings/Spawn Delay":
+					spawnDelay = (float)value;
 					break;
 				case "Spawn Settings/Spawn Offset":
 					spawnOffset = (Vector3)value;
@@ -98,6 +117,21 @@ namespace Project.Gameplay
 				case "Attack Settings/Flame Inactive Time":
 					flameInactiveTime = (float)value;
 					break;
+
+				case "Defeat Settings/Enable Enemy Launching":
+					isDefeatLaunchEnabled = (bool)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Defeat Settings/Launch Time":
+					defeatLaunchTime = (float)value;
+					break;
+				case "Defeat Settings/Launch Direction":
+					defeatLaunchDirection = (Vector3)value;
+					break;
+				case "Defeat Settings/Local Transform":
+					isDefeatLocalTransform = (bool)value;
+					break;
+
 				default:
 					return false;
 			}
@@ -107,40 +141,32 @@ namespace Project.Gameplay
 		#endregion
 
 		[Export]
-		private AnimationTree animationTree;
-		[Export]
-		private AnimationPlayer animationPlayer;
-		[Export]
 		private Node3D fireRoot;
-		[Export]
-		private Node3D root;
 		private AnimationNodeBlendTree animatorRoot;
 		private AnimationNodeTransition moveTransition;
 		private AnimationNodeTransition stateTransition;
 		private AnimationNodeStateMachinePlayback spinState;
 		private AnimationNodeStateMachinePlayback fireState;
 
-		private SpawnModes spawnMode;
-		private enum SpawnModes
-		{
-			Internal, //Use Range trigger
-			External, //External Signal
-			Always, //Always spawned
-		}
-
 		private bool SpawnTravelDisabled => Mathf.IsZeroApprox(spawnTravelTime);
 		/// <summary> How long does spawn traveling take? Set to 0 to spawn instantly. </summary>
 		private float spawnTravelTime;
+		/// <summary> How long should spawning be delayed? </summary>
+		private float spawnDelay;
 		/// <summary> Where to spawn from (Added with OriginalPosition) </summary>
 		public Vector3 spawnOffset;
 		/// <summary> Local Position to be after spawning is complete. </summary>
 		private Vector3 OriginalPosition => SpawnData.spawnTransform.Origin;
 		private Vector3 SpawnPosition => OriginalPosition + Basis * spawnOffset;
-		private bool isSpawned;
 		private bool isSpawning;
 
-		/// <summary> For the enemy to be launched a particular direction when defeated? </summary>
-		[Export]
+		/// <summary> Use this to launch the enemy when defeated. </summary>
+		private bool isDefeatLaunchEnabled;
+		/// <summary> Use local transform for launch direction? </summary>
+		private bool isDefeatLocalTransform;
+		/// <summary> How long should the enemy be launched?  </summary>
+		private float defeatLaunchTime = .5f;
+		/// <summary> Direction to launch. Leave at Vector3.Zero to automatically calculate. </summary>
 		private Vector3 defeatLaunchDirection;
 
 		/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>
@@ -150,10 +176,8 @@ namespace Project.Gameplay
 		private bool trackPlayer = true;
 		/// <summary> How long to complete a rotation cycle when trackPlayer is false. </summary>
 		private float rotationTime;
-		private float currentRotation;
+
 		private float rotationAmount;
-		private float rotationVelocity;
-		private const float ROTATION_SMOOTHING = .2f;
 
 		private AttackTypes attackType;
 		private enum AttackTypes
@@ -172,7 +196,6 @@ namespace Project.Gameplay
 
 		/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
 		private MovingObject movementController;
-		private const int ENEMY_PEARL_AMOUNT = 16; //How many pearls are obtained when defeating enemy is defeated
 
 		//Animation parameters
 		private readonly StringName IDLE_STATE = "idle";
@@ -209,7 +232,7 @@ namespace Project.Gameplay
 			if (tweener != null) //Kill any active tweens
 				tweener.Kill();
 
-			isSpawned = false;
+			IsActive = false;
 			isSpawning = false;
 			SpawnData.Respawn(this);
 			currentHealth = maxHealth;
@@ -244,12 +267,12 @@ namespace Project.Gameplay
 			isFlameActive = false;
 
 			if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Internal && IsActivated)) //No activation trigger. Activate immediately.
-				Activate();
+			(spawnMode == SpawnModes.Range && IsInRange)) //No activation trigger. Activate immediately.
+				EnterRange();
 			else //Start hidden
 			{
 				Visible = false;
-				PhysicsMonitoring = false;
+				SetHitboxStatus(false);
 			}
 		}
 
@@ -257,48 +280,55 @@ namespace Project.Gameplay
 		{
 			base.Defeat();
 
-			Runtime.Instance.SpawnPearls(ENEMY_PEARL_AMOUNT, Character.CenterPosition, new Vector2(2, 1.5f), 1.5f);
-
-			if (!defeatLaunchDirection.IsEqualApprox(Vector3.Zero))
+			if (isDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 			{
 				if (tweener != null) //Kill any existing tween
 					tweener.Kill();
 
+				Vector3 launchDirection = defeatLaunchDirection;
+				if (launchDirection.IsEqualApprox(Vector3.Zero)) //Calculate launch direction
+					launchDirection = Character.TrueVelocity;
+				else if (isDefeatLocalTransform)
+					launchDirection = GlobalTransform.Basis * launchDirection;
+
+				launchDirection = launchDirection.Rotated(Vector3.Up, Mathf.Pi); //Fix forward direction
+				launchDirection = launchDirection.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
+
 				//Get knocked back
-				tweener = CreateTween().SetTrans(Tween.TransitionType.Expo).SetEase(Tween.EaseType.In);
-				tweener.TweenProperty(this, "global_transform:origin", GlobalPosition + defeatLaunchDirection, .5f);
-				tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(.5f);
+				tweener = CreateTween().SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
+				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
+				tweener.TweenCallback(new Callable(this, MethodName.SpawnPearls));
+				tweener.TweenCallback(new Callable(this, MethodName.Despawn));
 			}
 			else
+			{
+				SpawnPearls();
 				Despawn();
+			}
 		}
 
 		protected override void UpdateEnemy()
 		{
 			if (Engine.IsEditorHint()) return; //In Editor
-			if (!isSpawned) return; //Hasn't spawned yet
+			if (!IsActive) return; //Hasn't spawned yet
 			if (attackType == AttackTypes.Spin) return; //No need to process when in AttackTypes.Spin
 
 			if (attackType == AttackTypes.Fire)
 				UpdateFlameAttack();
 
 			//Update rotation
-			if (IsActivated)
+			if (IsInRange)
 			{
 				if (trackPlayer) //Rotate to face player
-				{
-					float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
-					targetRotation -= GlobalRotation.Y; //Rotation is in local space
-					currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, ROTATION_SMOOTHING);
-				}
+					TrackPlayer();
 				else if (!Mathf.IsZeroApprox(rotationTime))
 				{
-					rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, ROTATION_SMOOTHING);
+					rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TRACKING_SMOOTHING);
 					currentRotation = ExtensionMethods.ModAngle(currentRotation + PhysicsManager.physicsDelta * rotationVelocity);
 				}
 			}
 			else
-				currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, ROTATION_SMOOTHING);
+				currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
 
 			UpdateRotation();
 			UpdateFidgets();
@@ -338,7 +368,7 @@ namespace Project.Gameplay
 
 				isFidgetActive = (bool)animationTree.Get(FIDGET_TRIGGER_STATE_PARAMETER);
 			}
-			else if (attackType != AttackTypes.Fire || !IsActivated) //Wait for fidget to start
+			else if (attackType != AttackTypes.Fire || !IsInRange) //Wait for fidget to start
 			{
 				fidgetTimer += PhysicsManager.physicsDelta;
 				if (fidgetTimer > FIDGET_FREQUENCY) //Start fidget
@@ -364,7 +394,7 @@ namespace Project.Gameplay
 
 		private void UpdateFlameAttack()
 		{
-			if (!IsActivated || isFidgetActive) //Out of range or fidget is active
+			if (!IsInRange || isFidgetActive) //Out of range or fidget is active
 			{
 				if (isFlameActive)
 					ToggleFlameAttack();
@@ -410,20 +440,15 @@ namespace Project.Gameplay
 			flameTimer = 0; //Reset timer
 		}
 
-		protected override void Activate()
+		protected override void EnterRange()
 		{
-			if (spawnMode == SpawnModes.External) return;
-
+			if (spawnMode == SpawnModes.Signal) return;
 			Spawn();
 		}
 
-		/// <summary>
-		/// Overload function to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal.
-		/// </summary>
-		private void Spawn(Area3D _) => Spawn();
-		private void Spawn()
+		protected override void Spawn()
 		{
-			if (isSpawning || isSpawned) return;
+			if (isSpawning || IsActive) return;
 
 			isSpawning = true;
 			SetDeferred("visible", true);
@@ -442,8 +467,8 @@ namespace Project.Gameplay
 			else //Travel
 			{
 				GlobalPosition = SpawnPosition;
-				tweener.TweenProperty(this, "transform:origin", OriginalPosition, spawnTravelTime).From(SpawnPosition);
-				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
+				tweener.TweenProperty(this, "position", OriginalPosition, spawnTravelTime).SetDelay(spawnDelay).From(SpawnPosition);
+				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
 
 				moveTransition.XfadeTime = 0;
 				if (!Mathf.IsZeroApprox(spawnOffset.X) || !Mathf.IsZeroApprox(spawnOffset.Z))
@@ -451,13 +476,15 @@ namespace Project.Gameplay
 				else
 					animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); //Immediately idle
 			}
+
+			base.Spawn();
 		}
 
 		private void FinishSpawning()
 		{
+			IsActive = true;
 			isSpawning = false;
-			isSpawned = true;
-			PhysicsMonitoring = true;
+			SetHitboxStatus(true);
 
 			if (!SpawnTravelDisabled)
 			{
