@@ -13,11 +13,8 @@ Add a description of the bug here.
 **Reproduction Steps**
 Add clear, concise steps to reproduce the bug, preferably in the format of a numbered list.
 
-****
-Add the game's version number, or the commit hash here.
-
 **System Information**
-Game Version: 
+Game Version: Add the game's version number, or the commit hash here.
 OS/Platform: Use "N/A" if bug happens on all platforms.
 Specs: Use "N/A" if bug happens on all platforms.
 
