@@ -49,13 +49,13 @@ namespace Project.Interface.Menus
 
 		public override void _PhysicsProcess(double _)
 		{
+			if (TransitionManager.IsTransitionActive) return;
+
 			if (Input.IsActionPressed("button_pause")) //Skip cutscene
 			{
 				skipTimer = Mathf.MoveToward(skipTimer, 1, PhysicsManager.physicsDelta);
 				if (Mathf.IsEqualApprox(skipTimer, 1))
-				{
-
-				}
+					OnEventFinished();
 			}
 			else
 				skipTimer = Mathf.MoveToward(skipTimer, 0, PhysicsManager.physicsDelta);
@@ -133,7 +133,17 @@ namespace Project.Interface.Menus
 		/// <summary> Called after the cutscene has finished playing. </summary>
 		public void OnEventFinished()
 		{
+			if (string.IsNullOrEmpty(QueuedScene)) // Fallback to menu scene
+				QueuedScene = TransitionManager.MENU_SCENE_PATH;
 
+			TransitionManager.QueueSceneChange(QueuedScene, false);
+			TransitionManager.StartTransition(new TransitionData()
+			{
+				color = Colors.Black,
+				inSpeed = .5f,
+			});
+
+			QueuedScene = string.Empty; // Reset queued scene
 		}
 	}
 }

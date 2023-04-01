@@ -19,6 +19,8 @@ namespace Project.Core
 		private ColorRect fade;
 		[Export]
 		private AnimationPlayer animator;
+		[Export]
+		private AnimationPlayer loadingAnimator;
 
 		//Converts realtime seconds to a ratio for the animation player's speed. ALL ANIMATIONS MUST BE 1 SECOND LONG.
 		public float ConvertToAnimatorSpeed(float seconds) => 1f / seconds;
@@ -38,6 +40,9 @@ namespace Project.Core
 				GD.Print("Transition is already active!");
 				return;
 			}
+
+			if (CurrentTransitionData.enableLoadingScreen)
+				loadingAnimator.Play("show");
 
 			IsTransitionActive = true;
 			fade.Color = CurrentTransitionData.color;
@@ -59,6 +64,9 @@ namespace Project.Core
 		{
 			if (CurrentTransitionData.outSpeed != 0)
 				animator.SpeedScale = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
+
+			if (CurrentTransitionData.enableLoadingScreen)
+				loadingAnimator.Play("hide");
 
 			animator.PlayBackwards("fade");
 			animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
@@ -106,13 +114,19 @@ namespace Project.Core
 		}
 
 		private string queuedScene;
-		private void ApplySceneChange()
+		private async void ApplySceneChange()
 		{
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
 			if (string.IsNullOrEmpty(queuedScene)) //Reload the current scene
 				GetTree().ReloadCurrentScene();
 			else
+			{
+				ResourceLoader.LoadThreadedRequest(queuedScene);
+				while (ResourceLoader.LoadThreadedGetStatus(queuedScene) == ResourceLoader.ThreadLoadStatus.InProgress)
+					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout);
+
 				GetTree().ChangeSceneToFile(queuedScene);
+			}
 
 			queuedScene = string.Empty; //Clear queue
 			FinishFade();
@@ -125,5 +139,6 @@ namespace Project.Core
 		public float inSpeed;
 		public float outSpeed;
 		public Color color;
+		public bool enableLoadingScreen;
 	}
 }

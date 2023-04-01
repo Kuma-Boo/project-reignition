@@ -63,7 +63,7 @@ namespace Project.Interface.Menus
 
 		[Export]
 		/// <summary> Path to the level's scene. </summary>
-		private string levelPath;
+		public string levelPath;
 		[Export]
 		/// <summary> Level ID. Used to sync with save data. </summary>
 		private string levelID;

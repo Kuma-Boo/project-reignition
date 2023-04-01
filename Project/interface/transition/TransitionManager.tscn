@@ -1,7 +1,97 @@
-[gd_scene load_steps=7 format=3 uid="uid://bbkkpqrn4few"]
+[gd_scene load_steps=11 format=3 uid="uid://bbkkpqrn4few"]
 
 [ext_resource type="Script" path="res://interface/transition/TransitionManager.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://rdmkjkkugnvf" path="res://interface/transition/loading/Loading.tscn" id="2_4rxrd"]
+
+[sub_resource type="Animation" id="Animation_nn8bs"]
+resource_name = "show"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1nhla"]
+resource_name = "hide"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_k4ji2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_41xu3"]
+_data = {
+"RESET": SubResource("Animation_k4ji2"),
+"hide": SubResource("Animation_1nhla"),
+"show": SubResource("Animation_nn8bs")
+}
 
 [sub_resource type="Animation" id="1"]
 length = 0.001
@@ -67,12 +157,13 @@ _data = {
 "fade": SubResource("2")
 }
 
-[node name="TransitionManager" type="CanvasLayer" node_paths=PackedStringArray("fade", "animator")]
+[node name="TransitionManager" type="CanvasLayer" node_paths=PackedStringArray("fade", "animator", "loadingAnimator")]
 process_mode = 3
 layer = 128
 script = ExtResource("1")
 fade = NodePath("Fade")
 animator = NodePath("AnimationPlayer")
+loadingAnimator = NodePath("Loading/LoadingAnimator")
 
 [node name="Fade" type="ColorRect" parent="."]
 self_modulate = Color(1, 1, 1, 0)
@@ -94,8 +185,12 @@ metadata/_edit_lock_ = true
 [node name="Loading" parent="." instance=ExtResource("2_4rxrd")]
 visible = false
 
+[node name="LoadingAnimator" type="AnimationPlayer" parent="Loading"]
+libraries = {
+"": SubResource("AnimationLibrary_41xu3")
+}
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 2.0
 libraries = {
 "": SubResource("AnimationLibrary_g2s4k")
 }

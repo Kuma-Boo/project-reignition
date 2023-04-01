@@ -65,6 +65,20 @@ namespace Project.Interface.Menus
 				levelOptions[i].HideOption();
 		}
 
+
+
+		public override void OpenSubmenu()
+		{
+			TransitionManager.QueueSceneChange(levelOptions[VerticalSelection].levelPath, false);
+			TransitionManager.StartTransition(new TransitionData()
+			{
+				inSpeed = 1f,
+				color = Colors.Black,
+				enableLoadingScreen = true
+			});
+		}
+
+
 		protected override void UpdateSelection()
 		{
 			if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return;
