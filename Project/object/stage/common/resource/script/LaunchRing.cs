@@ -147,7 +147,6 @@ namespace Project.Gameplay.Objects
 		private readonly float RECENTER_SPEED = .16f;
 
 		private CharacterController Character => CharacterController.instance;
-		private InputManager.Controller Controller => InputManager.controller;
 
 		public override void _Ready()
 		{
@@ -172,12 +171,12 @@ namespace Project.Gameplay.Objects
 
 				if (Character.CenterPosition.DistanceSquaredTo(GlobalPosition) < .5f) //Close enough; Allow inputs
 				{
-					if (Controller.jumpButton.wasPressed) //Disable launcher
+					if (Input.IsActionJustPressed("button_jump")) //Disable launcher
 					{
 						DropPlayer();
 						Character.CanJumpDash = false;
 					}
-					else if (Controller.actionButton.wasPressed)
+					else if (Input.IsActionJustPressed("button_action"))
 					{
 						DropPlayer();
 						Character.StartLauncher(GetLaunchSettings());

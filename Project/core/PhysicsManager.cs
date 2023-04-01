@@ -7,20 +7,13 @@ namespace Project.Core
 	{
 		public static PhysicsManager Instance { get; private set; }
 
-		[Signal]
-		public delegate void PhysicsUpdatedEventHandler();
-
 		public static float normalDelta;
 		public static float physicsDelta;
 		public static PhysicsDirectSpaceState3D physicsState;
 
 		public override void _EnterTree() => Instance = this;
 
-		private void UpdatePhysicsState()
-		{
-			physicsState = GetWorld3D().DirectSpaceState; //Update world's physics space
-			EmitSignal(SignalName.PhysicsUpdated); //Emit signal
-		}
+		private void UpdatePhysicsState() => physicsState = GetWorld3D().DirectSpaceState; //Update world's physics space
 
 		public override void _Process(double delta) => normalDelta = (float)delta;
 

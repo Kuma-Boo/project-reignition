@@ -42,10 +42,12 @@ namespace Project.Interface.Menus
 
 		protected override void UpdateSelection()
 		{
-			if (Controller.verticalAxis.sign == 0) return; //Only listen for vertical scrolling
+			// Only listen for vertical scrolling
+			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+			if (inputSign == 0) return;
 
-			VerticalSelection = WrapSelection(VerticalSelection + Controller.verticalAxis.sign, SaveManager.MAX_SAVE_SLOTS);
-			animator.Play(Controller.verticalAxis.sign < 0 ? "scroll-up" : "scroll-down");
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, SaveManager.MAX_SAVE_SLOTS);
+			animator.Play(inputSign < 0 ? "scroll-up" : "scroll-down");
 			scrollRatio = VerticalSelection / (SaveManager.MAX_SAVE_SLOTS - 1.0f);
 			menuMemory[MemoryKeys.SaveSelect] = VerticalSelection;
 
@@ -60,15 +62,22 @@ namespace Project.Interface.Menus
 		public override void OpenSubmenu()
 		{
 			SaveManager.ActiveSaveSlotIndex = _saveOptions[ACTIVE_SAVE_OPTION_INDEX].SaveIndex;
-			if (SaveManager.ActiveGameData.IsNewFile)
+			if (SaveManager.ActiveGameData.IsNewFile())
 			{
 				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex);
-				SaveManager.SaveGame();
-				//TODO Load directly into the first cutscene.
+				SaveManager.SaveGameToFile();
+
+				// Load directly into the first cutscene.
+				TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}1.tscn", false);
+				TransitionManager.StartTransition(new TransitionData()
+				{
+					color = Colors.Black,
+					inSpeed = 1f,
+				});
+				return;
 			}
 
 			menuMemory[MemoryKeys.WorldSelect] = (int)SaveManager.ActiveGameData.lastPlayedWorld;
-
 			_submenus[0].ShowMenu();
 		}
 

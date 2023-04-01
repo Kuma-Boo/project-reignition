@@ -236,7 +236,7 @@ namespace Project.Gameplay
 						targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RUN_RATIO); //Normalize speed ratio
 
 						//Only use walking animation when player is pressing control stick softly and not moving against the wall
-						if (Character.Controller.MovementAxisLength >= .8f &&
+						if (Character.InputVector.Length() >= .8f &&
 							speedRatio < Character.GroundSettings.GetSpeedRatio(Character.BackstepSettings.speed) && !Character.IsOnWall())
 						{
 							if (speedRatio < .3f)

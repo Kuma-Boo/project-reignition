@@ -12,7 +12,6 @@ namespace Project.Gameplay
 		public static CharacterController instance;
 
 		public CameraController Camera => CameraController.instance;
-		public InputManager.Controller Controller => InputManager.controller;
 		public LevelSettings Level => LevelSettings.instance;
 		public StageSettings Stage => StageSettings.instance;
 
@@ -118,27 +117,27 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Controls
-		/// <summary>
-		/// Is the player holding in the specified direction?
-		/// </summary>
+		public Vector2 InputVector => Input.GetVector("move_left", "move_right", "move_up", "move_down");
+		public float InputHorizontal => Input.GetAxis("move_left", "move_right");
+		public float InputVertical => Input.GetAxis("move_up", "move_down");
+
+		/// <summary> Is the player holding in the specified direction? </summary>
 		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default)
 		{
-			if (!allowNullInputs && Controller.IsHoldingNeutral)
+			if (!allowNullInputs && InputVector.IsZeroApprox())
 				return false;
 
 			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
 			return delta < Mathf.Pi * .4f;
 		}
 
-		/// <summary>
-		/// Returns the input angle based on the camera view.
-		/// </summary>
+		/// <summary> Returns the input angle based on the camera view. </summary>
 		public float GetInputAngle()
 		{
-			if (Controller.IsHoldingNeutral) //Invalid input, no change
+			if (InputVector.IsZeroApprox()) //Invalid input, no change
 				return MovementAngle;
 
-			return Camera.TransformAngle(Controller.MovementAxis.AngleTo(Vector2.Up)); //Target rotation angle (in radians)
+			return Camera.TransformAngle(InputVector.AngleTo(Vector2.Up)); //Target rotation angle (in radians)
 		}
 
 		/// <summary>
@@ -195,10 +194,10 @@ namespace Project.Gameplay
 			actionBufferTimer = Mathf.MoveToward(actionBufferTimer, 0, PhysicsManager.physicsDelta);
 			jumpBufferTimer = Mathf.MoveToward(jumpBufferTimer, 0, PhysicsManager.physicsDelta);
 
-			if (Controller.actionButton.wasPressed)
+			if (Input.IsActionJustPressed("button_action"))
 				actionBufferTimer = ACTION_BUFFER_LENGTH;
 
-			if (Controller.jumpButton.wasPressed)
+			if (Input.IsActionJustPressed("button_jump"))
 				jumpBufferTimer = JUMP_BUFFER_LENGTH;
 		}
 
@@ -405,7 +404,7 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive) return; //Overridden to max speed
 
 			float inputAngle = GetInputAngle();
-			float inputLength = Controller.SmoothedMovementAxisLength; //Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
+			float inputLength = InputVector.Length(); //Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(inputAngle, targetMovementAngle));
@@ -436,12 +435,12 @@ namespace Project.Gameplay
 				if (ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 				{
 					//Fixes player holding perpendicular to target direction
-					if (!Controller.IsHoldingNeutral && inputDot < .2f)
+					if (!InputVector.IsZeroApprox() && inputDot < .2f)
 						inputLength = 0;
 				}
 			}
 
-			if (Mathf.IsZeroApprox(inputLength) || Controller.IsHoldingNeutral) //Basic slow down
+			if (Mathf.IsZeroApprox(inputLength) || InputVector.IsZeroApprox()) //Basic slow down
 				MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, 0);
 			else
 			{
@@ -492,7 +491,7 @@ namespace Project.Gameplay
 			{
 				//Custom strafing movement
 				float strafeAmount = ExtensionMethods.DotAngle(GetInputAngle() + Mathf.Pi * .5f, PathFollower.ForwardAngle);
-				strafeAmount *= Controller.MovementAxisLength; //Analog inputs
+				strafeAmount *= InputVector.Length(); //Analog inputs
 
 				//Reduce strafe speed when moving slowly
 				float strafeFactor = IsOnGround ? GroundSettings.GetSpeedRatioClamped(MoveSpeed) : AirSettings.GetSpeedRatioClamped(MoveSpeed);
@@ -751,7 +750,7 @@ namespace Project.Gameplay
 		{
 			if (isAccelerationJumpQueued && currentJumpTime >= ACCELERATION_JUMP_LENGTH) //Acceleration jump?
 			{
-				if (IsHoldingDirection(PathFollower.ForwardAngle, true) && Controller.MovementAxisLength > .5f)
+				if (IsHoldingDirection(PathFollower.ForwardAngle, true) && InputVector.Length() > .5f)
 				{
 					ActionState = ActionStates.AccelJump;
 					MoveSpeed = Skills.accelerationJumpSpeed;
@@ -764,7 +763,7 @@ namespace Project.Gameplay
 
 			if (!IsJumpClamped)
 			{
-				if (!Controller.jumpButton.isHeld)
+				if (!Input.IsActionPressed("button_jump"))
 				{
 					IsJumpClamped = true;
 					if (currentJumpTime <= ACCELERATION_JUMP_LENGTH) //Listen for acceleration jump
@@ -878,7 +877,7 @@ namespace Project.Gameplay
 		{
 			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Skills.SlideFriction * PhysicsManager.physicsDelta); //Slow down
 
-			if (Controller.actionButton.wasReleased)
+			if (Input.IsActionJustReleased("button_action"))
 				ResetActionState();
 		}
 		#endregion
@@ -935,8 +934,8 @@ namespace Project.Gameplay
 				MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, BACKFLIP_TURN_SPEED);
 
 				if (IsHoldingDirection(PathFollower.BackAngle))
-					MoveSpeed = Skills.BackflipSettings.Interpolate(MoveSpeed, Controller.MovementAxisLength);
-				else if (Mathf.IsZeroApprox(Controller.MovementAxisLength))
+					MoveSpeed = Skills.BackflipSettings.Interpolate(MoveSpeed, InputVector.Length());
+				else if (Mathf.IsZeroApprox(InputVector.Length()))
 					MoveSpeed = Skills.BackflipSettings.Interpolate(MoveSpeed, 0);
 			}
 			else
@@ -1700,7 +1699,7 @@ namespace Project.Gameplay
 
 		private void UpdateCountdown()
 		{
-			if (Controller.actionButton.wasPressed)
+			if (Input.IsActionJustPressed("button_action"))
 				actionBufferTimer = 1f;
 			actionBufferTimer -= PhysicsManager.physicsDelta;
 

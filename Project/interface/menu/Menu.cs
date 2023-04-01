@@ -42,7 +42,6 @@ namespace Project.Interface.Menus
 
 		[Export]
 		protected bool isProcessing; //Should we process this menu?
-		protected InputManager.Controller Controller => InputManager.controller;
 
 		public override void _Ready()
 		{
@@ -92,11 +91,11 @@ namespace Project.Interface.Menus
 		protected const float SELECTION_SCROLLING_INTERVAL = .1f;
 		protected virtual void ProcessMenu()
 		{
-			if (Controller.jumpButton.wasPressed)
+			if (Input.IsActionJustPressed("button_jump"))
 				Confirm();
-			else if (Controller.actionButton.wasPressed)
+			else if (Input.IsActionJustPressed("button_action"))
 				Cancel();
-			else if (!Controller.IsHoldingNeutral)
+			else if (!Input.GetVector("move_left", "move_right", "move_up", "move_down").IsZeroApprox())
 			{
 				if (Mathf.IsZeroApprox(cursorSelectionTimer))
 					UpdateSelection();

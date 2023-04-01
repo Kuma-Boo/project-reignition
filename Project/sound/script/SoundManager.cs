@@ -114,7 +114,7 @@ namespace Project.Core
 
 			string key = currentDialog.textKeys[currentDialogIndex];
 			AudioStream targetStream = null;
-			if (Gameplay.StageSettings.instance != null)
+			if (IsInstanceValid(Gameplay.StageSettings.instance))
 				targetStream = Gameplay.StageSettings.instance.dialogLibrary.GetStream(key, LanguageIndex);
 
 			if (targetStream != null) //Using audio

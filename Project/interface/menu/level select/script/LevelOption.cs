@@ -62,16 +62,23 @@ namespace Project.Interface.Menus
 		#endregion
 
 		[Export]
+		/// <summary> Path to the level's scene. </summary>
 		private string levelPath;
+		[Export]
+		/// <summary> Level ID. Used to sync with save data. </summary>
+		private string levelID;
 
 		[Export]
-		public bool isSideMission; //Should this mission be indented on the mission screen?
+		/// <summary> Should this mission be indented on the mission screen? </summary>
+		public bool isSideMission;
 		[Export]
 		private bool hasFireSouls;
 		[Export]
 		private string missionNameKey;
 		[Export]
 		private string missionDescriptionKey;
+
+		[ExportGroup("Components")]
 		[Export]
 		private NodePath missionLabel;
 		[Export]

@@ -39,7 +39,6 @@ namespace Project.Gameplay.Objects
 
 		private SpawnData spawnData;
 		private CharacterController Character => CharacterController.instance;
-		private InputManager.Controller Controller => InputManager.controller;
 
 		public override void _Ready()
 		{
@@ -59,7 +58,7 @@ namespace Project.Gameplay.Objects
 		private readonly float CAST_DISTANCE = 1.5f;
 		private void UpdateStrafe()
 		{
-			strafeSpeed = ExtensionMethods.SmoothDamp(strafeSpeed, Controller.horizontalAxis.value * STRAFE_SPEED, ref strafeVelocity, STRAFE_TRACTION);
+			strafeSpeed = ExtensionMethods.SmoothDamp(strafeSpeed, Character.InputHorizontal * STRAFE_SPEED, ref strafeVelocity, STRAFE_TRACTION);
 
 			CheckWall(1);
 			CheckWall(-1);

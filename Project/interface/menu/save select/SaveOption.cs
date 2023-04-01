@@ -45,15 +45,19 @@ namespace Project.Interface.Menus
 			set
 			{
 				saveIndex = value;
+				SaveManager.GameData saveData = SaveManager.GameSaveSlots[saveIndex];
+
 				slotLabel.Text = slotShadowLabel.Text = (saveIndex + 1).ToString();
 
-				SaveManager.GameData saveData = SaveManager.GameSaveSlots[saveIndex];
-				newData.Visible = saveData.IsNewFile;
-				existingData.Visible = !saveData.IsNewFile;
-
-				if (saveData.IsNewFile) //No data
+				if (saveData.IsNewFile()) //No data
+				{
+					newData.Visible = true;
+					existingData.Visible = false;
 					return;
+				}
 
+				newData.Visible = false;
+				existingData.Visible = true;
 				worldIcon.RegionRect = worldIconRegions[(int)saveData.lastPlayedWorld];
 
 

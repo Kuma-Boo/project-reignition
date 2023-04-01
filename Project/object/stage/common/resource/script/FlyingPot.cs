@@ -58,7 +58,6 @@ namespace Project.Gameplay.Objects
 		private const float FLAP_INTERVAL = .32f; //How fast can the player flap?
 
 		public CharacterController Character => CharacterController.instance;
-		public InputManager.Controller Controller => Character.Controller;
 
 		public override void _Ready()
 		{
@@ -157,10 +156,10 @@ namespace Project.Gameplay.Objects
 
 		private void ProcessMovement()
 		{
-			float targetRotation = Controller.horizontalAxis.value * MAX_ANGLE;
+			float targetRotation = Character.InputHorizontal * MAX_ANGLE;
 			angle = Mathf.Lerp(angle, targetRotation, ROTATION_SPEED);
 
-			if (Controller.jumpButton.wasPressed)
+			if (Input.IsActionJustPressed("button_jump"))
 			{
 				EjectPlayer();
 				return;
@@ -168,7 +167,7 @@ namespace Project.Gameplay.Objects
 
 			flapTimer = Mathf.MoveToward(flapTimer, 0, PhysicsManager.physicsDelta);
 
-			if (Mathf.IsZeroApprox(flapTimer) && Controller.actionButton.wasPressed) //Move upwards
+			if (Mathf.IsZeroApprox(flapTimer) && Input.IsActionJustPressed("button_action")) //Move upwards
 			{
 				if (velocity < 0)
 					velocity = 0;

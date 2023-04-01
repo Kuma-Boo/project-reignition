@@ -1,6 +1,5 @@
 using Godot;
 using Godot.Collections;
-using System;
 using System.Collections.Generic;
 using Project.Core;
 
@@ -18,11 +17,14 @@ namespace Project.Gameplay
 		{
 			Array<Dictionary> properties = new Array<Dictionary>();
 
+			properties.Add(ExtensionMethods.CreateProperty("Level ID", Variant.Type.String));
 			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, MissionType.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty("Time Limit", Variant.Type.Int, PropertyHint.Range, "0,640"));
 
 			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race)
 				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
+
+			properties.Add(ExtensionMethods.CreateProperty("Story Event Index", Variant.Type.Int, PropertyHint.Range, "-1,30"));
 
 			properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Activation Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));
 			if (itemCycleActivationTrigger != null && !itemCycleActivationTrigger.IsEmpty)
@@ -54,12 +56,17 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
+				case "Level ID":
+					return (string)LevelID;
+
 				case "Mission Type":
 					return (int)MissionType;
 				case "Time Limit":
-					return TimeLimit;
+					return MissionTimeLimit;
 				case "Objective Count":
-					return ObjectiveCount;
+					return MissionObjectiveCount;
+				case "Story Event Index":
+					return storyEventIndex;
 
 				case "Item Cycling/Activation Trigger":
 					return itemCycleActivationTrigger;
@@ -98,15 +105,22 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
+				case "Level ID":
+					LevelID = (string)value;
+					break;
+
 				case "Mission Type":
 					MissionType = (MissionTypes)(int)value;
 					NotifyPropertyListChanged();
 					break;
 				case "Time Limit":
-					TimeLimit = (int)value;
+					MissionTimeLimit = (int)value;
 					break;
 				case "Objective Count":
-					ObjectiveCount = (int)value;
+					MissionObjectiveCount = (int)value;
+					break;
+				case "Story Event Index":
+					storyEventIndex = (int)value;
 					break;
 
 				case "Item Cycling/Activation Trigger":
@@ -189,6 +203,9 @@ namespace Project.Gameplay
 		private int silverScore;
 		private int bronzeScore;
 
+		/// <summary> Story event index to play after completing the stage. Leave at 0 if no story event is meant to be played. </summary>
+		public int storyEventIndex = -1;
+
 		/// <summary>
 		/// Calculates the rank, from -1 <-> 3.
 		/// </summary>
@@ -224,9 +241,9 @@ namespace Project.Gameplay
 			return rank;
 		}
 
-		private float TimeLimit { get; set; } //Level time limit, in seconds
-		public int ObjectiveCount { get; private set; } //What's the target amount for the current objective?
-		public MissionTypes MissionType { get; private set; } //Type of mission
+		/// <summary> Level ID, used for determining save data. </summary>
+		public StringName LevelID { get; set; }
+
 		public enum MissionTypes
 		{
 			None, //Add a goal node or a boss so the player doesn't get stuck!
@@ -236,6 +253,13 @@ namespace Project.Gameplay
 			Enemy, //Destroy a certain amount of enemies
 			Race, //Race against an enemy
 		}
+
+		/// <summary> Type of mission. </summary>
+		public MissionTypes MissionType { get; private set; }
+		/// <summary> What's the target amount for the mission objective? </summary>
+		public int MissionObjectiveCount { get; private set; }
+		/// <summary> Level time limit, in seconds. </summary>
+		private float MissionTimeLimit { get; set; }
 		#endregion
 
 		#region Level Data
@@ -318,9 +342,9 @@ namespace Project.Gameplay
 			CurrentObjectiveCount++;
 			EmitSignal(SignalName.ObjectiveChanged);
 
-			if (ObjectiveCount == 0) //i.e. Sand Oasis's "Don't break the jars!" mission.
+			if (MissionObjectiveCount == 0) //i.e. Sand Oasis's "Don't break the jars!" mission.
 				FinishLevel(false);
-			else if (CurrentObjectiveCount >= ObjectiveCount)
+			else if (CurrentObjectiveCount >= MissionObjectiveCount)
 				FinishLevel(true);
 		}
 
@@ -332,9 +356,9 @@ namespace Project.Gameplay
 		{
 			int previousAmount = CurrentRingCount;
 			CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
-			if (MissionType == MissionTypes.Ring && CurrentRingCount >= ObjectiveCount) //For ring based missions
+			if (MissionType == MissionTypes.Ring && CurrentRingCount >= MissionObjectiveCount) //For ring based missions
 			{
-				CurrentRingCount = ObjectiveCount; //Clamp
+				CurrentRingCount = MissionObjectiveCount; //Clamp
 				FinishLevel(true);
 			}
 
@@ -354,16 +378,16 @@ namespace Project.Gameplay
 			if (IsLevelFinished || Interface.Countdown.IsCountdownActive) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; //Add current time
-			if (TimeLimit == 0) //No time limit
+			if (MissionTimeLimit == 0) //No time limit
 			{
-				TimeSpan time = TimeSpan.FromSeconds(CurrentTime);
+				System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
 			}
 			else
 			{
-				TimeSpan time = TimeSpan.FromSeconds(Mathf.Clamp(TimeLimit - CurrentTime, 0, TimeLimit));
+				System.TimeSpan time = System.TimeSpan.FromSeconds(Mathf.Clamp(MissionTimeLimit - CurrentTime, 0, MissionTimeLimit));
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
-				if (CurrentTime >= TimeLimit) //Time's up!
+				if (CurrentTime >= MissionTimeLimit) //Time's up!
 					FinishLevel(false);
 			}
 

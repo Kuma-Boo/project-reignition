@@ -24,7 +24,6 @@ namespace Project.Gameplay.Triggers
 
 		private float entrySpeed; //Entry speed
 		private CharacterController Character => CharacterController.instance;
-		private InputManager.Controller Controller => InputManager.controller;
 
 		/// <summary> Is this drift trigger currently processing? </summary>
 		private bool isProcessing;
@@ -137,12 +136,12 @@ namespace Project.Gameplay.Triggers
 			float volume = distance / slideDistance;
 			sfx.VolumeDb = Mathf.SmoothStep(startingVolume, -80f, volume);
 
-			bool isAttemptingDrift = (Controller.actionButton.wasPressed && Character.Skills.isManualDriftEnabled) ||
+			bool isAttemptingDrift = (Input.IsActionJustPressed("button_action") && Character.Skills.isManualDriftEnabled) ||
 				(!Character.Skills.isManualDriftEnabled && distance <= INPUT_WINDOW_DISTANCE);
 
 			if (!wasDriftAttempted)
 			{
-				if (Controller.jumpButton.wasPressed) //Allow character to jump out of drift at any time
+				if (Input.IsActionJustPressed("button_jump")) //Allow character to jump out of drift at any time
 				{
 					driftAnimationTimer = 0;
 					CompleteDrift();

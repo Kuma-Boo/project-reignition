@@ -20,10 +20,11 @@ namespace Project.Interface.Menus
 			if (isCutsceneActive)
 			{
 				SoundManager.FadeSFX(bgm, .2f);
-				if (Controller.pauseButton.wasPressed || Controller.jumpButton.wasPressed)
+				if (Input.IsActionJustPressed("button_pause") ||
+					Input.IsActionJustPressed("button_jump"))
 					FinishCutscene();
 			}
-			else if (Controller.AnyButtonPressed) //Change menu
+			else if (Input.IsAnythingPressed()) //Change menu
 			{
 				animator.Play("confirm");
 				return;

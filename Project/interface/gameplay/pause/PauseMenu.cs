@@ -9,7 +9,6 @@ namespace Project.Interface
 		private AnimationPlayer pauseAnimator;
 
 		private bool canInteractWithPauseMenu = true;
-		private InputManager.Controller Controller => InputManager.controller;
 
 		private void EnableInteraction() => canInteractWithPauseMenu = true;
 
@@ -65,17 +64,18 @@ namespace Project.Interface
 		{
 			if (!canInteractWithPauseMenu || Countdown.IsCountdownActive) return;
 
-			if (Controller.pauseButton.wasPressed)
+			if (Input.IsActionJustPressed("button_pause"))
 				TogglePause();
 			else if (GetTree().Paused && canMoveCursor)
 			{
-				if (Controller.verticalAxis.sign != 0)
+				int sign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+				if (sign != 0)
 				{
-					int targetSelection = Mathf.Clamp(currentSelection + Controller.verticalAxis.sign, 0, MAX_SELECTION);
+					int targetSelection = Mathf.Clamp(currentSelection + sign, 0, MAX_SELECTION);
 					if (targetSelection != currentSelection)
 						UpdateSelection(targetSelection);
 				}
-				else if (InputManager.controller.jumpButton.wasPressed)
+				else if (Input.IsActionJustPressed("button_jump"))
 				{
 					switch (currentSelection)
 					{

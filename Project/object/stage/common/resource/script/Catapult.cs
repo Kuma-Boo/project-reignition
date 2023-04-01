@@ -23,7 +23,6 @@ namespace Project.Gameplay.Objects
 		public float farEndHeight;
 
 		public CharacterController Character => CharacterController.instance;
-		public InputManager.Controller Controller => Character.Controller;
 
 		[Export(PropertyHint.Range, "0, 1")]
 		public float launchPower; //0 <-> 1. Power of the shot. Exported for the editor
@@ -71,12 +70,12 @@ namespace Project.Gameplay.Objects
 				}
 				else //Update Controls
 				{
-					float targetLaunchPower = .5f + (Controller.verticalAxis.value * .5f);
+					float targetLaunchPower = .5f + (Character.InputVertical * .5f);
 					launchPower = ExtensionMethods.SmoothDamp(launchPower, targetLaunchPower, ref launchPowerVelocity, POWER_ADJUSTMENT_SPEED);
 
-					if (Controller.jumpButton.wasPressed) //Cancel
+					if (Input.IsActionJustPressed("button_jump")) //Cancel
 						EjectPlayer(true);
-					else if (Controller.actionButton.wasPressed) //Launch
+					else if (Input.IsActionJustPressed("button_action")) //Launch
 						EjectPlayer(false);
 
 					float targetRotation = Mathf.Lerp(CLOSE_WINDUP_ANGLE, 0, launchPower);

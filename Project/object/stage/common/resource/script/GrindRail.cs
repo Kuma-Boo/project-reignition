@@ -81,7 +81,7 @@ namespace Project.Gameplay
 					railModelPath = (NodePath)value;
 					break;
 				case "Invisible Rail Settings/Rail Material":
-					railMaterial = (Material)value;
+					railMaterial = (ShaderMaterial)value;
 					break;
 
 				case "Invisible Rail Settings/Start Cap":
@@ -116,7 +116,7 @@ namespace Project.Gameplay
 		private NodePath endCapPath;
 
 		private Node3D railModel;
-		private Material railMaterial;
+		private ShaderMaterial railMaterial;
 		private Node3D startCap;
 		private Node3D endCap;
 		private CollisionShape3D collider;
@@ -133,7 +133,6 @@ namespace Project.Gameplay
 		private CameraController Camera => CameraController.instance;
 		private CharacterController Character => CharacterController.instance;
 		private CharacterSkillManager Skills => Character.Skills;
-		private InputManager.Controller Controller => InputManager.controller;
 
 		private readonly float GRIND_STEP_HEIGHT = 1.6f; //How high to jump during a grindstep
 		private readonly float GRIND_STEP_SPEED = 24.0f; //How fast to move during a grindstep
@@ -283,7 +282,7 @@ namespace Project.Gameplay
 			sfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed)); //Fade volume based on speed
 
 			//Update shuffling
-			if (Controller.actionButton.wasPressed)
+			if (Input.IsActionJustPressed("button_action"))
 			{
 				if (!Character.Animator.IsBalanceShuffleActive)
 					StartShuffle(false); //Shuffle was performed slightly late
@@ -293,7 +292,7 @@ namespace Project.Gameplay
 					shuffleBufferTimer = -SHUFFLE_BUFFER_LENGTH;
 			}
 
-			if (Controller.jumpButton.wasPressed)
+			if (Input.IsActionJustPressed("button_jump"))
 				jumpBufferTimer = JUMP_BUFFER_LENGTH;
 
 			shuffleBufferTimer = Mathf.MoveToward(shuffleBufferTimer, 0, PhysicsManager.physicsDelta);
@@ -323,7 +322,7 @@ namespace Project.Gameplay
 						float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetInputAngle(), railAngle);
 						//Calculate how far player is trying to go
 						float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
-						horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Controller.MovementAxisLength); //Give some smoothing based on controller strength
+						horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Input.GetVector("move_left", "move_right", "move_up", "move_down").Length()); //Give some smoothing based on controller strength
 
 						//Keep some speed forward
 						Character.MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
@@ -423,7 +422,7 @@ namespace Project.Gameplay
 		{
 			railModel.GlobalPosition = Character.GlobalPosition;
 			railModel.Position = new Vector3(0, railModel.Position.Y, railModel.Position.Z); //Ignore player's x-offset
-			railMaterial.Set("uv_offset", railModel.Position.Z % 1);
+			railMaterial.SetShaderParameter("uv_offset", railModel.Position.Z);
 		}
 
 		private void UpdateInvisibleRailLength()

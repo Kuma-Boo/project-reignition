@@ -13,7 +13,7 @@ namespace Project.Gameplay
 		public void Initialize()
 		{
 			//Determine the size of the soul gauge
-			float levelRatio = SaveManager.ActiveGameData.SoulGaugeLevel; //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
+			float levelRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio(); //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
 			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; //Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
 			normalCollisionMask = Character.CollisionMask;
 
@@ -221,7 +221,7 @@ namespace Project.Gameplay
 				}
 				timeBreakDrainTimer--;
 
-				if (IsSoulGaugeEmpty || !Character.Controller.breakButton.isHeld) //Cancel time break?
+				if (IsSoulGaugeEmpty || !Input.IsActionPressed("button_timebreak")) //Cancel time break?
 					ToggleTimeBreak();
 
 				return;
@@ -232,7 +232,7 @@ namespace Project.Gameplay
 				if (breakTimer != 0) return; //Cooldown
 			}
 
-			if (Character.Controller.breakButton.wasPressed && !IsSpeedBreakActive)
+			if (Input.IsActionJustPressed("button_timebreak") && !IsSpeedBreakActive)
 			{
 				if (!IsTimeBreakEnabled) return;
 				if (!IsSoulGaugeCharged) return;
@@ -253,7 +253,7 @@ namespace Project.Gameplay
 					}
 
 					ModifySoulGauge(-1); //Drain soul gauge
-					if (IsSoulGaugeEmpty || !Character.Controller.boostButton.isHeld)//Check whether we shoudl cancel speed break
+					if (IsSoulGaugeEmpty || !Input.IsActionPressed("button_speedbreak"))//Check whether we shoudl cancel speed break
 						ToggleSpeedBreak();
 
 					if (Character.IsOnGround) //Speed is only applied while on the ground
@@ -267,7 +267,7 @@ namespace Project.Gameplay
 			else if (!Mathf.IsZeroApprox(breakTimer)) return; //Cooldown
 
 			//Check whether we can start speed break
-			if (Character.Controller.boostButton.wasPressed && !IsTimeBreakActive)
+			if (Input.IsActionJustPressed("button_speedbreak") && !IsTimeBreakActive)
 			{
 				if (!IsSoulGaugeCharged) return;
 				if (!IsSpeedBreakEnabled) return;

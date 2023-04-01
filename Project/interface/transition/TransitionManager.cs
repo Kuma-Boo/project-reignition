@@ -10,7 +10,10 @@ namespace Project.Core
 	public partial class TransitionManager : Node
 	{
 		public static TransitionManager instance;
+		/// <summary> Path to the main menu scene. </summary>
 		public const string MENU_SCENE_PATH = "res://interface/menu/Menu.tscn";
+		/// <summary> Path to story events. </summary>
+		public const string EVENT_SCENE_PATH = "res://video/event/scene/Event";
 
 		[Export]
 		private ColorRect fade;

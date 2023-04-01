@@ -67,9 +67,9 @@ namespace Project.Interface.Menus
 
 		protected override void UpdateSelection()
 		{
-			if (Mathf.IsZeroApprox(Controller.verticalAxis.value)) return;
+			if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return;
 
-			VerticalSelection = WrapSelection(VerticalSelection + Controller.verticalAxis.sign, levelOptions.Count);
+			VerticalSelection = WrapSelection(VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down")), levelOptions.Count);
 			menuMemory[MemoryKeys.LevelSelect] = VerticalSelection;
 			animator.Play("select");
 			animator.Seek(0, true);

@@ -6,10 +6,10 @@ namespace Project
 {
 	public static class ExtensionMethods
 	{
-		/// <summary> Casts a ray from a Node3D </summary>
+		/// <summary> Casts a ray from a Node3D. </summary>
 		public static RaycastHit CastRay(this Node3D s, Vector3 pos, Vector3 dir, uint mask = 2147483647, bool hitArea = false, Array<PhysicsBody3D> ex = null)
 		{
-			if (ex != null) //Reduce memory leaks
+			if (ex != null) // Reduce memory leakage
 			{
 				Array<Rid> excluded = new Array<Rid>();
 				for (int i = 0; i < ex.Count; i++)
@@ -21,7 +21,8 @@ namespace Project
 			return PhysicsManager.CastRay(pos, dir, hitArea, mask);
 		}
 
-		/// <summary> Creates a property dictionary to be used in _GetPropertyList() </summary>
+
+		/// <summary> Creates a property dictionary to be used in _GetPropertyList(). </summary>
 		public static Dictionary CreateProperty(string name, Variant.Type type, PropertyHint hint = PropertyHint.None, string hint_string = "")
 		{
 			Dictionary dictionary = new Dictionary();
@@ -31,6 +32,32 @@ namespace Project
 			dictionary.Add("hint_string", hint_string);
 			return dictionary;
 		}
+
+		/// <summary> Returns a string containing all enum values. For Inspector. </summary>
+		public static string EnumToString<T>(this T e)
+		{
+			System.Type t = e.GetType();
+			string[] names = System.Enum.GetNames(t);
+			string output = "";
+
+			for (int i = 0; i < names.Length; i++)
+			{
+				if (i != 0)
+					output += ",";
+
+				output += names[i];
+			}
+
+			return output;
+		}
+
+
+		/// <summary>
+		/// Checks if a uint flag is set.
+		/// Note: Flags must be set/unset manually. Use "flags |= flag" to set and "flags &= ~flag" to unset.
+		/// </summary>
+		public static bool HasFlag(this uint flags, uint flag) => (flags & flag) != 0;
+
 
 		//Global Directions
 		public static Vector3 Up(this Node3D s) => s.GlobalTransform.Basis.Y.Normalized();
@@ -43,13 +70,8 @@ namespace Project
 		public static Vector3 RemoveVertical(this Vector3 v) => new Vector3(v.X, 0, v.Z);
 		public static Vector2 Flatten(this Vector3 v) => new Vector2(v.X, v.Z);
 
-		public static float InverseLerp(this Vector3 a, Vector3 b, Vector3 v)
-		{
-			Vector3 ab = b - a;
-			Vector3 av = v - a;
-			return av.Dot(ab) / ab.Dot(ab);
-		}
 
+		/// <summary> Adds an explosive force to RigidBody3D. </summary>
 		public static void AddExplosionForce(this RigidBody3D body, Vector3 explosionPoint, float power)
 		{
 			Vector3 blastDir = body.GlobalPosition - explosionPoint;
@@ -61,18 +83,12 @@ namespace Project
 			body.ApplyImpulse(impulseMag * blastDir.Normalized());
 		}
 
-		/// <summary>
-		/// Gets the LocalPosition relative to a Node3D. Note that "left" is positive, while "right" is negative.
-		/// </summary>
-		public static Vector3 GetLocalPosition(this Node3D p, Vector3 pos)
-		{
-			Vector3 localPosition = p.GlobalTransform.Basis.Inverse() * (pos - p.GlobalPosition);
-			return localPosition;
-		}
 
-		/// <summary>
-		/// Manual implementation since Array.IndexOf() doesn't seem to work on StringNames.
-		/// </summary>
+		/// <summary> Gets the LocalPosition relative to a Node3D. Note that "left" is positive, while "right" is negative. </summary>
+		public static Vector3 GetLocalPosition(this Node3D p, Vector3 pos) => p.GlobalTransform.Basis.Inverse() * (pos - p.GlobalPosition);
+
+
+		/// <summary> Manual implementation since Array.IndexOf() doesn't seem to work on StringNames. </summary>
 		public static int GetStringNameIndex(this Array<StringName> a, StringName s)
 		{
 			for (int i = 0; i < a.Count; i++)
@@ -84,6 +100,7 @@ namespace Project
 			return -1;
 		}
 
+
 		/// <summary> Returns the dot product of two angles (in radians) </summary>
 		public static float DotAngle(float a, float b)
 		{
@@ -91,6 +108,7 @@ namespace Project
 			dot = dot <= 1 ? 1 - dot : -(dot - 1);
 			return dot;
 		}
+
 
 		/// <summary> Clamps an angle's distance to the reference angle, in radians. </summary>
 		public static float ClampAngleRange(float value, float reference, float range)
@@ -117,6 +135,7 @@ namespace Project
 				return max;
 		}
 
+
 		/// <summary> Converts an angle to exist between 0 <-> Mathf.Tau
 		public static float ModAngle(float angle)
 		{
@@ -126,8 +145,11 @@ namespace Project
 			return angle;
 		}
 
+
 		/// <summary> Returns the absolute delta between two angles (in radians) </summary>
 		public static float DeltaAngleRad(float firstAngle, float secondAngle) => Mathf.Abs(SignedDeltaAngleRad(firstAngle, secondAngle));
+
+
 		/// <summary> Returns the delta between two angles (in radians) </summary>
 		public static float SignedDeltaAngleRad(float firstAngle, float secondAngle)
 		{
@@ -139,6 +161,7 @@ namespace Project
 			return delta;
 		}
 
+
 		/// <summary> Moves toward an angle (in radians) </summary>
 		public static float MoveTowardAngleRad(float from, float to, float delta)
 		{
@@ -146,6 +169,7 @@ namespace Project
 			to %= Mathf.Tau;
 			return from + ((to - from) * delta);
 		}
+
 
 		//Smooth damp functions
 		public static float SmoothDamp(float current, float target, ref float currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
@@ -177,6 +201,8 @@ namespace Project
 
 			return output;
 		}
+
+
 		public static float SmoothDampAngle(float current, float target, ref float currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
 			current %= Mathf.Tau;
@@ -195,12 +221,16 @@ namespace Project
 
 			return result;
 		}
+
+
 		public static Vector2 SmoothDamp(this Vector2 current, Vector2 target, ref Vector2 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
 			Vector2 output = new Vector2(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
 				SmoothDamp(current.Y, target.Y, ref currentVelocity.Y, smoothTime, maxSpeed));
 			return output;
 		}
+
+
 		public static Vector3 SmoothDamp(this Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
 			Vector3 output = new Vector3(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
@@ -209,33 +239,8 @@ namespace Project
 			return output;
 		}
 
-		/// <summary>
-		/// Returns a string containing all enum values. For Inspector.
-		/// </summary>
-		public static string EnumToString<T>(this T e)
-		{
-			System.Type t = e.GetType();
-			string[] names = System.Enum.GetNames(t);
-			string output = "";
 
-			for (int i = 0; i < names.Length; i++)
-			{
-				if (i != 0)
-					output += ",";
-
-				output += names[i];
-			}
-
-			return output;
-		}
-
-
-		/// <summary>
-		/// Checks if a uint flag is set.
-		/// Note: Flags must be set/unset manually. Use "flags |= flag" to set and "flags &= ~flag" to unset.
-		/// </summary>
-		public static bool HasFlag(this uint flags, uint flag) => (flags & flag) != 0;
-
+		/// <summary> Checks if a Path3D is looping (i.e. Path's first and last point are at the same position). </summary>
 		public static bool IsLoopingPath(this Path3D path) => path.Curve.GetPointPosition(0).IsEqualApprox(path.Curve.GetPointPosition(path.Curve.PointCount - 1));
 	}
 }

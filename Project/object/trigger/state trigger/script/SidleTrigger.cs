@@ -29,7 +29,6 @@ namespace Project.Gameplay.Triggers
 		private bool isActive;
 		private bool isInteractingWithPlayer;
 		private CharacterController Character => CharacterController.instance;
-		private InputManager.Controller Controller => InputManager.controller;
 
 		private float velocity;
 		private float cycleTimer;
@@ -85,7 +84,7 @@ namespace Project.Gameplay.Triggers
 
 		private void UpdateSidle()
 		{
-			float targetVelocity = (isFacingRight ? Controller.MovementAxis.X : -Controller.MovementAxis.X) * CYCLE_FREQUENCY;
+			float targetVelocity = Input.GetAxis("move_left", "move_right") * (isFacingRight ? 1 : -1) * CYCLE_FREQUENCY;
 			if (Mathf.IsZeroApprox(velocity) || Mathf.Sign(targetVelocity) == Mathf.Sign(velocity))
 				velocity = Mathf.Lerp(velocity, targetVelocity, TRACTION_SMOOTHING);
 			else
@@ -191,7 +190,7 @@ namespace Project.Gameplay.Triggers
 						StartRespawn();
 						Character.Animator.SidleHangFall();
 					}
-					else if (Controller.jumpButton.wasPressed) //Process inputs
+					else if (Input.IsActionJustPressed("button_jump")) //Process inputs
 					{
 						//Jump back to the ledge
 						cycleTimer = 0;

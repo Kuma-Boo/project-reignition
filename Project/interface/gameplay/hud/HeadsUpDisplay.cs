@@ -65,7 +65,7 @@ namespace Project.Gameplay
 			{
 				maxRingLabel.Visible = ringDividerSprite.Visible = Level.MissionType == LevelSettings.MissionTypes.Ring; //Show/Hide max ring count
 				if (maxRingLabel.Visible)
-					maxRingLabel.Text = Level.ObjectiveCount.ToString(RING_LABEL_FORMAT);
+					maxRingLabel.Text = Level.MissionObjectiveCount.ToString(RING_LABEL_FORMAT);
 
 				ringAnimator.Active = true;
 				UpdateRingCount(0, true);
@@ -196,7 +196,7 @@ namespace Project.Gameplay
 
 			objectiveSprite.Visible = true;
 			objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");
-			objectiveMaxValue.Text = Level.ObjectiveCount.ToString("00");
+			objectiveMaxValue.Text = Level.MissionObjectiveCount.ToString("00");
 
 			Level.Connect(nameof(LevelSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}
@@ -224,7 +224,7 @@ namespace Project.Gameplay
 			soulGaugeBackground = soulGaugeFill.GetParent<Control>();
 
 			//Resize the soul gauge
-			soulGauge.OffsetTop = Mathf.Lerp(soulGauge.OffsetTop, 0, SaveManager.ActiveGameData.SoulGaugeLevel);
+			soulGauge.OffsetTop = Mathf.Lerp(soulGauge.OffsetTop, 0, SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio());
 			ModifySoulGauge(0f, false);
 		}
 

@@ -17,7 +17,7 @@ namespace Project.Gameplay.Objects
 				Level.FinishLevel(true); //Mission was simply to reach the goal
 			else if (Level.MissionType == LevelSettings.MissionTypes.Objective)
 				Level.FinishLevel(false); //Failed to complete the objective.
-			else if (Level.ObjectiveCount == 0) //For no pearls, ringless, stealth, etc.
+			else if (Level.MissionObjectiveCount == 0) //For no pearls, ringless, stealth, etc.
 				LevelSettings.instance.FinishLevel(Level.CurrentObjectiveCount == 0);
 		}
 	}

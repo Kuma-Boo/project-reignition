@@ -82,13 +82,14 @@ namespace Project.Interface.Menus
 
 		protected override void UpdateSelection()
 		{
-			if (Controller.verticalAxis.sign != 0)
+			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+			if (inputSign != 0)
 			{
-				VerticalSelection = WrapSelection(VerticalSelection + Controller.verticalAxis.sign, (int)SaveManager.WorldEnum.Max);
+				VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SaveManager.WorldEnum.Max);
 				menuMemory[MemoryKeys.WorldSelect] = VerticalSelection;
 				menuMemory[MemoryKeys.LevelSelect] = 0; //Reset level selection
 
-				bool isScrollingUp = Controller.verticalAxis.sign < 0;
+				bool isScrollingUp = inputSign < 0;
 				int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, (int)SaveManager.WorldEnum.Max);
 				UpdateSpriteRegion(3, transitionIndex); //Update level text
 
@@ -114,7 +115,7 @@ namespace Project.Interface.Menus
 			base.OpenParentMenu();
 			ActiveVideoPlayer.Stop();
 
-			SaveManager.SaveGame();
+			SaveManager.SaveGameToFile();
 			SaveManager.ActiveSaveSlotIndex = -1;
 		}
 		public override void OpenSubmenu()
@@ -128,7 +129,7 @@ namespace Project.Interface.Menus
 			//Don't change video?
 			if (ActiveVideoPlayer != null && ActiveVideoPlayer.Stream == videoStreams[VerticalSelection]) return;
 			if (!SaveManager.ActiveGameData.IsWorldUnlocked(VerticalSelection)) return; //World is locked
-			if (!Mathf.IsZeroApprox(Controller.verticalAxis.value)) return; //Still scrolling
+			if (!Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return; //Still scrolling
 
 			if (ActiveVideoPlayer != null && ActiveVideoPlayer.IsPlaying())
 			{

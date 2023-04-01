@@ -37,21 +37,21 @@ namespace Project.Core
 				isAdvancingFrame = false;
 			}
 
-			if (InputManager.debugTurbo.wasPressed)
+			if (Input.IsActionJustPressed("debug_turbo"))
 				Engine.TimeScale = 2.5f;
-			else if (InputManager.debugTurbo.wasReleased)
+			else if (Input.IsActionJustReleased("debug_turbo"))
 				Engine.TimeScale = 1f;
 
-			if (InputManager.debugPause.wasPressed)
+			if (Input.IsActionJustPressed("debug_pause"))
 				GetTree().Paused = !IsPaused;
 
-			if (InputManager.debugAdvance.wasPressed)
+			if (Input.IsActionJustPressed("debug_step"))
 			{
 				GetTree().Paused = false;
 				isAdvancingFrame = true;
 			}
 
-			if (InputManager.debugRestart.wasPressed)
+			if (Input.IsActionJustPressed("debug_restart"))
 			{
 				if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(Gameplay.CharacterController.instance))
 					Gameplay.CharacterController.instance.StartRespawn();
@@ -59,10 +59,11 @@ namespace Project.Core
 					TransitionManager.QueueSceneChange(string.Empty, true);
 			}
 
-			if (line3d.Count + line2d.Count != 0 && !IsPaused)
+			if (line3d.Count + line2d.Count != 0 && !IsPaused) //Queue Raycast Redraw
 				QueueRedraw();
 		}
 
+		#region Raycast Debug Code
 		public override void _Draw()
 		{
 			if (drawRaycasts)
@@ -90,7 +91,6 @@ namespace Project.Core
 			}
 		}
 
-		#region Line Drawer
 		public struct Line3D
 		{
 			public Vector3 start;

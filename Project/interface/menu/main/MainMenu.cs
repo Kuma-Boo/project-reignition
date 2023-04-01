@@ -44,8 +44,8 @@ namespace Project.Interface.Menus
 
 		protected override void UpdateSelection()
 		{
-			HorizontalSelection = Mathf.Clamp(HorizontalSelection + Controller.horizontalAxis.sign, 0, 1);
-			VerticalSelection = Mathf.Clamp(VerticalSelection + Controller.verticalAxis.sign, 0, 1);
+			HorizontalSelection = Mathf.Clamp(HorizontalSelection + Mathf.Sign(Input.GetAxis("move_left", "move_right")), 0, 1);
+			VerticalSelection = Mathf.Clamp(VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down")), 0, 1);
 
 			int targetSelection = HorizontalSelection + (VerticalSelection * 2);
 			if (targetSelection != currentSelection)

@@ -22,7 +22,6 @@ namespace Project.Interface
 		private AnimationPlayer animator;
 
 		private bool isProcessingInputs;
-		private InputManager.Controller Controller => InputManager.controller;
 		private LevelSettings Level => LevelSettings.instance;
 		private const string TECHNICAL_FORMATTING = "0.0";
 
@@ -38,14 +37,19 @@ namespace Project.Interface
 
 			if (animator.IsPlaying())
 			{
-				//Skip animation
-				if (Controller.jumpButton.wasPressed)
+				if (Input.IsActionJustPressed("button_jump")) // Skip animation
 					animator.Seek(animator.CurrentAnimationLength, true);
 			}
-			else if (Controller.jumpButton.wasPressed || Controller.actionButton.wasPressed)
+			else if (Input.IsActionJustPressed("button_jump") ||
+				Input.IsActionJustPressed("button_action"))
 			{
-				//Determine which scene to load
-				TransitionManager.QueueSceneChange(Controller.jumpButton.wasPressed ? TransitionManager.MENU_SCENE_PATH : string.Empty, false);
+				// Determine which scene to load
+				if (Input.IsActionJustPressed("button_action")) // Retry stage
+					TransitionManager.QueueSceneChange(string.Empty, false);
+				else if (Level.storyEventIndex == 0) // Load main menu
+					TransitionManager.QueueSceneChange(TransitionManager.MENU_SCENE_PATH, false);
+				else //Load story event
+					TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn", false);
 
 				TransitionManager.StartTransition(new TransitionData()
 				{

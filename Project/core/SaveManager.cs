@@ -9,7 +9,7 @@ namespace Project.Core
 		public override void _EnterTree()
 		{
 			LoadConfig();
-			LoadGame();
+			LoadGameFromFile();
 		}
 
 		#region Config
@@ -20,8 +20,7 @@ namespace Project.Core
 		}
 		public enum TextLanguage
 		{
-			English, //Retail english script
-			Retranslated, //Use the retranslation script
+			English, //English script (Uses Windii's retranslation when voiceover is set to Japanese)
 			Japanese,
 			German,
 			Italian,
@@ -60,13 +59,13 @@ namespace Project.Core
 
 			//Audio
 			public bool isMasterMuted;
-			public float masterVolume = .5f;
+			public int masterVolume = 50;
 			public bool isBgmMuted;
-			public float bgmVolume = 1f;
+			public int bgmVolume = 100;
 			public bool isSfxMuted;
-			public float sfxVolume = 1f;
+			public int sfxVolume = 100;
 			public bool isVoiceMuted;
-			public float voiceVolume = 1f;
+			public int voiceVolume = 100;
 
 			public string inputConfiguration;
 
@@ -96,24 +95,24 @@ namespace Project.Core
 				if (OS.IsDebugBuild())
 				{
 					settings.screenResolution = 1;
-					settings.bgmVolume = 0;
-					settings.masterVolume = 0f;
+					settings.masterVolume = 0;
+					settings.voiceLanguage = VoiceLanguage.Japanese;
+					settings.textLanguage = TextLanguage.English;
 				}
 			}
 
 			ApplyLocalization();
 
-			//TODO Attempt to load control configuration.
-			InputManager.LoadControls(settings.inputConfiguration);
+			// TODO Attempt to load control configuration.
 
 			DisplayServer.WindowSetVsyncMode(settings.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
 			DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[settings.screenResolution]);
 			DisplayServer.WindowSetMode(settings.isFullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed);
 
-			SetAudioBusVolume((int)AudioBuses.MASTER, settings.masterVolume, settings.isMasterMuted);
-			SetAudioBusVolume((int)AudioBuses.BGM, settings.bgmVolume, settings.isBgmMuted);
-			SetAudioBusVolume((int)AudioBuses.SFX, settings.sfxVolume, settings.isSfxMuted);
-			SetAudioBusVolume((int)AudioBuses.VOICE, settings.voiceVolume, settings.isVoiceMuted);
+			ApplyAudioBusVolume((int)AudioBuses.MASTER, settings.masterVolume, settings.isMasterMuted);
+			ApplyAudioBusVolume((int)AudioBuses.BGM, settings.bgmVolume, settings.isBgmMuted);
+			ApplyAudioBusVolume((int)AudioBuses.SFX, settings.sfxVolume, settings.isSfxMuted);
+			ApplyAudioBusVolume((int)AudioBuses.VOICE, settings.voiceVolume, settings.isVoiceMuted);
 		}
 
 		public void SaveConfig()
@@ -123,13 +122,11 @@ namespace Project.Core
 			file.Close();
 		}
 
+		/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
 		private void ApplyLocalization()
 		{
 			switch (settings.textLanguage)
 			{
-				case TextLanguage.Retranslated:
-					TranslationServer.SetLocale("en_US");
-					break;
 				case TextLanguage.Japanese:
 					TranslationServer.SetLocale("ja");
 					break;
@@ -146,18 +143,18 @@ namespace Project.Core
 					TranslationServer.SetLocale("de");
 					break;
 				default:
-					TranslationServer.SetLocale("en");
+					TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
 					break;
 			}
 		}
 
-		public void SetAudioBusVolume(int bus, float volume, bool forceMute = default)
+		public void ApplyAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
 		{
-			bool isMuted = Mathf.IsZeroApprox(volume) || forceMute;
-			AudioServer.SetBusMute(bus, isMuted); //Mute or unmute
+			if (volumePercentage == 0)
+				isMuted = true;
 
-			if (isMuted) return;
-			AudioServer.SetBusVolumeDb(bus, Mathf.LinearToDb(volume));
+			AudioServer.SetBusMute(bus, isMuted); // Mute or unmute
+			AudioServer.SetBusVolumeDb(bus, Mathf.LinearToDb(volumePercentage * .01f));
 		}
 
 		#endregion
@@ -174,8 +171,13 @@ namespace Project.Core
 			#region Data
 			/// <summary> Which area was the player in last? (Used for save select) </summary>
 			public WorldEnum lastPlayedWorld;
+			/// <summary> Flag representation of world rings collected. </summary>
 			public WorldFlagEnum worldRingsCollected;
+			/// <summary> Flag representation of worlds unlocked. </summary>
 			public WorldFlagEnum worldsUnlocked;
+
+			/// <summary> Individual level data. </summary>
+			public Dictionary<int, Dictionary> leveldata = new Dictionary<int, Dictionary>();
 
 			/// <summary> Player level, from 1 -> 99 </summary>
 			public int level;
@@ -187,16 +189,18 @@ namespace Project.Core
 			public SkillEnum skillRing;
 			#endregion
 
-			/// <summary> Is this a new file? </summary>
-			public bool IsNewFile => level == 0; //Since the player must at least be level one, a level zero file can be assumed to be empty.
+			#region Methods
+			/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
+			public bool IsNewFile() => level == 0;
+			/// <summary> Calculates the soul gauge's level ratio, normalized from [0 -> 1] </summary>
+			public float CalculateSoulGaugeLevelRatio(int levelCap = 50) => Mathf.Clamp(level, 0, levelCap) / (float)levelCap;
 
+			/// <summary> Checks if a world is unlocked. </summary>
 			public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
+			/// <summary> Checks if a world ring was obtained. </summary>
 			public bool IsWorldRingObtained(int worldIndex) => worldRingsCollected.HasFlag(ConvertIntToWorldEnum(worldIndex));
-			/// <summary> Soul gauge's level, normalized from [0 -> 1] </summary>
-			public float SoulGaugeLevel => Mathf.Clamp(level, 0, 50) / 50f;
-			/// <summary>
-			/// Converts worldIndex to WorldEnum. World index starts at zero.
-			/// </summary>
+
+			/// <summary> Converts (WorldEnum)worldIndex to WorldFlagEnum. World index starts at zero. </summary>
 			private WorldFlagEnum ConvertIntToWorldEnum(int worldIndex)
 			{
 				int returnIndex = 1;
@@ -206,22 +210,8 @@ namespace Project.Core
 				return (WorldFlagEnum)returnIndex;
 			}
 
-			/// <summary>
-			/// Creates a new GameData object that contains default values.
-			/// </summary>
-			public static GameData DefaultData()
-			{
-				return new GameData()
-				{
-					level = 1,
-					worldsUnlocked = WorldFlagEnum.All,
-					lastPlayedWorld = WorldEnum.LostPrologue,
-				};
-			}
 
-			/// <summary>
-			/// Creates a dictionary based on GameData.
-			/// </summary>
+			/// <summary> Creates a dictionary based on GameData. </summary>
 			public Dictionary SaveDictionary()
 			{
 				Dictionary dictionary = new Dictionary();
@@ -231,19 +221,22 @@ namespace Project.Core
 				dictionary.Add(nameof(worldRingsCollected), (int)worldRingsCollected);
 				dictionary.Add(nameof(worldsUnlocked), (int)worldsUnlocked);
 
+
+				dictionary.Add(nameof(leveldata), (Dictionary)leveldata);
+
+
 				//Player stats
 				dictionary.Add(nameof(level), level);
 				dictionary.Add(nameof(exp), exp);
 				dictionary.Add(nameof(playTime), Mathf.RoundToInt(playTime));
+
 
 				dictionary.Add(nameof(skillRing), (int)skillRing);
 
 				return dictionary;
 			}
 
-			/// <summary>
-			/// Sets GameData based on dictionary.
-			/// </summary>
+			/// <summary> Sets GameData based on dictionary. </summary>
 			public void LoadFromDictionary(Dictionary dictionary)
 			{
 				//WorldEnum data
@@ -254,6 +247,10 @@ namespace Project.Core
 				if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
 					worldsUnlocked = (WorldFlagEnum)(int)var;
 
+				if (dictionary.TryGetValue(nameof(leveldata), out var))
+					leveldata = (Dictionary<int, Dictionary>)var;
+
+
 				if (dictionary.TryGetValue(nameof(level), out var))
 					level = (int)var;
 				if (dictionary.TryGetValue(nameof(exp), out var))
@@ -261,12 +258,27 @@ namespace Project.Core
 				if (dictionary.TryGetValue(nameof(playTime), out var))
 					playTime = (float)var;
 
+
 				if (dictionary.TryGetValue(nameof(skillRing), out var))
 					skillRing = (SkillEnum)(int)var;
 			}
+
+
+			/// <summary> Creates a new GameData object that contains default values. </summary>
+			public static GameData DefaultData()
+			{
+				return new GameData()
+				{
+					level = 1,
+					worldsUnlocked = WorldFlagEnum.LostPrologue,
+					lastPlayedWorld = WorldEnum.LostPrologue,
+				};
+			}
+			#endregion
 		}
 
-		public const int MAX_PLAY_TIME = 359999; //99:59:59, in seconds.
+		/// <summary> Longest amount of playtime that can be displayed on the file select. (99:59:59 in seconds) </summary>
+		public const int MAX_PLAY_TIME = 359999;
 		[Flags]
 		public enum WorldFlagEnum
 		{
@@ -304,15 +316,22 @@ namespace Project.Core
 			ManualDrift = 8, //Manually perform a drift for more speed and points/exp
 		}
 
-		public enum LevelStateEnum
+		public struct LevelSaveData
 		{
-			Locked, //Level is locked
-			New, //Player has never tried the level
-			Played, //Player has at least attempted the level
-			Completed, //Player has completed the level at least once
+			/// <summary> Player's best time. </summary>
+			public float time;
+			/// <summary> Player's best score. </summary>
+			public float score;
+			/// <summary> Player's best rank. </summary>
+			public int rank;
+
+			/// <summary> Fire soul collection status. </summary>
+			public int[] firesoul;
 		}
 
-		public static void SaveGame()
+
+		/// <summary> Saves active game data to a file. </summary>
+		public static void SaveGameToFile()
 		{
 			if (ActiveSaveSlotIndex == -1) return; //Invalid save slot
 
@@ -331,7 +350,8 @@ namespace Project.Core
 			}
 		}
 
-		public static void LoadGame()
+		/// <summary> Loads game data from a file. </summary>
+		public static void LoadGameFromFile()
 		{
 			//TODO actually try and load from save files.
 			for (int i = 0; i < GameSaveSlots.Length; i++)
@@ -358,9 +378,7 @@ namespace Project.Core
 			}
 		}
 
-		/// <summary>
-		/// Deletes the current save data, then creates a new one in it's place.
-		/// </summary>
+		/// <summary> Frees game data at the given index, then creates default data in it's place. </summary>
 		public static void ResetSaveData(int index)
 		{
 			GameSaveSlots[index].Free();
