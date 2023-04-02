@@ -72,11 +72,11 @@ namespace Project.Interface.Menus
 		/// <summary> Should this mission be indented on the mission screen? </summary>
 		public bool isSideMission;
 		[Export]
-		private bool hasFireSouls;
+		public bool hasFireSouls;
 		[Export]
-		private string missionNameKey;
+		public string missionNameKey;
 		[Export]
-		private string missionDescriptionKey;
+		public string missionDescriptionKey;
 
 		[ExportGroup("Components")]
 		[Export]

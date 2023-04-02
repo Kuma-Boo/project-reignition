@@ -45,11 +45,11 @@ namespace Project.Interface
 			{
 				// Determine which scene to load
 				if (Input.IsActionJustPressed("button_action")) // Retry stage
-					TransitionManager.QueueSceneChange(string.Empty, false);
+					TransitionManager.QueueSceneChange(string.Empty);
 				else if (Level.storyEventIndex == 0) // Load main menu
-					TransitionManager.QueueSceneChange(TransitionManager.MENU_SCENE_PATH, false);
+					TransitionManager.QueueSceneChange(TransitionManager.MENU_SCENE_PATH);
 				else //Load story event
-					TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn", false);
+					TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn");
 
 				TransitionManager.StartTransition(new TransitionData()
 				{

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cumqwrsj6eqpd"]
+[gd_scene load_steps=37 format=3 uid="uid://cumqwrsj6eqpd"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/WorldSelect.cs" id="1_7vrge"]
 [ext_resource type="Texture2D" uid="uid://df4fllm7a4ue0" path="res://interface/menu/level select/texture/background.png" id="10_p8mo5"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bcdrs2nrai80q" path="res://interface/menu/level select/level lists/EvilFoundry.tscn" id="16_tfnbe"]
 [ext_resource type="PackedScene" uid="uid://cje3136x4i7df" path="res://interface/menu/level select/level lists/LevitatedRuin.tscn" id="17_6ds0g"]
 [ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlash.gdshader" id="17_61ktb"]
+[ext_resource type="PackedScene" uid="uid://cr7lxn48b6kg8" path="res://interface/menu/level select/ReadyMenu.tscn" id="17_c7rwi"]
 [ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="17_uyu6q"]
 [ext_resource type="PackedScene" uid="uid://bohjl852ydsyo" path="res://interface/menu/level select/level lists/LostPrologue.tscn" id="17_xanqf"]
 [ext_resource type="AudioStream" uid="uid://d36ykovj7lr0l" path="res://sound/ost/jingle/Level Select.mp3" id="17_ybr17"]
@@ -1479,10 +1480,10 @@ tracks/17/path = NodePath("DemoVideo:modulate")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
-"times": PackedFloat32Array(0, 0.333333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/18/type = "value"
 tracks/18/imported = false
@@ -1510,13 +1511,12 @@ _data = {
 "show": SubResource("Animation_f7md6")
 }
 
-[node name="WorldSelect" type="Control" node_paths=PackedStringArray("animator", "primaryVideoPlayer", "secondaryVideoPlayer", "description", "bgm")]
+[node name="WorldSelect" type="Control" node_paths=PackedStringArray("primaryVideoPlayer", "secondaryVideoPlayer", "description", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 script = ExtResource("1_7vrge")
-animator = NodePath("AnimationPlayer")
 primaryVideoPlayer = NodePath("DemoVideo/PrimaryVideoPlayer")
 secondaryVideoPlayer = NodePath("DemoVideo/SecondaryVideoPlayer")
 videoStreamPaths = [&"res://video/demo/demo0.ogv", &"res://video/demo/demo1.ogv", &"res://video/demo/demo2.ogv", &"res://video/demo/demo3.ogv", &"res://video/demo/demo4.ogv", &"res://video/demo/demo5.ogv", &"res://video/demo/demo6.ogv", &"res://video/demo/demo7.ogv"]
@@ -1525,8 +1525,9 @@ levelSpriteRegions = [Rect2(0, 400, 512, 60), Rect2(0, 0, 512, 60), Rect2(0, 230
 levelDescriptionKeys = ["lost_prologue_description", "sand_oasis_description", "dino_jungle_description", "evil_foundry_description", "levitated_ruin_description", "pirate_storm_description", "skeleton_dome_description", "night_palace_description", "sys_world_locked"]
 levelTextSprites = [NodePath("AreaSelection/Text/Top"), NodePath("AreaSelection/Text/Center"), NodePath("AreaSelection/Text/Bottom"), NodePath("AreaSelection/Text/TransitionText")]
 levelGlowSprites = [NodePath("AreaSelection/Text/Top/Glow"), NodePath("AreaSelection/Text/Center/Glow"), NodePath("AreaSelection/Text/Bottom/Glow")]
-bgm = NodePath("LevelSelectBGM")
 submenus = Array[NodePath]([NodePath("Submenus/LostPrologue"), NodePath("Submenus/SandOasis"), NodePath("Submenus/DinosaurJungle"), NodePath("Submenus/EvilFoundry"), NodePath("Submenus/LevitatedRuin"), NodePath("Submenus/PirateStorm"), NodePath("Submenus/SkeletonDome"), NodePath("Submenus/NightPalace")])
+bgm = NodePath("LevelSelectBGM")
+animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
 
 [node name="DemoVideo" type="Control" parent="."]
@@ -1662,45 +1663,56 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="LostPrologue" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("17_xanqf")]
+[node name="LostPrologue" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("17_xanqf")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="SandOasis" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("18_0kdsm")]
+[node name="SandOasis" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("18_0kdsm")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="DinosaurJungle" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("15_3h61q")]
+[node name="DinosaurJungle" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("15_3h61q")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="EvilFoundry" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("16_tfnbe")]
+[node name="EvilFoundry" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("16_tfnbe")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="LevitatedRuin" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("17_6ds0g")]
+[node name="LevitatedRuin" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("17_6ds0g")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="PirateStorm" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("18_dsf0x")]
+[node name="PirateStorm" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("18_dsf0x")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="SkeletonDome" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("19_3xa6d")]
+[node name="SkeletonDome" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("19_3xa6d")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="NightPalace" parent="Submenus" node_paths=PackedStringArray("description", "parentMenu") instance=ExtResource("20_y3iyc")]
+[node name="NightPalace" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("20_y3iyc")]
 layout_mode = 1
 description = NodePath("../../Description")
+readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
+
+[node name="ReadyMenu" parent="Submenus" instance=ExtResource("17_c7rwi")]
+layout_mode = 1
 
 [node name="Description" parent="." instance=ExtResource("18_w35s5")]
 z_index = 100
@@ -1735,4 +1747,4 @@ libraries = {
 next/reset-scroll = &"loop"
 next/scroll-down = &"reset-scroll"
 next/scroll-up = &"reset-scroll"
-blend_times = [&"show", &"loop", 0.1, &"loop", &"scroll-up", 0.05, &"loop", &"scroll-down", 0.05]
+blend_times = [&"show", &"loop", 0.1, &"loop", &"scroll-down", 0.05, &"loop", &"scroll-up", 0.05]

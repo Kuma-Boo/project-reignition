@@ -8,9 +8,6 @@ namespace Project.Interface.Menus
 	/// </summary>
 	public partial class Title : Menu
 	{
-		[Export]
-		private AnimationPlayer animator;
-
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
 		private const float CUTSCENE_TIME_LENGTH = 5f;
@@ -26,7 +23,7 @@ namespace Project.Interface.Menus
 			}
 			else if (Input.IsAnythingPressed()) //Change menu
 			{
-				animator.Play("confirm");
+				Confirm();
 				return;
 			}
 			else
@@ -47,7 +44,7 @@ namespace Project.Interface.Menus
 		{
 			animator.Play("RESET");
 			animator.Seek(0, true);
-			animator.Play("show");
+			animator.Play(SHOW_ANIMATION);
 
 			cutsceneTimer = 0;
 		}

@@ -41,7 +41,7 @@ namespace Project.Core
 				return;
 			}
 
-			if (CurrentTransitionData.enableLoadingScreen)
+			if (CurrentTransitionData.loadAsynchronously)
 				loadingAnimator.Play("show");
 
 			IsTransitionActive = true;
@@ -65,7 +65,7 @@ namespace Project.Core
 			if (CurrentTransitionData.outSpeed != 0)
 				animator.SpeedScale = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
 
-			if (CurrentTransitionData.enableLoadingScreen)
+			if (CurrentTransitionData.loadAsynchronously)
 				loadingAnimator.Play("hide");
 
 			animator.PlayBackwards("fade");
@@ -104,13 +104,11 @@ namespace Project.Core
 
 		public static void FinishTransition() => instance.FinishFade();
 
-		public static void QueueSceneChange(string scene, bool changeInstantly)
+		/// <summary> Queues a scene to load. Be sure to call StartTransition to actually transition to the scene. </summary>
+		public static void QueueSceneChange(string scene)
 		{
 			instance.queuedScene = scene;
-			if (changeInstantly)
-				instance.ApplySceneChange();
-			else
-				instance.Connect(SignalName.TransitionProcess, new Callable(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
+			instance.Connect(SignalName.TransitionProcess, new Callable(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
 		}
 
 		private string queuedScene;
@@ -121,9 +119,12 @@ namespace Project.Core
 				GetTree().ReloadCurrentScene();
 			else
 			{
-				ResourceLoader.LoadThreadedRequest(queuedScene);
-				while (ResourceLoader.LoadThreadedGetStatus(queuedScene) == ResourceLoader.ThreadLoadStatus.InProgress)
-					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout);
+				if (CurrentTransitionData.loadAsynchronously)
+				{
+					ResourceLoader.LoadThreadedRequest(queuedScene);
+					while (ResourceLoader.LoadThreadedGetStatus(queuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
+						await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
+				}
 
 				GetTree().ChangeSceneToFile(queuedScene);
 			}
@@ -139,6 +140,6 @@ namespace Project.Core
 		public float inSpeed;
 		public float outSpeed;
 		public Color color;
-		public bool enableLoadingScreen;
+		public bool loadAsynchronously;
 	}
 }

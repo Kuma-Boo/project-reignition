@@ -6,8 +6,6 @@ namespace Project.Interface.Menus
 	public partial class MainMenu : Menu
 	{
 		[Export]
-		private AnimationPlayer animator;
-		[Export]
 		private Node2D optionParent;
 		private readonly Array<Node2D> options = new Array<Node2D>();
 		[Export]
@@ -19,7 +17,7 @@ namespace Project.Interface.Menus
 
 		public override void ShowMenu()
 		{
-			animator.Play("show");
+			base.ShowMenu();
 			cursorVelocity = Vector2.Zero;
 			cursor.Position = options[currentSelection].Position;
 		}

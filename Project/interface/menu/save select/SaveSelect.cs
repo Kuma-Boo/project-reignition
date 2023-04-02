@@ -14,8 +14,6 @@ namespace Project.Interface.Menus
 		private const float SCROLL_SMOOTHING = .05f;
 
 		[Export]
-		private AnimationPlayer animator;
-		[Export]
 		private Array<NodePath> saveOptions = new Array<NodePath>();
 		private readonly Array<SaveOption> _saveOptions = new Array<SaveOption>();
 		private const int ACTIVE_SAVE_OPTION_INDEX = 3; //Corresponds to the center save option
@@ -47,7 +45,7 @@ namespace Project.Interface.Menus
 			if (inputSign == 0) return;
 
 			VerticalSelection = WrapSelection(VerticalSelection + inputSign, SaveManager.MAX_SAVE_SLOTS);
-			animator.Play(inputSign < 0 ? "scroll-up" : "scroll-down");
+			animator.Play(inputSign < 0 ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
 			scrollRatio = VerticalSelection / (SaveManager.MAX_SAVE_SLOTS - 1.0f);
 			menuMemory[MemoryKeys.SaveSelect] = VerticalSelection;
 
@@ -55,10 +53,6 @@ namespace Project.Interface.Menus
 				StartSelectionTimer();
 		}
 
-		protected override void Confirm() => animator.Play("confirm");
-		protected override void Cancel() => animator.Play("cancel");
-
-		public override void ShowMenu() => animator.Play("show");
 		public override void OpenSubmenu()
 		{
 			SaveManager.ActiveSaveSlotIndex = _saveOptions[ACTIVE_SAVE_OPTION_INDEX].SaveIndex;
@@ -68,7 +62,7 @@ namespace Project.Interface.Menus
 				SaveManager.SaveGameToFile();
 
 				// Load directly into the first cutscene.
-				TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}1.tscn", false);
+				TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}1.tscn");
 				TransitionManager.StartTransition(new TransitionData()
 				{
 					color = Colors.Black,

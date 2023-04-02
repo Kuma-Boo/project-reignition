@@ -30,12 +30,24 @@ namespace Project.Interface.Menus
 		}
 
 		[Export]
-		protected AudioStreamPlayer bgm;
-		[Export]
-		protected Menu parentMenu;
+		public Menu parentMenu;
 		[Export]
 		public Array<NodePath> submenus;
-		protected Array<Menu> _submenus = new Array<Menu>(); //Also ensure the order of submenus is correct in the inspector hierarchy
+		public Array<Menu> _submenus = new Array<Menu>(); //Also ensure the order of submenus is correct in the inspector hierarchy
+
+		[Export]
+		protected AudioStreamPlayer bgm;
+		[Export]
+		protected AnimationPlayer animator;
+
+		protected readonly StringName CONFIRM_ANIMATION = "confirm";
+		protected readonly StringName CANCEL_ANIMATION = "cancel";
+		protected readonly StringName SHOW_ANIMATION = "show";
+		protected readonly StringName HIDE_ANIMATION = "hide";
+		protected readonly StringName SCROLL_UP_ANIMATION = "scroll-up";
+		protected readonly StringName SCROLL_DOWN_ANIMATION = "scroll-down";
+		protected readonly StringName SCROLL_LEFT_ANIMATION = "scroll-up";
+		protected readonly StringName SCROLL_RIGHT_ANIMATION = "scroll-down";
 
 		protected int HorizontalSelection { get; set; }
 		protected int VerticalSelection { get; set; }
@@ -70,8 +82,22 @@ namespace Project.Interface.Menus
 		public void EnableProcessing() => isProcessing = true;
 		public void DisableProcessing() => isProcessing = false;
 
-		public virtual void ShowMenu() => Visible = true;
-		public virtual void HideMenu() => Visible = false;
+		public virtual void ShowMenu()
+		{
+			// Attempt to play "show" animation
+			if (animator != null && animator.HasAnimation(SHOW_ANIMATION))
+				animator.Play(SHOW_ANIMATION);
+			else // Fallback
+				Visible = true;
+		}
+		public virtual void HideMenu()
+		{
+			// Attempt to play "hide" animation
+			if (animator != null && animator.HasAnimation(HIDE_ANIMATION))
+				animator.Play(HIDE_ANIMATION);
+			else // Fallback
+				Visible = false;
+		}
 
 		public virtual void OpenParentMenu()
 		{
@@ -132,12 +158,20 @@ namespace Project.Interface.Menus
 		/// <summary>
 		/// Called when the Confirmbutton is pressed.
 		/// </summary>
-		protected virtual void Confirm() { }
+		protected virtual void Confirm()
+		{
+			if (animator != null && animator.HasAnimation(CONFIRM_ANIMATION))
+				animator.Play(CONFIRM_ANIMATION);
+		}
 
 		/// <summary>
 		/// Called when the Cancel button is pressed.
 		/// </summary>
-		protected virtual void Cancel() { }
+		protected virtual void Cancel()
+		{
+			if (animator != null && animator.HasAnimation(CANCEL_ANIMATION))
+				animator.Play(CANCEL_ANIMATION);
+		}
 
 		/// <summary>
 		/// Wraps a selection around max selection.

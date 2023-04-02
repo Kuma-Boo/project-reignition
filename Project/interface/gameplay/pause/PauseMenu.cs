@@ -99,17 +99,15 @@ namespace Project.Interface
 
 			canMoveCursor = false;
 			canInteractWithPauseMenu = false;
-			TransitionData data = new TransitionData()
+
+			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
+			TransitionManager.QueueSceneChange(targetScene);
+			TransitionManager.StartTransition(new TransitionData()
 			{
 				inSpeed = .5f,
 				outSpeed = .5f,
 				color = Colors.Black
-			};
-
-			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
-			TransitionManager.QueueSceneChange(targetScene, false);
-
-			TransitionManager.StartTransition(data);
+			});
 		}
 
 		/// <summary>

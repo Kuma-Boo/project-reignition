@@ -1,15 +1,12 @@
 using Godot;
 using System.Collections.Generic;
-using Project.Core;
 
 namespace Project.Interface.Menus
 {
 	public partial class LevelSelect : Menu
 	{
 		[Export]
-		private AnimationPlayer animator;
-		[Export]
-		private LevelDescription description;
+		private string areaKey;
 
 		[Export]
 		private Control cursor;
@@ -29,6 +26,11 @@ namespace Project.Interface.Menus
 		private Vector2 scrollVelocity;
 		private const float SCROLL_SMOOTHING = .05f;
 
+		[Export]
+		private LevelDescription description;
+		[Export]
+		private ReadyMenu readyMenu;
+
 		protected override void SetUp()
 		{
 			foreach (Node node in options.GetChildren())
@@ -43,9 +45,6 @@ namespace Project.Interface.Menus
 			base.ProcessMenu();
 			UpdateListPosition(SCROLL_SMOOTHING);
 		}
-
-		protected override void Confirm() => animator.Play("confirm");
-		protected override void Cancel() => animator.Play("cancel");
 
 		public override void ShowMenu()
 		{
@@ -66,18 +65,15 @@ namespace Project.Interface.Menus
 		}
 
 
-
+		/// <summary> Shows the "Are you ready?" screen. </summary>
 		public override void OpenSubmenu()
 		{
-			TransitionManager.QueueSceneChange(levelOptions[VerticalSelection].levelPath, false);
-			TransitionManager.StartTransition(new TransitionData()
-			{
-				inSpeed = 1f,
-				color = Colors.Black,
-				enableLoadingScreen = true
-			});
+			readyMenu.SetMapText(areaKey);
+			readyMenu.SetMissionText(levelOptions[VerticalSelection].missionNameKey);
+			readyMenu.parentMenu = this;
+			readyMenu.LevelPath = levelOptions[VerticalSelection].levelPath;
+			readyMenu.ShowMenu();
 		}
-
 
 		protected override void UpdateSelection()
 		{

@@ -136,7 +136,7 @@ namespace Project.Interface.Menus
 			if (string.IsNullOrEmpty(QueuedScene)) // Fallback to menu scene
 				QueuedScene = TransitionManager.MENU_SCENE_PATH;
 
-			TransitionManager.QueueSceneChange(QueuedScene, false);
+			TransitionManager.QueueSceneChange(QueuedScene);
 			TransitionManager.StartTransition(new TransitionData()
 			{
 				color = Colors.Black,

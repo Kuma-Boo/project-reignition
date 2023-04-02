@@ -56,7 +56,10 @@ namespace Project.Core
 				if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(Gameplay.CharacterController.instance))
 					Gameplay.CharacterController.instance.StartRespawn();
 				else
-					TransitionManager.QueueSceneChange(string.Empty, true);
+				{
+					TransitionManager.QueueSceneChange(string.Empty);
+					TransitionManager.StartTransition(new TransitionData());
+				}
 			}
 
 			if (line3d.Count + line2d.Count != 0 && !IsPaused) //Queue Raycast Redraw

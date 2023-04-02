@@ -6,9 +6,6 @@ namespace Project.Interface.Menus
 {
 	public partial class WorldSelect : Menu
 	{
-		[Export]
-		private AnimationPlayer animator;
-
 		[ExportSubgroup("Media Settings")]
 		[Export]
 		private VideoStreamPlayer primaryVideoPlayer;
@@ -93,7 +90,7 @@ namespace Project.Interface.Menus
 				int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, (int)SaveManager.WorldEnum.Max);
 				UpdateSpriteRegion(3, transitionIndex); //Update level text
 
-				animator.Play(isScrollingUp ? "scroll-up" : "scroll-down");
+				animator.Play(isScrollingUp ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
 				animator.Seek(0.0, true);
 				DisableProcessing();
 			}
@@ -101,14 +98,11 @@ namespace Project.Interface.Menus
 
 		protected override void Confirm()
 		{
-			//World hasn't been unlocked
+			// World hasn't been unlocked
 			if (!SaveManager.ActiveGameData.IsWorldUnlocked(VerticalSelection)) return;
 
-			animator.Play("confirm");
+			base.Confirm();
 		}
-
-		protected override void Cancel() => animator.Play("cancel");
-		public override void ShowMenu() => animator.Play("show");
 
 		public override void OpenParentMenu()
 		{

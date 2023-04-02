@@ -1,10 +1,8 @@
-[gd_scene load_steps=45 format=3 uid="uid://dv6hngvoiankc"]
+[gd_scene load_steps=45 format=3 uid="uid://tp07m54wdf26"]
 
 [ext_resource type="Texture2D" uid="uid://chvedyxbnb0fh" path="res://interface/menu/title/sprite/logos/logo en.png" id="1"]
 [ext_resource type="VideoStream" path="res://video/event/stream/event0.ogv" id="2"]
 [ext_resource type="AudioStream" uid="uid://crnh8q3fup5o7" path="res://video/event/opening.ogg" id="4"]
-[ext_resource type="Texture2D" uid="uid://bfwjdnmqpjcvd" path="res://interface/menu/title/sprite/Decal.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://ci31vwpumdkfo" path="res://interface/menu/title/sprite/Background.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://cmg0230lkyvho" path="res://interface/menu/title/sprite/transition/tile018.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://c6siw4cmrwyv8" path="res://interface/menu/title/sprite/transition/tile011.png" id="9"]
 [ext_resource type="Texture2D" uid="uid://ic2cd65b50so" path="res://interface/menu/title/sprite/transition/tile004.png" id="10"]
@@ -25,9 +23,11 @@
 [ext_resource type="Texture2D" uid="uid://b5agqctromx5y" path="res://interface/menu/title/sprite/transition/tile021.png" id="25"]
 [ext_resource type="Texture2D" uid="uid://capfcj7po32av" path="res://interface/menu/title/sprite/transition/tile005.png" id="26"]
 [ext_resource type="Texture2D" uid="uid://bdkci8ujhbjp7" path="res://interface/menu/title/sprite/transition/tile001.png" id="27"]
+[ext_resource type="Texture2D" uid="uid://ci31vwpumdkfo" path="res://interface/menu/title/sprite/background.png" id="27_lbk60"]
 [ext_resource type="Texture2D" uid="uid://dnqgph4h7p47a" path="res://interface/menu/title/sprite/transition/tile007.png" id="28"]
 [ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/otf/Greco Std DB.otf" id="28_g60da"]
 [ext_resource type="Texture2D" uid="uid://c5w26bctx2s2w" path="res://interface/menu/title/sprite/transition/tile010.png" id="29"]
+[ext_resource type="Texture2D" uid="uid://bfwjdnmqpjcvd" path="res://interface/menu/title/sprite/decal.png" id="29_2jf04"]
 [ext_resource type="Texture2D" uid="uid://ckd0rqyao1ktq" path="res://interface/menu/title/sprite/transition/tile013.png" id="30"]
 [ext_resource type="Texture2D" uid="uid://cw8fc6nqbs4s6" path="res://interface/menu/title/sprite/transition/tile009.png" id="31"]
 [ext_resource type="SpriteFrames" uid="uid://mcf4xjlise6g" path="res://effect/particle/material/flame/Flame Menu Footer.tres" id="31_ah02w"]
@@ -184,7 +184,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Footer:modulate")
+tracks/5/path = NodePath("FooterLabel:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -344,7 +344,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Footer:modulate")
+tracks/4/path = NodePath("FooterLabel:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -645,7 +645,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Footer:modulate")
+tracks/1/path = NodePath("FooterLabel:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -765,7 +765,7 @@ offset_bottom = 1080.0
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
-texture = ExtResource("7")
+texture = ExtResource("27_lbk60")
 
 [node name="Press Start" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -803,7 +803,7 @@ offset_left = -504.0
 offset_top = -64.0
 offset_right = -248.0
 offset_bottom = 64.0
-texture = ExtResource("6")
+texture = ExtResource("29_2jf04")
 stretch_mode = 4
 
 [node name="DecalR" type="TextureRect" parent="Press Start"]
@@ -812,7 +812,7 @@ offset_left = 264.0
 offset_top = -64.0
 offset_right = 520.0
 offset_bottom = 64.0
-texture = ExtResource("6")
+texture = ExtResource("29_2jf04")
 stretch_mode = 4
 flip_h = true
 
@@ -820,26 +820,6 @@ flip_h = true
 position = Vector2(960, 360)
 scale = Vector2(1.1, 1.1)
 texture = ExtResource("1")
-
-[node name="Footer" type="VBoxContainer" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 40.0
-offset_top = 968.0
-offset_right = 371.0
-offset_bottom = 1051.0
-
-[node name="Version Number" type="Label" parent="Footer"]
-layout_mode = 2
-text = "Version 0.0.1a"
-
-[node name="Copyright Text" type="Label" parent="Footer"]
-layout_mode = 2
-text = "Original Game © 2007 SEGA™"
-
-[node name="Remake" type="Label" parent="Footer"]
-layout_mode = 2
-text = "Remake by PauZ"
 
 [node name="Flames" type="Control" parent="."]
 material = SubResource("CanvasItemMaterial_kmqa8")
@@ -853,10 +833,29 @@ scale = Vector2(1, 1e-05)
 
 [node name="Flames" type="AnimatedSprite2D" parent="Flames"]
 use_parent_material = true
-position = Vector2(3.05176e-05, -184)
+position = Vector2(0, -192)
 scale = Vector2(7.5, 6)
 sprite_frames = ExtResource("31_ah02w")
 autoplay = "default"
+
+[node name="FooterLabel" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 968.0
+offset_right = 485.0
+offset_bottom = 1051.0
+theme_override_colors/font_color = Color(0.917647, 0.803922, 0.611765, 1)
+theme_override_colors/font_shadow_color = Color(0.392157, 0.2, 0.156863, 0.784314)
+theme_override_colors/font_outline_color = Color(0.356863, 0.188235, 0.0980392, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("28_g60da")
+theme_override_font_sizes/font_size = 32
+text = "Version 0.0.1a
+Original Game © 2007 SEGA™"
 
 [node name="Cutscene" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
