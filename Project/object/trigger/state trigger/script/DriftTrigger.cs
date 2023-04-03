@@ -67,7 +67,7 @@ namespace Project.Gameplay.Triggers
 			if (!isProcessing)
 			{
 				if (isFadingSFX)
-					isFadingSFX = SoundManager.FadeSFX(sfx);
+					isFadingSFX = SoundManager.FadeAudioPlayer(sfx);
 
 				if (driftAnimationTimer > 0)
 				{

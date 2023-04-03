@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://doso3qhadnp7p"]
+[gd_scene load_steps=6 format=3 uid="uid://doso3qhadnp7p"]
 
 [ext_resource type="SpriteFrames" uid="uid://mcf4xjlise6g" path="res://effect/particle/material/flame/Flame Menu Footer.tres" id="1_mmyxp"]
 
@@ -22,8 +22,26 @@ tracks/0/keys = {
 "values": [Vector2(1, 0), Vector2(1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_1slf5"]
+resource_name = "RESET"
+length = 0.001
+step = 0.0833333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4vh02"]
 _data = {
+"RESET": SubResource("Animation_1slf5"),
 "spawn": SubResource("5")
 }
 
@@ -35,6 +53,7 @@ offset_left = 960.0
 offset_top = 1080.0
 offset_right = 960.0
 offset_bottom = 1080.0
+scale = Vector2(1, 1e-05)
 
 [node name="Flames" type="AnimatedSprite2D" parent="."]
 use_parent_material = true

@@ -37,6 +37,7 @@ namespace Project.Interface.Menus
 
 		[Export]
 		protected AudioStreamPlayer bgm;
+		protected float bgmFadeTime;
 		[Export]
 		protected AnimationPlayer animator;
 
@@ -74,6 +75,8 @@ namespace Project.Interface.Menus
 
 		public override void _PhysicsProcess(double _)
 		{
+			ProcessBGMFade(); //Always process BGM fade
+
 			if (!isProcessing || TransitionManager.IsTransitionActive) return;
 			ProcessMenu();
 		}
@@ -191,8 +194,24 @@ namespace Project.Interface.Menus
 		{
 			if (bgm.Playing) return;
 
-			bgm.VolumeDb = 0.0f; //Reset volume
+
+			bgmFadeTime = 0.0f; // Stops any active fading
+			bgm.VolumeDb = 0.0f; // Reset volume
 			bgm.Play();
+		}
+
+		/// <summary> Call this function to stop bgm instantly. </summary>
+		public void StopBGM() => bgm.Stop();
+
+		/// <summary> Call this function to start fading bgm out. </summary>
+		public void FadeBGM(float fadetime) => bgmFadeTime = fadetime;
+
+		protected void ProcessBGMFade()
+		{
+			if (bgm == null || !bgm.Playing || Mathf.IsZeroApprox(bgmFadeTime)) return;
+
+			if (!SoundManager.FadeAudioPlayer(bgm, bgmFadeTime))
+				bgmFadeTime = 0.0f; // Reset fade time
 		}
 	}
 }

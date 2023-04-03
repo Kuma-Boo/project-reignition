@@ -182,7 +182,7 @@ namespace Project.Gameplay
 			}
 
 			if (isFadingSFX)
-				isFadingSFX = SoundManager.FadeSFX(sfx);
+				isFadingSFX = SoundManager.FadeAudioPlayer(sfx);
 
 			if (isActive)
 				UpdateRail();

@@ -34,7 +34,6 @@ namespace Project.Interface.Menus
 		public override void _PhysicsProcess(double _)
 		{
 			base._PhysicsProcess(_);
-
 			scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * SCROLLBAR_HEIGHT * scrollRatio, ref scrollbarVelocity, SCROLL_SMOOTHING);
 		}
 
@@ -75,9 +74,7 @@ namespace Project.Interface.Menus
 			_submenus[0].ShowMenu();
 		}
 
-		/// <summary>
-		/// Updates the visual data on all save options.
-		/// </summary>
+		/// <summary>  Updates the visual data on all save options. </summary>
 		public void UpdateSaveOptions()
 		{
 			for (int i = 0; i < _saveOptions.Count; i++)

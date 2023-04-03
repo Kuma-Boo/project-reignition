@@ -185,23 +185,23 @@ namespace Project.Core
 
 		#region SFX
 		/// <summary>
-		/// Fade a sound to -80f, then stop the sfx. Returns true if the sfx is still playing.
+		/// Fade a sound to -80f, then stop the audio player. Returns true if audio player is still playing.
 		/// </summary>
-		public static bool FadeSFX(AudioStreamPlayer sfx, float fadeTime = 1.0f)
+		public static bool FadeAudioPlayer(AudioStreamPlayer audioPlayer, float fadeTime = 1.0f)
 		{
-			if (sfx.Playing) //Already stopped playing
+			if (audioPlayer.Playing) //Already stopped playing
 			{
 				if (Mathf.IsZeroApprox(fadeTime))
-					sfx.Stop();
+					audioPlayer.Stop();
 				else
 				{
-					sfx.VolumeDb = Mathf.MoveToward(sfx.VolumeDb, -80, 80 * (1.0f / fadeTime) * PhysicsManager.physicsDelta);
-					if (Mathf.IsEqualApprox(sfx.VolumeDb, -80))
-						sfx.Stop();
+					audioPlayer.VolumeDb = Mathf.MoveToward(audioPlayer.VolumeDb, -80, 80 * (1.0f / fadeTime) * PhysicsManager.physicsDelta);
+					if (Mathf.IsEqualApprox(audioPlayer.VolumeDb, -80))
+						audioPlayer.Stop();
 				}
 			}
 
-			return sfx.Playing;
+			return audioPlayer.Playing;
 		}
 
 		// Item pickups are played in the SoundManager to avoid volume increase when collecting more than one at a time.

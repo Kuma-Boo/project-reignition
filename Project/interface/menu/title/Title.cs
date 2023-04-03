@@ -16,7 +16,6 @@ namespace Project.Interface.Menus
 		{
 			if (isCutsceneActive)
 			{
-				SoundManager.FadeSFX(bgm, .2f);
 				if (Input.IsActionJustPressed("button_pause") ||
 					Input.IsActionJustPressed("button_jump"))
 					FinishCutscene();

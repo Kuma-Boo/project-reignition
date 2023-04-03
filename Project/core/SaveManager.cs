@@ -95,7 +95,7 @@ namespace Project.Core
 				if (OS.IsDebugBuild())
 				{
 					settings.screenResolution = 1;
-					settings.masterVolume = 0;
+					settings.isMasterMuted = true;
 					settings.voiceLanguage = VoiceLanguage.Japanese;
 					settings.textLanguage = TextLanguage.English;
 				}

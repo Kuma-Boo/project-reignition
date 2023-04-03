@@ -228,7 +228,7 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				SoundManager.FadeSFX(heartbeatSfx, .2f); //Fade out sfx
+				SoundManager.FadeAudioPlayer(heartbeatSfx, .2f); //Fade out sfx
 				if (breakTimer != 0) return; //Cooldown
 			}
 

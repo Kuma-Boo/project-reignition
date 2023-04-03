@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bcdrs2nrai80q" path="res://interface/menu/level select/level lists/EvilFoundry.tscn" id="16_tfnbe"]
 [ext_resource type="PackedScene" uid="uid://cje3136x4i7df" path="res://interface/menu/level select/level lists/LevitatedRuin.tscn" id="17_6ds0g"]
 [ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlash.gdshader" id="17_61ktb"]
-[ext_resource type="PackedScene" uid="uid://cr7lxn48b6kg8" path="res://interface/menu/level select/ReadyMenu.tscn" id="17_c7rwi"]
+[ext_resource type="PackedScene" uid="uid://byf372uaewx1u" path="res://interface/menu/level select/ReadyMenu.tscn" id="17_c7rwi"]
 [ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="17_uyu6q"]
 [ext_resource type="PackedScene" uid="uid://bohjl852ydsyo" path="res://interface/menu/level select/level lists/LostPrologue.tscn" id="17_xanqf"]
 [ext_resource type="AudioStream" uid="uid://d36ykovj7lr0l" path="res://sound/ost/jingle/Level Select.mp3" id="17_ybr17"]
@@ -305,7 +305,7 @@ tracks/21/keys = {
 tracks/22/type = "value"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("Description:modulate")
+tracks/22/path = NodePath(".:modulate")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
@@ -317,7 +317,7 @@ tracks/22/keys = {
 tracks/23/type = "value"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath(".:modulate")
+tracks/23/path = NodePath("DemoVideo:modulate")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
@@ -329,34 +329,10 @@ tracks/23/keys = {
 tracks/24/type = "value"
 tracks/24/imported = false
 tracks/24/enabled = true
-tracks/24/path = NodePath("LevelSelectBGM:volume_db")
+tracks/24/path = NodePath("DemoVideo:visible")
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/25/type = "value"
-tracks/25/imported = false
-tracks/25/enabled = true
-tracks/25/path = NodePath("DemoVideo:modulate")
-tracks/25/interp = 1
-tracks/25/loop_wrap = true
-tracks/25/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/26/type = "value"
-tracks/26/imported = false
-tracks/26/enabled = true
-tracks/26/path = NodePath("DemoVideo:visible")
-tracks/26/interp = 1
-tracks/26/loop_wrap = true
-tracks/26/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -434,11 +410,14 @@ tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"DisableProcessing"
+}, {
+"args": [0.2],
+"method": &"FadeBGM"
 }, {
 "args": [],
 "method": &"OpenParentMenu"
@@ -473,60 +452,34 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("LevelSelectBGM:volume_db")
+tracks/8/path = NodePath("DemoVideo:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.2997, 0.466667),
-"transitions": PackedFloat32Array(1, 0.5, 1),
-"update": 0,
-"values": [0.0, 0.0, -80.0]
-}
-tracks/9/type = "method"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("LevelSelectBGM")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0.6),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"stop"
-}]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("DemoVideo:modulate")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
 "times": PackedFloat32Array(0, 0.333333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("DemoVideo:visible")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("DemoVideo:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
 "times": PackedFloat32Array(0, 0.333333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
 }
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath(".:modulate")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath(".:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
 "times": PackedFloat32Array(0, 0.599999),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
@@ -1711,11 +1664,15 @@ description = NodePath("../../Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
-[node name="ReadyMenu" parent="Submenus" instance=ExtResource("17_c7rwi")]
+[node name="ReadyMenu" parent="Submenus" node_paths=PackedStringArray("description") instance=ExtResource("17_c7rwi")]
+z_index = 100
+z_as_relative = false
 layout_mode = 1
+description = NodePath("../../Description")
 
 [node name="Description" parent="." instance=ExtResource("18_w35s5")]
 z_index = 100
+z_as_relative = false
 layout_mode = 1
 
 [node name="SFX" type="Node" parent="."]
@@ -1734,6 +1691,7 @@ bus = &"SFX"
 
 [node name="LevelSelectBGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_ybr17")
+volume_db = -0.286958
 bus = &"BGM"
 script = ExtResource("18_quajg")
 loopStartPosition = 0.534

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c4ohuqlywe4f"]
+[gd_scene load_steps=11 format=3 uid="uid://c4ohuqlywe4f"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/LevelDescription.cs" id="1_d2ip1"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="2_cdv3b"]
@@ -118,7 +118,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_fr02q"]
@@ -250,14 +250,32 @@ tracks/8/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_qh8xd"]
+resource_name = "hide"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4yfpo"]
 _data = {
 "RESET": SubResource("Animation_e0sjp"),
+"hide": SubResource("Animation_qh8xd"),
 "init": SubResource("Animation_fr02q"),
 "show": SubResource("Animation_v8y77")
 }
 
 [node name="Description" type="Control" node_paths=PackedStringArray("descriptionLabel", "animator")]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5

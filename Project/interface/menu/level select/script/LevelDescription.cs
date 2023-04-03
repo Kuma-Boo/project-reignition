@@ -16,5 +16,11 @@ namespace Project.Interface.Menus
 			animator.Play("show");
 			animator.Seek(0, true);
 		}
+
+		public void HideDescription()
+		{
+			animator.Play("hide");
+			animator.Seek(0, true);
+		}
 	}
 }
