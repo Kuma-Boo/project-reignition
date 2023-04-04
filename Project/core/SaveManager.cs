@@ -6,6 +6,8 @@ namespace Project.Core
 {
 	public partial class SaveManager : Node
 	{
+		private const string SAVE_DIRECTORY = "user://";
+
 		public override void _EnterTree()
 		{
 			LoadConfig();
@@ -13,6 +15,8 @@ namespace Project.Core
 		}
 
 		#region Config
+		private const string CONFIG_FILE_NAME = "config.cfg";
+
 		public enum VoiceLanguage
 		{
 			English,
@@ -52,12 +56,12 @@ namespace Project.Core
 
 		public partial class ConfigData : GodotObject
 		{
-			//Video
+			// Video
 			public bool useVsync;
 			public bool isFullscreen;
-			public int screenResolution = 4; //Default to 1080p
+			public int screenResolution = 4; // Defaults to 1080p
 
-			//Audio
+			// Audio
 			public bool isMasterMuted;
 			public int masterVolume = 50;
 			public bool isBgmMuted;
@@ -69,23 +73,92 @@ namespace Project.Core
 
 			public string inputConfiguration;
 
-			//Language
+			// Language
 			public bool subtitlesEnabled = true;
 			public VoiceLanguage voiceLanguage = VoiceLanguage.English;
 			public TextLanguage textLanguage = TextLanguage.English;
+
+			/// <summary> Creates a dictionary based on config data. </summary>
+			public Dictionary ToDictionary()
+			{
+				Dictionary dictionary = new Dictionary();
+
+				// Video
+				dictionary.Add(nameof(useVsync), useVsync);
+				dictionary.Add(nameof(isFullscreen), isFullscreen);
+				dictionary.Add(nameof(screenResolution), screenResolution);
+
+				// Audio
+				dictionary.Add(nameof(isMasterMuted), isMasterMuted);
+				dictionary.Add(nameof(masterVolume), masterVolume);
+				dictionary.Add(nameof(isBgmMuted), isBgmMuted);
+				dictionary.Add(nameof(bgmVolume), bgmVolume);
+				dictionary.Add(nameof(isSfxMuted), isSfxMuted);
+				dictionary.Add(nameof(sfxVolume), sfxVolume);
+				dictionary.Add(nameof(isVoiceMuted), isVoiceMuted);
+				dictionary.Add(nameof(voiceVolume), voiceVolume);
+
+				dictionary.Add(nameof(inputConfiguration), inputConfiguration);
+
+				// Langauge
+				dictionary.Add(nameof(subtitlesEnabled), subtitlesEnabled);
+				dictionary.Add(nameof(voiceLanguage), (int)voiceLanguage);
+				dictionary.Add(nameof(textLanguage), (int)textLanguage);
+
+				return dictionary;
+			}
+
+			/// <summary> Sets config data based on dictionary. </summary>
+			public void FromDictionary(Dictionary dictionary)
+			{
+				// Video
+				if (dictionary.TryGetValue(nameof(useVsync), out Variant var))
+					useVsync = (bool)var;
+				if (dictionary.TryGetValue(nameof(isFullscreen), out var))
+					isFullscreen = (bool)var;
+				if (dictionary.TryGetValue(nameof(screenResolution), out var))
+					screenResolution = (int)var;
+
+				if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
+					isMasterMuted = (bool)var;
+				if (dictionary.TryGetValue(nameof(masterVolume), out var))
+					masterVolume = (int)var;
+				if (dictionary.TryGetValue(nameof(isBgmMuted), out var))
+					isBgmMuted = (bool)var;
+				if (dictionary.TryGetValue(nameof(bgmVolume), out var))
+					bgmVolume = (int)var;
+				if (dictionary.TryGetValue(nameof(isSfxMuted), out var))
+					isSfxMuted = (bool)var;
+				if (dictionary.TryGetValue(nameof(sfxVolume), out var))
+					sfxVolume = (int)var;
+				if (dictionary.TryGetValue(nameof(isVoiceMuted), out var))
+					isVoiceMuted = (bool)var;
+				if (dictionary.TryGetValue(nameof(voiceVolume), out var))
+					voiceVolume = (int)var;
+
+
+				if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
+					inputConfiguration = (string)var;
+
+
+				if (dictionary.TryGetValue(nameof(subtitlesEnabled), out var))
+					subtitlesEnabled = (bool)var;
+				if (dictionary.TryGetValue(nameof(voiceLanguage), out var))
+					voiceLanguage = (VoiceLanguage)(int)var;
+				if (dictionary.TryGetValue(nameof(textLanguage), out var))
+					textLanguage = (TextLanguage)(int)var;
+			}
 		}
 
-		private const string SAVE_DIRECTORY = "user://";
-		private const string CONFIG_FILE = "config.cfg";
-
+		/// <summary> Attempts to load config data from file. </summary>
 		public void LoadConfig()
 		{
-			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE, FileAccess.ModeFlags.Read);
+			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
 
 			//Attempt to load.
 			if (FileAccess.GetOpenError() == Error.Ok) //Load Default settings
 			{
-				settings = (ConfigData)Json.ParseString(file.GetAsText());
+				settings.FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
 				file.Close();
 			}
 			else
@@ -115,10 +188,11 @@ namespace Project.Core
 			ApplyAudioBusVolume((int)AudioBuses.VOICE, settings.voiceVolume, settings.isVoiceMuted);
 		}
 
+		/// <summary> Attempts to save config data to file. </summary>
 		public void SaveConfig()
 		{
-			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE, FileAccess.ModeFlags.Write);
-			file.StoreString(Json.Stringify(settings));
+			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Write);
+			file.StoreString(Json.Stringify(settings.ToDictionary()));
 			file.Close();
 		}
 
@@ -160,125 +234,10 @@ namespace Project.Core
 		#endregion
 
 		#region Game data
-		public static int ActiveSaveSlotIndex = -1;
-		/// <summary> Reference to the current save being used. </summary>
-		public static GameData ActiveGameData => ActiveSaveSlotIndex == -1 ? null : GameSaveSlots[ActiveSaveSlotIndex];
-		public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; //List of all saves created.
-		public const int MAX_SAVE_SLOTS = 9; //Maximum number of save slots that can be created.
-
-		public partial class GameData : GodotObject
-		{
-			#region Data
-			/// <summary> Which area was the player in last? (Used for save select) </summary>
-			public WorldEnum lastPlayedWorld;
-			/// <summary> Flag representation of world rings collected. </summary>
-			public WorldFlagEnum worldRingsCollected;
-			/// <summary> Flag representation of worlds unlocked. </summary>
-			public WorldFlagEnum worldsUnlocked;
-
-			/// <summary> Individual level data. </summary>
-			public Dictionary<int, Dictionary> leveldata = new Dictionary<int, Dictionary>();
-
-			/// <summary> Player level, from 1 -> 99 </summary>
-			public int level;
-			/// <summary> How much exp the player currently has. </summary>
-			public int exp;
-			/// <summary> Total playtime, in seconds. </summary>
-			public float playTime;
-			/// <summary> Flag enum of all skills enabled. </summary>
-			public SkillEnum skillRing;
-			#endregion
-
-			#region Methods
-			/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
-			public bool IsNewFile() => level == 0;
-			/// <summary> Calculates the soul gauge's level ratio, normalized from [0 -> 1] </summary>
-			public float CalculateSoulGaugeLevelRatio(int levelCap = 50) => Mathf.Clamp(level, 0, levelCap) / (float)levelCap;
-
-			/// <summary> Checks if a world is unlocked. </summary>
-			public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
-			/// <summary> Checks if a world ring was obtained. </summary>
-			public bool IsWorldRingObtained(int worldIndex) => worldRingsCollected.HasFlag(ConvertIntToWorldEnum(worldIndex));
-
-			/// <summary> Converts (WorldEnum)worldIndex to WorldFlagEnum. World index starts at zero. </summary>
-			private WorldFlagEnum ConvertIntToWorldEnum(int worldIndex)
-			{
-				int returnIndex = 1;
-				for (int i = 0; i < worldIndex; i++)
-					returnIndex *= 2;
-
-				return (WorldFlagEnum)returnIndex;
-			}
-
-
-			/// <summary> Creates a dictionary based on GameData. </summary>
-			public Dictionary SaveDictionary()
-			{
-				Dictionary dictionary = new Dictionary();
-
-				//WorldEnum data
-				dictionary.Add(nameof(lastPlayedWorld), (int)lastPlayedWorld);
-				dictionary.Add(nameof(worldRingsCollected), (int)worldRingsCollected);
-				dictionary.Add(nameof(worldsUnlocked), (int)worldsUnlocked);
-
-
-				dictionary.Add(nameof(leveldata), (Dictionary)leveldata);
-
-
-				//Player stats
-				dictionary.Add(nameof(level), level);
-				dictionary.Add(nameof(exp), exp);
-				dictionary.Add(nameof(playTime), Mathf.RoundToInt(playTime));
-
-
-				dictionary.Add(nameof(skillRing), (int)skillRing);
-
-				return dictionary;
-			}
-
-			/// <summary> Sets GameData based on dictionary. </summary>
-			public void LoadFromDictionary(Dictionary dictionary)
-			{
-				//WorldEnum data
-				if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
-					lastPlayedWorld = (WorldEnum)(int)var;
-				if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
-					worldRingsCollected = (WorldFlagEnum)(int)var;
-				if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
-					worldsUnlocked = (WorldFlagEnum)(int)var;
-
-				if (dictionary.TryGetValue(nameof(leveldata), out var))
-					leveldata = (Dictionary<int, Dictionary>)var;
-
-
-				if (dictionary.TryGetValue(nameof(level), out var))
-					level = (int)var;
-				if (dictionary.TryGetValue(nameof(exp), out var))
-					exp = (int)var;
-				if (dictionary.TryGetValue(nameof(playTime), out var))
-					playTime = (float)var;
-
-
-				if (dictionary.TryGetValue(nameof(skillRing), out var))
-					skillRing = (SkillEnum)(int)var;
-			}
-
-
-			/// <summary> Creates a new GameData object that contains default values. </summary>
-			public static GameData DefaultData()
-			{
-				return new GameData()
-				{
-					level = 1,
-					worldsUnlocked = WorldFlagEnum.LostPrologue,
-					lastPlayedWorld = WorldEnum.LostPrologue,
-				};
-			}
-			#endregion
-		}
 
 		/// <summary> Longest amount of playtime that can be displayed on the file select. (99:59:59 in seconds) </summary>
 		public const int MAX_PLAY_TIME = 359999;
+
 		[Flags]
 		public enum WorldFlagEnum
 		{
@@ -316,6 +275,120 @@ namespace Project.Core
 			ManualDrift = 8, //Manually perform a drift for more speed and points/exp
 		}
 
+		public static int ActiveSaveSlotIndex = -1;
+		/// <summary> Reference to the current save being used. </summary>
+		public static GameData ActiveGameData => ActiveSaveSlotIndex == -1 ? null : GameSaveSlots[ActiveSaveSlotIndex];
+		public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; //List of all saves created.
+		public const int MAX_SAVE_SLOTS = 9; //Maximum number of save slots that can be created.
+
+		public partial class GameData : GodotObject
+		{
+			/// <summary> Which area was the player in last? (Used for save select) </summary>
+			public WorldEnum lastPlayedWorld;
+			/// <summary> Flag representation of world rings collected. </summary>
+			public WorldFlagEnum worldRingsCollected;
+			/// <summary> Flag representation of worlds unlocked. </summary>
+			public WorldFlagEnum worldsUnlocked;
+
+			/// <summary> Individual level data. </summary>
+			public Dictionary<int, Dictionary> leveldata = new Dictionary<int, Dictionary>();
+
+			/// <summary> Player level, from 1 -> 99 </summary>
+			public int level;
+			/// <summary> How much exp the player currently has. </summary>
+			public int exp;
+			/// <summary> Total playtime, in seconds. </summary>
+			public float playTime;
+			/// <summary> Flag enum of all skills enabled. </summary>
+			public SkillEnum skillRing;
+
+			/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
+			public bool IsNewFile() => level == 0;
+			/// <summary> Calculates the soul gauge's level ratio, normalized from [0 -> 1] </summary>
+			public float CalculateSoulGaugeLevelRatio(int levelCap = 50) => Mathf.Clamp(level, 0, levelCap) / (float)levelCap;
+
+			/// <summary> Checks if a world is unlocked. </summary>
+			public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
+			/// <summary> Checks if a world ring was obtained. </summary>
+			public bool IsWorldRingObtained(int worldIndex) => worldRingsCollected.HasFlag(ConvertIntToWorldEnum(worldIndex));
+
+			/// <summary> Converts (WorldEnum)worldIndex to WorldFlagEnum. World index starts at zero. </summary>
+			private WorldFlagEnum ConvertIntToWorldEnum(int worldIndex)
+			{
+				int returnIndex = 1;
+				for (int i = 0; i < worldIndex; i++)
+					returnIndex *= 2;
+
+				return (WorldFlagEnum)returnIndex;
+			}
+
+
+			/// <summary> Creates a dictionary based on GameData. </summary>
+			public Dictionary ToDictionary()
+			{
+				Dictionary dictionary = new Dictionary();
+
+				//WorldEnum data
+				dictionary.Add(nameof(lastPlayedWorld), (int)lastPlayedWorld);
+				dictionary.Add(nameof(worldRingsCollected), (int)worldRingsCollected);
+				dictionary.Add(nameof(worldsUnlocked), (int)worldsUnlocked);
+
+
+				dictionary.Add(nameof(leveldata), (Dictionary)leveldata);
+
+
+				//Player stats
+				dictionary.Add(nameof(level), level);
+				dictionary.Add(nameof(exp), exp);
+				dictionary.Add(nameof(playTime), Mathf.RoundToInt(playTime));
+
+
+				dictionary.Add(nameof(skillRing), (int)skillRing);
+
+				return dictionary;
+			}
+
+			/// <summary> Sets GameData based on dictionary. </summary>
+			public void FromDictionary(Dictionary dictionary)
+			{
+				//WorldEnum data
+				if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
+					lastPlayedWorld = (WorldEnum)(int)var;
+				if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
+					worldRingsCollected = (WorldFlagEnum)(int)var;
+				if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+					worldsUnlocked = (WorldFlagEnum)(int)var;
+
+				if (dictionary.TryGetValue(nameof(leveldata), out var))
+					leveldata = (Dictionary<int, Dictionary>)var;
+
+
+				if (dictionary.TryGetValue(nameof(level), out var))
+					level = (int)var;
+				if (dictionary.TryGetValue(nameof(exp), out var))
+					exp = (int)var;
+				if (dictionary.TryGetValue(nameof(playTime), out var))
+					playTime = (float)var;
+
+
+				if (dictionary.TryGetValue(nameof(skillRing), out var))
+					skillRing = (SkillEnum)(int)var;
+			}
+
+
+			/// <summary> Creates a new GameData object that contains default values. </summary>
+			public static GameData DefaultData()
+			{
+				return new GameData()
+				{
+					level = 1,
+					worldsUnlocked = WorldFlagEnum.LostPrologue,
+					lastPlayedWorld = WorldEnum.LostPrologue,
+				};
+			}
+		}
+
+
 		public struct LevelSaveData
 		{
 			/// <summary> Player's best time. </summary>
@@ -341,7 +414,7 @@ namespace Project.Core
 
 			if (FileAccess.GetOpenError() == Error.Ok)
 			{
-				file.StoreString(Json.Stringify(ActiveGameData.SaveDictionary(), "\t"));
+				file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
 				file.Close();
 			}
 			else
@@ -362,7 +435,7 @@ namespace Project.Core
 				FileAccess file = FileAccess.Open(SAVE_DIRECTORY + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
 				if (FileAccess.GetOpenError() == Error.Ok)
 				{
-					GameSaveSlots[i].LoadFromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
+					GameSaveSlots[i].FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
 					file.Close();
 				}
 			}
