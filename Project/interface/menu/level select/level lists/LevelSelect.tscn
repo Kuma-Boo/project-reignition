@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://caxyv5ydaqceo"]
+[gd_scene load_steps=24 format=3 uid="uid://caxyv5ydaqceo"]
 
 [ext_resource type="Texture2D" uid="uid://c0j6hn525tqn5" path="res://interface/menu/level select/texture/world text/level en.png" id="1_fuqut"]
 [ext_resource type="Script" path="res://interface/menu/level select/script/LevelSelect.cs" id="1_p6dn7"]
@@ -8,10 +8,16 @@
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="5_2qjo6"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="5_6pmlb"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="5_me7wh"]
+[ext_resource type="SpriteFrames" uid="uid://jc646omm5n2y" path="res://effect/particle/sprite frames/Flame Menu Short.tres" id="5_mfe06"]
+[ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="5_yw72e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2vkkl"]
 shader = ExtResource("3_ybchm")
 shader_parameter/flash_amount = 1.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rbwnh"]
+blend_mode = 1
+light_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_v77oq"]
 blend_mode = 1
@@ -217,6 +223,30 @@ tracks/11/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("WorldText/Flames:scale")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("WorldText/Flames:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_rxl6c"]
@@ -698,7 +728,7 @@ tracks/7/path = NodePath("WorldText:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.8, 0.933333),
+"times": PackedFloat32Array(0, 0.3996, 0.7326),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -710,7 +740,7 @@ tracks/8/path = NodePath(".")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.933333),
+"times": PackedFloat32Array(0, 0.7326),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -727,7 +757,7 @@ tracks/9/path = NodePath("Cursor:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.8, 0.933333),
+"times": PackedFloat32Array(0, 0.3996, 0.7326),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -739,7 +769,7 @@ tracks/10/path = NodePath("ScrollBar:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 0.8, 0.933333),
+"times": PackedFloat32Array(0, 0.3996, 0.7326),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -782,6 +812,30 @@ tracks/13/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("WorldText/Flames:scale")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.3996, 0.7326),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.5), Vector2(1, 1)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("WorldText/Flames:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.3996, 0.7326),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.784314)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rf6sp"]
 _data = {
@@ -820,6 +874,85 @@ material = SubResource("ShaderMaterial_2vkkl")
 texture = ExtResource("2_pxpor")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
+
+[node name="Flames" type="Node2D" parent="WorldText"]
+material = SubResource("CanvasItemMaterial_rbwnh")
+position = Vector2(0, 20)
+
+[node name="FlameShort1" type="AnimatedSprite2D" parent="WorldText/Flames"]
+use_parent_material = true
+position = Vector2(-279.464, -11.9643)
+scale = Vector2(0.821986, 0.62779)
+sprite_frames = ExtResource("5_mfe06")
+autoplay = "default"
+frame = 12
+
+[node name="FlameShort2" type="AnimatedSprite2D" parent="WorldText/Flames"]
+use_parent_material = true
+position = Vector2(-208.036, -48.5714)
+scale = Vector2(1.00335, 1.05804)
+sprite_frames = ExtResource("5_mfe06")
+autoplay = "default"
+
+[node name="FlameShort3" type="AnimatedSprite2D" parent="WorldText/Flames"]
+use_parent_material = true
+position = Vector2(-79.4642, -57.0893)
+scale = Vector2(1.36719, 1.35965)
+sprite_frames = ExtResource("5_mfe06")
+autoplay = "default"
+frame = 14
+
+[node name="FlameShort4" type="AnimatedSprite2D" parent="WorldText/Flames"]
+use_parent_material = true
+position = Vector2(23.2142, -47.75)
+scale = Vector2(1.30441, 1.25558)
+sprite_frames = ExtResource("5_mfe06")
+autoplay = "default"
+frame = 8
+
+[node name="FlameShort5" type="AnimatedSprite2D" parent="WorldText/Flames"]
+use_parent_material = true
+position = Vector2(146.429, -41.4286)
+scale = Vector2(1.18931, 1.25558)
+sprite_frames = ExtResource("5_mfe06")
+autoplay = "default"
+frame = 16
+
+[node name="FlameShort6" type="AnimatedSprite2D" parent="WorldText/Flames"]
+use_parent_material = true
+position = Vector2(228.181, -23.125)
+scale = Vector2(1.04021, 0.997489)
+sprite_frames = ExtResource("5_mfe06")
+autoplay = "default"
+frame = 4
+
+[node name="FlameTall1" type="AnimatedSprite2D" parent="WorldText/Flames"]
+modulate = Color(1, 1, 1, 0.784314)
+use_parent_material = true
+position = Vector2(-148.214, -48.5714)
+scale = Vector2(1.08594, 1.05804)
+sprite_frames = ExtResource("5_yw72e")
+autoplay = "default"
+
+[node name="FlameTall2" type="AnimatedSprite2D" parent="WorldText/Flames"]
+modulate = Color(1, 1, 1, 0.784314)
+use_parent_material = true
+position = Vector2(91.9643, -53.0357)
+rotation = -0.0716881
+scale = Vector2(1.32422, 1.19169)
+sprite_frames = ExtResource("5_yw72e")
+autoplay = "default"
+frame = 16
+
+[node name="FlameTall3" type="AnimatedSprite2D" parent="WorldText/Flames"]
+modulate = Color(1, 1, 1, 0.784314)
+use_parent_material = true
+position = Vector2(292.857, -25.3571)
+rotation = 0.0672023
+scale = Vector2(0.895132, 0.805542)
+sprite_frames = ExtResource("5_yw72e")
+autoplay = "default"
+frame = 28
 
 [node name="Window" type="Control" parent="."]
 layout_mode = 1
