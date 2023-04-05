@@ -126,6 +126,8 @@ namespace Project.Gameplay
 		[Export]
 		private AudioStreamPlayer sfx;
 		private bool isFadingSFX;
+		[Export]
+		private GpuParticles3D grindParticles;
 
 		private bool isActive; //Is the rail active?
 		private bool isInteractingWithPlayer; //Check for collisions?
@@ -235,6 +237,7 @@ namespace Project.Gameplay
 			isFadingSFX = false;
 			sfx.VolumeDb = 0f; //Reset volume
 			sfx.Play();
+			grindParticles.Emitting = true; // Start emitting sparks
 
 			if (isInvisibleRail)
 			{
@@ -256,7 +259,6 @@ namespace Project.Gameplay
 			Character.Animator.ExternalAngle = 0; //Rail modifies Character's Transform directly, animator angle is unused.
 			Character.Animator.StartBalancing();
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); //Snap
-			Character.Effect.StartGrindrail(); //Start creating sparks
 
 			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.DisconnectFromRail));
 			Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail));
@@ -354,6 +356,7 @@ namespace Project.Gameplay
 			pathFollower.Progress += movementDelta;
 			Character.UpdateExternalControl(true);
 			Character.Animator.UpdateBalancing();
+			grindParticles.GlobalTransform = Character.GlobalTransform; //Sync particle position with player
 
 			if (pathFollower.ProgressRatio >= 1 || Mathf.IsZeroApprox(Character.MoveSpeed)) //Disconnect from the rail
 				DisconnectFromRail();
@@ -373,9 +376,10 @@ namespace Project.Gameplay
 		{
 			if (!isActive) return;
 
-			isFadingSFX = true; //Start fading sound effect
+			isFadingSFX = true; // Start fading sound effect
+			grindParticles.Emitting = false; // Stop emitting particles
 
-			if (jumpBufferTimer > 0) //Player buffered jump late; cyote time
+			if (jumpBufferTimer > 0) // Player buffered jump late; cyote time
 				Character.Jump(true);
 
 			isActive = false;
@@ -383,11 +387,11 @@ namespace Project.Gameplay
 			if (isInvisibleRail)
 				railModel.Visible = false;
 
-			Character.IsOnGround = false; //Disconnect from the ground
+			Character.IsOnGround = false; // Disconnect from the ground
 			Character.Skills.IsSpeedBreakEnabled = true;
 			Character.ResetMovementState();
 
-			//Preserve speed
+			// Preserve speed
 			float launchAngle = pathFollower.Up().AngleTo(Vector3.Up) * Mathf.Sign(pathFollower.Up().Y);
 			Character.VerticalSpeed = Mathf.Sin(launchAngle) * -Character.MoveSpeed;
 			Character.MoveSpeed = Mathf.Cos(launchAngle) * Character.MoveSpeed;
@@ -395,9 +399,8 @@ namespace Project.Gameplay
 			if (!Character.IsGrindstepping)
 				Character.Animator.ResetState(.2f);
 			Character.Animator.SnapRotation(Character.MovementAngle);
-			Character.Effect.StopGrindrail(); //Stop creating sparks
 
-			//Disconnect signals
+			// Disconnect signals
 			if (Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.DisconnectFromRail)))
 				Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.DisconnectFromRail));
 			if (Character.IsConnected(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.DisconnectFromRail)))
@@ -412,7 +415,7 @@ namespace Project.Gameplay
 			RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Character.CollisionMask);
 			Debug.DrawRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, hit ? Colors.Red : Colors.White);
 
-			//Allow grindrails to travel through certain walls
+			// Allow grindrails to travel through certain walls
 			if (hit && hit.collidedObject.IsInGroup("allow grindrail")) return new RaycastHit();
 
 			return hit;
@@ -421,7 +424,7 @@ namespace Project.Gameplay
 		private void UpdateInvisibleRailPosition()
 		{
 			railModel.GlobalPosition = Character.GlobalPosition;
-			railModel.Position = new Vector3(0, railModel.Position.Y, railModel.Position.Z); //Ignore player's x-offset
+			railModel.Position = new Vector3(0, railModel.Position.Y, railModel.Position.Z); // Ignore player's x-offset
 			railMaterial.SetShaderParameter("uv_offset", railModel.Position.Z);
 		}
 

@@ -113,11 +113,5 @@ namespace Project.Gameplay
 			voiceChannel.Stop();
 			voiceChannel.VolumeDb = 0f;
 		}
-
-		[ExportGroup("VFX")]
-		[Export]
-		public GpuParticles3D grindrailVFX;
-		public void StartGrindrail() => grindrailVFX.Emitting = true;
-		public void StopGrindrail() => grindrailVFX.Emitting = false;
 	}
 }
