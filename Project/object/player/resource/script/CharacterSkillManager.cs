@@ -155,6 +155,7 @@ namespace Project.Gameplay
 					ToggleTimeBreak();
 			}
 		}
+
 		public bool IsSpeedBreakEnabled
 		{
 			get => isSpeedBreakEnabled;
@@ -165,6 +166,8 @@ namespace Project.Gameplay
 					ToggleSpeedBreak();
 			}
 		}
+		/// <summary> Is speedbreak currently overriding player's speed? </summary>
+		public bool IsSpeedBreakOverrideActive { get; private set; }
 		private bool isSpeedBreakEnabled = true;
 		private bool isTimeBreakEnabled = true;
 
@@ -256,8 +259,11 @@ namespace Project.Gameplay
 					if (IsSoulGaugeEmpty || !Input.IsActionPressed("button_speedbreak"))//Check whether we shoudl cancel speed break
 						ToggleSpeedBreak();
 
-					if (Character.IsOnGround) //Speed is only applied while on the ground
+					if (!IsSpeedBreakOverrideActive && Character.IsOnGround) //Speed is only applied while on the ground
+					{
+						IsSpeedBreakOverrideActive = true;
 						Character.MoveSpeed = speedBreakSpeed;
+					}
 				}
 				else
 					Character.MoveSpeed = 0f;
@@ -308,6 +314,7 @@ namespace Project.Gameplay
 			Character.ResetActionState();
 			IsSpeedBreakActive = !IsSpeedBreakActive;
 			breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
+			IsSpeedBreakOverrideActive = false; //Always disable override
 
 			if (IsSpeedBreakActive)
 			{

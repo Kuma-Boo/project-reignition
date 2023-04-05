@@ -148,7 +148,13 @@ namespace Project.Gameplay
 			float inputAngle = GetInputAngle();
 
 			if (Skills.IsSpeedBreakActive)
-				return PathFollower.ForwardAngle + PathFollower.DeltaAngle;
+			{
+				if (InputVector.IsZeroApprox()) // Reset to path direction
+					return PathFollower.ForwardAngle + PathFollower.DeltaAngle;
+				else
+					return ExtensionMethods.ClampAngleRange(inputAngle, PathFollower.ForwardAngle, Mathf.Pi * .3f);
+			}
+
 
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
@@ -389,33 +395,45 @@ namespace Project.Gameplay
 		/// <summary> Is the player moving backwards? </summary>
 		public bool IsMovingBackward { get; set; }
 
-		private const float TURNING_SPEED_LOSS = .04f; //How much speed to lose when turning sharply
-		private const float MIN_TURN_AMOUNT = .12f; //How much to turn when moving slowly
-		private const float MAX_TURN_AMOUNT = .4f; //How much to turn when moving at top speed
-		private const float STRAFE_TURNAROUND_SPEED = .24f; //How quickly to turnaround when at top speed
+		/// <summary> How much speed to lose when turning sharply. </summary>
+		private const float TURNING_SPEED_LOSS = .04f;
+		/// <summary> How much to smooth turning when moving slowly. </summary>
+		private const float MIN_TURN_AMOUNT = .12f;
+		/// <summary> How much to smooth turning when moving at top speed. </summary>
+		private const float MAX_TURN_AMOUNT = .4f;
+		/// <summary> How much to smooth turning when speed break is active. </summary>
+		private const float MAX_SPEED_BREAK_TURN_AMOUNT = .2f;
+		/// <summary> How quickly to turnaround when at top speed. </summary>
+		private const float STRAFE_TURNAROUND_SPEED = .24f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
-			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); //Store this for turning function
+			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); // Store this for turning function
 
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Backflip) return;
-			if (Skills.IsSpeedBreakActive) return; //Overridden to max speed
+
+			// Override to speedbreak speed
+			if (Skills.IsSpeedBreakActive)
+			{
+				if (Skills.IsSpeedBreakOverrideActive)
+					MoveSpeed = ActiveMovementSettings.Interpolate(Skills.speedBreakSpeed, 1.0f);
+				return;
+			}
 
 			float inputAngle = GetInputAngle();
-			float inputLength = InputVector.Length(); //Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
+			float inputLength = InputVector.Length(); // Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(inputAngle, targetMovementAngle));
-			MovementResource activeMovementResource = GetActiveMovementSettings();
 
 			if (IsLockoutActive)
 			{
 				if (ActiveLockoutData.overrideSpeed)
 				{
 					//Override speed to the correct value
-					float targetSpd = activeMovementResource.speed * ActiveLockoutData.speedRatio;
+					float targetSpd = ActiveMovementSettings.speed * ActiveLockoutData.speedRatio;
 					if (Mathf.IsZeroApprox(ActiveLockoutData.tractionMultiplier)) //Snap speed (i.e. Dash Panels)
 					{
 						MoveSpeed = targetSpd;
@@ -424,9 +442,9 @@ namespace Project.Gameplay
 
 					float delta = PhysicsManager.physicsDelta;
 					if (MoveSpeed <= targetSpd) //Accelerate using traction
-						delta *= activeMovementResource.traction * ActiveLockoutData.tractionMultiplier;
+						delta *= ActiveMovementSettings.traction * ActiveLockoutData.tractionMultiplier;
 					else //Slow down with friction
-						delta *= activeMovementResource.friction * ActiveLockoutData.frictionMultiplier;
+						delta *= ActiveMovementSettings.friction * ActiveLockoutData.frictionMultiplier;
 					MoveSpeed = Mathf.MoveToward(MoveSpeed, targetSpd, delta);
 					return;
 				}
@@ -440,14 +458,14 @@ namespace Project.Gameplay
 				}
 			}
 
-			if (Mathf.IsZeroApprox(inputLength) || InputVector.IsZeroApprox()) //Basic slow down
-				MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, 0);
+			if (Mathf.IsZeroApprox(inputLength) || InputVector.IsZeroApprox()) // Basic slow down
+				MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, 0);
 			else
 			{
 				float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, inputAngle);
 				bool isTurningAround = deltaAngle > MAX_TURNAROUND_ANGLE;
 				if (isTurningAround) //Skid to a stop
-					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, -1);
+					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, -1);
 				else
 				{
 					if (IsLockoutActive && ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) //Zipper exception
@@ -459,13 +477,13 @@ namespace Project.Gameplay
 						inputLength *= .2f;
 
 					if (MoveSpeed < BackstepSettings.speed) //Accelerate faster when at low speeds
-						MoveSpeed = Mathf.Lerp(MoveSpeed, activeMovementResource.speed * activeMovementResource.GetSpeedRatio(BackstepSettings.speed), .05f * inputLength);
+						MoveSpeed = Mathf.Lerp(MoveSpeed, ActiveMovementSettings.speed * ActiveMovementSettings.GetSpeedRatio(BackstepSettings.speed), .05f * inputLength);
 
-					MoveSpeed = activeMovementResource.Interpolate(MoveSpeed, inputLength); //Accelerate based on input strength/input direction
+					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); //Accelerate based on input strength/input direction
 				}
 			}
 
-			if (MoveSpeed < 0) //Don't allow negative movespeed
+			if (MoveSpeed < 0) // Don't allow negative movespeed
 			{
 				MoveSpeed = Mathf.Abs(MoveSpeed);
 				IsMovingBackward = !IsMovingBackward;
@@ -473,7 +491,7 @@ namespace Project.Gameplay
 			}
 		}
 
-		/// <summary> True when the player's MoveSpeed was zero </summary>
+		/// <summary> True when the player's MoveSpeed was zero during the previous frame. </summary>
 		private bool turnInstantly;
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
@@ -481,13 +499,12 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
 
 			float targetMovementAngle = GetTargetMovementAngle();
-			bool overrideFacingDirection = Skills.IsSpeedBreakActive || (IsLockoutActive &&
+			bool overrideFacingDirection = IsLockoutActive &&
 			(ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace ||
-			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe));
+			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe);
 
-			//Strafe implementation
-			if (Skills.IsSpeedBreakActive ||
-			(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
+			// Strafe implementation
+			if (IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
 			{
 				//Custom strafing movement
 				float strafeAmount = ExtensionMethods.DotAngle(GetInputAngle() + Mathf.Pi * .5f, PathFollower.ForwardAngle);
@@ -497,21 +514,24 @@ namespace Project.Gameplay
 				float strafeFactor = IsOnGround ? GroundSettings.GetSpeedRatioClamped(MoveSpeed) : AirSettings.GetSpeedRatioClamped(MoveSpeed);
 				strafeFactor += .1f;
 				strafeAmount *= strafeFactor;
-
-				if (Skills.IsSpeedBreakActive)
-					StrafeSpeed = Skills.speedbreakStrafeSettings.Interpolate(StrafeSpeed, strafeAmount);
-				else
-					StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, strafeAmount);
+				StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, strafeAmount);
 			}
 			else
 				StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, 0); //Reset strafe speed when not in use
 
-			if (overrideFacingDirection) //Direction is being overridden
+			if (overrideFacingDirection) // Direction is being overridden
 				MovementAngle = targetMovementAngle;
 
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			if (ActionState == ActionStates.Backflip) return;
-			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) return; //Turning around
+			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) return; // Turning around
+
+			if (turnInstantly) // Instantly set movement angle to target movement angle
+			{
+				turningVelocity = 0;
+				MovementAngle = targetMovementAngle;
+				return;
+			}
 
 			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
@@ -520,18 +540,12 @@ namespace Project.Gameplay
 			(Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle)))
 				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
 
-			float speedRatio = GroundSettings.GetSpeedRatio(MoveSpeed);
+			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
 			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
-
-			if (turnInstantly) //Instantly set movement angle to target movement angle
-			{
-				turningVelocity = 0;
-				MovementAngle = targetMovementAngle;
-			}
 
 			if (IsSpeedLossActive())
 			{
-				//Calculate turn delta, relative to ground speed
+				// Calculate turn delta, relative to ground speed
 				float speedLossRatio = deltaAngle / MAX_TURNAROUND_ANGLE;
 				MoveSpeed -= GroundSettings.speed * speedRatio * turningSpeedCurve.Sample(speedLossRatio) * TURNING_SPEED_LOSS;
 				if (MoveSpeed < 0)
@@ -539,20 +553,22 @@ namespace Project.Gameplay
 			}
 
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
-			if (Camera.ActiveSettings.followPathTilt) //Only do this when camera is tilting
-				MovementAngle += PathFollower.DeltaAngle * 1.84f; //Random number that seems pretty accurate.
+			if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting
+				MovementAngle += PathFollower.DeltaAngle * 1.84f; // Random number that seems pretty accurate.
 		}
 
-		/// <summary>
-		/// Returns true when speed loss should be applied.
-		/// </summary>
+
+		/// <summary> Returns true when speed loss should be applied. </summary>
 		private bool IsSpeedLossActive()
 		{
-			//Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
+			// Speedbreak is overriding speed
+			if (Skills.IsSpeedBreakActive) return false;
+
+			// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
 			if (IsHoldingDirection(PathFollower.ForwardAngle) && GroundSettings.GetSpeedRatio(MoveSpeed) > .5f)
 				return false;
 
-			//Or when overriding speed/direction
+			// Or when overriding speed/direction
 			if (IsLockoutActive &&
 			(ActiveLockoutData.overrideSpeed || ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free))
 				return false;
@@ -560,29 +576,38 @@ namespace Project.Gameplay
 			return true;
 		}
 
-		private MovementResource GetActiveMovementSettings()
+
+		private MovementResource ActiveMovementSettings
 		{
-			if (!IsOnGround)
-				return AirSettings;
-			return IsMovingBackward ? BackstepSettings : GroundSettings;
+			get
+			{
+				if (!IsOnGround)
+					return AirSettings;
+				return IsMovingBackward ? BackstepSettings : GroundSettings;
+			}
 		}
 
-		private float slopeInfluence; //Current influence of the slope
-		private const float SLOPE_INFLUENCE_STRENGTH = .4f; //How much should slope affect player?
-		private const float SLOPE_THRESHOLD = .02f; //Ignore slopes that are shallower than Mathf.PI * threshold
+
+		/// <summary> Current influence of the slope. </summary>
+		private float slopeInfluenceRatio;
+		/// <summary> How much should the steepest slope affect the player? </summary>
+		private const float SLOPE_INFLUENCE_STRENGTH = .4f;
+		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
+		private const float SLOPE_THRESHOLD = .02f;
+		/// <summary> Recalculates slope influence based on ground normal. </summary>
 		private void UpdateSlopeInfluence(Vector3 groundNormal)
 		{
-			//Calculate slope influence
+			// Calculate slope influence
 			float angle = groundNormal.AngleTo(Vector3.Up);
-			if (Mathf.Abs(angle) < Mathf.Pi * SLOPE_THRESHOLD) //Slope is too insignificant to affect movement
+			if (Mathf.Abs(angle) < Mathf.Pi * SLOPE_THRESHOLD) // Slope is too insignificant to affect movement
 			{
-				slopeInfluence = 0; //Reset influence
+				slopeInfluenceRatio = 0; // Reset influence
 				return;
 			}
 
 			float rotationAmount = GetMovementDirection().SignedAngleTo(Vector3.Forward, Vector3.Up);
 			Vector3 slopeDirection = groundNormal.Rotated(Vector3.Up, rotationAmount).Normalized();
-			slopeInfluence = slopeDirection.Z * SLOPE_INFLUENCE_STRENGTH;
+			slopeInfluenceRatio = slopeDirection.Z * SLOPE_INFLUENCE_STRENGTH;
 		}
 
 		private void UpdateSlopeSpd()
@@ -593,20 +618,20 @@ namespace Project.Gameplay
 
 			if (IsHoldingDirection(PathFollower.ForwardAngle)) //Accelerating
 			{
-				if (slopeInfluence < 0f) //Downhill
+				if (slopeInfluenceRatio < 0f) //Downhill
 				{
 					//Capped - MoveSpeed = Mathf.MoveToward(MoveSpeed, GroundSettings.speed, GroundSettings.traction * Mathf.Abs(slopeInfluence) * PhysicsManager.physicsDelta);
-					MoveSpeed += GroundSettings.traction * Mathf.Abs(slopeInfluence) * PhysicsManager.physicsDelta; //Uncapped
+					MoveSpeed += GroundSettings.traction * Mathf.Abs(slopeInfluenceRatio) * PhysicsManager.physicsDelta; //Uncapped
 				}
 				else if (GroundSettings.GetSpeedRatioClamped(MoveSpeed) < 1f) //Uphill; Reduce acceleration (Only when not at top speed)
-					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.traction * slopeInfluence * PhysicsManager.physicsDelta);
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.traction * slopeInfluenceRatio * PhysicsManager.physicsDelta);
 			}
 			else if (MoveSpeed > 0f) //Decceleration (Only applied when actually moving)
 			{
-				if (slopeInfluence < 0f) //Re-apply some speed when moving downhill
-					MoveSpeed = Mathf.MoveToward(MoveSpeed, GroundSettings.speed, GroundSettings.friction * Mathf.Abs(slopeInfluence) * PhysicsManager.physicsDelta);
+				if (slopeInfluenceRatio < 0f) //Re-apply some speed when moving downhill
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, GroundSettings.speed, GroundSettings.friction * Mathf.Abs(slopeInfluenceRatio) * PhysicsManager.physicsDelta);
 				else //Increase friction when moving uphill
-					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.friction * slopeInfluence * PhysicsManager.physicsDelta);
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.friction * slopeInfluenceRatio * PhysicsManager.physicsDelta);
 			}
 		}
 
@@ -1601,18 +1626,23 @@ namespace Project.Gameplay
 				if (ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
 				{
 					float wallDelta = ExtensionMethods.DeltaAngleRad(CalculateForwardAngle(wallHit.normal), MovementAngle);
-
-					if (wallDelta >= Mathf.Pi * .9f) //Running into wall head-on
+					if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
 					{
-						if (Skills.IsSpeedBreakActive) //Cancel speed break
+						// Cancel speed break
+						if (Skills.IsSpeedBreakActive)
 							Skills.ToggleSpeedBreak();
 
-						if (wallHit.distance <= CollisionRadius + COLLISION_PADDING)
-							MoveSpeed = 0; //Kill speed
+						// Running into wall head-on
+						if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + COLLISION_PADDING)
+						{
+							MoveSpeed = 0; // Kill speed
+							return;
+						}
 					}
-					else if (!IsMovingBackward && IsOnGround) //Reduce MoveSpeed when running against walls
+
+					if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
 					{
-						float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi) * .4f, 0f, 1f); //Arbitrary formula that works well
+						float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi) * .4f, 0f, 1f); // Arbitrary formula that works well
 						if (GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
 							MoveSpeed *= speedClamp;
 					}
@@ -1665,9 +1695,6 @@ namespace Project.Gameplay
 		public Vector3 GetMovementDirection()
 		{
 			Vector3 pathFollowerForward = PathFollower.Forward().Rotated(UpDirection, PathFollower.DeltaAngle);
-
-			if (Skills.IsSpeedBreakActive) //Follow pathfollower more accurately when speedbreaking
-				return pathFollowerForward;
 
 			//Tilted ground fix
 			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle + PathFollower.DeltaAngle, PathFollower.ForwardAngle);
