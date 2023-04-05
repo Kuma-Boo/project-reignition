@@ -4,12 +4,7 @@ using Project.Core;
 
 namespace Project.Gameplay
 {
-	/// <summary>
-	/// Renders planar reflections into a global texture.
-	/// Few side notes:
-	/// 1. This method is hard-coded to only support reflections facing Vector3.Up
-	/// 2. Near clipping cannot be aligned to the surface, so objects underneath will still be rendered (looking for a fix)
-	/// </summary>
+	/// <summary> Renders planar reflections into a global texture, then updates materials in reflectionMaterials. </summary>
 	[Tool]
 	public partial class PlanarReflectionRenderer : Node3D
 	{
@@ -30,10 +25,12 @@ namespace Project.Gameplay
 		private float nearClip = .05f;
 
 		[Export]
-		public Array<ShaderMaterial> reflectionMaterials; //List of materials that use reflection_texture
+		/// <summary> List of materials that use reflection_texture. </summary>
+		public Array<ShaderMaterial> reflectionMaterials;
 
 		[Export]
-		private bool editorPreview; //Render in the editor?
+		/// <summary> Attempt to preview in the editor? </summary>
+		private bool editorPreview;
 		private Vector3 previousCapturePosition;
 		private Vector3 previousCaptureRotation;
 
@@ -92,18 +89,17 @@ namespace Project.Gameplay
 			reflectionCamera.Size = mainCamera.Size;
 			reflectionCamera.Projection = mainCamera.Projection;
 
-			//TODO Update reflection camera's near clipping plane
 			reflectionCamera.Near = nearClip;
 			reflectionCamera.Far = mainCamera.Far;
 
-			//Update reflectionCamera's position
-			float reflectionHeight = GlobalPosition.Y;
-			Vector3 projection = Vector3.Down * (mainCamera.GlobalPosition.Y - reflectionHeight);
-			Vector3 targetPosition = mainCamera.GlobalPosition + projection * 2f;
+			// Update reflectionCamera's position
+			Vector3 reflectionAxis = this.Up();
+			Vector3 projection = reflectionAxis * reflectionAxis.Dot(mainCamera.GlobalPosition - GlobalPosition);
+			Vector3 targetPosition = (mainCamera.GlobalPosition - projection * 2f);
 
-			//Update reflectionCamera's rotation
-			Vector3 upDirection = mainCamera.Up().Reflect(Vector3.Up);
-			Vector3 forwardDirection = mainCamera.Forward().Reflect(Vector3.Up);
+			// Update reflectionCamera's rotation
+			Vector3 upDirection = mainCamera.Up().Reflect(reflectionAxis.Normalized());
+			Vector3 forwardDirection = mainCamera.Forward().Reflect(reflectionAxis.Normalized());
 
 			reflectionCamera.LookAtFromPosition(targetPosition, targetPosition + forwardDirection, upDirection);
 
