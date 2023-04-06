@@ -1,14 +1,13 @@
-[gd_scene load_steps=33 format=3 uid="uid://rh85bh20fk6r"]
+[gd_scene load_steps=58 format=3 uid="uid://rh85bh20fk6r"]
 
 [ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_6ikv1"]
-[ext_resource type="Material" uid="uid://ch6a5js1oy3jy" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="3_nvgwe"]
-[ext_resource type="Material" uid="uid://dafspxgcs3xew" path="res://object/enemy/majin/data/particle/material/Majin Flame Attack Process Material.tres" id="4_2umh6"]
-[ext_resource type="Material" uid="uid://s4sdfivuxcfv" path="res://object/enemy/majin/data/particle/material/Majin Ember Process Material.tres" id="4_c1shl"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_p44e7"]
 [ext_resource type="Material" uid="uid://efv6ms0uv2sg" path="res://object/enemy/majin/data/particle/material/Majin Flame.tres" id="6_t5qur"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
+[ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://object/enemy/majin/data/particle/texture/majin smoke.png" id="9_6teur"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://byf5qdjpi8ur4" path="res://object/enemy/majin/data/animation/MajinAnimationTreeRoot.tres" id="9_osrkc"]
+[ext_resource type="Texture2D" uid="uid://bn81ds3vmr8nq" path="res://object/enemy/majin/data/particle/texture/majin glow.png" id="9_w8pvn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qrrup"]
 radius = 0.4
@@ -17,9 +16,45 @@ height = 1.4
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vs3xy"]
 radius = 0.8
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xbynq"]
+height = 0.5
+radius = 1.8
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ilenc"]
 height = 30.0
 radius = 50.0
+
+[sub_resource type="Curve" id="22"]
+min_value = -20.0
+max_value = 5.0
+_data = [Vector2(0, 0), 0.0, 22.4655, 0, 0, Vector2(0.514249, 5), 0.0, 0.0, 0, 0, Vector2(1, -20), -121.932, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="23"]
+curve = SubResource("22")
+
+[sub_resource type="Curve" id="Curve_kdg3s"]
+_data = [Vector2(0, 0), 0.0, 6.5, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -5.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_sqmcm"]
+width = 64
+curve = SubResource("Curve_kdg3s")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_awomk"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.5
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -5.0
+radial_accel_max = 5.0
+radial_accel_curve = SubResource("23")
+scale_min = 0.1
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_sqmcm")
 
 [sub_resource type="PlaneMesh" id="16"]
 material = ExtResource("3_6ikv1")
@@ -60,6 +95,39 @@ material = ExtResource("6_t5qur")
 size = Vector2(1, 1)
 orientation = 2
 
+[sub_resource type="Gradient" id="Gradient_n8pk7"]
+offsets = PackedFloat32Array(0.0759878, 0.142857, 0.896657, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g4afi"]
+gradient = SubResource("Gradient_n8pk7")
+width = 64
+
+[sub_resource type="Curve" id="Curve_msxut"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.28457, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5rct8"]
+width = 64
+curve = SubResource("Curve_msxut")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mu1y7"]
+direction = Vector3(0, 0, 1)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 25.0
+angular_velocity_min = -720.0
+angular_velocity_max = 720.0
+damping_min = 10.0
+damping_max = 10.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 2.5
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_5rct8")
+color_ramp = SubResource("GradientTexture1D_g4afi")
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_l57xs"]
 height = 4.0
 radius = 0.2
@@ -70,10 +138,126 @@ height = 4.0
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ft0xj"]
 radius = 0.8
 
+[sub_resource type="Curve" id="Curve_6880i"]
+_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_c4uk2"]
+width = 64
+curve = SubResource("Curve_6880i")
+
+[sub_resource type="Curve" id="Curve_bcysb"]
+_data = [Vector2(0, 0.2), 0.0, 3.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), -5.66667, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_dwnsb"]
+width = 64
+curve = SubResource("Curve_bcysb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ekgjg"]
+lifetime_randomness = 0.2
+emission_shape = 2
+emission_sphere_radius = 3.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+angular_velocity_min = 100.0
+angular_velocity_max = 360.0
+linear_accel_min = -10.0
+linear_accel_max = -8.0
+radial_accel_min = -20.0
+radial_accel_max = -10.0
+radial_accel_curve = SubResource("CurveTexture_c4uk2")
+tangential_accel_min = -20.0
+tangential_accel_max = -10.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 0.8
+scale_max = 1.2
+scale_curve = SubResource("CurveTexture_dwnsb")
+color = Color(0.933333, 0.866667, 1, 1)
+anim_offset_max = 1.0
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_balcf"]
 material = ExtResource("4_p44e7")
 size = Vector2(1, 1)
 orientation = 2
+
+[sub_resource type="Gradient" id="Gradient_731c8"]
+offsets = PackedFloat32Array(0, 0.0769231, 0.759615, 0.947115)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5xnth"]
+gradient = SubResource("Gradient_731c8")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7bsia"]
+lifetime_randomness = 0.5
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.2
+direction = Vector3(0, 1, 0)
+spread = 10.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+damping_min = 8.0
+damping_max = 8.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 1.5
+scale_max = 2.0
+color = Color(0.294118, 0.294118, 0.294118, 1)
+color_ramp = SubResource("GradientTexture1D_5xnth")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eiiup"]
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("9_6teur")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_txkmg"]
+material = SubResource("StandardMaterial3D_eiiup")
+
+[sub_resource type="Curve" id="Curve_nqgxv"]
+_data = [Vector2(0, 0.0685921), 0.0, 9.01083, 0, 0, Vector2(0.277328, 1), 0.0, 0.0, 0, 0, Vector2(0.589069, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.04865, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_yoqy1"]
+width = 64
+curve = SubResource("Curve_nqgxv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_63pau"]
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_yoqy1")
+color = Color(1, 0.627451, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qw8ul"]
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("9_w8pvn")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_t1f3y"]
+material = SubResource("StandardMaterial3D_qw8ul")
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_jj8fs"]
 
@@ -87,7 +271,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Particles/SpawnLetter:visible")
+tracks/0/path = NodePath("FX/SpawnFX:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -99,7 +283,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Particles/FireRoot/FlameHitbox:isDisabled")
+tracks/1/path = NodePath("FX/FireFX/FlameHitbox:isDisabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -111,7 +295,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Particles/FireRoot/EmberCharge:visible")
+tracks/2/path = NodePath("FX/FireFX/EmberCharge:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -123,7 +307,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Particles/FireRoot/FlameAttack:visible")
+tracks/3/path = NodePath("FX/FireFX/FlameAttack:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -135,7 +319,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Particles/FireRoot/FlameCharge:visible")
+tracks/4/path = NodePath("FX/FireFX/FlameCharge:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -147,7 +331,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Particles/FireRoot/FlameCharge:position")
+tracks/5/path = NodePath("FX/FireFX/FlameCharge:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -159,7 +343,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Particles/FireRoot/FlameAttack:emitting")
+tracks/6/path = NodePath("FX/FireFX/FlameAttack:emitting")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -171,7 +355,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Particles/FireRoot/FlameCharge:rotation")
+tracks/7/path = NodePath("FX/FireFX/FlameCharge:rotation")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -183,7 +367,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Particles/FireRoot/FlameHitbox/Near:disabled")
+tracks/8/path = NodePath("FX/FireFX/FlameHitbox/Near:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -195,7 +379,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Particles/FireRoot/FlameHitbox/Mid:disabled")
+tracks/9/path = NodePath("FX/FireFX/FlameHitbox/Mid:disabled")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -207,7 +391,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Particles/FireRoot/FlameHitbox/Far:disabled")
+tracks/10/path = NodePath("FX/FireFX/FlameHitbox/Far:disabled")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -219,7 +403,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Particles/FireRoot/FlameAttack:transparency")
+tracks/11/path = NodePath("FX/FireFX/FlameAttack:transparency")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -231,14 +415,14 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Hitbox/CollisionShape3D:scale")
+tracks/12/path = NodePath("Hitbox/SpinCollisionShape3D:disabled")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(1, 1, 1)]
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_thps5"]
@@ -248,7 +432,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Particles/FireRoot/FlameHitbox:isDisabled")
+tracks/0/path = NodePath("FX/FireFX/FlameHitbox:isDisabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -260,7 +444,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Particles/FireRoot/FlameAttack:emitting")
+tracks/1/path = NodePath("FX/FireFX/FlameAttack:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -272,7 +456,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Particles/FireRoot/FlameAttack:visible")
+tracks/2/path = NodePath("FX/FireFX/FlameAttack:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -284,7 +468,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Particles/FireRoot/FlameHitbox/Near:disabled")
+tracks/3/path = NodePath("FX/FireFX/FlameHitbox/Near:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -296,7 +480,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Particles/FireRoot/FlameHitbox/Mid:disabled")
+tracks/4/path = NodePath("FX/FireFX/FlameHitbox/Mid:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -308,7 +492,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Particles/FireRoot/FlameHitbox/Far:disabled")
+tracks/5/path = NodePath("FX/FireFX/FlameHitbox/Far:disabled")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -320,7 +504,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Particles/FireRoot/FlameAttack:transparency")
+tracks/6/path = NodePath("FX/FireFX/FlameAttack:transparency")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -336,7 +520,7 @@ step = 0.0333333
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Particles/FireRoot/EmberCharge")
+tracks/0/path = NodePath("FX/FireFX/EmberCharge")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -350,7 +534,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Particles/FireRoot/FlameCharge")
+tracks/1/path = NodePath("FX/FireFX/FlameCharge")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -364,7 +548,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Particles/FireRoot/EmberCharge:visible")
+tracks/2/path = NodePath("FX/FireFX/EmberCharge:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -376,7 +560,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Particles/FireRoot/FlameCharge:visible")
+tracks/3/path = NodePath("FX/FireFX/FlameCharge:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -388,7 +572,7 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Particles/FireRoot/FlameAttack")
+tracks/4/path = NodePath("FX/FireFX/FlameAttack")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -402,7 +586,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Particles/FireRoot/FlameAttack:visible")
+tracks/5/path = NodePath("FX/FireFX/FlameAttack:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -414,7 +598,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Particles/FireRoot/FlameAttack:emitting")
+tracks/6/path = NodePath("FX/FireFX/FlameAttack:emitting")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -426,7 +610,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Particles/FireRoot/FlameHitbox:isDisabled")
+tracks/7/path = NodePath("FX/FireFX/FlameHitbox:isDisabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -438,7 +622,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Particles/FireRoot/FlameCharge:position")
+tracks/8/path = NodePath("FX/FireFX/FlameCharge:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -450,7 +634,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Particles/FireRoot/FlameCharge:rotation")
+tracks/9/path = NodePath("FX/FireFX/FlameCharge:rotation")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -462,7 +646,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Particles/FireRoot/FlameHitbox/Near:disabled")
+tracks/10/path = NodePath("FX/FireFX/FlameHitbox/Near:disabled")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -474,7 +658,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Particles/FireRoot/FlameHitbox/Mid:disabled")
+tracks/11/path = NodePath("FX/FireFX/FlameHitbox/Mid:disabled")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -486,7 +670,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Particles/FireRoot/FlameHitbox/Far:disabled")
+tracks/12/path = NodePath("FX/FireFX/FlameHitbox/Far:disabled")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -498,7 +682,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Particles/FireRoot/FlameAttack:transparency")
+tracks/13/path = NodePath("FX/FireFX/FlameAttack:transparency")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -510,11 +694,11 @@ tracks/13/keys = {
 
 [sub_resource type="Animation" id="Animation_aucka"]
 resource_name = "spawn"
-length = 0.001
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Particles/SpawnLetter:visible")
+tracks/0/path = NodePath("FX/SpawnFX:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -526,11 +710,39 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Particles/SpawnLetter")
+tracks/1/path = NodePath("FX/SpawnFX/Letter")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FX/SpawnFX/Smoke")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/SpawnFX/Glow")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -545,14 +757,14 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Hitbox/CollisionShape3D:scale")
+tracks/0/path = NodePath("Hitbox/SpinCollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.001),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(1, 1, 1)]
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
@@ -572,7 +784,7 @@ script = ExtResource("1")
 "Rotation Settings/Track Player" = true
 "Attack Settings/Attack Type" = 0
 "Defeat Settings/Enable Enemy Launching" = false
-fireRoot = NodePath("Particles/FireRoot")
+fireRoot = NodePath("FX/FireFX")
 pearlAmount = 15
 damagePlayer = true
 root = NodePath("Root")
@@ -597,6 +809,11 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 shape = SubResource("CapsuleShape3D_vs3xy")
 
+[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("CylinderShape3D_xbynq")
+disabled = true
+
 [node name="Range" type="Area3D" parent="."]
 collision_layer = 0
 collision_mask = 2
@@ -606,14 +823,13 @@ monitorable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("CylinderShape3D_ilenc")
 
-[node name="Particles" type="Node3D" parent="."]
+[node name="FX" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="FireRoot" type="Node3D" parent="Particles"]
+[node name="FireFX" type="Node3D" parent="FX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-visible = false
 
-[node name="EmberCharge" type="GPUParticles3D" parent="Particles/FireRoot"]
+[node name="EmberCharge" type="GPUParticles3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 visible = false
 cast_shadow = 0
@@ -626,11 +842,12 @@ one_shot = true
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-3, -2, -3, 6, 4, 6)
+local_coords = true
 transform_align = 3
-process_material = ExtResource("4_c1shl")
+process_material = SubResource("ParticleProcessMaterial_awomk")
 draw_pass_1 = SubResource("16")
 
-[node name="FlameCharge" type="GPUParticles3D" parent="Particles/FireRoot"]
+[node name="FlameCharge" type="GPUParticles3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 visible = false
 cast_shadow = 0
@@ -647,7 +864,7 @@ visibility_aabb = AABB(-1.5, -1, -1.5, 3, 3, 3)
 process_material = SubResource("ParticleProcessMaterial_vt4pw")
 draw_pass_1 = SubResource("20")
 
-[node name="FlameAttack" type="GPUParticles3D" parent="Particles/FireRoot"]
+[node name="FlameAttack" type="GPUParticles3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 1)
 visible = false
 cast_shadow = 0
@@ -661,10 +878,10 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-2, -2, 0, 4, 4, 10)
 local_coords = true
-process_material = ExtResource("4_2umh6")
+process_material = SubResource("ParticleProcessMaterial_mu1y7")
 draw_pass_1 = SubResource("20")
 
-[node name="FlameHitbox" type="Area3D" parent="Particles/FireRoot"]
+[node name="FlameHitbox" type="Area3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.2, 1)
 collision_layer = 0
 collision_mask = 2
@@ -672,35 +889,65 @@ monitorable = false
 script = ExtResource("7_vd724")
 isDisabled = true
 
-[node name="Near" type="CollisionShape3D" parent="Particles/FireRoot/FlameHitbox"]
+[node name="Near" type="CollisionShape3D" parent="FX/FireFX/FlameHitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CylinderShape3D_l57xs")
 
-[node name="Mid" type="CollisionShape3D" parent="Particles/FireRoot/FlameHitbox"]
+[node name="Mid" type="CollisionShape3D" parent="FX/FireFX/FlameHitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -2.38419e-07)
 shape = SubResource("CylinderShape3D_6210i")
 disabled = true
 
-[node name="Far" type="CollisionShape3D" parent="Particles/FireRoot/FlameHitbox"]
+[node name="Far" type="CollisionShape3D" parent="FX/FireFX/FlameHitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -4.76837e-07)
 shape = SubResource("CylinderShape3D_ft0xj")
 disabled = true
 
-[node name="SpawnLetter" type="GPUParticles3D" parent="Particles"]
+[node name="SpawnFX" type="Node3D" parent="FX"]
 visible = false
+
+[node name="Letter" type="GPUParticles3D" parent="FX/SpawnFX"]
 cast_shadow = 0
 gi_mode = 0
 emitting = false
 amount = 18
 one_shot = true
 speed_scale = 1.5
-explosiveness = 0.4
 randomness = 0.4
 fixed_fps = 60
 interpolate = false
 local_coords = true
-process_material = ExtResource("3_nvgwe")
+process_material = SubResource("ParticleProcessMaterial_ekgjg")
 draw_pass_1 = SubResource("PlaneMesh_balcf")
+
+[node name="Smoke" type="GPUParticles3D" parent="FX/SpawnFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+layers = 32
+emitting = false
+lifetime = 0.8
+one_shot = true
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(-1.5, -1, -1.5, 3, 4, 3)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_7bsia")
+draw_pass_1 = SubResource("QuadMesh_txkmg")
+
+[node name="Glow" type="GPUParticles3D" parent="FX/SpawnFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 1
+lifetime = 0.2
+one_shot = true
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(-1.05728, -0.912694, -1.32253, 2.11457, 1.82539, 2.64507)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_63pau")
+draw_pass_1 = SubResource("QuadMesh_t1f3y")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = ExtResource("9_osrkc")
@@ -738,5 +985,5 @@ libraries = {
 [connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
-[connection signal="area_entered" from="Particles/FireRoot/FlameHitbox" to="Particles/FireRoot/FlameHitbox" method="OnEntered" flags=18]
-[connection signal="area_exited" from="Particles/FireRoot/FlameHitbox" to="Particles/FireRoot/FlameHitbox" method="OnExited" flags=18]
+[connection signal="area_entered" from="FX/FireFX/FlameHitbox" to="FX/FireFX/FlameHitbox" method="OnEntered" flags=18]
+[connection signal="area_exited" from="FX/FireFX/FlameHitbox" to="FX/FireFX/FlameHitbox" method="OnExited" flags=18]
