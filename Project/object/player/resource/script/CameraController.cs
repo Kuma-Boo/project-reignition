@@ -246,16 +246,14 @@ namespace Project.Gameplay
 			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
 			cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 
-			cameraRoot.GlobalTransform = cameraTransform; //Update transform
+			// Update view offset
+			cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
+			cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 
-			//Update view offset
-			camera.HOffset = viewportOffset.X;
-			camera.VOffset = viewportOffset.Y;
-			debugMesh.Position = new Vector3(viewportOffset.X, viewportOffset.Y, 0); //Update debug mesh
-
+			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 			xformAngle = Character.CalculateForwardAngle(-data.offsetBasis.Z);
 
-			if (SnapFlag) //Reset flag after camera was updating
+			if (SnapFlag) // Reset flag after camera was updating
 				SnapFlag = false;
 		}
 
