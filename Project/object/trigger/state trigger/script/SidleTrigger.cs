@@ -77,6 +77,7 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.ExternalAngle = 0;
 			Character.Animator.SnapRotation(0);
 			Character.Animator.StartSidle(isFacingRight);
+			Character.Animator.UpdateSidle(cycleTimer);
 
 			if (!Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged)))
 				Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
@@ -84,18 +85,30 @@ namespace Project.Gameplay.Triggers
 
 		private void UpdateSidle()
 		{
+			// Check ground
+			Vector3 castVector = Vector3.Down * Character.CollisionRadius * 2.0f;
+			RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
+			Debug.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
+			if (!hit) // No ground - Respawn
+			{
+				GD.Print("Ground not found!!!");
+				StartRespawn();
+				Character.Animator.SidleFall();
+				return;
+			}
+
+			// Update velocity
 			float targetVelocity = Input.GetAxis("move_left", "move_right") * (isFacingRight ? 1 : -1) * CYCLE_FREQUENCY;
 			if (Mathf.IsZeroApprox(velocity) || Mathf.Sign(targetVelocity) == Mathf.Sign(velocity))
 				velocity = Mathf.Lerp(velocity, targetVelocity, TRACTION_SMOOTHING);
 			else
 				velocity = Mathf.Lerp(velocity, targetVelocity, FRICTION_SMOOTHING);
 
-			//Check walls
-			Vector3 castVector = Character.PathFollower.Forward() * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
-			castVector *= Mathf.Sign(velocity);
-			RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
+			// Check walls
+			castVector = Character.PathFollower.Forward() * Mathf.Sign(velocity) * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
+			hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
 			Debug.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
-			if (hit) //Kill speed
+			if (hit) // Kill speed
 				velocity = (hit.distance - Character.CollisionRadius) * Mathf.Sign(velocity);
 
 			if (Mathf.IsZeroApprox(velocity)) return;
@@ -125,7 +138,8 @@ namespace Project.Gameplay.Triggers
 			if (Character.ExternalController == this)
 				Character.ResetMovementState();
 
-			Character.Animator.ResetState(.1f);
+			if (damageState != DamageStates.Respawning)
+				Character.Animator.ResetState(.1f);
 			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
 
 			damageState = DamageStates.Disabled;

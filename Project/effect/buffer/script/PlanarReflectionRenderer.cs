@@ -130,9 +130,7 @@ namespace Project.Gameplay
 			if (reflectionMaterials != null)
 			{
 				for (int i = 0; i < reflectionMaterials.Count; i++)
-				{
 					reflectionMaterials[i].SetShaderParameter(REFLECTION_PARAMETER, ReflectionTexture);
-				}
 			}
 		}
 	}

@@ -571,6 +571,7 @@ namespace Project.Gameplay
 		/// </summary>
 		public void SidleFall()
 		{
+			animationTree.Set(SIDLE_SPEED_PARAMETER, 1f);
 			SidleRightState.Travel(SIDLE_FALL_STATE_PARAMETER);
 			SidleLeftState.Travel(SIDLE_FALL_STATE_PARAMETER);
 		}

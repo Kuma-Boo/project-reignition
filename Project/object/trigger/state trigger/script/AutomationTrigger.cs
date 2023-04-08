@@ -15,7 +15,7 @@ namespace Project.Gameplay.Triggers
 
 		[Export]
 		/// <summary> Where to stop automation. </summary>
-		private float endPoint; //How far to travel. Set at 0 to travel the entire path
+		private float endPoint;
 		[Export]
 		/// <summary> Always activate, regardless of which way the player entered/moves. </summary>
 		private bool ignoreDirection;
