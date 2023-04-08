@@ -37,7 +37,7 @@ namespace Project.Gameplay
 		private Callable UpdatePositionCallable => new Callable(this, MethodName.UpdatePosition);
 		private Callable ApplyTextureCallable => new Callable(this, MethodName.ApplyTexture);
 
-		public override void _Ready()
+		public override void _EnterTree()
 		{
 			if (!RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable))
 				RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable, (uint)ConnectFlags.Deferred);
