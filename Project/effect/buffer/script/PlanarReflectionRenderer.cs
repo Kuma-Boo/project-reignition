@@ -8,8 +8,13 @@ namespace Project.Gameplay
 	[Tool]
 	public partial class PlanarReflectionRenderer : Node3D
 	{
+		public static PlanarReflectionRenderer instance;
+
 		public static ViewportTexture ReflectionTexture { get; private set; }
 		public static readonly StringName REFLECTION_PARAMETER = "reflection_texture"; //All shaders that use reflections must have this parameter
+
+		/// <summary> Set this if you need more accurate reflection positions. </summary>
+		public Path3D ReflectionSyncPath { get; set; }
 
 		[Export(PropertyHint.Layers3DRender)]
 		private uint renderMask;
@@ -23,6 +28,7 @@ namespace Project.Gameplay
 		private SubViewport reflectionViewport;
 		[Export]
 		private float nearClip = .05f;
+
 
 		[Export]
 		/// <summary> List of materials that use reflection_texture. </summary>
@@ -39,6 +45,8 @@ namespace Project.Gameplay
 
 		public override void _EnterTree()
 		{
+			instance = this;
+
 			if (!RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable))
 				RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable, (uint)ConnectFlags.Deferred);
 
@@ -54,6 +62,7 @@ namespace Project.Gameplay
 			if (RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable))
 				RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
 
+			instance = null;
 			ReflectionTexture = null;
 		}
 
@@ -92,9 +101,14 @@ namespace Project.Gameplay
 			reflectionCamera.Near = nearClip;
 			reflectionCamera.Far = mainCamera.Far;
 
+			// Calculate reflection position
+			Vector3 reflectionPosition = GlobalPosition;
+			if (IsInstanceValid(ReflectionSyncPath)) // Use reflection syncing path?
+				reflectionPosition = ReflectionSyncPath.Curve.GetClosestPoint(CharacterController.instance.GlobalPosition - ReflectionSyncPath.GlobalPosition);
+
 			// Update reflectionCamera's position
 			Vector3 reflectionAxis = this.Up();
-			Vector3 projection = reflectionAxis * reflectionAxis.Dot(mainCamera.GlobalPosition - GlobalPosition);
+			Vector3 projection = reflectionAxis * reflectionAxis.Dot(mainCamera.GlobalPosition - reflectionPosition);
 			Vector3 targetPosition = (mainCamera.GlobalPosition - projection * 2f);
 
 			// Update reflectionCamera's rotation

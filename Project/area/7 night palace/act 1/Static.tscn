@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=65 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="7_omcuu"]
 [ext_resource type="PackedScene" uid="uid://cjw0hjwncmjt" path="res://area/7 night palace/act 1/environment/06Ending.tscn" id="7_xctaf"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="8_irx0t"]
+[ext_resource type="Script" path="res://object/trigger/modules/ReflectionTrigger.cs" id="8_ucc6w"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_ew8l8"]
 [ext_resource type="PackedScene" uid="uid://dkft1rtv6qnuv" path="res://area/7 night palace/act 1/environment/collision/Collision.tscn" id="9_oaikh"]
 [ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/7 night palace/data/Environment.tres" id="10_jp8di"]
@@ -28,6 +29,7 @@
 [ext_resource type="Curve3D" uid="uid://cmkw2yow867db" path="res://area/7 night palace/act 1/environment/path/WallRun1.tres" id="17_4n7m5"]
 [ext_resource type="Curve3D" uid="uid://bsnpkefxehx8g" path="res://area/7 night palace/act 1/environment/path/WallRun2.tres" id="18_6scab"]
 [ext_resource type="PackedScene" uid="uid://d4ivgn14opv12" path="res://area/7 night palace/data/skybox/SpaceSkybox.tscn" id="19_grfne"]
+[ext_resource type="Curve3D" uid="uid://dv14eorbe6d5w" path="res://area/7 night palace/act 1/environment/path/ReflectionSyncPath1.tres" id="21_t0k4n"]
 [ext_resource type="Material" uid="uid://sc8upcny5n7i" path="res://area/7 night palace/data/material/Effect Reflection.tres" id="25_6jp1c"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="27_lklb2"]
 [ext_resource type="PackedScene" path="res://area/7 night palace/data/BGM.tscn" id="28_dk7mm"]
@@ -35,52 +37,10 @@
 [ext_resource type="Curve3D" path="res://area/7 night palace/environment/path/SpaceBPath.tres" id="30_wgmg4"]
 [ext_resource type="Curve3D" path="res://area/7 night palace/environment/path/SpaceCPath.tres" id="31_vfagc"]
 [ext_resource type="Curve3D" path="res://area/7 night palace/environment/path/SpaceDPath.tres" id="32_ynool"]
-[ext_resource type="Curve3D" path="res://area/7 night palace/act 1/environment/path/GasRoomPath.tres" id="40_nugtn"]
+[ext_resource type="Curve3D" uid="uid://dpokcowfe8c78" path="res://area/7 night palace/act 1/environment/path/GasRoomPath.tres" id="40_nugtn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(15, 20, 2.5)
-
-[sub_resource type="Animation" id="Animation_ii0lq"]
-resource_name = "event"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("PlanarReflectionRenderer:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_7cupu"]
-_data = {
-"event": SubResource("Animation_ii0lq")
-}
-
-[sub_resource type="Animation" id="Animation_6sy7q"]
-resource_name = "event"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("PlanarReflectionRenderer:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(93, 2.5, -79.9)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_0ylad"]
-_data = {
-"event": SubResource("Animation_6sy7q")
-}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_crost"]
 size = Vector3(5, 10, 24)
@@ -360,36 +320,27 @@ shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Reflection" type="Node3D" parent="Trigger/Object"]
 
-[node name="Start" type="Node3D" parent="Trigger/Object/Reflection" node_paths=PackedStringArray("animator")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 59, 1, -79.9)
-script = ExtResource("5_jhy1v")
-animator = NodePath("AnimationPlayer")
-isOneShot = false
+[node name="PlanarReflectionRenderer" parent="Trigger/Object/Reflection" instance=ExtResource("27_lklb2")]
+renderMask = 23
+reflectionMaterials = [ExtResource("25_6jp1c")]
+editorPreview = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Reflection/Start"]
-root_node = NodePath("../../../../..")
-libraries = {
-"": SubResource("AnimationLibrary_7cupu")
-}
+[node name="Path" type="Node3D" parent="Trigger/Object/Reflection"]
 
-[node name="Hall" type="Node3D" parent="Trigger/Object/Reflection" node_paths=PackedStringArray("animator")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 59, 1, -79.9)
-script = ExtResource("5_jhy1v")
-animator = NodePath("AnimationPlayer")
-isOneShot = false
+[node name="ReflectionSyncPath1" type="Path3D" parent="Trigger/Object/Reflection/Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -79.858)
+curve = ExtResource("21_t0k4n")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Reflection/Hall"]
-root_node = NodePath("../../../../..")
-libraries = {
-"": SubResource("AnimationLibrary_0ylad")
-}
-
-[node name="StageTrigger" parent="Trigger/Object/Reflection" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 57.1, 1, -79.9)
+[node name="HallReflection" parent="Trigger/Object/Reflection" instance=ExtResource("4_d1bik")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35.1, 0, -79.9)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Reflection/StageTrigger"]
+[node name="Hall" type="Node3D" parent="Trigger/Object/Reflection/HallReflection"]
+script = ExtResource("8_ucc6w")
+reflectionSyncNodePath = NodePath("../../Path/ReflectionSyncPath1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Reflection/HallReflection"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
@@ -458,7 +409,7 @@ shape = SubResource("BoxShape3D_mow5f")
 [node name="CullingMap" type="Node3D" parent="Visuals"]
 
 [node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7, 0, -79.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -70)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -660,19 +611,11 @@ curve = ExtResource("31_vfagc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 770.3, 0, -780)
 curve = ExtResource("32_ynool")
 
-[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("27_lklb2")]
-renderMask = 23
-reflectionMaterials = [ExtResource("25_6jp1c")]
-
 [node name="BGM" parent="." instance=ExtResource("28_dk7mm")]
 bus = &"BGM"
 
-[connection signal="Activated" from="Trigger/Object/Reflection/StageTrigger" to="Trigger/Object/Reflection/Hall" method="Activate"]
-[connection signal="Deactivated" from="Trigger/Object/Reflection/StageTrigger" to="Trigger/Object/Reflection/Start" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/WallRun1" to="Trigger/Object/Sidle/SidleTrigger1/SidleActivation" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Path" method="Activate"]
-[connection signal="Activated" from="Trigger/Path/WallRun" to="Trigger/Object/Reflection/Hall" method="Activate"]
-[connection signal="Deactivated" from="Trigger/Path/WallRun" to="Trigger/Object/Reflection/Start" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Deactivate"]

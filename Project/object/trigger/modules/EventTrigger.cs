@@ -56,7 +56,10 @@ namespace Project.Gameplay.Triggers
 			if (wasActivated) return;
 
 			if (animator.HasAnimation("event"))
+			{
 				animator.Play("event");
+				animator.Seek(0, true);
+			}
 			else
 				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen.");
 
