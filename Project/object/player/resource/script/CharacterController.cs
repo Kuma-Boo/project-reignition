@@ -1542,11 +1542,8 @@ namespace Project.Gameplay
 
 		private bool ValidateWallCast(ref RaycastHit hit)
 		{
-			if (hit)
-			{
-				if (!hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("moveable"))
-					hit = new RaycastHit();
-			}
+			if (hit && !hit.collidedObject.IsInGroup("wall"))
+				hit = new RaycastHit();
 
 			return hit;
 		}

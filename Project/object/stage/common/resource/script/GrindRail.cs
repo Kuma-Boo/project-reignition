@@ -415,10 +415,11 @@ namespace Project.Gameplay
 			RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Character.CollisionMask);
 			Debug.DrawRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, hit ? Colors.Red : Colors.White);
 
-			// Allow grindrails to travel through certain walls
-			if (hit && hit.collidedObject.IsInGroup("allow grindrail")) return new RaycastHit();
+			// Block grinding through objects in the given group
+			if (hit && hit.collidedObject.IsInGroup("grind wall"))
+				return hit;
 
-			return hit;
+			return new RaycastHit();
 		}
 
 		private void UpdateInvisibleRailPosition()

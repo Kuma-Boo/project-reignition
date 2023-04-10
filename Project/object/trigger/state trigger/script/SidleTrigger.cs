@@ -108,7 +108,7 @@ namespace Project.Gameplay.Triggers
 			castVector = Character.PathFollower.Forward() * Mathf.Sign(velocity) * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
 			hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
 			Debug.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
-			if (hit) // Kill speed
+			if (hit && hit.collidedObject.IsInGroup("sidle wall")) // Kill speed
 				velocity = (hit.distance - Character.CollisionRadius) * Mathf.Sign(velocity);
 
 			if (Mathf.IsZeroApprox(velocity)) return;

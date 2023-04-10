@@ -155,15 +155,15 @@ namespace Project.Gameplay.Objects
 
 		public void OnHurtboxEntered(Area3D a)
 		{
-			if (a.IsInGroup("stagger boat")) //Keep going
-			{
-				moveSpeed = speedVelocity = 0; //Kill speed
-				hitstunTimer = HITSTUN_LENGTH;
-				Character.StartKnockback();
-			}
-			else //Knock the player off and respawn
+			if (a.IsInGroup("boat hazard")) // Knock the player off and respawn
 			{
 				Despawn();
+			}
+			else // Take damage and keep going
+			{
+				moveSpeed = speedVelocity = 0; // Kill speed
+				hitstunTimer = HITSTUN_LENGTH;
+				Character.StartKnockback();
 			}
 		}
 	}
