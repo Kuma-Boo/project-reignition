@@ -42,10 +42,10 @@ namespace Project.Gameplay.Triggers
 
 		public override void Respawn()
 		{
-			if (animator.HasAnimation("RESET")) //Only reset if a RESET animation exists.
+			if (animator.HasAnimation("RESET")) // Only reset if a RESET animation exists.
 			{
 				wasActivated = false;
-				animator.Play("RESET"); //Reset event
+				animator.Play("RESET"); // Reset event
 			}
 			else
 				GD.PrintErr(Name + " doesn't have a RESET animation.");
@@ -57,8 +57,10 @@ namespace Project.Gameplay.Triggers
 
 			if (animator.HasAnimation("event"))
 			{
+				if (!animator.IsPlaying() && animator.CurrentAnimation == "event") // Reset animation if necessary
+					animator.Seek(0, true);
+
 				animator.Play("event");
-				animator.Seek(0, true);
 			}
 			else
 				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen.");

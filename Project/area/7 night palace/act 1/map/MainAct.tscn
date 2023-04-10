@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=9 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_4hrnj"]
 [ext_resource type="PackedScene" uid="uid://ctfcgpodfhnp0" path="res://area/7 night palace/act 1/Static.tscn" id="3_ksvvu"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_kcdaq"]
+[ext_resource type="PackedScene" uid="uid://bo061vk53h0fv" path="res://area/7 night palace/object/foothold/SidleFooting.tscn" id="5_6dn8w"]
+[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="6_pusyw"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="7_fjkar"]
 
 [node name="World" type="Node"]
 
@@ -28,5 +32,90 @@ Completion/Lockout = ExtResource("2_4hrnj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
+
+[node name="Sidle" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0.01, -160)
+script = ExtResource("4_kcdaq")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="SidleGroup1" type="Node3D" parent="MainAct/Sidle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
+
+[node name="Footing" type="Node3D" parent="MainAct/Sidle/SidleGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="SidleFooting1" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
+
+[node name="SidleFooting2" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="SidleFooting3" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="SidleFooting4" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="SidleFooting5" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="SidleGroup2" type="Node3D" parent="MainAct/Sidle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="Footing" type="Node3D" parent="MainAct/Sidle/SidleGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="SidleFooting1" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
+
+[node name="SidleFooting2" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -9)
+
+[node name="SidleFooting3" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -12)
+
+[node name="SidleFooting4" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -15)
+
+[node name="SidleFooting5" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -18)
+
+[node name="SidleFooting6" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -21)
+
+[node name="SidleFooting7" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="ItemBox" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("6_pusyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 9.8)
+"Spawn Settings/Travel Time" = 0.5
+"Spawn Settings/Travel Height" = 2.0
+"Spawn Settings/Object" = ExtResource("7_fjkar")
+"Spawn Settings/Pickup Parent" = NodePath("SpawnPosition")
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct/Sidle/SidleGroup2/ItemBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+
+[node name="SidleGroup3" type="Node3D" parent="MainAct/Sidle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -54)
+
+[node name="Footing" type="Node3D" parent="MainAct/Sidle/SidleGroup3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="SidleFooting1" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
+
+[node name="SidleFooting2" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="SidleFooting3" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="SidleFooting4" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="SidleFooting5" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="SidleFooting6" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 
 [node name="Static" parent="." instance=ExtResource("3_ksvvu")]

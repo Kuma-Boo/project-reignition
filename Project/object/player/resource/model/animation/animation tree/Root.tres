@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=146 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=149 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_f60fx"]
 
@@ -597,6 +597,14 @@ xfade_time = 0.02
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="Curve" id="Curve_3ld4k"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tyb6g"]
+xfade_time = 0.4
+xfade_curve = SubResource("Curve_3ld4k")
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_5rs2g"]
 states/sidle-damage/node = SubResource("AnimationNodeAnimation_gb1up")
 states/sidle-damage/position = Vector2(364.583, 176.8)
@@ -614,7 +622,7 @@ states/sidle-loop/node = SubResource("AnimationNodeAnimation_oi742")
 states/sidle-loop/position = Vector2(365.6, 100.08)
 states/sidle-recovery/node = SubResource("AnimationNodeAnimation_5irqc")
 states/sidle-recovery/position = Vector2(648.2, 253.536)
-transitions = ["Start", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_ylwlr"), "sidle-damage", "sidle-damage-loop", SubResource("AnimationNodeStateMachineTransition_jylsn"), "sidle-hang", "sidle-hang-loop", SubResource("AnimationNodeStateMachineTransition_6ei5u"), "sidle-damage-loop", "sidle-hang", SubResource("AnimationNodeStateMachineTransition_cgm47"), "sidle-damage-loop", "sidle-fall", SubResource("AnimationNodeStateMachineTransition_nbyok"), "sidle-hang-loop", "sidle-hang-fall", SubResource("AnimationNodeStateMachineTransition_mjlqk"), "sidle-hang-loop", "sidle-recovery", SubResource("AnimationNodeStateMachineTransition_ji3kx"), "sidle-loop", "sidle-damage", SubResource("AnimationNodeStateMachineTransition_xpx0x"), "sidle-recovery", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_ephck")]
+transitions = ["Start", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_ylwlr"), "sidle-damage", "sidle-damage-loop", SubResource("AnimationNodeStateMachineTransition_jylsn"), "sidle-hang", "sidle-hang-loop", SubResource("AnimationNodeStateMachineTransition_6ei5u"), "sidle-damage-loop", "sidle-hang", SubResource("AnimationNodeStateMachineTransition_cgm47"), "sidle-damage-loop", "sidle-fall", SubResource("AnimationNodeStateMachineTransition_nbyok"), "sidle-hang-loop", "sidle-hang-fall", SubResource("AnimationNodeStateMachineTransition_mjlqk"), "sidle-hang-loop", "sidle-recovery", SubResource("AnimationNodeStateMachineTransition_ji3kx"), "sidle-loop", "sidle-damage", SubResource("AnimationNodeStateMachineTransition_xpx0x"), "sidle-recovery", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_ephck"), "sidle-damage", "sidle-fall", SubResource("AnimationNodeStateMachineTransition_tyb6g")]
 graph_offset = Vector2(5, 14)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_chcth"]
@@ -674,6 +682,10 @@ xfade_time = 0.1
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3ur1y"]
 xfade_time = 0.02
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4l2uq"]
+xfade_time = 0.4
+xfade_curve = SubResource("Curve_3ld4k")
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_1auqs"]
 states/sidle-damage/node = SubResource("AnimationNodeAnimation_xlsgi")
 states/sidle-damage/position = Vector2(383.12, 169.12)
@@ -688,10 +700,10 @@ states/sidle-hang-fall/position = Vector2(630.6, 387.88)
 states/sidle-hang-loop/node = SubResource("AnimationNodeAnimation_g7sbn")
 states/sidle-hang-loop/position = Vector2(383.41, 387.804)
 states/sidle-loop/node = SubResource("AnimationNodeAnimation_6cp2m")
-states/sidle-loop/position = Vector2(382.725, 100.464)
+states/sidle-loop/position = Vector2(382.649, 100.033)
 states/sidle-recovery/node = SubResource("AnimationNodeAnimation_rg0ud")
 states/sidle-recovery/position = Vector2(651.4, 243.648)
-transitions = ["Start", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_fxiye"), "sidle-loop", "sidle-damage", SubResource("AnimationNodeStateMachineTransition_4ourv"), "sidle-damage", "sidle-damage-loop", SubResource("AnimationNodeStateMachineTransition_vu4fp"), "sidle-damage-loop", "sidle-hang", SubResource("AnimationNodeStateMachineTransition_ll3ga"), "sidle-hang", "sidle-hang-loop", SubResource("AnimationNodeStateMachineTransition_hx6bh"), "sidle-hang-loop", "sidle-recovery", SubResource("AnimationNodeStateMachineTransition_eeg07"), "sidle-recovery", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_l6rnh"), "sidle-damage-loop", "sidle-fall", SubResource("AnimationNodeStateMachineTransition_ys343"), "sidle-hang-loop", "sidle-hang-fall", SubResource("AnimationNodeStateMachineTransition_3ur1y")]
+transitions = ["Start", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_fxiye"), "sidle-loop", "sidle-damage", SubResource("AnimationNodeStateMachineTransition_4ourv"), "sidle-damage", "sidle-damage-loop", SubResource("AnimationNodeStateMachineTransition_vu4fp"), "sidle-damage-loop", "sidle-hang", SubResource("AnimationNodeStateMachineTransition_ll3ga"), "sidle-hang", "sidle-hang-loop", SubResource("AnimationNodeStateMachineTransition_hx6bh"), "sidle-hang-loop", "sidle-recovery", SubResource("AnimationNodeStateMachineTransition_eeg07"), "sidle-recovery", "sidle-loop", SubResource("AnimationNodeStateMachineTransition_l6rnh"), "sidle-damage-loop", "sidle-fall", SubResource("AnimationNodeStateMachineTransition_ys343"), "sidle-hang-loop", "sidle-hang-fall", SubResource("AnimationNodeStateMachineTransition_3ur1y"), "sidle-damage", "sidle-fall", SubResource("AnimationNodeStateMachineTransition_4l2uq")]
 graph_offset = Vector2(-26, 55)
 
 [sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_75sr0"]
@@ -699,7 +711,7 @@ graph_offset = Vector2(-26, 55)
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_wadld"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yi2da"]
-graph_offset = Vector2(-514.191, 80.2435)
+graph_offset = Vector2(-626.792, 151.312)
 nodes/direction_transition/node = SubResource("AnimationNodeTransition_akqxs")
 nodes/direction_transition/position = Vector2(-288, 144)
 nodes/output/position = Vector2(288, 144)
@@ -725,7 +737,7 @@ input_2/auto_advance = false
 input_2/reset = true
 
 [resource]
-graph_offset = Vector2(-1054.61, 179.527)
+graph_offset = Vector2(-1060.8, 232.8)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
 nodes/balance_tree/position = Vector2(-960, 256)
 nodes/normal_state/node = SubResource("AnimationNodeStateMachine_3p6g0")
