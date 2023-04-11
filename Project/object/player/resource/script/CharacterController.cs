@@ -1124,9 +1124,6 @@ namespace Project.Gameplay
 		{
 			if (IsRespawning) return;
 
-			Lockon.IsMonitoring = false;
-			areaTrigger.SetDeferred("disabled", true);
-
 			//Fade screen out, enable respawn flag, and connect signals
 			IsDefeated = true;
 			IsRespawning = true;
@@ -1146,6 +1143,9 @@ namespace Project.Gameplay
 		/// </summary>
 		private void ProcessRespawn()
 		{
+			Lockon.IsMonitoring = false;
+			areaTrigger.Disabled = true;
+
 			IsDefeated = false;
 			ActionState = ActionStates.Normal;
 			MovementState = MovementStates.Normal;

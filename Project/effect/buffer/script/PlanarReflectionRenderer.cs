@@ -64,6 +64,7 @@ namespace Project.Gameplay
 
 			instance = null;
 			ReflectionTexture = null;
+			ApplyTexture();
 		}
 
 		private bool GetCamera()
@@ -137,9 +138,8 @@ namespace Project.Gameplay
 		/// <summary> Applies reflection texture to associated shaders. </summary>
 		private void ApplyTexture()
 		{
-			if (!GetReflectionViewport()) return;
-
-			ReflectionTexture = reflectionViewport.GetTexture();
+			if (GetReflectionViewport())
+				ReflectionTexture = reflectionViewport.GetTexture();
 
 			if (reflectionMaterials != null)
 			{

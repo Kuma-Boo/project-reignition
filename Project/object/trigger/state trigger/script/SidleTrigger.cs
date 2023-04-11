@@ -140,8 +140,7 @@ namespace Project.Gameplay.Triggers
 			if (Character.ExternalController == this)
 				Character.ResetMovementState();
 
-			if (damageState != DamageStates.Respawning)
-				Character.Animator.ResetState(.1f);
+			Character.Animator.ResetState(Character.IsRespawning ? 0.0f : .1f);
 			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
 
 			damageState = DamageStates.Disabled;
