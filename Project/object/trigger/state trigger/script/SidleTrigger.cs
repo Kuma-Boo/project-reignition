@@ -111,17 +111,19 @@ namespace Project.Gameplay.Triggers
 			if (hit && hit.collidedObject.IsInGroup("sidle wall")) // Kill speed
 				velocity = (hit.distance - Character.CollisionRadius) * Mathf.Sign(velocity);
 
-			if (Mathf.IsZeroApprox(velocity)) return;
+			if (!Mathf.IsZeroApprox(velocity))
+			{
+				cycleTimer += velocity * PhysicsManager.physicsDelta;
+				if (cycleTimer >= 1)
+					cycleTimer--;
+				else if (cycleTimer < 0)
+					cycleTimer++;
 
-			cycleTimer += velocity * PhysicsManager.physicsDelta;
-			if (cycleTimer >= 1)
-				cycleTimer--;
-			else if (cycleTimer < 0)
-				cycleTimer++;
+				Character.Animator.UpdateSidle(cycleTimer);
+				Character.MoveSpeed = Character.Skills.sidleMovementCurve.Sample(cycleTimer) * velocity * CYCLE_DISTANCE;
+				Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			}
 
-			Character.Animator.UpdateSidle(cycleTimer);
-			Character.MoveSpeed = Character.Skills.sidleMovementCurve.Sample(cycleTimer) * velocity * CYCLE_DISTANCE;
-			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 			Character.UpdateExternalControl();
 		}
 
