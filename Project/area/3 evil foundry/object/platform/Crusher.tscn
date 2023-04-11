@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://0gcen5dmjd"]
 
 [ext_resource type="PackedScene" uid="uid://oq1anfcpifuh" path="res://area/3 evil foundry/object/model/platform/Crusher.gltf" id="1_tdd7l"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/Crusher.cs" id="1_x3xhd"]
-[ext_resource type="Script" path="res://object/trigger/modules/PlatformTrigger.cs" id="3_tb3pl"]
+[ext_resource type="PackedScene" uid="uid://cosocodwyr4th" path="res://object/trigger/PlatformTrigger.tscn" id="3_pqcjf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8xdkw"]
 size = Vector3(5, 2, 5)
@@ -19,9 +19,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
 [node name="StaticBody3D" parent="CrusherTopMesh" index="0" groups=["floor", "wall"]]
 
-[node name="PlatformTrigger" type="Area3D" parent="CrusherTopMesh" index="1"]
-monitorable = false
-script = ExtResource("3_tb3pl")
+[node name="PlatformTrigger" parent="CrusherTopMesh" index="1" instance=ExtResource("3_pqcjf")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CrusherTopMesh/PlatformTrigger" index="0"]
 shape = SubResource("BoxShape3D_8xdkw")

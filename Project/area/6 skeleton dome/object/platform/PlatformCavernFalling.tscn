@@ -1,8 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cfejcc3m08i2r"]
 
 [ext_resource type="PackedScene" uid="uid://bd2vgdlj4fx6i" path="res://area/6 skeleton dome/object/model/platform/PlatformCavernFalling.gltf" id="1_irr62"]
-[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="2_ukred"]
-[ext_resource type="PackedScene" uid="uid://cosocodwyr4th" path="res://object/trigger/PlatformTrigger.tscn" id="3_vvblw"]
+[ext_resource type="Script" path="res://object/trigger/modules/PlatformTrigger.cs" id="1_mm11p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p4jqh"]
 size = Vector3(1, 1, 2)
@@ -74,9 +73,9 @@ tracks/4/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_y6qxx"]
-resource_name = "event"
-length = 5.0
-step = 0.0166667
+resource_name = "fall"
+length = 4.0
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -84,10 +83,10 @@ tracks/0/path = NodePath("Root:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 2.7, 4),
-"transitions": PackedFloat32Array(1, 2.5, 1, 1),
+"times": PackedFloat32Array(0, 1.7, 3),
+"transitions": PackedFloat32Array(2.5, 1, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, -50, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0, -50, 0), Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -96,7 +95,7 @@ tracks/1/path = NodePath("Root/Visuals:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 2.5, 2.7, 4.7, 4.9, 5),
+"times": PackedFloat32Array(0.2, 1.5, 1.7, 3.7, 3.9, 4),
 "transitions": PackedFloat32Array(1, 2, 1, 0.5, 1, 1),
 "update": 0,
 "values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.01, 0.01, 0.01), Vector3(0, 0, 0), Vector3(1.2, 1.2, 1.2), Vector3(1, 1, 1)]
@@ -108,10 +107,10 @@ tracks/2/path = NodePath("Root/Visuals:rotation")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.4, 0.6, 0.9, 1.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0872665), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0872665), Vector3(0, 0, 0.0872665), Vector3(0, 0, 0)]
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [Vector3(0, 0, 0)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -120,7 +119,7 @@ tracks/3/path = NodePath("Root/AnimatableBody3D/CollisionShape3D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 2.5, 2.7, 4.7),
+"times": PackedFloat32Array(0, 1.5, 1.7, 3.7),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [false, true, true, false]
@@ -132,23 +131,43 @@ tracks/4/path = NodePath("Root/PlatformTrigger/CollisionShape3D:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 2.5, 5),
+"times": PackedFloat32Array(0, 1.5, 4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [false, true, false]
 }
 
+[sub_resource type="Animation" id="Animation_hi8l2"]
+resource_name = "shake"
+length = 0.26667
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Visuals:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0872665), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p0p5m"]
 _data = {
 "RESET": SubResource("Animation_3udmq"),
-"event": SubResource("Animation_y6qxx")
+"fall": SubResource("Animation_y6qxx"),
+"shake": SubResource("Animation_hi8l2")
 }
 
-[node name="PlatformCavernFalling" type="Node3D" node_paths=PackedStringArray("animator")]
-script = ExtResource("2_ukred")
-animator = NodePath("AnimationPlayer")
-autoRespawn = true
-isOneShot = false
+[node name="PlatformCavernFalling" type="Node3D" node_paths=PackedStringArray("floorCalculationRoot", "parentCollider", "fallingPlatformAnimator")]
+script = ExtResource("1_mm11p")
+shakeLength = 1.0
+floorCalculationRoot = NodePath("Root/PlatformTrigger")
+parentCollider = NodePath("Root/AnimatableBody3D")
+fallingPlatformAnimator = NodePath("AnimationPlayer")
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -157,8 +176,10 @@ isOneShot = false
 [node name="PlatformCavernFallingMesh" parent="Root/Visuals" index="0"]
 cast_shadow = 0
 
-[node name="PlatformTrigger" parent="Root" node_paths=PackedStringArray("parentCollider") instance=ExtResource("3_vvblw")]
-parentCollider = NodePath("../AnimatableBody3D")
+[node name="PlatformTrigger" type="Area3D" parent="Root"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/PlatformTrigger"]
 shape = SubResource("BoxShape3D_p4jqh")
@@ -175,8 +196,7 @@ libraries = {
 "": SubResource("AnimationLibrary_p0p5m")
 }
 
-[connection signal="PlatformInteracted" from="Root/PlatformTrigger" to="." method="Activate"]
-[connection signal="area_entered" from="Root/PlatformTrigger" to="Root/PlatformTrigger" method="OnEntered"]
-[connection signal="area_exited" from="Root/PlatformTrigger" to="Root/PlatformTrigger" method="OnExited"]
+[connection signal="area_entered" from="Root/PlatformTrigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/PlatformTrigger" to="." method="OnExited"]
 
 [editable path="Root/Visuals"]
