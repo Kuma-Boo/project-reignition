@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=68 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -41,6 +41,9 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(20, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gcmbn"]
+size = Vector3(20, 20, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_crost"]
 size = Vector3(5, 10, 24)
@@ -351,13 +354,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="WallRun1" parent="Trigger/Object" instance=ExtResource("6_6kpe1")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 112, 2.5, -79.9)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 114, 2.5, -79.9)
 endPoint = 72.0
 ignoreDirection = true
 
+[node name="WallRun" type="Node3D" parent="Trigger/Object/WallRun1" node_paths=PackedStringArray("path")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -5.4)
+script = ExtResource("7_omcuu")
+path = NodePath("../../../../Path/WallRun1")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/WallRun1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mow5f")
+shape = SubResource("BoxShape3D_gcmbn")
 
 [node name="Sidle" type="Node3D" parent="Trigger/Object"]
 
@@ -404,21 +412,6 @@ shape = SubResource("BoxShape3D_dr1ap")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/Sidle/SidleTrigger3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -8.5)
 shape = SubResource("BoxShape3D_65qu7")
-
-[node name="Path" type="Node3D" parent="Trigger"]
-
-[node name="WallRun" parent="Trigger/Path" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 108.6, 2.5, -79.9)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="WallRun" type="Node3D" parent="Trigger/Path/WallRun" node_paths=PackedStringArray("path")]
-script = ExtResource("7_omcuu")
-path = NodePath("../../../../Path/WallRun1")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/WallRun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
 
@@ -533,7 +526,6 @@ directional_shadow_blend_splits = true
 startEnabled = true
 
 [node name="02Sidle" parent="Visuals/MainSection" instance=ExtResource("3_ch7dh")]
-visible = false
 
 [node name="03Tower" parent="Visuals/MainSection" instance=ExtResource("4_olu7y")]
 visible = false
@@ -716,6 +708,7 @@ curve = ExtResource("32_ynool")
 [node name="BGM" parent="." instance=ExtResource("28_dk7mm")]
 bus = &"BGM"
 
+[connection signal="Activated" from="Trigger/Object/WallRun1" to="Trigger/Object/WallRun1/WallRun" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/WallRun1" to="Trigger/Object/Sidle/SidleTrigger1/SidleActivation" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Path" method="Activate"]

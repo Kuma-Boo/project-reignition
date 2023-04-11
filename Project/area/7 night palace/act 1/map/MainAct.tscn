@@ -1,13 +1,17 @@
-[gd_scene load_steps=9 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=13 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_4hrnj"]
 [ext_resource type="PackedScene" uid="uid://ctfcgpodfhnp0" path="res://area/7 night palace/act 1/Static.tscn" id="3_ksvvu"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_kcdaq"]
+[ext_resource type="Script" path="res://addons/object_generator/ObjectGenerator.cs" id="4_nmhcr"]
 [ext_resource type="PackedScene" uid="uid://bo061vk53h0fv" path="res://area/7 night palace/object/foothold/SidleFooting.tscn" id="5_6dn8w"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_guij8"]
+[ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="6_3bewd"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="6_pusyw"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="7_fjkar"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="7_luf24"]
 
 [node name="World" type="Node"]
 
@@ -32,6 +36,97 @@ Completion/Lockout = ExtResource("2_4hrnj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
+
+[node name="Start" type="Node3D" parent="MainAct"]
+
+[node name="Rings1" type="Node3D" parent="MainAct/Start"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -24)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child06" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="Child07" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Child08" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35)
+
+[node name="Child09" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+
+[node name="Child10" parent="MainAct/Start/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
+
+[node name="Rings2" type="Node3D" parent="MainAct/Start"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.5, 1, -80)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="SpikeBallSpawner" parent="MainAct/Start" instance=ExtResource("6_3bewd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 21, -84)
+
+[node name="DashPanel" parent="MainAct/Start" instance=ExtResource("7_luf24")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 115.786, 2.5, -78.2942)
+speedRatio = 1.2
 
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0.01, -160)
