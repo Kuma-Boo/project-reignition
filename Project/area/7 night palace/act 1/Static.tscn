@@ -415,6 +415,19 @@ shape = SubResource("BoxShape3D_65qu7")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
 
+[node name="Path" type="Node3D" parent="Trigger"]
+
+[node name="MainPath3" parent="Trigger/Path" instance=ExtResource("4_d1bik")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -83.2426, -4, -325.343)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/MainPath3" node_paths=PackedStringArray("path")]
+script = ExtResource("7_omcuu")
+path = NodePath("../../../../Path/MainPath3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/MainPath3"]
+shape = SubResource("BoxShape3D_mow5f")
+
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
@@ -528,10 +541,8 @@ startEnabled = true
 [node name="02Sidle" parent="Visuals/MainSection" instance=ExtResource("3_ch7dh")]
 
 [node name="03Tower" parent="Visuals/MainSection" instance=ExtResource("4_olu7y")]
-visible = false
 
 [node name="04Interior" parent="Visuals/MainSection" instance=ExtResource("5_ydwi4")]
-visible = false
 
 [node name="05Carpet" parent="Visuals/MainSection" instance=ExtResource("6_067x7")]
 visible = false

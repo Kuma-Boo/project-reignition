@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=20 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -12,6 +12,15 @@
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="6_pusyw"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="7_fjkar"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="7_luf24"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="12_8tixp"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="12_f2vdf"]
+[ext_resource type="PackedScene" uid="uid://doc2lrkdh0ga3" path="res://object/trigger/state trigger/FootholdTrigger.tscn" id="13_o4u12"]
+[ext_resource type="PackedScene" uid="uid://dent1r1vgdehi" path="res://area/7 night palace/object/foothold/FootholdRight.tscn" id="14_7wfyl"]
+[ext_resource type="PackedScene" uid="uid://bslbpssktj445" path="res://area/7 night palace/object/foothold/FootholdLeft.tscn" id="14_ax5kg"]
+[ext_resource type="PackedScene" uid="uid://g20b46jmtkvd" path="res://area/7 night palace/object/foothold/FootholdCenter.tscn" id="15_gbj2e"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
+size = Vector3(2, 10, 4)
 
 [node name="World" type="Node"]
 
@@ -36,8 +45,12 @@ Completion/Lockout = ExtResource("2_4hrnj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0, -142)
 
 [node name="Start" type="Node3D" parent="MainAct"]
+script = ExtResource("4_kcdaq")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
 [node name="Rings1" type="Node3D" parent="MainAct/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -24)
@@ -121,8 +134,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 [node name="Child10" parent="MainAct/Start/Rings2" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
 
-[node name="SpikeBallSpawner" parent="MainAct/Start" instance=ExtResource("6_3bewd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 21, -84)
+[node name="SpikeBallSpawner1" parent="MainAct/Start" instance=ExtResource("6_3bewd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118.8, 20, -83.5)
+lifetime = 3.0
+spawnInterval = 2.0
+
+[node name="SpikeBallSpawner2" parent="MainAct/Start" instance=ExtResource("6_3bewd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120.6, 21, -85.6)
+lifetime = 3.0
 
 [node name="DashPanel" parent="MainAct/Start" instance=ExtResource("7_luf24")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 115.786, 2.5, -78.2942)
@@ -190,6 +209,78 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 9.8)
 [node name="SpawnPosition" type="Node3D" parent="MainAct/Sidle/SidleGroup2/ItemBox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
 
+[node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.100006, 0.8, -4)
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 0.4
+stateLengths = [2.0, 0.4, 0.4]
+
+[node name="SpikeGroup1" type="Node3D" parent="MainAct/Sidle/SidleGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.97501, 0, -15)
+
+[node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 1.0
+stateLengths = [3.0, 0.4, 1.0]
+
+[node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+"State Lengths/inactive" = 3.0
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 1.0
+stateLengths = [3.0, 0.4, 1.0]
+
+[node name="FootholdTrigger" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("13_o4u12")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1/FootholdTrigger"]
+shape = SubResource("BoxShape3D_lcjye")
+
+[node name="FootholdRight" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("14_7wfyl")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.5, -0.5, 1.1)
+
+[node name="FootholdCenter1" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1/FootholdRight" instance=ExtResource("15_gbj2e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.599991, 0, 0)
+
+[node name="FootholdCenter2" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1/FootholdRight" instance=ExtResource("15_gbj2e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59999, 0, 0)
+
+[node name="FootholdLeft" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1/FootholdRight" instance=ExtResource("14_ax5kg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, 0)
+
+[node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 3.10001, 0.8, -24)
+"State Lengths/inactive" = 1.8
+"State Lengths/warning" = 1.0
+"State Lengths/active" = 0.2
+stateLengths = [1.8, 1.0, 0.2]
+
+[node name="SpikeGroup2" type="Node3D" parent="MainAct/Sidle/SidleGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0249939, 0, -33)
+
+[node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 1.5)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.8
+"State Lengths/active" = 0.6
+stateLengths = [1.0, 0.8, 0.6]
+
+[node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.8
+"State Lengths/active" = 0.6
+stateLengths = [1.0, 0.8, 0.6]
+
+[node name="SpikePanel3" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -1.5)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.8
+"State Lengths/active" = 0.6
+stateLengths = [1.0, 0.8, 0.6]
+
 [node name="SidleGroup3" type="Node3D" parent="MainAct/Sidle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -54)
 
@@ -212,5 +303,93 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
 [node name="SidleFooting6" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="ItemBox1" parent="MainAct/Sidle/SidleGroup3" instance=ExtResource("6_pusyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 8.3)
+"Spawn Settings/Amount" = 50
+"Spawn Settings/Spawn Pearls" = true
+
+[node name="ItemBox2" parent="MainAct/Sidle/SidleGroup3" instance=ExtResource("6_pusyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 4.8)
+"Spawn Settings/Amount" = 50
+"Spawn Settings/Spawn Pearls" = true
+
+[node name="SpikeGroup1" type="Node3D" parent="MainAct/Sidle/SidleGroup3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="SpikePanel" parent="MainAct/Sidle/SidleGroup3/SpikeGroup1" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0)
+"State Lengths/inactive" = 0.6
+"State Lengths/warning" = 0.4
+"State Lengths/active" = 3.0
+stateLengths = [0.6, 0.4, 3.0]
+
+[node name="SpikeGroup2" type="Node3D" parent="MainAct/Sidle/SidleGroup3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.5)
+
+[node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup3/SpikeGroup2" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 1.0
+"State Lengths/active" = 1.5
+stateLengths = [2.0, 1.0, 1.5]
+
+[node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup3/SpikeGroup2" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+"Start Time" = -0.5
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 1.0
+"State Lengths/active" = 1.5
+startingTime = -0.5
+stateLengths = [2.0, 1.0, 1.5]
+
+[node name="SpikeGroup3" type="Node3D" parent="MainAct/Sidle/SidleGroup3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.5)
+
+[node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 2.25)
+"Start Time" = 1.0
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 1.0
+"State Lengths/active" = 1.5
+startingTime = 1.0
+stateLengths = [2.0, 1.0, 1.5]
+
+[node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+"Start Time" = 0.5
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 1.0
+"State Lengths/active" = 1.5
+startingTime = 0.5
+stateLengths = [2.0, 1.0, 1.5]
+
+[node name="SpikePanel3" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 1.0
+"State Lengths/active" = 1.5
+stateLengths = [2.0, 1.0, 1.5]
+
+[node name="SpikePanel4" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -2.25)
+"Start Time" = -0.5
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 1.0
+"State Lengths/active" = 1.5
+startingTime = -0.5
+stateLengths = [2.0, 1.0, 1.5]
+
+[node name="Hall" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.1, 0.01, -245.6)
+script = ExtResource("4_kcdaq")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="JumpPanel" parent="MainAct/Hall" instance=ExtResource("12_8tixp")]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -215.42, 5, -97.885)
+middleHeight = 8.0
+finalHeight = -16.0
+distance = 36.0
 
 [node name="Static" parent="." instance=ExtResource("3_ksvvu")]
