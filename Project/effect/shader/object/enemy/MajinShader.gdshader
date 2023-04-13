@@ -2,8 +2,8 @@ shader_type spatial;
 render_mode diffuse_burley;
 
 uniform sampler2D albedo : hint_default_black, source_color;
-uniform sampler2D detail : hint_default_transparent, source_color;
 uniform sampler2D specular : hint_default_black;
+uniform sampler2D detail : hint_default_transparent, source_color;
 uniform sampler2D detail_specular : hint_default_black;
 uniform float roughness : hint_range(0, 1) = .8;
 const float RIM_BIAS = .4;
