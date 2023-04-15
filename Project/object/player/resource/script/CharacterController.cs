@@ -1676,11 +1676,12 @@ namespace Project.Gameplay
 			Animator.SnapRotation(MovementAngle);
 		}
 
-		private void UpdateOrientation() //Orientates Root to world direction, then rotates the gimbal on the y-axis
+		/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis </summary>
+		public void UpdateOrientation(bool allowExternalUpdate = false)
 		{
-			if (MovementState == MovementStates.External) return; //Externally controlled
+			if (!allowExternalUpdate && MovementState == MovementStates.External) return; // Externally controlled
 
-			//Untested! This may end up breaking in certain scenarios
+			// Untested! This may end up breaking in certain scenarios
 			GlobalRotation = Vector3.Zero;
 			Vector3 cross = Vector3.Left.Rotated(Vector3.Up, UpDirection.Flatten().AngleTo(Vector2.Down));
 			GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));

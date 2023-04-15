@@ -15,14 +15,14 @@ namespace Project.Gameplay.Triggers
 		public delegate void DriftCompletedEventHandler();
 
 		[Export]
-		private bool isRightTurn; //Which way is the corner?
+		private bool isRightTurn; // Which way is the corner?
 
 		//Public for the editor
 		public Vector3 EndPosition => MiddlePosition + ExitDirection * slideDistance;
 		public Vector3 MiddlePosition => GlobalPosition + this.Back() * slideDistance;
 		public Vector3 ExitDirection => this.Right() * (isRightTurn ? 1 : -1);
 
-		private float entrySpeed; //Entry speed
+		private float entrySpeed; // Entry speed
 		private CharacterController Character => CharacterController.instance;
 
 		/// <summary> Is this drift trigger currently processing? </summary>
@@ -77,28 +77,27 @@ namespace Project.Gameplay.Triggers
 						Character.Animator.StopDrift();
 				}
 
-				return; //Inactive
+				return; // Inactive
 			}
 
 			UpdateDrift();
 		}
 
-		private bool IsDriftValid() //Checks whether the player is in a state where a drift is possible
+		private bool IsDriftValid() // Checks whether the player is in a state where a drift is possible
 		{
-			if (Character.IsMovingBackward) return false; //Can't drift backwards
-			if (Character.Skills.IsSpeedBreakActive) return false; //Can't drift during speed break :\
+			if (Character.IsMovingBackward) return false; // Can't drift backwards
 			if (!Character.IsOnGround || Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < ENTRANCE_SPEED_RATIO) return false; //In air/too slow
 			if (Character.MovementState == CharacterController.MovementStates.External) return false; //Player is already busy
 
-			//Check for any obstructions
-			RaycastHit hit = Character.CastRay(Character.CenterPosition, this.Back() * slideDistance, Runtime.Instance.environmentMask);
+			// Check for any obstructions
+			RaycastHit hit = Character.CastRay(Character.CenterPosition, Character.PathFollower.Forward() * slideDistance, Runtime.Instance.environmentMask);
 			if (hit)
 				return false;
 
-			return true; //Valid drift
+			return true; // Valid drift
 		}
 
-		private void StartDrift() //Initialize drift
+		private void StartDrift() // Initialize drift
 		{
 			isProcessing = true;
 
@@ -116,7 +115,7 @@ namespace Project.Gameplay.Triggers
 			sfx.Play();
 
 			driftAnimationTimer = DEFAULT_ANIMATION_LENGTH;
-			Character.StartExternal(this);
+			Character.StartExternal(this); // For future reference, this is wheere speedbreak gets disabled
 			Character.Animator.ExternalAngle = Character.MovementAngle;
 			Character.Animator.StartDrift(isRightTurn);
 			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));
@@ -128,11 +127,16 @@ namespace Project.Gameplay.Triggers
 		{
 			Vector3 targetPosition = MiddlePosition + this.Back() * INPUT_WINDOW_DISTANCE;
 
-			//Process drift
+			// Process drift
 			float distance = Character.GlobalPosition.Flatten().DistanceTo(targetPosition.Flatten());
-			Character.GlobalPosition = Character.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, DRIFT_SMOOTHING, entrySpeed);
+			Character.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, DRIFT_SMOOTHING, entrySpeed);
+			Character.Velocity = driftVelocity;
+			Character.MoveAndSlide();
+			Character.UpDirection = Character.PathFollower.Up(); // Use pathfollower's up direction when drifting
+			Character.UpdateExternalControl();
+			Character.UpdateOrientation(true);
 
-			//Fade out sfx based on distance
+			// Fade out sfx based on distance
 			float volume = distance / slideDistance;
 			sfx.VolumeDb = Mathf.SmoothStep(startingVolume, -80f, volume);
 
