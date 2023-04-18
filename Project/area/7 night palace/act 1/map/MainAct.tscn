@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=25 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -18,6 +18,11 @@
 [ext_resource type="PackedScene" uid="uid://dent1r1vgdehi" path="res://area/7 night palace/object/foothold/FootholdRight.tscn" id="14_7wfyl"]
 [ext_resource type="PackedScene" uid="uid://bslbpssktj445" path="res://area/7 night palace/object/foothold/FootholdLeft.tscn" id="14_ax5kg"]
 [ext_resource type="PackedScene" uid="uid://g20b46jmtkvd" path="res://area/7 night palace/object/foothold/FootholdCenter.tscn" id="15_gbj2e"]
+[ext_resource type="PackedScene" uid="uid://cxdonqvb6le03" path="res://object/enemy/majin/data/night palace/BlueMajin.tscn" id="18_ggltt"]
+[ext_resource type="PackedScene" uid="uid://dn28hpi34wpp4" path="res://object/enemy/majin/data/night palace/GreenMajin.tscn" id="18_wuv3v"]
+[ext_resource type="PackedScene" uid="uid://b4omh0erkr8si" path="res://object/enemy/majin/data/night palace/RedMajin.tscn" id="19_3ua6y"]
+[ext_resource type="PackedScene" uid="uid://duoxr3yjsxaoi" path="res://area/7 night palace/object/grindrail/Grindrail03.tscn" id="20_kogq7"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="21_3irg0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
@@ -45,7 +50,8 @@ Completion/Lockout = ExtResource("2_4hrnj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 159.6, 0.1, -132.6)
+
+[node name="CullingMap" type="Node3D" parent="MainAct"]
 
 [node name="Start" type="Node3D" parent="MainAct"]
 script = ExtResource("4_kcdaq")
@@ -150,7 +156,6 @@ speedRatio = 1.2
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0.01, -160)
 script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SidleGroup1" type="Node3D" parent="MainAct/Sidle"]
@@ -417,13 +422,124 @@ stateLengths = [2.0, 1.0, 1.5]
 [node name="Hall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.1, 0.01, -245.6)
 script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="MajinGroup1" type="Node3D" parent="MainAct/Hall"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.57361, 0, -14.9894)
+
+[node name="GreenMajin1" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-1, 2, 30)
+rangeOverride = 20
+
+[node name="GreenMajin2" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00003, 0, -7.00001)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
+rangeOverride = 20
+
+[node name="GreenMajin3" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299988, 0, -3.70001)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
+rangeOverride = 15
+
+[node name="BlueMajin" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_ggltt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32391, 0, -12.713)
+
+[node name="RedMajin" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -1.39404, 0, -20.3458)
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+
+[node name="GreenMajin4" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -5.95087, 0, -22.9364)
+
+[node name="ItemBox1" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.1, 0.5, -32)
+"Spawn Settings/Travel Time" = 0.5
+"Spawn Settings/Object" = ExtResource("7_fjkar")
+"Spawn Settings/Pickup Parent" = NodePath("SpawnPosition")
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct/Hall/ItemBox1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -1.5)
+
+[node name="ItemBox2" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81, 5.5, -35.5)
+"Spawn Settings/Amount" = 50
+"Spawn Settings/Spawn Pearls" = true
+
+[node name="ItemBox3" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -81, 5.5, -31.7)
+"Spawn Settings/Amount" = 50
+"Spawn Settings/Spawn Pearls" = true
+
+[node name="MajinGroup2" type="Node3D" parent="MainAct/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -113.1, 10, -33.5)
+
+[node name="BlueMajin1" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_ggltt")]
+transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -33, 0, -5)
+
+[node name="BlueMajin2" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_ggltt")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -33.5858, 0, -12.4142)
+
+[node name="RedMajin" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -40, 0, -19)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.8
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+
+[node name="GreenMajin1" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -40.5042, 0, -13.8656)
+
+[node name="BlueMajin3" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_ggltt")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -43.9696, 0, -21.803)
+
+[node name="GreenMajin2" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -41.7014, 0, -26.5102)
+
+[node name="Grindrail1" parent="MainAct/Hall" instance=ExtResource("20_kogq7")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -155, 5.3, -101)
+
+[node name="SpikeBall1" parent="MainAct/Hall" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -157.934, 6.2, -98)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 16.0
+
+[node name="SpikeBall2" parent="MainAct/Hall" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -187.934, 6.2, -101)
+"Movement/Cycle Length" = 1.5
+Movement/Distance = 20.0
+
+[node name="Grindrail2" parent="MainAct/Hall" instance=ExtResource("20_kogq7")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -178, 5.3, -98)
+
+[node name="RedMajin" parent="MainAct/Hall/Grindrail2" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -1)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.5
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 0.8
 
 [node name="JumpPanel" parent="MainAct/Hall" instance=ExtResource("12_8tixp")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -215.42, 5, -97.885)
 middleHeight = 8.0
 finalHeight = -16.0
 distance = 36.0
+
+[node name="Tower" type="Node3D" parent="MainAct"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
+script = ExtResource("4_kcdaq")
+saveVisibilityOnCheckpoint = true
+
+[node name="Interior" type="Node3D" parent="MainAct"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
+script = ExtResource("4_kcdaq")
+saveVisibilityOnCheckpoint = true
 
 [node name="Static" parent="." instance=ExtResource("3_ksvvu")]

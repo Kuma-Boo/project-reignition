@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://cinadnna2bo6u"]
+
+[ext_resource type="PackedScene" uid="uid://dvoongbmetjfh" path="res://object/stage/common/Grindrail.tscn" id="1_lii0n"]
+[ext_resource type="PackedScene" uid="uid://ii5pjgcpwxoq" path="res://area/7 night palace/object/model/grindrail/SpaceGrindrail03.gltf" id="2_cucys"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6dikv"]
+size = Vector3(2, 0.5, 30)
+
+[sub_resource type="Curve3D" id="Curve3D_jyi4o"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -30),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Grindrail" instance=ExtResource("1_lii0n")]
+"Rail Path" = NodePath("Path3D")
+
+[node name="SpaceGrindrail03" parent="." index="0" instance=ExtResource("2_cucys")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+shape = SubResource("BoxShape3D_6dikv")
+
+[node name="Path3D" type="Path3D" parent="." index="2"]
+curve = SubResource("Curve3D_jyi4o")
