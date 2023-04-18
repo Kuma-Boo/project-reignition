@@ -81,6 +81,8 @@ namespace Project.Gameplay.Triggers
 
 			if (!Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged)))
 				Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
+
+			EmitSignal(SignalName.Activated);
 		}
 
 		private void UpdateSidle()
@@ -145,6 +147,7 @@ namespace Project.Gameplay.Triggers
 
 			damageState = DamageStates.Disabled;
 			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
+			EmitSignal(SignalName.Deactivated);
 		}
 
 		#region Damage
@@ -152,25 +155,23 @@ namespace Project.Gameplay.Triggers
 		private DamageStates damageState;
 		private enum DamageStates
 		{
-			Disabled, //Normal sidle movement
-			Stagger, //Playing stagger animation
-			Falling, //Falling to rail
-			Hanging, //Jump recovery allowed
-			Recovery, //Recovering back to the ledge
+			Disabled, // Normal sidle movement
+			Stagger, // Playing stagger animation
+			Falling, // Falling to rail
+			Hanging, // Jump recovery allowed
+			Recovery, // Recovering back to the ledge
 			Respawning
 		}
 
-		private const float DAMAGE_STAGGER_LENGTH = .8f; //How long does the stagger animation last?
-		private const float DAMAGE_HANG_LENGTH = 5f; //How long can the player hang onto the rail?
-		private const float DAMAGE_TRANSITION_LENGTH = 1f; //How long is the transition from staggering to hanging?
-		private const float RECOVERY_LENGTH = .84f; //How long does the recovery take?
+		private const float DAMAGE_STAGGER_LENGTH = .8f; // How long does the stagger animation last?
+		private const float DAMAGE_HANG_LENGTH = 5f; // How long can the player hang onto the rail?
+		private const float DAMAGE_TRANSITION_LENGTH = 1f; // How long is the transition from staggering to hanging?
+		private const float RECOVERY_LENGTH = .84f; // How long does the recovery take?
 
-		/// <summary>
-		/// Called when the player hits a hazard.
-		/// </summary>
+		/// <summary> Called when the player hits a hazard. </summary>
 		private void OnPlayerDamaged()
 		{
-			//Invincible/Damage routine has already started
+			// Invincible/Damage routine has already started
 			if (Character.IsInvincible || damageState != DamageStates.Disabled) return;
 
 			if (LevelSettings.instance.CurrentRingCount == 0)
@@ -191,9 +192,7 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.SidleDamage();
 		}
 
-		/// <summary>
-		/// Processes player when being damaged.
-		/// </summary>
+		/// <summary> Processes player when being damaged. </summary>
 		private void UpdateSidleDamage()
 		{
 			cycleTimer += PhysicsManager.physicsDelta;
@@ -267,9 +266,7 @@ namespace Project.Gameplay.Triggers
 			}
 		}
 
-		/// <summary>
-		/// Tells the player to start respawning.
-		/// </summary>
+		/// <summary> Tells the player to start respawning. </summary>
 		private void StartRespawn()
 		{
 			cycleTimer = 0;
@@ -292,19 +289,8 @@ namespace Project.Gameplay.Triggers
 			Instance = this;
 			isInteractingWithPlayer = true;
 
-			//Apply state
-			Character.Skills.IsSpeedBreakEnabled = false; //Disable speed break
-			Character.AddLockoutData(lockout);
-
-			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, Character.PathFollower.ForwardAngle);
-			if (dot < 0)
-			{
-				Character.MoveSpeed = -Mathf.Abs(Character.MoveSpeed);
-				Character.MovementAngle = Character.PathFollower.ForwardAngle;
-				Character.PathFollower.Resync();
-			}
-
-			EmitSignal(SignalName.Activated);
+			Character.Skills.IsSpeedBreakEnabled = false; // Disable speed break
+			Character.AddLockoutData(lockout); // Apply lockout
 		}
 
 		public void OnExited(Area3D a)
@@ -315,7 +301,6 @@ namespace Project.Gameplay.Triggers
 			isInteractingWithPlayer = false;
 
 			StopSidle();
-			EmitSignal(SignalName.Deactivated);
 		}
 	}
 }
