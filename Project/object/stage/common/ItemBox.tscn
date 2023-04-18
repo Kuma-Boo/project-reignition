@@ -84,6 +84,18 @@ tracks/5/keys = {
 "method": &"play"
 }]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_hxe17"]
 resource_name = "open"
@@ -176,6 +188,18 @@ tracks/6/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_c756k"]
 _data = {
@@ -183,19 +207,16 @@ _data = {
 "open": SubResource("Animation_hxe17")
 }
 
-[node name="ItemBox" type="Area3D" node_paths=PackedStringArray("rootPosition", "wings", "chest", "animator")]
+[node name="ItemBox" type="Area3D" node_paths=PackedStringArray("animator")]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("2")
 "Spawn Settings/Amount" = 1
 "Spawn Settings/Travel Time" = 1.0
 "Spawn Settings/Spawn Pearls" = false
-"Spawn Settings/Arc Height" = 0.0
-"Spawn Settings/Position" = Vector3(0, 0, 0)
+"Spawn Settings/Travel Height" = 2.0
 "Spawn Settings/Object" = null
-rootPosition = NodePath("")
-wings = NodePath("")
-chest = NodePath("ItemBox")
+"Spawn Settings/Pickup Parent" = null
 animator = NodePath("AnimationPlayer")
 
 [node name="ItemBox" parent="." instance=ExtResource("3")]
@@ -220,7 +241,6 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
 shape = SubResource("6")
-disabled = true
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_o2niv")
