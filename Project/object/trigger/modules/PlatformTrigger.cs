@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay.Triggers
@@ -6,20 +7,77 @@ namespace Project.Gameplay.Triggers
 	/// <summary>
 	/// Moves player with moving platforms.
 	/// </summary>
+	[Tool]
 	public partial class PlatformTrigger : Node3D
 	{
+		#region Editor
+		public override Array<Dictionary> _GetPropertyList()
+		{
+			Array<Dictionary> properties = new Array<Dictionary>();
+
+			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Disabled", Variant.Type.Bool));
+			if (!isFallingBehaviourDisabled)
+			{
+				properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Auto Shake", Variant.Type.Bool));
+				properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Shake Length", Variant.Type.Float, PropertyHint.Range, "0, 10"));
+			}
+
+			return properties;
+		}
+
+		public override bool _Set(StringName property, Variant value)
+		{
+			switch ((string)property)
+			{
+				case "Falling Platform Settings/Disabled":
+					isFallingBehaviourDisabled = (bool)value;
+					NotifyPropertyListChanged();
+					break;
+				case "Falling Platform Settings/Auto Shake":
+					autoShake = (bool)value;
+					break;
+				case "Falling Platform Settings/Shake Length":
+					shakeLength = (float)value;
+					break;
+
+				default:
+					return false;
+			}
+
+			return true;
+		}
+
+		public override Variant _Get(StringName property)
+		{
+			switch ((string)property)
+			{
+				case "Falling Platform Settings/Disabled":
+					return isFallingBehaviourDisabled;
+				case "Falling Platform Settings/Auto Shake":
+					return autoShake;
+				case "Falling Platform Settings/Shake Length":
+					return shakeLength;
+			}
+
+			return base._Get(property);
+		}
+		#endregion
+
 		[Signal]
 		public delegate void PlatformInteractedEventHandler();
 
-		[ExportSubgroup("Falling Platform Settings")]
-		[Export]
+		/// <summary> Is falling behaviour disabled? </summary>
+		private bool isFallingBehaviourDisabled;
+		/// <summary> Should the platform automatically start to shake when the player steps on it? </summary>
+		private bool autoShake = true;
 		/// <summary> How long to shake before falling. </summary>
 		private float shakeLength;
+
+		// Runtime data
 		/// <summary> Timer to keep track of shaking status. </summary>
 		private float shakeTimer;
 		/// <summary> Is the platform about to fall? </summary>
 		private bool isPlatformShaking;
-		private bool IsFallingBehaviourEnabled => fallingPlatformAnimator != null;
 
 		[ExportSubgroup("Components")]
 		[Export]
@@ -29,7 +87,7 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Reference to the "floor" collider. </summary>
 		private PhysicsBody3D parentCollider;
 		[Export]
-		/// <summary> Assign this to enable falling platform behaviour. </summary>
+		/// <summary> Animator to handle falling platform behaviour. </summary>
 		private AnimationPlayer fallingPlatformAnimator;
 		private CharacterController Character => CharacterController.instance;
 
@@ -39,13 +97,20 @@ namespace Project.Gameplay.Triggers
 
 		public override void _Ready()
 		{
-			if (IsFallingBehaviourEnabled) // Falling behaviour is enabled, connect signal.
+			if (Engine.IsEditorHint() || isFallingBehaviourDisabled) return;
+
+			if (fallingPlatformAnimator == null)
+				GD.PrintErr($"Falling platform animator is missing on {Name}!");
+
+			if (autoShake) // Falling behaviour is enabled, connect signal.
 				Connect(SignalName.PlatformInteracted, new Callable(this, MethodName.StartShaking));
 		}
 
 
 		public override void _PhysicsProcess(double _)
 		{
+			if (Engine.IsEditorHint()) return;
+
 			if (isPlatformShaking)
 				UpdateFallingPlatformBehaviour();
 
@@ -64,8 +129,11 @@ namespace Project.Gameplay.Triggers
 		}
 
 
-		private void StartShaking()
+		/// <summary> Make the platform start shaking. This can also be called from a signal. </summary>
+		public void StartShaking()
 		{
+			if (isPlatformShaking) return; // Already shaking
+
 			if (Mathf.IsZeroApprox(shakeLength)) // Fall immediately
 			{
 				StartFalling();
@@ -75,11 +143,15 @@ namespace Project.Gameplay.Triggers
 			isPlatformShaking = true;
 			fallingPlatformAnimator.Play("shake");
 		}
+
+
+		/// <summary> Called when the platform begins to fall. </summary>
 		private void StartFalling()
 		{
 			isPlatformShaking = false; // Stop shaking
 			fallingPlatformAnimator.Play("fall", .2);
 		}
+
 
 		private void UpdateFallingPlatformBehaviour()
 		{
