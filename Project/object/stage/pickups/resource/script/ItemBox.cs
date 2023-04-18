@@ -146,6 +146,7 @@ namespace Project.Gameplay.Objects
 		private readonly List<Pickup> objectPool = new List<Pickup>();
 		private readonly List<LaunchSettings> objectLaunchSettings = new List<LaunchSettings>();
 
+
 		protected override void SetUp()
 		{
 			pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
@@ -174,17 +175,14 @@ namespace Project.Gameplay.Objects
 
 					pickupParent.AddChild(pickup);
 				}
-
-				//Disable node parent
-				pickupParent.Visible = false;
-				pickupParent.ProcessMode = ProcessModeEnum.Disabled;
 			}
 
 			base.SetUp();
-			Level.ConnectUnloadSignal(this);
+			Respawn();
 		}
 
-		public override void Unload() //Prevent memory leak
+
+		public override void Unload() // Prevent memory leak
 		{
 			for (int i = objectPool.Count - 1; i >= 0; i--)
 				objectPool[i].QueueFree();
@@ -195,19 +193,26 @@ namespace Project.Gameplay.Objects
 			base.Unload();
 		}
 
+
 		public override void Respawn()
 		{
 			base.Respawn();
-
 			isOpened = false;
 			isMovingObjects = false;
 
 			animator.Play("RESET");
 			animator.Seek(0, true);
 
+			if (pickupParent != null) // Disable node parent
+			{
+				pickupParent.Visible = false;
+				pickupParent.ProcessMode = ProcessModeEnum.Disabled;
+			}
+
 			for (int i = 0; i < objectPool.Count; i++)
 				objectPool[i].Respawn();
 		}
+
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -215,9 +220,10 @@ namespace Project.Gameplay.Objects
 
 			if (spawnPearls) return;
 
-			if (isOpened && isMovingObjects) //Interpolate objects
+			if (isOpened && isMovingObjects) // Interpolate objects
 				UpdateObjects();
 		}
+
 
 		private void UpdateObjects()
 		{
@@ -228,9 +234,9 @@ namespace Project.Gameplay.Objects
 				travelTimes[i] += PhysicsManager.physicsDelta;
 				float currentTime = Mathf.Clamp(travelTimes[i], 0, travelTime) / travelTime;
 				if (currentTime < 1f)
-					isMovementComplete = false; //Still moving objects
+					isMovementComplete = false; // Still moving objects
 
-				if (!objectPool[i].IsInsideTree()) continue; //Already collected?
+				if (!objectPool[i].IsInsideTree()) continue; // Already collected?
 
 				objectPool[i].Visible = !Mathf.IsZeroApprox(currentTime);
 				objectPool[i].Monitoring = objectPool[i].Monitorable = currentTime >= 1f;
@@ -247,6 +253,7 @@ namespace Project.Gameplay.Objects
 
 			isMovingObjects = !isMovementComplete;
 		}
+
 
 		protected override void Collect()
 		{
@@ -269,12 +276,12 @@ namespace Project.Gameplay.Objects
 			pickupParent.Visible = true;
 			pickupParent.ProcessMode = ProcessModeEnum.Inherit;
 
-			//Spawn objects
+			// Spawn objects
 			for (int i = 0; i < objectPool.Count; i++)
 			{
 				travelTimes[i] = Runtime.randomNumberGenerator.RandfRange(-travelDelay, 0);
-				objectPool[i].Monitoring = objectPool[i].Monitorable = false; //Disable collision temporarily
-				objectLaunchSettings[i] = new LaunchSettings(); //Set as uninitialized LaunchSettings
+				objectPool[i].Monitoring = objectPool[i].Monitorable = false; // Disable collision temporarily
+				objectLaunchSettings[i] = new LaunchSettings(); // Set as uninitialized LaunchSettings
 				CallDeferred(MethodName.UpdateObjects);
 			}
 		}

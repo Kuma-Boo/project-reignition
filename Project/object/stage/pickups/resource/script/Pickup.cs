@@ -13,7 +13,7 @@ namespace Project.Gameplay.Objects
 
 		/// <summary> Used for runtime items (Enemy Pearls, Item Box Contents, etc) to allow manual respawning. </summary>
 		public bool DisableAutoRespawning { get; set; }
-		private SpawnData spawnData;
+		public SpawnData SpawnData { get; set; }
 
 		protected LevelSettings Level => LevelSettings.instance;
 		protected CharacterController Character => CharacterController.instance;
@@ -22,9 +22,10 @@ namespace Project.Gameplay.Objects
 
 		protected virtual void SetUp()
 		{
-			if (!DisableAutoRespawning) //Setup respawn settings
+			SpawnData = new SpawnData(GetParent(), Transform);
+
+			if (!DisableAutoRespawning) // Connect respawn triggers
 			{
-				spawnData = new SpawnData(GetParent(), Transform);
 				Level.ConnectRespawnSignal(this);
 				Level.ConnectUnloadSignal(this);
 			}
@@ -41,9 +42,7 @@ namespace Project.Gameplay.Objects
 		public virtual void Unload() => QueueFree();
 		public virtual void Respawn()
 		{
-			if (DisableAutoRespawning) return;
-
-			spawnData.Respawn(this);
+			SpawnData.Respawn(this);
 			EmitSignal(SignalName.Respawned);
 		}
 
