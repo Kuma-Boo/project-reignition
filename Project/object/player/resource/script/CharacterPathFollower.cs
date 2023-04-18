@@ -34,7 +34,6 @@ namespace Project.Gameplay
 
 		public void SetActivePath(Path3D newPath)
 		{
-			GD.Print(newPath.Name);
 			if (newPath == null || newPath == ActivePath) return;
 
 			if (IsInsideTree()) //Unparent

@@ -18,6 +18,9 @@ namespace Project.Gameplay
 		/// <summary> Transition node for switching between states (normal, balancing, sidling, etc) </summary>
 		private AnimationNodeTransition animationStateTransition;
 
+		/// <summary> Determines facing directions for certain animation states. </summary>
+		private bool isFacingRight;
+
 		//For toggle transitions
 		private readonly StringName ENABLED_CONSTANT = "enabled";
 		private readonly StringName DISABLED_CONSTANT = "disabled";
@@ -377,8 +380,10 @@ namespace Project.Gameplay
 
 		#region Drift
 		private readonly StringName DRIFT_STATE = "drift_tree";
-		private AnimationNodeStateMachinePlayback DriftLeftState => animationTree.Get(DRIFT_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+
+		private AnimationNodeStateMachinePlayback ActiveDriftState => isFacingRight ? DriftRightState : DriftLeftState;
 		private AnimationNodeStateMachinePlayback DriftRightState => animationTree.Get(DRIFT_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+		private AnimationNodeStateMachinePlayback DriftLeftState => animationTree.Get(DRIFT_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 
 		private readonly StringName DRIFT_LEFT_PLAYBACK = "parameters/normal_state/drift_tree/left_state/playback";
 		private readonly StringName DRIFT_RIGHT_PLAYBACK = "parameters/normal_state/drift_tree/right_state/playback";
@@ -387,21 +392,18 @@ namespace Project.Gameplay
 		private readonly StringName DRIFT_START_STATE = "drift-start";
 		private readonly StringName DRIFT_LAUNCH_STATE = "drift-launch";
 
-		public void StartDrift(bool isRightTurn)
+		public void StartDrift(bool isDriftFacingRight)
 		{
-			DriftLeftState.Start(DRIFT_START_STATE);
-			DriftRightState.Start(DRIFT_START_STATE);
-
+			isFacingRight = isDriftFacingRight;
+			ActiveDriftState.Start(DRIFT_START_STATE);
 			NormalState.Travel(DRIFT_STATE);
-			animationTree.Set(DRIFT_DIRECTION_PARAMETER, isRightTurn ? RIGHT_CONSTANT : LEFT_CONSTANT);
+			animationTree.Set(DRIFT_DIRECTION_PARAMETER, isFacingRight ? RIGHT_CONSTANT : LEFT_CONSTANT);
 		}
 
-		public void LaunchDrift()
-		{
-			DriftLeftState.Travel(DRIFT_LAUNCH_STATE);
-			DriftRightState.Travel(DRIFT_LAUNCH_STATE);
-		}
+		/// <summary> Called when drift is performed. </summary>
+		public void LaunchDrift() => ActiveDriftState.Travel(DRIFT_LAUNCH_STATE);
 
+		/// <summary> Called when drift is completed. </summary>
 		public void StopDrift()
 		{
 			NormalState.Travel(GROUND_TREE_STATE);
@@ -414,8 +416,6 @@ namespace Project.Gameplay
 		private AnimationNodeStateMachinePlayback BalanceState => animationTree.Get(BALANCE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 		private readonly StringName BALANCE_PLAYBACK = "parameters/balance_tree/balance_state/playback";
 
-		/// <summary> Is the current balancing direction facing right? </summary>
-		private bool IsBalancingRight { get; set; }
 		/// <summary> Is the shuffling animation currently active? </summary>
 		public bool IsBalanceShuffleActive { get; private set; }
 
@@ -430,7 +430,7 @@ namespace Project.Gameplay
 		public void StartBalancing()
 		{
 			IsBalanceShuffleActive = true;
-			IsBalancingRight = true; //Default to facing right
+			isFacingRight = true; //Default to facing right
 			BalanceState.Start(SHUFFLE_RIGHT_PARAMETER, true); //Start with a shuffle
 
 			//Reset current balance
@@ -451,7 +451,7 @@ namespace Project.Gameplay
 		public void StartGrindStep()
 		{
 			int index = Core.Runtime.randomNumberGenerator.RandiRange(1, GRINDSTEP_ANIMATION_VARIATION_COUNT);
-			string targetPose = IsBalancingRight ? "step-right-0" : "step-left-0";
+			string targetPose = isFacingRight ? "step-right-0" : "step-left-0";
 			animationTree.Set(BALANCE_GRINDSTEP_TRANSITION_PARAMETER, targetPose + index.ToString());
 			animationTree.Set(BALANCE_GRINDSTEP_ACTIVE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		}
@@ -459,8 +459,8 @@ namespace Project.Gameplay
 		public void StartGrindShuffle()
 		{
 			IsBalanceShuffleActive = true;
-			IsBalancingRight = !IsBalancingRight;
-			BalanceState.Travel(IsBalancingRight ? SHUFFLE_RIGHT_PARAMETER : SHUFFLE_LEFT_PARAMETER);
+			isFacingRight = !isFacingRight;
+			BalanceState.Travel(isFacingRight ? SHUFFLE_RIGHT_PARAMETER : SHUFFLE_LEFT_PARAMETER);
 		}
 
 		private float balanceTurnVelocity;
@@ -474,8 +474,8 @@ namespace Project.Gameplay
 			IsBalanceShuffleActive = currentNode == SHUFFLE_LEFT_PARAMETER || currentNode == SHUFFLE_RIGHT_PARAMETER;
 			if (IsBalanceShuffleActive)
 			{
-				if ((IsBalancingRight && currentNode == BALANCE_RIGHT_PARAMETER) ||
-				(!IsBalancingRight && currentNode == BALANCE_LEFT_PARAMETER))
+				if ((isFacingRight && currentNode == BALANCE_RIGHT_PARAMETER) ||
+				(!isFacingRight && currentNode == BALANCE_LEFT_PARAMETER))
 					IsBalanceShuffleActive = false;
 			}
 			else
@@ -498,8 +498,9 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Sidle
-		public bool IsSidleMoving => SidleRightState.GetFadingFromNode().IsEmpty && SidleRightState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER;
+		public bool IsSidleMoving => (ActiveSidleState.GetFadingFromNode().IsEmpty && ActiveSidleState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER);
 
+		private AnimationNodeStateMachinePlayback ActiveSidleState => isFacingRight ? SidleRightState : SidleLeftState;
 		private AnimationNodeStateMachinePlayback SidleRightState => animationTree.Get(SIDLE_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 		private AnimationNodeStateMachinePlayback SidleLeftState => animationTree.Get(SIDLE_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 
@@ -517,17 +518,17 @@ namespace Project.Gameplay
 		private readonly StringName SIDLE_SEEK_PARAMETER = "parameters/sidle_tree/sidle_seek/seek_request";
 		private readonly StringName SIDLE_DIRECTION_PARAMETER = "parameters/sidle_tree/direction_transition/transition_request";
 
-		public void StartSidle(bool facingRight)
+		public void StartSidle(bool isSidleFacingRight)
 		{
-			if (Character.IsRespawning) //Cut directly
+			if (Character.IsRespawning) // Skip transition
 				SetStateXfade(0);
-			else //Quick crossfade into sidle
+			else // Quick crossfade into sidle
 				SetStateXfade(0.1f);
 
-			SidleRightState.Start(SIDLE_LOOP_STATE_PARAMETER);
-			SidleLeftState.Start(SIDLE_LOOP_STATE_PARAMETER);
+			isFacingRight = isSidleFacingRight;
+			ActiveSidleState.Start(SIDLE_LOOP_STATE_PARAMETER);
 			animationTree.Set(STATE_PARAMETER, SIDLE_STATE);
-			animationTree.Set(SIDLE_DIRECTION_PARAMETER, facingRight ? RIGHT_CONSTANT : LEFT_CONSTANT);
+			animationTree.Set(SIDLE_DIRECTION_PARAMETER, isFacingRight ? RIGHT_CONSTANT : LEFT_CONSTANT);
 		}
 
 		public void UpdateSidle(float cyclePosition)
@@ -536,53 +537,29 @@ namespace Project.Gameplay
 			animationTree.Set(SIDLE_SEEK_PARAMETER, cyclePosition * .8f); //Sidle animation length is .8 seconds, so normalize cycle position.
 		}
 
-		/// <summary>
-		/// Starts damage (stagger) animation.
-		/// </summary>
+		/// <summary> Starts damage (stagger) animation. </summary>
 		public void SidleDamage()
 		{
 			animationTree.Set(SIDLE_SPEED_PARAMETER, 1f);
 			animationTree.Set(SIDLE_SEEK_PARAMETER, -1);
 
-			SidleRightState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
-			SidleLeftState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
+			ActiveSidleState.Travel(SIDLE_DAMAGE_STATE_PARAMETER);
 		}
 
-		/// <summary>
-		/// Start hanging onto the ledge.
-		/// </summary>
-		public void SidleHang()
-		{
-			SidleRightState.Travel(SIDLE_HANG_STATE_PARAMETER);
-			SidleLeftState.Travel(SIDLE_HANG_STATE_PARAMETER);
-		}
+		/// <summary> Start hanging onto the ledge. </summary>
+		public void SidleHang() => ActiveSidleState.Travel(SIDLE_HANG_STATE_PARAMETER);
 
-		/// <summary>
-		/// Fall while hanging on the ledge.
-		/// </summary>
-		public void SidleHangFall()
-		{
-			SidleRightState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);
-			SidleLeftState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);
-		}
+		/// <summary> Recover back to the ledge. </summary>
+		public void SidleRecovery() => ActiveSidleState.Travel(SIDLE_LOOP_STATE_PARAMETER);
 
-		/// <summary>
-		/// Fall from the ledge.
-		/// </summary>
+		/// <summary> Fall while hanging on the ledge. </summary>
+		public void SidleHangFall() => ActiveSidleState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);
+
+		/// <summary> Fall from the ledge. </summary>
 		public void SidleFall()
 		{
 			animationTree.Set(SIDLE_SPEED_PARAMETER, 1f);
-			SidleRightState.Travel(SIDLE_FALL_STATE_PARAMETER);
-			SidleLeftState.Travel(SIDLE_FALL_STATE_PARAMETER);
-		}
-
-		/// <summary>
-		/// Recover back to the ledge.
-		/// </summary>
-		public void SidleRecovery()
-		{
-			SidleRightState.Travel(SIDLE_LOOP_STATE_PARAMETER);
-			SidleLeftState.Travel(SIDLE_LOOP_STATE_PARAMETER);
+			ActiveSidleState.Travel(SIDLE_FALL_STATE_PARAMETER);
 		}
 		#endregion
 	}
