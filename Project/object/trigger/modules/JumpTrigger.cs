@@ -8,12 +8,18 @@ namespace Project.Gameplay.Triggers
 	[Tool]
 	public partial class JumpTrigger : StageTriggerModule
 	{
+		[Signal]
+		/// <summary> Called when jump is finished. </summary>
+		public delegate void JumpFinishedEventHandler();
+
+
 		[Export]
 		/// <summary> How high to jump. </summary>
 		public float jumpHeight;
 		[Export]
 		/// <summary> Auto align jump direction? </summary>
 		public bool autoAlign;
+
 
 		public LaunchSettings GetLaunchSettings()
 		{
@@ -24,9 +30,14 @@ namespace Project.Gameplay.Triggers
 			return settings;
 		}
 
+
+		private void FinishJump() => EmitSignal(SignalName.JumpFinished);
+
+
 		public override void Activate()
 		{
 			Character.StartLauncher(GetLaunchSettings());
+			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump), (uint)ConnectFlags.OneShot);
 			Character.CanJumpDash = false;
 		}
 	}

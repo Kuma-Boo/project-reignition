@@ -440,8 +440,6 @@ namespace Project.Gameplay
 			SetStateXfade(0); //Don't blend into state
 			animationTree.Set(STATE_PARAMETER, BALANCE_STATE); //Turn on balancing animations
 			animationTree.Set(BALANCE_GRINDSTEP_ACTIVE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort); //Disable any grindstepping
-
-			UpdateBalanceSpeed();
 		}
 
 		private readonly StringName BALANCE_GRINDSTEP_ACTIVE_PARAMETER = "parameters/balance_tree/grindstep_active/request";
@@ -484,16 +482,16 @@ namespace Project.Gameplay
 			targetBalance = ExtensionMethods.SmoothDamp((float)animationTree.Get(BALANCE_RIGHT_LEAN_PARAMETER), targetBalance, ref balanceTurnVelocity, BALANCE_TURN_SMOOTHING);
 			animationTree.Set(BALANCE_RIGHT_LEAN_PARAMETER, targetBalance);
 			animationTree.Set(BALANCE_LEFT_LEAN_PARAMETER, -targetBalance);
-			UpdateBalanceSpeed();
 		}
 
 		private readonly StringName BALANCE_SPEED_PARAMETER = "parameters/balance_tree/balance_speed/scale";
 		private readonly StringName BALANCE_WIND_BLEND_PARAMETER = "parameters/balance_tree/wind_blend/blend_position";
-		private void UpdateBalanceSpeed()
+		public void UpdateBalanceSpeed(float speedRatio = -1)
 		{
-			float currentSpeed = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
-			animationTree.Set(BALANCE_SPEED_PARAMETER, currentSpeed + .8f);
-			animationTree.Set(BALANCE_WIND_BLEND_PARAMETER, currentSpeed);
+			if (speedRatio < 0)
+				speedRatio = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
+			animationTree.Set(BALANCE_SPEED_PARAMETER, speedRatio + .8f);
+			animationTree.Set(BALANCE_WIND_BLEND_PARAMETER, speedRatio);
 		}
 		#endregion
 

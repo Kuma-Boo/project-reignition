@@ -258,6 +258,7 @@ namespace Project.Gameplay
 
 			Character.Animator.ExternalAngle = 0; //Rail modifies Character's Transform directly, animator angle is unused.
 			Character.Animator.StartBalancing();
+			Character.Animator.UpdateBalanceSpeed();
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); //Snap
 
 			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.DisconnectFromRail));
@@ -356,6 +357,7 @@ namespace Project.Gameplay
 			pathFollower.Progress += movementDelta;
 			Character.UpdateExternalControl(true);
 			Character.Animator.UpdateBalancing();
+			Character.Animator.UpdateBalanceSpeed();
 			grindParticles.GlobalTransform = Character.GlobalTransform; //Sync particle position with player
 
 			if (pathFollower.ProgressRatio >= 1 || Mathf.IsZeroApprox(Character.MoveSpeed)) //Disconnect from the rail

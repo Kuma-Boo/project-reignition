@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=32 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -26,10 +26,15 @@
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="23_f4mat"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="24_i3gqp"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="25_t50ri"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="26_jgr2k"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="26_bkait"]
+[ext_resource type="PackedScene" uid="uid://ddove0gr1kgtf" path="res://area/7 night palace/object/Carpet.tscn" id="26_sio18"]
+[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="27_iu8fd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r3fog"]
+size = Vector3(10, 20, 1)
 
 [node name="World" type="Node"]
 
@@ -54,7 +59,7 @@ Completion/Lockout = ExtResource("2_4hrnj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -195.1, -14.9, -341.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -156.1, 10.1, -471.8)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -160,6 +165,7 @@ speedRatio = 1.2
 
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0.01, -160)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -426,6 +432,7 @@ stateLengths = [2.0, 1.0, 1.5]
 
 [node name="Hall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.1, 0.01, -245.6)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -539,8 +546,8 @@ distance = 36.0
 
 [node name="Tower" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
+visible = false
 script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="BallGroup1" type="Node3D" parent="MainAct/Tower"]
@@ -732,6 +739,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, -7)
 
 [node name="Interior" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -195, 2, -502.3)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -763,44 +771,19 @@ Spacing = 6.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/Interior/Rings1" instance=ExtResource("5_guij8")]
 
-[node name="Child02" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/Interior/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/Interior/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/Interior/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/Interior/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
 [node name="Rings2" type="Node3D" parent="MainAct/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.3, 9, 9.10001)
@@ -840,73 +823,54 @@ Spacing = 4.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 
-[node name="Child02" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child06" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child07" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child08" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_jgr2k")
-animator = NodePath("AnimationPlayer")
 
 [node name="Carpet" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
 script = ExtResource("4_kcdaq")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="JumpTrigger" parent="MainAct/Carpet" instance=ExtResource("26_bkait")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="JumpTrigger" type="Node3D" parent="MainAct/Carpet/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 12)
+script = ExtResource("27_iu8fd")
+jumpHeight = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Carpet/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_r3fog")
+
+[node name="Carpet" parent="MainAct/Carpet" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("26_sio18")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 17)
+maxSpeed = 10.0
+turnSpeed = 60.0
+bounds = Vector2(10, 5)
+path = NodePath("../../../Static/Path/CarpetPath")
+pathFollower = NodePath("../../../Static/Path/CarpetPath/CarpetPathFollower")
 
 [node name="Static" parent="." instance=ExtResource("3_ksvvu")]
 
@@ -915,16 +879,4 @@ saveVisibilityOnCheckpoint = true
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin2" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Activate"]
 [connection signal="Respawned" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Deactivate"]
-[connection signal="area_entered" from="MainAct/Interior/Rings1/Child01" to="MainAct/Interior/Rings1/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings1/Child02" to="MainAct/Interior/Rings1/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings1/Child03" to="MainAct/Interior/Rings1/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings1/Child04" to="MainAct/Interior/Rings1/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings1/Child05" to="MainAct/Interior/Rings1/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child01" to="MainAct/Interior/Rings3/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child02" to="MainAct/Interior/Rings3/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child03" to="MainAct/Interior/Rings3/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child04" to="MainAct/Interior/Rings3/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child05" to="MainAct/Interior/Rings3/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child06" to="MainAct/Interior/Rings3/Child06" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child07" to="MainAct/Interior/Rings3/Child07" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/Interior/Rings3/Child08" to="MainAct/Interior/Rings3/Child08" method="OnEntered" flags=18]
+[connection signal="JumpFinished" from="MainAct/Carpet/JumpTrigger/JumpTrigger" to="MainAct/Carpet/Carpet" method="Activate"]

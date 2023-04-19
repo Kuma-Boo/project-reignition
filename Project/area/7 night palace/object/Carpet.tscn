@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddove0gr1kgtf"]
+
+[ext_resource type="Script" path="res://area/7 night palace/data/script/Carpet.cs" id="1_ah2v3"]
+[ext_resource type="PackedScene" uid="uid://drabhhqncnl47" path="res://area/7 night palace/object/model/Carpet.gltf" id="1_plokg"]
+
+[node name="Carpet" type="Node3D" node_paths=PackedStringArray("root", "animator")]
+script = ExtResource("1_ah2v3")
+root = NodePath("Carpet")
+animator = NodePath("Carpet/AnimationPlayer")
+
+[node name="Carpet" parent="." instance=ExtResource("1_plokg")]
+
+[node name="FlyingCarpetMesh" parent="Carpet/FlyingCarpetRoot/Skeleton3D" index="0"]
+cast_shadow = 0
+
+[node name="AnimationPlayer" parent="Carpet" index="1"]
+autoplay = "carpet-idle"
+
+[editable path="Carpet"]

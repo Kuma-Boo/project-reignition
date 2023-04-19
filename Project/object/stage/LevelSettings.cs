@@ -396,6 +396,9 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Level Completion
+		[Signal]
+		public delegate void LevelCompletedEventHandler(); // Called when level is completed
+
 		public LockoutResource completionLockout;
 		public enum LevelStateEnum
 		{
@@ -406,17 +409,14 @@ namespace Project.Gameplay
 		public LevelStateEnum LevelState { get; private set; }
 		private bool IsLevelFinished => LevelState != LevelStateEnum.Incomplete;
 		private float completionDelay;
-
-		[Signal]
-		public delegate void LevelCompletedEventHandler(); //Called when level is completed
 		public void FinishLevel(bool wasSuccessful)
 		{
-			if (StageSettings.instance.StartCompletionDemo()) //Attempt to start the completion demo
+			if (StageSettings.instance.StartCompletionDemo()) // Attempt to start the completion demo
 			{
-				//Hide everything so shadows don't render
+				// Hide everything so shadows don't render
 				Visible = false;
 
-				//Disable all object nodes that aren't parented to this node
+				// Disable all object nodes that aren't parented to this node
 				Array<Node> nodes = GetTree().GetNodesInGroup("cull on complete");
 				for (int i = 0; i < nodes.Count; i++)
 				{
@@ -432,28 +432,29 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Object Spawning
-		//Checkpoint data
+		// Checkpoint data
+		[Signal]
+		public delegate void OnTriggeredCheckpointEventHandler();
 		public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
 		public Path3D CheckpointPlayerPath { get; private set; }
 		public Path3D CheckpointCameraPath { get; private set; }
 		public CameraSettingsResource CheckpointCameraSettings;
 		public void SetCheckpoint(Triggers.CheckpointTrigger newCheckpoint)
 		{
-			if (newCheckpoint == CurrentCheckpoint) return; //Already at this checkpoint
+			if (newCheckpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
-			CurrentCheckpoint = newCheckpoint; //Position transform
-			CheckpointPlayerPath = CharacterController.instance.PathFollower.ActivePath; //Store current path
-			CheckpointCameraPath = CameraController.instance.PathFollower.ActivePath; //Store current path
+			CurrentCheckpoint = newCheckpoint; // Position transform
+			CheckpointPlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current path
+			CheckpointCameraPath = CameraController.instance.PathFollower.ActivePath; // Store current path
 			CheckpointCameraSettings = CameraController.instance.ActiveSettings;
 
 			EmitSignal(SignalName.OnTriggeredCheckpoint);
 		}
-		[Signal]
-		public delegate void OnTriggeredCheckpointEventHandler();
+
 
 		[Signal]
 		public delegate void OnUnloadedEventHandler();
-		private const string UNLOAD_FUNCTION = "Unload"; //Clean up any memory leaks in this function
+		private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
 		public override void _ExitTree() => EmitSignal(SignalName.OnUnloaded);
 		public void ConnectUnloadSignal(Node node)
 		{
@@ -466,6 +467,7 @@ namespace Project.Gameplay
 			if (!IsConnected(SignalName.OnUnloaded, new Callable(node, UNLOAD_FUNCTION)))
 				Connect(SignalName.OnUnloaded, new Callable(node, UNLOAD_FUNCTION));
 		}
+
 
 		[Signal]
 		public delegate void OnRespawnedEventHandler();
@@ -482,11 +484,13 @@ namespace Project.Gameplay
 				Connect(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
 		}
 
+
 		public void RespawnObjects()
 		{
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
 			EmitSignal(SignalName.OnRespawned);
 		}
+
 
 		private bool itemCycleRespawnEnabled = true; //Respawn items when cycling?
 		private bool itemCycleFlagSet; //Should we trigger an item switch?
@@ -498,7 +502,6 @@ namespace Project.Gameplay
 		private Array<NodePath> itemCycles = new Array<NodePath>();
 		private readonly List<Node3D> _itemCycles = new List<Node3D>();
 		private readonly List<SpawnData> _itemCyclesSpawnData = new List<SpawnData>();
-
 		private void SetUpItemCycles()
 		{
 			if (itemCycleActivationTrigger == null || itemCycleActivationTrigger.IsEmpty) return; //Item cycling disabled
@@ -528,24 +531,25 @@ namespace Project.Gameplay
 			}
 		}
 
+
 		public void OnItemCycleActivate(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
 			if (itemCycles.Count == 0 || !itemCycleFlagSet) return;
 
-			//Cycle items
+			// Cycle items
 			if (itemCycleRespawnEnabled)
 				RespawnObjects();
 
-			if (_itemCycles[itemCycleIndex] != null) //Despawn current item cycle
+			if (_itemCycles[itemCycleIndex] != null) // Despawn current item cycle
 				_itemCyclesSpawnData[itemCycleIndex].parentNode.CallDeferred(MethodName.RemoveChild, _itemCycles[itemCycleIndex]);
 
-			//Increment counter
+			// Increment counter
 			itemCycleIndex++;
 			if (itemCycleIndex > itemCycles.Count - 1)
 				itemCycleIndex = 0;
 
-			if (_itemCycles[itemCycleIndex] != null) //Spawn current item cycle
+			if (_itemCycles[itemCycleIndex] != null) // Spawn current item cycle
 			{
 				_itemCyclesSpawnData[itemCycleIndex].parentNode.AddChild(_itemCycles[itemCycleIndex]);
 				_itemCycles[itemCycleIndex].Transform = _itemCyclesSpawnData[itemCycleIndex].spawnTransform;
@@ -553,6 +557,7 @@ namespace Project.Gameplay
 
 			itemCycleFlagSet = false;
 		}
+
 
 		public void OnItemCycleHalfwayEntered(Area3D a)
 		{
@@ -562,10 +567,13 @@ namespace Project.Gameplay
 		#endregion
 	}
 
+
 	public struct SpawnData
 	{
-		public Node parentNode; //Original parent node
-		public Transform3D spawnTransform; //Local transform to spawn with
+		/// <summary> Original parent node. </summary>
+		public Node parentNode;
+		/// <summary> Local transform to spawn with. </summary>
+		public Transform3D spawnTransform;
 		public SpawnData(Node parent, Transform3D transform)
 		{
 			parentNode = parent;
@@ -576,7 +584,7 @@ namespace Project.Gameplay
 		{
 			if (n.GetParent() != parentNode)
 			{
-				if (n.IsInsideTree()) //Object needs to be reparented first.
+				if (n.IsInsideTree()) // Object needs to be reparented first.
 					n.GetParent().RemoveChild(n);
 
 				parentNode.CallDeferred(Node.MethodName.AddChild, n);
