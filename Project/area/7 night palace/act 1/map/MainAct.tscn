@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=27 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -23,6 +23,8 @@
 [ext_resource type="PackedScene" uid="uid://b4omh0erkr8si" path="res://object/enemy/majin/data/night palace/RedMajin.tscn" id="19_3ua6y"]
 [ext_resource type="PackedScene" uid="uid://duoxr3yjsxaoi" path="res://area/7 night palace/object/grindrail/Grindrail03.tscn" id="20_kogq7"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="21_3irg0"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="23_f4mat"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="24_i3gqp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
@@ -50,6 +52,7 @@ Completion/Lockout = ExtResource("2_4hrnj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -195.1, -14.9, -341.4)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -535,7 +538,144 @@ distance = 36.0
 [node name="Tower" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
 script = ExtResource("4_kcdaq")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="SpikeBall1" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="SpikeBall2" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+animatorSpeedScale = 0.8
+
+[node name="SpikeBall3" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -3.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 9.0
+animatorSpeedScale = 0.8
+
+[node name="SpikeBall4" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 14.0
+
+[node name="MajinGroup1" type="Node3D" parent="MainAct/Tower"]
+
+[node name="BlueMajin1" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("18_ggltt")]
+transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, 2.89777, 2, -3.77646)
+
+[node name="BlueMajin2" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("18_ggltt")]
+transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, -3.86252, 2.5, 0.14016)
+
+[node name="RedMajin1" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, 18)
+"Attack Settings/Flame Active Time" = 2.5
+"Attack Settings/Flame Inactive Time" = 2.0
+maxHealth = 1
+
+[node name="GreenMajin" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 3, 18)
+
+[node name="RedMajin2" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5.5, 18)
+"Attack Settings/Flame Active Time" = 2.5
+"Attack Settings/Flame Inactive Time" = 2.0
+maxHealth = 1
+
+[node name="EnemyStone" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("23_f4mat")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.5, 28.5)
+enemyCount = 3
+
+[node name="Switch" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("24_i3gqp")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.1, 28.5)
+
+[node name="RingCuller" type="Node3D" parent="MainAct/Tower/MajinGroup1/Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+script = ExtResource("4_kcdaq")
+
+[node name="Ring" type="Node3D" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="Child03" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child04" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
+
+[node name="Child05" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child06" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child07" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child08" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.6)
+
+[node name="Child09" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child10" parent="MainAct/Tower/MajinGroup1/Switch/RingCuller/Ring" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
+
+[node name="DashPanel" parent="MainAct/Tower" instance=ExtResource("7_luf24")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 51)
+speedRatio = 1.2
+
+[node name="MajinGroup2" type="Node3D" parent="MainAct/Tower"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, -5, 82.2)
+
+[node name="BlueMajin1" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_ggltt")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.5, -2)
+
+[node name="BlueMajin2" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_ggltt")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 4.5, 2)
+
+[node name="GreenMajin1" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 8, -1)
+
+[node name="GreenMajin2" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 12, 2)
+
+[node name="BlueMajin3" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_ggltt")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 14.5, -2)
+
+[node name="BlueMajin4" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_ggltt")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 18.5, 2)
+
+[node name="RedMajin" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, 23, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 0.5
 
 [node name="Interior" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
@@ -543,3 +683,9 @@ script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="Static" parent="." instance=ExtResource("3_ksvvu")]
+
+[connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin1" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Tower/MajinGroup1/GreenMajin" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin2" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Activate"]
+[connection signal="Respawned" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Deactivate"]

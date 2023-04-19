@@ -350,6 +350,20 @@ path = NodePath("../../../../Path/WallRun1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gcmbn")
 
+[node name="WallRun2" parent="Trigger/Object" instance=ExtResource("6_6kpe1")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -163.8, -10, -320.3)
+endPoint = 72.0
+ignoreDirection = true
+
+[node name="WallRun" type="Node3D" parent="Trigger/Object/WallRun2" node_paths=PackedStringArray("path")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -5.4)
+script = ExtResource("7_omcuu")
+path = NodePath("../../../../Path/WallRun2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/WallRun2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gcmbn")
+
 [node name="Sidle" type="Node3D" parent="Trigger/Object"]
 
 [node name="SidleTrigger1" parent="Trigger/Object/Sidle" instance=ExtResource("6_i1wsq")]
@@ -407,6 +421,18 @@ script = ExtResource("7_omcuu")
 path = NodePath("../../../../Path/MainPath3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/MainPath3"]
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="MainPath4" parent="Trigger/Path" instance=ExtResource("4_d1bik")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -194.966, -15, -364.218)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/MainPath4" node_paths=PackedStringArray("path")]
+script = ExtResource("7_omcuu")
+path = NodePath("../../../../Path/MainPath4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/MainPath4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
@@ -692,7 +718,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74.513, -9.999, -320.333)
 curve = ExtResource("13_htggc")
 
 [node name="WallRun2" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -165.952, -9.999, -320.333)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -145, -10, -320.333)
 curve = ExtResource("18_6scab")
 
 [node name="MainPath4" type="Path3D" parent="Path"]
@@ -732,6 +758,7 @@ bus = &"BGM"
 
 [connection signal="Activated" from="Trigger/Object/WallRun1" to="Trigger/Object/WallRun1/WallRun" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/WallRun1" to="Trigger/Object/Sidle/SidleTrigger1/SidleActivation" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/WallRun2" to="Trigger/Object/WallRun2/WallRun" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Path" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Activate"]

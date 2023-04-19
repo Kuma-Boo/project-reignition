@@ -184,8 +184,9 @@ namespace Project.Gameplay
 			ResetLockonTarget();
 
 			Character.CanJumpDash = true;
-			Character.MoveSpeed = bounceSpeed;
+			Character.MoveSpeed = -bounceSpeed;
 			Character.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
+			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();
 		}
