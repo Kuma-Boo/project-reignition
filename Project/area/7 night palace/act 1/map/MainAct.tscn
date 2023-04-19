@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=29 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -25,6 +25,8 @@
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="21_3irg0"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="23_f4mat"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="24_i3gqp"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="25_t50ri"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="26_jgr2k"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
@@ -541,11 +543,12 @@ script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
-[node name="SpikeBall1" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
+[node name="BallGroup1" type="Node3D" parent="MainAct/Tower"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
-[node name="SpikeBall2" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+[node name="SpikeBall1" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
+
+[node name="SpikeBall2" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
 Movement/Mode = 2
 "Movement/Cycle Length" = 4.0
 "Movement/Horizontal Size" = 0.0
@@ -553,8 +556,7 @@ Movement/Mode = 2
 Movement/Radius = 4.0
 animatorSpeedScale = 0.8
 
-[node name="SpikeBall3" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+[node name="SpikeBall3" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
 Movement/Mode = 2
 "Movement/Cycle Length" = -3.0
 "Movement/Horizontal Size" = 0.0
@@ -562,8 +564,7 @@ Movement/Mode = 2
 Movement/Radius = 9.0
 animatorSpeedScale = 0.8
 
-[node name="SpikeBall4" parent="MainAct/Tower" instance=ExtResource("21_3irg0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+[node name="SpikeBall4" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
 Movement/Mode = 2
 "Movement/Cycle Length" = 4.0
 "Movement/Horizontal Size" = 0.0
@@ -662,23 +663,248 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 4.5
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 8, -1)
 
 [node name="GreenMajin2" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_wuv3v")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 12, 2)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 11.5, 2)
 
 [node name="BlueMajin3" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_ggltt")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 14.5, -2)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 14, -2)
 
 [node name="BlueMajin4" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("18_ggltt")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 18.5, 2)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 17, 2)
 
 [node name="RedMajin" parent="MainAct/Tower/MajinGroup2" instance=ExtResource("19_3ua6y")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, 23, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, 21, 0)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 0.5
 
+[node name="InvisibleGrindrail1" parent="MainAct/Tower" instance=ExtResource("25_t50ri")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -42, 16, 82.2)
+"Invisible Rail Settings/Length" = 28
+
+[node name="InvisibleGrindrail2" parent="MainAct/Tower" instance=ExtResource("25_t50ri")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -61, 19, 82.2)
+"Invisible Rail Settings/Length" = 28
+
+[node name="InvisibleGrindrail3" parent="MainAct/Tower" instance=ExtResource("25_t50ri")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -85, 22.5, 82.2)
+"Invisible Rail Settings/Length" = 32
+
+[node name="MajinGroup3" type="Node3D" parent="MainAct/Tower"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -118, 12, 82.2)
+
+[node name="RedMajin" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("19_3ua6y")]
+"Attack Settings/Flame Active Time" = 6.0
+"Attack Settings/Flame Inactive Time" = 1.0
+
+[node name="GreenMajin1" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+
+[node name="GreenMajin2" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="GreenMajin3" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+
+[node name="BlueMajin" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("18_ggltt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+
+[node name="GreenMajin4" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 0)
+
+[node name="ItemBox1" parent="MainAct/Tower" instance=ExtResource("6_pusyw")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -70.7, 5.5, 86)
+"Spawn Settings/Travel Height" = 5.0
+"Spawn Settings/Object" = ExtResource("7_fjkar")
+"Spawn Settings/Pickup Parent" = NodePath("SpawnPosition")
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct/Tower/ItemBox1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.3, -11.4)
+
+[node name="ItemBox2" parent="MainAct/Tower" instance=ExtResource("6_pusyw")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -77.7, 5.5, 80)
+"Spawn Settings/Travel Height" = 5.0
+"Spawn Settings/Object" = ExtResource("7_fjkar")
+"Spawn Settings/Pickup Parent" = NodePath("SpawnPosition")
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct/Tower/ItemBox2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, -7)
+
 [node name="Interior" type="Node3D" parent="MainAct"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -195, 2, -502.3)
+script = ExtResource("4_kcdaq")
+saveVisibilityOnCheckpoint = true
+
+[node name="MajinGroup" type="Node3D" parent="MainAct/Interior"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 46, 0, 0)
+
+[node name="GreenMajin1" parent="MainAct/Interior/MajinGroup" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+
+[node name="GreenMajin2" parent="MainAct/Interior/MajinGroup" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -2.5)
+
+[node name="RedMajin" parent="MainAct/Interior/MajinGroup" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.5
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+
+[node name="Rings1" type="Node3D" parent="MainAct/Interior"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 9, 19.1)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 6.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="MainAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Rings2" type="Node3D" parent="MainAct/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.3, 9, 9.10001)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 6.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Interior/Rings2" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/Interior/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child03" parent="MainAct/Interior/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child04" parent="MainAct/Interior/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child05" parent="MainAct/Interior/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Rings3" type="Node3D" parent="MainAct/Interior"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -12.3, 9, -21.4)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child06" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child07" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child08" type="Area3D" parent="MainAct/Interior/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("26_jgr2k")
+animator = NodePath("AnimationPlayer")
+
+[node name="Carpet" type="Node3D" parent="MainAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -689,3 +915,16 @@ saveVisibilityOnCheckpoint = true
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin2" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Activate"]
 [connection signal="Respawned" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Deactivate"]
+[connection signal="area_entered" from="MainAct/Interior/Rings1/Child01" to="MainAct/Interior/Rings1/Child01" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings1/Child02" to="MainAct/Interior/Rings1/Child02" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings1/Child03" to="MainAct/Interior/Rings1/Child03" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings1/Child04" to="MainAct/Interior/Rings1/Child04" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings1/Child05" to="MainAct/Interior/Rings1/Child05" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child01" to="MainAct/Interior/Rings3/Child01" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child02" to="MainAct/Interior/Rings3/Child02" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child03" to="MainAct/Interior/Rings3/Child03" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child04" to="MainAct/Interior/Rings3/Child04" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child05" to="MainAct/Interior/Rings3/Child05" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child06" to="MainAct/Interior/Rings3/Child06" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child07" to="MainAct/Interior/Rings3/Child07" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Interior/Rings3/Child08" to="MainAct/Interior/Rings3/Child08" method="OnEntered" flags=18]
