@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://cuplakh6fkalc"]
 
-[ext_resource type="Script" path="res://area/2 dino jungle/data/script/Boat.cs" id="1_8wvpo"]
-[ext_resource type="Resource" uid="uid://b3bjolw42bp2p" path="res://resource/preset/camera/object/BoatCam.tres" id="2_rrka6"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/PathTraveller.cs" id="1_712du"]
 [ext_resource type="PackedScene" uid="uid://basm3ynnw1lsn" path="res://area/2 dino jungle/object/model/Boat.gltf" id="3_tcnkk"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yrin3"]
@@ -115,26 +114,22 @@ _data = {
 "respawn": SubResource("Animation_a6uw5")
 }
 
-[node name="Boat" type="CharacterBody3D" node_paths=PackedStringArray("passengerPosition", "frontOrientationChecker", "rearOrientationChecker", "animator")]
-collision_layer = 0
-wall_min_slide_angle = 0.0
-floor_stop_on_slope = false
-floor_constant_speed = true
-floor_block_on_wall = false
-floor_snap_length = 5.0
-script = ExtResource("1_8wvpo")
-speed = 15.0
-passengerPosition = NodePath("Boat/PlayerPosition")
-frontOrientationChecker = NodePath("FrontOrientationChecker")
-rearOrientationChecker = NodePath("RearOrientationChecker")
+[node name="Boat" type="Node3D" node_paths=PackedStringArray("root", "playerPosition", "animator")]
+script = ExtResource("1_712du")
+root = NodePath("Boat/BoatMesh")
+playerPosition = NodePath("Boat/BoatRipple/PlayerPosition")
 animator = NodePath("AnimationPlayer")
-cameraSettings = ExtResource("2_rrka6")
-environmentMask = 1
 
 [node name="Boat" parent="." instance=ExtResource("3_tcnkk")]
 
-[node name="PlayerPosition" type="Node3D" parent="Boat"]
+[node name="BoatRipple" parent="Boat" index="0"]
+cast_shadow = 0
+
+[node name="PlayerPosition" type="Node3D" parent="Boat/BoatRipple" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+
+[node name="BoatMesh" parent="Boat" index="1"]
+cast_shadow = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -171,3 +166,5 @@ enabled = false
 target_position = Vector3(0, -5, 0)
 
 [connection signal="area_entered" from="Activation" to="." method="PlayerEntered"]
+
+[editable path="Boat"]

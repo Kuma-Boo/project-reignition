@@ -294,10 +294,8 @@ namespace Project.Gameplay
 		private const float TURN_SMOOTHING = .1f;
 		/// <summary> Max amount of turning allowed. </summary>
 		private readonly float MAX_TURN_ANGLE = Mathf.Pi * .4f;
-		/// <summary>
-		/// Calculates turn ratio based on current input with -1 being left and 1 being right.
-		/// </summary>
-		private float CalculateTurnRatio()
+		/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
+		public float CalculateTurnRatio()
 		{
 			if (Character.Skills.IsSpeedBreakActive) //Use strafe/movespeed
 				return Character.Skills.strafeSettings.GetSpeedRatio(Character.StrafeSpeed * 1.5f);
@@ -464,10 +462,8 @@ namespace Project.Gameplay
 		private float balanceTurnVelocity;
 		/// <summary> How much should the balancing animation be smoothed by? </summary>
 		private const float BALANCE_TURN_SMOOTHING = .15f;
-		public void UpdateBalancing()
+		public void UpdateBalancing(float balanceRatio)
 		{
-			float targetBalance = 0;
-
 			StringName currentNode = BalanceState.GetCurrentNode();
 			IsBalanceShuffleActive = currentNode == SHUFFLE_LEFT_PARAMETER || currentNode == SHUFFLE_RIGHT_PARAMETER;
 			if (IsBalanceShuffleActive)
@@ -475,13 +471,13 @@ namespace Project.Gameplay
 				if ((isFacingRight && currentNode == BALANCE_RIGHT_PARAMETER) ||
 				(!isFacingRight && currentNode == BALANCE_LEFT_PARAMETER))
 					IsBalanceShuffleActive = false;
-			}
-			else
-				targetBalance = CalculateTurnRatio();
 
-			targetBalance = ExtensionMethods.SmoothDamp((float)animationTree.Get(BALANCE_RIGHT_LEAN_PARAMETER), targetBalance, ref balanceTurnVelocity, BALANCE_TURN_SMOOTHING);
-			animationTree.Set(BALANCE_RIGHT_LEAN_PARAMETER, targetBalance);
-			animationTree.Set(BALANCE_LEFT_LEAN_PARAMETER, -targetBalance);
+				balanceRatio = 0;
+			}
+
+			balanceRatio = ExtensionMethods.SmoothDamp((float)animationTree.Get(BALANCE_RIGHT_LEAN_PARAMETER), balanceRatio, ref balanceTurnVelocity, BALANCE_TURN_SMOOTHING);
+			animationTree.Set(BALANCE_RIGHT_LEAN_PARAMETER, balanceRatio);
+			animationTree.Set(BALANCE_LEFT_LEAN_PARAMETER, -balanceRatio);
 		}
 
 		private readonly StringName BALANCE_SPEED_PARAMETER = "parameters/balance_tree/balance_speed/scale";

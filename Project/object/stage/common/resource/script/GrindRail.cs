@@ -356,7 +356,7 @@ namespace Project.Gameplay
 
 			pathFollower.Progress += movementDelta;
 			Character.UpdateExternalControl(true);
-			Character.Animator.UpdateBalancing();
+			Character.Animator.UpdateBalancing(Character.Animator.CalculateTurnRatio());
 			Character.Animator.UpdateBalanceSpeed();
 			grindParticles.GlobalTransform = Character.GlobalTransform; //Sync particle position with player
 

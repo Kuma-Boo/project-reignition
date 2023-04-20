@@ -4,9 +4,12 @@ using Project.Core;
 namespace Project.Gameplay.Objects
 {
 	/// <summary>
-	/// Controls the carpet found inside of Night Palace.
+	/// Controls objects that carry the player along a path. These include:
+	/// The logs in Dinosaur Jungle,
+	/// the cannon in Pirate Storm,
+	/// and the carpet in Night Palace.
 	/// </summary>
-	public partial class Carpet : Node3D
+	public partial class PathTraveller : Node3D
 	{
 		[ExportGroup("Settings")]
 		[Export]
@@ -17,6 +20,10 @@ namespace Project.Gameplay.Objects
 		private float turnSpeed;
 
 		[Export]
+		/// <summary> Allow object to move vertically? </summary>
+		private bool isVerticalMovementDisabled;
+
+		[Export]
 		/// <summary> Maximum distance from the path allowed. </summary>
 		private Vector2 bounds;
 		private float HorizontalTurnSmoothing => bounds.X * TURN_SMOOTHING_RATIO;
@@ -25,7 +32,7 @@ namespace Project.Gameplay.Objects
 		private readonly float TURN_SMOOTHING_RATIO = .8f;
 
 
-		/// <summary> How fast the carpet is currently moving? </summary>
+		/// <summary> How fast is the object currently moving? </summary>
 		private float speedDelta;
 		private Vector2 turnDelta;
 		// Values for smooth damp
@@ -37,16 +44,19 @@ namespace Project.Gameplay.Objects
 
 		[ExportGroup("Components")]
 		[Export]
-		/// <summary> Reference to the Carpet's travel path. </summary>
+		/// <summary> Reference to the travel path. </summary>
 		private Path3D path;
 		[Export]
-		/// <summary> Reference to the Carpet's pathfollower. </summary>
+		/// <summary> Reference to the pathfollower. </summary>
 		private PathFollow3D pathFollower;
 		[Export]
-		/// <summary> Reference to the Carpet's root. </summary>
+		/// <summary> Reference to the root. </summary>
 		private Node3D root;
 		[Export]
-		/// <summary> Reference to the Carpet's animator. </summary>
+		/// <summary> Reference to the player's position. </summary>
+		private Node3D playerPosition;
+		[Export]
+		/// <summary> Reference to the animator. </summary>
 		private AnimationPlayer animator;
 
 
@@ -72,8 +82,15 @@ namespace Project.Gameplay.Objects
 		{
 			if (!isActive) return;
 
-			// Process carpet movement
+			ProcessMovement();
+		}
+
+		/// <summary> Handles object's movement. </summary>
+		private void ProcessMovement()
+		{
 			Vector2 inputVector = Character.InputVector * turnSpeed;
+			if (isVerticalMovementDisabled) // Ignore vertical input
+				inputVector.Y = 0;
 
 			// Smooth out edges
 			bool isSmoothingHorizontal = Mathf.Abs(pathFollower.HOffset) > HorizontalTurnSmoothing &&
@@ -89,22 +106,31 @@ namespace Project.Gameplay.Objects
 			speedDelta = ExtensionMethods.SmoothDamp(speedDelta, maxSpeed, ref speedVelocity, SPEED_SMOOTHING);
 			turnDelta = ExtensionMethods.SmoothDamp(turnDelta, inputVector, ref turnVelocity, TURN_SMOOTHING);
 
-
+			// Update path follower
 			pathFollower.Progress += speedDelta * PhysicsManager.physicsDelta;
 
-			// Add turning offset
+			// Add offsets
 			pathFollower.HOffset -= turnDelta.X * PhysicsManager.physicsDelta;
 			pathFollower.VOffset -= turnDelta.Y * PhysicsManager.physicsDelta;
+			// Clamp offsets
 			pathFollower.HOffset = Mathf.Clamp(pathFollower.HOffset, -bounds.X, bounds.X);
 			pathFollower.VOffset = Mathf.Clamp(pathFollower.VOffset, -bounds.Y, bounds.Y);
 
-			//Update animations
-			root.Rotation = Vector3.Zero;
-			root.RotateX(Mathf.Pi * .25f * (turnDelta.Y / turnSpeed));
-			root.RotateZ(Mathf.Pi * .25f * (turnDelta.X / turnSpeed));
-			animator.SpeedScale = 1.0f + (speedDelta / maxSpeed) * 1.5f;
-			Character.Animator.UpdateBalancing();
+			// Update animations
+			if (root != null) // Update visual rotations
+			{
+				root.Rotation = Vector3.Zero;
+				root.RotateX(Mathf.Pi * .25f * (turnDelta.Y / turnSpeed));
+				root.RotateZ(Mathf.Pi * .25f * (turnDelta.X / turnSpeed));
+			}
 
+			if (animator != null) // Update animation speeds
+				animator.SpeedScale = 1.0f + (speedDelta / maxSpeed) * 1.5f;
+
+			Character.Animator.UpdateBalancing(inputVector.X / turnSpeed);
+
+
+			// Sync transforms
 			GlobalTransform = pathFollower.GlobalTransform;
 			Character.UpdateExternalControl();
 		}
@@ -118,8 +144,11 @@ namespace Project.Gameplay.Objects
 			pathFollower.Progress = startingProgress;
 			pathFollower.HOffset = pathFollower.VOffset = 0;
 
-			root.Transform = Transform3D.Identity;
-			animator.SpeedScale = 1.0f; // Reset speed scale
+			if (root != null) // Reset root transform
+				root.Transform = Transform3D.Identity;
+
+			if (animator != null) // Reset speed scale
+				animator.SpeedScale = 1.0f;
 		}
 
 
@@ -128,7 +157,7 @@ namespace Project.Gameplay.Objects
 		{
 			isActive = true;
 
-			Character.StartExternal(this, root);
+			Character.StartExternal(this, playerPosition);
 			Character.Animator.StartBalancing(); // Carpet uses balancing animations
 			Character.Animator.UpdateBalanceSpeed(1.0f);
 			Character.Animator.ExternalAngle = 0;
