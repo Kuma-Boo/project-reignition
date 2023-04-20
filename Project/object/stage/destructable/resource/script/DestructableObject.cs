@@ -8,6 +8,9 @@ namespace Project.Gameplay.Objects
 	/// </summary>
 	public partial class DestructableObject : Node3D
 	{
+		[Signal]
+		public delegate void ShatteredEventHandler();
+
 		private Tween tweener;
 
 		[Export]
@@ -33,7 +36,7 @@ namespace Project.Gameplay.Objects
 		private Node3D pieceRoot;
 		[Export]
 		protected AnimationPlayer animator;
-		[Export(PropertyHint.Flags, "PlayerCollision,ObjectCollision,AttackSkill,HomingAttack,SpeedBreak")]
+		[Export(PropertyHint.Flags, "PlayerCollision,ObjectCollision,AttackSkill,JumpDash,SpeedBreak")]
 		private int shatterFlags;
 		private enum ShatterFlags
 		{
@@ -41,7 +44,7 @@ namespace Project.Gameplay.Objects
 			PlayerCollision = 1, //Break immediately when touching
 			ObjectCollision = 2, //Should objects be able to shatter this?
 			AttackSkill = 4, //Break when player is using an attack skill
-			HomingAttack = 8, //Break when player is homing attacking. Must be enabled even if AttackSkill is active.
+			JumpDash = 8, //Break when player is jumpdashing/homing attacking. Must be enabled even if AttackSkill is active.
 			SpeedBreak = 16, //Break when speedbreak is active. Must be enabled even if AttackSkill is active.
 		}
 		private const float SHATTER_STRENGTH = 10.0f;
@@ -51,8 +54,6 @@ namespace Project.Gameplay.Objects
 
 		protected bool isShattered;
 		protected bool isInteractingWithPlayer;
-		[Signal]
-		public delegate void ShatteredEventHandler();
 
 		private readonly List<Piece> pieces = new List<Piece>();
 
@@ -258,11 +259,8 @@ namespace Project.Gameplay.Objects
 				Shatter();
 			else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
 				Shatter();
-			else if (FlagSetting.HasFlag(ShatterFlags.HomingAttack) && Character.Lockon.IsHomingAttacking)
-			{
+			else if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Character.ActionState == CharacterController.ActionStates.JumpDash)
 				Shatter();
-				Character.Lockon.StartBounce();
-			}
 			else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
 				Shatter();
 		}

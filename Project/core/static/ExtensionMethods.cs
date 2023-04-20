@@ -84,10 +84,6 @@ namespace Project
 		}
 
 
-		/// <summary> Gets the LocalPosition relative to a Node3D. Note that "left" is positive, while "right" is negative. </summary>
-		public static Vector3 GetLocalPosition(this Node3D p, Vector3 pos) => p.GlobalTransform.Basis.Inverse() * (pos - p.GlobalPosition);
-
-
 		/// <summary> Manual implementation since Array.IndexOf() doesn't seem to work on StringNames. </summary>
 		public static int GetStringNameIndex(this Array<StringName> a, StringName s)
 		{

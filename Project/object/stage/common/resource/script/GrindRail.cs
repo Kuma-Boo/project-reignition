@@ -153,15 +153,15 @@ namespace Project.Gameplay
 				Character.Lockon.StopHomingAttack();
 
 			// Sync rail pathfollower
-			Vector3 delta = rail.GetLocalPosition(Character.GlobalPosition);
+			Vector3 delta = rail.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - rail.GlobalPosition);
 			pathFollower.Progress = rail.Curve.GetClosestOffset(delta);
 
 			// Ignore grinds that would immediately put the player into a wall
 			if (CheckWall(Skills.grindSettings.speed * PhysicsManager.physicsDelta)) return;
 
-			float horizontalOffset = Mathf.Abs(pathFollower.GetLocalPosition(Character.GlobalPosition).X); // Get local offset
-			if (horizontalOffset < GRIND_RAIL_SNAPPING ||
-				(Character.IsGrindstepping && horizontalOffset < GRINDSTEP_RAIL_SNAPPING)) // Start grinding
+			delta = pathFollower.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - pathFollower.GlobalPosition);
+			if (Mathf.Abs(delta.X) < GRIND_RAIL_SNAPPING ||
+				(Character.IsGrindstepping && Mathf.Abs(delta.X) < GRINDSTEP_RAIL_SNAPPING)) // Start grinding
 				Activate();
 		}
 
