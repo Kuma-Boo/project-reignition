@@ -11,6 +11,12 @@ namespace Project.Gameplay.Objects
 	/// </summary>
 	public partial class PathTraveller : Node3D
 	{
+		[Signal]
+		public delegate void ActivatedEventHandler();
+		[Signal]
+		public delegate void DeactivatedEventHandler();
+
+
 		[ExportGroup("Settings")]
 		[Export]
 		/// <summary> How fast to move. </summary>
@@ -161,6 +167,8 @@ namespace Project.Gameplay.Objects
 			Character.Animator.StartBalancing(); // Carpet uses balancing animations
 			Character.Animator.UpdateBalanceSpeed(1.0f);
 			Character.Animator.ExternalAngle = 0;
+
+			EmitSignal(SignalName.Activated);
 		}
 
 
@@ -174,6 +182,8 @@ namespace Project.Gameplay.Objects
 			if (Character.ExternalParent == this)
 				Character.StopExternal();
 			Character.Animator.ResetState();
+
+			EmitSignal(SignalName.Deactivated);
 		}
 	}
 }
