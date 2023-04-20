@@ -27,7 +27,7 @@ namespace Project
 		private readonly float OCCLUSION_SMOOTHING = .5f;
 		private readonly float MOVEMENT_SMOOTHING = 4.0f;
 
-		private CameraController MainCamera => CameraController.instance;
+		private CameraController Camera => CharacterController.instance.Camera;
 		private Callable UpdateSunCallable => new Callable(this, MethodName.UpdateSun);
 
 		private readonly StringName SHADER_GLOBAL_SUN_OCCLUSION = "sun_occlusion";
@@ -50,12 +50,12 @@ namespace Project
 
 		private void UpdateSun()
 		{
-			if (MainCamera == null || DepthRenderer.DepthTexture == null) return; //No camera/depth texture found
+			if (Camera == null || DepthRenderer.DepthTexture == null) return; //No camera/depth texture found
 
 			currentOcclusion = ExtensionMethods.SmoothDamp(currentOcclusion, isOccluded ? 1f : 0f, ref currentOcclusionVelocity, OCCLUSION_SMOOTHING);
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_OCCLUSION, currentOcclusion);
 
-			screenUV = MainCamera.ConvertToScreenSpace(GlobalPosition) / Runtime.SCREEN_SIZE;
+			screenUV = Camera.ConvertToScreenSpace(GlobalPosition) / Runtime.SCREEN_SIZE;
 			if ((screenUV - previousScreenUV).LengthSquared() * 100.0f > movementThreshold)
 				currentMovement = 0f;
 			previousScreenUV = screenUV;
@@ -72,9 +72,9 @@ namespace Project
 		{
 			if (updateTimer <= 0f)
 			{
-				if (MainCamera.IsBehindCamera(GlobalPosition) || screenUV.X < 0.0f || screenUV.X > 1.0f || screenUV.Y < 0.0f || screenUV.Y > 1.0f)
+				if (Camera.IsBehindCamera(GlobalPosition) || screenUV.X < 0.0f || screenUV.X > 1.0f || screenUV.Y < 0.0f || screenUV.Y > 1.0f)
 					isOccluded = true; //Always occluded when the camera faces away
-				else if (MainCamera.IsOnScreen(GlobalPosition))
+				else if (Camera.IsOnScreen(GlobalPosition))
 				{
 					//Sample texture. VERY SLOW!!!
 					Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
@@ -95,7 +95,7 @@ namespace Project
 
 		private void UpdateLensFlare()
 		{
-			Vector2 originPosition = MainCamera.ConvertToScreenSpace(GlobalPosition);
+			Vector2 originPosition = Camera.ConvertToScreenSpace(GlobalPosition);
 			Vector2 flareDirection = lensFlareBase.GlobalPosition - originPosition; //Get the direction to the center of the screen
 
 			lensFlareBase.Modulate = Colors.White.Lerp(Colors.Transparent, currentOcclusion);

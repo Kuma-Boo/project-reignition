@@ -11,7 +11,6 @@ namespace Project.Gameplay
 	{
 		public static CharacterController instance;
 
-		public CameraController Camera => CameraController.instance;
 		public LevelSettings Level => LevelSettings.instance;
 		public StageSettings Stage => StageSettings.instance;
 
@@ -1804,6 +1803,8 @@ namespace Project.Gameplay
 
 		//Components, rarely needs to be edited, so they go at the bottom of the inspector
 		//All public so any object can get whatever player data they need
+		[Export]
+		public CameraController Camera { get; private set; }
 		[Export]
 		public CharacterPathFollower PathFollower { get; private set; }
 		[Export]

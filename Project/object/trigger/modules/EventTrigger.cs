@@ -90,9 +90,7 @@ namespace Project.Gameplay.Triggers
 		}
 
 
-
-		// Helper functions to be called from the animator
-
+		#region Animator Helper Functions
 		/// <summary> Plays a specific oneshot animation on the player. </summary>
 		public void PlayCharacterAnimation(StringName animationName) => Character.Animator.PlayOneshotAnimation(animationName);
 
@@ -116,5 +114,6 @@ namespace Project.Gameplay.Triggers
 			if (lockout != null)
 				Character.AddLockoutData(lockout);
 		}
+		#endregion
 	}
 }

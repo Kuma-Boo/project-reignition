@@ -74,8 +74,8 @@ namespace Project.Gameplay
 
 			if (Engine.IsEditorHint())
 				mainCamera = Editor.Plugin.editorCam;
-			else if (CameraController.instance != null)
-				mainCamera = CameraController.instance.Camera;
+			else if (CharacterController.instance != null)
+				mainCamera = CharacterController.instance.Camera.Camera;
 
 			return mainCamera != null && reflectionCamera != null;
 		}

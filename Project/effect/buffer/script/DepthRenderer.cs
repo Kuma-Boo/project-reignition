@@ -21,7 +21,7 @@ namespace Project.Gameplay
 		[Export]
 		public Array<ShaderMaterial> depthMaterials; //List of materials that use depth_texture
 
-		private Camera3D MainCamera => CameraController.instance.Camera;
+		private Camera3D Camera => CharacterController.instance.Camera.Camera;
 		private Callable ApplyTextureCallable => new Callable(this, MethodName.ApplyTexture);
 
 		public override void _Ready()
@@ -42,14 +42,14 @@ namespace Project.Gameplay
 
 		public override void _Process(double _)
 		{
-			depthCamera.Fov = MainCamera.Fov;
-			depthCamera.Size = MainCamera.Size;
-			depthCamera.Projection = MainCamera.Projection;
+			depthCamera.Fov = Camera.Fov;
+			depthCamera.Size = Camera.Size;
+			depthCamera.Projection = Camera.Projection;
 
-			depthCamera.Near = MainCamera.Near;
+			depthCamera.Near = Camera.Near;
 
-			depthCamera.Far = MainCamera.Far;
-			depthCamera.GlobalTransform = MainCamera.GlobalTransform;
+			depthCamera.Far = Camera.Far;
+			depthCamera.GlobalTransform = Camera.GlobalTransform;
 
 			depthViewport.Size = Runtime.HALF_SCREEN_SIZE;
 			depthViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;

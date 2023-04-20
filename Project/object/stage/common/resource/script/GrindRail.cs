@@ -132,7 +132,6 @@ namespace Project.Gameplay
 		private bool isActive; //Is the rail active?
 		private bool isInteractingWithPlayer; //Check for collisions?
 
-		private CameraController Camera => CameraController.instance;
 		private CharacterController Character => CharacterController.instance;
 		private CharacterSkillManager Skills => Character.Skills;
 

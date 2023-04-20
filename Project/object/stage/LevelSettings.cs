@@ -444,9 +444,9 @@ namespace Project.Gameplay
 			if (newCheckpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 			CurrentCheckpoint = newCheckpoint; // Position transform
-			CheckpointPlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current path
-			CheckpointCameraPath = CameraController.instance.PathFollower.ActivePath; // Store current path
-			CheckpointCameraSettings = CameraController.instance.ActiveSettings;
+			CheckpointPlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current player path
+			CheckpointCameraPath = CharacterController.instance.Camera.PathFollower.ActivePath; // Store current camera path
+			CheckpointCameraSettings = CharacterController.instance.Camera.ActiveSettings;
 
 			EmitSignal(SignalName.OnTriggeredCheckpoint);
 		}

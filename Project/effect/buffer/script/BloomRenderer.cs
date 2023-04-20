@@ -35,7 +35,7 @@ namespace Project.Gameplay
 		[Export]
 		private ShaderMaterial compositeMaterial; //Material that overlays the final bloom image to the screen
 
-		private Camera3D MainCamera => CameraController.instance.Camera;
+		private Camera3D Camera => CharacterController.instance.Camera.Camera;
 		private Callable ApplyTextureCallable => new Callable(this, MethodName.ApplyTexture);
 
 		public override void _Ready()
@@ -57,13 +57,13 @@ namespace Project.Gameplay
 
 		public override void _Process(double _)
 		{
-			bloomCamera.Fov = MainCamera.Fov;
-			bloomCamera.Size = MainCamera.Size;
-			bloomCamera.Projection = MainCamera.Projection;
+			bloomCamera.Fov = Camera.Fov;
+			bloomCamera.Size = Camera.Size;
+			bloomCamera.Projection = Camera.Projection;
 
-			bloomCamera.Near = MainCamera.Near;
-			bloomCamera.Far = MainCamera.Far;
-			bloomCamera.GlobalTransform = MainCamera.GlobalTransform;
+			bloomCamera.Near = Camera.Near;
+			bloomCamera.Far = Camera.Far;
+			bloomCamera.GlobalTransform = Camera.GlobalTransform;
 
 			bloomViewport.Size = compositeViewport.Size = Runtime.HALF_SCREEN_SIZE;
 			bloomViewport.RenderTargetUpdateMode = compositeViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
