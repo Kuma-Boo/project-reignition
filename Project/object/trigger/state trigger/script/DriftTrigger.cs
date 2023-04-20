@@ -45,7 +45,7 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Entrance speed (ratio) required to start a drift. </summary>
 		private const float ENTRANCE_SPEED_RATIO = .9f;
 
-		[ExportSubgroup("Components")]
+		[ExportGroup("Components")]
 		[Export]
 		private AudioStreamPlayer sfx;
 		[Export]

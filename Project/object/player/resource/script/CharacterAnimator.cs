@@ -78,7 +78,7 @@ namespace Project.Gameplay
 			//Prevent sluggish transitions into gameplay
 			disableSpeedSmoothing = true;
 			oneShotTransition.FadeInTime = oneShotTransition.FadeOutTime = 0;
-			Character.Camera.EventController = countdownCameraController;
+			Character.Camera.SetExternalController(countdownCameraController);
 		}
 
 		private readonly StringName ONESHOT_TRIGGER = "parameters/oneshot_trigger/request";

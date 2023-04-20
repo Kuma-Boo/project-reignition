@@ -8,6 +8,17 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class EventTrigger : StageTriggerModule
 	{
+		[Signal]
+		public delegate void ActivatedEventHandler();
+
+		[Export]
+		private bool autoRespawn;
+		[Export]
+		/// <summary> Only allow event to play once? </summary>
+		private bool isOneShot = true;
+		private bool wasActivated;
+
+		[ExportGroup("Components")]
 		[Export]
 		private AnimationPlayer animator;
 		[Export]
@@ -17,15 +28,9 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private LockoutResource lockout;
 
-		[Export]
-		private bool autoRespawn;
-		[Export]
-		/// <summary> Only allow event to play once? </summary>
-		private bool isOneShot = true;
+		private readonly StringName EVENT_ANIMATION = "event";
+		private readonly StringName RESET_ANIMATION = "RESET";
 
-		private bool wasActivated;
-		[Signal]
-		public delegate void ActivatedEventHandler();
 
 		public override void _Ready()
 		{
@@ -33,59 +38,76 @@ namespace Project.Gameplay.Triggers
 				LevelSettings.instance.ConnectRespawnSignal(this);
 		}
 
+
 		public override void _PhysicsProcess(double _)
 		{
-			if (playerStandin != null &&
-			 Character.MovementState == CharacterController.MovementStates.External && Character.ExternalController == this)
-				Character.UpdateExternalControl();
+			if (playerStandin == null)
+				return;
+
+			if (Character.MovementState != CharacterController.MovementStates.External || Character.ExternalController != this)
+				return;
+
+			Character.UpdateExternalControl();
 		}
+
 
 		public override void Respawn()
 		{
-			if (animator.HasAnimation("RESET")) // Only reset if a RESET animation exists.
-			{
-				wasActivated = false;
-				animator.Play("RESET"); // Reset event
-			}
-			else
-				GD.PrintErr(Name + " doesn't have a RESET animation.");
+			// Only reset if a RESET animation exists.
+			if (!animator.HasAnimation(RESET_ANIMATION)) return;
+
+			wasActivated = false;
+			animator.Play(RESET_ANIMATION);
 		}
+
 
 		public override void Activate()
 		{
-			if (wasActivated) return;
-
-			if (animator.HasAnimation("event"))
+			if (!animator.HasAnimation(EVENT_ANIMATION))
 			{
-				if (!animator.IsPlaying() && animator.CurrentAnimation == "event") // Reset animation if necessary
-					animator.Seek(0, true);
-
-				animator.Play("event");
-			}
-			else
 				GD.PrintErr($"{Name} doesn't have an event animation. Nothing will happen.");
+				return;
+			}
+
+			if (isOneShot && wasActivated) return;
+			wasActivated = true; // Update activation flag
+
+
+			if (!animator.IsPlaying() && animator.CurrentAnimation == EVENT_ANIMATION) // Reset animation if necessary
+				animator.Seek(0, true);
+
+			animator.Play(EVENT_ANIMATION);
+
 
 			if (playerStandin != null)
 				Character.StartExternal(this, playerStandin, .2f);
 
-			if (isOneShot)
-				wasActivated = true;
+			if (cameraStandin != null)
+				Character.Camera.SetExternalController(cameraStandin);
+
 
 			EmitSignal(SignalName.Activated);
 		}
 
-		/// <summary>
-		/// Call this to play a specific animation on the player
-		/// </summary>
+
+
+		// Helper functions to be called from the animator
+
+		/// <summary> Plays a specific oneshot animation on the player. </summary>
 		public void PlayCharacterAnimation(StringName animationName) => Character.Animator.PlayOneshotAnimation(animationName);
-		/// <summary>
-		/// Call this to reset character's movement state
-		/// </summary>
-		public void FinishEvent(float moveSpeed, float fallSpeed)
+
+
+		/// <summary> Sets the character's speeds. </summary>
+		public void SetCharacterSpeed(float moveSpeed, float verticalSpeed)
 		{
 			Character.MoveSpeed = moveSpeed;
-			Character.VerticalSpeed = fallSpeed;
+			Character.VerticalSpeed = verticalSpeed;
+		}
 
+
+		/// <summary> Resets the character's movement state. </summary>
+		public void FinishEvent()
+		{
 			Character.ResetMovementState();
 
 			Character.MovementAngle = Character.CalculateForwardAngle(playerStandin.Forward());

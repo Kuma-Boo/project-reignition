@@ -79,7 +79,7 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Is the platform about to fall? </summary>
 		private bool isPlatformShaking;
 
-		[ExportSubgroup("Components")]
+		[ExportGroup("Components")]
 		[Export]
 		/// <summary> Assign this to enable moving the player with the platform. </summary>
 		private Node3D floorCalculationRoot;

@@ -11,7 +11,7 @@ namespace Project.Gameplay
 	{
 		public static CameraController instance;
 
-		[ExportSubgroup("Gameplay Camera")]
+		[ExportGroup("Gameplay Camera")]
 		[Export]
 		private Node3D cameraRoot;
 		[Export]
@@ -23,17 +23,25 @@ namespace Project.Gameplay
 		public bool IsOnScreen(Vector3 worldSpace) => camera.IsPositionInFrustum(worldSpace);
 		public bool IsBehindCamera(Vector3 worldSpace) => camera.IsPositionBehind(worldSpace);
 
+		/// <summary> Node3D to follow (i.e. in a cutscene) </summary>
+		public Node3D ExternalController { get; private set; }
+		/// <summary> Used for more precise cutscene animation. </summary>
+		private Camera3D externalControllerCamera;
+		public void SetExternalController(Node3D controller)
+		{
+			ExternalController = controller;
+			externalControllerCamera = (controller is Camera3D) ? ExternalController as Camera3D : null;
+		}
+
 		[Export]
-		private TextureRect _crossfade;
+		private TextureRect crossfade;
 		[Export]
-		private AnimationPlayer _crossfadeAnimator;
+		private AnimationPlayer crossfadeAnimator;
 
 		[Export]
 		/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>
 		public CharacterPathFollower PathFollower { get; private set; }
-
 		private CharacterController Character => CharacterController.instance;
-		public Node3D EventController { get; set; } //Node3D to follow (i.e. in a cutscene)
 
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
 		private float xformAngle;
@@ -76,9 +84,9 @@ namespace Project.Gameplay
 		{
 			PathFollower.Resync();
 
-			if (EventController != null)
+			if (ExternalController != null)
 			{
-				cameraRoot.GlobalTransform = EventController.GlobalTransform;
+				cameraRoot.GlobalTransform = ExternalController.GlobalTransform;
 				return;
 			}
 
@@ -107,8 +115,8 @@ namespace Project.Gameplay
 		{
 			ImageTexture tex = new ImageTexture(); //Render the viewport
 			tex.SetImage(GetViewport().GetTexture().GetImage());
-			_crossfade.Texture = tex;
-			_crossfadeAnimator.Play("activate"); //Play crossfade animation
+			crossfade.Texture = tex;
+			crossfadeAnimator.Play("activate"); //Play crossfade animation
 
 			SnapFlag = true;
 			UpdateGameplayCamera();

@@ -6,7 +6,7 @@ namespace Project.Gameplay
 	/// <summary> Flower Majin that spits out seeds to attack the player. </summary>
 	public partial class FlowerMajin : Enemy
 	{
-		[ExportSubgroup("Enemy Settings")]
+		[ExportGroup("Enemy Settings")]
 		[Export]
 		private bool attackInstantly; //Skip passive phase when activated?
 		[Export]
@@ -16,7 +16,7 @@ namespace Project.Gameplay
 		[Export]
 		private float postAttackLength; //How long to wait after firing seeds before turning passive
 
-		[ExportSubgroup("Animation Settings")]
+		[ExportGroup("Animation Settings")]
 		[Export]
 		private bool isOpen; //Can the flower be damaged?
 		[Export]

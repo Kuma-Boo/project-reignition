@@ -6,7 +6,7 @@ namespace Project.Interface.Menus
 {
 	public partial class WorldSelect : Menu
 	{
-		[ExportSubgroup("Media Settings")]
+		[ExportGroup("Media Settings")]
 		[Export]
 		private VideoStreamPlayer primaryVideoPlayer;
 		[Export]
@@ -21,7 +21,7 @@ namespace Project.Interface.Menus
 		private float videoFadeFactor;
 		private const float VIDEO_FADE_SPEED = 5.0f;
 
-		[ExportSubgroup("Selection Settings")]
+		[ExportGroup("Selection Settings")]
 		[Export]
 		private LevelDescription description;
 		[Export]

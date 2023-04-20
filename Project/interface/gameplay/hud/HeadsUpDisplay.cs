@@ -38,7 +38,7 @@ namespace Project.Gameplay
 		}
 
 		#region Rings
-		[ExportSubgroup("Rings")]
+		[ExportGroup("Rings")]
 		[Export]
 		private Label ringLabel;
 		[Export]
@@ -91,7 +91,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Time and Score
-		[ExportSubgroup("Time & Score")]
+		[ExportGroup("Time & Score")]
 		[Export]
 		private Label time;
 		private void UpdateTime() => time.Text = Level.DisplayTime;
@@ -102,7 +102,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Bonuses
-		[ExportSubgroup("Bonuses")]
+		[ExportGroup("Bonuses")]
 		[Export]
 		private AnimationPlayer bonusAnimator;
 		[Export]
@@ -180,7 +180,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Objectives
-		[ExportSubgroup("Objective Counter")]
+		[ExportGroup("Objective Counter")]
 		[Export]
 		private Control objectiveRoot;
 		[Export]
@@ -205,7 +205,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Soul Gauge
-		[ExportSubgroup("Soul Gauge")]
+		[ExportGroup("Soul Gauge")]
 		[Export]
 		private Control soulGauge;
 		[Export]

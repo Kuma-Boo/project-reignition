@@ -146,7 +146,7 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		[ExportSubgroup("DON'T EDIT THESE DIRECTLY!")]
+		[ExportGroup("DON'T EDIT THESE DIRECTLY!")]
 		[Export]
 		private Array<StringName> keys;
 		public int KeyCount => keys.Count;

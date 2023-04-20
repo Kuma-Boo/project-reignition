@@ -18,7 +18,7 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private CameraSettingsResource customCameraSettings;
 
-		[ExportSubgroup("Components")]
+		[ExportGroup("Components")]
 		[Export]
 		private Node3D root;
 		[Export]
@@ -28,7 +28,7 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private CollisionShape3D environmentCollider;
 
-		[ExportSubgroup("Animation")]
+		[ExportGroup("Animation")]
 		[Export]
 		private AnimationPlayer interactionAnimator;
 		[Export]
