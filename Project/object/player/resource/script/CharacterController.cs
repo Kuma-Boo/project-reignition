@@ -989,7 +989,6 @@ namespace Project.Gameplay
 
 		#region GrindStep
 		public bool IsGrindstepping { get; private set; }
-
 		public void StartGrindstep()
 		{
 			IsGrindstepping = true;
@@ -999,6 +998,9 @@ namespace Project.Gameplay
 		public void StopGrindstep()
 		{
 			IsGrindstepping = false;
+
+			StrafeSpeed = 0;
+			MovementAngle = Animator.VisualAngle;
 			Animator.ResetState(.1f);
 		}
 		#endregion
@@ -1502,11 +1504,7 @@ namespace Project.Gameplay
 
 			isAccelerationJumpQueued = false;
 			if (IsGrindstepping)
-			{
-				StrafeSpeed = 0;
 				StopGrindstep();
-				MovementAngle = Animator.VisualAngle;
-			}
 
 			ResetActionState();
 			Lockon.ResetLockonTarget();
@@ -1517,9 +1515,7 @@ namespace Project.Gameplay
 			CheckLandingBoost(); //Landing boost skill
 		}
 
-		/// <summary>
-		/// Checks whether raycast collider is tagged properly.
-		/// </summary>
+		/// <summary> Checks whether raycast collider is tagged properly. </summary>
 		private bool ValidateGroundCast(ref RaycastHit hit)
 		{
 			if (hit)

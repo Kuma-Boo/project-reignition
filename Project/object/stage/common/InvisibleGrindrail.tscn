@@ -25,15 +25,13 @@ material = ExtResource("3_caohd")
 size = Vector2(1, 1)
 orientation = 2
 
-[node name="InvisibleGrindrail" instance=ExtResource("1_3avmn")]
-"Rail Path" = NodePath("Path3D")
-"Invisible Rail Settings/Enabled" = true
-"Invisible Rail Settings/Length" = 10
-"Invisible Rail Settings/Rail Object" = NodePath("Grindrail")
-"Invisible Rail Settings/Rail Material" = ExtResource("2_5lpto")
-"Invisible Rail Settings/Start Cap" = NodePath("Start")
-"Invisible Rail Settings/End Cap" = NodePath("End")
-"Invisible Rail Settings/Collider" = NodePath("CollisionShape3D")
+[node name="InvisibleGrindrail" node_paths=PackedStringArray("rail", "railModel", "startCap", "endCap", "collider") instance=ExtResource("1_3avmn")]
+rail = NodePath("Path3D")
+railModel = NodePath("Grindrail")
+railMaterial = ExtResource("2_5lpto")
+startCap = NodePath("Start")
+endCap = NodePath("End")
+collider = NodePath("CollisionShape3D")
 
 [node name="Grindrail" parent="." index="0" instance=ExtResource("2_8u20a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
@@ -52,7 +50,7 @@ process_material = SubResource("ParticleProcessMaterial_4crrn")
 draw_pass_1 = SubResource("PlaneMesh_kwiha")
 
 [node name="End" type="GPUParticles3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 layers = 32
 gi_mode = 0
 amount = 4

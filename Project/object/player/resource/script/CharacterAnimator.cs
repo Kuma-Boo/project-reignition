@@ -482,10 +482,8 @@ namespace Project.Gameplay
 
 		private readonly StringName BALANCE_SPEED_PARAMETER = "parameters/balance_tree/balance_speed/scale";
 		private readonly StringName BALANCE_WIND_BLEND_PARAMETER = "parameters/balance_tree/wind_blend/blend_position";
-		public void UpdateBalanceSpeed(float speedRatio = -1)
+		public void UpdateBalanceSpeed(float speedRatio)
 		{
-			if (speedRatio < 0)
-				speedRatio = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
 			animationTree.Set(BALANCE_SPEED_PARAMETER, speedRatio + .8f);
 			animationTree.Set(BALANCE_WIND_BLEND_PARAMETER, speedRatio);
 		}
