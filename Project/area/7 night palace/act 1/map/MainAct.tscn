@@ -37,7 +37,7 @@
 size = Vector3(2, 10, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r3fog"]
-size = Vector3(10, 20, 1)
+size = Vector3(20, 20, 2.5)
 
 [node name="World" type="Node"]
 
@@ -855,29 +855,45 @@ script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
-[node name="JumpTrigger" parent="MainAct/Carpet" instance=ExtResource("26_bkait")]
+[node name="StartTrigger" parent="MainAct/Carpet" instance=ExtResource("26_bkait")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
-[node name="JumpTrigger" type="Node3D" parent="MainAct/Carpet/JumpTrigger"]
+[node name="JumpTrigger" type="Node3D" parent="MainAct/Carpet/StartTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 12)
 script = ExtResource("27_iu8fd")
 jumpHeight = 2.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Carpet/JumpTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Carpet/StartTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_r3fog")
+
+[node name="EndTrigger" parent="MainAct/Carpet" instance=ExtResource("26_bkait")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.10059, -106, 425)
+
+[node name="Path" type="Node3D" parent="MainAct/Carpet/EndTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
+script = ExtResource("31_pibmb")
+path = NodePath("../../../../Static/Path/MainPath5")
+
+[node name="JumpTrigger" type="Node3D" parent="MainAct/Carpet/EndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
+script = ExtResource("27_iu8fd")
+jumpHeight = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Carpet/EndTrigger"]
 shape = SubResource("BoxShape3D_r3fog")
 
 [node name="Carpet" parent="MainAct/Carpet" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("26_sio18")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 17)
-maxSpeed = 10.0
-turnSpeed = 40.0
+maxSpeed = 50.0
+turnSpeed = 30.0
 bounds = Vector2(4, 2)
 path = NodePath("../../../Static/Path/CarpetPath")
 pathFollower = NodePath("../../../Static/Path/CarpetPath/CarpetPathFollower")
 
 [node name="Camera" type="Node3D" parent="MainAct/Carpet/Carpet"]
 script = ExtResource("29_uohue")
-transitionTime = 0.2
+transitionTime = 0.5
 settings = ExtResource("30_m5m3w")
 
 [node name="Path" type="Node3D" parent="MainAct/Carpet/Carpet" node_paths=PackedStringArray("path")]
@@ -891,7 +907,8 @@ path = NodePath("../../../../Static/Path/CarpetPath")
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin2" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Activate"]
 [connection signal="Respawned" from="MainAct/Tower/MajinGroup1/Switch" to="MainAct/Tower/MajinGroup1/Switch/RingCuller" method="Deactivate"]
-[connection signal="JumpFinished" from="MainAct/Carpet/JumpTrigger/JumpTrigger" to="MainAct/Carpet/Carpet" method="Activate"]
+[connection signal="JumpFinished" from="MainAct/Carpet/StartTrigger/JumpTrigger" to="MainAct/Carpet/Carpet" method="Activate"]
+[connection signal="Activated" from="MainAct/Carpet/EndTrigger" to="MainAct/Carpet/Carpet" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Activate"]
 [connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Deactivate"]
