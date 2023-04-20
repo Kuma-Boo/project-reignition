@@ -1,23 +1,28 @@
 # sonic-wildfire-remake
 A Fan Remake of Sonic and the Secret Rings.
 
-Originally released for the Nintendo Wii in 2007, over time many Sonic fans have called Sonic and the Secret Rings their least favorite Sonic game, with the main reasons cited being the Wii Remote's required motion controls, repetitive music, unnecessary skills, and nonsensical level progression.
+Originally released for the Nintendo Wii in 2007 to high critical praise, Sonic and the Secret Rings' reputation has dwindled among fans over time. Common reasons include:
+ - Required motion controls
+ - Repetitive music
+ - Unnecessary skills
+ - Nonsensical level progression.
 
 While this remake intends to keep the core ideas of Secret Rings, many things are to be changed and overhauled.
 
 
-**PRIMARY CHANGES**
-- Controls have been entirely remapped to a traditional controller.
-- Level Select now has a notification for critical story missions.
-- "Seven Rings in Hand" is no longer the menu theme.
-- Equipping Skill Rings before a mission is now skipped by default.
-- Skills that improve control no longer exist.
-- Skills that are simply weaker versions of other skills no longer exist.
-- Overall game speed and responsiveness has been buffed.
-- Time Break now maintains a smooth framerate.
+<h2>Planned Changes</h2>
+
+- Controls will be remapped for a traditional controller.
+- Level Select will have an indication for critical story missions.
+- "Seven Rings in Hand" will no longer be the menu theme.
+- Equipping Skill Rings before a mission will be skipped by default.
+- Skills that improve control will be mostly removed.
+- Skills that are weaker versions of other skills will be removed.
+- Time Break will maintain a smooth framerate.
 
 
-_DISCLAIMER_
-**Sonic and the Secret Rings** is copyrighted by **SEGA**.
-I am not affiliated or endorsed by SEGA in any way.
-This Fan Remake is distributed as **freeware**, and **should not be sold under any circumstances.**
+<h2>DISCLAIMER</h2>
+
+Sonic and the Secret Rings is copyrighted by SEGA. I am not affiliated or endorsed by SEGA in any way.
+
+This Fan Remake is distributed as **freeware**, and *should not be sold under any circumstances.*
