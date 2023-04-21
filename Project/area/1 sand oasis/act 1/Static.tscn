@@ -639,12 +639,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, -48)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
-[node name="01Unload-03Load" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
+[node name="03Load" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-4.37114e-08, 0.707107, 0.707107, 0, 0.707107, -0.707107, -1, -3.09086e-08, -3.09086e-08, 25.0994, 93.287, -62.1)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/01Unload-03Load"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03Load"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_84q52")
+
+[node name="01Unload" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -57.9006, 34.987, -62)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/01Unload"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
@@ -731,10 +740,8 @@ light_color = Color(0.890196, 0.866667, 0.533333, 1)
 light_cull_mask = 4293918723
 shadow_enabled = true
 shadow_bias = 0.02
-directional_shadow_mode = 1
-directional_shadow_split_1 = 0.5
 directional_shadow_blend_splits = true
-directional_shadow_fade_start = 0.5
+directional_shadow_max_distance = 50.0
 
 [node name="ExteriorBounceLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(-0.430447, -0.541281, 0.722309, 0.899382, -0.18953, 0.393942, -0.0763344, 0.819203, 0.568401, -11, 108, -67)
@@ -742,6 +749,7 @@ layers = 1024
 light_color = Color(0.74902, 0.631373, 0.509804, 1)
 light_energy = 0.3
 light_cull_mask = 4293918723
+directional_shadow_mode = 0
 
 [node name="LightBlockers" type="Node3D" parent="Visuals/Lighting"]
 
@@ -832,10 +840,10 @@ editorPreview = true
 [connection signal="Activated" from="Trigger/Path/Island2Trigger" to="Collision/IslandOneWay" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/02Slope" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02Load" to="Visuals/02Slope" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/01Unload-03Load" to="Visuals/01Opening" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/01Unload-03Load" to="Visuals/03Oasis" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/01Unload-03Load" to="Visuals/01Opening" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/01Unload-03Load" to="Visuals/03Oasis" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/03Load" to="Visuals/03Oasis" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03Load" to="Visuals/03Oasis" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/01Unload" to="Visuals/01Opening" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/01Unload" to="Visuals/01Opening" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/04Load" to="Visuals/04Forest" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/04Load" to="Visuals/04Forest" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/05Load-02Unload" to="Visuals/02Slope" method="Deactivate"]

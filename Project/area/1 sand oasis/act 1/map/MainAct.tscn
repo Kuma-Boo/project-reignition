@@ -1,4 +1,4 @@
-[gd_scene load_steps=202 format=3 uid="uid://c3uw5orpq1c4p"]
+[gd_scene load_steps=203 format=3 uid="uid://c3uw5orpq1c4p"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_jxthg"]
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_q36gh"]
@@ -22,7 +22,7 @@
 [ext_resource type="PackedScene" path="res://area/1 sand oasis/data/particle/FallingSandDustParticle.tscn" id="21_ccewu"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="22_dagtm"]
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="23_b85n2"]
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/object/Jar.tscn" id="24_2iptm"]
+[ext_resource type="PackedScene" uid="uid://dsms0ivmnpaq8" path="res://area/1 sand oasis/object/Jar.tscn" id="24_2iptm"]
 [ext_resource type="PackedScene" uid="uid://c0wwow83r4jry" path="res://object/enemy/majin/data/sand oasis/BlueMajin.tscn" id="25_wxgr8"]
 [ext_resource type="PackedScene" uid="uid://d4bv4ulvmin0y" path="res://object/enemy/majin/data/sand oasis/GreenMajin.tscn" id="26_6vety"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="27_j532y"]
@@ -3063,6 +3063,11 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="139"]
 size = Vector3(60, 16, 2)
+
+[sub_resource type="Curve" id="Curve_1i8pg"]
+max_value = 1.5
+_data = [Vector2(0, 0), 0.0, 7.0, 0, 0, Vector2(0.5, 1.5), 0.0, 0.0, 0, 0, Vector2(1, 0.75), -3.3, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Animation" id="162"]
 length = 0.001
@@ -11266,8 +11271,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("3_n7uj2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, -121.4, -435.6)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
+visible = false
 
 [node name="StartUnload" parent="MainAct/CullingMap" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(-0.482963, -0.12941, 0.866025, -0.258819, 0.965926, -5.96046e-08, -0.836516, -0.224144, -0.5, -291.28, -49.3, -122.296)
@@ -12286,6 +12293,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.647214, -0.470228, 0)
 
 [node name="Oasis" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
+visible = false
 script = ExtResource("8_w6s07")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -12774,6 +12782,7 @@ disableRespawn = true
 
 [node name="Plain" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -179, -40.999, -226)
+visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
@@ -13605,6 +13614,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4469, 0.498833, 8.52551)
 
 [node name="Island" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, -40, -325)
+visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
@@ -13805,7 +13815,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.2)
 transform = Transform3D(-0.771614, 0, 0.636092, 0, 1, 0, -0.636092, 0, -0.771614, 10.8006, -9.7456, -74.5369)
 middleHeight = 15.0
 finalHeight = 12.0
-distance = 42.0
+distance = 40.0
 
 [node name="Spring" parent="MainAct/Island" instance=ExtResource("22_dagtm")]
 transform = Transform3D(0.207912, -0.944819, 0.253163, 0, 0.258819, 0.965926, -0.978149, -0.200827, 0.0538115, 36.0919, 3.38381, -105.294)
@@ -13881,11 +13891,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
 [node name="JumpPanel4" parent="MainAct/Island" instance=ExtResource("40_jisem")]
 transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, -35.7361, -5.7999, -111.062)
 middleHeight = 7.5
-finalHeight = 3.0
+finalHeight = 1.0
 distance = 46.0
 
 [node name="Pearl" type="Node3D" parent="MainAct/Island/JumpPanel4"]
-transform = Transform3D(-1, -7.54979e-08, -1.30766e-07, 0, 0.866025, -0.5, 1.50996e-07, -0.5, -0.866025, 0, 4.16173, 4.35)
+transform = Transform3D(-1, -7.26374e-08, -1.32503e-07, 1.00375e-08, 0.843016, -0.537888, 1.50773e-07, -0.537888, -0.843016, 0, 4.23638, 4.40385)
 script = ExtResource("10_1plec")
 Generate = false
 Source = null
@@ -13924,7 +13934,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.208378, -1.18177, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Pearl2" type="Node3D" parent="MainAct/Island/JumpPanel4"]
-transform = Transform3D(-1, -5.16436e-08, -1.4189e-07, -3.55271e-15, 0.939693, -0.34202, 1.50996e-07, -0.34202, -0.939693, 0, 5.44604, 7.56841)
+transform = Transform3D(-1, -4.85249e-08, -1.43105e-07, 1.00374e-08, 0.923612, -0.383328, 1.50773e-07, -0.383328, -0.923612, 0, 5.66206, 7.56218)
 script = ExtResource("10_1plec")
 Generate = false
 Source = null
@@ -13963,7 +13973,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.208378, -1.18177, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Pearl3" type="Node3D" parent="MainAct/Island/JumpPanel4"]
-transform = Transform3D(-1, -2.62201e-08, -1.48702e-07, 4.02637e-15, 0.984808, -0.173648, 1.50996e-07, -0.173648, -0.984808, 0, 6.30304, 11.0347)
+transform = Transform3D(-1, -2.2938e-08, -1.49356e-07, 1.00375e-08, 0.976145, -0.217121, 1.50773e-07, -0.217121, -0.976145, 0, 6.87183, 10.9871)
 script = ExtResource("10_1plec")
 Generate = false
 Source = null
@@ -14002,36 +14012,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.208378, -1.18177, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Rings" type="Node3D" parent="MainAct/Island/JumpPanel4"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 7, 14)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 7.6, 14)
 script = ExtResource("10_1plec")
 Generate = false
-Source = null
+Source = ExtResource("11_o53jp")
 Amount = 6
 Shape = 0
 Orientation = 0
 Spacing = 3.0
 "Horizontal Offset" = null
-"Vertical Offset" = null
+"Vertical Offset" = SubResource("Curve_1i8pg")
 
-[node name="Ring7" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
+[node name="Child01" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
 
-[node name="Ring8" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.439707, -3)
+[node name="Child02" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.032, -3)
 
-[node name="Ring9" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725491, -6)
+[node name="Child03" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.456, -6)
 
-[node name="Ring10" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.876547, -9)
+[node name="Child04" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4748, -9)
 
-[node name="Ring11" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.911413, -12)
+[node name="Child05" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2516, -12)
 
-[node name="Ring12" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.833935, -15)
+[node name="Child06" parent="MainAct/Island/JumpPanel4/Rings" instance=ExtResource("11_o53jp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -15)
 
 [node name="Pearl4" type="Node3D" parent="MainAct/Island/JumpPanel4"]
-transform = Transform3D(1, 1.25051e-07, 2.03435e-07, -2.73597e-08, 0.906307, -0.422618, -2.37224e-07, 0.422618, 0.906307, 0, 5.95378, 39.1217)
+transform = Transform3D(1, 1.19209e-07, 2.06476e-07, -8.88178e-14, 0.866025, -0.5, -2.38419e-07, 0.5, 0.866025, 0, 5.36173, 39.7347)
 script = ExtResource("10_1plec")
 Generate = false
 Source = null
@@ -14070,7 +14080,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.208378, -1.18177, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Pearl5" type="Node3D" parent="MainAct/Island/JumpPanel4"]
-transform = Transform3D(1, 8.78254e-08, 2.22059e-07, -2.73597e-08, 0.965926, -0.258819, -2.37224e-07, 0.258819, 0.965926, 0, 6.9527, 35.8036)
+transform = Transform3D(1, 8.15439e-08, 2.2404e-07, -7.63833e-14, 0.939693, -0.34202, -2.38419e-07, 0.34202, 0.939693, 0, 6.64604, 36.5163)
 script = ExtResource("10_1plec")
 Generate = false
 Source = null
@@ -14109,7 +14119,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.208378, -1.18177, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Pearl6" type="Node3D" parent="MainAct/Island/JumpPanel4"]
-transform = Transform3D(1, 4.79309e-08, 2.33936e-07, -2.73597e-08, 0.996195, -0.0871556, -2.37224e-07, 0.0871556, 0.996195, 0, 7.50433, 32.2758)
+transform = Transform3D(1, 4.14009e-08, 2.34796e-07, -7.63833e-14, 0.984808, -0.173648, -2.38419e-07, 0.173648, 0.984808, 0, 7.70304, 33.05)
 script = ExtResource("10_1plec")
 Generate = false
 Source = null
@@ -14149,6 +14159,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Hallway" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.1, -45, -359)
+visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
@@ -14256,9 +14267,7 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -10, 
 
 [node name="PlatformTrigger" parent="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1" node_paths=PackedStringArray("parentCollider") instance=ExtResource("43_6d6jt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-"Falling Platform Settings/Disabled" = false
-"Falling Platform Settings/Auto Shake" = true
-"Falling Platform Settings/Shake Length" = 0.0
+"Falling Platform Settings/Disabled" = true
 parentCollider = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger"]
@@ -14863,6 +14872,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.3651, -11.0134, -10.2293)
 
 [node name="Interior" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -220, -65, -435)
+visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
@@ -15289,6 +15299,7 @@ length = 0.5
 
 [node name="Beach" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -410, -50, -540)
+visible = false
 script = ExtResource("8_w6s07")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -16487,6 +16498,7 @@ length = 0.5
 
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -663.725, 10, -705)
+visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
@@ -17106,6 +17118,7 @@ shape = SubResource("BoxShape3D_0rd0k")
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -415, -50, -820)
+visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
