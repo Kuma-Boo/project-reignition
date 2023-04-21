@@ -473,7 +473,7 @@ namespace Project.Gameplay
 		private bool freeCamTilting;
 
 		private bool isFreeCamLocked;
-		private Vector3 freeCamLockedPosition;
+		private Transform3D freeCamLockedTransform;
 
 		private void UpdateFreeCam()
 		{
@@ -488,7 +488,7 @@ namespace Project.Gameplay
 			if (Input.IsActionJustPressed("debug_free_cam_lock"))
 			{
 				isFreeCamLocked = !isFreeCamLocked;
-				freeCamLockedPosition = Camera.GlobalPosition;
+				freeCamLockedTransform = Camera.GlobalTransform;
 				GD.Print($"Free cam lock set to {isFreeCamLocked}.");
 			}
 
@@ -529,7 +529,7 @@ namespace Project.Gameplay
 				Camera.GlobalTranslate(Camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
 
 			if (isFreeCamLocked)
-				Camera.GlobalPosition = freeCamLockedPosition;
+				Camera.GlobalTransform = freeCamLockedTransform;
 		}
 
 
