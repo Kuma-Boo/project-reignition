@@ -1,0 +1,177 @@
+[gd_scene load_steps=7 format=3 uid="uid://r47skp23jl1b"]
+
+[ext_resource type="PackedScene" uid="uid://iaqsmbs2mp6w" path="res://area/7 night palace/object/model/gate/GateBroken.gltf" id="1_bn3is"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_mj45b"]
+[ext_resource type="PackedScene" uid="uid://cke1glphuqnad" path="res://area/7 night palace/object/model/gate/GateFixed.gltf" id="2_oq3xw"]
+
+[sub_resource type="Animation" id="Animation_477vt"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GateFixed:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GateBroken:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GateBroken/AnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["gate_RESET", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_0gvf5"]
+resource_name = "event"
+length = 1.50001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GateFixed:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GateBroken:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GateBroken/AnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["gate_fix", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p8wd7"]
+_data = {
+"RESET": SubResource("Animation_477vt"),
+"event": SubResource("Animation_0gvf5")
+}
+
+[node name="Gate" type="Node3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_mj45b")
+animator = NodePath("AnimationPlayer")
+
+[node name="GateBroken" parent="." instance=ExtResource("1_bn3is")]
+
+[node name="GateBrokenBaseMesh" parent="GateBroken" index="0"]
+cast_shadow = 0
+
+[node name="Skeleton3D" parent="GateBroken/GateRoot" index="0"]
+bones/1/position = Vector3(1.40871, 1.23856, 4.14278)
+bones/1/rotation = Quaternion(0.110993, 0.715821, -0.526837, 0.44466)
+bones/2/position = Vector3(0.130555, 4.29662, -4.81523)
+bones/2/rotation = Quaternion(-0.0672202, 0.0467876, 0.141786, 0.986503)
+bones/3/position = Vector3(-10.0687, 0.977181, 7.77156)
+bones/3/rotation = Quaternion(-0.0366004, 0.161409, -0.44611, 0.879542)
+bones/4/position = Vector3(5.20037, 1.93752, 1.39194)
+bones/4/rotation = Quaternion(-0.383247, -0.424154, -0.441804, 0.691393)
+bones/5/position = Vector3(0.589808, 9.42411, -3.281)
+bones/5/rotation = Quaternion(0.163834, 0.35391, -0.175949, 0.903852)
+bones/6/position = Vector3(-9.69774, 3.62623, 5.12074)
+bones/6/rotation = Quaternion(0.260803, 0.188323, -0.390183, 0.862713)
+bones/7/position = Vector3(-6.32927, 1.48875, 7.30637)
+bones/7/rotation = Quaternion(0.296567, 0.202081, -0.562423, 0.744911)
+bones/8/position = Vector3(-2.47556, 1.51466, 1.9396)
+bones/9/position = Vector3(-9.98768, 2.21507, -0.940593)
+bones/9/rotation = Quaternion(-0.571053, -0.244781, 0.742483, -0.2504)
+bones/10/position = Vector3(2.90266, 14.7368, 4.47058)
+bones/10/rotation = Quaternion(-0.542932, -0.468419, 0.146655, 0.681396)
+bones/11/position = Vector3(-4.86299, 6.38687, 1.75613)
+bones/11/rotation = Quaternion(0.334745, 0.251438, 0.201162, 0.885584)
+
+[node name="Piece01" parent="GateBroken/GateRoot/Skeleton3D" index="0"]
+cast_shadow = 0
+
+[node name="Piece02" parent="GateBroken/GateRoot/Skeleton3D" index="1"]
+cast_shadow = 0
+
+[node name="Piece03" parent="GateBroken/GateRoot/Skeleton3D" index="2"]
+cast_shadow = 0
+
+[node name="Piece04" parent="GateBroken/GateRoot/Skeleton3D" index="3"]
+cast_shadow = 0
+
+[node name="Piece05" parent="GateBroken/GateRoot/Skeleton3D" index="4"]
+cast_shadow = 0
+
+[node name="Piece06" parent="GateBroken/GateRoot/Skeleton3D" index="5"]
+cast_shadow = 0
+
+[node name="Piece07" parent="GateBroken/GateRoot/Skeleton3D" index="6"]
+cast_shadow = 0
+
+[node name="Piece08" parent="GateBroken/GateRoot/Skeleton3D" index="7"]
+cast_shadow = 0
+
+[node name="Piece09" parent="GateBroken/GateRoot/Skeleton3D" index="8"]
+cast_shadow = 0
+
+[node name="Piece10" parent="GateBroken/GateRoot/Skeleton3D" index="9"]
+cast_shadow = 0
+
+[node name="Piece11" parent="GateBroken/GateRoot/Skeleton3D" index="10"]
+cast_shadow = 0
+
+[node name="AnimationPlayer" parent="GateBroken" index="2"]
+autoplay = "gate_RESET"
+
+[node name="GateFixed" parent="." instance=ExtResource("2_oq3xw")]
+visible = false
+
+[node name="GateFixedMesh" parent="GateFixed" index="0"]
+cast_shadow = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_p8wd7")
+}
+
+[editable path="GateBroken"]
+[editable path="GateFixed"]
