@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://bdntsfu7j7ix8"]
 
 [ext_resource type="Script" path="res://area/7 night palace/data/script/Hourglass.cs" id="1_0nk1u"]
 [ext_resource type="PackedScene" uid="uid://dkl53dvmecqbq" path="res://area/7 night palace/object/model/obstacle/Hourglass.gltf" id="1_tgpdv"]
@@ -141,24 +141,6 @@ script = ExtResource("1_0nk1u")
 eventHandler = NodePath("EventHandler")
 crossfade = true
 
-[node name="LockonTrigger" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-collision_layer = 4
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LockonTrigger"]
-shape = SubResource("SphereShape3D_wiqb5")
-
-[node name="EventHandler" type="Node3D" parent="." node_paths=PackedStringArray("animator")]
-script = ExtResource("2_la6o2")
-animator = NodePath("AnimationPlayer")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="EventHandler"]
-root_node = NodePath("../..")
-libraries = {
-"": SubResource("AnimationLibrary_w3u7p")
-}
-
 [node name="Hourglass" parent="." instance=ExtResource("1_tgpdv")]
 
 [node name="HourglassBaseMesh" parent="Hourglass/HourglassRoot/Skeleton3D" index="0"]
@@ -185,6 +167,24 @@ visible = false
 
 [node name="AnimationPlayer" parent="Hourglass" index="3"]
 autoplay = "hourglass-RESET"
+
+[node name="LockonTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LockonTrigger"]
+shape = SubResource("SphereShape3D_wiqb5")
+
+[node name="EventHandler" type="Node3D" parent="." node_paths=PackedStringArray("animator")]
+script = ExtResource("2_la6o2")
+animator = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EventHandler"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_w3u7p")
+}
 
 [connection signal="area_entered" from="LockonTrigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="LockonTrigger" to="." method="OnExited"]

@@ -5,9 +5,9 @@ global uniform vec3 player_position;
 uniform sampler2D albedo : source_color;
 uniform float brightness;
 
-const float INTENSITY = 5.0;
+const float INTENSITY = 2.0;
 const float GLOW_SIZE = 1.0;
-const float GLOW_INTENSITY = .2;
+const float GLOW_INTENSITY = 0.4;
 
 void fragment()
 {

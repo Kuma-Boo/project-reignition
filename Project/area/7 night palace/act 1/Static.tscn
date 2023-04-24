@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=55 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -37,7 +37,7 @@
 [ext_resource type="PackedScene" uid="uid://kig7ydnck6g5" path="res://area/7 night palace/environment/NPSpaceC.tscn" id="26_1px5b"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="27_lklb2"]
 [ext_resource type="PackedScene" path="res://area/7 night palace/data/BGM.tscn" id="28_dk7mm"]
-[ext_resource type="Curve3D" path="res://area/7 night palace/environment/path/SpaceAPath.tres" id="29_42w86"]
+[ext_resource type="Curve3D" uid="uid://bu2xlhn0gs3pw" path="res://area/7 night palace/environment/path/SpaceAPath.tres" id="29_42w86"]
 [ext_resource type="PackedScene" uid="uid://bauk6pd03vahc" path="res://area/7 night palace/environment/collision/NPSpaceA.tscn" id="29_puwol"]
 [ext_resource type="PackedScene" uid="uid://jq178mr3fmlr" path="res://area/7 night palace/environment/collision/NPSpaceB.tscn" id="30_sv4vj"]
 [ext_resource type="Curve3D" path="res://area/7 night palace/environment/path/SpaceBPath.tres" id="30_wgmg4"]
@@ -99,6 +99,9 @@ size = Vector3(10, 10, 20)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_65qu7"]
 size = Vector3(3, 10, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n8mus"]
+size = Vector3(75, 30, 30)
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
 script = ExtResource("1_siayx")
@@ -275,6 +278,15 @@ shape = SubResource("BoxShape3D_dr1ap")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/Sidle/SidleTrigger3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -8.5)
 shape = SubResource("BoxShape3D_65qu7")
+
+[node name="SpaceAAutomation" parent="Trigger/Object" instance=ExtResource("6_6kpe1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 975, 0, -560)
+endPoint = 512.0
+ignoreDirection = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SpaceAAutomation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 0, 0)
+shape = SubResource("BoxShape3D_n8mus")
 
 [node name="Path" type="Node3D" parent="Trigger"]
 
@@ -536,6 +548,11 @@ curve = ExtResource("40_nugtn")
 [node name="SpaceAPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 770, 0, -640)
 curve = ExtResource("29_42w86")
+
+[node name="CarpetPathFollower2" type="PathFollow3D" parent="Path/SpaceAPath"]
+transform = Transform3D(0.0966999, -0.0707833, 0.992823, 0.00332733, 0.997479, 0.0707963, -0.995304, -0.00354249, 0.0966956, 288.715, -0.0251086, 79.9545)
+progress = 512.0
+loop = false
 
 [node name="SpaceBPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 770, 0, -460)

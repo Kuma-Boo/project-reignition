@@ -4,7 +4,7 @@ render_mode unshaded, blend_add, ambient_light_disabled;
 global uniform float time;
 
 uniform sampler2D albedo : source_color;
-const float intensity = 1.8;
+const float intensity = 1.5;
 const float scroll_speed = .02;
 
 void fragment()

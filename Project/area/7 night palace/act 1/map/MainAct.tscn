@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=43 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -37,12 +37,19 @@
 [ext_resource type="PackedScene" uid="uid://r47skp23jl1b" path="res://area/7 night palace/object/obstacle/Gate.tscn" id="33_kvbsj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="34_i4anx"]
 [ext_resource type="PackedScene" uid="uid://dqy65o3le786n" path="res://area/7 night palace/object/obstacle/SpacePanel.tscn" id="36_ghnrl"]
+[ext_resource type="PackedScene" uid="uid://o1hcy4hf5kg" path="res://area/7 night palace/object/obstacle/Stopper.tscn" id="37_mso31"]
+[ext_resource type="PackedScene" uid="uid://bdntsfu7j7ix8" path="res://area/7 night palace/object/obstacle/Hourglass.tscn" id="38_8l44y"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r3fog"]
 size = Vector3(20, 20, 2.5)
+
+[sub_resource type="Curve" id="Curve_c3fnw"]
+max_value = 5.0
+_data = [Vector2(0, 0), 0.0, 12.3918, 0, 0, Vector2(0.44877, 3.48375), 3.67028, 3.67028, 0, 0, Vector2(1, 3), -5.75094, 0.0, 0, 0]
+point_count = 3
 
 [node name="World" type="Node"]
 
@@ -944,12 +951,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 263.2, 10, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 283.2, 7, 0)
 
 [node name="SpaceA" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -640)
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SpacePanelGroup1" type="Node3D" parent="MainAct/SpaceA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 808.4, 0, -640)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.4, -0.25, 0)
 
 [node name="SpacePanel1" parent="MainAct/SpaceA/SpacePanelGroup1" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -3.09998)
@@ -966,8 +974,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2, 0, 3.10004)
 [node name="SpacePanel5" parent="MainAct/SpaceA/SpacePanelGroup1" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0, -3.09998)
 
+[node name="Rings1" type="Node3D" parent="MainAct/SpaceA"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34, 1, 2.5)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/SpaceA/Rings1" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/SpaceA/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/SpaceA/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/SpaceA/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/SpaceA/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="MainAct/SpaceA/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="MainAct/SpaceA/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
 [node name="SpacePanelGroup2" type="Node3D" parent="MainAct/SpaceA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 872.6, 0, -640.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.6, -0.25, -0.1)
 
 [node name="SpacePanel1" parent="MainAct/SpaceA/SpacePanelGroup2" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50006, 0, -3)
@@ -981,8 +1021,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0, -3)
 [node name="SpacePanel4" parent="MainAct/SpaceA/SpacePanelGroup2" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2, 0, 3.20001)
 
+[node name="Rings2" type="Node3D" parent="MainAct/SpaceA"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 87.5, 1, -2.5)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/SpaceA/Rings2" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/SpaceA/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/SpaceA/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/SpaceA/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/SpaceA/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="MainAct/SpaceA/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="MainAct/SpaceA/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
 [node name="SpacePanelGroup3" type="Node3D" parent="MainAct/SpaceA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 911.753, 0, -640.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125.753, -0.25, -0.1)
 
 [node name="SpacePanel1" parent="MainAct/SpaceA/SpacePanelGroup3" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50006, 0, 3.20001)
@@ -996,8 +1068,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0, 3.20001)
 [node name="SpacePanel4" parent="MainAct/SpaceA/SpacePanelGroup3" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2, 0, -3)
 
+[node name="Rings3" type="Node3D" parent="MainAct/SpaceA"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 124.5, 1, -1.5)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_c3fnw")
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/SpaceA/Rings3" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/SpaceA/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75792, 0, -4)
+
+[node name="Child03" parent="MainAct/SpaceA/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.95037, 0, -8)
+
+[node name="Child04" parent="MainAct/SpaceA/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.65153, 0, -12)
+
+[node name="Child05" parent="MainAct/SpaceA/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.90873, 0, -16)
+
+[node name="Child06" parent="MainAct/SpaceA/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70147, 0, -20)
+
+[node name="Child07" parent="MainAct/SpaceA/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -24)
+
 [node name="SpacePanelGroup4" type="Node3D" parent="MainAct/SpaceA"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 969.6, 0, -628.4)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 183.6, -0.25, 11.6)
 
 [node name="SpacePanel1" parent="MainAct/SpaceA/SpacePanelGroup4" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50006, 0, -3)
@@ -1046,6 +1150,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.2999, 0, -3)
 
 [node name="SpacePanel16" parent="MainAct/SpaceA/SpacePanelGroup4" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.8999, 0, 3.20001)
+
+[node name="MajinGroup" type="Node3D" parent="MainAct/SpaceA"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 183.5, 0, 21)
+
+[node name="BlueMajin" parent="MainAct/SpaceA/MajinGroup" instance=ExtResource("18_ggltt")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.09998, 0, 22.5)
+
+[node name="RedMajin1" parent="MainAct/SpaceA/MajinGroup" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.09998, 0, 29.6)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.8
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 0.5
+
+[node name="RedMajin2" parent="MainAct/SpaceA/MajinGroup" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.10004, 0, 40.3)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = -1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 0.5
+
+[node name="GreenMajin" parent="MainAct/SpaceA/MajinGroup" instance=ExtResource("18_wuv3v")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 46)
+
+[node name="Stopper" parent="MainAct/SpaceA" instance=ExtResource("37_mso31")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 276.8, 0.25, 80)
+
+[node name="Hourglass" parent="MainAct/SpaceA" instance=ExtResource("38_8l44y")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 286, 0, 80.1)
 
 [node name="GasA" type="Node3D" parent="MainAct"]
 visible = false
