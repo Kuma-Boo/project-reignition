@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://d1xx4j66jyirx"]
+[gd_scene load_steps=39 format=3 uid="uid://d1xx4j66jyirx"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -33,7 +33,9 @@
 [ext_resource type="Resource" uid="uid://b3ti60dq0o0ro" path="res://area/7 night palace/act 1/trigger/camera/CarpetCamera.tres" id="30_m5m3w"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="31_pibmb"]
 [ext_resource type="PackedScene" uid="uid://c0cem0iuvnuim" path="res://area/7 night palace/act 1/environment/model/HallStretchEvent.gltf" id="32_j58yj"]
+[ext_resource type="PackedScene" uid="uid://dvp0eoegosx00" path="res://area/7 night palace/object/Teleport.tscn" id="33_j541v"]
 [ext_resource type="PackedScene" uid="uid://r47skp23jl1b" path="res://area/7 night palace/object/Gate.tscn" id="33_kvbsj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="34_i4anx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
@@ -68,6 +70,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
 [node name="Start" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -852,6 +855,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
 [node name="Carpet" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
+visible = false
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -903,42 +907,68 @@ path = NodePath("../../../../Static/Path/CarpetPath")
 
 [node name="Ending" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -104, -490)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="HallStretchEvent" parent="MainAct/Ending" instance=ExtResource("32_j58yj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -300, 104, 490)
+visible = false
+
+[node name="Teleport1" parent="MainAct/Ending" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.25, 10, 0)
+warpTarget = NodePath("Checkpoint")
+
+[node name="Checkpoint" type="Node3D" parent="MainAct/Ending/Teleport1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 377, 94, -150)
+script = ExtResource("34_i4anx")
+
+[node name="Path" type="Node3D" parent="MainAct/Ending/Teleport1" node_paths=PackedStringArray("path")]
+script = ExtResource("31_pibmb")
+path = NodePath("../../../../Static/Path/SpaceAPath")
 
 [node name="Gate1" parent="MainAct/Ending" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.25, 7, 0)
 
+[node name="Teleport2" parent="MainAct/Ending" instance=ExtResource("33_j541v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 182.2, 10, 0)
+
 [node name="Gate2" parent="MainAct/Ending" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 202.2, 7, 0)
+
+[node name="Teleport3" parent="MainAct/Ending" instance=ExtResource("33_j541v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 263.2, 10, 0)
 
 [node name="Gate3" parent="MainAct/Ending" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 283.2, 7, 0)
 
 [node name="SpaceA" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="GasA" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="SpaceB" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="GasB" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="SpaceC" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="GasC" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -955,3 +985,9 @@ saveVisibilityOnCheckpoint = true
 [connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="MainAct/Ending/Teleport1/Checkpoint" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="MainAct/Ending/Teleport1/Path" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="MainAct/SpaceA" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="Static/Visuals/MainSection" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="Static/Visuals/SpaceSection" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="Static/Visuals/SpaceSection/NPSpaceA" method="Activate"]
