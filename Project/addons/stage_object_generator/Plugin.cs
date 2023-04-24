@@ -7,8 +7,8 @@ namespace Project.Editor.StageObjectGenerator
 	{
 		public override void _EnterTree()
 		{
-			var script = GD.Load<Script>("res://addons/object_generator/ObjectGenerator.cs");
-			var texture = GD.Load<Texture2D>("res://addons/object_generator/icon.png");
+			var script = GD.Load<Script>("res://addons/stage_object_generator/ObjectGenerator.cs");
+			var texture = GD.Load<Texture2D>("res://addons/stage_object_generator/icon.png");
 			AddCustomType("ObjectGenerator", "Node3D", script, texture);
 		}
 
