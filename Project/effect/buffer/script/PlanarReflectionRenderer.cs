@@ -73,7 +73,7 @@ namespace Project.Gameplay
 				reflectionCamera = GetNodeOrNull<Camera3D>(reflectionCameraPath);
 
 			if (Engine.IsEditorHint())
-				mainCamera = Editor.Plugin.editorCam;
+				mainCamera = Editor.StageObjectPreviewer.Plugin.editorCam;
 			else if (CharacterController.instance != null)
 				mainCamera = CharacterController.instance.Camera.Camera;
 

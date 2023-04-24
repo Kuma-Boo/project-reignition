@@ -4,7 +4,7 @@ using Project.Gameplay;
 using Project.Gameplay.Triggers;
 using Project.Gameplay.Objects;
 
-namespace Project.Editor
+namespace Project.Editor.StageObjectPreviewer
 {
 	[Tool]
 	public partial class Plugin : EditorPlugin

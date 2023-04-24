@@ -1,21 +1,25 @@
 using Godot;
 using Godot.Collections;
 
-//Tool for generating groups of objects
-namespace Project.Editor
+namespace Project.Editor.StageObjectGenerator
 {
 	[Tool]
+	/// <summary>
+	/// Tool for generating groups of stage objects.
+	/// </summary>
 	public partial class ObjectGenerator : Node3D
 	{
 		private PackedScene source;
+		private int currentChildCount;
 		private int amount;
+		private float IntervalDivider => amount - 1;
 
 		public SpawnShape shape;
 		public enum SpawnShape
 		{
-			Line, //Spawn linearly
-			Ring, //Spawns around a ring
-			Path //Spawn linearly along a path
+			Line, // Spawn linearly
+			Ring, // Spawns around a ring
+			Path // Spawn linearly along a path
 		}
 
 		public SpawnOrientation orientation;
@@ -37,7 +41,7 @@ namespace Project.Editor
 		public Curve hOffsetCurve;
 		public Curve vOffsetCurve;
 
-		private int currentChildCount;
+
 
 		public override Array<Dictionary> _GetPropertyList()
 		{
@@ -73,6 +77,7 @@ namespace Project.Editor
 
 			return properties;
 		}
+
 
 		public override bool _Set(StringName property, Variant value)
 		{
@@ -127,6 +132,7 @@ namespace Project.Editor
 			return true;
 		}
 
+
 		public override Variant _Get(StringName property)
 		{
 			switch ((string)property)
@@ -163,91 +169,108 @@ namespace Project.Editor
 			return base._Get(property);
 		}
 
+
 		private void GenerateChildren()
 		{
-			//Delete old children
+			// Delete old children
 			for (int i = 0; i < GetChildCount(); i++)
 			{
 				GetChild(i).Name = "Deletion" + i;
 				GetChild(i).QueueFree();
 			}
-			currentChildCount = 1; //Reset child counter
-			float divider = amount - 1;
+			currentChildCount = 1; // Reset child counter
 
 			switch (shape)
 			{
-				case SpawnShape.Ring:
-					if (amount == 1)
-					{
-						Spawn(Vector3.Zero);
-						break;
-					}
-
-					float interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
-					Vector3 rotationBase = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Left;
-					Vector3 rotationAxis = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Forward;
-					for (int i = 0; i < amount; i++)
-						Spawn(Vector3.Left.Rotated(rotationAxis, (interval * i)).Normalized() * spacing);
-					break;
 				case SpawnShape.Line:
-					Vector3 forwardDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Up;
-					Vector3 upDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Back;
-					float hOffset = 0;
-					float vOffset = 0;
-
-					for (int i = 0; i < amount; i++)
-					{
-						if (hOffsetCurve != null)
-							hOffset = hOffsetCurve.Sample(i / divider);
-
-						if (vOffsetCurve != null)
-							vOffset = vOffsetCurve.Sample(i / divider);
-
-						Spawn(forwardDirection * i * spacing + Vector3.Right * hOffset + upDirection * vOffset);
-					}
+					SpawnLinearly();
+					break;
+				case SpawnShape.Ring:
+					SpawnRing();
 					break;
 				case SpawnShape.Path:
-					path = GetNodeOrNull<Path3D>(_path);
-
-					if (path == null)
-					{
-						GD.PrintErr("No Path Provided.");
-						break;
-					}
-
-					PathFollow3D follow = new PathFollow3D
-					{
-						RotationMode = PathFollow3D.RotationModeEnum.Xyz
-					};
-					path.AddChild(follow);
-					follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
-
-					Vector3 offset = follow.GlobalTransform.Inverse().Basis * (GlobalPosition - follow.GlobalPosition);
-					for (int i = 0; i < amount; i++)
-					{
-						follow.HOffset = offset.X;
-						follow.VOffset = offset.Y;
-
-						if (hOffsetCurve != null)
-							follow.HOffset += hOffsetCurve.Sample((float)i / divider);
-
-						if (vOffsetCurve != null)
-							follow.VOffset += vOffsetCurve.Sample(i / divider);
-
-						Vector3 spawnPosition = follow.GlobalPosition;
-						if (disablePathY)
-							spawnPosition.Y = GlobalPosition.Y;
-
-						Spawn(spawnPosition, true);
-						follow.Progress += spacing;
-					}
-
-					follow.QueueFree();
+					SpawnAlongPath(GetNodeOrNull<Path3D>(_path));
 					break;
 			}
 		}
 
-		private void Spawn(Vector3 pos, bool globalPosition = default)
+
+		private void SpawnRing()
+		{
+			if (amount == 1)
+			{
+				SpawnNode(Vector3.Zero);
+				return;
+			}
+
+			float interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
+			Vector3 rotationBase = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Left;
+			Vector3 rotationAxis = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Forward;
+			for (int i = 0; i < amount; i++)
+				SpawnNode(Vector3.Left.Rotated(rotationAxis, (interval * i)).Normalized() * spacing);
+		}
+
+
+		private void SpawnLinearly()
+		{
+			Vector3 forwardDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Up;
+			Vector3 upDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Back;
+			float hOffset = 0;
+			float vOffset = 0;
+
+			for (int i = 0; i < amount; i++)
+			{
+				if (hOffsetCurve != null)
+					hOffset = hOffsetCurve.Sample(i / IntervalDivider);
+
+				if (vOffsetCurve != null)
+					vOffset = vOffsetCurve.Sample(i / IntervalDivider);
+
+				SpawnNode(forwardDirection * i * spacing + Vector3.Right * hOffset + upDirection * vOffset);
+			}
+		}
+
+
+		private void SpawnAlongPath(Path3D path)
+		{
+			if (path == null)
+			{
+				GD.PrintErr("No Path Provided.");
+				return;
+			}
+
+			PathFollow3D follow = new PathFollow3D
+			{
+				RotationMode = PathFollow3D.RotationModeEnum.Xyz
+			};
+			path.AddChild(follow);
+			follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
+
+			Vector3 offset = follow.GlobalTransform.Inverse().Basis * (GlobalPosition - follow.GlobalPosition);
+			for (int i = 0; i < amount; i++)
+			{
+				follow.HOffset = offset.X;
+				follow.VOffset = offset.Y;
+
+				if (hOffsetCurve != null)
+					follow.HOffset += hOffsetCurve.Sample((float)i / IntervalDivider);
+
+				if (vOffsetCurve != null)
+					follow.VOffset += vOffsetCurve.Sample(i / IntervalDivider);
+
+				Vector3 spawnPosition = follow.GlobalPosition;
+				if (disablePathY)
+					spawnPosition.Y = GlobalPosition.Y;
+
+				SpawnNode(spawnPosition, true);
+				follow.Progress += spacing;
+			}
+
+			follow.QueueFree();
+		}
+
+
+		private void SpawnNode(Vector3 pos, bool globalPosition = default)
 		{
 			Node3D obj = source.Instantiate<Node3D>();
 			obj.Name = "Child" + currentChildCount.ToString("00"); //Set name
