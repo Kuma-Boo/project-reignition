@@ -1,0 +1,186 @@
+[gd_scene load_steps=25 format=3 uid="uid://crrih5gido1jq"]
+
+[ext_resource type="Script" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_af5uk"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="2_rjw3s"]
+[ext_resource type="Material" uid="uid://bisebuvmypclt" path="res://area/7 night palace/data/particle/material/Teleport Swirl.tres" id="3_oxwne"]
+[ext_resource type="Texture2D" uid="uid://b80ntgklqi7px" path="res://area/7 night palace/data/particle/texture/splatter.png" id="4_6ewpw"]
+[ext_resource type="Texture2D" uid="uid://bh2f7rer7l8ea" path="res://area/7 night palace/data/particle/texture/spark.png" id="5_prose"]
+
+[sub_resource type="Gradient" id="Gradient_jhxgy"]
+offsets = PackedFloat32Array(0, 0.214876, 0.747934, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_e0pxo"]
+gradient = SubResource("Gradient_jhxgy")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_afrmw"]
+lifetime_randomness = 0.5
+emission_shape = 2
+emission_sphere_radius = 2.5
+gravity = Vector3(0, 10, 0)
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 3.0
+scale_max = 5.0
+color = Color(0, 0, 0, 0.784314)
+color_ramp = SubResource("GradientTexture1D_e0pxo")
+attractor_interaction_enabled = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_65ygm"]
+material = ExtResource("2_rjw3s")
+
+[sub_resource type="Gradient" id="Gradient_h8ymp"]
+offsets = PackedFloat32Array(0, 0.239669, 0.764463, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_t0dd5"]
+gradient = SubResource("Gradient_h8ymp")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m2q6a"]
+gravity = Vector3(0, 0, 0)
+angular_velocity_min = -720.0
+angular_velocity_max = -720.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 3.0
+scale_max = 5.0
+color = Color(0.588235, 0.313726, 0.901961, 1)
+color_ramp = SubResource("GradientTexture1D_t0dd5")
+hue_variation_min = -0.1
+hue_variation_max = 0.12
+attractor_interaction_enabled = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_yb5da"]
+material = ExtResource("3_oxwne")
+
+[sub_resource type="Gradient" id="Gradient_mu3qs"]
+offsets = PackedFloat32Array(0, 0.285124, 0.727273, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_iiq0d"]
+gradient = SubResource("Gradient_mu3qs")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a3yux"]
+lifetime_randomness = 0.2
+emission_shape = 2
+emission_sphere_radius = 3.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 1.5
+color = Color(0, 0, 0, 0.784314)
+color_ramp = SubResource("GradientTexture1D_iiq0d")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_20scg"]
+transparency = 1
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_6ewpw")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_2hq5k"]
+material = SubResource("StandardMaterial3D_20scg")
+
+[sub_resource type="Curve" id="Curve_mkg33"]
+_data = [Vector2(0, 0), 0.0, 8.98504, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.67446, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_50k1s"]
+width = 64
+curve = SubResource("Curve_mkg33")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kl87p"]
+emission_shape = 2
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_50k1s")
+color = Color(0.427451, 0.172549, 1, 1)
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t8ulp"]
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("5_prose")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_uknbu"]
+material = SubResource("StandardMaterial3D_t8ulp")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_x3qay"]
+radius = 3.0
+
+[node name="Teleport" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_af5uk")
+crossfade = true
+
+[node name="Dust" type="GPUParticles3D" parent="."]
+layers = 32
+amount = 64
+lifetime = 0.5
+preprocess = 5.0
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_afrmw")
+draw_pass_1 = SubResource("QuadMesh_65ygm")
+
+[node name="Swirl" type="GPUParticles3D" parent="."]
+layers = 32
+preprocess = 5.0
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_m2q6a")
+draw_pass_1 = SubResource("QuadMesh_yb5da")
+
+[node name="Splatter" type="GPUParticles3D" parent="."]
+layers = 32
+amount = 64
+preprocess = 5.0
+explosiveness = 0.25
+fixed_fps = 60
+interpolate = false
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_a3yux")
+draw_pass_1 = SubResource("QuadMesh_2hq5k")
+
+[node name="Spark" type="GPUParticles3D" parent="."]
+layers = 32
+amount = 16
+preprocess = 5.0
+fixed_fps = 60
+interpolate = false
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_kl87p")
+draw_pass_1 = SubResource("QuadMesh_uknbu")
+
+[node name="ParticleAttractor" type="GPUParticlesAttractorSphere3D" parent="."]
+layers = 32
+strength = 50.0
+cull_mask = 4293918752
+radius = 5.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_x3qay")
+
+[connection signal="area_entered" from="." to="." method="Activate"]
