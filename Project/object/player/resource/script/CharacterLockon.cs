@@ -25,6 +25,14 @@ namespace Project.Gameplay
 		private Node3D target;
 		/// <summary> Was lockonTarget changed this frame? </summary>
 		private bool wasTargetChanged;
+		private enum TargetState
+		{
+			Valid,
+			NotInList,
+			PlayerBusy,
+			Invisible,
+			HitObstacle,
+		}
 		private readonly Array<Node3D> activeTargets = new Array<Node3D>(); //List of targetable objects
 
 		/// <summary> Enables detection of new lockonTargets. </summary>
@@ -37,6 +45,7 @@ namespace Project.Gameplay
 		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 		public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
+
 		public void StartHomingAttack()
 		{
 			IsHomingAttacking = true;
@@ -45,12 +54,14 @@ namespace Project.Gameplay
 				LevelSettings.instance.AddBonus(LevelSettings.BonusType.PerfectHomingAttack);
 		}
 
+
 		public void StopHomingAttack()
 		{
 			IsHomingAttacking = false;
 			Character.ResetActionState();
 			ResetLockonTarget();
 		}
+
 
 		public void UpdateLockonTargets()
 		{
@@ -59,12 +70,12 @@ namespace Project.Gameplay
 
 			if (IsMonitoring)
 			{
-				int currentTarget = -1; //Index of the current target
-				float closestDistance = Mathf.Inf; //Current closest target
-				if (Target != null && Target.IsInsideTree()) //Current lockon target starts as the closest target
+				int currentTarget = -1; // Index of the current target
+				float closestDistance = Mathf.Inf; // Current closest target
+				if (Target != null && Target.IsInsideTree()) // Current lockon target starts as the closest target
 					closestDistance = Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 
-				//Check whether to pick a new target
+				// Check whether to pick a new target
 				for (int i = 0; i < activeTargets.Count; i++)
 				{
 					if (IsTargetValid(activeTargets[i]) != TargetState.Valid)
@@ -74,17 +85,17 @@ namespace Project.Gameplay
 					if (dst > closestDistance)
 						continue;
 
-					//Update data
+					// Update data
 					closestDistance = dst;
 					currentTarget = i;
 				}
 
-				if (currentTarget != -1 && activeTargets[currentTarget] != Target) //Target has changed
+				if (currentTarget != -1 && activeTargets[currentTarget] != Target) // Target has changed
 					Target = activeTargets[currentTarget];
-				else if (Target != null && IsTargetValid(Target) != TargetState.Valid) //Validate current lockon target
+				else if (Target != null && IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
 					Target = null;
 			}
-			else if (IsHomingAttacking) //Validate homing attack target
+			else if (IsHomingAttacking) // Validate homing attack target
 			{
 				TargetState state = IsTargetValid(Target);
 				if (state == TargetState.NotInList)
@@ -96,28 +107,20 @@ namespace Project.Gameplay
 				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 				UpdateLockonReticle(screenPos, wasTargetChanged);
 			}
-			else if (wasTargetChanged) //Disable UI
+			else if (wasTargetChanged) // Disable UI
 				DisableLockonReticle();
 		}
 
-		private enum TargetState
-		{
-			Valid,
-			NotInList,
-			PlayerBusy,
-			Invisible,
-			HitObstacle,
-		}
 
 		private TargetState IsTargetValid(Node3D t)
 		{
-			if (!activeTargets.Contains(t)) //Not in target list anymore (target hitbox may have been disabled)
+			if (!activeTargets.Contains(t)) // Not in target list anymore (target hitbox may have been disabled)
 				return TargetState.NotInList;
 
-			if (Character.ActionState == CharacterController.ActionStates.Damaged) //Character is busy
+			if (Character.ActionState == CharacterController.ActionStates.Damaged) // Character is busy
 				return TargetState.PlayerBusy;
 
-			if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalPosition)) //Not visible
+			if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalPosition)) // Not visible
 				return TargetState.Invisible;
 
 			//Raycast for obstacles
@@ -133,6 +136,7 @@ namespace Project.Gameplay
 
 			return TargetState.Valid;
 		}
+
 
 		public void ResetLockonTarget()
 		{
@@ -162,6 +166,7 @@ namespace Project.Gameplay
 		public bool IsBouncingLockoutActive => Character.ActiveLockoutData == bounceLockoutSettings;
 		public bool CanInterruptBounce { get; private set; }
 
+
 		public void UpdateBounce()
 		{
 			bounceInterruptTimer = Mathf.MoveToward(bounceInterruptTimer, 0, PhysicsManager.physicsDelta);
@@ -172,19 +177,23 @@ namespace Project.Gameplay
 			Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
 		}
 
-		public void StartBounce() //Bounce the character up and back (So they can target an enemy again)
+
+		public void StartBounce(bool snapToTarget = false) // Bounce the player
 		{
 			IsHomingAttacking = false;
 			CanInterruptBounce = false;
 			bounceInterruptTimer = bounceLockoutSettings.length - .5f;
 
-			if (Target != null)
+			if (snapToTarget && Target != null) // Snap the player to the target
+			{
+				Character.MoveSpeed = 0; // Reset speed
 				Character.GlobalPosition = Target.GlobalPosition;
+			}
+			else // Only bounce the player backwards if snapToTarget is false
+				Character.MoveSpeed = -bounceSpeed;
 
 			ResetLockonTarget();
-
 			Character.CanJumpDash = true;
-			Character.MoveSpeed = -bounceSpeed;
 			Character.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			Character.AddLockoutData(bounceLockoutSettings);
@@ -217,12 +226,13 @@ namespace Project.Gameplay
 		#endregion
 
 
-		//Targeting areas on the lockon layer
+		// Targeting areas on the lockon layer
 		public void OnTargetTriggerEnter(Area3D area)
 		{
 			if (!activeTargets.Contains(area))
 				activeTargets.Add(area);
 		}
+
 
 		public void OnTargetTriggerExit(Area3D area)
 		{
@@ -230,12 +240,14 @@ namespace Project.Gameplay
 				activeTargets.Remove(area);
 		}
 
-		//Allow targeting physics bodies as well...
+
+		// Allow targeting physics bodies as well...
 		public void OnTargetBodyEnter(PhysicsBody3D body)
 		{
 			if (!activeTargets.Contains(body))
 				activeTargets.Add(body);
 		}
+
 
 		public void OnTargetBodyExit(PhysicsBody3D body)
 		{

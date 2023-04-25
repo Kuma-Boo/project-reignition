@@ -41,7 +41,7 @@ namespace Project.Gameplay
 			if (!a.IsInGroup("player")) return;
 
 			if (Character.ActionState == CharacterController.ActionStates.JumpDash || Character.Lockon.IsHomingAttacking)
-				Character.Lockon.StartBounce();
+				Character.Lockon.StartBounce(true);
 			else
 				Character.StartKnockback();
 

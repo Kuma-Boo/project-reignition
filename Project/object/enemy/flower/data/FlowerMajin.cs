@@ -77,16 +77,14 @@ namespace Project.Gameplay
 
 		protected override void UpdateInteraction()
 		{
-			if (!isOpen)
+			if (isOpen || Character.ActionState != CharacterController.ActionStates.JumpDash)
 			{
-				if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-				{
-					Character.Lockon.StartBounce();
-					Character.Camera.LockonTarget = this;
-				}
-			}
-			else
 				base.UpdateInteraction();
+				return;
+			}
+
+			Character.Lockon.StartBounce(IsDefeated);
+			Character.Camera.LockonTarget = this;
 		}
 
 		public override void TakeDamage()

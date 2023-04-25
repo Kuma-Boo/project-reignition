@@ -143,30 +143,20 @@ crossfade = true
 
 [node name="Hourglass" parent="." instance=ExtResource("1_tgpdv")]
 
-[node name="HourglassBaseMesh" parent="Hourglass/HourglassRoot/Skeleton3D" index="0"]
-cast_shadow = 0
-instance_shader_parameters/scroll = 0.0
-
-[node name="HourglassSandBottomMesh" parent="Hourglass/HourglassRoot/Skeleton3D" index="1"]
-cast_shadow = 0
-instance_shader_parameters/scroll = 0.0
-
 [node name="HourglassSandTopMesh" parent="Hourglass/HourglassRoot/Skeleton3D" index="2"]
-cast_shadow = 0
 instance_shader_parameters/scroll = 0.0
 
 [node name="HourglassCollisionFloor" parent="Hourglass" index="1"]
 visible = false
 
 [node name="StaticBody3D" parent="Hourglass/HourglassCollisionFloor" index="0" groups=["floor"]]
+collision_layer = 8
 
 [node name="HourglassCollisionWall" parent="Hourglass" index="2"]
 visible = false
 
 [node name="StaticBody3D" parent="Hourglass/HourglassCollisionWall" index="0" groups=["wall"]]
-
-[node name="AnimationPlayer" parent="Hourglass" index="3"]
-autoplay = "hourglass-RESET"
+collision_layer = 8
 
 [node name="LockonTrigger" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
