@@ -161,20 +161,21 @@ namespace Project.Gameplay.Objects
 		/// <summary> Call this from a trigger. </summary>
 		public void Activate()
 		{
+			EmitSignal(SignalName.Activated);
 			isActive = true;
 
 			Character.StartExternal(this, playerPosition);
 			Character.Animator.StartBalancing(); // Carpet uses balancing animations
 			Character.Animator.UpdateBalanceSpeed(1.0f);
 			Character.Animator.ExternalAngle = 0;
-
-			EmitSignal(SignalName.Activated);
 		}
 
 
 		public void Deactivate()
 		{
+			EmitSignal(SignalName.Deactivated);
 			isActive = false;
+
 			// Reset damping values
 			speedDelta = speedVelocity = 0;
 			turnDelta = turnVelocity = Vector2.Zero;
@@ -182,8 +183,6 @@ namespace Project.Gameplay.Objects
 			if (Character.ExternalParent == this)
 				Character.StopExternal();
 			Character.Animator.ResetState();
-
-			EmitSignal(SignalName.Deactivated);
 		}
 	}
 }

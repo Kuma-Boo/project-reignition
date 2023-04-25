@@ -133,6 +133,7 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!isActive) return; //Already deactivated
 
+			EmitSignal(SignalName.Deactivated);
 			isActive = false;
 			Character.RemoveLockoutData(lockout);
 
@@ -147,7 +148,6 @@ namespace Project.Gameplay.Triggers
 
 			damageState = DamageStates.Disabled;
 			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
-			EmitSignal(SignalName.Deactivated);
 		}
 
 		#region Damage

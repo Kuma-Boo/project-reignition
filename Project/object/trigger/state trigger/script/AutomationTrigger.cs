@@ -54,9 +54,9 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!Character.Skills.IsSpeedBreakActive)
 			{
-				if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < .8f) //Accelerate quicker to reduce low-speed jank
+				if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < .8f) // Accelerate quicker to reduce low-speed jank
 					Character.MoveSpeed += LOW_SPEED_ACCELERATION * PhysicsManager.physicsDelta;
-				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); //Move to max speed
+				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); // Move to max speed
 			}
 
 			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
@@ -72,7 +72,7 @@ namespace Project.Gameplay.Triggers
 
 			if (!ignoreDirection)
 			{
-				//Ensure character is facing/moving the correct direction
+				// Ensure character is facing/moving the correct direction
 				float dot = ExtensionMethods.DotAngle(Character.MovementAngle, Character.CalculateForwardAngle(this.Forward()));
 				if (dot < 0f || Character.IsMovingBackward) return false;
 			}
@@ -82,7 +82,10 @@ namespace Project.Gameplay.Triggers
 
 		private void Activate()
 		{
-			//Cancel any lockout that doesn't have an assigned priority (i.e. Dash Panels)
+			EmitSignal(SignalName.Activated);
+			isActive = true;
+
+			// Cancel any lockout that doesn't have an assigned priority (i.e. Dash Panels)
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.priority == -1)
 				Character.RemoveLockoutData(Character.ActiveLockoutData);
 
@@ -92,22 +95,18 @@ namespace Project.Gameplay.Triggers
 			Character.StartExternal(this, Character.PathFollower, .05f, true);
 			Character.MoveSpeed = initialVelocity;
 			Character.Animator.SnapRotation(0);
-			Character.IsMovingBackward = false; //Prevent getting stuck in backstep animation
-
-			isActive = true;
-			EmitSignal(SignalName.Activated);
+			Character.IsMovingBackward = false; // Prevent getting stuck in backstep animation
 		}
 
 		private void Deactivate()
 		{
+			EmitSignal(SignalName.Deactivated);
 			isActive = false;
-			Character.PathFollower.Resync();
 
+			Character.PathFollower.Resync();
 			Character.ResetMovementState();
 			Character.UpDirection = Character.PathFollower.Up();
 			Character.Animator.SnapRotation(Character.MovementAngle);
-
-			EmitSignal(SignalName.Deactivated);
 		}
 
 		public void OnEntered(Area3D _) => isEntered = true;

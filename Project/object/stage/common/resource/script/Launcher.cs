@@ -61,6 +61,8 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Activate(Area3D a)
 		{
+			EmitSignal(SignalName.Activated);
+
 			if (sfxPlayer != null)
 				sfxPlayer.Play();
 
@@ -72,8 +74,6 @@ namespace Project.Gameplay.Objects
 				Character.Animator.Jump();
 			else
 				Character.Animator.LaunchAnimation();
-
-			EmitSignal(SignalName.Activated);
 		}
 
 		[Export]

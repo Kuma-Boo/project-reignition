@@ -70,8 +70,9 @@ namespace Project.Gameplay.Triggers
 			}
 
 			if (isOneShot && wasActivated) return;
-			wasActivated = true; // Update activation flag
 
+			EmitSignal(SignalName.Activated);
+			wasActivated = true; // Update activation flag
 
 			if (!animator.IsPlaying() && animator.CurrentAnimation == EVENT_ANIMATION) // Reset animation if necessary
 				animator.Seek(0, true);
@@ -84,9 +85,6 @@ namespace Project.Gameplay.Triggers
 
 			if (cameraStandin != null)
 				Character.Camera.SetExternalController(cameraStandin);
-
-
-			EmitSignal(SignalName.Activated);
 		}
 
 
