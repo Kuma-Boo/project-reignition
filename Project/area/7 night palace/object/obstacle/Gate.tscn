@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://r47skp23jl1b"]
+[gd_scene load_steps=9 format=3 uid="uid://r47skp23jl1b"]
 
 [ext_resource type="PackedScene" uid="uid://iaqsmbs2mp6w" path="res://area/7 night palace/object/model/gate/GateBroken.gltf" id="1_bn3is"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_mj45b"]
@@ -45,6 +45,18 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_0gvf5"]
 resource_name = "event"
@@ -87,6 +99,18 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p8wd7"]
 _data = {
@@ -94,7 +118,13 @@ _data = {
 "event": SubResource("Animation_0gvf5")
 }
 
-[node name="Gate" type="Node3D" node_paths=PackedStringArray("animator")]
+[sub_resource type="BoxShape3D" id="BoxShape3D_0b08u"]
+size = Vector3(2.5, 20, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f5drb"]
+size = Vector3(8, 20, 20)
+
+[node name="Gate" type="StaticBody3D" node_paths=PackedStringArray("animator") groups=["wall"]]
 script = ExtResource("1_mj45b")
 animator = NodePath("AnimationPlayer")
 
@@ -152,6 +182,18 @@ cast_shadow = 0
 libraries = {
 "": SubResource("AnimationLibrary_p8wd7")
 }
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 8, 0)
+shape = SubResource("BoxShape3D_0b08u")
+
+[node name="CollisionShapeLeft" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 10, -13.4)
+shape = SubResource("BoxShape3D_f5drb")
+
+[node name="CollisionShapeRight" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 10, 13.6)
+shape = SubResource("BoxShape3D_f5drb")
 
 [editable path="GateBroken"]
 [editable path="GateFixed"]
