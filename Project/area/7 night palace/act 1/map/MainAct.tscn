@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=50 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
@@ -35,10 +35,12 @@
 [ext_resource type="PackedScene" uid="uid://c0cem0iuvnuim" path="res://area/7 night palace/act 1/environment/model/HallStretchEvent.gltf" id="32_j58yj"]
 [ext_resource type="PackedScene" uid="uid://dvp0eoegosx00" path="res://area/7 night palace/object/obstacle/Teleport.tscn" id="33_j541v"]
 [ext_resource type="PackedScene" uid="uid://r47skp23jl1b" path="res://area/7 night palace/object/obstacle/Gate.tscn" id="33_kvbsj"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="33_o2ldu"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="34_i4anx"]
 [ext_resource type="PackedScene" uid="uid://dqy65o3le786n" path="res://area/7 night palace/object/obstacle/SpacePanel.tscn" id="36_ghnrl"]
 [ext_resource type="PackedScene" uid="uid://o1hcy4hf5kg" path="res://area/7 night palace/object/obstacle/Stopper.tscn" id="37_mso31"]
 [ext_resource type="PackedScene" uid="uid://bdntsfu7j7ix8" path="res://area/7 night palace/object/obstacle/Hourglass.tscn" id="38_8l44y"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="38_cjtko"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
@@ -46,10 +48,81 @@ size = Vector3(2, 10, 4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_r3fog"]
 size = Vector3(20, 20, 2.5)
 
+[sub_resource type="Animation" id="Animation_dr0il"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Teleport1:process_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Teleport1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_l4g0l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Teleport1:process_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Teleport1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1we6n"]
+_data = {
+"RESET": SubResource("Animation_l4g0l"),
+"event": SubResource("Animation_dr0il")
+}
+
 [sub_resource type="Curve" id="Curve_c3fnw"]
 max_value = 5.0
 _data = [Vector2(0, 0), 0.0, 12.3918, 0, 0, Vector2(0.44877, 3.48375), 3.67028, 3.67028, 0, 0, Vector2(1, 3), -5.75094, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Curve" id="Curve_i5pyg"]
+min_value = -1.5
+_data = [Vector2(0, 1), 0.0, -0.666667, 0, 0, Vector2(1, -1.5), -3.2, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_0sp7x"]
+min_value = -1.5
+max_value = 1.5
+_data = [Vector2(0, 1.05), 0.0, 5.25, 0, 0, Vector2(1, -1.5), -0.0833337, 0.0, 0, 0]
+point_count = 2
 
 [node name="World" type="Node"]
 
@@ -74,7 +147,7 @@ Completion/Lockout = ExtResource("2_4hrnj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -630)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 296, -104, -480)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -917,26 +990,43 @@ path = NodePath("../../../../Static/Path/CarpetPath")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -104, -490)
 visible = false
 script = ExtResource("4_kcdaq")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="HallStretchEvent" parent="MainAct/Ending" instance=ExtResource("32_j58yj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -300, 104, 490)
 visible = false
 
-[node name="Teleport1" parent="MainAct/Ending" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.25, 10, 0)
+[node name="Gate1" type="Node3D" parent="MainAct/Ending" node_paths=PackedStringArray("animator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.25, 6.85, 0)
+script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
+
+[node name="Checkpoint" type="Node3D" parent="MainAct/Ending/Gate1"]
+script = ExtResource("34_i4anx")
+
+[node name="Path" type="Node3D" parent="MainAct/Ending/Gate1"]
+script = ExtResource("31_pibmb")
+
+[node name="Teleport1" parent="MainAct/Ending/Gate1" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15, 0)
 warpTarget = NodePath("Checkpoint")
 
-[node name="Checkpoint" type="Node3D" parent="MainAct/Ending/Teleport1"]
+[node name="Path" type="Node3D" parent="MainAct/Ending/Gate1/Teleport1" node_paths=PackedStringArray("path")]
+script = ExtResource("31_pibmb")
+path = NodePath("../../../../../Static/Path/SpaceAPath")
+
+[node name="Checkpoint" type="Node3D" parent="MainAct/Ending/Gate1/Teleport1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 377, 94, -150)
 script = ExtResource("34_i4anx")
 
-[node name="Path" type="Node3D" parent="MainAct/Ending/Teleport1" node_paths=PackedStringArray("path")]
-script = ExtResource("31_pibmb")
-path = NodePath("../../../../Static/Path/SpaceAPath")
+[node name="Gate" parent="MainAct/Ending/Gate1" instance=ExtResource("33_kvbsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.150002, 0)
 
-[node name="Gate1" parent="MainAct/Ending" instance=ExtResource("33_kvbsj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.25, 7, 0)
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Ending/Gate1"]
+libraries = {
+"": SubResource("AnimationLibrary_1we6n")
+}
 
 [node name="Teleport2" parent="MainAct/Ending" instance=ExtResource("33_j541v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 182.2, 10, 0)
@@ -953,7 +1043,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 283.2, 7, 0)
 [node name="SpaceA" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -640)
 script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SpacePanelGroup1" type="Node3D" parent="MainAct/SpaceA"]
@@ -1174,13 +1263,305 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.100
 [node name="GreenMajin" parent="MainAct/SpaceA/MajinGroup" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 46)
 
-[node name="Stopper" parent="MainAct/SpaceA" instance=ExtResource("37_mso31")]
-transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 276.8, 0.25, 80)
+[node name="SpiralGroup" type="Node3D" parent="MainAct/SpaceA"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 183.5, 0, 80)
 
-[node name="Hourglass" parent="MainAct/SpaceA" instance=ExtResource("38_8l44y")]
+[node name="Pearls1" type="Node3D" parent="MainAct/SpaceA/SpiralGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59998, -8, 31.8)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("38_cjtko")
+Amount = 22
+Shape = 2
+Path = NodePath("../../../../Static/Path/SpaceAPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_i5pyg")
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0496826, -0.528689, -0.847351)
+
+[node name="Child02" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.781128, -0.92392, -0.561707)
+
+[node name="Child03" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.64465, -1.23053, -0.266541)
+
+[node name="Child04" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.53107, -1.44719, 0.0374146)
+
+[node name="Child05" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4306, -1.57371, 0.349792)
+
+[node name="Child06" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.33368, -1.61087, 0.670227)
+
+[node name="Child07" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.23108, -1.56027, 0.998596)
+
+[node name="Child08" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.11377, -1.42415, 1.33453)
+
+[node name="Child09" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.9729, -1.20538, 1.67773)
+
+[node name="Child10" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.80029, -0.907441, 2.02789)
+
+[node name="Child11" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.58789, -0.534456, 2.38446)
+
+[node name="Child12" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.32849, -0.0911713, 2.74689)
+
+[node name="Child13" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0153, 0.416963, 3.11456)
+
+[node name="Child14" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6431, 0.984, 3.48657)
+
+[node name="Child15" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2073, 1.60353, 3.86212)
+
+[node name="Child16" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.705, 2.26888, 4.24017)
+
+[node name="Child17" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1356, 2.97445, 4.62024)
+
+[node name="Child18" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.504, 3.71413, 5.0069)
+
+[node name="Child19" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.805, 4.46914, 5.39679)
+
+[node name="Child20" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0339, 5.23318, 5.78778)
+
+[node name="Child21" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.1886, 6.00159, 6.17871)
+
+[node name="Child22" parent="MainAct/SpaceA/SpiralGroup/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2682, 6.76961, 6.56836)
+
+[node name="Pearls2" type="Node3D" parent="MainAct/SpaceA/SpiralGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59998, -8, 48.4)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("38_cjtko")
+Amount = 22
+Shape = 2
+Path = NodePath("../../../../Static/Path/SpaceAPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_i5pyg")
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0396729, -0.500635, -0.864746)
+
+[node name="Child02" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786194, -0.899544, -0.579285)
+
+[node name="Child03" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.64557, -1.21056, -0.284363)
+
+[node name="Child04" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52893, -1.4321, 0.0194702)
+
+[node name="Child05" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.42639, -1.56371, 0.331726)
+
+[node name="Child06" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.32861, -1.60596, 0.651917)
+
+[node name="Child07" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.22614, -1.56015, 0.979919)
+
+[node name="Child08" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10992, -1.42833, 1.31525)
+
+[node name="Child09" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.97107, -1.21317, 1.65765)
+
+[node name="Child10" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.80115, -0.917969, 2.00671)
+
+[node name="Child11" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.59186, -0.546751, 2.36194)
+
+[node name="Child12" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.33575, -0.104187, 2.72278)
+
+[node name="Child13" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0259, 0.404321, 3.08838)
+
+[node name="Child14" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6566, 0.972669, 3.45807)
+
+[node name="Child15" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2231, 1.59442, 3.83081)
+
+[node name="Child16" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.7225, 2.26275, 4.20587)
+
+[node name="Child17" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1531, 2.97085, 4.58209)
+
+[node name="Child18" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5128, 3.70779, 4.96423)
+
+[node name="Child19" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.7999, 4.46567, 5.34753)
+
+[node name="Child20" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0134, 5.23869, 5.73029)
+
+[node name="Child21" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.1537, 6.02059, 6.112)
+
+[node name="Child22" parent="MainAct/SpaceA/SpiralGroup/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2213, 6.80504, 6.49213)
+
+[node name="Pearls3" type="Node3D" parent="MainAct/SpaceA/SpiralGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.09998, -4.8, 63.6)
+script = ExtResource("4_nmhcr")
+Generate = false
+Source = ExtResource("38_cjtko")
+Amount = 30
+Shape = 2
+Path = NodePath("../../../../Static/Path/SpaceAPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_0sp7x")
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.322876, -0.421668, -0.905884)
+
+[node name="Child02" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.146851, -1.27554, -0.82666)
+
+[node name="Child03" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.71759, -2.07206, -0.72229)
+
+[node name="Child04" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38574, -2.80199, -0.588379)
+
+[node name="Child05" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.14484, -3.4561, -0.418335)
+
+[node name="Child06" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98541, -4.02577, -0.203003)
+
+[node name="Child07" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.89447, -4.50307, 0.0679932)
+
+[node name="Child08" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85529, -4.88108, 0.407349)
+
+[node name="Child09" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.84705, -5.15451, 0.828003)
+
+[node name="Child10" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.84314, -5.31978, 1.34204)
+
+[node name="Child11" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.81189, -5.37671, 1.95813)
+
+[node name="Child12" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.71893, -5.33017, 2.6781)
+
+[node name="Child13" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.57013, -5.1824, 3.58765)
+
+[node name="Child14" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.1799, -4.89421, 4.54944)
+
+[node name="Child15" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6041, -4.52206, 5.50964)
+
+[node name="Child16" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.894, -4.09816, 6.45398)
+
+[node name="Child17" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0842, -3.63968, 7.37976)
+
+[node name="Child18" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1967, -3.15691, 8.28699)
+
+[node name="Child19" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2463, -2.65631, 9.17615)
+
+[node name="Child20" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2427, -2.14251, 10.0472)
+
+[node name="Child21" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1921, -1.61895, 10.9)
+
+[node name="Child22" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0975, -1.08866, 11.7325)
+
+[node name="Child23" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9582, -0.555245, 12.5399)
+
+[node name="Child24" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.769, -0.0238147, 13.3119)
+
+[node name="Child25" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5015, 0.497334, 14.053)
+
+[node name="Child26" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.1755, 1.01395, 14.7856)
+
+[node name="Child27" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.81183, 1.52457, 15.5175)
+
+[node name="Child28" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.42346, 2.02714, 16.2582)
+
+[node name="Child29" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.02185, 2.5196, 17.0167)
+
+[node name="Child30" parent="MainAct/SpaceA/SpiralGroup/Pearls3" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.61804, 2.9995, 17.8024)
+
+[node name="Stopper" parent="MainAct/SpaceA/SpiralGroup" instance=ExtResource("37_mso31")]
+transform = Transform3D(-1, 0, -8.74226e-08, 0, 1, 0, 8.74226e-08, 0, -1, 0, 0.25, 93.3)
+
+[node name="Hourglass" parent="MainAct/SpaceA" node_paths=PackedStringArray("warpTarget") instance=ExtResource("38_8l44y")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 286, 0, 80.1)
+warpTarget = NodePath("../../GasRooms")
 
-[node name="GasA" type="Node3D" parent="MainAct"]
+[node name="GasRooms" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1128, 0, -560)
+
+[node name="Path" type="Node3D" parent="MainAct/GasRooms" node_paths=PackedStringArray("path")]
+script = ExtResource("31_pibmb")
+path = NodePath("../../../Static/Path/GasRoomPath")
+
+[node name="Checkpoint" type="Node3D" parent="MainAct/GasRooms"]
+script = ExtResource("34_i4anx")
+
+[node name="GasA" type="Node3D" parent="MainAct/GasRooms"]
+visible = false
+script = ExtResource("4_kcdaq")
+saveVisibilityOnCheckpoint = true
+
+[node name="Hourglass" parent="MainAct/GasRooms/GasA" node_paths=PackedStringArray("warpTarget") instance=ExtResource("38_8l44y")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 206, 0, 0)
+warpTarget = NodePath("../../../Ending/Gate1/Checkpoint")
+
+[node name="GasB" type="Node3D" parent="MainAct/GasRooms"]
+visible = false
+script = ExtResource("4_kcdaq")
+saveVisibilityOnCheckpoint = true
+
+[node name="GasC" type="Node3D" parent="MainAct/GasRooms"]
 visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
@@ -1190,17 +1571,7 @@ visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
-[node name="GasB" type="Node3D" parent="MainAct"]
-visible = false
-script = ExtResource("4_kcdaq")
-saveVisibilityOnCheckpoint = true
-
 [node name="SpaceC" type="Node3D" parent="MainAct"]
-visible = false
-script = ExtResource("4_kcdaq")
-saveVisibilityOnCheckpoint = true
-
-[node name="GasC" type="Node3D" parent="MainAct"]
 visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
@@ -1218,9 +1589,25 @@ saveVisibilityOnCheckpoint = true
 [connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="MainAct/Ending/Teleport1/Checkpoint" method="Activate"]
-[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="MainAct/Ending/Teleport1/Path" method="Activate"]
-[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="MainAct/SpaceA" method="Activate"]
-[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="Static/Visuals/MainSection" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="Static/Visuals/SpaceSection" method="Activate"]
-[connection signal="Teleport" from="MainAct/Ending/Teleport1" to="Static/Visuals/SpaceSection/NPSpaceA" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/Gate1" to="MainAct/Ending" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/Gate1" to="MainAct/Ending/Gate1/Checkpoint" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/Gate1" to="MainAct/Ending/Gate1/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/Gate1" to="MainAct/Ending/Gate1/Gate" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/Gate1" to="Static/Visuals/MainSection" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Gate1/Teleport1" to="MainAct/Ending/Gate1/Teleport1/Checkpoint" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Gate1/Teleport1" to="MainAct/Ending/Gate1/Teleport1/Path" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Gate1/Teleport1" to="MainAct/SpaceA" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Gate1/Teleport1" to="Static/Visuals/MainSection" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/Ending/Gate1/Teleport1" to="Static/Visuals/SpaceSection" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/Gate1/Teleport1" to="Static/Visuals/SpaceSection/NPSpaceA" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/Gate1/Gate" to="MainAct/Ending" method="Activate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/SpaceA" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/GasRooms/Path" method="Activate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/GasRooms/GasA" method="Activate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Activate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Visuals/SpaceSection/NPSpaceA" method="Activate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/GasRooms/Checkpoint" method="Activate"]
+[connection signal="Teleport" from="MainAct/GasRooms/GasA/Hourglass" to="MainAct/Ending/Gate1" method="Activate"]
+[connection signal="Teleport" from="MainAct/GasRooms/GasA/Hourglass" to="MainAct/GasRooms/GasA" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/GasRooms/GasA/Hourglass" to="Static/Visuals/SpaceSection" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/GasRooms/GasA/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Deactivate"]

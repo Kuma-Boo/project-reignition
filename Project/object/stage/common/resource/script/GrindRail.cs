@@ -32,6 +32,8 @@ namespace Project.Gameplay
 
 		[ExportGroup("Invisible Rail Settings")]
 		[Export]
+		private bool isInvisibleRail;
+		[Export]
 		private Node3D railModel;
 		[Export]
 		private ShaderMaterial railMaterial;
@@ -44,7 +46,6 @@ namespace Project.Gameplay
 		[Export(PropertyHint.Range, "5, 120")]
 		/// <summary> Only used for invisible rails. </summary>
 		private int railLength;
-		private bool isInvisibleRail;
 		/// <summary> Updates rail's visual length. </summary>
 		private void UpdateInvisibleRailLength()
 		{
