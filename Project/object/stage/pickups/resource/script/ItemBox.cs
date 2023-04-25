@@ -106,6 +106,14 @@ namespace Project.Gameplay.Objects
 		/// <summary> Position to spawn nodes. </summary>
 		private NodePath pickupParentPath;
 		private Node3D pickupParent;
+		private void DisablePickupParent()
+		{
+			if (pickupParent != null) // Disable node parent
+			{
+				pickupParent.Visible = false;
+				pickupParent.ProcessMode = ProcessModeEnum.Disabled;
+			}
+		}
 
 		/// <summary> How many objects to spawn. </summary>
 		public int spawnAmount = 1;
@@ -116,13 +124,12 @@ namespace Project.Gameplay.Objects
 		/// <summary> Maximum amount to delay travel by. </summary>
 		private float travelDelay;
 
-
 		private Vector3 LaunchPosition => GlobalPosition + Vector3.Up * .5f;
 		public Vector3 EndPosition => pickupParent == null ? GlobalPosition : pickupParent.GlobalPosition;
 
 		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(LaunchPosition, EndPosition, travelHeight);
 
-		//Only effective if spawnAmount is greater than 1
+		// Only effective if spawnAmount is greater than 1
 		/// <summary> How wide of a ring to create. </summary>
 		public float spawnRadius;
 		/// <summary> Pre-calculated rotation interval. </summary>
@@ -141,7 +148,7 @@ namespace Project.Gameplay.Objects
 
 		private readonly Vector2 PEARL_SPAWN_RADIUS = new Vector2(2.0f, 1.0f);
 
-		//Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
+		// Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
 		private readonly List<float> travelTimes = new List<float>();
 		private readonly List<Pickup> objectPool = new List<Pickup>();
 		private readonly List<LaunchSettings> objectLaunchSettings = new List<LaunchSettings>();
@@ -163,22 +170,23 @@ namespace Project.Gameplay.Objects
 				if (pickupParent == null)
 					GD.PrintErr("spawnNode is null!");
 
-				//Pool objects
+				// Pool objects
 				for (int i = 0; i < spawnAmount; i++)
 				{
 					Pickup pickup = customObject.Instantiate<Pickup>();
+					pickupParent.AddChild(pickup);
+
 					pickup.DisableAutoRespawning = true;
+					pickup._Ready();
 
 					travelTimes.Add(0);
 					objectPool.Add(pickup);
 					objectLaunchSettings.Add(new LaunchSettings());
-
-					pickupParent.AddChild(pickup);
 				}
 			}
 
 			base.SetUp();
-			Respawn();
+			DisablePickupParent(); // Attempt to disable the pickup parent
 		}
 
 
@@ -197,17 +205,14 @@ namespace Project.Gameplay.Objects
 		public override void Respawn()
 		{
 			base.Respawn();
+
 			isOpened = false;
 			isMovingObjects = false;
 
 			animator.Play("RESET");
 			animator.Seek(0, true);
 
-			if (pickupParent != null) // Disable node parent
-			{
-				pickupParent.Visible = false;
-				pickupParent.ProcessMode = ProcessModeEnum.Disabled;
-			}
+			DisablePickupParent();
 
 			for (int i = 0; i < objectPool.Count; i++)
 				objectPool[i].Respawn();

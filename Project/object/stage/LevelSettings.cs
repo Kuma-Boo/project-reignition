@@ -582,7 +582,7 @@ namespace Project.Gameplay
 
 		public void Respawn(Node n)
 		{
-			if (n.GetParent() != parentNode)
+			if (parentNode != null && n.GetParent() != parentNode)
 			{
 				if (n.IsInsideTree()) // Object needs to be reparented first.
 					n.GetParent().RemoveChild(n);
