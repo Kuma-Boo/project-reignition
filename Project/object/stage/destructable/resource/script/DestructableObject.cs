@@ -260,7 +260,10 @@ namespace Project.Gameplay.Objects
 			else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
 				Shatter();
 			else if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Character.ActionState == CharacterController.ActionStates.JumpDash)
+			{
 				Shatter();
+				Character.Lockon.StartBounce();
+			}
 			else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
 				Shatter();
 		}
