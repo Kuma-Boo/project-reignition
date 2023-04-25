@@ -58,7 +58,7 @@ namespace Project.Gameplay.Triggers
 			else if (Character.IsOnGround)
 			{
 				if (Character.ActionState == CharacterController.ActionStates.Normal)
-					StartSidle(); //Allows player to slide through sidle section if they know what they're doing
+					StartSidle(); // Allows player to slide through sidle section if they know what they're doing
 				else if (Character.ActionState == CharacterController.ActionStates.Crouching && Mathf.IsZeroApprox(Character.MoveSpeed))
 					Character.ResetActionState();
 			}
@@ -66,6 +66,8 @@ namespace Project.Gameplay.Triggers
 
 		private void StartSidle()
 		{
+			EmitSignal(SignalName.Activated); // Always emit signal first to allow path changes, etc.
+
 			isActive = true;
 			velocity = 0;
 			cycleTimer = 0;
@@ -81,8 +83,6 @@ namespace Project.Gameplay.Triggers
 
 			if (!Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged)))
 				Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
-
-			EmitSignal(SignalName.Activated);
 		}
 
 		private void UpdateSidle()
