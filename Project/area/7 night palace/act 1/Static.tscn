@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=61 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -19,9 +19,11 @@
 [ext_resource type="Script" path="res://object/trigger/modules/ReflectionTrigger.cs" id="8_ucc6w"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_ew8l8"]
 [ext_resource type="PackedScene" uid="uid://dkft1rtv6qnuv" path="res://area/7 night palace/act 1/environment/collision/Collision.tscn" id="9_oaikh"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_7ghp2"]
 [ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/7 night palace/data/Environment.tres" id="10_jp8di"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="10_tmf6t"]
 [ext_resource type="Curve3D" uid="uid://chfrjhr8vu4n6" path="res://area/7 night palace/act 1/environment/path/MainPath1.tres" id="11_ji1lh"]
+[ext_resource type="Resource" uid="uid://bl2d766v1u5w3" path="res://area/7 night palace/act 1/trigger/camera/SpaceAAutoCamera.tres" id="11_onu37"]
 [ext_resource type="Curve3D" uid="uid://da2df8sqgk6fe" path="res://area/7 night palace/act 1/environment/path/MainPath2.tres" id="12_gech5"]
 [ext_resource type="Curve3D" uid="uid://7nar8sphbcx3" path="res://area/7 night palace/act 1/environment/path/MainPath3.tres" id="13_htggc"]
 [ext_resource type="Curve3D" uid="uid://dgoop554yliys" path="res://area/7 night palace/act 1/environment/path/MainPath4.tres" id="14_gh6jo"]
@@ -45,6 +47,7 @@
 [ext_resource type="PackedScene" uid="uid://dt58vpb6kmhjw" path="res://area/7 night palace/environment/collision/NPSpaceC.tscn" id="31_8lu1i"]
 [ext_resource type="Curve3D" path="res://area/7 night palace/environment/path/SpaceCPath.tres" id="31_vfagc"]
 [ext_resource type="Curve3D" uid="uid://dpokcowfe8c78" path="res://area/7 night palace/act 1/environment/path/GasRoomPath.tres" id="40_nugtn"]
+[ext_resource type="Curve3D" uid="uid://btaj2vveuk3yl" path="res://area/7 night palace/environment/path/SpaceAAutomationPath.tres" id="45_n5usr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3kcky"]
 size = Vector3(15, 20, 2.5)
@@ -332,11 +335,21 @@ shape = SubResource("BoxShape3D_65qu7")
 
 [node name="SpaceAAutomation" parent="Trigger/Object" instance=ExtResource("6_6kpe1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 975, 0, -560)
-endPoint = 512.0
+endPoint = 242.0
 ignoreDirection = true
 
+[node name="Path" type="Node3D" parent="Trigger/Object/SpaceAAutomation" node_paths=PackedStringArray("path")]
+script = ExtResource("7_omcuu")
+path = NodePath("../../../../Path/SpaceAAutomationPath")
+affectCamera = false
+
+[node name="Camera" type="Node3D" parent="Trigger/Object/SpaceAAutomation"]
+script = ExtResource("10_7ghp2")
+transitionTime = 1.0
+settings = ExtResource("11_onu37")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SpaceAAutomation"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 0)
 shape = SubResource("BoxShape3D_n8mus")
 
 [node name="SpaceFallTrigger" parent="Trigger/Object" instance=ExtResource("4_d1bik")]
@@ -635,6 +648,10 @@ curve = ExtResource("40_nugtn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 770, 0, -640)
 curve = ExtResource("29_42w86")
 
+[node name="SpaceAAutomationPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 961.676, 0, -560)
+curve = ExtResource("45_n5usr")
+
 [node name="SpaceBPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 770, 0, -460)
 curve = ExtResource("30_wgmg4")
@@ -651,6 +668,10 @@ bus = &"BGM"
 [connection signal="Activated" from="Trigger/Object/WallRun2" to="Trigger/Object/WallRun2/WallRun" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Path" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Deactivate"]
+[connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/01Unload" to="Visuals/MainSection/01Start" method="Deactivate"]

@@ -14143,7 +14143,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Hallway" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.1, -45, -359)
-visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
@@ -14227,7 +14226,7 @@ script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hallway/SpikeBallTrigger/Event"]
-root_node = NodePath("../../../Button/SpikeBall")
+root_node = NodePath("../../../Switch/SpikeBall")
 libraries = {
 "": SubResource("AnimationLibrary_145oe")
 }
@@ -14235,128 +14234,128 @@ libraries = {
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Hallway/SpikeBallTrigger"]
 shape = SubResource("160")
 
-[node name="Button" parent="MainAct/Hallway" instance=ExtResource("42_gpj5q")]
-transform = Transform3D(-0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, -0.819152, 21.1298, 0, -51.4072)
+[node name="Switch" parent="MainAct/Hallway" instance=ExtResource("42_gpj5q")]
+transform = Transform3D(-0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, -0.819152, 21.1298, 0.0999985, -51.4072)
 
-[node name="EventTrigger" type="Node3D" parent="MainAct/Hallway/Button" node_paths=PackedStringArray("animator")]
+[node name="EventTrigger" type="Node3D" parent="MainAct/Hallway/Switch" node_paths=PackedStringArray("animator")]
 script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
 
-[node name="Pillar1" type="Node3D" parent="MainAct/Hallway/Button/EventTrigger"]
+[node name="Pillar1" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, -11)
 
-[node name="SquarePillarShort1" parent="MainAct/Hallway/Button/EventTrigger/Pillar1" instance=ExtResource("29_4m38a")]
+[node name="SquarePillarShort1" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1" instance=ExtResource("29_4m38a")]
 process_priority = -22
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -10, 0)
 
-[node name="PlatformTrigger" parent="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1" node_paths=PackedStringArray("parentCollider") instance=ExtResource("43_6d6jt")]
+[node name="PlatformTrigger" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1" node_paths=PackedStringArray("parentCollider") instance=ExtResource("43_6d6jt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 "Falling Platform Settings/Disabled" = true
 parentCollider = NodePath("..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger"]
 shape = SubResource("355")
 
-[node name="SandDustParticle1" parent="MainAct/Hallway/Button/EventTrigger/Pillar1" instance=ExtResource("15_mu1ul")]
+[node name="SandDustParticle1" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1" instance=ExtResource("15_mu1ul")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 visible = false
 
-[node name="SandSplatterParticle1" parent="MainAct/Hallway/Button/EventTrigger/Pillar1" instance=ExtResource("16_6m0tl")]
+[node name="SandSplatterParticle1" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1" instance=ExtResource("16_6m0tl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 visible = false
 
-[node name="Pillar2" type="Node3D" parent="MainAct/Hallway/Button/EventTrigger"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -3.05176e-05, -3.1, -13.7)
+[node name="Pillar2" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -3.2, -13.7)
 
-[node name="SquarePillarShort2" parent="MainAct/Hallway/Button/EventTrigger/Pillar2" instance=ExtResource("29_4m38a")]
+[node name="SquarePillarShort2" parent="MainAct/Hallway/Switch/EventTrigger/Pillar2" instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -10, 0)
 
-[node name="SandDustParticle2" parent="MainAct/Hallway/Button/EventTrigger/Pillar2" instance=ExtResource("15_mu1ul")]
+[node name="SandDustParticle2" parent="MainAct/Hallway/Switch/EventTrigger/Pillar2" instance=ExtResource("15_mu1ul")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 3, 0)
 visible = false
 
-[node name="SandSplatterParticle2" parent="MainAct/Hallway/Button/EventTrigger/Pillar2" instance=ExtResource("16_6m0tl")]
+[node name="SandSplatterParticle2" parent="MainAct/Hallway/Switch/EventTrigger/Pillar2" instance=ExtResource("16_6m0tl")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 3, 0)
 visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hallway/Button/EventTrigger"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hallway/Switch/EventTrigger"]
 process_priority = 25
 playback_process_mode = 0
 libraries = {
 "": SubResource("AnimationLibrary_r83o7")
 }
 
-[node name="BlueMajin1" parent="MainAct/Hallway/Button/EventTrigger" instance=ExtResource("25_wxgr8")]
+[node name="BlueMajin1" parent="MainAct/Hallway/Switch/EventTrigger" instance=ExtResource("25_wxgr8")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.193512, 7, -21.8653)
 
-[node name="BlueMajin2" parent="MainAct/Hallway/Button/EventTrigger" instance=ExtResource("25_wxgr8")]
+[node name="BlueMajin2" parent="MainAct/Hallway/Switch/EventTrigger" instance=ExtResource("25_wxgr8")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.733215, 8, -28.5912)
 
-[node name="BlueMajin3" parent="MainAct/Hallway/Button/EventTrigger" instance=ExtResource("25_wxgr8")]
+[node name="BlueMajin3" parent="MainAct/Hallway/Switch/EventTrigger" instance=ExtResource("25_wxgr8")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.4632, 9, -34.8662)
 
-[node name="EventTrigger" type="Node3D" parent="MainAct/Hallway/Button/EventTrigger" node_paths=PackedStringArray("animator")]
+[node name="EventTrigger" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.891006, 0, 0.45399, 0, 1, 0, -0.45399, 0, 0.891006, -1.46387, -2.9, -34.8461)
 script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
 
-[node name="FireSoul1" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger" instance=ExtResource("44_7td3m")]
+[node name="FireSoul1" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger" instance=ExtResource("44_7td3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.9, -4.89999)
 
-[node name="Pillar1" type="Node3D" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger"]
+[node name="Pillar1" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger"]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
-[node name="SquarePillarShort1" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar1" instance=ExtResource("29_4m38a")]
+[node name="SquarePillarShort1" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar1" instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
 
-[node name="SandDustParticle1" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar1" instance=ExtResource("15_mu1ul")]
+[node name="SandDustParticle1" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar1" instance=ExtResource("15_mu1ul")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 visible = false
 
-[node name="SandSplatterParticle1" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar1" instance=ExtResource("16_6m0tl")]
+[node name="SandSplatterParticle1" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar1" instance=ExtResource("16_6m0tl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 visible = false
 
-[node name="Pillar2" type="Node3D" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger"]
+[node name="Pillar2" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 0, -2.44998)
 
-[node name="SquarePillarShort2" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar2" instance=ExtResource("29_4m38a")]
+[node name="SquarePillarShort2" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar2" instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
 
-[node name="SandDustParticle2" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar2" instance=ExtResource("15_mu1ul")]
+[node name="SandDustParticle2" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar2" instance=ExtResource("15_mu1ul")]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -7.62939e-06, 3, 0)
 visible = false
 
-[node name="SandSplatterParticle2" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar2" instance=ExtResource("16_6m0tl")]
+[node name="SandSplatterParticle2" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar2" instance=ExtResource("16_6m0tl")]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 3, 0)
 visible = false
 
-[node name="Pillar3" type="Node3D" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger"]
+[node name="Pillar3" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.89999)
 
-[node name="SquarePillarShort3" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar3" instance=ExtResource("29_4m38a")]
+[node name="SquarePillarShort3" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar3" instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
 
-[node name="Spring" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar3/SquarePillarShort3" instance=ExtResource("22_dagtm")]
+[node name="Spring" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar3/SquarePillarShort3" instance=ExtResource("22_dagtm")]
 transform = Transform3D(1, 5.96046e-08, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, -1.52588e-05, 10.0293, -1.4223)
 middleHeight = 1.0
 finalHeight = -5.0
 distance = 25.0
 
-[node name="SandDustParticle3" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar3" instance=ExtResource("15_mu1ul")]
+[node name="SandDustParticle3" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar3" instance=ExtResource("15_mu1ul")]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -7.62939e-06, 3, 0)
 visible = false
 
-[node name="SandSplatterParticle3" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger/Pillar3" instance=ExtResource("16_6m0tl")]
+[node name="SandSplatterParticle3" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger/Pillar3" instance=ExtResource("16_6m0tl")]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 3, 0)
 visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hallway/Button/EventTrigger/EventTrigger"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hallway/Switch/EventTrigger/EventTrigger"]
 libraries = {
 "": SubResource("AnimationLibrary_61176")
 }
 
-[node name="SpikeBall" parent="MainAct/Hallway/Button" instance=ExtResource("45_ldib5")]
+[node name="SpikeBall" parent="MainAct/Hallway/Switch" instance=ExtResource("45_ldib5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Rings2" type="Node3D" parent="MainAct/Hallway"]
@@ -18155,10 +18154,10 @@ shape = SubResource("65")
 [connection signal="Deactivated" from="MainAct/Island/Spring" to="MainAct/Island/TriggerData/SpringCamera" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Island/JumpPanel4" to="MainAct/Island/TriggerData/JumpEndCamera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Island/JumpPanel4" to="MainAct/Island/TriggerData/JumpEndCamera" method="Deactivate"]
-[connection signal="Activated" from="MainAct/Hallway/Button" to="MainAct/Hallway/Button/EventTrigger" method="Activate"]
-[connection signal="Respawned" from="MainAct/Hallway/Button" to="MainAct/Hallway/Button/EventTrigger" method="Respawn"]
-[connection signal="Respawned" from="MainAct/Hallway/Button" to="MainAct/Hallway/Button/EventTrigger/EventTrigger" method="Respawn"]
-[connection signal="area_entered" from="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnEntered"]
-[connection signal="area_exited" from="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Button/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnExited"]
-[connection signal="Defeated" from="MainAct/Hallway/Button/EventTrigger/BlueMajin1" to="MainAct/Hallway/Button/EventTrigger/EventTrigger" method="Activate"]
+[connection signal="Activated" from="MainAct/Hallway/Switch" to="MainAct/Hallway/Switch/EventTrigger" method="Activate"]
+[connection signal="Respawned" from="MainAct/Hallway/Switch" to="MainAct/Hallway/Switch/EventTrigger" method="Respawn"]
+[connection signal="Respawned" from="MainAct/Hallway/Switch" to="MainAct/Hallway/Switch/EventTrigger/EventTrigger" method="Respawn"]
+[connection signal="area_entered" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnEntered"]
+[connection signal="area_exited" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnExited"]
+[connection signal="Defeated" from="MainAct/Hallway/Switch/EventTrigger/BlueMajin1" to="MainAct/Hallway/Switch/EventTrigger/EventTrigger" method="Activate"]
 [connection signal="Shattered" from="MainAct/End/JarGroup3/JarM2" to="MainAct/End/JarGroup3/GreenMajin" method="Spawn"]

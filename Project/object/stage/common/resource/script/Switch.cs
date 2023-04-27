@@ -20,16 +20,20 @@ namespace Project.Gameplay.Objects
 		[Export]
 		/// <summary> Allow the switch to be toggled on/off? </summary>
 		private bool isToggleable;
+		private bool isActive;
+		/// <summary> Was this switch already modified? Used when isToggleable is set to false. </summary>
+		private bool wasModified;
+
+		[ExportGroup("Components")]
 		[Export]
 		private AnimationPlayer animator;
-		private bool isActive;
-		private bool wasModified; //Was this switch already modified? Used when isToggleable is set to false.
 
 		public override void _Ready()
 		{
 			LevelSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
+
 
 		public void Respawn()
 		{
@@ -38,6 +42,7 @@ namespace Project.Gameplay.Objects
 			animator.Play(isActive ? "activate-loop" : "RESET");
 			EmitSignal(SignalName.Respawned);
 		}
+
 
 		private void OnEntered(Area3D _) => Activate();
 		public void Activate()
