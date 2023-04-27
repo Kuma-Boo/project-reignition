@@ -13,23 +13,19 @@ namespace Project.Gameplay.Objects
 		{
 			Array<Dictionary> properties = new Array<Dictionary>();
 
-			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Amount", Variant.Type.Int, PropertyHint.Range, "1,100"));
-			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Time", Variant.Type.Float, PropertyHint.Range, "0.2,2,0.1"));
-
 			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Pearls", Variant.Type.Bool));
 
 			if (!spawnPearls)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Object", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Pickup Parent", Variant.Type.NodePath));
 
-				if (spawnAmount > 1)
-				{
-					properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Delay", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
-					properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Radius", Variant.Type.Float, PropertyHint.Range, "0,5,0.1"));
-				}
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Time", Variant.Type.Float, PropertyHint.Range, "0.2,2,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Delay", Variant.Type.Float, PropertyHint.Range, "0.2,2,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Delay Range", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
 			}
+			else
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Amount", Variant.Type.Int, PropertyHint.Range, "1,100"));
 
 			return properties;
 		}
@@ -55,15 +51,12 @@ namespace Project.Gameplay.Objects
 				case "Spawn Settings/Travel Delay":
 					travelDelay = (float)value;
 					break;
+				case "Spawn Settings/Travel Delay Range":
+					travelDelayRange = (float)value;
+					break;
 				case "Spawn Settings/Pickup Parent":
 					pickupParentPath = (NodePath)value;
 					pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
-					break;
-				case "Spawn Settings/Spawn Radius":
-					spawnRadius = (float)value;
-					break;
-				case "Spawn Settings/Object":
-					customObject = (PackedScene)value;
 					break;
 
 				default:
@@ -87,12 +80,10 @@ namespace Project.Gameplay.Objects
 					return travelHeight;
 				case "Spawn Settings/Travel Delay":
 					return travelDelay;
+				case "Spawn Settings/Travel Delay Range":
+					return travelDelayRange;
 				case "Spawn Settings/Pickup Parent":
 					return pickupParentPath;
-				case "Spawn Settings/Spawn Radius":
-					return spawnRadius;
-				case "Spawn Settings/Object":
-					return customObject;
 			}
 			return base._Get(property);
 		}
@@ -100,8 +91,6 @@ namespace Project.Gameplay.Objects
 
 		/// <summary> Use RuntimeConstants method for pearls? </summary>
 		public bool spawnPearls;
-		/// <summary> Scene to spawn when spawning custom object. </summary>
-		private PackedScene customObject;
 
 		/// <summary> Position to spawn nodes. </summary>
 		private NodePath pickupParentPath;
@@ -119,26 +108,18 @@ namespace Project.Gameplay.Objects
 		public int spawnAmount = 1;
 		/// <summary> How long to travel for. </summary>
 		private float travelTime = 1;
+		/// <summary> Travel delay for object spawning. </summary>
+		private float travelDelay;
+		/// <summary> Travel delay range for object spawning. </summary>
+		private float travelDelayRange;
 		/// <summary> How high to travel. </summary>
 		private float travelHeight = 2;
-		/// <summary> Maximum amount to delay travel by. </summary>
-		private float travelDelay;
 
-		private Vector3 LaunchPosition => GlobalPosition + Vector3.Up * .5f;
+		private Vector3 SpawnPosition => GlobalPosition + SPAWN_OFFSET;
 		public Vector3 EndPosition => pickupParent == null ? GlobalPosition : pickupParent.GlobalPosition;
 
-		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(LaunchPosition, EndPosition, travelHeight);
+		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(SpawnPosition, EndPosition, travelHeight);
 
-		// Only effective if spawnAmount is greater than 1
-		/// <summary> How wide of a ring to create. </summary>
-		public float spawnRadius;
-		/// <summary> Pre-calculated rotation interval. </summary>
-		private float rotationInterval;
-		private Vector3 GetSpawnOffset(int i)
-		{
-			if (spawnAmount == 1) return Vector3.Zero;
-			return this.Forward().Rotated(this.Up(), i * rotationInterval) * spawnRadius;
-		}
 
 		[Export]
 		private AnimationPlayer animator;
@@ -146,13 +127,13 @@ namespace Project.Gameplay.Objects
 		private bool isOpened;
 		private bool isMovingObjects;
 
-		private readonly Vector2 PEARL_SPAWN_RADIUS = new Vector2(2.0f, 1.0f);
-
 		// Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
 		private readonly List<float> travelTimes = new List<float>();
 		private readonly List<Pickup> objectPool = new List<Pickup>();
 		private readonly List<LaunchSettings> objectLaunchSettings = new List<LaunchSettings>();
 
+		private readonly Vector3 SPAWN_OFFSET = Vector3.Up * .5f;
+		private readonly Vector2 PEARL_SPAWN_RADIUS = new Vector2(2.0f, 1.0f);
 
 		protected override void SetUp()
 		{
@@ -160,28 +141,18 @@ namespace Project.Gameplay.Objects
 
 			if (Engine.IsEditorHint()) return;
 
-			rotationInterval = Mathf.Tau / spawnAmount;
-
 			if (!spawnPearls)
 			{
-				if (customObject == null)
-					GD.PrintErr("Item box can't spawn anything!");
-
 				if (pickupParent == null)
-					GD.PrintErr("spawnNode is null!");
+					GD.PrintErr($"Pickup parent is null on {Name}! Did you mean to turn spawnPearls on?");
 
 				// Pool objects
-				for (int i = 0; i < spawnAmount; i++)
+				if (pickupParent is Pickup)
+					PoolPickup(pickupParent as Pickup);
+				else
 				{
-					Pickup pickup = customObject.Instantiate<Pickup>();
-					pickupParent.AddChild(pickup);
-
-					pickup.DisableAutoRespawning = true;
-					pickup._Ready();
-
-					travelTimes.Add(0);
-					objectPool.Add(pickup);
-					objectLaunchSettings.Add(new LaunchSettings());
+					for (int i = 0; i < pickupParent.GetChildCount(); i++)
+						PoolPickup(pickupParent.GetChildOrNull<Pickup>(i));
 				}
 			}
 
@@ -230,6 +201,19 @@ namespace Project.Gameplay.Objects
 		}
 
 
+		private void PoolPickup(Pickup pickup)
+		{
+			if (pickup == null) return;
+
+			pickup.DisableAutoRespawning = true;
+			pickup._Ready();
+
+			travelTimes.Add(0);
+			objectPool.Add(pickup);
+			objectLaunchSettings.Add(new LaunchSettings());
+		}
+
+
 		private void UpdateObjects()
 		{
 			bool isMovementComplete = true;
@@ -249,9 +233,14 @@ namespace Project.Gameplay.Objects
 				if (objectPool[i].Visible)
 				{
 					if (!objectLaunchSettings[i].IsInitialized)
-						objectLaunchSettings[i] = LaunchSettings.Create(LaunchPosition, EndPosition + GetSpawnOffset(i), travelHeight);
+					{
+						Vector3 startPosition = Basis.Inverse() * (SpawnPosition - EndPosition);
+						if (objectPool[i] == pickupParent)
+							startPosition = SPAWN_OFFSET;
+						objectLaunchSettings[i] = LaunchSettings.Create(startPosition, objectPool[i].Position, travelHeight);
+					}
 
-					objectPool[i].GlobalPosition = objectLaunchSettings[i].InterpolatePositionRatio(currentTime);
+					objectPool[i].Position = objectLaunchSettings[i].InterpolatePositionRatio(currentTime);
 					objectPool[i].Scale = Vector3.One * Mathf.Clamp(currentTime, 0.5f, 1f);
 				}
 			}
@@ -284,7 +273,7 @@ namespace Project.Gameplay.Objects
 			// Spawn objects
 			for (int i = 0; i < objectPool.Count; i++)
 			{
-				travelTimes[i] = Runtime.randomNumberGenerator.RandfRange(-travelDelay, 0);
+				travelTimes[i] = Runtime.randomNumberGenerator.RandfRange(-travelDelayRange, 0) - travelDelay;
 				objectPool[i].Monitoring = objectPool[i].Monitorable = false; // Disable collision temporarily
 				objectLaunchSettings[i] = new LaunchSettings(); // Set as uninitialized LaunchSettings
 				CallDeferred(MethodName.UpdateObjects);

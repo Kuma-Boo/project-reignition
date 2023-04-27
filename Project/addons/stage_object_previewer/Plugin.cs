@@ -125,8 +125,6 @@ namespace Project.Editor.StageObjectPreviewer
 			if (box.spawnPearls) return;
 
 			DrawLaunchSettings(overlay, box.GetLaunchSettings(), DEFAULT_DRAW_COLOR);
-			if (box.spawnAmount > 1)
-				DrawPerspectiveCircle(overlay, box.EndPosition, box.GlobalTransform.Basis, box.spawnRadius, Vector3.Forward, Vector3.Up, DEFAULT_DRAW_COLOR);
 		}
 
 		private void UpdateMovingObject(Control overlay)
