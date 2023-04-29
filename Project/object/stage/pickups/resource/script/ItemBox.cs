@@ -234,7 +234,7 @@ namespace Project.Gameplay.Objects
 				{
 					if (!objectLaunchSettings[i].IsInitialized)
 					{
-						Vector3 startPosition = Basis.Inverse() * (SpawnPosition - EndPosition);
+						Vector3 startPosition = GlobalTransform.Basis.Inverse() * (SpawnPosition - EndPosition);
 						if (objectPool[i] == pickupParent)
 							startPosition = SPAWN_OFFSET;
 						objectLaunchSettings[i] = LaunchSettings.Create(startPosition, objectPool[i].Position, travelHeight);
