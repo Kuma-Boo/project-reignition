@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay
@@ -38,8 +37,10 @@ namespace Project.Gameplay
 		[Export]
 		private ShaderMaterial railMaterial;
 		[Export]
+		private NodePath startCapPath;
 		private Node3D startCap;
 		[Export]
+		private NodePath endCapPath;
 		private Node3D endCap;
 		[Export]
 		private CollisionShape3D collider;
@@ -49,6 +50,9 @@ namespace Project.Gameplay
 		/// <summary> Updates rail's visual length. </summary>
 		private void UpdateInvisibleRailLength()
 		{
+			startCap = GetNodeOrNull<Node3D>(startCapPath);
+			endCap = GetNodeOrNull<Node3D>(endCapPath);
+
 			if (startCap != null)
 				startCap.Position = Vector3.Forward;
 
