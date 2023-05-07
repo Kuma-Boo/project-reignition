@@ -8,7 +8,9 @@ uniform sampler2D albedo : source_color;
 
 void fragment()
 {
-	ALBEDO = texture(albedo, UV + vec2(0, time * scroll_speed)).rgb;
-	ALPHA = COLOR.a;
+	vec2 uv = UV + vec2(0, time * scroll_speed);
+	vec4 col = texture(albedo, uv) * COLOR;
+	ALBEDO = col.rgb;
+	ALPHA = col.a;
 }
 
