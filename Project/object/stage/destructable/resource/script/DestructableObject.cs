@@ -47,6 +47,8 @@ namespace Project.Gameplay.Objects
 			JumpDash = 8, //Break when player is jumpdashing/homing attacking. Must be enabled even if AttackSkill is active.
 			SpeedBreak = 16, //Break when speedbreak is active. Must be enabled even if AttackSkill is active.
 		}
+		[Export]
+		private bool bouncePlayerOnJumpDash;
 		private const float SHATTER_STRENGTH = 10.0f;
 
 		private ShatterFlags FlagSetting => (ShatterFlags)shatterFlags;
@@ -262,7 +264,8 @@ namespace Project.Gameplay.Objects
 			else if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
 				Shatter();
-				Character.Lockon.StartBounce();
+				if (bouncePlayerOnJumpDash)
+					Character.Lockon.StartBounce();
 			}
 			else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
 				Shatter();
