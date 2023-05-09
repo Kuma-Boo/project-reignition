@@ -146,15 +146,6 @@ namespace Project.Gameplay
 		{
 			float inputAngle = GetInputAngle();
 
-			if (Skills.IsSpeedBreakActive)
-			{
-				if (InputVector.IsZeroApprox()) // Reset to path direction
-					return PathFollower.ForwardAngle + PathFollower.DeltaAngle;
-				else
-					return ExtensionMethods.ClampAngleRange(inputAngle, PathFollower.ForwardAngle, Mathf.Pi * .3f);
-			}
-
-
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
 				float targetAngle = Mathf.DegToRad(ActiveLockoutData.movementAngle);
@@ -166,7 +157,7 @@ namespace Project.Gameplay
 					targetAngle += MovementAngle;
 
 				//Check if we're trying to turn around
-				if (ActiveLockoutData.allowReversing)
+				if (!Skills.IsSpeedBreakActive && ActiveLockoutData.allowReversing)
 				{
 					if (turnInstantly)
 						IsMovingBackward = IsHoldingDirection(PathFollower.BackAngle);
@@ -176,6 +167,14 @@ namespace Project.Gameplay
 				}
 
 				return targetAngle;
+			}
+
+			if (Skills.IsSpeedBreakActive)
+			{
+				if (InputVector.IsZeroApprox()) // Reset to path direction
+					return PathFollower.ForwardAngle;
+				else
+					return ExtensionMethods.ClampAngleRange(inputAngle, PathFollower.ForwardAngle, Mathf.Pi * .3f);
 			}
 
 			return inputAngle;
@@ -1690,7 +1689,7 @@ namespace Project.Gameplay
 			Vector3 pathFollowerForward = PathFollower.Forward().Rotated(UpDirection, PathFollower.DeltaAngle);
 
 			//Tilted ground fix
-			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle + PathFollower.DeltaAngle, PathFollower.ForwardAngle);
+			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			return PathFollower.Forward().Rotated(UpDirection, fixAngle);
 		}
 
