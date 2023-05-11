@@ -66,8 +66,6 @@ namespace Project.Gameplay.Triggers
 
 		private void StartSidle()
 		{
-			EmitSignal(SignalName.Activated); // Always emit signal first to allow path changes, etc.
-
 			isActive = true;
 			velocity = 0;
 			cycleTimer = 0;
@@ -133,7 +131,6 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!isActive) return; //Already deactivated
 
-			EmitSignal(SignalName.Deactivated);
 			isActive = false;
 			Character.RemoveLockoutData(lockout);
 
@@ -291,6 +288,7 @@ namespace Project.Gameplay.Triggers
 
 			Character.Skills.IsSpeedBreakEnabled = false; // Disable speed break
 			Character.AddLockoutData(lockout); // Apply lockout
+			EmitSignal(SignalName.Activated); // Immediately emit signals to allow path changes, etc.
 		}
 
 		public void OnExited(Area3D a)
@@ -301,6 +299,7 @@ namespace Project.Gameplay.Triggers
 			isInteractingWithPlayer = false;
 
 			StopSidle();
+			EmitSignal(SignalName.Deactivated); // Deactivate signals
 		}
 	}
 }
