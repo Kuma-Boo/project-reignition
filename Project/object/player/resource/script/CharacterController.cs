@@ -1396,7 +1396,7 @@ namespace Project.Gameplay
 				JustLandedOnGround = false;
 
 			Vector3 castOrigin = CenterPosition;
-			float castLength = CollisionRadius + COLLISION_PADDING;
+			float castLength = CollisionRadius + COLLISION_PADDING * 2.0f;
 			if (IsOnGround)
 				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpeed < 0)
@@ -1430,7 +1430,7 @@ namespace Project.Gameplay
 			{
 				groundHit.Divide(raysHit);
 
-				float snapDistance = groundHit.distance - CollisionRadius;
+				float snapDistance = groundHit.distance - CollisionRadius - COLLISION_PADDING;
 				//Landing on the ground
 				if (!IsOnGround && VerticalSpeed < 0)
 				{

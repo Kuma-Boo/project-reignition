@@ -42,15 +42,15 @@
 [ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/1 sand oasis/act 1/trigger/camera/InteriorCam.tres" id="31_l0kwc"]
 [ext_resource type="Resource" uid="uid://cg68afq5jr66c" path="res://area/1 sand oasis/act 1/trigger/camera/IslandCam.tres" id="34_ger3f"]
 [ext_resource type="Resource" uid="uid://drgk50yomyihb" path="res://resource/preset/camera/common/OverheadCam.tres" id="34_ubrmr"]
-[ext_resource type="Curve3D" uid="uid://b7gbck0wu67df" path="res://area/1 sand oasis/act 1/environment/path/UTurnPath.tres" id="35_l4txy"]
-[ext_resource type="Curve3D" uid="uid://bj4d0fcf4vcj5" path="res://area/1 sand oasis/act 1/environment/path/WallClimbPath.tres" id="36_hdewb"]
-[ext_resource type="Curve3D" uid="uid://c84i7vd4lndao" path="res://area/1 sand oasis/act 1/environment/path/OasisPath.tres" id="38_woedv"]
-[ext_resource type="Curve3D" uid="uid://cf7m3uu0xqoyd" path="res://area/1 sand oasis/act 1/environment/path/Island1Path.tres" id="40_a230r"]
-[ext_resource type="Curve3D" uid="uid://d17eaj8mnlduk" path="res://area/1 sand oasis/act 1/environment/path/IslandEndPath.tres" id="40_i6qa6"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/UTurnPath.tres" id="35_l4txy"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/WallClimbPath.tres" id="36_hdewb"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/OasisPath.tres" id="38_woedv"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/Island1Path.tres" id="40_a230r"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/IslandEndPath.tres" id="40_i6qa6"]
 [ext_resource type="Curve3D" uid="uid://byicms7vwsqxd" path="res://area/1 sand oasis/act 1/environment/path/SidlePath.tres" id="41_2kxa5"]
-[ext_resource type="Curve3D" uid="uid://c4e3ggaw5qv22" path="res://area/1 sand oasis/act 1/environment/path/Island2Path.tres" id="41_bop36"]
-[ext_resource type="Curve3D" uid="uid://bd11lqjee6yib" path="res://area/1 sand oasis/act 1/environment/path/BeachPath.tres" id="41_tujp6"]
-[ext_resource type="Curve3D" uid="uid://3tgg8ctpmu67" path="res://area/1 sand oasis/act 1/environment/path/EndingPath.tres" id="45_mavj3"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/Island2Path.tres" id="41_bop36"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/BeachPath.tres" id="41_tujp6"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/EndingPath.tres" id="45_mavj3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_84q52"]
 size = Vector3(15, 20, 2.5)
@@ -107,6 +107,11 @@ environment = NodePath("Visuals/WorldEnvironment")
 visible = false
 
 [node name="Trigger" type="Node3D" parent="."]
+
+[node name="Event" type="Node3D" parent="Trigger"]
+
+[node name="SandfallEvent" parent="Trigger/Event" instance=ExtResource("13_6o732")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -666, 7.003, -765)
 
 [node name="Object" type="Node3D" parent="Trigger"]
 
@@ -779,10 +784,6 @@ mesh = SubResource("PlaneMesh_njmjg")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
 environment = ExtResource("21_xtian")
-
-[node name="Event" type="Node3D" parent="."]
-
-[node name="SandfallEvent" parent="Event" instance=ExtResource("13_6o732")]
 
 [node name="Path" type="Node3D" parent="."]
 
