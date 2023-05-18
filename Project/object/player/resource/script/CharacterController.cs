@@ -133,10 +133,10 @@ namespace Project.Gameplay
 		/// <summary> Returns the input angle based on the camera view. </summary>
 		public float GetInputAngle()
 		{
-			if (InputVector.IsZeroApprox()) //Invalid input, no change
+			if (InputVector.IsZeroApprox()) // Invalid input, no change
 				return MovementAngle;
 
-			return Camera.TransformAngle(InputVector.AngleTo(Vector2.Up)); //Target rotation angle (in radians)
+			return Camera.TransformAngle(InputVector.AngleTo(Vector2.Up)); // Target rotation angle (in radians)
 		}
 
 		/// <summary>
@@ -156,14 +156,14 @@ namespace Project.Gameplay
 				else if (ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Local)
 					targetAngle += MovementAngle;
 
-				//Check if we're trying to turn around
+				// Check if we're trying to turn around
 				if (!Skills.IsSpeedBreakActive && ActiveLockoutData.allowReversing)
 				{
 					if (turnInstantly)
 						IsMovingBackward = IsHoldingDirection(PathFollower.BackAngle);
 
 					if (IsMovingBackward)
-						targetAngle += Mathf.Pi; //Flip targetAngle when moving backwards
+						targetAngle += Mathf.Pi; // Flip targetAngle when moving backwards
 				}
 
 				return targetAngle;

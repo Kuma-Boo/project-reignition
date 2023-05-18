@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=86 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_h3exi"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_apj6p"]
@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_158q5"]
 [ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="39_p0jth"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="40_m082x"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="41_4nxje"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="41_nmbev"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="42_o7jek"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/object/Cactus.tscn" id="43_4v8c0"]
@@ -42,7 +41,7 @@
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/object/dino/DinoRex.tscn" id="66_a6b1t"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/object/rock/GrayRock.tscn" id="67_82x8e"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="68_wfrq5"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/Static.tscn" id="69_kptet"]
+[ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="69_kptet"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1mwhh"]
 size = Vector3(100, 100, 250)
@@ -5259,8 +5258,8 @@ transform = Transform3D(0.573577, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573577, 
 
 [node name="ItemBoxFlying1" parent="MainAct/Crossing" instance=ExtResource("37_8fetv")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 151, 2.5, -97)
-"Spawn Settings/Travel Time" = 1.5
 "Spawn Settings/Pickup Parent" = NodePath("RichRing")
+"Spawn Settings/Travel Time" = 1.5
 "Spawn Settings/Travel Height" = 3.0
 
 [node name="RichRing" parent="MainAct/Crossing/ItemBoxFlying1" instance=ExtResource("29_prhwm")]
@@ -6020,85 +6019,35 @@ Orientation = 0
 "Ring Size" = 1.5
 "Ring Ratio" = 1.0
 
-[node name="Child01" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child01" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child02" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child02" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.21353, 0, 0.881678)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child03" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.463525, 0, 1.42658)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child04" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.463526, 0, 1.42658)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child05" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21353, 0, 0.881678)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child06" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.31134e-07)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child07" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21353, 0, -0.881678)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child08" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.463525, 0, -1.42658)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child09" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child09" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.463526, 0, -1.42658)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child10" type="Area3D" parent="MainAct/End/ItemBoxFlying/PickupParent" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child10" parent="MainAct/End/ItemBoxFlying/PickupParent" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.21353, 0, -0.881677)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("41_4nxje")
-animator = NodePath("AnimationPlayer")
 
 [node name="Pearls1" type="Node3D" parent="MainAct/End"]
 transform = Transform3D(0.731354, 0, -0.681998, 0, 1, 0, 0.681998, 0, 0.731354, -13.9086, 5, 12.603)
@@ -6460,13 +6409,3 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Despawn"]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child01" to="MainAct/End/ItemBoxFlying/PickupParent/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child02" to="MainAct/End/ItemBoxFlying/PickupParent/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child03" to="MainAct/End/ItemBoxFlying/PickupParent/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child04" to="MainAct/End/ItemBoxFlying/PickupParent/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child05" to="MainAct/End/ItemBoxFlying/PickupParent/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child06" to="MainAct/End/ItemBoxFlying/PickupParent/Child06" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child07" to="MainAct/End/ItemBoxFlying/PickupParent/Child07" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child08" to="MainAct/End/ItemBoxFlying/PickupParent/Child08" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child09" to="MainAct/End/ItemBoxFlying/PickupParent/Child09" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/End/ItemBoxFlying/PickupParent/Child10" to="MainAct/End/ItemBoxFlying/PickupParent/Child10" method="OnEntered" flags=18]

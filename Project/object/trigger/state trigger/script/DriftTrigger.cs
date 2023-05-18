@@ -25,18 +25,22 @@ namespace Project.Gameplay.Triggers
 		private float entrySpeed; // Entry speed
 		private CharacterController Character => CharacterController.instance;
 
-		/// <summary> Is this drift trigger currently processing? </summary>
+		/// <summary> Is this drift trigger currently being processed? </summary>
 		private bool isProcessing;
-		/// <summary> Did the player already press the action button and fail? </summary>
-		private bool wasDriftAttempted;
-		/// <summary> Was this drift successful? </summary>
-		private bool wasDriftSuccessful;
+		private enum DriftResults
+		{
+			Processing, // Waiting for drift input
+			Failed, // The player failed the drift
+			Success, // Player successfully drifted
+		}
+		/// <summary> Result of the drift. </summary>
+		private DriftResults driftResult;
 
-		/// <summary> For smooth damp </summary>
+		/// <summary> For smooth damping. </summary>
 		private Vector3 driftVelocity;
-		/// <summary> Positional smoothing </summary>
+		/// <summary> Positional smoothing. </summary>
 		private const float DRIFT_SMOOTHING = .25f;
-		/// <summary> How generous the input window is -How wide the road is- (Due to player's decceleration, it's harder to get an early drift.) </summary>
+		/// <summary> How generous the input window is (Due to player's decceleration, it's harder to get an early drift.) </summary>
 		private const float INPUT_WINDOW_DISTANCE = 1f;
 
 		/// <summary> How far to slide. </summary>
@@ -103,9 +107,7 @@ namespace Project.Gameplay.Triggers
 
 			entrySpeed = Character.MoveSpeed;
 			driftVelocity = Vector3.Zero;
-
-			wasDriftAttempted = false;
-			wasDriftSuccessful = false;
+			driftResult = DriftResults.Processing;
 
 			//Reset sfx volume
 			float speedRatio = (Character.GroundSettings.GetSpeedRatioClamped(entrySpeed)) - ENTRANCE_SPEED_RATIO / (1 - ENTRANCE_SPEED_RATIO);
@@ -115,7 +117,7 @@ namespace Project.Gameplay.Triggers
 			sfx.Play();
 
 			driftAnimationTimer = DEFAULT_ANIMATION_LENGTH;
-			Character.StartExternal(this); // For future reference, this is wheere speedbreak gets disabled
+			Character.StartExternal(this); // For future reference, this is where speedbreak gets disabled
 			Character.Animator.ExternalAngle = Character.MovementAngle;
 			Character.Animator.StartDrift(isRightTurn);
 			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));
@@ -135,6 +137,7 @@ namespace Project.Gameplay.Triggers
 			Character.UpDirection = Character.PathFollower.Up(); // Use pathfollower's up direction when drifting
 			Character.UpdateExternalControl();
 			Character.UpdateOrientation(true);
+			Character.PathFollower.Resync(); //Resync
 
 			// Fade out sfx based on distance
 			float volume = distance / slideDistance;
@@ -143,47 +146,43 @@ namespace Project.Gameplay.Triggers
 			bool isAttemptingDrift = (Input.IsActionJustPressed("button_action") && Character.Skills.isManualDriftEnabled) ||
 				(!Character.Skills.isManualDriftEnabled && distance <= INPUT_WINDOW_DISTANCE);
 
-			if (!wasDriftAttempted)
+			if (driftResult == DriftResults.Failed) return; // Drift was already failed
+
+			if (Input.IsActionJustPressed("button_jump")) //Allow character to jump out of drift at any time
 			{
-				if (Input.IsActionJustPressed("button_jump")) //Allow character to jump out of drift at any time
-				{
-					driftAnimationTimer = 0;
-					CompleteDrift();
+				driftAnimationTimer = 0;
+				CompleteDrift();
 
+				ApplyBonus();
+				Character.Jump();
+				Character.MoveSpeed = driftVelocity.Length(); //Keep speed from drift
+			}
+			else if (isAttemptingDrift)
+			{
+				if (!Character.Skills.isManualDriftEnabled || distance <= INPUT_WINDOW_DISTANCE * 2f) // Successful drift
+				{
+					driftResult = DriftResults.Success;
 					ApplyBonus();
-					Character.Jump();
-					Character.MoveSpeed = driftVelocity.Length(); //Keep speed from drift
-				}
-				else if (isAttemptingDrift)
-				{
-					if (!Character.Skills.isManualDriftEnabled || distance <= INPUT_WINDOW_DISTANCE * 2f) //Successful drift
-					{
-						wasDriftAttempted = true;
-						wasDriftSuccessful = true;
-						ApplyBonus();
 
-						Character.Animator.LaunchDrift();
-						driftAnimationTimer = LAUNCH_ANIMATION_LENGTH;
+					Character.Animator.LaunchDrift();
+					driftAnimationTimer = LAUNCH_ANIMATION_LENGTH;
 
-						Character.AddLockoutData(lockout); //Apply lockout
-						CompleteDrift();
-					}
-					else //Too early! Fail drift attempt and play a special animation
-					{
-						wasDriftAttempted = true;
-						driftAnimationTimer = FAIL_ANIMATION_LENGTH;
-						ApplyBonus();
-						CompleteDrift();
-					}
+					Character.AddLockoutData(lockout); //Apply lockout
+					CompleteDrift();
 				}
-				else if (distance < .1f)
+				else // Too early! Fail drift attempt and play a special animation
 				{
-					Character.MoveSpeed = 0f; //Reset Movespeed
+					driftResult = DriftResults.Failed;
+					driftAnimationTimer = FAIL_ANIMATION_LENGTH;
+					ApplyBonus();
 					CompleteDrift();
 				}
 			}
-
-			Character.PathFollower.Resync(); //Resync
+			else if (distance < .1f)
+			{
+				Character.MoveSpeed = 0f; //Reset Movespeed
+				CompleteDrift();
+			}
 		}
 
 		private void CompleteDrift()

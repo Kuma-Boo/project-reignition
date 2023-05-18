@@ -224,17 +224,14 @@ namespace Project.Gameplay
 				{
 					targetMoveState = MOVE_FORWARD_STATE;
 
-					if (speedRatio >= RUN_RATIO) //Running
+					if (Character.Skills.IsSpeedBreakActive) // Constant animation speed
+						targetAnimationSpeed = 2.5f;
+					else if (speedRatio >= RUN_RATIO) // Running
 					{
-						if (Character.Skills.IsSpeedBreakActive)
-							targetAnimationSpeed = 2.5f;
-						else
-						{
-							float extraSpeed = Mathf.Clamp((speedRatio - RUN_RATIO) / .2f, 0f, 1.4f);
-							targetAnimationSpeed = 2f + extraSpeed;
-						}
+						float extraSpeed = Mathf.Clamp((speedRatio - RUN_RATIO) / .2f, 0f, 1f);
+						targetAnimationSpeed = 2f + extraSpeed;
 					}
-					else //Jogging
+					else // Jogging
 					{
 						targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RUN_RATIO); //Normalize speed ratio
 

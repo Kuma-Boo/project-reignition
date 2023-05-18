@@ -1,10 +1,10 @@
-[gd_scene load_steps=53 format=3]
+[gd_scene load_steps=53 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/collision/DinoLeftCollision.tscn" id="2_bnu7f"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/collision/DinoRightCollision.tscn" id="3_mgxrj"]
-[ext_resource type="Environment" uid="uid://b1kn2h0uduv2k" path="res://area/2 dino jungle/data/Environment.tres" id="4_gsi68"]
+[ext_resource type="Environment" path="res://area/2 dino jungle/data/Environment.tres" id="4_gsi68"]
 [ext_resource type="PackedScene" uid="uid://c5dih136fv3wc" path="res://area/2 dino jungle/act 1/environment/01Chase.tscn" id="5_8hbmi"]
 [ext_resource type="PackedScene" uid="uid://iij01cwh2ttg" path="res://area/2 dino jungle/act 1/environment/02River.tscn" id="6_51sf7"]
 [ext_resource type="PackedScene" uid="uid://8hi2u5lp8ujo" path="res://area/2 dino jungle/act 1/environment/03Cave.tscn" id="7_fyuv1"]
@@ -244,9 +244,10 @@ size = Vector3(218, 2, 244)
 [sub_resource type="BoxShape3D" id="BoxShape3D_3jd5o"]
 size = Vector3(14, 30, 2)
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
 script = ExtResource("1_hpjme")
-mainPath = NodePath("Path/MainPath")
+pathParent = NodePath("Path")
+environment = NodePath("WorldEnvironment")
 
 [node name="Collision" type="Node3D" parent="."]
 visible = false
@@ -343,8 +344,6 @@ playback_process_mode = 0
 
 [node name="SpiralAutomationTrigger" parent="Event" instance=ExtResource("14_lokxv")]
 transform = Transform3D(-0.980615, 0, 0.195946, 0, 1, 0, -0.195946, 0, -0.980615, -439.622, -219.5, -845.88)
-distanceToTravel = 360.0
-startingPoint = 1586.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Event/SpiralAutomationTrigger"]
 shape = SubResource("SphereShape3D_0h2id")
@@ -401,8 +400,6 @@ libraries = {
 [node name="JumpTrigger" type="Node3D" parent="Event/Apatos/FirstApatos/Dino1Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9, 0)
 script = ExtResource("22_vku8w")
-targetNode = NodePath("Target")
-peakHeight = 10.0
 
 [node name="Target" type="Node3D" parent="Event/Apatos/FirstApatos/Dino1Trigger/JumpTrigger"]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -2.10779, 5.3, -9.58984)
