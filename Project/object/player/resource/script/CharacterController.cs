@@ -1473,15 +1473,15 @@ namespace Project.Gameplay
 				//Smoothly reset world direction
 				float orientationResetFactor = 0;
 				Vector3 targetUp = Vector3.Up;
-				if (Camera.ActiveSettings.followPathTilt) //Use PathFollower.Up when on a tilted path.
+				if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
 					targetUp = PathFollower.Up();
 
 				if (ActionState == ActionStates.Stomping ||
-				ActionState == ActionStates.JumpDash) //Quickly reset when stomping/homing attacking
+				ActionState == ActionStates.JumpDash) // Quickly reset when stomping/homing attacking
 					orientationResetFactor = .2f;
 				else if (ActionState == ActionStates.Backflip)
 				{
-					targetUp = PathFollower.Up();
+					targetUp = PathFollower.UpAxis;
 					orientationResetFactor = VerticalSpeed > 0 ? .2f : .2f;
 				}
 				else if (VerticalSpeed > 0)

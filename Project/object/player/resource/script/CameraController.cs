@@ -505,7 +505,7 @@ namespace Project.Gameplay
 			// Update visibility
 			debugMesh.Visible = isFreeCamEnabled;
 			PathFollower.Visible = isFreeCamEnabled;
-			Character.PathFollower.Visible = true;//isFreeCamEnabled;
+			Character.PathFollower.Visible = isFreeCamEnabled;
 
 			if (!isFreeCamEnabled) return;
 			float targetMoveSpeed = freecamMovespeed;
