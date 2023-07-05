@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=15 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="2_3qp24"]
@@ -8,12 +8,11 @@
 [ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="5_a0jad"]
 [ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="6_pf4ty"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
-[ext_resource type="AnimationNodeStateMachinePlayback" uid="uid://ccdadf5aj855y" path="res://object/player/resource/model/animation/animation tree/NormalState.tres" id="9_0ju0r"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
 min_value = 1.0
 max_value = 2.0
-_data = [Vector2(0, 1.2), 0.0, 0.0, 0, 0, Vector2(0.45, 1.475), 1.5, 1.5, 0, 0, Vector2(0.8, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.4), -6.5, 0.0, 0, 0]
+_data = [Vector2(0, 1.2), 0.0, 0.0, 0, 0, Vector2(0.5, 1.7), 1.5, 1.5, 0, 0, Vector2(0.8, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.4), -6.5, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="Animation" id="Animation_tuy1q"]
@@ -274,16 +273,6 @@ _data = {
 "respawn": SubResource("Animation_ju8e7")
 }
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_qr8lc"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_45pcb"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_4bcut"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_ubiiq"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_j1aym"]
-
 [node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer", "countdownCameraController") instance=ExtResource("1_ea3e1")]
 script = ExtResource("2_3qp24")
 animationTree = NodePath("AnimationTree")
@@ -364,7 +353,7 @@ bones/58/rotation = Quaternion(0.497319, -0.170663, -0.0986399, 0.844878)
 bones/59/rotation = Quaternion(0.998158, 4.7369e-08, -2.34904e-09, -0.0606696)
 
 [node name="ChestAttachment" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="4"]
-transform = Transform3D(0.734397, 6.68111e-07, -0.67872, -8.54107e-07, 1, 6.01971e-08, 0.67872, 5.35491e-07, 0.734397, -0.0184942, 0.493473, 0.00512386)
+transform = Transform3D(0.734397, 6.6811e-07, -0.67872, -8.54107e-07, 1, 6.01969e-08, 0.67872, 5.35491e-07, 0.734397, -0.0184943, 0.493473, 0.00512386)
 bone_name = "chest"
 bone_idx = 5
 
@@ -401,24 +390,22 @@ transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 
 tree_root = ExtResource("8_sfnih")
 anim_player = NodePath("../MotionAnimationPlayer")
 parameters/balance_tree/balance_speed/scale = 1.0
-parameters/balance_tree/balance_state/playback = SubResource("AnimationNodeStateMachinePlayback_qr8lc")
 parameters/balance_tree/balance_state/balance_left_blend/blend_position = 0
 parameters/balance_tree/balance_state/balance_right_blend/blend_position = 0
 parameters/balance_tree/grindstep_active/active = false
+parameters/balance_tree/grindstep_active/internal_active = false
 parameters/balance_tree/grindstep_active/request = 0
 parameters/balance_tree/grindstep_transition/current_state = "pose-01"
 parameters/balance_tree/grindstep_transition/transition_request = "pose-01"
 parameters/balance_tree/grindstep_transition/current_index = 0
 parameters/balance_tree/wind_add/add_amount = 1.0
 parameters/balance_tree/wind_blend/blend_position = 0.0
-parameters/normal_state/playback = ExtResource("9_0ju0r")
 parameters/normal_state/drift_tree/direction_transition/current_state = ""
 parameters/normal_state/drift_tree/direction_transition/transition_request = ""
 parameters/normal_state/drift_tree/direction_transition/current_index = -1
-parameters/normal_state/drift_tree/left_state/playback = SubResource("AnimationNodeStateMachinePlayback_45pcb")
-parameters/normal_state/drift_tree/right_state/playback = SubResource("AnimationNodeStateMachinePlayback_4bcut")
 parameters/normal_state/ground_tree/land_speed/scale = 1.2
 parameters/normal_state/ground_tree/land_trigger/active = false
+parameters/normal_state/ground_tree/land_trigger/internal_active = false
 parameters/normal_state/ground_tree/land_trigger/request = 0
 parameters/normal_state/ground_tree/move_blend/blend_position = 0.0
 parameters/normal_state/ground_tree/move_seek/seek_request = -1.0
@@ -433,12 +420,11 @@ parameters/oneshot_tree/oneshot_transition/current_state = ""
 parameters/oneshot_tree/oneshot_transition/transition_request = ""
 parameters/oneshot_tree/oneshot_transition/current_index = 0
 parameters/oneshot_trigger/active = false
+parameters/oneshot_trigger/internal_active = false
 parameters/oneshot_trigger/request = 0
 parameters/sidle_tree/direction_transition/current_state = "right"
 parameters/sidle_tree/direction_transition/transition_request = ""
 parameters/sidle_tree/direction_transition/current_index = 0
-parameters/sidle_tree/sidle_left_state/playback = SubResource("AnimationNodeStateMachinePlayback_ubiiq")
-parameters/sidle_tree/sidle_right_state/playback = SubResource("AnimationNodeStateMachinePlayback_j1aym")
 parameters/sidle_tree/sidle_seek/seek_request = -1.0
 parameters/sidle_tree/sidle_speed/scale = 0.0
 parameters/state_transition/current_state = "normal"

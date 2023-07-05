@@ -187,8 +187,9 @@ endPoint = 70.0
 script = ExtResource("19_gytq8")
 path = NodePath("../../../../Path/UTurnPath")
 
-[node name="BeachPath" type="Node3D" parent="Trigger/Object/UTurnTrigger"]
+[node name="BeachPath" type="Node3D" parent="Trigger/Object/UTurnTrigger" node_paths=PackedStringArray("path")]
 script = ExtResource("19_gytq8")
+path = NodePath("../../../../Path/BeachPath")
 
 [node name="Camera" type="Node3D" parent="Trigger/Object/UTurnTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 14, -5)
@@ -836,7 +837,6 @@ editorPreview = true
 [connection signal="DriftStarted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/DriftCamera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/UTurnTrigger" to="Trigger/Object/UTurnTrigger/UTurnPath" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/UTurnTrigger" to="Trigger/Object/UTurnTrigger/Camera" method="Activate"]
-[connection signal="Deactivated" from="Trigger/Object/UTurnTrigger" to="Trigger/Object/UTurnTrigger/UTurnPath" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/UTurnTrigger" to="Trigger/Object/UTurnTrigger/BeachPath" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/WallClimbTrigger" to="Trigger/Object/WallClimbTrigger/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/WallClimbTrigger" to="Trigger/Object/WallClimbTrigger/Path" method="Activate"]

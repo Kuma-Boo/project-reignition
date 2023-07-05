@@ -1470,26 +1470,26 @@ namespace Project.Gameplay
 					Animator.Fall();
 				}
 
-				//Smoothly reset world direction
-				float orientationResetFactor = 0;
-				Vector3 targetUp = Vector3.Up;
+				// Calculate target up direction
+				Vector3 targetUpDirection = Vector3.Up;
 				if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
-					targetUp = PathFollower.Up();
+					targetUpDirection = PathFollower.Up();
+				else if (ActionState == ActionStates.Backflip)
+					targetUpDirection = PathFollower.UpAxis;
 
+				// Calculate reset factor
+				float orientationResetFactor = 0;
 				if (ActionState == ActionStates.Stomping ||
 				ActionState == ActionStates.JumpDash) // Quickly reset when stomping/homing attacking
 					orientationResetFactor = .2f;
 				else if (ActionState == ActionStates.Backflip)
-				{
-					targetUp = PathFollower.UpAxis;
 					orientationResetFactor = VerticalSpeed > 0 ? .2f : .2f;
-				}
 				else if (VerticalSpeed > 0)
 					orientationResetFactor = .01f;
 				else
 					orientationResetFactor = (VerticalSpeed * .2f / Runtime.MAX_GRAVITY) - .05f;
 
-				UpDirection = UpDirection.Lerp(targetUp, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
+				UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
 
