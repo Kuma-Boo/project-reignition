@@ -351,7 +351,7 @@ namespace Project.Gameplay.Bosses
 			float progress = bossPathFollower.Progress; //Cache current progress
 
 			//Try to predict where the player will be when the missile lands
-			float dot = Character.GetMovementDirection().Dot(PathFollower.Forward());
+			float dot = Character.GetMovementDirection().Dot(PathFollower.Back());
 			float offsetPrediction = Character.MoveSpeed * Runtime.randomNumberGenerator.RandfRange(1f, 2f) * dot;
 			bossPathFollower.Progress = PathFollower.Progress + offsetPrediction;
 			bossPathFollower.HOffset = PathFollower.FlatPlayerPositionDelta.X; //Works since the path is flat

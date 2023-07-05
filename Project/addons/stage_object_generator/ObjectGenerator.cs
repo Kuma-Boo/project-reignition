@@ -241,7 +241,7 @@ namespace Project.Editor.StageObjectGenerator
 
 			PathFollow3D follow = new PathFollow3D
 			{
-				RotationMode = PathFollow3D.RotationModeEnum.Xyz
+				UseModelFront = true
 			};
 			path.AddChild(follow);
 			follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;

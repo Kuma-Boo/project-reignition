@@ -107,6 +107,7 @@ namespace Project.Gameplay
 			// Create a path follower
 			pathFollower = new PathFollow3D()
 			{
+				UseModelFront = true,
 				Loop = false,
 			};
 
