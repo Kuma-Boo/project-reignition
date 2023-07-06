@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://153wwjnd7nv6"]
+[gd_scene load_steps=41 format=3 uid="uid://153wwjnd7nv6"]
 
 [ext_resource type="PackedScene" uid="uid://dbyn2iyw87kug" path="res://object/stage/common/resource/model/FlyingPot.gltf" id="1"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/FlyingPot.cs" id="2"]
@@ -13,7 +13,6 @@
 [ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="9_ctkoe"]
 [ext_resource type="AudioStream" uid="uid://b75ytouytm73f" path="res://sound/sfx/objects/flying pot enter.wav" id="12_0cgd7"]
 [ext_resource type="AudioStream" uid="uid://cjnqa17j2mmww" path="res://sound/sfx/objects/flying pot exit.wav" id="13_43524"]
-[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="14_0wd1l"]
 [ext_resource type="AudioStream" uid="uid://c0f0a8fdabdrf" path="res://sound/sfx/objects/wing.wav" id="14_uh57a"]
 
 [sub_resource type="SphereShape3D" id="3"]
@@ -542,19 +541,14 @@ _data = {
 "wing-loop": SubResource("Animation_ws0l1")
 }
 
-[node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "cameraTrigger", "environmentCollider", "interactionAnimator", "wingAnimator")]
+[node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "environmentCollider", "interactionAnimator", "wingAnimator")]
 script = ExtResource("2")
 customCameraSettings = ExtResource("2_gdkjt")
 root = NodePath("Root")
 lockonArea = NodePath("Root/LockonTarget")
-cameraTrigger = NodePath("Camera")
 environmentCollider = NodePath("Root/Collision/CollisionShape3D")
 interactionAnimator = NodePath("Root/InteractionAnimator")
 wingAnimator = NodePath("Root/WingAnimator")
-
-[node name="Camera" type="Node3D" parent="."]
-script = ExtResource("14_0wd1l")
-transitionTime = 0.2
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -651,9 +645,11 @@ attenuation_filter_cutoff_hz = 10000.0
 tree_root = SubResource("AnimationNodeBlendTree_v4aem")
 anim_player = NodePath("../Flying Pot/AnimationPlayer")
 parameters/action_trigger/active = false
+parameters/action_trigger/internal_active = false
 parameters/action_trigger/request = 2
 parameters/flap_seek/seek_request = -1.0
 parameters/flap_trigger/active = false
+parameters/flap_trigger/internal_active = false
 parameters/flap_trigger/request = 2
 parameters/wing_seek/seek_request = 0.0
 parameters/wing_state/current_state = "Flap"

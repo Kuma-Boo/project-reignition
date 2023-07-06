@@ -24,9 +24,8 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private Area3D lockonArea;
 		[Export]
-		private CameraTrigger cameraTrigger;
-		[Export]
 		private CollisionShape3D environmentCollider;
+		private CameraTrigger cameraTrigger;
 
 		[ExportGroup("Animation")]
 		[Export]
@@ -65,8 +64,15 @@ namespace Project.Gameplay.Objects
 
 			LevelSettings.instance.ConnectRespawnSignal(this);
 
-			if (customCameraSettings != null)
-				cameraTrigger.settings = customCameraSettings;
+			if (customCameraSettings != null) // Create the camera trigger
+			{
+				cameraTrigger = new CameraTrigger()
+				{
+					transitionTime = .2f, // Default to .2 seconds for transitions
+					settings = customCameraSettings
+				};
+				AddChild(cameraTrigger);
+			}
 		}
 
 		private void Respawn()
