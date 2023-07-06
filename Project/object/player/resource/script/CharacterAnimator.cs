@@ -8,6 +8,10 @@ namespace Project.Gameplay
 	public partial class CharacterAnimator : Node3D
 	{
 		[Export]
+		/// <summary> Reference to the effects controller. </summary>
+		public CharacterEffect Effect { get; private set; }
+
+		[Export]
 		private AnimationTree animationTree;
 		[Export]
 		private AnimationPlayer eventAnimationPlayer;
@@ -529,6 +533,7 @@ namespace Project.Gameplay
 		/// <summary> Starts damage (stagger) animation. </summary>
 		public void SidleDamage()
 		{
+			Effect.PlayVoice("sidle hurt");
 			animationTree.Set(SIDLE_SPEED_PARAMETER, 1f);
 			animationTree.Set(SIDLE_SEEK_PARAMETER, -1);
 
@@ -539,7 +544,11 @@ namespace Project.Gameplay
 		public void SidleHang() => ActiveSidleState.Travel(SIDLE_HANG_STATE_PARAMETER);
 
 		/// <summary> Recover back to the ledge. </summary>
-		public void SidleRecovery() => ActiveSidleState.Travel(SIDLE_LOOP_STATE_PARAMETER);
+		public void SidleRecovery()
+		{
+			Effect.PlayVoice("grunt");
+			ActiveSidleState.Travel(SIDLE_LOOP_STATE_PARAMETER);
+		}
 
 		/// <summary> Fall while hanging on the ledge. </summary>
 		public void SidleHangFall() => ActiveSidleState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);

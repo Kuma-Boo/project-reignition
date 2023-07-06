@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://c4kdj2x0c8h4m"]
+[gd_scene load_steps=9 format=3 uid="uid://c4kdj2x0c8h4m"]
 
 [ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="2_ijgvj"]
 [ext_resource type="PackedScene" uid="uid://wfh54hnc028k" path="res://object/player/resource/model/Sonic.tscn" id="3_t0hx8"]
 [ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
-[ext_resource type="PackedScene" uid="uid://gp7nom61rmtj" path="res://object/player/resource/component/Effect.tscn" id="8_ni1dd"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterController.cs" id="10"]
 [ext_resource type="PackedScene" path="res://object/player/resource/component/Skills.tscn" id="13"]
 
@@ -17,7 +16,7 @@ radius = 0.4
 [sub_resource type="SphereShape3D" id="80"]
 radius = 0.36
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("environmentCollider", "areaTrigger", "PathFollower", "Animator", "Effect", "Skills", "Lockon") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("environmentCollider", "areaTrigger", "PathFollower", "Animator", "Skills", "Lockon") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -34,7 +33,6 @@ environmentCollider = NodePath("CollisionShape3D")
 areaTrigger = NodePath("Components/AreaTrigger/CollisionShape3D")
 PathFollower = NodePath("Components/PathFollower")
 Animator = NodePath("Components/Sonic")
-Effect = NodePath("Components/Effect")
 Skills = NodePath("Components/Skills")
 Lockon = NodePath("Components/Lockon")
 
@@ -44,26 +42,6 @@ Lockon = NodePath("Components/Lockon")
 use_model_front = true
 
 [node name="Sonic" parent="Components" instance=ExtResource("3_t0hx8")]
-
-[node name="BodyMesh" parent="Components/Sonic/SonicRoot/GeneralSkeleton" index="0"]
-layers = 64
-
-[node name="LEye" parent="Components/Sonic/SonicRoot/GeneralSkeleton" index="1"]
-layers = 64
-
-[node name="REye" parent="Components/Sonic/SonicRoot/GeneralSkeleton" index="2"]
-layers = 64
-
-[node name="RingMesh" parent="Components/Sonic/SonicRoot/GeneralSkeleton" index="3"]
-layers = 64
-
-[node name="ChestAttachment" parent="Components/Sonic/SonicRoot/GeneralSkeleton" index="4"]
-transform = Transform3D(0.734397, 6.6811e-07, -0.67872, -8.54107e-07, 1, 6.01969e-08, 0.67872, 5.35491e-07, 0.734397, -0.0184943, 0.493473, 0.00512386)
-
-[node name="CameraController" parent="Components/Sonic/CountdownCamera" index="0"]
-transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 0)
-
-[node name="Effect" parent="Components" instance=ExtResource("8_ni1dd")]
 
 [node name="Skills" parent="Components" instance=ExtResource("13")]
 
@@ -83,5 +61,3 @@ shape = SubResource("80")
 
 [connection signal="body_entered" from="Components/AreaTrigger" to="." method="OnObjectCollisionEnter"]
 [connection signal="body_exited" from="Components/AreaTrigger" to="." method="OnObjectCollisionExit"]
-
-[editable path="Components/Sonic"]

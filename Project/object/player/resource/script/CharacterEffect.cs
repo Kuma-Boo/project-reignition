@@ -1,12 +1,13 @@
 using Godot;
+using System.Collections.Generic;
 using Project.Core;
 
 namespace Project.Gameplay
 {
 	/// <summary>
-	/// Responsible for playing sfx/vfx.
+	/// Responsible for playing sfx/vfx. Controlled from the CharacterAnimator.
 	/// </summary>
-	public partial class CharacterEffect : Node
+	public partial class CharacterEffect : Node3D
 	{
 		/*
 		For some reason, there seem to be a lot of duplicate AudioStreams from the original game.
@@ -30,7 +31,7 @@ namespace Project.Gameplay
 
 		public readonly StringName JUMP_SFX = "jump";
 
-		//Actions (Jumping, sliding, etc)
+		// Actions (Jumping, sliding, etc)
 		[ExportGroup("Actions")]
 		[Export]
 		private SFXLibraryResource actionSFXLibrary;
@@ -52,6 +53,10 @@ namespace Project.Gameplay
 		[Export]
 		private AudioStreamPlayer footstepChannel;
 		[Export]
+		private Node3D rightFoot;
+		[Export]
+		private Node3D leftFoot;
+		[Export]
 		private AudioStreamPlayer landingChannel;
 		/// <summary> Index of the current type of ground the player is walking on. </summary>
 		private int groundKeyIndex;
@@ -67,10 +72,49 @@ namespace Project.Gameplay
 			landingDustParticle.Restart();
 		}
 
-		public void PlayFootstepSFX()
+		public void PlayFootstepFX(bool isRightFoot)
 		{
 			footstepChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 0);
 			footstepChannel.Play();
+
+			Transform3D spawnTransform = isRightFoot ? rightFoot.GlobalTransform : leftFoot.GlobalTransform;
+			spawnTransform.Basis = GlobalTransform.Basis;
+
+			if (groundKeyIndex == 1) // Check if the ground key is 1 (Corresponds to sand)
+				CreateFootprint(spawnTransform);
+		}
+
+
+		// Footprints
+		[Export]
+		private PackedScene footprintDecal;
+		private List<Node3D> footprintDecalList = new List<Node3D>();
+		private void CreateFootprint(Transform3D spawnTransform)
+		{
+			Node3D activeFootprintDecal = null;
+			for (int i = 0; i < footprintDecalList.Count; i++)
+			{
+				if (footprintDecalList[i].Visible) // Footprint is already active
+					continue;
+
+				activeFootprintDecal = footprintDecalList[i]; // Try to reuse decals if possible
+			}
+
+			if (activeFootprintDecal == null) // Create new footprint decal
+			{
+				activeFootprintDecal = footprintDecal.Instantiate<Node3D>();
+				footprintDecalList.Add(activeFootprintDecal);
+				Project.Gameplay.StageSettings.instance.AddChild(activeFootprintDecal);
+			}
+
+			// Reset fading animation
+			AnimationPlayer animator = activeFootprintDecal.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+			if (animator != null)
+			{
+				animator.Seek(0.0);
+				animator.Play(animator.Autoplay);
+			}
+			activeFootprintDecal.GlobalTransform = spawnTransform;
 		}
 
 		public void UpdateGroundType(Node collision)

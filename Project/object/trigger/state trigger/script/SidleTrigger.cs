@@ -185,7 +185,6 @@ namespace Project.Gameplay.Triggers
 			velocity = 0;
 			cycleTimer = 0;
 
-			Character.Effect.PlayVoice("sidle hurt");
 			Character.Animator.SidleDamage();
 		}
 
@@ -206,8 +205,6 @@ namespace Project.Gameplay.Triggers
 						//Jump back to the ledge
 						cycleTimer = 0;
 						damageState = DamageStates.Recovery;
-
-						Character.Effect.PlayVoice("grunt");
 						Character.Animator.SidleRecovery();
 					}
 					break;
@@ -244,8 +241,7 @@ namespace Project.Gameplay.Triggers
 						if (cycleTimer < RECOVERY_LENGTH)
 							return;
 
-						Character.IsOnGround = true;
-						Character.Effect.PlayLandingFX();
+						Character.LandOnGround();
 					}
 
 					cycleTimer = 0;

@@ -346,8 +346,7 @@ namespace Project.Gameplay
 		/// </summary>
 		public void UpdateExternalControl(bool autoResync = false)
 		{
-			if (JustLandedOnGround) //Bugfix: Don't let animator get stuck playing landing animation
-				JustLandedOnGround = false;
+			CheckGround(); // Check ground even when externally controlled
 
 			isCustomPhysicsEnabled = true;
 			externalOffset = externalOffset.Lerp(Vector3.Zero, externalSmoothing); //Smooth out entry
@@ -1426,10 +1425,18 @@ namespace Project.Gameplay
 				}
 			}
 
+			if (MovementState == MovementStates.External) // Exit early when externally controlled
+			{
+				if (groundHit)
+					Effect.UpdateGroundType(groundHit.collidedObject);
+				return;
+			}
+
 			if (groundHit) //Successful ground hit
 			{
-				groundHit.Divide(raysHit);
+				Effect.UpdateGroundType(groundHit.collidedObject);
 
+				groundHit.Divide(raysHit);
 				float snapDistance = groundHit.distance - CollisionRadius - COLLISION_PADDING;
 				//Landing on the ground
 				if (!IsOnGround && VerticalSpeed < 0)
@@ -1457,8 +1464,6 @@ namespace Project.Gameplay
 				{
 					//Update world direction
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized();
-
-					Effect.UpdateGroundType(groundHit.collidedObject);
 					UpdateSlopeInfluence(groundHit.normal);
 				}
 			}
@@ -1510,6 +1515,9 @@ namespace Project.Gameplay
 
 			JustLandedOnGround = true;
 			CheckLandingBoost(); //Landing boost skill
+
+			// Play FX
+			Effect.PlayLandingFX();
 		}
 
 		/// <summary> Checks whether raycast collider is tagged properly. </summary>
@@ -1802,8 +1810,7 @@ namespace Project.Gameplay
 		public CharacterPathFollower PathFollower { get; private set; }
 		[Export]
 		public CharacterAnimator Animator { get; private set; }
-		[Export]
-		public CharacterEffect Effect { get; private set; }
+		public CharacterEffect Effect => Animator.Effect;
 		[Export]
 		public CharacterSkillManager Skills { get; private set; }
 		[Export]
