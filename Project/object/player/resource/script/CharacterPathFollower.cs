@@ -66,14 +66,19 @@ namespace Project.Gameplay
 			FlatPlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
 
-			//Update custom orientations
+			// Update custom orientations
 			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();
 			float upDotProduct = this.Forward().Dot(Vector3.Up);
 			if (upDotProduct < .9f)
 				RightAxis = this.Forward().Cross(Vector3.Up).Normalized();
-			else //Moving straight up/down
+			else // Moving straight up/down
 				RightAxis = this.Back().Cross(ForwardAxis).Normalized();
+
 			UpAxis = this.Forward().Rotated(RightAxis, Mathf.Pi * .5f).Normalized();
+
+			Core.Debug.DrawRay(GlobalPosition, UpAxis, Colors.Green);
+			Core.Debug.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
+			Core.Debug.DrawRay(GlobalPosition, RightAxis, Colors.Red);
 		}
 
 		/// <summary> Calculates the delta position using Basis.Inverse(). </summary>

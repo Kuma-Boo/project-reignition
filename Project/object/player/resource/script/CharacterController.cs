@@ -1414,7 +1414,7 @@ namespace Project.Gameplay
 			{
 				castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * CollisionRadius;
 				RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
-				Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
+				//Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
 				if (ValidateGroundCast(ref hit))
 				{
 					if (!groundHit)
@@ -1480,14 +1480,12 @@ namespace Project.Gameplay
 				// Calculate reset factor
 				float orientationResetFactor = 0;
 				if (ActionState == ActionStates.Stomping ||
-				ActionState == ActionStates.JumpDash) // Quickly reset when stomping/homing attacking
+				ActionState == ActionStates.JumpDash || ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
 					orientationResetFactor = .2f;
-				else if (ActionState == ActionStates.Backflip)
-					orientationResetFactor = VerticalSpeed > 0 ? .2f : .2f;
 				else if (VerticalSpeed > 0)
 					orientationResetFactor = .01f;
 				else
-					orientationResetFactor = (VerticalSpeed * .2f / Runtime.MAX_GRAVITY) - .05f;
+					orientationResetFactor = (VerticalSpeed * .2f / Runtime.MAX_GRAVITY);
 
 				UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
@@ -1524,7 +1522,7 @@ namespace Project.Gameplay
 				else if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) //Limit angle collision
 					hit = new RaycastHit();
 				else if (!IsOnGround &&
-					hit.collidedObject.IsInGroup("wall")) //Be more strict on objects tagged as a wall
+					hit.collidedObject.IsInGroup("wall")) //Use Vector3.Up for objects tagged as a wall
 				{
 					if (hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .2f)
 						hit = new RaycastHit();
