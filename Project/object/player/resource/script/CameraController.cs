@@ -330,7 +330,7 @@ namespace Project.Gameplay
 				{
 					// Negative number -> Concave, Positive number -> Convex.
 					float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
-					if (Mathf.Abs(slopeDifference) > .01f) // Deadzone to prevent jittering
+					if (Mathf.Abs(slopeDifference) > .05f) // Deadzone to prevent jittering
 						data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
 				}
 				else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)
