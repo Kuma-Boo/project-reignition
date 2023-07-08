@@ -167,7 +167,7 @@ namespace Project.Gameplay.Objects
 			Character.StartExternal(this, playerPosition);
 			Character.Animator.StartBalancing(); // Carpet uses balancing animations
 			Character.Animator.UpdateBalanceSpeed(1.0f);
-			Character.Animator.ExternalAngle = 0;
+			Character.Animator.ExternalAngle = Mathf.Pi; // Rotate to follow pathfollower
 		}
 
 

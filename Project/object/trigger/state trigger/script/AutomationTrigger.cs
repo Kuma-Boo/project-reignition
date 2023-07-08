@@ -63,7 +63,7 @@ namespace Project.Gameplay.Triggers
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 
 			Character.UpdateExternalControl(false);
-			Character.Animator.ExternalAngle = 0;
+			Character.Animator.ExternalAngle = Mathf.Pi; // Rotate to follow pathfollower
 		}
 
 		private bool IsActivationValid()

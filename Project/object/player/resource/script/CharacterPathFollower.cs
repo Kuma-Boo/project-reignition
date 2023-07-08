@@ -26,9 +26,9 @@ namespace Project.Gameplay
 		public Vector3 GlobalPlayerPositionDelta { get; private set; }
 
 		/// <summary> Custom up axis. Equal to Forward() rotated 90 degrees around RightAxis. </summary>
-		public Vector3 UpAxis { get; private set; }
+		public Vector3 HeightAxis { get; private set; }
 		/// <summary> Custom right axis. Cross product of Forward() and Vector3.Up [Fallback: ForwardAxis] </summary>
-		public Vector3 RightAxis { get; private set; }
+		public Vector3 SideAxis { get; private set; }
 		/// <summary> Custom forward axis. Equal to Vector3.Forward.Rotated(Vector3.Up, ForwardAngle) </summary>
 		public Vector3 ForwardAxis { get; private set; }
 
@@ -58,7 +58,7 @@ namespace Project.Gameplay
 
 		public void RecalculateData()
 		{
-			float newForwardAngle = Character.CalculateForwardAngle(this.Forward());
+			float newForwardAngle = Character.CalculateForwardAngle(this.Back());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .575f; //Abitrary blend amount that seems to work
 			ForwardAngle = newForwardAngle;
 
@@ -68,17 +68,17 @@ namespace Project.Gameplay
 
 			// Update custom orientations
 			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();
-			float upDotProduct = this.Forward().Dot(Vector3.Up);
+			float upDotProduct = this.Back().Dot(Vector3.Up);
 			if (upDotProduct < .9f)
-				RightAxis = this.Forward().Cross(Vector3.Up).Normalized();
+				SideAxis = this.Forward().Cross(Vector3.Up).Normalized();
 			else // Moving straight up/down
-				RightAxis = this.Back().Cross(ForwardAxis).Normalized();
+				SideAxis = this.Back().Cross(ForwardAxis).Normalized();
 
-			UpAxis = this.Forward().Rotated(RightAxis, Mathf.Pi * .5f).Normalized();
+			HeightAxis = this.Forward().Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
 
-			Core.Debug.DrawRay(GlobalPosition, UpAxis, Colors.Green);
+			Core.Debug.DrawRay(GlobalPosition, HeightAxis, Colors.Green);
 			Core.Debug.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
-			Core.Debug.DrawRay(GlobalPosition, RightAxis, Colors.Red);
+			Core.Debug.DrawRay(GlobalPosition, SideAxis, Colors.Red);
 		}
 
 		/// <summary> Calculates the delta position using Basis.Inverse(). </summary>

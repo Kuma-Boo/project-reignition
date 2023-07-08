@@ -593,7 +593,7 @@ namespace Project.Gameplay.Bosses
 			horizontalTracking = Mathf.Clamp(horizontalTracking, -FLYING_EYE_MAX_TRACKING, FLYING_EYE_MAX_TRACKING);
 			flyingEyeTarget = Character.PathFollower.GlobalPosition + Vector3.Up * flyingEyeAttackPosition.Y;
 			flyingEyeTarget += Character.PathFollower.Right() * (flyingEyeAttackPosition.X - horizontalTracking);
-			flyingEyeTarget += Character.PathFollower.Forward() * FLYING_EYE_RADIUS;
+			flyingEyeTarget += Character.PathFollower.Back() * FLYING_EYE_RADIUS;
 		}
 
 

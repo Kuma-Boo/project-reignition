@@ -239,10 +239,7 @@ namespace Project.Editor.StageObjectGenerator
 				return;
 			}
 
-			PathFollow3D follow = new PathFollow3D
-			{
-				UseModelFront = true
-			};
+			PathFollow3D follow = new PathFollow3D();
 			path.AddChild(follow);
 			follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
 

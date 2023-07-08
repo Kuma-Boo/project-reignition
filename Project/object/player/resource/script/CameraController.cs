@@ -265,7 +265,6 @@ namespace Project.Gameplay
 			// Update view offset
 			cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 			cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
-
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 			xformAngle = Character.CalculateForwardAngle(-data.offsetBasis.Z);
 
@@ -324,12 +323,12 @@ namespace Project.Gameplay
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					targetYawAngle += PathFollower.ForwardAngle;
 				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					targetPitchAngle += PathFollower.Forward().AngleTo(PathFollower.Forward().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Forward().Y);
+					targetPitchAngle += PathFollower.Back().AngleTo(PathFollower.Back().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Back().Y);
 
 				if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Auto) // Fixes slope changes
 				{
 					// Negative number -> Concave, Positive number -> Convex.
-					float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
+					float slopeDifference = sampledForward.Y - PathFollower.Back().Y;
 					if (Mathf.Abs(slopeDifference) > .05f) // Deadzone to prevent jittering
 						data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
 				}
@@ -342,7 +341,7 @@ namespace Project.Gameplay
 				data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend);
 				data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
 				if (settings.followPathTilt) //Calculate tilt
-					data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.RightAxis, PathFollower.Forward()); //Update tilt
+					data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.SideAxis, PathFollower.Forward()); //Update tilt
 
 				// Update Tracking
 				// Calculate position for tracking calculations
@@ -435,7 +434,7 @@ namespace Project.Gameplay
 				offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi);
 				offsetBasis = offsetBasis.Rotated(Vector3.Up, blendData.yawAngle);
 				offsetBasis = offsetBasis.Rotated(offsetBasis.X.Normalized(), blendData.pitchAngle);
-				offsetBasis = offsetBasis.Rotated(offsetBasis.Z.Normalized(), blendData.tiltAngle);
+				offsetBasis = offsetBasis.Rotated(-offsetBasis.Z.Normalized(), blendData.tiltAngle);
 			}
 
 			/// <summary> Yaw rotation data used for tracking. </summary>

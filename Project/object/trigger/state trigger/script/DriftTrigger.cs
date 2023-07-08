@@ -94,7 +94,7 @@ namespace Project.Gameplay.Triggers
 			if (Character.MovementState == CharacterController.MovementStates.External) return false; //Player is already busy
 
 			// Check for any obstructions
-			RaycastHit hit = Character.CastRay(Character.CenterPosition, Character.PathFollower.Forward() * slideDistance, Runtime.Instance.environmentMask);
+			RaycastHit hit = Character.CastRay(Character.CenterPosition, Character.PathFollower.Back() * slideDistance, Runtime.Instance.environmentMask);
 			if (hit)
 				return false;
 

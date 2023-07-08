@@ -74,8 +74,8 @@ namespace Project.Gameplay.Triggers
 			Character.IsOnGround = true;
 			Character.StartExternal(this, Character.PathFollower, .2f);
 
-			Character.Animator.ExternalAngle = 0;
-			Character.Animator.SnapRotation(0);
+			Character.Animator.ExternalAngle = Mathf.Pi; // Rotate to follow pathfollower
+			Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 			Character.Animator.StartSidle(isFacingRight);
 			Character.Animator.UpdateSidle(cycleTimer);
 
@@ -105,7 +105,7 @@ namespace Project.Gameplay.Triggers
 				velocity = Mathf.Lerp(velocity, targetVelocity, FRICTION_SMOOTHING);
 
 			// Check walls
-			castVector = Character.PathFollower.Forward() * Mathf.Sign(velocity) * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
+			castVector = Character.PathFollower.Back() * Mathf.Sign(velocity) * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
 			hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
 			Debug.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 			if (hit && hit.collidedObject.IsInGroup("sidle wall")) // Kill speed

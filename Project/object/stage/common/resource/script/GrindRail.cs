@@ -107,7 +107,6 @@ namespace Project.Gameplay
 			// Create a path follower
 			pathFollower = new PathFollow3D()
 			{
-				UseModelFront = true,
 				Loop = false,
 			};
 
@@ -201,7 +200,7 @@ namespace Project.Gameplay
 			Character.MoveSpeed = Skills.grindSettings.speed; // Start at the correct speed
 			Character.VerticalSpeed = 0f;
 
-			Character.Animator.ExternalAngle = 0; // Rail modifies Character's Transform directly, so animator angle is unused.
+			Character.Animator.ExternalAngle = Mathf.Pi; // Rotate to follow pathfollower
 			Character.Animator.StartBalancing();
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 
@@ -257,7 +256,7 @@ namespace Project.Gameplay
 			}
 
 			Character.UpDirection = pathFollower.Up();
-			Character.MovementAngle = Character.CalculateForwardAngle(pathFollower.Forward());
+			Character.MovementAngle = Character.CalculateForwardAngle(pathFollower.Back());
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 
 			sfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed)); //Fade volume based on speed
@@ -360,8 +359,8 @@ namespace Project.Gameplay
 		private RaycastHit CheckWall(float movementDelta)
 		{
 			float castLength = movementDelta + Character.CollisionRadius;
-			RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Character.CollisionMask);
-			Debug.DrawRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, hit ? Colors.Red : Colors.White);
+			RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Back() * castLength, Character.CollisionMask);
+			Debug.DrawRay(pathFollower.GlobalPosition, pathFollower.Back() * castLength, hit ? Colors.Red : Colors.White);
 
 			// Block grinding through objects in the given group
 			if (hit && hit.collidedObject.IsInGroup("grind wall"))

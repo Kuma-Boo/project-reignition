@@ -281,7 +281,7 @@ namespace Project.Gameplay
 		{
 			if (!IsLockoutActive || !ActiveLockoutData.recenterPlayer) return;
 
-			Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
+			Vector3 recenterDirection = PathFollower.Back().Rotated(UpDirection, Mathf.Pi * .5f);
 			float currentOffset = -PathFollower.FlatPlayerPositionDelta.X;
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
@@ -1480,7 +1480,7 @@ namespace Project.Gameplay
 				if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
 					targetUpDirection = PathFollower.Up();
 				else if (ActionState == ActionStates.Backflip)
-					targetUpDirection = PathFollower.UpAxis;
+					targetUpDirection = PathFollower.HeightAxis;
 
 				// Calculate reset factor
 				float orientationResetFactor = 0;
@@ -1692,11 +1692,11 @@ namespace Project.Gameplay
 		public float MovementAngle { get; set; }
 		public Vector3 GetMovementDirection()
 		{
-			Vector3 pathFollowerForward = PathFollower.Forward().Rotated(UpDirection, PathFollower.DeltaAngle);
+			Vector3 pathFollowerForward = PathFollower.Back().Rotated(UpDirection, PathFollower.DeltaAngle);
 
 			//Tilted ground fix
 			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-			return PathFollower.Forward().Rotated(UpDirection, fixAngle);
+			return PathFollower.Back().Rotated(UpDirection, fixAngle);
 		}
 
 		//Gets the rotation of a given "forward" vector
@@ -1708,7 +1708,7 @@ namespace Project.Gameplay
 				float angle = new Vector2(forwardDirection.X + forwardDirection.Z, forwardDirection.Y).Angle();
 				Vector3 axis = forwardDirection.Cross(UpDirection).Normalized();
 				if (!IsOnGround || !axis.IsNormalized()) //Fallback
-					axis = PathFollower.RightAxis;
+					axis = PathFollower.SideAxis;
 
 				forwardDirection = -forwardDirection.Rotated(axis, angle);
 			}
