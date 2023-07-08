@@ -32,11 +32,8 @@ namespace Project.Gameplay.Objects
 			sfxPlayer.Play();
 			isQueued = false;
 
-			//Only apply speed boost when player is moving slower. Don't slow them down!
-			bool applyBoost = Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio;
-
-			//Apply boost
-			if (applyBoost)
+			//Only apply speed boost when player is moving slow. Don't slow them down!
+			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio)
 				Character.MoveSpeed = Character.GroundSettings.speed * speedRatio;
 
 			if (Character.MovementState != CharacterController.MovementStates.External) //Add lockout if not in automation
@@ -48,8 +45,9 @@ namespace Project.Gameplay.Objects
 					movementAngle = 0,
 					speedRatio = speedRatio,
 					disableActions = true,
-					overrideSpeed = applyBoost,
-					tractionMultiplier = 0f,
+					overrideSpeed = true,
+					tractionMultiplier = -1,
+					frictionMultiplier = 0,
 					length = length,
 					priority = -1, //Not using priority
 				};

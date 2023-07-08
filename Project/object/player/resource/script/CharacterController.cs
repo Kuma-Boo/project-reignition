@@ -431,17 +431,18 @@ namespace Project.Gameplay
 				{
 					//Override speed to the correct value
 					float targetSpd = ActiveMovementSettings.speed * ActiveLockoutData.speedRatio;
-					if (Mathf.IsZeroApprox(ActiveLockoutData.tractionMultiplier)) //Snap speed (i.e. Dash Panels)
-					{
-						MoveSpeed = targetSpd;
-						return;
-					}
-
 					float delta = PhysicsManager.physicsDelta;
 					if (MoveSpeed <= targetSpd) //Accelerate using traction
 						delta *= ActiveMovementSettings.traction * ActiveLockoutData.tractionMultiplier;
 					else //Slow down with friction
 						delta *= ActiveMovementSettings.friction * ActiveLockoutData.frictionMultiplier;
+
+					if (delta < 0) //Snap speed (i.e. Dash Panels)
+					{
+						MoveSpeed = targetSpd;
+						return;
+					}
+
 					MoveSpeed = Mathf.MoveToward(MoveSpeed, targetSpd, delta);
 					return;
 				}

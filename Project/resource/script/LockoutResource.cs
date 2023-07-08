@@ -27,8 +27,8 @@ namespace Project.Gameplay
 			if (overrideSpeed)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Speed Ratio", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Controls/Traction Multiplier", Variant.Type.Float, PropertyHint.Range, "0,4,.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Controls/Friction Multiplier", Variant.Type.Float, PropertyHint.Range, "0,4,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Controls/Traction Percentage", Variant.Type.Int, PropertyHint.Range, "-1,300,1"));
+				properties.Add(ExtensionMethods.CreateProperty("Controls/Friction Percentage", Variant.Type.Int, PropertyHint.Range, "-1,300,1"));
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Ignore Slopes", Variant.Type.Bool));
 			}
 
@@ -73,11 +73,11 @@ namespace Project.Gameplay
 				case "Controls/Speed Ratio":
 					speedRatio = (float)value;
 					break;
-				case "Controls/Traction Multiplier":
-					tractionMultiplier = (float)value;
+				case "Controls/Traction Percentage":
+					tractionMultiplier = (int)value * .01f;
 					break;
-				case "Controls/Friction Multiplier":
-					frictionMultiplier = (float)value;
+				case "Controls/Friction Percentage":
+					frictionMultiplier = (int)value * .01f;
 					break;
 				case "Controls/Ignore Slopes":
 					ignoreSlopes = (bool)value;
@@ -126,10 +126,10 @@ namespace Project.Gameplay
 					return overrideSpeed;
 				case "Controls/Speed Ratio":
 					return speedRatio;
-				case "Controls/Traction Multiplier":
-					return tractionMultiplier;
-				case "Controls/Friction Multiplier":
-					return frictionMultiplier;
+				case "Controls/Traction Percentage":
+					return Mathf.Round(tractionMultiplier * 100);
+				case "Controls/Friction Percentage":
+					return Mathf.Round(frictionMultiplier * 100);
 				case "Controls/Ignore Slopes":
 					return ignoreSlopes;
 
@@ -157,9 +157,9 @@ namespace Project.Gameplay
 		public bool overrideSpeed;
 		/// <summary> Ratio compared to character's normal top speed. Character will move to this speed ratio </summary>
 		public float speedRatio;
-		/// <summary> Multiplied with character's traction. Snaps instantly when set to 0 </summary>
+		/// <summary> Multiplied with character's traction. </summary>
 		public float tractionMultiplier;
-		/// <summary> Multiplied with character's friction. Snaps instantly when set to 0 </summary>
+		/// <summary> Multiplied with character's friction. </summary>
 		public float frictionMultiplier;
 		/// <summary> Don't use slope physics when calculating speed </summary>
 		public bool ignoreSlopes;
