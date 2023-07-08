@@ -24,8 +24,6 @@ namespace Project.Interface
 			pauseAnimator.Play(isPaused ? "pause" : "unpause");
 
 			float targetTimeScale = isPaused ? 0.0f : 1.0f; //Calculate the correct time scale
-			Runtime.Instance.pearlTexture.SpeedScale = targetTimeScale;
-			Runtime.Instance.richPearlTexture.SpeedScale = targetTimeScale;
 
 			if (isPaused) //Reset selection
 			{

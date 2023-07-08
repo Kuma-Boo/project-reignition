@@ -52,10 +52,6 @@ namespace Project.Core
 		public SphereShape3D PearlCollisionShape = new SphereShape3D();
 		public SphereShape3D RichPearlCollisionShape = new SphereShape3D();
 		[Export]
-		public AnimatedTexture pearlTexture;
-		[Export]
-		public AnimatedTexture richPearlTexture;
-		[Export]
 		public PackedScene pearlScene;
 
 		/// <summary> Pool of auto-collected pearls used whenever enemies are defeated or itemboxes are opened. </summary>

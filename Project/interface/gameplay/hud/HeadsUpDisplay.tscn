@@ -1,17 +1,21 @@
-[gd_scene load_steps=37 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=40 format=3 uid="uid://chn7ckbhlrr2g"]
 
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/HUD Numbers.fnt" id="2_lj78h"]
 [ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="2_y70id"]
+[ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/sprite atlas.png" id="4_63n04"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/tile000.png" id="4_qopjr"]
 [ext_resource type="SpriteFrames" uid="uid://dyapcyhxvxwbp" path="res://interface/gameplay/hud/rings/RingSpriteFrames.tres" id="5_u8bqk"]
-[ext_resource type="Texture2D" uid="uid://d0le4lri64mpt" path="res://interface/gameplay/hud/soul gauge/blue/fill/FillTexture.tres" id="5_vr31j"]
-[ext_resource type="Texture2D" uid="uid://46fjg4qe6ode" path="res://interface/gameplay/hud/soul gauge/blue/surface/SurfaceTexture.tres" id="6_b8vd0"]
-[ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/Sprites.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://ct0masmpsfy21" path="res://interface/gameplay/hud/soul gauge/orange/surface/SurfaceTexture.tres" id="7_0as1b"]
-[ext_resource type="Texture2D" uid="uid://bn7bhmfqmn5i8" path="res://interface/gameplay/hud/soul gauge/Background.png" id="8"]
-[ext_resource type="Texture2D" uid="uid://comwfaowhnt8d" path="res://interface/gameplay/hud/soul gauge/orange/fill/FillTexture.tres" id="8_w3mjo"]
+[ext_resource type="Texture2D" uid="uid://bn7bhmfqmn5i8" path="res://interface/gameplay/hud/soul gauge/background.png" id="8"]
+[ext_resource type="Material" uid="uid://duq3egwjfpmil" path="res://interface/gameplay/hud/soul gauge/Soul Gauge Fill.tres" id="8_t3t32"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
+[ext_resource type="Texture2D" uid="uid://bypa7d6a6vjnr" path="res://interface/gameplay/hud/soul gauge/fill dimensions.png" id="9_i8ml4"]
+[ext_resource type="Texture2D" uid="uid://y6m76qloqq21" path="res://interface/gameplay/hud/soul gauge/fill blue.png" id="9_vmawo"]
+[ext_resource type="Material" uid="uid://bch4e64imkayn" path="res://interface/gameplay/hud/soul gauge/Soul Gauge Surface.tres" id="10_k6fym"]
+[ext_resource type="Texture2D" uid="uid://bfpp6wa7clovs" path="res://interface/gameplay/hud/soul gauge/surface dimensions.png" id="11_8tr11"]
+[ext_resource type="Texture2D" uid="uid://2c2b843w6r0j" path="res://interface/gameplay/hud/soul gauge/fill orange.png" id="12_ib41r"]
 [ext_resource type="Script" path="res://interface/gameplay/hud/HeadsUpDisplay.cs" id="13"]
+[ext_resource type="Texture2D" uid="uid://d2chsgj5rnd0g" path="res://interface/gameplay/hud/soul gauge/surface blue.png" id="14_r84fg"]
+[ext_resource type="Texture2D" uid="uid://wehmqy1nfvqd" path="res://interface/gameplay/hud/soul gauge/surface orange.png" id="15_sbv1p"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -254,66 +258,39 @@ node_connections = [&"output", 0, &"ringless_add", &"gain_trigger", 0, &"hold-an
 [sub_resource type="CanvasItemMaterial" id="57"]
 blend_mode = 1
 
-[sub_resource type="CanvasItemMaterial" id="54"]
-blend_mode = 1
-
 [sub_resource type="Animation" id="56"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SoulGauge/Background/Fill:texture")
+tracks/0/path = NodePath("SoulGauge/Background/Fill:material:shader_parameter/albedo")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [ExtResource("5_vr31j")]
+"update": 1,
+"values": [ExtResource("9_vmawo")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:texture")
+tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:material:shader_parameter/albedo")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [ExtResource("6_b8vd0")]
+"update": 1,
+"values": [ExtResource("14_r84fg")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SoulGauge/Background/Fill/SurfaceGlow:texture")
+tracks/2/path = NodePath("SparkleBottom:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [ExtResource("6_b8vd0")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SoulGauge/Glow:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SparkleBottom:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -327,70 +304,46 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SoulGauge/Background/Fill:texture")
+tracks/0/path = NodePath("SoulGauge/Background/Fill:material:shader_parameter/albedo")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [ExtResource("8_w3mjo")]
+"update": 1,
+"values": [ExtResource("12_ib41r")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:texture")
+tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:material:shader_parameter/albedo")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [ExtResource("7_0as1b")]
+"update": 1,
+"values": [ExtResource("15_sbv1p")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SoulGauge/Background/Fill/SurfaceGlow:texture")
+tracks/2/path = NodePath("SparkleBottom:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("7_0as1b")]
+"times": PackedFloat32Array(0, 0.0666667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
-tracks/3/type = "value"
+tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SoulGauge/Glow:modulate")
+tracks/3/path = NodePath("SFX")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SparkleBottom:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SFX")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -582,7 +535,7 @@ clip_text = true
 [node name="Divider" type="Sprite2D" parent="Rings/Current"]
 position = Vector2(110.4, -1.6)
 scale = Vector2(1.2, 1.2)
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(120, 168, 64, 104)
 
@@ -626,8 +579,10 @@ libraries = {
 tree_root = SubResource("AnimationNodeBlendTree_06lyc")
 anim_player = NodePath("../AnimationPlayer")
 parameters/gain_trigger/active = false
+parameters/gain_trigger/internal_active = false
 parameters/gain_trigger/request = 0
 parameters/loss_trigger/active = false
+parameters/loss_trigger/internal_active = false
 parameters/loss_trigger/request = 0
 parameters/ringless_add/add_amount = 1.0
 parameters/ringless_transition/current_state = "disabled"
@@ -721,13 +676,6 @@ anchor_right = 0.933
 anchor_bottom = 0.889
 metadata/_edit_lock_ = true
 
-[node name="BurstPoint" type="Sprite2D" parent="SoulGauge"]
-position = Vector2(64, 552)
-scale = Vector2(1.25, 1.25)
-texture = ExtResource("7")
-region_enabled = true
-region_rect = Rect2(112, 120, 88, 24)
-
 [node name="SoulGauge" type="NinePatchRect" parent="SoulGauge"]
 layout_mode = 1
 anchors_preset = -1
@@ -736,7 +684,7 @@ anchor_bottom = 1.0
 offset_top = 384.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_rect = Rect2(8, 10, 96, 326)
 patch_margin_top = 82
 patch_margin_bottom = 176
@@ -759,7 +707,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_rect = Rect2(8, 10, 96, 326)
 patch_margin_top = 82
 patch_margin_bottom = 176
@@ -768,7 +716,7 @@ patch_margin_bottom = 176
 use_parent_material = true
 position = Vector2(88.0001, 16)
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(120, 8, 72, 72)
 
@@ -776,7 +724,7 @@ region_rect = Rect2(120, 8, 72, 72)
 use_parent_material = true
 position = Vector2(24.0001, 64)
 rotation = -1.309
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(120, 8, 72, 72)
 
@@ -796,6 +744,7 @@ texture = ExtResource("8")
 expand_mode = 1
 
 [node name="Fill" type="TextureRect" parent="SoulGauge/SoulGauge/Background"]
+material = ExtResource("8_t3t32")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -807,11 +756,11 @@ offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
-texture = ExtResource("5_vr31j")
+texture = ExtResource("9_i8ml4")
 stretch_mode = 1
 
 [node name="Surface" type="TextureRect" parent="SoulGauge/SoulGauge/Background/Fill"]
-material = SubResource("54")
+material = ExtResource("10_k6fym")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -820,26 +769,17 @@ offset_top = -16.0
 offset_right = 8.0
 offset_bottom = 16.0
 grow_horizontal = 2
-scale = Vector2(0.8, 0.4)
+scale = Vector2(1, 0.6)
 pivot_offset = Vector2(16, 16)
-texture = ExtResource("6_b8vd0")
+texture = ExtResource("11_8tr11")
 stretch_mode = 3
 
-[node name="SurfaceGlow" type="TextureRect" parent="SoulGauge/SoulGauge/Background/Fill"]
-material = SubResource("54")
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = -8.0
-offset_top = -16.0
-offset_right = 8.00002
-offset_bottom = 16.0
-grow_horizontal = 2
-scale = Vector2(0.8, 0.4)
-pivot_offset = Vector2(16, 16)
-texture = ExtResource("6_b8vd0")
-stretch_mode = 3
-flip_v = true
+[node name="BurstPoint" type="Sprite2D" parent="SoulGauge"]
+position = Vector2(64, 552)
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("4_63n04")
+region_enabled = true
+region_rect = Rect2(112, 120, 88, 24)
 
 [node name="SparkleBottom" type="Node2D" parent="SoulGauge"]
 modulate = Color(1, 1, 1, 0)
@@ -850,7 +790,7 @@ position = Vector2(64, 704)
 use_parent_material = true
 position = Vector2(-48, -88)
 rotation = -1.309
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(120, 8, 72, 72)
 
@@ -859,7 +799,7 @@ use_parent_material = true
 position = Vector2(-40, -39.9999)
 rotation = -1.83259
 scale = Vector2(1.69211, 1.69211)
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(120, 8, 72, 72)
 
@@ -868,16 +808,15 @@ use_parent_material = true
 position = Vector2(32, -24)
 rotation = -1.15572
 scale = Vector2(1.96274, 1.96274)
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(120, 8, 72, 72)
 
-[node name="BurstPoint2" type="Sprite2D" parent="SoulGauge/SparkleBottom"]
-modulate = Color(1, 1, 1, 0)
+[node name="BurstPointGlow" type="Sprite2D" parent="SoulGauge/SparkleBottom"]
 use_parent_material = true
 position = Vector2(0, -152)
 scale = Vector2(1.25, 1.25)
-texture = ExtResource("7")
+texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(112, 120, 88, 24)
 

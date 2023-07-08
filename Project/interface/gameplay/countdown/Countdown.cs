@@ -22,13 +22,14 @@ namespace Project.Interface
 
 		public override void _Ready()
 		{
+			BGMPlayer.StartStageMusic(); // Start BGM
+
 			if (CheatManager.SkipCountdown)
 			{
 				FinishCountdown();
 				return;
 			}
 
-			BGMPlayer.StartStageMusic();
 			animator.Play("countdown");
 			TweenCountdownTicks();
 

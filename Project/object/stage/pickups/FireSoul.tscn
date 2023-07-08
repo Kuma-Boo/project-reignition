@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cu6lpq7q82grk"]
+[gd_scene load_steps=20 format=3 uid="uid://cu6lpq7q82grk"]
 
 [ext_resource type="PackedScene" uid="uid://bpe2f7mqbqm5p" path="res://object/stage/pickups/resource/model/rings/RedRing.gltf" id="2"]
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/FireSoul.cs" id="3"]
@@ -9,8 +9,27 @@
 [ext_resource type="Material" uid="uid://b5qyda7h10tjp" path="res://object/stage/pickups/resource/model/rings/material/Fire Soul Spark Process Material.tres" id="6_y1djn"]
 [ext_resource type="Material" uid="uid://bxxlkkkc8u4vt" path="res://object/stage/pickups/resource/model/rings/material/Fire Soul Spark.tres" id="7_qpah1"]
 
-[sub_resource type="QuadMesh" id="13"]
+[sub_resource type="Gradient" id="Gradient_dwlfg"]
+offsets = PackedFloat32Array(0, 0.135231, 0.843416, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yp1j3"]
+gradient = SubResource("Gradient_dwlfg")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_34o3w"]
+gravity = Vector3(0, 0, 0)
+angle_min = -30.0
+angle_max = 30.0
+scale_min = 0.2
+scale_max = 0.5
+color_ramp = SubResource("GradientTexture1D_yp1j3")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_nwwog"]
 material = ExtResource("3_026a5")
+center_offset = Vector3(0, 0.25, 0)
 
 [sub_resource type="Animation" id="4"]
 length = 0.001
@@ -227,28 +246,17 @@ animator = NodePath("Animator")
 
 [node name="RedRing" parent="." instance=ExtResource("2")]
 
-[node name="Flames" type="Node3D" parent="RedRing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-
-[node name="Flame1" type="MeshInstance3D" parent="RedRing/Flames"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("13")
-skeleton = NodePath("../../..")
-
-[node name="Flame2" type="MeshInstance3D" parent="RedRing/Flames"]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, -0.0151195, 0)
-mesh = SubResource("13")
-skeleton = NodePath("../../..")
-
-[node name="Flame3" type="MeshInstance3D" parent="RedRing/Flames"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, -0.0267808, 0)
-mesh = SubResource("13")
-skeleton = NodePath("../../..")
-
-[node name="Flame4" type="MeshInstance3D" parent="RedRing/Flames"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 1, 0, -0.143444, 0)
-mesh = SubResource("13")
-skeleton = NodePath("../../..")
+[node name="Flames" type="GPUParticles3D" parent="RedRing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+layers = 32
+cast_shadow = 0
+amount = 32
+lifetime = 0.5
+preprocess = 2.0
+explosiveness = 0.5
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_34o3w")
+draw_pass_1 = SubResource("QuadMesh_nwwog")
 
 [node name="Animator" type="AnimationPlayer" parent="."]
 autoplay = "loop"

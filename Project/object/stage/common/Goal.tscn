@@ -1,12 +1,19 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxepb172kmp8n"]
+[gd_scene load_steps=11 format=3 uid="uid://dxepb172kmp8n"]
 
 [ext_resource type="PackedScene" uid="uid://gfsb7tuqhikm" path="res://object/stage/common/resource/model/Goal.gltf" id="1"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Goal.cs" id="3"]
-[ext_resource type="Material" uid="uid://bqfiirb67gv80" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="3_cj5gr"]
-[ext_resource type="Material" uid="uid://d1manyxporfp7" path="res://object/stage/common/resource/model/material/Goal Flame Detail.tres" id="3_p4xm7"]
+[ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="3_cj5gr"]
+[ext_resource type="Material" uid="uid://bwaydbu62y838" path="res://object/stage/common/resource/model/material/Goal Flame Process Material.tres" id="3_mg7a6"]
+[ext_resource type="Material" uid="uid://ceygng5qttsw1" path="res://object/stage/common/resource/model/material/Goal Flame Detail.tres" id="3_p4xm7"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_5w4f5"]
-orientation = 2
+[sub_resource type="QuadMesh" id="QuadMesh_8dqw3"]
+material = ExtResource("3_p4xm7")
+size = Vector2(0.6, 1)
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_d5t4l"]
+material = ExtResource("3_cj5gr")
+center_offset = Vector3(0, 0.5, 0)
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -54,78 +61,31 @@ script = ExtResource("3")
 
 [node name="Goal" parent="." instance=ExtResource("1")]
 
-[node name="FlamesDetail" type="Node3D" parent="Goal"]
-
-[node name="Flame1" type="MeshInstance3D" parent="Goal/FlamesDetail"]
-transform = Transform3D(-1, 0, 0, 0, 1.5, 0, 0, 0, 1, 1.43025, 2, 0.175742)
-material_override = ExtResource("3_p4xm7")
+[node name="FlameDetail" type="GPUParticles3D" parent="Goal"]
+transform = Transform3D(0.991919, 0, -0.126874, 0, 1, 0, 0.126874, 0, 0.991919, -0.0109326, 0.7, -0.414528)
+layers = 32
 cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
+preprocess = 2.0
+explosiveness = 0.4
+interpolate = false
+local_coords = true
+process_material = ExtResource("3_mg7a6")
+draw_pass_1 = SubResource("QuadMesh_8dqw3")
 
-[node name="Flame2" type="MeshInstance3D" parent="Goal/FlamesDetail"]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -1.24013, 2, -0.312872)
-material_override = ExtResource("3_p4xm7")
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
-
-[node name="Flame3" type="MeshInstance3D" parent="Goal/FlamesDetail"]
-transform = Transform3D(1.18177, 0, -0.173648, 0, 0.8, 0, 0.208378, 0, 0.984808, 0.394656, 1.76, -0.0246156)
-material_override = ExtResource("3_p4xm7")
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
-
-[node name="Flame4" type="MeshInstance3D" parent="Goal/FlamesDetail"]
-transform = Transform3D(1.96962, 0, -0.173648, 0, 1.5, 0, 0.347296, 0, 0.984808, -0.511368, 1.76, -0.184372)
-material_override = ExtResource("3_p4xm7")
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
-
-[node name="FlamesBase" type="Node3D" parent="Goal"]
-
-[node name="Flame1" type="MeshInstance3D" parent="Goal/FlamesBase"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
-material_override = ExtResource("3_cj5gr")
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
-
-[node name="Flame2" type="MeshInstance3D" parent="Goal/FlamesBase"]
-transform = Transform3D(0.787846, 0, -0.173648, 0, 1.2, 0, 0.138918, 0, 0.984808, -1.74238, 2, -0.401432)
-material_override = ExtResource("3_cj5gr")
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
-
-[node name="Flame3" type="MeshInstance3D" parent="Goal/FlamesBase"]
-transform = Transform3D(1.47721, 0, -0.260472, 0, 1.5, 0, 0.260472, 0, 1.47721, -0.796962, 2, -0.23473)
-material_override = ExtResource("3_cj5gr")
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
-
-[node name="Flame4" type="MeshInstance3D" parent="Goal/FlamesBase"]
-transform = Transform3D(-1, 0, 0, 0, 1.2, 0, 0, 0, 1, 2.2, 2, 0)
-material_override = ExtResource("3_cj5gr")
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("PlaneMesh_5w4f5")
-skeleton = NodePath("../../..")
+[node name="FlameBase" type="GPUParticles3D" parent="Goal"]
+transform = Transform3D(0.991919, 0, -0.126874, 0, 1, 0, 0.126874, 0, 0.991919, 0.0405563, 0.7, -0.817075)
+layers = 32
+lifetime = 2.0
+preprocess = 2.0
+explosiveness = 0.5
+interpolate = false
+local_coords = true
+process_material = ExtResource("3_mg7a6")
+draw_pass_1 = SubResource("QuadMesh_d5t4l")
 
 [node name="Animator" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Goal")
 autoplay = "loop"
-playback_speed = 1.2
 libraries = {
 "": SubResource("AnimationLibrary_x6d5q")
 }
