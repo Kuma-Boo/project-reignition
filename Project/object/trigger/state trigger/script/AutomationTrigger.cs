@@ -63,7 +63,7 @@ namespace Project.Gameplay.Triggers
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 
 			Character.UpdateExternalControl(false);
-			Character.Animator.ExternalAngle = Mathf.Pi; // Rotate to follow pathfollower
+			Character.Animator.ExternalAngle = Mathf.Pi;
 		}
 
 		private bool IsActivationValid()
@@ -94,7 +94,7 @@ namespace Project.Gameplay.Triggers
 			float initialVelocity = Character.MoveSpeed;
 			Character.StartExternal(this, Character.PathFollower, .05f, true);
 			Character.MoveSpeed = initialVelocity;
-			Character.Animator.SnapRotation(0);
+			Character.Animator.SnapRotation(Mathf.Pi); // Rotate to follow pathfollower
 			Character.IsMovingBackward = false; // Prevent getting stuck in backstep animation
 		}
 
