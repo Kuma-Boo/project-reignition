@@ -8,15 +8,24 @@
 script = ExtResource("1_5mwi3")
 animator = NodePath("AnimationPlayer")
 playerStandin = NodePath("SandfallEventRoot/Skeleton3D/Player")
-cameraStandin = NodePath("SandfallEventRoot/Skeleton3D/Camera3D")
+cameraStandin = NodePath("SandfallEventRoot/Skeleton3D/CameraPivot/CameraReference")
 lockout = ExtResource("3_5h0al")
 
+[node name="Skeleton3D" parent="SandfallEventRoot" index="0"]
+bones/0/position = Vector3(2.25, 2.97181, 0)
+bones/1/position = Vector3(0, 1.50001, 0)
+bones/2/position = Vector3(2, 1.50001, -3.5)
+bones/3/position = Vector3(2, 1.50001, 3)
+
 [node name="Player" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="1"]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.25, 2.96254, 0)
+transform = Transform3D(-1.19209e-07, -0.0156825, 0.999877, 9.87202e-08, 0.999877, 0.0156825, -1, 1.00583e-07, -1.19209e-07, 43.2932, -43.3404, 0)
 bone_name = "player"
 bone_idx = 0
 
-[node name="Camera3D" type="Camera3D" parent="SandfallEventRoot/Skeleton3D" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+[node name="CameraPivot" type="Node3D" parent="SandfallEventRoot/Skeleton3D" index="2"]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 2.3, 4, 0)
+
+[node name="CameraReference" type="Camera3D" parent="SandfallEventRoot/Skeleton3D/CameraPivot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
 cull_mask = 32767
 fov = 60.0

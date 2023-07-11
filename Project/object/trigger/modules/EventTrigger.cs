@@ -83,7 +83,7 @@ namespace Project.Gameplay.Triggers
 			if (playerStandin != null)
 				Character.StartExternal(this, playerStandin, .2f);
 
-			if (cameraStandin != null)
+			if (cameraStandin != null) // Set external camera
 				Character.Camera.SetExternalController(cameraStandin);
 		}
 
@@ -111,6 +111,9 @@ namespace Project.Gameplay.Triggers
 
 			if (lockout != null)
 				Character.AddLockoutData(lockout);
+
+			if (cameraStandin != null) // Remove external camera
+				Character.Camera.SetExternalController(null);
 		}
 		#endregion
 	}
