@@ -102,12 +102,13 @@ namespace Project.Gameplay.Triggers
 
 
 		/// <summary> Resets the character's movement state. </summary>
-		public void FinishEvent()
+		public void FinishEvent(float fadeout)
 		{
 			Character.ResetMovementState();
 
 			Character.MovementAngle = Character.CalculateForwardAngle(playerStandin.Forward());
 			Character.Animator.SnapRotation(Character.MovementAngle);
+			Character.Animator.CancelOneshot(fadeout);
 
 			if (lockout != null)
 				Character.AddLockoutData(lockout);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=17 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="2_3qp24"]
@@ -8,6 +8,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://dhcxjlduawy8d" path="res://object/player/resource/model/animation/ActionLibrary.gltf" id="5_21j6r"]
 [ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="5_a0jad"]
 [ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="6_pf4ty"]
+[ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="8_7bg0r"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
@@ -348,10 +349,11 @@ bone_idx = 3
 [node name="SoleOffset" type="Node3D" parent="SonicRoot/GeneralSkeleton/LFoot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0, -0.15)
 
-[node name="MotionAnimationPlayer" type="AnimationPlayer" parent="." index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
 libraries = {
 "ActionLibrary": ExtResource("5_21j6r"),
 "BalanceLibrary": ExtResource("5_a0jad"),
+"EventLibrary": ExtResource("8_7bg0r"),
 "SidleLibrary": ExtResource("6_pf4ty")
 }
 
@@ -368,7 +370,7 @@ transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 tree_root = ExtResource("8_sfnih")
-anim_player = NodePath("../MotionAnimationPlayer")
+anim_player = NodePath("../AnimationPlayer")
 parameters/balance_tree/balance_speed/scale = 1.0
 parameters/balance_tree/balance_state/balance_left_blend/blend_position = 0
 parameters/balance_tree/balance_state/balance_right_blend/blend_position = 0
@@ -396,9 +398,9 @@ parameters/normal_state/ground_tree/move_transition/current_index = 0
 parameters/normal_state/ground_tree/turn_add/add_amount = 1.0
 parameters/normal_state/ground_tree/turn_blend/blend_position = Vector2(0, 0)
 parameters/oneshot_tree/oneshot_seek/seek_request = -1.0
-parameters/oneshot_tree/oneshot_transition/current_state = ""
+parameters/oneshot_tree/oneshot_transition/current_state = "so_a1_sandfall_event"
 parameters/oneshot_tree/oneshot_transition/transition_request = ""
-parameters/oneshot_tree/oneshot_transition/current_index = 0
+parameters/oneshot_tree/oneshot_transition/current_index = 1
 parameters/oneshot_trigger/active = false
 parameters/oneshot_trigger/internal_active = false
 parameters/oneshot_trigger/request = 0

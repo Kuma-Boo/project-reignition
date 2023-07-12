@@ -98,7 +98,11 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Cancels the oneshot animation early.
 		/// </summary>
-		public void CancelOneshot() => animationTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		public void CancelOneshot(float fadeout = 0)
+		{
+			oneShotTransition.FadeOutTime = fadeout;
+			animationTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+		}
 		#endregion
 
 		#region States
