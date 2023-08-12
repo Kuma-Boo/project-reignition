@@ -425,6 +425,7 @@ namespace Project.Gameplay
 				}
 			}
 
+			BGMPlayer.StageMusicPaused = true;
 			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 			EmitSignal(SignalName.LevelCompleted);
 		}

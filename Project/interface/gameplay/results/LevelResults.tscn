@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=26 format=3 uid="uid://x03eut8s4p3l"]
 
 [ext_resource type="AudioStream" uid="uid://dbv5ecruxgfsy" path="res://sound/ost/jingle/Stage Clear.mp3" id="1"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="2"]
@@ -7,8 +7,12 @@
 [ext_resource type="Texture2D" uid="uid://bmwc4e25fnuqd" path="res://interface/gameplay/results/result atlas.png" id="5"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/HUD Numbers.fnt" id="5_iuphe"]
 [ext_resource type="Texture2D" uid="uid://covowu2nyy2gi" path="res://interface/gameplay/results/text/results en.png" id="7"]
+[ext_resource type="AudioStream" uid="uid://djog8y22u5a43" path="res://sound/sfx/system/result success.wav" id="8_5re71"]
 [ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/gameplay/results/icon/silver.png" id="8_mjqbr"]
 [ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/gameplay/results/icon/gold.png" id="9_sn0cs"]
+[ext_resource type="AudioStream" uid="uid://biwixrje8ahed" path="res://sound/sfx/system/result fail.wav" id="9_xr8rf"]
+[ext_resource type="AudioStream" uid="uid://sm8k2fwwnwnk" path="res://sound/sfx/system/result data.wav" id="10_m50k4"]
+[ext_resource type="AudioStream" uid="uid://b4nrxor8mt3ef" path="res://sound/sfx/system/result rank.wav" id="11_w8yyn"]
 
 [sub_resource type="CanvasItemMaterial" id="4"]
 
@@ -497,6 +501,18 @@ tracks/39/keys = {
 "update": 1,
 "values": [ExtResource("3")]
 }
+tracks/40/type = "value"
+tracks/40/imported = false
+tracks/40/enabled = true
+tracks/40/path = NodePath("RankSFX:volume_db")
+tracks/40/interp = 1
+tracks/40/loop_wrap = true
+tracks/40/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="7"]
 resource_name = "fail-result"
@@ -696,6 +712,32 @@ tracks/15/keys = {
 "method": &"SetInputProcessing"
 }]
 }
+tracks/16/type = "method"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("DataSFX")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0.6664, 1.1662, 1.5, 1.83333, 2.33333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="6"]
 resource_name = "fail-start"
@@ -785,6 +827,34 @@ tracks/6/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("FailSFX")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("BGM")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_j5equ"]
 resource_name = "medal-bronze"
@@ -813,6 +883,58 @@ tracks/1/keys = {
 "update": 1,
 "values": [ExtResource("3")]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RankSFX:volume_db")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_buwbo"]
+resource_name = "medal-gold"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/Medal:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/Medal:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("9_sn0cs")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RankSFX:volume_db")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_fkhnx"]
 resource_name = "medal-none"
@@ -828,6 +950,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RankSFX:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
 }
 
 [sub_resource type="Animation" id="Animation_foxyq"]
@@ -856,6 +990,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("8_mjqbr")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RankSFX:volume_db")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="5"]
@@ -1066,6 +1212,49 @@ tracks/16/keys = {
 "values": [{
 "args": [true],
 "method": &"SetInputProcessing"
+}]
+}
+tracks/17/type = "method"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("DataSFX")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0.5, 0.833, 1.1662, 1.4994, 1.8326, 2.3324),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/18/type = "method"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("RankSFX")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(2.499),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
 }]
 }
 
@@ -1361,33 +1550,33 @@ tracks/23/keys = {
 "update": 1,
 "values": [true]
 }
-
-[sub_resource type="Animation" id="Animation_buwbo"]
-resource_name = "medal-gold"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Data/Medal:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
+tracks/24/type = "method"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("SuccessSFX")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Data/Medal:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
+tracks/25/type = "method"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("BGM")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("9_sn0cs")]
+"values": [{
+"args": [],
+"method": &"Play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kj0vb"]
@@ -1694,6 +1883,26 @@ bus = &"BGM"
 script = ExtResource("2")
 loopStartPosition = 5.85
 loopEndPosition = 28.0
+
+[node name="FailSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_xr8rf")
+volume_db = -3.0
+bus = &"SFX"
+
+[node name="SuccessSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_5re71")
+volume_db = -3.0
+bus = &"SFX"
+
+[node name="DataSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_m50k4")
+volume_db = -6.0
+max_polyphony = 2
+bus = &"SFX"
+
+[node name="RankSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_w8yyn")
+bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

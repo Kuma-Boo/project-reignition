@@ -168,7 +168,11 @@ namespace Project.Core
 				if (OS.IsDebugBuild())
 				{
 					settings.screenResolution = 1;
-					settings.isMasterMuted = true;
+					settings.isMasterMuted =
+					settings.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
+					settings.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
+					settings.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
+
 					settings.voiceLanguage = VoiceLanguage.Japanese;
 					settings.textLanguage = TextLanguage.English;
 				}
