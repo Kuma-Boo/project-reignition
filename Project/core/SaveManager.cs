@@ -162,20 +162,18 @@ namespace Project.Core
 				file.Close();
 			}
 			else
-			{
 				settings = new ConfigData();
 
-				if (OS.IsDebugBuild())
-				{
-					settings.screenResolution = 1;
-					settings.isMasterMuted =
-					settings.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
-					settings.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
-					settings.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
+			if (OS.IsDebugBuild()) // Editor build
+			{
+				settings.screenResolution = 1;
+				settings.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
+				settings.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
+				settings.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
+				settings.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
 
-					settings.voiceLanguage = VoiceLanguage.Japanese;
-					settings.textLanguage = TextLanguage.English;
-				}
+				settings.voiceLanguage = VoiceLanguage.Japanese;
+				settings.textLanguage = TextLanguage.English;
 			}
 
 			ApplyLocalization();

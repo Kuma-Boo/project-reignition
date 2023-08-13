@@ -1,5 +1,4 @@
 using Godot;
-using Project.Gameplay.Objects;
 
 
 namespace Project.Gameplay
@@ -7,12 +6,15 @@ namespace Project.Gameplay
 	public partial class DinoTrio : PathFollow3D
 	{
 		[Export]
+		private Path3D path;
+		[Export]
 		private AnimationTree animator;
+		[Export]
+		private bool log;
 		private float moveSpeed;
+		private float zOffset; // Used during attacks
 
-		[Signal]
-		public delegate void SignalNsameEventHandler();
-
+		private CharacterController Character => CharacterController.instance;
 
 		public override void _Ready()
 		{
@@ -22,6 +24,8 @@ namespace Project.Gameplay
 
 		public override void _PhysicsProcess(double _)
 		{
+			if (log)
+				GD.Print(path.Curve.GetClosestOffset(path.GlobalPosition - Character.GlobalPosition));
 		}
 
 		public void OnAreaEntered(Area3D area)
