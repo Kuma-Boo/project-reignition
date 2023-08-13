@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=22 format=3 uid="uid://byovecvbub7lf"]
 
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_cngxd"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="3"]
@@ -18,7 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="16"]
 [ext_resource type="PackedScene" uid="uid://e43vdgi280co" path="res://area/2 dino jungle/object/rock/WaterRock.tscn" id="17"]
 [ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="18"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 2/Static.tscn" id="18_547h0"]
+[ext_resource type="PackedScene" uid="uid://dp60xb12an0s2" path="res://area/2 dino jungle/act 2/Static.tscn" id="18_547h0"]
 
 [sub_resource type="Curve" id="Curve_sbtd2"]
 max_value = 3.0
@@ -32,21 +32,21 @@ size = Vector3(9.4, 11.5, 2)
 
 [node name="MajinEggAct" type="Node3D" parent="."]
 script = ExtResource("4")
-"Starting Path" = NodePath("../Static/Path/MainPath")
+"Level ID" = "dj_a2_majin"
 "Mission Type" = 1
 "Time Limit" = 0.0
 "Objective Count" = 5
+"Story Event Index" = -1
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0.0
-"Ranking/Silver Time" = 0.0
-"Ranking/Bronze Time" = 0.0
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
 "Ranking/Gold Score" = 0
 "Ranking/Silver Score" = 0
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = ExtResource("2_cngxd")
-Completion/Animator = NodePath("")
 
 [node name="SpawnPosition" type="Node3D" parent="MajinEggAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.3, -2, -6)
@@ -267,15 +267,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.65327, -1.25, 7.62659)
 
 [node name="RedMajin" parent="MajinEggAct/LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.920298, 0, -0.391218, 0, 1, 0, 0.391218, 0, -0.920298, 23.171, 4.46462, 65.2765)
-spawnInstantly = true
 
 [node name="RedMajin2" parent="MajinEggAct/LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.999577, 24.3009, 3.57783, 82.5364)
-spawnInstantly = true
 
 [node name="RedMajin3" parent="MajinEggAct/LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.983294, 0, 0.182024, 0, 1, 0, -0.182024, 0, -0.983294, 20.8068, 2.52471, 99.0963)
-spawnInstantly = true
 
 [node name="Rings" type="Node3D" parent="MajinEggAct/LotusGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008)
@@ -541,10 +538,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.577617, 26, 0)
 [node name="Switch" parent="MajinEggAct/Boat1" instance=ExtResource("13")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -89.201, -1.54498, 214.719)
 
-[node name="RingCuller" type="Node3D" parent="MajinEggAct/Boat1/Switch" node_paths=PackedStringArray("targetNode")]
+[node name="RingCuller" type="Node3D" parent="MajinEggAct/Boat1/Switch"]
 script = ExtResource("5")
-targetNode = NodePath("../Rings")
-modifyTree = true
 
 [node name="Rings" type="Node3D" parent="MajinEggAct/Boat1/Switch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.392, 0, -5.88899)
@@ -595,23 +590,15 @@ transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, 
 
 [node name="SpikeBall" parent="MajinEggAct/Boat2" instance=ExtResource("14")]
 transform = Transform3D(0.612599, 0, 0.790394, 0, 1, 0, -0.790394, 0, 0.612599, -98.5681, -5.875, 145.687)
-moveSpeed = 4.0
-distance = 10.0
-movementType = 1
+Movement/Distance = 10.0
 
 [node name="SpikeBall2" parent="MajinEggAct/Boat2" instance=ExtResource("14")]
 transform = Transform3D(0.727373, 0, 0.686243, 0, 1, 0, -0.686243, 0, 0.727373, -114.02, -5.875, 141.898)
-moveSpeed = 4.0
-distance = 18.0
-startingOffset = 0.4
-movementType = 1
+Movement/Distance = 18.0
 
 [node name="SpikeBall3" parent="MajinEggAct/Boat2" instance=ExtResource("14")]
 transform = Transform3D(0.929347, 0, 0.369207, 0, 1, 0, -0.369207, 0, 0.929347, -120.421, -5.875, 125.352)
-moveSpeed = 4.0
-distance = 15.0
-startingOffset = 0.8
-movementType = 1
+Movement/Distance = 15.0
 
 [node name="WaterRock2" parent="MajinEggAct/Boat2" instance=ExtResource("17")]
 transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -94.2378, -5.99945, 73.2432)
@@ -701,15 +688,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4015, 0, 20.7474)
 
 [node name="BlueMajin" parent="MajinEggAct/Island" instance=ExtResource("11")]
 transform = Transform3D(-0.0290879, 0, 0.999577, 0, 1, 0, -0.999577, 0, -0.0290879, -165.788, -1.221, 111.46)
-spawnInstantly = true
 
 [node name="BlueMajin2" parent="MajinEggAct/Island" instance=ExtResource("11")]
 transform = Transform3D(0.422616, 0, 0.906309, 0, 1, 0, -0.906309, 0, 0.422616, -170.812, -1.221, 106.319)
-spawnInstantly = true
 
 [node name="BlueMajin3" parent="MajinEggAct/Island" instance=ExtResource("11")]
 transform = Transform3D(0.906307, 0, 0.422619, 0, 1, 0, -0.422619, 0, 0.906307, -177.562, -1.221, 105.495)
-spawnInstantly = true
 
 [node name="EnemyStone" parent="MajinEggAct/Island" instance=ExtResource("10")]
 transform = Transform3D(0.957989, 0, 0.286804, 0, 1, 0, -0.286804, 0, 0.957989, -177.571, -0.716, 102.281)
@@ -882,15 +866,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.21396, 0, -6.10972)
 
 [node name="GreenMajin" parent="MajinEggAct/LeftPath" instance=ExtResource("7")]
 transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -76.8037, 5.792, -26.4819)
-spawnInstantly = true
 
 [node name="GreenMajin2" parent="MajinEggAct/LeftPath" instance=ExtResource("7")]
 transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -71.7546, 7.226, -25.2419)
-spawnInstantly = true
 
 [node name="GreenMajin3" parent="MajinEggAct/LeftPath" instance=ExtResource("7")]
 transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -67.7612, 9.28, -22.519)
-spawnInstantly = true
 
 [node name="RightPath" type="Node3D" parent="MajinEggAct"]
 
@@ -899,8 +880,6 @@ transform = Transform3D(0.230615, 0, -0.973045, 0, 1, 0, 0.973045, 0, 0.230615, 
 
 [node name="JumpTo" type="Node3D" parent="MajinEggAct/RightPath/DinoJump"]
 script = ExtResource("3")
-targetNode = NodePath("")
-peakHeight = 2.0
 
 [node name="Target" type="Node3D" parent="MajinEggAct/RightPath/DinoJump/JumpTo"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, -5.11, -21.99)
@@ -915,15 +894,12 @@ enemyCount = 3
 
 [node name="BlueMajin" parent="MajinEggAct/RightPath" instance=ExtResource("11")]
 transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -141.723, 6.981, -41.146)
-spawnInstantly = true
 
 [node name="BlueMajin2" parent="MajinEggAct/RightPath" instance=ExtResource("11")]
 transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -137.485, 6.981, -40.307)
-spawnInstantly = true
 
 [node name="BlueMajin3" parent="MajinEggAct/RightPath" instance=ExtResource("11")]
 transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -140.687, 6.981, -45.4303)
-spawnInstantly = true
 
 [node name="Catapult" parent="MajinEggAct/RightPath" instance=ExtResource("15")]
 transform = Transform3D(0.690882, 0, 0.722967, 0, 1, 0, -0.722967, 0, 0.690882, -128.18, 6.98, -46.0578)

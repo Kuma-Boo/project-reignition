@@ -1,6 +1,7 @@
-[gd_scene load_steps=66 format=3]
+[gd_scene load_steps=55 format=3 uid="uid://dp60xb12an0s2"]
 
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="1_d384b"]
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_tbi4j"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/object/platform/CactusPlatform.tscn" id="2_y75g5"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/object/platform/GrassPillar.tscn" id="3_f3x6u"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="4_7yy7k"]
@@ -8,25 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="6_wsjb6"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="7_t54v7"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_srgif"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_Climb.tres" id="9_1oxnw"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/object/Boat.tscn" id="10_0g3b7"]
+[ext_resource type="PackedScene" uid="uid://cuplakh6fkalc" path="res://area/2 dino jungle/object/Boat.tscn" id="10_0g3b7"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="11_3ntm7"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="12_t28j3"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="13_0pim3"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="14_nk68g"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="15_e1nfe"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="16_i7wrh"]
-[ext_resource type="Resource" uid="uid://drgk50yomyihb" path="res://resource/preset/camera/common/OverheadCam.tres" id="17_t5kt4"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_Waterfall.tres" id="18_rq1km"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_Waterfall2.tres" id="19_mb5m1"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_PotCorner.tres" id="20_dbata"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_BackWall.tres" id="21_l6y3p"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_Cavern.tres" id="22_r7t2k"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_SpringTurn.tres" id="23_a2uhp"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_Split.tres" id="24_swc1p"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_SplitMain.tres" id="25_giqra"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_SplitRight.tres" id="26_cyy8i"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 2/camera/CAM_LotusPath.tres" id="27_a0qr0"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="28_kp8ug"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/act 2/environment/collision/Collision.tscn" id="29_eiiea"]
 [ext_resource type="PackedScene" uid="uid://dhudcebp1ql1o" path="res://area/2 dino jungle/act 2/environment/DJAct2.tscn" id="30_ymmwk"]
@@ -37,7 +26,7 @@
 [ext_resource type="Curve3D" uid="uid://mig8mj50lbiu" path="res://area/2 dino jungle/act 2/environment/path/RightPath.tres" id="33_quywa"]
 [ext_resource type="Curve3D" uid="uid://b6lms2do0qg2p" path="res://area/2 dino jungle/act 2/environment/path/SpringPath.tres" id="34_2rl0i"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/data/BGM.tscn" id="35_dxojr"]
-[ext_resource type="Environment" uid="uid://b1kn2h0uduv2k" path="res://area/2 dino jungle/data/Environment.tres" id="36_vlkax"]
+[ext_resource type="Environment" path="res://area/2 dino jungle/data/Environment.tres" id="36_vlkax"]
 
 [sub_resource type="Animation" id="42"]
 resource_name = "RESET"
@@ -377,7 +366,10 @@ _data = {
 "demo3": SubResource("96")
 }
 
-[node name="Static" type="Node"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
+script = ExtResource("1_tbi4j")
+pathParent = NodePath("Path")
+environment = NodePath("WorldEnvironment")
 
 [node name="Common" type="Node3D" parent="." groups=["cull on complete"]]
 
@@ -468,7 +460,6 @@ distance = 7.0
 
 [node name="Camera3D" type="Node3D" parent="Common/Objects/Spring"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("9_1oxnw")
 
 [node name="BoatSection1" type="Node3D" parent="Common/Objects"]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -40.58, -5.75, 147.5)
@@ -478,24 +469,18 @@ transform = Transform3D(0.0871559, 0, -0.996195, 0, 1, 0, 0.996195, 0, 0.0871559
 
 [node name="Start" parent="Common/Objects/BoatSection1" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.994318, 0, -0.106457, 0, 1, 0, 0.106457, 0, 0.994318, 6.69522, 16.68, -0.218796)
-enterMode = 1
 
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection1/Start"]
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../../Boat")
-peakHeight = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection1/Start"]
 shape = SubResource("23")
 
 [node name="End" parent="Common/Objects/BoatSection1" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.2117, 0, 0.977336, 0, 1, 0, -0.977336, 0, 0.2117, -18.3607, 1.73, 63.0856)
-enterMode = 1
 
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection1/End"]
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../../FlyingPot")
-peakHeight = 3.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection1/End"]
 shape = SubResource("23")
@@ -538,13 +523,10 @@ transform = Transform3D(-0.939692, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939692, 
 
 [node name="Start1" parent="Common/Objects/BoatSection2" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(-0.183184, 0, 0.983079, 0, 1, 0, -0.983079, 0, -0.183184, -0.732456, 10.14, -9.82281)
-enterMode = 1
 
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection2/Start1"]
 transform = Transform3D(1, 0, -7.45058e-08, 0, 1, 0, 7.45058e-08, 0, 1, 0, -5.78, 0)
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../../Boat1")
-peakHeight = 5.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection2/Start1"]
 shape = SubResource("23")
@@ -553,13 +535,10 @@ shape = SubResource("23")
 
 [node name="Start2" parent="Common/Objects/BoatSection2" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(-0.268169, 0, 0.963372, 0, 1, 0, -0.963372, 0, -0.268169, 48.042, 10.14, 121.37)
-enterMode = 1
 
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection2/Start2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.899979, -2.056, -1.52588e-05)
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../../Boat2")
-peakHeight = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection2/Start2"]
 shape = SubResource("23")
@@ -569,7 +548,6 @@ transform = Transform3D(-0.984807, 0, -0.173648, 0, 1, 0, 0.173648, 0, -0.984807
 
 [node name="End" parent="Common/Objects/BoatSection2" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(-0.90217, 0, -0.431382, 0, 1, 0, 0.431382, 0, -0.90217, 77.3081, 1.7, 58.3825)
-enterMode = 1
 
 [node name="PathTrigger" type="Node3D" parent="Common/Objects/BoatSection2/End"]
 transform = Transform3D(1, 0, -2.23517e-08, 0, 1, 0, 2.23517e-08, 0, 1, -10.8199, 2.52, 1.52588e-05)
@@ -577,8 +555,6 @@ script = ExtResource("14_nk68g")
 
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection2/End"]
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../PathTrigger")
-peakHeight = 5.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection2/End"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 0, 0)
@@ -589,17 +565,13 @@ transform = Transform3D(0.819156, 0, 0.573572, 0, 1, 0, -0.573572, 0, 0.819156, 
 middleHeight = 8.0
 finalHeight = 8.0
 
-[node name="WallCull1" type="Node3D" parent="Common/Objects/BoatSection2" node_paths=PackedStringArray("targetNode")]
+[node name="WallCull1" type="Node3D" parent="Common/Objects/BoatSection2"]
 transform = Transform3D(-0.970763, 0, -0.24004, 0, 1, 0, 0.24004, 0, -0.970763, -37.443, 16.68, 55.9918)
 script = ExtResource("15_e1nfe")
-targetNode = NodePath("../../../../Collision/BoatWall1")
-modifyTree = true
 
-[node name="WallCull2" type="Node3D" parent="Common/Objects/BoatSection2" node_paths=PackedStringArray("targetNode")]
+[node name="WallCull2" type="Node3D" parent="Common/Objects/BoatSection2"]
 transform = Transform3D(-0.970763, 0, -0.24004, 0, 1, 0, 0.24004, 0, -0.970763, -37.443, 16.68, 55.9918)
 script = ExtResource("15_e1nfe")
-targetNode = NodePath("../../../../Collision/BoatWall2")
-modifyTree = true
 
 [node name="BoatSection3" type="Node3D" parent="Common/Objects"]
 transform = Transform3D(-0.615661, 0, 0.788011, 0, 1, 0, -0.788011, 0, -0.615661, -149.26, -5.75, 40.68)
@@ -608,13 +580,10 @@ transform = Transform3D(-0.615661, 0, 0.788011, 0, 1, 0, -0.788011, 0, -0.615661
 
 [node name="Start" parent="Common/Objects/BoatSection3" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.0813652, 0, 0.996684, 0, 1, 0, -0.996684, 0, 0.0813652, -0.482567, 10.14, -9.13567)
-enterMode = 1
 
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection3/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.311, 1.606, 3.8147e-06)
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../../Boat")
-peakHeight = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection3/Start"]
 shape = SubResource("23")
@@ -625,9 +594,6 @@ transform = Transform3D(-0.896225, 0, 0.443598, 0, 1, 0, -0.443598, 0, -0.896225
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection3/End"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.37001, 0, 2.38213)
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../../../DinoBridge/DinoSwitchRight")
-targetPosition = Vector3(0, -0.5, -0.5)
-peakHeight = 4.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection3/End"]
 transform = Transform3D(0.819152, 0, -0.573578, 0, 1, 0, 0.573578, 0, 0.819152, -2.30632, -0.99, 1.56245)
@@ -639,9 +605,6 @@ transform = Transform3D(-0.150679, 0, 0.988582, 0, 1, 0, -0.988582, 0, -0.150679
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection3/End2"]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -1.36996, 0, 0.646347)
 script = ExtResource("12_t28j3")
-targetNode = NodePath("../../../DinoBridge/DinoSwitchLeft")
-targetPosition = Vector3(0, -0.5, -0.5)
-peakHeight = 4.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/BoatSection3/End2"]
 transform = Transform3D(0.955165, 0, -0.296079, 0, 1, 0, 0.296079, 0, 0.955165, -5.50364, -0.99, 5.2406)
@@ -652,12 +615,9 @@ transform = Transform3D(-0.424705, 0, -0.905332, 0, 1, 0, 0.905332, 0, -0.424705
 
 [node name="DinoJump" parent="Common/Objects/DinoBridge" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.999436, -1.35516e-08, -0.0335445, 1.40993e-08, 1, 1.60936e-08, 0.0335445, -1.65575e-08, 0.999436, -0.0546846, 19.576, -49.5789)
-enterMode = 1
 
 [node name="Jump" type="Node3D" parent="Common/Objects/DinoBridge/DinoJump"]
 script = ExtResource("12_t28j3")
-targetNode = NodePath("")
-peakHeight = 0.5
 
 [node name="Target" type="Node3D" parent="Common/Objects/DinoBridge/DinoJump/Jump"]
 transform = Transform3D(1, -7.99361e-15, -2.98023e-08, -6.66134e-15, 1, -6.66134e-16, 2.98023e-08, 6.43929e-15, 1, 0, -1, -5)
@@ -674,7 +634,8 @@ transform = Transform3D(1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 40.7799,
 
 [node name="DinoLockout" parent="Common/Objects/DinoBridge" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.972006, -1.35515e-08, -0.234955, 1.70625e-08, 1, 1.291e-08, 0.234955, -1.65575e-08, 0.972006, -6.26522, 34.652, -6.34328)
-triggerMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Lockout" type="Node3D" parent="Common/Objects/DinoBridge/DinoLockout"]
 transform = Transform3D(1, -4.44089e-16, 2.98023e-08, -4.44089e-16, 1, -2.22045e-16, -2.98023e-08, -2.22045e-16, 1, 0, 0, 0)
@@ -690,37 +651,31 @@ shape = SubResource("60")
 
 [node name="Lilypads" parent="Common/Triggers" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.731, 10.167, 43.762)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Common/Triggers/Lilypads"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("17_t5kt4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/Lilypads"]
 shape = SubResource("27")
 
 [node name="Waterfall" parent="Common/Triggers" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.815, 19.049, 120.856)
-triggerMode = 2
-enterMode = 1
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Common/Triggers/Waterfall"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("18_rq1km")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/Waterfall"]
 shape = SubResource("27")
 
 [node name="Waterfall2" parent="Common/Triggers" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.906307, 0, 0.422619, 0, 1, 0, -0.422619, 0, 0.906307, -17.7306, 14.338, 145.282)
-enterMode = 1
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/Waterfall2"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("19_mb5m1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/Waterfall2"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
@@ -728,12 +683,11 @@ shape = SubResource("28")
 
 [node name="PotCorner" parent="Common/Triggers" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.68624, 0, -0.727375, 0, 1, 0, 0.727375, 0, 0.68624, -67.0516, 17.688, 221.486)
-triggerMode = 2
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/PotCorner"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("20_dbata")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/PotCorner"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.385, 0)
@@ -748,18 +702,17 @@ transform = Transform3D(0.727373, 0, -0.686243, 0, 1, 0, 0.686243, 0, 0.727373, 
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/PotCliff"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("21_l6y3p")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/PotCliff"]
 shape = SubResource("63")
 
 [node name="Cavern" parent="Common/Triggers" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.573575, -8.83923e-09, -0.819153, 5.8097e-09, 1, -6.72271e-09, 0.819153, -9.03053e-10, 0.573575, -101.864, 1.258, 135.592)
-triggerMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/Cavern"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("22_r7t2k")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/Cavern"]
 shape = SubResource("64")
@@ -769,7 +722,6 @@ transform = Transform3D(0.573575, -8.83923e-09, -0.819153, 5.8097e-09, 1, -6.722
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/SpringTurn"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("23_a2uhp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/SpringTurn"]
 shape = SubResource("65")
@@ -780,7 +732,6 @@ transform = Transform3D(0.573575, -8.83923e-09, -0.819153, 5.8097e-09, 1, -6.722
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/SpringStraight"]
 transform = Transform3D(1, 2.22045e-16, 2.98023e-08, -5.55112e-16, 1, 5.55112e-16, -2.98023e-08, 5.55112e-17, 1, 0, 0, 0)
 script = ExtResource("8_srgif")
-cameraData = ExtResource("23_a2uhp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/SpringStraight"]
 shape = SubResource("65")
@@ -814,30 +765,28 @@ transform = Transform3D(-0.836752, 0, -0.547582, 0, 1, 0, 0.547582, 0, -0.836752
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/SplitCamera"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("24_swc1p")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/SplitCamera"]
 shape = SubResource("49")
 
 [node name="SplitCameraMain" parent="Common/Triggers" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(-0.622041, 0, -0.782985, 0, 1, 0, 0.782985, 0, -0.622041, -154.978, 14.338, -47.1407)
-triggerMode = 2
-exitMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/SplitCameraMain"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("25_giqra")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/SplitCameraMain"]
 shape = SubResource("50")
 
 [node name="SplitRight" parent="Common/Triggers" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(-0.803497, 0, -0.595309, 0, 1, 0, 0.595309, 0, -0.803497, -152.883, 14.338, -30.9404)
-triggerMode = 2
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/SplitRight"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("26_cyy8i")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/SplitRight"]
 shape = SubResource("51")
@@ -847,7 +796,6 @@ transform = Transform3D(-0.803497, 0, -0.595309, 0, 1, 0, 0.595309, 0, -0.803497
 
 [node name="Camera3D" type="Node3D" parent="Common/Triggers/SplitCameraLotusPath"]
 script = ExtResource("8_srgif")
-cameraData = ExtResource("27_a0qr0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Triggers/SplitCameraLotusPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.225, 0, -1.52588e-05)
@@ -882,7 +830,6 @@ directional_shadow_pancake_size = 0.0
 
 [node name="PlanarReflectionRenderer" parent="Visuals" instance=ExtResource("32_2v3ne")]
 reflectionMaterials = [ExtResource("33_kheyr")]
-reflectorHeight = -6.0
 
 [node name="Path" type="Node3D" parent="."]
 visible = false

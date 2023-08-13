@@ -1,10 +1,10 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=24 format=3 uid="uid://ctht326ugrail"]
 
 [ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_82lqk"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_dpy03"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_d4xxv"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/PteroEggManager.cs" id="3_sb6wl"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 2/Static.tscn" id="20_8sfob"]
+[ext_resource type="PackedScene" uid="uid://dp60xb12an0s2" path="res://area/2 dino jungle/act 2/Static.tscn" id="20_8sfob"]
 [ext_resource type="PackedScene" uid="uid://cxbowmxqmvhbd" path="res://area/2 dino jungle/object/egg/PteroEgg.tscn" id="22_00ptn"]
 [ext_resource type="PackedScene" uid="uid://krnj2r3cdn5m" path="res://area/2 dino jungle/object/egg/EggNest.tscn" id="23_xhqyv"]
 [ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="24_0cv4e"]
@@ -34,21 +34,21 @@ size = Vector3(9.4, 11.5, 2)
 
 [node name="PteroEggAct" type="Node3D" parent="."]
 script = ExtResource("1_82lqk")
-"Starting Path" = NodePath("")
+"Level ID" = "dj_a2_ptero"
 "Mission Type" = 1
 "Time Limit" = 0.0
 "Objective Count" = 4
+"Story Event Index" = -1
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0.0
-"Ranking/Silver Time" = 0.0
-"Ranking/Bronze Time" = 0.0
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
 "Ranking/Gold Score" = 0
 "Ranking/Silver Score" = 0
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
 Completion/Lockout = ExtResource("2_dpy03")
-Completion/Animator = NodePath("")
 
 [node name="SpawnPosition" type="Node3D" parent="PteroEggAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.3, -2, -6)
@@ -58,8 +58,6 @@ metadata/_edit_lock_ = true
 
 [node name="Eggs" type="Node3D" parent="PteroEggAct"]
 script = ExtResource("3_sb6wl")
-eggs = null
-signs = null
 
 [node name="PteroEgg" parent="PteroEggAct/Eggs" instance=ExtResource("22_00ptn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, -1.5, 25.6)
@@ -307,15 +305,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.73205)
 
 [node name="RedMajin" parent="PteroEggAct/LotusGroup" instance=ExtResource("27_lu3gx")]
 transform = Transform3D(-0.918218, 0, -0.396075, 0, 1, 0, 0.396075, 0, -0.918218, 23.1692, 4.45383, 65.2806)
-spawnInstantly = true
 
 [node name="RedMajin2" parent="PteroEggAct/LotusGroup" instance=ExtResource("27_lu3gx")]
 transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.999577, 24.3009, 3.57783, 82.5364)
-spawnInstantly = true
 
 [node name="RedMajin3" parent="PteroEggAct/LotusGroup" instance=ExtResource("27_lu3gx")]
 transform = Transform3D(-0.984806, 0, 0.173654, 0, 1, 0, -0.173654, 0, -0.984806, 20.8096, 2.51883, 99.0893)
-spawnInstantly = true
 
 [node name="Rings" type="Node3D" parent="PteroEggAct/LotusGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008)
@@ -581,10 +576,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.577617, 26, 0)
 [node name="Switch" parent="PteroEggAct/Boat1" instance=ExtResource("30_5pmxi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -89.201, -1.54498, 214.719)
 
-[node name="RingCuller" type="Node3D" parent="PteroEggAct/Boat1/Switch" node_paths=PackedStringArray("targetNode")]
+[node name="RingCuller" type="Node3D" parent="PteroEggAct/Boat1/Switch"]
 script = ExtResource("31_uxx68")
-targetNode = NodePath("../Rings")
-modifyTree = true
 
 [node name="Rings" type="Node3D" parent="PteroEggAct/Boat1/Switch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.392, 0, -5.88899)
@@ -635,23 +628,15 @@ transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, 
 
 [node name="SpikeBall" parent="PteroEggAct/Boat2" instance=ExtResource("32_30mv5")]
 transform = Transform3D(0.612599, 0, 0.790394, 0, 1, 0, -0.790394, 0, 0.612599, -98.5681, -5.875, 145.687)
-moveSpeed = 4.0
-distance = 10.0
-movementType = 1
+Movement/Distance = 10.0
 
 [node name="SpikeBall2" parent="PteroEggAct/Boat2" instance=ExtResource("32_30mv5")]
 transform = Transform3D(0.727373, 0, 0.686243, 0, 1, 0, -0.686243, 0, 0.727373, -114.02, -5.875, 141.898)
-moveSpeed = 4.0
-distance = 18.0
-startingOffset = 0.4
-movementType = 1
+Movement/Distance = 18.0
 
 [node name="SpikeBall3" parent="PteroEggAct/Boat2" instance=ExtResource("32_30mv5")]
 transform = Transform3D(0.929347, 0, 0.369207, 0, 1, 0, -0.369207, 0, 0.929347, -120.421, -5.875, 125.352)
-moveSpeed = 4.0
-distance = 15.0
-startingOffset = 0.8
-movementType = 1
+Movement/Distance = 15.0
 
 [node name="WaterRock2" parent="PteroEggAct/Boat2" instance=ExtResource("29_lns4b")]
 transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -94.2378, -5.99945, 73.2432)
@@ -741,15 +726,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4015, 0, 20.7474)
 
 [node name="BlueMajin" parent="PteroEggAct/Island" instance=ExtResource("33_5onlh")]
 transform = Transform3D(-0.0290879, 0, 0.999577, 0, 1, 0, -0.999577, 0, -0.0290879, -165.788, -1.221, 111.46)
-spawnInstantly = true
 
 [node name="BlueMajin2" parent="PteroEggAct/Island" instance=ExtResource("33_5onlh")]
 transform = Transform3D(0.422616, 0, 0.906309, 0, 1, 0, -0.906309, 0, 0.422616, -170.812, -1.221, 106.319)
-spawnInstantly = true
 
 [node name="BlueMajin3" parent="PteroEggAct/Island" instance=ExtResource("33_5onlh")]
 transform = Transform3D(0.906307, 0, 0.422619, 0, 1, 0, -0.422619, 0, 0.906307, -177.562, -1.221, 105.495)
-spawnInstantly = true
 
 [node name="EnemyStone" parent="PteroEggAct/Island" instance=ExtResource("34_8p3er")]
 transform = Transform3D(0.957989, 0, 0.286804, 0, 1, 0, -0.286804, 0, 0.957989, -177.571, -0.716, 102.281)
@@ -922,15 +904,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.21396, 0, -6.10972)
 
 [node name="GreenMajin" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
 transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -76.8037, 5.792, -26.4819)
-spawnInstantly = true
 
 [node name="GreenMajin2" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
 transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -71.7546, 7.226, -25.2419)
-spawnInstantly = true
 
 [node name="GreenMajin3" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
 transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -67.7612, 9.28, -22.519)
-spawnInstantly = true
 
 [node name="RightPath" type="Node3D" parent="PteroEggAct"]
 
@@ -940,7 +919,6 @@ transform = Transform3D(0.230615, 0, -0.973045, 0, 1, 0, 0.973045, 0, 0.230615, 
 [node name="JumpTo" type="Node3D" parent="PteroEggAct/RightPath/DinoJump"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 0, 0)
 script = ExtResource("37_vcc2n")
-peakHeight = 2.0
 
 [node name="Target" type="Node3D" parent="PteroEggAct/RightPath/DinoJump/JumpTo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.11, -21.99)
@@ -955,15 +933,12 @@ enemyCount = 3
 
 [node name="BlueMajin" parent="PteroEggAct/RightPath" instance=ExtResource("33_5onlh")]
 transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -141.723, 6.981, -41.146)
-spawnInstantly = true
 
 [node name="BlueMajin2" parent="PteroEggAct/RightPath" instance=ExtResource("33_5onlh")]
 transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -137.485, 6.981, -40.307)
-spawnInstantly = true
 
 [node name="BlueMajin3" parent="PteroEggAct/RightPath" instance=ExtResource("33_5onlh")]
 transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -140.687, 6.981, -45.4303)
-spawnInstantly = true
 
 [node name="Catapult" parent="PteroEggAct/RightPath" instance=ExtResource("28_4k1cr")]
 transform = Transform3D(0.690882, 0, 0.722967, 0, 1, 0, -0.722967, 0, 0.690882, -128.18, 6.98, -46.0578)
