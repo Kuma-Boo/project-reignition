@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cc1ft0jnv1sql"]
+[gd_scene load_steps=24 format=3 uid="uid://cc1ft0jnv1sql"]
 
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoTrio.cs" id="1_6nsvh"]
 [ext_resource type="PackedScene" uid="uid://ctbsi13u4rad0" path="res://area/2 dino jungle/object/model/dino/DinoTrio.gltf" id="1_57frd"]
@@ -14,6 +14,8 @@ animation = &"trio-attack"
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_grb6f"]
 fadein_time = 0.2
 fadeout_time = 1.2
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_gviv6"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eqvhn"]
 animation = &"trio-fidget-paw"
@@ -67,6 +69,8 @@ blend_point_1/pos = 1.0
 min_space = 0.0
 sync = true
 
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_r5fhp"]
+
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_nk615"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_mgc27"]
@@ -79,22 +83,26 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dcn5s"]
-graph_offset = Vector2(-323.575, 8.33031)
+graph_offset = Vector2(-459.758, 10.0106)
 nodes/attack/node = SubResource("AnimationNodeAnimation_8caol")
 nodes/attack/position = Vector2(-160, 368)
 nodes/attack_speed/node = SubResource("AnimationNodeTimeScale_dklgt")
 nodes/attack_speed/position = Vector2(-16, 304)
 nodes/attack_trigger/node = SubResource("AnimationNodeOneShot_grb6f")
 nodes/attack_trigger/position = Vector2(128, 112)
+nodes/idle_seek/node = SubResource("AnimationNodeTimeSeek_gviv6")
+nodes/idle_seek/position = Vector2(-320, 112)
 nodes/idle_state/node = SubResource("AnimationNodeStateMachine_wcpqs")
-nodes/idle_state/position = Vector2(-320, 112)
+nodes/idle_state/position = Vector2(-480, 112)
 nodes/movement_blend/node = SubResource("AnimationNodeBlendSpace1D_kn0bb")
-nodes/movement_blend/position = Vector2(-544, 288)
+nodes/movement_blend/position = Vector2(-688, 288)
+nodes/movement_seek/node = SubResource("AnimationNodeTimeSeek_r5fhp")
+nodes/movement_seek/position = Vector2(-320, 256)
 nodes/movement_speed/node = SubResource("AnimationNodeTimeScale_nk615")
-nodes/movement_speed/position = Vector2(-336, 288)
+nodes/movement_speed/position = Vector2(-496, 288)
 nodes/moving_transition/node = SubResource("AnimationNodeTransition_mgc27")
-nodes/moving_transition/position = Vector2(-128, 112)
-node_connections = [&"output", 0, &"attack_trigger", &"attack_trigger", 0, &"moving_transition", &"attack_trigger", 1, &"attack_speed", &"movement_speed", 0, &"movement_blend", &"moving_transition", 0, &"idle_state", &"moving_transition", 1, &"movement_speed", &"attack_speed", 0, &"attack"]
+nodes/moving_transition/position = Vector2(-144, 112)
+node_connections = [&"output", 0, &"attack_trigger", &"attack_trigger", 0, &"moving_transition", &"attack_trigger", 1, &"attack_speed", &"movement_speed", 0, &"movement_blend", &"moving_transition", 0, &"idle_seek", &"moving_transition", 1, &"movement_seek", &"attack_speed", 0, &"attack", &"idle_seek", 0, &"idle_state", &"movement_seek", 0, &"movement_speed"]
 
 [node name="DinoTrio" type="PathFollow3D" node_paths=PackedStringArray("animationTree")]
 script = ExtResource("1_6nsvh")
@@ -118,19 +126,22 @@ shape = SubResource("BoxShape3D_rux8y")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="DinoTrio/DinoTrioRoot" index="0"]
-bones/1/position = Vector3(-1.84096e-09, 2.85462, 0.0421269)
-bones/2/rotation = Quaternion(0.986246, -1.19156e-08, 2.61644e-06, -0.165285)
-bones/3/rotation = Quaternion(0.100407, -2.27363e-06, 6.31543e-07, 0.994946)
-bones/4/rotation = Quaternion(0.812515, -1.04427e-06, 2.37551e-06, 0.58294)
-bones/5/rotation = Quaternion(-0.51688, 4.35469e-07, -1.55996e-06, 0.856058)
-bones/6/rotation = Quaternion(0.812628, 6.77446e-05, -1.47863e-05, 0.582783)
-bones/7/rotation = Quaternion(-0.516864, -9.71521e-06, -5.18814e-05, 0.856067)
-bones/8/rotation = Quaternion(-0.797164, 2.64323e-05, 5.3967e-05, 0.603763)
-bones/9/rotation = Quaternion(0.376495, 3.79463e-05, -0.000127266, 0.926419)
-bones/10/rotation = Quaternion(-0.797164, -3.93023e-07, -1.43666e-06, 0.603763)
-bones/11/rotation = Quaternion(0.376495, -5.69285e-07, 2.19001e-06, 0.926419)
-bones/12/rotation = Quaternion(-0.0697905, -1.31576e-08, 1.88116e-07, 0.997562)
-bones/13/rotation = Quaternion(0.0665371, 2.23216e-09, -4.33025e-07, 0.997784)
+bones/1/position = Vector3(-8.15641e-09, 2.86977, 0.0671492)
+bones/1/rotation = Quaternion(-0.710555, 9.68278e-09, 6.95733e-09, 0.703641)
+bones/2/rotation = Quaternion(-0.986246, 1.19156e-08, -2.61644e-06, 0.165285)
+bones/3/rotation = Quaternion(0.181051, -2.20612e-06, 8.9634e-07, 0.983474)
+bones/4/rotation = Quaternion(0.811499, -1.03556e-06, 2.35823e-06, 0.584353)
+bones/5/rotation = Quaternion(-0.485142, 4.42825e-07, -1.47122e-06, 0.874435)
+bones/6/rotation = Quaternion(0.811608, 6.73926e-05, -1.38554e-05, 0.584202)
+bones/7/rotation = Quaternion(-0.485118, -9.7687e-06, -4.82314e-05, 0.874449)
+bones/8/rotation = Quaternion(-0.884186, 6.54233e-05, 8.33827e-05, 0.467132)
+bones/9/rotation = Quaternion(0.569416, 3.47552e-05, -0.000231502, 0.822049)
+bones/10/rotation = Quaternion(-0.790576, -3.67867e-07, -1.41492e-06, 0.612361)
+bones/11/rotation = Quaternion(0.371912, -5.68399e-07, 2.12583e-06, 0.928268)
+bones/12/rotation = Quaternion(0.127368, -1.6467e-09, 1.89115e-07, 0.991856)
+bones/13/rotation = Quaternion(-0.209914, 5.30741e-08, -3.84104e-07, 0.97772)
+bones/18/position = Vector3(-0.68562, 0.777135, -0.801398)
+bones/18/rotation = Quaternion(-0.344878, 0, 0, 0.938648)
 bones/20/rotation = Quaternion(-0.707108, 0.000270456, 0.000270456, 0.707106)
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -140,11 +151,13 @@ parameters/attack_speed/scale = 1.2
 parameters/attack_trigger/active = false
 parameters/attack_trigger/internal_active = false
 parameters/attack_trigger/request = 0
+parameters/idle_seek/seek_request = -1.0
 parameters/movement_blend/blend_position = 1.0
+parameters/movement_seek/seek_request = -1.0
 parameters/movement_speed/scale = 1.0
-parameters/moving_transition/current_state = "disabled"
+parameters/moving_transition/current_state = "enabled"
 parameters/moving_transition/transition_request = ""
-parameters/moving_transition/current_index = 0
+parameters/moving_transition/current_index = 1
 
 [connection signal="area_entered" from="Collision" to="." method="OnEntered"]
 

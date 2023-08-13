@@ -11,10 +11,12 @@ namespace Project.Gameplay
 		private static float attackTimer; // Timer to determine when to attack
 		private static float playerProgress; // Player's offset on the curve
 
-		private bool isMainDino; // Is this the first registered dino?
+		private bool IsMainDino => reversePrevention != null; // Is this the first registered dino?
 
 		[Export]
 		private Path3D path;
+		[Export]
+		private PathFollow3D reversePrevention; // Object to prevent player from ending up behind dinosaurs
 
 		[ExportGroup("Movement")]
 		[Export]
@@ -70,7 +72,7 @@ namespace Project.Gameplay
 
 		private void Respawn()
 		{
-			if (isMainDino)
+			if (IsMainDino)
 			{
 				playerHitTimer = 0;
 				attackTimer = ATTACK_INTERVAL;
@@ -79,12 +81,13 @@ namespace Project.Gameplay
 			Progress = 0;
 			moveSpeed = rubberbandingSpeed = 0;
 			CancelAttack();
+
+			// Desync animations
+			animationTree.Set(MOVEMENT_SEEK_PARAMETER, Runtime.randomNumberGenerator.RandfRange(0, 5));
 		}
 
 		public override void _EnterTree()
 		{
-			isMainDino = registeredDinoTrio.Count == 0;
-
 			if (!registeredDinoTrio.Contains(this))
 				registeredDinoTrio.Add(this);
 		}
@@ -99,7 +102,7 @@ namespace Project.Gameplay
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (isMainDino) // Main dino processes extra things
+			if (IsMainDino) // Main dino processes extra things
 			{
 				ProcessPositions();
 				ProcessAttacks();
@@ -116,12 +119,21 @@ namespace Project.Gameplay
 		{
 			Vector3 localPosition = path.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - path.GlobalPosition);
 			playerProgress = path.Curve.GetClosestOffset(localPosition);
+
+			// Update reverse prevention
+			float targetProgress = Progress;
+			for (int i = 0; i < registeredDinoTrio.Count; i++)
+			{
+				if (registeredDinoTrio[i].Progress < targetProgress)
+					targetProgress = registeredDinoTrio[i].Progress;
+			}
+			reversePrevention.Progress = targetProgress;
 		}
 
 
 		private void ProcessAttacks()
 		{
-			if (!isMainDino) return; // Only the main dino can process attack timer
+			if (!IsMainDino) return; // Only the main dino can process attack timer
 			if (Character.Camera.IsBehindCamera(GlobalPosition)) return; // Don't attack when off-camera for fairness
 
 			for (int i = 0; i < registeredDinoTrio.Count; i++)
@@ -163,7 +175,7 @@ namespace Project.Gameplay
 
 			if (!Mathf.IsZeroApprox(playerHitTimer))
 			{
-				if (isMainDino) // Update timer
+				if (IsMainDino) // Update timer
 					playerHitTimer = Mathf.MoveToward(playerHitTimer, 0, PhysicsManager.physicsDelta);
 
 				moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
@@ -201,6 +213,7 @@ namespace Project.Gameplay
 
 		private readonly StringName IDLE_STATE_PLAYBACK = "parameters/idle_state/playback";
 		private readonly StringName IDLE_STATE_PARAMETER = "trio-idle";
+		private readonly StringName IDLE_SEEK_PARAMETER = "parameters/idle_seek/seek_request";
 		private readonly StringName PAW_STATE_PARAMETER = "trio-fidget-paw";
 		private readonly StringName SHAKE_STATE_PARAMETER = "trio-fidget-shake";
 
@@ -209,6 +222,7 @@ namespace Project.Gameplay
 
 		private readonly StringName MOVEMENT_BLEND_PARAMETER = "parameters/movement_blend/blend_position";
 		private readonly StringName MOVEMENT_SPEED_PARAMETER = "parameters/movement_speed/scale";
+		private readonly StringName MOVEMENT_SEEK_PARAMETER = "parameters/movement_seek/seek_request";
 
 		private readonly StringName ATTACK_TRIGGER = "parameters/attack_trigger/request";
 
@@ -219,7 +233,7 @@ namespace Project.Gameplay
 				if ((string)animationTree.Get(MOVING_TRANSITION) == ENABLED_CONSTANT)
 				{
 					animationTree.Set(MOVING_TRANSITION_REQUEST, DISABLED_CONSTANT);
-					SelectIdleFidget();
+					animationTree.Set(IDLE_SEEK_PARAMETER, Runtime.randomNumberGenerator.RandfRange(0, 5));
 				}
 			}
 			else
