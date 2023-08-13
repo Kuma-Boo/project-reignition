@@ -1050,8 +1050,18 @@ namespace Project.Gameplay
 			public bool ignoreInvincibility;
 			/// <summary> Don't damage the player? </summary>
 			public bool disableDamage;
-			/// <summary> Always apply knockback, regardless of invincibility or state. </summary>
-			public bool forceActivation;
+			/// <summary> Always apply knockback, regardless of state. </summary>
+			public bool ignoreMovementState;
+
+			/// <summary> Override default knockback amount? </summary>
+			public bool overrideKnockbackSpeed;
+			/// <summary> Speed to assign to player. </summary>
+			public float knockbackSpeed;
+
+			/// <summary> Override default knockback height? </summary>
+			public bool overrideKnockbackHeight;
+			/// <summary> Height to move player by. </summary>
+			public float knockbackHeight;
 		}
 		private KnockbackSettings previousKnockbackSettings;
 
@@ -1071,16 +1081,19 @@ namespace Project.Gameplay
 
 			MovementAngle = PathFollower.ForwardAngle; //Prevent being knocked sideways
 
-			if (MovementState == MovementStates.Normal || knockbackSettings.forceActivation)
+			if (MovementState == MovementStates.Normal || knockbackSettings.ignoreMovementState)
 			{
 				Animator.Hurt();
 				previousKnockbackSettings = knockbackSettings;
 
-				MoveSpeed = knockbackSettings.knockForward ? 8f : -8f;
+				MoveSpeed = knockbackSettings.overrideKnockbackSpeed ? knockbackSettings.knockbackSpeed : 8f;
+				if (!knockbackSettings.knockForward)
+					MoveSpeed *= -1;
+
 				if (!knockbackSettings.stayOnGround)
 				{
 					IsOnGround = false;
-					VerticalSpeed = Runtime.CalculateJumpPower(1);
+					VerticalSpeed = Runtime.CalculateJumpPower(knockbackSettings.overrideKnockbackHeight ? knockbackSettings.knockbackHeight : 1);
 				}
 			}
 

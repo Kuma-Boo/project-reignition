@@ -1,5 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://dax0mun2bjm1v"]
+[gd_scene load_steps=19 format=3 uid="uid://dax0mun2bjm1v"]
 
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_inrdn"]
 [ext_resource type="PackedScene" uid="uid://bdqp0wj6evtuh" path="res://area/0 lost prologue/act/environment/collision/Collision.tscn" id="1_qgh10"]
 [ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/0 lost prologue/data/Environment.tres" id="2_ooith"]
 [ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/01Opening.tscn" id="3_gpjv8"]
@@ -22,7 +23,10 @@ size = Vector3(90, 20, 10)
 [sub_resource type="BoxShape3D" id="13"]
 size = Vector3(153.4, 20, 251.8)
 
-[node name="Static" type="Node"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
+script = ExtResource("1_inrdn")
+pathParent = NodePath("Path")
+environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("1_qgh10")]
 visible = false
@@ -56,9 +60,6 @@ directional_shadow_blend_splits = true
 directional_shadow_fade_start = 0.9
 directional_shadow_max_distance = 200.0
 directional_shadow_pancake_size = 0.0
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
-environment = ExtResource("2_ooith")
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -94,3 +95,6 @@ shape = SubResource("13")
 
 [node name="BGM" parent="." instance=ExtResource("15_cd8jc")]
 bus = &"BGM"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_ooith")

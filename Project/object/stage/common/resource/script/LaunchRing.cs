@@ -241,7 +241,7 @@ namespace Project.Gameplay.Objects
 			Character.StartKnockback(new CharacterController.KnockbackSettings()
 			{
 				stayOnGround = true,
-				forceActivation = true,
+				ignoreMovementState = true,
 			});
 		}
 	}

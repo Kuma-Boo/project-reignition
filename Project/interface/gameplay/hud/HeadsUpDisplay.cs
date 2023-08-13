@@ -67,8 +67,10 @@ namespace Project.Gameplay
 				if (maxRingLabel.Visible)
 					maxRingLabel.Text = Level.MissionObjectiveCount.ToString(RING_LABEL_FORMAT);
 
+				int startingRingCount = 0; // TODO Determine by skills
 				ringAnimator.Active = true;
-				UpdateRingCount(0, true);
+				UpdateRingCount(startingRingCount, true);
+				Level.UpdateRingCount(startingRingCount, LevelSettings.MathModeEnum.Replace, true);
 			}
 		}
 

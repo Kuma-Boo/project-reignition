@@ -2,17 +2,18 @@
 
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoTrio.cs" id="1_6nsvh"]
 [ext_resource type="PackedScene" uid="uid://ctbsi13u4rad0" path="res://area/2 dino jungle/object/model/dino/DinoTrio.gltf" id="1_57frd"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="2_6i8xh"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_d47gs"]
-radius = 4.5
+[sub_resource type="BoxShape3D" id="BoxShape3D_rux8y"]
+size = Vector3(2.5, 5, 9)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8caol"]
 animation = &"trio-attack"
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_dklgt"]
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_grb6f"]
 fadein_time = 0.2
-fadeout_time = 0.5
+fadeout_time = 1.2
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eqvhn"]
 animation = &"trio-fidget-paw"
@@ -44,24 +45,13 @@ xfade_time = 0.25
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_wcpqs"]
 states/trio-fidget-paw/node = SubResource("AnimationNodeAnimation_eqvhn")
-states/trio-fidget-paw/position = Vector2(495.2, 101.488)
+states/trio-fidget-paw/position = Vector2(495.2, 101.795)
 states/trio-fidget-shake/node = SubResource("AnimationNodeAnimation_3hfkb")
-states/trio-fidget-shake/position = Vector2(331.52, 174)
+states/trio-fidget-shake/position = Vector2(331.104, 174)
 states/trio-idle/node = SubResource("AnimationNodeAnimation_4acdl")
 states/trio-idle/position = Vector2(331.2, 99.76)
 transitions = ["Start", "trio-idle", SubResource("AnimationNodeStateMachineTransition_3k72x"), "trio-fidget-paw", "trio-idle", SubResource("AnimationNodeStateMachineTransition_hyoy8"), "trio-fidget-shake", "trio-idle", SubResource("AnimationNodeStateMachineTransition_empis"), "trio-idle", "trio-fidget-shake", SubResource("AnimationNodeStateMachineTransition_dthfr"), "trio-idle", "trio-fidget-paw", SubResource("AnimationNodeStateMachineTransition_cpjyf")]
 graph_offset = Vector2(43, 5)
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_nk615"]
-
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_mgc27"]
-xfade_time = 0.4
-input_0/name = "idle"
-input_0/auto_advance = false
-input_0/reset = true
-input_1/name = "moving"
-input_1/auto_advance = false
-input_1/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mbdbg"]
 animation = &"trio-walk"
@@ -77,61 +67,85 @@ blend_point_1/pos = 1.0
 min_space = 0.0
 sync = true
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_nk615"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_mgc27"]
+xfade_time = 0.4
+input_0/name = "disabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "enabled"
+input_1/auto_advance = false
+input_1/reset = true
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dcn5s"]
+graph_offset = Vector2(-323.575, 8.33031)
 nodes/attack/node = SubResource("AnimationNodeAnimation_8caol")
-nodes/attack/position = Vector2(-80, 336)
+nodes/attack/position = Vector2(-160, 368)
+nodes/attack_speed/node = SubResource("AnimationNodeTimeScale_dklgt")
+nodes/attack_speed/position = Vector2(-16, 304)
 nodes/attack_trigger/node = SubResource("AnimationNodeOneShot_grb6f")
 nodes/attack_trigger/position = Vector2(128, 112)
 nodes/idle_state/node = SubResource("AnimationNodeStateMachine_wcpqs")
-nodes/idle_state/position = Vector2(-336, 80)
+nodes/idle_state/position = Vector2(-320, 112)
+nodes/movement_blend/node = SubResource("AnimationNodeBlendSpace1D_kn0bb")
+nodes/movement_blend/position = Vector2(-544, 288)
 nodes/movement_speed/node = SubResource("AnimationNodeTimeScale_nk615")
 nodes/movement_speed/position = Vector2(-336, 288)
 nodes/moving_transition/node = SubResource("AnimationNodeTransition_mgc27")
 nodes/moving_transition/position = Vector2(-128, 112)
-nodes/movment_blend/node = SubResource("AnimationNodeBlendSpace1D_kn0bb")
-nodes/movment_blend/position = Vector2(-544, 288)
-node_connections = [&"attack_trigger", 0, &"moving_transition", &"attack_trigger", 1, &"attack", &"movement_speed", 0, &"movment_blend", &"moving_transition", 0, &"idle_state", &"moving_transition", 1, &"movement_speed", &"output", 0, &"attack_trigger"]
+node_connections = [&"output", 0, &"attack_trigger", &"attack_trigger", 0, &"moving_transition", &"attack_trigger", 1, &"attack_speed", &"movement_speed", 0, &"movement_blend", &"moving_transition", 0, &"idle_state", &"moving_transition", 1, &"movement_speed", &"attack_speed", 0, &"attack"]
 
-[node name="DinoTrio" type="PathFollow3D" node_paths=PackedStringArray("animator")]
+[node name="DinoTrio" type="PathFollow3D" node_paths=PackedStringArray("animationTree")]
 script = ExtResource("1_6nsvh")
-animator = NodePath("AnimationTree")
+traction = 20.0
+friction = 40.0
+preferredOffset = 5.0
+attackOffset = 10.0
+rubberbandingStrength = 0.6
+speedMultiplier = 1.0
+animationTree = NodePath("AnimationTree")
 
 [node name="Collision" type="Area3D" parent="."]
 collision_layer = 8
 collision_mask = 2
-script = ExtResource("2_6i8xh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
-shape = SubResource("SphereShape3D_d47gs")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_rux8y")
 
 [node name="DinoTrio" parent="." instance=ExtResource("1_57frd")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="DinoTrio/DinoTrioRoot" index="0"]
-bones/1/position = Vector3(-1.84096e-09, 2.96546, 0.0421269)
+bones/1/position = Vector3(-1.84096e-09, 2.85462, 0.0421269)
 bones/2/rotation = Quaternion(0.986246, -1.19156e-08, 2.61644e-06, -0.165285)
-bones/3/rotation = Quaternion(0.06656, -2.2817e-06, 5.81026e-07, 0.997782)
-bones/4/rotation = Quaternion(0.786205, -1.06885e-06, 2.27749e-06, 0.617966)
-bones/5/rotation = Quaternion(-0.41868, 4.64483e-07, -1.25786e-06, 0.908134)
-bones/6/rotation = Quaternion(0.78632, 7.03623e-05, -1.20156e-05, 0.617819)
-bones/7/rotation = Quaternion(-0.418672, -9.85588e-06, -4.0862e-05, 0.908138)
-bones/8/rotation = Quaternion(-0.767081, 1.42859e-05, 4.14004e-05, 0.641551)
-bones/9/rotation = Quaternion(0.261884, 3.95447e-05, -8.86975e-05, 0.965099)
-bones/10/rotation = Quaternion(-0.767081, -2.05452e-07, -1.21659e-06, 0.641551)
-bones/11/rotation = Quaternion(0.261884, -5.93987e-07, 1.53498e-06, 0.965099)
-bones/12/rotation = Quaternion(-0.00341083, -6.40055e-10, 1.88575e-07, 0.999994)
-bones/13/rotation = Quaternion(0.0547228, 2.04109e-09, -4.29451e-07, 0.998502)
+bones/3/rotation = Quaternion(0.100407, -2.27363e-06, 6.31543e-07, 0.994946)
+bones/4/rotation = Quaternion(0.812515, -1.04427e-06, 2.37551e-06, 0.58294)
+bones/5/rotation = Quaternion(-0.51688, 4.35469e-07, -1.55996e-06, 0.856058)
+bones/6/rotation = Quaternion(0.812628, 6.77446e-05, -1.47863e-05, 0.582783)
+bones/7/rotation = Quaternion(-0.516864, -9.71521e-06, -5.18814e-05, 0.856067)
+bones/8/rotation = Quaternion(-0.797164, 2.64323e-05, 5.3967e-05, 0.603763)
+bones/9/rotation = Quaternion(0.376495, 3.79463e-05, -0.000127266, 0.926419)
+bones/10/rotation = Quaternion(-0.797164, -3.93023e-07, -1.43666e-06, 0.603763)
+bones/11/rotation = Quaternion(0.376495, -5.69285e-07, 2.19001e-06, 0.926419)
+bones/12/rotation = Quaternion(-0.0697905, -1.31576e-08, 1.88116e-07, 0.997562)
+bones/13/rotation = Quaternion(0.0665371, 2.23216e-09, -4.33025e-07, 0.997784)
 bones/20/rotation = Quaternion(-0.707108, 0.000270456, 0.000270456, 0.707106)
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_dcn5s")
 anim_player = NodePath("../DinoTrio/AnimationPlayer")
+parameters/attack_speed/scale = 1.2
 parameters/attack_trigger/active = false
 parameters/attack_trigger/internal_active = false
 parameters/attack_trigger/request = 0
+parameters/movement_blend/blend_position = 1.0
 parameters/movement_speed/scale = 1.0
-parameters/moving_transition/current_state = "idle"
+parameters/moving_transition/current_state = "disabled"
 parameters/moving_transition/transition_request = ""
 parameters/moving_transition/current_index = 0
-parameters/movment_blend/blend_position = 0.0
+
+[connection signal="area_entered" from="Collision" to="." method="OnEntered"]
 
 [editable path="DinoTrio"]

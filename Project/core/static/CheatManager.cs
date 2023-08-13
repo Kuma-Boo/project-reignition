@@ -15,6 +15,8 @@ namespace Project.Core
 
 		/// <summary> Infinite soul gauge. </summary>
 		public static bool InfiniteSoulGauge => EnableCheats && true;
+		/// <summary> Infinite soul gauge. </summary>
+		public static bool InfiniteRings => EnableCheats && true;
 		/// <summary> Skip countdowns for faster debugging. </summary>
 		public static bool SkipCountdown => EnableCheats && true;
 

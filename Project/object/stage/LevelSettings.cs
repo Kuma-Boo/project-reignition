@@ -362,6 +362,9 @@ namespace Project.Gameplay
 				FinishLevel(true);
 			}
 
+			if (CheatManager.InfiniteRings) // Infinite ring cheat
+				CurrentRingCount = 999;
+
 			EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 		}
 

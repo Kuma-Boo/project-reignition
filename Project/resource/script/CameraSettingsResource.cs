@@ -34,7 +34,7 @@ namespace Project.Gameplay
 			properties.Add(ExtensionMethods.CreateProperty(STATIC_CAMERA_KEY, Variant.Type.Bool));
 			if (!isStaticCamera)
 			{
-				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
 				properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
 				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_MODE_KEY, Variant.Type.Int, PropertyHint.Enum, distanceCalculationMode.EnumToString()));
 
