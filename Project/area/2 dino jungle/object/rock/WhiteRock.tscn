@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnwhks8ciopdd"]
+[gd_scene load_steps=9 format=3 uid="uid://cnwhks8ciopdd"]
 
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_45nuq"]
 [ext_resource type="PackedScene" uid="uid://dg1hjwb52rbkk" path="res://area/2 dino jungle/object/model/rock/WhiteRock.gltf" id="1_wso5u"]
+[ext_resource type="PackedScene" uid="uid://c0ph8vi1nx1vs" path="res://area/2 dino jungle/object/model/rock/WhiteRockPieces.gltf" id="3_uwb6q"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qdoo2"]
 radius = 1.0
@@ -10,17 +12,134 @@ height = 3.0
 height = 2.2
 radius = 0.7
 
-[node name="WhiteRock" instance=ExtResource("1_wso5u")]
-collision_layer = 8
-collision_mask = 2
+[sub_resource type="Animation" id="Animation_rcpcg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Trigger:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_slgct"]
+resource_name = "shatter"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Trigger:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rshkq"]
+_data = {
+"RESET": SubResource("Animation_rcpcg"),
+"shatter": SubResource("Animation_slgct")
+}
+
+[node name="WhiteRock" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_45nuq")
+pieceMass = 0.2
+root = NodePath("Root/WhiteRock")
+pieceRoot = NodePath("WhiteRockPieces")
+animator = NodePath("AnimationPlayer")
+shatterFlags = 18
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 10
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_qdoo2")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="3" groups=["floor", "splash jump", "wall"]]
+[node name="Root" type="StaticBody3D" parent="." groups=["floor", "splash jump", "wall"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+[node name="WhiteRock" parent="Root" instance=ExtResource("1_wso5u")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CylinderShape3D_m56ji")
+
+[node name="WhiteRockPieces" parent="." instance=ExtResource("3_uwb6q")]
+visible = false
+
+[node name="WhiteRockPiece1" parent="WhiteRockPieces" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.43535, 0)
+
+[node name="WhiteRockPiece2" parent="WhiteRockPieces" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403744, 1.00079, 0)
+
+[node name="WhiteRockPiece4" parent="WhiteRockPieces" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.84168, -0.0765405)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rshkq")
+}
+
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]
+[connection signal="body_entered" from="Trigger" to="." method="OnBodyEntered"]
+
+[editable path="WhiteRockPieces"]

@@ -1,4 +1,6 @@
 using Godot;
+using Project.Gameplay.Objects;
+
 
 namespace Project.Gameplay
 {
@@ -22,12 +24,6 @@ namespace Project.Gameplay
 		{
 		}
 
-		public void MyFunction()
-		{
-
-		}
-
-
 		public void OnAreaEntered(Area3D area)
 		{
 			if (area.IsInGroup("player"))
@@ -38,6 +34,8 @@ namespace Project.Gameplay
 					ignoreInvincibility = true, // Always knockback the player
 					disableDamage = CharacterController.instance.IsInvincible, // Don't hurt player during invincibility
 				});
+
+				return;
 			}
 		}
 	}
