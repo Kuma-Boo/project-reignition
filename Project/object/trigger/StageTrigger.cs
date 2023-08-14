@@ -131,7 +131,7 @@ namespace Project.Gameplay.Triggers
 			}
 
 			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
-				LevelSettings.instance.ConnectRespawnSignal(this);
+				StageSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		public void Respawn()
@@ -140,7 +140,7 @@ namespace Project.Gameplay.Triggers
 			{
 				//Compare the currentCheckpoint progress compared to this StageTrigger
 				float eventPosition = PathFollower.GetProgress(GlobalPosition);
-				float checkpointPosition = PathFollower.GetProgress(LevelSettings.instance.CurrentCheckpoint.GlobalPosition);
+				float checkpointPosition = PathFollower.GetProgress(StageSettings.instance.CurrentCheckpoint.GlobalPosition);
 				bool isRespawningAhead = checkpointPosition > eventPosition;
 
 				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||

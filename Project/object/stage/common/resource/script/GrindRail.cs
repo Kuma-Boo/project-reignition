@@ -349,7 +349,7 @@ namespace Project.Gameplay
 		{
 			shuffleBufferTimer = 0; // Reset input buffer
 
-			LevelSettings.instance.AddBonus(isPerfectShuffle ? LevelSettings.BonusType.PerfectGrindShuffle : LevelSettings.BonusType.GrindShuffle);
+			StageSettings.instance.AddBonus(isPerfectShuffle ? StageSettings.BonusType.PerfectGrindShuffle : StageSettings.BonusType.GrindShuffle);
 
 			Character.MoveSpeed = isPerfectShuffle ? Skills.perfectShuffleSpeed : Skills.grindSettings.speed;
 			Character.Animator.StartGrindShuffle();

@@ -81,7 +81,7 @@ namespace Project.Gameplay.Objects
 			startingProgress = pathFollower.Progress;
 			spawnData = new SpawnData(GetParent(), Transform); // Create spawn data
 
-			LevelSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)

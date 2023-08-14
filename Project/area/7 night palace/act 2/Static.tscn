@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=19 format=3 uid="uid://ch46r833tuwi0"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_6j01u"]
 [ext_resource type="Curve3D" uid="uid://c87yklkwfa334" path="res://area/7 night palace/act 2/environment/path/MainPath.tres" id="2_gnax0"]
 [ext_resource type="PackedScene" uid="uid://baa0itya2nvqn" path="res://area/7 night palace/act 2/environment/NPAct2.tscn" id="2_la3f2"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_ueibm"]
 [ext_resource type="PackedScene" uid="uid://b4gexcm5wctiv" path="res://area/7 night palace/act 2/environment/collision/Collision.tscn" id="3_1m48j"]
 [ext_resource type="PackedScene" path="res://area/7 night palace/data/BGM.tscn" id="3_j1s7w"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_jkftw"]
@@ -34,15 +35,48 @@ size = Vector3(120, 10, 30)
 [sub_resource type="BoxShape3D" id="BoxShape3D_5st8l"]
 size = Vector3(70, 10, 60)
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("mainPath")]
+[node name="Static" type="Node3D"]
 script = ExtResource("1_6j01u")
-mainPath = NodePath("Path/MainPath")
+"Level ID" = "np_a2"
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = null
+"Story Event Index" = -1
+"Dialog Library" = null
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = ExtResource("2_ueibm")
+"Completion/Demo Animator" = NodePath("")
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("WorldEnvironment")
 
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="NPAct2" parent="Visuals" instance=ExtResource("2_la3f2")]
 
 [node name="SpaceSkybox" parent="Visuals" instance=ExtResource("4_0qu5p")]
+
+[node name="Lights" type="Node3D" parent="Visuals"]
+
+[node name="MainLight" type="DirectionalLight3D" parent="Visuals/Lights"]
+transform = Transform3D(-0.984808, 3.00452e-09, -0.173648, 0.17318, 0.0733427, -0.982156, 0.0127358, -0.997307, -0.0722284, 0, 0, 0)
+light_color = Color(0.901961, 1, 1, 1)
+light_energy = 1.4
+light_cull_mask = 4293918727
+
+[node name="EnvironmentLight" type="DirectionalLight3D" parent="Visuals/Lights"]
+transform = Transform3D(-0.984808, -2.27712e-08, 0.173648, 0.173648, -1.29142e-07, 0.984808, 7.64274e-15, 1, 1.31134e-07, 0, 0, 0)
+layers = 6
+light_color = Color(0.92549, 0.882353, 0.752941, 1)
+light_energy = 0.4
+light_cull_mask = 4293918727
 
 [node name="Collision" parent="." instance=ExtResource("3_1m48j")]
 visible = false
@@ -94,23 +128,8 @@ shape = SubResource("BoxShape3D_5st8l")
 [node name="MainPath" type="Path3D" parent="Path"]
 curve = ExtResource("2_gnax0")
 
-[node name="Lighting" type="Node3D" parent="."]
-
-[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.984808, 3.00452e-09, -0.173648, 0.17318, 0.0733427, -0.982156, 0.0127358, -0.997307, -0.0722284, 0, 0, 0)
-light_color = Color(0.901961, 1, 1, 1)
-light_energy = 1.4
-light_cull_mask = 4293918727
-
-[node name="EnvironmentLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.984808, -2.27712e-08, 0.173648, 0.173648, -1.29142e-07, 0.984808, 7.64274e-15, 1, 1.31134e-07, 0, 0, 0)
-layers = 6
-light_color = Color(0.92549, 0.882353, 0.752941, 1)
-light_energy = 0.4
-light_cull_mask = 4293918727
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
-environment = ExtResource("8_6epym")
-
 [node name="BGM" parent="." instance=ExtResource("3_j1s7w")]
 bus = &"BGM"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("8_6epym")

@@ -53,7 +53,7 @@ namespace Project.Gameplay.Bosses
 			//_eventAnimator.Play("intro"); Intro animation isn't animated yet.
 			GD.Print("Skipping intro animation.");
 
-			LevelSettings.instance.ConnectUnloadSignal(this);
+			StageSettings.instance.ConnectUnloadSignal(this);
 			Character.Connect(CharacterController.SignalName.Respawn, new Callable(this, MethodName.Respawn));
 			Respawn();
 		}

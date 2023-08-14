@@ -29,7 +29,7 @@ namespace Project.Gameplay
 
 		protected override void SetUp()
 		{
-			LevelSettings.instance.ConnectUnloadSignal(this);
+			StageSettings.instance.ConnectUnloadSignal(this);
 
 			for (int i = 0; i < MAX_SEED_COUNT; i++)
 			{

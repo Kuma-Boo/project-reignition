@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://efrfjkjxlfc8" path="res://area/1 sand oasis/act 1/environment/01Opening.tscn" id="2_eyaqr"]
 [ext_resource type="Resource" uid="uid://b57nulf6d3pq4" path="res://sound/voice/sand oasis/DialogLibrary.tres" id="2_qgupw"]
 [ext_resource type="PackedScene" uid="uid://bu2kguc4ygtbo" path="res://area/1 sand oasis/act 1/environment/02Slope.tscn" id="3_b4ate"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="3_cy8o7"]
 [ext_resource type="PackedScene" uid="uid://cq0d65qpud85m" path="res://area/1 sand oasis/act 1/environment/03Oasis.tscn" id="4_qddv3"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_4sfp2"]
 [ext_resource type="PackedScene" uid="uid://cn1pgixwy7otq" path="res://area/1 sand oasis/act 1/environment/04Forest.tscn" id="5_i1spc"]
@@ -33,7 +34,6 @@
 [ext_resource type="Resource" uid="uid://dq3y0ns7mcco5" path="res://area/1 sand oasis/act 1/camera/OasisCam.tres" id="23_vlc8n"]
 [ext_resource type="Resource" uid="uid://dx47u8sre674v" path="res://area/1 sand oasis/act 1/camera/SidleCornerCam.tres" id="24_nfyes"]
 [ext_resource type="Resource" uid="uid://cfbyfp0sae1jm" path="res://area/1 sand oasis/act 1/camera/HallCam.tres" id="24_qtnck"]
-[ext_resource type="Resource" uid="uid://brknjxuaah7xr" path="res://area/1 sand oasis/act 1/camera/OpeningCam.tres" id="26_cxtmr"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="27_ypwqo"]
 [ext_resource type="Resource" uid="uid://dd0ulcjl72sfi" path="res://resource/preset/camera/common/WallForwardCam.tres" id="27_ywd2q"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="28_5kt56"]
@@ -96,12 +96,27 @@ size = Vector3(20, 20, 2.5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_njmjg"]
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
+[node name="Static" type="Node3D"]
 script = ExtResource("1_0njhg")
-initialCameraSettings = ExtResource("26_cxtmr")
-pathParent = NodePath("Path")
-dialogLibrary = ExtResource("2_qgupw")
-environment = NodePath("Visuals/WorldEnvironment")
+"Level ID" = "so_a1"
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = null
+"Story Event Index" = -1
+"Dialog Library" = ExtResource("2_qgupw")
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = ExtResource("3_cy8o7")
+"Completion/Demo Animator" = NodePath("")
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("1_pkods")]
 visible = false
@@ -785,9 +800,6 @@ layers = 2
 cast_shadow = 3
 mesh = SubResource("PlaneMesh_njmjg")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
-environment = ExtResource("21_xtian")
-
 [node name="Path" type="Node3D" parent="."]
 
 [node name="OasisPath" type="Path3D" parent="Path"]
@@ -827,6 +839,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -663.715, -40, -765)
 curve = ExtResource("45_mavj3")
 
 [node name="BGM" parent="." instance=ExtResource("14_ej622")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("21_xtian")
 
 [node name="DepthRenderer" parent="." instance=ExtResource("27_ypwqo")]
 

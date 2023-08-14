@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://7kcasi6v1odv"]
+[gd_scene load_steps=14 format=3 uid="uid://7kcasi6v1odv"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fxxlg"]
 [ext_resource type="PackedScene" uid="uid://ctpgc4qaiar68" path="res://area/1 sand oasis/act 2/environment/collision/Collision.tscn" id="1_wbafh"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="2_1co7j"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_qu7ja"]
 [ext_resource type="PackedScene" uid="uid://bgg1qa2ad1gbh" path="res://area/1 sand oasis/act 2/environment/00Exterior.tscn" id="3_5ndpe"]
 [ext_resource type="PackedScene" uid="uid://bdy7ivd82yprv" path="res://area/1 sand oasis/act 2/environment/01MainHall.tscn" id="4_l4am4"]
 [ext_resource type="PackedScene" uid="uid://b1dvfuglm1ahd" path="res://area/1 sand oasis/act 2/environment/02Descent.tscn" id="5_m10wp"]
@@ -13,10 +14,27 @@
 [ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="10_f773a"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="12_pipgr"]
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
+[node name="Static" type="Node3D"]
 script = ExtResource("1_fxxlg")
-pathParent = NodePath("Paths")
-environment = NodePath("Environment")
+"Level ID" = "so_a2"
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = null
+"Story Event Index" = -1
+"Dialog Library" = null
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = ExtResource("2_qu7ja")
+"Completion/Demo Animator" = NodePath("")
+"Static/Path Parent" = NodePath("Paths")
+Static/Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("1_wbafh")]
 visible = false
@@ -40,7 +58,7 @@ visible = false
 [node name="MainPath" type="Path3D" parent="Paths"]
 curve = ExtResource("8_5ae3c")
 
-[node name="Environment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("9_jnh50")
 
 [node name="DepthRenderer" parent="." instance=ExtResource("12_pipgr")]

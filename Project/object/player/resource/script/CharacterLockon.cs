@@ -51,7 +51,7 @@ namespace Project.Gameplay
 			IsHomingAttacking = true;
 			IsPerfectHomingAttack = monitoringPerfectHomingAttack;
 			if (IsPerfectHomingAttack)
-				LevelSettings.instance.AddBonus(LevelSettings.BonusType.PerfectHomingAttack);
+				StageSettings.instance.AddBonus(StageSettings.BonusType.PerfectHomingAttack);
 		}
 
 

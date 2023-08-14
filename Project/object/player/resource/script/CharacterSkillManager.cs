@@ -212,8 +212,8 @@ namespace Project.Gameplay
 		{
 			//Update timebreak satutration visuals
 			float targetSaturation = IsTimeBreakActive ? 0.1f : 1.0f;
-			StageSettings.instance.environment.Environment.AdjustmentSaturation =
-				Mathf.MoveToward(StageSettings.instance.environment.Environment.AdjustmentSaturation, targetSaturation, SATURATION_ADJUSTMENT_SPEED * PhysicsManager.physicsDelta);
+			StageSettings.instance.Environment.Environment.AdjustmentSaturation =
+				Mathf.MoveToward(StageSettings.instance.Environment.Environment.AdjustmentSaturation, targetSaturation, SATURATION_ADJUSTMENT_SPEED * PhysicsManager.physicsDelta);
 
 			if (IsTimeBreakActive)
 			{

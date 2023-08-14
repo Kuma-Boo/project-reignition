@@ -100,9 +100,9 @@ namespace Project.Gameplay.Objects
 			Respawn();
 
 			if (!disableRespawn)
-				LevelSettings.instance.ConnectRespawnSignal(this);
+				StageSettings.instance.ConnectRespawnSignal(this);
 
-			LevelSettings.instance.ConnectUnloadSignal(this);
+			StageSettings.instance.ConnectUnloadSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)

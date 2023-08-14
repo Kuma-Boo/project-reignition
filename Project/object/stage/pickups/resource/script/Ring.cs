@@ -22,14 +22,14 @@ namespace Project.Gameplay.Objects
 		{
 			if (isRichRing)
 			{
-				Level.UpdateScore(100, LevelSettings.MathModeEnum.Add);
-				Level.UpdateRingCount(20, LevelSettings.MathModeEnum.Add);
+				Stage.UpdateScore(100, StageSettings.MathModeEnum.Add);
+				Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Add);
 				SoundManager.instance.PlayRichRingSFX();
 			}
 			else
 			{
-				Level.UpdateScore(10, LevelSettings.MathModeEnum.Add);
-				Level.UpdateRingCount(1, LevelSettings.MathModeEnum.Add);
+				Stage.UpdateScore(10, StageSettings.MathModeEnum.Add);
+				Stage.UpdateRingCount(1, StageSettings.MathModeEnum.Add);
 				SoundManager.instance.PlayRingSFX();
 			}
 

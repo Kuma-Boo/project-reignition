@@ -30,7 +30,7 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
-			LevelSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
 

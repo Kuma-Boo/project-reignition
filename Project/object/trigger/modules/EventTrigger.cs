@@ -35,7 +35,7 @@ namespace Project.Gameplay.Triggers
 		public override void _Ready()
 		{
 			if (autoRespawn)
-				LevelSettings.instance.ConnectRespawnSignal(this);
+				StageSettings.instance.ConnectRespawnSignal(this);
 		}
 
 

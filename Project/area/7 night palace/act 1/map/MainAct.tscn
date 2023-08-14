@@ -1,8 +1,6 @@
-[gd_scene load_steps=58 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=54 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_lgy0w"]
-[ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_4hrnj"]
 [ext_resource type="PackedScene" uid="uid://ctfcgpodfhnp0" path="res://area/7 night palace/act 1/Static.tscn" id="3_ksvvu"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_kcdaq"]
 [ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="4_nmhcr"]
@@ -41,8 +39,6 @@
 [ext_resource type="PackedScene" uid="uid://o1hcy4hf5kg" path="res://area/7 night palace/object/obstacle/Stopper.tscn" id="37_mso31"]
 [ext_resource type="PackedScene" uid="uid://bdntsfu7j7ix8" path="res://area/7 night palace/object/obstacle/Hourglass.tscn" id="38_8l44y"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="38_cjtko"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="40_aq052"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="40_odre4"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="42_m3821"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="43_sswox"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="44_dyala"]
@@ -189,22 +185,12 @@ _data = {
 
 [node name="World" type="Node"]
 
-[node name="MainAct" type="Node3D" parent="."]
-script = ExtResource("1_lgy0w")
+[node name="Static" parent="." instance=ExtResource("3_ksvvu")]
 "Level ID" = "np_a1_main"
-"Mission Type" = 0
-"Time Limit" = 0.0
-"Story Event Index" = -1
 "Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = ExtResource("2_4hrnj")
+"Completion/Demo Animator" = NodePath("")
+
+[node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
@@ -1683,44 +1669,19 @@ Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" instance=ExtResource("5_guij8")]
 
-[node name="Child02" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
 [node name="InvisibleGrindrail4" parent="MainAct/SpaceB/GrindrailGroup1" instance=ExtResource("25_t50ri")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, -3.10001, 0, -38)
@@ -1738,84 +1699,34 @@ Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
+[node name="Child01" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 
-[node name="Child02" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child02" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child03" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child03" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child04" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child04" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child05" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child05" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child06" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child06" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child07" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child07" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child08" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child08" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child09" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child09" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child10" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child10" parent="MainAct/SpaceB/GrindrailGroup1/PearlsL1" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
 [node name="PearlsR1" type="Node3D" parent="MainAct/SpaceB/GrindrailGroup1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60001, -2.2, -25.3)
@@ -1997,44 +1908,19 @@ Spacing = 4.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" instance=ExtResource("5_guij8")]
 
-[node name="Child02" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/SpaceB/GrindrailGroup2/Rings1" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
 [node name="Rings2" type="Node3D" parent="MainAct/SpaceB/GrindrailGroup2"]
 transform = Transform3D(1, 0, 2.84217e-14, 0, 1, 0, -2.84217e-14, 0, 1, 3.10001, -1.99832, -30.8593)
@@ -2048,60 +1934,25 @@ Spacing = 2.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" instance=ExtResource("5_guij8")]
 
-[node name="Child02" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child06" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child07" parent="MainAct/SpaceB/GrindrailGroup2/Rings2" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
 [node name="InvisibleGrindrail1" parent="MainAct/SpaceB/GrindrailGroup2" instance=ExtResource("25_t50ri")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.10001, 0, 0)
@@ -2119,164 +1970,64 @@ Spacing = 1.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
+[node name="Child01" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 
-[node name="Child02" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child02" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child03" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child03" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child04" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child04" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child05" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child05" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child06" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child06" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child07" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child07" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child08" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child08" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child09" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child09" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child10" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child10" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child11" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child11" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child12" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child12" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child13" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child13" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child14" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child14" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child15" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child15" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child16" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child16" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child17" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child17" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child18" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child18" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child19" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child19" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child20" type="Area3D" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("38_cjtko")]
+[node name="Child20" parent="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_odre4")
-collider = NodePath("CollisionShape3D")
 
 [node name="InvisibleGrindrail2" parent="MainAct/SpaceB/GrindrailGroup2" instance=ExtResource("25_t50ri")]
 transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 3.10001, 0, -21)
@@ -2396,84 +2147,34 @@ Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 
-[node name="Child02" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child06" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child07" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child08" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child09" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child09" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child10" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsL" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child10" parent="MainAct/SpaceB/EnemyGroup/RingsL" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
 [node name="RingsR" type="Node3D" parent="MainAct/SpaceB/EnemyGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.799988, 1, -1)
@@ -2487,84 +2188,34 @@ Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 
-[node name="Child02" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child06" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child07" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child08" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child09" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child09" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child10" type="Area3D" parent="MainAct/SpaceB/EnemyGroup/RingsR" node_paths=PackedStringArray("animator") instance=ExtResource("5_guij8")]
+[node name="Child10" parent="MainAct/SpaceB/EnemyGroup/RingsR" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("40_aq052")
-animator = NodePath("AnimationPlayer")
 
 [node name="SpacePanel" parent="MainAct/SpaceB/EnemyGroup" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 4, -76)
@@ -3643,8 +3294,6 @@ saveVisibilityOnCheckpoint = true
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 206, 0, 0)
 warpTarget = NodePath("../../../Ending/GateC")
 
-[node name="Static" parent="." instance=ExtResource("3_ksvvu")]
-
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin1" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/GreenMajin" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin2" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
@@ -3697,73 +3346,6 @@ warpTarget = NodePath("../../../Ending/GateC")
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Trigger/Path/GasRoomPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Visuals/SpaceSection/NPSpaceA" method="Deactivate"]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child01" to="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child02" to="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child03" to="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child04" to="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child05" to="MainAct/SpaceB/GrindrailGroup1/InvisibleGrindrail3/Rings/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child01" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child02" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child03" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child04" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child05" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child06" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child06" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child07" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child07" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child08" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child08" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child09" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child09" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child10" to="MainAct/SpaceB/GrindrailGroup1/PearlsL1/Child10" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings1/Child01" to="MainAct/SpaceB/GrindrailGroup2/Rings1/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings1/Child02" to="MainAct/SpaceB/GrindrailGroup2/Rings1/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings1/Child03" to="MainAct/SpaceB/GrindrailGroup2/Rings1/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings1/Child04" to="MainAct/SpaceB/GrindrailGroup2/Rings1/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings1/Child05" to="MainAct/SpaceB/GrindrailGroup2/Rings1/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings2/Child01" to="MainAct/SpaceB/GrindrailGroup2/Rings2/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings2/Child02" to="MainAct/SpaceB/GrindrailGroup2/Rings2/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings2/Child03" to="MainAct/SpaceB/GrindrailGroup2/Rings2/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings2/Child04" to="MainAct/SpaceB/GrindrailGroup2/Rings2/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings2/Child05" to="MainAct/SpaceB/GrindrailGroup2/Rings2/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings2/Child06" to="MainAct/SpaceB/GrindrailGroup2/Rings2/Child06" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/Rings2/Child07" to="MainAct/SpaceB/GrindrailGroup2/Rings2/Child07" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child01" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child02" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child03" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child04" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child05" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child06" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child06" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child07" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child07" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child08" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child08" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child09" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child09" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child10" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child10" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child11" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child11" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child12" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child12" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child13" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child13" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child14" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child14" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child15" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child15" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child16" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child16" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child17" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child17" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child18" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child18" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child19" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child19" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child20" to="MainAct/SpaceB/GrindrailGroup2/InvisibleGrindrail1/Pearls/Child20" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child01" to="MainAct/SpaceB/EnemyGroup/RingsL/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child02" to="MainAct/SpaceB/EnemyGroup/RingsL/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child03" to="MainAct/SpaceB/EnemyGroup/RingsL/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child04" to="MainAct/SpaceB/EnemyGroup/RingsL/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child05" to="MainAct/SpaceB/EnemyGroup/RingsL/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child06" to="MainAct/SpaceB/EnemyGroup/RingsL/Child06" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child07" to="MainAct/SpaceB/EnemyGroup/RingsL/Child07" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child08" to="MainAct/SpaceB/EnemyGroup/RingsL/Child08" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child09" to="MainAct/SpaceB/EnemyGroup/RingsL/Child09" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsL/Child10" to="MainAct/SpaceB/EnemyGroup/RingsL/Child10" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child01" to="MainAct/SpaceB/EnemyGroup/RingsR/Child01" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child02" to="MainAct/SpaceB/EnemyGroup/RingsR/Child02" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child03" to="MainAct/SpaceB/EnemyGroup/RingsR/Child03" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child04" to="MainAct/SpaceB/EnemyGroup/RingsR/Child04" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child05" to="MainAct/SpaceB/EnemyGroup/RingsR/Child05" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child06" to="MainAct/SpaceB/EnemyGroup/RingsR/Child06" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child07" to="MainAct/SpaceB/EnemyGroup/RingsR/Child07" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child08" to="MainAct/SpaceB/EnemyGroup/RingsR/Child08" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child09" to="MainAct/SpaceB/EnemyGroup/RingsR/Child09" method="OnEntered" flags=18]
-[connection signal="area_entered" from="MainAct/SpaceB/EnemyGroup/RingsR/Child10" to="MainAct/SpaceB/EnemyGroup/RingsR/Child10" method="OnEntered" flags=18]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/BlueMajin1" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/BlueMajin1" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/BlueMajin1" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone3" method="IncrementCounter"]

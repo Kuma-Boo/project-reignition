@@ -41,7 +41,7 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Smoothing to apply when slowing down.  </summary>
 		private const float FRICTION_SMOOTHING = .4f;
 
-		public override void _Ready() => LevelSettings.instance.ConnectRespawnSignal(this);
+		public override void _Ready() => StageSettings.instance.ConnectRespawnSignal(this);
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -171,7 +171,7 @@ namespace Project.Gameplay.Triggers
 			// Invincible/Damage routine has already started
 			if (Character.IsInvincible || damageState != DamageStates.Disabled) return;
 
-			if (LevelSettings.instance.CurrentRingCount == 0)
+			if (StageSettings.instance.CurrentRingCount == 0)
 			{
 				StopSidle();
 				Character.StartKnockback(new CharacterController.KnockbackSettings());

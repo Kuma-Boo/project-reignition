@@ -12,7 +12,7 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		private bool isStageVisuals; //Take CheatManager.DisableStageCulling into account?
 		private bool DebugDisableCulling => isStageVisuals && CheatManager.DisableStageCulling;
-		private LevelSettings Level => LevelSettings.instance;
+		private StageSettings Level => StageSettings.instance;
 
 		public override void _Ready()
 		{
@@ -24,7 +24,7 @@ namespace Project.Gameplay.Triggers
 				visibleOnCheckpoint = startEnabled;
 
 				//Listen for checkpoint signals
-				Level.Connect(LevelSettings.SignalName.OnTriggeredCheckpoint, new Callable(this, MethodName.ProcessCheckpoint));
+				Level.Connect(StageSettings.SignalName.OnTriggeredCheckpoint, new Callable(this, MethodName.ProcessCheckpoint));
 				Level.ConnectRespawnSignal(this);
 			}
 

@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3 uid="uid://554o5nn5ah4r"]
+
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_qxxdp"]
+[ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="1_vnwbt"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_43uh2"]
+[ext_resource type="PackedScene" uid="uid://756omvmukmd8" path="res://area/3 evil foundry/boss/environment/model/EFBoss.gltf" id="2_mkb4g"]
+[ext_resource type="Material" path="res://area/3 evil foundry/data/material/Lava.tres" id="3_eibot"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/boss/environment/collision/Collision.tscn" id="4_ptqv5"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/boss/environment/path/MainPath.tres" id="5_b4qr8"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/data/BGMBoss.tscn" id="6_yibqe"]
+
+[sub_resource type="PlaneMesh" id="3"]
+material = ExtResource("3_eibot")
+size = Vector2(100, 100)
+
+[node name="Static" type="Node3D"]
+script = ExtResource("1_qxxdp")
+"Level ID" = "ef_boss"
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = null
+"Story Event Index" = -1
+"Dialog Library" = null
+"Item Cycling/Activation Trigger" = null
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = ExtResource("2_43uh2")
+"Completion/Demo Animator" = null
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("WorldEnvironment")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="EFBoss" parent="Visuals" instance=ExtResource("2_mkb4g")]
+
+[node name="Lava" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+mesh = SubResource("3")
+
+[node name="OmniLight" type="OmniLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+light_color = Color(0.45098, 0.2, 0, 1)
+light_energy = 1.2
+shadow_enabled = true
+omni_range = 100.0
+omni_attenuation = 0.15529
+
+[node name="DirectionalLight" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -5, 0)
+light_color = Color(0.976471, 0.443137, 0, 1)
+light_energy = 2.4
+
+[node name="DirectionalLight2" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1.31134e-07, 1, 0, -1, 1.31134e-07, 0, -5, 0)
+light_color = Color(1, 0.623529, 0.14902, 1)
+light_energy = 0.4
+
+[node name="Collision" parent="." instance=ExtResource("4_ptqv5")]
+visible = false
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="MainPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
+curve = ExtResource("5_b4qr8")
+
+[node name="BGM" parent="." instance=ExtResource("6_yibqe")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_vnwbt")

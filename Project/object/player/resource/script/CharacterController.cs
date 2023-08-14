@@ -11,7 +11,7 @@ namespace Project.Gameplay
 	{
 		public static CharacterController instance;
 
-		public LevelSettings Level => LevelSettings.instance;
+		public StageSettings Level => StageSettings.instance;
 		public StageSettings Stage => StageSettings.instance;
 
 		public override void _EnterTree() => instance = this; //Always Override Singleton
@@ -28,8 +28,8 @@ namespace Project.Gameplay
 			Camera.PathFollower.SetActivePath(startingPath);
 
 			Level.SetCheckpoint(GetParent<Triggers.CheckpointTrigger>()); //Initial checkpoint configuration
-			Level.UpdateRingCount(Skills.StartingRingCount, LevelSettings.MathModeEnum.Replace); //Start with the proper ring count
-			Level.Connect(LevelSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
+			Level.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); //Start with the proper ring count
+			Level.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -1119,7 +1119,7 @@ namespace Project.Gameplay
 			if (Level.CurrentRingCount == 0)
 				StartRespawn();
 			else
-				Level.UpdateRingCount(20, LevelSettings.MathModeEnum.Subtract);
+				Level.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
 		}
 
 		[Signal]
@@ -1175,7 +1175,7 @@ namespace Project.Gameplay
 
 			Level.RespawnObjects();
 			Level.IncrementRespawnCount();
-			Level.UpdateRingCount(Skills.RespawnRingCount, LevelSettings.MathModeEnum.Replace, true); //Reset ring count
+			Level.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); //Reset ring count
 
 			EmitSignal(SignalName.Respawn);
 

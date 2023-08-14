@@ -1,15 +1,20 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=7 format=3 uid="uid://ciqbaxbhrxrjk"]
 
-[ext_resource type="PackedScene" uid="uid://ch6ygjlfbysyw" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_f1agf"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="3_7xkky"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_qelh1"]
-[ext_resource type="PackedScene" uid="uid://b41nu8t4ive34" path="res://area/3 evil foundry/act 1/Static.tscn" id="5_fqsot"]
+[ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="5_fqsot"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_744t3"]
 radius = 3.0
 
 [node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("5_fqsot")]
+"Level ID" = "ef_a1_main"
+"Item Cycling/Activation Trigger" = NodePath("")
+"Completion/Demo Animator" = NodePath("")
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -29,5 +34,3 @@ script = ExtResource("4_qelh1")
 
 [node name="CollisionShape3d" type="CollisionShape3D" parent="MainAct/SpawnPosition/SpawnTrigger"]
 shape = SubResource("SphereShape3D_744t3")
-
-[node name="Static" parent="." instance=ExtResource("5_fqsot")]

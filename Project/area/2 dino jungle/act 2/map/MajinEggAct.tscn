@@ -1,9 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://byovecvbub7lf"]
+[gd_scene load_steps=20 format=3 uid="uid://byovecvbub7lf"]
 
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_cngxd"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="3"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_asuc3"]
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="4"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="7"]
@@ -30,23 +28,13 @@ size = Vector3(9.4, 11.5, 2)
 
 [node name="Stage" type="Node"]
 
-[node name="MajinEggAct" type="Node3D" parent="."]
-script = ExtResource("4")
-"Level ID" = "dj_a2_majin"
+[node name="Static" parent="." instance=ExtResource("18_547h0")]
+"Level ID" = "dj_a2_majin_egg"
 "Mission Type" = 1
-"Time Limit" = 0.0
 "Objective Count" = 5
-"Story Event Index" = -1
 "Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = ExtResource("2_cngxd")
+
+[node name="MajinEggAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MajinEggAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.3, -2, -6)
@@ -994,14 +982,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90211, 0, -0.618034)
 [node name="Ring10" parent="MajinEggAct/RightPath/Ring2" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17557, 0, -1.61803)
 
-[node name="Static" parent="." instance=ExtResource("18_547h0")]
-
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg" to="MajinEggAct" method="IncrementObjective"]
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg2" to="MajinEggAct" method="IncrementObjective"]
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg3" to="MajinEggAct" method="IncrementObjective"]
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg4" to="MajinEggAct" method="IncrementObjective"]
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg5" to="MajinEggAct" method="IncrementObjective"]
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg6" to="MajinEggAct" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg2" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg3" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg4" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg5" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg6" to="Static" method="IncrementObjective"]
 [connection signal="Activated" from="MajinEggAct/Boat1/Switch" to="MajinEggAct/Boat1/Switch/RingCuller" method="ActivateNode"]
 [connection signal="Defeated" from="MajinEggAct/Island/BlueMajin" to="MajinEggAct/Island/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MajinEggAct/Island/BlueMajin" to="MajinEggAct/Island/EnemyStone2" method="IncrementCounter"]

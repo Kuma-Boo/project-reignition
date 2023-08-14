@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
-[ext_resource type="Resource" uid="uid://dhevcck1smng1" path="res://resource/preset/camera/common/DefaultCam.tres" id="2_kw85d"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_2yiqa"]
 [ext_resource type="PackedScene" uid="uid://yqibg72h3a4f" path="res://area/7 night palace/act 1/environment/02Sidle.tscn" id="3_ch7dh"]
 [ext_resource type="PackedScene" uid="uid://1mlq23jb6byp" path="res://area/7 night palace/data/skybox/Skybox.tscn" id="3_dbu0p"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="3_v46al"]
@@ -113,11 +113,27 @@ size = Vector3(75, 30, 30)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xr06l"]
 size = Vector3(320, 5, 140)
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
+[node name="Static" type="Node3D"]
 script = ExtResource("1_siayx")
-initialCameraSettings = ExtResource("2_kw85d")
-pathParent = NodePath("Path")
-environment = NodePath("Visuals/WorldEnvironment")
+"Level ID" = "np_a1"
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = null
+"Story Event Index" = -1
+"Dialog Library" = null
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = ExtResource("2_2yiqa")
+"Completion/Demo Animator" = NodePath("")
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("WorldEnvironment")
 
 [node name="Trigger" type="Node3D" parent="."]
 
@@ -588,9 +604,6 @@ isStageVisuals = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 786, 0, -640)
 layers = 1024
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
-environment = ExtResource("10_jp8di")
-
 [node name="Collision" type="Node3D" parent="."]
 visible = false
 
@@ -633,7 +646,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -140.162, 6.48, -481.848)
 curve = ExtResource("16_qmphs")
 
 [node name="CarpetPathFollower" type="PathFollow3D" parent="Path/CarpetPath"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 loop = false
 
 [node name="MainPath5" type="Path3D" parent="Path"]
@@ -663,15 +676,18 @@ curve = ExtResource("31_vfagc")
 [node name="BGM" parent="." instance=ExtResource("28_dk7mm")]
 bus = &"BGM"
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("10_jp8di")
+
 [connection signal="Activated" from="Trigger/Object/WallRun1" to="Trigger/Object/WallRun1/WallRun" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/WallRun1" to="Trigger/Object/Sidle/SidleTrigger1/SidleActivation" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/WallRun2" to="Trigger/Object/WallRun2/WallRun" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Path" method="Activate"]
-[connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Activate"]
-[connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Deactivate"]
+[connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/01Unload" to="Visuals/MainSection/01Start" method="Deactivate"]

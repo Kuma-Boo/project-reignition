@@ -1,7 +1,5 @@
-[gd_scene load_steps=62 format=3 uid="uid://cu3clxd81brgn"]
+[gd_scene load_steps=60 format=3 uid="uid://cu3clxd81brgn"]
 
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_qfp2h"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_vtqkh"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_6vb5h"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_6wf7v"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5_gkrps"]
@@ -232,22 +230,13 @@ size = Vector3(12, 10, 2)
 
 [node name="Stage" type="Node"]
 
-[node name="TimerAct" type="Node3D" parent="."]
-script = ExtResource("1_qfp2h")
-"Level ID" = ""
-"Mission Type" = 0
+[node name="Static" parent="." instance=ExtResource("40_byhqa")]
+"Level ID" = "ef_a2_timer"
 "Time Limit" = 180.0
-"Story Event Index" = -1
 "Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = ExtResource("2_vtqkh")
+"Completion/Demo Animator" = NodePath("")
+
+[node name="TimerAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 10.001, -184.125)
@@ -2279,8 +2268,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.9999, 0, -85)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TimerAct/End/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
 shape = SubResource("BoxShape3D_egyd0")
-
-[node name="Static" parent="." instance=ExtResource("40_byhqa")]
 
 [connection signal="Activated" from="TimerAct/CullingMap/StartUnload - PlatformHallLoad" to="TimerAct/Start" method="Deactivate"]
 [connection signal="Activated" from="TimerAct/CullingMap/StartUnload - PlatformHallLoad" to="TimerAct/PlatformHall" method="Activate"]

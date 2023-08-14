@@ -15,7 +15,7 @@ namespace Project.Gameplay.Objects
 		public bool DisableAutoRespawning { get; set; }
 		public SpawnData SpawnData { get; set; }
 
-		protected LevelSettings Level => LevelSettings.instance;
+		protected StageSettings Stage => StageSettings.instance;
 		protected CharacterController Character => CharacterController.instance;
 
 		public override void _Ready() => SetUp();
@@ -26,8 +26,8 @@ namespace Project.Gameplay.Objects
 
 			if (!DisableAutoRespawning) // Connect respawn triggers
 			{
-				Level.ConnectRespawnSignal(this);
-				Level.ConnectUnloadSignal(this);
+				Stage.ConnectRespawnSignal(this);
+				Stage.ConnectUnloadSignal(this);
 			}
 		}
 

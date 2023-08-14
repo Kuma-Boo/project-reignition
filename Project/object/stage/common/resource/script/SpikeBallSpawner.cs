@@ -101,7 +101,7 @@ namespace Project.Gameplay.Hazards
 				AddChild(rb);
 			}
 
-			LevelSettings.instance.ConnectUnloadSignal(this);
+			StageSettings.instance.ConnectUnloadSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)
