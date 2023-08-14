@@ -39,7 +39,7 @@ namespace Project.Gameplay
 			get
 			{
 				float spd = (moveSpeed + rubberbandingSpeed);
-				if (isAttacking)
+				if (attackState != AttackState.Inactive)
 					spd *= speedMultiplier;
 				if (spd < 2f)
 					spd = 0;
@@ -49,10 +49,18 @@ namespace Project.Gameplay
 
 		// Used during attacks
 		[ExportGroup("Animation")]
+		//[Export]
+		//private bool isAttacking;
 		[Export]
-		private bool isAttacking;
-		[Export]
-		private bool isAttackActive;
+		private AttackState attackState;
+		private enum AttackState
+		{
+			Inactive,
+			Windup,
+			Charge,
+			Toss,
+			Recovery
+		}
 		[Export(PropertyHint.Range, "0, 5")]
 		private float speedMultiplier;
 
@@ -112,6 +120,9 @@ namespace Project.Gameplay
 			UpdateAnimations();
 
 			Progress += TotalMoveSpeed * PhysicsManager.physicsDelta;
+
+			if (isInteractingWithPlayer)
+				DamagePlayer();
 		}
 
 
@@ -138,7 +149,7 @@ namespace Project.Gameplay
 
 			for (int i = 0; i < registeredDinoTrio.Count; i++)
 			{
-				if (registeredDinoTrio[i].isAttacking) // Don't update timer when a dino is already attacking
+				if (registeredDinoTrio[i].attackState != AttackState.Inactive) // Don't update timer when a dino is already attacking
 					return;
 			}
 
@@ -188,7 +199,7 @@ namespace Project.Gameplay
 
 
 			// Accelerate
-			if (isAttackActive)
+			if (attackState != AttackState.Inactive)
 				moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(deltaProgress), .25f);
 			else
 			{
@@ -197,7 +208,6 @@ namespace Project.Gameplay
 					targetSpeed = Character.Skills.GroundSettings.speed - SPEED_DIFFERENCE;
 
 				moveSpeed = Mathf.MoveToward(moveSpeed, targetSpeed, traction * PhysicsManager.physicsDelta);
-
 
 				// Rubberbanding
 				rubberbandingSpeed = (deltaProgress - preferredOffset) * rubberbandingStrength;
@@ -252,23 +262,54 @@ namespace Project.Gameplay
 		public void CancelAttack() => animationTree.Set(ATTACK_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 
+		private bool tossedPlayer; // last state we processed damage in
+		private void DamagePlayer()
+		{
+			playerHitTimer = PLAYER_HIT_WAIT_TIME;
+			attackTimer = ATTACK_INTERVAL; // Reset attack timer
+
+			switch (attackState)
+			{
+				case AttackState.Toss: // Powerful launch
+					if (tossedPlayer) return; // Already tossed the player
+
+					CharacterController.instance.StartKnockback(new CharacterController.KnockbackSettings()
+					{
+						knockForward = true, // Always knock forward
+						ignoreInvincibility = true, // Always knockback the player
+						disableDamage = CharacterController.instance.IsInvincible, // Don't hurt player during invincibility
+						overrideKnockbackSpeed = true,
+						knockbackSpeed = 40f,
+						overrideKnockbackHeight = true,
+						knockbackHeight = 3
+					});
+
+					break;
+				default: //Normal knockback
+					CharacterController.instance.StartKnockback(new CharacterController.KnockbackSettings()
+					{
+						knockForward = true,
+						overrideKnockbackSpeed = true,
+						knockbackSpeed = TotalMoveSpeed
+					});
+					break;
+			}
+
+			tossedPlayer = attackState == AttackState.Toss;
+		}
+
+		private bool isInteractingWithPlayer;
 		public void OnEntered(Area3D area)
 		{
 			if (!area.IsInGroup("player")) return;
+			isInteractingWithPlayer = true;
+			tossedPlayer = false;
+		}
 
-			CharacterController.instance.StartKnockback(new CharacterController.KnockbackSettings()
-			{
-				knockForward = true, // Always knock forward
-				ignoreInvincibility = true, // Always knockback the player
-				disableDamage = CharacterController.instance.IsInvincible, // Don't hurt player during invincibility
-				overrideKnockbackSpeed = true,
-				knockbackSpeed = Mathf.Max(TotalMoveSpeed * .5f, 10f),
-				overrideKnockbackHeight = true,
-				knockbackHeight = 2
-			});
-
-			playerHitTimer = PLAYER_HIT_WAIT_TIME;
-			attackTimer = ATTACK_INTERVAL; // Reset attack timer
+		public void OnExited(Area3D area)
+		{
+			if (!area.IsInGroup("player")) return;
+			isInteractingWithPlayer = false;
 		}
 	}
 }

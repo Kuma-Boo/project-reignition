@@ -12,7 +12,7 @@ animation = &"trio-attack"
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_dklgt"]
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_grb6f"]
-fadein_time = 0.2
+fadein_time = 0.25
 fadeout_time = 1.2
 
 [sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_gviv6"]
@@ -83,7 +83,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dcn5s"]
-graph_offset = Vector2(-459.758, 10.0106)
+graph_offset = Vector2(-170.369, 62.2325)
 nodes/attack/node = SubResource("AnimationNodeAnimation_8caol")
 nodes/attack/position = Vector2(-160, 368)
 nodes/attack_speed/node = SubResource("AnimationNodeTimeScale_dklgt")
@@ -102,7 +102,7 @@ nodes/movement_speed/node = SubResource("AnimationNodeTimeScale_nk615")
 nodes/movement_speed/position = Vector2(-496, 288)
 nodes/moving_transition/node = SubResource("AnimationNodeTransition_mgc27")
 nodes/moving_transition/position = Vector2(-144, 112)
-node_connections = [&"output", 0, &"attack_trigger", &"attack_trigger", 0, &"moving_transition", &"attack_trigger", 1, &"attack_speed", &"movement_speed", 0, &"movement_blend", &"moving_transition", 0, &"idle_seek", &"moving_transition", 1, &"movement_seek", &"attack_speed", 0, &"attack", &"idle_seek", 0, &"idle_state", &"movement_seek", 0, &"movement_speed"]
+node_connections = [&"output", 0, &"attack_trigger", &"attack_speed", 0, &"attack", &"attack_trigger", 0, &"moving_transition", &"attack_trigger", 1, &"attack_speed", &"idle_seek", 0, &"idle_state", &"movement_seek", 0, &"movement_speed", &"movement_speed", 0, &"movement_blend", &"moving_transition", 0, &"idle_seek", &"moving_transition", 1, &"movement_seek"]
 
 [node name="DinoTrio" type="PathFollow3D" node_paths=PackedStringArray("animationTree")]
 script = ExtResource("1_6nsvh")
@@ -111,14 +111,13 @@ friction = 40.0
 preferredOffset = 5.0
 attackOffset = 10.0
 rubberbandingStrength = 0.6
-speedMultiplier = 1.0
 animationTree = NodePath("AnimationTree")
 
-[node name="Collision" type="Area3D" parent="."]
+[node name="Trigger" type="Area3D" parent="."]
 collision_layer = 8
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_rux8y")
 
@@ -126,22 +125,18 @@ shape = SubResource("BoxShape3D_rux8y")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="DinoTrio/DinoTrioRoot" index="0"]
-bones/1/position = Vector3(-8.15641e-09, 2.86977, 0.0671492)
-bones/1/rotation = Quaternion(-0.710555, 9.68278e-09, 6.95733e-09, 0.703641)
 bones/2/rotation = Quaternion(-0.986246, 1.19156e-08, -2.61644e-06, 0.165285)
-bones/3/rotation = Quaternion(0.181051, -2.20612e-06, 8.9634e-07, 0.983474)
-bones/4/rotation = Quaternion(0.811499, -1.03556e-06, 2.35823e-06, 0.584353)
-bones/5/rotation = Quaternion(-0.485142, 4.42825e-07, -1.47122e-06, 0.874435)
-bones/6/rotation = Quaternion(0.811608, 6.73926e-05, -1.38554e-05, 0.584202)
-bones/7/rotation = Quaternion(-0.485118, -9.7687e-06, -4.82314e-05, 0.874449)
-bones/8/rotation = Quaternion(-0.884186, 6.54233e-05, 8.33827e-05, 0.467132)
-bones/9/rotation = Quaternion(0.569416, 3.47552e-05, -0.000231502, 0.822049)
-bones/10/rotation = Quaternion(-0.790576, -3.67867e-07, -1.41492e-06, 0.612361)
-bones/11/rotation = Quaternion(0.371912, -5.68399e-07, 2.12583e-06, 0.928268)
-bones/12/rotation = Quaternion(0.127368, -1.6467e-09, 1.89115e-07, 0.991856)
-bones/13/rotation = Quaternion(-0.209914, 5.30741e-08, -3.84104e-07, 0.97772)
-bones/18/position = Vector3(-0.68562, 0.777135, -0.801398)
-bones/18/rotation = Quaternion(-0.344878, 0, 0, 0.938648)
+bones/3/rotation = Quaternion(0.149306, -2.22548e-06, 7.68762e-07, 0.988791)
+bones/4/rotation = Quaternion(0.762143, -1.10277e-06, 2.20587e-06, 0.647409)
+bones/5/rotation = Quaternion(-0.32846, 4.87986e-07, -9.76097e-07, 0.944518)
+bones/6/rotation = Quaternion(0.762261, 7.26845e-05, -1.01596e-05, 0.64727)
+bones/7/rotation = Quaternion(-0.32846, -9.96412e-06, -3.14196e-05, 0.944518)
+bones/8/rotation = Quaternion(-0.729554, 1.42996e-08, 2.66168e-05, 0.683923)
+bones/9/rotation = Quaternion(0.125925, 4.06579e-05, -4.27046e-05, 0.99204)
+bones/10/rotation = Quaternion(-0.729554, 1.44258e-08, -9.59512e-07, 0.683923)
+bones/11/rotation = Quaternion(0.125924, -6.11157e-07, 7.42576e-07, 0.99204)
+bones/12/rotation = Quaternion(-0.0339461, 4.57378e-08, 1.83396e-07, 0.999424)
+bones/13/rotation = Quaternion(-0.0742523, -2.51855e-09, -4.30046e-07, 0.997239)
 bones/20/rotation = Quaternion(-0.707108, 0.000270456, 0.000270456, 0.707106)
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -159,6 +154,7 @@ parameters/moving_transition/current_state = "enabled"
 parameters/moving_transition/transition_request = ""
 parameters/moving_transition/current_index = 1
 
-[connection signal="area_entered" from="Collision" to="." method="OnEntered"]
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]
 
 [editable path="DinoTrio"]
