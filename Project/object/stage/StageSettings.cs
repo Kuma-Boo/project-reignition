@@ -76,7 +76,6 @@ namespace Project.Gameplay
 
 				case "Camera Settings":
 					return InitialCameraSettings;
-
 				case "Story Event Index":
 					return storyEventIndex;
 				case "Dialog Library":
@@ -213,8 +212,6 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		public CameraSettingsResource InitialCameraSettings { get; private set; }
-
 		#region Path Settings
 		private NodePath pathParent;
 		/// <summary> List of all level paths contained for this level. </summary>
@@ -249,8 +246,6 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		public SFXLibraryResource dialogLibrary;
-
 		/// <summary> Reference to active area's WorldEnvironment node. </summary>
 		public WorldEnvironment Environment { get; private set; }
 		private NodePath environment;
@@ -282,21 +277,43 @@ namespace Project.Gameplay
 		}
 
 
-
 		#region Level Settings
-		private bool skipScore; //Don't use score when ranking (i.e. for bosses)
+		/// <summary> Level ID, used for determining save data. </summary>
+		public StringName LevelID { get; set; }
+		public CameraSettingsResource InitialCameraSettings { get; private set; }
+		/// <summary> Story event index to play after completing the stage. Leave at -1 if no story event is meant to be played. </summary>
+		public int storyEventIndex = -1;
+		public SFXLibraryResource dialogLibrary;
 
-		//Requirements for time rank. Format is in seconds.
+		public enum MissionTypes
+		{
+			None, // Add a goal node or a boss so the player doesn't get stuck!
+			Objective, // Add custom nodes that call IncrementObjective()
+			Ring, // Collect a certain amount of rings
+			Pearl, // Collect a certain amount of pearls (normally zero)
+			Enemy, // Destroy a certain amount of enemies
+			Race, // Race against an enemy
+		}
+
+		/// <summary> Type of mission. </summary>
+		public MissionTypes MissionType { get; private set; }
+		/// <summary> What's the target amount for the mission objective? </summary>
+		public int MissionObjectiveCount { get; private set; }
+		/// <summary> Level time limit, in seconds. </summary>
+		private float MissionTimeLimit { get; set; }
+
+
+		// Rank
+		private bool skipScore; // Don't use score when ranking (i.e. for bosses)
+
+		// Requirements for time rank. Format is in seconds.
 		private int goldTime;
 		private int silverTime;
 		private int bronzeTime;
-		//Requirement for score rank
+		// Requirement for score rank
 		private int goldScore;
 		private int silverScore;
 		private int bronzeScore;
-
-		/// <summary> Story event index to play after completing the stage. Leave at 0 if no story event is meant to be played. </summary>
-		public int storyEventIndex = -1;
 
 		/// <summary>
 		/// Calculates the rank, from -1 <-> 3.
@@ -306,7 +323,7 @@ namespace Project.Gameplay
 			if (LevelState == LevelStateEnum.Failed)
 				return -1;
 
-			int rank = 0; //DEFAULT - No rank
+			int rank = 0; // DEFAULT - No rank
 
 			if (skipScore)
 			{
@@ -327,35 +344,15 @@ namespace Project.Gameplay
 					rank = 2;
 			}
 
-			if (rank >= 3 && RespawnCount != 0) //Limit to silver if a respawn occured
+			if (rank >= 3 && RespawnCount != 0) // Limit to silver if a respawn occured
 				rank = 2;
 
 			return rank;
 		}
-
-		/// <summary> Level ID, used for determining save data. </summary>
-		public StringName LevelID { get; set; }
-
-		public enum MissionTypes
-		{
-			None, //Add a goal node or a boss so the player doesn't get stuck!
-			Objective, //Add custom nodes that call IncrementObjective()
-			Ring, //Collect a certain amount of rings
-			Pearl, //Collect a certain amount of pearls (normally zero)
-			Enemy, //Destroy a certain amount of enemies
-			Race, //Race against an enemy
-		}
-
-		/// <summary> Type of mission. </summary>
-		public MissionTypes MissionType { get; private set; }
-		/// <summary> What's the target amount for the mission objective? </summary>
-		public int MissionObjectiveCount { get; private set; }
-		/// <summary> Level time limit, in seconds. </summary>
-		private float MissionTimeLimit { get; set; }
 		#endregion
 
 		#region Level Data
-		public enum MathModeEnum //List of ways the score can be modified
+		public enum MathModeEnum // List of ways the score can be modified
 		{
 			Add,
 			Subtract,
@@ -374,7 +371,7 @@ namespace Project.Gameplay
 					break;
 				case MathModeEnum.Subtract:
 					value -= amount;
-					if (value < 0) //Clamp to zero
+					if (value < 0) // Clamp to zero
 						value = 0;
 					break;
 				case MathModeEnum.Multiply:
@@ -387,11 +384,10 @@ namespace Project.Gameplay
 			return value;
 		}
 
-		public int CurrentScore { get; private set; } //How high is the current score?
-		public string DisplayScore { get; private set; } //Current score formatted to eight zeros
 		[Signal]
-		public delegate void ScoreChangedEventHandler(); //Score has changed, normally occours from a bonus
-
+		public delegate void ScoreChangedEventHandler(); // Score has changed, normally occours from a bonus
+		public int CurrentScore { get; private set; } // How high is the current score?
+		public string DisplayScore { get; private set; } // Current score formatted to eight zeros
 		private const string SCORE_FORMATTING = "00000000";
 		public void UpdateScore(int amount, MathModeEnum mode)
 		{
@@ -400,14 +396,14 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.ScoreChanged);
 		}
 
-		//Bonuses
+		// Bonuses
 		public enum BonusType
 		{
-			PerfectHomingAttack, //Obtained by attacking an enemy using a perfect homing attack
-			DriftBonus, //Obtained by performing a Drift
-			GrindShuffle, //Obtained by performing a grind shuffle
-			PerfectGrindShuffle, //Obtained by performing a perfect grind shuffle
-			GrindStep, //Obtained by using the Grind Step
+			PerfectHomingAttack, // Obtained by attacking an enemy using a perfect homing attack
+			DriftBonus, // Obtained by performing a Drift
+			GrindShuffle, // Obtained by performing a grind shuffle
+			PerfectGrindShuffle, // Obtained by performing a perfect grind shuffle
+			GrindStep, // Obtained by using the Grind Step
 		}
 		[Signal]
 		public delegate void BonusAddedEventHandler(BonusType type);
@@ -422,35 +418,35 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.BonusAdded, (int)type);
 		}
 
-		public int RespawnCount { get; private set; } //How high many times did the player have to respawn?
+		public int RespawnCount { get; private set; } // How high many times did the player have to respawn?
 		public void IncrementRespawnCount() => RespawnCount++;
 
 		//Objectives
-		public int CurrentObjectiveCount { get; private set; } //How much has the player currently completed?
+		public int CurrentObjectiveCount { get; private set; } // How much has the player currently completed?
 		[Signal]
-		public delegate void ObjectiveChangedEventHandler(); //Progress towards the objective has changed
+		public delegate void ObjectiveChangedEventHandler(); // Progress towards the objective has changed
 		public void IncrementObjective()
 		{
 			CurrentObjectiveCount++;
 			EmitSignal(SignalName.ObjectiveChanged);
 
-			if (MissionObjectiveCount == 0) //i.e. Sand Oasis's "Don't break the jars!" mission.
+			if (MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
 				FinishLevel(false);
 			else if (CurrentObjectiveCount >= MissionObjectiveCount)
 				FinishLevel(true);
 		}
 
-		//Rings
-		public int CurrentRingCount { get; private set; } //How many rings is the player currently holding?
+		// Rings
+		public int CurrentRingCount { get; private set; } // How many rings is the player currently holding?
 		[Signal]
-		public delegate void RingChangedEventHandler(int change); //Ring count has changed
+		public delegate void RingChangedEventHandler(int change); // Ring count has changed
 		public void UpdateRingCount(int amount, MathModeEnum mode, bool disableAnimations = false)
 		{
 			int previousAmount = CurrentRingCount;
 			CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
-			if (MissionType == MissionTypes.Ring && CurrentRingCount >= MissionObjectiveCount) //For ring based missions
+			if (MissionType == MissionTypes.Ring && CurrentRingCount >= MissionObjectiveCount) // For ring based missions
 			{
-				CurrentRingCount = MissionObjectiveCount; //Clamp
+				CurrentRingCount = MissionObjectiveCount; // Clamp
 				FinishLevel(true);
 			}
 
@@ -460,20 +456,20 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 		}
 
-		//Time
+		// Time
 		[Signal]
-		public delegate void TimeChangedEventHandler(); //Time has changed.
+		public delegate void TimeChangedEventHandler(); // Time has changed.
 
-		public float CurrentTime { get; private set; } //How long has the player been on this level? (In Seconds)
-		public string DisplayTime { get; private set; } //Current time formatted in mm:ss.ff
+		public float CurrentTime { get; private set; } // How long has the player been on this level? (In Seconds)
+		public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
 
 		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
 		private void UpdateTime()
 		{
 			if (IsLevelFinished || Interface.Countdown.IsCountdownActive) return;
 
-			CurrentTime += PhysicsManager.physicsDelta; //Add current time
-			if (MissionTimeLimit == 0) //No time limit
+			CurrentTime += PhysicsManager.physicsDelta; // Add current time
+			if (MissionTimeLimit == 0) // No time limit
 			{
 				System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
@@ -482,7 +478,7 @@ namespace Project.Gameplay
 			{
 				System.TimeSpan time = System.TimeSpan.FromSeconds(Mathf.Clamp(MissionTimeLimit - CurrentTime, 0, MissionTimeLimit));
 				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
-				if (CurrentTime >= MissionTimeLimit) //Time's up!
+				if (CurrentTime >= MissionTimeLimit) // Time's up!
 					FinishLevel(false);
 			}
 
@@ -583,7 +579,7 @@ namespace Project.Gameplay
 
 		[Signal]
 		public delegate void OnRespawnedEventHandler();
-		private const string RESPAWN_FUNCTION = "Respawn"; //Default name of respawn functions
+		private const string RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
 		public void ConnectRespawnSignal(Node node)
 		{
 			if (!node.HasMethod(RESPAWN_FUNCTION))
@@ -599,24 +595,24 @@ namespace Project.Gameplay
 
 		public void RespawnObjects()
 		{
-			SoundManager.instance.CancelDialog(); //Cancel any active dialog
+			SoundManager.instance.CancelDialog(); // Cancel any active dialog
 			EmitSignal(SignalName.OnRespawned);
 		}
 
 
-		private bool itemCycleRespawnEnabled = true; //Respawn items when cycling?
-		private bool itemCycleFlagSet; //Should we trigger an item switch?
-		private int itemCycleIndex; //Active item set
+		private bool itemCycleRespawnEnabled = true; // Respawn items when cycling?
+		private bool itemCycleFlagSet; // Should we trigger an item switch?
+		private int itemCycleIndex; // Active item set
 
-		//Make sure itemCycle triggers are monitoring and collide with the player
-		private NodePath itemCycleActivationTrigger; //When to apply the item cycle
-		private NodePath itemCycleHalfwayTrigger; //So the player can't just move in and out of the activation trigger
+		// Make sure itemCycle triggers are monitoring and collide with the player
+		private NodePath itemCycleActivationTrigger; // When to apply the item cycle
+		private NodePath itemCycleHalfwayTrigger; // So the player can't just move in and out of the activation trigger
 		private Array<NodePath> itemCycles = new Array<NodePath>();
 		private readonly List<Node3D> _itemCycles = new List<Node3D>();
 		private readonly List<SpawnData> _itemCyclesSpawnData = new List<SpawnData>();
 		private void SetUpItemCycles()
 		{
-			if (itemCycleActivationTrigger == null || itemCycleActivationTrigger.IsEmpty) return; //Item cycling disabled
+			if (itemCycleActivationTrigger == null || itemCycleActivationTrigger.IsEmpty) return; // Item cycling disabled
 
 			GetNode<Area3D>(itemCycleActivationTrigger).Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnItemCycleActivate));
 			if (itemCycleHalfwayTrigger != null)
@@ -624,7 +620,7 @@ namespace Project.Gameplay
 
 			for (int i = 0; i < itemCycles.Count; i++)
 			{
-				if (itemCycles[i] == null || itemCycles[i].IsEmpty) //Nothing on this item cycle!
+				if (itemCycles[i] == null || itemCycles[i].IsEmpty) // Nothing on this item cycle!
 				{
 					_itemCycles.Add(null);
 					_itemCyclesSpawnData.Add(new SpawnData());
@@ -638,7 +634,7 @@ namespace Project.Gameplay
 				_itemCycles.Add(node);
 				_itemCyclesSpawnData.Add(spawnData);
 
-				if (i != itemCycleIndex) //Disable inactive nodes
+				if (i != itemCycleIndex) // Disable inactive nodes
 					spawnData.parentNode.CallDeferred(MethodName.RemoveChild, node);
 			}
 		}
