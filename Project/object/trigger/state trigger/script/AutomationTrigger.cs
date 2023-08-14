@@ -73,7 +73,7 @@ namespace Project.Gameplay.Triggers
 			if (!ignoreDirection)
 			{
 				// Ensure character is facing/moving the correct direction
-				float dot = ExtensionMethods.DotAngle(Character.MovementAngle, Character.CalculateForwardAngle(this.Forward()));
+				float dot = ExtensionMethods.DotAngle(Character.MovementAngle, ExtensionMethods.CalculateForwardAngle(this.Forward()));
 				if (dot < 0f || Character.IsMovingBackward) return false;
 			}
 

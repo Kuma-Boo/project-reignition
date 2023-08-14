@@ -59,7 +59,7 @@ namespace Project.Gameplay.Objects
 					Character.MovementAngle = Character.PathFollower.ForwardAngle;
 				}
 				else
-					Character.MovementAngle = Character.CalculateForwardAngle(this.Forward());
+					Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), Character.PathFollower.Up());
 
 				Character.AddLockoutData(lockout);
 			}

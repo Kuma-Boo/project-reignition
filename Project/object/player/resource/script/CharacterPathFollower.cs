@@ -4,6 +4,7 @@ namespace Project.Gameplay
 {
 	/// <summary>
 	/// Helps keep track of where the player is relative to the level's path.
+	/// NOTE: Paths with vertical surfaces tilted at 180 degrees are unsupported.
 	/// </summary>
 	public partial class CharacterPathFollower : PathFollow3D
 	{
@@ -58,27 +59,13 @@ namespace Project.Gameplay
 
 		public void RecalculateData()
 		{
-			float newForwardAngle = Character.CalculateForwardAngle(this.Back());
+			float newForwardAngle = ExtensionMethods.CalculateForwardAngle(this.Back(), this.Up());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .575f; //Abitrary blend amount that seems to work
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			FlatPlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
-
-			// Update custom orientations
-			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();
-			float upDotProduct = this.Back().Dot(Vector3.Up);
-			if (upDotProduct < .9f)
-				SideAxis = this.Forward().Cross(Vector3.Up).Normalized();
-			else // Moving straight up/down
-				SideAxis = this.Back().Cross(ForwardAxis).Normalized();
-
-			HeightAxis = this.Forward().Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
-
-			Core.Debug.DrawRay(GlobalPosition, HeightAxis, Colors.Green);
-			Core.Debug.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
-			Core.Debug.DrawRay(GlobalPosition, SideAxis, Colors.Red);
 		}
 
 		/// <summary> Calculates the delta position using Basis.Inverse(). </summary>

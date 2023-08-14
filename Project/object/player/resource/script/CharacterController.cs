@@ -878,7 +878,7 @@ namespace Project.Gameplay
 				isCustomPhysicsEnabled = true;
 				VerticalSpeed = 0;
 				Velocity = Lockon.HomingAttackDirection.Normalized() * Skills.homingAttackSpeed;
-				MovementAngle = CalculateForwardAngle(Lockon.HomingAttackDirection);
+				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
 
 				PathFollower.Resync();
@@ -1273,7 +1273,7 @@ namespace Project.Gameplay
 				Vector3 launchDirection = LaunchSettings.InitialVelocity.RemoveVertical();
 				if (!launchDirection.IsEqualApprox(Vector3.Zero))
 				{
-					MovementAngle = CalculateForwardAngle(launchDirection);
+					MovementAngle = ExtensionMethods.CalculateForwardAngle(launchDirection);
 					Animator.SnapRotation(MovementAngle);
 				}
 			}
@@ -1603,7 +1603,7 @@ namespace Project.Gameplay
 
 					if (ceilingAngle > Mathf.Pi * .1f) //Only slanted ceilings need this workaround
 					{
-						float deltaAngle = ExtensionMethods.DeltaAngleRad(PathFollower.ForwardAngle, CalculateForwardAngle(ceilingHit.normal));
+						float deltaAngle = ExtensionMethods.DeltaAngleRad(PathFollower.ForwardAngle, ExtensionMethods.CalculateForwardAngle(ceilingHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up));
 						if (deltaAngle > Mathf.Pi * .1f) //Wall isn't aligned to the path
 							return;
 
@@ -1636,7 +1636,7 @@ namespace Project.Gameplay
 			{
 				if (ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
 				{
-					float wallDelta = ExtensionMethods.DeltaAngleRad(CalculateForwardAngle(wallHit.normal), MovementAngle);
+					float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
 					if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
 					{
 						// Cancel speed break
@@ -1714,20 +1714,26 @@ namespace Project.Gameplay
 		}
 
 		//Gets the rotation of a given "forward" vector
-		public float CalculateForwardAngle(Vector3 forwardDirection)
+		public float CalculateForwardAngle(Vector3 forwardVector, bool usePathUp = false)
 		{
-			float dot = forwardDirection.Dot(Vector3.Up);
+			float dot = forwardVector.Dot(Vector3.Up);
+			/*
 			if (Mathf.Abs(dot) > .9f) //Moving vertically
 			{
-				float angle = new Vector2(forwardDirection.X + forwardDirection.Z, forwardDirection.Y).Angle();
-				Vector3 axis = forwardDirection.Cross(UpDirection).Normalized();
+				float angle = new Vector2(forwardVector.X + forwardVector.Z, forwardVector.Y).Angle();
+				Vector3 axis = forwardVector.Cross(UpDirection).Normalized();
 				if (!IsOnGround || !axis.IsNormalized()) //Fallback
 					axis = PathFollower.SideAxis;
 
-				forwardDirection = -forwardDirection.Rotated(axis, angle);
+				forwardVector = -forwardVector.Rotated(axis, angle);
+			}
+			*/
+			if (Mathf.Abs(dot) > .9f) // Moving vertically
+			{
+				forwardVector = -((usePathUp) ? PathFollower.Up() : Vector3.Up) * Mathf.Sign(dot);
 			}
 
-			return forwardDirection.Flatten().Normalized().AngleTo(Vector2.Down);
+			return forwardVector.Flatten().Normalized().AngleTo(Vector2.Down);
 		}
 
 		#region Signals

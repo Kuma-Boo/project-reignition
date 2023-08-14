@@ -259,14 +259,16 @@ namespace Project.Gameplay
 
 			Transform3D cameraTransform = new Transform3D(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
 			cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
-			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
-			cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 
-			// Update view offset
+			// Calculate xform angle before applying pitch tracking
+			xformAngle = ExtensionMethods.CalculateForwardAngle(-cameraTransform.Basis.Z, cameraTransform.Basis.Y);
+			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
+
+			// Update cameraTransform origin
+			cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 			cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 			cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
-			xformAngle = Character.CalculateForwardAngle(-data.offsetBasis.Z);
 
 			if (SnapFlag) // Reset flag after camera was updating
 				SnapFlag = false;
@@ -315,7 +317,7 @@ namespace Project.Gameplay
 				Vector3 sampledForward = (PathFollower.GlobalPosition - sampledPosition).Normalized();
 
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					sampledTargetYawAngle += Character.CalculateForwardAngle(sampledForward);
+					sampledTargetYawAngle += ExtensionMethods.CalculateForwardAngle(sampledForward);
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					sampledTargetPitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
 

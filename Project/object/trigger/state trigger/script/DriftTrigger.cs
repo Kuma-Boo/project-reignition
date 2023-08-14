@@ -191,7 +191,7 @@ namespace Project.Gameplay.Triggers
 			isProcessing = false;
 
 			//Turn 90 degrees
-			Character.MovementAngle = Character.CalculateForwardAngle(ExitDirection);
+			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
 			Character.Animator.ExternalAngle = Character.MovementAngle;
 
 			Character.ResetMovementState();

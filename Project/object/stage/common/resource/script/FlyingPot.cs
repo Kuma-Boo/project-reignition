@@ -146,7 +146,7 @@ namespace Project.Gameplay.Objects
 			velocity = 0f; //Kill all velocity
 
 			float angleRatio = angle / MAX_ANGLE;
-			Character.MovementAngle = Character.CalculateForwardAngle(this.Back());
+			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Back());
 			Character.StrafeSpeed = Character.Skills.AirSettings.speed * angleRatio;
 			Character.VerticalSpeed = Runtime.CalculateJumpPower(Character.jumpHeight);
 

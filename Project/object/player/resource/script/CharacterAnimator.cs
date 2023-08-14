@@ -351,7 +351,7 @@ namespace Project.Gameplay
 			if (Character.MovementState == CharacterController.MovementStates.External)
 				targetRotation = ExternalAngle;
 			else if (Character.Lockon.IsHomingAttacking) //Face target
-				targetRotation = Character.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
+				targetRotation = ExtensionMethods.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
 			else if (Character.IsMovingBackward) //Backstepping
 				targetRotation = Character.PathFollower.ForwardAngle + groundTurnRatio * Mathf.Pi * .15f;
 			else if (Character.IsLockoutActive)
