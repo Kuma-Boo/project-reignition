@@ -1713,29 +1713,6 @@ namespace Project.Gameplay
 			return PathFollower.Back().Rotated(UpDirection, fixAngle);
 		}
 
-		//Gets the rotation of a given "forward" vector
-		public float CalculateForwardAngle(Vector3 forwardVector, bool usePathUp = false)
-		{
-			float dot = forwardVector.Dot(Vector3.Up);
-			/*
-			if (Mathf.Abs(dot) > .9f) //Moving vertically
-			{
-				float angle = new Vector2(forwardVector.X + forwardVector.Z, forwardVector.Y).Angle();
-				Vector3 axis = forwardVector.Cross(UpDirection).Normalized();
-				if (!IsOnGround || !axis.IsNormalized()) //Fallback
-					axis = PathFollower.SideAxis;
-
-				forwardVector = -forwardVector.Rotated(axis, angle);
-			}
-			*/
-			if (Mathf.Abs(dot) > .9f) // Moving vertically
-			{
-				forwardVector = -((usePathUp) ? PathFollower.Up() : Vector3.Up) * Mathf.Sign(dot);
-			}
-
-			return forwardVector.Flatten().Normalized().AngleTo(Vector2.Down);
-		}
-
 		#region Signals
 		private bool IsCountdownActive => Interface.Countdown.IsCountdownActive;
 
