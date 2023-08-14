@@ -56,8 +56,8 @@ namespace Project.Gameplay
 		protected virtual void SetUp()
 		{
 			SpawnData = new SpawnData(GetParent(), Transform);
-			LevelSettings.instance.ConnectRespawnSignal(this);
-			LevelSettings.instance.ConnectUnloadSignal(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.instance.ConnectUnloadSignal(this);
 			Respawn();
 
 			if (rangeCollider != null && rangeOverride != -1)

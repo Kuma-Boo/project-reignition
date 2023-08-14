@@ -62,7 +62,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (Engine.IsEditorHint()) return;
 
-			LevelSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 
 			if (customCameraSettings != null) // Create the camera trigger
 			{

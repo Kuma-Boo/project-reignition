@@ -22,13 +22,13 @@ namespace Project.Interface
 		private AnimationPlayer animator;
 
 		private bool isProcessingInputs;
-		private LevelSettings Level => LevelSettings.instance;
+		private StageSettings Level => StageSettings.instance;
 		private const string TECHNICAL_FORMATTING = "0.0";
 
 		public override void _Ready()
 		{
 			if (Level != null)
-				Level.Connect(nameof(LevelSettings.LevelCompleted), new Callable(this, nameof(StartResults)));
+				Level.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)));
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -73,7 +73,7 @@ namespace Project.Interface
 				animator.Play("medal-gold");
 
 			animator.Seek(0.0, true);
-			animator.Play(Level.LevelState == LevelSettings.LevelStateEnum.Success ? "success-start" : "fail-start");
+			animator.Play(Level.LevelState == StageSettings.LevelStateEnum.Success ? "success-start" : "fail-start");
 
 			score.Text = Level.DisplayScore;
 			time.Text = Level.DisplayTime;
@@ -87,7 +87,7 @@ namespace Project.Interface
 			float technicalBonus = 1.0f;
 			technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
 
-			Level.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), LevelSettings.MathModeEnum.Add);
+			Level.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);
 			total.Text = Level.DisplayScore;
 		}
 

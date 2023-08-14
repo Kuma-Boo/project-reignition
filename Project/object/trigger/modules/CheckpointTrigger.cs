@@ -5,6 +5,6 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class CheckpointTrigger : TeleportTrigger
 	{
-		public override void Activate() => LevelSettings.instance.SetCheckpoint(this);
+		public override void Activate() => StageSettings.instance.SetCheckpoint(this);
 	}
 }

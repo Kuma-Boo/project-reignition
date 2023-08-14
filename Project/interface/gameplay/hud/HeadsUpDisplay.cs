@@ -10,7 +10,7 @@ namespace Project.Gameplay
 	public partial class HeadsUpDisplay : Control
 	{
 		public static HeadsUpDisplay instance;
-		private LevelSettings Level => LevelSettings.instance;
+		private StageSettings Level => StageSettings.instance;
 
 		public override void _Ready()
 		{
@@ -23,11 +23,11 @@ namespace Project.Gameplay
 
 			if (Level != null) //Decouple from level settings
 			{
-				Level.Connect(nameof(LevelSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
-				Level.Connect(nameof(LevelSettings.TimeChanged), new Callable(this, MethodName.UpdateTime));
-				Level.Connect(nameof(LevelSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
-				Level.Connect(nameof(LevelSettings.BonusAdded), new Callable(this, MethodName.AddBonus));
-				Level.Connect(nameof(LevelSettings.LevelCompleted), new Callable(this, MethodName.LevelComplete)); //Hide interface
+				Level.Connect(nameof(StageSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
+				Level.Connect(nameof(StageSettings.TimeChanged), new Callable(this, MethodName.UpdateTime));
+				Level.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
+				Level.Connect(nameof(StageSettings.BonusAdded), new Callable(this, MethodName.AddBonus));
+				Level.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.LevelComplete)); //Hide interface
 			}
 		}
 
@@ -63,14 +63,14 @@ namespace Project.Gameplay
 			//Initialize ring counter
 			if (Level != null)
 			{
-				maxRingLabel.Visible = ringDividerSprite.Visible = Level.MissionType == LevelSettings.MissionTypes.Ring; //Show/Hide max ring count
+				maxRingLabel.Visible = ringDividerSprite.Visible = Level.MissionType == StageSettings.MissionTypes.Ring; //Show/Hide max ring count
 				if (maxRingLabel.Visible)
 					maxRingLabel.Text = Level.MissionObjectiveCount.ToString(RING_LABEL_FORMAT);
 
 				int startingRingCount = 0; // TODO Determine by skills
 				ringAnimator.Active = true;
 				UpdateRingCount(startingRingCount, true);
-				Level.UpdateRingCount(startingRingCount, LevelSettings.MathModeEnum.Replace, true);
+				Level.UpdateRingCount(startingRingCount, StageSettings.MathModeEnum.Replace, true);
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace Project.Gameplay
 		private Array<NodePath> bonusLabels;
 		private Label[] _bonusLabels;
 		private int bonusCount = -1;
-		private readonly Array<LevelSettings.BonusType> bonusQueue = new Array<LevelSettings.BonusType>();
+		private readonly Array<StageSettings.BonusType> bonusQueue = new Array<StageSettings.BonusType>();
 		private const int MAX_BONUS_COUNT = 5; //How many bonuses can be onscreen at once
 		private void InitializeBonuses()
 		{
@@ -124,7 +124,7 @@ namespace Project.Gameplay
 			}
 		}
 
-		private void AddBonus(LevelSettings.BonusType type)
+		private void AddBonus(StageSettings.BonusType type)
 		{
 			if (bonusAnimator.IsPlaying())
 			{
@@ -193,14 +193,14 @@ namespace Project.Gameplay
 		private Label objectiveMaxValue;
 		private void InitializeObjectives()
 		{
-			objectiveRoot.Visible = Level != null && Level.MissionType == LevelSettings.MissionTypes.Objective;
+			objectiveRoot.Visible = Level != null && Level.MissionType == StageSettings.MissionTypes.Objective;
 			if (!objectiveRoot.Visible) return; //Don't do anything when objective counter isn't visible
 
 			objectiveSprite.Visible = true;
 			objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");
 			objectiveMaxValue.Text = Level.MissionObjectiveCount.ToString("00");
 
-			Level.Connect(nameof(LevelSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+			Level.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}
 
 		private void UpdateObjective() => objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");

@@ -55,7 +55,7 @@ namespace Project.Gameplay
 			//Revert camera settings
 			UpdateCameraSettings(new CameraBlendData()
 			{
-				SettingsResource = LevelSettings.instance.CheckpointCameraSettings,
+				SettingsResource = StageSettings.instance.CheckpointCameraSettings,
 			});
 		}
 

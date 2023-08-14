@@ -74,7 +74,7 @@ namespace Project.Gameplay
 		public override void _Ready()
 		{
 			animationTree.Active = true;
-			LevelSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
 
