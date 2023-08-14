@@ -52,6 +52,19 @@ namespace Project
 		}
 
 
+		public static float CalculateForwardAngle(Vector3 forwardVector, Vector3 upVector)
+		{
+			float dot = forwardVector.Dot(Vector3.Up);
+			if (Mathf.Abs(dot) > .9f) // Moving vertically
+				forwardVector = -upVector * Mathf.Sign(dot);
+
+			return forwardVector.Flatten().Normalized().AngleTo(Vector2.Down);
+		}
+
+		/// <summary> Overload method that uses Vector3.Up as upVector. </summary>
+		public static float CalculateForwardAngle(Vector3 forwardVector) => CalculateForwardAngle(forwardVector, Vector3.Up);
+
+
 		/// <summary>
 		/// Checks if a uint flag is set.
 		/// Note: Flags must be set/unset manually. Use "flags |= flag" to set and "flags &= ~flag" to unset.

@@ -256,7 +256,7 @@ namespace Project.Gameplay
 			}
 
 			Character.UpDirection = pathFollower.Up();
-			Character.MovementAngle = Character.CalculateForwardAngle(pathFollower.Back());
+			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(pathFollower.Back(), Character.PathFollower.Up());
 			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 
 			sfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed)); //Fade volume based on speed

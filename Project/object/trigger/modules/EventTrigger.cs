@@ -106,7 +106,7 @@ namespace Project.Gameplay.Triggers
 		{
 			Character.ResetMovementState();
 
-			Character.MovementAngle = Character.CalculateForwardAngle(playerStandin.Forward());
+			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(playerStandin.Forward());
 			Character.Animator.SnapRotation(Character.MovementAngle);
 			Character.Animator.CancelOneshot(fadeout);
 

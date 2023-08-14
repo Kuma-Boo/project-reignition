@@ -4,6 +4,7 @@ namespace Project.Gameplay
 {
 	/// <summary>
 	/// Helps keep track of where the player is relative to the level's path.
+	/// NOTE: Paths with vertical surfaces tilted at 180 degrees are unsupported.
 	/// </summary>
 	public partial class CharacterPathFollower : PathFollow3D
 	{
@@ -58,13 +59,14 @@ namespace Project.Gameplay
 
 		public void RecalculateData()
 		{
-			float newForwardAngle = Character.CalculateForwardAngle(this.Back());
+			float newForwardAngle = ExtensionMethods.CalculateForwardAngle(this.Back(), this.Up());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .575f; //Abitrary blend amount that seems to work
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			FlatPlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
+
 
 			// Update custom orientations
 			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();
