@@ -1,7 +1,5 @@
-[gd_scene load_steps=24 format=3 uid="uid://ctht326ugrail"]
+[gd_scene load_steps=22 format=3 uid="uid://ctht326ugrail"]
 
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_82lqk"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_dpy03"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_d4xxv"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/PteroEggManager.cs" id="3_sb6wl"]
 [ext_resource type="PackedScene" uid="uid://dp60xb12an0s2" path="res://area/2 dino jungle/act 2/Static.tscn" id="20_8sfob"]
@@ -32,23 +30,13 @@ size = Vector3(9.4, 11.5, 2)
 
 [node name="Stage" type="Node"]
 
-[node name="PteroEggAct" type="Node3D" parent="."]
-script = ExtResource("1_82lqk")
-"Level ID" = "dj_a2_ptero"
+[node name="Static" parent="." instance=ExtResource("20_8sfob")]
+"Level ID" = "dj_a2_ptero_egg"
 "Mission Type" = 1
-"Time Limit" = 0.0
 "Objective Count" = 4
-"Story Event Index" = -1
 "Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = ExtResource("2_dpy03")
+
+[node name="PteroEggAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="PteroEggAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.3, -2, -6)
@@ -1033,12 +1021,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90211, 0, -0.618034)
 [node name="Ring10" parent="PteroEggAct/RightPath/Ring2" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17557, 0, -1.61803)
 
-[node name="Static" parent="." instance=ExtResource("20_8sfob")]
-
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg" to="PteroEggAct" method="IncrementObjective"]
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg2" to="PteroEggAct" method="IncrementObjective"]
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg3" to="PteroEggAct" method="IncrementObjective"]
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg4" to="PteroEggAct" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg" to="Static" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg2" to="Static" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg3" to="Static" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg4" to="Static" method="IncrementObjective"]
 [connection signal="Activated" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/RingCuller" method="ActivateNode"]
 [connection signal="Defeated" from="PteroEggAct/Island/BlueMajin" to="PteroEggAct/Island/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/Island/BlueMajin" to="PteroEggAct/Island/EnemyStone2" method="IncrementCounter"]

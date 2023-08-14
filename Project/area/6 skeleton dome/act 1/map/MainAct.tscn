@@ -1,9 +1,7 @@
-[gd_scene load_steps=84 format=3 uid="uid://c6qp0p2qw34ud"]
+[gd_scene load_steps=81 format=3 uid="uid://c6qp0p2qw34ud"]
 
 [ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6irkq"]
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_yisij"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_4su1b"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_5ne6u"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="3_4cg0m"]
 [ext_resource type="PackedScene" uid="uid://rfun0ekg6spj" path="res://area/6 skeleton dome/object/platform/PlatformCavernSmall.tscn" id="3_6m2nv"]
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="3_7v3mk"]
@@ -35,7 +33,6 @@
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_6pbex"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="23_11llw"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="25_4vuwu"]
-[ext_resource type="Resource" uid="uid://dm4x1eupq13eq" path="res://area/6 skeleton dome/act 1/trigger/camera/ExteriorCamera.tres" id="26_t7xhw"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="34_d0kwn"]
 [ext_resource type="PackedScene" uid="uid://qxfca8v0ndfq" path="res://area/6 skeleton dome/object/grindrail/Grindrail02.tscn" id="34_sbk4a"]
 [ext_resource type="PackedScene" uid="uid://0jj0alw37l1s" path="res://area/6 skeleton dome/object/grindrail/Grindrail04.tscn" id="36_3kt84"]
@@ -335,22 +332,11 @@ size = Vector3(30, 20, 1)
 
 [node name="Stage" type="Node"]
 
-[node name="MainAct" type="Node3D" parent="."]
-script = ExtResource("1_yisij")
-"Level ID" = "sd_a1_main"
-"Mission Type" = 0
-"Time Limit" = 0.0
-"Story Event Index" = 20
+[node name="Static" parent="." instance=ExtResource("1_6irkq")]
 "Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = ExtResource("2_5ne6u")
+"Completion/Demo Animator" = NodePath("")
+
+[node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 metadata/_edit_lock_ = true
@@ -608,7 +594,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.395)
 
 [node name="ItemBoxFlying" parent="MainAct/Opening/Upper" instance=ExtResource("15_hvsse")]
 transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, -32.8294, 3.35, 8.4382)
-
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
@@ -2074,7 +2059,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="ItemBoxFlying" parent="MainAct/Cavern/Hall/SwitchGroup3" instance=ExtResource("15_hvsse")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 1.594, 4, -6.966)
-
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
@@ -2089,7 +2073,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="ItemBoxFlying" parent="MainAct/Cavern/Hall/SwitchGroup4" instance=ExtResource("15_hvsse")]
 transform = Transform3D(0.999517, 0, -0.0310968, 0, 1, 0, 0.0310968, 0, 0.999517, 0.361, 4, -7.801)
-
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
@@ -2104,7 +2087,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="ItemBoxFlying" parent="MainAct/Cavern/Hall/SwitchGroup5" instance=ExtResource("15_hvsse")]
 transform = Transform3D(0.998495, 0, 0.0548631, 0, 1, 0, -0.0548631, 0, 0.998495, -0.2, 4, -7.989)
-
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
@@ -4093,7 +4075,6 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.09948
 
 [node name="ItemBoxFlying" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup" instance=ExtResource("15_hvsse")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000244141, 0, 0)
-
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 100
 
@@ -5210,9 +5191,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -24.8)
 [node name="ItemBox1" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1"]
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1" instance=ExtResource("15_hvsse")]
-
-"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
+"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1" node_paths=PackedStringArray("root")]
@@ -5281,9 +5261,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.40002)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2" instance=ExtResource("15_hvsse")]
-
-"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
+"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2" node_paths=PackedStringArray("root")]
@@ -5352,8 +5331,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.9)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3" instance=ExtResource("15_hvsse")]
-"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
+"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3" node_paths=PackedStringArray("root")]
@@ -5422,9 +5401,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -34.3)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4" instance=ExtResource("15_hvsse")]
-
-"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
+"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4" node_paths=PackedStringArray("root")]
@@ -5498,9 +5476,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -69.4)
 [node name="ItemBox1" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2"]
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1" instance=ExtResource("15_hvsse")]
-
-"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
+"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1" node_paths=PackedStringArray("root")]
@@ -5569,9 +5546,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.70001)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2" instance=ExtResource("15_hvsse")]
-
-"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
+"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2" node_paths=PackedStringArray("root")]
@@ -5640,9 +5616,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.7)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3" instance=ExtResource("15_hvsse")]
-
-"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
+"Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3" node_paths=PackedStringArray("root")]
@@ -6036,9 +6011,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24, -195)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Throne/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 5)
 shape = SubResource("BoxShape3D_7ky5u")
-
-[node name="Static" parent="." instance=ExtResource("1_6irkq")]
-initialCameraSettings = ExtResource("26_t7xhw")
 
 [connection signal="Activated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Deactivate"]

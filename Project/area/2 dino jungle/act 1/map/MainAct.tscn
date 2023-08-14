@@ -1,7 +1,5 @@
-[gd_scene load_steps=87 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=85 format=3 uid="uid://b3gupr30ahvvi"]
 
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_h3exi"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_apj6p"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="4_1j3qj"]
 [ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/AutorunLockout.tres" id="5_ntl2g"]
@@ -310,22 +308,12 @@ size = Vector3(8, 15, 6)
 
 [node name="Stage" type="Node"]
 
-[node name="MainAct" type="Node3D" parent="."]
-script = ExtResource("1_h3exi")
-"Level ID" = "dj_a1_mainn"
-"Mission Type" = 0
-"Time Limit" = 0.0
-"Story Event Index" = -1
+[node name="Static" parent="." instance=ExtResource("69_kptet")]
+"Level ID" = "dj_a1_main"
 "Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = ExtResource("2_apj6p")
+"Completion/Demo Animator" = NodePath("")
+
+[node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 metadata/_edit_lock_ = true
@@ -6397,8 +6385,6 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
 shape = SubResource("BoxShape3D_co0c0")
-
-[node name="Static" parent="." instance=ExtResource("69_kptet")]
 
 [connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Despawn"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]

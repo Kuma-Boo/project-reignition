@@ -1,7 +1,5 @@
-[gd_scene load_steps=195 format=3 uid="uid://ms7rm6vsb708"]
+[gd_scene load_steps=193 format=3 uid="uid://ms7rm6vsb708"]
 
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_jxthg"]
-[ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_q36gh"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_n7uj2"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_v6hfg"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="5_ox8ed"]
@@ -11171,22 +11169,10 @@ size = Vector3(12, 20, 2)
 
 [node name="Stage" type="Node"]
 
-[node name="MainAct" type="Node3D" parent="."]
-script = ExtResource("1_jxthg")
+[node name="Static" parent="." instance=ExtResource("69_a710p")]
 "Level ID" = "so_a1_main"
-"Mission Type" = 0
-"Time Limit" = 0.0
-"Story Event Index" = -1
-"Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 1.0
-Completion/Lockout = ExtResource("2_q36gh")
+
+[node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, 0)
@@ -18083,8 +18069,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185, 8.8, 2)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("65")
-
-[node name="Static" parent="." instance=ExtResource("69_a710p")]
 
 [connection signal="Activated" from="MainAct/CullingMap/OasisLoad" to="MainAct/Oasis" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/OasisLoad" to="MainAct/Oasis" method="Deactivate"]

@@ -38,8 +38,8 @@ namespace Project.Gameplay
 
 			//Apply default settings
 			CameraSettingsResource targetSettings = defaultSettings;
-			if (StageSettings.instance != null && StageSettings.instance.initialCameraSettings != null)
-				targetSettings = StageSettings.instance.initialCameraSettings;
+			if (StageSettings.instance != null && StageSettings.instance.InitialCameraSettings != null)
+				targetSettings = StageSettings.instance.InitialCameraSettings;
 
 			UpdateCameraSettings(new CameraBlendData()
 			{

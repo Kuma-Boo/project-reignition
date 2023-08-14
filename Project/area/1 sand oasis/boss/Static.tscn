@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://brtel7tjfbqu1"]
+[gd_scene load_steps=15 format=3 uid="uid://brtel7tjfbqu1"]
 
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="1_sibja"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_usvxm"]
 [ext_resource type="PackedScene" uid="uid://l2gs3bhjao6b" path="res://area/1 sand oasis/boss/environment/SOBoss.tscn" id="1_xgd2p"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_lfny6"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="2_xu7fo"]
 [ext_resource type="PackedScene" uid="uid://0dl0qnex82mi" path="res://area/1 sand oasis/boss/environment/collision/Collision.tscn" id="3_7yi4a"]
 [ext_resource type="Curve3D" uid="uid://bvpu60xrfh0px" path="res://area/1 sand oasis/boss/environment/path/MainPath.tres" id="4_nrma0"]
@@ -50,7 +51,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("./Camera:fov")
+tracks/3/path = NodePath("Camera:fov")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -62,7 +63,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("./Camera:current")
+tracks/4/path = NodePath("Camera:current")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -78,7 +79,7 @@ length = 10.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("./Camera:fov")
+tracks/0/path = NodePath("Camera:fov")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -114,7 +115,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("./Camera:rotation")
+tracks/3/path = NodePath("Camera:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -126,7 +127,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("./Camera:current")
+tracks/4/path = NodePath("Camera:current")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -180,7 +181,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("./Camera:rotation")
+tracks/2/path = NodePath("Camera:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -192,7 +193,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("./Camera:fov")
+tracks/3/path = NodePath("Camera:fov")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -246,7 +247,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("./Camera:rotation")
+tracks/2/path = NodePath("Camera:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -258,7 +259,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("./Camera:fov")
+tracks/3/path = NodePath("Camera:fov")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -290,11 +291,27 @@ _data = {
 "demo3": SubResource("Animation_5pere")
 }
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionDemoAnimator", "environment")]
+[node name="Static" type="Node3D"]
 script = ExtResource("1_usvxm")
-pathParent = NodePath("Path")
-completionDemoAnimator = NodePath("DemoCamera/AnimationPlayer")
-environment = NodePath("WorldEnvironment")
+"Level ID" = "so_boss"
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = null
+"Story Event Index" = -1
+"Dialog Library" = null
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = ExtResource("2_lfny6")
+"Completion/Demo Animator" = NodePath("DemoCamera/AnimationPlayer")
+"Static/Path Parent" = NodePath("")
+Static/Environment = NodePath("")
 
 [node name="Collision" parent="." instance=ExtResource("3_7yi4a")]
 visible = false
@@ -319,7 +336,7 @@ directional_shadow_max_distance = 250.0
 curve = ExtResource("4_nrma0")
 
 [node name="BossPathFollower" type="PathFollow3D" parent="Path/MainPath"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -60)
 progress = 60.0
 cubic_interp = false
 

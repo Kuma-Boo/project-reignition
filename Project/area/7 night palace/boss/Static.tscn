@@ -1,6 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://b6tymj1vanl66"]
+[gd_scene load_steps=19 format=3 uid="uid://b6tymj1vanl66"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fvbu3"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_odam1"]
 [ext_resource type="Script" path="res://area/7 night palace/boss/script/InfiniteHallway.cs" id="2_wuoms"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="3_3wins"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="4_8p504"]
@@ -22,6 +23,25 @@ size = Vector3(16, 28, 2)
 
 [node name="Static" type="Node3D"]
 script = ExtResource("1_fvbu3")
+"Level ID" = "np_boss"
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = null
+"Story Event Index" = -1
+"Dialog Library" = null
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = ExtResource("2_odam1")
+"Completion/Demo Animator" = NodePath("")
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("WorldEnvironment")
 
 [node name="Visuals" type="Node3D" parent="."]
 
@@ -108,9 +128,6 @@ transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, -0.62828
 transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, 0, 15, 0)
 shape = SubResource("10")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
-environment = ExtResource("8_metfr")
-
 [node name="Moonlight" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(2.54519e-06, -0.548177, 0.836362, -3.01604e-07, 0.836362, 0.548177, -1, -1.64747e-06, 1.96337e-06, 12.4917, 3, -7.73828)
 light_energy = 1.2
@@ -155,6 +172,9 @@ editorPreview = true
 [node name="BGM" parent="." instance=ExtResource("11_s0jtr")]
 autoplay = true
 bus = &"Master"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("8_metfr")
 
 [connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/RichRing" method="Respawn"]
 [connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Rings/Ring1" method="Respawn"]

@@ -1,6 +1,5 @@
-[gd_scene load_steps=12 format=3 uid="uid://c6vlrltnp4jhp"]
+[gd_scene load_steps=11 format=3 uid="uid://c6vlrltnp4jhp"]
 
-[ext_resource type="Script" path="res://object/stage/LevelSettings.cs" id="1_iec1i"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_tlcwl"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="3_5ajvl"]
 [ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/AutorunLockout.tres" id="4_dlj7f"]
@@ -18,22 +17,15 @@ size = Vector3(14, 12, 8)
 
 [node name="Stage" type="Node"]
 
-[node name="RingAct" type="Node3D" parent="."]
-script = ExtResource("1_iec1i")
+[node name="Static" parent="." instance=ExtResource("7_85nhw")]
 "Level ID" = "dj_a1_ring"
-"Mission Type" = 0
-"Time Limit" = 0.0
-"Story Event Index" = -1
+"Mission Type" = 2
+"Objective Count" = 100
 "Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = null
+"Completion/Demo Animator" = NodePath("")
+initialCameraSettings = ExtResource("10_pwidg")
+
+[node name="RingAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="RingAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
@@ -69,6 +61,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 5)
 shape = SubResource("BoxShape3D_kvbov")
 
 [node name="DinoTrioGroup" parent="." instance=ExtResource("7_ntpku")]
-
-[node name="Static" parent="." instance=ExtResource("7_85nhw")]
-initialCameraSettings = ExtResource("10_pwidg")

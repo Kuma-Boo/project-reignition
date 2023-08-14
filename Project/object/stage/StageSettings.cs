@@ -26,7 +26,9 @@ namespace Project.Gameplay
 			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race)
 				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
 
+			properties.Add(ExtensionMethods.CreateProperty("Camera Settings", Variant.Type.Object));
 			properties.Add(ExtensionMethods.CreateProperty("Story Event Index", Variant.Type.Int, PropertyHint.Range, "-1,30"));
+			properties.Add(ExtensionMethods.CreateProperty("Dialog Library", Variant.Type.Object));
 
 			properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Activation Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));
 			if (itemCycleActivationTrigger != null && !itemCycleActivationTrigger.IsEmpty)
@@ -52,6 +54,8 @@ namespace Project.Gameplay
 			properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object));
 			properties.Add(ExtensionMethods.CreateProperty("Completion/Demo Animator", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "AnimationPlayer"));
 
+			properties.Add(ExtensionMethods.CreateProperty("Static/Path Parent", Variant.Type.NodePath));
+			properties.Add(ExtensionMethods.CreateProperty("Static/Environment", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "WorldEnvironment"));
 
 			return properties;
 		}
@@ -69,8 +73,14 @@ namespace Project.Gameplay
 					return MissionTimeLimit;
 				case "Objective Count":
 					return MissionObjectiveCount;
+
+				case "Camera Settings":
+					return InitialCameraSettings;
+
 				case "Story Event Index":
 					return storyEventIndex;
+				case "Dialog Library":
+					return dialogLibrary;
 
 				case "Item Cycling/Activation Trigger":
 					return itemCycleActivationTrigger;
@@ -102,6 +112,11 @@ namespace Project.Gameplay
 					return completionLockout;
 				case "Completion/Demo Animator":
 					return completionDemoAnimator;
+
+				case "Static/Path Parent":
+					return pathParent;
+				case "Static/Environment":
+					return environment;
 			}
 
 			return base._Get(property);
@@ -125,8 +140,15 @@ namespace Project.Gameplay
 				case "Objective Count":
 					MissionObjectiveCount = (int)value;
 					break;
+
+				case "Camera Settings":
+					InitialCameraSettings = (CameraSettingsResource)value;
+					break;
 				case "Story Event Index":
 					storyEventIndex = (int)value;
+					break;
+				case "Dialog Library":
+					dialogLibrary = (SFXLibraryResource)value;
 					break;
 
 				case "Item Cycling/Activation Trigger":
@@ -175,6 +197,14 @@ namespace Project.Gameplay
 				case "Completion/Demo Animator":
 					completionDemoAnimator = (NodePath)value;
 					break;
+
+
+				case "Static/Path Parent":
+					pathParent = (NodePath)value;
+					break;
+				case "Static/Environment":
+					environment = (NodePath)value;
+					break;
 				default:
 					return false;
 			}
@@ -183,12 +213,10 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		[Export]
-		public CameraSettingsResource initialCameraSettings;
+		public CameraSettingsResource InitialCameraSettings { get; private set; }
 
 		#region Path Settings
-		[Export]
-		public Node3D pathParent;
+		private NodePath pathParent;
 		/// <summary> List of all level paths contained for this level. </summary>
 		private readonly Array<Path3D> pathList = new Array<Path3D>();
 
@@ -221,12 +249,11 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		[Export]
 		public SFXLibraryResource dialogLibrary;
 
-		[Export]
 		/// <summary> Reference to active area's WorldEnvironment node. </summary>
-		public WorldEnvironment environment;
+		public WorldEnvironment Environment { get; private set; }
+		private NodePath environment;
 
 
 		public override void _EnterTree()
@@ -235,10 +262,13 @@ namespace Project.Gameplay
 
 			instance = this; //Always override previous instance
 
+			Environment = GetNodeOrNull<WorldEnvironment>(environment);
+
 			SetUpItemCycles();
-			for (int i = 0; i < pathParent.GetChildCount(); i++)
+			Node pathParentNode = GetNode<Node>(pathParent);
+			for (int i = 0; i < pathParentNode.GetChildCount(); i++)
 			{
-				Path3D path = pathParent.GetChildOrNull<Path3D>(i);
+				Path3D path = pathParentNode.GetChildOrNull<Path3D>(i);
 				if (path != null)
 					pathList.Add(path);
 			}

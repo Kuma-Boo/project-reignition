@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://dax0mun2bjm1v"]
+[gd_scene load_steps=20 format=3 uid="uid://dax0mun2bjm1v"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_inrdn"]
 [ext_resource type="PackedScene" uid="uid://bdqp0wj6evtuh" path="res://area/0 lost prologue/act/environment/collision/Collision.tscn" id="1_qgh10"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_oex4j"]
 [ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/0 lost prologue/data/Environment.tres" id="2_ooith"]
 [ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/01Opening.tscn" id="3_gpjv8"]
 [ext_resource type="PackedScene" path="res://area/0 lost prologue/act/environment/02Hall.tscn" id="4_ut2gb"]
@@ -23,12 +24,14 @@ size = Vector3(90, 20, 10)
 [sub_resource type="BoxShape3D" id="13"]
 size = Vector3(153.4, 20, 251.8)
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "environment")]
+[node name="Static" type="Node3D"]
 script = ExtResource("1_inrdn")
 "Level ID" = "lp"
 "Mission Type" = 0
 "Time Limit" = 0.0
+"Camera Settings" = null
 "Story Event Index" = -1
+"Dialog Library" = null
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
 "Ranking/Gold Time" = 0
@@ -38,10 +41,10 @@ script = ExtResource("1_inrdn")
 "Ranking/Silver Score" = 0
 "Ranking/Bronze Score" = 0
 Completion/Delay = 0.0
-Completion/Lockout = null
+Completion/Lockout = ExtResource("2_oex4j")
 "Completion/Demo Animator" = NodePath("")
-pathParent = NodePath("Path")
-environment = NodePath("WorldEnvironment")
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("1_qgh10")]
 visible = false
