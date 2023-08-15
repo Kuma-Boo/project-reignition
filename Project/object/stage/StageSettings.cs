@@ -502,19 +502,7 @@ namespace Project.Gameplay
 		private float completionDelay;
 		public void FinishLevel(bool wasSuccessful)
 		{
-			if (StartCompletionDemo()) // Attempt to start the completion demo
-			{
-				// Hide everything so shadows don't render
-				Visible = false;
-
-				// Disable all object nodes that aren't parented to this node
-				Array<Node> nodes = GetTree().GetNodesInGroup("cull on complete");
-				for (int i = 0; i < nodes.Count; i++)
-				{
-					if (nodes[i] is Node3D node)
-						node.Visible = false;
-				}
-			}
+			StartCompletionDemo(); // Attempt to start the completion demo
 
 			BGMPlayer.StageMusicPaused = true;
 			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
@@ -523,16 +511,13 @@ namespace Project.Gameplay
 
 		/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
 		public NodePath completionDemoAnimator;
-		public bool StartCompletionDemo()
+		public void StartCompletionDemo()
 		{
 			AnimationPlayer completionAnimator = GetNodeOrNull<AnimationPlayer>(completionDemoAnimator);
-			if (completionAnimator == null) return false;
+			if (completionAnimator == null) return;
 
 			OnCameraDemoAdvance();
-
-			completionAnimator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(this, MethodName.OnCameraDemoAdvance));
 			completionAnimator.Play("demo1");
-			return true;
 		}
 
 		/// <summary> Completion demo advanced, play a crossfade </summary>
