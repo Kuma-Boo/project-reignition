@@ -83,7 +83,11 @@ namespace Project.Gameplay.Triggers
 
 
 			if (playerStandin != null)
+			{
 				Character.StartExternal(this, playerStandin, smoothing);
+				Character.Animator.ExternalAngle = 0; // Reset external angle
+				Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
+			}
 
 			if (cameraStandin != null) // Set external camera
 				Character.Camera.SetExternalController(cameraStandin);

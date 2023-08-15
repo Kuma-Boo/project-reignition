@@ -13,8 +13,6 @@ namespace Project.Gameplay.Triggers
 		[Signal]
 		public delegate void DeactivatedEventHandler();
 
-		/// <summary> Reference to the active sidle trigger. </summary>
-		public static SidleTrigger Instance { get; private set; }
 		/// <summary> Reference to the active foothold. </summary>
 		public static FootholdTrigger CurrentFoothold { get; set; }
 		/// <summary> Should the player grab a foot hold when taking damage? </summary>
@@ -50,6 +48,14 @@ namespace Project.Gameplay.Triggers
 
 			if (isActive)
 			{
+				if (Character.ExternalController != this) // Overridden
+				{
+					GD.Print("sidle was overridden");
+					StopSidle();
+					isInteractingWithPlayer = false;
+					return;
+				}
+
 				if (damageState == DamageStates.Disabled)
 					UpdateSidle();
 				else
@@ -73,7 +79,6 @@ namespace Project.Gameplay.Triggers
 
 			Character.IsOnGround = true;
 			Character.StartExternal(this, Character.PathFollower, .2f);
-
 			Character.Animator.ExternalAngle = Mathf.Pi; // Rotate to follow pathfollower
 			Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 			Character.Animator.StartSidle(isFacingRight);
@@ -138,11 +143,12 @@ namespace Project.Gameplay.Triggers
 			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
 
 			if (Character.ExternalController == this)
+			{
 				Character.ResetMovementState();
+				Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
+			}
 
 			Character.Animator.ResetState(Character.IsRespawning ? 0.0f : .1f);
-			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
-
 			damageState = DamageStates.Disabled;
 			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
 		}
@@ -279,7 +285,6 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!a.IsInGroup("player")) return;
 
-			Instance = this;
 			isInteractingWithPlayer = true;
 
 			Character.Skills.IsSpeedBreakEnabled = false; // Disable speed break
@@ -291,7 +296,6 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!a.IsInGroup("player")) return;
 
-			Instance = null;
 			isInteractingWithPlayer = false;
 
 			StopSidle();
