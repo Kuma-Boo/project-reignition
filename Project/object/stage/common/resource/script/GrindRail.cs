@@ -237,6 +237,7 @@ namespace Project.Gameplay
 			if (!Character.IsGrindstepping)
 				Character.Animator.ResetState(.2f);
 			Character.Animator.SnapRotation(Character.MovementAngle);
+			Character.Animator.Fall();
 
 			// Disconnect signals
 			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
