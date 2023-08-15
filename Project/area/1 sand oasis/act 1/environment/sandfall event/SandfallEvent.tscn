@@ -1,46 +1,66 @@
-[gd_scene load_steps=5 format=3 uid="uid://wpj0smmgjk01"]
+[gd_scene load_steps=6 format=3 uid="uid://wpj0smmgjk01"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_5mwi3"]
 [ext_resource type="PackedScene" uid="uid://o86v4ui8fnjs" path="res://area/1 sand oasis/act 1/environment/sandfall event/SandfallEvent.gltf" id="1_yr102"]
 [ext_resource type="Resource" uid="uid://dyjpi8d72jkne" path="res://resource/preset/lockout/EventLockout.tres" id="3_5h0al"]
-[ext_resource type="Curve3D" uid="uid://c5w0rahqukuhw" path="res://area/1 sand oasis/act 1/environment/sandfall event/SandfallEventCurve.tres" id="4_qtk4r"]
+[ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="4_b4jar"]
+[ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="5_0kp86"]
 
 [node name="SandfallEvent" node_paths=PackedStringArray("animator", "playerStandin", "cameraStandin") instance=ExtResource("1_yr102")]
 script = ExtResource("1_5mwi3")
 animator = NodePath("AnimationPlayer")
 playerStandin = NodePath("SandfallEventRoot/Skeleton3D/Player/Player")
-cameraStandin = NodePath("SandfallEventCurve/CameraPathFollower/CameraPivot/CameraReference")
+cameraStandin = NodePath("SandfallEventRoot/Skeleton3D/Camera/CameraPivot/CameraReference")
 lockout = ExtResource("3_5h0al")
 smoothing = 0.5
 
 [node name="Skeleton3D" parent="SandfallEventRoot" index="0"]
-bones/0/position = Vector3(2.25, 2.99434, 0)
-bones/1/position = Vector3(0, 1.50001, 0)
-bones/2/position = Vector3(2, 1.50001, -3.5)
-bones/3/position = Vector3(2, 1.50001, 3)
+bones/0/position = Vector3(2.25, 2.99434, 1.77636e-15)
+bones/1/position = Vector3(2.25, 2.99434, 0)
+bones/2/position = Vector3(0, 1.50001, 0)
+bones/3/position = Vector3(2, 1.50001, -3.5)
+bones/4/position = Vector3(2, 1.50001, 3)
 
 [node name="Player" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="1"]
-transform = Transform3D(0, 2.22045e-16, 1, 2.22045e-16, 1, -2.22045e-16, -1, 2.22045e-16, 0, 2.25, 2.98244, 0)
+transform = Transform3D(0, 2.22045e-16, 1, 2.22045e-16, 1, -2.22045e-16, -1, 2.22045e-16, 0, 2.23809, 2.99434, 0)
+visible = false
 bone_name = "player"
-bone_idx = 0
+bone_idx = 1
 
 [node name="Player" type="Node3D" parent="SandfallEventRoot/Skeleton3D/Player" index="0"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="SandfallEventCurve" type="Path3D" parent="." index="2"]
-curve = ExtResource("4_qtk4r")
+[node name="Sonic" parent="SandfallEventRoot/Skeleton3D/Player/Player" index="0" instance=ExtResource("4_b4jar")]
 
-[node name="CameraPathFollower" type="PathFollow3D" parent="SandfallEventCurve" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.999996, 0, 0.999996, 0, 1, 0, -4.37112e-08, 0, 5, 0)
-v_offset = 5.0
-rotation_mode = 2
-loop = false
-tilt_enabled = false
+[node name="GeneralSkeleton" parent="SandfallEventRoot/Skeleton3D/Player/Player/Sonic/SonicRoot" index="0"]
+bones/11/rotation = Quaternion(0.55867, 0.762376, -0.0946178, -0.312598)
+bones/12/rotation = Quaternion(0.00527085, 0.0365675, -0.0021433, 0.999315)
+bones/14/rotation = Quaternion(0.00294868, 0.00678223, -0.000281789, 0.999973)
+bones/15/rotation = Quaternion(0.014017, 0.00409223, 0.00361267, 0.999887)
+bones/17/rotation = Quaternion(0.0167333, 0.0107753, 0.000105142, 0.999802)
+bones/18/rotation = Quaternion(0.0249171, 0.00388378, 0.000898508, 0.999682)
+bones/20/rotation = Quaternion(0.00122096, 0.00794685, 6.06179e-05, 0.999968)
+bones/21/rotation = Quaternion(0.00959978, -0.00273355, 0.000526762, 0.99995)
+bones/23/rotation = Quaternion(-0.00150023, 0.00739151, -0.000392204, 0.999972)
+bones/24/rotation = Quaternion(0.00834599, -0.0104869, 0.000889611, 0.99991)
+bones/37/rotation = Quaternion(0.00122097, -0.00794686, -6.06105e-05, 0.999968)
+bones/38/rotation = Quaternion(0.00959979, 0.00273354, -0.000526762, 0.99995)
 
-[node name="CameraPivot" type="Node3D" parent="SandfallEventCurve/CameraPathFollower" index="0"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallEventRoot/Skeleton3D/Player/Player/Sonic" index="1"]
+libraries = {
+"EventLibrary": ExtResource("5_0kp86")
+}
 
-[node name="CameraReference" type="Camera3D" parent="SandfallEventCurve/CameraPathFollower/CameraPivot" index="0"]
+[node name="Camera" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="2"]
+transform = Transform3D(1, 0, -4.37114e-08, 0, 1, 0, 4.37114e-08, 0, 1, 2.24405, 2.98507, 1.77636e-15)
+bone_name = "camera"
+bone_idx = 0
+
+[node name="CameraPivot" type="Node3D" parent="SandfallEventRoot/Skeleton3D/Camera" index="0"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 4, 0)
+
+[node name="CameraReference" type="Camera3D" parent="SandfallEventRoot/Skeleton3D/Camera/CameraPivot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 cull_mask = 32767
 fov = 60.0
+
+[editable path="SandfallEventRoot/Skeleton3D/Player/Player/Sonic"]
