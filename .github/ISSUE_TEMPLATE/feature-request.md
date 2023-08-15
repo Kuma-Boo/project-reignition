@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Describe the feature and it's purpose**
-What is the feature? Why should it exist?
+<!-- Add request here -->
 
 **Mockup**
-Add any screenshots or pseudo-code here.
+<!-- Add any screenshots or pseudo-code here. -->
