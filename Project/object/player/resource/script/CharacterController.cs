@@ -1765,7 +1765,7 @@ namespace Project.Gameplay
 			Skills.IsTimeBreakEnabled = false;
 			Skills.IsSpeedBreakEnabled = false;
 
-			AddLockoutData(Level.completionLockout);
+			AddLockoutData(Level.CompletionLockout);
 		}
 
 		public void OnObjectCollisionEnter(Node3D body)

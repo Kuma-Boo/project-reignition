@@ -50,7 +50,7 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
 			}
 
-			properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,4,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,2.5,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object));
 			properties.Add(ExtensionMethods.CreateProperty("Completion/Demo Animator", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "AnimationPlayer"));
 
@@ -108,7 +108,7 @@ namespace Project.Gameplay
 				case "Completion/Delay":
 					return completionDelay;
 				case "Completion/Lockout":
-					return completionLockout;
+					return CompletionLockout;
 				case "Completion/Demo Animator":
 					return completionDemoAnimator;
 
@@ -191,7 +191,7 @@ namespace Project.Gameplay
 					completionDelay = (float)value;
 					break;
 				case "Completion/Lockout":
-					completionLockout = (LockoutResource)value;
+					CompletionLockout = (LockoutResource)value;
 					break;
 				case "Completion/Demo Animator":
 					completionDemoAnimator = (NodePath)value;
@@ -490,7 +490,7 @@ namespace Project.Gameplay
 		[Signal]
 		public delegate void LevelCompletedEventHandler(); // Called when level is completed
 
-		public LockoutResource completionLockout;
+		private float completionDelay;
 		public enum LevelStateEnum
 		{
 			Incomplete,
@@ -498,11 +498,13 @@ namespace Project.Gameplay
 			Success,
 		}
 		public LevelStateEnum LevelState { get; private set; }
+		public LockoutResource CompletionLockout { get; private set; }
 		private bool IsLevelFinished => LevelState != LevelStateEnum.Incomplete;
-		private float completionDelay;
+		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 		public void FinishLevel(bool wasSuccessful)
 		{
-			StartCompletionDemo(); // Attempt to start the completion demo
+			// Attempt to start the completion demo
+			GetTree().CreateTimer(wasSuccessful ? completionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
 			BGMPlayer.StageMusicPaused = true;
 			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
