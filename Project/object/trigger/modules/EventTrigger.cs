@@ -27,6 +27,8 @@ namespace Project.Gameplay.Triggers
 		private Node3D cameraStandin;
 		[Export]
 		private LockoutResource lockout;
+		[Export(PropertyHint.Range, "0, 1")]
+		private float smoothing = .2f;
 
 		private readonly StringName EVENT_ANIMATION = "event";
 		private readonly StringName RESET_ANIMATION = "RESET";
@@ -81,7 +83,7 @@ namespace Project.Gameplay.Triggers
 
 
 			if (playerStandin != null)
-				Character.StartExternal(this, playerStandin, .2f);
+				Character.StartExternal(this, playerStandin, smoothing);
 
 			if (cameraStandin != null) // Set external camera
 				Character.Camera.SetExternalController(cameraStandin);
