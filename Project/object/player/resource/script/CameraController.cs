@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Triggers;
 using System.Collections.Generic;
 
 namespace Project.Gameplay
@@ -289,6 +290,10 @@ namespace Project.Gameplay
 			{
 				blendData = CameraBlendList[index],
 			};
+
+			// Update static data before simulating camera
+			if (CameraBlendList[index].Trigger != null && CameraBlendList[index].Trigger.UpdateEveryFrame)
+				CameraBlendList[index].Trigger.UpdateStaticData(CameraBlendList[index]);
 
 			float targetYawAngle = settings.yawAngle;
 			float targetPitchAngle = settings.pitchAngle;
@@ -604,8 +609,12 @@ namespace Project.Gameplay
 
 		/// <summary> How long blending takes in seconds. </summary>
 		public float BlendTime { get; set; }
-		/// <summary> Camera's static position. Only used when CameraSettingsResource.isStaticCamera is true. </summary>
+		/// <summary> Camera's static position. Only used when CameraSettingsResource.ussStaticPosition is true. </summary>
 		public Vector3 StaticPosition { get; set; }
+
+
+		/// <summary> Camera's static rotation. Only used when CameraSettingsResource.useStaticRotation is true. </summary>
+		public Vector3 StaticRotation { get; set; }
 
 		/// <summary> Current pitch angle. </summary>
 		public float pitchAngle;
@@ -637,6 +646,8 @@ namespace Project.Gameplay
 
 		/// <summary> CameraSettingsResource for this camera setting. </summary>
 		public CameraSettingsResource SettingsResource { get; set; }
+		/// <summary> Reference to the cameraTrigger, if it exists. </summary>
+		public CameraTrigger Trigger { get; set; }
 
 		public void SetInfluence(float rawInfluence)
 		{

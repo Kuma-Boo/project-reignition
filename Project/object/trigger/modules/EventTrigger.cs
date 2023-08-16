@@ -34,7 +34,6 @@ namespace Project.Gameplay.Triggers
 			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool));
 
-			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Camera Stand-in", Variant.Type.NodePath));
 			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath));
 
 
@@ -44,7 +43,6 @@ namespace Project.Gameplay.Triggers
 				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Animation Fadeout Time", Variant.Type.Float));
 				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Position Smoothing", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 
-				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Exit On Ground", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Normalize Exit Move Speed", Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Exit Move Speed", Variant.Type.Float));
 				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Exit Vertical Speed", Variant.Type.Float));
@@ -62,8 +60,6 @@ namespace Project.Gameplay.Triggers
 					return autoRespawn;
 				case "Trigger Settings/Is One Shot":
 					return isOneShot;
-				case "Trigger Settings/Camera Stand-in":
-					return cameraStandin;
 				case "Trigger Settings/Player Stand-in":
 					return playerStandin;
 
@@ -96,9 +92,6 @@ namespace Project.Gameplay.Triggers
 					break;
 				case "Trigger Settings/Is One Shot":
 					isOneShot = (bool)value;
-					break;
-				case "Trigger Settings/Camera Stand-in":
-					cameraStandin = (NodePath)value;
 					break;
 				case "Trigger Settings/Player Stand-in":
 					playerStandin = (NodePath)value;
@@ -197,15 +190,11 @@ namespace Project.Gameplay.Triggers
 				Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 				Character.Animator.PlayOneshotAnimation(characterAnimation);
 			}
-
-			if (cameraStandin != null && !cameraStandin.IsEmpty) // Set external camera
-				Character.Camera.SetExternalController(GetNode<Node3D>(cameraStandin));
 		}
 
 
 		#region Event Animation
 		private NodePath playerStandin;
-		private NodePath cameraStandin;
 		/// <summary> Lockout to apply when character finishes event. </summary>
 		private LockoutResource characterExitLockout;
 		private float characterPositionSmoothing = .2f;
@@ -232,9 +221,6 @@ namespace Project.Gameplay.Triggers
 
 			if (characterExitLockout != null)
 				Character.AddLockoutData(characterExitLockout);
-
-			if (cameraStandin != null) // Remove external camera
-				Character.Camera.SetExternalController(null);
 
 			Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.speed * characterExitMoveSpeed : characterExitMoveSpeed;
 			Character.VerticalSpeed = characterExitVerticalSpeed;
