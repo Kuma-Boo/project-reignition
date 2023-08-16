@@ -222,13 +222,13 @@ namespace Project.Gameplay.Triggers
 
 
 		/// <summary> Resets the character's movement state. </summary>
-		public void FinishEvent(float fadeout)
+		public void FinishEvent()
 		{
 			Character.ResetMovementState();
 
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
 			Character.Animator.SnapRotation(Character.MovementAngle);
-			Character.Animator.CancelOneshot(fadeout);
+			Character.Animator.CancelOneshot(characterFadeoutTime);
 
 			if (characterExitLockout != null)
 				Character.AddLockoutData(characterExitLockout);

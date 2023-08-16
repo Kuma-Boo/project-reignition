@@ -102,6 +102,11 @@ namespace Project.Gameplay
 		{
 			oneShotTransition.FadeOutTime = fadeout;
 			animationTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+
+
+			// Abort accidental landing animations
+			if (!Character.JustLandedOnGround)
+				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
 		#endregion
 

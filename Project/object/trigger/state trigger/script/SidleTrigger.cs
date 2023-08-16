@@ -50,7 +50,6 @@ namespace Project.Gameplay.Triggers
 			{
 				if (Character.ExternalController != this) // Overridden
 				{
-					GD.Print("sidle was overridden");
 					StopSidle();
 					isInteractingWithPlayer = false;
 					return;
