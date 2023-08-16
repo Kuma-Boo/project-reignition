@@ -1,16 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://wpj0smmgjk01"]
+[gd_scene load_steps=3 format=3 uid="uid://wpj0smmgjk01"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_5mwi3"]
 [ext_resource type="PackedScene" uid="uid://o86v4ui8fnjs" path="res://area/1 sand oasis/act 1/environment/sandfall event/SandfallEvent.gltf" id="1_yr102"]
-[ext_resource type="Resource" uid="uid://dyjpi8d72jkne" path="res://resource/preset/lockout/EventLockout.tres" id="3_5h0al"]
 
-[node name="SandfallEvent" node_paths=PackedStringArray("animator", "playerStandin", "cameraStandin") instance=ExtResource("1_yr102")]
+[node name="SandfallEvent" node_paths=PackedStringArray("animator") instance=ExtResource("1_yr102")]
 script = ExtResource("1_5mwi3")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Camera Stand-in" = NodePath("SandfallEventRoot/Skeleton3D/Camera/CameraReference")
+"Trigger Settings/Player Stand-in" = NodePath("SandfallEventRoot/Skeleton3D/Player")
+"Player Event Settings/Animation" = &"so_a1_sandfall_event"
+"Player Event Settings/Animation Fadeout Time" = 0.2
+"Player Event Settings/Position Smoothing" = 0.0
+"Player Event Settings/Normalize Exit Move Speed" = true
+"Player Event Settings/Exit Move Speed" = 1.0
+"Player Event Settings/Exit Vertical Speed" = 0.0
+"Player Event Settings/Exit Lockout" = null
 animator = NodePath("AnimationPlayer")
-playerStandin = NodePath("SandfallEventRoot/Skeleton3D/Player")
-cameraStandin = NodePath("SandfallEventRoot/Skeleton3D/Camera/CameraReference")
-lockout = ExtResource("3_5h0al")
-smoothing = 0.0
 
 [node name="Skeleton3D" parent="SandfallEventRoot" index="0"]
 bones/0/position = Vector3(2.25, 2.99434, 0)
@@ -33,11 +39,8 @@ bone_name = "camera"
 bone_idx = 1
 
 [node name="CameraReference" type="Camera3D" parent="SandfallEventRoot/Skeleton3D/Camera" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 cull_mask = 32767
 fov = 50.0
 
 [node name="AnimationPlayer" parent="." index="1"]
 playback_process_mode = 0
-
-[connection signal="Activated" from="." to="." method="PlayCharacterAnimation" binds= [&"so_a1_sandfall_event"]]
