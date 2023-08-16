@@ -8,31 +8,36 @@
 script = ExtResource("1_5mwi3")
 animator = NodePath("AnimationPlayer")
 playerStandin = NodePath("SandfallEventRoot/Skeleton3D/Player")
-cameraStandin = NodePath("SandfallEventRoot/Skeleton3D/Camera/CameraPivot/CameraReference")
+cameraStandin = NodePath("SandfallEventRoot/Skeleton3D/Camera/CameraReference")
 lockout = ExtResource("3_5h0al")
 smoothing = 0.0
 
 [node name="Skeleton3D" parent="SandfallEventRoot" index="0"]
-bones/0/position = Vector3(2.25, 2.99434, 1.77636e-15)
-bones/1/position = Vector3(2.25, 2.99434, 0)
-bones/2/position = Vector3(0, 1.50001, 0)
-bones/3/position = Vector3(2, 1.50001, -3.5)
-bones/4/position = Vector3(2, 1.50001, 3)
+bones/0/position = Vector3(2.25, 2.99434, 0)
+bones/0/rotation = Quaternion(0, -1, 0, -7.54979e-08)
+bones/1/position = Vector3(4, 1.1, 0)
+bones/1/rotation = Quaternion(-0.0308436, 0.706434, 0.0308436, 0.706434)
+bones/2/position = Vector3(2.25, 2.99434, 0)
+bones/3/position = Vector3(0, 1.50001, 0)
+bones/4/position = Vector3(2, 1.50001, -3.5)
+bones/5/position = Vector3(2, 1.50001, 3)
 
 [node name="Player" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="1"]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.25, 2.99434, 0)
 bone_name = "player"
-bone_idx = 1
+bone_idx = 2
 
 [node name="Camera" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="2"]
-transform = Transform3D(1, 0, -4.37114e-08, 0, 1, 0, 4.37114e-08, 0, 1, 2.25, 2.99434, 1.77636e-15)
+transform = Transform3D(-1.50996e-07, 0.0871557, -0.996195, 0, 0.996195, 0.0871557, 1, 1.31601e-08, -1.50421e-07, -1.75, 4.09434, -6.03983e-07)
 bone_name = "camera"
-bone_idx = 0
+bone_idx = 1
 
-[node name="CameraPivot" type="Node3D" parent="SandfallEventRoot/Skeleton3D/Camera" index="0"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 4, 0)
-
-[node name="CameraReference" type="Camera3D" parent="SandfallEventRoot/Skeleton3D/Camera/CameraPivot" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+[node name="CameraReference" type="Camera3D" parent="SandfallEventRoot/Skeleton3D/Camera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 cull_mask = 32767
-fov = 60.0
+fov = 50.0
+
+[node name="AnimationPlayer" parent="." index="1"]
+playback_process_mode = 0
+
+[connection signal="Activated" from="." to="." method="PlayCharacterAnimation" binds= [&"so_a1_sandfall_event"]]
