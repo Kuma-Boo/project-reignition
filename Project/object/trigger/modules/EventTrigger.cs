@@ -189,6 +189,9 @@ namespace Project.Gameplay.Triggers
 				Character.Animator.ExternalAngle = 0; // Reset external angle
 				Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 				Character.Animator.PlayOneshotAnimation(characterAnimation);
+
+				// Disable break skills
+				Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = false;
 			}
 		}
 
@@ -224,6 +227,9 @@ namespace Project.Gameplay.Triggers
 
 			Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.speed * characterExitMoveSpeed : characterExitMoveSpeed;
 			Character.VerticalSpeed = characterExitVerticalSpeed;
+
+			// Re-enable break skills
+			Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = true;
 		}
 		#endregion
 	}
