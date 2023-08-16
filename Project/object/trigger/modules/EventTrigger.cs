@@ -38,7 +38,7 @@ namespace Project.Gameplay.Triggers
 			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath));
 
 
-			if (!playerStandin.IsEmpty) // Add player event settings
+			if (playerStandin != null && !playerStandin.IsEmpty) // Add player event settings
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Animation", Variant.Type.StringName));
 				properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Animation Fadeout Time", Variant.Type.Float));
@@ -190,7 +190,7 @@ namespace Project.Gameplay.Triggers
 			animator.Play(EVENT_ANIMATION);
 
 
-			if (!playerStandin.IsEmpty)
+			if (playerStandin != null && !playerStandin.IsEmpty)
 			{
 				Character.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
 				Character.Animator.ExternalAngle = 0; // Reset external angle
@@ -198,7 +198,7 @@ namespace Project.Gameplay.Triggers
 				Character.Animator.PlayOneshotAnimation(characterAnimation);
 			}
 
-			if (!cameraStandin.IsEmpty) // Set external camera
+			if (cameraStandin != null && !cameraStandin.IsEmpty) // Set external camera
 				Character.Camera.SetExternalController(GetNode<Node3D>(cameraStandin));
 		}
 
