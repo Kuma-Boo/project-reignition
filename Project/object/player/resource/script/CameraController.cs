@@ -10,6 +10,8 @@ namespace Project.Gameplay
 	/// </summary>
 	public partial class CameraController : Node3D
 	{
+		public const float DEFAULT_FOV = 60;
+
 		[ExportGroup("Components")]
 		[Export]
 		private Node3D cameraRoot;
@@ -235,6 +237,7 @@ namespace Project.Gameplay
 			float staticBlendRatio = 0; // Blend value of whether to use static camera positions or not
 			Vector2 viewportOffset = Vector2.Zero;
 			Vector3 staticPosition = Vector3.Zero;
+			float fov = DEFAULT_FOV;
 
 			for (int i = 0; i < CameraBlendList.Count; i++) // Simulate each blend data separately
 			{
@@ -252,6 +255,14 @@ namespace Project.Gameplay
 
 				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.isStaticCamera ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
+
+				if (CameraBlendList[i].Trigger != null)
+				{
+					float targetFOV = CameraBlendList[i].Trigger.targetFOV;
+					if (Mathf.IsZeroApprox(targetFOV))
+						targetFOV = DEFAULT_FOV;
+					fov = Mathf.Lerp(fov, targetFOV, CameraBlendList[i].SmoothedInfluence);
+				}
 			}
 
 			// Recalculate non-static camera positions for better transition rotations.
@@ -271,7 +282,9 @@ namespace Project.Gameplay
 			cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
-			if (SnapFlag) // Reset flag after camera was updating
+			Camera.Fov = fov; // Update fov
+
+			if (SnapFlag) // Reset flag after camera was updated
 				SnapFlag = false;
 		}
 

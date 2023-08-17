@@ -22,6 +22,11 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		/// <summary> Update static position/rotations every frame? </summary>
 		public bool UpdateEveryFrame { get; private set; }
+
+		[Export(PropertyHint.Range, "0, 179, .1")]
+		/// <summary> FOV. Set to 0 to reset to default fov. </summary>
+		public float targetFOV;
+
 		[Export]
 		/// <summary> Must be assigned to something. </summary>
 		public CameraSettingsResource settings;
