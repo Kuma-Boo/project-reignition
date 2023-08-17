@@ -185,6 +185,8 @@ namespace Project.Gameplay.Triggers
 
 			if (playerStandin != null && !playerStandin.IsEmpty)
 			{
+				BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
+
 				Character.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
 				Character.Animator.ExternalAngle = 0; // Reset external angle
 				Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
@@ -216,6 +218,7 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Resets the character's movement state. </summary>
 		public void FinishEvent()
 		{
+			BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
 			Character.ResetMovementState();
 
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
