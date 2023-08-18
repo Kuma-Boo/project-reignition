@@ -1,4 +1,5 @@
 using Godot;
+using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay
 {
@@ -72,7 +73,7 @@ namespace Project.Gameplay
 		/// <summary> Animation index for countdown animation. </summary>
 		private readonly StringName COUNTDOWN_ANIMATION = "countdown";
 		[Export]
-		private Node3D countdownCameraController;
+		private CameraTrigger countdownCameraController;
 
 		public void PlayCountdown()
 		{
@@ -82,7 +83,6 @@ namespace Project.Gameplay
 			//Prevent sluggish transitions into gameplay
 			disableSpeedSmoothing = true;
 			oneShotTransition.FadeInTime = oneShotTransition.FadeOutTime = 0;
-			Character.Camera.SetExternalController(countdownCameraController);
 		}
 
 		private readonly StringName ONESHOT_TRIGGER = "parameters/oneshot_trigger/request";
@@ -102,6 +102,11 @@ namespace Project.Gameplay
 		{
 			oneShotTransition.FadeOutTime = fadeout;
 			animationTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+
+
+			// Abort accidental landing animations
+			if (!Character.JustLandedOnGround)
+				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
 		#endregion
 

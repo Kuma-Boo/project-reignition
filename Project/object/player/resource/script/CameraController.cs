@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Triggers;
 using System.Collections.Generic;
 
 namespace Project.Gameplay
@@ -9,6 +10,8 @@ namespace Project.Gameplay
 	/// </summary>
 	public partial class CameraController : Node3D
 	{
+		public const float DEFAULT_FOV = 60;
+
 		[ExportGroup("Components")]
 		[Export]
 		private Node3D cameraRoot;
@@ -64,12 +67,6 @@ namespace Project.Gameplay
 		{
 			PathFollower.Resync();
 
-			if (ExternalController != null)
-			{
-				UpdateExternalControl();
-				return;
-			}
-
 			//Don't update the camera when the player is defeated
 			if (Character.IsDefeated) return;
 
@@ -111,23 +108,6 @@ namespace Project.Gameplay
 		}
 
 		#region Gameplay Camera
-		/// <summary> Node3D to follow (i.e. in a cutscene) </summary>
-		public Node3D ExternalController { get; private set; }
-		/// <summary> Used for more precise cutscene animation. </summary>
-		private Camera3D externalControllerCamera;
-		public void SetExternalController(Node3D controller)
-		{
-			ExternalController = controller;
-			externalControllerCamera = (controller is Camera3D) ? ExternalController as Camera3D : null;
-		}
-
-
-		private void UpdateExternalControl()
-		{
-			cameraRoot.GlobalTransform = ExternalController.GlobalTransform;
-		}
-
-
 		/// <summary> Skips smoothing for the current frame. </summary>
 		public bool SnapFlag { get; set; }
 
@@ -234,6 +214,7 @@ namespace Project.Gameplay
 			float staticBlendRatio = 0; // Blend value of whether to use static camera positions or not
 			Vector2 viewportOffset = Vector2.Zero;
 			Vector3 staticPosition = Vector3.Zero;
+			float fov = DEFAULT_FOV;
 
 			for (int i = 0; i < CameraBlendList.Count; i++) // Simulate each blend data separately
 			{
@@ -251,6 +232,14 @@ namespace Project.Gameplay
 
 				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.isStaticCamera ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
+
+				if (CameraBlendList[i].Trigger != null)
+				{
+					float targetFOV = CameraBlendList[i].Trigger.targetFOV;
+					if (Mathf.IsZeroApprox(targetFOV))
+						targetFOV = DEFAULT_FOV;
+					fov = Mathf.Lerp(fov, targetFOV, CameraBlendList[i].SmoothedInfluence);
+				}
 			}
 
 			// Recalculate non-static camera positions for better transition rotations.
@@ -270,7 +259,9 @@ namespace Project.Gameplay
 			cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
-			if (SnapFlag) // Reset flag after camera was updating
+			Camera.Fov = fov; // Update fov
+
+			if (SnapFlag) // Reset flag after camera was updated
 				SnapFlag = false;
 		}
 
@@ -289,6 +280,10 @@ namespace Project.Gameplay
 			{
 				blendData = CameraBlendList[index],
 			};
+
+			// Update static data before simulating camera
+			if (CameraBlendList[index].Trigger != null && CameraBlendList[index].Trigger.UpdateEveryFrame)
+				CameraBlendList[index].Trigger.UpdateStaticData(CameraBlendList[index]);
 
 			float targetYawAngle = settings.yawAngle;
 			float targetPitchAngle = settings.pitchAngle;
@@ -604,8 +599,12 @@ namespace Project.Gameplay
 
 		/// <summary> How long blending takes in seconds. </summary>
 		public float BlendTime { get; set; }
-		/// <summary> Camera's static position. Only used when CameraSettingsResource.isStaticCamera is true. </summary>
+		/// <summary> Camera's static position. Only used when CameraSettingsResource.ussStaticPosition is true. </summary>
 		public Vector3 StaticPosition { get; set; }
+
+
+		/// <summary> Camera's static rotation. Only used when CameraSettingsResource.useStaticRotation is true. </summary>
+		public Vector3 StaticRotation { get; set; }
 
 		/// <summary> Current pitch angle. </summary>
 		public float pitchAngle;
@@ -637,6 +636,8 @@ namespace Project.Gameplay
 
 		/// <summary> CameraSettingsResource for this camera setting. </summary>
 		public CameraSettingsResource SettingsResource { get; set; }
+		/// <summary> Reference to the cameraTrigger, if it exists. </summary>
+		public CameraTrigger Trigger { get; set; }
 
 		public void SetInfluence(float rawInfluence)
 		{

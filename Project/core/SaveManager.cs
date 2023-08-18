@@ -166,7 +166,7 @@ namespace Project.Core
 
 			if (OS.IsDebugBuild()) // Editor build
 			{
-				settings.screenResolution = 1;
+				settings.screenResolution = 3;
 				settings.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
 				settings.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
 				settings.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
@@ -448,7 +448,7 @@ namespace Project.Core
 				ActiveSaveSlotIndex = 0;
 				GameSaveSlots[ActiveSaveSlotIndex] = new GameData()
 				{
-					worldsUnlocked = WorldFlagEnum.All
+					worldsUnlocked = WorldFlagEnum.All,
 				};
 			}
 		}

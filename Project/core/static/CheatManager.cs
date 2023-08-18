@@ -4,19 +4,22 @@ namespace Project.Core
 	{
 		/// <summary> Don't forget to set this to false for the final build. </summary>
 		private static bool EnableCheats => true;
+		/// <summary> Use a custom save. </summary>
+		public static bool UseDebugSave => true;
+
+		/// <summary> Draw debug rays? </summary>
+		public static bool EnableDebugRays => EnableCheats && false;
 
 		/// <summary> Allow the player to jump in the air. </summary>
 		public static bool EnableMoonJump => EnableCheats && false;
 
-		/// <summary> Use a custom save. </summary>
-		public static bool UseDebugSave => EnableCheats && true;
 		/// <summary> Don't load skills from save data, use inspector values instead. </summary>
 		public static bool UseEditorSkillValues => EnableCheats && true;
 
 		/// <summary> Infinite soul gauge. </summary>
-		public static bool InfiniteSoulGauge => EnableCheats && true;
+		public static bool InfiniteSoulGauge => EnableCheats && false;
 		/// <summary> Infinite soul gauge. </summary>
-		public static bool InfiniteRings => EnableCheats && true;
+		public static bool InfiniteRings => EnableCheats && false;
 		/// <summary> Skip countdowns for faster debugging. </summary>
 		public static bool SkipCountdown => EnableCheats && true;
 
@@ -24,6 +27,6 @@ namespace Project.Core
 		public static bool DisableStageCulling => EnableCheats && false;
 
 		/// <summary> Have all stages unlocked </summary>
-		public static bool UnlockAllStages => EnableCheats && true;
+		public static bool UnlockAllStages => EnableCheats && false;
 	}
 }

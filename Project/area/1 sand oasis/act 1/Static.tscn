@@ -1,12 +1,12 @@
-[gd_scene load_steps=74 format=3 uid="uid://tvjx2wghc06t"]
+[gd_scene load_steps=73 format=3 uid="uid://tvjx2wghc06t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
 [ext_resource type="PackedScene" uid="uid://efrfjkjxlfc8" path="res://area/1 sand oasis/act 1/environment/01Opening.tscn" id="2_eyaqr"]
 [ext_resource type="Resource" uid="uid://brknjxuaah7xr" path="res://area/1 sand oasis/act 1/camera/OpeningCam.tres" id="2_gn5c4"]
-[ext_resource type="Resource" uid="uid://b57nulf6d3pq4" path="res://sound/voice/sand oasis/DialogLibrary.tres" id="2_qgupw"]
 [ext_resource type="PackedScene" uid="uid://bu2kguc4ygtbo" path="res://area/1 sand oasis/act 1/environment/02Slope.tscn" id="3_b4ate"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="3_cy8o7"]
+[ext_resource type="Resource" uid="uid://b57nulf6d3pq4" path="res://area/1 sand oasis/data/DialogLibrary.tres" id="3_g6e77"]
 [ext_resource type="PackedScene" uid="uid://cq0d65qpud85m" path="res://area/1 sand oasis/act 1/environment/03Oasis.tscn" id="4_qddv3"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_4sfp2"]
 [ext_resource type="PackedScene" uid="uid://cn1pgixwy7otq" path="res://area/1 sand oasis/act 1/environment/04Forest.tscn" id="5_i1spc"]
@@ -18,7 +18,6 @@
 [ext_resource type="PackedScene" uid="uid://c1tblqj07pix8" path="res://area/1 sand oasis/act 1/environment/07Beach.tscn" id="8_owf84"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="9_bc5dk"]
 [ext_resource type="PackedScene" uid="uid://ckpkxovh854hl" path="res://area/1 sand oasis/act 1/environment/08End.tscn" id="9_pbgai"]
-[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="9_qkax6"]
 [ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="11_hwlgd"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="12_lqbp2"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="12_qxfqh"]
@@ -547,7 +546,7 @@ script = ExtResource("1_0njhg")
 "Time Limit" = 0.0
 "Camera Settings" = ExtResource("2_gn5c4")
 "Story Event Index" = -1
-"Dialog Library" = ExtResource("2_qgupw")
+"Dialog Library" = ExtResource("3_g6e77")
 "Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
 "Ranking/Gold Time" = 0
@@ -714,11 +713,6 @@ OneShot = true
 "Enter Mode" = 0
 
 [node name="SandfallEvent" parent="Trigger/Object/SandfallTrigger" instance=ExtResource("13_6o732")]
-
-[node name="Dialog" type="Node3D" parent="Trigger/Object/SandfallTrigger"]
-script = ExtResource("9_qkax6")
-delays = [0.0]
-textKeys = ["oas_event_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SandfallTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 3, 0)
@@ -913,7 +907,7 @@ shape = SubResource("BoxShape3D_tlhfy")
 shape = SubResource("BoxShape3D_tlhfy")
 
 [node name="PillarTrigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -630, -30, -765)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -620, -30, -765)
 "Enter Mode" = 0
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/PillarTrigger"]
@@ -1039,7 +1033,7 @@ transform = Transform3D(-2.8213e-07, 3.09086e-08, 1, -1.28028e-08, 1, -3.09086e-
 script = ExtResource("12_lqbp2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Checkpoint8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 5.93427e-17, 0, 5.93402e-17, 1, 0, 8, 20)
 shape = SubResource("BoxShape3D_84q52")
 
 [node name="Checkpoint9" parent="Trigger/Checkpoint" instance=ExtResource("5_4sfp2")]
@@ -1279,7 +1273,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -650.67, 10, -640.435)
 curve = ExtResource("41_2kxa5")
 
 [node name="EndingPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -663.715, -40, -765)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -635.734, -40, -765)
 curve = ExtResource("45_mavj3")
 
 [node name="DemoCamera" type="Node3D" parent="."]
