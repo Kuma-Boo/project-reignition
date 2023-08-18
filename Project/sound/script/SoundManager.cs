@@ -67,13 +67,13 @@ namespace Project.Core
 		public void OnDialogFinished()
 		{
 			currentDialogIndex++;
-			if (currentDialogIndex < currentDialog.DialogCount)
+			if (currentDialogIndex < currentDialog.DialogCount) // Start next dialog line
 			{
 				subtitleAnimator.Play("deactivate-text");
-				CallDeferred(nameof(UpdateDialog), true);
+				CallDeferred(MethodName.UpdateDialog, true);
 			}
 			else
-				CallDeferred(nameof(DisableDialog));
+				CallDeferred(MethodName.DisableDialog);
 		}
 
 		private void DisableDialog()
@@ -81,29 +81,33 @@ namespace Project.Core
 			IsDialogActive = false;
 			subtitleAnimator.Play("deactivate");
 
+			UpdateSonicDialog();
+			UpdateShahraDialog();
+
 			//Disconnect signals
-			if (delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogDelayComplete)))
-				delayTimer.Disconnect("timeout", new Callable(this, MethodName.OnDialogDelayComplete));
+			if (delayTimer.IsConnected(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogDelayComplete)))
+				delayTimer.Disconnect(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogDelayComplete));
 
-			if (delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogFinished)))
-				delayTimer.Disconnect("timeout", new Callable(this, MethodName.OnDialogFinished));
+			if (delayTimer.IsConnected(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogFinished)))
+				delayTimer.Disconnect(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogFinished));
 
-			if (dialogChannel.IsConnected("finished", new Callable(this, MethodName.OnDialogFinished)))
-				dialogChannel.Disconnect("finished", new Callable(this, MethodName.OnDialogFinished));
+			if (dialogChannel.IsConnected(AudioStreamPlayer.SignalName.Finished, new Callable(this, MethodName.OnDialogFinished)))
+				dialogChannel.Disconnect(AudioStreamPlayer.SignalName.Finished, new Callable(this, MethodName.OnDialogFinished));
 		}
 
 		private void UpdateDialog(bool processDelay)
 		{
-			if (dialogChannel.IsConnected("finished", new Callable(this, MethodName.OnDialogFinished))) //Must have been interrupted
-				dialogChannel.Disconnect("finished", new Callable(this, MethodName.OnDialogFinished));
+			// Must have been interrupted
+			if (dialogChannel.IsConnected(AudioStreamPlayer.SignalName.Finished, new Callable(this, MethodName.OnDialogFinished)))
+				dialogChannel.Disconnect(AudioStreamPlayer.SignalName.Finished, new Callable(this, MethodName.OnDialogFinished));
 
 			UpdateSonicDialog();
 			UpdateShahraDialog();
 
-			if (processDelay && currentDialog.HasDelay(currentDialogIndex))
+			if (processDelay && currentDialog.HasDelay(currentDialogIndex)) // Wait for dialog delay (if applicable)
 			{
 				delayTimer.Start(currentDialog.delays[currentDialogIndex]);
-				delayTimer.Connect("timeout", new Callable(this, MethodName.OnDialogDelayComplete), (uint)ConnectFlags.OneShot);
+				delayTimer.Connect(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogDelayComplete), (uint)ConnectFlags.OneShot);
 				return;
 			}
 
@@ -122,30 +126,30 @@ namespace Project.Core
 				dialogChannel.Stream = targetStream;
 				subtitleLabel.Text = Tr(currentDialog.textKeys[currentDialogIndex]);
 				dialogChannel.Play();
-				if (!currentDialog.HasLength(currentDialogIndex))//Use audio length
+				if (!currentDialog.HasLength(currentDialogIndex))// Use audio length
 				{
-					dialogChannel.Connect("finished", new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
+					dialogChannel.Connect(AudioStreamPlayer.SignalName.Finished, new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
 					return;
 				}
 			}
-			else  //Text-only keys
+			else  // Text-only keys
 			{
-				if (!currentDialog.HasLength(currentDialogIndex)) //Skip
+				if (!currentDialog.HasLength(currentDialogIndex)) // Skip
 				{
 					GD.PrintErr("Text-only dialog doesn't have a specified length. Skipping.");
 					OnDialogFinished();
 					return;
 				}
 
-				dialogChannel.Stream = null; //Disable dialog channel
+				dialogChannel.Stream = null; // Disable dialog channel
 
-				if (string.IsNullOrEmpty(key) || key.EndsWith("*")) //Cutscene Support - To avoid busywork in editor
+				if (string.IsNullOrEmpty(key) || key.EndsWith("*")) // Cutscene Support - To avoid busywork in editor
 					key = currentDialog.textKeys[0].Replace("*", (currentDialogIndex + 1).ToString());
-				subtitleLabel.Text = Tr(key); //Update subtitles
+				subtitleLabel.Text = Tr(key); // Update subtitles
 			}
 
 			//If we've made it this far, we're using the custom specified time
-			if (!delayTimer.IsConnected("timeout", new Callable(this, MethodName.OnDialogFinished)))
+			if (!delayTimer.IsConnected(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogFinished)))
 				delayTimer.Connect(Timer.SignalName.Timeout, new Callable(this, MethodName.OnDialogFinished), (uint)ConnectFlags.OneShot);
 			delayTimer.Start(currentDialog.displayLength[currentDialogIndex]);
 		}
@@ -159,7 +163,7 @@ namespace Project.Core
 		private void UpdateSonicDialog() //Checks whether Sonic is the one speaking, and mutes his gameplay audio.
 		{
 			bool wasSonicSpeaking = isSonicSpeaking;
-			isSonicSpeaking = currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
+			isSonicSpeaking = IsDialogActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
 			if (isSonicSpeaking && !wasSonicSpeaking)
 				EmitSignal(SignalName.SonicSpeechStart);
 			else if (!isSonicSpeaking && wasSonicSpeaking)
@@ -175,7 +179,7 @@ namespace Project.Core
 		private void UpdateShahraDialog() //Checks whether Shahra is the one speaking, and mutes his gameplay audio.
 		{
 			bool wasShahraSpeaking = isShahraSpeaking;
-			isShahraSpeaking = currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
+			isShahraSpeaking = IsDialogActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
 			if (isShahraSpeaking && !wasShahraSpeaking)
 				EmitSignal(SignalName.ShahraSpeechStart);
 			else if (!isShahraSpeaking && wasShahraSpeaking)
