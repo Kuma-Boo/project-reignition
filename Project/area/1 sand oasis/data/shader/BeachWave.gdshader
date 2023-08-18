@@ -2,7 +2,7 @@ shader_type spatial;
 render_mode specular_disabled;
 
 global uniform float time;
-uniform sampler2D main_tex : source_color, filter_linear;
+uniform sampler2D main_tex : source_color, filter_linear, repeat_enable;
 uniform sampler2D secondary_tex : source_color, filter_linear;
 uniform float frequency;
 uniform float strength;
@@ -15,7 +15,7 @@ void fragment()
 	vec2 uv = UV;
 	uv.y = clamp(uv.y + uv_offset, 0.01, 1); //Repeat x only
 	
-	vec4 col = texture(main_tex, uv) * alpha;
+	vec4 col = texture(main_tex, UV);
 	uv.y = (UV.y - uv_offset) + .54;
 	vec4 secondary_col = texture(secondary_tex, uv) * secondary_alpha;
 	col += secondary_col * secondary_col.r * (1.0 - col.a) * .5;
