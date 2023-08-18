@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://c1tblqj07pix8"]
+[gd_scene load_steps=5 format=3 uid="uid://c1tblqj07pix8"]
 
 [ext_resource type="PackedScene" uid="uid://c36jr32mbyabe" path="res://area/1 sand oasis/act 1/environment/model/07Beach.gltf" id="1_vix83"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_ia5ps"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2nr1i"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_0xdqd"]
 
 [node name="07Beach" instance=ExtResource("1_vix83")]
 script = ExtResource("2_ia5ps")
@@ -185,15 +189,18 @@ cast_shadow = 0
 layers = 2
 cast_shadow = 0
 
-[node name="stg010_sandfallf_08_Mesh_0001" parent="." index="48"]
-visible = false
-cast_shadow = 0
-
-[node name="stg010_sandfall_18_Mesh_0008" parent="." index="49"]
+[node name="stg010_sandfall_18_Mesh_0008" parent="." index="48"]
 layers = 2
 cast_shadow = 0
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="50"]
+[node name="SandfallParticles" type="Node3D" parent="." index="50"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -664, 2, -685)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="SandfallParticles" index="0"]
+process_material = SubResource("ParticleProcessMaterial_2nr1i")
+draw_pass_1 = SubResource("QuadMesh_0xdqd")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="51"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -414.267, -16.8903, -609.791)
 layers = 2
 size = Vector3(640.173, 238.557, 653.244)
