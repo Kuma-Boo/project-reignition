@@ -30,6 +30,7 @@ namespace Project.Gameplay
 			Level.SetCheckpoint(GetParent<Triggers.CheckpointTrigger>()); //Initial checkpoint configuration
 			Level.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); //Start with the proper ring count
 			Level.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
+			Level.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -1769,14 +1770,25 @@ namespace Project.Gameplay
 			actionBufferTimer = 0; //Reset action buffer from starting boost
 		}
 
+
 		private void OnLevelCompleted()
 		{
-			//Disable everything
+			// Disable everything
 			Lockon.IsMonitoring = false;
 			Skills.IsTimeBreakEnabled = false;
 			Skills.IsSpeedBreakEnabled = false;
 
-			AddLockoutData(Level.CompletionLockout);
+			if (Level.LevelState == StageSettings.LevelStateEnum.Failed || Level.CompletionLockout == null)
+				AddLockoutData(Runtime.Instance.StopLockout);
+			else
+				AddLockoutData(Level.CompletionLockout);
+		}
+
+
+		private void OnLevelDemoStarted()
+		{
+			MoveSpeed = 0;
+			AddLockoutData(Runtime.Instance.StopLockout);
 		}
 
 		public void OnObjectCollisionEnter(Node3D body)

@@ -488,7 +488,9 @@ namespace Project.Gameplay
 
 		#region Level Completion
 		[Signal]
-		public delegate void LevelCompletedEventHandler(); // Called when level is completed
+		public delegate void LevelCompletedEventHandler(); // Called when the level is completed
+		[Signal]
+		public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
 
 		private float completionDelay;
 		public enum LevelStateEnum
@@ -498,6 +500,7 @@ namespace Project.Gameplay
 			Success,
 		}
 		public LevelStateEnum LevelState { get; private set; }
+		/// <summary> Control lockout to apply when the level is completed. Leave null to use Runtime.Instance.StopLockout. </summary>
 		public LockoutResource CompletionLockout { get; private set; }
 		private bool IsLevelFinished => LevelState != LevelStateEnum.Incomplete;
 		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
@@ -515,6 +518,8 @@ namespace Project.Gameplay
 		public NodePath completionDemoAnimator;
 		public void StartCompletionDemo()
 		{
+			EmitSignal(SignalName.LevelDemoStarted);
+
 			AnimationPlayer completionAnimator = GetNodeOrNull<AnimationPlayer>(completionDemoAnimator);
 			if (completionAnimator == null) return;
 

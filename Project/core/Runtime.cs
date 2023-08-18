@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Gameplay;
 
 namespace Project.Core
 {
@@ -27,11 +28,17 @@ namespace Project.Core
 		}
 
 		[Export(PropertyHint.Layers3DPhysics)]
+		/// <summary> Collision layer for the environment. </summary>
 		public uint environmentMask;
 		[Export(PropertyHint.Layers3DPhysics)]
-		public uint particleCollisionLayer; //Collision layer for destructable particle effects
+		/// <summary> Collision layer for destructable particle effects. </summary>
+		public uint particleCollisionLayer;
 		[Export(PropertyHint.Layers3DPhysics)]
-		public uint particleCollisionMask; //Collision mask for destructable particle effects
+		/// <summary> Collision mask for destructable particle effects. </summary>
+		public uint particleCollisionMask;
+		[Export]
+		/// <summary> Lockout used for stopping the player. </summary>
+		public LockoutResource StopLockout { get; private set; }
 
 		public static readonly float GRAVITY = 28.0f;
 		public static readonly float MAX_GRAVITY = -48.0f;
