@@ -1766,8 +1766,6 @@ namespace Project.Gameplay
 
 			//Snap camera to gameplay
 			Camera.SnapFlag = true;
-			Camera.SetExternalController(null);
-
 			actionBufferTimer = 0; //Reset action buffer from starting boost
 		}
 

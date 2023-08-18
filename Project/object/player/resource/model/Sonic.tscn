@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=19 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="2_3qp24"]
@@ -10,6 +10,8 @@
 [ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="6_pf4ty"]
 [ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="8_7bg0r"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_iki8q"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="11_8klty"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
 min_value = 1.0
@@ -70,7 +72,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("CountdownCamera/CameraController:position")
+tracks/4/path = NodePath("CountdownCamera:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -78,50 +80,6 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
-}
-tracks/5/type = "bezier"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("CountdownCamera/CameraController:rotation:x")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/6/type = "bezier"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("CountdownCamera/CameraController:rotation:y")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(-3.14159, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/7/type = "bezier"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("CountdownCamera/CameraController:rotation:z")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/8/type = "bezier"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("CountdownCamera:rotation:y")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
 }
 
 [sub_resource type="Animation" id="Animation_g0fnl"]
@@ -181,7 +139,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("CountdownCamera/CameraController:position")
+tracks/4/path = NodePath("CountdownCamera:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -193,46 +151,30 @@ tracks/4/keys = {
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("CountdownCamera/CameraController:rotation:x")
+tracks/5/path = NodePath("CountdownCamera:rotation:y")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"handle_modes": PackedInt32Array(0, 2, 0, 2, 0, 0),
-"points": PackedFloat32Array(-0.959931, -0.25, 0, 0.566667, 0.000118554, -0.114142, -0.0913214, -0.503601, 0.0346363, 0.191005, 0, -0.566667, -0.000118796, 0.1, 2.0964e-05, -0.349066, -0.0999947, 0.00112358, 0.233533, -0.00262406, -0.349066, -0.333333, 0, 0.399999, 0, -0.349066, -0.399999, 0, 0, 0),
-"times": PackedFloat32Array(0, 0.633333, 1.5, 1.8, 2.8, 4)
-}
-tracks/6/type = "bezier"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("CountdownCamera/CameraController:rotation:y")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(-3.14159, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/7/type = "bezier"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("CountdownCamera/CameraController:rotation:z")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/8/type = "bezier"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("CountdownCamera:rotation:y")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
 "handle_modes": PackedInt32Array(2, 2, 2, 2, 2, 2, 2),
 "points": PackedFloat32Array(0.837758, 0, 0, 0.222222, 0, 0.0872665, -0.194948, 0.116788, 0.201381, -0.120642, 0, -0.277778, 0.000191449, 0.172783, -0.000119084, 0.760034, -0.0440681, -0.0982824, 0.08521, 0.190038, 0.837758, -0.244435, 0.00233689, 0.178707, -0.00170851, -0.427705, -0.0799164, 0.0426124, 0.21145, -0.112747, -0.524, -0.4, 0, 0, 0),
 "times": PackedFloat32Array(0, 0.666666, 1.5, 1.8, 2.53333, 2.8, 4)
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("CountdownCamera")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 4),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}, {
+"args": [],
+"method": &"Deactivate"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_3gene"]
@@ -280,7 +222,7 @@ script = ExtResource("2_3qp24")
 Effect = NodePath("Effect")
 animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
-countdownCameraController = NodePath("CountdownCamera/CameraController")
+countdownCameraController = NodePath("CountdownCamera")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
 [node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot") instance=ExtResource("3_5mek6")]
@@ -364,9 +306,10 @@ libraries = {
 }
 
 [node name="CountdownCamera" type="Node3D" parent="." index="4"]
-
-[node name="CameraController" type="Node3D" parent="CountdownCamera" index="0"]
-transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 0)
+transform = Transform3D(0.669131, 0, 0.743145, 0, 1, 0, -0.743145, 0, 0.669131, 0, 0, 0)
+script = ExtResource("10_iki8q")
+UpdateEveryFrame = true
+settings = ExtResource("11_8klty")
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 tree_root = ExtResource("8_sfnih")
@@ -398,9 +341,9 @@ parameters/normal_state/ground_tree/move_transition/current_index = 0
 parameters/normal_state/ground_tree/turn_add/add_amount = 1.0
 parameters/normal_state/ground_tree/turn_blend/blend_position = Vector2(0, 0)
 parameters/oneshot_tree/oneshot_seek/seek_request = -1.0
-parameters/oneshot_tree/oneshot_transition/current_state = "so_a1_sandfall_event"
+parameters/oneshot_tree/oneshot_transition/current_state = "countdown"
 parameters/oneshot_tree/oneshot_transition/transition_request = ""
-parameters/oneshot_tree/oneshot_transition/current_index = 1
+parameters/oneshot_tree/oneshot_transition/current_index = 0
 parameters/oneshot_trigger/active = false
 parameters/oneshot_trigger/internal_active = false
 parameters/oneshot_trigger/request = 0

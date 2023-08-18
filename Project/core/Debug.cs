@@ -9,8 +9,6 @@ namespace Project.Core
 		private bool isAdvancingFrame;
 		private bool IsPaused => GetTree().Paused;
 
-		private readonly bool drawRaycasts = true;
-
 		private enum Properties
 		{
 			HSpeed,
@@ -69,7 +67,7 @@ namespace Project.Core
 		#region Raycast Debug Code
 		public override void _Draw()
 		{
-			if (drawRaycasts)
+			if (CheatManager.EnableDebugRays)
 			{
 				for (int i = line2d.Count - 1; i >= 0; i--)
 				{

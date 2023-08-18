@@ -67,12 +67,6 @@ namespace Project.Gameplay
 		{
 			PathFollower.Resync();
 
-			if (ExternalController != null)
-			{
-				UpdateExternalControl();
-				return;
-			}
-
 			//Don't update the camera when the player is defeated
 			if (Character.IsDefeated) return;
 
@@ -114,23 +108,6 @@ namespace Project.Gameplay
 		}
 
 		#region Gameplay Camera
-		/// <summary> Node3D to follow (i.e. in a cutscene) </summary>
-		public Node3D ExternalController { get; private set; }
-		/// <summary> Used for more precise cutscene animation. </summary>
-		private Camera3D externalControllerCamera;
-		public void SetExternalController(Node3D controller)
-		{
-			ExternalController = controller;
-			externalControllerCamera = (controller is Camera3D) ? ExternalController as Camera3D : null;
-		}
-
-
-		private void UpdateExternalControl()
-		{
-			cameraRoot.GlobalTransform = ExternalController.GlobalTransform;
-		}
-
-
 		/// <summary> Skips smoothing for the current frame. </summary>
 		public bool SnapFlag { get; set; }
 
