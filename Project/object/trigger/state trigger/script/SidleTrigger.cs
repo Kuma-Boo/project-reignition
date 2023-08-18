@@ -185,6 +185,7 @@ namespace Project.Gameplay.Triggers
 
 			Character.TakeDamage();
 			Character.StartInvincibility();
+			Character.Effect.PlayVoice("sidle hurt");
 
 			damageState = DamageStates.Stagger;
 			velocity = 0;

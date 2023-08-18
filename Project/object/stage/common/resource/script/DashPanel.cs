@@ -34,7 +34,10 @@ namespace Project.Gameplay.Objects
 
 			//Only apply speed boost when player is moving slow. Don't slow them down!
 			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio)
+			{
 				Character.MoveSpeed = Character.GroundSettings.speed * speedRatio;
+				Character.Effect.PlayVoice("dash panel");
+			}
 
 			if (Character.MovementState != CharacterController.MovementStates.External) //Add lockout if not in automation
 			{

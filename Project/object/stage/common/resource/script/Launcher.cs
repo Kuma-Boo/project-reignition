@@ -66,6 +66,9 @@ namespace Project.Gameplay.Objects
 			if (sfxPlayer != null)
 				sfxPlayer.Play();
 
+			if (voiceKey != null && !voiceKey.IsEmpty)
+				Character.Effect.PlayVoice(voiceKey);
+
 			IsCharacterCentered = recenterSpeed == 0;
 			LaunchSettings LaunchSettings = GetLaunchSettings();
 			Character.StartLauncher(LaunchSettings, this);
@@ -92,7 +95,11 @@ namespace Project.Gameplay.Objects
 		public void Deactivate() => EmitSignal(SignalName.Deactivated);
 
 		[Export]
-		private AudioStreamPlayer3D sfxPlayer; //Optional SFX field
+		/// <summary> Optional SFX field </summary>
+		private AudioStreamPlayer3D sfxPlayer;
+		[Export]
+		/// <summary> Option voice to play. </summary>
+		private StringName voiceKey;
 	}
 }
 
