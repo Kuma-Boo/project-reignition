@@ -342,17 +342,30 @@ namespace Project.Gameplay
 		}
 
 		/// <summary>
-		/// Moves the player to externalParent. Must be called after external controller has been processed.
+		/// Must be called after external controller has been processed. Pauses physics then calls ApplyExternalTransform.
 		/// </summary>
 		public void UpdateExternalControl(bool autoResync = false)
 		{
 			CheckGround(); // Check ground even when externally controlled
 
 			isCustomPhysicsEnabled = true;
-			externalOffset = externalOffset.Lerp(Vector3.Zero, externalSmoothing); //Smooth out entry
+			externalOffset = externalOffset.Lerp(Vector3.Zero, externalSmoothing); // Smooth out entry
 
+			CallDeferred(MethodName.ApplyExternalTransform, autoResync);
+		}
+
+		/// <summary>
+		/// Moves the player to externalParent. Called in deferred mode to ensure things are synced properly.
+		/// </summary>
+		public void ApplyExternalTransform(bool autoResync)
+		{
 			if (ExternalParent != null)
+			{
+				if (ExternalParent is BoneAttachment3D) // Ensure BoneAttachments are updated
+					(ExternalParent as BoneAttachment3D).OnBonePoseUpdate((ExternalParent as BoneAttachment3D).BoneIdx);
+
 				GlobalTransform = ExternalParent.GlobalTransform;
+			}
 
 			GlobalPosition += externalOffset;
 
