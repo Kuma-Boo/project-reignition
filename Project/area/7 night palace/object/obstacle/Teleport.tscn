@@ -1,10 +1,10 @@
-[gd_scene load_steps=26 format=3 uid="uid://dvp0eoegosx00"]
+[gd_scene load_steps=24 format=3 uid="uid://dvp0eoegosx00"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_af5uk"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="2_rjw3s"]
 [ext_resource type="Texture2D" uid="uid://bqk3vp0tj6jyx" path="res://area/7 night palace/data/particle/swirl.png" id="3_m53jp"]
-[ext_resource type="Texture2D" uid="uid://b80ntgklqi7px" path="res://area/7 night palace/data/particle/splatter.png" id="4_ncda7"]
-[ext_resource type="Texture2D" uid="uid://bh2f7rer7l8ea" path="res://area/7 night palace/data/particle/spark.png" id="5_uhxsn"]
+[ext_resource type="Material" uid="uid://boyiki4rgce2h" path="res://effect/particle/material/environment/Common Splatter.tres" id="4_pxnfi"]
+[ext_resource type="Material" uid="uid://dxchrwvn2cemd" path="res://effect/particle/material/Common Sparkle.tres" id="5_wlwjg"]
 
 [sub_resource type="Gradient" id="Gradient_jhxgy"]
 offsets = PackedFloat32Array(0, 0.214876, 0.747934, 1)
@@ -85,19 +85,8 @@ scale_max = 1.5
 color = Color(0, 0, 0, 0.588235)
 color_ramp = SubResource("GradientTexture1D_iiq0d")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_20scg"]
-transparency = 1
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("4_ncda7")
-billboard_mode = 3
-billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
 [sub_resource type="QuadMesh" id="QuadMesh_2hq5k"]
-material = SubResource("StandardMaterial3D_20scg")
+material = ExtResource("4_pxnfi")
 
 [sub_resource type="Curve" id="Curve_mkg33"]
 _data = [Vector2(0, 0), 0.0, 8.98504, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.67446, 0.0, 0, 0]
@@ -123,20 +112,8 @@ color = Color(0.65, 0.3, 1, 1)
 hue_variation_min = -0.05
 hue_variation_max = 0.05
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t8ulp"]
-blend_mode = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("5_uhxsn")
-billboard_mode = 3
-billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
 [sub_resource type="QuadMesh" id="QuadMesh_uknbu"]
-material = SubResource("StandardMaterial3D_t8ulp")
+material = ExtResource("5_wlwjg")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_x3qay"]
 radius = 3.0
@@ -184,7 +161,7 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_a3yux")
 draw_pass_1 = SubResource("QuadMesh_2hq5k")
 
-[node name="Spark" type="GPUParticles3D" parent="."]
+[node name="Sparkle" type="GPUParticles3D" parent="."]
 layers = 32
 cast_shadow = 0
 amount = 16

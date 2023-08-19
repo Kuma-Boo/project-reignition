@@ -66,10 +66,46 @@ namespace Project.Gameplay
 		/// </summary>
 		public void PlayLandingFX()
 		{
-			landingChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 1);
-			landingChannel.Play();
+			switch (groundKeyIndex)
+			{
+				case 6: // Water
+					PlaySplashFX();
+					break;
+				default:
+					landingChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 1);
+					landingChannel.Play();
+					landingDustParticle.Restart();
+					break;
+			}
+		}
 
-			landingDustParticle.Restart();
+
+		/// <summary>
+		/// Plays water splash sfx and vfx.
+		/// </summary>
+		[Export]
+		private PackedScene splashParticle;
+		private List<ParticleGroup> splashParticleList = new List<ParticleGroup>();
+		public void PlaySplashFX()
+		{
+			PlayActionSFX("splash");
+
+			ParticleGroup activeSplashParticle = null;
+			for (int i = 0; i < splashParticleList.Count; i++)
+			{
+				if (!splashParticleList[i].IsActive)
+				{
+					activeSplashParticle = splashParticleList[i];
+					break;
+				}
+			}
+
+			if (activeSplashParticle == null)
+				activeSplashParticle = splashParticle.Instantiate<ParticleGroup>();
+
+			StageSettings.instance.AddChild(activeSplashParticle);
+			activeSplashParticle.GlobalPosition = GlobalPosition;
+			activeSplashParticle.StartParticles();
 		}
 
 		public void PlayFootstepFX(bool isRightFoot)
@@ -104,7 +140,7 @@ namespace Project.Gameplay
 			{
 				activeFootprintDecal = footprintDecal.Instantiate<Node3D>();
 				footprintDecalList.Add(activeFootprintDecal);
-				Project.Gameplay.StageSettings.instance.AddChild(activeFootprintDecal);
+				StageSettings.instance.AddChild(activeFootprintDecal);
 			}
 
 			// Reset fading animation
