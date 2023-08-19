@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3 uid="uid://bemb37fo0seak"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterSkillManager.cs" id="1_rj66u"]
 [ext_resource type="Resource" uid="uid://b0pl4vxr6ryfl" path="res://object/player/resource/movement settings/GrindSettings.tres" id="2_17xxn"]
@@ -11,12 +11,13 @@
 [ext_resource type="Resource" uid="uid://bijq2wxw8v0nx" path="res://object/player/resource/movement settings/BackstepSettings.tres" id="4_nrknj"]
 [ext_resource type="AudioStream" uid="uid://c0ht8bcbttefh" path="res://sound/sfx/player/speed break.wav" id="9_800f8"]
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="10_fl25x"]
+[ext_resource type="AudioStream" uid="uid://ci25ma2gyy8iq" path="res://sound/sfx/player/time break pad.ogg" id="12_vkf5a"]
 
 [sub_resource type="Curve" id="Curve_jakcp"]
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Skills" type="Node3D" node_paths=PackedStringArray("breakSkillSfx", "heartbeatSfx")]
+[node name="Skills" type="Node3D" node_paths=PackedStringArray("speedBreakSFX", "timeBreakSFX", "heartbeatSFX")]
 script = ExtResource("1_rj66u")
 baseGroundSettings = ExtResource("2_tfp0s")
 strafeSettings = ExtResource("3_6aunl")
@@ -36,12 +37,17 @@ countdownBoostSpeed = 32.0
 landingDashSpeed = 32.0
 speedBreakActivate = ExtResource("9_800f8")
 speedBreakDeactivate = ExtResource("3_di5ls")
-breakSkillSfx = NodePath("BreakSFX")
-heartbeatSfx = NodePath("HeartbeatSFX")
+speedBreakSFX = NodePath("SpeedBreakSFX")
+timeBreakSFX = NodePath("TimeBreakSFX")
+heartbeatSFX = NodePath("HeartbeatSFX")
 speedBreakSpeed = 54.0
 
-[node name="BreakSFX" type="AudioStreamPlayer" parent="."]
+[node name="SpeedBreakSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_di5ls")
+bus = &"SFX"
+
+[node name="TimeBreakSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_vkf5a")
 bus = &"SFX"
 
 [node name="HeartbeatSFX" type="AudioStreamPlayer" parent="."]

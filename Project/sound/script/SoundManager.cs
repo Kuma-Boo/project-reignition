@@ -257,6 +257,19 @@ namespace Project.Core
 		}
 
 		public void PlayRichPearlSFX() => richPearlSFX.Play();
+
+
+		/// <summary>
+		/// Sets whether the break channel is muted or not (for muting environments)
+		/// </summary>
+		public static bool IsBreakChannelMuted
+		{
+			set
+			{
+				AudioServer.SetBusMute(AudioServer.GetBusIndex("BREAK"), value);
+				GD.Print(value);
+			}
+		}
 		#endregion
 	}
 }

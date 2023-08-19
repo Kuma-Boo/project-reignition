@@ -118,15 +118,11 @@ namespace Project.Gameplay
 		public bool IsAttacking { get; set; } //Is the player using an attack skill? (i.e Any of the fire skills)
 
 		[Export(PropertyHint.Range, "1,5,.1")]
-		public float pearlAttractorMultiplier = 2f; //Collision multiplier when PearlAttractor skill is enabled
-		[Export]
-		private bool isPearlAttractionEnabled;
+		public float pearlAttractorMultiplier = 1f; //Collision multiplier when PearlAttractor skill is enabled
 
 		private void LoadSkillsFromSaveData()
 		{
 			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.LandingBoost);
-			isPearlAttractionEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.PearlAttractor);
-
 			isManualDriftEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.ManualDrift);
 		}
 
@@ -136,10 +132,7 @@ namespace Project.Gameplay
 				LoadSkillsFromSaveData();
 
 			//Expand hitbox if skills is equipped
-			if (isPearlAttractionEnabled)
-				Runtime.Instance.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
-			else
-				Runtime.Instance.UpdatePearlCollisionShapes();
+			Runtime.Instance.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
 		}
 		#endregion
 
@@ -178,9 +171,11 @@ namespace Project.Gameplay
 		private AudioStream speedBreakDeactivate;
 		//Audio players
 		[Export]
-		private AudioStreamPlayer breakSkillSfx;
+		private AudioStreamPlayer speedBreakSFX;
 		[Export]
-		private AudioStreamPlayer heartbeatSfx;
+		private AudioStreamPlayer timeBreakSFX;
+		[Export]
+		private AudioStreamPlayer heartbeatSFX;
 
 		[Export]
 		public float speedBreakSpeed; //Movement speed during speed break
@@ -231,7 +226,8 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				SoundManager.FadeAudioPlayer(heartbeatSfx, .2f); //Fade out sfx
+				SoundManager.FadeAudioPlayer(timeBreakSFX, .2f);
+				SoundManager.FadeAudioPlayer(heartbeatSFX, .2f); //Fade out sfx
 				if (breakTimer != 0) return; //Cooldown
 			}
 
@@ -249,10 +245,10 @@ namespace Project.Gameplay
 			{
 				if (Mathf.IsZeroApprox(breakTimer))
 				{
-					if (breakSkillSfx.Stream != speedBreakActivate) //Play sfx when boost starts
+					if (speedBreakSFX.Stream != speedBreakActivate) //Play sfx when boost starts
 					{
-						breakSkillSfx.Stream = speedBreakActivate;
-						breakSkillSfx.Play();
+						speedBreakSFX.Stream = speedBreakActivate;
+						speedBreakSFX.Play();
 					}
 
 					ModifySoulGauge(-1); //Drain soul gauge
@@ -288,6 +284,7 @@ namespace Project.Gameplay
 		{
 			timeBreakDrainTimer = 0;
 			IsTimeBreakActive = !IsTimeBreakActive;
+			SoundManager.IsBreakChannelMuted = IsTimeBreakActive;
 			Engine.TimeScale = IsTimeBreakActive ? TIME_BREAK_RATIO : 1f;
 
 			if (IsTimeBreakActive)
@@ -296,8 +293,9 @@ namespace Project.Gameplay
 				BGMPlayer.SetStageMusicVolume(-80f);
 
 				//Reset volume and play
-				heartbeatSfx.VolumeDb = 0f;
-				heartbeatSfx.Play();
+				timeBreakSFX.VolumeDb = heartbeatSFX.VolumeDb = 0f;
+				timeBreakSFX.Play();
+				heartbeatSFX.Play();
 			}
 			else
 			{
@@ -313,6 +311,7 @@ namespace Project.Gameplay
 		{
 			Character.ResetActionState();
 			IsSpeedBreakActive = !IsSpeedBreakActive;
+			SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
 			breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
 			IsSpeedBreakOverrideActive = false; //Always disable override
 
@@ -323,8 +322,8 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				breakSkillSfx.Stream = speedBreakDeactivate;
-				breakSkillSfx.Play();
+				speedBreakSFX.Stream = speedBreakDeactivate;
+				speedBreakSFX.Play();
 
 				Character.MoveSpeed = Character.GroundSettings.speed; //Override speed
 				Character.CollisionMask = normalCollisionMask; //Reset collision layer
