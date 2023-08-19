@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=9 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://d4niu0q5cqdvj" path="res://object/player/resource/particle/WaterSplash.tscn" id="4_uxs56"]
 [ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/particle/LandingDustParticle.tscn" id="5_58bv7"]
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
+[ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/particle/WaterStep.tscn" id="7_8fv5b"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "landingDustParticle", "footstepChannel", "landingChannel", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -18,6 +19,7 @@ footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
 splashParticle = ExtResource("4_uxs56")
 footprintDecal = ExtResource("4_7l0ao")
+waterStep = NodePath("VFX/WaterStep")
 voiceLibrary = ExtResource("33_pyanb")
 voiceChannel = NodePath("SFX/VoiceChannel")
 
@@ -37,5 +39,8 @@ bus = &"SFX"
 bus = &"SFX"
 
 [node name="VFX" type="Node3D" parent="."]
+
+[node name="WaterStep" parent="VFX" node_paths=PackedStringArray("subSystems") instance=ExtResource("7_8fv5b")]
+subSystems = [null, NodePath("Splash")]
 
 [node name="LandingDustParticle" parent="VFX" instance=ExtResource("5_58bv7")]

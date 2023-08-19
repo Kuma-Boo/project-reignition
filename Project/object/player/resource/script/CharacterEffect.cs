@@ -116,16 +116,26 @@ namespace Project.Gameplay
 			Transform3D spawnTransform = isRightFoot ? rightFoot.GlobalTransform : leftFoot.GlobalTransform;
 			spawnTransform.Basis = GlobalTransform.Basis;
 
-			if (groundKeyIndex == 1) // Check if the ground key is 1 (Corresponds to sand)
-				CreateFootprint(spawnTransform);
+			switch (groundKeyIndex)
+			{
+				case 1:
+					CreateSandFootFX(spawnTransform); // Check if the ground key is 1 (Corresponds to sand)
+					break;
+				case 6:
+					CreateSplashFootFX(isRightFoot);
+					break;
+				default: // TODO Create basic dust
+					break;
+			}
+
 		}
 
 
-		// Footprints
+		#region Footsteps and footprints
 		[Export]
 		private PackedScene footprintDecal;
 		private List<Node3D> footprintDecalList = new List<Node3D>();
-		private void CreateFootprint(Transform3D spawnTransform)
+		private void CreateSandFootFX(Transform3D spawnTransform)
 		{
 			Node3D activeFootprintDecal = null;
 			for (int i = 0; i < footprintDecalList.Count; i++)
@@ -152,6 +162,17 @@ namespace Project.Gameplay
 			}
 			activeFootprintDecal.GlobalTransform = spawnTransform;
 		}
+
+		[Export]
+		private ParticleGroup waterStep;
+		private void CreateSplashFootFX(bool isRightFoot)
+		{
+			waterStep.GlobalPosition = isRightFoot ? rightFoot.GlobalPosition : leftFoot.GlobalPosition;
+
+			uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
+			waterStep.EmitParticle(waterStep.GlobalTransform, CharacterController.instance.Velocity * .2f, Colors.White, Colors.White, flags);
+		}
+		#endregion
 
 		public void UpdateGroundType(Node collision)
 		{

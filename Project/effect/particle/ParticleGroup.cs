@@ -1,3 +1,4 @@
+using System.Reflection.PortableExecutable;
 using Godot;
 using Godot.Collections;
 
@@ -9,7 +10,7 @@ namespace Project
 	public partial class ParticleGroup : GpuParticles3D
 	{
 		[Export]
-		public Array<GpuParticles3D> subSystems;
+		private Array<GpuParticles3D> subSystems;
 
 		public bool IsActive { get; private set; }
 
@@ -26,15 +27,18 @@ namespace Project
 		{
 			base._PhysicsProcess(delta);
 
-			if (IsActive) return;
+			if (!IsActive) return;
 
-			for (int i = 0; i < subSystems.Count; i++)
+			if (subSystems != null)
 			{
-				// Still active
-				if (subSystems[i].Emitting) return;
+				for (int i = 0; i < subSystems.Count; i++)
+				{
+					// Still active
+					if (subSystems[i].Emitting) return;
+				}
 			}
 
-			IsActive = false;
+			IsActive = Emitting;
 		}
 	}
 }
