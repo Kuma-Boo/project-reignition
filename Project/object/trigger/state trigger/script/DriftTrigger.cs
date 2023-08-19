@@ -95,7 +95,7 @@ namespace Project.Gameplay.Triggers
 
 			// Check for any obstructions
 			RaycastHit hit = Character.CastRay(Character.CenterPosition, Character.PathFollower.Back() * slideDistance, Runtime.Instance.environmentMask);
-			if (hit)
+			if (hit && !hit.collidedObject.IsInGroup("level wall"))
 				return false;
 
 			return true; // Valid drift
