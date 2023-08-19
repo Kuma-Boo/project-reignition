@@ -2,26 +2,29 @@ shader_type spatial;
 render_mode specular_disabled;
 
 global uniform float time;
-uniform sampler2D main_tex : source_color, filter_linear, repeat_enable;
-uniform sampler2D secondary_tex : source_color, filter_linear;
+uniform sampler2D main_tex : source_color;
+uniform sampler2D secondary_tex : source_color;
 uniform float frequency;
 uniform float strength;
+uniform float offset;
+uniform float secondary_offset : hint_range(0.0, 1.0, 0.1);
 
 void fragment()
 {
-	float alpha = pow(sin(time * frequency), 2.0);
-	float uv_offset = sin(mod((time * frequency) / PI, 1.0) * 2.6) * strength - strength;//pow(cos(TIME * frequency), 2.0) * strength - strength;
-	float secondary_alpha = pow(sin((time - .4) * frequency), 2.0);
+	float alpha = abs(sin(time * frequency));
 	vec2 uv = UV;
-	uv.y = clamp(uv.y + uv_offset, 0.01, 1); //Repeat x only
+	uv.y = clamp(uv.y + offset + strength * alpha, 0.01, 1.0);
+	vec4 col = texture(main_tex, uv) * alpha;
 	
-	vec4 col = texture(main_tex, UV);
-	uv.y = (UV.y - uv_offset) + .54;
-	vec4 secondary_col = texture(secondary_tex, uv) * secondary_alpha;
-	col += secondary_col * secondary_col.r * (1.0 - col.a) * .5;
-	col = clamp(col, 0, 1);
+	float secondary_alpha = abs(sin((time - secondary_offset) * frequency));
+	vec2 uv2 = UV;
+	uv2.y = uv2.y + offset + strength * secondary_alpha;
+	vec4 secondary_col = texture(secondary_tex, uv2) * secondary_alpha;
 	
-	col *= COLOR;
+	col.rgb += secondary_col.r;
+	col.a += secondary_col.r;
+	
+	col = clamp(col * COLOR, 0, 1);
 	ALBEDO = col.rgb;
 	ALPHA = col.a;
 }
