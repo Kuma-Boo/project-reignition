@@ -1431,7 +1431,7 @@ namespace Project.Gameplay
 
 			Vector3 checkOffset = Vector3.Zero;
 			RaycastHit groundHit = new RaycastHit();
-			Vector3 castVector = -UpDirection * castLength;
+			Vector3 castVector = this.Down() * castLength;
 			int raysHit = 0;
 
 			//Whisker casts (For smoother collision)
@@ -1439,9 +1439,9 @@ namespace Project.Gameplay
 			Vector3 castOffset = this.Forward() * (CollisionRadius - COLLISION_PADDING);
 			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 			{
-				castOffset = castOffset.Rotated(UpDirection, interval).Normalized() * CollisionRadius;
+				castOffset = castOffset.Rotated(this.Down(), interval).Normalized() * CollisionRadius;
 				RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
-				//Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
+				Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
 				if (ValidateGroundCast(ref hit))
 				{
 					if (!groundHit)
@@ -1555,7 +1555,7 @@ namespace Project.Gameplay
 			{
 				if (!hit.collidedObject.IsInGroup("floor"))
 					hit = new RaycastHit();
-				else if (hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) //Limit angle collision
+				else if (MovementState != MovementStates.External && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) //Limit angle collision
 					hit = new RaycastHit();
 				else if (!IsOnGround &&
 					hit.collidedObject.IsInGroup("wall")) //Use Vector3.Up for objects tagged as a wall
