@@ -2,12 +2,12 @@ shader_type spatial;
 render_mode specular_disabled;
 
 global uniform float time;
-uniform sampler2D main_tex : source_color;
-uniform sampler2D secondary_tex : source_color;
+uniform sampler2D main_tex : source_color, hint_default_transparent;
+uniform sampler2D secondary_tex : source_color, hint_default_transparent;
 uniform float frequency;
 uniform float strength;
 uniform float offset;
-uniform float secondary_offset : hint_range(0.0, 1.0, 0.1);
+uniform float secondary_offset;
 
 void fragment()
 {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c1tblqj07pix8"]
+[gd_scene load_steps=18 format=3 uid="uid://c1tblqj07pix8"]
 
 [ext_resource type="PackedScene" uid="uid://c36jr32mbyabe" path="res://area/1 sand oasis/act 1/environment/model/07Beach.gltf" id="1_vix83"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_ia5ps"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_bpbt4"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="5_a5l47"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="5_mhkj6"]
+[ext_resource type="AudioStream" uid="uid://du2kydx1f2bpe" path="res://sound/sfx/stage/sand oasis/area beach wave.ogg" id="7_b5jkw"]
 
 [sub_resource type="Gradient" id="Gradient_obxjw"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -672,7 +673,16 @@ libraries = {
 "": SubResource("AnimationLibrary_mv8n0")
 }
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="51"]
+[node name="BeachSFX" type="AudioStreamPlayer3D" parent="." index="51"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -390.018, -49, -535.768)
+stream = ExtResource("7_b5jkw")
+unit_size = 100.0
+autoplay = true
+max_distance = 125.0
+bus = &"SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="52"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -414.267, -16.8903, -609.791)
 layers = 2
 size = Vector3(640.173, 238.557, 653.244)
