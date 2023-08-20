@@ -139,7 +139,6 @@ namespace Project.Gameplay
 		protected virtual void SpawnPearls()
 		{
 			Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
-			GD.Print("Spawned Pearls");
 		}
 
 		protected bool IsHitboxEnabled { get; private set; }

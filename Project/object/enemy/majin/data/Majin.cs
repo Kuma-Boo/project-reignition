@@ -297,14 +297,10 @@ namespace Project.Gameplay
 				//Get knocked back
 				tweener = CreateTween().SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
 				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
-				tweener.TweenCallback(new Callable(this, MethodName.SpawnPearls));
-				tweener.TweenCallback(new Callable(this, MethodName.Despawn));
+				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("defeat")));
 			}
 			else
-			{
-				SpawnPearls();
-				Despawn();
-			}
+				animationPlayer.Play("defeat");
 		}
 
 		protected override void UpdateEnemy()

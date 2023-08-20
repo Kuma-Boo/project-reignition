@@ -198,6 +198,8 @@ namespace Project.Gameplay
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();
+
+			Character.Effect.PlayActionSFX("jump");
 		}
 		#endregion
 

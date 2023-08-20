@@ -1,13 +1,15 @@
-[gd_scene load_steps=58 format=3 uid="uid://rh85bh20fk6r"]
+[gd_scene load_steps=72 format=3 uid="uid://rh85bh20fk6r"]
 
 [ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_6ikv1"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_p44e7"]
 [ext_resource type="Material" uid="uid://efv6ms0uv2sg" path="res://object/enemy/majin/data/particle/material/Majin Flame.tres" id="6_t5qur"]
+[ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="7_6w2wy"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
+[ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://object/enemy/majin/data/particle/material/Majin Smoke.tres" id="8_a28yl"]
 [ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://object/enemy/majin/data/particle/texture/majin smoke.png" id="9_6teur"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://byf5qdjpi8ur4" path="res://object/enemy/majin/data/animation/MajinAnimationTreeRoot.tres" id="9_osrkc"]
-[ext_resource type="Texture2D" uid="uid://bn81ds3vmr8nq" path="res://object/enemy/majin/data/particle/texture/majin glow.png" id="9_w8pvn"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="9_yw7li"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qrrup"]
 radius = 0.4
@@ -229,9 +231,101 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_txkmg"]
 material = SubResource("StandardMaterial3D_eiiup")
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_783gj"]
+lifetime_randomness = 0.2
+direction = Vector3(0, 1, 0)
+spread = 80.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 8.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 0.8
+scale_max = 1.2
+scale_curve = SubResource("CurveTexture_dwnsb")
+color = Color(0.933333, 0.698039, 0.0431373, 1)
+anim_offset_max = 1.0
+
+[sub_resource type="Gradient" id="Gradient_58f0m"]
+offsets = PackedFloat32Array(0, 0.0456621, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_y1b4x"]
+gradient = SubResource("Gradient_58f0m")
+width = 64
+
+[sub_resource type="Curve" id="Curve_w2bwe"]
+_data = [Vector2(0, 0.2), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_c5dsq"]
+width = 64
+curve = SubResource("Curve_w2bwe")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o1erl"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.5
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 20.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+damping_min = 1.0
+damping_max = 1.0
+angle_max = 360.0
+scale_min = 8.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_c5dsq")
+color = Color(1, 0.701961, 0, 1)
+color_ramp = SubResource("GradientTexture1D_y1b4x")
+
+[sub_resource type="QuadMesh" id="QuadMesh_p17fq"]
+material = ExtResource("8_a28yl")
+
+[sub_resource type="Gradient" id="Gradient_253g5"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kahv6"]
+gradient = SubResource("Gradient_253g5")
+width = 64
+
+[sub_resource type="Curve" id="Curve_jvq1l"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6dgam"]
+width = 64
+curve = SubResource("Curve_jvq1l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3crcx"]
+direction = Vector3(0, 1, 0)
+spread = 30.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+angle_max = 360.0
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_6dgam")
+color = Color(1, 0.713726, 0.278431, 1)
+color_ramp = SubResource("GradientTexture1D_kahv6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_bbrsu"]
+material = ExtResource("9_yw7li")
+
+[sub_resource type="Gradient" id="Gradient_2rcfc"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ck6w1"]
+gradient = SubResource("Gradient_2rcfc")
+width = 64
+
 [sub_resource type="Curve" id="Curve_nqgxv"]
-_data = [Vector2(0, 0.0685921), 0.0, 9.01083, 0, 0, Vector2(0.277328, 1), 0.0, 0.0, 0, 0, Vector2(0.589069, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.04865, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_yoqy1"]
 width = 64
@@ -242,28 +336,11 @@ gravity = Vector3(0, 0, 0)
 scale_min = 5.0
 scale_max = 5.0
 scale_curve = SubResource("CurveTexture_yoqy1")
-color = Color(1, 0.627451, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qw8ul"]
-blend_mode = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("9_w8pvn")
-billboard_mode = 3
-billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
+color = Color(1, 1, 1, 0.588235)
+color_ramp = SubResource("GradientTexture1D_ck6w1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_t1f3y"]
-material = SubResource("StandardMaterial3D_qw8ul")
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_jj8fs"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_0f175"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_jnhsd"]
+material = ExtResource("7_6w2wy")
 
 [sub_resource type="Animation" id="Animation_ojgnd"]
 resource_name = "RESET"
@@ -424,6 +501,157 @@ tracks/12/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("FX/DefeatFX:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Root:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("FX/DefeatFX/DefeatSplatter:lifetime")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.5]
+}
+
+[sub_resource type="Animation" id="Animation_hrty8"]
+resource_name = "defeat"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4, 1),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"SpawnPearls"
+}, {
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FX/DefeatFX:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FX/DefeatFX/DefeatLetter")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/DefeatFX/DefeatSplatter:lifetime")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 0.5]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FX/DefeatFX/DefeatSplatter")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"restart"
+}, {
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/DefeatFX/DefeatSmoke")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FX/Glow")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Root:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
 
 [sub_resource type="Animation" id="Animation_thps5"]
 resource_name = "fire-end"
@@ -545,43 +773,43 @@ tracks/1/keys = {
 "method": &"restart"
 }]
 }
-tracks/2/type = "value"
+tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("FX/FireFX/EmberCharge:visible")
+tracks/2/path = NodePath("FX/FireFX/FlameAttack")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.0666667),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("FX/FireFX/FlameCharge:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.166667),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("FX/FireFX/FlameAttack")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"restart"
 }]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/FireFX/EmberCharge:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FX/FireFX/FlameCharge:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.166667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -710,7 +938,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("FX/SpawnFX/Letter")
+tracks/1/path = NodePath("FX/SpawnFX/SpawnLetter")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -724,7 +952,7 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("FX/SpawnFX/Smoke")
+tracks/2/path = NodePath("FX/SpawnFX/SpawnSmoke")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -738,7 +966,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("FX/SpawnFX/Glow")
+tracks/3/path = NodePath("FX/Glow")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -770,6 +998,7 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
 "RESET": SubResource("Animation_ojgnd"),
+"defeat": SubResource("Animation_hrty8"),
 "fire-end": SubResource("Animation_thps5"),
 "fire-start": SubResource("Animation_c8j0n"),
 "spawn": SubResource("Animation_aucka"),
@@ -828,7 +1057,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="FireFX" type="Node3D" parent="FX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-visible = false
 
 [node name="EmberCharge" type="GPUParticles3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
@@ -907,9 +1135,9 @@ disabled = true
 [node name="SpawnFX" type="Node3D" parent="FX"]
 visible = false
 
-[node name="Letter" type="GPUParticles3D" parent="FX/SpawnFX"]
+[node name="SpawnLetter" type="GPUParticles3D" parent="FX/SpawnFX"]
+layers = 32
 cast_shadow = 0
-gi_mode = 0
 emitting = false
 amount = 18
 one_shot = true
@@ -921,9 +1149,10 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_ekgjg")
 draw_pass_1 = SubResource("PlaneMesh_balcf")
 
-[node name="Smoke" type="GPUParticles3D" parent="FX/SpawnFX"]
+[node name="SpawnSmoke" type="GPUParticles3D" parent="FX/SpawnFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 layers = 32
+cast_shadow = 0
 emitting = false
 lifetime = 0.8
 one_shot = true
@@ -934,14 +1163,61 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_7bsia")
 draw_pass_1 = SubResource("QuadMesh_txkmg")
 
-[node name="Glow" type="GPUParticles3D" parent="FX/SpawnFX"]
+[node name="DefeatFX" type="Node3D" parent="FX"]
+visible = false
+
+[node name="DefeatLetter" type="GPUParticles3D" parent="FX/DefeatFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.6
+randomness = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_783gj")
+draw_pass_1 = SubResource("PlaneMesh_balcf")
+
+[node name="DefeatSmoke" type="GPUParticles3D" parent="FX/DefeatFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 layers = 32
 cast_shadow = 0
+extra_cull_margin = 16384.0
 gi_mode = 0
 emitting = false
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_o1erl")
+draw_pass_1 = SubResource("QuadMesh_p17fq")
+
+[node name="DefeatSplatter" type="GPUParticles3D" parent="FX/DefeatFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_3crcx")
+draw_pass_1 = SubResource("QuadMesh_bbrsu")
+
+[node name="Glow" type="GPUParticles3D" parent="FX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
 amount = 1
-lifetime = 0.2
+lifetime = 0.1
 one_shot = true
 fixed_fps = 60
 interpolate = false
@@ -952,7 +1228,6 @@ draw_pass_1 = SubResource("QuadMesh_t1f3y")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = ExtResource("9_osrkc")
-parameters/defeat_state/playback = SubResource("AnimationNodeStateMachinePlayback_jj8fs")
 parameters/defeat_transition/current_state = ""
 parameters/defeat_transition/transition_request = "disabled"
 parameters/defeat_transition/current_index = 0
@@ -960,9 +1235,10 @@ parameters/fidget_transition/current_state = ""
 parameters/fidget_transition/transition_request = ""
 parameters/fidget_transition/current_index = -1
 parameters/fidget_trigger/active = false
+parameters/fidget_trigger/internal_active = false
 parameters/fidget_trigger/request = 0
-parameters/fire_state/playback = SubResource("AnimationNodeStateMachinePlayback_0f175")
 parameters/hit_trigger/active = false
+parameters/hit_trigger/internal_active = false
 parameters/hit_trigger/request = 0
 parameters/idle_horizontal_factor/add_amount = 0.6
 parameters/idle_movement_factor/add_amount = 0.0
@@ -970,11 +1246,11 @@ parameters/move_transition/current_state = ""
 parameters/move_transition/transition_request = "disabled"
 parameters/move_transition/current_index = 0
 parameters/seek/seek_request = -1.0
-parameters/spin_state/playback = SubResource("AnimationNodeStateMachinePlayback_jnhsd")
 parameters/state_transition/current_state = ""
 parameters/state_transition/transition_request = "idle"
 parameters/state_transition/current_index = 0
 parameters/teleport_trigger/active = false
+parameters/teleport_trigger/internal_active = false
 parameters/teleport_trigger/request = 0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
