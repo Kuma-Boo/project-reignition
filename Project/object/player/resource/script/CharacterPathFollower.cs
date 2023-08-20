@@ -60,7 +60,7 @@ namespace Project.Gameplay
 		public void RecalculateData()
 		{
 			float newForwardAngle = ExtensionMethods.CalculateForwardAngle(this.Back(), this.Up());
-			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .6f; //Abitrary blend amount that seems to work
+			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle) * .59f; //Abitrary blend amount that seems to work
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;

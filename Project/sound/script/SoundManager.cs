@@ -264,11 +264,7 @@ namespace Project.Core
 		/// </summary>
 		public static bool IsBreakChannelMuted
 		{
-			set
-			{
-				AudioServer.SetBusMute(AudioServer.GetBusIndex("BREAK"), value);
-				GD.Print(value);
-			}
+			set => AudioServer.SetBusMute(AudioServer.GetBusIndex("BREAK"), value);
 		}
 		#endregion
 	}
