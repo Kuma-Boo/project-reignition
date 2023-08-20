@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-namespace Project.Editor.StageObjectGenerator
+namespace Project.Editor.CustomNodes
 {
 	[Tool]
 	/// <summary>

@@ -85,12 +85,12 @@ namespace Project.Gameplay
 		/// </summary>
 		[Export]
 		private PackedScene splashParticle;
-		private List<ParticleGroup> splashParticleList = new List<ParticleGroup>();
+		private List<Editor.CustomNodes.GpuParticles3DGroup> splashParticleList = new List<Editor.CustomNodes.GpuParticles3DGroup>();
 		public void PlaySplashFX()
 		{
 			PlayActionSFX("splash");
 
-			ParticleGroup activeSplashParticle = null;
+			Editor.CustomNodes.GpuParticles3DGroup activeSplashParticle = null;
 			for (int i = 0; i < splashParticleList.Count; i++)
 			{
 				if (!splashParticleList[i].IsActive)
@@ -101,7 +101,7 @@ namespace Project.Gameplay
 			}
 
 			if (activeSplashParticle == null)
-				activeSplashParticle = splashParticle.Instantiate<ParticleGroup>();
+				activeSplashParticle = splashParticle.Instantiate<Editor.CustomNodes.GpuParticles3DGroup>();
 
 			StageSettings.instance.AddChild(activeSplashParticle);
 			activeSplashParticle.GlobalPosition = GlobalPosition;
@@ -164,7 +164,7 @@ namespace Project.Gameplay
 		}
 
 		[Export]
-		private ParticleGroup waterStep;
+		private Editor.CustomNodes.GpuParticles3DGroup waterStep;
 		private void CreateSplashFootFX(bool isRightFoot)
 		{
 			waterStep.GlobalPosition = isRightFoot ? rightFoot.GlobalPosition : leftFoot.GlobalPosition;

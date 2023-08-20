@@ -1,13 +1,12 @@
-using System.Reflection.PortableExecutable;
 using Godot;
 using Godot.Collections;
 
-namespace Project
+namespace Project.Editor.CustomNodes
 {
 	/// <summary>
 	/// Plays a group of GPUParticles together.
 	/// </summary>
-	public partial class ParticleGroup : GpuParticles3D
+	public partial class GpuParticles3DGroup : GpuParticles3D
 	{
 		[Export]
 		private Array<GpuParticles3D> subSystems;
