@@ -27,28 +27,20 @@ namespace Project.Gameplay
 		#region Stats
 		[ExportCategory("Stats")]
 		[Export]
-		private MovementResource baseGroundSettings; //Slowest Sonic
-		[Export]
-		private MovementResource maxGroundSettings; //Fastest Sonic
+		private MovementResource groundSettings; // Default ground settings
 
 		[Export]
-		public MovementResource strafeSettings; //Strafe settings used during strafe sections
-		[Export]
-		public MovementResource speedbreakStrafeSettings; //Strafe settings used during speed break
+		public MovementResource strafeSettings; // Strafe settings used during strafe sections
 
 		[Export]
-		private MovementResource baseAirSettings; //Slowest Sonic
-		[Export]
-		private MovementResource maxAirSettings; //Fastest Sonic
+		private MovementResource airSettings; // Default air settings
 		[Export]
 		public float accelerationJumpSpeed;
 		[Export]
 		public float homingAttackSpeed;
 
 		[Export]
-		public float baseSlideFriction; //Shortest slide
-		[Export]
-		public float maxSlideFriction; //Longest slide
+		public float slideFriction; // Default slide
 
 		//While there aren't any upgrades for the following movement skills, they're here for consistancy
 		[Export]
@@ -77,12 +69,12 @@ namespace Project.Gameplay
 		private void SetUpStats() //Stuff like upgradable speed, increased handling, etc.
 		{
 			//TODO Interpolate values based on skill ring settings
-			GroundSettings = baseGroundSettings;
-			AirSettings = baseAirSettings;
+			GroundSettings = groundSettings;
+			AirSettings = airSettings;
 			BackflipSettings = backflipSettings;
 			BackstepSettings = backstepSettings;
 
-			SlideFriction = baseSlideFriction;
+			SlideFriction = slideFriction;
 		}
 		#endregion
 
