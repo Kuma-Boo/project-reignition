@@ -145,6 +145,15 @@ namespace Project.Gameplay
 		/// </summary>
 		private float GetTargetMovementAngle()
 		{
+			if (Skills.IsSpeedBreakActive)
+			{
+				float targetAngle = PathFollower.ForwardAngle + PathFollower.DeltaAngle;
+				if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting)
+					targetAngle -= PathFollower.DeltaAngle * 1.8f;
+
+				return targetAngle;
+			}
+
 			float inputAngle = GetInputAngle();
 
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
@@ -168,14 +177,6 @@ namespace Project.Gameplay
 				}
 
 				return targetAngle;
-			}
-
-			if (Skills.IsSpeedBreakActive)
-			{
-				if (InputVector.IsZeroApprox()) // Reset to path direction
-					return PathFollower.ForwardAngle;
-				else
-					return ExtensionMethods.ClampAngleRange(inputAngle, PathFollower.ForwardAngle, Mathf.Pi * .3f);
 			}
 
 			return inputAngle;
@@ -511,12 +512,13 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
 
 			float targetMovementAngle = GetTargetMovementAngle();
-			bool overrideFacingDirection = IsLockoutActive &&
+			bool overrideFacingDirection = (IsLockoutActive &&
 			(ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace ||
-			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe);
+			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)) || Skills.IsSpeedBreakActive;
 
 			// Strafe implementation
-			if (IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
+			if (Skills.IsSpeedBreakActive ||
+			(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
 			{
 				//Custom strafing movement
 				float strafeAmount = ExtensionMethods.DotAngle(GetInputAngle() + Mathf.Pi * .5f, PathFollower.ForwardAngle);
@@ -564,9 +566,9 @@ namespace Project.Gameplay
 					MoveSpeed = 0;
 			}
 
-			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
 			if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting
-				MovementAngle += PathFollower.DeltaAngle * 1.84f; // Random number that seems pretty accurate.
+				MovementAngle += PathFollower.DeltaAngle * 1.08f; // Random number that seems pretty accurate.
+			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
 		}
 
 
