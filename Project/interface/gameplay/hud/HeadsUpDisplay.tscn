@@ -1,11 +1,12 @@
-[gd_scene load_steps=40 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=41 format=3 uid="uid://chn7ckbhlrr2g"]
 
+[ext_resource type="Texture2D" uid="uid://btu2qfmfefcpo" path="res://interface/gameplay/hud/rings/ring atlas.png" id="2_8yr5f"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/HUD Numbers.fnt" id="2_lj78h"]
 [ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="2_y70id"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="3_wydbw"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/sprite atlas.png" id="4_63n04"]
-[ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/tile000.png" id="4_qopjr"]
-[ext_resource type="SpriteFrames" uid="uid://dyapcyhxvxwbp" path="res://interface/gameplay/hud/rings/RingSpriteFrames.tres" id="5_u8bqk"]
-[ext_resource type="Texture2D" uid="uid://bn7bhmfqmn5i8" path="res://interface/gameplay/hud/soul gauge/background.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/ring.png" id="7_ggxti"]
+[ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/soul gauge/background.png" id="8"]
 [ext_resource type="Material" uid="uid://duq3egwjfpmil" path="res://interface/gameplay/hud/soul gauge/Soul Gauge Fill.tres" id="8_t3t32"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
 [ext_resource type="Texture2D" uid="uid://bypa7d6a6vjnr" path="res://interface/gameplay/hud/soul gauge/fill dimensions.png" id="9_i8ml4"]
@@ -79,6 +80,286 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector2(184, 64)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Current/Ring:timeScale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Current/Ring:loopMode")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Current/Ring:playing")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "bezier"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Loss/RingsRoot/Ring1:position:x")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/9/type = "bezier"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Loss/RingsRoot/Ring1:position:y")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/10/type = "bezier"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Loss/RingsRoot/Ring2:position:x")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/11/type = "bezier"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Loss/RingsRoot/Ring2:position:y")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/12/type = "bezier"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Loss/RingsRoot/Ring3:position:x")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/13/type = "bezier"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Loss/RingsRoot/Ring3:position:y")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/14/type = "bezier"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Loss/RingsRoot/Ring4:position:x")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/15/type = "bezier"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Loss/RingsRoot/Ring4:position:y")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/16/type = "bezier"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Loss/RingsRoot/Ring5:position:x")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/17/type = "bezier"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Loss/RingsRoot/Ring5:position:y")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/18/type = "bezier"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Loss/RingsRoot/Ring6:position:x")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/19/type = "bezier"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Loss/RingsRoot/Ring6:position:y")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/20/type = "bezier"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Loss/RingsRoot/Ring7:position:x")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/21/type = "bezier"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Loss/RingsRoot/Ring7:position:y")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/22/type = "bezier"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Loss/RingsRoot/Ring8:position:x")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/23/type = "bezier"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Loss/RingsRoot/Ring8:position:y")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/24/type = "bezier"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Loss/RingsRoot/Ring9:position:x")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/25/type = "bezier"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Loss/RingsRoot/Ring9:position:y")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/26/type = "bezier"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Loss/RingsRoot/Ring10:position:x")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/27/type = "bezier"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Loss/RingsRoot/Ring10:position:y")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("Loss/RingsRoot:modulate")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("Loss/RingsRoot:process_mode")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
 
 [sub_resource type="Animation" id="1"]
 resource_name = "collect"
@@ -106,6 +387,42 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Current/Ring:timeScale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [5.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Current/Ring:loopMode")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 2]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Current/Ring:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="46"]
@@ -160,6 +477,286 @@ tracks/3/keys = {
 "args": [0.0],
 "method": &"play"
 }]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Current/Ring:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Current/Ring:timeScale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [5.0, 1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Current/Ring:loopMode")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 2]
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Loss/RingsRoot/Ring1:position:x")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.291667, 487.193, 448, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.833333)
+}
+tracks/8/type = "bezier"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Loss/RingsRoot/Ring1:position:y")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"handle_modes": PackedInt32Array(0, 0, 3, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.239583, -19.5888, 176, -0.0522722, -91.6377, 0.0292283, -66.7481, 108, -0.0208333, 0, 0.0208333, 0, 175.136, -0.03125, -62.3584, 0, 0),
+"times": PackedFloat32Array(0, 0.416667, 0.541667, 0.666667)
+}
+tracks/9/type = "bezier"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Loss/RingsRoot/Ring2:position:x")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.0416667, 321.778, 460, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.583333)
+}
+tracks/10/type = "bezier"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Loss/RingsRoot/Ring2:position:y")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"handle_modes": PackedInt32Array(0, 0, 3, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.150164, 1.23139, 308, -0.0520833, 0, 0.0416667, -34.622, 256, -0.0520833, 0, 0.0520833, 0, 308, -0.0416666, -34.622, 0.0520833, 0),
+"times": PackedFloat32Array(0, 0.333333, 0.458333, 0.583333)
+}
+tracks/11/type = "bezier"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Loss/RingsRoot/Ring3:position:x")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0, 113.878, 248, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.625)
+}
+tracks/12/type = "bezier"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Loss/RingsRoot/Ring3:position:y")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"handle_modes": PackedInt32Array(0, 0, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.125, 0.57821, 240, -0.0416667, -66.722, 0.0141175, -29.322, 196, -0.0416667, 0, 0.0416668, 0, 240, -0.0275492, -30.422, 0, 0),
+"times": PackedFloat32Array(0, 0.375, 0.5, 0.625)
+}
+tracks/13/type = "bezier"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Loss/RingsRoot/Ring4:position:x")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.0833333, 74.3542, 88, -0.09375, 0, 0.09375, 0),
+"times": PackedFloat32Array(0, 0.666667)
+}
+tracks/14/type = "bezier"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Loss/RingsRoot/Ring4:position:y")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"handle_modes": PackedInt32Array(0, 0, 3, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 152, -0.0312501, 0, 0.0516986, -27.6522, 128, -0.0312501, 0, 0.0312501, 0, 152, -0.0316347, -20.3141, 0, 0),
+"times": PackedFloat32Array(0, 0.375, 0.5, 0.625)
+}
+tracks/15/type = "bezier"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Loss/RingsRoot/Ring5:position:x")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 116.73, 120, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.750001)
+}
+tracks/16/type = "bezier"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Loss/RingsRoot/Ring5:position:y")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"handle_modes": PackedInt32Array(0, 0, 3, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 376, -0.0416667, -85.9157, 0.0416667, -66.5557, 300, -0.0416666, 0, 0.0416666, 0, 376, -0.0416667, -48.4207, 0, 0),
+"times": PackedFloat32Array(0, 0.416667, 0.583334, 0.75)
+}
+tracks/17/type = "bezier"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Loss/RingsRoot/Ring6:position:x")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"handle_modes": PackedInt32Array(0, 3),
+"points": PackedFloat32Array(0, -0.25, 0, 0.125, -50.1095, -48, -0.15625, 0, 0.15625, 0),
+"times": PackedFloat32Array(0, 0.625)
+}
+tracks/18/type = "bezier"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Loss/RingsRoot/Ring6:position:y")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"handle_modes": PackedInt32Array(0, 0, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 456, -0.0416668, 0, 0.0375704, -68.0602, 372, -0.0555556, 0, 0.0555556, 0, 456, -0.0457629, -65.7276, 0, 0),
+"times": PackedFloat32Array(0, 0.291667, 0.458333, 0.625)
+}
+tracks/19/type = "bezier"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Loss/RingsRoot/Ring7:position:x")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.333333, -58.4658, -48, -0.0972223, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.583334)
+}
+tracks/20/type = "bezier"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Loss/RingsRoot/Ring7:position:y")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"handle_modes": PackedInt32Array(0, 0, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 216, -0.0291432, -64.0048, 0.0541902, -46.4664, 168, -0.0416668, 0, 0.0555554, 0, 216, -0.0708098, -44.5177, 0, 0),
+"times": PackedFloat32Array(0, 0.291667, 0.416667, 0.583333)
+}
+tracks/21/type = "bezier"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Loss/RingsRoot/Ring8:position:x")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.0833333, -103.286, -104, -0.0972222, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.666667)
+}
+tracks/22/type = "bezier"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Loss/RingsRoot/Ring8:position:y")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"handle_modes": PackedInt32Array(0, 0, 2, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.0729167, -0.00440645, 136, -0.0416667, -60.0046, 0.0625, -42.4661, 96, -0.0694444, 0, 0.0694444, 0, 136, -0.09375, -42.4661, 0, 0),
+"times": PackedFloat32Array(0, 0.333334, 0.5, 0.666667)
+}
+tracks/23/type = "bezier"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Loss/RingsRoot/Ring9:position:x")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.125, -228.004, -220, -0.0833335, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.583334)
+}
+tracks/24/type = "bezier"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Loss/RingsRoot/Ring9:position:y")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"handle_modes": PackedInt32Array(0, 0, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 312, -0.0416667, -103.492, 0.0416667, -56.723, 264, -0.0416667, 0, 0.0416668, 0, 312, -0.0416672, -45.0307, 0, 0),
+"times": PackedFloat32Array(0, 0.333333, 0.458333, 0.583334)
+}
+tracks/25/type = "bezier"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Loss/RingsRoot/Ring10:position:x")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.166667, -228.004, -240, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.666667)
+}
+tracks/26/type = "bezier"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Loss/RingsRoot/Ring10:position:y")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 112, -0.0833333, -65.2352, 0.0416667, -34.0558, 64, -0.111111, 0, 0.111111, 0, 112, -0.0416672, -34.0558, 0, 0),
+"times": PackedFloat32Array(0, 0.333333, 0.5, 0.666667)
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Loss/RingsRoot:modulate")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.833334, 1),
+"transitions": PackedFloat32Array(2, 1, 0.5, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("Loss/RingsRoot:process_mode")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 4]
 }
 
 [sub_resource type="Animation" id="Animation_dq8eb"]
@@ -234,7 +831,6 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_06lyc"]
-graph_offset = Vector2(-447.538, 31.8623)
 nodes/gain-anim/node = SubResource("AnimationNodeAnimation_rarei")
 nodes/gain-anim/position = Vector2(-480, 96)
 nodes/gain_trigger/node = SubResource("AnimationNodeOneShot_jee8d")
@@ -486,9 +1082,9 @@ metadata/_edit_lock_ = true
 [node name="Rings" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 128.0
+offset_left = 176.0
 offset_top = 64.0
-offset_right = 544.0
+offset_right = 592.0
 offset_bottom = 192.0
 metadata/_edit_lock_ = true
 
@@ -499,15 +1095,13 @@ offset_top = 64.0
 offset_right = 184.0
 offset_bottom = 64.0
 
-[node name="Ring" type="TextureRect" parent="Rings/Current"]
-layout_mode = 0
-offset_left = -184.0
-offset_top = -49.6
-offset_right = -88.0
-offset_bottom = 46.4
-scale = Vector2(1.2, 1.2)
-pivot_offset = Vector2(48, 48)
-texture = ExtResource("4_qopjr")
+[node name="Ring" type="Sprite2D" parent="Rings/Current"]
+position = Vector2(-136, 0)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+script = ExtResource("3_wydbw")
+loopMode = 1
 
 [node name="CurrentAmount" type="Label" parent="Rings/Current"]
 layout_mode = 0
@@ -552,7 +1146,7 @@ self_modulate = Color(1, 0, 0, 1)
 layout_mode = 0
 offset_left = -136.0
 offset_top = -64.0
-offset_right = 8.0
+offset_right = 8.00171
 offset_bottom = 3.0
 scale = Vector2(0.85, 0.85)
 theme_override_fonts/font = ExtResource("2_lj78h")
@@ -564,11 +1158,107 @@ stream = ExtResource("2_y70id")
 bus = &"SFX"
 
 [node name="RingsRoot" type="Node2D" parent="Rings/Loss"]
-visible = false
+process_mode = 4
+modulate = Color(1, 1, 1, 0)
 
-[node name="Ring1" type="AnimatedSprite2D" parent="Rings/Loss/RingsRoot"]
-sprite_frames = ExtResource("5_u8bqk")
-autoplay = "default"
+[node name="Ring1" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = 0.460767
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+timeScale = 0.2
+
+[node name="Ring2" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = 0.523598
+scale = Vector2(1.375, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring3" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = 0.236989
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring4" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = -0.953518
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring5" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring6" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = -0.332001
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring7" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = -0.388323
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring8" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = -0.457046
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring9" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+rotation = -0.533923
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
+
+[node name="Ring10" type="Sprite2D" parent="Rings/Loss/RingsRoot"]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_8yr5f")
+hframes = 8
+frame = 7
+script = ExtResource("3_wydbw")
+playing = true
+loopMode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Rings"]
 libraries = {
@@ -590,6 +1280,7 @@ parameters/ringless_transition/transition_request = ""
 parameters/ringless_transition/current_index = 1
 
 [node name="Objectives" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 0
 offset_left = 128.0
@@ -604,7 +1295,7 @@ offset_top = 16.0
 offset_right = 96.0
 offset_bottom = 112.0
 pivot_offset = Vector2(0, 48)
-texture = ExtResource("4_qopjr")
+texture = ExtResource("7_ggxti")
 
 [node name="Value" type="Label" parent="Objectives"]
 layout_mode = 0
@@ -643,6 +1334,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Values" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 0
 offset_left = 1408.0
@@ -669,6 +1361,7 @@ text = "00:00.00"
 vertical_alignment = 1
 
 [node name="SoulGauge" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchor_left = 0.867
 anchor_top = 0.237
@@ -831,6 +1524,7 @@ volume_db = -6.0
 bus = &"SFX"
 
 [node name="Bonus" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchor_left = 0.067
 anchor_top = 0.296

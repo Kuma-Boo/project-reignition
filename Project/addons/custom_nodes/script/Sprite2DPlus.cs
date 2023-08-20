@@ -34,8 +34,9 @@ namespace Project.Editor.CustomNodes
 		{
 			if (!playing)
 			{
-				if (!paused)
-					timer = 0;
+				timer = 0;
+				Frame = 0;
+				paused = false;
 
 				return;
 			}
