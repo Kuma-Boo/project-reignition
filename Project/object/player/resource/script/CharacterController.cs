@@ -81,10 +81,15 @@ namespace Project.Gameplay
 			Backflip,
 		}
 
-		/// <summary>
-		/// Reset action state to ActionState.Normal
-		/// </summary>
-		public void ResetActionState() => ActionState = ActionStates.Normal;
+		public void ResetActionState() => SetActionState(ActionStates.Normal);
+		private void SetActionState(ActionStates newState)
+		{
+			if (ActionState == ActionStates.Crouching)
+				StopCrouching();
+
+			ActionState = newState;
+		}
+
 		private void UpdateStateMachine()
 		{
 			if (IsCountdownActive)
@@ -317,9 +322,9 @@ namespace Project.Gameplay
 		{
 			ExternalController = controller;
 
+			ResetActionState();
 			ResetMovementState();
 			MovementState = MovementStates.External;
-			ActionState = ActionStates.Normal;
 
 			Skills.IsSpeedBreakEnabled = allowSpeedBreak;
 
@@ -775,7 +780,7 @@ namespace Project.Gameplay
 			IsOnGround = false;
 			CanJumpDash = true;
 			canLandingBoost = Skills.isLandingDashEnabled;
-			ActionState = ActionStates.Jumping;
+			SetActionState(ActionStates.Jumping);
 			VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 
 			if (IsMovingBackward || MoveSpeed < 0) //Kill speed when jumping backwards
@@ -791,7 +796,7 @@ namespace Project.Gameplay
 			{
 				if (IsHoldingDirection(PathFollower.ForwardAngle, true) && InputVector.Length() > .5f)
 				{
-					ActionState = ActionStates.AccelJump;
+					SetActionState(ActionStates.AccelJump);
 					MoveSpeed = Skills.accelerationJumpSpeed;
 					Animator.AirAttackAnimation();
 				}
@@ -862,7 +867,7 @@ namespace Project.Gameplay
 			CanJumpDash = false;
 			IsMovingBackward = false; //Can't jumpdash backwards!
 			MoveSpeed = jumpDashSpeed;
-			ActionState = ActionStates.JumpDash;
+			SetActionState(ActionStates.JumpDash);
 
 			if (Lockon.IsBouncingLockoutActive) //Interrupt lockout
 				RemoveLockoutData(Lockon.bounceLockoutSettings);
@@ -909,16 +914,19 @@ namespace Project.Gameplay
 		#region Crouch & Slide
 		private void StartCrouching()
 		{
-			ActionState = ActionStates.Crouching;
+			SetActionState(ActionStates.Crouching);
+			Animator.StartCrouching();
 		}
 
-		public void UpdateCrouching()
+		private void UpdateCrouching()
 		{
-			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Skills.SlideFriction * PhysicsManager.physicsDelta); //Slow down
+			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Skills.SlideFriction * PhysicsManager.physicsDelta); // Slow down
 
-			if (Input.IsActionJustReleased("button_action"))
+			if (!Input.IsActionPressed("button_action"))
 				ResetActionState();
 		}
+
+		private void StopCrouching() => Animator.StopCrouching();
 		#endregion
 
 		#region Stomp
@@ -951,7 +959,7 @@ namespace Project.Gameplay
 			canLandingBoost = true;
 			Lockon.ResetLockonTarget();
 			Lockon.IsMonitoring = false;
-			ActionState = ActionStates.Stomping;
+			SetActionState(ActionStates.Stomping);
 
 			//TODO Play a separate stomping animation if using a stomp skill
 			Animator.Fall();
@@ -965,6 +973,24 @@ namespace Project.Gameplay
 		private const float MAX_BACKFLIP_ADJUSTMENT = Mathf.Pi * .25f;
 		/// <summary> How much to turn when backflipping </summary>
 		private const float BACKFLIP_TURN_SPEED = .25f;
+		private void StartBackflip()
+		{
+			CanJumpDash = true;
+			MoveSpeed = Skills.BackflipSettings.speed;
+
+			IsMovingBackward = true;
+			MovementAngle = GetInputAngle();
+
+			VerticalSpeed = Runtime.CalculateJumpPower(backflipHeight);
+
+			IsOnGround = false;
+			SetActionState(ActionStates.Backflip);
+
+			Effect.PlayActionSFX(Effect.JUMP_SFX);
+			Animator.Backflip();
+		}
+
+
 		private void UpdateBackflip()
 		{
 			if (!IsHoldingDirection(PathFollower.ForwardAngle)) //Influence backflip direction slightly
@@ -982,23 +1008,6 @@ namespace Project.Gameplay
 
 			if (IsOnGround)
 				ResetActionState();
-		}
-
-		private void StartBackflip()
-		{
-			CanJumpDash = true;
-			MoveSpeed = Skills.BackflipSettings.speed;
-
-			IsMovingBackward = true;
-			MovementAngle = GetInputAngle();
-
-			VerticalSpeed = Runtime.CalculateJumpPower(backflipHeight);
-
-			IsOnGround = false;
-			ActionState = ActionStates.Backflip;
-
-			Effect.PlayActionSFX(Effect.JUMP_SFX);
-			Animator.Backflip();
 		}
 		#endregion
 
@@ -1130,7 +1139,7 @@ namespace Project.Gameplay
 		/// </summary>
 		public void TakeDamage()
 		{
-			ActionState = ActionStates.Damaged;
+			SetActionState(ActionStates.Damaged);
 
 			if (Level.CurrentRingCount == 0)
 				StartRespawn();
@@ -1176,7 +1185,7 @@ namespace Project.Gameplay
 			areaTrigger.Disabled = true;
 
 			IsDefeated = false;
-			ActionState = ActionStates.Normal;
+			ResetActionState();
 			MovementState = MovementStates.Normal;
 
 			invincibilityTimer = 0;
@@ -1269,7 +1278,7 @@ namespace Project.Gameplay
 			if (activeLauncher != null && activeLauncher == newLauncher) return; //Already launching that!
 
 			ResetMovementState();
-			ActionState = ActionStates.Normal;
+			ResetActionState();
 			MovementState = MovementStates.Launcher;
 
 			activeLauncher = newLauncher;
@@ -1832,7 +1841,8 @@ namespace Project.Gameplay
 		public CharacterPathFollower PathFollower { get; private set; }
 		[Export]
 		public CharacterAnimator Animator { get; private set; }
-		public CharacterEffect Effect => Animator.Effect;
+		[Export]
+		public CharacterEffect Effect { get; private set; }
 		[Export]
 		public CharacterSkillManager Skills { get; private set; }
 		[Export]

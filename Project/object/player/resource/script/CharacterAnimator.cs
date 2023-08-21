@@ -9,10 +9,6 @@ namespace Project.Gameplay
 	public partial class CharacterAnimator : Node3D
 	{
 		[Export]
-		/// <summary> Reference to the effects controller. </summary>
-		public CharacterEffect Effect { get; private set; }
-
-		[Export]
 		private AnimationTree animationTree;
 		[Export]
 		private AnimationPlayer eventAnimationPlayer;
@@ -20,8 +16,8 @@ namespace Project.Gameplay
 
 		/// <summary> Reference to the root blend tree of the animation tree. </summary>
 		private AnimationNodeBlendTree animationRoot;
-		/// <summary> Transition node for switching between states (normal, balancing, sidling, etc) </summary>
-		private AnimationNodeTransition animationStateTransition;
+		/// <summary> Transition node for switching between states (normal, balancing, sidling, etc). </summary>
+		private AnimationNodeTransition stateTransition;
 
 		/// <summary> Determines facing directions for certain animation states. </summary>
 		private bool isFacingRight;
@@ -38,18 +34,12 @@ namespace Project.Gameplay
 			animationTree.Active = true; //Activate animator
 
 			animationRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
-			animationStateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
+			stateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
 			oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
 		}
 
-		public void StartInvincibility()
-		{
-			eventAnimationPlayer.Play("invincibility");
-			eventAnimationPlayer.Seek(0.0, true);
-		}
-
 		/// <summary> Forces the player's animation back to the grounded state. </summary>
-		public void SnapToGround() => NormalState.Start(GROUND_TREE_STATE, true);
+		public void SnapToGround() => NormalStatePlayback.Start(GROUND_TREE_STATE, true);
 
 		private readonly StringName PLAYER_POSITION_SHADER_PARAMETER = "player_position";
 		/// <summary>
@@ -112,6 +102,7 @@ namespace Project.Gameplay
 
 		#region States
 		private readonly StringName NORMAL_STATE = "normal";
+		private readonly StringName DRIFT_STATE = "drift";
 		private readonly StringName BALANCE_STATE = "balance";
 		private readonly StringName SIDLE_STATE = "sidle";
 
@@ -128,93 +119,57 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Sets the crossfade length of the primary state transition node.
 		/// </summary>
-		private void SetStateXfade(float xfadeTime) => animationStateTransition.XfadeTime = xfadeTime;
+		private void SetStateXfade(float xfadeTime) => stateTransition.XfadeTime = xfadeTime;
 		#endregion
+
 
 		#region Normal Animations
 		/// <summary> Gets the normal state's StateMachinePlayback </summary>
-		private AnimationNodeStateMachinePlayback NormalState => animationTree.Get(NORMAL_STATE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
-		private readonly StringName NORMAL_STATE_PLAYBACK = "parameters/normal_state/playback";
+		private AnimationNodeStateMachinePlayback NormalStatePlayback => animationTree.Get(NORMAL_STATE_PLAYBACK_PARAMETER).Obj as AnimationNodeStateMachinePlayback;
+		private readonly StringName NORMAL_STATE_PLAYBACK_PARAMETER = "parameters/normal_state/playback";
 
-		private bool canTransitionToFalling;
-		private readonly StringName FALL_STATE_PARAMETER = "fall";
-		public void Fall()
-		{
-			canTransitionToFalling = true;
-		}
 
-		private readonly StringName JUMP_STATE_PARAMETER = "jump";
-		public void Jump()
-		{
-			canTransitionToFalling = true;
-			NormalState.Travel(JUMP_STATE_PARAMETER);
-		}
-
-		private readonly StringName HURT_STATE_PARAMETER = "hurt";
-		public void Hurt()
-		{
-			NormalState.Travel(HURT_STATE_PARAMETER);
-		}
-
-		private readonly StringName AIR_DASH_PARAMETER = "jump-accel";
-		private readonly StringName LAUNCH_PARAMETER = "jump-launch";
-		public void AirAttackAnimation()
-		{
-			canTransitionToFalling = false;
-			NormalState.Travel(AIR_DASH_PARAMETER);
-		}
-		public void LaunchAnimation()
-		{
-			canTransitionToFalling = false;
-			NormalState.Travel(LAUNCH_PARAMETER);
-		}
-
-		private readonly StringName BACKFLIP_STATE_PARAMETER = "backflip";
-		public void Backflip()
-		{
-			NormalState.Travel(BACKFLIP_STATE_PARAMETER);
-		}
 
 		private readonly StringName GROUND_TREE_STATE = "ground_tree";
 
-		private readonly StringName IDLE_STATE = "idle";
-		private readonly StringName MOVE_FORWARD_STATE = "forward";
-		private readonly StringName MOVE_BACK_STATE = "backward";
+		private readonly StringName IDLE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/idle_blend/blend_amount";
+		private readonly StringName FORWARD_SEEK_PARAMETER = "parameters/normal_state/ground_tree/forward_seek/seek_request";
+		private readonly StringName BACKWARD_SEEK_PARAMETER = "parameters/normal_state/ground_tree/backward_seek/seek_request";
 
-		private readonly StringName MOVE_REQUEST_PARAMETER = "parameters/normal_state/ground_tree/move_transition/transition_request";
-		private readonly StringName MOVE_SPEED_PARAMETER = "parameters/normal_state/ground_tree/move_speed/scale";
-		private readonly StringName MOVE_SEEK_PARAMETER = "parameters/normal_state/ground_tree/move_seek/seek_request";
-		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/move_blend/blend_position";
+		private readonly StringName GROUND_SPEED_PARAMETER = "parameters/normal_state/ground_tree/ground_speed/scale";
+		private readonly StringName GROUND_SEEK_PARAMETER = "parameters/normal_state/ground_tree/ground_seek/seek_request";
+		private readonly StringName FORWARD_BLEND_PARAMETER = "parameters/normal_state/ground_tree/forward_blend/blend_position";
 
 		private readonly StringName TURN_BLEND_PARAMETER = "parameters/normal_state/ground_tree/turn_blend/blend_position";
 		private readonly StringName LAND_TRIGGER_PARAMETER = "parameters/normal_state/ground_tree/land_trigger/request";
 
-		/// <summary> Disables speed smoothing. </summary>
-		private bool disableSpeedSmoothing;
 		[Export]
 		private Curve movementAnimationSpeedCurve;
+		/// <summary> Disables speed smoothing. </summary>
+		private bool disableSpeedSmoothing;
+		private float idleBlendVelocity;
 		/// <summary> What speedratio should be considered as fully running? </summary>
 		private const float RUN_RATIO = .9f;
 		/// <summary> How much should the animation speed be smoothed by? </summary>
 		private const float SPEED_SMOOTHING = .06f;
 		/// <summary> How much should the transition from idling be smoothed by? </summary>
-		private const float IDLE_SMOOTHING = .2f;
-
+		private const float IDLE_SMOOTHING = .05f;
 		private void GroundAnimations()
 		{
 			//TODO Speed break animation
 			if (Character.Skills.IsSpeedBreakCharging) return;
 
-			StringName targetMoveState = IDLE_STATE;
+			float idleBlend = (float)animationTree.Get(IDLE_BLEND_PARAMETER);
 			float speedRatio = Mathf.Abs(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed));
 			float targetAnimationSpeed = 1f;
 			groundTurnRatio = 0;
 
 			if (Character.JustLandedOnGround) //Play landing animation
 			{
-				animationTree.Set(MOVE_SEEK_PARAMETER, 0);
+				disableSpeedSmoothing = true;
+				animationTree.Set(GROUND_SEEK_PARAMETER, 0);
 				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				NormalState.Travel(GROUND_TREE_STATE);
+				NormalStatePlayback.Travel(GROUND_TREE_STATE);
 			}
 
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
@@ -227,15 +182,15 @@ namespace Project.Gameplay
 
 			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 			{
-				if (Character.IsMovingBackward) //Backstep
+				if (Character.IsMovingBackward) // Backstep
 				{
-					targetMoveState = MOVE_BACK_STATE;
+					idleBlend = ExtensionMethods.SmoothDamp(idleBlend, -1, ref idleBlendVelocity, IDLE_SMOOTHING);
 					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
 					targetAnimationSpeed = 1.2f + speedRatio;
 				}
-				else //Moving
+				else // Moving forward
 				{
-					targetMoveState = MOVE_FORWARD_STATE;
+					idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 1, ref idleBlendVelocity, IDLE_SMOOTHING);
 
 					if (Character.Skills.IsSpeedBreakActive) // Constant animation speed
 						targetAnimationSpeed = 2.5f;
@@ -248,14 +203,10 @@ namespace Project.Gameplay
 					{
 						targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RUN_RATIO); //Normalize speed ratio
 
-						//Only use walking animation when player is pressing control stick softly and not moving against the wall
+						// Speed up animation if player is trying to start running
 						if (Character.InputVector.Length() >= .8f &&
 							speedRatio < Character.GroundSettings.GetSpeedRatio(Character.BackstepSettings.speed) && !Character.IsOnWall())
-						{
-							if (speedRatio < .3f)
-								speedRatio = .3f;
 							targetAnimationSpeed += 1.0f;
-						}
 					}
 				}
 
@@ -264,39 +215,31 @@ namespace Project.Gameplay
 				else if (!Character.IsLockoutActive || Character.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Replace)
 					groundTurnRatio = CalculateTurnRatio();
 			}
+			else
+			{
+				idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 0, ref idleBlendVelocity, IDLE_SMOOTHING);
 
-			animationTree.Set(MOVE_REQUEST_PARAMETER, targetMoveState);
-			animationTree.Set(MOVE_BLEND_PARAMETER, speedRatio);
+				if (Mathf.IsZeroApprox(idleBlend))
+				{
+					animationTree.Set(BACKWARD_SEEK_PARAMETER, 0);
+					animationTree.Set(FORWARD_SEEK_PARAMETER, 0);
+				}
+			}
+
+			animationTree.Set(IDLE_BLEND_PARAMETER, idleBlend);
+			animationTree.Set(FORWARD_BLEND_PARAMETER, speedRatio);
 			if (disableSpeedSmoothing)
 			{
-				animationTree.Set(MOVE_SPEED_PARAMETER, targetAnimationSpeed);
+				animationTree.Set(GROUND_SPEED_PARAMETER, targetAnimationSpeed);
 				disableSpeedSmoothing = false;
 			}
 			else
-				animationTree.Set(MOVE_SPEED_PARAMETER, Mathf.Lerp((float)animationTree.Get(MOVE_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
+				animationTree.Set(GROUND_SPEED_PARAMETER, Mathf.Lerp((float)animationTree.Get(GROUND_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
 
-			groundTurnRatio = Mathf.Lerp(((Vector2)animationTree.Get(TURN_BLEND_PARAMETER)).X, groundTurnRatio, TURN_SMOOTHING); //Blend from animator
-
-			if (Character.IsMovingBackward)
-				animationTree.Set(TURN_BLEND_PARAMETER, new Vector2(groundTurnRatio, 0));
-			else
-				animationTree.Set(TURN_BLEND_PARAMETER, new Vector2(groundTurnRatio, speedRatio));
+			groundTurnRatio = Mathf.Lerp(((Vector2)animationTree.Get(TURN_BLEND_PARAMETER)).X, groundTurnRatio, TURN_SMOOTHING); // Blend from animator
+			animationTree.Set(TURN_BLEND_PARAMETER, new Vector2(groundTurnRatio, Character.IsMovingBackward ? 0 : speedRatio));
 		}
 
-		private void AirAnimations()
-		{
-			if (canTransitionToFalling)
-			{
-				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
-
-				if (Character.ActionState != CharacterController.ActionStates.Jumping ||
-				Character.VerticalSpeed <= 0)
-				{
-					canTransitionToFalling = false;
-					NormalState.Travel(FALL_STATE_PARAMETER);
-				}
-			}
-		}
 
 		/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
 		private float groundTurnRatio;
@@ -320,7 +263,82 @@ namespace Project.Gameplay
 			delta = Mathf.Clamp(delta, -MAX_TURN_ANGLE, MAX_TURN_ANGLE);
 			return delta / MAX_TURN_ANGLE;
 		}
+
+
+		private bool canTransitionToFalling;
+		private readonly StringName FALL_STATE_PARAMETER = "fall-start";
+		public void Fall() => canTransitionToFalling = true;
+
+		private readonly StringName JUMP_STATE_PARAMETER = "jump-start";
+		public void Jump()
+		{
+			canTransitionToFalling = true;
+			NormalStatePlayback.Travel(JUMP_STATE_PARAMETER);
+		}
+
+		private readonly StringName AIR_DASH_PARAMETER = "jump-accel-start";
+		public void AirAttackAnimation()
+		{
+			canTransitionToFalling = false;
+			NormalStatePlayback.Travel(AIR_DASH_PARAMETER);
+		}
+
+		private readonly StringName LAUNCH_PARAMETER = "jump-launch-start";
+		public void LaunchAnimation()
+		{
+			canTransitionToFalling = false;
+			NormalStatePlayback.Travel(LAUNCH_PARAMETER);
+		}
+
+		private readonly StringName BACKFLIP_STATE_PARAMETER = "backflip";
+		public void Backflip() => NormalStatePlayback.Travel(BACKFLIP_STATE_PARAMETER);
+
+
+		private void AirAnimations()
+		{
+			if (canTransitionToFalling)
+			{
+				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
+
+				if (Character.ActionState != CharacterController.ActionStates.Jumping ||
+				Character.VerticalSpeed <= 0)
+				{
+					canTransitionToFalling = false;
+					NormalStatePlayback.Travel(FALL_STATE_PARAMETER);
+				}
+			}
+		}
+
+
+		private AnimationNodeStateMachinePlayback CrouchStatePlayback => animationTree.Get(CROUCH_PLAYBACK_PARAMETER).Obj as AnimationNodeStateMachinePlayback;
+		private readonly StringName CROUCH_PLAYBACK_PARAMETER = "parameters/normal_state/ground_tree/crouch_state/playback";
+
+		private readonly StringName CROUCH_STATE_START = "crouch-start";
+		private readonly StringName CROUCH_STATE_STOP = "crouch-stop";
+		private readonly StringName CROUCH_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/crouch_transition/transition_request";
+		public void StartCrouching()
+		{
+			CrouchStatePlayback.Travel(CROUCH_STATE_START);
+			animationTree.Set(CROUCH_TRANSITION_PARAMETER, ENABLED_CONSTANT);
+
+		}
+		public void StopCrouching()
+		{
+			CrouchStatePlayback.Travel(CROUCH_STATE_STOP);
+			animationTree.Set(CROUCH_TRANSITION_PARAMETER, DISABLED_CONSTANT);
+		}
+
+
+		public void StartInvincibility()
+		{
+			eventAnimationPlayer.Play("invincibility");
+			eventAnimationPlayer.Seek(0.0, true);
+		}
+
+		private readonly StringName HURT_STATE_PARAMETER = "hurt-start";
+		public void Hurt() => NormalStatePlayback.Travel(HURT_STATE_PARAMETER);
 		#endregion
+
 
 		#region Visual Rotation
 		/// <summary> Angle to use when character's MovementState is CharacterController.MovementStates.External. </summary>
@@ -347,17 +365,16 @@ namespace Project.Gameplay
 		/// </summary>
 		private void UpdateVisualRotation()
 		{
-			if (Character.IsGrindstepping) return; //Use the same angle as the grindrail
+			if (Character.IsGrindstepping) return; // Use the same angle as the grindrail
 
-			//Don't update directions when externally controlled or on launchers
+			// Don't update directions when externally controlled or on launchers
 			float targetRotation = Character.MovementAngle;
-			float smoothing = MOVEMENT_ROTATION_SMOOTHING;
 
 			if (Character.MovementState == CharacterController.MovementStates.External)
 				targetRotation = ExternalAngle;
-			else if (Character.Lockon.IsHomingAttacking) //Face target
+			else if (Character.Lockon.IsHomingAttacking) // Face target
 				targetRotation = ExtensionMethods.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
-			else if (Character.IsMovingBackward) //Backstepping
+			else if (Character.IsMovingBackward) // Backstepping
 				targetRotation = Character.PathFollower.ForwardAngle + groundTurnRatio * Mathf.Pi * .15f;
 			else if (Character.IsLockoutActive)
 			{
@@ -386,17 +403,16 @@ namespace Project.Gameplay
 		private void ApplyVisualRotation() => Rotation = Vector3.Up * VisualAngle;
 		#endregion
 
-		#region Drift
-		private readonly StringName DRIFT_STATE = "drift_tree";
 
+		#region Drift
 		private AnimationNodeStateMachinePlayback ActiveDriftState => isFacingRight ? DriftRightState : DriftLeftState;
 		private AnimationNodeStateMachinePlayback DriftRightState => animationTree.Get(DRIFT_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 		private AnimationNodeStateMachinePlayback DriftLeftState => animationTree.Get(DRIFT_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 
-		private readonly StringName DRIFT_LEFT_PLAYBACK = "parameters/normal_state/drift_tree/left_state/playback";
-		private readonly StringName DRIFT_RIGHT_PLAYBACK = "parameters/normal_state/drift_tree/right_state/playback";
+		private readonly StringName DRIFT_LEFT_PLAYBACK = "parameters/drift_tree/left_state/playback";
+		private readonly StringName DRIFT_RIGHT_PLAYBACK = "parameters/drift_tree/right_state/playback";
 
-		private readonly StringName DRIFT_DIRECTION_PARAMETER = "parameters/normal_state/drift_tree/direction_transition/transition_request";
+		private readonly StringName DRIFT_DIRECTION_PARAMETER = "parameters/drift_tree/direction_transition/transition_request";
 		private readonly StringName DRIFT_START_STATE = "drift-start";
 		private readonly StringName DRIFT_LAUNCH_STATE = "drift-launch";
 
@@ -404,8 +420,10 @@ namespace Project.Gameplay
 		{
 			isFacingRight = isDriftFacingRight;
 			ActiveDriftState.Start(DRIFT_START_STATE);
-			NormalState.Travel(DRIFT_STATE);
 			animationTree.Set(DRIFT_DIRECTION_PARAMETER, isFacingRight ? RIGHT_CONSTANT : LEFT_CONSTANT);
+
+			SetStateXfade(.2f); // Transition into drift
+			animationTree.Set(STATE_PARAMETER, DRIFT_STATE);
 		}
 
 		/// <summary> Called when drift is performed. </summary>
@@ -414,10 +432,11 @@ namespace Project.Gameplay
 		/// <summary> Called when drift is completed. </summary>
 		public void StopDrift()
 		{
-			NormalState.Travel(GROUND_TREE_STATE);
-			animationRoot.Set(MOVE_SEEK_PARAMETER, 0);
+			ResetState(.4f);
+			animationRoot.Set(GROUND_SEEK_PARAMETER, 0);
 		}
 		#endregion
+
 
 		#region Grinding and Balancing Animations
 		/// <summary> Reference to the balance state's StateMachinePlayback </summary>
@@ -499,8 +518,9 @@ namespace Project.Gameplay
 		}
 		#endregion
 
+
 		#region Sidle
-		public bool IsSidleMoving => (ActiveSidleState.GetFadingFromNode().IsEmpty && ActiveSidleState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER);
+		public bool IsSidleMoving => ActiveSidleState.GetFadingFromNode().IsEmpty && ActiveSidleState.GetCurrentNode() == SIDLE_LOOP_STATE_PARAMETER;
 
 		private AnimationNodeStateMachinePlayback ActiveSidleState => isFacingRight ? SidleRightState : SidleLeftState;
 		private AnimationNodeStateMachinePlayback SidleRightState => animationTree.Get(SIDLE_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
@@ -542,7 +562,6 @@ namespace Project.Gameplay
 		/// <summary> Starts damage (stagger) animation. </summary>
 		public void SidleDamage()
 		{
-			Effect.PlayVoice("sidle hurt");
 			animationTree.Set(SIDLE_SPEED_PARAMETER, 1f);
 			animationTree.Set(SIDLE_SEEK_PARAMETER, -1);
 
@@ -553,11 +572,7 @@ namespace Project.Gameplay
 		public void SidleHang() => ActiveSidleState.Travel(SIDLE_HANG_STATE_PARAMETER);
 
 		/// <summary> Recover back to the ledge. </summary>
-		public void SidleRecovery()
-		{
-			Effect.PlayVoice("grunt");
-			ActiveSidleState.Travel(SIDLE_LOOP_STATE_PARAMETER);
-		}
+		public void SidleRecovery() => ActiveSidleState.Travel(SIDLE_LOOP_STATE_PARAMETER);
 
 		/// <summary> Fall while hanging on the ledge. </summary>
 		public void SidleHangFall() => ActiveSidleState.Travel(SIDLE_HANG_FALL_STATE_PARAMETER);

@@ -159,7 +159,7 @@ namespace Project.Gameplay.Triggers
 			}
 			else if (isAttemptingDrift)
 			{
-				if (!Character.Skills.isManualDriftEnabled || distance <= INPUT_WINDOW_DISTANCE * 2f) // Successful drift
+				if (distance <= INPUT_WINDOW_DISTANCE * 2f) // Successful drift
 				{
 					driftResult = DriftResults.Success;
 					ApplyBonus();
@@ -195,7 +195,6 @@ namespace Project.Gameplay.Triggers
 			Character.Animator.ExternalAngle = Character.MovementAngle;
 
 			Character.ResetMovementState();
-			Character.Animator.ResetState(0.4f);
 
 			if (Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift)))
 				Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));

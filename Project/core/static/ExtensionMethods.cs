@@ -25,11 +25,13 @@ namespace Project
 		/// <summary> Creates a property dictionary to be used in _GetPropertyList(). </summary>
 		public static Dictionary CreateProperty(string name, Variant.Type type, PropertyHint hint = PropertyHint.None, string hint_string = "")
 		{
-			Dictionary dictionary = new Dictionary();
-			dictionary.Add("name", name);
-			dictionary.Add("type", (long)type);
-			dictionary.Add("hint", (long)hint);
-			dictionary.Add("hint_string", hint_string);
+			Dictionary dictionary = new Dictionary
+			{
+				{ "name", name },
+				{ "type", (long)type },
+				{ "hint", (long)hint },
+				{ "hint_string", hint_string }
+			};
 			return dictionary;
 		}
 
@@ -183,7 +185,7 @@ namespace Project
 		//Smooth damp functions
 		public static float SmoothDamp(float current, float target, ref float currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
-			float deltaTime = Core.PhysicsManager.physicsDelta;
+			float deltaTime = PhysicsManager.physicsDelta;
 			smoothTime = Mathf.Max(0.0001f, smoothTime);
 			float omega = 2f / smoothTime;
 
