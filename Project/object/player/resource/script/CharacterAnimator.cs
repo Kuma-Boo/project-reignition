@@ -112,6 +112,7 @@ namespace Project.Gameplay
 
 		#region States
 		private readonly StringName NORMAL_STATE = "normal";
+		private readonly StringName DRIFT_STATE = "drift";
 		private readonly StringName BALANCE_STATE = "balance";
 		private readonly StringName SIDLE_STATE = "sidle";
 
@@ -419,16 +420,14 @@ namespace Project.Gameplay
 
 
 		#region Drift
-		private readonly StringName DRIFT_STATE = "drift_tree";
-
 		private AnimationNodeStateMachinePlayback ActiveDriftState => isFacingRight ? DriftRightState : DriftLeftState;
 		private AnimationNodeStateMachinePlayback DriftRightState => animationTree.Get(DRIFT_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 		private AnimationNodeStateMachinePlayback DriftLeftState => animationTree.Get(DRIFT_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 
-		private readonly StringName DRIFT_LEFT_PLAYBACK = "parameters/normal_state/drift_tree/left_state/playback";
-		private readonly StringName DRIFT_RIGHT_PLAYBACK = "parameters/normal_state/drift_tree/right_state/playback";
+		private readonly StringName DRIFT_LEFT_PLAYBACK = "parameters/drift_tree/left_state/playback";
+		private readonly StringName DRIFT_RIGHT_PLAYBACK = "parameters/drift_tree/right_state/playback";
 
-		private readonly StringName DRIFT_DIRECTION_PARAMETER = "parameters/normal_state/drift_tree/direction_transition/transition_request";
+		private readonly StringName DRIFT_DIRECTION_PARAMETER = "parameters/drift_tree/direction_transition/transition_request";
 		private readonly StringName DRIFT_START_STATE = "drift-start";
 		private readonly StringName DRIFT_LAUNCH_STATE = "drift-launch";
 
@@ -436,8 +435,10 @@ namespace Project.Gameplay
 		{
 			isFacingRight = isDriftFacingRight;
 			ActiveDriftState.Start(DRIFT_START_STATE);
-			NormalStatePlayback.Travel(DRIFT_STATE);
 			animationTree.Set(DRIFT_DIRECTION_PARAMETER, isFacingRight ? RIGHT_CONSTANT : LEFT_CONSTANT);
+
+			SetStateXfade(.2f); // Transition into drift
+			animationTree.Set(STATE_PARAMETER, DRIFT_STATE);
 		}
 
 		/// <summary> Called when drift is performed. </summary>
@@ -446,7 +447,7 @@ namespace Project.Gameplay
 		/// <summary> Called when drift is completed. </summary>
 		public void StopDrift()
 		{
-			NormalStatePlayback.Travel(GROUND_TREE_STATE);
+			ResetState(.4f);
 			animationRoot.Set(GROUND_SEEK_PARAMETER, 0);
 		}
 		#endregion
