@@ -177,14 +177,14 @@ namespace Project.Gameplay
 
 		private readonly StringName GROUND_TREE_STATE = "ground_tree";
 
-		private readonly StringName IDLE_STATE = "idle";
-		private readonly StringName MOVE_FORWARD_STATE = "forward";
-		private readonly StringName MOVE_BACK_STATE = "backward";
+		private float idleBlendVelocity;
+		private readonly StringName IDLE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/idle_blend/blend_amount";
+		private readonly StringName FORWARD_SEEK_PARAMETER = "parameters/normal_state/ground_tree/forward_seek/seek_request";
+		private readonly StringName BACKWARD_SEEK_PARAMETER = "parameters/normal_state/ground_tree/backward_seek/seek_request";
 
-		private readonly StringName MOVE_REQUEST_PARAMETER = "parameters/normal_state/ground_tree/move_transition/transition_request";
-		private readonly StringName MOVE_SPEED_PARAMETER = "parameters/normal_state/ground_tree/move_speed/scale";
-		private readonly StringName MOVE_SEEK_PARAMETER = "parameters/normal_state/ground_tree/move_seek/seek_request";
-		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/normal_state/ground_tree/move_blend/blend_position";
+		private readonly StringName GROUND_SPEED_PARAMETER = "parameters/normal_state/ground_tree/ground_speed/scale";
+		private readonly StringName GROUND_SEEK_PARAMETER = "parameters/normal_state/ground_tree/ground_seek/seek_request";
+		private readonly StringName FORWARD_BLEND_PARAMETER = "parameters/normal_state/ground_tree/forward_blend/blend_position";
 
 		private readonly StringName TURN_BLEND_PARAMETER = "parameters/normal_state/ground_tree/turn_blend/blend_position";
 		private readonly StringName LAND_TRIGGER_PARAMETER = "parameters/normal_state/ground_tree/land_trigger/request";
@@ -198,21 +198,22 @@ namespace Project.Gameplay
 		/// <summary> How much should the animation speed be smoothed by? </summary>
 		private const float SPEED_SMOOTHING = .06f;
 		/// <summary> How much should the transition from idling be smoothed by? </summary>
-		private const float IDLE_SMOOTHING = .2f;
+		private const float IDLE_SMOOTHING = .05f;
 
 		private void GroundAnimations()
 		{
 			//TODO Speed break animation
 			if (Character.Skills.IsSpeedBreakCharging) return;
 
-			StringName targetMoveState = IDLE_STATE;
+			float idleBlend = (float)animationTree.Get(IDLE_BLEND_PARAMETER);
 			float speedRatio = Mathf.Abs(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed));
 			float targetAnimationSpeed = 1f;
 			groundTurnRatio = 0;
 
 			if (Character.JustLandedOnGround) //Play landing animation
 			{
-				animationTree.Set(MOVE_SEEK_PARAMETER, 0);
+				disableSpeedSmoothing = true;
+				animationTree.Set(GROUND_SEEK_PARAMETER, 0);
 				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				NormalState.Travel(GROUND_TREE_STATE);
 			}
@@ -227,15 +228,15 @@ namespace Project.Gameplay
 
 			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 			{
-				if (Character.IsMovingBackward) //Backstep
+				if (Character.IsMovingBackward) // Backstep
 				{
-					targetMoveState = MOVE_BACK_STATE;
+					idleBlend = ExtensionMethods.SmoothDamp(idleBlend, -1, ref idleBlendVelocity, IDLE_SMOOTHING);
 					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
 					targetAnimationSpeed = 1.2f + speedRatio;
 				}
-				else //Moving
+				else // Moving forward
 				{
-					targetMoveState = MOVE_FORWARD_STATE;
+					idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 1, ref idleBlendVelocity, IDLE_SMOOTHING);
 
 					if (Character.Skills.IsSpeedBreakActive) // Constant animation speed
 						targetAnimationSpeed = 2.5f;
@@ -252,8 +253,8 @@ namespace Project.Gameplay
 						if (Character.InputVector.Length() >= .8f &&
 							speedRatio < Character.GroundSettings.GetSpeedRatio(Character.BackstepSettings.speed) && !Character.IsOnWall())
 						{
-							if (speedRatio < .3f)
-								speedRatio = .3f;
+							//if (speedRatio < .3f)
+							//speedRatio = .3f;
 							targetAnimationSpeed += 1.0f;
 						}
 					}
@@ -264,16 +265,26 @@ namespace Project.Gameplay
 				else if (!Character.IsLockoutActive || Character.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Replace)
 					groundTurnRatio = CalculateTurnRatio();
 			}
+			else
+			{
+				idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 0, ref idleBlendVelocity, IDLE_SMOOTHING);
 
-			animationTree.Set(MOVE_REQUEST_PARAMETER, targetMoveState);
-			animationTree.Set(MOVE_BLEND_PARAMETER, speedRatio);
+				if (Mathf.IsZeroApprox(idleBlend))
+				{
+					animationTree.Set(BACKWARD_SEEK_PARAMETER, 0);
+					animationTree.Set(FORWARD_SEEK_PARAMETER, 0);
+				}
+			}
+
+			animationTree.Set(IDLE_BLEND_PARAMETER, idleBlend);
+			animationTree.Set(FORWARD_BLEND_PARAMETER, speedRatio);
 			if (disableSpeedSmoothing)
 			{
-				animationTree.Set(MOVE_SPEED_PARAMETER, targetAnimationSpeed);
+				animationTree.Set(GROUND_SPEED_PARAMETER, targetAnimationSpeed);
 				disableSpeedSmoothing = false;
 			}
 			else
-				animationTree.Set(MOVE_SPEED_PARAMETER, Mathf.Lerp((float)animationTree.Get(MOVE_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
+				animationTree.Set(GROUND_SPEED_PARAMETER, Mathf.Lerp((float)animationTree.Get(GROUND_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));
 
 			groundTurnRatio = Mathf.Lerp(((Vector2)animationTree.Get(TURN_BLEND_PARAMETER)).X, groundTurnRatio, TURN_SMOOTHING); //Blend from animator
 
@@ -415,7 +426,7 @@ namespace Project.Gameplay
 		public void StopDrift()
 		{
 			NormalState.Travel(GROUND_TREE_STATE);
-			animationRoot.Set(MOVE_SEEK_PARAMETER, 0);
+			animationRoot.Set(GROUND_SEEK_PARAMETER, 0);
 		}
 		#endregion
 
