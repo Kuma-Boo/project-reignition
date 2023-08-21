@@ -313,10 +313,20 @@ namespace Project.Gameplay
 		private AnimationNodeStateMachinePlayback CrouchStatePlayback => animationTree.Get(CROUCH_STATE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 		private readonly StringName CROUCH_STATE_PLAYBACK = "parameters/normal_state/ground_tree/crouch_state/playback";
 
-		private readonly StringName CROUCH_STATE_STOP = "crouch_stop";
+		private readonly StringName CROUCH_STATE_START = "crouch-start";
+		private readonly StringName CROUCH_STATE_STOP = "crouch-stop";
 		private readonly StringName CROUCH_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/crouch_transition/transition_request";
-		public void StartCrouching() => animationTree.Set(CROUCH_TRANSITION_PARAMETER, ENABLED_CONSTANT);
-		public void StopCrouching() => CrouchStatePlayback.Travel(CROUCH_STATE_STOP);
+		public void StartCrouching()
+		{
+			CrouchStatePlayback.Travel(CROUCH_STATE_START);
+			animationTree.Set(CROUCH_TRANSITION_PARAMETER, ENABLED_CONSTANT);
+
+		}
+		public void StopCrouching()
+		{
+			CrouchStatePlayback.Travel(CROUCH_STATE_STOP);
+			animationTree.Set(CROUCH_TRANSITION_PARAMETER, DISABLED_CONSTANT);
+		}
 
 
 		/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
