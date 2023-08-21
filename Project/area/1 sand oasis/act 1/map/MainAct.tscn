@@ -1,4 +1,4 @@
-[gd_scene load_steps=194 format=3 uid="uid://ms7rm6vsb708"]
+[gd_scene load_steps=195 format=3 uid="uid://ms7rm6vsb708"]
 
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/stage completion/RunLockout.tres" id="2_nivqw"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_n7uj2"]
@@ -44,6 +44,7 @@
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="45_ldib5"]
 [ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="46_h1tgf"]
 [ext_resource type="PackedScene" uid="uid://c3nre8sxl3opx" path="res://area/1 sand oasis/object/Spear.tscn" id="47_1qr4i"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="48_8s2be"]
 [ext_resource type="PackedScene" path="res://area/1 sand oasis/data/particle/Rock1Particle.tscn" id="48_tmqpp"]
 [ext_resource type="PackedScene" uid="uid://crsn7131rf3ne" path="res://area/1 sand oasis/data/particle/Rock2Particle.tscn" id="49_8ciag"]
 [ext_resource type="PackedScene" uid="uid://dnfwvf2akhf1v" path="res://area/1 sand oasis/object/FlameShooter.tscn" id="50_67i4p"]
@@ -3112,7 +3113,6 @@ tracks/5/keys = {
 
 [sub_resource type="Animation" id="163"]
 resource_name = "event"
-length = 1.0
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -14675,7 +14675,7 @@ script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="MainAct/Hallway/SpearGroup4/Event"]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 1.3, -0.5, -3)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.94624, -1.9, -5.63995)
 visible = false
 
 [node name="Spear1" parent="MainAct/Hallway/SpearGroup4/Event/Spear1" instance=ExtResource("47_1qr4i")]
@@ -14707,7 +14707,7 @@ transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
 visible = false
 
 [node name="Spear3" type="Node3D" parent="MainAct/Hallway/SpearGroup4/Event"]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.154, -1.2, 3.02301)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -6.70356, -2.74121, 2.43423)
 visible = false
 
 [node name="Spear3" parent="MainAct/Hallway/SpearGroup4/Event/Spear3" instance=ExtResource("47_1qr4i")]
@@ -14732,79 +14732,186 @@ transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 
 shape = SubResource("BoxShape3D_ljdqf")
 
 [node name="Pearls" type="Node3D" parent="MainAct/Hallway"]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -34.5848, 1.40718, 31.5528)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -34.8587, 0.300091, 29.5691)
 script = ExtResource("10_1plec")
 Generate = false
-Source = null
+Source = ExtResource("12_s1yxw")
 Amount = 21
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/BeachPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Pearl22" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.274551, -0.932423, -0.174957)
+[node name="Child01" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.86646e-05, -2.67029e-05, 3.05176e-05)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl23" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.960129, -1.39347, 0.285828)
+[node name="Child02" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2568, -0.476204, 0.418549)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl24" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23511, -1.86299, 0.622375)
+[node name="Child03" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.54543, -0.958, 0.719727)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl25" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.54095, -2.33557, 0.828735)
+[node name="Child04" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8569, -1.44342, 0.89151)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl26" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.84983, -2.79949, 0.9021)
+[node name="Child05" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.17924, -1.92958, 0.924133)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl27" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.15969, -3.25277, 0.847992)
+[node name="Child06" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.49829, -2.41292, 0.811981)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl28" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.47211, -3.69473, 0.670868)
+[node name="Child07" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.79908, -2.88957, 0.55481)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl29" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.76514, -4.11713, 0.380341)
+[node name="Child08" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.06214, -3.34903, 0.162048)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl30" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0365, -4.51884, -0.0142822)
+[node name="Child09" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3049, -3.74374, -0.320313)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl31" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.2807, -4.89781, -0.504425)
+[node name="Child10" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5407, -4.10461, -0.874542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl32" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.4728, -5.24916, -1.13437)
+[node name="Child11" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.7552, -4.46965, -1.49185)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl33" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5971, -5.587, -1.89874)
+[node name="Child12" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.9369, -4.86838, -2.16452)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl34" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6531, -5.93294, -2.76172)
+[node name="Child13" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.0755, -5.32325, -2.88495)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl35" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.6471, -6.30987, -3.69376)
+[node name="Child14" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.1607, -5.8502, -3.64468)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl36" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.5874, -6.74229, -4.67096)
+[node name="Child15" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.183, -6.45874, -4.43423)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl37" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.4795, -7.25584, -5.66852)
+[node name="Child16" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.1346, -7.15239, -5.24353)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl38" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.329, -7.88032, -6.66202)
+[node name="Child17" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.0101, -7.92939, -6.06253)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl39" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.1239, -8.63284, -7.604)
+[node name="Child18" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8083, -8.77901, -6.87637)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl40" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8717, -9.42226, -8.47974)
+[node name="Child19" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.5725, -9.65304, -7.66855)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl41" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.6154, -10.2123, -9.35086)
+[node name="Child20" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.3257, -10.5378, -8.45508)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
-[node name="Pearl42" parent="MainAct/Hallway/Pearls" instance=ExtResource("12_s1yxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.3651, -11.0134, -10.2293)
+[node name="Child21" type="Area3D" parent="MainAct/Hallway/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("12_s1yxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.0716, -11.4258, -9.24072)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("48_8s2be")
+collider = NodePath("CollisionShape3D")
 
 [node name="Interior" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -220, -65, -435)
@@ -18226,4 +18333,25 @@ shape = SubResource("65")
 [connection signal="area_entered" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnEntered"]
 [connection signal="area_exited" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnExited"]
 [connection signal="Defeated" from="MainAct/Hallway/Switch/EventTrigger/BlueMajin1" to="MainAct/Hallway/Switch/EventTrigger/EventTrigger" method="Activate"]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child01" to="MainAct/Hallway/Pearls/Child01" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child02" to="MainAct/Hallway/Pearls/Child02" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child03" to="MainAct/Hallway/Pearls/Child03" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child04" to="MainAct/Hallway/Pearls/Child04" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child05" to="MainAct/Hallway/Pearls/Child05" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child06" to="MainAct/Hallway/Pearls/Child06" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child07" to="MainAct/Hallway/Pearls/Child07" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child08" to="MainAct/Hallway/Pearls/Child08" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child09" to="MainAct/Hallway/Pearls/Child09" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child10" to="MainAct/Hallway/Pearls/Child10" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child11" to="MainAct/Hallway/Pearls/Child11" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child12" to="MainAct/Hallway/Pearls/Child12" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child13" to="MainAct/Hallway/Pearls/Child13" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child14" to="MainAct/Hallway/Pearls/Child14" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child15" to="MainAct/Hallway/Pearls/Child15" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child16" to="MainAct/Hallway/Pearls/Child16" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child17" to="MainAct/Hallway/Pearls/Child17" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child18" to="MainAct/Hallway/Pearls/Child18" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child19" to="MainAct/Hallway/Pearls/Child19" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child20" to="MainAct/Hallway/Pearls/Child20" method="OnEntered" flags=18]
+[connection signal="area_entered" from="MainAct/Hallway/Pearls/Child21" to="MainAct/Hallway/Pearls/Child21" method="OnEntered" flags=18]
 [connection signal="Shattered" from="MainAct/End/JarGroup3/JarM2" to="MainAct/End/JarGroup3/GreenMajin" method="Spawn"]
