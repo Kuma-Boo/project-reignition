@@ -910,6 +910,7 @@ namespace Project.Gameplay
 		private void StartCrouching()
 		{
 			ActionState = ActionStates.Crouching;
+			Animator.StartCrouching();
 		}
 
 		public void UpdateCrouching()
@@ -917,7 +918,10 @@ namespace Project.Gameplay
 			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Skills.SlideFriction * PhysicsManager.physicsDelta); //Slow down
 
 			if (Input.IsActionJustReleased("button_action"))
+			{
 				ResetActionState();
+				Animator.StopCrouching();
+			}
 		}
 		#endregion
 
