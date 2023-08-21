@@ -211,6 +211,7 @@ namespace Project.Gameplay.Triggers
 						//Jump back to the ledge
 						cycleTimer = 0;
 						damageState = DamageStates.Recovery;
+						Character.Effect.PlayVoice("grunt");
 						Character.Animator.SidleRecovery();
 					}
 					break;

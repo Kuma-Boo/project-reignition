@@ -1841,7 +1841,8 @@ namespace Project.Gameplay
 		public CharacterPathFollower PathFollower { get; private set; }
 		[Export]
 		public CharacterAnimator Animator { get; private set; }
-		public CharacterEffect Effect => Animator.Effect;
+		[Export]
+		public CharacterEffect Effect { get; private set; }
 		[Export]
 		public CharacterSkillManager Skills { get; private set; }
 		[Export]
