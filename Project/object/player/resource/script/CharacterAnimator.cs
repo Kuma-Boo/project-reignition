@@ -427,13 +427,10 @@ namespace Project.Gameplay
 		}
 
 		/// <summary> Called when drift is performed. </summary>
-		public void LaunchDrift() => ActiveDriftState.Travel(DRIFT_LAUNCH_STATE);
-
-		/// <summary> Called when drift is completed. </summary>
-		public void StopDrift()
+		public void LaunchDrift()
 		{
-			ResetState(.4f);
-			animationRoot.Set(GROUND_SEEK_PARAMETER, 0);
+			ActiveDriftState.Travel(DRIFT_LAUNCH_STATE);
+			SetStateXfade(0f); // Remove xfade in case player wants to jump early
 		}
 		#endregion
 

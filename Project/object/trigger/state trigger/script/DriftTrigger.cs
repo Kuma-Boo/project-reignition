@@ -29,9 +29,11 @@ namespace Project.Gameplay.Triggers
 		private bool isProcessing;
 		private enum DriftResults
 		{
-			Processing, // Waiting for drift input
-			Failed, // The player failed the drift
-			Success, // Player successfully drifted
+			WAITING, // Waiting for drift input
+			TIME_FAIL, // The player mistimed the input
+			WAIT_FAIL, // The player slid to a stop
+			SUCCESS, // Player successfully drifted
+			JUMPED, // Player jumped out of the drift
 		}
 		/// <summary> Result of the drift. </summary>
 		private DriftResults driftResult;
@@ -78,7 +80,7 @@ namespace Project.Gameplay.Triggers
 					driftAnimationTimer = Mathf.MoveToward(driftAnimationTimer, 0, PhysicsManager.physicsDelta);
 
 					if (Mathf.IsZeroApprox(driftAnimationTimer))
-						Character.Animator.StopDrift();
+						Character.Animator.ResetState(.4f);
 				}
 
 				return; // Inactive
@@ -107,10 +109,9 @@ namespace Project.Gameplay.Triggers
 
 			entrySpeed = Character.MoveSpeed;
 			driftVelocity = Vector3.Zero;
-			driftResult = DriftResults.Processing;
 
 			//Reset sfx volume
-			float speedRatio = (Character.GroundSettings.GetSpeedRatioClamped(entrySpeed)) - ENTRANCE_SPEED_RATIO / (1 - ENTRANCE_SPEED_RATIO);
+			float speedRatio = Character.GroundSettings.GetSpeedRatioClamped(entrySpeed) - ENTRANCE_SPEED_RATIO / (1 - ENTRANCE_SPEED_RATIO);
 			startingVolume = Mathf.Lerp(MIN_STARTING_VOLUME, 0, speedRatio);
 			isFadingSFX = false;
 			sfx.VolumeDb = startingVolume;
@@ -127,6 +128,8 @@ namespace Project.Gameplay.Triggers
 
 		private void UpdateDrift()
 		{
+			if (driftResult != DriftResults.WAITING) return; // Drift was already failed
+
 			Vector3 targetPosition = MiddlePosition + this.Back() * INPUT_WINDOW_DISTANCE;
 
 			// Process drift
@@ -146,43 +149,45 @@ namespace Project.Gameplay.Triggers
 			bool isAttemptingDrift = (Input.IsActionJustPressed("button_action") && Character.Skills.isManualDriftEnabled) ||
 				(!Character.Skills.isManualDriftEnabled && distance <= INPUT_WINDOW_DISTANCE);
 
-			if (driftResult == DriftResults.Failed) return; // Drift was already failed
-
 			if (Input.IsActionJustPressed("button_jump")) //Allow character to jump out of drift at any time
 			{
 				driftAnimationTimer = 0;
+				driftResult = DriftResults.JUMPED;
 				CompleteDrift();
-
 				ApplyBonus();
-				Character.Jump();
-				Character.MoveSpeed = driftVelocity.Length(); //Keep speed from drift
+
+				Character.MoveSpeed = driftVelocity.Length(); // Keep speed from drift
+				return;
 			}
-			else if (isAttemptingDrift)
+
+			if (isAttemptingDrift)
 			{
 				if (distance <= INPUT_WINDOW_DISTANCE * 2f) // Successful drift
 				{
-					driftResult = DriftResults.Success;
-					ApplyBonus();
-
-					Character.Animator.LaunchDrift();
+					driftResult = DriftResults.SUCCESS;
 					driftAnimationTimer = LAUNCH_ANIMATION_LENGTH;
 
+					Character.Animator.LaunchDrift();
 					Character.AddLockoutData(lockout); //Apply lockout
-					CompleteDrift();
 				}
 				else // Too early! Fail drift attempt and play a special animation
 				{
-					driftResult = DriftResults.Failed;
+					driftResult = DriftResults.TIME_FAIL;
 					driftAnimationTimer = FAIL_ANIMATION_LENGTH;
-					ApplyBonus();
-					CompleteDrift();
 				}
-			}
-			else if (distance < .1f)
-			{
-				Character.MoveSpeed = 0f; //Reset Movespeed
+
+				ApplyBonus();
 				CompleteDrift();
+				return;
 			}
+
+			if (distance >= .1f) return;
+
+			// Slid to a stop
+			driftResult = DriftResults.WAIT_FAIL;
+			driftAnimationTimer = PhysicsManager.physicsDelta;
+			Character.MoveSpeed = 0f; //Reset Movespeed
+			CompleteDrift();
 		}
 
 		private void CompleteDrift()
@@ -191,8 +196,13 @@ namespace Project.Gameplay.Triggers
 			isProcessing = false;
 
 			//Turn 90 degrees
-			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
-			Character.Animator.ExternalAngle = Character.MovementAngle;
+			if (driftResult == DriftResults.JUMPED)
+				Character.Animator.ResetState(0f);
+			else
+			{
+				Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
+				Character.Animator.ExternalAngle = Character.MovementAngle;
+			}
 
 			Character.ResetMovementState();
 
@@ -202,23 +212,26 @@ namespace Project.Gameplay.Triggers
 			EmitSignal(SignalName.DriftCompleted);
 		}
 
-		private bool wasBonusApplied; //Was this corner attempted before?
+		/// <summary> Tracks whether drift bonus was already applied. </summary>
+		private bool wasBonusApplied;
 		private void ApplyBonus()
 		{
-			if (wasBonusApplied) return; //Bonus was already applied
+			if (wasBonusApplied) return; // Bonus was already applied
 
 			wasBonusApplied = true;
 		}
 
 		public void OnEntered(Area3D _)
 		{
+			driftResult = DriftResults.WAITING;
+
 			if (!IsDriftValid())
 			{
-				ApplyBonus(); //Invalid drift, skip bonus
+				ApplyBonus(); // Invalid drift, skip bonus
 				return;
 			}
 
-			StartDrift(); //Drift started successfully
+			StartDrift(); // Drift started successfully
 		}
 	}
 }
