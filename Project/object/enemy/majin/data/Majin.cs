@@ -305,9 +305,10 @@ namespace Project.Gameplay
 
 		protected override void UpdateEnemy()
 		{
-			if (Engine.IsEditorHint()) return; //In Editor
-			if (!IsActive) return; //Hasn't spawned yet
-			if (attackType == AttackTypes.Spin) return; //No need to process when in AttackTypes.Spin
+			if (Engine.IsEditorHint()) return; // In Editor
+			if (!IsActive) return; // Hasn't spawned yet
+			if (IsDefeated) return; // Already defeated
+			if (attackType == AttackTypes.Spin) return; // No need to process when in AttackTypes.Spin
 
 			if (attackType == AttackTypes.Fire)
 				UpdateFlameAttack();
