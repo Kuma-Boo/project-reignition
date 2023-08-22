@@ -6,10 +6,12 @@ namespace Project.Core
 {
 	public partial class SaveManager : Node
 	{
+		public static SaveManager Instance;
 		private const string SAVE_DIRECTORY = "user://";
 
 		public override void _EnterTree()
 		{
+			Instance = this;
 			LoadConfig();
 			LoadGameFromFile();
 		}
@@ -51,8 +53,8 @@ namespace Project.Core
 			new Vector2I(3840, 2160), //4K
 		};
 
-		public static ConfigData settings;
-		public static bool UseEnglishVoices => settings.voiceLanguage == VoiceLanguage.English;
+		public static ConfigData Config;
+		public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
 
 		public partial class ConfigData : GodotObject
 		{
@@ -158,50 +160,52 @@ namespace Project.Core
 			//Attempt to load.
 			if (FileAccess.GetOpenError() == Error.Ok) //Load Default settings
 			{
-				settings.FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
+				Config.FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
 				file.Close();
 			}
 			else
-				settings = new ConfigData();
+				Config = new ConfigData();
 
 			if (OS.IsDebugBuild()) // Editor build
 			{
-				settings.screenResolution = 3;
-				settings.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
-				settings.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
-				settings.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
-				settings.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
+				Config.screenResolution = 3;
+				Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
+				Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
+				Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
+				Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
 
-				settings.voiceLanguage = VoiceLanguage.Japanese;
-				settings.textLanguage = TextLanguage.English;
+				Config.voiceLanguage = VoiceLanguage.Japanese;
+				Config.textLanguage = TextLanguage.English;
 			}
 
 			ApplyLocalization();
-
-			// TODO Attempt to load control configuration.
-
-			DisplayServer.WindowSetVsyncMode(settings.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
-			DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[settings.screenResolution]);
-			DisplayServer.WindowSetMode(settings.isFullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed);
-
-			ApplyAudioBusVolume((int)AudioBuses.MASTER, settings.masterVolume, settings.isMasterMuted);
-			ApplyAudioBusVolume((int)AudioBuses.BGM, settings.bgmVolume, settings.isBgmMuted);
-			ApplyAudioBusVolume((int)AudioBuses.SFX, settings.sfxVolume, settings.isSfxMuted);
-			ApplyAudioBusVolume((int)AudioBuses.VOICE, settings.voiceVolume, settings.isVoiceMuted);
+			ApplyConfig();
 		}
 
 		/// <summary> Attempts to save config data to file. </summary>
 		public void SaveConfig()
 		{
 			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Write);
-			file.StoreString(Json.Stringify(settings.ToDictionary()));
+			file.StoreString(Json.Stringify(Config.ToDictionary()));
 			file.Close();
+		}
+
+		public void ApplyConfig()
+		{
+			DisplayServer.WindowSetVsyncMode(Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
+			DisplayServer.WindowSetMode(Config.isFullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed);
+			DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[Config.screenResolution]);
+
+			ApplyAudioBusVolume((int)AudioBuses.MASTER, Config.masterVolume, Config.isMasterMuted);
+			ApplyAudioBusVolume((int)AudioBuses.BGM, Config.bgmVolume, Config.isBgmMuted);
+			ApplyAudioBusVolume((int)AudioBuses.SFX, Config.sfxVolume, Config.isSfxMuted);
+			ApplyAudioBusVolume((int)AudioBuses.VOICE, Config.voiceVolume, Config.isVoiceMuted);
 		}
 
 		/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
 		private void ApplyLocalization()
 		{
-			switch (settings.textLanguage)
+			switch (Config.textLanguage)
 			{
 				case TextLanguage.Japanese:
 					TranslationServer.SetLocale("ja");

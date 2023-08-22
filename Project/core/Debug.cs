@@ -43,6 +43,27 @@ namespace Project.Core
 			if (Input.IsActionJustPressed("debug_pause"))
 				GetTree().Paused = !IsPaused;
 
+			if (Input.IsActionJustPressed("debug_window_small"))
+			{
+				SaveManager.Config.screenResolution = 0;
+				SaveManager.Config.isFullscreen = false;
+				SaveManager.Instance.ApplyConfig();
+			}
+
+			if (Input.IsActionJustPressed("debug_window_medium"))
+			{
+				SaveManager.Config.screenResolution = 3;
+				SaveManager.Config.isFullscreen = false;
+				SaveManager.Instance.ApplyConfig();
+			}
+
+			if (Input.IsActionJustPressed("debug_window_large"))
+			{
+				SaveManager.Config.screenResolution = 4;
+				SaveManager.Config.isFullscreen = true;
+				SaveManager.Instance.ApplyConfig();
+			}
+
 			if (Input.IsActionJustPressed("debug_step"))
 			{
 				GetTree().Paused = false;
