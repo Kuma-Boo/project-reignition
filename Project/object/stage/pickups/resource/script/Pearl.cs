@@ -37,7 +37,7 @@ namespace Project.Gameplay.Objects
 
 			Transform3D t = GlobalTransform;
 			GetParent().RemoveChild(this);
-			Character.AddChild(this);
+			Character.Animator.AddChild(this);
 			GlobalTransform = t;
 
 			if (tweener != null)
@@ -45,9 +45,10 @@ namespace Project.Gameplay.Objects
 
 			// Collection tween
 			tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
-			float distance = Runtime.randomNumberGenerator.RandfRange(.4f, .8f);
-			Vector3 endPoint = new Vector3(distance, .5f, -.5f);
-			Vector3 midPoint = new Vector3(distance * 2, (Position.Y + endPoint.Y) * .5f, -.25f);
+			float distance = Runtime.randomNumberGenerator.RandfRange(.2f, .8f);
+			float height = Runtime.randomNumberGenerator.RandfRange(.2f, .5f);
+			Vector3 endPoint = new Vector3(distance, height, -.5f);
+			Vector3 midPoint = new Vector3(distance * 2, height * 2f, .5f);
 
 			if (Runtime.randomNumberGenerator.Randf() > .5f)
 			{
