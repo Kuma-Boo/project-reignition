@@ -1744,20 +1744,22 @@ namespace Project.Gameplay
 		private float countdownBoostTimer;
 		private readonly float COUNTDOWN_BOOST_WINDOW = .4f;
 
-		private void UpdateCountdown()
+		public void OnCountdownStarted()
 		{
-			if (Input.IsActionJustPressed("button_action"))
-				actionBufferTimer = 1f;
-			actionBufferTimer -= PhysicsManager.physicsDelta;
-
 			PathFollower.Resync();
 			MovementAngle = PathFollower.ForwardAngle;
 
 			Animator.SnapRotation(PathFollower.ForwardAngle);
 			Animator.PlayCountdown();
+			SnapToGround();
 		}
 
-		public void OnCountdownLanded() => Effect.PlayLandingFX();
+		private void UpdateCountdown()
+		{
+			if (Input.IsActionJustPressed("button_action"))
+				actionBufferTimer = 1f;
+			actionBufferTimer -= PhysicsManager.physicsDelta;
+		}
 
 		public void OnCountdownFinished()
 		{
