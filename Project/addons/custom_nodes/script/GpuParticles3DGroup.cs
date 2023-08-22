@@ -9,7 +9,7 @@ namespace Project.Editor.CustomNodes
 	public partial class GpuParticles3DGroup : GpuParticles3D
 	{
 		[Export]
-		private Array<GpuParticles3D> subSystems;
+		public Array<GpuParticles3D> subSystems;
 
 		public bool IsActive { get; private set; }
 

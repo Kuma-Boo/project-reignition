@@ -171,6 +171,10 @@ namespace Project.Gameplay
 
 			uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
 			waterStep.EmitParticle(waterStep.GlobalTransform, CharacterController.instance.Velocity * .2f, Colors.White, Colors.White, flags);
+
+			//Vector3 splashVelocity = CharacterController.instance.Velocity * .1f + Vector3.Up * 5;
+			for (int i = 0; i < 8; i++)
+				waterStep.subSystems[0].EmitParticle(Transform3D.Identity, Vector3.Zero, Colors.White, Colors.White, 0);
 		}
 		#endregion
 

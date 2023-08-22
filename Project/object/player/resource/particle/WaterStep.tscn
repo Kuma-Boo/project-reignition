@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ck3jhmveflebn"]
+[gd_scene load_steps=19 format=3 uid="uid://ck3jhmveflebn"]
 
 [ext_resource type="Texture2D" uid="uid://c81morow3jatk" path="res://effect/particle/texture/environment/water splash ripple.png" id="1_h5i3i"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GpuParticles3DGroup.cs" id="2_r5a76"]
@@ -42,19 +42,42 @@ albedo_texture = ExtResource("1_h5i3i")
 material = SubResource("StandardMaterial3D_dhhmf")
 
 [sub_resource type="Gradient" id="Gradient_taey7"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.104418, 0.7751, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_cw16b"]
 gradient = SubResource("Gradient_taey7")
 width = 64
 
+[sub_resource type="Curve" id="Curve_emmus"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Curve" id="Curve_gv48i"]
+_data = [Vector2(0, 0.4), 0.0, 5.65603, 0, 0, Vector2(0.1829, 1), 0.685873, 0.685873, 0, 0, Vector2(0.843074, 0.807933), -1.12526, -1.12526, 0, 0, Vector2(1, 0.5), -2.26863, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_xs75u"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_rsg5h"]
+width = 64
+curve_x = SubResource("Curve_emmus")
+curve_y = SubResource("Curve_gv48i")
+curve_z = SubResource("Curve_xs75u")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_60tjv"]
+lifetime_randomness = 0.6
+particle_flag_align_y = true
 direction = Vector3(0, 1, 0)
-initial_velocity_min = 4.0
-initial_velocity_max = 5.0
-angle_max = 360.0
-scale_min = 0.5
-scale_max = 1.5
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+angle_min = -45.0
+angle_max = 45.0
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveXYZTexture_rsg5h")
 color_ramp = SubResource("GradientTexture1D_cw16b")
 
 [sub_resource type="QuadMesh" id="QuadMesh_ftpuj"]
@@ -76,13 +99,13 @@ script = ExtResource("2_r5a76")
 subSystems = [NodePath("Splash")]
 
 [node name="Splash" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
 emitting = false
-lifetime = 0.8
-one_shot = true
-explosiveness = 1.0
+amount = 64
+lifetime = 0.4
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
