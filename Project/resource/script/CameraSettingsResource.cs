@@ -13,6 +13,7 @@ namespace Project.Gameplay
 		private const string DISTANCE_KEY = "Distance/Distance";
 		private const string BACKSTEP_DISTANCE_KEY = "Distance/Backstep Distance";
 		private const string DISTANCE_MODE_KEY = "Distance/Distance Calculation Mode";
+		private const string HOMING_ATTACK_DISTANCE_KEY = "Distance/Ignore Homing Attack";
 
 		private const string PITCH_ANGLE_KEY = "Rotation/Pitch Angle";
 		private const string YAW_ANGLE_KEY = "Rotation/Yaw Angle";
@@ -36,6 +37,7 @@ namespace Project.Gameplay
 			{
 				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
 				properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+				properties.Add(ExtensionMethods.CreateProperty(HOMING_ATTACK_DISTANCE_KEY, Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_MODE_KEY, Variant.Type.Int, PropertyHint.Enum, distanceCalculationMode.EnumToString()));
 
 				properties.Add(ExtensionMethods.CreateProperty(HORIZONTAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, horizontalTrackingMode.EnumToString()));
@@ -70,6 +72,8 @@ namespace Project.Gameplay
 					return distance;
 				case BACKSTEP_DISTANCE_KEY:
 					return backstepDistance;
+				case HOMING_ATTACK_DISTANCE_KEY:
+					return ignoreHomingAttackDistance;
 				case DISTANCE_MODE_KEY:
 					return (int)distanceCalculationMode;
 
@@ -114,6 +118,9 @@ namespace Project.Gameplay
 					break;
 				case BACKSTEP_DISTANCE_KEY:
 					backstepDistance = (float)value;
+					break;
+				case HOMING_ATTACK_DISTANCE_KEY:
+					ignoreHomingAttackDistance = (bool)value;
 					break;
 				case DISTANCE_MODE_KEY:
 					distanceCalculationMode = (DistanceModeEnum)(int)value;
@@ -186,6 +193,8 @@ namespace Project.Gameplay
 		public float distance;
 		/// <summary> Extra distance to add when backstepping. </summary>
 		public float backstepDistance;
+		/// <summary> Don't add more distance when performing a homing attack? </summary>
+		public bool ignoreHomingAttackDistance;
 		/// <summary> How to calculate distance. </summary>
 		public DistanceModeEnum distanceCalculationMode;
 		public enum DistanceModeEnum

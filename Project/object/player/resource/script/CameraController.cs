@@ -83,28 +83,27 @@ namespace Project.Gameplay
 		private float lockonBlend;
 		private float lockonBlendVelocity;
 		/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
-		private const float LOCKON_BLEND_IN_SMOOTHING = 10.0f;
+		private const float LOCKON_BLEND_IN_SMOOTHING = .2f;
 		/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
-		private const float LOCKON_BLEND_OUT_SMOOTHING = 40.0f;
-		/// <summary> Max blend between player and lockon target. (Higher - Bias towards target, Lower - Bias towards player) </summary>
-		private const float MAX_LOCKON_BLEND = .6f;
+		private const float LOCKON_BLEND_OUT_SMOOTHING = .8f;
+		/// <summary> How much extra distance to add when performing a homing attack. </summary>
+		private const float LOCKON_DISTANCE = 2.5f;
 		private void UpdateLockonTarget()
 		{
-			float targetBlend = 0.0f;
+			float targetBlend = 0;
 			float smoothing = LOCKON_BLEND_OUT_SMOOTHING;
 
-			if (LockonTarget != null)
+			// Lockon is active
+			if (LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive)
 			{
-				if (LockonTarget.IsInsideTree()) // Validate lockon target
-				{
-					targetBlend = MAX_LOCKON_BLEND;
-					smoothing = LOCKON_BLEND_IN_SMOOTHING;
-				}
-				else
-					LockonTarget = null; // Invalid LockonTarget
+				targetBlend = 1;
+				smoothing = LOCKON_BLEND_IN_SMOOTHING;
 			}
 
-			lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing * PhysicsManager.physicsDelta);
+			if (LockonTarget != null && !LockonTarget.IsInsideTree()) // Invalid LockonTarget
+				LockonTarget = null;
+
+			lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing);
 		}
 
 		#region Gameplay Camera
@@ -114,7 +113,6 @@ namespace Project.Gameplay
 		/// <summary> Angle to use when transforming from world space to camera space </summary>
 		private float xformAngle;
 		public float TransformAngle(float angle) => xformAngle + angle;
-
 
 
 		[Export]
@@ -213,7 +211,6 @@ namespace Project.Gameplay
 			float distance = 0;
 			float staticBlendRatio = 0; // Blend value of whether to use static camera positions or not
 			Vector2 viewportOffset = Vector2.Zero;
-			Vector3 staticPosition = Vector3.Zero;
 			float fov = DEFAULT_FOV;
 
 			for (int i = 0; i < CameraBlendList.Count; i++) // Simulate each blend data separately
@@ -254,9 +251,12 @@ namespace Project.Gameplay
 			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
 
 			// Update cameraTransform origin
+			viewportOffset.Y = Mathf.Lerp(viewportOffset.Y, 0, lockonBlend);
 			cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 			cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 			cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
+
+
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
 			Camera.Fov = fov; // Update fov
@@ -299,6 +299,10 @@ namespace Project.Gameplay
 					else
 						targetDistance += settings.backstepDistance;
 				}
+
+				if (!settings.ignoreHomingAttackDistance &&
+					(Character.Lockon.IsHomingAttacking || LockonTarget != null))
+					targetDistance += LOCKON_DISTANCE;
 				data.blendData.DistanceSmoothDamp(targetDistance, SnapFlag);
 
 				// Calculate targetAngles when DistanceMode is set to Sample.
@@ -382,14 +386,6 @@ namespace Project.Gameplay
 						data.pitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 						targetPitchTracking = data.pitchTracking;
 					}
-				}
-
-				// Track lockon
-				if (LockonTarget != null) // Update lockon tracking
-				{
-					data.CalculatePosition(Character.CenterPosition);
-					globalDelta = LockonTarget.GlobalPosition - data.precalculatedPosition;
-					data.lockonPitchTracking = globalDelta.Normalized().AngleTo(globalDelta.RemoveVertical().Normalized()) * Mathf.Sign(globalDelta.Y);
 				}
 
 				data.pitchTracking = Mathf.Lerp(targetPitchTracking, data.lockonPitchTracking, lockonBlend);
