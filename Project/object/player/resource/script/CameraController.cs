@@ -79,6 +79,7 @@ namespace Project.Gameplay
 
 		/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 		public Node3D LockonTarget { get; set; }
+		private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive;
 		/// <summary> [0 -> 1] ratio of how much to focus onto LockonTarget. </summary>
 		private float lockonBlend;
 		private float lockonBlendVelocity;
@@ -94,7 +95,7 @@ namespace Project.Gameplay
 			float smoothing = LOCKON_BLEND_OUT_SMOOTHING;
 
 			// Lockon is active
-			if (LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive)
+			if (IsLockonCameraActive)
 			{
 				targetBlend = 1;
 				smoothing = LOCKON_BLEND_IN_SMOOTHING;
@@ -300,8 +301,7 @@ namespace Project.Gameplay
 						targetDistance += settings.backstepDistance;
 				}
 
-				if (!settings.ignoreHomingAttackDistance &&
-					(Character.Lockon.IsHomingAttacking || LockonTarget != null))
+				if (!settings.ignoreHomingAttackDistance && IsLockonCameraActive)
 					targetDistance += LOCKON_DISTANCE;
 				data.blendData.DistanceSmoothDamp(targetDistance, SnapFlag);
 
