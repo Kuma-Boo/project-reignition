@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://biywpw2ega7fx"]
+
+[ext_resource type="PackedScene" uid="uid://rh85bh20fk6r" path="res://object/enemy/majin/Majin.tscn" id="1_0put8"]
+[ext_resource type="PackedScene" uid="uid://cmebbuxscvc6a" path="res://object/enemy/majin/data/lost prologue/model/GreenMajin.gltf" id="2_a8d54"]
+[ext_resource type="AnimationLibrary" uid="uid://bh1trop5ft0h8" path="res://object/enemy/majin/data/animation/green majin/MajinLibrary.gltf" id="3_8g7e5"]
+
+[node name="GreenMajin" instance=ExtResource("1_0put8")]
+
+[node name="GreenMajin" parent="Root" index="0" instance=ExtResource("2_a8d54")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root/GreenMajin" index="1"]
+libraries = {
+"MajinLibrary": ExtResource("3_8g7e5")
+}
+
+[node name="AnimationTree" parent="." index="5"]
+anim_player = NodePath("../Root/GreenMajin/AnimationPlayer")
