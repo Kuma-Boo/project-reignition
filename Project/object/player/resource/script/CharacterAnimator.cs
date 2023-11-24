@@ -325,7 +325,7 @@ namespace Project.Gameplay
 		public void StopCrouching()
 		{
 			CrouchStatePlayback.Travel(CROUCH_STATE_STOP);
-			animationTree.Set(CROUCH_TRANSITION_PARAMETER, DISABLED_CONSTANT);
+			//animationTree.Set(CROUCH_TRANSITION_PARAMETER, DISABLED_CONSTANT);
 		}
 
 

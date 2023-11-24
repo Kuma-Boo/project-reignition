@@ -515,6 +515,7 @@ namespace Project.Gameplay
 		private void UpdateTurning()
 		{
 			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
+			if (ActionState == ActionStates.Crouching || MoveSpeed == 0) return;
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			bool overrideFacingDirection = (IsLockoutActive &&
