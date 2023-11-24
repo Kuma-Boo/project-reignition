@@ -1,9 +1,13 @@
 shader_type spatial;
 render_mode unshaded, cull_front, depth_draw_never, depth_test_disabled;
 
-uniform sampler2D depth_texture : source_color;
-uniform float far_clip_distance;
-uniform bool multiply;
+// Depth texture fed from the game view
+uniform sampler2D depth_texture : source_color, filter_linear_mipmap;
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+
+// Depth texture from the bloom viewport
+uniform sampler2D bloom_depth_texture : hint_depth_texture, filter_linear_mipmap;
+global uniform float render_distance;
 
 void vertex()
 {
@@ -12,25 +16,26 @@ void vertex()
 
 void fragment()
 {
-	if(multiply)
-		ALBEDO = vec3(1.0);
-	else
-		ALBEDO = vec3(0.0);
-		
-	float depth = texture(DEPTH_TEXTURE, SCREEN_UV).x;
-	vec3 ndc = vec3(SCREEN_UV, depth) * 2.0 - 1.0;
-	vec4 view = INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
-	float linear_depth = -(view.xyz / view.w).z;
-	float normalized_depth = linear_depth / far_clip_distance;
-	float geometry_depth = texture(depth_texture, SCREEN_UV).r;
-	
-	if(normalized_depth + (far_clip_distance * .00001) < 1.0)
+	float alpha = texture(screen_texture, SCREEN_UV).a;
+	if(abs(alpha) < 0.01) // Turn transparent pixels to mid-gray
 	{
-		//Has clipping issues due to subviewports rendering in ldr
-		if(geometry_depth > normalized_depth)
-		{
-			vec4 col = texture(SCREEN_TEXTURE, SCREEN_UV);
-			ALBEDO = mix(ALBEDO, col.rgb, col.a);
-		}
+		ALBEDO = vec3(.5);
+		ALPHA = 1.0;
+	}
+	else
+	{
+		float depth = texture(depth_texture, SCREEN_UV).z;
+		float bloom_depth = texture(bloom_depth_texture, SCREEN_UV).x;
+		vec3 ndc = vec3(SCREEN_UV, bloom_depth) * 2.0 - 1.0;
+		vec4 view = INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
+		float linear_depth = -(view.xyz / view.w).z;
+		float normalized_depth = linear_depth / render_distance;
+		
+		//ALBEDO = texture(screen_texture, SCREEN_UV).rgb;
+
+		if(depth > bloom_depth) // Covered by gameplay
+			ALBEDO = vec3(0);
+		else
+			ALBEDO = vec3(1.0);
 	}
 }

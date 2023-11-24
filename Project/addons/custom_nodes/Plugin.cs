@@ -2,6 +2,7 @@ using Godot;
 
 namespace Project.Editor.CustomNodes
 {
+#if TOOLS
 	[Tool]
 	public partial class Plugin : EditorPlugin
 	{
@@ -29,4 +30,5 @@ namespace Project.Editor.CustomNodes
 			RemoveCustomType("GPUParticles3DGroup");
 		}
 	}
+#endif
 }

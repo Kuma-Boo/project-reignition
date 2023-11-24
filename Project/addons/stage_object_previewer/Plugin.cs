@@ -6,6 +6,7 @@ using Project.Gameplay.Objects;
 
 namespace Project.Editor.StageObjectPreviewer
 {
+#if TOOLS
 	[Tool]
 	public partial class Plugin : EditorPlugin
 	{
@@ -187,4 +188,5 @@ namespace Project.Editor.StageObjectPreviewer
 			overlay.DrawLine(editorCam.UnprojectPosition(s), editorCam.UnprojectPosition(e), DEFAULT_DRAW_COLOR, 1, true);
 		}
 	}
+#endif
 }

@@ -72,10 +72,12 @@ namespace Project.Gameplay
 			if (reflectionCamera == null)
 				reflectionCamera = GetNodeOrNull<Camera3D>(reflectionCameraPath);
 
+			if (CharacterController.instance != null)
+				mainCamera = CharacterController.instance.Camera.Camera;
+			/*
 			if (Engine.IsEditorHint())
 				mainCamera = Editor.StageObjectPreviewer.Plugin.editorCam;
-			else if (CharacterController.instance != null)
-				mainCamera = CharacterController.instance.Camera.Camera;
+			*/
 
 			return mainCamera != null && reflectionCamera != null;
 		}

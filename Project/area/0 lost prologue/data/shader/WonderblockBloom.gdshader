@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_mul;
+render_mode unshaded;
 
 const float distance_fade_min = 80.0;
 const float distance_fade_max = 5.0;
@@ -16,5 +16,5 @@ void vertex()
 void fragment()
 {
 	float distance_fac = 1.0 - clamp(smoothstep(distance_fade_max, distance_fade_min, -VERTEX.z), 0.0, 1.0);
-	ALBEDO = mix(vec3(1), COLOR.rgb, distance_fac); //Use vertex color
+	ALBEDO = vec3(.5);//mix(vec3(.5), COLOR.rgb, distance_fac); //Use vertex color
 }
