@@ -8,7 +8,7 @@ namespace Project.Core
 		public static bool UseDebugSave => true;
 
 		/// <summary> Draw debug rays? </summary>
-		public static bool EnableDebugRays => EnableCheats && true;
+		public static bool EnableDebugRays { get; set; }
 
 		/// <summary> Allow the player to jump in the air. </summary>
 		public static bool EnableMoonJump => EnableCheats && false;

@@ -81,6 +81,9 @@ namespace Project.Core
 				}
 			}
 
+			if (Input.IsActionJustPressed("debug_hud"))
+				CheatManager.EnableDebugRays = !CheatManager.EnableDebugRays;
+
 			if (line3d.Count + line2d.Count != 0 && !IsPaused) //Queue Raycast Redraw
 				QueueRedraw();
 		}
