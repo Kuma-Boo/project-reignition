@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://tvjx2wghc06t"]
+[gd_scene load_steps=74 format=3 uid="uid://tvjx2wghc06t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -42,8 +42,10 @@
 [ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/1 sand oasis/act 1/camera/InteriorCam.tres" id="31_l0kwc"]
 [ext_resource type="Resource" uid="uid://cg68afq5jr66c" path="res://area/1 sand oasis/act 1/camera/IslandCam.tres" id="34_ger3f"]
 [ext_resource type="Resource" uid="uid://drgk50yomyihb" path="res://resource/preset/camera/common/OverheadCam.tres" id="34_ubrmr"]
+[ext_resource type="PackedScene" uid="uid://dj6ocx6h5n2p" path="res://area/1 sand oasis/act 1/environment/07Sandfall.tscn" id="35_cm6qy"]
 [ext_resource type="Curve3D" uid="uid://crn2qyyfnwwp8" path="res://area/1 sand oasis/act 1/environment/path/UTurnPath.tres" id="35_l4txy"]
 [ext_resource type="Curve3D" uid="uid://bafu5u1qauyww" path="res://area/1 sand oasis/act 1/environment/path/WallClimbPath.tres" id="36_hdewb"]
+[ext_resource type="PackedScene" uid="uid://bhwb217ryq28a" path="res://area/1 sand oasis/act 1/environment/07SandfallLOD.tscn" id="36_lkcqk"]
 [ext_resource type="Curve3D" uid="uid://dict5g5k6l4qt" path="res://area/1 sand oasis/act 1/environment/path/OasisPath.tres" id="38_woedv"]
 [ext_resource type="Curve3D" uid="uid://d06vcokvyxct4" path="res://area/1 sand oasis/act 1/environment/path/Island1Path.tres" id="40_a230r"]
 [ext_resource type="Curve3D" uid="uid://dryhqabeih5pq" path="res://area/1 sand oasis/act 1/environment/path/IslandEndPath.tres" id="40_i6qa6"]
@@ -1090,7 +1092,6 @@ shape = SubResource("BoxShape3D_84q52")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
-visible = false
 
 [node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, -48)
@@ -1173,6 +1174,15 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -648.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
+[node name="07SLoad" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -659.583, 12, -639.966)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/07SLoad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_84q52")
+
 [node name="01Opening" parent="Visuals" instance=ExtResource("2_eyaqr")]
 startEnabled = true
 
@@ -1186,6 +1196,10 @@ startEnabled = true
 [node name="05Islands" parent="Visuals" instance=ExtResource("6_5pcm3")]
 
 [node name="06Interior" parent="Visuals" instance=ExtResource("7_ichp8")]
+
+[node name="07Sandfall" parent="Visuals" instance=ExtResource("35_cm6qy")]
+
+[node name="07SandfallLOD" parent="Visuals" instance=ExtResource("36_lkcqk")]
 
 [node name="07Beach" parent="Visuals" instance=ExtResource("8_owf84")]
 
@@ -1336,8 +1350,14 @@ editorPreview = true
 [connection signal="Deactivated" from="Visuals/CullingMap/04Unload-05Unload" to="Visuals/04Forest" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/04Unload-05Unload" to="Visuals/05Islands" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/07Load" to="Visuals/07Beach" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/07Load" to="Visuals/07SandfallLOD" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/07Load" to="Visuals/07Beach" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/07Load" to="Visuals/07SandfallLOD" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/06Unload-08Load" to="Visuals/06Interior" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/06Unload-08Load" to="Visuals/08End" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/06Unload-08Load" to="Visuals/06Interior" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/06Unload-08Load" to="Visuals/08End" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/07SLoad" to="Visuals/07Sandfall" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/07SLoad" to="Visuals/07SandfallLOD" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/07SLoad" to="Visuals/07Sandfall" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/07SLoad" to="Visuals/07SandfallLOD" method="Activate"]
