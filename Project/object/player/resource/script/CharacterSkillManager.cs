@@ -40,7 +40,7 @@ namespace Project.Gameplay
 		public float homingAttackSpeed;
 
 		[Export]
-		public float slideFriction; // Default slide
+		private MovementResource slideSettings; // Default slide settings
 
 		//While there aren't any upgrades for the following movement skills, they're here for consistancy
 		[Export]
@@ -63,8 +63,7 @@ namespace Project.Gameplay
 		public MovementResource AirSettings { get; private set; }
 		public MovementResource BackflipSettings { get; private set; }
 		public MovementResource BackstepSettings { get; private set; }
-
-		public float SlideFriction { get; private set; }
+		public MovementResource SlideSettings { get; private set; }
 
 		private void SetUpStats() //Stuff like upgradable speed, increased handling, etc.
 		{
@@ -74,7 +73,7 @@ namespace Project.Gameplay
 			BackflipSettings = backflipSettings;
 			BackstepSettings = backstepSettings;
 
-			SlideFriction = slideFriction;
+			SlideSettings = slideSettings;
 		}
 		#endregion
 

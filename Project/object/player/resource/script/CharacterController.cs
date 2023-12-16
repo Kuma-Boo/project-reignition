@@ -73,7 +73,8 @@ namespace Project.Gameplay
 			Normal,
 			Jumping,
 			AccelJump,
-			Crouching, //Sliding included
+			Crouching,
+			Sliding,
 			Damaged, //Being knocked back by damage
 			Respawning, //Idle until respawn timer reaches zero
 			JumpDash, //Also includes homing attack
@@ -84,7 +85,7 @@ namespace Project.Gameplay
 		public void ResetActionState() => SetActionState(ActionStates.Normal);
 		private void SetActionState(ActionStates newState)
 		{
-			if (ActionState == ActionStates.Crouching)
+			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				StopCrouching();
 
 			ActionState = newState;
@@ -429,7 +430,7 @@ namespace Project.Gameplay
 		{
 			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); // Store this for turning function
 
-			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Backflip) return;
+			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding || ActionState == ActionStates.Backflip) return;
 
 			// Override to speedbreak speed
 			if (Skills.IsSpeedBreakActive)
@@ -685,7 +686,7 @@ namespace Project.Gameplay
 
 			if (Skills.IsSpeedBreakActive) return;
 
-			if (ActionState == ActionStates.Crouching)
+			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				UpdateCrouching();
 			else if (actionBufferTimer != 0)
 			{
@@ -915,13 +916,36 @@ namespace Project.Gameplay
 		#region Crouch & Slide
 		private void StartCrouching()
 		{
-			SetActionState(ActionStates.Crouching);
+			if (!IsOnWall && ((!IsMovingBackward && MoveSpeed != 0) || MoveSpeed >= Skills.SlideSettings.speed))
+			{
+				if (MoveSpeed <= Skills.SlideSettings.speed)
+					MoveSpeed = Skills.SlideSettings.speed;
+
+				SetActionState(ActionStates.Sliding);
+			}
+			else
+				SetActionState(ActionStates.Crouching);
 			Animator.StartCrouching();
 		}
 
 		private void UpdateCrouching()
 		{
-			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Skills.SlideFriction * PhysicsManager.physicsDelta); // Slow down
+			if (MoveSpeed <= 0)
+			{
+				MoveSpeed = 0;
+
+				if (ActionState == ActionStates.Sliding)
+				{
+					ActionState = ActionStates.Crouching;
+					Animator.ToggleSliding();
+				}
+			}
+			else
+			{
+				MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -1);
+				if (ActionState == ActionStates.Crouching)
+					MoveSpeed *= .5f;
+			}
 
 			if (!Input.IsActionPressed("button_action"))
 				ResetActionState();
@@ -1425,6 +1449,8 @@ namespace Project.Gameplay
 			UpdateRecenter();
 		}
 
+		public new bool IsOnWall { get; set; }
+
 		public bool IsOnGround { get; set; }
 		public bool JustLandedOnGround { get; private set; } //Flag for doing stuff on land
 
@@ -1646,6 +1672,7 @@ namespace Project.Gameplay
 		//Checks for walls forward and backwards (only in the direction the player is moving).
 		private void CheckMainWall(Vector3 castVector)
 		{
+			IsOnWall = false;
 			if (Mathf.IsZeroApprox(MoveSpeed)) //No movement
 			{
 				Debug.DrawRay(CenterPosition, castVector * CollisionRadius, Colors.White);
@@ -1672,6 +1699,7 @@ namespace Project.Gameplay
 						// Running into wall head-on
 						if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + COLLISION_PADDING)
 						{
+							IsOnWall = true;
 							MoveSpeed = 0; // Kill speed
 							return;
 						}

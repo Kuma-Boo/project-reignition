@@ -315,17 +315,31 @@ namespace Project.Gameplay
 
 		private readonly StringName CROUCH_STATE_START = "crouch-start";
 		private readonly StringName CROUCH_STATE_STOP = "crouch-stop";
+
+		private readonly StringName SLIDE_STATE_START = "slide-start";
+		private readonly StringName SLIDE_STATE_STOP = "slide-stop";
 		private readonly StringName CROUCH_TRANSITION_PARAMETER = "parameters/normal_state/ground_tree/crouch_transition/transition_request";
 		public void StartCrouching()
 		{
-			CrouchStatePlayback.Travel(CROUCH_STATE_START);
+			if (Character.ActionState == CharacterController.ActionStates.Sliding)
+				CrouchStatePlayback.Travel(SLIDE_STATE_START);
+			else
+				CrouchStatePlayback.Travel(CROUCH_STATE_START);
 			animationTree.Set(CROUCH_TRANSITION_PARAMETER, ENABLED_CONSTANT);
-
 		}
+
+		public void ToggleSliding()
+		{
+			if (Character.ActionState == CharacterController.ActionStates.Sliding)
+				CrouchStatePlayback.Travel(SLIDE_STATE_START);
+			else
+				CrouchStatePlayback.Travel(SLIDE_STATE_STOP);
+		}
+
 		public void StopCrouching()
 		{
 			CrouchStatePlayback.Travel(CROUCH_STATE_STOP);
-			//animationTree.Set(CROUCH_TRANSITION_PARAMETER, DISABLED_CONSTANT);
+			animationTree.Set(CROUCH_TRANSITION_PARAMETER, DISABLED_CONSTANT);
 		}
 
 
