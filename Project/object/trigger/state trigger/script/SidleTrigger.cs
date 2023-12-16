@@ -147,7 +147,7 @@ namespace Project.Gameplay.Triggers
 				Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
 			}
 
-			Character.Animator.ResetState(Character.IsRespawning ? 0.0f : .1f);
+			Character.Animator.ResetState(Character.IsRespawning || Character.MovementState == CharacterController.MovementStates.External ? 0.0f : .1f);
 			damageState = DamageStates.Disabled;
 			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
 		}

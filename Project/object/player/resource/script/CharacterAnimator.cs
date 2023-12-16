@@ -71,7 +71,7 @@ namespace Project.Gameplay
 			eventAnimationPlayer.Play(COUNTDOWN_ANIMATION);
 
 			//Prevent sluggish transitions into gameplay
-			disableSpeedSmoothing = true;
+			DisabledSpeedSmoothing = true;
 			oneShotTransition.FadeInTime = oneShotTransition.FadeOutTime = 0;
 		}
 
@@ -92,7 +92,6 @@ namespace Project.Gameplay
 		{
 			oneShotTransition.FadeOutTime = fadeout;
 			animationTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
-
 
 			// Abort accidental landing animations
 			if (!Character.JustLandedOnGround)
@@ -146,7 +145,7 @@ namespace Project.Gameplay
 		[Export]
 		private Curve movementAnimationSpeedCurve;
 		/// <summary> Disables speed smoothing. </summary>
-		private bool disableSpeedSmoothing;
+		public bool DisabledSpeedSmoothing { get; set; }
 		private float idleBlendVelocity;
 		/// <summary> What speedratio should be considered as fully running? </summary>
 		private const float RUN_RATIO = .9f;
@@ -166,7 +165,7 @@ namespace Project.Gameplay
 
 			if (Character.JustLandedOnGround) //Play landing animation
 			{
-				disableSpeedSmoothing = true;
+				DisabledSpeedSmoothing = true;
 				animationTree.Set(GROUND_SEEK_PARAMETER, 0);
 				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				NormalStatePlayback.Travel(GROUND_TREE_STATE);
@@ -184,13 +183,20 @@ namespace Project.Gameplay
 			{
 				if (Character.IsMovingBackward) // Backstep
 				{
-					idleBlend = ExtensionMethods.SmoothDamp(idleBlend, -1, ref idleBlendVelocity, IDLE_SMOOTHING);
+					if (DisabledSpeedSmoothing)
+						idleBlend = -1;
+					else
+						idleBlend = ExtensionMethods.SmoothDamp(idleBlend, -1, ref idleBlendVelocity, IDLE_SMOOTHING);
+
 					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
 					targetAnimationSpeed = 1.2f + speedRatio;
 				}
 				else // Moving forward
 				{
-					idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 1, ref idleBlendVelocity, IDLE_SMOOTHING);
+					if (DisabledSpeedSmoothing)
+						idleBlend = 1;
+					else
+						idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 1, ref idleBlendVelocity, IDLE_SMOOTHING);
 
 					if (Character.Skills.IsSpeedBreakActive) // Constant animation speed
 						targetAnimationSpeed = 2.5f;
@@ -228,10 +234,10 @@ namespace Project.Gameplay
 
 			animationTree.Set(IDLE_BLEND_PARAMETER, idleBlend);
 			animationTree.Set(FORWARD_BLEND_PARAMETER, speedRatio);
-			if (disableSpeedSmoothing)
+			if (DisabledSpeedSmoothing)
 			{
 				animationTree.Set(GROUND_SPEED_PARAMETER, targetAnimationSpeed);
-				disableSpeedSmoothing = false;
+				DisabledSpeedSmoothing = false;
 			}
 			else
 				animationTree.Set(GROUND_SPEED_PARAMETER, Mathf.Lerp((float)animationTree.Get(GROUND_SPEED_PARAMETER), targetAnimationSpeed, SPEED_SMOOTHING));

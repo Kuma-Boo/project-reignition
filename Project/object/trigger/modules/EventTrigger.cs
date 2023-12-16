@@ -224,6 +224,7 @@ namespace Project.Gameplay.Triggers
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
 			Character.Animator.SnapRotation(Character.MovementAngle);
 			Character.Animator.CancelOneshot(characterFadeoutTime);
+			Character.Animator.DisabledSpeedSmoothing = true;
 
 			if (characterExitLockout != null)
 				Character.AddLockoutData(characterExitLockout);
