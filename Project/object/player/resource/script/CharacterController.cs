@@ -126,6 +126,7 @@ namespace Project.Gameplay
 		public Vector2 InputVector => Input.GetVector("move_left", "move_right", "move_up", "move_down");
 		public float InputHorizontal => Input.GetAxis("move_left", "move_right");
 		public float InputVertical => Input.GetAxis("move_up", "move_down");
+		private bool isAxisTapped; //Was the left stick tapped?
 
 		/// <summary> Is the player holding in the specified direction? </summary>
 		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default)
@@ -544,7 +545,7 @@ namespace Project.Gameplay
 				MovementAngle = targetMovementAngle;
 
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
-			if (ActionState == ActionStates.Backflip) return;
+			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Sliding) return;
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) return; // Turning around
 
 			if (turnInstantly) // Instantly set movement angle to target movement angle
@@ -914,6 +915,8 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Crouch & Slide
+		/// <summary> How much can the player adjust their angle while sliding? </summary>
+		private const float MAX_SLIDE_ADJUSTMENT = Mathf.Pi * .4f;
 		private void StartCrouching()
 		{
 			if (!IsOnWall && ((!IsMovingBackward && MoveSpeed != 0) || MoveSpeed >= Skills.SlideSettings.speed))
@@ -943,7 +946,19 @@ namespace Project.Gameplay
 			else
 			{
 				MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -1);
-				if (ActionState == ActionStates.Crouching)
+
+				if (ActionState == ActionStates.Sliding) // Update turning
+				{
+					if (!IsHoldingDirection(PathFollower.BackAngle)) //Influence sliding direction slightly
+					{
+						float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.ForwardAngle, MAX_SLIDE_ADJUSTMENT);
+						MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, MIN_TURN_AMOUNT);
+
+						if (IsHoldingDirection(PathFollower.ForwardAngle))
+							MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -(1 - InputVector.Length()));
+					}
+				}
+				else if (ActionState == ActionStates.Crouching)
 					MoveSpeed *= .5f;
 			}
 
