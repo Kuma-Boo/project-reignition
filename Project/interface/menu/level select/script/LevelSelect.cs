@@ -65,6 +65,15 @@ namespace Project.Interface.Menus
 		}
 
 
+		protected override void Confirm()
+		{
+			if (!levelOptions[VerticalSelection].IsUnlocked)
+				return;
+
+			base.Confirm();
+		}
+
+
 		/// <summary> Shows the "Are you ready?" screen. </summary>
 		public override void OpenSubmenu()
 		{

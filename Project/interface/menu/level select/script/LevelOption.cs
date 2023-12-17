@@ -41,23 +41,20 @@ namespace Project.Interface.Menus
 
 		private void ApplySettings()
 		{
-			Control _indentNode = GetNodeOrNull<Control>(indentNode);
-			if (_indentNode != null)
-				_indentNode.SetAnchorAndOffset(Side.Left, 0, isSideMission ? 128 : 0);
+			if (indentNode != null)
+				indentNode.SetAnchorAndOffset(Side.Left, 0, isSideMission ? 128 : 0);
 
-			Label _missionLabel = GetNodeOrNull<Label>(missionLabel);
-			if (_missionLabel != null)
+			if (missionLabel != null)
 			{
-				if (!Engine.IsEditorHint() && !IsUnlocked())
-					missionNameKey = "mission_locked";
+				if (!Engine.IsEditorHint() && !IsUnlocked)
+					missionLabel.Text = "mission_locked";
 				else
-					_missionLabel.Text = string.IsNullOrEmpty(missionNameKey) ? "Mission Name" : missionNameKey;
+					missionLabel.Text = string.IsNullOrEmpty(missionNameKey) ? "Mission Name" : missionNameKey;
 
 			}
 
-			Control _fireSoulNode = GetNodeOrNull<Control>(fireSoulNode);
-			if (_fireSoulNode != null)
-				_fireSoulNode.Visible = hasFireSouls;
+			if (fireSoulNode != null)
+				fireSoulNode.Visible = hasFireSouls;
 		}
 		#endregion
 
@@ -80,27 +77,38 @@ namespace Project.Interface.Menus
 
 		[ExportGroup("Components")]
 		[Export]
-		private NodePath missionLabel;
+		private Label missionLabel;
 		[Export]
-		private NodePath indentNode;
+		private Control indentNode;
 		[Export]
-		private NodePath fireSoulNode;
+		private HBoxContainer fireSoulNode;
 		[Export]
 		private AnimationPlayer animator;
 
 		public override void _Ready() => ApplySettings();
 
-		public bool IsUnlocked()
+		public bool IsUnlocked
 		{
-			if (Core.CheatManager.UnlockAllStages) return true;
+			get
+			{
+				if (Core.CheatManager.UnlockAllStages) return true;
 
-			//TODO Determine by save data
-			return false;
+				//TODO Determine by save data
+				return false;
+			}
 		}
 
-		public string GetDescription() => IsUnlocked() ? missionDescriptionKey : "mission_description_locked";
+		public string GetDescription() => IsUnlocked ? missionDescriptionKey : "mission_description_locked";
 
-		public void ShowOption() => animator.Play("show");
+		public void ShowOption()
+		{
+			animator.Play(IsUnlocked ? "unlocked" : "locked");
+			animator.Advance(0);
+
+			ApplySettings();
+			animator.Play("show");
+		}
+
 		public void HideOption() => animator.Play("hide");
 	}
 }
