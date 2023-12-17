@@ -38,6 +38,11 @@ namespace Project.Interface.Menus
 				if (node is LevelOption)
 					levelOptions.Add(node as LevelOption);
 			}
+
+			if (menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.LevelSelect)
+				isProcessing = true;
+
+			base.SetUp();
 		}
 
 		protected override void ProcessMenu()
