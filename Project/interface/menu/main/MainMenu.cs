@@ -67,7 +67,7 @@ namespace Project.Interface.Menus
 		public override void OpenSubmenu()
 		{
 			if (currentSelection == 0)
-				submenus[currentSelection].ShowMenu();
+				_submenus[currentSelection].ShowMenu();
 		}
 
 		public void AnimateSelection() => animator.Play($"select-{currentSelection}");

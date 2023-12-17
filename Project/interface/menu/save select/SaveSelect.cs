@@ -71,7 +71,7 @@ namespace Project.Interface.Menus
 			}
 
 			menuMemory[MemoryKeys.WorldSelect] = (int)SaveManager.ActiveGameData.lastPlayedWorld;
-			submenus[0].ShowMenu();
+			_submenus[0].ShowMenu();
 		}
 
 		/// <summary>  Updates the visual data on all save options. </summary>

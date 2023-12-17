@@ -33,7 +33,8 @@ namespace Project.Interface.Menus
 		[Export]
 		public Menu parentMenu;
 		[Export]
-		public Array<Menu> submenus;
+		public Array<NodePath> submenus;
+		public Array<Menu> _submenus = new Array<Menu>(); //Also ensure the order of submenus is correct in the inspector hierarchy
 
 		[Export]
 		protected AudioStreamPlayer bgm;
@@ -58,6 +59,15 @@ namespace Project.Interface.Menus
 
 		public override void _Ready()
 		{
+			if (submenus != null)
+			{
+				for (int i = 0; i < submenus.Count; i++) //Required due to inspector not allowing for custom classes
+				{
+					Menu submenu = GetNode<Menu>(submenus[i]);
+					_submenus.Add(submenu);
+				}
+			}
+
 			SetUp();
 
 			if (isProcessing) //Enable isProcessing from the editor for quick single-menu debugging
