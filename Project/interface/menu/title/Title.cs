@@ -10,7 +10,7 @@ namespace Project.Interface.Menus
 	{
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
-		private const float CUTSCENE_TIME_LENGTH = 5f;
+		private const float CUTSCENE_TIME_LENGTH = 20f;
 
 		protected override void ProcessMenu()
 		{
