@@ -39,8 +39,6 @@ namespace Project.Interface.Menus
 					levelOptions.Add(node as LevelOption);
 			}
 
-			if (menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.LevelSelect)
-				isProcessing = true;
 
 			base.SetUp();
 		}

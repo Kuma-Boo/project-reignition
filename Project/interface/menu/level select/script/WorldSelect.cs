@@ -46,6 +46,14 @@ namespace Project.Interface.Menus
 			VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
 			videoStreams = new VideoStream[videoStreamPaths.Count];
 			CallDeferred(MethodName.LoadVideos);
+
+			if (menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.LevelSelect) // Activate the correct submenu
+			{
+				animator.Play("init-level-select");
+				animator.Advance(0);
+				VerticalSelection = (int)SaveManager.ActiveGameData.lastPlayedWorld;
+				OpenSubmenu();
+			}
 		}
 
 		/// <summary>

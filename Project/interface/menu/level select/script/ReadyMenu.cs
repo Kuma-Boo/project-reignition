@@ -25,8 +25,11 @@ namespace Project.Interface.Menus
 
 		protected override void Confirm()
 		{
-			if (HorizontalSelection == 0)
+			if (HorizontalSelection == 0) // Load level
+			{
+				menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.LevelSelect;
 				base.Confirm();
+			}
 			else
 				Cancel();
 		}
