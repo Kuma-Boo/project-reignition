@@ -115,7 +115,7 @@ namespace Project.Interface.Menus
 		public override void OpenSubmenu()
 		{
 			SaveManager.ActiveGameData.lastPlayedWorld = (SaveManager.WorldEnum)VerticalSelection;
-			_submenus[VerticalSelection].ShowMenu();
+			submenus[VerticalSelection].ShowMenu();
 		}
 
 		private void UpdateVideo()

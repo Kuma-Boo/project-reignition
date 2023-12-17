@@ -37,7 +37,7 @@ namespace Project.Interface.Menus
 		}
 
 		//Activate main menu (submenu 0);
-		public override void OpenSubmenu() => _submenus[0].ShowMenu();
+		public override void OpenSubmenu() => submenus[0].ShowMenu();
 
 		public override void ShowMenu()
 		{
