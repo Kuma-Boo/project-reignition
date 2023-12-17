@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://byf372uaewx1u"]
+[gd_scene load_steps=79 format=3 uid="uid://byf372uaewx1u"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/ReadyMenu.cs" id="1_ldudh"]
 [ext_resource type="Texture2D" uid="uid://bgtxik1dsbu0u" path="res://interface/menu/level select/texture/ready text/ready en.png" id="2_eg5ps"]
@@ -34,6 +34,7 @@
 [ext_resource type="Texture2D" uid="uid://dycd1qhflhfle" path="res://interface/menu/level select/texture/transition/tile022.png" id="25_q4m67"]
 [ext_resource type="Texture2D" uid="uid://dlmkldnwn2j0b" path="res://interface/menu/level select/texture/transition/tile023.png" id="26_p1ct4"]
 [ext_resource type="Texture2D" uid="uid://dcfhonoq0ix2l" path="res://effect/particle/texture/flame/flame menu short.png" id="27_c5fyk"]
+[ext_resource type="AudioStream" uid="uid://bdykixhqk0n1m" path="res://sound/sfx/system/menu level transition.wav" id="28_1bnlw"]
 [ext_resource type="PackedScene" uid="uid://dad2hh4ttgaox" path="res://interface/menu/flames/Flames.tscn" id="31_1njce"]
 [ext_resource type="SpriteFrames" uid="uid://jc646omm5n2y" path="res://effect/particle/sprite frames/Flame Menu Short.tres" id="31_4413p"]
 [ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="32_skf7y"]
@@ -942,6 +943,32 @@ tracks/6/keys = {
 "method": &"play"
 }]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SFX/Transition:volume_db")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.0334, 1.33334, 1.5),
+"transitions": PackedFloat32Array(1, 1, 0.5, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SFX/Transition")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_ablxt"]
 resource_name = "select-no"
@@ -1802,6 +1829,11 @@ color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
 [node name="SFX" type="Node" parent="."]
+
+[node name="Transition" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("28_1bnlw")
+volume_db = -0.000400542
+bus = &"SFX"
 
 [node name="Select" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("7_5a0w1")

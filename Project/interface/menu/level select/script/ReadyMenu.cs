@@ -27,6 +27,7 @@ namespace Project.Interface.Menus
 		{
 			if (HorizontalSelection == 0) // Load level
 			{
+				StopBGM(); // Stop bgm
 				menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.LevelSelect;
 				base.Confirm();
 			}
