@@ -345,6 +345,7 @@ namespace Project.Gameplay
 		public void StopExternal()
 		{
 			MovementState = MovementStates.Normal; //Needs to be set to normal BEFORE orientation is reset
+			ExternalParent = null;
 
 			UpdateOrientation();
 			EmitSignal(SignalName.ExternalControlCompleted);
