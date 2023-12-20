@@ -1053,10 +1053,26 @@ namespace Project.Gameplay
 		#endregion
 
 		#region GrindStep
-		public bool IsGrindstepping { get; private set; }
+		public bool IsGrindstepping { get; set; }
+		/// <summary> How high to jump during a grindstep. </summary>
+		private readonly float GRIND_STEP_HEIGHT = 1.6f;
+		/// <summary> How fast to move during a grindstep. </summary>
+		private readonly float GRIND_STEP_SPEED = 24.0f;
 		public void StartGrindstep()
 		{
-			IsGrindstepping = true;
+			// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
+			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(GetInputAngle(), MovementAngle);
+			// Calculate how far player is trying to go
+			float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
+			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, InputVector.Length()); // Give some smoothing based on controller strength
+
+			// Keep some speed forward
+			MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
+			VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
+			MoveSpeed = new Vector2(horizontalTarget, MoveSpeed).Length();
+
+			CanJumpDash = false; // Disable jumpdashing
+			Effect.PlayActionSFX(Effect.JUMP_SFX);
 			Animator.StartGrindStep();
 		}
 

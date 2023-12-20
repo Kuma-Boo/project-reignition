@@ -93,11 +93,6 @@ namespace Project.Gameplay
 		/// <summary> Process collisions? </summary>
 		private bool isInteractingWithPlayer;
 
-		/// <summary> How high to jump during a grindstep. </summary>
-		private readonly float GRIND_STEP_HEIGHT = 1.6f;
-		/// <summary> How fast to move during a grindstep. </summary>
-		private readonly float GRIND_STEP_SPEED = 24.0f;
-
 
 		public override void _Ready()
 		{
@@ -291,13 +286,12 @@ namespace Project.Gameplay
 					jumpBufferTimer = 0;
 
 					//Check if the player is holding a direction parallel to rail and start a grindstep
-					if (Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi * .5f) ||
-						Character.IsHoldingDirection(Character.MovementAngle - Mathf.Pi * .5f))
-						Character.StartGrindstep();
+					Character.IsGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi * .5f) ||
+						Character.IsHoldingDirection(Character.MovementAngle - Mathf.Pi * .5f);
 
 					Deactivate();
 					if (Character.IsGrindstepping) // Grindstepping
-						StartGrindstep();
+						Character.StartGrindstep();
 					else // Jump normally
 						Character.Jump(true);
 
@@ -327,24 +321,6 @@ namespace Project.Gameplay
 
 			if (pathFollower.ProgressRatio >= 1 || Mathf.IsZeroApprox(Character.MoveSpeed)) // Disconnect from the rail
 				Deactivate();
-		}
-
-
-		private void StartGrindstep()
-		{
-			// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
-			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Character.GetInputAngle(), Character.MovementAngle);
-			// Calculate how far player is trying to go
-			float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
-			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Character.InputVector.Length()); // Give some smoothing based on controller strength
-
-			// Keep some speed forward
-			Character.MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
-			Character.VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
-			Character.MoveSpeed = new Vector2(horizontalTarget, Character.MoveSpeed).Length();
-
-			Character.CanJumpDash = false; // Disable jumpdashing
-			Character.Animator.StartGrindStep();
 		}
 
 
