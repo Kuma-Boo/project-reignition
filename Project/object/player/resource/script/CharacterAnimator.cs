@@ -460,6 +460,10 @@ namespace Project.Gameplay
 		private AnimationNodeStateMachinePlayback BalanceState => animationTree.Get(BALANCE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 		private readonly StringName BALANCE_PLAYBACK = "parameters/balance_tree/balance_state/playback";
 
+		/// <summary> Reference to the balance state's StateMachinePlayback </summary>
+		private AnimationNodeStateMachinePlayback GrindStepState => animationTree.Get(GRINDSTEP_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+		private readonly StringName GRINDSTEP_PLAYBACK = "parameters/balance_tree/grindstep_state/playback";
+
 		/// <summary> Is the shuffling animation currently active? </summary>
 		public bool IsBalanceShuffleActive { get; private set; }
 
@@ -483,19 +487,18 @@ namespace Project.Gameplay
 
 			SetStateXfade(0); //Don't blend into state
 			animationTree.Set(STATE_PARAMETER, BALANCE_STATE); //Turn on balancing animations
-			animationTree.Set(BALANCE_GRINDSTEP_ACTIVE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort); //Disable any grindstepping
+			animationTree.Set(BALANCE_GRINDSTEP_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort); //Disable any grindstepping
 		}
 
-		private readonly StringName BALANCE_GRINDSTEP_ACTIVE_PARAMETER = "parameters/balance_tree/grindstep_active/request";
-		private readonly StringName BALANCE_GRINDSTEP_TRANSITION_PARAMETER = "parameters/balance_tree/grindstep_transition/transition_request";
+		private readonly StringName BALANCE_GRINDSTEP_TRIGGER_PARAMETER = "parameters/balance_tree/grindstep_trigger/request";
 		/// <summary> How many variations of the grindstep animation are there? </summary>
-		private readonly int GRINDSTEP_ANIMATION_VARIATION_COUNT = 4;
+		private readonly int GRINDSTEP_ANIMATION_VARIATION_COUNT = 3;
 		public void StartGrindStep()
 		{
 			int index = Core.Runtime.randomNumberGenerator.RandiRange(1, GRINDSTEP_ANIMATION_VARIATION_COUNT);
 			string targetPose = isFacingRight ? "step-right-0" : "step-left-0";
-			animationTree.Set(BALANCE_GRINDSTEP_TRANSITION_PARAMETER, targetPose + index.ToString());
-			animationTree.Set(BALANCE_GRINDSTEP_ACTIVE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			GrindStepState.Start(targetPose + index.ToString(), true);
+			animationTree.Set(BALANCE_GRINDSTEP_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		}
 
 		public void StartGrindShuffle()
