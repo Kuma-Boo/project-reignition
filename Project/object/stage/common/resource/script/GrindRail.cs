@@ -300,6 +300,8 @@ namespace Project.Gameplay
 						StartGrindstep();
 					else // Jump normally
 						Character.Jump(true);
+
+					return;
 				}
 			}
 
