@@ -188,7 +188,7 @@ namespace Project.Gameplay
 			}
 
 			Character.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
-			Character.StartExternal(this, pathFollower);
+			Character.StartExternal(this, pathFollower, 0.2f);
 
 			Character.IsMovingBackward = false;
 			Character.LandOnGround(); // Rail counts as being on the ground

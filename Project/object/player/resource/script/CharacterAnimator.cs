@@ -485,9 +485,9 @@ namespace Project.Gameplay
 			animationTree.Set(BALANCE_LEFT_LEAN_PARAMETER, 0);
 			animationTree.Set(BALANCE_RIGHT_LEAN_PARAMETER, 0);
 
-			SetStateXfade(0); //Don't blend into state
+			SetStateXfade(0.05f);
 			animationTree.Set(STATE_PARAMETER, BALANCE_STATE); //Turn on balancing animations
-			animationTree.Set(BALANCE_GRINDSTEP_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort); //Disable any grindstepping
+			animationTree.Set(BALANCE_GRINDSTEP_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut); //Disable any grindstepping
 		}
 
 		private readonly StringName BALANCE_GRINDSTEP_TRIGGER_PARAMETER = "parameters/balance_tree/grindstep_trigger/request";
