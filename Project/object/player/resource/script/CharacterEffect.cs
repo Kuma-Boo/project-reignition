@@ -25,19 +25,8 @@ namespace Project.Gameplay
 			}
 			*/
 
-			attackTrailMesh = new ImmediateMesh();
-			attackTrailMeshInstance.Mesh = attackTrailMesh;
-			attackTrailPreviousPosition = GlobalPosition;
-
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechStart, new Callable(this, MethodName.MuteGameplayVoice));
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
-		}
-
-
-		public override void _PhysicsProcess(double delta)
-		{
-			UpdateAttackTrail(delta);
-			RenderAttackTrail();
 		}
 
 
@@ -55,105 +44,8 @@ namespace Project.Gameplay
 			actionChannel.Play();
 		}
 
-		#region Attack Trail
-		public bool IsAttackTrailActive { get; set; }
-
 		[Export]
-		private MeshInstance3D attackTrailMeshInstance;
-		private ImmediateMesh attackTrailMesh;
-		private Vector3 attackTrailPreviousPosition;
-
-		private struct Point
-		{
-			public Vector3 position; // Origin of the point
-			public Vector3 normal; // "Up" direction of the point
-			public Vector3 tangent; // "Forward" direction of the point
-
-			public Point(Vector3 p, Vector3 n, Vector3 t)
-			{
-				position = p;
-				normal = n;
-				tangent = t;
-			}
-		}
-
-		private readonly List<Point> homingTrailPoints = new(); // Data of each point
-		private readonly List<float> homingTrailPointLifetimes = new(); // Lifetime of each point
-		private const float ATTACK_TRAIL_DISTANCE_RESOLUTION = .1f; // Resolution of the homing attack trail distance-wise
-		private const int ATTACK_TRAIL_RESOLUTION = 16; // Resolution of the homing attack trail length-wise
-		private const float ATTACK_TRAIL_RADIUS = .3f; // Radius of the trail
-		private const float ATTACK_TRAIL_LIFETIME = .5f; // How long each point should live
-		private const float ATTACK_TRAIL_UV_STEP = .01f; // How much of the uv a segment should take up
-
-
-		private void UpdateAttackTrail(double delta)
-		{
-			if (IsAttackTrailActive && GlobalPosition.DistanceSquaredTo(attackTrailPreviousPosition) >= ATTACK_TRAIL_DISTANCE_RESOLUTION * ATTACK_TRAIL_DISTANCE_RESOLUTION) // Check for new points
-				AddHomingAttackPoint();
-
-			for (int i = homingTrailPoints.Count - 1; i >= 0; i--) // Update each point in reverse order
-			{
-				homingTrailPointLifetimes[i] += (float)delta;
-				if (homingTrailPointLifetimes[i] >= ATTACK_TRAIL_LIFETIME)
-					RemoveHomingAttackPoint(i);
-			}
-		}
-
-
-		private void RenderAttackTrail()
-		{
-			attackTrailMesh.ClearSurfaces();
-
-			if (homingTrailPoints.Count < 2) // No points to render
-				return;
-
-			float angleIncrement = Mathf.Tau / ATTACK_TRAIL_RESOLUTION;
-
-			for (int y = 0; y < ATTACK_TRAIL_RESOLUTION; y++)
-			{
-				attackTrailMesh.SurfaceBegin(Mesh.PrimitiveType.TriangleStrip);
-				float yFactor01 = y / (float)ATTACK_TRAIL_RESOLUTION;
-				float yFactor02 = (y + 1) / (float)ATTACK_TRAIL_RESOLUTION;
-
-				for (int x = 0; x < homingTrailPoints.Count; x++)
-				{
-					float xFactor = x / (homingTrailPoints.Count - 1.0f);
-
-					Vector3 normal01 = homingTrailPoints[x].normal.Rotated(homingTrailPoints[x].tangent, angleIncrement * y);
-					Vector3 normal02 = normal01.Rotated(homingTrailPoints[x].tangent, angleIncrement);
-					Vector3 surfaceNormal = (normal01 + normal02) * .5f;
-					attackTrailMesh.SurfaceSetUV(new Vector2(x * ATTACK_TRAIL_UV_STEP, yFactor01));
-					attackTrailMesh.SurfaceSetUV2(new Vector2(xFactor, yFactor01));
-					attackTrailMesh.SurfaceSetNormal(surfaceNormal);
-					attackTrailMesh.SurfaceAddVertex(ToLocal(homingTrailPoints[x].position + normal01 * ATTACK_TRAIL_RADIUS));
-
-					attackTrailMesh.SurfaceSetUV(new Vector2(x * ATTACK_TRAIL_UV_STEP, yFactor02));
-					attackTrailMesh.SurfaceSetUV2(new Vector2(xFactor, yFactor01));
-					attackTrailMesh.SurfaceSetNormal(surfaceNormal);
-					attackTrailMesh.SurfaceAddVertex(ToLocal(homingTrailPoints[x].position + normal02 * ATTACK_TRAIL_RADIUS));
-				}
-
-				attackTrailMesh.SurfaceEnd();
-			}
-		}
-
-
-		private void AddHomingAttackPoint()
-		{
-			Vector3 tangentDirection = (GlobalPosition - attackTrailPreviousPosition).Normalized();
-			Vector3 upDirection = tangentDirection.Rotated(this.Right(), Mathf.Pi * .5f);
-			homingTrailPoints.Add(new Point(GlobalPosition, upDirection, tangentDirection));
-			homingTrailPointLifetimes.Add(0);
-			attackTrailPreviousPosition = GlobalPosition;
-		}
-
-
-		private void RemoveHomingAttackPoint(int index)
-		{
-			homingTrailPoints.RemoveAt(index);
-			homingTrailPointLifetimes.RemoveAt(index);
-		}
-		#endregion
+		public Trail3D homingAttackTrail;
 
 
 		//Materials (footsteps, landing, etc)

@@ -88,7 +88,7 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				StopCrouching();
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
-				Effect.IsAttackTrailActive = false;
+				Effect.homingAttackTrail.IsEmitting = false;
 
 			ActionState = newState;
 		}
@@ -870,7 +870,7 @@ namespace Project.Gameplay
 			if (CanJumpDash)
 			{
 				Effect.PlayActionSFX("jump dash");
-				Effect.IsAttackTrailActive = true;
+				Effect.homingAttackTrail.IsEmitting = true;
 			}
 
 			CanJumpDash = false;
