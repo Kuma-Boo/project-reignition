@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=13 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -11,8 +11,6 @@
 [ext_resource type="Script" path="res://effect/Trail3D.cs" id="10_1mog6"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/particle/material/Spin Material.tres" id="11_lk1sb"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
-
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_qgqey"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
 radius = 0.4
@@ -57,13 +55,11 @@ bus = &"SFX"
 
 [node name="LandingDustParticle" parent="VFX" instance=ExtResource("5_58bv7")]
 
-[node name="TrailMesh" type="MeshInstance3D" parent="VFX"]
+[node name="TrailMesh" type="Node3D" parent="VFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-layers = 32
-material_override = ExtResource("9_on86l")
-cast_shadow = 0
-mesh = SubResource("ImmediateMesh_qgqey")
 script = ExtResource("10_1mog6")
+layer = 32
+material = ExtResource("9_on86l")
 
 [node name="SpinMesh" type="MeshInstance3D" parent="VFX"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.5, 0)

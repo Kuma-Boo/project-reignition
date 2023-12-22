@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Project.Core
 {
-	[Tool]
-	public partial class Trail3D : MeshInstance3D
+	public partial class Trail3D : Node3D
 	{
 		[Export]
 		public bool IsEmitting { get; set; }
+		private MeshInstance3D trailMeshInstance;
 		private ImmediateMesh trailMesh;
 		private Vector3 previousPosition;
 
@@ -21,6 +21,10 @@ namespace Project.Core
 		private float lifetime = .5f; // How long each point should live
 		private const float ATTACK_TRAIL_UV_STEP = .01f; // How much of the uv each segment should take up
 
+		[Export(PropertyHint.Layers3DRender)]
+		private uint layer;
+		[Export]
+		public Material material;
 
 
 		private readonly List<Point> points = new(); // Data of each point
@@ -29,21 +33,32 @@ namespace Project.Core
 		public override void _Ready()
 		{
 			trailMesh = new ImmediateMesh();
-			Mesh = trailMesh;
+
+			// Actual mesh instance is parented at the bottom of the tree so trails render AFTER everything else has moved.
+			trailMeshInstance = new MeshInstance3D()
+			{
+				Layers = layer,
+				MaterialOverride = material,
+				Mesh = trailMesh,
+				CastShadow = GeometryInstance3D.ShadowCastingSetting.Off
+			};
+
+			GetTree().CurrentScene.CallDeferred(MethodName.AddChild, trailMeshInstance);
 			previousPosition = GlobalPosition;
 		}
 
 
 		public override void _PhysicsProcess(double delta)
 		{
-			UpdateTrail(delta);
-			RenderTrail();
+			CallDeferred(MethodName.UpdateTrail, delta);
 		}
 
 
 		private void UpdateTrail(double delta)
 		{
-			if (IsEmitting && GlobalPosition.DistanceSquaredTo(previousPosition) >= Mathf.Pow(distance_deadzone, 2.0f)) // Check for new points
+			trailMeshInstance.GlobalTransform = GlobalTransform;
+
+			if (IsEmitting && trailMeshInstance.GlobalPosition.DistanceSquaredTo(previousPosition) >= Mathf.Pow(distance_deadzone, 2.0f)) // Check for new points
 				AddPoint();
 
 			for (int i = points.Count - 1; i >= 0; i--) // Update each point in reverse order
@@ -52,6 +67,8 @@ namespace Project.Core
 				if (pointLifetimes[i] >= lifetime)
 					RemovePoint(i);
 			}
+
+			RenderTrail();
 		}
 
 
@@ -95,11 +112,11 @@ namespace Project.Core
 
 		private void AddPoint()
 		{
-			Vector3 tangentDirection = (GlobalPosition - previousPosition).Normalized();
+			Vector3 tangentDirection = (trailMeshInstance.GlobalPosition - previousPosition).Normalized();
 			Vector3 upDirection = tangentDirection.Rotated(this.Right(), Mathf.Pi * .5f);
 			points.Add(new Point(GlobalPosition, upDirection, tangentDirection));
 			pointLifetimes.Add(0);
-			previousPosition = GlobalPosition;
+			previousPosition = trailMeshInstance.GlobalPosition;
 		}
 
 
