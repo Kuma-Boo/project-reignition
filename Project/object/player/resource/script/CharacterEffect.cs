@@ -45,7 +45,19 @@ namespace Project.Gameplay
 		}
 
 		[Export]
-		public Trail3D homingAttackTrail;
+		public Trail3D trailFX;
+		[Export]
+		public MeshInstance3D spinFX;
+
+		public void StartTrailFX()
+		{
+			trailFX.IsEmitting = true;
+		}
+
+		public void StopTrailFX()
+		{
+			trailFX.IsEmitting = false;
+		}
 
 
 		//Materials (footsteps, landing, etc)

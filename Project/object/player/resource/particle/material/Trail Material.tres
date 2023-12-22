@@ -1,0 +1,32 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://bduajl86aiq4o"]
+
+[ext_resource type="Shader" path="res://effect/shader/object/HomingAttack.gdshader" id="1_r6ik7"]
+[ext_resource type="Texture2D" uid="uid://l13owmpxqol5" path="res://object/player/resource/particle/homing attack trail.png" id="2_kvn6n"]
+
+[sub_resource type="Curve" id="Curve_v0t8y"]
+_data = [Vector2(0, 1), 0.0, -7.2863, 0, 0, Vector2(1, 1), 8.16707, 0.0, 0, 0]
+point_count = 2
+metadata/_snap_enabled = true
+
+[sub_resource type="CurveTexture" id="CurveTexture_g5n3t"]
+width = 64
+curve = SubResource("Curve_v0t8y")
+
+[sub_resource type="Gradient" id="Gradient_03ojf"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.0566802, 0.230769, 0.700405, 0.963563)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gh06t"]
+gradient = SubResource("Gradient_03ojf")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_r6ik7")
+shader_parameter/intensity = 1.2
+shader_parameter/scroll_speed = Vector2(2, 0.5)
+shader_parameter/opacity = 2.5
+shader_parameter/softness = 0.0
+shader_parameter/albedo = ExtResource("2_kvn6n")
+shader_parameter/vertex_color = SubResource("GradientTexture1D_gh06t")
+shader_parameter/lut = SubResource("CurveTexture_g5n3t")

@@ -88,7 +88,7 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				StopCrouching();
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
-				Effect.homingAttackTrail.IsEmitting = false;
+				Effect.StopTrailFX();
 
 			ActionState = newState;
 		}
@@ -870,7 +870,7 @@ namespace Project.Gameplay
 			if (CanJumpDash)
 			{
 				Effect.PlayActionSFX("jump dash");
-				Effect.homingAttackTrail.IsEmitting = true;
+				Effect.StartTrailFX();
 			}
 
 			CanJumpDash = false;
@@ -1475,7 +1475,7 @@ namespace Project.Gameplay
 			CheckCeiling();
 
 			//Calculate true velocity after physics were processed.
-			TrueVelocity = TrueVelocity - GlobalPosition;
+			TrueVelocity -= GlobalPosition;
 			if (IsOnGround && IsOnWall() && Mathf.IsZeroApprox(TrueVelocity.LengthSquared()))
 			{
 				MoveSpeed = 0;
