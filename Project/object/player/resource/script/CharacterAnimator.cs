@@ -169,6 +169,7 @@ namespace Project.Gameplay
 				animationTree.Set(GROUND_SEEK_PARAMETER, 0);
 				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				NormalStatePlayback.Travel(GROUND_TREE_STATE);
+				StopHurt();
 			}
 
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
@@ -354,9 +355,6 @@ namespace Project.Gameplay
 			eventAnimationPlayer.Play("invincibility");
 			eventAnimationPlayer.Seek(0.0, true);
 		}
-
-		private readonly StringName HURT_STATE_PARAMETER = "hurt-start";
-		public void Hurt() => NormalStatePlayback.Travel(HURT_STATE_PARAMETER);
 		#endregion
 
 
@@ -602,6 +600,20 @@ namespace Project.Gameplay
 		{
 			animationTree.Set(SIDLE_SPEED_PARAMETER, 1f);
 			ActiveSidleState.Travel(SIDLE_FALL_STATE_PARAMETER);
+		}
+		#endregion
+
+		#region Hurt
+		private readonly StringName HURT_TRIGGER = "parameters/hurt_trigger/request";
+		public void StartHurt()
+		{
+			animationTree.Set(HURT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		}
+
+
+		public void StopHurt()
+		{
+			animationTree.Set(HURT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 		}
 		#endregion
 	}

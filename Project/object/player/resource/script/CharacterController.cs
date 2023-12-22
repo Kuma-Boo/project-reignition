@@ -1170,7 +1170,7 @@ namespace Project.Gameplay
 
 			if (MovementState == MovementStates.Normal || knockbackSettings.ignoreMovementState)
 			{
-				Animator.Hurt();
+				Animator.StartHurt();
 				previousKnockbackSettings = knockbackSettings;
 
 				MoveSpeed = knockbackSettings.overrideKnockbackSpeed ? knockbackSettings.knockbackSpeed : 8f;
@@ -1593,7 +1593,7 @@ namespace Project.Gameplay
 				else if (VerticalSpeed > 0)
 					orientationResetFactor = .01f;
 				else
-					orientationResetFactor = (VerticalSpeed * .2f / Runtime.MAX_GRAVITY);
+					orientationResetFactor = VerticalSpeed * .2f / Runtime.MAX_GRAVITY;
 
 				UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
