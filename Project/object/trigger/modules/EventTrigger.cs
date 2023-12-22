@@ -219,12 +219,12 @@ namespace Project.Gameplay.Triggers
 		public void FinishEvent()
 		{
 			BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
-			Character.ResetMovementState();
 
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
 			Character.Animator.SnapRotation(Character.MovementAngle);
 			Character.Animator.CancelOneshot(characterFadeoutTime);
 			Character.Animator.DisabledSpeedSmoothing = true;
+			Character.ResetMovementState();
 
 			if (characterExitLockout != null)
 				Character.AddLockoutData(characterExitLockout);
