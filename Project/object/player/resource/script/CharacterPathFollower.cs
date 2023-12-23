@@ -78,9 +78,9 @@ namespace Project.Gameplay
 
 			HeightAxis = this.Forward().Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
 
-			Core.Debug.DrawRay(GlobalPosition, HeightAxis, Colors.Green);
-			Core.Debug.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
-			Core.Debug.DrawRay(GlobalPosition, SideAxis, Colors.Red);
+			Core.DebugManager.DrawRay(GlobalPosition, HeightAxis, Colors.Green);
+			Core.DebugManager.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
+			Core.DebugManager.DrawRay(GlobalPosition, SideAxis, Colors.Red);
 		}
 
 		/// <summary> Calculates the delta position using Basis.Inverse(). </summary>

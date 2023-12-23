@@ -6,18 +6,28 @@ namespace Project.Gameplay.Triggers
 	public partial class CullingTrigger : StageTriggerModule
 	{
 		[Export]
-		private bool startEnabled; //Generally things should start culled
+		private bool startEnabled; // Generally things should start culled
 		[Export]
 		private bool saveVisibilityOnCheckpoint;
 		[Export]
-		private bool isStageVisuals; //Take CheatManager.DisableStageCulling into account?
-		private bool DebugDisableCulling => isStageVisuals && CheatManager.DisableStageCulling;
+		private bool isStageVisuals;
+		private bool isActive;
 		private StageSettings Level => StageSettings.instance;
+
+		public override void _EnterTree()
+		{
+			if (isStageVisuals)
+				DebugManager.Instance.Connect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
+		}
+
+		public override void _ExitTree()
+		{
+			if (isStageVisuals)
+				DebugManager.Instance.Disconnect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
+		}
 
 		public override void _Ready()
 		{
-			if (DebugDisableCulling) return;
-
 			if (saveVisibilityOnCheckpoint)
 			{
 				//Cache starting checkpoint state
@@ -47,7 +57,7 @@ namespace Project.Gameplay.Triggers
 				return;
 			}
 
-			//Disable the node on startup?
+			// Disable the node on startup?
 			if (startEnabled)
 				Activate();
 			else
@@ -56,18 +66,27 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
-			if (DebugDisableCulling) return;
-
-			Visible = true;
-			ProcessMode = ProcessModeEnum.Inherit;
+			isActive = true;
+			UpdateCullingState();
 		}
 
 		public override void Deactivate()
 		{
-			if (DebugDisableCulling) return;
+			isActive = false;
+			UpdateCullingState();
+		}
 
-			Visible = false;
-			ProcessMode = ProcessModeEnum.Disabled;
+		private void UpdateCullingState()
+		{
+			if (isStageVisuals && !DebugManager.IsStageCullingEnabled) // Treat as active
+			{
+				Visible = true;
+				ProcessMode = ProcessModeEnum.Inherit;
+				return;
+			}
+
+			Visible = isActive;
+			ProcessMode = isActive ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
 		}
 	}
 }

@@ -484,8 +484,8 @@ namespace Project.Gameplay
 				GD.Print($"Free cam lock set to {isFreeCamLocked}.");
 			}
 
-			freeCamRotating = Input.IsMouseButtonPressed(MouseButton.Left);
-			freeCamTilting = Input.IsMouseButtonPressed(MouseButton.Right);
+			freeCamRotating = Input.IsMouseButtonPressed(MouseButton.Right);
+			freeCamTilting = Input.IsMouseButtonPressed(MouseButton.Middle);
 			if (freeCamRotating || freeCamTilting)
 			{
 				isFreeCamEnabled = true;

@@ -129,7 +129,7 @@ namespace Project.Gameplay
 				castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
 			Vector3 castVector = t.GlobalPosition - castPosition;
 			RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
-			Debug.DrawRay(castPosition, castVector, Colors.Magenta);
+			DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
 
 			if (h && h.collidedObject != t)
 				return TargetState.HitObstacle;

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Godot;
 using Godot.Collections;
 
@@ -91,7 +92,7 @@ namespace Project.Interface.Menus
 		{
 			get
 			{
-				if (Core.CheatManager.UnlockAllStages) return true;
+				if (Core.DebugManager.Instance.UnlockAllStages) return true;
 
 				//TODO Determine by save data
 				return false;

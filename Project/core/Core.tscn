@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cx75joue8tyuv"]
 
 [ext_resource type="Script" path="res://core/PhysicsManager.cs" id="2_phpky"]
-[ext_resource type="Script" path="res://core/Debug.cs" id="3_exwps"]
+[ext_resource type="Script" path="res://core/DebugManager.cs" id="3_exwps"]
 [ext_resource type="Script" path="res://core/Runtime.cs" id="4_15wji"]
 [ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="4_71aq3"]
 [ext_resource type="Script" path="res://core/SaveManager.cs" id="4_au3sm"]
@@ -10,8 +10,186 @@
 [node name="Core" type="Node"]
 process_mode = 3
 
-[node name="Debug" type="Node2D" parent="."]
+[node name="DebugManager" type="Node2D" parent="." node_paths=PackedStringArray("debugMenuRoot")]
+top_level = true
 script = ExtResource("3_exwps")
+debugMenuRoot = NodePath("CanvasLayer/Menu")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="DebugManager"]
+layer = 127
+
+[node name="Menu" type="ColorRect" parent="DebugManager/CanvasLayer"]
+visible = false
+offset_right = 448.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(0.211765, 0.239216, 0.290196, 1)
+metadata/_edit_lock_ = true
+
+[node name="Tabs" type="TabContainer" parent="DebugManager/CanvasLayer/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -516.0
+offset_right = 200.0
+offset_bottom = 516.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="Debug" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
+layout_mode = 2
+
+[node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 25.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Preset" type="HBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Preset" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/Preset"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+placeholder_text = "Preset"
+alignment = 1
+max_length = 8
+
+[node name="Save" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/Preset"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+button_pressed = true
+text = "Save"
+
+[node name="Load" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/Preset"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+button_pressed = true
+text = "Load"
+
+[node name="DebugRays" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Draw Rays"
+
+[node name="StageCulling" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+button_pressed = true
+text = "Cull Stage"
+
+[node name="UnlockAllStages" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Unlock Stages"
+
+[node name="Gameplay" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
+visible = false
+layout_mode = 2
+
+[node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 25.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Countdown" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+button_pressed = true
+text = "Skip Countdown"
+
+[node name="InfiniteSoul" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Inifinite Soul"
+
+[node name="InfiniteRing" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Inifinite Ring"
+
+[node name="Free Cam" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
+visible = false
+layout_mode = 2
+
+[node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Free Cam"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 25.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Lock" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Free Cam/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Lock Camera"
+
+[node name="Reset" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Free Cam/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Reset Camera"
+
+[node name="SpeedLabel" type="Label" parent="DebugManager/CanvasLayer/Menu/Tabs/Free Cam/Options"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Speed"
+
+[node name="Speed" type="HSlider" parent="DebugManager/CanvasLayer/Menu/Tabs/Free Cam/Options"]
+layout_mode = 2
+step = 5.0
+value = 20.0
+rounded = true
+tick_count = 11
+ticks_on_borders = true
 
 [node name="SaveManager" type="Node" parent="."]
 script = ExtResource("4_au3sm")
@@ -27,3 +205,10 @@ pearlScene = ExtResource("7_wy237")
 
 [node name="PhysicsManager" type="Node3D" parent="."]
 script = ExtResource("2_phpky")
+
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/DebugRays" to="DebugManager" method="OnRayToggled"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/StageCulling" to="DebugManager" method="OnStageCullingToggled"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/UnlockAllStages" to="DebugManager" method="OnUnlockStagesToggled"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/Countdown" to="DebugManager" method="OnSkipCountdownToggled"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteSoul" to="DebugManager" method="OnInfiniteSoulToggled"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteRing" to="DebugManager" method="OnInfiniteRingsToggled"]

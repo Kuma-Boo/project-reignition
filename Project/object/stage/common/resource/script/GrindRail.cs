@@ -339,7 +339,7 @@ namespace Project.Gameplay
 		{
 			float castLength = movementDelta + Character.CollisionRadius;
 			RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Back() * castLength, Character.CollisionMask);
-			Debug.DrawRay(pathFollower.GlobalPosition, pathFollower.Back() * castLength, hit ? Colors.Red : Colors.White);
+			DebugManager.DrawRay(pathFollower.GlobalPosition, pathFollower.Back() * castLength, hit ? Colors.Red : Colors.White);
 
 			// Block grinding through objects in the given group
 			if (hit && hit.collidedObject.IsInGroup("grind wall"))

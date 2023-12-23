@@ -24,7 +24,7 @@ namespace Project.Interface
 		{
 			BGMPlayer.StartStageMusic(); // Start BGM
 
-			if (CheatManager.SkipCountdown)
+			if (DebugManager.Instance.SkipCountdown)
 			{
 				FinishCountdown();
 				return;

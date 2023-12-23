@@ -92,7 +92,7 @@ namespace Project.Gameplay.Triggers
 			// Check ground
 			Vector3 castVector = Vector3.Down * Character.CollisionRadius * 2.0f;
 			RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
-			Debug.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
+			DebugManager.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 			if (!hit) // No ground - Respawn
 			{
 				GD.Print("Ground not found!!!");
@@ -111,7 +111,7 @@ namespace Project.Gameplay.Triggers
 			// Check walls
 			castVector = Character.PathFollower.Back() * Mathf.Sign(velocity) * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
 			hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
-			Debug.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
+			DebugManager.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 			if (hit && hit.collidedObject.IsInGroup("sidle wall")) // Kill speed
 				velocity = (hit.distance - Character.CollisionRadius) * Mathf.Sign(velocity);
 

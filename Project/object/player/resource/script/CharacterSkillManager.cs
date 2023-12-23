@@ -119,7 +119,7 @@ namespace Project.Gameplay
 
 		private void SetUpSkills()
 		{
-			if (!CheatManager.UseEditorSkillValues)
+			if (!DebugManager.Instance.UseEditorSkills) // Only load skills in an actual build
 				LoadSkillsFromSaveData();
 
 			//Expand hitbox if skills is equipped
@@ -182,7 +182,7 @@ namespace Project.Gameplay
 
 		public void UpdateSoulSkills()
 		{
-			if (CheatManager.InfiniteSoulGauge) //Max out the soul gauge
+			if (DebugManager.Instance.InfiniteSoulGauge) //Max out the soul gauge
 				ModifySoulGauge(SOUL_GAUGE_MAX);
 
 			UpdateTimeBreak();

@@ -3,9 +3,13 @@ using System.Collections.Generic;
 
 namespace Project.Core
 {
-	public partial class Debug : Node2D
+	public partial class DebugManager : Node2D
 	{
-		public static Debug Instance;
+		public static DebugManager Instance;
+
+		[Export]
+		private Control debugMenuRoot;
+
 		private bool isAdvancingFrame;
 		private bool IsPaused => GetTree().Paused;
 
@@ -18,10 +22,20 @@ namespace Project.Core
 			PropertyCount
 		}
 
-		public override void _Ready()
+		public override void _EnterTree()
 		{
 			Instance = this;
 			ProcessMode = ProcessModeEnum.Always;
+
+			IsStageCullingEnabled = true;
+
+
+			if (OS.IsDebugBuild()) // Editor Debug
+			{
+				UseEditorSkills = true;
+				UseDebugSave = true;
+				SkipCountdown = true;
+			}
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -34,6 +48,9 @@ namespace Project.Core
 				GetTree().Paused = true;
 				isAdvancingFrame = false;
 			}
+
+			if (Input.IsActionJustPressed("debug_menu"))
+				debugMenuRoot.Visible = !debugMenuRoot.Visible;
 
 			if (Input.IsActionJustPressed("debug_turbo"))
 				Engine.TimeScale = 2.5f;
@@ -81,38 +98,43 @@ namespace Project.Core
 				}
 			}
 
-			if (Input.IsActionJustPressed("debug_hud"))
-				CheatManager.EnableDebugRays = !CheatManager.EnableDebugRays;
-
-			if (line3d.Count + line2d.Count != 0 && !IsPaused) //Queue Raycast Redraw
+			if (line3d.Count + line2d.Count != 0 && !IsPaused) // Queue Raycast Redraw
 				QueueRedraw();
 		}
 
 		#region Raycast Debug Code
 		public override void _Draw()
 		{
-			if (CheatManager.EnableDebugRays)
+			if (!IsDebugRaysEnabled)
 			{
-				for (int i = line2d.Count - 1; i >= 0; i--)
-				{
-					DrawLine(line2d[i].start, line2d[i].end, line3d[i].color, 1.0f, true);
-					line2d.RemoveAt(i);
-				}
+				line2d.Clear();
+				line3d.Clear();
+				return;
+			}
 
-				Camera3D cam = GetViewport().GetCamera3D();
-				if (cam == null) return; //NO CAMERA
+			for (int i = line2d.Count - 1; i >= 0; i--)
+			{
+				DrawLine(line2d[i].start, line2d[i].end, line3d[i].color, 1.0f, true);
+				line2d.RemoveAt(i);
+			}
 
-				for (int i = line3d.Count - 1; i >= 0; i--)
-				{
-					if (cam.IsPositionBehind(line3d[i].start) || cam.IsPositionBehind(line3d[i].end))
-						continue;
+			Camera3D cam = GetViewport().GetCamera3D();
+			if (cam == null)
+			{
+				line3d.Clear();
+				return; //NO CAMERA
+			}
 
-					Vector2 startPos = cam.UnprojectPosition(line3d[i].start);
-					Vector2 endPos = cam.UnprojectPosition(line3d[i].end);
+			for (int i = line3d.Count - 1; i >= 0; i--)
+			{
+				if (cam.IsPositionBehind(line3d[i].start) || cam.IsPositionBehind(line3d[i].end))
+					continue;
 
-					DrawLine(startPos, endPos, line3d[i].color, 1.0f, true);
-					line3d.RemoveAt(i);
-				}
+				Vector2 startPos = cam.UnprojectPosition(line3d[i].start);
+				Vector2 endPos = cam.UnprojectPosition(line3d[i].end);
+
+				DrawLine(startPos, endPos, line3d[i].color, 1.0f, true);
+				line3d.RemoveAt(i);
 			}
 		}
 
@@ -152,6 +174,48 @@ namespace Project.Core
 
 		public static void DrawLn(Vector2 s, Vector2 e, Color c) => line2d.Add(new Line2D(s, e, c));
 		public static void DrawRay(Vector2 s, Vector2 r, Color c) => line2d.Add(new Line2D(s, s + r, c));
+		#endregion
+
+		#region Debug Cheats
+		/// <summary> Draw debug rays? </summary>
+		private bool IsDebugRaysEnabled { get; set; }
+		public void OnRayToggled(bool enabled) => IsDebugRaysEnabled = enabled;
+
+		[Signal]
+		public delegate void StageCullingToggledEventHandler();
+		public static bool IsStageCullingEnabled { get; private set; }
+		private void OnStageCullingToggled(bool enabled)
+		{
+			IsStageCullingEnabled = enabled;
+			EmitSignal(SignalName.StageCullingToggled);
+		}
+
+		/// <summary> Have all worlds/stages unlocked. </summary>
+		public bool UnlockAllStages { get; private set; }
+		[Signal]
+		public delegate void UnlockStagesToggledEventHandler();
+		private void OnUnlockStagesToggled(bool enabled)
+		{
+			UnlockAllStages = enabled;
+			EmitSignal(SignalName.UnlockStagesToggled);
+		}
+
+		/// <summary> Don't load skills from save data, use inspector values instead. </summary>
+		public bool UseEditorSkills { get; private set; }
+		/// <summary> Use a custom save. </summary>
+		public bool UseDebugSave { get; private set; }
+		#endregion
+
+		#region Gameplay Cheats
+		/// <summary> Infinite soul gauge. </summary>
+		public bool InfiniteSoulGauge { get; private set; }
+		private void OnInfiniteSoulToggled(bool enabled) => InfiniteSoulGauge = enabled;
+		/// <summary> Infinite rings. </summary>
+		public bool InfiniteRings { get; private set; }
+		private void OnInfiniteRingsToggled(bool enabled) => InfiniteRings = enabled;
+		/// <summary> Skip countdowns for faster debugging. </summary>
+		public bool SkipCountdown { get; private set; }
+		private void OnSkipCountdownToggled(bool enabled) => SkipCountdown = enabled;
 		#endregion
 	}
 }

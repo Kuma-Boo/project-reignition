@@ -669,15 +669,6 @@ namespace Project.Gameplay
 				UpdateGroundActions();
 			else
 				UpdateAirActions();
-
-			if (CheatManager.EnableMoonJump && !Mathf.IsZeroApprox(jumpBufferTimer))
-			{
-				bool allowJumpDash = VerticalSpeed > 0;
-				Jump();
-				CanJumpDash = allowJumpDash;
-				jumpBufferTimer = 0;
-				return;
-			}
 		}
 
 		private void UpdateGroundActions()
@@ -1518,7 +1509,7 @@ namespace Project.Gameplay
 			{
 				castOffset = castOffset.Rotated(this.Down(), interval).Normalized() * CollisionRadius;
 				RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
-				Debug.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
+				DebugManager.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
 				if (ValidateGroundCast(ref hit))
 				{
 					if (!groundHit)
@@ -1666,7 +1657,7 @@ namespace Project.Gameplay
 				castVector += GetMovementDirection() * MoveSpeed * PhysicsManager.physicsDelta;
 
 			RaycastHit ceilingHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
-			Debug.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
+			DebugManager.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
 
 			if (ceilingHit)
 			{
@@ -1714,7 +1705,7 @@ namespace Project.Gameplay
 			IsOnWall = false;
 			if (Mathf.IsZeroApprox(MoveSpeed)) //No movement
 			{
-				Debug.DrawRay(CenterPosition, castVector * CollisionRadius, Colors.White);
+				DebugManager.DrawRay(CenterPosition, castVector * CollisionRadius, Colors.White);
 				return;
 			}
 
@@ -1722,7 +1713,7 @@ namespace Project.Gameplay
 			float castLength = CollisionRadius + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
 
 			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
-			Debug.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
+			DebugManager.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
 
 			if (ValidateWallCast(ref wallHit))
 			{
@@ -1763,7 +1754,7 @@ namespace Project.Gameplay
 			float castLength = CollisionRadius + COLLISION_PADDING + Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
 
 			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
-			Debug.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
+			DebugManager.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
 
 			if (ValidateWallCast(ref wallHit))
 				StrafeSpeed = 0;

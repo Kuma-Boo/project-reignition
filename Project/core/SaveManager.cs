@@ -446,8 +446,8 @@ namespace Project.Core
 				}
 			}
 
-			//Debug game data
-			if (CheatManager.UseDebugSave) //For testing
+			// Debug game data
+			if (DebugManager.Instance.UseDebugSave) //For testing
 			{
 				ActiveSaveSlotIndex = 0;
 				GameSaveSlots[ActiveSaveSlotIndex] = new GameData()
