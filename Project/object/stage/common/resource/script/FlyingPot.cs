@@ -25,17 +25,20 @@ namespace Project.Gameplay.Objects
 		private Area3D lockonArea;
 		[Export]
 		private CollisionShape3D environmentCollider;
+		[Export]
+		private AnimationTree animationTree;
+		[Export]
+		private AudioStreamPlayer enterSFX;
+		[Export]
+		private AudioStreamPlayer exitSFX;
 		private CameraTrigger cameraTrigger;
 
-		[ExportGroup("Animation")]
-		[Export]
-		private AnimationPlayer interactionAnimator;
-		[Export]
-		private AnimationPlayer wingAnimator;
-		[Export]
-		private bool canTransitionToFalling; //Animator parameter to sync falling transition
-		[Export]
-		private bool isFalling; //Animator parameter to check falling status
+
+		private AnimationNodeStateMachinePlayback WingStatePlayback => animationTree.Get(WING_STATE_PLAYBACK_PARAMETER).Obj as AnimationNodeStateMachinePlayback;
+		private readonly StringName ACTION_TRIGGER = "parameters/action_trigger/request";
+		private readonly StringName WING_STATE_PLAYBACK_PARAMETER = "parameters/wing_state/playback";
+		private readonly StringName FLAP_STATE = "pot-flap";
+		private readonly StringName IDLE_STATE = "pot-idle";
 
 		private bool isProcessing;
 		private bool isControllingPlayer;
@@ -49,12 +52,12 @@ namespace Project.Gameplay.Objects
 		private Vector2 localPosition;
 
 		private const float MAX_GRAVITY = -10.0f;
-		private const float GRAVITY_SCALE = 0.26f;
-		private const float WING_POWER = 4.0f;
+		private const float WING_ACCELERATION = 4f;
 		private const float MAX_SPEED = 12.0f;
 		private const float ROTATION_SPEED = .1f;
 		private const float MAX_ANGLE = Mathf.Pi * .2f;
-		private const float FLAP_INTERVAL = .32f; //How fast can the player flap?
+		private const float FLAP_INTERVAL = .5f; // How long is a single flap?
+		private const float FLAP_ACCELERATION_LENGTH = .4f; // How long does a flap accelerate?
 
 		public CharacterController Character => CharacterController.instance;
 
@@ -62,6 +65,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (Engine.IsEditorHint()) return;
 
+			animationTree.Active = true;
 			StageSettings.instance.ConnectRespawnSignal(this);
 
 			if (customCameraSettings != null) // Create the camera trigger
@@ -107,7 +111,7 @@ namespace Project.Gameplay.Objects
 			isEnteringPot = true;
 			environmentCollider.Disabled = true;
 
-			float jumpHeight = (GlobalPosition.Y + 1) - Character.GlobalPosition.Y;
+			float jumpHeight = GlobalPosition.Y + 1 - Character.GlobalPosition.Y;
 			jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
 			LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, root.GlobalPosition, jumpHeight, false);
 			settings.IsJump = true;
@@ -135,7 +139,8 @@ namespace Project.Gameplay.Objects
 			isControllingPlayer = true;
 			Character.StartExternal(this, root);
 			Character.Animator.Visible = false;
-			interactionAnimator.Play("enter");
+			animationTree.Set(ACTION_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			enterSFX.Play();
 		}
 
 		private void EjectPlayer()
@@ -154,7 +159,8 @@ namespace Project.Gameplay.Objects
 			Character.Animator.SnapRotation(Character.MovementAngle - Mathf.Pi * angleRatio);
 			Character.ResetMovementState();
 
-			interactionAnimator.Play("exit");
+			animationTree.Set(ACTION_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			exitSFX.Play();
 
 			if (cameraTrigger != null)
 				cameraTrigger.Deactivate();
@@ -171,21 +177,24 @@ namespace Project.Gameplay.Objects
 				return;
 			}
 
-			flapTimer = Mathf.MoveToward(flapTimer, 0, PhysicsManager.physicsDelta);
 
-			if (Mathf.IsZeroApprox(flapTimer) && Input.IsActionJustPressed("button_action")) //Move upwards
+			if (!Mathf.IsZeroApprox(flapTimer)) // Accelerate
 			{
 				if (velocity < 0)
-					velocity = 0;
+					velocity *= .2f;
 
-				velocity += WING_POWER;
-				if (velocity > MAX_SPEED)
-					velocity = MAX_SPEED;
-
-				wingAnimator.Play("flap");
-				wingAnimator.Seek(0.0);
+				flapTimer = Mathf.MoveToward(flapTimer, 0, PhysicsManager.physicsDelta);
+				if (flapTimer >= FLAP_ACCELERATION_LENGTH)
+					velocity += WING_ACCELERATION;
+			}
+			else if (Input.IsActionJustPressed("button_action")) // Move upwards
+			{
+				WingStatePlayback.Travel(FLAP_STATE);
 				flapTimer = FLAP_INTERVAL;
 			}
+
+			if (velocity > MAX_SPEED)
+				velocity = MAX_SPEED;
 		}
 
 		private void ApplyMovement()
@@ -197,20 +206,19 @@ namespace Project.Gameplay.Objects
 
 			localPosition.X = Mathf.Clamp(localPosition.X, -travelBounds.X + boundOffset, travelBounds.X + boundOffset);
 			localPosition.Y = Mathf.Clamp(localPosition.Y, 0f, travelBounds.Y);
-			if (Mathf.IsZeroApprox(localPosition.Y))
+
+			if (!Mathf.IsZeroApprox(localPosition.Y)) // Fall
+			{
+				// Update velocity
+				velocity -= Runtime.GRAVITY * PhysicsManager.physicsDelta; //Floaty fall
+				if (velocity < MAX_GRAVITY)
+					velocity = MAX_GRAVITY;
+			}
+			else if (velocity != 0) // Return to idle flapping
 			{
 				velocity = 0;
-
-				if (isFalling)
-					wingAnimator.Play("flap");
+				WingStatePlayback.Travel(IDLE_STATE);
 			}
-			else if (velocity < 0 && canTransitionToFalling)
-				wingAnimator.Play("fall"); //Start fall animation
-
-			//Update velocity
-			velocity -= Runtime.GRAVITY * GRAVITY_SCALE * PhysicsManager.physicsDelta; //Floaty fall
-			if (velocity < MAX_GRAVITY)
-				velocity = MAX_GRAVITY;
 
 			if (!isControllingPlayer)
 				angle = Mathf.Lerp(angle, 0f, ROTATION_SPEED);
