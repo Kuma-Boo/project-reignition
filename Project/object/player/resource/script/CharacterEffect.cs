@@ -187,6 +187,9 @@ namespace Project.Gameplay
 		/// <summary> Plays FXs that occur the moment a foot strikes the ground (i.e. SFX, Footprints, etc.). </summary>
 		public void PlayFootstepFX(bool isRightFoot)
 		{
+			if (Mathf.IsZeroApprox(CharacterController.instance.MoveSpeed)) // Probably called during a blend to idle state; Ignore.
+				return;
+
 			footstepChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 0);
 			footstepChannel.Play();
 
