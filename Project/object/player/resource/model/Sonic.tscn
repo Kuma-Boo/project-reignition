@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=25 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="2_3qp24"]
@@ -7,17 +7,43 @@
 [ext_resource type="PackedScene" uid="uid://c2bl1sk5cfyq3" path="res://object/player/resource/particle/countdown/CountdownFlameParticle.tscn" id="4_js45q"]
 [ext_resource type="AnimationLibrary" uid="uid://dhcxjlduawy8d" path="res://object/player/resource/model/animation/ActionLibrary.gltf" id="5_21j6r"]
 [ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="5_a0jad"]
+[ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="6_kpqgu"]
 [ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="6_pf4ty"]
 [ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="8_7bg0r"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_iki8q"]
 [ext_resource type="Resource" uid="uid://ce3ywymj0dq0j" path="res://resource/preset/camera/common/InheritCam.tres" id="11_ihqo8"]
+[ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
 min_value = 1.0
 max_value = 2.0
 _data = [Vector2(0, 1.2), 0.0, 0.0, 0, 0, Vector2(0.5, 1.7), 1.5, 1.5, 0, 0, Vector2(0.8, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.4), -6.5, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="Curve" id="Curve_2rxkn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_j53km"]
+width = 64
+curve = SubResource("Curve_2rxkn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ny081"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 0.1
+initial_velocity_max = 0.5
+gravity = Vector3(0, -1, 0)
+damping_min = 0.1
+damping_max = 0.5
+scale_min = 0.1
+scale_curve = SubResource("CurveTexture_j53km")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vcbic"]
+material = ExtResource("6_kpqgu")
+size = Vector2(0.1, 0.1)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6smkh"]
 
@@ -202,15 +228,30 @@ bone_name = "chest"
 bone_idx = 5
 
 [node name="FlameOffset" type="Node3D" parent="SonicRoot/GeneralSkeleton/ChestAttachment" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0, 0.1)
+transform = Transform3D(1, -9.31323e-09, 0, 3.72529e-09, 1, 0, 4.47035e-08, 2.23517e-08, 1, 0.02, -1.49012e-07, 0.1)
 
 [node name="CountdownBoostParticle" parent="SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset" index="0" instance=ExtResource("3_hb6te")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 visible = false
 
 [node name="CountdownFlameParticle" parent="SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset" index="1" instance=ExtResource("4_js45q")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 visible = false
+
+[node name="Embers" type="GPUParticles3D" parent="SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset" index="2"]
+transform = Transform3D(1, -2.79123e-13, 2.84217e-13, -1.33353e-14, 1, 0, -2.84217e-13, -2.22045e-15, 1, -3.1665e-08, 0.040546, 0)
+visible = false
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_ny081")
+draw_pass_1 = SubResource("QuadMesh_vcbic")
 
 [node name="RFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="5"]
 transform = Transform3D(1, -6.92779e-14, -5.1853e-13, 5.12881e-13, 9.54606e-08, 0.999999, -1.77636e-14, -0.999998, 1.13156e-07, -0.0397276, 0.155469, 0.00205613)
@@ -244,17 +285,17 @@ libraries = {
 }
 
 [node name="CountdownRoot" type="Node3D" parent="." index="4"]
-transform = Transform3D(0.97237, 0, 0.233445, 0, 1, 0, -0.233445, 0, 0.97237, 0, 0, 0)
+transform = Transform3D(0.906307, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906307, 0, 0, 0)
 
-[node name="CountdownPosition" type="Node3D" parent="CountdownRoot" index="0"]
+[node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" index="0"]
+stream = ExtResource("12_3lyoq")
+bus = &"SFX"
+
+[node name="CountdownPosition" type="Node3D" parent="CountdownRoot" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.939692, -0.34202, 0, 0.34202, 0.939692, 0, 0, 0)
 script = ExtResource("10_iki8q")
 UpdateEveryFrame = true
 settings = ExtResource("11_ihqo8")
-
-[node name="Camera" type="Camera3D" parent="CountdownRoot/CountdownPosition" index="0"]
-visible = false
-cull_mask = 32767
-current = true
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 active = false
