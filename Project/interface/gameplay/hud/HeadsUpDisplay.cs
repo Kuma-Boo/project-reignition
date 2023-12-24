@@ -254,7 +254,7 @@ namespace Project.Gameplay
 				isSoulGaugeCharged = true;
 				soulGaugeAnimator.Play("charged");
 			}
-			else if (isSoulGaugeCharged && !isCharged)
+			else if (!isCharged)
 			{
 				//Lost charge
 				isSoulGaugeCharged = false;
