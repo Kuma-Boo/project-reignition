@@ -22,7 +22,7 @@ namespace Project.Gameplay.Triggers
 			Character.Effect.PlayVoice("fall");
 
 			if (triggerType == TriggerType.Water)
-				Character.Effect.PlaySplashFX();
+				Character.Effect.PlayLandingWaterFX();
 		}
 	}
 }

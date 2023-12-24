@@ -10,23 +10,30 @@ namespace Project.Editor.CustomNodes
 	{
 		[Export]
 		public Array<GpuParticles3D> subSystems;
+		public bool IsGroupEmitting { get; private set; }
 
-		public bool IsActive { get; private set; }
+		public void SetEmitting(bool value)
+		{
+			for (int i = 0; i < subSystems.Count; i++)
+				subSystems[i].Emitting = value;
 
-		public void StartParticles()
+			Emitting = value;
+		}
+
+		public void RestartGroup()
 		{
 			for (int i = 0; i < subSystems.Count; i++)
 				subSystems[i].Restart();
 
 			Restart();
-			IsActive = true;
+			IsGroupEmitting = true;
 		}
 
 		public override void _PhysicsProcess(double delta)
 		{
 			base._PhysicsProcess(delta);
 
-			if (!IsActive) return;
+			if (!IsGroupEmitting) return;
 
 			if (subSystems != null)
 			{
@@ -37,7 +44,7 @@ namespace Project.Editor.CustomNodes
 				}
 			}
 
-			IsActive = Emitting;
+			IsGroupEmitting = Emitting;
 		}
 	}
 }

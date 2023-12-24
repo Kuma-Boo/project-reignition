@@ -78,19 +78,16 @@ namespace Project.Gameplay
 		public void StartTimeBreak() => timeBreakAnimator.Play("start");
 		public void StopTimeBreak() => timeBreakAnimator.Play("stop");
 
-		//Materials (footsteps, landing, etc)
 		[ExportGroup("Ground Interactions")]
+		// SFX for different ground materials (footsteps, landing, etc)
 		[Export]
 		private SFXLibraryResource materialSFXLibrary;
-		/// <summary> VFX for landing with a dust cloud. </summary>
-		[Export]
-		private GpuParticles3D landingDustParticle;
-		[Export]
-		private AudioStreamPlayer footstepChannel;
 		[Export]
 		private Node3D rightFoot;
 		[Export]
 		private Node3D leftFoot;
+		[Export]
+		private AudioStreamPlayer footstepChannel;
 		[Export]
 		private AudioStreamPlayer landingChannel;
 		/// <summary> Index of the current type of ground the player is walking on. </summary>
@@ -104,12 +101,10 @@ namespace Project.Gameplay
 			switch (groundKeyIndex)
 			{
 				case 6: // Water
-					PlaySplashFX();
+					PlayLandingWaterFX();
 					break;
 				default:
-					landingChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 1);
-					landingChannel.Play();
-					landingDustParticle.Restart();
+					PlayLandingDustFX();
 					break;
 			}
 		}
@@ -119,13 +114,26 @@ namespace Project.Gameplay
 		/// Plays water splash sfx and vfx.
 		/// </summary>
 		[Export]
-		private Editor.CustomNodes.GpuParticles3DGroup splashParticle;
-		public void PlaySplashFX()
+		private Editor.CustomNodes.GpuParticles3DGroup landingWaterParticle;
+		public void PlayLandingWaterFX()
 		{
 			PlayActionSFX("splash");
-			splashParticle.StartParticles();
+			landingWaterParticle.RestartGroup();
 		}
 
+
+		/// <summary> VFX for landing with a dust cloud. </summary>
+		[Export]
+		private GpuParticles3D landingDustParticle;
+		private void PlayLandingDustFX()
+		{
+			landingChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 1);
+			landingChannel.Play();
+			landingDustParticle.Restart();
+		}
+
+
+		/// <summary> Plays FXs that occur the moment a foot strikes the ground (i.e. SFX, Footprints, etc.). </summary>
 		public void PlayFootstepFX(bool isRightFoot)
 		{
 			footstepChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 0);
@@ -136,19 +144,17 @@ namespace Project.Gameplay
 
 			switch (groundKeyIndex)
 			{
-				case 1:
-					CreateSandFootFX(spawnTransform); // Check if the ground key is 1 (Corresponds to sand)
+				case 1: // Sand
+					CreateSandFootFX(spawnTransform); // Create a footprint
 					break;
-				case 6:
-					CreateSplashFootFX(isRightFoot);
+				case 6: // Water
+					CreateSplashFootFX(isRightFoot); // Create a ripple at the player's foot
 					break;
-				default: // TODO Create basic dust
+				default:
 					break;
 			}
 		}
 
-
-		#region Footsteps and footprints
 		[Export]
 		private PackedScene footprintDecal;
 		private List<Node3D> footprintDecalList = new List<Node3D>();
@@ -188,29 +194,47 @@ namespace Project.Gameplay
 
 			uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
 			waterStep.EmitParticle(waterStep.GlobalTransform, CharacterController.instance.Velocity * .2f, Colors.White, Colors.White, flags);
-
-			//Vector3 splashVelocity = CharacterController.instance.Velocity * .1f + Vector3.Up * 5;
-			//for (int i = 0; i < 8; i++)
-			//	waterStep.subSystems[0].EmitParticle(Transform3D.Identity, Vector3.Zero, Colors.White, Colors.White, 0);
 		}
 
-		private void UpdateRunningDust(bool isEnabled)
+
+		[Export]
+		/// <summary> Emitters responsible for dust when moving on the ground. </summary>
+		private Editor.CustomNodes.GpuParticles3DGroup[] stepEmitters;
+		/// <summary> Index of the current step emitter. </summary>
+		private int currentStepEmitter = -1;
+		/// <summary> Is step dust be emitted? </summary>
+		public bool IsEmittingStepDust
 		{
-			switch (groundKeyIndex)
+			get => currentStepEmitter != -1;
+			set
 			{
-				case 1: // Sand footdust
-					break;
-				case 6: // Water splash
-					break;
-				default: // TODO Create basic dust
-					break;
+				if ((value && currentStepEmitter == groundKeyIndex) || (!value && !IsEmittingStepDust)) // Unnecessary assignment; return early
+					return;
+
+				// Start by disabling any current emission (if applicable)
+				if (IsEmittingStepDust && stepEmitters.Length > currentStepEmitter && stepEmitters[currentStepEmitter] != null)
+					stepEmitters[currentStepEmitter].SetEmitting(false);
+
+				if (!value) // Disabling emitters, return early
+				{
+					currentStepEmitter = -1;
+					return;
+				}
+
+				currentStepEmitter = groundKeyIndex; // Update current step emitter based on current ground type
+
+				if (stepEmitters.Length - 1 < currentStepEmitter || stepEmitters[currentStepEmitter] == null) // Validate that step emitter exists
+					return;
+
+				// Start the emitter
+				stepEmitters[currentStepEmitter].SetEmitting(true);
 			}
 		}
-		#endregion
+
 
 		public void UpdateGroundType(Node collision)
 		{
-			//Loop through material keys and see if anything matches
+			// Loop through material keys and see if anything matches
 			for (int i = 0; i < materialSFXLibrary.KeyCount; i++)
 			{
 				if (!collision.IsInGroup(materialSFXLibrary.GetKeyByIndex(i))) continue;
@@ -219,10 +243,10 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (groundKeyIndex != 0) //Avoid being spammed with warnings
+			if (groundKeyIndex != 0) // Avoid being spammed with warnings
 			{
 				GD.PrintErr($"'{collision.Name}' isn't in any sound groups found in CharacterSound.cs.");
-				groundKeyIndex = 0; //Default to first key is the default (pavement)
+				groundKeyIndex = 0; // Default to first key (pavement)
 			}
 		}
 

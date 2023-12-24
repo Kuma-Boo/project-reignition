@@ -4,7 +4,7 @@ using Project.Gameplay.Triggers;
 namespace Project.Gameplay
 {
 	/// <summary>
-	/// Responsible for playing the player's animations and visual effects.
+	/// Responsible for playing the player's animations.
 	/// </summary>
 	public partial class CharacterAnimator : Node3D
 	{
@@ -153,6 +153,8 @@ namespace Project.Gameplay
 		private const float IDLE_SMOOTHING = .05f;
 		private void GroundAnimations()
 		{
+			Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
+
 			//TODO Speed break animation
 			if (Character.Skills.IsSpeedBreakCharging) return;
 
@@ -301,6 +303,8 @@ namespace Project.Gameplay
 
 		private void AirAnimations()
 		{
+			Character.Effect.IsEmittingStepDust = false; // Don't emit step dust in the air
+
 			if (canTransitionToFalling)
 			{
 				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
