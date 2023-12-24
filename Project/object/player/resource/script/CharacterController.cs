@@ -1844,6 +1844,7 @@ namespace Project.Gameplay
 
 		private void OnLevelCompleted()
 		{
+			ResetActionState();
 			// Disable everything
 			Lockon.IsMonitoring = false;
 			Skills.IsTimeBreakEnabled = false;
