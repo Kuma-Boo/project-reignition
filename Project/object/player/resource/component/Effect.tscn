@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=31 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -10,10 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://d4niu0q5cqdvj" path="res://object/player/resource/effect/landing/LandingWaterParticle.tscn" id="10_8wlk5"]
 [ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/effect/landing/LandingDustParticle.tscn" id="11_kh13g"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
+[ext_resource type="PackedScene" uid="uid://bmx51bju4lg72" path="res://object/player/resource/effect/landing/LandingSandParticle.tscn" id="11_un14r"]
 [ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/effect/step/WaterStepRing.tscn" id="12_d83uw"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="12_j6i3j"]
 [ext_resource type="PackedScene" uid="uid://bskjectn3e0tg" path="res://object/player/resource/effect/step/PavementStepDust.tscn" id="13_bll1l"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="14_6clfa"]
+[ext_resource type="PackedScene" uid="uid://bwy4awbkt5ftv" path="res://object/player/resource/effect/step/SandStepDust.tscn" id="14_30qhf"]
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/timebreak.png" id="15_p7iiw"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
@@ -223,7 +225,7 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "dustParticle", "footstepChannel", "landingChannel", "landingWaterParticle", "landingDustParticle", "waterStep", "stepEmitters", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "dustParticle", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -235,11 +237,12 @@ dustParticle = NodePath("VFX/ActionFX/DustParticle")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
+landingSandParticle = NodePath("VFX/LandingFX/LandingSandParticle")
 landingWaterParticle = NodePath("VFX/LandingFX/LandingWaterParticle")
 landingDustParticle = NodePath("VFX/LandingFX/LandingDustParticle")
+stepEmitters = [NodePath("VFX/StepFX/PavementStepDust"), NodePath("VFX/StepFX/SandStepDust")]
 footprintDecal = ExtResource("4_8hf43")
 waterStep = NodePath("VFX/StepFX/WaterStepRing")
-stepEmitters = [NodePath("VFX/StepFX/PavementStepDust")]
 voiceLibrary = ExtResource("33_pyanb")
 voiceChannel = NodePath("SFX/VoiceChannel")
 
@@ -284,6 +287,8 @@ skeleton = NodePath("../..")
 
 [node name="LandingWaterParticle" parent="VFX/LandingFX" instance=ExtResource("10_8wlk5")]
 
+[node name="LandingSandParticle" parent="VFX/LandingFX" instance=ExtResource("11_un14r")]
+
 [node name="LandingDustParticle" parent="VFX/LandingFX" instance=ExtResource("11_kh13g")]
 
 [node name="StepFX" type="Node3D" parent="VFX"]
@@ -291,6 +296,8 @@ skeleton = NodePath("../..")
 [node name="WaterStepRing" parent="VFX/StepFX" instance=ExtResource("12_d83uw")]
 
 [node name="PavementStepDust" parent="VFX/StepFX" instance=ExtResource("13_bll1l")]
+
+[node name="SandStepDust" parent="VFX/StepFX" instance=ExtResource("14_30qhf")]
 
 [node name="ScreenShock" type="ColorRect" parent="VFX"]
 visible = false

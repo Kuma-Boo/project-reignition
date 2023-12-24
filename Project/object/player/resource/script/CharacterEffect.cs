@@ -100,6 +100,9 @@ namespace Project.Gameplay
 		{
 			switch (groundKeyIndex)
 			{
+				case 1: // Sand
+					PlayLandingSandFX();
+					break;
 				case 6: // Water
 					PlayLandingWaterFX();
 					break;
@@ -107,6 +110,18 @@ namespace Project.Gameplay
 					PlayLandingDustFX();
 					break;
 			}
+		}
+
+
+		[ExportSubgroup("Landing VFX")]
+		/// <summary> Sand landing VFX. </summary>
+		[Export]
+		private GpuParticles3D landingSandParticle;
+		private void PlayLandingSandFX()
+		{
+			landingChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 1);
+			landingChannel.Play();
+			landingSandParticle.Restart();
 		}
 
 
@@ -130,6 +145,42 @@ namespace Project.Gameplay
 			landingChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(groundKeyIndex), 1);
 			landingChannel.Play();
 			landingDustParticle.Restart();
+		}
+
+
+		[ExportSubgroup("Step VFX")]
+		[Export]
+		/// <summary> Emitters responsible for dust when moving on the ground. </summary>
+		private Editor.CustomNodes.GpuParticles3DGroup[] stepEmitters;
+		/// <summary> Index of the current step emitter. </summary>
+		private int currentStepEmitter = -1;
+		/// <summary> Is step dust be emitted? </summary>
+		public bool IsEmittingStepDust
+		{
+			get => currentStepEmitter != -1;
+			set
+			{
+				if ((value && currentStepEmitter == groundKeyIndex) || (!value && !IsEmittingStepDust)) // Unnecessary assignment; return early
+					return;
+
+				// Start by disabling any current emission (if applicable)
+				if (IsEmittingStepDust && stepEmitters.Length > currentStepEmitter && stepEmitters[currentStepEmitter] != null)
+					stepEmitters[currentStepEmitter].SetEmitting(false);
+
+				if (!value) // Disabling emitters, return early
+				{
+					currentStepEmitter = -1;
+					return;
+				}
+
+				currentStepEmitter = groundKeyIndex; // Update current step emitter based on current ground type
+
+				if (stepEmitters.Length - 1 < currentStepEmitter || stepEmitters[currentStepEmitter] == null) // Validate that step emitter exists
+					return;
+
+				// Start the emitter
+				stepEmitters[currentStepEmitter].SetEmitting(true);
+			}
 		}
 
 
@@ -194,41 +245,6 @@ namespace Project.Gameplay
 
 			uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
 			waterStep.EmitParticle(waterStep.GlobalTransform, CharacterController.instance.Velocity * .2f, Colors.White, Colors.White, flags);
-		}
-
-
-		[Export]
-		/// <summary> Emitters responsible for dust when moving on the ground. </summary>
-		private Editor.CustomNodes.GpuParticles3DGroup[] stepEmitters;
-		/// <summary> Index of the current step emitter. </summary>
-		private int currentStepEmitter = -1;
-		/// <summary> Is step dust be emitted? </summary>
-		public bool IsEmittingStepDust
-		{
-			get => currentStepEmitter != -1;
-			set
-			{
-				if ((value && currentStepEmitter == groundKeyIndex) || (!value && !IsEmittingStepDust)) // Unnecessary assignment; return early
-					return;
-
-				// Start by disabling any current emission (if applicable)
-				if (IsEmittingStepDust && stepEmitters.Length > currentStepEmitter && stepEmitters[currentStepEmitter] != null)
-					stepEmitters[currentStepEmitter].SetEmitting(false);
-
-				if (!value) // Disabling emitters, return early
-				{
-					currentStepEmitter = -1;
-					return;
-				}
-
-				currentStepEmitter = groundKeyIndex; // Update current step emitter based on current ground type
-
-				if (stepEmitters.Length - 1 < currentStepEmitter || stepEmitters[currentStepEmitter] == null) // Validate that step emitter exists
-					return;
-
-				// Start the emitter
-				stepEmitters[currentStepEmitter].SetEmitting(true);
-			}
 		}
 
 
