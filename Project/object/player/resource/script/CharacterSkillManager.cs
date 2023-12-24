@@ -308,6 +308,7 @@ namespace Project.Gameplay
 
 			if (IsSpeedBreakActive)
 			{
+				Character.Effect.ScreenShockFX();
 				Character.Effect.PlayVoice("speed break");
 				Character.CollisionMask = Runtime.Instance.environmentMask; //Don't collide with any objects
 			}

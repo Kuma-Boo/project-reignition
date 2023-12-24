@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=20 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -10,6 +10,7 @@
 [ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/particle/material/Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://core/custom nodes/Trail3D.cs" id="10_1mog6"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/particle/material/Spin Material.tres" id="11_lk1sb"]
+[ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="12_j6i3j"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
@@ -18,12 +19,91 @@ height = 0.8
 radial_segments = 32
 rings = 16
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
+[sub_resource type="Gradient" id="Gradient_tqkgi"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.5, 0.762646, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0q2jh"]
+gradient = SubResource("Gradient_tqkgi")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q05ck"]
+shader = ExtResource("12_j6i3j")
+shader_parameter/wave_count = 20.0
+shader_parameter/speed = 30.0
+shader_parameter/height = 0.0
+shader_parameter/factor_texture = SubResource("GradientTexture2D_0q2jh")
+
+[sub_resource type="Animation" id="Animation_45gst"]
+resource_name = "shock"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScreenShock:material:shader_parameter/height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"update": 0,
+"values": [0.0, 0.1, 0.05, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScreenShock:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_d5ix5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScreenShock:material:shader_parameter/height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScreenShock:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5ilpv"]
+_data = {
+"RESET": SubResource("Animation_d5ix5"),
+"shock": SubResource("Animation_45gst")
+}
+
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
 trailFX = NodePath("VFX/TrailMesh")
 spinFX = NodePath("VFX/SpinMesh")
+screenShockAnimator = NodePath("VFX/ScreenShock/AnimationPlayer")
 materialSFXLibrary = ExtResource("5_h4i1s")
 landingDustParticle = NodePath("VFX/LandingDustParticle")
 footstepChannel = NodePath("SFX/FootstepChannel")
@@ -68,3 +148,20 @@ material_override = ExtResource("11_lk1sb")
 transparency = 1.0
 cast_shadow = 0
 mesh = SubResource("SphereMesh_0nuab")
+
+[node name="ScreenShock" type="ColorRect" parent="VFX"]
+material = SubResource("ShaderMaterial_q05ck")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(960, 540)
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VFX/ScreenShock"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_5ilpv")
+}

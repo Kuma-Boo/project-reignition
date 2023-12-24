@@ -48,6 +48,8 @@ namespace Project.Gameplay
 		public Trail3D trailFX;
 		[Export]
 		public MeshInstance3D spinFX;
+		[Export]
+		private AnimationPlayer screenShockAnimator;
 
 		public void StartTrailFX()
 		{
@@ -57,6 +59,12 @@ namespace Project.Gameplay
 		public void StopTrailFX()
 		{
 			trailFX.IsEmitting = false;
+		}
+
+		public void ScreenShockFX()
+		{
+			screenShockAnimator.Play("shock");
+			screenShockAnimator.Seek(0.0, true);
 		}
 
 
