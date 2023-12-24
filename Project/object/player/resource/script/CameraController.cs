@@ -63,7 +63,7 @@ namespace Project.Gameplay
 		}
 
 
-		public void UpdateCamera()
+		public override void _Process(double _)
 		{
 			PathFollower.Resync();
 
@@ -193,7 +193,7 @@ namespace Project.Gameplay
 			}
 
 			float influence = Mathf.MoveToward(CameraBlendList[blendIndex].LinearInfluence, 1f,
-				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.physicsDelta);
+				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.normalDelta);
 			CameraBlendList[blendIndex].SetInfluence(influence);
 		}
 
@@ -228,7 +228,7 @@ namespace Project.Gameplay
 				data.horizontalTrackingOffset = Mathf.Lerp(data.horizontalTrackingOffset, iData.horizontalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
 				data.verticalTrackingOffset = Mathf.Lerp(data.verticalTrackingOffset, iData.verticalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
 
-				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.isStaticCamera ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
+				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.useStaticPosition ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 
 				if (CameraBlendList[i].Trigger != null)
@@ -289,7 +289,7 @@ namespace Project.Gameplay
 			float targetYawAngle = settings.yawAngle;
 			float targetPitchAngle = settings.pitchAngle;
 
-			if (!settings.isStaticCamera)
+			if (!settings.useStaticPosition)
 			{
 				// Calculate distance
 				float targetDistance = settings.distance;
@@ -398,18 +398,23 @@ namespace Project.Gameplay
 			{
 				data.precalculatedPosition = data.blendData.StaticPosition;
 
-				Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
-				data.blendData.distance = delta.Length();
-				delta = delta.Normalized();
+				if (settings.copyRotation) // Override rotation w/ inherited basis
+					data.offsetBasis = data.blendData.RotationBasis;
+				else
+				{
+					Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
+					data.blendData.distance = delta.Length();
+					delta = delta.Normalized();
 
-				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					targetYawAngle += delta.Flatten().AngleTo(Vector2.Up) + Mathf.Pi;
-				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						targetYawAngle += delta.Flatten().AngleTo(Vector2.Up) + Mathf.Pi;
+					if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 
-				data.blendData.yawAngle = targetYawAngle;
-				data.blendData.pitchAngle = targetPitchAngle;
-				data.CalculateBasis();
+					data.blendData.yawAngle = targetYawAngle;
+					data.blendData.pitchAngle = targetPitchAngle;
+					data.CalculateBasis();
+				}
 			}
 
 			if (!data.blendData.WasInitialized)
@@ -508,17 +513,17 @@ namespace Project.Gameplay
 				targetMoveSpeed *= .5f;
 
 			if (Input.IsKeyPressed(Key.E))
-				Camera.GlobalTranslate(Camera.Up() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				Camera.GlobalTranslate(Camera.Up() * targetMoveSpeed * PhysicsManager.normalDelta);
 			if (Input.IsKeyPressed(Key.Q))
-				Camera.GlobalTranslate(Camera.Down() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				Camera.GlobalTranslate(Camera.Down() * targetMoveSpeed * PhysicsManager.normalDelta);
 			if (Input.IsKeyPressed(Key.W))
-				Camera.GlobalTranslate(Camera.Back() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				Camera.GlobalTranslate(Camera.Back() * targetMoveSpeed * PhysicsManager.normalDelta);
 			if (Input.IsKeyPressed(Key.S))
-				Camera.GlobalTranslate(Camera.Forward() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				Camera.GlobalTranslate(Camera.Forward() * targetMoveSpeed * PhysicsManager.normalDelta);
 			if (Input.IsKeyPressed(Key.D))
-				Camera.GlobalTranslate(Camera.Right() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				Camera.GlobalTranslate(Camera.Right() * targetMoveSpeed * PhysicsManager.normalDelta);
 			if (Input.IsKeyPressed(Key.A))
-				Camera.GlobalTranslate(Camera.Left() * targetMoveSpeed * PhysicsManager.physicsDelta);
+				Camera.GlobalTranslate(Camera.Left() * targetMoveSpeed * PhysicsManager.normalDelta);
 
 			if (isFreeCamLocked)
 				Camera.GlobalTransform = freeCamLockedTransform;
@@ -587,7 +592,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.physicsDelta);
+			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.normalDelta);
 		}
 
 		/// <summary> [0 -> 1] Blend between offset and sample. </summary>
@@ -598,9 +603,8 @@ namespace Project.Gameplay
 		/// <summary> Camera's static position. Only used when CameraSettingsResource.ussStaticPosition is true. </summary>
 		public Vector3 StaticPosition { get; set; }
 
-
 		/// <summary> Camera's static rotation. Only used when CameraSettingsResource.useStaticRotation is true. </summary>
-		public Vector3 StaticRotation { get; set; }
+		public Basis RotationBasis { get; set; }
 
 		/// <summary> Current pitch angle. </summary>
 		public float pitchAngle;
@@ -624,7 +628,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DISTANCE_SMOOTHING * PhysicsManager.physicsDelta);
+			distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DISTANCE_SMOOTHING * PhysicsManager.normalDelta);
 		}
 
 		/// <summary> Has this blend data been processed before? </summary>

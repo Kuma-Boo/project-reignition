@@ -11,13 +11,15 @@
 [ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="8_7bg0r"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_iki8q"]
-[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="11_8klty"]
+[ext_resource type="Resource" uid="uid://ce3ywymj0dq0j" path="res://resource/preset/camera/common/InheritCam.tres" id="11_ihqo8"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
 min_value = 1.0
 max_value = 2.0
 _data = [Vector2(0, 1.2), 0.0, 0.0, 0, 0, Vector2(0.5, 1.7), 1.5, 1.5, 0, 0, Vector2(0.8, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.4), -6.5, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6smkh"]
 
 [sub_resource type="Animation" id="Animation_tuy1q"]
 length = 0.001
@@ -72,7 +74,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("CountdownCamera:position")
+tracks/4/path = NodePath("CountdownRoot/CountdownPosition:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -80,115 +82,6 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_g0fnl"]
-resource_name = "countdown"
-length = 4.0
-step = 0.0333333
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset/CountdownBoostParticle")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(3.06667),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset/CountdownBoostParticle:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 3.06667, 4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [false, true, false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset/CountdownFlameParticle:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 2.13333, 4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [false, true, false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset/CountdownFlameParticle:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 2.13333, 2.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.1, 0.1, 0.1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("CountdownCamera:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.666667, 1.5, 1.8, 2.53333, 2.8),
-"transitions": PackedFloat32Array(2, 0.5, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 2), Vector3(0, 0.5, 2), Vector3(0, 0.5, 1.9), Vector3(-0.05, 0.05, 1), Vector3(-0.05, 0.05, 1), Vector3(0, 0.4, 0.5)]
-}
-tracks/5/type = "bezier"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("CountdownCamera:rotation:y")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"handle_modes": PackedInt32Array(2, 2, 2, 2, 2, 2, 2),
-"points": PackedFloat32Array(0.837758, 0, 0, 0.222222, 0, 0.0872665, -0.194948, 0.116788, 0.201381, -0.120642, 0, -0.277778, 0.000191449, 0.172783, -0.000119084, 0.760034, -0.0440681, -0.0982824, 0.08521, 0.190038, 0.837758, -0.244435, 0.00233689, 0.178707, -0.00170851, -0.427705, -0.0799164, 0.0426124, 0.21145, -0.112747, -0.524, -0.4, 0, 0, 0),
-"times": PackedFloat32Array(0, 0.666666, 1.5, 1.8, 2.53333, 2.8, 4)
-}
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("CountdownCamera")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 4),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"Activate"
-}, {
-"args": [],
-"method": &"Deactivate"
-}]
-}
-tracks/7/type = "method"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Effect")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0.666667),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"PlayLandingFX"
-}]
 }
 
 [sub_resource type="Animation" id="Animation_3gene"]
@@ -226,16 +119,14 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r0udk"]
 _data = {
 "RESET": SubResource("Animation_tuy1q"),
-"countdown": SubResource("Animation_g0fnl"),
 "invincibility": SubResource("Animation_3gene"),
 "respawn": SubResource("Animation_ju8e7")
 }
 
-[node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer", "countdownCameraController") instance=ExtResource("1_ea3e1")]
+[node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer") instance=ExtResource("1_ea3e1")]
 script = ExtResource("2_3qp24")
 animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
-countdownCameraController = NodePath("CountdownCamera")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
 [node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot") instance=ExtResource("3_5mek6")]
@@ -339,6 +230,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.085, -0.15)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
 libraries = {
+"": SubResource("AnimationLibrary_6smkh"),
 "ActionLibrary": ExtResource("5_21j6r"),
 "BalanceLibrary": ExtResource("5_a0jad"),
 "EventLibrary": ExtResource("8_7bg0r"),
@@ -351,15 +243,23 @@ libraries = {
 "": SubResource("AnimationLibrary_r0udk")
 }
 
-[node name="CountdownCamera" type="Node3D" parent="." index="4"]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0, 0, 0)
+[node name="CountdownRoot" type="Node3D" parent="." index="4"]
+transform = Transform3D(0.97237, 0, 0.233445, 0, 1, 0, -0.233445, 0, 0.97237, 0, 0, 0)
+
+[node name="CountdownPosition" type="Node3D" parent="CountdownRoot" index="0"]
 script = ExtResource("10_iki8q")
 UpdateEveryFrame = true
-settings = ExtResource("11_8klty")
+settings = ExtResource("11_ihqo8")
+
+[node name="Camera" type="Camera3D" parent="CountdownRoot/CountdownPosition" index="0"]
+visible = false
+cull_mask = 32767
+current = true
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 active = false
 libraries = {
+"": SubResource("AnimationLibrary_6smkh"),
 "ActionLibrary": ExtResource("5_21j6r"),
 "BalanceLibrary": ExtResource("5_a0jad"),
 "EventLibrary": ExtResource("8_7bg0r"),

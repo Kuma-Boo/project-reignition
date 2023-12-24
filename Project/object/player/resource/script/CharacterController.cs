@@ -41,7 +41,6 @@ namespace Project.Gameplay
 
 			Animator.UpdateAnimation();
 			Skills.UpdateSoulSkills();
-			Camera.UpdateCamera();
 		}
 
 		#region State Machine

@@ -11,9 +11,6 @@ namespace Project.Interface
 		public delegate void CountdownStartedEventHandler();
 		[Signal]
 		public delegate void CountdownFinishedEventHandler();
-		/// <summary> Signal that gets called when the player "lands". </summary>
-		[Signal]
-		public delegate void CountdownLandedEventHandler();
 
 		[Export]
 		private Node2D tickParent;
@@ -36,11 +33,6 @@ namespace Project.Interface
 			IsCountdownActive = true;
 			EmitSignal(SignalName.CountdownStarted);
 		}
-
-		/// <summary>
-		/// Play vfx/sfx during countdown.
-		/// </summary>
-		public void CountdownCharacterLanded() => EmitSignal(SignalName.CountdownLanded);
 
 		public void FinishCountdown()
 		{

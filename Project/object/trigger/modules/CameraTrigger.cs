@@ -34,12 +34,16 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
 		private CameraSettingsResource previousSettings;
 		private Vector3 previousStaticPosition;
+		private Basis previousStaticRotation;
 		private CameraController Camera => Character.Camera;
 
 		public void UpdateStaticData(CameraBlendData data)
 		{
-			if (data.SettingsResource.isStaticCamera)
+			if (data.SettingsResource.useStaticPosition)
 				data.StaticPosition = GlobalPosition;
+
+			if (data.SettingsResource.copyRotation)
+				data.RotationBasis = GlobalBasis;
 		}
 
 
@@ -55,6 +59,7 @@ namespace Project.Gameplay.Triggers
 			{
 				previousSettings = Camera.ActiveSettings;
 				previousStaticPosition = Camera.ActiveBlendData.StaticPosition; // Cache static position
+				previousStaticRotation = Camera.ActiveBlendData.RotationBasis; // Cache static rotation
 			}
 
 			Camera.UpdateCameraSettings(new CameraBlendData()
@@ -80,6 +85,7 @@ namespace Project.Gameplay.Triggers
 				BlendTime = Mathf.IsEqualApprox(deactivationTransitionTime, -1) ? transitionTime : deactivationTransitionTime,
 				SettingsResource = previousSettings,
 				StaticPosition = previousStaticPosition, // Restore cached static position
+				RotationBasis = previousStaticRotation // Restore cached static rotation
 			});
 		}
 	}

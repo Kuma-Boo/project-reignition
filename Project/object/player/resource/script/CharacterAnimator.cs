@@ -62,13 +62,10 @@ namespace Project.Gameplay
 		private AnimationNodeOneShot oneShotTransition;
 		/// <summary> Animation index for countdown animation. </summary>
 		private readonly StringName COUNTDOWN_ANIMATION = "countdown";
-		[Export]
-		private CameraTrigger countdownCameraController;
 
 		public void PlayCountdown()
 		{
 			PlayOneshotAnimation(COUNTDOWN_ANIMATION);
-			eventAnimationPlayer.Play(COUNTDOWN_ANIMATION);
 
 			//Prevent sluggish transitions into gameplay
 			DisabledSpeedSmoothing = true;
@@ -91,11 +88,12 @@ namespace Project.Gameplay
 		public void CancelOneshot(float fadeout = 0)
 		{
 			oneShotTransition.FadeOutTime = fadeout;
-			animationTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
 			// Abort accidental landing animations
-			if (!Character.JustLandedOnGround)
+			if (!Character.JustLandedOnGround || Mathf.IsZeroApprox(fadeout))
 				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			else
+				animationTree.Set(ONESHOT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 		}
 		#endregion
 

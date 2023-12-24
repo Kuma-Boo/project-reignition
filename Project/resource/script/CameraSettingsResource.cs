@@ -9,6 +9,7 @@ namespace Project.Gameplay
 	{
 		#region Editor
 		private const string STATIC_CAMERA_KEY = "Static Camera Enabled";
+		private const string COPY_ROTATION_KEY = "Copy Rotation";
 
 		private const string DISTANCE_KEY = "Distance/Distance";
 		private const string BACKSTEP_DISTANCE_KEY = "Distance/Backstep Distance";
@@ -33,7 +34,7 @@ namespace Project.Gameplay
 			Array<Dictionary> properties = new Array<Dictionary>();
 
 			properties.Add(ExtensionMethods.CreateProperty(STATIC_CAMERA_KEY, Variant.Type.Bool));
-			if (!isStaticCamera)
+			if (!useStaticPosition)
 			{
 				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
 				properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
@@ -49,12 +50,18 @@ namespace Project.Gameplay
 					properties.Add(ExtensionMethods.CreateProperty(HALL_ROTATION_KEY, Variant.Type.Bool));
 				}
 			}
+			else
+				properties.Add(ExtensionMethods.CreateProperty(COPY_ROTATION_KEY, Variant.Type.Bool));
 
-			properties.Add(ExtensionMethods.CreateProperty(PITCH_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
-			properties.Add(ExtensionMethods.CreateProperty(YAW_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
-			properties.Add(ExtensionMethods.CreateProperty(PITCH_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty(YAW_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty(TILT_KEY, Variant.Type.Bool));
+
+			if (!useStaticPosition || !copyRotation)
+			{
+				properties.Add(ExtensionMethods.CreateProperty(PITCH_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
+				properties.Add(ExtensionMethods.CreateProperty(YAW_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
+				properties.Add(ExtensionMethods.CreateProperty(PITCH_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
+				properties.Add(ExtensionMethods.CreateProperty(YAW_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
+				properties.Add(ExtensionMethods.CreateProperty(TILT_KEY, Variant.Type.Bool));
+			}
 
 			properties.Add(ExtensionMethods.CreateProperty(VIEW_OFFSET_KEY, Variant.Type.Vector2));
 
@@ -66,7 +73,9 @@ namespace Project.Gameplay
 			switch ((string)property)
 			{
 				case STATIC_CAMERA_KEY:
-					return isStaticCamera;
+					return useStaticPosition;
+				case COPY_ROTATION_KEY:
+					return copyRotation;
 
 				case DISTANCE_KEY:
 					return distance;
@@ -99,6 +108,8 @@ namespace Project.Gameplay
 					return hallWidth;
 				case HALL_ROTATION_KEY:
 					return isHallRotationEnabled;
+				default:
+					break;
 			}
 
 			return base._Get(property);
@@ -109,7 +120,11 @@ namespace Project.Gameplay
 			switch ((string)property)
 			{
 				case STATIC_CAMERA_KEY:
-					isStaticCamera = (bool)value;
+					useStaticPosition = (bool)value;
+					NotifyPropertyListChanged();
+					break;
+				case COPY_ROTATION_KEY:
+					copyRotation = (bool)value;
 					NotifyPropertyListChanged();
 					break;
 
@@ -171,7 +186,9 @@ namespace Project.Gameplay
 		#endregion
 
 		/// <summary> Keep the camera's position at a specific point? </summary>
-		public bool isStaticCamera;
+		public bool useStaticPosition;
+		/// <summary> Keep the camera's rotation at a specific value? </summary>
+		public bool copyRotation;
 
 		/// <summary> Angle (in radians) of pitch (X rotation). </summary>
 		public float pitchAngle;
