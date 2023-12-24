@@ -119,6 +119,7 @@ namespace Project.Gameplay.Triggers
 
 			driftAnimationTimer = DEFAULT_ANIMATION_LENGTH;
 			Character.StartExternal(this); // For future reference, this is where speedbreak gets disabled
+			Character.Effect.StartDust();
 			Character.Animator.ExternalAngle = Character.MovementAngle;
 			Character.Animator.StartDrift(isRightTurn);
 			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));
@@ -205,6 +206,7 @@ namespace Project.Gameplay.Triggers
 			}
 
 			Character.ResetMovementState();
+			Character.Effect.StopDust();
 
 			if (Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift)))
 				Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=28 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/effect/LandingDustParticle.tscn" id="5_58bv7"]
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
 [ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/effect/WaterStep.tscn" id="7_8fv5b"]
+[ext_resource type="PackedScene" uid="uid://bls68nf485o5s" path="res://object/player/resource/effect/DriftParticle.tscn" id="8_71s58"]
 [ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://core/custom nodes/Trail3D.cs" id="10_1mog6"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
@@ -221,7 +222,7 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "dustParticle", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -229,6 +230,7 @@ trailFX = NodePath("VFX/TrailMesh")
 spinFX = NodePath("VFX/SpinMesh")
 screenShockAnimator = NodePath("VFX/ScreenShock/AnimationPlayer")
 timeBreakAnimator = NodePath("VFX/TimeBreak/AnimationPlayer")
+dustParticle = NodePath("VFX/DriftParticle")
 materialSFXLibrary = ExtResource("5_h4i1s")
 landingDustParticle = NodePath("VFX/LandingDustParticle")
 footstepChannel = NodePath("SFX/FootstepChannel")
@@ -257,6 +259,8 @@ bus = &"SFX"
 [node name="VFX" type="Node3D" parent="."]
 
 [node name="WaterStep" parent="VFX" instance=ExtResource("7_8fv5b")]
+
+[node name="DriftParticle" parent="VFX" instance=ExtResource("8_71s58")]
 
 [node name="LandingDustParticle" parent="VFX" instance=ExtResource("5_58bv7")]
 

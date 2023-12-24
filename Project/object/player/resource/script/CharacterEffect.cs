@@ -52,6 +52,11 @@ namespace Project.Gameplay
 		private AnimationPlayer screenShockAnimator;
 		[Export]
 		private AnimationPlayer timeBreakAnimator;
+		/// <summary> VFX for drifting dust. </summary>
+		[Export]
+		private GpuParticles3D dustParticle;
+		public void StartDust() => dustParticle.Emitting = true;
+		public void StopDust() => dustParticle.Emitting = false;
 
 		public void StartTrailFX()
 		{
