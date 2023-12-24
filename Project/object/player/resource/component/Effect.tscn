@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=32 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -13,10 +13,11 @@
 [ext_resource type="PackedScene" uid="uid://bmx51bju4lg72" path="res://object/player/resource/effect/landing/LandingSandParticle.tscn" id="11_un14r"]
 [ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/effect/step/WaterStepRing.tscn" id="12_d83uw"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="12_j6i3j"]
-[ext_resource type="PackedScene" uid="uid://bskjectn3e0tg" path="res://object/player/resource/effect/step/PavementStepDust.tscn" id="13_bll1l"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="14_6clfa"]
-[ext_resource type="PackedScene" uid="uid://bwy4awbkt5ftv" path="res://object/player/resource/effect/step/SandStepDust.tscn" id="14_30qhf"]
+[ext_resource type="PackedScene" uid="uid://dnhyu4rssyjcr" path="res://object/player/resource/effect/step/WaterStepParticle.tscn" id="14_r0gbt"]
+[ext_resource type="PackedScene" uid="uid://bskjectn3e0tg" path="res://object/player/resource/effect/step/PavementStepParticle.tscn" id="15_gkso8"]
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/timebreak.png" id="15_p7iiw"]
+[ext_resource type="PackedScene" uid="uid://bwy4awbkt5ftv" path="res://object/player/resource/effect/step/SandStepParticle.tscn" id="16_m0x2c"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
@@ -240,7 +241,7 @@ landingChannel = NodePath("SFX/LandingChannel")
 landingSandParticle = NodePath("VFX/LandingFX/LandingSandParticle")
 landingWaterParticle = NodePath("VFX/LandingFX/LandingWaterParticle")
 landingDustParticle = NodePath("VFX/LandingFX/LandingDustParticle")
-stepEmitters = [NodePath("VFX/StepFX/PavementStepDust"), NodePath("VFX/StepFX/SandStepDust")]
+stepEmitters = [NodePath("VFX/StepFX/PavementStepParticle"), NodePath("VFX/StepFX/SandStepParticle"), null, null, null, null, NodePath("VFX/StepFX/WaterStepParticle")]
 footprintDecal = ExtResource("4_8hf43")
 waterStep = NodePath("VFX/StepFX/WaterStepRing")
 voiceLibrary = ExtResource("33_pyanb")
@@ -295,9 +296,11 @@ skeleton = NodePath("../..")
 
 [node name="WaterStepRing" parent="VFX/StepFX" instance=ExtResource("12_d83uw")]
 
-[node name="PavementStepDust" parent="VFX/StepFX" instance=ExtResource("13_bll1l")]
+[node name="WaterStepParticle" parent="VFX/StepFX" instance=ExtResource("14_r0gbt")]
 
-[node name="SandStepDust" parent="VFX/StepFX" instance=ExtResource("14_30qhf")]
+[node name="PavementStepParticle" parent="VFX/StepFX" instance=ExtResource("15_gkso8")]
+
+[node name="SandStepParticle" parent="VFX/StepFX" instance=ExtResource("16_m0x2c")]
 
 [node name="ScreenShock" type="ColorRect" parent="VFX"]
 visible = false

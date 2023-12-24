@@ -47,6 +47,8 @@ namespace Project.Gameplay
 		/// </summary>
 		public void UpdateAnimation()
 		{
+			UpdateStepDust();
+
 			if (Character.IsOnGround)
 				GroundAnimations();
 			else
@@ -56,6 +58,18 @@ namespace Project.Gameplay
 
 			//Update player position for shaders
 			RenderingServer.GlobalShaderParameterSet(PLAYER_POSITION_SHADER_PARAMETER, GlobalPosition);
+		}
+
+
+		private void UpdateStepDust()
+		{
+			if (!Character.IsOnGround) // Don't emit step dust in the air
+			{
+				Character.Effect.IsEmittingStepDust = false;
+				return;
+			}
+
+			Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
 		}
 
 		#region Oneshot Animations
@@ -153,8 +167,6 @@ namespace Project.Gameplay
 		private const float IDLE_SMOOTHING = .05f;
 		private void GroundAnimations()
 		{
-			Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
-
 			//TODO Speed break animation
 			if (Character.Skills.IsSpeedBreakCharging) return;
 
@@ -303,8 +315,6 @@ namespace Project.Gameplay
 
 		private void AirAnimations()
 		{
-			Character.Effect.IsEmittingStepDust = false; // Don't emit step dust in the air
-
 			if (canTransitionToFalling)
 			{
 				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;

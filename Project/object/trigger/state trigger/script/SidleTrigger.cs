@@ -127,6 +127,8 @@ namespace Project.Gameplay.Triggers
 				Character.MoveSpeed = Character.Skills.sidleMovementCurve.Sample(cycleTimer) * velocity * CYCLE_DISTANCE;
 				Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
 			}
+			else
+				Character.MoveSpeed = 0;
 
 			Character.UpdateExternalControl();
 		}
