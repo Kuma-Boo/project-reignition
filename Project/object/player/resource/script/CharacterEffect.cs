@@ -50,6 +50,8 @@ namespace Project.Gameplay
 		public MeshInstance3D spinFX;
 		[Export]
 		private AnimationPlayer screenShockAnimator;
+		[Export]
+		private AnimationPlayer timeBreakAnimator;
 
 		public void StartTrailFX()
 		{
@@ -67,6 +69,9 @@ namespace Project.Gameplay
 			screenShockAnimator.Seek(0.0, true);
 		}
 
+
+		public void StartTimeBreak() => timeBreakAnimator.Play("start");
+		public void StopTimeBreak() => timeBreakAnimator.Play("stop");
 
 		//Materials (footsteps, landing, etc)
 		[ExportGroup("Ground Interactions")]

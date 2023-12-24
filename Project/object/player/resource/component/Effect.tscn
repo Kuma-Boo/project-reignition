@@ -1,16 +1,18 @@
-[gd_scene load_steps=20 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=27 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
-[ext_resource type="PackedScene" uid="uid://cupcp1cgd17wh" path="res://object/player/resource/particle/FootprintDecal.tscn" id="4_7l0ao"]
-[ext_resource type="PackedScene" uid="uid://d4niu0q5cqdvj" path="res://object/player/resource/particle/WaterSplash.tscn" id="4_uxs56"]
-[ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/particle/LandingDustParticle.tscn" id="5_58bv7"]
+[ext_resource type="PackedScene" uid="uid://cupcp1cgd17wh" path="res://object/player/resource/effect/FootprintDecal.tscn" id="4_7l0ao"]
+[ext_resource type="PackedScene" uid="uid://d4niu0q5cqdvj" path="res://object/player/resource/effect/WaterSplash.tscn" id="4_uxs56"]
+[ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/effect/LandingDustParticle.tscn" id="5_58bv7"]
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
-[ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/particle/WaterStep.tscn" id="7_8fv5b"]
-[ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/particle/material/Trail Material.tres" id="9_on86l"]
+[ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/effect/WaterStep.tscn" id="7_8fv5b"]
+[ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://core/custom nodes/Trail3D.cs" id="10_1mog6"]
-[ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/particle/material/Spin Material.tres" id="11_lk1sb"]
+[ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="12_j6i3j"]
+[ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="14_6clfa"]
+[ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/timebreak.png" id="15_p7iiw"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
@@ -36,33 +38,6 @@ shader_parameter/wave_count = 20.0
 shader_parameter/speed = 30.0
 shader_parameter/height = 0.0
 shader_parameter/factor_texture = SubResource("GradientTexture2D_0q2jh")
-
-[sub_resource type="Animation" id="Animation_45gst"]
-resource_name = "shock"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ScreenShock:material:shader_parameter/height")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 1),
-"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
-"update": 0,
-"values": [0.0, 0.1, 0.05, 0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ScreenShock:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_d5ix5"]
 length = 0.001
@@ -90,6 +65,57 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ScreenShock:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_45gst"]
+resource_name = "shock"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScreenShock:material:shader_parameter/height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"update": 0,
+"values": [0.0, 0.1, 0.05, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScreenShock:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ScreenShock:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5ilpv"]
 _data = {
@@ -97,13 +123,112 @@ _data = {
 "shock": SubResource("Animation_45gst")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s8tqs"]
+shader = ExtResource("14_6clfa")
+shader_parameter/iterations = 5
+shader_parameter/rotation_step = 0.02
+shader_parameter/rotation_speed = 0.4
+shader_parameter/opacity = 0.5
+shader_parameter/lut = ExtResource("15_p7iiw")
+
+[sub_resource type="Animation" id="Animation_f7t1y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material:shader_parameter/opacity")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.5]
+}
+
+[sub_resource type="Animation" id="Animation_ljny0"]
+resource_name = "start"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material:shader_parameter/opacity")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_hc4f1"]
+resource_name = "stop"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material:shader_parameter/opacity")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m0ixc"]
+_data = {
+"RESET": SubResource("Animation_f7t1y"),
+"start": SubResource("Animation_ljny0"),
+"stop": SubResource("Animation_hc4f1")
+}
+
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
 trailFX = NodePath("VFX/TrailMesh")
 spinFX = NodePath("VFX/SpinMesh")
 screenShockAnimator = NodePath("VFX/ScreenShock/AnimationPlayer")
+timeBreakAnimator = NodePath("VFX/TimeBreak/AnimationPlayer")
 materialSFXLibrary = ExtResource("5_h4i1s")
 landingDustParticle = NodePath("VFX/LandingDustParticle")
 footstepChannel = NodePath("SFX/FootstepChannel")
@@ -150,6 +275,7 @@ cast_shadow = 0
 mesh = SubResource("SphereMesh_0nuab")
 
 [node name="ScreenShock" type="ColorRect" parent="VFX"]
+visible = false
 material = SubResource("ShaderMaterial_q05ck")
 anchors_preset = 15
 anchor_right = 1.0
@@ -164,4 +290,22 @@ metadata/_edit_lock_ = true
 root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_5ilpv")
+}
+
+[node name="TimeBreak" type="ColorRect" parent="VFX"]
+visible = false
+material = SubResource("ShaderMaterial_s8tqs")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(960, 540)
+mouse_filter = 2
+color = Color(1, 0.929412, 0.917647, 0)
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VFX/TimeBreak"]
+libraries = {
+"": SubResource("AnimationLibrary_m0ixc")
 }

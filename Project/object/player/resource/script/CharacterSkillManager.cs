@@ -197,7 +197,7 @@ namespace Project.Gameplay
 		private void UpdateTimeBreak()
 		{
 			//Update timebreak satutration visuals
-			float targetSaturation = IsTimeBreakActive ? 0.1f : 1.0f;
+			float targetSaturation = IsTimeBreakActive ? 0.2f : 1.0f;
 			StageSettings.instance.Environment.Environment.AdjustmentSaturation =
 				Mathf.MoveToward(StageSettings.instance.Environment.Environment.AdjustmentSaturation, targetSaturation, SATURATION_ADJUSTMENT_SPEED * PhysicsManager.physicsDelta);
 
@@ -280,6 +280,7 @@ namespace Project.Gameplay
 
 			if (IsTimeBreakActive)
 			{
+				Character.Effect.StartTimeBreak();
 				Character.Effect.PlayVoice("time break");
 				BGMPlayer.SetStageMusicVolume(-80f);
 
@@ -290,6 +291,7 @@ namespace Project.Gameplay
 			}
 			else
 			{
+				Character.Effect.StopTimeBreak();
 				breakTimer = BREAK_SKILLS_COOLDOWN;
 				BGMPlayer.SetStageMusicVolume(0f);
 
