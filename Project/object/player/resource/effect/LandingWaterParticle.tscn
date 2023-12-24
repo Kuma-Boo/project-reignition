@@ -1,9 +1,9 @@
 [gd_scene load_steps=22 format=3 uid="uid://d4niu0q5cqdvj"]
 
-[ext_resource type="Texture2D" uid="uid://c81morow3jatk" path="res://effect/particle/texture/environment/water splash ripple.png" id="1_1wins"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GpuParticles3DGroup.cs" id="2_6h2g1"]
-[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Splatter Add.tres" id="3_8fq08"]
-[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="4_tvuxr"]
+[ext_resource type="Texture2D" uid="uid://c81morow3jatk" path="res://effect/particle/texture/environment/water splash ripple.png" id="1_8nrk5"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GpuParticles3DGroup.cs" id="2_kynw0"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Splatter Add.tres" id="3_qje2y"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="4_00gtt"]
 
 [sub_resource type="Gradient" id="Gradient_qls6t"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -36,7 +36,7 @@ color_ramp = SubResource("GradientTexture1D_h4qlt")
 blend_mode = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_1wins")
+albedo_texture = ExtResource("1_8nrk5")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xc2cj"]
 material = SubResource("StandardMaterial3D_dhhmf")
@@ -85,7 +85,7 @@ scale_curve = SubResource("CurveXYZTexture_rsg5h")
 color_ramp = SubResource("GradientTexture1D_cw16b")
 
 [sub_resource type="QuadMesh" id="QuadMesh_jr0lt"]
-material = ExtResource("3_8fq08")
+material = ExtResource("3_qje2y")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_60tjv"]
 angle_max = 360.0
@@ -97,9 +97,9 @@ scale_max = 1.5
 color_ramp = SubResource("GradientTexture1D_cw16b")
 
 [sub_resource type="QuadMesh" id="QuadMesh_ftpuj"]
-material = ExtResource("4_tvuxr")
+material = ExtResource("4_00gtt")
 
-[node name="WaterSplash" type="GPUParticles3D" node_paths=PackedStringArray("subSystems")]
+[node name="LandingWaterParticle" type="GPUParticles3D" node_paths=PackedStringArray("subSystems")]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -113,7 +113,7 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_gy24x")
 draw_pass_1 = SubResource("PlaneMesh_xc2cj")
-script = ExtResource("2_6h2g1")
+script = ExtResource("2_kynw0")
 subSystems = [NodePath("MainSplash"), NodePath("SecondarySplash")]
 
 [node name="MainSplash" type="GPUParticles3D" parent="."]

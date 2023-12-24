@@ -3,13 +3,13 @@
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
 [ext_resource type="PackedScene" uid="uid://cupcp1cgd17wh" path="res://object/player/resource/effect/FootprintDecal.tscn" id="4_7l0ao"]
-[ext_resource type="PackedScene" uid="uid://d4niu0q5cqdvj" path="res://object/player/resource/effect/WaterSplash.tscn" id="4_uxs56"]
 [ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/effect/LandingDustParticle.tscn" id="5_58bv7"]
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
-[ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/effect/WaterStep.tscn" id="7_8fv5b"]
-[ext_resource type="PackedScene" uid="uid://bls68nf485o5s" path="res://object/player/resource/effect/DriftParticle.tscn" id="8_71s58"]
+[ext_resource type="PackedScene" uid="uid://ck3jhmveflebn" path="res://object/player/resource/effect/WaterStepRing.tscn" id="7_83kla"]
+[ext_resource type="PackedScene" uid="uid://bls68nf485o5s" path="res://object/player/resource/effect/DustParticle.tscn" id="8_svcok"]
 [ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://core/custom nodes/Trail3D.cs" id="10_1mog6"]
+[ext_resource type="PackedScene" uid="uid://d4niu0q5cqdvj" path="res://object/player/resource/effect/LandingWaterParticle.tscn" id="10_ip6u6"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="12_j6i3j"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="14_6clfa"]
@@ -222,22 +222,22 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "dustParticle", "landingDustParticle", "footstepChannel", "landingChannel", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "dustParticle", "landingDustParticle", "footstepChannel", "landingChannel", "splashParticle", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
-trailFX = NodePath("VFX/TrailMesh")
-spinFX = NodePath("VFX/SpinMesh")
+trailFX = NodePath("VFX/ActionFX/TrailMesh")
+spinFX = NodePath("VFX/ActionFX/SpinMesh")
 screenShockAnimator = NodePath("VFX/ScreenShock/AnimationPlayer")
 timeBreakAnimator = NodePath("VFX/TimeBreak/AnimationPlayer")
-dustParticle = NodePath("VFX/DriftParticle")
+dustParticle = NodePath("VFX/ActionFX/DustParticle")
 materialSFXLibrary = ExtResource("5_h4i1s")
-landingDustParticle = NodePath("VFX/LandingDustParticle")
+landingDustParticle = NodePath("VFX/LandingFX/LandingDustParticle")
 footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
-splashParticle = ExtResource("4_uxs56")
+splashParticle = NodePath("VFX/LandingFX/LandingWaterParticle")
 footprintDecal = ExtResource("4_7l0ao")
-waterStep = NodePath("VFX/WaterStep")
+waterStep = NodePath("VFX/StepFX/WaterStepRing")
 voiceLibrary = ExtResource("33_pyanb")
 voiceChannel = NodePath("SFX/VoiceChannel")
 
@@ -258,25 +258,35 @@ bus = &"SFX"
 
 [node name="VFX" type="Node3D" parent="."]
 
-[node name="WaterStep" parent="VFX" instance=ExtResource("7_8fv5b")]
+[node name="ActionFX" type="Node3D" parent="VFX"]
 
-[node name="DriftParticle" parent="VFX" instance=ExtResource("8_71s58")]
+[node name="DustParticle" parent="VFX/ActionFX" instance=ExtResource("8_svcok")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 
-[node name="LandingDustParticle" parent="VFX" instance=ExtResource("5_58bv7")]
-
-[node name="TrailMesh" type="Node3D" parent="VFX"]
+[node name="TrailMesh" type="Node3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("10_1mog6")
 layer = 32
 material = ExtResource("9_on86l")
 
-[node name="SpinMesh" type="MeshInstance3D" parent="VFX"]
+[node name="SpinMesh" type="MeshInstance3D" parent="VFX/ActionFX"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.5, 0)
 layers = 32
 material_override = ExtResource("11_lk1sb")
 transparency = 1.0
 cast_shadow = 0
 mesh = SubResource("SphereMesh_0nuab")
+skeleton = NodePath("../..")
+
+[node name="LandingFX" type="Node3D" parent="VFX"]
+
+[node name="LandingWaterParticle" parent="VFX/LandingFX" instance=ExtResource("10_ip6u6")]
+
+[node name="LandingDustParticle" parent="VFX/LandingFX" instance=ExtResource("5_58bv7")]
+
+[node name="StepFX" type="Node3D" parent="VFX"]
+
+[node name="WaterStepRing" parent="VFX/StepFX" instance=ExtResource("7_83kla")]
 
 [node name="ScreenShock" type="ColorRect" parent="VFX"]
 visible = false

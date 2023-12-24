@@ -1,4 +1,6 @@
-[gd_resource type="ParticleProcessMaterial" load_steps=5 format=3 uid="uid://bgkja2v2gybb"]
+[gd_scene load_steps=8 format=3 uid="uid://bls68nf485o5s"]
+
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="2_3dcgn"]
 
 [sub_resource type="Gradient" id="Gradient_bbnln"]
 offsets = PackedFloat32Array(0, 0.0739796, 1)
@@ -17,15 +19,13 @@ point_count = 2
 width = 64
 curve = SubResource("Curve_468hu")
 
-[resource]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sekew"]
 emission_shape = 1
 emission_sphere_radius = 0.2
 angle_min = -180.0
 angle_max = 180.0
 direction = Vector3(0, 1, 0)
 spread = 80.0
-initial_velocity_min = 2.0
-initial_velocity_max = 3.0
 gravity = Vector3(0, 0, 0)
 damping_min = 3.0
 damping_max = 3.0
@@ -33,3 +33,20 @@ scale_min = 0.4
 scale_max = 0.6
 scale_curve = SubResource("CurveTexture_ftcpn")
 color_ramp = SubResource("GradientTexture1D_2r5b0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_g63sh"]
+material = ExtResource("2_3dcgn")
+
+[node name="DriftParticle" type="GPUParticles3D"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 0.5
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_sekew")
+draw_pass_1 = SubResource("QuadMesh_g63sh")

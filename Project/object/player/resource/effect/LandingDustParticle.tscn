@@ -1,7 +1,40 @@
-[gd_scene load_steps=4 format=3 uid="uid://d2h4veiykf6nn"]
+[gd_scene load_steps=8 format=3 uid="uid://d2h4veiykf6nn"]
 
-[ext_resource type="Material" uid="uid://bgkja2v2gybb" path="res://object/player/resource/effect/material/Landing Dust Process Material.tres" id="1_8l1o1"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="1_56ykj"]
+
+[sub_resource type="Gradient" id="Gradient_bbnln"]
+offsets = PackedFloat32Array(0, 0.0739796, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2r5b0"]
+gradient = SubResource("Gradient_bbnln")
+width = 64
+
+[sub_resource type="Curve" id="Curve_468hu"]
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ftcpn"]
+width = 64
+curve = SubResource("Curve_468hu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dh0gg"]
+emission_shape = 1
+emission_sphere_radius = 0.2
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 2.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, 0, 0)
+damping_min = 3.0
+damping_max = 3.0
+scale_min = 0.4
+scale_max = 0.6
+scale_curve = SubResource("CurveTexture_ftcpn")
+color_ramp = SubResource("GradientTexture1D_2r5b0")
 
 [sub_resource type="QuadMesh" id="QuadMesh_g63sh"]
 material = ExtResource("1_56ykj")
@@ -21,5 +54,5 @@ explosiveness = 1.0
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
-process_material = ExtResource("1_8l1o1")
+process_material = SubResource("ParticleProcessMaterial_dh0gg")
 draw_pass_1 = SubResource("QuadMesh_g63sh")

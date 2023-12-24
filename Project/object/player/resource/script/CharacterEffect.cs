@@ -119,28 +119,11 @@ namespace Project.Gameplay
 		/// Plays water splash sfx and vfx.
 		/// </summary>
 		[Export]
-		private PackedScene splashParticle;
-		private List<Editor.CustomNodes.GpuParticles3DGroup> splashParticleList = new List<Editor.CustomNodes.GpuParticles3DGroup>();
+		private Editor.CustomNodes.GpuParticles3DGroup splashParticle;
 		public void PlaySplashFX()
 		{
 			PlayActionSFX("splash");
-
-			Editor.CustomNodes.GpuParticles3DGroup activeSplashParticle = null;
-			for (int i = 0; i < splashParticleList.Count; i++)
-			{
-				if (!splashParticleList[i].IsActive)
-				{
-					activeSplashParticle = splashParticleList[i];
-					break;
-				}
-			}
-
-			if (activeSplashParticle == null)
-				activeSplashParticle = splashParticle.Instantiate<Editor.CustomNodes.GpuParticles3DGroup>();
-
-			StageSettings.instance.AddChild(activeSplashParticle);
-			activeSplashParticle.GlobalPosition = GlobalPosition;
-			activeSplashParticle.StartParticles();
+			splashParticle.StartParticles();
 		}
 
 		public void PlayFootstepFX(bool isRightFoot)
@@ -162,7 +145,6 @@ namespace Project.Gameplay
 				default: // TODO Create basic dust
 					break;
 			}
-
 		}
 
 
@@ -199,7 +181,7 @@ namespace Project.Gameplay
 		}
 
 		[Export]
-		private Editor.CustomNodes.GpuParticles3DGroup waterStep;
+		private GpuParticles3D waterStep;
 		private void CreateSplashFootFX(bool isRightFoot)
 		{
 			waterStep.GlobalPosition = isRightFoot ? rightFoot.GlobalPosition : leftFoot.GlobalPosition;
@@ -208,8 +190,21 @@ namespace Project.Gameplay
 			waterStep.EmitParticle(waterStep.GlobalTransform, CharacterController.instance.Velocity * .2f, Colors.White, Colors.White, flags);
 
 			//Vector3 splashVelocity = CharacterController.instance.Velocity * .1f + Vector3.Up * 5;
-			for (int i = 0; i < 8; i++)
-				waterStep.subSystems[0].EmitParticle(Transform3D.Identity, Vector3.Zero, Colors.White, Colors.White, 0);
+			//for (int i = 0; i < 8; i++)
+			//	waterStep.subSystems[0].EmitParticle(Transform3D.Identity, Vector3.Zero, Colors.White, Colors.White, 0);
+		}
+
+		private void UpdateRunningDust(bool isEnabled)
+		{
+			switch (groundKeyIndex)
+			{
+				case 1: // Sand footdust
+					break;
+				case 6: // Water splash
+					break;
+				default: // TODO Create basic dust
+					break;
+			}
 		}
 		#endregion
 
