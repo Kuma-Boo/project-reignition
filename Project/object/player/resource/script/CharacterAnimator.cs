@@ -295,7 +295,8 @@ namespace Project.Gameplay
 			IsFallTransitionEnabled = enableFallTransition;
 			animationTree.Set(AIR_STATE_TRANSITION, state);
 			animationTree.Set(FALL_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-			animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+			animationTree.Set(BOUNCE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
 
 		public void JumpAnimation() => UpdateAirState("jump", true);
@@ -312,9 +313,9 @@ namespace Project.Gameplay
 		private const int BOUNCE_VARIATION_COUNT = 4;
 		public void BounceTrick()
 		{
+			UpdateAirState(FALL_STATE_PARAMETER, false);
 			animationTree.Set(BOUNCE_TRANSITION, Runtime.randomNumberGenerator.RandiRange(1, BOUNCE_VARIATION_COUNT).ToString());
 			animationTree.Set(BOUNCE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			UpdateAirState(FALL_STATE_PARAMETER, false);
 		}
 
 
