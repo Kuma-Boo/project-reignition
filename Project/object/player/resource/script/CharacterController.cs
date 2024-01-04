@@ -785,7 +785,7 @@ namespace Project.Gameplay
 				MoveSpeed = 0;
 
 			Effect.PlayActionSFX(Effect.JUMP_SFX);
-			Animator.Jump();
+			Animator.JumpAnimation();
 		}
 
 		private void UpdateJump()
@@ -796,7 +796,7 @@ namespace Project.Gameplay
 				{
 					SetActionState(ActionStates.AccelJump);
 					MoveSpeed = Skills.accelerationJumpSpeed;
-					Animator.AirAttackAnimation();
+					Animator.JumpAccelAnimation();
 				}
 
 				VerticalSpeed = 5f; //Consistant accel jump height
@@ -881,7 +881,7 @@ namespace Project.Gameplay
 			else
 			{
 				Lockon.StartHomingAttack(); //Start Homing attack
-				Animator.AirAttackAnimation();
+				Animator.JumpAccelAnimation();
 			}
 		}
 
@@ -1000,7 +1000,7 @@ namespace Project.Gameplay
 			SetActionState(ActionStates.Stomping);
 
 			//TODO Play a separate stomping animation if using a stomp skill
-			Animator.Fall();
+			Animator.IsFallTransitionEnabled = true;
 		}
 		#endregion
 
@@ -1025,7 +1025,7 @@ namespace Project.Gameplay
 			SetActionState(ActionStates.Backflip);
 
 			Effect.PlayActionSFX(Effect.JUMP_SFX);
-			Animator.Backflip();
+			Animator.BackflipAnimation();
 		}
 
 
@@ -1359,7 +1359,7 @@ namespace Project.Gameplay
 
 			if (data.IsJump) //Play jump effects
 			{
-				Animator.Jump();
+				Animator.JumpAnimation();
 				Effect.PlayActionSFX(Effect.JUMP_SFX);
 			}
 		}
@@ -1567,7 +1567,7 @@ namespace Project.Gameplay
 				if (IsOnGround) //Leave ground
 				{
 					IsOnGround = false;
-					Animator.Fall();
+					Animator.IsFallTransitionEnabled = true;
 				}
 
 				// Calculate target up direction

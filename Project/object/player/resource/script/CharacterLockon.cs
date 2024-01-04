@@ -199,6 +199,7 @@ namespace Project.Gameplay
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();
 
+			Character.Animator.BounceTrick();
 			Character.Effect.PlayActionSFX("jump");
 		}
 		#endregion

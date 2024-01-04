@@ -74,7 +74,7 @@ namespace Project.Gameplay.Objects
 			Character.StartLauncher(LaunchSettings, this);
 
 			if (LaunchSettings.InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
-				Character.Animator.Jump();
+				Character.Animator.JumpAnimation();
 			else
 				Character.Animator.LaunchAnimation();
 		}

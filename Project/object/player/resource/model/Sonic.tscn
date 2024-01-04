@@ -155,9 +155,10 @@ animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
-[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot") instance=ExtResource("3_5mek6")]
+[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot", "stepEmitters") instance=ExtResource("3_5mek6")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot/SoleOffset")
 leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot/SoleOffset")
+stepEmitters = [NodePath("VFX/StepFX/PavementStepParticle"), NodePath("VFX/StepFX/SandStepParticle"), null, null, null, null, NodePath("VFX/StepFX/WaterStepParticle")]
 
 [node name="GeneralSkeleton" parent="SonicRoot" index="0"]
 bones/2/rotation = Quaternion(0.00897831, -5.98702e-12, 1.91381e-09, 0.99996)
@@ -285,14 +286,14 @@ libraries = {
 }
 
 [node name="CountdownRoot" type="Node3D" parent="." index="4"]
-transform = Transform3D(0.906307, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906307, 0, 0, 0)
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
 [node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" index="0"]
 stream = ExtResource("12_3lyoq")
 bus = &"SFX"
 
 [node name="CountdownPosition" type="Node3D" parent="CountdownRoot" index="1"]
-transform = Transform3D(1, 0, 0, 0, 0.939692, -0.34202, 0, 0.34202, 0.939692, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
 script = ExtResource("10_iki8q")
 UpdateEveryFrame = true
 settings = ExtResource("11_ihqo8")
@@ -308,6 +309,21 @@ libraries = {
 }
 tree_root = ExtResource("8_sfnih")
 anim_player = NodePath("../AnimationPlayer")
+parameters/air_tree/backflip_trigger/active = false
+parameters/air_tree/backflip_trigger/internal_active = false
+parameters/air_tree/backflip_trigger/request = 0
+parameters/air_tree/bounce_transition/current_state = ""
+parameters/air_tree/bounce_transition/transition_request = ""
+parameters/air_tree/bounce_transition/current_index = -1
+parameters/air_tree/bounce_trigger/active = false
+parameters/air_tree/bounce_trigger/internal_active = false
+parameters/air_tree/bounce_trigger/request = 0
+parameters/air_tree/fall_trigger/active = false
+parameters/air_tree/fall_trigger/internal_active = false
+parameters/air_tree/fall_trigger/request = 0
+parameters/air_tree/state_transition/current_state = "fall"
+parameters/air_tree/state_transition/transition_request = ""
+parameters/air_tree/state_transition/current_index = 0
 parameters/balance_tree/balance_speed/scale = 1.0
 parameters/balance_tree/balance_state/balance_left_blend/blend_position = 0
 parameters/balance_tree/balance_state/balance_right_blend/blend_position = 0
@@ -323,24 +339,27 @@ parameters/balance_tree/wind_blend/blend_position = 0.0
 parameters/drift_tree/direction_transition/current_state = "left"
 parameters/drift_tree/direction_transition/transition_request = ""
 parameters/drift_tree/direction_transition/current_index = 0
+parameters/ground_transition/current_state = "enabled"
+parameters/ground_transition/transition_request = ""
+parameters/ground_transition/current_index = 0
+parameters/ground_tree/backstep_seek/seek_request = -1.0
+parameters/ground_tree/crouch_transition/current_state = "disabled"
+parameters/ground_tree/crouch_transition/transition_request = ""
+parameters/ground_tree/crouch_transition/current_index = 0
+parameters/ground_tree/forward_blend/blend_position = 0
+parameters/ground_tree/forward_seek/seek_request = -1.0
+parameters/ground_tree/ground_seek/seek_request = -1.0
+parameters/ground_tree/ground_speed/scale = 1.0
+parameters/ground_tree/idle_blend/blend_amount = 0
+parameters/ground_tree/land_speed/scale = 1.5
+parameters/ground_tree/land_trigger/active = false
+parameters/ground_tree/land_trigger/internal_active = false
+parameters/ground_tree/land_trigger/request = 0
+parameters/ground_tree/turn_add/add_amount = 0
+parameters/ground_tree/turn_blend/blend_position = Vector2(0, 0)
 parameters/hurt_trigger/active = false
 parameters/hurt_trigger/internal_active = false
 parameters/hurt_trigger/request = 0
-parameters/normal_state/ground_tree/backstep_seek/seek_request = -1.0
-parameters/normal_state/ground_tree/crouch_transition/current_state = "disabled"
-parameters/normal_state/ground_tree/crouch_transition/transition_request = ""
-parameters/normal_state/ground_tree/crouch_transition/current_index = 0
-parameters/normal_state/ground_tree/forward_blend/blend_position = 0.0
-parameters/normal_state/ground_tree/forward_seek/seek_request = -1.0
-parameters/normal_state/ground_tree/ground_seek/seek_request = -1.0
-parameters/normal_state/ground_tree/ground_speed/scale = 1.0
-parameters/normal_state/ground_tree/idle_blend/blend_amount = 0.0
-parameters/normal_state/ground_tree/land_speed/scale = 1.5
-parameters/normal_state/ground_tree/land_trigger/active = false
-parameters/normal_state/ground_tree/land_trigger/internal_active = false
-parameters/normal_state/ground_tree/land_trigger/request = 0
-parameters/normal_state/ground_tree/turn_add/add_amount = 1.0
-parameters/normal_state/ground_tree/turn_blend/blend_position = Vector2(0, 0)
 parameters/oneshot_tree/oneshot_seek/seek_request = -1.0
 parameters/oneshot_tree/oneshot_transition/current_state = "countdown"
 parameters/oneshot_tree/oneshot_transition/transition_request = ""
