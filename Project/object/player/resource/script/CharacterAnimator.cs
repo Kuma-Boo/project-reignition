@@ -181,7 +181,7 @@ namespace Project.Gameplay
 			{
 				ResetGroundTree();
 				animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				groundTransition.XfadeTime = .1f;
+				groundTransition.XfadeTime = .05f;
 				animationTree.Set(GROUND_TRANSITION, ENABLED_CONSTANT);
 				StopHurt();
 			}
@@ -288,6 +288,7 @@ namespace Project.Gameplay
 
 		public bool IsFallTransitionEnabled { get; set; }
 		private readonly StringName FALL_TRIGGER = "parameters/air_tree/fall_trigger/request";
+		private readonly StringName FALL_SPEED = "parameters/air_tree/fall_speed/scale";
 		private readonly StringName AIR_STATE_TRANSITION = "parameters/air_tree/state_transition/transition_request";
 		private readonly StringName FALL_STATE_PARAMETER = "fall";
 		private void UpdateAirState(StringName state, bool enableFallTransition)
@@ -302,6 +303,20 @@ namespace Project.Gameplay
 		public void JumpAnimation() => UpdateAirState("jump", true);
 		public void JumpAccelAnimation() => UpdateAirState("accel", false);
 		public void LaunchAnimation() => UpdateAirState("launch", false);
+
+		public void StompAnimation(bool offensive)
+		{
+			UpdateAirState(FALL_STATE_PARAMETER, false);
+			if (offensive)
+			{
+				// TODO Separate stomp animation
+			}
+			else
+			{
+				animationTree.Set(FALL_SPEED, 2.5f);
+				animationTree.Set(FALL_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			}
+		}
 
 
 		private readonly StringName BACKFLIP_TRIGGER = "parameters/air_tree/backflip_trigger/request";
@@ -332,6 +347,7 @@ namespace Project.Gameplay
 				Character.VerticalSpeed <= 0)
 				{
 					UpdateAirState(FALL_STATE_PARAMETER, false);
+					animationTree.Set(FALL_SPEED, 1.0f);
 					animationTree.Set(FALL_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				}
 			}

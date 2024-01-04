@@ -1000,7 +1000,7 @@ namespace Project.Gameplay
 			SetActionState(ActionStates.Stomping);
 
 			//TODO Play a separate stomping animation if using a stomp skill
-			Animator.IsFallTransitionEnabled = true;
+			Animator.StompAnimation(false);
 		}
 		#endregion
 
