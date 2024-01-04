@@ -447,7 +447,7 @@ namespace Project.Gameplay
 		private AnimationNodeStateMachinePlayback DriftRightState => animationTree.Get(DRIFT_RIGHT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 		private AnimationNodeStateMachinePlayback DriftLeftState => animationTree.Get(DRIFT_LEFT_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
 
-		private readonly StringName DRIFT_LEFT_PLAYBACK = "s/drift_tree/left_state/playback";
+		private readonly StringName DRIFT_LEFT_PLAYBACK = "parameters/drift_tree/left_state/playback";
 		private readonly StringName DRIFT_RIGHT_PLAYBACK = "parameters/drift_tree/right_state/playback";
 
 		private readonly StringName DRIFT_DIRECTION_TRANSITION = "parameters/drift_tree/direction_transition/transition_request";
