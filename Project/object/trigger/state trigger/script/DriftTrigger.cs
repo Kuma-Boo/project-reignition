@@ -147,8 +147,9 @@ namespace Project.Gameplay.Triggers
 			float volume = distance / slideDistance;
 			sfx.VolumeDb = Mathf.SmoothStep(startingVolume, -80f, volume);
 
-			bool isAttemptingDrift = (Input.IsActionJustPressed("button_action") && Character.Skills.isManualDriftEnabled) ||
-				(!Character.Skills.isManualDriftEnabled && distance <= INPUT_WINDOW_DISTANCE);
+			bool isManualDrift = Character.Skills.IsSkillEnabled(SkillKeyEnum.ManualDrift);
+			bool isAttemptingDrift = (Input.IsActionJustPressed("button_action") && isManualDrift) ||
+				(!isManualDrift && distance <= INPUT_WINDOW_DISTANCE);
 
 			if (Input.IsActionJustPressed("button_jump")) //Allow character to jump out of drift at any time
 			{

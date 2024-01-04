@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay
@@ -13,15 +14,15 @@ namespace Project.Gameplay
 		public void Initialize()
 		{
 			//Determine the size of the soul gauge
-			float levelRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio(); //Current ratio (0 -> 10) compared to the soul gauge level cap (50)
-			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; //Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
+			float levelRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio(); // Current ratio (0 -> 10) compared to the soul gauge level cap (50)
+			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; // Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
 			normalCollisionMask = Character.CollisionMask;
 
 			SetUpStats();
 			SetUpSkills();
 		}
 
-		//Cancel time break, just in case
+		// Cancel time break, just in case
 		public override void _ExitTree() => IsTimeBreakEnabled = false;
 
 		#region Stats
@@ -42,7 +43,7 @@ namespace Project.Gameplay
 		[Export]
 		private MovementResource slideSettings; // Default slide settings
 
-		//While there aren't any upgrades for the following movement skills, they're here for consistancy
+		// While there aren't any upgrades for the following movement skills, they're here for consistancy
 		[Export]
 		private MovementResource backflipSettings;
 		[Export]
@@ -52,22 +53,22 @@ namespace Project.Gameplay
 		[Export]
 		public float perfectShuffleSpeed;
 		[Export]
-		public MovementResource grindSettings; //Settings for grinding on rails
+		public MovementResource grindSettings; // Settings for grinding on rails
 
 		[ExportCategory("Sidle Settings")]
 		[Export]
 		public Curve sidleMovementCurve;
 
-		//References to the actual values being used
+		// References to the actual values being used
 		public MovementResource GroundSettings { get; private set; }
 		public MovementResource AirSettings { get; private set; }
 		public MovementResource BackflipSettings { get; private set; }
 		public MovementResource BackstepSettings { get; private set; }
 		public MovementResource SlideSettings { get; private set; }
 
-		private void SetUpStats() //Stuff like upgradable speed, increased handling, etc.
+		private void SetUpStats() // Stuff like upgradable speed, increased handling, etc.
 		{
-			//TODO Interpolate values based on skill ring settings
+			// TODO Interpolate values based on skill ring settings
 			GroundSettings = groundSettings;
 			AirSettings = airSettings;
 			BackflipSettings = backflipSettings;
@@ -75,13 +76,17 @@ namespace Project.Gameplay
 
 			SlideSettings = slideSettings;
 		}
+
+
 		#endregion
 
 
 		#region Skills
+		private SkillRing SkillRing => SaveManager.ActiveGameData.skillRing;
+		public bool IsSkillEnabled(SkillKeyEnum key) => SkillRing.equippedSkills.Contains(key);
+
+
 		[ExportCategory("Countdown Skills")]
-		[Export]
-		public bool isCountdownBoostEnabled;
 		[Export]
 		public float countdownBoostSpeed;
 
@@ -90,8 +95,6 @@ namespace Project.Gameplay
 		/// <summary> How many rings to start with when respawning. </summary>
 		public int RespawnRingCount => 0;
 
-		[Export]
-		public bool isSplashJumpEnabled;
 		public void SplashJump()
 		{
 			GD.Print("Splash Jump isn't implemented yet.");
@@ -100,30 +103,13 @@ namespace Project.Gameplay
 		/// <summary> Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster. </summary>
 		[Export]
 		public float landingDashSpeed;
-		[Export]
-		public bool isLandingDashEnabled;
 
-		[Export]
-		public bool isManualDriftEnabled; //Automatically clear corners?
-
-		public bool IsAttacking { get; set; } //Is the player using an attack skill? (i.e Any of the fire skills)
-
-		[Export(PropertyHint.Range, "1,5,.1")]
-		public float pearlAttractorMultiplier = 1f; //Collision multiplier when PearlAttractor skill is enabled
-
-		private void LoadSkillsFromSaveData()
-		{
-			isLandingDashEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.LandingBoost);
-			isManualDriftEnabled = SaveManager.ActiveGameData.skillRing.HasFlag(SaveManager.SkillEnum.ManualDrift);
-		}
+		public bool IsAttacking { get; set; } // Is the player using an attack skill? (i.e Any of the fire skills)
 
 		private void SetUpSkills()
 		{
-			if (!DebugManager.Instance.UseEditorSkills) // Only load skills in an actual build
-				LoadSkillsFromSaveData();
-
-			//Expand hitbox if skills is equipped
-			Runtime.Instance.UpdatePearlCollisionShapes(pearlAttractorMultiplier);
+			// Expand hitbox if skills is equipped
+			Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKeyEnum.PearlCollector) ? 5 : 1);
 		}
 		#endregion
 

@@ -56,13 +56,13 @@ namespace Project.Core
 		}
 
 		#region Pearl Stuff
-		public SphereShape3D PearlCollisionShape = new SphereShape3D();
-		public SphereShape3D RichPearlCollisionShape = new SphereShape3D();
+		public SphereShape3D PearlCollisionShape = new();
+		public SphereShape3D RichPearlCollisionShape = new();
 		[Export]
 		public PackedScene pearlScene;
 
 		/// <summary> Pool of auto-collected pearls used whenever enemies are defeated or itemboxes are opened. </summary>
-		private readonly Array<Gameplay.Objects.Pearl> pearlPool = new Array<Gameplay.Objects.Pearl>();
+		private readonly Array<Gameplay.Objects.Pearl> pearlPool = new();
 
 		private const float PEARL_NORMAL_COLLISION = .4f;
 		private const float RICH_PEARL_NORMAL_COLLISION = .6f;

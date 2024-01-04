@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Gameplay;
 using System;
 
 namespace Project.Core
@@ -44,13 +45,13 @@ namespace Project.Core
 
 		private readonly Vector2I[] SCREEN_RESOLUTIONS =
 		{
-			new Vector2I(640, 360), //360p
-			new Vector2I(854, 480), //480p
-			new Vector2I(1280, 720), //720p
-			new Vector2I(1600, 900), //900p
-			new Vector2I(1920, 1080), //1080p
-			new Vector2I(2560, 1440), //1440p
-			new Vector2I(3840, 2160), //4K
+			new(640, 360), //360p
+			new(854, 480), //480p
+			new(1280, 720), //720p
+			new(1600, 900), //900p
+			new(1920, 1080), //1080p
+			new(2560, 1440), //1440p
+			new(3840, 2160), //4K
 		};
 
 		public static ConfigData Config;
@@ -83,29 +84,29 @@ namespace Project.Core
 			/// <summary> Creates a dictionary based on config data. </summary>
 			public Dictionary ToDictionary()
 			{
-				Dictionary dictionary = new Dictionary();
+				Dictionary dictionary = new()
+				{
+					// Video
+					{ nameof(useVsync), useVsync },
+					{ nameof(isFullscreen), isFullscreen },
+					{ nameof(screenResolution), screenResolution },
 
-				// Video
-				dictionary.Add(nameof(useVsync), useVsync);
-				dictionary.Add(nameof(isFullscreen), isFullscreen);
-				dictionary.Add(nameof(screenResolution), screenResolution);
+					// Audio
+					{ nameof(isMasterMuted), isMasterMuted },
+					{ nameof(masterVolume), masterVolume },
+					{ nameof(isBgmMuted), isBgmMuted },
+					{ nameof(bgmVolume), bgmVolume },
+					{ nameof(isSfxMuted), isSfxMuted },
+					{ nameof(sfxVolume), sfxVolume },
+					{ nameof(isVoiceMuted), isVoiceMuted },
+					{ nameof(voiceVolume), voiceVolume },
+					{ nameof(inputConfiguration), inputConfiguration },
 
-				// Audio
-				dictionary.Add(nameof(isMasterMuted), isMasterMuted);
-				dictionary.Add(nameof(masterVolume), masterVolume);
-				dictionary.Add(nameof(isBgmMuted), isBgmMuted);
-				dictionary.Add(nameof(bgmVolume), bgmVolume);
-				dictionary.Add(nameof(isSfxMuted), isSfxMuted);
-				dictionary.Add(nameof(sfxVolume), sfxVolume);
-				dictionary.Add(nameof(isVoiceMuted), isVoiceMuted);
-				dictionary.Add(nameof(voiceVolume), voiceVolume);
-
-				dictionary.Add(nameof(inputConfiguration), inputConfiguration);
-
-				// Langauge
-				dictionary.Add(nameof(subtitlesEnabled), subtitlesEnabled);
-				dictionary.Add(nameof(voiceLanguage), (int)voiceLanguage);
-				dictionary.Add(nameof(textLanguage), (int)textLanguage);
+					// Langauge
+					{ nameof(subtitlesEnabled), subtitlesEnabled },
+					{ nameof(voiceLanguage), (int)voiceLanguage },
+					{ nameof(textLanguage), (int)textLanguage }
+				};
 
 				return dictionary;
 			}
@@ -173,9 +174,6 @@ namespace Project.Core
 				Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
 				Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
 				Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
-
-				Config.voiceLanguage = VoiceLanguage.Japanese;
-				Config.textLanguage = TextLanguage.English;
 			}
 
 			ApplyLocalization();
@@ -270,16 +268,6 @@ namespace Project.Core
 			Max
 		}
 
-		[Flags]
-		public enum SkillEnum
-		{
-			//Standard skills
-			None = 0,
-			LandingBoost = 1, //Gives a speed boost when landing
-			PearlAttractor = 2, //Makes collecting pearls easier
-			SplashJump = 4, //Bounces the player when JumpDashing an obstacle
-			ManualDrift = 8, //Manually perform a drift for more speed and points/exp
-		}
 
 		public static int ActiveSaveSlotIndex = -1;
 		/// <summary> Reference to the current save being used. </summary>
@@ -297,7 +285,7 @@ namespace Project.Core
 			public WorldFlagEnum worldsUnlocked;
 
 			/// <summary> Individual level data. </summary>
-			public Dictionary<int, Dictionary> leveldata = new Dictionary<int, Dictionary>();
+			public Dictionary<int, Dictionary> leveldata = new();
 
 			/// <summary> Player level, from 1 -> 99 </summary>
 			public int level;
@@ -305,8 +293,8 @@ namespace Project.Core
 			public int exp;
 			/// <summary> Total playtime, in seconds. </summary>
 			public float playTime;
-			/// <summary> Flag enum of all skills enabled. </summary>
-			public SkillEnum skillRing;
+			/// <summary> Current skill ring. </summary>
+			public SkillRing skillRing;
 
 			/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
 			public bool IsNewFile() => level == 0;
@@ -332,24 +320,21 @@ namespace Project.Core
 			/// <summary> Creates a dictionary based on GameData. </summary>
 			public Dictionary ToDictionary()
 			{
-				Dictionary dictionary = new Dictionary();
-
-				//WorldEnum data
-				dictionary.Add(nameof(lastPlayedWorld), (int)lastPlayedWorld);
-				dictionary.Add(nameof(worldRingsCollected), (int)worldRingsCollected);
-				dictionary.Add(nameof(worldsUnlocked), (int)worldsUnlocked);
-
-
-				dictionary.Add(nameof(leveldata), (Dictionary)leveldata);
+				Dictionary dictionary = new()
+				{
+					// WorldEnum data
+					{ nameof(lastPlayedWorld), (int)lastPlayedWorld },
+					{ nameof(worldRingsCollected), (int)worldRingsCollected },
+					{ nameof(worldsUnlocked), (int)worldsUnlocked },
+					{ nameof(leveldata), (Dictionary)leveldata },
 
 
-				//Player stats
-				dictionary.Add(nameof(level), level);
-				dictionary.Add(nameof(exp), exp);
-				dictionary.Add(nameof(playTime), Mathf.RoundToInt(playTime));
-
-
-				dictionary.Add(nameof(skillRing), (int)skillRing);
+					// Player stats
+					{ nameof(level), level },
+					{ nameof(exp), exp },
+					{ nameof(playTime), Mathf.RoundToInt(playTime) },
+					{ nameof(skillRing), skillRing.equippedSkills },
+				};
 
 				return dictionary;
 			}
@@ -376,9 +361,8 @@ namespace Project.Core
 				if (dictionary.TryGetValue(nameof(playTime), out var))
 					playTime = (float)var;
 
-
 				if (dictionary.TryGetValue(nameof(skillRing), out var))
-					skillRing = (SkillEnum)(int)var;
+					skillRing.equippedSkills = (Array<SkillKeyEnum>)var;
 			}
 
 
@@ -465,4 +449,7 @@ namespace Project.Core
 		}
 		#endregion
 	}
+
+
+
 }

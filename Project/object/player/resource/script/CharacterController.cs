@@ -777,7 +777,7 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			canLandingBoost = Skills.isLandingDashEnabled;
+			canLandingBoost = Skills.IsSkillEnabled(SkillKeyEnum.LandingDash);
 			SetActionState(ActionStates.Jumping);
 			VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 
@@ -1821,7 +1821,7 @@ namespace Project.Gameplay
 
 		public void OnCountdownFinished()
 		{
-			if (Skills.isCountdownBoostEnabled && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) //Successful starting boost
+			if (Skills.IsSkillEnabled(SkillKeyEnum.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) //Successful starting boost
 			{
 				MoveSpeed = Skills.countdownBoostSpeed;
 				AddLockoutData(new LockoutResource()
@@ -1875,9 +1875,9 @@ namespace Project.Gameplay
 
 			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))
 			{
-				if (Skills.isSplashJumpEnabled) //Perform a splash jump
+				if (Skills.IsSkillEnabled(SkillKeyEnum.SplashJump)) // Perform a splash jump
 					Skills.SplashJump();
-				else //Cancel HomingAttack
+				else // Cancel HomingAttack
 					Lockon.StopHomingAttack();
 			}
 		}
