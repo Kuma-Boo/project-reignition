@@ -15,12 +15,21 @@ namespace Project.Interface.Menus
 		private Node2D cursor;
 		[Export]
 		private Description description;
+		[Export]
+		private Sprite2D scrollbar;
+		[Export]
+		private Label skillPointLabel;
 
 		private SkillListResource MasterSkillList => Runtime.Instance.masterSkillList;
 		private SkillRing ActiveSkillRing => SaveManager.ActiveGameData.skillRing;
 
-		private int scrollAmount;
 		private int cursorPosition;
+
+
+		private int scrollAmount;
+		private float scrollRatio;
+		private Vector2 scrollVelocity;
+		private const float SCROLL_SMOOTHING = .05f;
 		/// <summary> How much to scroll per skill. </summary>
 		private readonly int SCROLL_INTERVAL = 63;
 		/// <summary> Number of skills on a single page. </summary>
@@ -46,7 +55,14 @@ namespace Project.Interface.Menus
 			description.ShowDescription();
 			description.SetText(skillList[VerticalSelection].DescriptionKey);
 
+			Redraw();
 			base.SetUp();
+		}
+
+
+		public override void _Process(double _)
+		{
+			scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * (160 * scrollRatio - 80), ref scrollVelocity, SCROLL_SMOOTHING);
 		}
 
 
@@ -65,16 +81,20 @@ namespace Project.Interface.Menus
 					cursorPosition += inputSign;
 
 				scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKeyEnum.Max - PAGE_SIZE);
+				scrollRatio = (float)scrollAmount / ((int)SkillKeyEnum.Max - PAGE_SIZE);
 				cursorPosition = Mathf.Clamp(cursorPosition, 0, PAGE_SIZE - 1);
 				optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * SCROLL_INTERVAL);
 				cursor.Position = Vector2.Up * -cursorPosition * SCROLL_INTERVAL;
 				description.SetText(skillList[VerticalSelection].DescriptionKey);
 
+				animator.Play("select");
 				if (!isSelectionScrolling)
 					StartSelectionTimer();
 
 				return;
 			}
+
+			// TODO Change sort method when horizontal input is detected
 		}
 
 
@@ -83,21 +103,35 @@ namespace Project.Interface.Menus
 			if (!ToggleSkill(skillList[VerticalSelection].Key))
 				return;
 
+			Redraw();
+		}
 
-			// TODO Play SFX
+
+		private void Redraw()
+		{
+			skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 			skillList[VerticalSelection].IsSkillActive = ActiveSkillRing.equippedSkills.Contains(skillList[VerticalSelection].Key);
 		}
+
 
 		private bool ToggleSkill(SkillKeyEnum key)
 		{
 			if (ActiveSkillRing.equippedSkills.Contains(key))
 			{
 				ActiveSkillRing.equippedSkills.Remove(key);
+				ActiveSkillRing.TotalCost -= MasterSkillList.GetSkillCost(key);
+				animator.Play("unequip");
 				return true;
 			}
 
-			// TODO check if the player has enough SP to equip the skill
+			// Ensure the player has enough skill points
+			int targetTotalCost = ActiveSkillRing.TotalCost + MasterSkillList.GetSkillCost(key);
+			if (targetTotalCost > ActiveSkillRing.MaxSkillPoints)
+				return false;
+
 			ActiveSkillRing.equippedSkills.Add(key);
+			ActiveSkillRing.TotalCost = targetTotalCost;
+			animator.Play("equip");
 			return true;
 		}
 

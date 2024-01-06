@@ -27,9 +27,16 @@ namespace Project.Interface.Menus
 		private Label nameLabel;
 		[Export]
 		private Label costLabel;
+		[Export]
+		private AnimationPlayer animator;
 
-		public override void _Process(double delta)
+		public State state;
+		public enum State
 		{
+			Locked, // Locked skill
+			Equipable, // Normal
+			Expensive, // Not enough SP
+			Invalid, // Interferes with a different skill
 		}
 
 		public void RedrawData()

@@ -1,13 +1,84 @@
-[gd_scene load_steps=7 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=18 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
 [ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="3_ud304"]
 [ext_resource type="PackedScene" uid="uid://b6v3sm1vo8for" path="res://interface/menu/skill select/SkillOption.tscn" id="4_sgi6g"]
 [ext_resource type="Texture2D" uid="uid://cqp20lub7h6aq" path="res://interface/menu/skill select/texture/skill menu.png" id="4_x4q03"]
+[ext_resource type="Texture2D" uid="uid://n4o8qvki6yi7" path="res://interface/menu/skill select/texture/skill atlas.png" id="5_803ye"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="5_q6eds"]
+[ext_resource type="FontFile" uid="uid://djl6jc2kf2oes" path="res://interface/font/Skill Point Numbers.fnt" id="6_djpvp"]
+[ext_resource type="AudioStream" uid="uid://bc6pmkxr1e25r" path="res://sound/sfx/system/skill equip.wav" id="7_5j0l1"]
+[ext_resource type="AudioStream" uid="uid://fjiifn0tycil" path="res://sound/sfx/system/skill ring save.wav" id="7_n4imj"]
+[ext_resource type="AudioStream" uid="uid://dmf8plsfsakc6" path="res://sound/sfx/system/skill unequip.wav" id="8_rnu1p"]
+[ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="9_1265f"]
 
-[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description")]
+[sub_resource type="LabelSettings" id="LabelSettings_t4h80"]
+font = ExtResource("6_djpvp")
+font_size = 24
+
+[sub_resource type="Animation" id="Animation_ug8bd"]
+resource_name = "select"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Select")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_qo4fo"]
+resource_name = "equip"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Equip")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_tf8ok"]
+resource_name = "unequip"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Unequip")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wky6r"]
+_data = {
+"equip": SubResource("Animation_qo4fo"),
+"select": SubResource("Animation_ug8bd"),
+"unequip": SubResource("Animation_tf8ok")
+}
+
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointLabel", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +90,9 @@ skillOption = ExtResource("4_sgi6g")
 optionContainer = NodePath("Clip/Options")
 cursor = NodePath("CursorOrigin/Cursor")
 description = NodePath("Description")
+scrollbar = NodePath("ScrollBar/ScrollPosition")
+skillPointLabel = NodePath("SkillPointBar/SPLabel")
+animator = NodePath("AnimationPlayer")
 isProcessing = true
 metadata/_edit_lock_ = true
 
@@ -71,6 +145,41 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(264, 0, 248, 48)
 
+[node name="SkillPointBar" type="Node2D" parent="."]
+position = Vector2(1072, 96)
+scale = Vector2(2.5, 2.5)
+
+[node name="Background" type="Sprite2D" parent="SkillPointBar"]
+position = Vector2(0, 3.8147e-06)
+texture = ExtResource("5_803ye")
+region_enabled = true
+region_rect = Rect2(0, 136, 112, 16)
+
+[node name="Fill" type="Sprite2D" parent="SkillPointBar"]
+position = Vector2(-44, -6)
+scale = Vector2(1, 0.7)
+texture = ExtResource("5_803ye")
+centered = false
+region_enabled = true
+region_rect = Rect2(120, 88, 88, 16)
+
+[node name="Border" type="Sprite2D" parent="SkillPointBar"]
+position = Vector2(0, 3.8147e-06)
+rotation = 3.14159
+scale = Vector2(1, -1)
+texture = ExtResource("5_803ye")
+region_enabled = true
+region_rect = Rect2(0, 111.5, 112, 16)
+
+[node name="SPLabel" type="Label" parent="SkillPointBar"]
+offset_left = 57.6
+offset_top = -16.0
+offset_right = 192.6
+offset_bottom = 16.0
+text = "000/000"
+label_settings = SubResource("LabelSettings_t4h80")
+vertical_alignment = 1
+
 [node name="Clip" type="Control" parent="."]
 clip_contents = true
 custom_minimum_size = Vector2(1020, 472)
@@ -110,3 +219,26 @@ region_rect = Rect2(8, 224, 24, 24)
 
 [node name="Description" parent="." instance=ExtResource("3_ud304")]
 layout_mode = 1
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="Save" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("7_n4imj")
+bus = &"SFX"
+
+[node name="Equip" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("7_5j0l1")
+bus = &"SFX"
+
+[node name="Unequip" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("8_rnu1p")
+bus = &"SFX"
+
+[node name="Select" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("9_1265f")
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wky6r")
+}

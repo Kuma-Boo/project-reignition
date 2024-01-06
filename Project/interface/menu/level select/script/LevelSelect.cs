@@ -120,7 +120,7 @@ namespace Project.Interface.Menus
 				{
 					scrollRatio = 1;
 					scrollAmount = levelOptions.Count - 5;
-					cursorPosition = 4 - ((levelOptions.Count - 1) - VerticalSelection);
+					cursorPosition = 4 - (levelOptions.Count - 1 - VerticalSelection);
 				}
 				else
 				{

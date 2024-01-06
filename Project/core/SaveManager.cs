@@ -362,19 +362,24 @@ namespace Project.Core
 					playTime = (float)var;
 
 				if (dictionary.TryGetValue(nameof(skillRing), out var))
+				{
 					skillRing.equippedSkills = (Array<SkillKeyEnum>)var;
+					skillRing.RefreshSkillRingData(level);
+				}
 			}
 
 
 			/// <summary> Creates a new GameData object that contains default values. </summary>
 			public static GameData DefaultData()
 			{
-				return new GameData()
+				GameData data = new()
 				{
 					level = 1,
 					worldsUnlocked = WorldFlagEnum.LostPrologue,
 					lastPlayedWorld = WorldEnum.LostPrologue,
 				};
+				data.skillRing.RefreshSkillRingData(data.level);
+				return data;
 			}
 		}
 
@@ -434,10 +439,8 @@ namespace Project.Core
 			if (DebugManager.Instance.UseDebugSave) //For testing
 			{
 				ActiveSaveSlotIndex = 0;
-				GameSaveSlots[ActiveSaveSlotIndex] = new GameData()
-				{
-					worldsUnlocked = WorldFlagEnum.All,
-				};
+				GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();
+				ActiveGameData.worldsUnlocked = WorldFlagEnum.All;
 			}
 		}
 
@@ -449,7 +452,4 @@ namespace Project.Core
 		}
 		#endregion
 	}
-
-
-
 }

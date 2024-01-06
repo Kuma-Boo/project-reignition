@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Gameplay
 {
@@ -155,8 +156,24 @@ namespace Project.Gameplay
 
 	public class SkillRing
 	{
-		public Array<SkillKeyEnum> equippedSkills = new(); // List of equipped skills
-		public int totalCost;
+		/// <summary> List of equipped skills. </summary>
+		public Array<SkillKeyEnum> equippedSkills = new();
+		/// <summary> Cost of all equipped skills. </summary>
+		public int TotalCost { get; set; }
+		/// <summary> Amount of available skill points. </summary>
+		public int MaxSkillPoints { get; private set; }
+
+		public void RefreshSkillRingData(int level)
+		{
+			// +5 per level, starts at 10, ends at 500.
+			MaxSkillPoints = 10;
+			if (level > 1)
+				MaxSkillPoints += (level - 1) * 5;
+
+			TotalCost = 0;
+			for (int i = 0; i < equippedSkills.Count; i++)
+				TotalCost += Runtime.Instance.masterSkillList.GetSkillCost(equippedSkills[i]);
+		}
 	}
 }
 

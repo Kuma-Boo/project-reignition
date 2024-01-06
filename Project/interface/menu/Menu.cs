@@ -9,7 +9,7 @@ namespace Project.Interface.Menus
 	/// </summary>
 	public partial class Menu : Control
 	{
-		public static Dictionary<MemoryKeys, int> menuMemory = new Dictionary<MemoryKeys, int>(); //Use this for determining which menu is open/which option is selected
+		public static Dictionary<MemoryKeys, int> menuMemory = new(); //Use this for determining which menu is open/which option is selected
 		public enum MemoryKeys
 		{
 			Title,
