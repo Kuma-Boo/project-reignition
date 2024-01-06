@@ -34,7 +34,7 @@ namespace Project.Interface.Menus
 		public Menu parentMenu;
 		[Export]
 		public Array<NodePath> submenus;
-		public Array<Menu> _submenus = new Array<Menu>(); //Also ensure the order of submenus is correct in the inspector hierarchy
+		public Array<Menu> _submenus = new(); // Also ensure the order of submenus is correct in the inspector hierarchy
 
 		[Export]
 		protected AudioStreamPlayer bgm;
@@ -55,13 +55,13 @@ namespace Project.Interface.Menus
 		protected int VerticalSelection { get; set; }
 
 		[Export]
-		protected bool isProcessing; //Should we process this menu?
+		protected bool isProcessing; // Should we process this menu?
 
 		public override void _Ready()
 		{
 			if (submenus != null)
 			{
-				for (int i = 0; i < submenus.Count; i++) //Required due to inspector not allowing for custom classes
+				for (int i = 0; i < submenus.Count; i++) // Required due to inspector not allowing for custom classes
 				{
 					Menu submenu = GetNode<Menu>(submenus[i]);
 					_submenus.Add(submenu);
@@ -70,13 +70,13 @@ namespace Project.Interface.Menus
 
 			SetUp();
 
-			if (isProcessing) //Enable isProcessing from the editor for quick single-menu debugging
+			if (isProcessing) // Enable isProcessing from the editor for quick single-menu debugging
 				ShowMenu();
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
-			ProcessBGMFade(); //Always process BGM fade
+			ProcessBGMFade(); // Always process BGM fade
 
 			if (!isProcessing || TransitionManager.IsTransitionActive) return;
 			ProcessMenu();
@@ -144,10 +144,10 @@ namespace Project.Interface.Menus
 		/// </summary>
 		protected virtual void UpdateSelection() { }
 
+		protected bool isSelectionScrolling;
 		/// <summary>
 		/// Call this to avoid selection changing too quickly.
 		/// </summary>
-		protected bool isSelectionScrolling;
 		protected void StartSelectionTimer()
 		{
 			if (!isSelectionScrolling)

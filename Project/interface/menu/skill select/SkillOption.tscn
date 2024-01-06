@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6v3sm1vo8for"]
+[gd_scene load_steps=5 format=3 uid="uid://b6v3sm1vo8for"]
 
-[ext_resource type="Texture2D" uid="uid://n4o8qvki6yi7" path="res://interface/menu/skill ring/texture/skill atlas.png" id="1_46y00"]
+[ext_resource type="Texture2D" uid="uid://n4o8qvki6yi7" path="res://interface/menu/skill select/texture/skill atlas.png" id="1_46y00"]
+[ext_resource type="Script" path="res://interface/menu/skill select/script/SkillOption.cs" id="1_djcyy"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="2_kayxw"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1r66m"]
 blend_mode = 1
 
-[node name="SkillOption" type="Control"]
+[node name="SkillOption" type="Control" node_paths=PackedStringArray("glow", "numberLabel", "nameLabel", "costLabel")]
 custom_minimum_size = Vector2(1064, 64)
 layout_mode = 3
 anchor_right = 0.554
@@ -15,6 +16,11 @@ offset_right = 0.319946
 offset_bottom = -8.36
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_djcyy")
+glow = NodePath("Light/Glow")
+numberLabel = NodePath("NumberLabel")
+nameLabel = NodePath("NameLabel")
+costLabel = NodePath("CostLabel")
 
 [node name="Light" type="Sprite2D" parent="."]
 position = Vector2(32, 32)
@@ -50,14 +56,14 @@ text = "001"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SkillLabel" type="Label" parent="."]
+[node name="NameLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.18
-anchor_right = 0.5
+anchor_right = 0.722
 anchor_bottom = 1.0
 offset_left = 32.48
-offset_right = -34.0
+offset_right = -0.208069
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)

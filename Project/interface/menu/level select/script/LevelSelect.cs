@@ -17,7 +17,7 @@ namespace Project.Interface.Menus
 		[Export]
 		private Control options;
 		private Vector2 optionVelocity;
-		private readonly List<LevelOption> levelOptions = new List<LevelOption>();
+		private readonly List<LevelOption> levelOptions = new();
 		[Export]
 		private Sprite2D scrollbar;
 
@@ -27,7 +27,7 @@ namespace Project.Interface.Menus
 		private const float SCROLL_SMOOTHING = .05f;
 
 		[Export]
-		private LevelDescription description;
+		private Description description;
 		[Export]
 		private ReadyMenu readyMenu;
 

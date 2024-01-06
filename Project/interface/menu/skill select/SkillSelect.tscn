@@ -1,13 +1,13 @@
 [gd_scene load_steps=7 format=3 uid="uid://bt32kmhyoo7ec"]
 
-[ext_resource type="Script" path="res://interface/menu/skill ring/SkillRing.cs" id="1_v1nov"]
+[ext_resource type="Script" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
 [ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="3_ud304"]
-[ext_resource type="PackedScene" uid="uid://b6v3sm1vo8for" path="res://interface/menu/skill ring/SkillOption.tscn" id="4_sgi6g"]
-[ext_resource type="Texture2D" uid="uid://cqp20lub7h6aq" path="res://interface/menu/skill ring/texture/skill menu.png" id="4_x4q03"]
+[ext_resource type="PackedScene" uid="uid://b6v3sm1vo8for" path="res://interface/menu/skill select/SkillOption.tscn" id="4_sgi6g"]
+[ext_resource type="Texture2D" uid="uid://cqp20lub7h6aq" path="res://interface/menu/skill select/texture/skill menu.png" id="4_x4q03"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="5_q6eds"]
 
-[node name="SkillRing" type="Control"]
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,10 +15,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_v1nov")
+skillOption = ExtResource("4_sgi6g")
+optionContainer = NodePath("Clip/Options")
+cursor = NodePath("CursorOrigin/Cursor")
+description = NodePath("Description")
+isProcessing = true
 metadata/_edit_lock_ = true
 
 [node name="Background" type="TextureRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,11 +47,14 @@ texture = ExtResource("4_x4q03")
 region_enabled = true
 region_rect = Rect2(0, 280, 512, 232)
 
-[node name="Cursor" type="Node2D" parent="."]
-position = Vector2(944, 480)
+[node name="CursorOrigin" type="Node2D" parent="."]
+position = Vector2(944, 232)
+metadata/_edit_lock_ = true
+
+[node name="Cursor" type="Node2D" parent="CursorOrigin"]
 scale = Vector2(2.25, 2.25)
 
-[node name="L" type="Sprite2D" parent="Cursor"]
+[node name="L" type="Sprite2D" parent="CursorOrigin/Cursor"]
 position = Vector2(0, -24)
 scale = Vector2(-1, 1)
 texture = ExtResource("4_x4q03")
@@ -56,7 +63,7 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(264, 0, 248, 48)
 
-[node name="R" type="Sprite2D" parent="Cursor"]
+[node name="R" type="Sprite2D" parent="CursorOrigin/Cursor"]
 position = Vector2(0, -24)
 texture = ExtResource("4_x4q03")
 centered = false
@@ -85,36 +92,6 @@ anchor_right = 1.0
 offset_bottom = 631.0
 grow_horizontal = 2
 theme_override_constants/separation = -1
-
-[node name="SkillOption" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption2" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption3" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption4" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption5" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption6" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption7" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption8" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption9" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
-
-[node name="SkillOption10" parent="Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
 
 [node name="ScrollBar" type="Sprite2D" parent="."]
 position = Vector2(1512, 456)

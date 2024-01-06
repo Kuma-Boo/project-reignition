@@ -12,7 +12,7 @@ namespace Project.Interface.Menus
 		[Export]
 		private VideoStreamPlayer secondaryVideoPlayer;
 		[Export]
-		private Array<StringName> videoStreamPaths = new Array<StringName>();
+		private Array<StringName> videoStreamPaths = new();
 		private VideoStream[] videoStreams;
 		private VideoStreamPlayer ActiveVideoPlayer { get; set; }
 		private VideoStreamPlayer PreviousVideoPlayer { get; set; }
@@ -23,17 +23,17 @@ namespace Project.Interface.Menus
 
 		[ExportGroup("Selection Settings")]
 		[Export]
-		private LevelDescription description;
+		private Description description;
 		[Export]
-		private Array<Rect2> levelSpriteRegions = new Array<Rect2>();
+		private Array<Rect2> levelSpriteRegions = new();
 		[Export]
-		private Array<string> levelDescriptionKeys = new Array<string>();
+		private Array<string> levelDescriptionKeys = new();
 		[Export]
-		private Array<NodePath> levelTextSprites = new Array<NodePath>();
+		private Array<NodePath> levelTextSprites = new();
 		[Export]
-		private Array<NodePath> levelGlowSprites = new Array<NodePath>();
-		private readonly Array<Sprite2D> _levelTextSprites = new Array<Sprite2D>();
-		private readonly Array<Sprite2D> _levelGlowSprites = new Array<Sprite2D>();
+		private Array<NodePath> levelGlowSprites = new();
+		private readonly Array<Sprite2D> _levelTextSprites = new();
+		private readonly Array<Sprite2D> _levelGlowSprites = new();
 
 		protected override void SetUp()
 		{

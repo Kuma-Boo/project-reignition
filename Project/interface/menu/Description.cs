@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Interface.Menus
 {
-	public partial class LevelDescription : Control
+	public partial class Description : Control
 	{
 		[Export]
 		private Label descriptionLabel;

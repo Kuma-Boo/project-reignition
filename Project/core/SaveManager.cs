@@ -294,7 +294,7 @@ namespace Project.Core
 			/// <summary> Total playtime, in seconds. </summary>
 			public float playTime;
 			/// <summary> Current skill ring. </summary>
-			public SkillRing skillRing;
+			public SkillRing skillRing = new();
 
 			/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
 			public bool IsNewFile() => level == 0;

@@ -8,9 +8,9 @@ namespace Project.Core
 	{
 		public static Runtime Instance;
 
-		public static RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+		public static readonly RandomNumberGenerator randomNumberGenerator = new();
 
-		public static readonly Vector2I SCREEN_SIZE = new Vector2I(1920, 1080); //Working resolution is 1080p
+		public static readonly Vector2I SCREEN_SIZE = new(1920, 1080); // Working resolution is 1080p
 		public static readonly Vector2I HALF_SCREEN_SIZE = (Vector2I)((Vector2)SCREEN_SIZE * .5f);
 
 		public override void _EnterTree()
@@ -39,6 +39,9 @@ namespace Project.Core
 		[Export]
 		/// <summary> Lockout used for stopping the player. </summary>
 		public LockoutResource StopLockout { get; private set; }
+
+		[Export]
+		public SkillListResource masterSkillList;
 
 		public static readonly float GRAVITY = 28.0f;
 		public static readonly float MAX_GRAVITY = -48.0f;

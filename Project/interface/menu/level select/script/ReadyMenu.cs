@@ -10,7 +10,7 @@ namespace Project.Interface.Menus
 		[Export]
 		private Label missionLabel;
 		[Export]
-		private LevelDescription description;
+		private Description description;
 		public void ShowDescription() => description.ShowDescription();
 		public void HideDescription() => description.HideDescription();
 

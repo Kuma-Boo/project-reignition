@@ -113,6 +113,9 @@ namespace Project.Gameplay
 		}
 
 
+		public int GetSkillCost(SkillKeyEnum key) => skillCostList[GetSkillIndex(key)];
+
+
 		/// <summary> Creates a skill. </summary>
 		private void CreateSkill(SkillKeyEnum key)
 		{
@@ -152,8 +155,7 @@ namespace Project.Gameplay
 
 	public class SkillRing
 	{
-		public Array<SkillKeyEnum> equippedSkills; // List of equipped skills
-
+		public Array<SkillKeyEnum> equippedSkills = new(); // List of equipped skills
 		public int totalCost;
 	}
 }
