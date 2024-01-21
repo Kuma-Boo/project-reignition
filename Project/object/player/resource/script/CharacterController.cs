@@ -1492,16 +1492,16 @@ namespace Project.Gameplay
 			Vector3 castOrigin = CenterPosition;
 			float castLength = CollisionRadius + COLLISION_PADDING * 2.0f;
 			if (IsOnGround)
-				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; //Atttempt to remain stuck to the ground when moving quickly
+				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; // Attempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpeed < 0)
 				castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
 
 			Vector3 checkOffset = Vector3.Zero;
-			RaycastHit groundHit = new RaycastHit();
+			RaycastHit groundHit = new();
 			Vector3 castVector = this.Down() * castLength;
 			int raysHit = 0;
 
-			//Whisker casts (For smoother collision)
+			// Whisker casts (For smoother collision)
 			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
 			Vector3 castOffset = this.Forward() * (CollisionRadius - COLLISION_PADDING);
 			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
@@ -1527,33 +1527,22 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (groundHit) //Successful ground hit
+			if (groundHit) // Successful ground hit
 			{
 				Effect.UpdateGroundType(groundHit.collidedObject);
 
 				groundHit.Divide(raysHit);
 				float snapDistance = groundHit.distance - CollisionRadius - COLLISION_PADDING;
-				//Landing on the ground
+				// Landing on the ground
 				if (!IsOnGround && VerticalSpeed < 0)
 				{
 					UpDirection = groundHit.normal;
 					UpdateOrientation();
 					LandOnGround();
 					Effect.PlayLandingFX();
-
-					if (Mathf.Abs(groundHit.normal.Dot(Vector3.Up)) < .9f) //Slanted ground fix
-					{
-						Vector3 offsetVector = groundHit.point - GlobalPosition;
-						Vector3 axis = offsetVector.Cross(Vector3.Up).Normalized();
-						if (axis.IsNormalized())
-						{
-							offsetVector = offsetVector.Rotated(axis, offsetVector.SignedAngleTo(Vector3.Up, axis));
-							snapDistance = offsetVector.Y;
-						}
-					}
 				}
 
-				GlobalPosition += castVector.Normalized() * snapDistance; //Snap to ground
+				GlobalPosition -= UpDirection * snapDistance; // Snap to ground
 
 				if (IsOnGround)
 				{
