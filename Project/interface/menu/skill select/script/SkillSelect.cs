@@ -18,6 +18,8 @@ namespace Project.Interface.Menus
 		[Export]
 		private Sprite2D scrollbar;
 		[Export]
+		private Sprite2D skillPointFill;
+		[Export]
 		private Label skillPointLabel;
 
 		private SkillListResource MasterSkillList => Runtime.Instance.masterSkillList;
@@ -110,6 +112,7 @@ namespace Project.Interface.Menus
 		private void Redraw()
 		{
 			skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
+			skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
 			skillList[VerticalSelection].IsSkillActive = ActiveSkillRing.equippedSkills.Contains(skillList[VerticalSelection].Key);
 		}
 
