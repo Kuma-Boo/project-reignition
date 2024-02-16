@@ -84,9 +84,7 @@ namespace Project.Gameplay
 		public void ResetActionState() => SetActionState(ActionStates.Normal);
 		private void SetActionState(ActionStates newState)
 		{
-			if (ActionState == ActionStates.Damaged)
-				Animator.StopHurt();
-			else if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
+			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				StopCrouching();
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
 				Effect.StopTrailFX();
@@ -1252,6 +1250,8 @@ namespace Project.Gameplay
 			IsMovingBackward = false;
 			ResetVelocity();
 			ResetOrientation();
+
+			Animator.StopHurt(); // Stop hurt animation
 
 			Level.RespawnObjects();
 			Level.IncrementRespawnCount();
