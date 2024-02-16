@@ -1195,9 +1195,15 @@ namespace Project.Gameplay
 			SetActionState(ActionStates.Damaged);
 
 			if (Level.CurrentRingCount == 0)
+			{
+				Effect.PlayVoice("defeat");
 				StartRespawn();
+			}
 			else
+			{
+				Effect.PlayVoice("hurt");
 				Level.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
+			}
 		}
 
 		[Signal]
