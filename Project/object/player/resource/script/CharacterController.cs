@@ -922,6 +922,7 @@ namespace Project.Gameplay
 				if (MoveSpeed <= Skills.SlideSettings.speed)
 					MoveSpeed = Skills.SlideSettings.speed;
 
+				Effect.PlayActionSFX("slide");
 				SetActionState(ActionStates.Sliding);
 			}
 			else

@@ -103,6 +103,9 @@ namespace Project.Gameplay.Triggers
 
 			// Update velocity
 			float targetVelocity = Input.GetAxis("move_left", "move_right") * (isFacingRight ? 1 : -1) * CYCLE_FREQUENCY;
+			if (Mathf.IsZeroApprox(velocity) && !Mathf.IsZeroApprox(targetVelocity)) // Ensure sfx plays when starting to move
+				Character.Effect.PlayActionSFX("sidle");
+
 			if (Mathf.IsZeroApprox(velocity) || Mathf.Sign(targetVelocity) == Mathf.Sign(velocity))
 				velocity = Mathf.Lerp(velocity, targetVelocity, TRACTION_SMOOTHING);
 			else
@@ -118,10 +121,11 @@ namespace Project.Gameplay.Triggers
 			if (!Mathf.IsZeroApprox(velocity))
 			{
 				cycleTimer += velocity * PhysicsManager.physicsDelta;
-				if (cycleTimer >= 1)
-					cycleTimer--;
-				else if (cycleTimer < 0)
-					cycleTimer++;
+				if (Mathf.Abs(cycleTimer - .5f) >= .5f) // Starting a new cycle
+				{
+					cycleTimer -= Mathf.Sign(cycleTimer);
+					Character.Effect.PlayActionSFX("sidle");
+				}
 
 				Character.Animator.UpdateSidle(cycleTimer);
 				Character.MoveSpeed = Character.Skills.sidleMovementCurve.Sample(cycleTimer) * velocity * CYCLE_DISTANCE;
@@ -208,11 +212,12 @@ namespace Project.Gameplay.Triggers
 						StartRespawn();
 						Character.Animator.SidleHangFall();
 					}
-					else if (Input.IsActionJustPressed("button_jump")) //Process inputs
+					else if (Input.IsActionJustPressed("button_jump")) // Process inputs
 					{
-						//Jump back to the ledge
+						// Jump back to the ledge
 						cycleTimer = 0;
 						damageState = DamageStates.Recovery;
+						Character.Effect.PlayActionSFX(Character.Effect.JUMP_SFX);
 						Character.Effect.PlayVoice("grunt");
 						Character.Animator.SidleRecovery();
 					}
