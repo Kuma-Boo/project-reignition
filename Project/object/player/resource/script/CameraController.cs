@@ -63,7 +63,7 @@ namespace Project.Gameplay
 		}
 
 
-		public override void _PhysicsProcess(double _)
+		public override void _Process(double _)
 		{
 			PathFollower.Resync();
 
@@ -71,10 +71,6 @@ namespace Project.Gameplay
 			if (Character.IsDefeated) return;
 
 			UpdateGameplayCamera();
-		}
-
-		public override void _Process(double _)
-		{
 			if (OS.IsDebugBuild())
 				UpdateFreeCam();
 		}
@@ -196,7 +192,7 @@ namespace Project.Gameplay
 			}
 
 			float influence = Mathf.MoveToward(CameraBlendList[blendIndex].LinearInfluence, 1f,
-				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.physicsDelta);
+				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.normalDelta);
 			CameraBlendList[blendIndex].SetInfluence(influence);
 		}
 
@@ -402,7 +398,7 @@ namespace Project.Gameplay
 				data.precalculatedPosition = data.blendData.StaticPosition;
 
 				if (settings.copyRotation) // Override rotation w/ inherited basis
-					data.offsetBasis = data.blendData.RotationBasis;
+					data.offsetBasis = data.blendData.RotationBasis.Orthonormalized();
 				else
 				{
 					Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
@@ -595,7 +591,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.physicsDelta);
+			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.normalDelta);
 		}
 
 		/// <summary> [0 -> 1] Blend between offset and sample. </summary>
@@ -603,7 +599,7 @@ namespace Project.Gameplay
 
 		/// <summary> How long blending takes in seconds. </summary>
 		public float BlendTime { get; set; }
-		/// <summary> Camera's static position. Only used when CameraSettingsResource.ussStaticPosition is true. </summary>
+		/// <summary> Camera's static position. Only used when CameraSettingsResource.useStaticPosition is true. </summary>
 		public Vector3 StaticPosition { get; set; }
 
 		/// <summary> Camera's static rotation. Only used when CameraSettingsResource.useStaticRotation is true. </summary>
