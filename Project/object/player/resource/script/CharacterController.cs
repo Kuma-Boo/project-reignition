@@ -86,7 +86,7 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				StopCrouching();
-			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
+			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX				
 				Effect.StopTrailFX();
 
 			ActionState = newState;
@@ -857,11 +857,9 @@ namespace Project.Gameplay
 			else //Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
-			if (CanJumpDash)
-			{
-				Effect.PlayActionSFX("jump dash");
-				Effect.StartTrailFX();
-			}
+			Animator.StopHurt(); // Cancel hurt animation if necessary
+			Effect.PlayActionSFX("jump dash");
+			Effect.StartTrailFX();
 
 			CanJumpDash = false;
 			IsMovingBackward = false; //Can't jumpdash backwards!
