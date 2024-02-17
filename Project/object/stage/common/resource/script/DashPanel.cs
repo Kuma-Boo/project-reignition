@@ -31,6 +31,7 @@ namespace Project.Gameplay.Objects
 
 			sfxPlayer.Play();
 			isQueued = false;
+			Character.ResetActionState();
 
 			//Only apply speed boost when player is moving slow. Don't slow them down!
 			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio)
