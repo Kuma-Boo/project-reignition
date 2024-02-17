@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://cp0tqv3rfejma"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_ks0kr"]
-[ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="8_atfm6"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="8_atfm6"]
 [ext_resource type="PackedScene" uid="uid://b3folnh8hcqs" path="res://area/1 sand oasis/boss/boss/SandScorpion.tscn" id="8_sawvf"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="9_7ca06"]
 [ext_resource type="PackedScene" uid="uid://brtel7tjfbqu1" path="res://area/1 sand oasis/boss/Static.tscn" id="9_qrt26"]
@@ -46,7 +46,10 @@ size = Vector3(24, 20, 4)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("9_qrt26")]
-"Item Cycling/Activation Trigger" = NodePath("")
+"Item Cycling/Activation Trigger" = NodePath("../BossAct/ItemCyclePoint")
+"Item Cycling/Halfway Trigger" = NodePath("../BossAct/ItemHalfwayPoint")
+"Item Cycling/Enable Respawning" = true
+"Item Cycling/Item Cycles" = [NodePath("../BossAct/Lap01"), NodePath("../BossAct/Lap02"), NodePath("../BossAct/Lap03")]
 
 [node name="BossAct" type="Node3D" parent="."]
 

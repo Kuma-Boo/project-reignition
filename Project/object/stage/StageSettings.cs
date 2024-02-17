@@ -588,6 +588,13 @@ namespace Project.Gameplay
 		public void RespawnObjects()
 		{
 			SoundManager.instance.CancelDialog(); // Cancel any active dialog
+
+			if (!itemCycleActivationTrigger.IsEmpty) // Respawn item cycles
+			{
+				itemCycleIndex = 0;
+				SpawnItemCycle();
+			}
+
 			EmitSignal(SignalName.OnRespawned);
 		}
 
@@ -639,23 +646,34 @@ namespace Project.Gameplay
 
 			// Cycle items
 			if (itemCycleRespawnEnabled)
-				RespawnObjects();
+				EmitSignal(SignalName.OnRespawned);
 
-			if (_itemCycles[itemCycleIndex] != null) // Despawn current item cycle
-				_itemCyclesSpawnData[itemCycleIndex].parentNode.CallDeferred(MethodName.RemoveChild, _itemCycles[itemCycleIndex]);
+			DespawnItemCycle();
 
 			// Increment counter
 			itemCycleIndex++;
 			if (itemCycleIndex > itemCycles.Count - 1)
 				itemCycleIndex = 0;
 
+			SpawnItemCycle();
+			itemCycleFlagSet = false;
+		}
+
+
+		private void DespawnItemCycle()
+		{
+			if (_itemCycles[itemCycleIndex] != null) // Despawn current item cycle
+				_itemCyclesSpawnData[itemCycleIndex].parentNode.CallDeferred(MethodName.RemoveChild, _itemCycles[itemCycleIndex]);
+		}
+
+
+		private void SpawnItemCycle()
+		{
 			if (_itemCycles[itemCycleIndex] != null) // Spawn current item cycle
 			{
 				_itemCyclesSpawnData[itemCycleIndex].parentNode.AddChild(_itemCycles[itemCycleIndex]);
 				_itemCycles[itemCycleIndex].Transform = _itemCyclesSpawnData[itemCycleIndex].spawnTransform;
 			}
-
-			itemCycleFlagSet = false;
 		}
 
 
