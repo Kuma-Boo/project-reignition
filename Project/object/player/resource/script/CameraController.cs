@@ -63,7 +63,7 @@ namespace Project.Gameplay
 		}
 
 
-		public override void _Process(double _)
+		public override void _PhysicsProcess(double _)
 		{
 			PathFollower.Resync();
 
@@ -71,7 +71,10 @@ namespace Project.Gameplay
 			if (Character.IsDefeated) return;
 
 			UpdateGameplayCamera();
+		}
 
+		public override void _Process(double _)
+		{
 			if (OS.IsDebugBuild())
 				UpdateFreeCam();
 		}
@@ -193,7 +196,7 @@ namespace Project.Gameplay
 			}
 
 			float influence = Mathf.MoveToward(CameraBlendList[blendIndex].LinearInfluence, 1f,
-				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.normalDelta);
+				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.physicsDelta);
 			CameraBlendList[blendIndex].SetInfluence(influence);
 		}
 
@@ -592,7 +595,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.normalDelta);
+			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.physicsDelta);
 		}
 
 		/// <summary> [0 -> 1] Blend between offset and sample. </summary>
@@ -628,7 +631,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DISTANCE_SMOOTHING * PhysicsManager.normalDelta);
+			distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DISTANCE_SMOOTHING * PhysicsManager.physicsDelta);
 		}
 
 		/// <summary> Has this blend data been processed before? </summary>
