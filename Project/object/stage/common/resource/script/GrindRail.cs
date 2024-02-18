@@ -92,6 +92,8 @@ namespace Project.Gameplay
 		private bool isActive;
 		/// <summary> Process collisions? </summary>
 		private bool isInteractingWithPlayer;
+		/// <summary> Is the player leaving via grindstep? </summary>
+		private bool isGrindstepping;
 
 
 		public override void _Ready()
@@ -161,7 +163,7 @@ namespace Project.Gameplay
 
 			delta = pathFollower.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - pathFollower.GlobalPosition);
 			if (Mathf.Abs(delta.X) < GRIND_RAIL_SNAPPING ||
-				(Character.IsGrindstepping && Mathf.Abs(delta.X) < GRINDSTEP_RAIL_SNAPPING)) // Start grinding
+				(Character.ActionState == CharacterController.ActionStates.Grindstep && Mathf.Abs(delta.X) < GRINDSTEP_RAIL_SNAPPING)) // Start grinding
 				Activate();
 		}
 
@@ -169,6 +171,7 @@ namespace Project.Gameplay
 		private void Activate()
 		{
 			isActive = true;
+			isGrindstepping = false;
 
 			// Reset buffer timers
 			jumpBufferTimer = 0;
@@ -229,7 +232,7 @@ namespace Project.Gameplay
 			Character.VerticalSpeed = Mathf.Sin(launchAngle) * -Character.MoveSpeed;
 			Character.MoveSpeed = Mathf.Cos(launchAngle) * Character.MoveSpeed;
 
-			if (!Character.IsGrindstepping)
+			if (!isGrindstepping)
 				Character.Animator.ResetState(.2f);
 			Character.Animator.SnapRotation(Character.MovementAngle);
 			Character.Animator.IsFallTransitionEnabled = true;
@@ -286,11 +289,11 @@ namespace Project.Gameplay
 					jumpBufferTimer = 0;
 
 					//Check if the player is holding a direction parallel to rail and start a grindstep
-					Character.IsGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi * .5f) ||
+					isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + Mathf.Pi * .5f) ||
 						Character.IsHoldingDirection(Character.MovementAngle - Mathf.Pi * .5f);
 
 					Deactivate();
-					if (Character.IsGrindstepping) // Grindstepping
+					if (isGrindstepping) // Grindstepping
 						Character.StartGrindstep();
 					else // Jump normally
 						Character.Jump(true);

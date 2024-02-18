@@ -79,6 +79,7 @@ namespace Project.Gameplay
 			JumpDash, //Also includes homing attack
 			Stomping, //Jump cancel
 			Backflip,
+			Grindstep,
 		}
 
 		public void ResetActionState() => SetActionState(ActionStates.Normal);
@@ -86,8 +87,10 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				StopCrouching();
-			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX				
+			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
 				Effect.StopTrailFX();
+			else if (ActionState == ActionStates.Grindstep)
+				StopGrindstep();
 
 			ActionState = newState;
 		}
@@ -984,7 +987,7 @@ namespace Project.Gameplay
 			currentJumpTime < .1f)
 				return;
 
-			if (IsGrindstepping)
+			if (ActionState == ActionStates.Grindstep)
 				Animator.ResetState(.1f);
 
 			//Stomp
@@ -1047,7 +1050,6 @@ namespace Project.Gameplay
 		#endregion
 
 		#region GrindStep
-		public bool IsGrindstepping { get; set; }
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
@@ -1066,14 +1068,13 @@ namespace Project.Gameplay
 			MoveSpeed = new Vector2(horizontalTarget, MoveSpeed).Length();
 
 			CanJumpDash = false; // Disable jumpdashing
+			SetActionState(ActionStates.Grindstep);
 			Effect.PlayActionSFX(Effect.JUMP_SFX);
 			Animator.StartGrindStep();
 		}
 
 		public void StopGrindstep()
 		{
-			IsGrindstepping = false;
-
 			StrafeSpeed = 0;
 			MovementAngle = Animator.VisualAngle;
 			Animator.ResetState(.1f);
@@ -1594,8 +1595,8 @@ namespace Project.Gameplay
 			CanJumpDash = false;
 
 			isAccelerationJumpQueued = false;
-			if (IsGrindstepping)
-				StopGrindstep();
+			if (ActionState == ActionStates.Grindstep)
+				ResetActionState();
 
 			ResetActionState();
 			Lockon.ResetLockonTarget();
