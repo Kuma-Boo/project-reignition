@@ -943,18 +943,20 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -1);
-
-				if (ActionState == ActionStates.Sliding) // Update turning
+				if (ActionState == ActionStates.Sliding)
 				{
-					if (!IsHoldingDirection(PathFollower.BackAngle)) //Influence sliding direction slightly
+					// Influence sliding direction slightly
+					if (!IsHoldingDirection(PathFollower.BackAngle))
 					{
 						float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.ForwardAngle, MAX_SLIDE_ADJUSTMENT);
 						MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, MIN_TURN_AMOUNT);
-
-						if (IsHoldingDirection(PathFollower.ForwardAngle))
-							MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -(1 - InputVector.Length()));
 					}
+
+					// Influence speed
+					if (IsHoldingDirection(PathFollower.ForwardAngle))
+						MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -(1 - InputVector.Length()));
+					else
+						MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -InputVector.Length());
 				}
 				else if (ActionState == ActionStates.Crouching)
 					MoveSpeed *= .5f;
