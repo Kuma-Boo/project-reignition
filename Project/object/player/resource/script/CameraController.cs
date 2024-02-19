@@ -62,11 +62,9 @@ namespace Project.Gameplay
 			});
 		}
 
-
-		public override void _Process(double _)
+		public override void _PhysicsProcess(double _)
 		{
 			PathFollower.Resync();
-
 			//Don't update the camera when the player is defeated
 			if (Character.IsDefeated) return;
 
@@ -192,7 +190,7 @@ namespace Project.Gameplay
 			}
 
 			float influence = Mathf.MoveToward(CameraBlendList[blendIndex].LinearInfluence, 1f,
-				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.normalDelta);
+				CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.physicsDelta);
 			CameraBlendList[blendIndex].SetInfluence(influence);
 		}
 
@@ -591,7 +589,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.normalDelta);
+			hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HALL_SMOOTHING * PhysicsManager.physicsDelta);
 		}
 
 		/// <summary> [0 -> 1] Blend between offset and sample. </summary>
