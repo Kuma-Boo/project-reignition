@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cfejcc3m08i2r" path="res://area/6 skeleton dome/object/platform/PlatformCavernFalling.tscn" id="4_w5q3l"]
 [ext_resource type="PackedScene" uid="uid://b1daf70kelhld" path="res://area/6 skeleton dome/object/platform/PlatformCavernLarge.tscn" id="5_5f5sv"]
 [ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="5_danjg"]
-[ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="5_p0cpw"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_p0cpw"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="6_21sva"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="6_86hu3"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_i636b"]
@@ -333,8 +333,6 @@ size = Vector3(30, 20, 1)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_6irkq")]
-"Item Cycling/Activation Trigger" = NodePath("")
-"Completion/Demo Animator" = NodePath("")
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -1879,6 +1877,9 @@ enemyCount = 1
 
 [node name="SpringEvent" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup2" node_paths=PackedStringArray("animator")]
 script = ExtResource("40_dipor")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="Spring02" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent" instance=ExtResource("4_ia1t0")]
@@ -1943,6 +1944,9 @@ transform = Transform3D(0.999893, -0.0146693, 0.000496656, 0.0144478, 0.989635, 
 
 [node name="Gate" parent="MainAct/Field/SpiralPath" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.96418, 0, 1.14907, 0, 1.5, 0, -1.14907, 0, 0.96418, 8.69281, -2.50708, -72.0129)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 330.9, 0, -900)
@@ -1970,6 +1974,9 @@ transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 
 
 [node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1.08253, 0, 0.5, 0, 1, 0, -0.625, 0, 0.866025, -4.5, 0, -7.33)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings1" type="Node3D" parent="MainAct/Cavern/Hall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.8, -10)
@@ -2044,6 +2051,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1, 0, -57.4)
 
 [node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.689362, 0, -9.87842)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup2" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -2053,6 +2063,9 @@ transform = Transform3D(0.384247, 0, -0.92323, 0, 1, 0, 0.92323, 0, 0.384247, 27
 
 [node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup3" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.129333, 0, -5.48291)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup3" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -2067,6 +2080,9 @@ transform = Transform3D(-0.208356, 0, -0.978053, 0, 1, 0, 0.978053, 0, -0.208356
 
 [node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup4" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19995, 0, -5)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup4" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -2081,6 +2097,9 @@ transform = Transform3D(-0.18021, 0, -0.983628, 0, 1, 0, 0.983628, 0, -0.18021, 
 
 [node name="Gate" parent="MainAct/Cavern/Hall/SwitchGroup5" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1, 0, -5)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/Cavern/Hall/SwitchGroup5" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -3468,6 +3487,9 @@ transform = Transform3D(0.819152, -0.0539783, 0.571031, 0, 0.995562, 0.0941083, 
 
 [node name="Gate" parent="MainAct/SideCavern/Hall/SwitchGroup" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.80005, -1.73822, -20)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Sickle1" parent="MainAct/SideCavern/Hall" instance=ExtResource("43_lkrtx")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -36, 12.4, -30)
@@ -3651,6 +3673,9 @@ animatorSpeedScale = 0.4
 
 [node name="Gate" parent="MainAct/Interior/MainHall/SwitchGroup" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.984809, 0, -0.173649, 0, 1, 0, 0.173649, 0, 0.984809, 1.07169, 0, -5.59216)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="LowerHall" type="Node3D" parent="MainAct/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 20, -239.9)
@@ -3777,6 +3802,9 @@ enemyCount = 3
 
 [node name="Gate" parent="MainAct/Interior/LowerHall/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19995, 0, -12)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings4" type="Node3D" parent="MainAct/Interior/LowerHall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 220, 1, 0)
@@ -3836,6 +3864,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.100111, 0)
 
 [node name="Gate" parent="MainAct/Interior/LowerHall/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="GrindrailL" parent="MainAct/Interior/LowerHall" instance=ExtResource("36_3kt84")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 287.8, 0.299999, -82.1)
@@ -4346,6 +4377,9 @@ shape = SubResource("BoxShape3D_m7se1")
 [node name="SpikeBallSpawners" type="Node3D" parent="MainAct/Spiral/Sidle" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 5.58794e-09, -2.98023e-08, -1.86265e-09, 0.999999, -3.35276e-08, 8.9407e-08, -1.19209e-07, 1, -6.10352e-05, -1.52588e-05, 0.00012207)
 script = ExtResource("40_dipor")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="SpikeBallSpawner1" parent="MainAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("3_7v3mk")]
@@ -4652,6 +4686,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
 
 [node name="Gate" parent="MainAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SpikeBall1" parent="MainAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -4732,6 +4769,9 @@ animatorSpeedScale = 0.5
 
 [node name="Gate" parent="MainAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.70001)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="WarpRed" parent="MainAct/Spiral/Warp" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0, 0)
@@ -4838,6 +4878,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup2" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53)
@@ -4886,6 +4929,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup3" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -71)
@@ -4909,6 +4955,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup3" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -83)
@@ -4944,6 +4993,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup4" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup5" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -106)
@@ -4981,6 +5033,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup5" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="WarpRed" parent="MainAct/HallB" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -138)
@@ -6090,55 +6145,55 @@ shape = SubResource("BoxShape3D_7ky5u")
 [connection signal="Defeated" from="MainAct/Spiral/MiddleRow/SpringGroup/SkeletonMajin3" to="MainAct/Spiral/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Spiral/Warp/SwitchGroup1/Switch" to="MainAct/Spiral/Warp/SwitchGroup1/Gate" method="Activate"]
 [connection signal="Activated" from="MainAct/Spiral/Warp/SwitchGroup2/Switch" to="MainAct/Spiral/Warp/SwitchGroup2/Gate" method="Activate"]
-[connection signal="Teleport" from="MainAct/Spiral/Warp/WarpRed" to="MainAct/Spiral" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Spiral/Warp/WarpRed" to="MainAct/HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/Spiral/Warp/WarpRed" to="Static/Trigger/Path/HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/Spiral/Warp/WarpRed" to="Static/Visuals/09Spiral" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Spiral/Warp/WarpRed" to="Static/Visuals/10HallA" method="Activate"]
+[connection signal="Teleport" from="MainAct/Spiral/Warp/WarpRed" to="MainAct/Spiral" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/Spiral/Warp/WarpRed" to="MainAct/HallA" method="Activate"]
 [connection signal="Defeated" from="MainAct/HallA/SkeletonMajin1" to="MainAct/HallA/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/HallA/SkeletonMajin2" to="MainAct/HallA/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/HallA/SkeletonMajin3" to="MainAct/HallA/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/HallA/SkeletonMajin4" to="MainAct/HallA/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/HallA/SkeletonMajin5" to="MainAct/HallA/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/HallA/SkeletonMajin6" to="MainAct/HallA/EnemyStone" method="IncrementCounter"]
-[connection signal="Teleport" from="MainAct/HallA/WarpRed" to="MainAct/HallA" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/HallA/WarpRed" to="MainAct/HallB" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallA/WarpRed" to="Static/Trigger/Path/HallB" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallA/WarpRed" to="Static/Visuals/10HallA" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallA/WarpRed" to="Static/Visuals/11HallB" method="Activate"]
+[connection signal="Teleport" from="MainAct/HallA/WarpRed" to="MainAct/HallA" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/HallA/WarpRed" to="MainAct/HallB" method="Activate"]
 [connection signal="Activated" from="MainAct/HallB/SwitchGroup1/Switch" to="MainAct/HallB/SwitchGroup1/Gate" method="Activate"]
 [connection signal="Activated" from="MainAct/HallB/SwitchGroup2/Switch" to="MainAct/HallB/SwitchGroup2/Gate" method="Activate"]
 [connection signal="Activated" from="MainAct/HallB/SwitchGroup3/Switch" to="MainAct/HallB/SwitchGroup3/Gate" method="Activate"]
 [connection signal="Activated" from="MainAct/HallB/SwitchGroup4/Switch" to="MainAct/HallB/SwitchGroup4/Gate" method="Activate"]
 [connection signal="Activated" from="MainAct/HallB/SwitchGroup5/Switch" to="MainAct/HallB/SwitchGroup5/Gate" method="Activate"]
-[connection signal="Teleport" from="MainAct/HallB/WarpRed" to="MainAct/HallB" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/HallB/WarpRed" to="MainAct/HallC" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallB/WarpRed" to="Static/Trigger/Path/HallC" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallB/WarpRed" to="Static/Visuals/11HallB" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallB/WarpRed" to="Static/Visuals/12HallC" method="Activate"]
-[connection signal="Teleport" from="MainAct/HallB/WarpWhite" to="MainAct/HallA" method="Activate"]
-[connection signal="Teleport" from="MainAct/HallB/WarpWhite" to="MainAct/HallB" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/HallB/WarpRed" to="MainAct/HallB" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/HallB/WarpRed" to="MainAct/HallC" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallB/WarpWhite" to="Static/Trigger/Path/HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallB/WarpWhite" to="Static/Visuals/10HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallB/WarpWhite" to="Static/Visuals/11HallB" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/HallC/WarpWhiteL" to="MainAct/HallA" method="Activate"]
-[connection signal="Teleport" from="MainAct/HallC/WarpWhiteL" to="MainAct/HallC" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/HallB/WarpWhite" to="MainAct/HallA" method="Activate"]
+[connection signal="Teleport" from="MainAct/HallB/WarpWhite" to="MainAct/HallB" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteL" to="Static/Trigger/Path/HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteL" to="Static/Visuals/10HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteL" to="Static/Visuals/12HallC" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/HallC/WarpRed" to="MainAct/HallC" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/HallC/WarpRed" to="MainAct/HallT" method="Activate"]
+[connection signal="Teleport" from="MainAct/HallC/WarpWhiteL" to="MainAct/HallA" method="Activate"]
+[connection signal="Teleport" from="MainAct/HallC/WarpWhiteL" to="MainAct/HallC" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpRed" to="Static/Trigger/Path/HallT" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpRed" to="Static/Visuals/12HallC" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpRed" to="Static/Visuals/13HallTreasure" method="Activate"]
-[connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="MainAct/HallA" method="Activate"]
-[connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="MainAct/HallC" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/HallC/WarpRed" to="MainAct/HallC" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/HallC/WarpRed" to="MainAct/HallT" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="Static/Trigger/Path/HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="Static/Visuals/10HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="Static/Visuals/12HallC" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/HallT/WarpRed" to="MainAct/HallT" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/HallT/WarpRed" to="MainAct/End" method="Activate"]
+[connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="MainAct/HallA" method="Activate"]
+[connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="MainAct/HallC" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Trigger/Path/Throne" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Visuals/13HallTreasure" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Visuals/14Arena" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Visuals/15Hall" method="Activate"]
+[connection signal="Teleport" from="MainAct/HallT/WarpRed" to="MainAct/HallT" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/HallT/WarpRed" to="MainAct/End" method="Activate"]

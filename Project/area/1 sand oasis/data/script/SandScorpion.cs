@@ -742,7 +742,7 @@ namespace Project.Gameplay.Bosses
 			}
 
 			if (!TakeDamage())
-				Character.Lockon.StartBounce();
+				Character.Lockon.StartBounce(false);
 		}
 
 		/// <summary> Is the player currently colliding with the eye on the boss's back? </summary>

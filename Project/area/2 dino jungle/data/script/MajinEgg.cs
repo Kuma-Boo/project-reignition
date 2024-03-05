@@ -53,7 +53,7 @@ namespace Project.Gameplay.Objects
 				else
 					animator.Play("crack-01");
 
-				Character.Lockon.StartBounce();
+				Character.Lockon.StartBounce(false);
 			}
 		}
 	}

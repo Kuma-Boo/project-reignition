@@ -178,18 +178,18 @@ namespace Project.Gameplay
 		}
 
 
-		public void StartBounce(bool snapToTarget = false) // Bounce the player
+		public void StartBounce(bool bounceUpward = true) // Bounce the player
 		{
 			IsHomingAttacking = false;
 			CanInterruptBounce = false;
 			bounceInterruptTimer = bounceLockoutSettings.length - .5f;
 
-			if (snapToTarget && Target != null) // Snap the player to the target
+			if (bounceUpward && Target != null) // Snap the player to the target
 			{
 				Character.MoveSpeed = 0; // Reset speed
 				Character.GlobalPosition = Target.GlobalPosition;
 			}
-			else // Only bounce the player backwards if snapToTarget is false
+			else // Only bounce the player backwards if bounceUpward is false
 				Character.MoveSpeed = -bounceSpeed;
 
 			ResetLockonTarget();
