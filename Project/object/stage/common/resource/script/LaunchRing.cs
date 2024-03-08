@@ -221,7 +221,7 @@ namespace Project.Gameplay.Objects
 			isActive = true;
 			isRecentered = false;
 			recenterVelocity = Vector3.Zero;
-			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward());
+			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
 			Character.Animator.ExternalAngle = Character.MovementAngle;
 
 			//Disable homing reticle
