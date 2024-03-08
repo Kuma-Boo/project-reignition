@@ -74,10 +74,10 @@ namespace Project.Gameplay
 
 			if (CharacterController.instance != null)
 				mainCamera = CharacterController.instance.Camera.Camera;
-			/*
+
 			if (Engine.IsEditorHint())
 				mainCamera = Editor.StageObjectPreviewer.Plugin.editorCam;
-			*/
+
 
 			return mainCamera != null && reflectionCamera != null;
 		}
@@ -85,8 +85,8 @@ namespace Project.Gameplay
 		//Mirror main camera along plane
 		private void UpdatePosition()
 		{
-			if (!GetCamera() || !GetReflectionViewport()) return;
 			if (Engine.IsEditorHint() && !editorPreview) return;
+			if (!GetCamera() || !GetReflectionViewport()) return;
 
 			if (Engine.IsEditorHint())
 			{

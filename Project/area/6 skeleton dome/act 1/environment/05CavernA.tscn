@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dowhra81lhhjh"]
+[gd_scene load_steps=5 format=3 uid="uid://dowhra81lhhjh"]
 
 [ext_resource type="PackedScene" uid="uid://bqrpc4l71qki4" path="res://area/6 skeleton dome/act 1/environment/model/05CavernA.gltf" id="1_cuemr"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_oci1t"]
+[ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="3_y6xva"]
+[ext_resource type="Material" uid="uid://bia2fywx2kiva" path="res://area/6 skeleton dome/data/material/Water.tres" id="4_u0ur3"]
 
 [node name="05CavernA" instance=ExtResource("1_cuemr")]
 script = ExtResource("2_oci1t")
@@ -134,11 +136,23 @@ cast_shadow = 0
 gi_mode = 1
 
 [node name="stg040_w17_Mesh_0000" parent="." index="25"]
-layers = 4
+layers = 8
 cast_shadow = 0
 gi_mode = 1
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="26"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="26"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 328, 0, -897)
+layers = 1024
+light_cull_mask = 4293918728
+directional_shadow_mode = 0
+
+[node name="PlanarReflectionRenderer" parent="." index="27" instance=ExtResource("3_y6xva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340, -25, -889)
+renderMask = 5
+reflectionMaterials = [ExtResource("4_u0ur3")]
+editorPreview = true
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="28"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 339, -25, -895)
 size = Vector3(279, 168, 190)
 interior = true
