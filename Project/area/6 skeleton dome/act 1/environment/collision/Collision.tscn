@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cpap2vq8on6er"]
+[gd_scene load_steps=4 format=3 uid="uid://cpap2vq8on6er"]
 
 [ext_resource type="PackedScene" uid="uid://b8rsxqw0fsult" path="res://area/6 skeleton dome/act 1/environment/collision/Collision.gltf" id="1_aqvwq"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_q8yyq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yb0vj"]
+size = Vector3(5, 40, 10)
 
 [node name="Collision" instance=ExtResource("1_aqvwq")]
 
@@ -24,3 +28,18 @@ visible = false
 [node name="StaticBody3D" parent="SpikeBallCollision" index="0"]
 collision_layer = 16
 collision_mask = 0
+
+[node name="CavernPathWall" parent="." index="5"]
+script = ExtResource("2_q8yyq")
+
+[node name="CavePath" type="Area3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 309.2, -5, -899.8)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CavePath" index="0"]
+shape = SubResource("BoxShape3D_yb0vj")
+
+[connection signal="area_entered" from="CavePath" to="CavernPathWall" method="Activate"]
+[connection signal="area_exited" from="CavePath" to="CavernPathWall" method="Deactivate"]

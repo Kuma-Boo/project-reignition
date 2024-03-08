@@ -10,6 +10,9 @@ namespace Project.Gameplay.Triggers
 	{
 		protected CharacterController Character => CharacterController.instance;
 
+		public virtual void Activate(Area3D _) => Activate();
+		public virtual void Deactivate(Area3D _) => Deactivate();
+
 		public virtual void Activate() { }
 		public virtual void Deactivate() { }
 		public virtual void Respawn() { }
