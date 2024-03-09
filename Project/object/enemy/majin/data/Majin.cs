@@ -459,7 +459,7 @@ namespace Project.Gameplay
 			{
 				animationPlayer.Play("spawn");
 				animationTree.Set(TELEPORT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(1.0f); //Delay by length of teleport animation
+				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); //Delay by length of teleport animation
 			}
 			else //Travel
 			{
