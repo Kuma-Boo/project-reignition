@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://m68asxsb3okb" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
 [ext_resource type="PackedScene" uid="uid://cm6t7ujinia4o" path="res://area/6 skeleton dome/act 1/environment/01Opening.tscn" id="2_2hxrj"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/stage completion/StopLockout.tres" id="2_fb6ao"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/run/StopLockout.tres" id="2_fb6ao"]
 [ext_resource type="PackedScene" uid="uid://cpap2vq8on6er" path="res://area/6 skeleton dome/act 1/environment/collision/Collision.tscn" id="2_w0uof"]
 [ext_resource type="Curve3D" uid="uid://de8unmmsw8u52" path="res://area/6 skeleton dome/act 1/environment/path/LoopPath.tres" id="3_8uh60"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_gut3n"]
@@ -30,8 +30,8 @@
 [ext_resource type="PackedScene" uid="uid://bdfexa8m5qlx" path="res://area/6 skeleton dome/act 1/environment/06Hall.tscn" id="9_ps185"]
 [ext_resource type="Resource" uid="uid://da4ffdhmq38kl" path="res://area/6 skeleton dome/act 1/trigger/camera/ExteriorSideAutomationCamera.tres" id="9_u8obq"]
 [ext_resource type="Curve3D" uid="uid://bx2yc3pau034m" path="res://area/6 skeleton dome/act 1/environment/path/HallTreasurePath.tres" id="9_yis2j"]
-[ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/AutorunLockout.tres" id="10_8j6r2"]
 [ext_resource type="PackedScene" uid="uid://df7e32d20wm0s" path="res://area/6 skeleton dome/act 1/environment/07Hall.tscn" id="10_am7fh"]
+[ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="11_j17lq"]
 [ext_resource type="PackedScene" uid="uid://cj0chvxs68t3y" path="res://area/6 skeleton dome/act 1/environment/08Exterior.tscn" id="11_sdnx7"]
 [ext_resource type="PackedScene" uid="uid://b1wv2fobgv0fu" path="res://area/6 skeleton dome/act 1/environment/09Spiral.tscn" id="12_oijso"]
 [ext_resource type="PackedScene" uid="uid://nafnu78lyjso" path="res://area/6 skeleton dome/act 1/environment/10HallA.tscn" id="13_ceqn3"]
@@ -330,7 +330,7 @@ settings = ExtResource("9_u8obq")
 [node name="Lockout" type="Node3D" parent="Trigger/Object/ExteriorSideAutomation"]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0, 1, 13)
 script = ExtResource("9_ipjde")
-lockoutData = ExtResource("10_8j6r2")
+lockoutData = ExtResource("11_j17lq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/ExteriorSideAutomation"]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0, 10, -19)
@@ -767,6 +767,7 @@ directional_shadow_blend_splits = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("50_cio3r")
 
+[connection signal="Activated" from="Trigger/Object/ExteriorSideAutomation" to="Visuals/05CavernB" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/LoopAutomation" to="Trigger/Object/LoopAutomation/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/LoopAutomation" to="Trigger/Object/LoopAutomation/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/LoopAutomation" to="Trigger/Object/LoopAutomation/Path" method="Deactivate"]
