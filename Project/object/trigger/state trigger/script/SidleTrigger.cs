@@ -142,7 +142,6 @@ namespace Project.Gameplay.Triggers
 			if (!isActive) return; //Already deactivated
 
 			isActive = false;
-			Character.RemoveLockoutData(lockout);
 
 			Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.BackAngle : Character.PathFollower.ForwardAngle;
 			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
@@ -305,6 +304,7 @@ namespace Project.Gameplay.Triggers
 			if (!a.IsInGroup("player")) return;
 
 			isInteractingWithPlayer = false;
+			Character.RemoveLockoutData(lockout);
 
 			StopSidle();
 			EmitSignal(SignalName.Deactivated); // Deactivate signals
