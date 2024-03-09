@@ -31,8 +31,5 @@ namespace Project.Gameplay.Triggers
 
 		/// <summary> Emits signal when warp actually occours. </summary>
 		public void ApplyTeleport() => EmitSignal(SignalName.Teleport);
-
-		/// <summary> Overload method for connecting directly from Area3D. </summary>
-		public void Activate(Area3D a) => Activate();
 	}
 }
