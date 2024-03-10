@@ -51,8 +51,8 @@
 [ext_resource type="Curve3D" uid="uid://bnap2vstvanc3" path="res://area/6 skeleton dome/act 1/environment/path/CavernPath.tres" id="22_6cr1p"]
 [ext_resource type="Curve3D" uid="uid://s12iwxjs3hkf" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorSidePath.tres" id="23_8emqc"]
 [ext_resource type="Curve3D" uid="uid://df74bepf0633f" path="res://area/6 skeleton dome/act 1/environment/path/InteriorPath.tres" id="23_gd5mj"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="24_tfjd1"]
 [ext_resource type="Curve3D" uid="uid://clk4yjdi5rfn5" path="res://area/6 skeleton dome/act 1/environment/path/CavernSidePath.tres" id="26_fl6rx"]
+[ext_resource type="PackedScene" uid="uid://f70owqcwad3i" path="res://area/6 skeleton dome/act 1/environment/05CavernB.tscn" id="29_puvoi"]
 [ext_resource type="Curve3D" uid="uid://cr17iglvpmagl" path="res://area/6 skeleton dome/act 1/environment/path/CavernBPath.tres" id="37_1a8ni"]
 [ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/AutomationPath.tres" id="40_ih587"]
 [ext_resource type="Environment" uid="uid://kx3kct81htga" path="res://area/6 skeleton dome/data/Environment.tres" id="50_cio3r"]
@@ -593,7 +593,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Path" type="Node3D" parent="Trigger"]
-visible = false
 
 [node name="ExteriorSide" parent="Trigger/Path" instance=ExtResource("3_gut3n")]
 transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 36.6411, 40, -823.355)
@@ -646,8 +645,9 @@ shape = SubResource("BoxShape3D_gbf13")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118.35, 40, -1038.15)
 "Enter Mode" = 0
 
-[node name="Path" type="Node3D" parent="Trigger/Path/CavernB"]
+[node name="Path" type="Node3D" parent="Trigger/Path/CavernB" node_paths=PackedStringArray("path")]
 script = ExtResource("7_pc1yy")
+path = NodePath("../../../../Path/LoopPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/CavernB"]
 shape = SubResource("BoxShape3D_7hn3n")
@@ -865,10 +865,7 @@ startEnabled = true
 
 [node name="05CavernA" parent="Visuals" instance=ExtResource("7_vfkpk")]
 
-[node name="05CavernB" type="Node3D" parent="Visuals"]
-script = ExtResource("24_tfjd1")
-saveVisibilityOnCheckpoint = true
-isStageVisuals = true
+[node name="05CavernB" parent="Visuals" instance=ExtResource("29_puvoi")]
 
 [node name="06Hall" parent="Visuals" instance=ExtResource("9_ps185")]
 
@@ -997,7 +994,6 @@ environment = ExtResource("50_cio3r")
 [connection signal="Activated" from="Visuals/CullingMap/05AUnload-07Load" to="Visuals/07Hall" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/05AUnload-07Load" to="Visuals/05CavernA" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/05AUnload-07Load" to="Visuals/07Hall" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/08Load-05BUnload-06Unload" to="Visuals/05CavernB" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/08Load-05BUnload-06Unload" to="Visuals/06Hall" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/08Load-05BUnload-06Unload" to="Visuals/08Exterior" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/08Load-05BUnload-06Unload" to="Visuals/08Exterior" method="Deactivate"]
