@@ -93,6 +93,9 @@ namespace Project.Gameplay
 				StopGrindstep();
 
 			ActionState = newState;
+
+			if (ActionState != ActionStates.Damaged)
+				Animator.StopHurt();
 		}
 
 		private void UpdateStateMachine()
@@ -860,7 +863,6 @@ namespace Project.Gameplay
 			else //Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
-			Animator.StopHurt(); // Cancel hurt animation if necessary
 			Effect.PlayActionSFX("jump dash");
 			Effect.StartTrailFX();
 
@@ -1257,8 +1259,6 @@ namespace Project.Gameplay
 			IsMovingBackward = false;
 			ResetVelocity();
 			ResetOrientation();
-
-			Animator.StopHurt(); // Stop hurt animation
 
 			Level.RespawnObjects();
 			Level.IncrementRespawnCount();
