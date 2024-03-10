@@ -276,6 +276,18 @@ namespace Project.Gameplay
 			}
 		}
 
+
+		public override void TakeDamage()
+		{
+			if (isFlameActive)
+				ToggleFlameAttack();
+
+			animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+			base.TakeDamage();
+		}
+
+
 		protected override void Defeat()
 		{
 			base.Defeat();
@@ -284,6 +296,8 @@ namespace Project.Gameplay
 			{
 				if (tweener != null) //Kill any existing tween
 					tweener.Kill();
+
+				animationTree.Set(DEFEAT_TRANSITION_PARAMETER, "enabled");
 
 				Vector3 launchDirection = defeatLaunchDirection;
 				if (launchDirection.IsEqualApprox(Vector3.Zero)) //Calculate launch direction
@@ -343,6 +357,9 @@ namespace Project.Gameplay
 			"flip",
 			"fight"
 		};
+
+		private readonly StringName HIT_TRIGGER_PARAMETER = "parameters/hit_trigger/request";
+		private readonly StringName DEFEAT_TRANSITION_PARAMETER = "parameters/defeat_transition/transition_request";
 
 		private readonly StringName IDLE_FACTOR_PARAMETER = "parameters/idle_movement_factor/add_amount";
 		private readonly StringName FIDGET_TRANSITION_PARAMETER = "parameters/fidget_transition/transition_request"; //Sets the fidget animation
@@ -501,6 +518,7 @@ namespace Project.Gameplay
 				tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); //Delay spin activation by windup animation length
 			}
 		}
+
 
 		/// <summary>
 		/// Called after spin attack's windup animation.

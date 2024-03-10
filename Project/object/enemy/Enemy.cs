@@ -66,7 +66,6 @@ namespace Project.Gameplay
 					rangeCollider.Disabled = true;
 				else //Resize
 				{
-					CylinderShape3D originalShape = rangeCollider.Shape as CylinderShape3D;
 					rangeCollider.Shape = new CylinderShape3D()
 					{
 						Radius = rangeOverride,
