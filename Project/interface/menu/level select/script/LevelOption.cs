@@ -91,6 +91,7 @@ namespace Project.Interface.Menus
 		{
 			get
 			{
+				if (string.IsNullOrEmpty(levelPath)) return false; // Level doesn't exist.
 				if (Core.DebugManager.Instance.UnlockAllStages) return true;
 
 				//TODO Determine by save data

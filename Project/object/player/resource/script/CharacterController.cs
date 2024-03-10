@@ -1108,8 +1108,7 @@ namespace Project.Gameplay
 		private const float DAMAGE_FRICTION = 20f;
 		private void UpdateDamage()
 		{
-			if (Mathf.IsZeroApprox(MoveSpeed) ||
-				(!previousKnockbackSettings.stayOnGround && IsOnGround))
+			if (!previousKnockbackSettings.stayOnGround && IsOnGround)
 			{
 				ResetActionState();
 				return;
