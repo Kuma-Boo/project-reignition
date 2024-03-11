@@ -47,7 +47,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (Character.Lockon.IsBouncingLockoutActive || !IsHitboxEnabled) return;
 
-			if (isAttacking && !isHurtboxInteraction)
+			if (isAttacking && !isHurtboxInteraction && !Character.Skills.IsSpeedBreakActive)
 				Character.StartKnockback();
 			else
 				base.UpdateInteraction();
