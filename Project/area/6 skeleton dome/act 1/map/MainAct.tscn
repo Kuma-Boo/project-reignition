@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://c6qp0p2qw34ud"]
+[gd_scene load_steps=89 format=3 uid="uid://c6qp0p2qw34ud"]
 
 [ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6irkq"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_4su1b"]
@@ -36,6 +36,8 @@
 [ext_resource type="Script" path="res://object/trigger/modules/TeleportTrigger.cs" id="29_7pa2l"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="29_lingp"]
 [ext_resource type="Resource" uid="uid://da4ffdhmq38kl" path="res://area/6 skeleton dome/act 1/camera/CavernBEntranceCam.tres" id="30_ki7ko"]
+[ext_resource type="Resource" uid="uid://dis8ey5inj26x" path="res://area/6 skeleton dome/act 1/camera/CavernPanelCam.tres" id="30_m7cvs"]
+[ext_resource type="Resource" uid="uid://kdsth38ah16g" path="res://area/6 skeleton dome/act 1/camera/HallCam.tres" id="31_im3ec"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="31_uxr80"]
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="32_y1qr6"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="34_d0kwn"]
@@ -1308,7 +1310,7 @@ startCapPath = NodePath("")
 endCapPath = NodePath("")
 
 [node name="Spring03" parent="MainAct/Field/UpperPath/Grindrail2" instance=ExtResource("4_ia1t0")]
-transform = Transform3D(0.999999, -1.39698e-09, -7.45058e-09, -9.31323e-10, 0.984808, 0.173648, -7.45058e-09, -0.173648, 0.984807, 0.0383224, 0.4263, -27.6206)
+transform = Transform3D(0.999999, -2.32831e-09, -1.49012e-08, -1.86265e-09, 0.984808, 0.173648, -1.49012e-08, -0.173648, 0.984807, 0.0383148, 0.4263, -27.6206)
 finalHeight = 6.0
 distance = 1.0
 voiceKey = &""
@@ -1331,15 +1333,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.5)
 
 [node name="GreenMajin2" parent="MainAct/Field/UpperPath" instance=ExtResource("5_danjg")]
-transform = Transform3D(0.951057, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.951057, 45.4951, 4.60923, -60.7794)
+transform = Transform3D(0.951057, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.951057, 46.4951, 4.60923, -60.7794)
 rangeOverride = 25
 
 [node name="GreenMajin3" parent="MainAct/Field/UpperPath" instance=ExtResource("5_danjg")]
-transform = Transform3D(0.951057, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.951057, 48.6308, 3.30923, -61.4056)
+transform = Transform3D(0.951057, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.951057, 47.7308, 3.30923, -62.1056)
 rangeOverride = 25
 
 [node name="RedMajin" parent="MainAct/Field/UpperPath" instance=ExtResource("22_l3dvj")]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 47.2276, 2.7, -64.4283)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 46.6276, 2.7, -64.6283)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 2.0
@@ -1351,6 +1353,13 @@ transform = Transform3D(-0.956305, 0, 0.292372, 0, 1, 0, -0.292372, 0, -0.956305
 middleHeight = 40.0
 finalHeight = 24.0
 distance = 52.0
+
+[node name="Camera" type="Node3D" parent="MainAct/Field/UpperPath/JumpPanel"]
+script = ExtResource("29_lingp")
+transitionTime = 1.0
+deactivationTransitionTime = 0.5
+settings = ExtResource("30_m7cvs")
+previousSettings = ExtResource("31_im3ec")
 
 [node name="CavernBTeleport" type="Node3D" parent="MainAct/Field/UpperPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107.5, 22.4, -148.75)
@@ -1397,7 +1406,7 @@ spawnMode = 1
 
 [node name="RedMajin" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("22_l3dvj")]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0.955063, 1.5, -5.41644)
-"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 1.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 40, 0)
 "Rotation Settings/Track Player" = false
@@ -1412,7 +1421,7 @@ enemyCount = 1
 
 [node name="JumpPanel" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("34_d0kwn")]
 middleHeight = 24.0
-finalHeight = 18.0
+finalHeight = 17.0
 distance = 32.0
 
 [node name="GrindrailGroup" type="Node3D" parent="MainAct/Field/LowerPath"]
@@ -1923,7 +1932,7 @@ spawnMode = 1
 
 [node name="RedMajin" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("22_l3dvj")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -1, 0, 3)
-"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 1.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 40, 0)
 "Attack Settings/Flame Active Time" = 2.5
@@ -6200,6 +6209,8 @@ shape = SubResource("BoxShape3D_7ky5u")
 [connection signal="Shattered" from="MainAct/Overpass/Hall/BlockGroup/Stone5" to="MainAct/Overpass/Hall/BlockGroup/Stone7" method="Shatter"]
 [connection signal="Defeated" from="MainAct/Overpass/Hall/BlockGroup/RedMajin" to="MainAct/Overpass/Hall/BlockGroup/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Overpass/Hall/BlockGroup/RedMajin" to="MainAct/Overpass/Hall/BlockGroup/EnemyStone2" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Field/UpperPath/JumpPanel" to="MainAct/Field/UpperPath/JumpPanel/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Field/UpperPath/JumpPanel" to="MainAct/Field/UpperPath/JumpPanel/Camera" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation" to="MainAct/Field/UpperPath/CavernBTeleport/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation" to="MainAct/Field/UpperPath/CavernBTeleport/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation" to="MainAct/Field/UpperPath/CavernBTeleport/Teleport" method="Activate"]
