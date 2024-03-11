@@ -883,6 +883,7 @@ namespace Project.Gameplay
 			{
 				Lockon.StartHomingAttack(); //Start Homing attack
 				Animator.JumpAccelAnimation();
+				UpdateJumpDash();
 			}
 		}
 
