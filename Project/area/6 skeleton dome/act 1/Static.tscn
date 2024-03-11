@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=75 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://m68asxsb3okb" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -53,7 +53,7 @@
 [ext_resource type="Curve3D" uid="uid://df74bepf0633f" path="res://area/6 skeleton dome/act 1/environment/path/InteriorPath.tres" id="23_gd5mj"]
 [ext_resource type="Curve3D" uid="uid://clk4yjdi5rfn5" path="res://area/6 skeleton dome/act 1/environment/path/CavernSidePath.tres" id="26_fl6rx"]
 [ext_resource type="PackedScene" uid="uid://f70owqcwad3i" path="res://area/6 skeleton dome/act 1/environment/05CavernB.tscn" id="29_puvoi"]
-[ext_resource type="Curve3D" uid="uid://cr17iglvpmagl" path="res://area/6 skeleton dome/act 1/environment/path/CavernBPath.tres" id="37_1a8ni"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/CavernBPath.tres" id="37_1a8ni"]
 [ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/AutomationPath.tres" id="40_ih587"]
 [ext_resource type="PackedScene" uid="uid://0q5cfpfqkhek" path="res://area/6 skeleton dome/data/skybox/Skybox.tscn" id="41_pilw5"]
 [ext_resource type="Environment" uid="uid://kx3kct81htga" path="res://area/6 skeleton dome/data/Environment.tres" id="50_cio3r"]
@@ -105,6 +105,8 @@ size = Vector3(40, 20, 150)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_blxyp"]
 size = Vector3(40, 20, 2.5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_doimh"]
 
 [node name="Static" type="Node3D"]
 script = ExtResource("1_0tght")
@@ -892,6 +894,31 @@ startEnabled = true
 
 [node name="Skybox" parent="Visuals" instance=ExtResource("41_pilw5")]
 
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="Exterior" type="Node3D" parent="Lighting"]
+
+[node name="FieldTransitionShadow" type="MeshInstance3D" parent="Lighting/Exterior"]
+transform = Transform3D(12, 0, 0, 0, 5, 0, 0, 0, 5, 133.51, 10.8779, -810)
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_doimh")
+
+[node name="FieldTransitionShadow2" type="MeshInstance3D" parent="Lighting/Exterior"]
+transform = Transform3D(11.375, 0, 0, 0, 5, 0, 0, 0, 29, 79.546, 50, -876.288)
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_doimh")
+
+[node name="FieldTransitionShadow3" type="MeshInstance3D" parent="Lighting/Exterior"]
+transform = Transform3D(6.12836, 0, -4.50401, 0, 5, 0, 5.1423, 0, 5.36767, 79.607, 50, -846.857)
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_doimh")
+
+[node name="ExteriorLighting" type="DirectionalLight3D" parent="Lighting/Exterior"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_cull_mask = 4293918785
+directional_shadow_blend_splits = true
+
 [node name="Path" type="Node3D" parent="."]
 
 [node name="ExteriorPath" type="Path3D" parent="Path"]
@@ -952,10 +979,10 @@ curve = ExtResource("9_yis2j")
 
 [node name="BGM" parent="." instance=ExtResource("14_yuo0o")]
 
-[node name="ExteriorSun" type="DirectionalLight3D" parent="."]
+[node name="DropShadows" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_cull_mask = 4293918723
+light_cull_mask = 4293918726
 shadow_enabled = true
 directional_shadow_blend_splits = true
 
