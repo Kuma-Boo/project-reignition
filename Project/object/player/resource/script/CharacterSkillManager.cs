@@ -162,7 +162,7 @@ namespace Project.Gameplay
 		public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
 
 		private float breakTimer = 0; //Timer for break skills
-		private const float SPEEDBREAK_DELAY = 0.12f; //Time to say SPEED BREAK!
+		private const float SPEEDBREAK_DELAY = 0.4f; //Time to say SPEED BREAK!
 		private const float BREAK_SKILLS_COOLDOWN = 1f; //Prevent skill spam
 		public const float TIME_BREAK_RATIO = .6f; //Time scale
 
@@ -239,7 +239,11 @@ namespace Project.Gameplay
 					}
 				}
 				else
-					Character.MoveSpeed = 0f;
+				{
+					Character.MoveSpeed = 0;
+					Character.StrafeSpeed = 0;
+					Character.Camera.StartCrossfade(); // Crossfade the screen briefly
+				}
 
 				return;
 			}
@@ -296,9 +300,10 @@ namespace Project.Gameplay
 
 			if (IsSpeedBreakActive)
 			{
-				Character.Effect.ScreenShockFX();
 				Character.Effect.PlayVoice("speed break");
 				Character.CollisionMask = Runtime.Instance.environmentMask; //Don't collide with any objects
+				Character.Animator.SpeedBreak();
+				Character.Effect.StartSpeedBreak();
 			}
 			else
 			{
@@ -307,6 +312,7 @@ namespace Project.Gameplay
 
 				Character.MoveSpeed = Character.GroundSettings.speed; //Override speed
 				Character.CollisionMask = normalCollisionMask; //Reset collision layer
+				Character.Effect.StopSpeedBreak();
 			}
 
 			if (HeadsUpDisplay.instance != null)

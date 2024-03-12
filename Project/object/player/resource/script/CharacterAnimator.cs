@@ -132,6 +132,8 @@ namespace Project.Gameplay
 		private readonly StringName TURN_BLEND_PARAMETER = "parameters/ground_tree/turn_blend/blend_position";
 		private readonly StringName LAND_TRIGGER_PARAMETER = "parameters/ground_tree/land_trigger/request";
 
+		private readonly StringName SPEEDBREAK_TRIGGER_PARAMETER = "parameters/ground_tree/speedbreak_trigger/request";
+
 		[Export]
 		private Curve movementAnimationSpeedCurve;
 		/// <summary> Disables speed smoothing. </summary>
@@ -163,6 +165,11 @@ namespace Project.Gameplay
 			animationTree.Set(CROUCH_TRANSITION, DISABLED_CONSTANT);
 		}
 
+
+		public void SpeedBreak()
+		{
+			animationTree.Set(SPEEDBREAK_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		}
 
 		private void GroundAnimations()
 		{

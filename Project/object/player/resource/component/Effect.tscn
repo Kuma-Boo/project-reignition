@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=35 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://bskjectn3e0tg" path="res://object/player/resource/effect/step/PavementStepParticle.tscn" id="15_gkso8"]
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/timebreak.png" id="15_p7iiw"]
 [ext_resource type="PackedScene" uid="uid://bwy4awbkt5ftv" path="res://object/player/resource/effect/step/SandStepParticle.tscn" id="16_m0x2c"]
+[ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="20_o3oog"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
@@ -44,24 +45,30 @@ shader_parameter/speed = 30.0
 shader_parameter/height = 0.0
 shader_parameter/factor_texture = SubResource("GradientTexture2D_0q2jh")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2wap6"]
+shader = ExtResource("20_o3oog")
+shader_parameter/blur_power = 0.0
+shader_parameter/blur_clarity = 5.0
+shader_parameter/sampling_count = 10
+
 [sub_resource type="Animation" id="Animation_d5ix5"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScreenShock:material:shader_parameter/height")
+tracks/0/path = NodePath("SpeedBreak/ScreenShock:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ScreenShock:scale")
+tracks/1/path = NodePath("SpeedBreak/ScreenShock:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -73,34 +80,58 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ScreenShock:visible")
+tracks/2/path = NodePath("SpeedBreak/ScreenShock:material:shader_parameter/height")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:material:shader_parameter/blur_power")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_45gst"]
-resource_name = "shock"
+resource_name = "start"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScreenShock:material:shader_parameter/height")
+tracks/0/path = NodePath("SpeedBreak/ScreenShock:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 1),
-"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.0, 0.1, 0.05, 0.0]
+"values": [true, false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ScreenShock:scale")
+tracks/1/path = NodePath("SpeedBreak/ScreenShock:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -112,20 +143,108 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ScreenShock:visible")
+tracks/2/path = NodePath("SpeedBreak/ScreenShock:material:shader_parameter/height")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"update": 0,
+"values": [0.0, 0.1, 0.05, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:material:shader_parameter/blur_power")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.01]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_i45wl"]
+resource_name = "stop"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpeedBreak/ScreenShock:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpeedBreak/ScreenShock:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpeedBreak/ScreenShock:material:shader_parameter/height")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"update": 0,
+"values": [0.0, 0.1, 0.05, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:material:shader_parameter/blur_power")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.01, 0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5ilpv"]
 _data = {
 "RESET": SubResource("Animation_d5ix5"),
-"shock": SubResource("Animation_45gst")
+"start": SubResource("Animation_45gst"),
+"stop": SubResource("Animation_i45wl")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s8tqs"]
@@ -153,19 +272,18 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:material:shader_parameter/opacity")
+tracks/1/path = NodePath(".:material:shader_parameter/blur_power")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.5]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_ljny0"]
 resource_name = "start"
-length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -181,14 +299,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:material:shader_parameter/opacity")
-tracks/1/interp = 1
+tracks/1/path = NodePath(".:material:shader_parameter/blur_power")
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.5, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [0.0, 1.0]
+"values": [0.0, 0.0, 0.02]
 }
 
 [sub_resource type="Animation" id="Animation_hc4f1"]
@@ -209,14 +327,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:material:shader_parameter/opacity")
-tracks/1/interp = 1
+tracks/1/path = NodePath(".:material:shader_parameter/blur_power")
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [1.0, 0.0]
+"values": [0.02, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m0ixc"]
@@ -226,14 +344,14 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "screenShockAnimator", "timeBreakAnimator", "dustParticle", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
 spinFX = NodePath("VFX/ActionFX/SpinMesh")
-screenShockAnimator = NodePath("VFX/ScreenShock/AnimationPlayer")
 timeBreakAnimator = NodePath("VFX/TimeBreak/AnimationPlayer")
+speedBreakAnimator = NodePath("VFX/SpeedBreak/AnimationPlayer")
 dustParticle = NodePath("VFX/ActionFX/DustParticle")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
@@ -302,19 +420,44 @@ skeleton = NodePath("../..")
 
 [node name="SandStepParticle" parent="VFX/StepFX" instance=ExtResource("16_m0x2c")]
 
-[node name="ScreenShock" type="ColorRect" parent="VFX"]
+[node name="SpeedBreak" type="Node" parent="VFX"]
+
+[node name="ScreenShock" type="ColorRect" parent="VFX/SpeedBreak"]
 visible = false
 material = SubResource("ShaderMaterial_q05ck")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 6.10352e-05
+offset_top = -6.10352e-05
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(960, 540)
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="VFX/ScreenShock"]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="VFX/SpeedBreak"]
+position = Vector2(960, 540)
+scale = Vector2(9.6, 5.4)
+copy_mode = 2
+
+[node name="RadialBlur" type="ColorRect" parent="VFX/SpeedBreak/BackBufferCopy"]
+visible = false
+material = SubResource("ShaderMaterial_2wap6")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = -100.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(960, 540)
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VFX/SpeedBreak"]
 root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_5ilpv")

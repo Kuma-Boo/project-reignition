@@ -49,9 +49,9 @@ namespace Project.Gameplay
 		[Export]
 		public MeshInstance3D spinFX;
 		[Export]
-		private AnimationPlayer screenShockAnimator;
-		[Export]
 		private AnimationPlayer timeBreakAnimator;
+		[Export]
+		private AnimationPlayer speedBreakAnimator;
 		/// <summary> VFX for drifting dust. </summary>
 		[Export]
 		private GpuParticles3D dustParticle;
@@ -68,15 +68,12 @@ namespace Project.Gameplay
 			trailFX.IsEmitting = false;
 		}
 
-		public void ScreenShockFX()
-		{
-			screenShockAnimator.Play("shock");
-			screenShockAnimator.Seek(0.0, true);
-		}
-
 
 		public void StartTimeBreak() => timeBreakAnimator.Play("start");
 		public void StopTimeBreak() => timeBreakAnimator.Play("stop");
+
+		public void StartSpeedBreak() => speedBreakAnimator.Play("start");
+		public void StopSpeedBreak() => speedBreakAnimator.Play("stop");
 
 		[ExportGroup("Ground Interactions")]
 		// SFX for different ground materials (footsteps, landing, etc)

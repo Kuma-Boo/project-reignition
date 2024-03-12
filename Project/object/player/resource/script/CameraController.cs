@@ -34,6 +34,7 @@ namespace Project.Gameplay
 		public CharacterPathFollower PathFollower { get; private set; }
 		private CharacterController Character => CharacterController.instance;
 
+		private readonly StringName SHADER_GLOBAL_PLAYER_SCREEN_POSITION = new("player_screen_position");
 
 		public void Initialize()
 		{
@@ -254,10 +255,11 @@ namespace Project.Gameplay
 			cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 			cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 
-
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
 			Camera.Fov = fov; // Update fov
+			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.GlobalPosition) / Runtime.SCREEN_SIZE);
+
 
 			if (SnapFlag) // Reset flag after camera was updated
 				SnapFlag = false;
