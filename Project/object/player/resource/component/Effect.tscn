@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=43 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -16,8 +16,9 @@
 [ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="14_6clfa"]
 [ext_resource type="PackedScene" uid="uid://dnhyu4rssyjcr" path="res://object/player/resource/effect/step/WaterStepParticle.tscn" id="14_r0gbt"]
 [ext_resource type="PackedScene" uid="uid://bskjectn3e0tg" path="res://object/player/resource/effect/step/PavementStepParticle.tscn" id="15_gkso8"]
-[ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/timebreak.png" id="15_p7iiw"]
+[ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/time break.png" id="15_p7iiw"]
 [ext_resource type="PackedScene" uid="uid://bwy4awbkt5ftv" path="res://object/player/resource/effect/step/SandStepParticle.tscn" id="16_m0x2c"]
+[ext_resource type="Texture2D" uid="uid://ch2re1xkc00aj" path="res://object/player/resource/effect/texture/speed break streak.png" id="17_u6bvm"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="20_o3oog"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
@@ -26,6 +27,56 @@ radius = 0.4
 height = 0.8
 radial_segments = 32
 rings = 16
+
+[sub_resource type="Curve" id="Curve_fi1cr"]
+_data = [Vector2(0.1, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 0), -7.04173, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_j21f5"]
+curve = SubResource("Curve_fi1cr")
+
+[sub_resource type="Curve" id="Curve_yynal"]
+_data = [Vector2(0, 0), 0.0, 2.42837, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_v8u0k"]
+width = 64
+curve = SubResource("Curve_yynal")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ru5au"]
+emission_shape_offset = Vector3(0, 0, 10)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 2.5
+emission_ring_inner_radius = 2.0
+direction = Vector3(0, 0, -1)
+spread = 2.0
+initial_velocity_min = 1.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_curve = SubResource("CurveTexture_v8u0k")
+color = Color(1.8, 1.2, 0, 1)
+alpha_curve = SubResource("CurveTexture_j21f5")
+hue_variation_min = -0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p28i4"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("17_u6bvm")
+distance_fade_mode = 1
+distance_fade_min_distance = 0.1
+distance_fade_max_distance = 0.5
+
+[sub_resource type="QuadMesh" id="QuadMesh_ehsdl"]
+material = SubResource("StandardMaterial3D_p28i4")
+size = Vector2(1, 50)
+center_offset = Vector3(0, 25, 0)
 
 [sub_resource type="Gradient" id="Gradient_tqkgi"]
 interpolation_mode = 2
@@ -113,6 +164,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_45gst"]
 resource_name = "start"
@@ -171,6 +234,18 @@ tracks/4/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -235,6 +310,18 @@ tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
@@ -420,7 +507,19 @@ skeleton = NodePath("../..")
 
 [node name="SandStepParticle" parent="VFX/StepFX" instance=ExtResource("16_m0x2c")]
 
-[node name="SpeedBreak" type="Node" parent="VFX"]
+[node name="SpeedBreak" type="Node3D" parent="VFX"]
+
+[node name="Streaks" type="GPUParticles3D" parent="VFX/SpeedBreak"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 4.1128e-08)
+layers = 32
+emitting = false
+amount = 32
+lifetime = 0.3
+fixed_fps = 60
+interpolate = false
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_ru5au")
+draw_pass_1 = SubResource("QuadMesh_ehsdl")
 
 [node name="ScreenShock" type="ColorRect" parent="VFX/SpeedBreak"]
 visible = false
