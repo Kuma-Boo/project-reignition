@@ -200,7 +200,7 @@ namespace Project.Gameplay
 			Character.ResetActionState();
 
 			Character.Animator.BounceTrick();
-			Character.Effect.PlayActionSFX("jump");
+			Character.Effect.PlayActionSFX(Character.Effect.JUMP_SFX);
 		}
 		#endregion
 

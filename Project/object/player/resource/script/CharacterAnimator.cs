@@ -398,6 +398,18 @@ namespace Project.Gameplay
 			eventAnimationPlayer.Play("invincibility");
 			eventAnimationPlayer.Seek(0.0, true);
 		}
+
+		public void StartTeleport()
+		{
+			eventAnimationPlayer.Play("teleport-start");
+			eventAnimationPlayer.Seek(0.0, true);
+		}
+
+		public void StopTeleport()
+		{
+			eventAnimationPlayer.Play("teleport-end");
+			eventAnimationPlayer.Seek(0.0, true);
+		}
 		#endregion
 
 
@@ -603,7 +615,7 @@ namespace Project.Gameplay
 
 		public void StartSidle(bool isSidleFacingRight)
 		{
-			if (Character.IsRespawning) // Skip transition
+			if (Character.ActionState == CharacterController.ActionStates.Teleport) // Skip transition
 				SetStateXfade(0);
 			else // Quick crossfade into sidle
 				SetStateXfade(0.1f);

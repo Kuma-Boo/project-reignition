@@ -29,8 +29,11 @@ namespace Project.Gameplay
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
 		}
 
-
 		public readonly StringName JUMP_SFX = "jump";
+		public readonly StringName JUMP_DASH_SFX = "jump dash";
+		public readonly StringName SLIDE_SFX = "slide";
+		public readonly StringName SPLASH_SFX = "splash";
+		public readonly StringName SIDLE_SFX = "sidle";
 
 		// Actions (Jumping, sliding, etc)
 		[ExportGroup("Actions")]
@@ -67,7 +70,6 @@ namespace Project.Gameplay
 		{
 			trailFX.IsEmitting = false;
 		}
-
 
 		public void StartTimeBreak() => timeBreakAnimator.Play("start");
 		public void StopTimeBreak() => timeBreakAnimator.Play("stop");
@@ -129,7 +131,7 @@ namespace Project.Gameplay
 		private Editor.CustomNodes.GpuParticles3DGroup landingWaterParticle;
 		public void PlayLandingWaterFX()
 		{
-			PlayActionSFX("splash");
+			PlayActionSFX(SPLASH_SFX);
 			landingWaterParticle.RestartGroup();
 		}
 

@@ -127,10 +127,9 @@ namespace Project.Gameplay
 		public void StartCrossfade()
 		{
 			// Update the crossfade texture
-			ImageTexture tex = new ImageTexture();
+			ImageTexture tex = new();
 			tex.SetImage(GetViewport().GetTexture().GetImage());
 			crossfade.Texture = tex;
-
 			crossfadeAnimator.Play("activate");// Start crossfade animation
 
 			// Warp the camera

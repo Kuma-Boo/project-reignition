@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://63pn4rd1drw0"]
+[gd_scene load_steps=29 format=3 uid="uid://63pn4rd1drw0"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_lddwh"]
 [ext_resource type="PackedScene" uid="uid://cp8owtrig0i60" path="res://area/6 skeleton dome/object/model/obstacle/WarpBase.gltf" id="1_ratfe"]
@@ -6,7 +6,6 @@
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="5_kxm8l"]
 [ext_resource type="Shader" path="res://effect/shader/particle/ParticleSpiral.gdshader" id="6_4i8i7"]
 [ext_resource type="Texture2D" uid="uid://brn14x5sawajk" path="res://area/6 skeleton dome/data/particle/warp light.png" id="6_krhar"]
-[ext_resource type="AudioStream" uid="uid://pbwii8b4qu3s" path="res://sound/sfx/player/teleport start.wav" id="7_elj0l"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_84q1u"]
 radius = 1.25
@@ -189,11 +188,6 @@ local_coords = true
 process_material = SubResource("ShaderMaterial_c12ja")
 draw_pass_1 = SubResource("QuadMesh_wkeqr")
 
-[node name="SFX" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("7_elj0l")
-bus = &"SFX"
-
-[connection signal="Teleport" from="." to="SFX" method="play"]
 [connection signal="area_entered" from="." to="." method="Activate"]
 
 [editable path="WarpBase"]

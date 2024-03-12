@@ -49,7 +49,7 @@ namespace Project.Core
 
 		private float shaderTime;
 		private const float SHADER_ROLLOVER = 3600f;
-		private readonly StringName SHADER_GLOBAL_TIME = new StringName("time");
+		private readonly StringName SHADER_GLOBAL_TIME = "time";
 		private void UpdateShaderTime()
 		{
 			shaderTime += PhysicsManager.normalDelta;

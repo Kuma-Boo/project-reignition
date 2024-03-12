@@ -44,7 +44,7 @@ namespace Project.Gameplay.Triggers
 		public override void _PhysicsProcess(double _)
 		{
 			if (!isInteractingWithPlayer ||
-			(Character.IsRespawning && Character.ActionState == CharacterController.ActionStates.Damaged)) return;
+			Character.ActionState == CharacterController.ActionStates.Teleport) return;
 
 			if (isActive)
 			{
@@ -104,7 +104,7 @@ namespace Project.Gameplay.Triggers
 			// Update velocity
 			float targetVelocity = Input.GetAxis("move_left", "move_right") * (isFacingRight ? 1 : -1) * CYCLE_FREQUENCY;
 			if (Mathf.IsZeroApprox(velocity) && !Mathf.IsZeroApprox(targetVelocity)) // Ensure sfx plays when starting to move
-				Character.Effect.PlayActionSFX("sidle");
+				Character.Effect.PlayActionSFX(Character.Effect.SIDLE_SFX);
 
 			if (Mathf.IsZeroApprox(velocity) || Mathf.Sign(targetVelocity) == Mathf.Sign(velocity))
 				velocity = Mathf.Lerp(velocity, targetVelocity, TRACTION_SMOOTHING);
@@ -124,7 +124,7 @@ namespace Project.Gameplay.Triggers
 				if (Mathf.Abs(cycleTimer - .5f) >= .5f) // Starting a new cycle
 				{
 					cycleTimer -= Mathf.Sign(cycleTimer);
-					Character.Effect.PlayActionSFX("sidle");
+					Character.Effect.PlayActionSFX(Character.Effect.SIDLE_SFX);
 				}
 
 				Character.Animator.UpdateSidle(cycleTimer);
@@ -152,7 +152,7 @@ namespace Project.Gameplay.Triggers
 				Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
 			}
 
-			Character.Animator.ResetState(Character.IsRespawning || Character.MovementState == CharacterController.MovementStates.External ? 0.0f : .1f);
+			Character.Animator.ResetState(Character.ActionState == CharacterController.ActionStates.Teleport || Character.MovementState == CharacterController.MovementStates.External ? 0.0f : .1f);
 			damageState = DamageStates.Disabled;
 			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
 		}

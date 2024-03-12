@@ -23,8 +23,6 @@ namespace Project.Interface
 			BGMPlayer.StageMusicPaused = isPaused;
 			pauseAnimator.Play(isPaused ? "pause" : "unpause");
 
-			float targetTimeScale = isPaused ? 0.0f : 1.0f; //Calculate the correct time scale
-
 			if (isPaused) //Reset selection
 			{
 				currentSelection = 0;

@@ -74,10 +74,10 @@ namespace Project.Gameplay
 			AccelJump,
 			Crouching,
 			Sliding,
-			Damaged, //Being knocked back by damage
-			Respawning, //Idle until respawn timer reaches zero
-			JumpDash, //Also includes homing attack
-			Stomping, //Jump cancel
+			Damaged, // Being knocked back by damage
+			Teleport, // Includes respawning as well
+			JumpDash, // Includes homing attack
+			Stomping, // Includes jump cancel
 			Backflip,
 			Grindstep,
 		}
@@ -106,7 +106,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (IsRespawning) return;
+			if (ActionState == ActionStates.Teleport) return;
 
 			UpdateInputs();
 
@@ -863,7 +863,7 @@ namespace Project.Gameplay
 			else //Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
-			Effect.PlayActionSFX("jump dash");
+			Effect.PlayActionSFX(Effect.JUMP_DASH_SFX);
 			Effect.StartTrailFX();
 
 			CanJumpDash = false;
@@ -924,7 +924,7 @@ namespace Project.Gameplay
 				if (MoveSpeed <= Skills.SlideSettings.speed)
 					MoveSpeed = Skills.SlideSettings.speed;
 
-				Effect.PlayActionSFX("slide");
+				Effect.PlayActionSFX(Effect.SLIDE_SFX);
 				SetActionState(ActionStates.Sliding);
 			}
 			else
@@ -1215,18 +1215,15 @@ namespace Project.Gameplay
 
 		/// <summary> True after the player is defeated, but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
-		/// <summary> Is the player currently respawning? </summary>
-		public bool IsRespawning { get; private set; }
 		/// <summary>
 		/// Called when the player is returning to a checkpoint.
 		/// </summary>
 		public void StartRespawn()
 		{
-			if (IsRespawning) return;
+			if (ActionState == ActionStates.Teleport) return;
 
 			//Fade screen out, enable respawn flag, and connect signals
 			IsDefeated = true;
-			IsRespawning = true;
 			TransitionManager.StartTransition(new TransitionData()
 			{
 				inSpeed = .5f,
@@ -1235,7 +1232,6 @@ namespace Project.Gameplay
 			});
 
 			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.ProcessRespawn), (uint)ConnectFlags.OneShot);
-			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionFinish, new Callable(this, MethodName.OnRespawnFinished), (uint)ConnectFlags.OneShot);
 		}
 
 		/// <summary>
@@ -1267,7 +1263,7 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.Respawn);
 
 			//Wait a single physics frame to ensure objects update properly
-			GetTree().CreateTimer(PhysicsManager.physicsDelta).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
+			GetTree().CreateTimer(PhysicsManager.physicsDelta, false).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
 		}
 
 		/// <summary>
@@ -1278,40 +1274,45 @@ namespace Project.Gameplay
 			SnapToGround();
 			areaTrigger.Disabled = false;
 
-			//TODO Play respawn animation/sfx
 			TransitionManager.FinishTransition();
 		}
 
-		/// <summary>
-		/// Disable respawn flags and allow the game to continue.
-		/// </summary>
-		private void OnRespawnFinished() => IsRespawning = false;
-
-		private const float TELEPORT_FX_LENGTH = .2f;
+		private const float TELEPORT_START_FX_LENGTH = .2f;
+		private const float TELEPORT_END_FX_LENGTH = .5f;
 		/// <summary>
 		/// Teleports the player to a specific location. Use TeleportSettings to have more control of how teleport occurs.
 		/// </summary>
 		public async void Teleport(Triggers.TeleportTrigger trigger)
 		{
-			if (trigger.enableStartFX)
-			{
-				//TODO Play FX
-				await ToSignal(GetTree().CreateTimer(TELEPORT_FX_LENGTH), SceneTreeTimer.SignalName.Timeout);
-			}
-
-			GlobalPosition = trigger.WarpPosition;
-			SnapToGround();
-
-			trigger.ApplyTeleport(); //Apply any signals/path changes
-
-			MovementAngle = PathFollower.ForwardAngle;
-			Animator.SnapRotation(PathFollower.ForwardAngle);
+			SetActionState(ActionStates.Teleport);
 
 			if (trigger.resetMovespeed)
 				ResetVelocity();
 
+			if (trigger.enableStartFX)
+			{
+				Animator.StartTeleport();
+				await ToSignal(GetTree().CreateTimer(TELEPORT_START_FX_LENGTH, false), SceneTreeTimer.SignalName.Timeout);
+			}
+
 			if (trigger.crossfade)
 				Camera.StartCrossfade();
+
+			await ToSignal(GetTree().CreateTimer(PhysicsManager.physicsDelta, false), SceneTreeTimer.SignalName.Timeout);
+			GlobalPosition = trigger.WarpPosition;
+			SnapToGround();
+
+			trigger.ApplyTeleport(); //Apply any signals/path changes
+			MovementAngle = PathFollower.ForwardAngle;
+			Animator.SnapRotation(PathFollower.ForwardAngle);
+
+			if (trigger.enableEndFX)
+			{
+				Animator.StopTeleport();
+				await ToSignal(GetTree().CreateTimer(TELEPORT_END_FX_LENGTH, false), SceneTreeTimer.SignalName.Timeout);
+			}
+
+			ResetActionState();
 		}
 
 		/// <summary>
@@ -1547,7 +1548,6 @@ namespace Project.Gameplay
 					UpDirection = groundHit.normal;
 					UpdateOrientation();
 					LandOnGround();
-					Effect.PlayLandingFX();
 				}
 
 				GlobalPosition -= UpDirection * snapDistance; // Snap to ground
@@ -1575,7 +1575,7 @@ namespace Project.Gameplay
 					targetUpDirection = PathFollower.HeightAxis;
 
 				// Calculate reset factor
-				float orientationResetFactor = 0;
+				float orientationResetFactor;
 				if (ActionState == ActionStates.Stomping ||
 				ActionState == ActionStates.JumpDash || ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
 					orientationResetFactor = .2f;
@@ -1597,13 +1597,11 @@ namespace Project.Gameplay
 			CanJumpDash = false;
 
 			isAccelerationJumpQueued = false;
-			if (ActionState == ActionStates.Grindstep)
-				ResetActionState();
-
-			ResetActionState();
 			Lockon.ResetLockonTarget();
 
-			if (IsCountdownActive || IsRespawning) return; //Don't do this stuff during countdown or respawn
+			if (IsDefeated || IsCountdownActive || ActionState == ActionStates.Teleport) return; //Don't do this stuff during countdown or respawn
+
+			ResetActionState();
 
 			JustLandedOnGround = true;
 			CheckLandingBoost(); //Landing boost skill

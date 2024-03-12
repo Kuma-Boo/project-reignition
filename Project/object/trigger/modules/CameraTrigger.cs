@@ -78,7 +78,7 @@ namespace Project.Gameplay.Triggers
 		{
 			if (previousSettings == null || settings == null) return;
 			if (Camera.ActiveSettings != settings) return; // Already overridden by a different trigger
-			if (Character.IsRespawning) return;
+			if (Character.ActionState == CharacterController.ActionStates.Teleport) return;
 
 			Camera.UpdateCameraSettings(new CameraBlendData()
 			{

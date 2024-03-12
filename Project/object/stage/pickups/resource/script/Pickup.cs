@@ -34,7 +34,7 @@ namespace Project.Gameplay.Objects
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			if (Character.IsRespawning) return; //Don't allow collecting things when respawning
+			if (Character.ActionState == CharacterController.ActionStates.Teleport) return; // Don't allow collections during teleport/respawn
 
 			CallDeferred(MethodName.Collect);
 		}

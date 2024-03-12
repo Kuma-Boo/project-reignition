@@ -99,7 +99,7 @@ namespace Project.Gameplay.Triggers
 					break;
 
 				case "Player Event Settings/Animation":
-					characterAnimation = new StringName((string)value);
+					characterAnimation = (string)value;
 					break;
 				case "Player Event Settings/Animation Fadeout Time":
 					characterFadeoutTime = (float)value;
