@@ -193,6 +193,9 @@ namespace Project.Gameplay
 		private float flameTimer;
 		/// <summary> Is the flame attack currently active? </summary>
 		private bool isFlameActive;
+		/// <summary> Timer to keep track of stagger length. </summary>
+		private float staggerTimer;
+		private const float STAGGER_LENGTH = .5f;
 
 		/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
 		private MovingObject movementController;
@@ -262,6 +265,9 @@ namespace Project.Gameplay
 				movementController.TimeScale = 0;
 			}
 
+			// Reset stagger
+			staggerTimer = 0;
+
 			//Reset flame attack
 			flameTimer = 0;
 			isFlameActive = false;
@@ -280,7 +286,10 @@ namespace Project.Gameplay
 		public override void TakeDamage()
 		{
 			if (isFlameActive)
+			{
 				ToggleFlameAttack();
+				staggerTimer = STAGGER_LENGTH;
+			}
 
 			animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
@@ -327,6 +336,12 @@ namespace Project.Gameplay
 			if (!IsActive) return; // Hasn't spawned yet
 			if (IsDefeated) return; // Already defeated
 			if (attackType == AttackTypes.Spin) return; // No need to process when in AttackTypes.Spin
+
+			if (staggerTimer != 0)
+			{
+				staggerTimer = Mathf.MoveToward(staggerTimer, 0, PhysicsManager.physicsDelta);
+				return;
+			}
 
 			if (attackType == AttackTypes.Fire)
 				UpdateFlameAttack();
