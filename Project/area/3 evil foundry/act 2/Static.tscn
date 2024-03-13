@@ -585,23 +585,6 @@ transform = Transform3D(1, -5.674e-16, 1.74846e-07, 5.674e-16, 1, 5.674e-16, -1.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_007vp")
 
-[node name="ObjectLight" type="DirectionalLight3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-layers = 1024
-light_color = Color(0.756863, 0.627451, 0.262745, 1)
-light_energy = 0.6
-light_cull_mask = 4293918727
-shadow_enabled = true
-directional_shadow_max_distance = 10.0
-
-[node name="GeometryLight" type="DirectionalLight3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-layers = 1024
-light_color = Color(0.666667, 0.729412, 0.415686, 1)
-light_energy = 1.2
-light_cull_mask = 4293918726
-directional_shadow_max_distance = 10.0
-
 [node name="01Opening" parent="Visuals" instance=ExtResource("6_38647")]
 startEnabled = true
 
@@ -626,6 +609,35 @@ startEnabled = true
 [node name="11Hall" parent="Visuals" instance=ExtResource("16_ll6ca")]
 
 [node name="12End" parent="Visuals" instance=ExtResource("17_h4u1h")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.92549, 0.8, 0.466667, 1)
+light_cull_mask = 4293918785
+directional_shadow_max_distance = 10.0
+
+[node name="DropShadows" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_cull_mask = 4293918726
+shadow_enabled = true
+
+[node name="LavaLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, 0, 0)
+layers = 1024
+light_color = Color(0.819608, 0.584314, 0, 1)
+light_cull_mask = 4293918722
+directional_shadow_max_distance = 10.0
+
+[node name="LavaGlowLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.6, 0.42, 0, 1)
+light_cull_mask = 4293918728
+directional_shadow_max_distance = 10.0
 
 [node name="Path" type="Node3D" parent="."]
 
