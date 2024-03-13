@@ -27,7 +27,11 @@ namespace Project.Gameplay.Hazards
 		private NodePath head;
 		private Node3D headNode;
 		[Export]
+		private bool enableSparkParticles = true;
+		[Export]
 		private GpuParticles3D sparkParticles;
+		/// <summary> Were sparks emitted this rotation? </summary>
+		private bool emittedSparks;
 		[Export]
 		private PackedScene chainScene;
 		[Export(PropertyHint.Range, "0,32")]
@@ -41,14 +45,21 @@ namespace Project.Gameplay.Hazards
 		private const float CHAIN_BASE_OFFSET = 1.3f;
 
 		//Set up length when loading into the scene
-		public override void _Ready() => UpdateLength();
+		public override void _Ready()
+		{
+			UpdateLength();
+			UpdateHeadPosition();
+		}
 
 		public override void _PhysicsProcess(double _)
 		{
 			if (Engine.IsEditorHint())
 			{
 				if (update)
+				{
 					UpdateLength();
+					UpdateHeadPosition();
+				}
 			}
 			else
 			{
@@ -56,11 +67,28 @@ namespace Project.Gameplay.Hazards
 				currentRatio = Mathf.MoveToward(currentRatio, targetRatio, (1.0f / cycleLength) * PhysicsManager.physicsDelta);
 
 				if (Mathf.IsEqualApprox(currentRatio, targetRatio))
+				{
+					emittedSparks = false;
 					isSwingingRight = !isSwingingRight;
+				}
 
-				sparkParticles.Emitting = Mathf.Abs(rootNode.Rotation.Z) < Mathf.Pi * .2f;
+				if (enableSparkParticles && !emittedSparks)
+				{
+					if (Mathf.Abs(rootNode.Rotation.Z) < Mathf.Pi * .1f &&
+					Mathf.Sign(targetRatio - .5f) != Mathf.Sign(currentRatio - .5f))
+					{
+						sparkParticles.Rotation = Vector3.Up * Mathf.Pi * targetRatio;
+						sparkParticles.Restart();
+						emittedSparks = true;
+					}
+				}
+
+				UpdateHeadPosition();
 			}
+		}
 
+		private void UpdateHeadPosition()
+		{
 			float interpolatedRatio = (Mathf.SmoothStep(0, 1, Mathf.Abs(currentRatio)) * 2) - 1;
 			rootNode.Rotation = Vector3.Back * Mathf.DegToRad(rotationAmount) * interpolatedRatio;
 		}

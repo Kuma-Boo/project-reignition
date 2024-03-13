@@ -1,13 +1,25 @@
-[gd_scene load_steps=7 format=3 uid="uid://d21ummt57uq4a"]
+[gd_scene load_steps=10 format=3 uid="uid://d21ummt57uq4a"]
 
 [ext_resource type="PackedScene" uid="uid://ck54rrm4x5ped" path="res://area/6 skeleton dome/object/model/obstacle/SickleBase.gltf" id="1_ffr4p"]
 [ext_resource type="Script" path="res://area/6 skeleton dome/data/script/Sickle.cs" id="1_uaaaq"]
 [ext_resource type="PackedScene" uid="uid://dwq4y4ikxpatn" path="res://area/6 skeleton dome/object/model/obstacle/SickleHead.gltf" id="2_bc5ee"]
 [ext_resource type="PackedScene" uid="uid://cabdisubyyw42" path="res://area/6 skeleton dome/object/model/obstacle/SickleChain.gltf" id="2_drsr8"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="4_j2r0i"]
+[ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="6_lwuu3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y3xwk"]
 size = Vector3(3, 2, 0.5)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fbngt"]
+spread = 15.0
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_2myjr"]
+material = ExtResource("6_lwuu3")
+size = Vector2(0.1, 3)
+center_offset = Vector3(0, 1.5, 0)
 
 [node name="Sickle" type="Node3D" node_paths=PackedStringArray("sparkParticles")]
 script = ExtResource("1_uaaaq")
@@ -41,8 +53,18 @@ script = ExtResource("4_j2r0i")
 shape = SubResource("BoxShape3D_y3xwk")
 
 [node name="Sparks" type="GPUParticles3D" parent="Root/SickleHead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, -1.5, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.3
+one_shot = true
+fixed_fps = 60
+interpolate = false
 visibility_aabb = AABB(-7, -4, -2, 14, 8, 4)
-local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_fbngt")
+draw_pass_1 = SubResource("QuadMesh_2myjr")
 
 [connection signal="area_entered" from="Root/SickleHead/Hitbox" to="Root/SickleHead/Hitbox" method="OnEntered"]
 [connection signal="area_exited" from="Root/SickleHead/Hitbox" to="Root/SickleHead/Hitbox" method="OnExited"]
