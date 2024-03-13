@@ -74,7 +74,7 @@ namespace Project.Gameplay.Hazards
 
 				if (enableSparkParticles && !emittedSparks)
 				{
-					if (Mathf.Abs(rootNode.Rotation.Z) < Mathf.Pi * .1f &&
+					if (Mathf.Abs(rootNode.Rotation.Z) < Mathf.Pi * .05f &&
 					Mathf.Sign(targetRatio - .5f) != Mathf.Sign(currentRatio - .5f))
 					{
 						sparkParticles.Rotation = Vector3.Up * Mathf.Pi * targetRatio;
