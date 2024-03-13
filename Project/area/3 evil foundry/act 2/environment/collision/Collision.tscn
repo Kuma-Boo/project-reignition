@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbrcws5d38ioo"]
+[gd_scene load_steps=3 format=3 uid="uid://cbrcws5d38ioo"]
 
 [ext_resource type="PackedScene" uid="uid://bxm4ks6nrv2u0" path="res://area/3 evil foundry/act 2/environment/collision/Collision.gltf" id="1_k53m8"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_wrxuq"]
 
 [node name="Collision" instance=ExtResource("1_k53m8")]
 
@@ -23,3 +24,9 @@ cast_shadow = 0
 cast_shadow = 0
 
 [node name="StaticBody3D" parent="FloorMetal2" index="0" groups=["floor", "metal"]]
+
+[node name="ElevatorOneWayWall" parent="." index="4"]
+script = ExtResource("2_wrxuq")
+saveVisibilityOnCheckpoint = true
+
+[node name="StaticBody3D" parent="ElevatorOneWayWall" index="0" groups=["level wall", "wall"]]
