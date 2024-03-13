@@ -258,6 +258,7 @@ namespace Project.Gameplay
 			//Reset idle movement
 			idleFactorVelocity = 0;
 			animationTree.Set(IDLE_FACTOR_PARAMETER, 0);
+			animationTree.Set(DEFEAT_TRANSITION_PARAMETER, DISABLED_STATE);
 
 			if (movementController != null) //Reset/Pause movement
 			{
@@ -310,20 +311,27 @@ namespace Project.Gameplay
 					tweener.Kill();
 
 				animationPlayer.Play("strike");
-				animationTree.Set(DEFEAT_TRANSITION_PARAMETER, "enabled");
+				animationTree.Set(DEFEAT_TRANSITION_PARAMETER, ENABLED_STATE);
+				animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
 				Vector3 launchDirection = defeatLaunchDirection;
 				if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
-					launchDirection = Character.Animator.Back();
+					launchDirection = (Character.Animator.Back() + Character.Animator.Up() * .2f).Normalized();
 				else if (isDefeatLocalTransform)
 					launchDirection = GlobalTransform.Basis * launchDirection;
 
 				launchDirection = launchDirection.Rotated(Vector3.Up, Mathf.Pi); //Fix forward direction
 				launchDirection = launchDirection.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
 
+				Vector3 targetRotation = Vector3.Up * 360;
+				if (Runtime.randomNumberGenerator.Randf() > .5f)
+					targetRotation *= -1;
+				targetRotation -= Vector3.Right * 30;
+
 				//Get knocked back
-				tweener = CreateTween().SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
+				tweener = CreateTween();
 				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
+				tweener.Parallel().TweenProperty(this, "rotation_degrees", RotationDegrees + targetRotation, defeatLaunchTime);
 				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("defeat")));
 			}
 			else
@@ -465,6 +473,7 @@ namespace Project.Gameplay
 			else //Stop flame attack
 			{
 				animationPlayer.Play("fire-end");
+				animationPlayer.Advance(0.0);
 				fireState.Travel("attack-fire-end");
 				stateTransition.XfadeTime = 0.4;
 				animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE);
@@ -491,6 +500,7 @@ namespace Project.Gameplay
 			tweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
 
 			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); //Idle
+
 			if (SpawnTravelDisabled) //Spawn instantly
 			{
 				animationPlayer.Play("spawn");

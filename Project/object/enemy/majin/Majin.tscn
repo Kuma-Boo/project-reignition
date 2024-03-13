@@ -639,7 +639,7 @@ tracks/9/keys = {
 
 [sub_resource type="Animation" id="Animation_thps5"]
 resource_name = "fire-end"
-length = 0.500003
+length = 0.001
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -648,10 +648,10 @@ tracks/0/path = NodePath("FX/FireFX/FlameHitbox:isDisabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.333333),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true]
+"values": [true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -672,10 +672,10 @@ tracks/2/path = NodePath("FX/FireFX/FlameHitbox/Near:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.0666667),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true]
+"values": [true]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -684,10 +684,10 @@ tracks/3/path = NodePath("FX/FireFX/FlameHitbox/Mid:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.133333),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true]
+"values": [true]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -696,10 +696,10 @@ tracks/4/path = NodePath("FX/FireFX/FlameHitbox/Far:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_c8j0n"]
@@ -933,6 +933,42 @@ tracks/0/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_13cad"]
+resource_name = "stagger"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StaggerSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_1j3bl"]
+resource_name = "strike"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StrikeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_y1q6p"]
 resource_name = "travel"
 length = 0.5
@@ -1009,42 +1045,6 @@ tracks/5/path = NodePath("FX/TravelSFX")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_13cad"]
-resource_name = "stagger"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FX/StaggerSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_1j3bl"]
-resource_name = "strike"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FX/StrikeSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1193,6 +1193,7 @@ disabled = true
 [node name="FlameSFX" type="AudioStreamPlayer3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 stream = ExtResource("5_xr0sx")
+volume_db = -12.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
@@ -1231,6 +1232,7 @@ draw_pass_1 = SubResource("QuadMesh_txkmg")
 
 [node name="SpawnSFX" type="AudioStreamPlayer3D" parent="FX/SpawnFX"]
 stream = ExtResource("8_4kwy5")
+volume_db = -12.0
 unit_size = 100.0
 max_db = 0.0
 max_distance = 200.0
@@ -1285,7 +1287,7 @@ draw_pass_1 = SubResource("QuadMesh_bbrsu")
 
 [node name="DefeatSFX" type="AudioStreamPlayer3D" parent="FX/DefeatFX"]
 stream = ExtResource("11_15qiw")
-volume_db = -6.0
+volume_db = -12.0
 unit_size = 20.0
 max_db = 0.0
 max_distance = 100.0
@@ -1293,20 +1295,21 @@ bus = &"SFX"
 
 [node name="StaggerSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("12_2cawu")
-volume_db = -6.0
+volume_db = -12.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
 
 [node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("13_470oy")
-volume_db = -6.0
+volume_db = -12.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
 
 [node name="TravelSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("14_41brs")
+volume_db = -6.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
