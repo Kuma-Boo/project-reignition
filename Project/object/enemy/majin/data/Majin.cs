@@ -285,6 +285,9 @@ namespace Project.Gameplay
 			animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
 			base.TakeDamage();
+
+			if (!IsDefeated)
+				animationPlayer.Play("stagger");
 		}
 
 
@@ -297,11 +300,12 @@ namespace Project.Gameplay
 				if (tweener != null) //Kill any existing tween
 					tweener.Kill();
 
+				animationPlayer.Play("strike");
 				animationTree.Set(DEFEAT_TRANSITION_PARAMETER, "enabled");
 
 				Vector3 launchDirection = defeatLaunchDirection;
-				if (launchDirection.IsEqualApprox(Vector3.Zero)) //Calculate launch direction
-					launchDirection = Character.TrueVelocity;
+				if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
+					launchDirection = Character.Animator.Back();
 				else if (isDefeatLocalTransform)
 					launchDirection = GlobalTransform.Basis * launchDirection;
 
@@ -480,6 +484,7 @@ namespace Project.Gameplay
 			}
 			else //Travel
 			{
+				animationPlayer.Play("travel");
 				GlobalPosition = SpawnPosition;
 				tweener.TweenProperty(this, "position", OriginalPosition, spawnTravelTime).SetDelay(spawnDelay).From(SpawnPosition);
 				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));

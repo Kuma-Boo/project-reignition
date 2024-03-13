@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://xeuluo21g3tw"]
+[gd_scene load_steps=11 format=3 uid="uid://xeuluo21g3tw"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_araiw"]
 [ext_resource type="PackedScene" uid="uid://cum3u35ksu1pb" path="res://object/stage/common/resource/model/SpikePanel.gltf" id="2_wces2"]
+[ext_resource type="AudioStream" uid="uid://b3qcheh5xyfn" path="res://sound/sfx/objects/spike panel activate.wav" id="3_x6o7f"]
+[ext_resource type="AudioStream" uid="uid://pa8b1xr148yu" path="res://sound/sfx/objects/spike panel deactivate.wav" id="4_qse3b"]
 
 [sub_resource type="BoxShape3D" id="3"]
 size = Vector3(1, 0.9, 1)
@@ -44,6 +46,30 @@ tracks/2/keys = {
 "update": 0,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ActivateSFX:volume_db")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DeactivateSFX:volume_db")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="4"]
 resource_name = "active"
@@ -85,6 +111,44 @@ tracks/2/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ActivateSFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ActivateSFX:volume_db")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("DeactivateSFX:volume_db")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [0.0, -80.0]
+}
 
 [sub_resource type="Animation" id="7"]
 resource_name = "inactive"
@@ -125,6 +189,44 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DeactivateSFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ActivateSFX:volume_db")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [0.0, -80.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("DeactivateSFX:volume_db")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="6"]
@@ -208,6 +310,18 @@ disabled = true
 libraries = {
 "": SubResource("AnimationLibrary_vh2p2")
 }
+
+[node name="ActivateSFX" type="AudioStreamPlayer3D" parent="SpikePanel"]
+stream = ExtResource("3_x6o7f")
+max_db = 0.0
+max_distance = 50.0
+bus = &"SFX"
+
+[node name="DeactivateSFX" type="AudioStreamPlayer3D" parent="SpikePanel"]
+stream = ExtResource("4_qse3b")
+max_db = 0.0
+max_distance = 50.0
+bus = &"SFX"
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

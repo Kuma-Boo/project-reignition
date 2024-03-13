@@ -1,16 +1,21 @@
-[gd_scene load_steps=72 format=3 uid="uid://rh85bh20fk6r"]
+[gd_scene load_steps=81 format=3 uid="uid://rh85bh20fk6r"]
 
 [ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_6ikv1"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_p44e7"]
+[ext_resource type="AudioStream" uid="uid://cf1drci6lgvsm" path="res://sound/sfx/enemy/majin/majin flame attack.wav" id="5_xr0sx"]
 [ext_resource type="Material" uid="uid://efv6ms0uv2sg" path="res://object/enemy/majin/data/particle/material/Majin Flame.tres" id="6_t5qur"]
 [ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="7_6w2wy"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
+[ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="8_4kwy5"]
 [ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="8_a28yl"]
 [ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="9_6teur"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://byf5qdjpi8ur4" path="res://object/enemy/majin/data/animation/MajinAnimationTreeRoot.tres" id="9_osrkc"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="9_yw7li"]
-
+[ext_resource type="AudioStream" uid="uid://t8wiootnsl8g" path="res://sound/sfx/enemy/majin/majin defeat.wav" id="11_15qiw"]
+[ext_resource type="AudioStream" uid="uid://jpjrq8guepkq" path="res://sound/sfx/enemy/majin/majin stagger.wav" id="12_2cawu"]
+[ext_resource type="AudioStream" uid="uid://cvn3dgomxnoym" path="res://sound/sfx/enemy/majin/majin strike.wav" id="13_470oy"]
+[ext_resource type="AudioStream" uid="uid://cttipl3ihmbr5" path="res://sound/sfx/enemy/majin/majin travel.wav" id="14_41brs"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qrrup"]
 radius = 0.4
@@ -617,6 +622,20 @@ tracks/8/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("FX/DefeatFX/DefeatSFX")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_thps5"]
 resource_name = "fire-end"
@@ -798,6 +817,20 @@ tracks/8/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("FX/FireFX/FlameSFX")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_aucka"]
 resource_name = "spawn"
@@ -868,6 +901,20 @@ tracks/4/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/SpawnFX/SpawnSFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_1nwld"]
 resource_name = "spin"
@@ -886,6 +933,126 @@ tracks/0/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_y1q6p"]
+resource_name = "travel"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/SpawnFX:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FX/SpawnFX/SpawnLetter")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FX/SpawnFX/SpawnSmoke")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/Flash")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Root:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/TravelSFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_13cad"]
+resource_name = "stagger"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StaggerSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_1j3bl"]
+resource_name = "strike"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StrikeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
 "RESET": SubResource("Animation_ojgnd"),
@@ -893,7 +1060,10 @@ _data = {
 "fire-end": SubResource("Animation_thps5"),
 "fire-start": SubResource("Animation_c8j0n"),
 "spawn": SubResource("Animation_aucka"),
-"spin": SubResource("Animation_1nwld")
+"spin": SubResource("Animation_1nwld"),
+"stagger": SubResource("Animation_13cad"),
+"strike": SubResource("Animation_1j3bl"),
+"travel": SubResource("Animation_y1q6p")
 }
 
 [node name="Majin" type="StaticBody3D" node_paths=PackedStringArray("fireRoot", "root", "collider", "hurtbox", "rangeCollider", "animationTree", "animationPlayer") groups=["enemy", "wall"]]
@@ -1020,6 +1190,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -4.76837e-07)
 shape = SubResource("CylinderShape3D_ft0xj")
 disabled = true
 
+[node name="FlameSFX" type="AudioStreamPlayer3D" parent="FX/FireFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+stream = ExtResource("5_xr0sx")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
 [node name="SpawnFX" type="Node3D" parent="FX"]
 visible = false
 
@@ -1035,7 +1212,6 @@ randomness = 0.4
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
-local_coords = true
 process_material = SubResource("ParticleProcessMaterial_ekgjg")
 draw_pass_1 = SubResource("PlaneMesh_balcf")
 
@@ -1050,9 +1226,15 @@ one_shot = true
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
-local_coords = true
 process_material = SubResource("ParticleProcessMaterial_7bsia")
 draw_pass_1 = SubResource("QuadMesh_txkmg")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="FX/SpawnFX"]
+stream = ExtResource("8_4kwy5")
+unit_size = 100.0
+max_db = 0.0
+max_distance = 200.0
+bus = &"SFX"
 
 [node name="DefeatFX" type="Node3D" parent="FX"]
 visible = false
@@ -1100,6 +1282,34 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_3crcx")
 draw_pass_1 = SubResource("QuadMesh_bbrsu")
+
+[node name="DefeatSFX" type="AudioStreamPlayer3D" parent="FX/DefeatFX"]
+stream = ExtResource("11_15qiw")
+volume_db = -6.0
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="StaggerSFX" type="AudioStreamPlayer3D" parent="FX"]
+stream = ExtResource("12_2cawu")
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
+stream = ExtResource("13_470oy")
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="TravelSFX" type="AudioStreamPlayer3D" parent="FX"]
+stream = ExtResource("14_41brs")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [node name="Flash" type="GPUParticles3D" parent="FX"]
 layers = 32

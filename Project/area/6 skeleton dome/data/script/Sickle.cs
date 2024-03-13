@@ -18,6 +18,8 @@ namespace Project.Gameplay.Hazards
 		private float currentRatio = .5f;
 		[Export]
 		private bool isSwingingRight;
+		[Export]
+		private bool enableSparkParticles = true;
 
 		[ExportGroup("Editor")]
 		[Export]
@@ -26,8 +28,6 @@ namespace Project.Gameplay.Hazards
 		[Export]
 		private NodePath head;
 		private Node3D headNode;
-		[Export]
-		private bool enableSparkParticles = true;
 		[Export]
 		private GpuParticles3D sparkParticles;
 		/// <summary> Were sparks emitted this rotation? </summary>

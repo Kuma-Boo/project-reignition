@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://dnfwvf2akhf1v"]
+[gd_scene load_steps=19 format=3 uid="uid://dnfwvf2akhf1v"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
 [ext_resource type="PackedScene" uid="uid://b1tirama0dt1b" path="res://area/1 sand oasis/object/model/FlameShooter.gltf" id="1_wwv3q"]
 [ext_resource type="Material" uid="uid://ckje67air1flv" path="res://area/1 sand oasis/data/particle/material/Flame Shooter Base Flame.tres" id="4_yfx5b"]
 [ext_resource type="Material" uid="uid://d200b5pyic62o" path="res://area/1 sand oasis/data/particle/material/Flame Shooter Explosion Flame.tres" id="5_2kp5f"]
+[ext_resource type="AudioStream" uid="uid://bs3ovsaon27bd" path="res://sound/sfx/objects/flame shooter.wav" id="5_kt73t"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hqwbi"]
 radius = 0.4
@@ -131,6 +132,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_1683u"]
 resource_name = "inactive"
@@ -253,6 +268,12 @@ visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_tiero")
 draw_pass_1 = SubResource("QuadMesh_gcb82")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_kt73t")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
