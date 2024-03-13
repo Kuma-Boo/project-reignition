@@ -428,8 +428,6 @@ namespace Project.Gameplay
 		private const float MIN_TURN_AMOUNT = .12f;
 		/// <summary> How much to smooth turning when moving at top speed. </summary>
 		private const float MAX_TURN_AMOUNT = .4f;
-		/// <summary> How much to smooth turning when speed break is active. </summary>
-		private const float MAX_SPEED_BREAK_TURN_AMOUNT = .2f;
 		/// <summary> How quickly to turnaround when at top speed. </summary>
 		private const float STRAFE_TURNAROUND_SPEED = .24f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
@@ -618,41 +616,26 @@ namespace Project.Gameplay
 		}
 
 
-		/// <summary> Current influence of the slope. </summary>
-		private float slopeInfluenceRatio;
 		/// <summary> How much should the steepest slope affect the player? </summary>
 		private const float SLOPE_INFLUENCE_STRENGTH = .4f;
 		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
-		private const float SLOPE_THRESHOLD = .02f;
-		/// <summary> Recalculates slope influence based on ground normal. </summary>
-		private void UpdateSlopeInfluence(Vector3 groundNormal)
-		{
-			// Calculate slope influence
-			float angle = groundNormal.AngleTo(Vector3.Up);
-			if (Mathf.Abs(angle) < Mathf.Pi * SLOPE_THRESHOLD) // Slope is too insignificant to affect movement
-			{
-				slopeInfluenceRatio = 0; // Reset influence
-				return;
-			}
-
-			float rotationAmount = GetMovementDirection().SignedAngleTo(Vector3.Forward, Vector3.Up);
-			Vector3 slopeDirection = groundNormal.Rotated(Vector3.Up, rotationAmount).Normalized();
-			slopeInfluenceRatio = slopeDirection.Z * SLOPE_INFLUENCE_STRENGTH;
-		}
-
+		private const float SLOPE_THRESHOLD = .2f;
 		private void UpdateSlopeSpd()
 		{
 			if (Mathf.IsZeroApprox(MoveSpeed) || IsMovingBackward) return; //Idle/Backstepping isn't affected by slopes
 			if (!IsOnGround) return; //Slope is too shallow or not on the ground
 			if (IsLockoutActive && ActiveLockoutData.ignoreSlopes) return; //Lockout is ignoring slopes
 
+			// Calculate slope influence
+			float slopeInfluenceRatio = -PathFollower.Forward().Dot(Vector3.Up);
+			if (Mathf.Abs(slopeInfluenceRatio) <= SLOPE_THRESHOLD) return;
+
+			slopeInfluenceRatio = Mathf.SmoothStep(-SLOPE_INFLUENCE_STRENGTH, SLOPE_INFLUENCE_STRENGTH, slopeInfluenceRatio);
+
 			if (IsHoldingDirection(PathFollower.ForwardAngle)) //Accelerating
 			{
 				if (slopeInfluenceRatio < 0f) //Downhill
-				{
-					//Capped - MoveSpeed = Mathf.MoveToward(MoveSpeed, GroundSettings.speed, GroundSettings.traction * Mathf.Abs(slopeInfluence) * PhysicsManager.physicsDelta);
 					MoveSpeed += GroundSettings.traction * Mathf.Abs(slopeInfluenceRatio) * PhysicsManager.physicsDelta; //Uncapped
-				}
 				else if (GroundSettings.GetSpeedRatioClamped(MoveSpeed) < 1f) //Uphill; Reduce acceleration (Only when not at top speed)
 					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.traction * slopeInfluenceRatio * PhysicsManager.physicsDelta);
 			}
@@ -1556,7 +1539,6 @@ namespace Project.Gameplay
 				{
 					//Update world direction
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized();
-					UpdateSlopeInfluence(groundHit.normal);
 				}
 			}
 			else
