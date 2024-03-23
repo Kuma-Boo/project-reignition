@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cbpudluma1oux"]
+[gd_scene load_steps=12 format=3 uid="uid://cbpudluma1oux"]
 
 [ext_resource type="PackedScene" uid="uid://d2w0v34pt425j" path="res://object/stage/destructable/resource/model/Crate.gltf" id="1_ievg5"]
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_m1iim"]
 [ext_resource type="PackedScene" uid="uid://bn8xhewfbks6p" path="res://object/stage/destructable/resource/model/CratePieces.gltf" id="2_ekvth"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="4_ms1x2"]
 [ext_resource type="AudioStream" uid="uid://caieglcob25kc" path="res://sound/sfx/objects/crate shatter.wav" id="4_ngm6l"]
 [ext_resource type="AudioStream" uid="uid://tf3yvlftwu8c" path="res://sound/sfx/objects/crate push.wav" id="5_0m3lv"]
 
@@ -187,6 +188,8 @@ volume_db = -6.0
 max_db = 0.0
 max_distance = 50.0
 bus = &"SFX"
+script = ExtResource("4_ms1x2")
+groupKey = &"crate_shatter"
 
 [node name="Push" type="AudioStreamPlayer3D" parent="Root/SFX"]
 stream = ExtResource("5_0m3lv")
@@ -195,6 +198,8 @@ max_db = 0.0
 max_distance = 10.0
 bus = &"SFX"
 attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("4_ms1x2")
+groupKey = &"crate_push"
 
 [node name="CratePieces" parent="." instance=ExtResource("2_ekvth")]
 visible = false

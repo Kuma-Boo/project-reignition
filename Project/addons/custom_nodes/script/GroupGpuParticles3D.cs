@@ -6,7 +6,7 @@ namespace Project.CustomNodes
 	/// <summary>
 	/// Plays a group of GPUParticles together.
 	/// </summary>
-	public partial class GpuParticles3DGroup : GpuParticles3D
+	public partial class GroupGpuParticles3D : GpuParticles3D
 	{
 		[Export]
 		public Array<GpuParticles3D> subSystems;

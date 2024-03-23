@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Gameplay.Hazards
 {
@@ -12,7 +13,7 @@ namespace Project.Gameplay.Hazards
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = new();
 
 			properties.Add(ExtensionMethods.CreateProperty("Current State", Variant.Type.Int, PropertyHint.Enum, GetStateNames()));
 
@@ -104,29 +105,10 @@ namespace Project.Gameplay.Hazards
 		private float startingTime;
 		/// <summary> State/Animation names. </summary>
 		[Export]
-		private Array<StringName> stateNames = new Array<StringName>();
+		private Array<StringName> stateNames = new();
 		/// <summary> How long each state should last. Set per object. </summary>
 		[Export]
-		private Array<float> stateLengths = new Array<float>();
-
-		/*
-		[Export]
-		public float inactiveLength;
-		[Export]
-		public float warningLength;
-		[Export]
-		public float activeLength;
-		[Export(PropertyHint.Range, "0, 1")]
-		public float startingOffset;
-
-		private AttackState attackState;
-		private enum AttackState
-		{
-			Inactive,
-			Warning,
-			Active,
-		}
-		*/
+		private Array<float> stateLengths = new();
 
 		[Export]
 		private AnimationPlayer animator;
@@ -139,9 +121,7 @@ namespace Project.Gameplay.Hazards
 
 			currentStateIndex = Mathf.Clamp(currentStateIndex, 0, stateNames.Count);
 			if (currentStateIndex < stateLengths.Count)
-			{
 				StartTimer(stateLengths[currentStateIndex] - startingTime);
-			}
 			else
 				OnTimerCompleted();
 		}

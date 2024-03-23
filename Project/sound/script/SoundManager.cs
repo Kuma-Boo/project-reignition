@@ -218,7 +218,7 @@ namespace Project.Core
 
 		[Export]
 		private Node pearlSFX;
-		private readonly Array<AudioStreamPlayer> pearlSFXList = new Array<AudioStreamPlayer>();
+		private readonly Array<AudioStreamPlayer> pearlSFXList = new();
 		public int PearlSoundEffectIndex { get; set; }
 		[Export]
 		private AudioStreamPlayer richPearlSFX;
@@ -244,7 +244,7 @@ namespace Project.Core
 			if (PearlSoundEffectIndex >= pearlSFXList.Count)
 				PearlSoundEffectIndex = pearlSFXList.Count - 1;
 
-			float volume = ((PearlSoundEffectIndex - 1f) / pearlSFXList.Count) * PEARL_AUDIO_DUCK_STRENGTH;
+			float volume = (PearlSoundEffectIndex - 1f) / pearlSFXList.Count * PEARL_AUDIO_DUCK_STRENGTH;
 			volume = Mathf.LinearToDb(1 - volume);
 
 			for (int i = 0; i < pearlSFXList.Count; i++) //Audio Ducking
@@ -258,6 +258,42 @@ namespace Project.Core
 
 		public void PlayRichPearlSFX() => richPearlSFX.Play();
 
+
+		public enum SFXType
+		{
+			SPIKE_PANEL,
+			ENEMY_SPAWN,
+			FLAME_SHOOTER
+		}
+
+		private readonly Dictionary<StringName, int> sfxGroups = new();
+		public float AddGroupSFX(StringName key)
+		{
+			if (!sfxGroups.ContainsKey(key))
+				sfxGroups.Add(key, 0);
+			sfxGroups[key] += 1;
+			return CalculateGroupSFXVolumeDB(key);
+		}
+
+		public float RemoveGroupSFX(StringName key)
+		{
+			if (sfxGroups.ContainsKey(key))
+			{
+				sfxGroups[key] -= 1;
+				if (sfxGroups[key] < 0)
+					sfxGroups.Remove(key);
+			}
+
+			return CalculateGroupSFXVolumeDB(key);
+		}
+
+		private float CalculateGroupSFXVolumeDB(StringName key)
+		{
+			if (sfxGroups.ContainsKey(key)) // Calculate target db volume
+				return Mathf.LinearToDb(1.0f / sfxGroups[key]);
+
+			return 0.0f; // Don't modify db
+		}
 
 		/// <summary>
 		/// Sets whether the break channel is muted or not (for muting environments)

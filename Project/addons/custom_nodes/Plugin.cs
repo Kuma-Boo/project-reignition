@@ -16,9 +16,9 @@ namespace Project.CustomNodes
 			texture = GD.Load<Texture2D>("res://addons/custom_nodes/icon/sprite 2d plus.svg");
 			AddCustomType("Sprite2DPlus", "Sprite2D", script, texture);
 
-			script = GD.Load<Script>("res://addons/custom_nodes/script/GpuParticles3DGroup.cs");
-			texture = GD.Load<Texture2D>("res://addons/custom_nodes/icon/gpu particle 3d group.svg");
-			AddCustomType("GPUParticles3DGroup", "GpuParticles3D", script, texture);
+			script = GD.Load<Script>("res://addons/custom_nodes/script/GroupGpuParticles3D.cs");
+			texture = GD.Load<Texture2D>("res://addons/custom_nodes/icon/group gpu particle 3d.svg");
+			AddCustomType("GroupGPUParticles3D", "GpuParticles3D", script, texture);
 		}
 
 		public override void _ExitTree()
@@ -27,7 +27,7 @@ namespace Project.CustomNodes
 			// Always remember to remove it from the engine when deactivated.
 			RemoveCustomType("ObjectGenerator");
 			RemoveCustomType("Sprite2DPlus");
-			RemoveCustomType("GPUParticles3DGroup");
+			RemoveCustomType("GroupGPUParticles3D");
 		}
 	}
 #endif
