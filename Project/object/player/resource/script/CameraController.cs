@@ -49,8 +49,6 @@ namespace Project.Gameplay
 			{
 				SettingsResource = targetSettings,
 			});
-
-			Character.Connect(CharacterController.SignalName.Respawn, new Callable(this, MethodName.Respawn));
 		}
 
 

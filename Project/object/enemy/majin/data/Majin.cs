@@ -235,10 +235,8 @@ namespace Project.Gameplay
 			if (tweener != null) //Kill any active tweens
 				tweener.Kill();
 
-			IsActive = false;
+			base.Respawn();
 			isSpawning = false;
-			SpawnData.Respawn(this);
-			currentHealth = maxHealth;
 
 			animationPlayer.Play("RESET");
 			animationPlayer.Advance(0);

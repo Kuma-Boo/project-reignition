@@ -1193,10 +1193,6 @@ namespace Project.Gameplay
 			}
 		}
 
-		[Signal]
-		/// <summary> Use this instead of LevelSettings.SignalName.Respawn to only respawn when the player is defeated. </summary>
-		public delegate void RespawnEventHandler();
-
 		/// <summary> True after the player is defeated, but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
 		/// <summary>
@@ -1226,7 +1222,6 @@ namespace Project.Gameplay
 			Lockon.IsMonitoring = false;
 			areaTrigger.Disabled = true;
 
-			IsDefeated = false;
 			ResetActionState();
 			MovementState = MovementStates.Normal;
 
@@ -1236,18 +1231,15 @@ namespace Project.Gameplay
 			Camera.PathFollower.SetActivePath(Level.CheckpointCameraPath);
 			PathFollower.Resync();
 
+			IsDefeated = false;
 			IsMovingBackward = false;
 			ResetVelocity();
 			ResetOrientation();
 
-			Level.RespawnObjects();
-			Level.IncrementRespawnCount();
-			Level.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); //Reset ring count
-
-			EmitSignal(SignalName.Respawn);
+			Camera.Respawn();
 
 			//Wait a single physics frame to ensure objects update properly
-			GetTree().CreateTimer(PhysicsManager.physicsDelta, false).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
+			GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
 		}
 
 		/// <summary>
@@ -1257,6 +1249,10 @@ namespace Project.Gameplay
 		{
 			SnapToGround();
 			areaTrigger.Disabled = false;
+
+			Level.RespawnObjects();
+			Level.IncrementRespawnCount();
+			Level.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); //Reset ring count
 
 			TransitionManager.FinishTransition();
 		}

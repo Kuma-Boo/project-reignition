@@ -54,7 +54,7 @@ namespace Project.Gameplay.Bosses
 			GD.Print("Skipping intro animation.");
 
 			StageSettings.instance.ConnectUnloadSignal(this);
-			Character.Connect(CharacterController.SignalName.Respawn, new Callable(this, MethodName.Respawn));
+			StageSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
 
