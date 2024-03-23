@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using Project.Core;
+using Project.CustomNodes;
 
 namespace Project.Gameplay
 {
@@ -128,7 +129,7 @@ namespace Project.Gameplay
 		/// Plays water splash sfx and vfx.
 		/// </summary>
 		[Export]
-		private Editor.CustomNodes.GpuParticles3DGroup landingWaterParticle;
+		private CustomNodes.GpuParticles3DGroup landingWaterParticle;
 		public void PlayLandingWaterFX()
 		{
 			PlayActionSFX(SPLASH_SFX);
@@ -150,7 +151,7 @@ namespace Project.Gameplay
 		[ExportSubgroup("Step VFX")]
 		[Export]
 		/// <summary> Emitters responsible for dust when moving on the ground. </summary>
-		private Editor.CustomNodes.GpuParticles3DGroup[] stepEmitters;
+		private CustomNodes.GpuParticles3DGroup[] stepEmitters;
 		/// <summary> Index of the current step emitter. </summary>
 		private int currentStepEmitter = -1;
 		/// <summary> Is step dust be emitted? </summary>

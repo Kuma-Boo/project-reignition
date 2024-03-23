@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Project.Editor.CustomNodes
+namespace Project.CustomNodes
 {
 	[Tool]
 	/// <summary>

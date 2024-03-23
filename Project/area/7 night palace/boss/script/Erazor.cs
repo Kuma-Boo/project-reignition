@@ -55,7 +55,7 @@ namespace Project.Gameplay.Bosses
 		public delegate void DuelCompletedEventHandler(); //Called when a duel attack ends. Resets positions to allow infinte hallway
 
 		private CharacterController Character => CharacterController.instance;
-		private float LocalPlayerPosition => Character.PathFollower.FlatPlayerPositionDelta.X;
+		private float LocalPlayerPosition => Character.PathFollower.LocalPlayerPositionDelta.X;
 
 		//Animation parameters
 		private const string TELEPORT_SPEED = "parameters/TeleportSpeed/scale";

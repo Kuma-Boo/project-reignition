@@ -1,4 +1,5 @@
 using Godot;
+using Project.CustomNodes;
 
 namespace Project.Gameplay
 {
@@ -22,7 +23,7 @@ namespace Project.Gameplay
 		/// <summary> Delta between last frame and current frame. Updates on Resync(). </summary>
 		public float DeltaAngle { get; private set; }
 		/// <summary> Local delta to player position. </summary>
-		public Vector3 FlatPlayerPositionDelta { get; private set; }
+		public Vector3 LocalPlayerPositionDelta { get; private set; }
 		/// <summary> Absolute delta to player position. </summary>
 		public Vector3 GlobalPlayerPositionDelta { get; private set; }
 
@@ -64,7 +65,7 @@ namespace Project.Gameplay
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;
-			FlatPlayerPositionDelta = (Character.GlobalPosition - GlobalPosition).Rotated(Vector3.Up, -ForwardAngle);
+			LocalPlayerPositionDelta = GlobalBasis.Inverse() * (Character.GlobalPosition - GlobalPosition);
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
 
 

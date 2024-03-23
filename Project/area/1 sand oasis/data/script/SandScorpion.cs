@@ -354,7 +354,7 @@ namespace Project.Gameplay.Bosses
 			float dot = Character.GetMovementDirection().Dot(PathFollower.Back());
 			float offsetPrediction = Character.MoveSpeed * Runtime.randomNumberGenerator.RandfRange(1f, 2f) * dot;
 			bossPathFollower.Progress = PathFollower.Progress + offsetPrediction;
-			bossPathFollower.HOffset = PathFollower.FlatPlayerPositionDelta.X; //Works since the path is flat
+			bossPathFollower.HOffset = PathFollower.LocalPlayerPositionDelta.X; //Works since the path is flat
 			if (i != 0 && i < MAX_MISSILE_COUNT - 1) //Slightly randomize the middle missile's spread
 				bossPathFollower.HOffset += Runtime.randomNumberGenerator.RandfRange(-MISSILE_SPREAD, MISSILE_SPREAD);
 
@@ -430,7 +430,7 @@ namespace Project.Gameplay.Bosses
 					else if (attackSide != 0) //Track the player's position
 					{
 						float current = (float)lTailAnimationTree.Get(LIGHT_ATTACK_POSITION_PARAMETER);
-						float pos = PathFollower.FlatPlayerPositionDelta.X;
+						float pos = PathFollower.LocalPlayerPositionDelta.X;
 						if ((attackSide == -1 && pos < 0) || (attackSide == 1 && pos > 0))
 							pos = 0;
 
@@ -473,7 +473,7 @@ namespace Project.Gameplay.Bosses
 		{
 			attackCounter++;
 			isAttacking = true;
-			if (PathFollower.FlatPlayerPositionDelta.X > 0) //Left Attack
+			if (PathFollower.LocalPlayerPositionDelta.X > 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-light-attack");
@@ -498,7 +498,7 @@ namespace Project.Gameplay.Bosses
 		{
 			attackCounter = 0;
 			isAttacking = true;
-			if (PathFollower.FlatPlayerPositionDelta.X > 0) //Left Attack
+			if (PathFollower.LocalPlayerPositionDelta.X > 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-heavy-attack");
@@ -589,7 +589,7 @@ namespace Project.Gameplay.Bosses
 		private void UpdateFlyingEyeTarget()
 		{
 			//Calculate
-			float horizontalTracking = flyingEyeAttackPosition.X - PathFollower.FlatPlayerPositionDelta.X;
+			float horizontalTracking = flyingEyeAttackPosition.X - PathFollower.LocalPlayerPositionDelta.X;
 			horizontalTracking = Mathf.Clamp(horizontalTracking, -FLYING_EYE_MAX_TRACKING, FLYING_EYE_MAX_TRACKING);
 			flyingEyeTarget = Character.PathFollower.GlobalPosition + Vector3.Up * flyingEyeAttackPosition.Y;
 			flyingEyeTarget += Character.PathFollower.Right() * (flyingEyeAttackPosition.X - horizontalTracking);
@@ -606,7 +606,7 @@ namespace Project.Gameplay.Bosses
 			isStriking = true;
 
 			//Cache current player position delta
-			flyingEyeAttackPosition = new Vector2(PathFollower.FlatPlayerPositionDelta.X, FLYING_EYE_RADIUS);
+			flyingEyeAttackPosition = new Vector2(PathFollower.LocalPlayerPositionDelta.X, FLYING_EYE_RADIUS);
 
 			rootAnimationTree.Set(EYE_PARAMETER, ENABLED_STATE); //Open eye cage
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, EYE_BITE_STATE); //Start biting

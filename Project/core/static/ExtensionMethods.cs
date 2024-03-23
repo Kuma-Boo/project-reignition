@@ -249,9 +249,5 @@ namespace Project
 				SmoothDamp(current.Z, target.Z, ref currentVelocity.Z, smoothTime, maxSpeed));
 			return output;
 		}
-
-
-		/// <summary> Checks if a Path3D is looping (i.e. Path's first and last point are at the same position). </summary>
-		public static bool IsLoopingPath(this Path3D path) => path.Curve.GetPointPosition(0).IsEqualApprox(path.Curve.GetPointPosition(path.Curve.PointCount - 1));
 	}
 }

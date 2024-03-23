@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 
-namespace Project.Core
+namespace Project.CustomNodes
 {
 	public partial class Trail3D : Node3D
 	{

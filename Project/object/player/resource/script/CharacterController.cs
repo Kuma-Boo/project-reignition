@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using Project.Core;
+using Project.CustomNodes;
 
 namespace Project.Gameplay
 {
@@ -298,7 +299,7 @@ namespace Project.Gameplay
 			if (!IsLockoutActive || !ActiveLockoutData.recenterPlayer) return;
 
 			Vector3 recenterDirection = PathFollower.Back().Rotated(UpDirection, Mathf.Pi * .5f);
-			float currentOffset = -PathFollower.FlatPlayerPositionDelta.X;
+			float currentOffset = PathFollower.LocalPlayerPositionDelta.X;
 			float movementOffset = currentOffset;
 			if (!isRecentered) //Smooth out recenter speed
 			{

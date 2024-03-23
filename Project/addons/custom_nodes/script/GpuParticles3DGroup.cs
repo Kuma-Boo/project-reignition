@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-namespace Project.Editor.CustomNodes
+namespace Project.CustomNodes
 {
 	/// <summary>
 	/// Plays a group of GPUParticles together.
