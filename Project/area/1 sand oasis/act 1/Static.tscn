@@ -54,6 +54,8 @@
 [ext_resource type="Curve3D" uid="uid://bom3ca8pa5n4x" path="res://area/1 sand oasis/act 1/environment/path/BeachPath.tres" id="41_tujp6"]
 [ext_resource type="Curve3D" uid="uid://dyf3xaw47l0tm" path="res://area/1 sand oasis/act 1/environment/path/EndingPath.tres" id="45_mavj3"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_eqslh"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_84q52"]
 size = Vector3(15, 20, 2.5)
 
@@ -77,8 +79,6 @@ radius = 8.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8dg41"]
 size = Vector3(10, 10, 120)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_eqslh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jsp8v"]
 size = Vector3(10, 4, 2)
@@ -567,7 +567,21 @@ visible = false
 
 [node name="Trigger" type="Node3D" parent="."]
 
+[node name="SandfallTrigger" parent="Trigger" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -666, 7.003, -765)
+collision_layer = 0
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="SandfallEvent" parent="Trigger/SandfallTrigger" instance=ExtResource("13_6o732")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/SandfallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 3, 0)
+shape = SubResource("SphereShape3D_eqslh")
+
 [node name="Object" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="DriftTrigger1" parent="Trigger/Object" instance=ExtResource("17_vcxwi")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 70.19, 75, -52.15)
@@ -614,7 +628,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -166.5, -48.7, -95.9)
 [node name="Camera" type="Node3D" parent="Trigger/Object/ZipperRecenterLockout"]
 transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, 0, 0, 0)
 script = ExtResource("13_3nlok")
-transitionTime = 0.5
+transitionTime = 1.0
 settings = ExtResource("15_68xag")
 
 [node name="Lockout" type="Node3D" parent="Trigger/Object/ZipperRecenterLockout"]
@@ -706,20 +720,8 @@ settings = ExtResource("23_g7g12")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
 shape = SubResource("BoxShape3D_8dg41")
 
-[node name="SandfallTrigger" parent="Trigger/Object" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -666, 7.003, -765)
-collision_layer = 0
-OneShot = true
-"Respawn Mode" = 3
-"Enter Mode" = 0
-
-[node name="SandfallEvent" parent="Trigger/Object/SandfallTrigger" instance=ExtResource("13_6o732")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SandfallTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 3, 0)
-shape = SubResource("SphereShape3D_eqslh")
-
 [node name="Camera" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="Hall1Trigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-4.37114e-08, -0.642788, -0.766044, 8.74228e-08, 0.766044, -0.642788, 1, -9.50669e-08, 2.27094e-08, -123.844, -45, -62.1165)
@@ -949,6 +951,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_y0xl3")
 
 [node name="Checkpoint" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="Checkpoint1" parent="Trigger/Checkpoint" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -248.74, -40, -252.31)
@@ -1050,6 +1053,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
 [node name="Path" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="Island1Trigger" parent="Trigger/Path" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 60.5882, -45, -220.579)
@@ -1093,6 +1097,7 @@ shape = SubResource("BoxShape3D_84q52")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
 
 [node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, -48)
@@ -1247,7 +1252,20 @@ layers = 2
 cast_shadow = 3
 mesh = SubResource("PlaneMesh_njmjg")
 
+[node name="BeachBuildingBlock" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 79, -668.25, 15, -705)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="BeachBuildingBlock2" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(40, 0, 0, 0, 1, 0, 0, 0, 19, -630.25, 15, -825)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
 [node name="Path" type="Node3D" parent="."]
+visible = false
 
 [node name="OasisPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.194, 75.003, 5.155)
@@ -1286,6 +1304,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -635.734, -40, -765)
 curve = ExtResource("45_mavj3")
 
 [node name="DemoCamera" type="Node3D" parent="."]
+visible = false
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
 cull_mask = 30
