@@ -13,7 +13,7 @@ namespace Project.Gameplay
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = new();
 
 			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Travel Time", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
 			if (!SpawnTravelDisabled)
@@ -27,7 +27,7 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
 
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
-			if (attackType == AttackTypes.Fire) //Show relevant fire-related settings
+			if (attackType == AttackTypes.Fire) // Show relevant fire-related settings
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
@@ -163,7 +163,7 @@ namespace Project.Gameplay
 		/// <summary> Use this to launch the enemy when defeated. </summary>
 		private bool isDefeatLaunchEnabled;
 		/// <summary> Use local transform for launch direction? </summary>
-		private bool isDefeatLocalTransform;
+		private bool isDefeatLocalTransform = true;
 		/// <summary> How long should the enemy be launched?  </summary>
 		private float defeatLaunchTime = .5f;
 		/// <summary> Direction to launch. Leave at Vector3.Zero to automatically calculate. </summary>
@@ -182,9 +182,9 @@ namespace Project.Gameplay
 		private AttackTypes attackType;
 		private enum AttackTypes
 		{
-			Disabled, //Just idle
-			Spin, //Spin like a top
-			Fire, //Spit fire out
+			Disabled, // Just idle
+			Spin, // Spin like a top
+			Fire, // Spit fire out
 		}
 
 		private float flameActiveTime = 1.0f;
@@ -200,7 +200,7 @@ namespace Project.Gameplay
 		/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
 		private MovingObject movementController;
 
-		//Animation parameters
+		// Animation parameters
 		private readonly StringName IDLE_STATE = "idle";
 		private readonly StringName SPIN_STATE = "spin";
 		private readonly StringName FIRE_STATE = "fire";
@@ -215,7 +215,7 @@ namespace Project.Gameplay
 
 		protected override void SetUp()
 		{
-			if (Engine.IsEditorHint()) return; //In Editor
+			if (Engine.IsEditorHint()) return; // In Editor
 
 			animationTree.Active = true;
 			animatorRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
@@ -224,7 +224,7 @@ namespace Project.Gameplay
 			fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
 			spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
 
-			if (attackType == AttackTypes.Spin) //Try to get movement controller parent
+			if (attackType == AttackTypes.Spin) // Try to get movement controller parent
 				movementController = GetParentOrNull<MovingObject>();
 
 			base.SetUp();
@@ -232,7 +232,7 @@ namespace Project.Gameplay
 
 		public override void Respawn()
 		{
-			if (tweener != null) //Kill any active tweens
+			if (tweener != null) // Kill any active tweens
 				tweener.Kill();
 
 			base.Respawn();
@@ -241,8 +241,8 @@ namespace Project.Gameplay
 			animationPlayer.Play("RESET");
 			animationPlayer.Advance(0);
 
-			//Reset rotation
-			if (!trackPlayer && !Mathf.IsZeroApprox(rotationTime)) //Precalculate rotation amount
+			// Reset rotation
+			if (!trackPlayer && !Mathf.IsZeroApprox(rotationTime)) // Precalculate rotation amount
 				rotationAmount = Mathf.Tau / rotationTime;
 
 			rotationVelocity = 0;
@@ -253,12 +253,12 @@ namespace Project.Gameplay
 				currentRotation = 0;
 			UpdateRotation();
 
-			//Reset idle movement
+			// Reset idle movement
 			idleFactorVelocity = 0;
 			animationTree.Set(IDLE_FACTOR_PARAMETER, 0);
 			animationTree.Set(DEFEAT_TRANSITION_PARAMETER, DISABLED_STATE);
 
-			if (movementController != null) //Reset/Pause movement
+			if (movementController != null) // Reset/Pause movement
 			{
 				movementController.Reset();
 				movementController.TimeScale = 0;
@@ -267,14 +267,14 @@ namespace Project.Gameplay
 			// Reset stagger
 			staggerTimer = 0;
 
-			//Reset flame attack
+			// Reset flame attack
 			flameTimer = 0;
 			isFlameActive = false;
 
 			if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Range && IsInRange)) //No activation trigger. Activate immediately.
+			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
 				EnterRange();
-			else //Start hidden
+			else // Start hidden
 			{
 				Visible = false;
 				SetHitboxStatus(false);
@@ -305,7 +305,7 @@ namespace Project.Gameplay
 
 			if (isDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 			{
-				if (tweener != null) //Kill any existing tween
+				if (tweener != null) // Kill any existing tween
 					tweener.Kill();
 
 				animationPlayer.Play("strike");
@@ -318,19 +318,18 @@ namespace Project.Gameplay
 				else if (isDefeatLocalTransform)
 					launchDirection = GlobalTransform.Basis * launchDirection;
 
-				launchDirection = launchDirection.Rotated(Vector3.Up, Mathf.Pi); //Fix forward direction
+				launchDirection = launchDirection.Rotated(Vector3.Up, Mathf.Pi); // Fix forward direction
 				launchDirection = launchDirection.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
 
-				Vector3 targetRotation = Vector3.Up * 360;
+				Vector3 targetRotation = Vector3.Up * Mathf.Tau * 2.0f;
 				if (Runtime.randomNumberGenerator.Randf() > .5f)
 					targetRotation *= -1;
-				targetRotation -= Vector3.Right * 30;
 
-				//Get knocked back
-				tweener = CreateTween();
+				// Get knocked back
+				tweener = CreateTween().SetParallel();
 				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
-				tweener.Parallel().TweenProperty(this, "rotation_degrees", RotationDegrees + targetRotation, defeatLaunchTime);
-				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("defeat")));
+				tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime).SetEase(Tween.EaseType.In);
+				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("defeat"))).SetDelay(defeatLaunchTime);
 			}
 			else
 				animationPlayer.Play("defeat");
@@ -352,10 +351,10 @@ namespace Project.Gameplay
 			if (attackType == AttackTypes.Fire)
 				UpdateFlameAttack();
 
-			//Update rotation
+			// Update rotation
 			if (IsInRange)
 			{
-				if (trackPlayer) //Rotate to face player
+				if (trackPlayer) // Rotate to face player
 					TrackPlayer();
 				else if (!Mathf.IsZeroApprox(rotationTime))
 				{
@@ -371,12 +370,12 @@ namespace Project.Gameplay
 		}
 
 		private float idleFactorVelocity;
-		private const float IDLE_FACTOR_SMOOTHING = 30.0f; //Idle movement strength smoothing
+		private const float IDLE_FACTOR_SMOOTHING = 30.0f; // Idle movement strength smoothing
 
 
 		private bool isFidgetActive;
-		private int fidgetIndex; //Index of the current fidget animation.
-		private float fidgetTimer; //Keeps track of how long it's been since the last fidget
+		private int fidgetIndex; // Index of the current fidget animation.
+		private float fidgetTimer; // Keeps track of how long it's been since the last fidget
 
 		private readonly StringName[] FIDGET_ANIMATIONS = {
 			"flip",
@@ -387,10 +386,10 @@ namespace Project.Gameplay
 		private readonly StringName DEFEAT_TRANSITION_PARAMETER = "parameters/defeat_transition/transition_request";
 
 		private readonly StringName IDLE_FACTOR_PARAMETER = "parameters/idle_movement_factor/add_amount";
-		private readonly StringName FIDGET_TRANSITION_PARAMETER = "parameters/fidget_transition/transition_request"; //Sets the fidget animation
-		private readonly StringName FIDGET_TRIGGER_PARAMETER = "parameters/fidget_trigger/request"; //Currently fidgeting? Set StringName
-		private readonly StringName FIDGET_TRIGGER_STATE_PARAMETER = "parameters/fidget_trigger/active"; //Get StringName
-		private const float FIDGET_FREQUENCY = 3f; //How often to fidget
+		private readonly StringName FIDGET_TRANSITION_PARAMETER = "parameters/fidget_transition/transition_request"; // Sets the fidget animation
+		private readonly StringName FIDGET_TRIGGER_PARAMETER = "parameters/fidget_trigger/request"; // Currently fidgeting? Set StringName
+		private readonly StringName FIDGET_TRIGGER_STATE_PARAMETER = "parameters/fidget_trigger/active"; // Get StringName
+		private const float FIDGET_FREQUENCY = 3f; // How often to fidget
 
 		/// <summary>
 		/// Updates fidgets and idle movement.
@@ -398,7 +397,7 @@ namespace Project.Gameplay
 		private void UpdateFidgets()
 		{
 			float targetIdleFactor = 1.0f;
-			if (isFidgetActive) //Adjust movement strength based on fidget
+			if (isFidgetActive) // Adjust movement strength based on fidget
 			{
 				if (fidgetIndex == 0)
 					targetIdleFactor = 0.0f;
@@ -407,12 +406,12 @@ namespace Project.Gameplay
 
 				isFidgetActive = (bool)animationTree.Get(FIDGET_TRIGGER_STATE_PARAMETER);
 			}
-			else if (attackType != AttackTypes.Fire || !IsInRange) //Wait for fidget to start
+			else if (attackType != AttackTypes.Fire || !IsInRange) // Wait for fidget to start
 			{
 				fidgetTimer += PhysicsManager.physicsDelta;
-				if (fidgetTimer > FIDGET_FREQUENCY) //Start fidget
+				if (fidgetTimer > FIDGET_FREQUENCY) // Start fidget
 				{
-					fidgetTimer = 0; //Reset timer
+					fidgetTimer = 0; // Reset timer
 					fidgetIndex = Runtime.randomNumberGenerator.RandiRange(0, FIDGET_ANIMATIONS.Length - 1);
 					animationTree.Set(FIDGET_TRANSITION_PARAMETER, FIDGET_ANIMATIONS[fidgetIndex]);
 					animationTree.Set(FIDGET_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -433,7 +432,7 @@ namespace Project.Gameplay
 
 		private void UpdateFlameAttack()
 		{
-			if (!IsInRange || isFidgetActive) //Out of range or fidget is active
+			if (!IsInRange || isFidgetActive) // Out of range or fidget is active
 			{
 				if (isFlameActive)
 					ToggleFlameAttack();
@@ -441,18 +440,18 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (Mathf.IsZeroApprox(flameInactiveTime) && isFlameActive) return; //Always activated
+			if (Mathf.IsZeroApprox(flameInactiveTime) && isFlameActive) return; // Always activated
 
 			if (isFlameActive)
 			{
 				flameTimer = Mathf.MoveToward(flameTimer, flameActiveTime, PhysicsManager.physicsDelta);
-				if (Mathf.IsEqualApprox(flameTimer, flameActiveTime)) //Switch off
+				if (Mathf.IsEqualApprox(flameTimer, flameActiveTime)) // Switch off
 					ToggleFlameAttack();
 			}
 			else
 			{
 				flameTimer = Mathf.MoveToward(flameTimer, flameInactiveTime, PhysicsManager.physicsDelta);
-				if (Mathf.IsEqualApprox(flameTimer, flameInactiveTime)) //Switch on
+				if (Mathf.IsEqualApprox(flameTimer, flameInactiveTime)) // Switch on
 					ToggleFlameAttack();
 			}
 		}
@@ -461,14 +460,14 @@ namespace Project.Gameplay
 		{
 			isFlameActive = !isFlameActive;
 
-			if (isFlameActive) //Start fire attack
+			if (isFlameActive) // Start fire attack
 			{
 				animationPlayer.Play("fire-start");
 				fireState.Travel("attack-fire-start");
 				stateTransition.XfadeTime = 0.1;
 				animationTree.Set(STATE_REQUEST_PARAMETER, FIRE_STATE);
 			}
-			else //Stop flame attack
+			else // Stop flame attack
 			{
 				animationPlayer.Play("fire-end");
 				animationPlayer.Advance(0.0);
@@ -477,7 +476,7 @@ namespace Project.Gameplay
 				animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE);
 			}
 
-			flameTimer = 0; //Reset timer
+			flameTimer = 0; // Reset timer
 		}
 
 		protected override void EnterRange()
@@ -497,15 +496,15 @@ namespace Project.Gameplay
 				tweener.Kill();
 			tweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
 
-			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); //Idle
+			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); // Idle
 
-			if (SpawnTravelDisabled) //Spawn instantly
+			if (SpawnTravelDisabled) // Spawn instantly
 			{
 				animationPlayer.Play("spawn");
 				animationTree.Set(TELEPORT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); //Delay by length of teleport animation
+				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
 			}
-			else //Travel
+			else // Travel
 			{
 				animationPlayer.Play("travel");
 				GlobalPosition = SpawnPosition;
@@ -514,9 +513,9 @@ namespace Project.Gameplay
 
 				moveTransition.XfadeTime = 0;
 				if (!Mathf.IsZeroApprox(spawnOffset.X) || !Mathf.IsZeroApprox(spawnOffset.Z))
-					animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); //Travel animation
+					animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); // Travel animation
 				else
-					animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); //Immediately idle
+					animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); // Immediately idle
 			}
 
 			base.Spawn();
@@ -531,7 +530,7 @@ namespace Project.Gameplay
 			if (!SpawnTravelDisabled)
 			{
 				moveTransition.XfadeTime = MOVE_TRANSITION_LENGTH;
-				animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); //Stopped moving
+				animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); // Stopped moving
 			}
 
 			if (attackType == AttackTypes.Spin)
@@ -543,7 +542,7 @@ namespace Project.Gameplay
 					tweener.Kill();
 
 				tweener = CreateTween();
-				tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); //Delay spin activation by windup animation length
+				tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); // Delay spin activation by windup animation length
 			}
 		}
 
@@ -555,7 +554,7 @@ namespace Project.Gameplay
 		{
 			animationPlayer.Play("spin");
 
-			if (movementController != null) //Start movement
+			if (movementController != null) // Start movement
 				movementController.TimeScale = 1;
 		}
 	}
