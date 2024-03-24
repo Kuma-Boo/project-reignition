@@ -40,12 +40,12 @@ namespace Project.Gameplay.Objects
 		private int shatterFlags;
 		private enum ShatterFlags
 		{
-			Signal = 0, //Don't listen to area collider
-			PlayerCollision = 1, //Break immediately when touching
-			ObjectCollision = 2, //Should objects be able to shatter this?
-			AttackSkill = 4, //Break when player is using an attack skill
-			JumpDash = 8, //Break when player is jumpdashing/homing attacking. Must be enabled even if AttackSkill is active.
-			SpeedBreak = 16, //Break when speedbreak is active. Must be enabled even if AttackSkill is active.
+			Signal = 0, // Don't listen to area collider
+			PlayerCollision = 1, // Break immediately when touching
+			ObjectCollision = 2, // Should objects be able to shatter this?
+			AttackSkill = 4, // Break when player is using an attack skill
+			JumpDash = 8, // Break when player is jumpdashing/homing attacking. Must be enabled even if AttackSkill is active.
+			SpeedBreak = 16, // Break when speedbreak is active. Must be enabled even if AttackSkill is active.
 		}
 		[Export]
 		private bool bouncePlayerOnJumpDash;
@@ -57,27 +57,27 @@ namespace Project.Gameplay.Objects
 		protected bool isShattered;
 		protected bool isInteractingWithPlayer;
 
-		private readonly List<Piece> pieces = new List<Piece>();
-
+		private readonly List<Piece> pieces = new();
 		private class Piece
 		{
 			public RigidBody3D rigidbody;
 			public MeshInstance3D mesh;
 			public CollisionShape3D collider;
 			public Vector3 scale;
-			public Vector3 position; //Local transform to spawn with
+			public Vector3 position; // Local transform to spawn with
 		}
+
 
 		public override void _Ready()
 		{
 			for (int i = 0; i < pieceRoot.GetChildCount(); i++)
 			{
 				RigidBody3D rigidbody = pieceRoot.GetChildOrNull<RigidBody3D>(i);
-				if (rigidbody == null) //Pieces must be a rigidbody
+				if (rigidbody == null) // Pieces must be a rigidbody
 					continue;
 
-				MeshInstance3D mesh = rigidbody.GetChildOrNull<MeshInstance3D>(0); //mesh must be the FIRST child of the rigidbody.
-				CollisionShape3D collider = rigidbody.GetChildOrNull<CollisionShape3D>(1); //collider must be the SECOND child of the rigidbody.
+				MeshInstance3D mesh = rigidbody.GetChildOrNull<MeshInstance3D>(0); // mesh must be the FIRST child of the rigidbody.
+				CollisionShape3D collider = rigidbody.GetChildOrNull<CollisionShape3D>(1); // collider must be the SECOND child of the rigidbody.
 
 				rigidbody.GravityScale = gravityScale;
 				rigidbody.Mass = pieceMass;
@@ -105,20 +105,14 @@ namespace Project.Gameplay.Objects
 			StageSettings.instance.ConnectUnloadSignal(this);
 		}
 
+
 		public override void _PhysicsProcess(double _)
 		{
-			/*
-			if (isShattered && pieceRoot.Visible)
-			{
-				for (int i = 0; i < pieces.Count; i++) //Use this to visualize piece tradjectory
-					Core.Debug.DrawRay(pieces[i].rigidbody.GlobalPosition, pieces[i].rigidbody.LinearVelocity * Core.PhysicsManager.physicsDelta, Colors.Red);
-			}
-			*/
-
 			if (isShattered || !isInteractingWithPlayer) return;
 
 			ProcessPlayerCollision();
 		}
+
 
 		public virtual void Respawn()
 		{
@@ -127,15 +121,15 @@ namespace Project.Gameplay.Objects
 			if (tweener != null)
 				tweener.Kill();
 
-			//Reset Pieces
+			// Reset Pieces
 			for (int i = 0; i < pieces.Count; i++)
 			{
 				pieces[i].rigidbody.Freeze = true;
-				pieces[i].rigidbody.LinearVelocity = pieces[i].rigidbody.AngularVelocity = Vector3.Zero; //Reset velocity
-				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.On; //Reset Shadows
+				pieces[i].rigidbody.LinearVelocity = pieces[i].rigidbody.AngularVelocity = Vector3.Zero; // Reset velocity
+				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.On; // Reset Shadows
 			}
 
-			//Enable root
+			// Enable root
 			root.ProcessMode = ProcessModeEnum.Inherit;
 
 			if (root is RigidBody3D)
@@ -144,43 +138,45 @@ namespace Project.Gameplay.Objects
 				rb.LinearVelocity = rb.AngularVelocity = Vector3.Zero;
 			}
 
-			//Wait an extra physics frame for rigidbody to freeze to allow updating transforms
+			// Wait an extra physics frame for rigidbody to freeze to allow updating transforms
 			GetTree().CreateTimer(Core.PhysicsManager.physicsDelta, true, true).Connect(SceneTreeTimer.SignalName.Timeout,
 			new Callable(this, MethodName.ResetNodeTransforms));
 		}
 
+
 		private void ResetNodeTransforms()
 		{
-			//Start with the piece parent disabled
+			// Start with the piece parent disabled
 			pieceRoot.Visible = false;
 			pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 
-			//Reset animator
+			// Reset animator
 			if (animator != null)
 			{
 				if (animator.HasAnimation("RESET"))
 					animator.Play("RESET");
 
-				//Attempt to queue autoplay animation
+				// Attempt to queue autoplay animation
 				if (!string.IsNullOrEmpty(animator.Autoplay))
 					animator.Queue(animator.Autoplay);
 			}
 
 			for (int i = 0; i < pieces.Count; i++)
 			{
-				//Update mesh/collider transforms, due to rigidbody resetting scales
+				// Update mesh/collider transforms, due to rigidbody resetting scales
 				pieces[i].mesh.Transform = Transform3D.Identity.ScaledLocal(pieces[i].scale);
 				pieces[i].collider.Transform = Transform3D.Identity.ScaledLocal(pieces[i].scale);
 
-				pieces[i].rigidbody.GlobalTransform = Transform3D.Identity; //Reset location, rotation and scale
-				pieces[i].rigidbody.Position = pieces[i].position; //Use local position
-				pieces[i].rigidbody.GlobalRotation = pieceRoot.GlobalRotation; //Sync rotation
+				pieces[i].rigidbody.GlobalTransform = Transform3D.Identity; // Reset location, rotation and scale
+				pieces[i].rigidbody.Position = pieces[i].position; // Use local position
+				pieces[i].rigidbody.GlobalRotation = pieceRoot.GlobalRotation; // Sync rotation
 
-				pieces[i].mesh.Transparency = 0f; //Reset fade
+				pieces[i].mesh.Transparency = 0f; // Reset fade
 			}
 
 			root.Transform = Transform3D.Identity;
 		}
+
 
 		public virtual void Despawn()
 		{
@@ -191,10 +187,9 @@ namespace Project.Gameplay.Objects
 			pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 		}
 
+
 		public virtual void Shatter() //Call this from a signal
 		{
-			GD.Print("Shattered");
-
 			if (isShattered) return;
 
 			//Play particle effects, sfx, etc
@@ -203,16 +198,17 @@ namespace Project.Gameplay.Objects
 
 			pieceRoot.Visible = true; //Make sure piece root is visible
 			pieceRoot.ProcessMode = ProcessModeEnum.Inherit;
+			pieceRoot.GlobalTransform = root.GlobalTransform; // Copy root transform
 
 			Vector3 shatterPoint = root.GlobalPosition;
 			float shatterStrength = SHATTER_STRENGTH;
-			if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) //Directional shatter
+			if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) // Directional shatter
 			{
-				//Kill character's speed
+				// Kill character's speed
 				if (Character.IsOnGround && stopPlayerOnShatter)
 					Character.MoveSpeed = 0f;
 
-				shatterPoint = Character.CenterPosition; //Shatter from player
+				shatterPoint = Character.CenterPosition; // Shatter from player
 
 				if (Character.ActionState != CharacterController.ActionStates.JumpDash)
 					shatterStrength *= Mathf.Clamp(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed), .5f, 1f);
@@ -223,7 +219,7 @@ namespace Project.Gameplay.Objects
 			{
 				pieces[i].rigidbody.Freeze = false;
 				pieces[i].rigidbody.AddExplosionForce(shatterPoint, shatterStrength);
-				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off; //Particles don't cast shadows when shattering
+				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off; // Particles don't cast shadows when shattering
 				tweener.TweenProperty(pieces[i].mesh, "transparency", 1f, 1f).From(0f);
 			}
 
@@ -231,8 +227,10 @@ namespace Project.Gameplay.Objects
 			EmitSignal(SignalName.Shattered);
 		}
 
-		//Prevent memory leakage
+
+		// Prevent memory leakage
 		public void Unload() => pieces.Clear();
+
 
 		public void OnEntered(Area3D a)
 		{
@@ -249,11 +247,13 @@ namespace Project.Gameplay.Objects
 			isInteractingWithPlayer = true;
 		}
 
+
 		public void OnExited(Area3D a)
 		{
 			if (a.IsInGroup("player"))
 				isInteractingWithPlayer = false;
 		}
+
 
 		private void ProcessPlayerCollision()
 		{
@@ -271,6 +271,7 @@ namespace Project.Gameplay.Objects
 				Shatter();
 		}
 
+
 		public void OnBodyEntered(Node3D b)
 		{
 			if (isShattered) return;
@@ -283,13 +284,13 @@ namespace Project.Gameplay.Objects
 
 			if (b.IsInGroup("player"))
 			{
-				ProcessPlayerCollision(); //Check whether we shattered
+				ProcessPlayerCollision(); // Check whether we shattered
 
-				if (!isShattered) //Attempt to play animator's "push" animation
+				if (!isShattered) // Attempt to play animator's "push" animation
 				{
 					if (animator != null && animator.HasAnimation("push"))
 					{
-						//Prevent objects from getting "stuck" on the player
+						// Prevent objects from getting "stuck" on the player
 						RigidBody3D rb = root as RigidBody3D;
 						float pushPower = Mathf.Clamp(Character.MoveSpeed, 10.0f, 20.0f);
 						Vector3 launchPosition = (rb.GlobalPosition + rb.CenterOfMass) - Character.GlobalPosition;
@@ -297,7 +298,7 @@ namespace Project.Gameplay.Objects
 						animator.Play("push");
 					}
 
-					Character.MoveSpeed *= 0.4f; //Kill character's speed
+					Character.MoveSpeed *= 0.4f; // Kill character's speed
 				}
 			}
 		}
