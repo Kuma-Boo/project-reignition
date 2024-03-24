@@ -259,13 +259,6 @@ namespace Project.Core
 		public void PlayRichPearlSFX() => richPearlSFX.Play();
 
 
-		public enum SFXType
-		{
-			SPIKE_PANEL,
-			ENEMY_SPAWN,
-			FLAME_SHOOTER
-		}
-
 		private readonly Dictionary<StringName, int> sfxGroups = new();
 		public float AddGroupSFX(StringName key)
 		{
