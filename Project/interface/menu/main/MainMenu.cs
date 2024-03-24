@@ -7,7 +7,7 @@ namespace Project.Interface.Menus
 	{
 		[Export]
 		private Node2D optionParent;
-		private readonly Array<Node2D> options = new Array<Node2D>();
+		private readonly Array<Node2D> options = new();
 		[Export]
 		private Node2D cursor;
 		private Vector2 cursorVelocity;
@@ -50,8 +50,8 @@ namespace Project.Interface.Menus
 			{
 				currentSelection = targetSelection;
 				menuMemory[MemoryKeys.MainMenu] = currentSelection;
-				animator.Play($"select");
-				animator.Seek(0.0, true);
+				animator.Play("select");
+				animator.Advance(0.0);
 				AnimateSelection();
 			}
 		}

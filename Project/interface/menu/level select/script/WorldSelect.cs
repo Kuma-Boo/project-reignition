@@ -19,7 +19,7 @@ namespace Project.Interface.Menus
 
 		private Color crossfadeColor;
 		private float videoFadeFactor;
-		private const float VIDEO_FADE_SPEED = 5.0f;
+		private const float VIDEO_CROSSFADE_SPEED = 5.0f;
 
 		[ExportGroup("Selection Settings")]
 		[Export]
@@ -34,7 +34,6 @@ namespace Project.Interface.Menus
 		private Array<NodePath> levelGlowSprites = new();
 		private readonly Array<Sprite2D> _levelTextSprites = new();
 		private readonly Array<Sprite2D> _levelGlowSprites = new();
-
 		protected override void SetUp()
 		{
 			for (int i = 0; i < levelTextSprites.Count; i++)
@@ -56,6 +55,15 @@ namespace Project.Interface.Menus
 			}
 		}
 
+		public override void ShowMenu()
+		{
+			if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
+				animator.Play("show-fade-video");
+			else
+				animator.Play(SHOW_ANIMATION);
+		}
+
+
 		/// <summary>
 		/// Load videos a frame after scene is set up to prevent crashing
 		/// </summary>
@@ -64,6 +72,7 @@ namespace Project.Interface.Menus
 			for (int i = 0; i < videoStreams.Length; i++)
 				videoStreams[i] = ResourceLoader.Load<VideoStream>(videoStreamPaths[i]);
 		}
+
 
 		public override void _Process(double _)
 		{
@@ -75,7 +84,7 @@ namespace Project.Interface.Menus
 					if (!ActiveVideoPlayer.IsPlaying())
 						ActiveVideoPlayer.CallDeferred(VideoStreamPlayer.MethodName.Play);
 					else
-						videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VIDEO_FADE_SPEED * PhysicsManager.normalDelta);
+						videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VIDEO_CROSSFADE_SPEED * PhysicsManager.normalDelta);
 				}
 
 				ActiveVideoPlayer.Modulate = Colors.Transparent.Lerp(Colors.White, videoFadeFactor);
@@ -85,6 +94,7 @@ namespace Project.Interface.Menus
 			}
 		}
 
+
 		protected override void UpdateSelection()
 		{
 			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
@@ -92,17 +102,18 @@ namespace Project.Interface.Menus
 			{
 				VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SaveManager.WorldEnum.Max);
 				menuMemory[MemoryKeys.WorldSelect] = VerticalSelection;
-				menuMemory[MemoryKeys.LevelSelect] = 0; //Reset level selection
+				menuMemory[MemoryKeys.LevelSelect] = 0; // Reset level selection
 
 				bool isScrollingUp = inputSign < 0;
 				int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, (int)SaveManager.WorldEnum.Max);
-				UpdateSpriteRegion(3, transitionIndex); //Update level text
+				UpdateSpriteRegion(3, transitionIndex); // Update level text
 
 				animator.Play(isScrollingUp ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
 				animator.Seek(0.0, true);
 				DisableProcessing();
 			}
 		}
+
 
 		protected override void Confirm()
 		{
@@ -112,6 +123,7 @@ namespace Project.Interface.Menus
 			base.Confirm();
 		}
 
+
 		public override void OpenParentMenu()
 		{
 			base.OpenParentMenu();
@@ -120,18 +132,21 @@ namespace Project.Interface.Menus
 			SaveManager.SaveGameToFile();
 			SaveManager.ActiveSaveSlotIndex = -1;
 		}
+
+
 		public override void OpenSubmenu()
 		{
 			SaveManager.ActiveGameData.lastPlayedWorld = (SaveManager.WorldEnum)VerticalSelection;
 			_submenus[VerticalSelection].ShowMenu();
 		}
 
+
 		private void UpdateVideo()
 		{
-			//Don't change video?
+			// Don't change video?
 			if (ActiveVideoPlayer != null && ActiveVideoPlayer.Stream == videoStreams[VerticalSelection]) return;
-			if (!SaveManager.ActiveGameData.IsWorldUnlocked(VerticalSelection)) return; //World is locked
-			if (!Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return; //Still scrolling
+			if (!SaveManager.ActiveGameData.IsWorldUnlocked(VerticalSelection)) return; // World is locked
+			if (!Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return; // Still scrolling
 
 			if (ActiveVideoPlayer != null && ActiveVideoPlayer.IsPlaying())
 			{
@@ -147,15 +162,17 @@ namespace Project.Interface.Menus
 			ActiveVideoPlayer.Paused = false;
 		}
 
+
 		public void UpdateLevelText()
 		{
-			UpdateSpriteRegion(0, VerticalSelection - 1); //Top option
-			UpdateSpriteRegion(1, VerticalSelection); //Center option
-			UpdateSpriteRegion(2, VerticalSelection + 1); //Bottom option
+			UpdateSpriteRegion(0, VerticalSelection - 1); // Top option
+			UpdateSpriteRegion(1, VerticalSelection); // Center option
+			UpdateSpriteRegion(2, VerticalSelection + 1); // Bottom option
 
-			for (int i = 0; i < _levelGlowSprites.Count; i++) //Sync glow regions
+			for (int i = 0; i < _levelGlowSprites.Count; i++) // Sync glow regions
 				_levelGlowSprites[i].RegionRect = _levelTextSprites[i].RegionRect;
 		}
+
 
 		private void UpdateSpriteRegion(int spriteIndex, int selectionIndex)
 		{
