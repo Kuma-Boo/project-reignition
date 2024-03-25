@@ -12,7 +12,7 @@ namespace Project.Gameplay
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = new();
 
 			properties.Add(ExtensionMethods.CreateProperty("General/Lockout Length", Variant.Type.Float, PropertyHint.Range, "0,20,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("General/Recenter Player", Variant.Type.Bool));
@@ -33,7 +33,7 @@ namespace Project.Gameplay
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Type", Variant.Type.Int, PropertyHint.Enum, movementMode.EnumToString()));
-			if (movementMode == MovementModes.Strafe || movementMode == MovementModes.Replace)
+			if (movementMode == MovementModes.Replace)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle", Variant.Type.Float, PropertyHint.Range, "-180,180"));
 				properties.Add(ExtensionMethods.CreateProperty("Controls/Direction Space", Variant.Type.Int, PropertyHint.Enum, spaceMode.EnumToString()));

@@ -1,7 +1,6 @@
 using Godot;
 using System.Collections.Generic;
 using Project.Core;
-using Project.CustomNodes;
 
 namespace Project.Gameplay
 {
@@ -143,7 +142,7 @@ namespace Project.Gameplay
 				return false;
 
 			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
-			return delta < Mathf.Pi * .4f;
+			return delta < Mathf.Pi * .5f;
 		}
 
 		/// <summary> Returns the input angle based on the camera view. </summary>
@@ -161,18 +160,13 @@ namespace Project.Gameplay
 		private float GetTargetMovementAngle()
 		{
 			if (Skills.IsSpeedBreakActive)
-			{
-				float targetAngle = PathFollower.ForwardAngle + PathFollower.DeltaAngle;
-				if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting)
-					targetAngle -= PathFollower.DeltaAngle * 1.8f;
-
-				return targetAngle;
-			}
-
-			float inputAngle = GetInputAngle();
+				return GetStrafeAngle();
 
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
+				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
+					return GetStrafeAngle();
+
 				float targetAngle = Mathf.DegToRad(ActiveLockoutData.movementAngle);
 				if (ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Camera)
 					targetAngle = Camera.TransformAngle(targetAngle);
@@ -194,8 +188,27 @@ namespace Project.Gameplay
 				return targetAngle;
 			}
 
+			float inputAngle = GetInputAngle();
 			return inputAngle;
 		}
+
+
+		private float GetStrafeAngle()
+		{
+			float targetAngle = GetInputAngle();
+			if (InputVector.IsZeroApprox())
+			{
+				targetAngle = PathFollower.ForwardAngle + PathFollower.DeltaAngle;
+
+				if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting)
+					targetAngle -= PathFollower.DeltaAngle * 1.8f;
+			}
+			else if (IsHoldingDirection(PathFollower.BackAngle))
+				targetAngle = ExtensionMethods.ReflectAngle(targetAngle, PathFollower.ForwardAngle);
+
+			return targetAngle;
+		}
+
 
 		private float jumpBufferTimer;
 		private float actionBufferTimer;
@@ -476,12 +489,15 @@ namespace Project.Gameplay
 					return;
 				}
 
-
-				if (ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
+				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
 				{
-					//Fixes player holding perpendicular to target direction
-					if (!InputVector.IsZeroApprox() && inputDot < .2f)
+					if (!InputVector.IsZeroApprox() && inputDot < .2f) // Fixes player holding perpendicular to target direction
 						inputLength = 0;
+				}
+				else if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
+				{
+					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength);
+					return;
 				}
 			}
 
@@ -520,6 +536,8 @@ namespace Project.Gameplay
 
 		/// <summary> True when the player's MoveSpeed was zero during the previous frame. </summary>
 		private bool turnInstantly;
+		/// <summary> Amount to blend between free and replace modes. </summary>
+		private float strafeBlend;
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
@@ -527,26 +545,8 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Crouching || MoveSpeed == 0) return;
 
 			float targetMovementAngle = GetTargetMovementAngle();
-			bool overrideFacingDirection = (IsLockoutActive &&
-			(ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace ||
-			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)) || Skills.IsSpeedBreakActive;
-
-			// Strafe implementation
-			if (Skills.IsSpeedBreakActive ||
-			(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
-			{
-				//Custom strafing movement
-				float strafeAmount = ExtensionMethods.DotAngle(GetInputAngle() + Mathf.Pi * .5f, PathFollower.ForwardAngle);
-				strafeAmount *= InputVector.Length(); //Analog inputs
-
-				//Reduce strafe speed when moving slowly
-				float strafeFactor = IsOnGround ? GroundSettings.GetSpeedRatioClamped(MoveSpeed) : AirSettings.GetSpeedRatioClamped(MoveSpeed);
-				strafeFactor += .1f;
-				strafeAmount *= strafeFactor;
-				StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, strafeAmount);
-			}
-			else
-				StrafeSpeed = Skills.strafeSettings.Interpolate(StrafeSpeed, 0); //Reset strafe speed when not in use
+			bool overrideFacingDirection = IsLockoutActive &&
+			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace;
 
 			if (overrideFacingDirection) // Direction is being overridden
 				MovementAngle = targetMovementAngle;
@@ -571,6 +571,8 @@ namespace Project.Gameplay
 
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
 			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
+			if (Skills.IsSpeedBreakActive)
+				turnDelta = maxTurnAmount;
 
 			if (IsSpeedLossActive())
 			{
@@ -584,6 +586,18 @@ namespace Project.Gameplay
 			if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * 1.08f; // Random number that seems pretty accurate.
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
+
+			// Strafe implementation
+			if (Skills.IsSpeedBreakActive ||
+			(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
+			{
+				if (InputVector.IsZeroApprox())
+					strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
+				else
+					strafeBlend = 0;
+
+				MovementAngle = Mathf.LerpAngle(MovementAngle, targetMovementAngle, strafeBlend);
+			}
 		}
 
 
@@ -963,7 +977,7 @@ namespace Project.Gameplay
 		private const int STOMP_GRAVITY = 180;
 		private void UpdateStomp()
 		{
-			MoveSpeed = StrafeSpeed = 0; //Go STRAIGHT down
+			MoveSpeed = 0; //Go STRAIGHT down
 			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
 		}
 
@@ -981,7 +995,7 @@ namespace Project.Gameplay
 
 			//Stomp
 			actionBufferTimer = 0;
-			MoveSpeed = StrafeSpeed = 0; //Kill horizontal speed
+			MoveSpeed = 0; //Kill horizontal speed
 
 			canLandingBoost = true;
 			Lockon.ResetLockonTarget();
@@ -1064,7 +1078,6 @@ namespace Project.Gameplay
 
 		public void StopGrindstep()
 		{
-			StrafeSpeed = 0;
 			MovementAngle = Animator.VisualAngle;
 			Animator.ResetState(.1f);
 		}
@@ -1428,7 +1441,7 @@ namespace Project.Gameplay
 		/// <summary> Used for jumping and falling. </summary>
 		public float VerticalSpeed { get; set; }
 		/// <summary> Resets all speed values to zero. </summary>
-		private void ResetVelocity() => MoveSpeed = StrafeSpeed = VerticalSpeed = 0;
+		private void ResetVelocity() => MoveSpeed = VerticalSpeed = 0;
 
 		public Vector3 TrueVelocity { get; private set; }
 
@@ -1438,9 +1451,8 @@ namespace Project.Gameplay
 			if (isCustomPhysicsEnabled) return; //When physics are handled in the state machine
 
 			Vector3 movementDirection = GetMovementDirection();
-			Vector3 strafeDirection = movementDirection.Cross(UpDirection);
 
-			Velocity = movementDirection * MoveSpeed + strafeDirection * StrafeSpeed;
+			Velocity = movementDirection * MoveSpeed;
 			Velocity += UpDirection * VerticalSpeed;
 
 			//Store the current position to calculate true velocity later
@@ -1449,7 +1461,6 @@ namespace Project.Gameplay
 			MoveAndSlide();
 
 			CheckMainWall(movementDirection);
-			CheckStrafeWall(strafeDirection);
 
 			//Collision checks
 			CheckGround();
@@ -1458,10 +1469,7 @@ namespace Project.Gameplay
 			//Calculate true velocity after physics were processed.
 			TrueVelocity -= GlobalPosition;
 			if (IsOnGround && IsOnWall() && Mathf.IsZeroApprox(TrueVelocity.LengthSquared()))
-			{
 				MoveSpeed = 0;
-				StrafeSpeed = 0;
-			}
 
 			PathFollower.Resync(); //Resync
 			UpdateRecenter();
@@ -1716,21 +1724,6 @@ namespace Project.Gameplay
 					}
 				}
 			}
-		}
-
-		private void CheckStrafeWall(Vector3 castVector)
-		{
-			if (Mathf.IsZeroApprox(StrafeSpeed)) //Strafing disabled
-				return;
-
-			castVector *= Mathf.Sign(StrafeSpeed);
-			float castLength = CollisionRadius + COLLISION_PADDING + Mathf.Abs(StrafeSpeed) * PhysicsManager.physicsDelta;
-
-			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
-			DebugManager.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
-
-			if (ValidateWallCast(ref wallHit))
-				StrafeSpeed = 0;
 		}
 
 		private const float ORIENTATION_SMOOTHING = .4f;

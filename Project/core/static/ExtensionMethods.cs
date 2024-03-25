@@ -157,6 +157,15 @@ namespace Project
 		}
 
 
+		/// <summary> Reflects an angle across angles -Mathf.Pi/Mathf.Pi.
+		public static float ReflectAngle(float angle, float referenceAngle = 0)
+		{
+			float delta = angle - referenceAngle;
+			int sign = Mathf.Sign(delta);
+			return referenceAngle + (Mathf.Pi * sign - delta); // Reflect targetAngle
+		}
+
+
 		/// <summary> Returns the absolute delta between two angles (in radians) </summary>
 		public static float DeltaAngleRad(float firstAngle, float secondAngle) => Mathf.Abs(SignedDeltaAngleRad(firstAngle, secondAngle));
 
