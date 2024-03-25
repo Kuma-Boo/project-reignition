@@ -632,7 +632,7 @@ namespace Project.Gameplay
 
 
 		/// <summary> How much should the steepest slope affect the player? </summary>
-		private const float SLOPE_INFLUENCE_STRENGTH = .4f;
+		private const float SLOPE_INFLUENCE_STRENGTH = .2f;
 		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
 		private const float SLOPE_THRESHOLD = .2f;
 		private void UpdateSlopeSpd()
@@ -645,7 +645,7 @@ namespace Project.Gameplay
 			float slopeInfluenceRatio = -PathFollower.Forward().Dot(Vector3.Up);
 			if (Mathf.Abs(slopeInfluenceRatio) <= SLOPE_THRESHOLD) return;
 
-			slopeInfluenceRatio = Mathf.SmoothStep(-SLOPE_INFLUENCE_STRENGTH, SLOPE_INFLUENCE_STRENGTH, slopeInfluenceRatio);
+			slopeInfluenceRatio = Mathf.Lerp(-SLOPE_INFLUENCE_STRENGTH, SLOPE_INFLUENCE_STRENGTH, slopeInfluenceRatio);
 
 			if (IsHoldingDirection(PathFollower.ForwardAngle)) //Accelerating
 			{
