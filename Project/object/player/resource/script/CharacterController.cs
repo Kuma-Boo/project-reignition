@@ -142,7 +142,7 @@ namespace Project.Gameplay
 				return false;
 
 			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
-			return delta < Mathf.Pi * .5f;
+			return delta < Mathf.Pi * .4f;
 		}
 
 		/// <summary> Returns the input angle based on the camera view. </summary>
