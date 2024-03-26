@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cbamk7p3d1ddn"]
+[gd_scene load_steps=53 format=3 uid="uid://cbamk7p3d1ddn"]
 
 [ext_resource type="Texture2D" uid="uid://chvedyxbnb0fh" path="res://interface/menu/title/texture/logos/logo en.png" id="1"]
 [ext_resource type="VideoStream" path="res://video/event/stream/event0.ogv" id="2"]
@@ -31,6 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://bfwjdnmqpjcvd" path="res://interface/menu/title/texture/decal.png" id="29_2jf04"]
 [ext_resource type="SpriteFrames" uid="uid://blsqrm1eukmr2" path="res://effect/particle/sprite frames/Flame Menu Small.tres" id="29_8b480"]
 [ext_resource type="Texture2D" uid="uid://ckd0rqyao1ktq" path="res://interface/menu/title/texture/transition/tile013.png" id="30"]
+[ext_resource type="Texture2D" uid="uid://ci5hojl3r34do" path="res://interface/menu/title/texture/press any button.png" id="30_cw0ix"]
 [ext_resource type="Texture2D" uid="uid://cw8fc6nqbs4s6" path="res://interface/menu/title/texture/transition/tile009.png" id="31"]
 [ext_resource type="Texture2D" uid="uid://vbh7a47k4llw" path="res://interface/menu/title/texture/transition/transition fade.png" id="32"]
 [ext_resource type="PackedScene" uid="uid://dad2hh4ttgaox" path="res://interface/menu/flames/Flames.tscn" id="33_hglwt"]
@@ -321,6 +322,9 @@ _data = {
 "transition": SubResource("Animation_dodqd")
 }
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_t665m"]
+blend_mode = 1
+
 [sub_resource type="Animation" id="9"]
 length = 0.001
 tracks/0/type = "value"
@@ -394,6 +398,18 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Press Start/Text/Glow:self_modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="12"]
@@ -500,6 +516,18 @@ tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.4008),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Press Start/Text/Glow:self_modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.400001),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -697,8 +725,20 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="10"]
 resource_name = "loop"
-length = 2.8
+length = 1.00001
 loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Press Start/Text/Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(2, 2, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="8"]
 resource_name = "show"
@@ -826,6 +866,18 @@ tracks/8/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Press Start/Text/Glow:self_modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.416667, 1.45833),
+"transitions": PackedFloat32Array(1.5, 2, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dvawa"]
 _data = {
@@ -839,6 +891,7 @@ _data = {
 }
 
 [node name="Title" type="Control" node_paths=PackedStringArray("animator")]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1920.0
@@ -1065,26 +1118,19 @@ offset_top = 787.0
 offset_right = 944.0
 offset_bottom = 787.0
 
-[node name="Label" type="Label" parent="Press Start"]
-light_mask = 32
-layout_mode = 0
-offset_left = -248.0
-offset_top = -64.0
-offset_right = 264.0
-offset_bottom = 21.0
-pivot_offset = Vector2(256, 64)
-theme_override_colors/font_color = Color(1, 0.882353, 0.713726, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.556863)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 5
-theme_override_constants/shadow_outline_size = 15
-theme_override_fonts/font = ExtResource("28_g60da")
-theme_override_font_sizes/font_size = 40
-text = "sys_press_start"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Text" type="Sprite2D" parent="Press Start"]
+position = Vector2(0, -14)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("30_cw0ix")
+region_enabled = true
+region_rect = Rect2(0, 0, 256, 48)
+
+[node name="Glow" type="Sprite2D" parent="Press Start/Text"]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_t665m")
+texture = ExtResource("30_cw0ix")
+region_enabled = true
+region_rect = Rect2(0, 48, 256, 48)
 
 [node name="DecalL" type="TextureRect" parent="Press Start"]
 layout_mode = 0
