@@ -404,6 +404,8 @@ namespace Project.Gameplay
 
 					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 						targetYawAngle += delta.Flatten().AngleTo(Vector2.Up);
+					targetYawAngle += Mathf.Pi;
+
 					if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 						targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 
@@ -425,7 +427,7 @@ namespace Project.Gameplay
 			public Basis offsetBasis;
 			public void CalculateBasis()
 			{
-				offsetBasis = Basis.Identity;
+				offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi);
 				offsetBasis = offsetBasis.Rotated(Vector3.Up, blendData.yawAngle);
 				offsetBasis = offsetBasis.Rotated(offsetBasis.X.Normalized(), blendData.pitchAngle);
 				offsetBasis = offsetBasis.Rotated(-offsetBasis.Z.Normalized(), blendData.tiltAngle);

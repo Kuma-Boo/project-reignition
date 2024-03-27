@@ -1726,7 +1726,6 @@ namespace Project.Gameplay
 			}
 		}
 
-		private const float ORIENTATION_SMOOTHING = .4f;
 		private void ResetOrientation()
 		{
 			UpDirection = Vector3.Up;
