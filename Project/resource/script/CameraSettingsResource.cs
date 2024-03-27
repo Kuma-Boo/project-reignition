@@ -9,7 +9,9 @@ namespace Project.Gameplay
 	{
 		#region Editor
 		private const string STATIC_CAMERA_KEY = "Static Camera Enabled";
+		private const string COPY_POSITION_KEY = "Copy Position";
 		private const string COPY_ROTATION_KEY = "Copy Rotation";
+		private const string POSITION_KEY = "Static Position";
 
 		private const string DISTANCE_KEY = "Distance/Distance";
 		private const string BACKSTEP_DISTANCE_KEY = "Distance/Backstep Distance";
@@ -22,7 +24,8 @@ namespace Project.Gameplay
 		private const string YAW_OVERRIDE_KEY = "Rotation/Yaw Override Mode";
 		private const string TILT_KEY = "Rotation/Follow Path Tilt";
 
-		private const string VIEW_OFFSET_KEY = "Screen/View Offset";
+		private const string VIEW_OFFSET_KEY = "View/Offset";
+		private const string FOV_KEY = "View/FOV";
 
 		private const string HORIZONTAL_TRACKING_KEY = "Tracking/Horizontal Tracking Mode";
 		private const string VERTICAL_TRACKING_KEY = "Tracking/Vertical Tracking Mode";
@@ -51,7 +54,13 @@ namespace Project.Gameplay
 				}
 			}
 			else
+			{
+				properties.Add(ExtensionMethods.CreateProperty(COPY_POSITION_KEY, Variant.Type.Bool));
+				if (!copyPosition)
+					properties.Add(ExtensionMethods.CreateProperty(POSITION_KEY, Variant.Type.Vector3));
+
 				properties.Add(ExtensionMethods.CreateProperty(COPY_ROTATION_KEY, Variant.Type.Bool));
+			}
 
 
 			if (!useStaticPosition || !copyRotation)
@@ -64,6 +73,7 @@ namespace Project.Gameplay
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty(VIEW_OFFSET_KEY, Variant.Type.Vector2));
+			properties.Add(ExtensionMethods.CreateProperty(FOV_KEY, Variant.Type.Float, PropertyHint.Range, "0, 179, .1"));
 
 			return properties;
 		}
@@ -74,8 +84,12 @@ namespace Project.Gameplay
 			{
 				case STATIC_CAMERA_KEY:
 					return useStaticPosition;
+				case COPY_POSITION_KEY:
+					return copyPosition;
 				case COPY_ROTATION_KEY:
 					return copyRotation;
+				case POSITION_KEY:
+					return staticPosition;
 
 				case DISTANCE_KEY:
 					return distance;
@@ -99,6 +113,8 @@ namespace Project.Gameplay
 
 				case VIEW_OFFSET_KEY:
 					return viewportOffset;
+				case FOV_KEY:
+					return targetFOV;
 
 				case HORIZONTAL_TRACKING_KEY:
 					return (int)horizontalTrackingMode;
@@ -123,9 +139,16 @@ namespace Project.Gameplay
 					useStaticPosition = (bool)value;
 					NotifyPropertyListChanged();
 					break;
+				case COPY_POSITION_KEY:
+					copyPosition = (bool)value;
+					NotifyPropertyListChanged();
+					break;
 				case COPY_ROTATION_KEY:
 					copyRotation = (bool)value;
 					NotifyPropertyListChanged();
+					break;
+				case POSITION_KEY:
+					staticPosition = (Vector3)value;
 					break;
 
 				case DISTANCE_KEY:
@@ -160,6 +183,9 @@ namespace Project.Gameplay
 				case VIEW_OFFSET_KEY:
 					viewportOffset = (Vector2)value;
 					break;
+				case FOV_KEY:
+					targetFOV = (float)value;
+					break;
 
 				case HORIZONTAL_TRACKING_KEY:
 					horizontalTrackingMode = (TrackingModeEnum)(int)value;
@@ -187,8 +213,12 @@ namespace Project.Gameplay
 
 		/// <summary> Keep the camera's position at a specific point? </summary>
 		public bool useStaticPosition;
-		/// <summary> Keep the camera's rotation at a specific value? </summary>
+		/// <summary> Copy camera's position from the cameraTrigger node? </summary>
+		public bool copyPosition = true;
+		/// <summary> Copy camera's rotation from the cameraTrigger node? </summary>
 		public bool copyRotation;
+		/// <summary> Static position to use when copyPosition is false. </summary>
+		public Vector3 staticPosition;
 
 		/// <summary> Angle (in radians) of pitch (X rotation). </summary>
 		public float pitchAngle;
@@ -223,6 +253,8 @@ namespace Project.Gameplay
 
 		/// <summary> Viewport offset. Use this offset height or lead the player (sidescrolling) </summary>
 		public Vector2 viewportOffset;
+		/// <summary> FOV. Set to 0 to reset to default fov. </summary>
+		public float targetFOV;
 
 		/// <summary> Is horizontal tracking enabled? </summary>
 		public TrackingModeEnum horizontalTrackingMode;

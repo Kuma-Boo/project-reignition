@@ -10,7 +10,7 @@ namespace Project.Gameplay
 	/// </summary>
 	public partial class CameraController : Node3D
 	{
-		public const float DEFAULT_FOV = 60;
+		public const float DEFAULT_FOV = 50;
 
 		[ExportGroup("Components")]
 		[Export]
@@ -149,6 +149,9 @@ namespace Project.Gameplay
 				data.CalculateBlendSpeed(); // Cache blend speed so we don't have to do it every frame
 
 			// Add current data to blend list
+			if (data.Trigger == null && data.SettingsResource.useStaticPosition) // Fallback to static position value
+				data.StaticPosition = data.SettingsResource.staticPosition;
+
 			CameraBlendList.Add(data);
 		}
 
@@ -198,7 +201,7 @@ namespace Project.Gameplay
 			UpdateTransitionTimer();
 			UpdateLockonTarget();
 
-			CameraPositionData data = new CameraPositionData()
+			CameraPositionData data = new()
 			{
 				offsetBasis = Basis.Identity,
 				blendData = ActiveBlendData
@@ -226,20 +229,17 @@ namespace Project.Gameplay
 				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.useStaticPosition ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 
-				if (CameraBlendList[i].Trigger != null)
-				{
-					float targetFOV = CameraBlendList[i].Trigger.targetFOV;
-					if (Mathf.IsZeroApprox(targetFOV))
-						targetFOV = DEFAULT_FOV;
-					fov = Mathf.Lerp(fov, targetFOV, CameraBlendList[i].SmoothedInfluence);
-				}
+				float targetFOV = CameraBlendList[i].SettingsResource.targetFOV;
+				if (Mathf.IsZeroApprox(targetFOV))
+					targetFOV = DEFAULT_FOV;
+				fov = Mathf.Lerp(fov, targetFOV, CameraBlendList[i].SmoothedInfluence);
 			}
 
 			// Recalculate non-static camera positions for better transition rotations.
 			Vector3 position = data.offsetBasis.Z.Normalized() * distance;
 			position += Character.CenterPosition;
 
-			Transform3D cameraTransform = new Transform3D(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
+			Transform3D cameraTransform = new(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
 			cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
 
 			// Calculate xform angle before applying pitch tracking
@@ -273,7 +273,7 @@ namespace Project.Gameplay
 		private CameraPositionData SimulateCamera(int index)
 		{
 			CameraSettingsResource settings = CameraBlendList[index].SettingsResource;
-			CameraPositionData data = new CameraPositionData()
+			CameraPositionData data = new()
 			{
 				blendData = CameraBlendList[index],
 			};
@@ -403,7 +403,7 @@ namespace Project.Gameplay
 					delta = delta.Normalized();
 
 					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-						targetYawAngle += delta.Flatten().AngleTo(Vector2.Up) + Mathf.Pi;
+						targetYawAngle += delta.Flatten().AngleTo(Vector2.Up);
 					if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 						targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 
@@ -425,7 +425,7 @@ namespace Project.Gameplay
 			public Basis offsetBasis;
 			public void CalculateBasis()
 			{
-				offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi);
+				offsetBasis = Basis.Identity;
 				offsetBasis = offsetBasis.Rotated(Vector3.Up, blendData.yawAngle);
 				offsetBasis = offsetBasis.Rotated(offsetBasis.X.Normalized(), blendData.pitchAngle);
 				offsetBasis = offsetBasis.Rotated(-offsetBasis.Z.Normalized(), blendData.tiltAngle);

@@ -1,6 +1,66 @@
-[gd_scene load_steps=2 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=15 format=3 uid="uid://bwehljjnagemy"]
 
-[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_7tw2f"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="2_gtq52"]
+[ext_resource type="PackedScene" uid="uid://5temnwxjglvx" path="res://interface/menu/options/environment/ControlBook.tscn" id="2_hmq0t"]
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
+[ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
+[ext_resource type="Resource" uid="uid://c3slkgpsm3e6l" path="res://interface/menu/options/OptionsCamera.tres" id="3_jnp5r"]
+[ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/Camera.tscn" id="5_1klrf"]
+
+[sub_resource type="Curve3D" id="Curve3D_eqptd"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_gac2s"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.208904, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_emfc0"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_gac2s")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yt67y"]
+emission_shape = 3
+emission_box_extents = Vector3(8, 1, 0)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+gravity = Vector3(0, 0, 0)
+damping_min = 2.0
+damping_max = 5.0
+scale_max = 1.5
+color = Color(0.501961, 0.529412, 0.843137, 1)
+alpha_curve = SubResource("CurveTexture_emfc0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_5ggik"]
+material = ExtResource("2_gtq52")
+size = Vector2(5, 5)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ap680"]
+sky_top_color = Color(0.596078, 0.521569, 0.52549, 1)
+sky_horizon_color = Color(0.776471, 0.654902, 0.607843, 1)
+ground_bottom_color = Color(0.0901961, 0.113725, 0.301961, 1)
+ground_horizon_color = Color(0.482353, 0.556863, 0.752941, 1)
+
+[sub_resource type="Sky" id="Sky_qkpod"]
+sky_material = SubResource("ProceduralSkyMaterial_ap680")
+
+[sub_resource type="Environment" id="Environment_xk4ou"]
+background_mode = 1
+sky = SubResource("Sky_qkpod")
+ambient_light_source = 2
+ambient_light_color = Color(0.501961, 0.470588, 0.380392, 1)
+tonemap_mode = 2
+tonemap_white = 1.2
+ssao_enabled = true
+ssil_enabled = true
 
 [node name="Options" type="Control"]
 layout_mode = 3
@@ -11,6 +71,74 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="Controls" type="Node3D" parent="."]
+[node name="ControlBook" parent="." instance=ExtResource("2_hmq0t")]
+script = ExtResource("2_x1aix")
+"Level ID" = ""
+"Mission Type" = 0
+"Time Limit" = 0.0
+"Camera Settings" = ExtResource("3_jnp5r")
+"Story Event Index" = -1
+"Dialog Library" = null
+"Item Cycling/Activation Trigger" = NodePath("")
+"Ranking/Skip Score" = false
+"Ranking/Gold Time" = 0
+"Ranking/Silver Time" = 0
+"Ranking/Bronze Time" = 0
+"Ranking/Gold Score" = 0
+"Ranking/Silver Score" = 0
+"Ranking/Bronze Score" = 0
+Completion/Delay = 0.0
+Completion/Lockout = null
+"Completion/Demo Animator" = NodePath("")
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("../Visuals/WorldEnvironment")
 
-[node name="CharacterSpawn" parent="Controls" instance=ExtResource("1_7tw2f")]
+[node name="Controls" type="Node3D" parent="ControlBook"]
+
+[node name="PlayerSpawn" type="Node3D" parent="ControlBook/Controls"]
+
+[node name="Player" parent="ControlBook/Controls/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("3_4o0co")]
+Camera = NodePath("../Camera")
+
+[node name="Camera" parent="ControlBook/Controls/PlayerSpawn" instance=ExtResource("5_1klrf")]
+
+[node name="Path" type="Node3D" parent="ControlBook"]
+
+[node name="MainPath" type="Path3D" parent="ControlBook/Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.2, 2)
+curve = SubResource("Curve3D_eqptd")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="EnvironmentLight" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.803922, 0.803922, 1, 1)
+light_cull_mask = 2
+shadow_enabled = true
+
+[node name="CharacterLight" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_cull_mask = 64
+
+[node name="Fog" type="GPUParticles3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4, 4)
+amount = 128
+lifetime = 2.0
+preprocess = 5.0
+fixed_fps = 60
+fract_delta = false
+visibility_aabb = AABB(-4, 0, -4, 8, 8, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_yt67y")
+draw_pass_1 = SubResource("QuadMesh_5ggik")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
+environment = SubResource("Environment_xk4ou")
+
+[editable path="ControlBook"]
+[editable path="ControlBook/ControlBook"]
+[editable path="ControlBook/ControlBook/BookRoot/Page1"]
+[editable path="ControlBook/ControlBook/BookRoot/Page2"]
+[editable path="ControlBook/ControlBook/BookRoot/Page3"]

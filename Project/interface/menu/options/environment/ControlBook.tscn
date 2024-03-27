@@ -1,24 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://5temnwxjglvx"]
+[gd_scene load_steps=3 format=3 uid="uid://5temnwxjglvx"]
 
 [ext_resource type="PackedScene" uid="uid://cskupol7nua05" path="res://interface/menu/options/environment/model/ControlBook.gltf" id="1_vnb8n"]
 [ext_resource type="PackedScene" uid="uid://45i65dldyv8w" path="res://interface/menu/options/environment/model/Page.gltf" id="2_l14ka"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nkiui"]
-sky_top_color = Color(0.596078, 0.521569, 0.52549, 1)
-sky_horizon_color = Color(0.776471, 0.654902, 0.607843, 1)
-ground_bottom_color = Color(0.0901961, 0.113725, 0.301961, 1)
-ground_horizon_color = Color(0.482353, 0.556863, 0.752941, 1)
-
-[sub_resource type="Sky" id="Sky_qkpod"]
-sky_material = SubResource("ProceduralSkyMaterial_nkiui")
-
-[sub_resource type="Environment" id="Environment_cnrrc"]
-background_mode = 2
-sky = SubResource("Sky_qkpod")
-tonemap_mode = 2
-tonemap_white = 1.2
-ssao_enabled = true
-ssil_enabled = true
 
 [node name="ControlBook" type="Node3D"]
 
@@ -26,14 +9,17 @@ ssil_enabled = true
 
 [node name="Skeleton3D" parent="ControlBook/BookRoot" index="0"]
 bones/0/rotation = Quaternion(-2.66925e-08, -0.707107, -2.66925e-08, 0.707107)
-bones/2/rotation = Quaternion(0.5, 0.5, -0.5, -0.5)
+bones/2/rotation = Quaternion(-0.5, -0.5, 0.5, 0.5)
 bones/3/rotation = Quaternion(0.707106, 1.72081e-08, 1.72081e-08, 0.707107)
 bones/3/scale = Vector3(1, 1, 1)
+bones/4/rotation = Quaternion(3.23117e-08, 0.707106, 0.707107, 5.3385e-08)
 bones/4/scale = Vector3(1, 1, 1)
-bones/5/rotation = Quaternion(0.5, -0.5, 0.5, -0.5)
+bones/5/rotation = Quaternion(-0.5, 0.5, -0.5, 0.5)
 bones/6/rotation = Quaternion(-0.707107, 1.45739e-08, -1.45739e-08, 0.707107)
-bones/7/scale = Vector3(1, 1, 1)
-bones/8/scale = Vector3(1, 1, 1)
+bones/7/position = Vector3(0.00665104, -0.0499999, -0.02)
+bones/7/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
+bones/8/position = Vector3(0.00665104, -0.0499999, 0.02)
+bones/8/rotation = Quaternion(0.707107, 0, 0, 0.707107)
 
 [node name="obj_book01_Mesh_0001" parent="ControlBook/BookRoot/Skeleton3D" index="0"]
 layers = 2
@@ -103,15 +89,8 @@ cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_cnrrc")
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 4, 1)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.418137, 0.908384, 0, -0.908384, 0.418137, 0, 3, 1.2)
-shadow_enabled = true
+[node name="AnimationPlayer" parent="ControlBook" index="1"]
+autoplay = "open"
 
 [editable path="ControlBook"]
 [editable path="ControlBook/BookRoot/Page1"]

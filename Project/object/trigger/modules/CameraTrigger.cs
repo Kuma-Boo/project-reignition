@@ -23,10 +23,6 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Update static position/rotations every frame? </summary>
 		public bool UpdateEveryFrame { get; private set; }
 
-		[Export(PropertyHint.Range, "0, 179, .1")]
-		/// <summary> FOV. Set to 0 to reset to default fov. </summary>
-		public float targetFOV;
-
 		[Export]
 		/// <summary> Must be assigned to something. </summary>
 		public CameraSettingsResource settings;
@@ -39,8 +35,12 @@ namespace Project.Gameplay.Triggers
 
 		public void UpdateStaticData(CameraBlendData data)
 		{
-			if (data.SettingsResource.useStaticPosition)
+			if (!data.SettingsResource.useStaticPosition) return;
+
+			if (data.SettingsResource.copyPosition)
 				data.StaticPosition = GlobalPosition;
+			else
+				data.StaticPosition = data.SettingsResource.staticPosition;
 
 			if (data.SettingsResource.copyRotation)
 				data.RotationBasis = GlobalBasis;
