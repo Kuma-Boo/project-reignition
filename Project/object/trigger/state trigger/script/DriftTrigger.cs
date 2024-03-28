@@ -203,6 +203,7 @@ namespace Project.Gameplay.Triggers
 			else
 			{
 				Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
+				Character.MovementAngle -= Mathf.Pi * .1f * Character.InputVector.X;
 				Character.Animator.ExternalAngle = Character.MovementAngle;
 			}
 
