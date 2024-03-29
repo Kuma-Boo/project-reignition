@@ -1,11 +1,20 @@
-[gd_scene load_steps=15 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=24 format=3 uid="uid://bwehljjnagemy"]
 
+[ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
+[ext_resource type="Material" uid="uid://jpwdaxh0ckoc" path="res://interface/menu/options/environment/material/Menu Overlay.tres" id="2_g15f7"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="2_gtq52"]
 [ext_resource type="PackedScene" uid="uid://5temnwxjglvx" path="res://interface/menu/options/environment/ControlBook.tscn" id="2_hmq0t"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
 [ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
-[ext_resource type="Resource" uid="uid://dhsn8grwbru0d" path="res://interface/menu/options/environment/OptionsCamera.tres" id="3_jnp5r"]
+[ext_resource type="Resource" uid="uid://dhsn8grwbru0d" path="res://interface/menu/options/camera/ControlTestCamera.tres" id="3_jnp5r"]
+[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/Camera.tscn" id="5_1klrf"]
+[ext_resource type="Resource" uid="uid://bn72cja883581" path="res://interface/menu/options/camera/OptionsCamera.tres" id="5_jmxg0"]
+[ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/otf/Greco Std DB.otf" id="7_5wjas"]
+[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
+[ext_resource type="Texture2D" uid="uid://bmsu8uq8tp6gy" path="res://interface/menu/options/texture/key_base.png" id="8_66qrj"]
+[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="9_yjhgu"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="11_3t47u"]
 
 [sub_resource type="Curve3D" id="Curve3D_eqptd"]
 _data = {
@@ -62,22 +71,24 @@ tonemap_white = 1.2
 ssao_enabled = true
 ssil_enabled = true
 
-[node name="Options" type="Control"]
+[node name="Options" type="Control" node_paths=PackedStringArray("menuViewport")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_yejdm")
+menuOverlay = ExtResource("2_g15f7")
+menuViewport = NodePath("SubViewportContainer/SubViewport")
 metadata/_edit_lock_ = true
 
 [node name="ControlBook" parent="." instance=ExtResource("2_hmq0t")]
-transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
 script = ExtResource("2_x1aix")
 "Level ID" = ""
 "Mission Type" = 0
 "Time Limit" = 0.0
-"Camera Settings" = ExtResource("3_jnp5r")
+"Camera Settings" = ExtResource("5_jmxg0")
 "Story Event Index" = -1
 "Dialog Library" = null
 "Item Cycling/Activation Trigger" = NodePath("")
@@ -94,15 +105,29 @@ Completion/Lockout = null
 "Static/Path Parent" = NodePath("../Path")
 Static/Environment = NodePath("../Visuals/WorldEnvironment")
 
-[node name="Controls" type="Node3D" parent="."]
+[node name="PlayerSpawn" type="Node3D" parent="ControlBook"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.2, 8, -8)
+script = ExtResource("4_g52h3")
 
-[node name="PlayerSpawn" type="Node3D" parent="Controls"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.5, 10, 0)
-
-[node name="Player" parent="Controls/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("3_4o0co")]
+[node name="Player" parent="ControlBook/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("3_4o0co")]
+process_mode = 4
 Camera = NodePath("../Camera")
 
-[node name="Camera" parent="Controls/PlayerSpawn" instance=ExtResource("5_1klrf")]
+[node name="Camera" parent="ControlBook/PlayerSpawn" instance=ExtResource("5_1klrf")]
+
+[node name="Jump" type="Node3D" parent="ControlBook"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.2, -1.8, 0)
+
+[node name="Jump" type="Node3D" parent="ControlBook/Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 8)
+script = ExtResource("8_7asuc")
+jumpHeight = 15.0
+
+[node name="ControlTestCamera" type="Node3D" parent="ControlBook"]
+script = ExtResource("11_3t47u")
+transitionTime = 0.5
+settings = ExtResource("3_jnp5r")
+previousSettings = ExtResource("5_jmxg0")
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -126,6 +151,8 @@ light_cull_mask = 64
 
 [node name="Fog" type="GPUParticles3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4, 4)
+layers = 32
+emitting = false
 amount = 128
 lifetime = 2.0
 preprocess = 5.0
@@ -138,3 +165,163 @@ draw_pass_1 = SubResource("QuadMesh_5ggik")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
 environment = SubResource("Environment_xk4ou")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 0
+offset_top = 1216.0
+offset_right = 2048.0
+offset_bottom = 2240.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+positional_shadow_atlas_size = 0
+positional_shadow_atlas_quad_0 = 0
+positional_shadow_atlas_quad_1 = 0
+positional_shadow_atlas_quad_2 = 0
+positional_shadow_atlas_quad_3 = 0
+size = Vector2i(2048, 1024)
+render_target_update_mode = 4
+
+[node name="Base" type="Control" parent="SubViewportContainer/SubViewport"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Cursor" type="Control" parent="SubViewportContainer/SubViewport/Base"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 1100.0
+offset_top = 400.0
+offset_right = 1100.0
+offset_bottom = 400.0
+
+[node name="Left" type="Sprite2D" parent="SubViewportContainer/SubViewport/Base/Cursor"]
+position = Vector2(40, 0)
+rotation = 1.5708
+scale = Vector2(2, 2)
+texture = ExtResource("9_yjhgu")
+offset = Vector2(32, 0)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(0, 120, 60, 40)
+
+[node name="Right" type="Sprite2D" parent="SubViewportContainer/SubViewport/Base/Cursor"]
+position = Vector2(880, 0)
+rotation = -1.57079
+scale = Vector2(2, 2)
+texture = ExtResource("9_yjhgu")
+offset = Vector2(-32, 0)
+region_enabled = true
+region_rect = Rect2(0, 120, 60, 40)
+
+[node name="Controls" type="Control" parent="SubViewportContainer/SubViewport/Base"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="SubViewportContainer/SubViewport/Base/Controls"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1024.0
+offset_top = 160.0
+offset_right = -174.0
+offset_bottom = -124.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Menu" type="Label" parent="SubViewportContainer/SubViewport/Base/Controls/LSide"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("7_5wjas")
+theme_override_font_sizes/font_size = 80
+text = "actions"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ActionControls" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Base/Controls/LSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 100.0
+offset_right = 420.0
+offset_bottom = 99.9998
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlOption" type="Control" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls"]
+custom_minimum_size = Vector2(840, 128)
+layout_mode = 2
+
+[node name="ActionLabel" type="Label" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 128.0
+offset_top = -4.0
+offset_right = 389.0
+offset_bottom = -4.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7_5wjas")
+theme_override_font_sizes/font_size = 80
+text = "jump"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Input" type="Control" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_right = -64.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ButtonSprite" type="TextureRect" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption/Input"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_66qrj")
+stretch_mode = 3
+
+[node name="InputLabel" type="Label" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption/Input"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(96, 64)
+theme_override_fonts/font = ExtResource("7_5wjas")
+theme_override_font_sizes/font_size = 32
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/SubViewport"]
+anchor_mode = 0
