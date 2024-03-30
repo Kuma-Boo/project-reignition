@@ -9,9 +9,11 @@ namespace Project.Core
 		public static Runtime Instance;
 
 		public static readonly RandomNumberGenerator randomNumberGenerator = new();
-
 		public static readonly Vector2I SCREEN_SIZE = new(1920, 1080); // Working resolution is 1080p
 		public static readonly Vector2I HALF_SCREEN_SIZE = (Vector2I)((Vector2)SCREEN_SIZE * .5f);
+
+		/// <summary> Was the last input the player made on a controller? </summary>
+		public static bool IsUsingController { get; private set; }
 
 		public override void _EnterTree()
 		{

@@ -1,8 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=19 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Material" uid="uid://jpwdaxh0ckoc" path="res://interface/menu/options/environment/material/Menu Overlay.tres" id="2_g15f7"]
-[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="2_gtq52"]
 [ext_resource type="PackedScene" uid="uid://5temnwxjglvx" path="res://interface/menu/options/environment/ControlBook.tscn" id="2_hmq0t"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
 [ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
@@ -10,11 +9,11 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/Camera.tscn" id="5_1klrf"]
 [ext_resource type="Resource" uid="uid://bn72cja883581" path="res://interface/menu/options/camera/OptionsCamera.tres" id="5_jmxg0"]
-[ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/otf/Greco Std DB.otf" id="7_5wjas"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
 [ext_resource type="Texture2D" uid="uid://bmsu8uq8tp6gy" path="res://interface/menu/options/texture/key_base.png" id="8_66qrj"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="9_yjhgu"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="11_3t47u"]
+[ext_resource type="FontFile" uid="uid://dakokhex1lp8k" path="res://interface/font/otf/Greco Std B.otf" id="13_tx5t6"]
 
 [sub_resource type="Curve3D" id="Curve3D_eqptd"]
 _data = {
@@ -22,35 +21,6 @@ _data = {
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
-
-[sub_resource type="Curve" id="Curve_gac2s"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.208904, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_emfc0"]
-width = 64
-texture_mode = 1
-curve = SubResource("Curve_gac2s")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yt67y"]
-emission_shape = 3
-emission_box_extents = Vector3(8, 1, 0)
-direction = Vector3(0, 1, 0)
-spread = 0.0
-initial_velocity_min = 5.0
-initial_velocity_max = 10.0
-angular_velocity_min = -50.0
-angular_velocity_max = 50.0
-gravity = Vector3(0, 0, 0)
-damping_min = 2.0
-damping_max = 5.0
-scale_max = 1.5
-color = Color(0.501961, 0.529412, 0.843137, 1)
-alpha_curve = SubResource("CurveTexture_emfc0")
-
-[sub_resource type="QuadMesh" id="QuadMesh_5ggik"]
-material = ExtResource("2_gtq52")
-size = Vector2(5, 5)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ap680"]
 sky_top_color = Color(0.596078, 0.521569, 0.52549, 1)
@@ -80,7 +50,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_yejdm")
 menuOverlay = ExtResource("2_g15f7")
-menuViewport = NodePath("SubViewportContainer/SubViewport")
+menuViewport = NodePath("ViewportPreview/MenuViewport")
 metadata/_edit_lock_ = true
 
 [node name="ControlBook" parent="." instance=ExtResource("2_hmq0t")]
@@ -149,30 +119,16 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 layers = 1024
 light_cull_mask = 64
 
-[node name="Fog" type="GPUParticles3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4, 4)
-layers = 32
-emitting = false
-amount = 128
-lifetime = 2.0
-preprocess = 5.0
-fixed_fps = 60
-interpolate = false
-visibility_aabb = AABB(-4, 0, -4, 8, 8, 8)
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_yt67y")
-draw_pass_1 = SubResource("QuadMesh_5ggik")
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
 environment = SubResource("Environment_xk4ou")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="ViewportPreview" type="SubViewportContainer" parent="."]
 layout_mode = 0
 offset_top = 1216.0
 offset_right = 2048.0
 offset_bottom = 2240.0
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="MenuViewport" type="SubViewport" parent="ViewportPreview"]
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
@@ -185,7 +141,7 @@ positional_shadow_atlas_quad_3 = 0
 size = Vector2i(2048, 1024)
 render_target_update_mode = 4
 
-[node name="Base" type="Control" parent="SubViewportContainer/SubViewport"]
+[node name="Base" type="Control" parent="ViewportPreview/MenuViewport"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -193,7 +149,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Cursor" type="Control" parent="SubViewportContainer/SubViewport/Base"]
+[node name="Cursor" type="Control" parent="ViewportPreview/MenuViewport/Base"]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 1100.0
@@ -201,7 +157,7 @@ offset_top = 400.0
 offset_right = 1100.0
 offset_bottom = 400.0
 
-[node name="Left" type="Sprite2D" parent="SubViewportContainer/SubViewport/Base/Cursor"]
+[node name="Left" type="Sprite2D" parent="ViewportPreview/MenuViewport/Base/Cursor"]
 position = Vector2(40, 0)
 rotation = 1.5708
 scale = Vector2(2, 2)
@@ -211,7 +167,7 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(0, 120, 60, 40)
 
-[node name="Right" type="Sprite2D" parent="SubViewportContainer/SubViewport/Base/Cursor"]
+[node name="Right" type="Sprite2D" parent="ViewportPreview/MenuViewport/Base/Cursor"]
 position = Vector2(880, 0)
 rotation = -1.57079
 scale = Vector2(2, 2)
@@ -220,7 +176,8 @@ offset = Vector2(-32, 0)
 region_enabled = true
 region_rect = Rect2(0, 120, 60, 40)
 
-[node name="Controls" type="Control" parent="SubViewportContainer/SubViewport/Base"]
+[node name="Options" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -228,7 +185,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LSide" type="Control" parent="SubViewportContainer/SubViewport/Base/Controls"]
+[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Options"]
 modulate = Color(0.705882, 0.0705882, 0, 1)
 layout_mode = 1
 anchors_preset = 11
@@ -242,37 +199,118 @@ offset_bottom = -124.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="SubViewportContainer/SubViewport/Base/Controls/LSide"]
+[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 81.0
 grow_horizontal = 2
-theme_override_fonts/font = ExtResource("7_5wjas")
+theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 80
-text = "actions"
+text = "options"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="ActionControls" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Base/Controls/LSide"]
+[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Options/RSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -420.0
-offset_top = 100.0
+offset_top = 150.0
 offset_right = 420.0
-offset_bottom = 99.9998
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="VideoLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_video"
+vertical_alignment = 1
+uppercase = true
+
+[node name="AudioLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_audio"
+vertical_alignment = 1
+uppercase = true
+
+[node name="LanguageLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_lang"
+vertical_alignment = 1
+uppercase = true
+
+[node name="ControlLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_control"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Controls" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ControlOption" type="Control" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls"]
+[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Controls"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1024.0
+offset_top = 160.0
+offset_right = -174.0
+offset_bottom = -124.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Controls/RSide"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 80
+text = "actions"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ActionControls" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Controls/RSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 150.0
+offset_right = 420.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlOption" type="Control" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls"]
 custom_minimum_size = Vector2(840, 128)
 layout_mode = 2
 
-[node name="ActionLabel" type="Label" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption"]
+[node name="ActionLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -281,13 +319,13 @@ offset_top = -4.0
 offset_right = 389.0
 offset_bottom = -4.0
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("7_5wjas")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
 text = "jump"
 vertical_alignment = 1
 uppercase = true
 
-[node name="Input" type="Control" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption"]
+[node name="Input" type="Control" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -298,7 +336,7 @@ offset_right = -64.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="ButtonSprite" type="TextureRect" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption/Input"]
+[node name="ButtonSprite" type="TextureRect" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption/Input"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -308,7 +346,7 @@ grow_vertical = 2
 texture = ExtResource("8_66qrj")
 stretch_mode = 3
 
-[node name="InputLabel" type="Label" parent="SubViewportContainer/SubViewport/Base/Controls/LSide/ActionControls/ControlOption/Input"]
+[node name="InputLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption/Input"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -316,12 +354,387 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(96, 64)
-theme_override_fonts/font = ExtResource("7_5wjas")
+theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 32
 text = "A"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/SubViewport"]
-anchor_mode = 0
+[node name="Video" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Video"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 174.0
+offset_top = 160.0
+offset_right = 1024.0
+offset_bottom = 160.0
+grow_vertical = 2
+
+[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/LSide"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 80
+text = "option_video"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Video/LSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -448.0
+offset_top = 150.0
+offset_right = 448.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="VsyncLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_vsync"
+vertical_alignment = 1
+uppercase = true
+
+[node name="ResolutionLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_resolution"
+vertical_alignment = 1
+uppercase = true
+
+[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Video"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1024.0
+offset_top = 160.0
+offset_right = -174.0
+offset_bottom = -124.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Video/RSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 150.0
+offset_right = 420.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="VsyncLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "on"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="ResolutionLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "1920:1080"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Audio" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Audio"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 174.0
+offset_top = 160.0
+offset_right = 1024.0
+offset_bottom = 160.0
+grow_vertical = 2
+
+[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 80
+text = "option_audio"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Audio/LSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 150.0
+offset_right = 420.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="MainLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_main_vol"
+vertical_alignment = 1
+uppercase = true
+
+[node name="BGMLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_bgm_vol"
+vertical_alignment = 1
+uppercase = true
+
+[node name="SFXLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_sfx_vol"
+vertical_alignment = 1
+uppercase = true
+
+[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_voice_vol"
+vertical_alignment = 1
+uppercase = true
+
+[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Audio"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1024.0
+offset_top = 160.0
+offset_right = -174.0
+offset_bottom = -124.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Audio/RSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 150.0
+offset_right = 420.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="MainLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="MusicLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="SFXLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Language" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Language"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 174.0
+offset_top = 160.0
+offset_right = 1024.0
+offset_bottom = 160.0
+grow_vertical = 2
+
+[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 81.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 80
+text = "option_lang"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Language/LSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 150.0
+offset_right = 420.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="UseSubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_sub_toggle"
+vertical_alignment = 1
+uppercase = true
+
+[node name="SubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_sub_lang"
+vertical_alignment = 1
+uppercase = true
+
+[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "option_voice_lang"
+vertical_alignment = 1
+uppercase = true
+
+[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Language"]
+modulate = Color(0.705882, 0.0705882, 0, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1024.0
+offset_top = 160.0
+offset_right = -174.0
+offset_bottom = -124.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Language/RSide"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 150.0
+offset_right = 420.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="UseSubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "On"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="SubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "lang_en"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/RSide/Options"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 64
+text = "lang_en"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true

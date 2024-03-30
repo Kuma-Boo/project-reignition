@@ -176,6 +176,7 @@ namespace Project.Core
 				Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
 			}
 
+			ApplyInputMap();
 			ApplyLocalization();
 			ApplyConfig();
 		}
@@ -199,6 +200,15 @@ namespace Project.Core
 			ApplyAudioBusVolume((int)AudioBuses.SFX, Config.sfxVolume, Config.isSfxMuted);
 			ApplyAudioBusVolume((int)AudioBuses.VOICE, Config.voiceVolume, Config.isVoiceMuted);
 		}
+
+
+		/// <summary> Applies input map configuration. </summary>
+		public void ApplyInputMap()
+		{
+
+		}
+
+
 
 		/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
 		private void ApplyLocalization()
