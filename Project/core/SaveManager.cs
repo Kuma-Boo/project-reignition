@@ -14,12 +14,32 @@ namespace Project.Core
 		{
 			Instance = this;
 			LoadConfig();
-			LoadGameFromFile();
+			PreloadGameData();
 		}
 
+
 		#region Config
+		public static ConfigData Config;
+		public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
 		private const string CONFIG_FILE_NAME = "config.cfg";
 
+		/// <summary> Default debug settings for testing from the editor. </summary>
+		private ConfigData DebugSettings => new()
+		{
+			screenResolution = 3,
+			isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER),
+			isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM),
+			isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX),
+			isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE),
+		};
+
+		private ConfigData DefaultSettings => new();
+
+		public enum ControllerType
+		{
+			PlayStation, // Use PlayStation button prompts
+			Xbox // Use XBox button prompts
+		}
 		public enum VoiceLanguage
 		{
 			English,
@@ -42,20 +62,16 @@ namespace Project.Core
 			VOICE,
 			COUNT
 		}
-
 		private readonly Vector2I[] SCREEN_RESOLUTIONS =
 		{
-			new(640, 360), //360p
-			new(854, 480), //480p
-			new(1280, 720), //720p
-			new(1600, 900), //900p
-			new(1920, 1080), //1080p
-			new(2560, 1440), //1440p
-			new(3840, 2160), //4K
+			new(640, 360), // 360p
+			new(854, 480), // 480p
+			new(1280, 720), // 720p
+			new(1600, 900), // 900p
+			new(1920, 1080), // 1080p
+			new(2560, 1440), // 1440p
+			new(3840, 2160), // 4K
 		};
-
-		public static ConfigData Config;
-		public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
 
 		public partial class ConfigData : GodotObject
 		{
@@ -74,7 +90,9 @@ namespace Project.Core
 			public bool isVoiceMuted;
 			public int voiceVolume = 100;
 
-			public string inputConfiguration;
+			// Controls
+			public ControllerType controllerType = ControllerType.PlayStation;
+			public Dictionary inputConfiguration;
 
 			// Language
 			public bool subtitlesEnabled = true;
@@ -100,12 +118,14 @@ namespace Project.Core
 					{ nameof(sfxVolume), sfxVolume },
 					{ nameof(isVoiceMuted), isVoiceMuted },
 					{ nameof(voiceVolume), voiceVolume },
-					{ nameof(inputConfiguration), inputConfiguration },
+
+					{ nameof(controllerType), (int)controllerType },
+					{ nameof(inputConfiguration), Json.Stringify(inputConfiguration) },
 
 					// Langauge
 					{ nameof(subtitlesEnabled), subtitlesEnabled },
 					{ nameof(voiceLanguage), (int)voiceLanguage },
-					{ nameof(textLanguage), (int)textLanguage }
+					{ nameof(textLanguage), (int)textLanguage },
 				};
 
 				return dictionary;
@@ -140,8 +160,10 @@ namespace Project.Core
 					voiceVolume = (int)var;
 
 
+				if (dictionary.TryGetValue(nameof(controllerType), out var))
+					controllerType = (ControllerType)(int)var;
 				if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
-					inputConfiguration = (string)var;
+					inputConfiguration = (Dictionary)Json.ParseString((string)var);
 
 
 				if (dictionary.TryGetValue(nameof(subtitlesEnabled), out var))
@@ -153,33 +175,29 @@ namespace Project.Core
 			}
 		}
 
+
 		/// <summary> Attempts to load config data from file. </summary>
 		public void LoadConfig()
 		{
-			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
-
-			//Attempt to load.
-			if (FileAccess.GetOpenError() == Error.Ok) //Load Default settings
+			if (!OS.IsDebugBuild())
 			{
-				Config.FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
-				file.Close();
+				FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
+
+				// Attempt to load.
+				if (FileAccess.GetOpenError() == Error.Ok) // Load Default settings
+				{
+					Config.FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
+					file.Close();
+				}
+				else
+					Config = DefaultSettings;
 			}
 			else
-				Config = new ConfigData();
+				Config = DebugSettings; // Editor build
 
-			if (OS.IsDebugBuild()) // Editor build
-			{
-				Config.screenResolution = 3;
-				Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
-				Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
-				Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
-				Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
-			}
-
-			ApplyInputMap();
-			ApplyLocalization();
 			ApplyConfig();
 		}
+
 
 		/// <summary> Attempts to save config data to file. </summary>
 		public void SaveConfig()
@@ -189,25 +207,64 @@ namespace Project.Core
 			file.Close();
 		}
 
+
+		/// <summary> Applies active configuration data. </summary>
 		public void ApplyConfig()
 		{
+			ApplyInputMap();
+			ApplyLocalization();
+
 			DisplayServer.WindowSetVsyncMode(Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
 			DisplayServer.WindowSetMode(Config.isFullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed);
 			DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[Config.screenResolution]);
 
-			ApplyAudioBusVolume((int)AudioBuses.MASTER, Config.masterVolume, Config.isMasterMuted);
-			ApplyAudioBusVolume((int)AudioBuses.BGM, Config.bgmVolume, Config.isBgmMuted);
-			ApplyAudioBusVolume((int)AudioBuses.SFX, Config.sfxVolume, Config.isSfxMuted);
-			ApplyAudioBusVolume((int)AudioBuses.VOICE, Config.voiceVolume, Config.isVoiceMuted);
+			SetAudioBusVolume((int)AudioBuses.MASTER, Config.masterVolume, Config.isMasterMuted);
+			SetAudioBusVolume((int)AudioBuses.BGM, Config.bgmVolume, Config.isBgmMuted);
+			SetAudioBusVolume((int)AudioBuses.SFX, Config.sfxVolume, Config.isSfxMuted);
+			SetAudioBusVolume((int)AudioBuses.VOICE, Config.voiceVolume, Config.isVoiceMuted);
 		}
 
 
 		/// <summary> Applies input map configuration. </summary>
 		public void ApplyInputMap()
 		{
+			// No custom input map was created
+			if (Config.inputConfiguration == null) return;
 
+			Array<StringName> actions = InputMap.GetActions();
+
+			for (int i = 0; i < actions.Count; i++)
+			{
+				if (!Config.inputConfiguration.ContainsKey(actions[i]))
+					continue;
+
+				// Mappings are ordered in a [key, axis, button] format.
+				string[] mappings = ((string)Config.inputConfiguration[actions[i]]).Split(',');
+				Key key = (Key)mappings[0].ToInt();
+				JoyAxis axis = (JoyAxis)mappings[1].ToInt();
+				JoyButton button = (JoyButton)mappings[2].ToInt();
+
+				InputMap.ActionEraseEvents(actions[i]);
+
+				if (key != Key.None)
+					InputMap.ActionAddEvent(actions[i], new InputEventKey()
+					{
+						Keycode = key
+					});
+
+				if (axis != JoyAxis.Invalid)
+					InputMap.ActionAddEvent(actions[i], new InputEventJoypadMotion()
+					{
+						Axis = axis
+					});
+
+				if (button != JoyButton.Invalid)
+					InputMap.ActionAddEvent(actions[i], new InputEventJoypadButton()
+					{
+						ButtonIndex = button
+					});
+			}
 		}
-
 
 
 		/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
@@ -236,7 +293,9 @@ namespace Project.Core
 			}
 		}
 
-		public void ApplyAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
+
+		/// <summary> Changes the volume of an audio bus channel. </summary>
+		public void SetAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
 		{
 			if (volumePercentage == 0)
 				isMuted = true;
@@ -244,7 +303,6 @@ namespace Project.Core
 			AudioServer.SetBusMute(bus, isMuted); // Mute or unmute
 			AudioServer.SetBusVolumeDb(bus, Mathf.LinearToDb(volumePercentage * .01f));
 		}
-
 		#endregion
 
 		#region Game data
@@ -428,13 +486,13 @@ namespace Project.Core
 			}
 		}
 
-		/// <summary> Loads game data from a file. </summary>
-		public static void LoadGameFromFile()
+
+		/// <summary> Preloads game data so it can be displayed on menus. </summary>
+		public static void PreloadGameData()
 		{
-			//TODO actually try and load from save files.
 			for (int i = 0; i < GameSaveSlots.Length; i++)
 			{
-				GameSaveSlots[i] = new GameData();
+				GameSaveSlots[i] = new();
 
 				string saveNumber = i.ToString("00");
 				FileAccess file = FileAccess.Open(SAVE_DIRECTORY + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
@@ -446,7 +504,7 @@ namespace Project.Core
 			}
 
 			// Debug game data
-			if (DebugManager.Instance.UseDebugSave) //For testing
+			if (DebugManager.Instance.UseDebugSave) // For testing
 			{
 				ActiveSaveSlotIndex = 0;
 				GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();

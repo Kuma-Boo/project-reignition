@@ -1,7 +1,6 @@
 using Godot;
 using Project.Core;
 
-//Data for movement
 namespace Project.Gameplay
 {
 	/// <summary>

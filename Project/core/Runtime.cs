@@ -12,14 +12,14 @@ namespace Project.Core
 		public static readonly Vector2I SCREEN_SIZE = new(1920, 1080); // Working resolution is 1080p
 		public static readonly Vector2I HALF_SCREEN_SIZE = (Vector2I)((Vector2)SCREEN_SIZE * .5f);
 
-		/// <summary> Was the last input the player made on a controller? </summary>
-		public static bool IsUsingController { get; private set; }
 
 		public override void _EnterTree()
 		{
 			Instance = this;
+			ActiveController = -1; // Default to keyboard
 			Interface.Menus.Menu.SetUpMemory();
 		}
+
 
 		public override void _Process(double _)
 		{
@@ -121,5 +121,107 @@ namespace Project.Core
 			tween.Connect(Tween.SignalName.Finished, Callable.From(() => tween.Kill())); //Kill tween after completing
 		}
 		#endregion
+
+
+		/// <summary> Emitted when the active controller changes. </summary>
+		[Signal]
+		public delegate void ControllerChangedEventHandler(int controllerIndex);
+		public bool IsUsingController => ActiveController != -1;
+		public int ActiveController { get; private set; }
+
+		public override void _Input(InputEvent e)
+		{
+			int targetController = -1;
+			if (e is InputEventJoypadButton)
+				ActiveController = e.Device; // Gamepad (ignore analog inputs due to noise)
+
+			if (targetController == ActiveController) return;
+
+			ActiveController = targetController;
+			EmitSignal(SignalName.ControllerChanged, ActiveController);
+		}
+
+
+		public string GetKeyLabel(Key key)
+		{
+			string returnString = OS.GetKeycodeString(key).ToUpper();
+			if (returnString.Length == 4 && returnString.StartsWith("KEY")) // Numbers
+				return returnString.Remove(0, 3);
+			if (returnString.Length == 3 && returnString.StartsWith("KP")) // Numpad Numbers
+				return "NUM " + returnString.Remove(0, 2);
+
+			switch (key)
+			{
+				// Typical keys
+				case Key.Quoteleft:
+					return "`";
+				case Key.Minus:
+					return "-";
+				case Key.Equal:
+					return "=";
+				case Key.Backspace:
+					return "BK\bSPC";
+				case Key.Bracketleft:
+					return "[";
+				case Key.Bracketright:
+					return "]";
+				case Key.Backslash:
+					return "\\";
+				case Key.Capslock:
+					return "CAPS";
+				case Key.Semicolon:
+					return ";";
+				case Key.Apostrophe:
+					return "'";
+				case Key.Comma:
+					return ",";
+				case Key.Period:
+					return ".";
+				case Key.Slash:
+					return "/";
+				case Key.Menu:
+					return "☰";
+
+				case Key.Left:
+					return "🡸";
+				case Key.Right:
+					return "🡺";
+				case Key.Up:
+					return "🡹";
+				case Key.Down:
+					return "🡻";
+
+				// Side keys
+				case Key.Print:
+					return "PRTSC";
+				case Key.Scrolllock:
+					return "SCRLK";
+				case Key.Insert:
+					return "INS";
+				case Key.Pageup:
+					return "PG UP";
+				case Key.Pagedown:
+					return "PG DN";
+				case Key.Delete:
+					return "DEL";
+
+				// Numpad
+				case Key.KpAdd:
+					return "NUM +";
+				case Key.KpDivide:
+					return "NUM /";
+				case Key.KpSubtract:
+					return "NUM -";
+				case Key.KpMultiply:
+					return "NUM *";
+				case Key.KpPeriod:
+					return "NUM .";
+				case Key.KpEnter:
+					return "NUM ENTER";
+
+				default:
+					return returnString;
+			}
+		}
 	}
 }
