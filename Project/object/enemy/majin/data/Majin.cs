@@ -328,7 +328,7 @@ namespace Project.Gameplay
 				// Get knocked back
 				tweener = CreateTween().SetParallel();
 				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
-				tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime).SetEase(Tween.EaseType.In);
+				tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
 				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("defeat"))).SetDelay(defeatLaunchTime);
 			}
 			else
