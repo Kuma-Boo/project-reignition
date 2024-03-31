@@ -1427,7 +1427,7 @@ namespace Project.Gameplay
 			get => GlobalPosition + UpDirection * CollisionRadius;
 			set => GlobalPosition = value - UpDirection * CollisionRadius;
 		}
-		private const float COLLISION_PADDING = .04f;
+		private const float COLLISION_PADDING = .02f;
 
 		/// <summary> Character's primary movement speed. </summary>
 		public float MoveSpeed { get; set; }
@@ -1491,9 +1491,10 @@ namespace Project.Gameplay
 			Vector3 castVector = this.Down() * castLength;
 			int raysHit = 0;
 
+
 			// Whisker casts (For smoother collision)
 			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
-			Vector3 castOffset = this.Forward() * (CollisionRadius - COLLISION_PADDING);
+			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - COLLISION_PADDING);
 			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 			{
 				castOffset = castOffset.Rotated(this.Down(), interval).Normalized() * CollisionRadius;
@@ -1520,23 +1521,20 @@ namespace Project.Gameplay
 			if (groundHit) // Successful ground hit
 			{
 				Effect.UpdateGroundType(groundHit.collidedObject);
-
 				groundHit.Divide(raysHit);
-				float snapDistance = groundHit.distance - CollisionRadius - COLLISION_PADDING;
-				// Landing on the ground
-				if (!IsOnGround && VerticalSpeed < 0)
+
+				if (!IsOnGround && VerticalSpeed < 0) // Landing on the ground
 				{
 					UpDirection = groundHit.normal;
 					UpdateOrientation();
+					MoveAndCollide(UpDirection * VerticalSpeed); // Snap to ground
 					LandOnGround();
 				}
-
-				GlobalPosition -= UpDirection * snapDistance; // Snap to ground
-
-				if (IsOnGround)
+				else
 				{
-					//Update world direction
-					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized();
+					float snapDistance = groundHit.distance - CollisionRadius;
+					GlobalPosition -= UpDirection * snapDistance; // Remain snapped to the ground
+					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized(); //Update world direction
 				}
 			}
 			else
@@ -1620,9 +1618,8 @@ namespace Project.Gameplay
 
 		public void CheckCeiling() //Checks the ceiling.
 		{
-			//Ceiling check casts from the root position, to allow more accurate crusher detection
-			Vector3 castOrigin = GlobalPosition;
-			float castLength = CollisionRadius * 2f;
+			Vector3 castOrigin = GlobalPosition + UpDirection * CollisionRadius;
+			float castLength = CollisionRadius + COLLISION_PADDING;
 			if (VerticalSpeed > 0)
 				castLength += VerticalSpeed * PhysicsManager.physicsDelta;
 
