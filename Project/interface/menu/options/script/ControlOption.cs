@@ -17,7 +17,7 @@ namespace Project.Interface.Menus
 		[Export]
 		public Texture2D keyWideSprite;
 		[Export]
-		public ControllerSpriteResource controllerResource;
+		public ControllerSpriteResource[] controllerResources;
 
 		[Export]
 		private StringName inputID;
@@ -63,7 +63,29 @@ namespace Project.Interface.Menus
 		/// <summary> Remaps the target input to the given input event's binding. </summary>
 		private void RemapInput(InputEvent inputEvent)
 		{
+			// Check for conflicting input mappings
+			Array<StringName> actionList = InputMap.GetActions();
 			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID);
+
+			for (int i = 0; i < actionList.Count; i++)
+			{
+				if (!InputMap.ActionHasEvent(actionList[i], inputEvent))
+					continue;
+
+				// Resolve the mapping conflict by swapping input mapping with this menu option's mapping
+				foreach (InputEvent e in eventList)
+				{
+					if (inputEvent.GetType() != e.GetType())
+						continue;
+
+					InputMap.ActionEraseEvent(actionList[i], inputEvent);
+					InputMap.ActionAddEvent(actionList[i], e);
+					break;
+				}
+				break;
+			}
+
+
 			for (int i = 0; i < eventList.Count; i++)
 			{
 				if (inputEvent.GetType() != eventList[i].GetType())
@@ -150,7 +172,7 @@ namespace Project.Interface.Menus
 					if (eventList[i] is InputEventJoypadButton)
 					{
 						int index = (int)(eventList[i] as InputEventJoypadButton).ButtonIndex;
-						spriteRect.Texture = controllerResource.buttons[index];
+						spriteRect.Texture = controllerResources[(int)SaveManager.Config.controllerType].buttons[index];
 						return;
 					}
 				}

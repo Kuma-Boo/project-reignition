@@ -1,19 +1,24 @@
-[gd_scene load_steps=19 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=42 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Material" uid="uid://jpwdaxh0ckoc" path="res://interface/menu/options/environment/material/Menu Overlay.tres" id="2_g15f7"]
-[ext_resource type="PackedScene" uid="uid://5temnwxjglvx" path="res://interface/menu/options/environment/ControlBook.tscn" id="2_hmq0t"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
 [ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
 [ext_resource type="Resource" uid="uid://dhsn8grwbru0d" path="res://interface/menu/options/camera/ControlTestCamera.tres" id="3_jnp5r"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/Camera.tscn" id="5_1klrf"]
 [ext_resource type="Resource" uid="uid://bn72cja883581" path="res://interface/menu/options/camera/OptionsCamera.tres" id="5_jmxg0"]
+[ext_resource type="PackedScene" uid="uid://cgpnlulbvy8vl" path="res://interface/menu/options/environment/model/Collision.gltf" id="5_w565g"]
+[ext_resource type="PackedScene" uid="uid://cskupol7nua05" path="res://interface/menu/options/environment/model/ControlBook.gltf" id="6_jppea"]
+[ext_resource type="PackedScene" uid="uid://45i65dldyv8w" path="res://interface/menu/options/environment/model/Page.gltf" id="7_37jow"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
-[ext_resource type="Texture2D" uid="uid://bmsu8uq8tp6gy" path="res://resource/input sprites/options/key_base.png" id="8_66qrj"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="8_wksl8"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="9_yjhgu"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="11_3t47u"]
 [ext_resource type="FontFile" uid="uid://dakokhex1lp8k" path="res://interface/font/otf/Greco Std B.otf" id="13_tx5t6"]
+[ext_resource type="PackedScene" uid="uid://c1806dq45a0kr" path="res://interface/menu/options/ControlOption.tscn" id="14_itn8j"]
+[ext_resource type="AudioStream" uid="uid://b5d5wemyoi5ap" path="res://sound/ost/treasure disc/4 MISGIVING.mp3" id="18_fr2tm"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="19_agawd"]
 
 [sub_resource type="Curve3D" id="Curve3D_eqptd"]
 _data = {
@@ -21,6 +26,35 @@ _data = {
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
+
+[sub_resource type="Curve" id="Curve_6u87m"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.208904, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_emfc0"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_6u87m")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xe8d5"]
+emission_shape = 3
+emission_box_extents = Vector3(8, 1, 0)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+gravity = Vector3(0, 0, 0)
+damping_min = 2.0
+damping_max = 5.0
+scale_max = 1.5
+color = Color(0.501961, 0.529412, 0.843137, 1)
+alpha_curve = SubResource("CurveTexture_emfc0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_md2q0"]
+material = ExtResource("8_wksl8")
+size = Vector2(5, 5)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ap680"]
 sky_top_color = Color(0.596078, 0.521569, 0.52549, 1)
@@ -35,13 +69,503 @@ sky_material = SubResource("ProceduralSkyMaterial_ap680")
 background_mode = 1
 sky = SubResource("Sky_qkpod")
 ambient_light_source = 2
-ambient_light_color = Color(0.501961, 0.470588, 0.380392, 1)
+ambient_light_color = Color(0.372549, 0.364706, 0.807843, 1)
 tonemap_mode = 2
 tonemap_white = 1.2
 ssao_enabled = true
 ssil_enabled = true
 
-[node name="Options" type="Control" node_paths=PackedStringArray("menuViewport")]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_eqdc5"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Animation" id="Animation_8efxu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e1b8a"]
+resource_name = "loop"
+length = 1.20001
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_i84eb"]
+resource_name = "select"
+length = 1.60001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 1, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oqwnn"]
+_data = {
+"RESET": SubResource("Animation_8efxu"),
+"loop": SubResource("Animation_e1b8a"),
+"select": SubResource("Animation_i84eb")
+}
+
+[sub_resource type="Animation" id="Animation_w5dih"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_24v0k"]
+resource_name = "audio"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_4nv1k"]
+resource_name = "control"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_k03le"]
+resource_name = "flip-left"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ControlBook/ControlBook/AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["flip-left", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_fjvqe"]
+resource_name = "flip-right"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ControlBook/ControlBook/AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["flip-right", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_oqo83"]
+resource_name = "language"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_kujvr"]
+resource_name = "options"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_q1gli"]
+resource_name = "video"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6r0td"]
+_data = {
+"RESET": SubResource("Animation_w5dih"),
+"audio": SubResource("Animation_24v0k"),
+"control": SubResource("Animation_4nv1k"),
+"flip-left": SubResource("Animation_k03le"),
+"flip-right": SubResource("Animation_fjvqe"),
+"language": SubResource("Animation_oqo83"),
+"options": SubResource("Animation_kujvr"),
+"video": SubResource("Animation_q1gli")
+}
+
+[node name="Options" type="Control" node_paths=PackedStringArray("menuViewport", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,10 +574,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_yejdm")
 menuOverlay = ExtResource("2_g15f7")
-menuViewport = NodePath("ViewportPreview/MenuViewport")
+menuViewport = NodePath("Viewport/MenuViewport")
+bgm = NodePath("BGM")
+animator = NodePath("AnimationPlayer")
+isProcessing = true
 metadata/_edit_lock_ = true
 
-[node name="ControlBook" parent="." instance=ExtResource("2_hmq0t")]
+[node name="ControlBook" type="Node3D" parent="."]
 script = ExtResource("2_x1aix")
 "Level ID" = ""
 "Mission Type" = 0
@@ -72,8 +599,136 @@ script = ExtResource("2_x1aix")
 Completion/Delay = 0.0
 Completion/Lockout = null
 "Completion/Demo Animator" = NodePath("")
-"Static/Path Parent" = NodePath("../Path")
-Static/Environment = NodePath("../Visuals/WorldEnvironment")
+"Static/Path Parent" = NodePath("Path")
+Static/Environment = NodePath("Visuals/WorldEnvironment")
+
+[node name="Collision" parent="ControlBook" instance=ExtResource("5_w565g")]
+visible = false
+
+[node name="StaticBody3D" parent="ControlBook/Collision/Floor" index="0" groups=["floor"]]
+
+[node name="ControlBook" parent="ControlBook" instance=ExtResource("6_jppea")]
+
+[node name="Skeleton3D" parent="ControlBook/ControlBook/BookRoot" index="0"]
+bones/0/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
+bones/2/rotation = Quaternion(-0.707107, -1.47514e-08, -1.47514e-08, 0.707107)
+bones/3/rotation = Quaternion(0.707106, 1.72081e-08, 1.72081e-08, 0.707107)
+bones/4/rotation = Quaternion(3.23117e-08, 0.707106, 0.707107, 5.3385e-08)
+bones/5/rotation = Quaternion(-0.707107, -1.47514e-08, -1.47514e-08, 0.707107)
+bones/6/rotation = Quaternion(-0.707107, 1.45739e-08, -1.45739e-08, 0.707107)
+
+[node name="obj_book01_Mesh_0001" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="0"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0003" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="1"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0006" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="2"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0008" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="3"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0009" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="4"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0010" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="5"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0011" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="6"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0012" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="7"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0013" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="8"]
+layers = 2
+cast_shadow = 0
+
+[node name="obj_book01_Mesh_0014" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="9"]
+layers = 2
+cast_shadow = 0
+
+[node name="Page1" parent="ControlBook/ControlBook/BookRoot" index="1" instance=ExtResource("7_37jow")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
+
+[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page1" index="0"]
+layers = 2
+cast_shadow = 0
+blend_shapes/Flip = 0.5
+blend_shapes/Stretch = 1.0
+
+[node name="Page2" parent="ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.175, 0)
+
+[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page2" index="0"]
+layers = 2
+cast_shadow = 0
+blend_shapes/Flip = 0.5
+blend_shapes/Stretch = 1.0
+
+[node name="Page3" parent="ControlBook/ControlBook/BookRoot" index="3" instance=ExtResource("7_37jow")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
+visible = false
+
+[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page3" index="0"]
+layers = 2
+cast_shadow = 0
+blend_shapes/Flip = 0.5
+blend_shapes/Stretch = 1.0
+
+[node name="MenuOverlay" parent="ControlBook/ControlBook" index="1"]
+transparency = 1.0
+cast_shadow = 0
+
+[node name="AnimationPlayer" parent="ControlBook/ControlBook" index="2"]
+autoplay = "open"
+
+[node name="Path" type="Node3D" parent="ControlBook"]
+
+[node name="MainPath" type="Path3D" parent="ControlBook/Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.2, 2)
+curve = SubResource("Curve3D_eqptd")
+
+[node name="Visuals" type="Node3D" parent="ControlBook"]
+
+[node name="EnvironmentLight" type="DirectionalLight3D" parent="ControlBook/Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.6, 0.6, 1, 1)
+light_energy = 1.5
+light_cull_mask = 2
+shadow_enabled = true
+
+[node name="CharacterLight" type="DirectionalLight3D" parent="ControlBook/Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_cull_mask = 64
+
+[node name="Fog" type="GPUParticles3D" parent="ControlBook/Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4, 4)
+layers = 32
+emitting = false
+amount = 128
+lifetime = 2.0
+preprocess = 5.0
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(-4, 0, -4, 8, 8, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_xe8d5")
+draw_pass_1 = SubResource("QuadMesh_md2q0")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="ControlBook/Visuals"]
+environment = SubResource("Environment_xk4ou")
 
 [node name="PlayerSpawn" type="Node3D" parent="ControlBook"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.2, 8, -8)
@@ -99,36 +754,13 @@ transitionTime = 0.5
 settings = ExtResource("3_jnp5r")
 previousSettings = ExtResource("5_jmxg0")
 
-[node name="Path" type="Node3D" parent="."]
-
-[node name="MainPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.2, 2)
-curve = SubResource("Curve3D_eqptd")
-
-[node name="Visuals" type="Node3D" parent="."]
-
-[node name="EnvironmentLight" type="DirectionalLight3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-layers = 1024
-light_color = Color(0.803922, 0.803922, 1, 1)
-light_cull_mask = 2
-shadow_enabled = true
-
-[node name="CharacterLight" type="DirectionalLight3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-layers = 1024
-light_cull_mask = 64
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Visuals"]
-environment = SubResource("Environment_xk4ou")
-
-[node name="ViewportPreview" type="SubViewportContainer" parent="."]
+[node name="Viewport" type="SubViewportContainer" parent="."]
 layout_mode = 0
 offset_top = 1216.0
 offset_right = 2048.0
 offset_bottom = 2240.0
 
-[node name="MenuViewport" type="SubViewport" parent="ViewportPreview"]
+[node name="MenuViewport" type="SubViewport" parent="Viewport"]
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
@@ -138,10 +770,10 @@ positional_shadow_atlas_quad_0 = 0
 positional_shadow_atlas_quad_1 = 0
 positional_shadow_atlas_quad_2 = 0
 positional_shadow_atlas_quad_3 = 0
-size = Vector2i(2048, 1024)
+size = Vector2i(2000, 1000)
 render_target_update_mode = 4
 
-[node name="Base" type="Control" parent="ViewportPreview/MenuViewport"]
+[node name="Base" type="Control" parent="Viewport/MenuViewport"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -149,35 +781,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Cursor" type="Control" parent="ViewportPreview/MenuViewport/Base"]
-layout_mode = 1
-anchors_preset = 0
-offset_left = 1100.0
-offset_top = 400.0
-offset_right = 1100.0
-offset_bottom = 400.0
-
-[node name="Left" type="Sprite2D" parent="ViewportPreview/MenuViewport/Base/Cursor"]
-position = Vector2(40, 0)
-rotation = 1.5708
-scale = Vector2(2, 2)
-texture = ExtResource("9_yjhgu")
-offset = Vector2(32, 0)
-flip_h = true
-region_enabled = true
-region_rect = Rect2(0, 120, 60, 40)
-
-[node name="Right" type="Sprite2D" parent="ViewportPreview/MenuViewport/Base/Cursor"]
-position = Vector2(880, 0)
-rotation = -1.57079
-scale = Vector2(2, 2)
-texture = ExtResource("9_yjhgu")
-offset = Vector2(-32, 0)
-region_enabled = true
-region_rect = Rect2(0, 120, 60, 40)
-
-[node name="Options" type="Control" parent="ViewportPreview/MenuViewport/Base"]
-visible = false
+[node name="Options" type="Control" parent="Viewport/MenuViewport/Base"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -185,8 +789,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Options"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
+[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Options"]
+modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -199,7 +803,7 @@ offset_bottom = -124.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide"]
+[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -212,7 +816,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Options/RSide"]
+[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Options/RSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -226,7 +830,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="VideoLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+[node name="VideoLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -234,7 +838,7 @@ text = "option_video"
 vertical_alignment = 1
 uppercase = true
 
-[node name="AudioLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+[node name="AudioLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -242,7 +846,7 @@ text = "option_audio"
 vertical_alignment = 1
 uppercase = true
 
-[node name="LanguageLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+[node name="LanguageLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -250,7 +854,7 @@ text = "option_lang"
 vertical_alignment = 1
 uppercase = true
 
-[node name="ControlLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Options/RSide/Options"]
+[node name="ControlLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -258,110 +862,7 @@ text = "option_control"
 vertical_alignment = 1
 uppercase = true
 
-[node name="Controls" type="Control" parent="ViewportPreview/MenuViewport/Base"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Controls"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1024.0
-offset_top = 160.0
-offset_right = -174.0
-offset_bottom = -124.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Controls/RSide"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 81.0
-grow_horizontal = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 80
-text = "actions"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="ActionControls" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Controls/RSide"]
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -420.0
-offset_top = 150.0
-offset_right = 420.0
-offset_bottom = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ControlOption" type="Control" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls"]
-custom_minimum_size = Vector2(840, 128)
-layout_mode = 2
-
-[node name="ActionLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption"]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_left = 128.0
-offset_top = -4.0
-offset_right = 389.0
-offset_bottom = -4.0
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "jump"
-vertical_alignment = 1
-uppercase = true
-
-[node name="Input" type="Control" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption"]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -256.0
-offset_right = -64.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="ButtonSprite" type="TextureRect" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption/Input"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_66qrj")
-stretch_mode = 3
-
-[node name="InputLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Controls/RSide/ActionControls/ControlOption/Input"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(96, 64)
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 32
-text = "A"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="Video" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+[node name="Control" type="Control" parent="Viewport/MenuViewport/Base"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -370,8 +871,75 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Video"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
+[node name="PG1" type="Control" parent="Viewport/MenuViewport/Base/Control"]
+modulate = Color(0.6, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2048.0
+offset_top = 160.0
+offset_right = -24.0
+offset_bottom = -124.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1"]
+layout_mode = 1
+offset_left = 250.0
+offset_right = 595.0
+offset_bottom = 81.0
+theme_override_fonts/font = ExtResource("13_tx5t6")
+theme_override_font_sizes/font_size = 80
+text = "actions"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ActionControls" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Control/PG1"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -762.0
+offset_top = 140.0
+offset_right = 838.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Jump" parent="Viewport/MenuViewport/Base/Control/PG1/ActionControls" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputID = &"button_jump"
+
+[node name="Action" parent="Viewport/MenuViewport/Base/Control/PG1/ActionControls" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputID = &"button_action"
+
+[node name="SpeedBreak" parent="Viewport/MenuViewport/Base/Control/PG1/ActionControls" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputID = &"button_speedbreak"
+
+[node name="TimeBreak" parent="Viewport/MenuViewport/Base/Control/PG1/ActionControls" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputID = &"button_timebreak"
+
+[node name="Pause" parent="Viewport/MenuViewport/Base/Control/PG1/ActionControls" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+
+[node name="Video" type="Control" parent="Viewport/MenuViewport/Base"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="Viewport/MenuViewport/Base/Video"]
+modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -381,7 +949,7 @@ offset_right = 1024.0
 offset_bottom = 160.0
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/LSide"]
+[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Video/LSide"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -394,7 +962,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Video/LSide"]
+[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Video/LSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -408,7 +976,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="VsyncLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/LSide/Options"]
+[node name="VsyncLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -416,7 +984,7 @@ text = "option_vsync"
 vertical_alignment = 1
 uppercase = true
 
-[node name="ResolutionLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/LSide/Options"]
+[node name="ResolutionLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -424,8 +992,8 @@ text = "option_resolution"
 vertical_alignment = 1
 uppercase = true
 
-[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Video"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
+[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Video"]
+modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -438,7 +1006,7 @@ offset_bottom = -124.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Video/RSide"]
+[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Video/RSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -452,7 +1020,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="VsyncLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/RSide/Options"]
+[node name="VsyncLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -461,7 +1029,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="ResolutionLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Video/RSide/Options"]
+[node name="ResolutionLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -470,7 +1038,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="Audio" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+[node name="Audio" type="Control" parent="Viewport/MenuViewport/Base"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -479,8 +1047,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Audio"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
+[node name="LSide" type="Control" parent="Viewport/MenuViewport/Base/Audio"]
+modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -490,7 +1058,7 @@ offset_right = 1024.0
 offset_bottom = 160.0
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide"]
+[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -503,7 +1071,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Audio/LSide"]
+[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Audio/LSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -517,7 +1085,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="MainLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+[node name="MainLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -525,7 +1093,7 @@ text = "option_main_vol"
 vertical_alignment = 1
 uppercase = true
 
-[node name="BGMLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+[node name="BGMLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -533,7 +1101,7 @@ text = "option_bgm_vol"
 vertical_alignment = 1
 uppercase = true
 
-[node name="SFXLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+[node name="SFXLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -541,7 +1109,7 @@ text = "option_sfx_vol"
 vertical_alignment = 1
 uppercase = true
 
-[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/LSide/Options"]
+[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -549,8 +1117,8 @@ text = "option_voice_vol"
 vertical_alignment = 1
 uppercase = true
 
-[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Audio"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
+[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Audio"]
+modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -563,7 +1131,7 @@ offset_bottom = -124.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Audio/RSide"]
+[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Audio/RSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -577,7 +1145,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="MainLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+[node name="MainLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -586,7 +1154,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="MusicLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+[node name="MusicLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -595,7 +1163,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="SFXLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+[node name="SFXLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -604,7 +1172,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Audio/RSide/Options"]
+[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -613,7 +1181,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="Language" type="Control" parent="ViewportPreview/MenuViewport/Base"]
+[node name="Language" type="Control" parent="Viewport/MenuViewport/Base"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -622,8 +1190,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Language"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
+[node name="LSide" type="Control" parent="Viewport/MenuViewport/Base/Language"]
+modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -633,7 +1201,7 @@ offset_right = 1024.0
 offset_bottom = 160.0
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide"]
+[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -646,7 +1214,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Language/LSide"]
+[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Language/LSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -660,7 +1228,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="UseSubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide/Options"]
+[node name="UseSubtitleLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -668,7 +1236,7 @@ text = "option_sub_toggle"
 vertical_alignment = 1
 uppercase = true
 
-[node name="SubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide/Options"]
+[node name="SubtitleLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -676,7 +1244,7 @@ text = "option_sub_lang"
 vertical_alignment = 1
 uppercase = true
 
-[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/LSide/Options"]
+[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -684,8 +1252,8 @@ text = "option_voice_lang"
 vertical_alignment = 1
 uppercase = true
 
-[node name="RSide" type="Control" parent="ViewportPreview/MenuViewport/Base/Language"]
-modulate = Color(0.705882, 0.0705882, 0, 1)
+[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Language"]
+modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -698,7 +1266,7 @@ offset_bottom = -124.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="ViewportPreview/MenuViewport/Base/Language/RSide"]
+[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Language/RSide"]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -712,7 +1280,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="UseSubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/RSide/Options"]
+[node name="UseSubtitleLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -721,7 +1289,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="SubtitleLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/RSide/Options"]
+[node name="SubtitleLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -730,7 +1298,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="VoiceLabel" type="Label" parent="ViewportPreview/MenuViewport/Base/Language/RSide/Options"]
+[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/RSide/Options"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("13_tx5t6")
 theme_override_font_sizes/font_size = 64
@@ -738,3 +1306,38 @@ text = "lang_en"
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
+
+[node name="Cursor" type="NinePatchRect" parent="Viewport/MenuViewport/Base"]
+material = SubResource("CanvasItemMaterial_eqdc5")
+layout_mode = 0
+offset_left = 1024.0
+offset_top = 316.0
+offset_right = 2048.0
+offset_bottom = 380.0
+texture = ExtResource("9_yjhgu")
+region_rect = Rect2(136, 96, 120, 16)
+patch_margin_left = 24
+patch_margin_right = 24
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Viewport/MenuViewport/Base/Cursor"]
+libraries = {
+"": SubResource("AnimationLibrary_oqwnn")
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_6r0td")
+}
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("18_fr2tm")
+bus = &"BGM"
+script = ExtResource("19_agawd")
+loopStartPosition = 30.264
+loopEndPosition = 95.0
+
+[editable path="ControlBook/Collision"]
+[editable path="ControlBook/ControlBook"]
+[editable path="ControlBook/ControlBook/BookRoot/Page1"]
+[editable path="ControlBook/ControlBook/BookRoot/Page2"]
+[editable path="ControlBook/ControlBook/BookRoot/Page3"]

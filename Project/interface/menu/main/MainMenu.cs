@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Interface.Menus
 {
@@ -30,6 +31,8 @@ namespace Project.Interface.Menus
 			currentSelection = menuMemory[MemoryKeys.MainMenu];
 			HorizontalSelection = currentSelection % 2;
 			VerticalSelection = currentSelection / 2;
+
+			isProcessing = menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.MainMenu;
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -59,7 +62,7 @@ namespace Project.Interface.Menus
 		protected override void Confirm()
 		{
 			//Ignore unimplemented menus.
-			if (currentSelection != 0) return;
+			if (currentSelection == 1 || currentSelection == 2) return;
 			animator.Play("confirm");
 		}
 		protected override void Cancel() => animator.Play("cancel");
@@ -68,6 +71,17 @@ namespace Project.Interface.Menus
 		{
 			if (currentSelection == 0)
 				_submenus[currentSelection].ShowMenu();
+			else if (currentSelection == 3)
+			{
+				FadeBGM(.5f);
+				menuMemory[MemoryKeys.MainMenu] = currentSelection;
+				TransitionManager.QueueSceneChange("res://interface/menu/options/Options.tscn");
+				TransitionManager.StartTransition(new()
+				{
+					color = Colors.Black,
+					inSpeed = .5f,
+				});
+			}
 		}
 
 		public void AnimateSelection() => animator.Play($"select-{currentSelection}");

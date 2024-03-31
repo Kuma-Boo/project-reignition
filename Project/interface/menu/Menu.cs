@@ -20,6 +20,8 @@ namespace Project.Interface.Menus
 
 			SpecialBook,
 
+			Options,
+
 			ActiveMenu,
 			Max
 		}
