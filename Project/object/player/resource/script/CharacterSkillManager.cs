@@ -31,9 +31,6 @@ namespace Project.Gameplay
 		private MovementResource groundSettings; // Default ground settings
 
 		[Export]
-		public MovementResource strafeSettings; // Strafe settings used during strafe sections
-
-		[Export]
 		private MovementResource airSettings; // Default air settings
 		[Export]
 		public float accelerationJumpSpeed;
@@ -241,7 +238,6 @@ namespace Project.Gameplay
 				else
 				{
 					Character.MoveSpeed = 0;
-					Character.StrafeSpeed = 0;
 					Character.Camera.StartCrossfade(); // Crossfade the screen briefly
 				}
 
@@ -300,6 +296,7 @@ namespace Project.Gameplay
 
 			if (IsSpeedBreakActive)
 			{
+				Character.MovementAngle = Character.PathFollower.ForwardAngle;
 				Character.Effect.PlayVoice("speed break");
 				Character.CollisionMask = Runtime.Instance.environmentMask; //Don't collide with any objects
 				Character.Animator.SpeedBreak();

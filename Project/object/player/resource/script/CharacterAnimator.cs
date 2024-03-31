@@ -175,7 +175,6 @@ namespace Project.Gameplay
 		{
 			Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
 
-			//TODO Speed break animation
 			if (Character.Skills.IsSpeedBreakCharging) return;
 
 			float idleBlend = (float)animationTree.Get(IDLE_BLEND_PARAMETER);
@@ -194,11 +193,7 @@ namespace Project.Gameplay
 
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
 				speedRatio < .5f)
-			{
-				//Calculate true movespeed
-				float trueSpeed = new Vector2(Character.MoveSpeed, Character.StrafeSpeed).Length();
-				speedRatio = Character.GroundSettings.GetSpeedRatio(trueSpeed);
-			}
+				speedRatio = Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed);
 
 			if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 			{
@@ -274,14 +269,13 @@ namespace Project.Gameplay
 		private const float TURN_SMOOTHING = .1f;
 		/// <summary> Max amount of turning allowed. </summary>
 		private readonly float MAX_TURN_ANGLE = Mathf.Pi * .4f;
+		/// <summary> How much to visually lean into turns. </summary>
+		private readonly float PATH_TURN_STRENGTH = 15.0f;
 		/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
 		public float CalculateTurnRatio()
 		{
-			if (Character.Skills.IsSpeedBreakActive) //Use strafe/movespeed
-				return Character.Skills.strafeSettings.GetSpeedRatio(Character.StrafeSpeed * 1.5f);
-
 			float referenceAngle = Character.IsMovingBackward ? Character.PathFollower.ForwardAngle : Character.MovementAngle;
-			float inputAngle = Character.GetInputAngle();
+			float inputAngle = Character.GetInputAngle() + Character.PathFollower.DeltaAngle * PATH_TURN_STRENGTH;
 			float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
 
 			if (ExtensionMethods.DotAngle(referenceAngle, inputAngle) < 0) //Input is backwards
@@ -449,21 +443,11 @@ namespace Project.Gameplay
 				targetRotation = ExtensionMethods.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
 			else if (Character.IsMovingBackward) // Backstepping
 				targetRotation = Character.PathFollower.ForwardAngle + groundTurnRatio * Mathf.Pi * .15f;
-			else if (Character.IsLockoutActive)
-			{
-				if (Character.ActiveLockoutData.recenterPlayer)
-					targetRotation = Character.PathFollower.ForwardAngle;
-				else if (Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
-				{
-					if (Mathf.IsZeroApprox(Character.MoveSpeed)) return;
-					float angle = Vector2.Down.AngleTo(new Vector2(Character.StrafeSpeed, Character.MoveSpeed));
-					float ratio = Mathf.Clamp(1.0f - Character.Skills.GroundSettings.GetSpeedRatioClamped(Character.MoveSpeed), 0, 1);
-					if (!Character.IsOnGround)
-						ratio = 1;
+			else if (Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer)
+				targetRotation = Character.PathFollower.ForwardAngle;
 
-					targetRotation += angle * ratio;
-				}
-			}
+			if (Character.Skills.IsSpeedBreakActive && Character.MovementState != CharacterController.MovementStates.External)
+				VisualAngle += Character.PathFollower.DeltaAngle;
 
 			VisualAngle = ExtensionMethods.ClampAngleRange(VisualAngle, Character.PathFollower.ForwardAngle, Mathf.Pi);
 			VisualAngle = ExtensionMethods.SmoothDampAngle(VisualAngle, targetRotation, ref rotationVelocity, MOVEMENT_ROTATION_SMOOTHING);

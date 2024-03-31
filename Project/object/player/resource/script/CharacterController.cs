@@ -197,12 +197,7 @@ namespace Project.Gameplay
 		{
 			float targetAngle = GetInputAngle();
 			if (InputVector.IsZeroApprox())
-			{
-				targetAngle = PathFollower.ForwardAngle + PathFollower.DeltaAngle;
-
-				if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting)
-					targetAngle -= PathFollower.DeltaAngle * 1.8f;
-			}
+				targetAngle = PathFollower.ForwardAngle + PathFollower.DeltaAngle * .5f;
 			else if (IsHoldingDirection(PathFollower.BackAngle))
 				targetAngle = ExtensionMethods.ReflectAngle(targetAngle, PathFollower.ForwardAngle);
 
@@ -1436,8 +1431,6 @@ namespace Project.Gameplay
 
 		/// <summary> Character's primary movement speed. </summary>
 		public float MoveSpeed { get; set; }
-		/// <summary> Used during speed break, etc. </summary>
-		public float StrafeSpeed { get; set; }
 		/// <summary> Used for jumping and falling. </summary>
 		public float VerticalSpeed { get; set; }
 		/// <summary> Resets all speed values to zero. </summary>
