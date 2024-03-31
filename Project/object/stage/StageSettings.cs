@@ -516,19 +516,25 @@ namespace Project.Gameplay
 
 		/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
 		public NodePath completionDemoAnimator;
-		public void StartCompletionDemo()
+		private AnimationPlayer completionAnimator;
+		private void StartCompletionDemo()
 		{
 			EmitSignal(SignalName.LevelDemoStarted);
 
-			AnimationPlayer completionAnimator = GetNodeOrNull<AnimationPlayer>(completionDemoAnimator);
+			completionAnimator = GetNodeOrNull<AnimationPlayer>(completionDemoAnimator);
 			if (completionAnimator == null) return;
 
 			OnCameraDemoAdvance();
 			completionAnimator.Play("demo1");
 		}
 
-		/// <summary> Completion demo advanced, play a crossfade </summary>
-		public void OnCameraDemoAdvance() => CharacterController.instance.Camera.StartCrossfade();
+		/// <summary> Completion demo advanced, play a crossfade. </summary>
+		public void OnCameraDemoAdvance()
+		{
+			completionAnimator.Play(completionAnimator.AnimationGetNext(completionAnimator.CurrentAnimation));
+			CharacterController.instance.Camera.StartCrossfade();
+		}
+
 		#endregion
 
 		#region Object Spawning
