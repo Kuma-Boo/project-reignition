@@ -159,9 +159,6 @@ namespace Project.Gameplay
 		/// </summary>
 		private float GetTargetMovementAngle()
 		{
-			if (Skills.IsSpeedBreakActive)
-				return GetStrafeAngle();
-
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
 				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
@@ -187,6 +184,9 @@ namespace Project.Gameplay
 
 				return targetAngle;
 			}
+
+			if (Skills.IsSpeedBreakActive)
+				return GetStrafeAngle();
 
 			float inputAngle = GetInputAngle();
 			return inputAngle;

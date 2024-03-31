@@ -168,8 +168,11 @@ namespace Project.Gameplay
 
 		public void SpeedBreak()
 		{
+			animationTree.Set(FORWARD_SEEK_PARAMETER, .5f);
 			animationTree.Set(SPEEDBREAK_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			animationTree.Set(LAND_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
+
 
 		private void GroundAnimations()
 		{
@@ -320,7 +323,11 @@ namespace Project.Gameplay
 
 
 		private readonly StringName BACKFLIP_TRIGGER = "parameters/air_tree/backflip_trigger/request";
-		public void BackflipAnimation() => animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		public void BackflipAnimation()
+		{
+			animationTree.Set(AIR_STATE_TRANSITION, FALL_STATE_PARAMETER);
+			animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		}
 
 
 		private readonly StringName BOUNCE_TRANSITION = "parameters/air_tree/bounce_transition/transition_request";
