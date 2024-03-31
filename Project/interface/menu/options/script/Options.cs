@@ -9,6 +9,9 @@ namespace Project.Interface.Menus
 		public ShaderMaterial menuOverlay;
 		[Export]
 		public SubViewport menuViewport;
+		[Export]
+		public Control cursor;
+
 		private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
 		public static readonly StringName MENU_PARAMETER = "menu_texture";
 
@@ -36,15 +39,13 @@ namespace Project.Interface.Menus
 				RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
 		}
 
-		public void ApplyTexture()
-		{
-			menuOverlay.SetShaderParameter(MENU_PARAMETER, menuViewport.GetTexture());
-		}
 
+		public void ApplyTexture() => menuOverlay.SetShaderParameter(MENU_PARAMETER, menuViewport.GetTexture());
 
 
 		protected override void ProcessMenu()
 		{
+			UpdateCursor();
 			if (Input.IsActionJustPressed("button_pause"))
 				Select();
 			else
@@ -59,6 +60,7 @@ namespace Project.Interface.Menus
 				case Submenus.Options:
 					currentSubmenu = (Submenus)VerticalSelection + 1;
 					animator.Play("flip-left");
+					VerticalSelection = 0;
 					break;
 			}
 		}
@@ -72,7 +74,7 @@ namespace Project.Interface.Menus
 					DisableProcessing();
 					FadeBGM(.5f);
 					menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
-					TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
+					TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(SaveManager.Instance, SaveManager.MethodName.SaveConfig), (uint)ConnectFlags.OneShot);
 					TransitionManager.QueueSceneChange(TransitionManager.MENU_SCENE_PATH);
 					TransitionManager.StartTransition(new()
 					{
@@ -81,16 +83,11 @@ namespace Project.Interface.Menus
 					});
 					break;
 				default:
+					VerticalSelection = (int)currentSubmenu - 1;
 					currentSubmenu = Submenus.Options;
 					animator.Play("flip-right");
 					break;
 			}
-		}
-
-
-		private void TransitionFinished()
-		{
-			SaveManager.Instance.SaveConfig();
 		}
 
 
@@ -110,15 +107,19 @@ namespace Project.Interface.Menus
 			if (currentSubmenu == Submenus.Options)
 				VerticalSelection = WrapSelection(VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down")), 4);
 
-			//animator.Play("select");
-			//animator.Seek(0, true);
+			animator.Play("select");
+			animator.Seek(0, true);
 			StartSelectionTimer();
 		}
+
+
+		private void UpdateCursor() => cursor.Position = new(0, 300 + VerticalSelection * 96);
 
 
 		/// <summary> Changes the visible submenu. Called from the page flip animation. </summary>
 		private void UpdateSubmenuVisibility()
 		{
+			UpdateCursor();
 			animator.Play(currentSubmenu.ToString().ToLower());
 		}
 	}
