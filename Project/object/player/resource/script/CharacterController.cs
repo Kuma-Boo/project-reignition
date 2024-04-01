@@ -578,6 +578,7 @@ namespace Project.Gameplay
 					MoveSpeed = 0;
 			}
 
+
 			if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * 1.08f; // Random number that seems pretty accurate.
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
@@ -1745,11 +1746,8 @@ namespace Project.Gameplay
 		public float MovementAngle { get; set; }
 		public Vector3 GetMovementDirection()
 		{
-			Vector3 pathFollowerForward = PathFollower.Back().Rotated(UpDirection, PathFollower.DeltaAngle);
-
-			//Tilted ground fix
-			float fixAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-			return PathFollower.Back().Rotated(UpDirection, fixAngle);
+			float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
+			return PathFollower.Back().Rotated(UpDirection, deltaAngle);
 		}
 
 		#region Signals

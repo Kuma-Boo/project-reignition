@@ -42,7 +42,7 @@ namespace Project.Gameplay.Objects
 
 			if (Character.MovementState != CharacterController.MovementStates.External) //Add lockout if not in automation
 			{
-				LockoutResource lockout = new LockoutResource()
+				LockoutResource lockout = new()
 				{
 					movementMode = LockoutResource.MovementModes.Replace,
 					spaceMode = LockoutResource.SpaceModes.Local,
