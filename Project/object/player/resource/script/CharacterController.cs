@@ -199,7 +199,7 @@ namespace Project.Gameplay
 			if (InputVector.IsZeroApprox())
 				targetAngle = PathFollower.ForwardAngle + PathFollower.DeltaAngle * .5f;
 			else if (IsHoldingDirection(PathFollower.BackAngle))
-				targetAngle = ExtensionMethods.ReflectAngle(targetAngle, PathFollower.ForwardAngle);
+				targetAngle = ExtensionMethods.ReflectAngle(targetAngle, PathFollower.ForwardAngle + PathFollower.DeltaAngle * .5f);
 
 			return targetAngle;
 		}
@@ -578,10 +578,9 @@ namespace Project.Gameplay
 					MoveSpeed = 0;
 			}
 
-
-			if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting
-				MovementAngle += PathFollower.DeltaAngle * 1.08f; // Random number that seems pretty accurate.
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
+			if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting
+				MovementAngle += PathFollower.DeltaAngle * 1.1f; // Random number that seems to work well
 
 			// Strafe implementation
 			if (Skills.IsSpeedBreakActive ||
@@ -1243,7 +1242,6 @@ namespace Project.Gameplay
 			IsDefeated = false;
 			IsMovingBackward = false;
 			ResetVelocity();
-			ResetOrientation();
 
 			Camera.Respawn();
 
@@ -1256,6 +1254,8 @@ namespace Project.Gameplay
 		/// </summary>
 		private void FinishRespawn()
 		{
+			ResetOrientation();
+
 			SnapToGround();
 			areaTrigger.Disabled = false;
 
