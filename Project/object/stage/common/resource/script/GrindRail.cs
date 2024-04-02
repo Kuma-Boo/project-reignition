@@ -150,10 +150,6 @@ namespace Project.Gameplay
 			if (Character.MovementState != CharacterController.MovementStates.Normal) return; // Character is busy
 			if (Character.VerticalSpeed > 0f) return; // Player must be falling to start grinding!
 
-			// Cancel any active homing attack
-			if (Character.Lockon.IsHomingAttacking)
-				Character.Lockon.StopHomingAttack();
-
 			// Sync rail pathfollower
 			Vector3 delta = rail.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - rail.GlobalPosition);
 			pathFollower.Progress = rail.Curve.GetClosestOffset(delta);
@@ -162,9 +158,20 @@ namespace Project.Gameplay
 			if (CheckWall(Skills.grindSettings.speed * PhysicsManager.physicsDelta)) return;
 
 			delta = pathFollower.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - pathFollower.GlobalPosition);
-			if (Mathf.Abs(delta.X) < GRIND_RAIL_SNAPPING ||
-				(Character.ActionState == CharacterController.ActionStates.Grindstep && Mathf.Abs(delta.X) < GRINDSTEP_RAIL_SNAPPING)) // Start grinding
-				Activate();
+			delta.Y -= Character.VerticalSpeed * PhysicsManager.physicsDelta;
+			if (!Character.JustLandedOnGround && delta.Y < 0)
+				return;
+
+			// Horizontal validation
+			if (Mathf.Abs(delta.X) > GRIND_RAIL_SNAPPING &&
+				!(Character.ActionState == CharacterController.ActionStates.Grindstep && Mathf.Abs(delta.X) > GRINDSTEP_RAIL_SNAPPING))
+				return;
+
+
+			if (Character.Lockon.IsHomingAttacking) // Cancel any active homing attack
+				Character.Lockon.StopHomingAttack();
+
+			Activate(); // Start grinding
 		}
 
 
