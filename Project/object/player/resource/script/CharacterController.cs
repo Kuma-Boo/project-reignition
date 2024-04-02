@@ -1498,7 +1498,7 @@ namespace Project.Gameplay
 			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - COLLISION_PADDING);
 			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 			{
-				castOffset = castOffset.Rotated(this.Down(), interval).Normalized() * CollisionRadius;
+				castOffset = castOffset.Rotated(this.Down(), interval);
 				RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
 				DebugManager.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
 				if (ValidateGroundCast(ref hit))
