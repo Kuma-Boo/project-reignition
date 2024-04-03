@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="3_wydbw"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/sprite atlas.png" id="4_63n04"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/ring.png" id="7_ggxti"]
-[ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/soul gauge/Background.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/soul gauge/gradient.png" id="8"]
 [ext_resource type="Material" uid="uid://duq3egwjfpmil" path="res://interface/gameplay/hud/soul gauge/Soul Gauge Fill.tres" id="8_t3t32"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
 [ext_resource type="Texture2D" uid="uid://bypa7d6a6vjnr" path="res://interface/gameplay/hud/soul gauge/fill dimensions.png" id="9_i8ml4"]
@@ -859,7 +859,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SoulGauge/Background/Fill:material:shader_parameter/albedo")
+tracks/0/path = NodePath("SoulGauge/Gradient/Fill:material:shader_parameter/albedo")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -871,7 +871,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:material:shader_parameter/albedo")
+tracks/1/path = NodePath("SoulGauge/Gradient/Fill/Surface:material:shader_parameter/albedo")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -912,7 +912,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SoulGauge/Background/Fill:material:shader_parameter/albedo")
+tracks/0/path = NodePath("SoulGauge/Gradient/Fill:material:shader_parameter/albedo")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -924,7 +924,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SoulGauge/Background/Fill/Surface:material:shader_parameter/albedo")
+tracks/1/path = NodePath("SoulGauge/Gradient/Fill/Surface:material:shader_parameter/albedo")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1098,8 +1098,8 @@ objectiveValue = NodePath("Objectives/Value")
 objectiveMaxValue = NodePath("Objectives/MaxValue")
 soulGauge = NodePath("SoulGauge/SoulGauge")
 soulGaugeRoot = NodePath("SoulGauge")
-soulGaugeFill = NodePath("SoulGauge/SoulGauge/Background/Fill")
-soulGaugeBackground = NodePath("SoulGauge/SoulGauge/Background")
+soulGaugeFill = NodePath("SoulGauge/SoulGauge/Gradient/Fill")
+soulGaugeBackground = NodePath("SoulGauge/SoulGauge/Gradient")
 soulGaugeAnimator = NodePath("SoulGauge/AnimationPlayer")
 metadata/_edit_lock_ = true
 
@@ -1451,7 +1451,7 @@ texture = ExtResource("4_63n04")
 region_enabled = true
 region_rect = Rect2(120, 8, 72, 72)
 
-[node name="Background" type="TextureRect" parent="SoulGauge/SoulGauge"]
+[node name="Gradient" type="TextureRect" parent="SoulGauge/SoulGauge"]
 show_behind_parent = true
 clip_contents = true
 layout_mode = 1
@@ -1466,7 +1466,7 @@ offset_bottom = -48.16
 texture = ExtResource("8")
 expand_mode = 1
 
-[node name="Fill" type="TextureRect" parent="SoulGauge/SoulGauge/Background"]
+[node name="Fill" type="TextureRect" parent="SoulGauge/SoulGauge/Gradient"]
 material = ExtResource("8_t3t32")
 layout_mode = 1
 anchors_preset = 15
@@ -1482,7 +1482,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("9_i8ml4")
 stretch_mode = 1
 
-[node name="Surface" type="TextureRect" parent="SoulGauge/SoulGauge/Background/Fill"]
+[node name="Surface" type="TextureRect" parent="SoulGauge/SoulGauge/Gradient/Fill"]
 material = ExtResource("10_k6fym")
 layout_mode = 1
 anchors_preset = 10
