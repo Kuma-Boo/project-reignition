@@ -53,7 +53,7 @@
 [ext_resource type="Curve3D" uid="uid://df74bepf0633f" path="res://area/6 skeleton dome/act 1/environment/path/InteriorPath.tres" id="23_gd5mj"]
 [ext_resource type="Curve3D" uid="uid://clk4yjdi5rfn5" path="res://area/6 skeleton dome/act 1/environment/path/CavernSidePath.tres" id="26_fl6rx"]
 [ext_resource type="PackedScene" uid="uid://f70owqcwad3i" path="res://area/6 skeleton dome/act 1/environment/05CavernB.tscn" id="29_puvoi"]
-[ext_resource type="Curve3D" uid="uid://cr17iglvpmagl" path="res://area/6 skeleton dome/act 1/environment/path/CavernBPath.tres" id="37_1a8ni"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/CavernBPath.tres" id="37_1a8ni"]
 [ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/AutomationPath.tres" id="40_ih587"]
 [ext_resource type="PackedScene" uid="uid://0q5cfpfqkhek" path="res://area/6 skeleton dome/data/skybox/Skybox.tscn" id="41_pilw5"]
 [ext_resource type="Environment" uid="uid://kx3kct81htga" path="res://area/6 skeleton dome/data/Environment.tres" id="50_cio3r"]
@@ -134,6 +134,7 @@ Static/Environment = NodePath("WorldEnvironment")
 visible = false
 
 [node name="Trigger" type="Node3D" parent="."]
+visible = false
 
 [node name="Object" type="Node3D" parent="Trigger"]
 
@@ -257,7 +258,6 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -15.8661, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/OpeningUpper"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("14_1l7dq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/OpeningUpper"]
@@ -272,7 +272,6 @@ transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/FieldBrawl"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("14_jrk5s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FieldBrawl"]
@@ -287,7 +286,6 @@ transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -11.0397, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Field"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("2_g7phu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Field"]
@@ -303,7 +301,6 @@ transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/FieldUpper"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("16_u35fa")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FieldUpper"]
@@ -325,7 +322,6 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 217.33
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Cavern"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("19_4sy55")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Cavern"]
@@ -341,7 +337,6 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 382.33
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 3)
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("20_0vw1s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CavernExit"]
@@ -357,7 +352,6 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 434.33
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -159.75, 40, 2.3)
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("2_g7phu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Interior"]
@@ -373,7 +367,6 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 405.33
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -159.75, 40, 2.3)
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("2_g7phu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Interior2"]
@@ -389,22 +382,34 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 588.33
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -159.75, 40, 2.3)
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("14_jrk5s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/InteriorBrawl"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 shape = SubResource("BoxShape3D_1fxnk")
 
-[node name="Spiral" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
+[node name="SpiralEntrance" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
 transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 697.334, 20.0002, -1129.85)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralEntrance"]
+script = ExtResource("8_ka6po")
+transitionTime = 0.5
+settings = ExtResource("2_g7phu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralEntrance"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
+shape = SubResource("BoxShape3D_1fxnk")
+
+[node name="Spiral" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 779.834, 20.0002, -1264.15)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Spiral"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("19_lv64g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Spiral"]
@@ -419,7 +424,6 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 855.33
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralEnd"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("20_l0r8l")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralEnd"]
@@ -434,7 +438,6 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 884.33
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Halls"]
 script = ExtResource("8_ka6po")
 transitionTime = 0.5
-deactivationTransitionTime = 0.5
 settings = ExtResource("2_g7phu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Halls"]
@@ -920,6 +923,7 @@ light_cull_mask = 4293918785
 directional_shadow_blend_splits = true
 
 [node name="Path" type="Node3D" parent="."]
+visible = false
 
 [node name="ExteriorPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.91, 0, 67.139)
