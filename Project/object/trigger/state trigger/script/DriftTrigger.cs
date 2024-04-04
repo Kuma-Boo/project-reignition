@@ -168,9 +168,6 @@ namespace Project.Gameplay.Triggers
 				{
 					driftResult = DriftResults.SUCCESS;
 					driftAnimationTimer = LAUNCH_ANIMATION_LENGTH;
-
-					Character.Animator.LaunchDrift();
-					Character.AddLockoutData(lockout); //Apply lockout
 				}
 				else // Too early! Fail drift attempt and play a special animation
 				{
@@ -204,6 +201,10 @@ namespace Project.Gameplay.Triggers
 			{
 				Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
 				Character.MovementAngle -= Mathf.Pi * .1f * Character.InputVector.X;
+
+				Character.AddLockoutData(lockout); //Apply lockout
+
+				Character.Animator.LaunchDrift();
 				Character.Animator.ExternalAngle = Character.MovementAngle;
 			}
 

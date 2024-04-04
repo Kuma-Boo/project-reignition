@@ -579,7 +579,7 @@ namespace Project.Gameplay
 			}
 
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
-			if (Camera.ActiveSettings.followPathTilt) // Only do this when camera is tilting
+			if (Camera.ActiveSettings.followPathTilt && !IsLockoutActive) // Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * 1.1f; // Random number that seems to work well
 
 			// Strafe implementation
