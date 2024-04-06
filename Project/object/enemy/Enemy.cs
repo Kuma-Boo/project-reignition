@@ -14,9 +14,9 @@ namespace Project.Gameplay
 		protected SpawnModes spawnMode;
 		protected enum SpawnModes
 		{
-			Range, //Use Range trigger
-			Signal, //External Signal
-			Always, //Always spawned
+			Range, // Use Range trigger
+			Signal, // External Signal
+			Always, // Always spawned
 		}
 
 		[Export(PropertyHint.Range, "-1, 100")]
@@ -29,17 +29,17 @@ namespace Project.Gameplay
 		protected int maxHealth = 1;
 		protected int currentHealth;
 		[Export]
-		protected bool damagePlayer; //Does this enemy hurt the player on touch?
+		protected bool damagePlayer; // Does this enemy hurt the player on touch?
 
 		[ExportGroup("Components")]
 		[Export]
 		protected Node3D root;
 		[Export]
-		protected CollisionShape3D collider; //Environmental collider. Disabled when defeated (For death animations, etc)
+		protected CollisionShape3D collider; // Environmental collider. Disabled when defeated (For death animations, etc)
 		[Export]
-		protected Area3D hurtbox; //Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
+		protected Area3D hurtbox; // Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
 		[Export]
-		protected CollisionShape3D rangeCollider; //Range trigger
+		protected CollisionShape3D rangeCollider; // Range trigger
 		[Export]
 		/// <summary> Animation tree for enemy character. </summary>
 		protected AnimationTree animationTree;
@@ -62,9 +62,9 @@ namespace Project.Gameplay
 
 			if (rangeCollider != null && rangeOverride != -1)
 			{
-				if (rangeOverride == 0) //Disable
+				if (rangeOverride == 0) // Disable
 					rangeCollider.Disabled = true;
-				else //Resize
+				else // Resize range trigger
 				{
 					rangeCollider.Shape = new CylinderShape3D()
 					{
@@ -88,7 +88,7 @@ namespace Project.Gameplay
 		public virtual void Unload() => QueueFree();
 		public virtual void Respawn()
 		{
-			IsActive = false; //Start disabled
+			IsActive = false; // Start disabled
 
 			SpawnData.Respawn(this);
 			currentHealth = maxHealth;
@@ -111,9 +111,9 @@ namespace Project.Gameplay
 		public virtual void TakeDamage()
 		{
 			if (Character.Lockon.IsPerfectHomingAttack)
-				currentHealth -= 2; //float damage
+				currentHealth -= 2; // float damage
 			else
-				currentHealth--; //TODO increase player attack based on skills?
+				currentHealth--; // TODO increase player attack based on skills?
 
 			if (IsDefeated)
 				Defeat();
@@ -136,21 +136,18 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Spawns pearls. Call this somewhere in Defeat(), or from an AnimationPlayer.
 		/// </summary>
-		protected virtual void SpawnPearls()
-		{
-			Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
-		}
+		protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 		protected bool IsHitboxEnabled { get; private set; }
 		protected void SetHitboxStatus(bool isEnabled)
 		{
 			IsHitboxEnabled = isEnabled;
 
-			//Update environment collider
+			// Update environment collider
 			if (collider != null)
 				collider.Disabled = !IsHitboxEnabled;
 
-			//Update hurtbox
+			// Update hurtbox
 			if (hurtbox != null)
 				hurtbox.Monitorable = hurtbox.Monitoring = IsHitboxEnabled;
 		}
@@ -162,16 +159,16 @@ namespace Project.Gameplay
 		protected virtual void EnterRange() { }
 		protected virtual void ExitRange() { }
 
-		//True when colliding with the player
+		// True when colliding with the player
 		protected bool IsInteracting => interactionCounter != 0;
 		protected int interactionCounter;
 		protected virtual void UpdateInteraction()
 		{
 			if (Character.Lockon.IsBouncingLockoutActive || !IsHitboxEnabled) return;
 
-			if (Character.Skills.IsSpeedBreakActive) //For now, speed break kills enemies instantly
+			if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
 				Defeat();
-			else if (Character.MovementState == CharacterController.MovementStates.Launcher) //Launcher kills enemies instantly
+			else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
 				Defeat();
 			else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
@@ -192,7 +189,7 @@ namespace Project.Gameplay
 		protected void TrackPlayer()
 		{
 			float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
-			targetRotation -= GlobalRotation.Y; //Rotation is in local space
+			targetRotation -= GlobalRotation.Y; // Rotation is in local space
 			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TRACKING_SMOOTHING);
 		}
 
