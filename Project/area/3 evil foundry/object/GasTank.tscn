@@ -1,7 +1,734 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdxneanubmcid"]
+[gd_scene load_steps=47 format=3 uid="uid://bdxneanubmcid"]
 
+[ext_resource type="Script" path="res://area/3 evil foundry/data/script/GasTank.cs" id="1_35lqu"]
 [ext_resource type="PackedScene" uid="uid://ba5wjjvaj72bi" path="res://area/3 evil foundry/object/model/GasTank.gltf" id="1_ygu6i"]
+[ext_resource type="AudioStream" uid="uid://c0ydr1y6r2csf" path="res://sound/sfx/stage/evil foundry/gas tank strike.wav" id="3_pmf55"]
+[ext_resource type="AudioStream" uid="uid://cfm8o0cc0jghj" path="res://sound/sfx/stage/evil foundry/gas tank explosion.wav" id="4_jqcuq"]
+[ext_resource type="Texture2D" uid="uid://b524sxb5d2gth" path="res://area/3 evil foundry/data/particle/texture/travel ember.png" id="5_nolqv"]
+[ext_resource type="Texture2D" uid="uid://blgftiehf5pku" path="res://area/3 evil foundry/data/particle/texture/travel flicker.png" id="6_6gcsu"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="7_hpvuk"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="8_nkggl"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="9_3ev21"]
+[ext_resource type="Texture2D" uid="uid://52piqyc1t31p" path="res://area/3 evil foundry/data/particle/texture/explosion.png" id="10_1xuab"]
 
-[node name="GasTank" type="Node3D"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_bme4n"]
+radius = 1.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_p2ke1"]
+radius = 4.0
+
+[sub_resource type="Curve" id="Curve_uucnd"]
+_data = [Vector2(0, 0), 0.0, 13.9529, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -16.4806, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_8y1co"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_uucnd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2p7ni"]
+emission_shape = 2
+emission_sphere_radius = 0.5
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 90.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.4
+alpha_curve = SubResource("CurveTexture_8y1co")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j6lyq"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("5_nolqv")
+texture_repeat = false
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_st8t0"]
+material = SubResource("StandardMaterial3D_j6lyq")
+
+[sub_resource type="Curve" id="Curve_ykgd8"]
+_data = [Vector2(0, 0), 0.0, 13.1693, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0898733, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_d66x1"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_ykgd8")
+
+[sub_resource type="Curve" id="Curve_sw173"]
+_data = [Vector2(0, 0), 0.0, 2.0328, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_g80f6"]
+width = 64
+curve = SubResource("Curve_sw173")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_byw7y"]
+lifetime_randomness = 0.15
+emission_shape = 2
+emission_sphere_radius = 0.5
+angle_max = 360.0
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_g80f6")
+color = Color(1, 1, 1, 0.392157)
+alpha_curve = SubResource("CurveTexture_d66x1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oo1jq"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("6_6gcsu")
+texture_repeat = false
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_5fhaa"]
+material = SubResource("StandardMaterial3D_oo1jq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dgxdw"]
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_g80f6")
+color = Color(0, 0, 0, 1)
+alpha_curve = SubResource("CurveTexture_8y1co")
+
+[sub_resource type="QuadMesh" id="QuadMesh_3k587"]
+material = ExtResource("7_hpvuk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rfnbj"]
+lifetime_randomness = 0.4
+emission_shape = 2
+emission_sphere_radius = 1.0
+angle_max = 360.0
+direction = Vector3(0, 0, -1)
+spread = 90.0
+initial_velocity_min = 8.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_g80f6")
+color = Color(1, 0.643137, 0.129412, 1)
+alpha_curve = SubResource("CurveTexture_d66x1")
+
+[sub_resource type="QuadMesh" id="QuadMesh_81224"]
+material = ExtResource("8_nkggl")
+
+[sub_resource type="Gradient" id="Gradient_pmb71"]
+offsets = PackedFloat32Array(0.738636, 1)
+colors = PackedColorArray(1, 0.247059, 0, 1, 1, 1, 0.419608, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rjunc"]
+gradient = SubResource("Gradient_pmb71")
+width = 64
+
+[sub_resource type="Curve" id="Curve_5q7bd"]
+max_value = 10.0
+_data = [Vector2(0, 0), 0.0, 333.656, 0, 0, Vector2(0.1, 10), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_fykya"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_5q7bd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2gkhu"]
+angle_max = 360.0
+direction = Vector3(0, 0, -1)
+spread = 90.0
+flatness = 0.7
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+damping_min = 20.0
+damping_max = 40.0
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_g80f6")
+color = Color(1, 0.913725, 0.839216, 1)
+color_ramp = SubResource("GradientTexture1D_rjunc")
+alpha_curve = SubResource("CurveTexture_8y1co")
+emission_curve = SubResource("CurveTexture_fykya")
+
+[sub_resource type="QuadMesh" id="QuadMesh_58uuy"]
+material = ExtResource("9_3ev21")
+
+[sub_resource type="Gradient" id="Gradient_nem7w"]
+offsets = PackedFloat32Array(0, 0.598485, 1)
+colors = PackedColorArray(1, 0.764775, 0.698582, 1, 1, 0.733957, 0.659091, 1, 1, 0.219608, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ohrs2"]
+gradient = SubResource("Gradient_nem7w")
+width = 64
+
+[sub_resource type="Curve" id="Curve_ctlww"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_uebl6"]
+width = 64
+curve = SubResource("Curve_ctlww")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_upx8c"]
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_uebl6")
+color = Color(1, 1, 1, 0.392157)
+color_ramp = SubResource("GradientTexture1D_ohrs2")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xqx71"]
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("10_1xuab")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_kvel3"]
+material = SubResource("StandardMaterial3D_xqx71")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hxsmx"]
+lifetime_randomness = 0.4
+emission_shape = 2
+emission_sphere_radius = 1.0
+angle_max = 360.0
+direction = Vector3(0, 0, -1)
+spread = 90.0
+flatness = 0.4
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_g80f6")
+color = Color(0, 0, 0, 1)
+alpha_curve = SubResource("CurveTexture_8y1co")
+
+[sub_resource type="Animation" id="Animation_nslme"]
+resource_name = "detonate"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/Explosion/Explosion")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GasTank/GasTankCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GasTank:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/Explosion/ExplosionSplatter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FX/Explosion/ExplosionBurst")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/Explosion/ExplosionFlame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FX/Explosion/ExplosionSmoke")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:monitoring")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath(".:monitorable")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("FX/Strike/TravelEmber:emitting")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("FX/Strike/TravelFlicker:emitting")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("FX/Strike/TravelSmoke:emitting")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_7ds0a"]
+resource_name = "strike"
+length = 10.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/Strike/Strike")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GasTank:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.698132, 0, 12.5664)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GasTank/GasTankCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/Strike/TravelEmber:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FX/Strike/TravelSmoke:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/Strike/TravelFlicker:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".:monitorable")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:monitoring")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_5m3lv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GasTank:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GasTank/GasTankCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GasTank:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/Strike/TravelEmber:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FX/Strike/TravelSmoke:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/Strike/TravelFlicker:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".:monitorable")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:monitoring")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4kdib"]
+_data = {
+"RESET": SubResource("Animation_5m3lv"),
+"detonate": SubResource("Animation_nslme"),
+"strike": SubResource("Animation_7ds0a")
+}
+
+[node name="GasTank" type="Area3D" node_paths=PackedStringArray("animator")]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_35lqu")
+animator = NodePath("AnimationPlayer")
 
 [node name="GasTank" parent="." instance=ExtResource("1_ygu6i")]
+
+[node name="GasTankCollision" parent="GasTank" index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="GasTank/GasTankCollision" index="0" groups=["floor", "wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_bme4n")
+
+[node name="Explosion" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 10
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Explosion"]
+shape = SubResource("SphereShape3D_p2ke1")
+
+[node name="FX" type="Node3D" parent="."]
+
+[node name="Strike" type="Node3D" parent="FX"]
+
+[node name="Strike" type="AudioStreamPlayer3D" parent="FX/Strike"]
+stream = ExtResource("3_pmf55")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="TravelEmber" type="GPUParticles3D" parent="FX/Strike"]
+layers = 32
+cast_shadow = 0
+emitting = false
+fixed_fps = 60
+interpolate = false
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_2p7ni")
+draw_pass_1 = SubResource("QuadMesh_st8t0")
+
+[node name="TravelFlicker" type="GPUParticles3D" parent="FX/Strike"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 2
+lifetime = 0.2
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_byw7y")
+draw_pass_1 = SubResource("QuadMesh_5fhaa")
+
+[node name="TravelSmoke" type="GPUParticles3D" parent="FX/Strike"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_dgxdw")
+draw_pass_1 = SubResource("QuadMesh_3k587")
+
+[node name="Explosion" type="Node3D" parent="FX"]
+
+[node name="Explosion" type="AudioStreamPlayer3D" parent="FX/Explosion"]
+stream = ExtResource("4_jqcuq")
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ExplosionSplatter" type="GPUParticles3D" parent="FX/Explosion"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_rfnbj")
+draw_pass_1 = SubResource("QuadMesh_81224")
+
+[node name="ExplosionFlame" type="GPUParticles3D" parent="FX/Explosion"]
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_2gkhu")
+draw_pass_1 = SubResource("QuadMesh_58uuy")
+
+[node name="ExplosionBurst" type="GPUParticles3D" parent="FX/Explosion"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 2
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_upx8c")
+draw_pass_1 = SubResource("QuadMesh_kvel3")
+
+[node name="ExplosionSmoke" type="GPUParticles3D" parent="FX/Explosion"]
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.3
+fixed_fps = 60
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_hxsmx")
+draw_pass_1 = SubResource("QuadMesh_kvel3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4kdib")
+}
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_exited" from="." to="." method="OnExited"]
+
+[editable path="GasTank"]

@@ -19,8 +19,8 @@ namespace Project.Editor.StageObjectPreviewer
 		public override bool _Handles(GodotObject var) => true;
 		public override void _Edit(GodotObject var)
 		{
-			if (var is Node)
-				target = (Node)var;
+			if (var is Node node)
+				target = node;
 		}
 
 		public override int _Forward3DGuiInput(Camera3D cam, InputEvent e)
@@ -50,6 +50,8 @@ namespace Project.Editor.StageObjectPreviewer
 				DrawLaunchSettings((target as Catapult).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as Catapult).launchPower));
 			else if (target is LaunchRing)
 				DrawLaunchSettings((target as LaunchRing).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as LaunchRing).LaunchRatio));
+			else if (target is GasTank)
+				DrawLaunchSettings((target as GasTank).GetLaunchSettings(), DEFAULT_DRAW_COLOR);
 			else if (target is ItemBox)
 				UpdateItemBox();
 			else if (target is FlyingPot)

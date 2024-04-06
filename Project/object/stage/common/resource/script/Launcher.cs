@@ -181,7 +181,7 @@ namespace Project.Gameplay
 		public static LaunchSettings Create(Vector3 s, Vector3 e, float h, bool relativeToEnd = false)
 		{
 			Vector3 delta = e - s;
-			LaunchSettings data = new LaunchSettings()
+			LaunchSettings data = new()
 			{
 				startPosition = s,
 				endPosition = e,
