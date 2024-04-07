@@ -29,7 +29,7 @@ namespace Project.Gameplay.Triggers
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = new();
 
 			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool));
