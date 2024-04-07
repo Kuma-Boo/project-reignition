@@ -20,7 +20,7 @@ namespace Project.Gameplay
 			if (!isInteractingWithPlayer || Character.IsOnGround) return;
 
 			animator.Play("drop");
-			Character.Lockon.StartBounce();
+			Character.Lockon.StartBounce(false);
 		}
 
 		public void OnEntered(Area3D a)

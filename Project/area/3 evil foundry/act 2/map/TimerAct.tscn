@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://cu3clxd81brgn"]
+[gd_scene load_steps=67 format=3 uid="uid://cu3clxd81brgn"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_6vb5h"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_6wf7v"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="29_0pebw"]
 [ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="30_j3b0o"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="31_42x6v"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="31_mxyuv"]
 [ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="32_gwlrw"]
 [ext_resource type="PackedScene" uid="uid://0gcen5dmjd" path="res://area/3 evil foundry/object/platform/Crusher.tscn" id="33_uego7"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="34_ssr7c"]
@@ -159,6 +160,33 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6116e"]
 size = Vector3(10, 16, 10)
+
+[sub_resource type="Animation" id="Animation_64hf2"]
+resource_name = "event"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HangingScrap3/AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["drop", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ldr67"]
+_data = {
+"event": SubResource("Animation_64hf2")
+}
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_p2qn8"]
+height = 20.0
+radius = 20.0
 
 [sub_resource type="Curve" id="Curve_upu56"]
 min_value = -2.0
@@ -1232,7 +1260,6 @@ Movement/Distance = 5.0
 
 [node name="PlatformHall" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40, -340)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1300,8 +1327,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -4.6)
 [node name="BlueMajin" parent="TimerAct/PlatformHall" instance=ExtResource("30_j3b0o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -51.5)
 
-[node name="HangingScrap3" parent="TimerAct/PlatformHall" instance=ExtResource("26_5p3y4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -56)
+[node name="FireSoul1" parent="TimerAct/PlatformHall" instance=ExtResource("31_mxyuv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -50.7)
+
+[node name="ScrapFall" parent="TimerAct/PlatformHall" instance=ExtResource("4_6wf7v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, -56)
+
+[node name="HangingScrap3" parent="TimerAct/PlatformHall/ScrapFall" instance=ExtResource("26_5p3y4")]
+
+[node name="Event" type="Node3D" parent="TimerAct/PlatformHall/ScrapFall" node_paths=PackedStringArray("animator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
+script = ExtResource("15_mtoqc")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = null
+animator = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TimerAct/PlatformHall/ScrapFall/Event"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_ldr67")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimerAct/PlatformHall/ScrapFall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
+shape = SubResource("CylinderShape3D_p2qn8")
 
 [node name="HangingScrap4" parent="TimerAct/PlatformHall" instance=ExtResource("26_5p3y4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, -64)
@@ -1413,6 +1463,10 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -82, 1
 "Rotation Settings/Rotation Time" = 8.0
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 1.0
+
+[node name="FireSoul2" parent="TimerAct/PlatformHall" instance=ExtResource("31_mxyuv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -85, 7, -110)
+fireSoulIndex = 2
 
 [node name="Lava" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 40, -440)
@@ -2118,7 +2172,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="End" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -100, -30, -120)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2200,9 +2253,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 [node name="LaunchRing" parent="TimerAct/End" instance=ExtResource("31_42x6v")]
 transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, 24, 4, 55)
 Settings/Distance = 40.0
-"Settings/End Height" = -4.0
-"Settings/Min Distance" = 40.0
-"Settings/Min End Height" = -4.0
+"Settings/Middle Height" = 4.0
+"Settings/End Height" = -3.0
+"Settings/Min Distance" = 25.0
+"Settings/Min Middle Height" = 2.0
+
+[node name="FireSoul3" parent="TimerAct/End" instance=ExtResource("31_mxyuv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 4, 55)
+fireSoulIndex = 3
 
 [node name="GasTank" parent="TimerAct/End" instance=ExtResource("36_lpes0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 70, -2, 38.6)
