@@ -108,7 +108,11 @@ namespace Project.Gameplay
 			GetParent().CallDeferred("remove_child", this);
 		}
 
-		public virtual void TakeDamage()
+
+		protected virtual void UpdateEnemy() { }
+
+
+		public virtual void TakePlayerDamage()
 		{
 			if (Character.Lockon.IsPerfectHomingAttack)
 				currentHealth -= 2; // float damage
@@ -121,7 +125,18 @@ namespace Project.Gameplay
 				Character.Camera.LockonTarget = this;
 		}
 
-		protected virtual void UpdateEnemy() { }
+
+		public virtual void TakeExternalDamage(int amount = -1)
+		{
+			if (amount == -1)
+				currentHealth = 0;
+			else
+				currentHealth -= amount;
+
+			if (IsDefeated)
+				Defeat();
+		}
+
 
 		/// <summary>
 		/// Called when the enemy is defeated.
@@ -172,7 +187,7 @@ namespace Project.Gameplay
 				Defeat();
 			else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
-				TakeDamage();
+				TakePlayerDamage();
 				Character.Lockon.StartBounce(IsDefeated);
 			}
 			else if (damagePlayer)

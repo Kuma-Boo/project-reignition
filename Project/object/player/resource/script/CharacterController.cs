@@ -1141,7 +1141,7 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Called when the player takes damage or is being knocked around.
 		/// </summary>
-		public void StartKnockback(KnockbackSettings knockbackSettings = new KnockbackSettings())
+		public void StartKnockback(KnockbackSettings knockbackSettings = new())
 		{
 			EmitSignal(SignalName.Knockback); //Emit signal FIRST so external controllers can be alerted
 			if (IsInvincible && !knockbackSettings.ignoreInvincibility) return;

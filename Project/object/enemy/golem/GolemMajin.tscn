@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://bntrixspwpi2"]
+[gd_scene load_steps=25 format=3 uid="uid://bntrixspwpi2"]
 
 [ext_resource type="Script" path="res://object/enemy/golem/data/GolemMajin.cs" id="1_qx3kf"]
 [ext_resource type="PackedScene" uid="uid://623w0nu8qp3d" path="res://object/enemy/golem/data/model/GolemMajin.gltf" id="1_x1tra"]
+[ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="3_r5w0e"]
 [ext_resource type="PackedScene" uid="uid://dvoongbmetjfh" path="res://object/stage/common/Grindrail.tscn" id="3_w2hby"]
 [ext_resource type="Animation" uid="uid://bwighvm66o7c2" path="res://object/enemy/golem/data/model/animation/defeat.res" id="4_pjs84"]
 [ext_resource type="Animation" uid="uid://dq4pmubffeqkg" path="res://object/enemy/golem/data/model/animation/RESET.res" id="5_rp51u"]
@@ -154,10 +155,12 @@ transform = Transform3D(1, -4.37114e-08, 4.37115e-08, 4.37115e-08, 1, -3.35255e-
 bone_name = "head"
 bone_idx = 8
 
-[node name="Hurtbox" type="Area3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Head"]
+[node name="Hurtbox" type="Area3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Head" node_paths=PackedStringArray("enemy")]
 transform = Transform3D(1, 2.66947e-15, -3.55271e-15, -1.50942e-14, 1, 2.04636e-12, 1.42109e-14, -2.04636e-12, 1, 3.93404e-08, 0.900002, -2.92193e-06)
-collision_layer = 4
+collision_layer = 12
 collision_mask = 2
+script = ExtResource("3_r5w0e")
+enemy = NodePath("../../../../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox"]
 shape = SubResource("SphereShape3D_u3rel")

@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using System.Collections.Generic;
 
 namespace Project.Gameplay.Objects
 {
@@ -16,11 +17,14 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private AnimationPlayer animator;
 
-		private bool wasDetonated;
 		private bool isInteractingWithPlayer;
+		private bool isPlayerInExplosion;
+		private readonly List<Enemy> enemyList = new();
+
+		private bool wasDetonated;
 		private bool isTraveling;
 		private float travelTime;
-		private const float TIME_SCALE = .5f;
+		private const float TIME_SCALE = .8f;
 
 		private CharacterController Character => CharacterController.instance;
 		private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
@@ -63,7 +67,6 @@ namespace Project.Gameplay.Objects
 
 			travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * TIME_SCALE);
 			GlobalPosition = launchSettings.InterpolatePositionTime(travelTime);
-			GD.Print(launchSettings.TotalTravelTime, travelTime);
 		}
 
 
@@ -92,6 +95,12 @@ namespace Project.Gameplay.Objects
 			wasDetonated = true;
 			isTraveling = false;
 			animator.Play("detonate");
+
+			for (int i = 0; i < enemyList.Count; i++)
+				enemyList[i].TakeExternalDamage(); // Damage all enemies in range
+
+			if (isPlayerInExplosion)
+				Character.StartKnockback();
 		}
 
 
@@ -106,6 +115,41 @@ namespace Project.Gameplay.Objects
 		{
 			if (!a.IsInGroup("player")) return;
 			isInteractingWithPlayer = false;
+		}
+
+
+		private void OnExplosionEntered(Area3D a)
+		{
+			if (a.IsInGroup("player"))
+			{
+				isPlayerInExplosion = true;
+				return;
+			}
+
+
+			if (a is EnemyHurtbox)
+			{
+				Enemy targetEnemy = (a as EnemyHurtbox).enemy;
+				if (!enemyList.Contains(targetEnemy))
+					enemyList.Add(targetEnemy);
+			}
+		}
+
+
+		private void OnExplosionExited(Area3D a)
+		{
+			if (a.IsInGroup("player"))
+			{
+				isPlayerInExplosion = false;
+				return;
+			}
+
+			if (a is EnemyHurtbox)
+			{
+				Enemy targetEnemy = (a as EnemyHurtbox).enemy;
+				if (enemyList.Contains(targetEnemy))
+					enemyList.Remove(targetEnemy);
+			}
 		}
 	}
 }

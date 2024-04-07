@@ -43,9 +43,9 @@ namespace Project.Gameplay
 			animationTree.Set(STATE_TRANSITION, "walk");
 		}
 
-		public override void TakeDamage()
+		protected override void Defeat()
 		{
-			currentHealth = 0;
+			base.Defeat();
 			animationTree.Set(STATE_TRANSITION, "defeat");
 		}
 

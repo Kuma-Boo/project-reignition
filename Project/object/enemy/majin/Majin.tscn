@@ -1,6 +1,7 @@
-[gd_scene load_steps=82 format=3 uid="uid://rh85bh20fk6r"]
+[gd_scene load_steps=83 format=3 uid="uid://rh85bh20fk6r"]
 
 [ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
+[ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="2_onhwc"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_6ikv1"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_p44e7"]
 [ext_resource type="AudioStream" uid="uid://cf1drci6lgvsm" path="res://sound/sfx/enemy/majin/majin flame attack.wav" id="5_xr0sx"]
@@ -1091,10 +1092,12 @@ animationPlayer = NodePath("AnimationPlayer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_qrrup")
 
-[node name="Hitbox" type="Area3D" parent="."]
+[node name="Hitbox" type="Area3D" parent="." node_paths=PackedStringArray("enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-collision_layer = 4
+collision_layer = 12
 collision_mask = 2
+script = ExtResource("2_onhwc")
+enemy = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)

@@ -282,7 +282,7 @@ namespace Project.Gameplay
 		}
 
 
-		public override void TakeDamage()
+		public override void TakePlayerDamage()
 		{
 			if (isFlameActive)
 			{
@@ -292,7 +292,7 @@ namespace Project.Gameplay
 
 			animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
-			base.TakeDamage();
+			base.TakePlayerDamage();
 
 			if (!IsDefeated)
 				animationPlayer.Play("stagger");

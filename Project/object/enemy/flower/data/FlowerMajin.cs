@@ -87,9 +87,9 @@ namespace Project.Gameplay
 			Character.Camera.LockonTarget = this;
 		}
 
-		public override void TakeDamage()
+		public override void TakePlayerDamage()
 		{
-			base.TakeDamage();
+			base.TakePlayerDamage();
 
 			if (IsDefeated)
 			{
