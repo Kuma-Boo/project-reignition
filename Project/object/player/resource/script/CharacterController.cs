@@ -895,7 +895,6 @@ namespace Project.Gameplay
 				isCustomPhysicsEnabled = true;
 				VerticalSpeed = 0;
 				MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
-				GD.Print(MoveSpeed);
 				Velocity = Lockon.HomingAttackDirection.Normalized() * MoveSpeed;
 				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
