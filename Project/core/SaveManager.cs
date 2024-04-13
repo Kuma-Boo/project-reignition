@@ -31,6 +31,11 @@ namespace Project.Core
 			isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM),
 			isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX),
 			isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE),
+
+			masterVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.MASTER)) * 100),
+			bgmVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.BGM)) * 100),
+			sfxVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.SFX)) * 100),
+			voiceVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.VOICE)) * 100),
 		};
 
 		private ConfigData DefaultSettings => new();
