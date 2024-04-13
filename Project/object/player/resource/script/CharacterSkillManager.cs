@@ -36,6 +36,8 @@ namespace Project.Gameplay
 		public float accelerationJumpSpeed;
 		[Export]
 		public float homingAttackSpeed;
+		[Export]
+		public float homingAttackAcceleration;
 
 		[Export]
 		private MovementResource slideSettings; // Default slide settings

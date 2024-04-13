@@ -293,12 +293,14 @@ namespace Project.Gameplay
 		private readonly StringName FALL_TRIGGER = "parameters/air_tree/fall_trigger/request";
 		private readonly StringName FALL_SPEED = "parameters/air_tree/fall_speed/scale";
 		private readonly StringName AIR_STATE_TRANSITION = "parameters/air_tree/state_transition/transition_request";
+		private readonly StringName ACCEL_JUMP_TRIGGER = "parameters/air_tree/jump_accel_trigger/request";
 		private readonly StringName FALL_STATE_PARAMETER = "fall";
 		private void UpdateAirState(StringName state, bool enableFallTransition)
 		{
 			IsFallTransitionEnabled = enableFallTransition;
 			animationTree.Set(AIR_STATE_TRANSITION, state);
 			animationTree.Set(FALL_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			animationTree.Set(ACCEL_JUMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			animationTree.Set(BOUNCE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
@@ -308,8 +310,14 @@ namespace Project.Gameplay
 			ResetState();
 			UpdateAirState("jump", true);
 		}
-		public void JumpAccelAnimation() => UpdateAirState("accel", false);
+		public void JumpAccelAnimation()
+		{
+			IsFallTransitionEnabled = false;
+			animationTree.Set(ACCEL_JUMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		}
 		public void LaunchAnimation() => UpdateAirState("launch", false);
+		public void HomingAttackAnimation() => UpdateAirState("homing_attack", false);
+
 
 		public void StompAnimation(bool offensive)
 		{

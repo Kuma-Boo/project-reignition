@@ -861,7 +861,6 @@ namespace Project.Gameplay
 
 			CanJumpDash = false;
 			IsMovingBackward = false; //Can't jumpdash backwards!
-			MoveSpeed = jumpDashSpeed;
 			SetActionState(ActionStates.JumpDash);
 
 			if (Lockon.IsBouncingLockoutActive) //Interrupt lockout
@@ -869,13 +868,14 @@ namespace Project.Gameplay
 
 			if (Lockon.Target == null) //Normal jumpdash
 			{
+				MoveSpeed = jumpDashSpeed;
 				VerticalSpeed = jumpDashPower;
 				Animator.LaunchAnimation();
 			}
 			else
 			{
 				Lockon.StartHomingAttack(); //Start Homing attack
-				Animator.JumpAccelAnimation();
+				Animator.HomingAttackAnimation();
 				UpdateJumpDash();
 			}
 		}
@@ -894,7 +894,9 @@ namespace Project.Gameplay
 
 				isCustomPhysicsEnabled = true;
 				VerticalSpeed = 0;
-				Velocity = Lockon.HomingAttackDirection.Normalized() * Skills.homingAttackSpeed;
+				MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
+				GD.Print(MoveSpeed);
+				Velocity = Lockon.HomingAttackDirection.Normalized() * MoveSpeed;
 				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
 
