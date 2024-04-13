@@ -195,7 +195,7 @@ namespace Project.Gameplay
 		private bool isFlameActive;
 		/// <summary> Timer to keep track of stagger length. </summary>
 		private float staggerTimer;
-		private const float STAGGER_LENGTH = .5f;
+		private const float STAGGER_LENGTH = 1.2f;
 
 		/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
 		private MovingObject movementController;
