@@ -1,14 +1,23 @@
-[gd_resource type="ParticleProcessMaterial" load_steps=3 format=3 uid="uid://bbd8sroj6bubr"]
+[gd_resource type="ParticleProcessMaterial" load_steps=5 format=3 uid="uid://bbd8sroj6bubr"]
 
 [sub_resource type="Gradient" id="Gradient_4qt1c"]
-offsets = PackedFloat32Array(0, 0.138996, 0.664093, 1)
+offsets = PackedFloat32Array(0, 0.166667, 0.664093, 1)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_3rcar"]
 gradient = SubResource("Gradient_4qt1c")
 width = 64
 
+[sub_resource type="Curve" id="Curve_hd67o"]
+_data = [Vector2(0, 0), 0.0, 6.80794, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.7), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_3evoi"]
+width = 64
+curve = SubResource("Curve_hd67o")
+
 [resource]
+lifetime_randomness = 0.3
 emission_shape = 6
 emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 1.0
@@ -17,13 +26,15 @@ emission_ring_inner_radius = 0.8
 angle_min = -180.0
 angle_max = 180.0
 direction = Vector3(0, 1, 0)
-spread = 30.0
 initial_velocity_min = 8.0
 initial_velocity_max = 12.0
-angular_velocity_min = -180.0
-angular_velocity_max = 180.0
+angular_velocity_min = -90.0
+angular_velocity_max = 90.0
 gravity = Vector3(0, -20, 0)
+damping_min = 5.0
+damping_max = 10.0
 attractor_interaction_enabled = false
-scale_min = 0.5
-scale_max = 2.0
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_3evoi")
 color_ramp = SubResource("GradientTexture1D_3rcar")
