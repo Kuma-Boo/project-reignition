@@ -303,7 +303,11 @@ namespace Project.Gameplay
 			animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
 
-		public void JumpAnimation() => UpdateAirState("jump", true);
+		public void JumpAnimation()
+		{
+			ResetState();
+			UpdateAirState("jump", true);
+		}
 		public void JumpAccelAnimation() => UpdateAirState("accel", false);
 		public void LaunchAnimation() => UpdateAirState("launch", false);
 
@@ -494,7 +498,7 @@ namespace Project.Gameplay
 		public void LaunchDrift()
 		{
 			ActiveDriftState.Travel(DRIFT_LAUNCH_STATE);
-			SetStateXfade(0f); // Remove xfade in case player wants to jump early
+			SetStateXfade(0.1f); // Remove xfade in case player wants to jump early
 		}
 		#endregion
 
@@ -662,10 +666,6 @@ namespace Project.Gameplay
 			animationTree.Set(HURT_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 		}
 		#endregion
-
-
-
-
 
 
 		// Shaders
