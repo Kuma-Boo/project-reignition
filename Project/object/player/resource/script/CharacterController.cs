@@ -1219,6 +1219,10 @@ namespace Project.Gameplay
 
 			//Fade screen out, enable respawn flag, and connect signals
 			IsDefeated = true;
+
+			Lockon.IsMonitoring = false;
+			areaTrigger.Disabled = true;
+
 			TransitionManager.StartTransition(new TransitionData()
 			{
 				inSpeed = .5f,
@@ -1234,8 +1238,6 @@ namespace Project.Gameplay
 		/// </summary>
 		private void ProcessRespawn()
 		{
-			Lockon.IsMonitoring = false;
-			areaTrigger.Disabled = true;
 
 			ResetActionState();
 			MovementState = MovementStates.Normal;
