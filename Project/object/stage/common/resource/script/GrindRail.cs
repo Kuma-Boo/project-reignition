@@ -46,7 +46,7 @@ namespace Project.Gameplay
 		private CollisionShape3D collider;
 		[Export(PropertyHint.Range, "5, 120")]
 		/// <summary> Only used for invisible rails. </summary>
-		private int railLength;
+		private int railLength = 5;
 		/// <summary> Updates rail's visual length. </summary>
 		private void UpdateInvisibleRailLength()
 		{
