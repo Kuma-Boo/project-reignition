@@ -17,10 +17,19 @@ namespace Project.Gameplay
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (!isInteractingWithPlayer || Character.IsOnGround) return;
+			if (!isInteractingWithPlayer) return;
+
+			if (Character.IsOnGround)
+			{
+				if (animator.CurrentAnimation != "delay_drop")
+					animator.Play("delay_drop");
+				return;
+			}
 
 			animator.Play("drop");
-			Character.Lockon.StartBounce(false);
+
+			if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+				Character.Lockon.StartBounce(false);
 		}
 
 		public void OnEntered(Area3D a)

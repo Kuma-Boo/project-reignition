@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5dibkkf5v0en"]
+[gd_scene load_steps=10 format=3 uid="uid://b5dibkkf5v0en"]
 
 [ext_resource type="PackedScene" uid="uid://b7m6ycj60sqx5" path="res://area/3 evil foundry/object/model/scrap/ScrapClaw.gltf" id="1_7go6u"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
@@ -113,7 +113,7 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(3, 1),
+"transitions": PackedFloat32Array(2, 1),
 "update": 0,
 "values": [Vector3(0, -10.9, 0), Vector3(0, -40, 0)]
 }
@@ -166,9 +166,26 @@ tracks/5/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_2q0sr"]
+resource_name = "delay_drop"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uxish"]
 _data = {
 "RESET": SubResource("Animation_tapwj"),
+"delay_drop": SubResource("Animation_2q0sr"),
 "drop": SubResource("Animation_8088o")
 }
 
@@ -201,6 +218,7 @@ shape = SubResource("BoxShape3D_yocea")
 libraries = {
 "": SubResource("AnimationLibrary_uxish")
 }
+next/delay_drop = &"drop"
 
 [connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="Hitbox" to="." method="OnExited"]

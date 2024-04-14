@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://cu3clxd81brgn"]
+[gd_scene load_steps=68 format=3 uid="uid://cu3clxd81brgn"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_6vb5h"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_6wf7v"]
@@ -163,7 +163,6 @@ size = Vector3(10, 16, 10)
 
 [sub_resource type="Animation" id="Animation_64hf2"]
 resource_name = "event"
-length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -171,7 +170,7 @@ tracks/0/path = NodePath("HangingScrap3/AnimationPlayer")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.8),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": ["drop", -1, 1.0, false],
@@ -179,8 +178,27 @@ tracks/0/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_tuy7c"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HangingScrap3")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Respawn"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ldr67"]
 _data = {
+"RESET": SubResource("Animation_tuy7c"),
 "event": SubResource("Animation_64hf2")
 }
 
@@ -1328,7 +1346,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -4.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -51.5)
 
 [node name="FireSoul1" parent="TimerAct/PlatformHall" instance=ExtResource("31_mxyuv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -50.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -48.7)
 
 [node name="ScrapFall" parent="TimerAct/PlatformHall" instance=ExtResource("4_6wf7v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, -56)
@@ -1338,9 +1356,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, -56)
 [node name="Event" type="Node3D" parent="TimerAct/PlatformHall/ScrapFall" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
 script = ExtResource("15_mtoqc")
-"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
-"Trigger Settings/Player Stand-in" = null
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TimerAct/PlatformHall/ScrapFall/Event"]
@@ -2172,6 +2190,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="End" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -100, -30, -120)
+visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
