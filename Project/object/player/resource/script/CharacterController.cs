@@ -1380,6 +1380,13 @@ namespace Project.Gameplay
 			{
 				Vector3 targetPosition = LaunchSettings.InterpolatePositionTime(launcherTime);
 				float heightDelta = targetPosition.Y - GlobalPosition.Y;
+				RaycastHit hit = this.CastRay(GlobalPosition, targetPosition - GlobalPosition, Runtime.Instance.environmentMask);
+				if (hit && hit.collidedObject.IsInGroup("wall"))
+				{
+					FinishLauncher();
+					return;
+				}
+
 				GlobalPosition = targetPosition;
 
 				if (heightDelta < 0) //Only check ground when falling
