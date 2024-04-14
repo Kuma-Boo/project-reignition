@@ -23,6 +23,7 @@ namespace Project.Gameplay
 		private const string PITCH_OVERRIDE_KEY = "Rotation/Pitch Override Mode";
 		private const string YAW_OVERRIDE_KEY = "Rotation/Yaw Override Mode";
 		private const string TILT_KEY = "Rotation/Follow Path Tilt";
+		private const string CONTROL_INFLUENCE_KEY = "Rotation/Control Influence";
 
 		private const string VIEW_OFFSET_KEY = "View/Offset";
 		private const string FOV_KEY = "View/FOV";
@@ -70,6 +71,7 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty(PITCH_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
 				properties.Add(ExtensionMethods.CreateProperty(YAW_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
 				properties.Add(ExtensionMethods.CreateProperty(TILT_KEY, Variant.Type.Bool));
+				properties.Add(ExtensionMethods.CreateProperty(CONTROL_INFLUENCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,3,.01"));
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty(VIEW_OFFSET_KEY, Variant.Type.Vector2));
@@ -110,6 +112,8 @@ namespace Project.Gameplay
 					return (int)yawOverrideMode;
 				case TILT_KEY:
 					return followPathTilt;
+				case CONTROL_INFLUENCE_KEY:
+					return pathControlInfluence;
 
 				case VIEW_OFFSET_KEY:
 					return viewportOffset;
@@ -179,6 +183,9 @@ namespace Project.Gameplay
 				case TILT_KEY:
 					followPathTilt = (bool)value;
 					break;
+				case CONTROL_INFLUENCE_KEY:
+					pathControlInfluence = (float)value;
+					break;
 
 				case VIEW_OFFSET_KEY:
 					viewportOffset = (Vector2)value;
@@ -226,6 +233,8 @@ namespace Project.Gameplay
 		public float yawAngle;
 		/// <summary> Should the camera tilt (Z rotation) with the path? </summary>
 		public bool followPathTilt;
+		/// <summary> How closely to follow the path. </summary>
+		public float pathControlInfluence;
 		/// <summary> How should pitch be applied? </summary>
 		public OverrideModeEnum pitchOverrideMode;
 		/// <summary> How should yaw be applied? </summary>
