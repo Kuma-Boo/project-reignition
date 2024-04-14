@@ -1214,7 +1214,7 @@ namespace Project.Gameplay
 		/// </summary>
 		public void StartRespawn()
 		{
-			if (ActionState == ActionStates.Teleport) return;
+			if (ActionState == ActionStates.Teleport || IsDefeated) return;
 
 			//Fade screen out, enable respawn flag, and connect signals
 			IsDefeated = true;
@@ -1243,13 +1243,10 @@ namespace Project.Gameplay
 			Teleport(Level.CurrentCheckpoint);
 			PathFollower.SetActivePath(Level.CheckpointPlayerPath); //Revert path
 			Camera.PathFollower.SetActivePath(Level.CheckpointCameraPath);
-			PathFollower.Resync();
 
 			IsDefeated = false;
 			IsMovingBackward = false;
 			ResetVelocity();
-
-			Camera.Respawn();
 
 			//Wait a single physics frame to ensure objects update properly
 			GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
@@ -1260,6 +1257,9 @@ namespace Project.Gameplay
 		/// </summary>
 		private void FinishRespawn()
 		{
+			PathFollower.Resync();
+			Camera.Respawn();
+
 			ResetOrientation();
 
 			SnapToGround();
