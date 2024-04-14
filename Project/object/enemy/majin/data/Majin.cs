@@ -284,11 +284,10 @@ namespace Project.Gameplay
 
 		public override void TakePlayerDamage()
 		{
+			staggerTimer = STAGGER_LENGTH;
+
 			if (isFlameActive)
-			{
 				ToggleFlameAttack();
-				staggerTimer = STAGGER_LENGTH;
-			}
 
 			animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
