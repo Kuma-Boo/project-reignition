@@ -94,7 +94,8 @@ namespace Project.Gameplay.Triggers
 			float initialVelocity = Character.MoveSpeed;
 			Character.StartExternal(this, Character.PathFollower, .05f, true);
 			Character.MoveSpeed = initialVelocity;
-			Character.Animator.SnapRotation(Mathf.Pi); // Rotate to follow pathfollower
+			Character.Animator.ExternalAngle = Mathf.Pi;
+			Character.Animator.SnapRotation(Character.Animator.ExternalAngle); // Rotate to follow pathfollower
 			Character.IsMovingBackward = false; // Prevent getting stuck in backstep animation
 		}
 
