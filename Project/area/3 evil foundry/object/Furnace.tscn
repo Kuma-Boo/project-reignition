@@ -1,7 +1,36 @@
-[gd_scene load_steps=2 format=3 uid="uid://det4s2txdn4ka"]
+[gd_scene load_steps=5 format=3 uid="uid://det4s2txdn4ka"]
 
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="1_3w3ry"]
 [ext_resource type="PackedScene" uid="uid://0lojqk5idu4m" path="res://area/3 evil foundry/object/model/Furnace.gltf" id="1_qorb6"]
 
-[node name="Furnace" type="Node3D"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wu2fn"]
+radius = 1.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_26sm0"]
+radius = 0.6
+
+[node name="Furnace" type="Area3D"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_3w3ry")
 
 [node name="Furnace" parent="." instance=ExtResource("1_qorb6")]
+
+[node name="FurnaceCollision" parent="Furnace" index="3"]
+visible = false
+
+[node name="StaticBody3D" parent="Furnace/FurnaceCollision" index="0" groups=["floor", "wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_wu2fn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_26sm0")
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_exited" from="." to="." method="OnExited"]
+
+[editable path="Furnace"]
