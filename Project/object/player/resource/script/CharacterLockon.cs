@@ -199,7 +199,7 @@ namespace Project.Gameplay
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();
 
-			Character.Animator.ResetState(0.0f);
+			Character.Animator.ResetState(0.1f);
 			Character.Animator.BounceTrick();
 			Character.Effect.PlayActionSFX(Character.Effect.JUMP_SFX);
 		}

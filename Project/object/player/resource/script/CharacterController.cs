@@ -91,6 +91,7 @@ namespace Project.Gameplay
 			{
 				Effect.StopSpinFX();
 				Effect.StopTrailFX();
+				Animator.ResetState();
 			}
 			else if (ActionState == ActionStates.Grindstep)
 				StopGrindstep();
