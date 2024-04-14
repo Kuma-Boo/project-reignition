@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://2npi4fgvupgn"]
+[gd_scene load_steps=46 format=3 uid="uid://2npi4fgvupgn"]
 
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="1_6j3jw"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_ur5y1"]
@@ -20,7 +20,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="12_mfj43"]
 [ext_resource type="PackedScene" uid="uid://cemtlg8cxol3u" path="res://area/3 evil foundry/act 2/environment/07Lava.tscn" id="12_xges4"]
 [ext_resource type="Resource" uid="uid://c4lfqsmnwakyi" path="res://area/3 evil foundry/act 2/trigger/camera/PlatformCam.tres" id="13_a6aos"]
-[ext_resource type="Script" path="res://resource/script/LockoutResource.cs" id="13_pi7rf"]
+[ext_resource type="Resource" uid="uid://ca2ma4up160dq" path="res://area/3 evil foundry/act 2/trigger/ElevatorAutoRun.tres" id="13_pinv4"]
 [ext_resource type="PackedScene" uid="uid://di2lht4cfgmud" path="res://area/3 evil foundry/act 2/environment/08Lava.tscn" id="13_u51j8"]
 [ext_resource type="PackedScene" uid="uid://bbj7cijdrgxht" path="res://area/3 evil foundry/act 2/environment/09Elevator.tscn" id="14_ktwr4"]
 [ext_resource type="PackedScene" uid="uid://cxx3xasx0htnt" path="res://area/3 evil foundry/act 2/environment/10Spiral.tscn" id="15_xd5yw"]
@@ -51,22 +51,6 @@ size = Vector3(10, 10, 79)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fkw0b"]
 size = Vector3(10, 20, 2.5)
-
-[sub_resource type="Resource" id="Resource_4dy2b"]
-script = ExtResource("13_pi7rf")
-"General/Lockout Length" = 0.0
-"General/Recenter Player" = false
-General/Invincible = false
-General/Priority = 0
-"Actions/Reset Actions" = null
-"Actions/Disable Actions" = false
-"Actions/Reset Flags" = 0
-"Controls/Override Speed" = true
-"Controls/Speed Ratio" = 1.0
-"Controls/Traction Percentage" = 100.0
-"Controls/Friction Percentage" = 100.0
-"Controls/Ignore Slopes" = true
-"Controls/Movement Type" = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0j1ln"]
 size = Vector3(10, 20, 15)
@@ -396,7 +380,7 @@ visible = false
 [node name="ElevatorAutorun" type="Node3D" parent="Trigger/Path"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -43, 40, -190)
 script = ExtResource("12_mfj43")
-lockoutData = SubResource("Resource_4dy2b")
+lockoutData = ExtResource("13_pinv4")
 
 [node name="ElevatorPath" parent="Trigger/Path" instance=ExtResource("2_tyjcn")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -43, 40, -190)
@@ -420,6 +404,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_0yj8a")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="Platform" parent="Trigger/Camera" instance=ExtResource("2_tyjcn")]
 transform = Transform3D(-1, -4.37114e-08, 8.74228e-08, -4.37114e-08, 1, -4.37114e-08, -8.74228e-08, -4.37114e-08, -1, 120, 40, -350.4)
