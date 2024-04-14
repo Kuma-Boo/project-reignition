@@ -33,7 +33,7 @@ namespace Project.Gameplay
 			Invisible,
 			HitObstacle,
 		}
-		private readonly Array<Node3D> activeTargets = new Array<Node3D>(); //List of targetable objects
+		private readonly Array<Node3D> activeTargets = new(); //List of targetable objects
 
 		/// <summary> Enables detection of new lockonTargets. </summary>
 		public bool IsMonitoring { get; set; }
@@ -199,6 +199,7 @@ namespace Project.Gameplay
 			Character.AddLockoutData(bounceLockoutSettings);
 			Character.ResetActionState();
 
+			Character.Animator.ResetState(0.0f);
 			Character.Animator.BounceTrick();
 			Character.Effect.PlayActionSFX(Character.Effect.JUMP_SFX);
 		}

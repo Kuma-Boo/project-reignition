@@ -1,6 +1,5 @@
 using Godot;
 using Godot.Collections;
-using Project.Core;
 
 namespace Project.Gameplay.Objects
 {
@@ -133,7 +132,7 @@ namespace Project.Gameplay.Objects
 		[ExportGroup("Editor")]
 		[Export]
 		private Array<NodePath> pieces;
-		private readonly Array<Node3D> _pieces = new Array<Node3D>();
+		private readonly Array<Node3D> _pieces = new();
 		private readonly int PIECE_COUNT = 16;
 		private readonly float RING_SIZE = 2.2f;
 
@@ -174,14 +173,19 @@ namespace Project.Gameplay.Objects
 					if (Input.IsActionJustPressed("button_jump")) //Disable launcher
 					{
 						DropPlayer();
+						Character.Animator.ResetState();
+						Character.Effect.StopSpinFX();
 						Character.CanJumpDash = false;
 					}
 					else if (Input.IsActionJustPressed("button_action"))
 					{
 						DropPlayer();
+						Character.Effect.StartTrailFX();
 						Character.StartLauncher(GetLaunchSettings());
 					}
 				}
+
+				Character.Animator.SetSpinSpeed(1.5f + launchPower);
 			}
 		}
 
@@ -217,6 +221,8 @@ namespace Project.Gameplay.Objects
 
 			animator.Play("charge");
 			Character.StartExternal(this);
+			Character.Animator.StartSpin();
+			Character.Effect.StartSpinFX();
 
 			isActive = true;
 			isRecentered = false;

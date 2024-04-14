@@ -102,6 +102,7 @@ namespace Project.Gameplay
 		private readonly StringName DRIFT_STATE = "drift";
 		private readonly StringName BALANCE_STATE = "balance";
 		private readonly StringName SIDLE_STATE = "sidle";
+		private readonly StringName SPIN_STATE = "spin";
 
 		private readonly StringName STATE_TRANSITION = "parameters/state_transition/transition_request";
 
@@ -316,7 +317,6 @@ namespace Project.Gameplay
 			animationTree.Set(ACCEL_JUMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		}
 		public void LaunchAnimation() => UpdateAirState("launch", false);
-		public void HomingAttackAnimation() => UpdateAirState("homing_attack", false);
 
 
 		public void StompAnimation(bool offensive)
@@ -675,6 +675,20 @@ namespace Project.Gameplay
 		}
 		#endregion
 
+
+		#region Spin
+		private readonly StringName SPIN_SPEED_PARAMETER = "parameters/spin_speed/scale";
+		public void StartSpin(float speed = 1.0f)
+		{
+			SetSpinSpeed(speed);
+			SetStateXfade(.2f);
+			animationTree.Set(STATE_TRANSITION, SPIN_STATE);
+			UpdateAirState(FALL_STATE_PARAMETER, true);
+		}
+
+
+		public void SetSpinSpeed(float speed = 1.0f) => animationTree.Set(SPIN_SPEED_PARAMETER, speed);
+		#endregion
 
 		// Shaders
 		private readonly StringName PLAYER_POSITION_SHADER_PARAMETER = "player_position";

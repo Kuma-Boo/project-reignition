@@ -88,7 +88,10 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 				StopCrouching();
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
+			{
+				Effect.StopSpinFX();
 				Effect.StopTrailFX();
+			}
 			else if (ActionState == ActionStates.Grindstep)
 				StopGrindstep();
 
@@ -875,7 +878,8 @@ namespace Project.Gameplay
 			else
 			{
 				Lockon.StartHomingAttack(); //Start Homing attack
-				Animator.HomingAttackAnimation();
+				Animator.StartSpin(2.0f);
+				Effect.StartSpinFX();
 				UpdateJumpDash();
 			}
 		}
@@ -1158,6 +1162,7 @@ namespace Project.Gameplay
 			if (MovementState == MovementStates.Normal || knockbackSettings.ignoreMovementState)
 			{
 				Animator.StartHurt();
+				Animator.ResetState();
 				previousKnockbackSettings = knockbackSettings;
 
 				MoveSpeed = knockbackSettings.overrideKnockbackSpeed ? knockbackSettings.knockbackSpeed : 8f;
@@ -1401,6 +1406,9 @@ namespace Project.Gameplay
 				activeLauncher = null;
 			}
 
+			Effect.StopSpinFX();
+			Effect.StopTrailFX();
+			Animator.ResetState();
 			ResetMovementState();
 
 			Lockon.IsMonitoring = CanJumpDash;

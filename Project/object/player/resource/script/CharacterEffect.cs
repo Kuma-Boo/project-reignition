@@ -62,15 +62,11 @@ namespace Project.Gameplay
 		public void StartDust() => dustParticle.Emitting = true;
 		public void StopDust() => dustParticle.Emitting = false;
 
-		public void StartTrailFX()
-		{
-			trailFX.IsEmitting = true;
-		}
+		public void StartTrailFX() => trailFX.IsEmitting = true;
+		public void StopTrailFX() => trailFX.IsEmitting = false;
 
-		public void StopTrailFX()
-		{
-			trailFX.IsEmitting = false;
-		}
+		public void StartSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 0.0f, .2f);
+		public void StopSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 1.0f, .2f);
 
 		public void StartTimeBreak() => timeBreakAnimator.Play("start");
 		public void StopTimeBreak() => timeBreakAnimator.Play("stop");

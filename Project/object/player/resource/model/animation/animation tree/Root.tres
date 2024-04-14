@@ -48,31 +48,6 @@ animation = &"ActionLibrary/fall-start"
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_fofmu"]
 fadeout_time = 0.02
 
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_cgaql"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_to6u0"]
-animation = &"ActionLibrary/spin"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6ikp0"]
-animation = &"ActionLibrary/spin-start"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y87v7"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8vjp2"]
-xfade_time = 0.05
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ap8pi"]
-states/End/position = Vector2(200, 288)
-states/loop/node = SubResource("AnimationNodeAnimation_to6u0")
-states/loop/position = Vector2(200, 222)
-states/start/node = SubResource("AnimationNodeAnimation_6ikp0")
-states/start/position = Vector2(200, 164)
-transitions = ["Start", "start", SubResource("AnimationNodeStateMachineTransition_y87v7"), "start", "loop", SubResource("AnimationNodeStateMachineTransition_8vjp2")]
-graph_offset = Vector2(-70, 173)
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ks456"]
 animation = &"ActionLibrary/jump-accel"
 
@@ -154,15 +129,12 @@ input_0/reset = true
 input_1/name = "jump"
 input_1/auto_advance = false
 input_1/reset = true
-input_2/name = "homing_attack"
+input_2/name = "launch"
 input_2/auto_advance = false
 input_2/reset = true
-input_3/name = "launch"
-input_3/auto_advance = false
-input_3/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_2rvqt"]
-graph_offset = Vector2(-2123.8, 137.877)
+graph_offset = Vector2(-1710.62, 86.8774)
 nodes/backflip_anim/node = SubResource("AnimationNodeAnimation_8m3pk")
 nodes/backflip_anim/position = Vector2(-800, 256)
 nodes/backflip_trigger/node = SubResource("AnimationNodeOneShot_0x4r8")
@@ -187,10 +159,6 @@ nodes/fall_start_anim/node = SubResource("AnimationNodeAnimation_8771d")
 nodes/fall_start_anim/position = Vector2(-1280, 320)
 nodes/fall_trigger/node = SubResource("AnimationNodeOneShot_fofmu")
 nodes/fall_trigger/position = Vector2(-816, 0)
-nodes/homing_attack_speed/node = SubResource("AnimationNodeTimeScale_cgaql")
-nodes/homing_attack_speed/position = Vector2(-1660, 120)
-nodes/homing_state/node = SubResource("AnimationNodeStateMachine_ap8pi")
-nodes/homing_state/position = Vector2(-1880, 220)
 nodes/jump_accel_state/node = SubResource("AnimationNodeStateMachine_k7fcl")
 nodes/jump_accel_state/position = Vector2(-2260, 200)
 nodes/jump_accel_trigger/node = SubResource("AnimationNodeOneShot_ciwrw")
@@ -198,10 +166,10 @@ nodes/jump_accel_trigger/position = Vector2(-2060, 60)
 nodes/jump_state/node = SubResource("AnimationNodeStateMachine_0x8ha")
 nodes/jump_state/position = Vector2(-2260, 40)
 nodes/launch_state/node = SubResource("AnimationNodeStateMachine_2xb6y")
-nodes/launch_state/position = Vector2(-1460, 260)
+nodes/launch_state/position = Vector2(-1540, 140)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_ks64y")
 nodes/state_transition/position = Vector2(-1280, 0)
-node_connections = [&"backflip_trigger", 0, &"fall_trigger", &"backflip_trigger", 1, &"backflip_anim", &"bounce_transition", 0, &"bounce_trick_1_anim", &"bounce_transition", 1, &"bounce_trick_2_anim", &"bounce_transition", 2, &"bounce_trick_3_anim", &"bounce_transition", 3, &"bounce_trick_4_anim", &"bounce_trigger", 0, &"backflip_trigger", &"bounce_trigger", 1, &"bounce_transition", &"fall_speed", 0, &"fall_start_anim", &"fall_trigger", 0, &"state_transition", &"fall_trigger", 1, &"fall_speed", &"homing_attack_speed", 0, &"homing_state", &"jump_accel_trigger", 0, &"jump_state", &"jump_accel_trigger", 1, &"jump_accel_state", &"output", 0, &"bounce_trigger", &"state_transition", 0, &"fall_anim", &"state_transition", 1, &"jump_accel_trigger", &"state_transition", 2, &"homing_attack_speed", &"state_transition", 3, &"launch_state"]
+node_connections = [&"backflip_trigger", 0, &"fall_trigger", &"backflip_trigger", 1, &"backflip_anim", &"bounce_transition", 0, &"bounce_trick_1_anim", &"bounce_transition", 1, &"bounce_trick_2_anim", &"bounce_transition", 2, &"bounce_trick_3_anim", &"bounce_transition", 3, &"bounce_trick_4_anim", &"bounce_trigger", 0, &"backflip_trigger", &"bounce_trigger", 1, &"bounce_transition", &"fall_speed", 0, &"fall_start_anim", &"fall_trigger", 0, &"state_transition", &"fall_trigger", 1, &"fall_speed", &"jump_accel_trigger", 0, &"jump_state", &"jump_accel_trigger", 1, &"jump_accel_state", &"output", 0, &"bounce_trigger", &"state_transition", 0, &"fall_anim", &"state_transition", 1, &"jump_accel_trigger", &"state_transition", 2, &"launch_state"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_f60fx"]
 
@@ -537,7 +505,7 @@ transitions = ["drift-start", "drift-launch", SubResource("AnimationNodeStateMac
 graph_offset = Vector2(-17, 49)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_umbst"]
-graph_offset = Vector2(-347.85, 50.6007)
+graph_offset = Vector2(-575.85, 97.6007)
 nodes/direction_transition/node = SubResource("AnimationNodeTransition_ktt7m")
 nodes/direction_transition/position = Vector2(96, 160)
 nodes/left_state/node = SubResource("AnimationNodeStateMachine_uwp2s")
@@ -1048,6 +1016,31 @@ nodes/sidle_speed/node = SubResource("AnimationNodeTimeScale_wadld")
 nodes/sidle_speed/position = Vector2(-64, 144)
 node_connections = [&"direction_transition", 0, &"sidle_right_state", &"direction_transition", 1, &"sidle_left_state", &"output", 0, &"sidle_seek", &"sidle_seek", 0, &"sidle_speed", &"sidle_speed", 0, &"direction_transition"]
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_taids"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vrvy4"]
+animation = &"ActionLibrary/spin"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c0u2g"]
+animation = &"ActionLibrary/spin-start"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3simu"]
+xfade_time = 0.05
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_q3xr0"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_xchh2"]
+states/End/position = Vector2(200, 294)
+states/loop/node = SubResource("AnimationNodeAnimation_vrvy4")
+states/loop/position = Vector2(200, 227)
+states/start/node = SubResource("AnimationNodeAnimation_c0u2g")
+states/start/position = Vector2(200, 160)
+transitions = ["start", "loop", SubResource("AnimationNodeStateMachineTransition_3simu"), "Start", "start", SubResource("AnimationNodeStateMachineTransition_q3xr0")]
+graph_offset = Vector2(-153, 57)
+
 [sub_resource type="AnimationNodeTransition" id="70"]
 input_0/name = "normal"
 input_0/auto_advance = false
@@ -1061,9 +1054,12 @@ input_2/reset = true
 input_3/name = "sidle"
 input_3/auto_advance = false
 input_3/reset = true
+input_4/name = "spin"
+input_4/auto_advance = false
+input_4/reset = true
 
 [resource]
-graph_offset = Vector2(-948.984, -11.2834)
+graph_offset = Vector2(-957.681, -26.7836)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1120, 112)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
@@ -1084,6 +1080,10 @@ nodes/oneshot_trigger/node = SubResource("AnimationNodeOneShot_fl47a")
 nodes/oneshot_trigger/position = Vector2(48, 144)
 nodes/sidle_tree/node = SubResource("AnimationNodeBlendTree_yi2da")
 nodes/sidle_tree/position = Vector2(-1120, 368)
+nodes/spin_speed/node = SubResource("AnimationNodeTimeScale_taids")
+nodes/spin_speed/position = Vector2(-743.193, 377.99)
+nodes/spin_state/node = SubResource("AnimationNodeStateMachine_xchh2")
+nodes/spin_state/position = Vector2(-940, 460)
 nodes/state_transition/node = SubResource("70")
 nodes/state_transition/position = Vector2(-560, 140)
-node_connections = [&"ground_transition", 0, &"ground_tree", &"ground_transition", 1, &"air_tree", &"hurt_trigger", 0, &"state_transition", &"hurt_trigger", 1, &"hurt_state", &"oneshot_trigger", 0, &"hurt_trigger", &"oneshot_trigger", 1, &"oneshot_tree", &"output", 0, &"oneshot_trigger", &"state_transition", 0, &"ground_transition", &"state_transition", 1, &"drift_tree", &"state_transition", 2, &"balance_tree", &"state_transition", 3, &"sidle_tree"]
+node_connections = [&"ground_transition", 0, &"ground_tree", &"ground_transition", 1, &"air_tree", &"hurt_trigger", 0, &"state_transition", &"hurt_trigger", 1, &"hurt_state", &"oneshot_trigger", 0, &"hurt_trigger", &"oneshot_trigger", 1, &"oneshot_tree", &"output", 0, &"oneshot_trigger", &"spin_speed", 0, &"spin_state", &"state_transition", 0, &"ground_transition", &"state_transition", 1, &"drift_tree", &"state_transition", 2, &"balance_tree", &"state_transition", 3, &"sidle_tree", &"state_transition", 4, &"spin_speed"]
