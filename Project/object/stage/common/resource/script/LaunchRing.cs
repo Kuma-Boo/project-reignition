@@ -107,7 +107,7 @@ namespace Project.Gameplay.Objects
 		[Export(PropertyHint.Range, "0, 1")]
 		/// <summary> Change this in the editor to visualize launch paths. </summary>
 		private float launchPower;
-		public float LaunchRatio => isSpikeVariant ? 1f : launchPower;
+		public float LaunchRatio => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, launchPower);
 
 		//Min
 		private float minDistance;
