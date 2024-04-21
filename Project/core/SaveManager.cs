@@ -15,11 +15,17 @@ namespace Project.Core
 			Instance = this;
 			LoadConfig();
 			PreloadGameData();
+
+			if (!OS.IsDebugBuild())
+			{
+				Config = DebugSettings; // Editor build
+				ApplyConfig();
+			}
 		}
 
 
 		#region Config
-		public static ConfigData Config;
+		public static ConfigData Config = new();
 		public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
 		private const string CONFIG_FILE_NAME = "config.cfg";
 
@@ -37,8 +43,6 @@ namespace Project.Core
 			sfxVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.SFX)) * 100),
 			voiceVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.VOICE)) * 100),
 		};
-
-		private ConfigData DefaultSettings => new();
 
 		public enum ControllerType
 		{
@@ -187,21 +191,24 @@ namespace Project.Core
 		/// <summary> Attempts to load config data from file. </summary>
 		public void LoadConfig()
 		{
-			if (!OS.IsDebugBuild())
-			{
-				FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
+			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
 
+			if (file.GetError() == Error.Ok)
+			{
 				// Attempt to load.
-				if (FileAccess.GetOpenError() == Error.Ok) // Load Default settings
+				try
 				{
-					Config.FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
+					Dictionary d = (Dictionary)Json.ParseString(file.GetAsText());
+					GD.Print(d);
+
+					Config.FromDictionary(d);
 					file.Close();
 				}
-				else
-					Config = DefaultSettings;
+				catch // Load Default settings
+				{
+					Config = new();
+				}
 			}
-			else
-				Config = DebugSettings; // Editor build
 
 			ApplyConfig();
 		}
@@ -211,7 +218,7 @@ namespace Project.Core
 		public void SaveConfig()
 		{
 			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Write);
-			file.StoreString(Json.Stringify(Config.ToDictionary()));
+			file.StoreString(Json.Stringify(Config.ToDictionary(), "\t"));
 			file.Close();
 		}
 
