@@ -360,7 +360,11 @@ namespace Project.Gameplay
 
 			if (IsFallTransitionEnabled)
 			{
-				if (Character.MovementState == CharacterController.MovementStates.Launcher) return;
+				if (Character.MovementState == CharacterController.MovementStates.Launcher)
+				{
+					if (!Character.LaunchSettings.IsJump || Character.VerticalSpeed >= 0)
+						return;
+				}
 
 				if (Character.ActionState != CharacterController.ActionStates.Jumping ||
 				Character.VerticalSpeed <= 0)

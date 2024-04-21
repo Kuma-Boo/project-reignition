@@ -85,6 +85,8 @@ namespace Project.Interface.Menus
 
 					controlMappingOptions[VerticalSelection].CallDeferred(ControlOption.MethodName.StartListening);
 					break;
+				case Submenus.Test:
+					return;
 			}
 
 			UpdateLabels();
@@ -94,8 +96,6 @@ namespace Project.Interface.Menus
 
 		protected override void Cancel()
 		{
-			if (currentSubmenu == Submenus.Mapping && controlMappingOptions[VerticalSelection].IsListeningForInputs) return;
-
 			switch (currentSubmenu)
 			{
 				case Submenus.Options:
@@ -112,10 +112,14 @@ namespace Project.Interface.Menus
 					});
 					break;
 				case Submenus.Mapping:
+					if (controlMappingOptions[VerticalSelection].IsListeningForInputs) return;
+
 					VerticalSelection = 1;
 					currentSubmenu = Submenus.Control;
 					animator.Play("flip-right");
 					break;
+				case Submenus.Test:
+					return;
 				default:
 					VerticalSelection = (int)currentSubmenu - 1;
 					currentSubmenu = Submenus.Options;
@@ -129,7 +133,8 @@ namespace Project.Interface.Menus
 		{
 			if (currentSubmenu == Submenus.Test) // Cancel test
 			{
-
+				animator.Play("test_end");
+				currentSubmenu = Submenus.Control;
 			}
 			else
 				Confirm();
@@ -177,6 +182,8 @@ namespace Project.Interface.Menus
 					}
 
 					break;
+				case Submenus.Test:
+					return;
 			}
 
 			animator.Play("select");
@@ -416,7 +423,8 @@ namespace Project.Interface.Menus
 			}
 			else
 			{
-				// Start Control Test.
+				currentSubmenu = Submenus.Test;
+				animator.Play("flip-left");
 			}
 		}
 	}

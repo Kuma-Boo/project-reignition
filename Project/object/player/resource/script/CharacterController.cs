@@ -1332,7 +1332,7 @@ namespace Project.Gameplay
 		public delegate void LaunchFinishedEventHandler();
 
 		private float launcherTime;
-		private LaunchSettings LaunchSettings;
+		public LaunchSettings LaunchSettings { get; private set; }
 		private Objects.Launcher activeLauncher;
 		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null)
 		{
@@ -1388,6 +1388,7 @@ namespace Project.Gameplay
 				}
 
 				GlobalPosition = targetPosition;
+				VerticalSpeed = heightDelta;
 
 				if (heightDelta < 0) //Only check ground when falling
 					CheckGround();
