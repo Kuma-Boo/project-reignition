@@ -49,6 +49,8 @@ namespace Project.Gameplay
 			{
 				SettingsResource = targetSettings,
 			});
+
+			Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
 		}
 
 
@@ -528,8 +530,10 @@ namespace Project.Gameplay
 		}
 
 
-		public override void _Input(InputEvent e)
+		private void ReceiveInput(InputEvent e)
 		{
+			if (!isFreeCamEnabled) return;
+
 			if (e is InputEventMouseMotion)
 			{
 				if (freeCamRotating)
@@ -558,8 +562,6 @@ namespace Project.Gameplay
 					}
 				}
 			}
-
-			e.Dispose();
 		}
 		#endregion
 	}

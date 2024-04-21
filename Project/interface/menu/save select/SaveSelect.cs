@@ -58,7 +58,7 @@ namespace Project.Interface.Menus
 			if (SaveManager.ActiveGameData.IsNewFile())
 			{
 				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex);
-				SaveManager.SaveGameToFile();
+				SaveManager.Instance.SaveGameToFile();
 
 				// Load directly into the first cutscene.
 				TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}1.tscn");

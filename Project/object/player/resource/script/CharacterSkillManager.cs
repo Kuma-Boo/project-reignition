@@ -13,6 +13,8 @@ namespace Project.Gameplay
 
 		public void Initialize()
 		{
+			if (SaveManager.ActiveGameData == null) return;
+
 			//Determine the size of the soul gauge
 			float levelRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio(); // Current ratio (0 -> 10) compared to the soul gauge level cap (50)
 			maxSoulPower = SOUL_GAUGE_BASE + Mathf.FloorToInt(levelRatio * 10f) * 20; // Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).

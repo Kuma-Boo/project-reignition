@@ -43,12 +43,14 @@ namespace Project.Core
 		public enum ControllerType
 		{
 			PlayStation, // Use PlayStation button prompts
-			Xbox // Use XBox button prompts
+			Xbox, // Use XBox button prompts
+			Count
 		}
 		public enum VoiceLanguage
 		{
 			English,
-			Japanese
+			Japanese,
+			Count
 		}
 		public enum TextLanguage
 		{
@@ -57,7 +59,8 @@ namespace Project.Core
 			German,
 			Italian,
 			French,
-			Spanish
+			Spanish,
+			Count
 		}
 		private enum AudioBuses
 		{
@@ -67,7 +70,7 @@ namespace Project.Core
 			VOICE,
 			COUNT
 		}
-		private readonly Vector2I[] SCREEN_RESOLUTIONS =
+		public static readonly Vector2I[] SCREEN_RESOLUTIONS =
 		{
 			new(640, 360), // 360p
 			new(854, 480), // 480p
@@ -97,7 +100,7 @@ namespace Project.Core
 
 			// Controls
 			public ControllerType controllerType = ControllerType.PlayStation;
-			public Dictionary inputConfiguration;
+			public Dictionary inputConfiguration = new();
 
 			// Language
 			public bool subtitlesEnabled = true;
@@ -472,7 +475,7 @@ namespace Project.Core
 
 
 		/// <summary> Saves active game data to a file. </summary>
-		public static void SaveGameToFile()
+		public void SaveGameToFile()
 		{
 			if (ActiveSaveSlotIndex == -1) return; //Invalid save slot
 
@@ -493,7 +496,7 @@ namespace Project.Core
 
 
 		/// <summary> Preloads game data so it can be displayed on menus. </summary>
-		public static void PreloadGameData()
+		public void PreloadGameData()
 		{
 			for (int i = 0; i < GameSaveSlots.Length; i++)
 			{

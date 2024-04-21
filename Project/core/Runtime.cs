@@ -126,19 +126,26 @@ namespace Project.Core
 		/// <summary> Emitted when the active controller changes. </summary>
 		[Signal]
 		public delegate void ControllerChangedEventHandler(int controllerIndex);
+		[Signal]
+		public delegate void EventInputedEventHandler(InputEvent e);
 		public bool IsUsingController => ActiveController != -1;
 		public int ActiveController { get; private set; }
 
-		public override void _Input(InputEvent e)
+		public override void _UnhandledInput(InputEvent e)
 		{
+			EmitSignal(SignalName.EventInputed, e);
+
 			int targetController = -1;
 			if (e is InputEventJoypadButton)
 				ActiveController = e.Device; // Gamepad (ignore analog inputs due to noise)
 
 			if (targetController == ActiveController) return;
 
+
 			ActiveController = targetController;
 			EmitSignal(SignalName.ControllerChanged, ActiveController);
+
+			e.Dispose();
 		}
 
 

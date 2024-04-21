@@ -6,6 +6,9 @@ namespace Project.Interface.Menus
 {
 	public partial class ControlOption : Control
 	{
+		[Signal]
+		public delegate void SwapMappingEventHandler(StringName id, InputEvent e); // Emitted when a remap results in a mapping swap
+
 		[Export]
 		public Label actionLabel;
 		[Export]
@@ -20,82 +23,98 @@ namespace Project.Interface.Menus
 		public ControllerSpriteResource[] controllerResources;
 
 		[Export]
-		private StringName inputID;
-		private bool isListeningForInputs;
-
+		public StringName inputID;
+		public bool IsListeningForInputs { get; private set; }
 
 		public override void _Ready()
 		{
 			actionLabel.Text = Tr(inputID.ToString());
+			SaveConfig();
 			RedrawBinding();
 			Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.RedrawBinding));
+			Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
 		}
 
 
 		public void StartListening()
 		{
-			isListeningForInputs = true;
-
-			inputLabel.Text = "...";
-			inputLabel.Visible = true;
-			spriteRect.Visible = false;
-		}
-
-
-		private void StopListening()
-		{
-			isListeningForInputs = false;
+			IsListeningForInputs = true;
+			Input.ActionRelease("button_jump");
 			RedrawBinding();
 		}
 
 
-		public override void _Input(InputEvent e)
+		private async void StopListening()
 		{
-			if (!isListeningForInputs) return;
-			if (!e.IsPressed()) return; // Only listen for PRESSES
-			if (!(e is InputEventKey || e is InputEventJoypadButton)) return; // Only listen for keys and button presses.
+			await ToSignal(GetTree().CreateTimer(PhysicsManager.physicsDelta, false), SceneTreeTimer.SignalName.Timeout);
+			IsListeningForInputs = false;
+			RedrawBinding();
+		}
 
-			if (!ValidateInput(e))
-				StopListening();
+
+		public void ReceiveInput(InputEvent e) => ReceiveInput(e, false);
+		public void ReceiveInput(InputEvent e, bool swapInput)
+		{
+			if (!swapInput)
+			{
+				if (!IsListeningForInputs) return;
+				if (!e.IsPressed() || e.IsEcho()) return; // Only listen for press
+				if (!(e is InputEventKey || e is InputEventJoypadButton)) return; // Only listen for keys and button presses.
+
+				if (!FilterInput(e)) return;
+			}
+
+			RemapInput(e);
+			CallDeferred(MethodName.StopListening);
 		}
 
 
 		/// <summary> Remaps the target input to the given input event's binding. </summary>
-		private void RemapInput(InputEvent inputEvent)
+		private void RemapInput(InputEvent e)
 		{
 			// Check for conflicting input mappings
 			Array<StringName> actionList = InputMap.GetActions();
-			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID);
+			StringName swapAction = null;
 
 			for (int i = 0; i < actionList.Count; i++)
 			{
-				if (!InputMap.ActionHasEvent(actionList[i], inputEvent))
+				if (!SaveManager.Config.inputConfiguration.ContainsKey(actionList[i]))
 					continue;
 
-				// Resolve the mapping conflict by swapping input mapping with this menu option's mapping
-				foreach (InputEvent e in eventList)
+				if (InputMap.ActionHasEvent(actionList[i], e))
 				{
-					if (inputEvent.GetType() != e.GetType())
-						continue;
+					if (actionList[i] == inputID) return; // Nothing changed
 
-					InputMap.ActionEraseEvent(actionList[i], inputEvent);
-					InputMap.ActionAddEvent(actionList[i], e);
-					break;
+					// Store conflict for a swap later
+					swapAction = actionList[i];
 				}
-				break;
 			}
+
+			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID);
 
 
 			for (int i = 0; i < eventList.Count; i++)
 			{
-				if (inputEvent.GetType() != eventList[i].GetType())
+				if (e.GetType() != eventList[i].GetType())
 					continue;
 
 				InputMap.ActionEraseEvent(inputID, eventList[i]); // Erase the old action
-				InputMap.ActionAddEvent(inputID, inputEvent); // Add the new action
-				eventList = InputMap.ActionGetEvents(inputID); // Refresh event list
+
+				// Resolve the mapping conflict by swapping input mapping with this menu option's mapping
+				if (swapAction != null)
+					EmitSignal(SignalName.SwapMapping, swapAction, eventList[i]);
+
+				InputMap.ActionAddEvent(inputID, e); // Add the new action
 				break;
 			}
+
+			SaveConfig();
+		}
+
+
+		private void SaveConfig()
+		{
+			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID); // Refresh event list
 
 			// Construct the mapping string
 			int[] mappingList = { (int)Key.None, (int)JoyAxis.Invalid, (int)JoyButton.Invalid };
@@ -109,13 +128,16 @@ namespace Project.Interface.Menus
 					mappingList[2] = (int)(e as InputEventJoypadButton).ButtonIndex;
 			}
 			string mappingString = $"{mappingList[0]}, {mappingList[1]}, {mappingList[2]}";
-			SaveManager.Config.inputConfiguration[inputID] = mappingString;
-			RedrawBinding();
+
+			if (SaveManager.Config.inputConfiguration.ContainsKey(inputID))
+				SaveManager.Config.inputConfiguration[inputID] = mappingString;
+			else
+				SaveManager.Config.inputConfiguration.Add(inputID, mappingString);
 		}
 
 
 		/// <summary> Checks whether the input can be remapped to the target binding. </summary>
-		private bool ValidateInput(InputEvent e)
+		private bool FilterInput(InputEvent e)
 		{
 			if (e is InputEventJoypadButton) // Exclude certain buttons (such as guides and d-pads)
 			{
@@ -157,9 +179,17 @@ namespace Project.Interface.Menus
 		}
 
 
-		private void RedrawBinding()
+		public void RedrawBinding()
 		{
-			isListeningForInputs = false;
+			if (IsListeningForInputs)
+			{
+				inputLabel.Text = "...";
+				inputLabel.Visible = true;
+				spriteRect.Visible = false;
+				return;
+			}
+
+
 			spriteRect.Visible = true;
 			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID);
 
@@ -184,7 +214,7 @@ namespace Project.Interface.Menus
 			{
 				if (eventList[i] is InputEventKey)
 				{
-					Key key = (eventList[i] as InputEventKey).PhysicalKeycode;
+					Key key = (eventList[i] as InputEventKey).Keycode;
 					inputLabel.Text = Runtime.Instance.GetKeyLabel(key);
 					spriteRect.Texture = inputLabel.Text.Length > 3 ? keyWideSprite : keySprite;
 					break;
