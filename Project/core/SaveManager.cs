@@ -199,8 +199,6 @@ namespace Project.Core
 				try
 				{
 					Dictionary d = (Dictionary)Json.ParseString(file.GetAsText());
-					GD.Print(d);
-
 					Config.FromDictionary(d);
 					file.Close();
 				}
