@@ -48,6 +48,14 @@ namespace Project.Interface.Menus
 		public void ApplyTexture() => menuOverlay.SetShaderParameter(MENU_PARAMETER, menuViewport.GetTexture());
 
 
+		private void FlipBook(Submenus submenu, bool flipRight, int selection)
+		{
+			currentSubmenu = submenu;
+			animator.Play(flipRight ? "flip-right" : "flip-left");
+			VerticalSelection = selection;
+		}
+
+
 		protected override void ProcessMenu()
 		{
 			UpdateCursor();
@@ -63,18 +71,19 @@ namespace Project.Interface.Menus
 			switch (currentSubmenu)
 			{
 				case Submenus.Options:
-					currentSubmenu = (Submenus)VerticalSelection + 1;
-					animator.Play("flip-left");
-					VerticalSelection = 0;
+					ConfirmSFX();
+					FlipBook((Submenus)VerticalSelection + 1, false, 0);
 					break;
 				case Submenus.Video:
-					SlideVideoOption(1);
+					if (SlideVideoOption(1))
+						ConfirmSFX();
 					break;
 				case Submenus.Audio:
 					ConfirmAudioOption();
 					break;
 				case Submenus.Language:
-					SlideLanguageOption(1);
+					if (SlideLanguageOption(1))
+						ConfirmSFX();
 					break;
 				case Submenus.Control:
 					ConfirmControlOption();
@@ -83,6 +92,7 @@ namespace Project.Interface.Menus
 					if (controlMappingOptions[VerticalSelection].IsListeningForInputs) // Listening for inputs
 						return;
 
+					ConfirmSFX();
 					controlMappingOptions[VerticalSelection].CallDeferred(ControlOption.MethodName.StartListening);
 					break;
 				case Submenus.Test:
@@ -99,6 +109,7 @@ namespace Project.Interface.Menus
 			switch (currentSubmenu)
 			{
 				case Submenus.Options:
+					CancelSFX();
 					DisableProcessing();
 					FadeBGM(.5f);
 					SaveManager.Instance.SaveConfig();
@@ -114,16 +125,14 @@ namespace Project.Interface.Menus
 				case Submenus.Mapping:
 					if (controlMappingOptions[VerticalSelection].IsListeningForInputs) return;
 
-					VerticalSelection = 1;
-					currentSubmenu = Submenus.Control;
-					animator.Play("flip-right");
+					CancelSFX();
+					FlipBook(Submenus.Control, true, 1);
 					break;
 				case Submenus.Test:
 					return;
 				default:
-					VerticalSelection = (int)currentSubmenu - 1;
-					currentSubmenu = Submenus.Options;
-					animator.Play("flip-right");
+					CancelSFX();
+					FlipBook(Submenus.Options, true, (int)currentSubmenu - 1);
 					break;
 			}
 		}
@@ -261,6 +270,14 @@ namespace Project.Interface.Menus
 
 		private void RedrawControlOptions(StringName id, InputEvent e)
 		{
+			if (string.IsNullOrEmpty(id)) // Button was remapped to the same button
+				CancelSFX();
+			else // Actual remap has occurred
+				ConfirmSFX();
+
+			if (e == null)
+				return;
+
 			foreach (ControlOption controlOption in controlMappingOptions)
 			{
 				if (controlOption.inputID == id)
@@ -294,6 +311,7 @@ namespace Project.Interface.Menus
 
 			if (!settingUpdated) return;
 
+			ConfirmSFX();
 			StartSelectionTimer();
 			UpdateLabels();
 			SaveManager.Instance.ApplyConfig();
@@ -400,6 +418,7 @@ namespace Project.Interface.Menus
 
 		private void ConfirmAudioOption()
 		{
+			ConfirmSFX();
 			if (VerticalSelection == 0)
 				SaveManager.Config.isMasterMuted = !SaveManager.Config.isMasterMuted;
 			else if (VerticalSelection == 1)
@@ -413,19 +432,27 @@ namespace Project.Interface.Menus
 
 		private void ConfirmControlOption()
 		{
+			ConfirmSFX();
 			if (VerticalSelection == 0)
 				SlideControlOption(1);
 			else if (VerticalSelection == 1)
-			{
-				currentSubmenu = Submenus.Mapping;
-				animator.Play("flip-left");
-				VerticalSelection = 0;
-			}
+				FlipBook(Submenus.Mapping, false, 0);
 			else
-			{
-				currentSubmenu = Submenus.Test;
-				animator.Play("flip-left");
-			}
+				FlipBook(Submenus.Test, false, VerticalSelection);
+		}
+
+
+		private void ConfirmSFX()
+		{
+			animator.Play("confirm");
+			animator.Advance(0.0);
+		}
+
+
+		private void CancelSFX()
+		{
+			animator.Play("cancel");
+			animator.Advance(0.0);
 		}
 	}
 }

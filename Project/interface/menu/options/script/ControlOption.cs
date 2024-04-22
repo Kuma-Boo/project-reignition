@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Microsoft.VisualBasic;
 using Project.Core;
 
 namespace Project.Interface.Menus
@@ -83,7 +84,13 @@ namespace Project.Interface.Menus
 
 				if (InputMap.ActionHasEvent(actionList[i], e))
 				{
-					if (actionList[i] == inputID) return; // Nothing changed
+					if (actionList[i] == inputID)
+					{
+						EmitSignal(SignalName.SwapMapping, string.Empty, new());
+						return; // Nothing changed
+					}
+
+
 
 					// Store conflict for a swap later
 					swapAction = actionList[i];
@@ -91,7 +98,6 @@ namespace Project.Interface.Menus
 			}
 
 			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID);
-
 
 			for (int i = 0; i < eventList.Count; i++)
 			{
@@ -108,6 +114,7 @@ namespace Project.Interface.Menus
 				break;
 			}
 
+			EmitSignal(SignalName.SwapMapping, inputID, new());
 			SaveConfig();
 		}
 
