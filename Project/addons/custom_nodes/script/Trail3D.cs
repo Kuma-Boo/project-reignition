@@ -15,10 +15,12 @@ namespace Project.CustomNodes
 		private float radius = .3f; // Radius of the trail
 		[Export]
 		private int resolution = 16; // Resolution of the homing attack trail length-wise
-		[Export]
-		private float distance_deadzone = .1f; // Resolution of the homing attack trail distance-wise
+		[Export(PropertyHint.Range, "0.01, 1, 0.01")]
+		private float distanceDeadzone = .1f; // Resolution of the homing attack trail distance-wise
 		[Export]
 		private float lifetime = .5f; // How long each point should live
+		[Export]
+		private Curve transparencyCurve;
 		private const float ATTACK_TRAIL_UV_STEP = .01f; // How much of the uv each segment should take up
 
 		[Export(PropertyHint.Layers3DRender)]
@@ -32,10 +34,10 @@ namespace Project.CustomNodes
 
 		public override void _Ready()
 		{
-			trailMesh = new ImmediateMesh();
+			trailMesh = new();
 
 			// Actual mesh instance is parented at the bottom of the tree so trails render AFTER everything else has moved.
-			trailMeshInstance = new MeshInstance3D()
+			trailMeshInstance = new()
 			{
 				Layers = layer,
 				MaterialOverride = material,
@@ -58,7 +60,7 @@ namespace Project.CustomNodes
 		{
 			trailMeshInstance.GlobalTransform = GlobalTransform;
 
-			if (IsEmitting && trailMeshInstance.GlobalPosition.DistanceSquaredTo(previousPosition) >= Mathf.Pow(distance_deadzone, 2.0f)) // Check for new points
+			if (IsEmitting && trailMeshInstance.GlobalPosition.DistanceSquaredTo(previousPosition) >= Mathf.Pow(distanceDeadzone, 2.0f)) // Check for new points
 				AddPoint();
 
 			for (int i = points.Count - 1; i >= 0; i--) // Update each point in reverse order
@@ -90,6 +92,7 @@ namespace Project.CustomNodes
 				for (int x = 0; x < points.Count; x++)
 				{
 					float xFactor = x / (points.Count - 1.0f);
+					float transparency = Mathf.Clamp(transparencyCurve.Sample(pointLifetimes[x] / lifetime), 0f, 1f);
 
 					Vector3 normal01 = points[x].normal.Rotated(points[x].tangent, angleIncrement * y);
 					Vector3 normal02 = normal01.Rotated(points[x].tangent, angleIncrement);
@@ -98,11 +101,13 @@ namespace Project.CustomNodes
 					trailMesh.SurfaceSetUV2(new Vector2(xFactor, yFactor01));
 					trailMesh.SurfaceSetNormal(surfaceNormal);
 					trailMesh.SurfaceAddVertex(ToLocal(points[x].position + normal01 * radius));
+					trailMesh.SurfaceSetColor(new(Colors.White, transparency));
 
 					trailMesh.SurfaceSetUV(new Vector2(x * ATTACK_TRAIL_UV_STEP, yFactor02));
 					trailMesh.SurfaceSetUV2(new Vector2(xFactor, yFactor01));
 					trailMesh.SurfaceSetNormal(surfaceNormal);
 					trailMesh.SurfaceAddVertex(ToLocal(points[x].position + normal02 * radius));
+					trailMesh.SurfaceSetColor(new(Colors.White, transparency));
 				}
 
 				trailMesh.SurfaceEnd();
@@ -112,6 +117,9 @@ namespace Project.CustomNodes
 
 		private void AddPoint()
 		{
+			if (points.Count == 0)
+				previousPosition = trailMeshInstance.GlobalPosition + this.Back();
+
 			Vector3 tangentDirection = (trailMeshInstance.GlobalPosition - previousPosition).Normalized();
 			Vector3 upDirection = tangentDirection.Rotated(this.Right(), Mathf.Pi * .5f);
 			points.Add(new Point(GlobalPosition, upDirection, tangentDirection));

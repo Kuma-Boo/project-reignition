@@ -1734,6 +1734,8 @@ namespace Project.Gameplay
 							MoveSpeed *= speedClamp;
 					}
 				}
+				else if (ActionState == ActionStates.JumpDash)
+					Effect.StopTrailFX();
 			}
 		}
 

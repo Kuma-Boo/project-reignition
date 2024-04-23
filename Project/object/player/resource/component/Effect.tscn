@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=44 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -21,6 +21,10 @@
 [ext_resource type="Texture2D" uid="uid://ch2re1xkc00aj" path="res://object/player/resource/effect/texture/speed break streak.png" id="17_u6bvm"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="20_o3oog"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
+
+[sub_resource type="Curve" id="Curve_bi8dp"]
+_data = [Vector2(0, 1), 0.0, -0.0371234, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
 radius = 0.4
@@ -477,7 +481,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 [node name="TrailMesh" type="Node3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("10_1mog6")
-distance_deadzone = 0.01
+distanceDeadzone = 0.01
+transparencyCurve = SubResource("Curve_bi8dp")
 layer = 32
 material = ExtResource("9_on86l")
 
