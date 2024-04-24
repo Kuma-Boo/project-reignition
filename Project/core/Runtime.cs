@@ -131,7 +131,7 @@ namespace Project.Core
 		public bool IsUsingController => ActiveController != -1;
 		public int ActiveController { get; private set; }
 
-		public override void _UnhandledInput(InputEvent e)
+		public override void _Input(InputEvent e)
 		{
 			EmitSignal(SignalName.EventInputed, e);
 
