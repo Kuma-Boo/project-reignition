@@ -191,6 +191,18 @@ namespace Project.Core
 		/// <summary> Attempts to load config data from file. </summary>
 		public void LoadConfig()
 		{
+			foreach (StringName actionName in InputMap.GetActions())
+			{
+				foreach (InputEvent e in InputMap.ActionGetEvents(actionName))
+				{
+					if (e is InputEventJoypadMotion)
+					{
+						InputEventJoypadMotion m = e as InputEventJoypadMotion;
+						GD.Print(m.Axis, m.AxisValue);
+					}
+				}
+			}
+
 			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
 
 			if (file.GetError() == Error.Ok)
@@ -256,6 +268,7 @@ namespace Project.Core
 				Key key = (Key)mappings[0].ToInt();
 				JoyAxis axis = (JoyAxis)mappings[1].ToInt();
 				JoyButton button = (JoyButton)mappings[2].ToInt();
+				int axisSign = mappings[3].ToInt();
 
 				InputMap.ActionEraseEvents(actions[i]);
 
@@ -268,7 +281,8 @@ namespace Project.Core
 				if (axis != JoyAxis.Invalid)
 					InputMap.ActionAddEvent(actions[i], new InputEventJoypadMotion()
 					{
-						Axis = axis
+						Axis = axis,
+						AxisValue = axisSign
 					});
 
 				if (button != JoyButton.Invalid)

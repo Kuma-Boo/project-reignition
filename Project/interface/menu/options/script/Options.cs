@@ -89,7 +89,7 @@ namespace Project.Interface.Menus
 					ConfirmControlOption();
 					break;
 				case Submenus.Mapping:
-					if (controlMappingOptions[VerticalSelection].IsListeningForInputs) // Listening for inputs
+					if (!controlMappingOptions[VerticalSelection].IsReady)
 						return;
 
 					ConfirmSFX();
@@ -123,7 +123,7 @@ namespace Project.Interface.Menus
 					});
 					break;
 				case Submenus.Mapping:
-					if (controlMappingOptions[VerticalSelection].IsListeningForInputs) return;
+					if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 					CancelSFX();
 					FlipBook(Submenus.Control, true, 1);
@@ -179,7 +179,7 @@ namespace Project.Interface.Menus
 					VerticalSelection = WrapSelection(targetSelection, 3);
 					break;
 				case Submenus.Mapping:
-					if (controlMappingOptions[VerticalSelection].IsListeningForInputs) // Listening for inputs
+					if (!controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
 						return;
 
 					bool movementPage = IsMovementPage;

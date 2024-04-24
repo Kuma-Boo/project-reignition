@@ -8,7 +8,7 @@ namespace Project.Interface
 	public partial class ControllerSpriteResource : Resource
 	{
 		[Export]
-		public Texture2D[] stickDirections;
+		public Texture2D[] axis;
 		[Export]
 		public Texture2D[] buttons;
 	}

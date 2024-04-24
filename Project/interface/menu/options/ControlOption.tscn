@@ -1,13 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1806dq45a0kr"]
+[gd_scene load_steps=9 format=3 uid="uid://c1806dq45a0kr"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/ControlOption.cs" id="1_l770c"]
 [ext_resource type="FontFile" uid="uid://dakokhex1lp8k" path="res://interface/font/otf/Greco Std B.otf" id="2_ylei2"]
 [ext_resource type="Texture2D" uid="uid://bmsu8uq8tp6gy" path="res://resource/input sprites/options/key_base.png" id="3_cllrh"]
-[ext_resource type="Texture2D" uid="uid://8emhmyf8wpl1" path="res://resource/input sprites/options/key_wide.png" id="3_huuj6"]
 [ext_resource type="Resource" uid="uid://dqn88r0wddcgn" path="res://resource/preset/controller/OptionsPS5.tres" id="4_2yyor"]
+[ext_resource type="Resource" uid="uid://pd738lykyqjt" path="res://resource/preset/controller/OptionsKeyboard.tres" id="4_17ddv"]
 [ext_resource type="Resource" uid="uid://dexagc2ikyn0e" path="res://resource/preset/controller/OptionsXboxOne.tres" id="5_16qra"]
+[ext_resource type="Texture2D" uid="uid://chcjxv1r5uopv" path="res://resource/input sprites/options/button/button_a.png" id="7_b4hlo"]
+[ext_resource type="Texture2D" uid="uid://djrxs4mn3pwh6" path="res://resource/input sprites/options/button/button_base.png" id="8_llhce"]
 
-[node name="ControlOption" type="Control" node_paths=PackedStringArray("actionLabel", "inputLabel", "spriteRect")]
+[node name="ControlOption" type="Control" node_paths=PackedStringArray("actionLabel", "inputLabel", "awaitingInput", "keyTextureRect", "axisTextureRect", "buttonTextureRect")]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 3
 anchors_preset = 0
@@ -15,11 +17,12 @@ offset_right = 2048.0
 offset_bottom = 96.0
 script = ExtResource("1_l770c")
 actionLabel = NodePath("ActionLabel")
-inputLabel = NodePath("Input/InputLabel")
-spriteRect = NodePath("Input/ButtonSprite")
-keySprite = ExtResource("3_cllrh")
-keyWideSprite = ExtResource("3_huuj6")
-controllerResources = Array[Resource]([ExtResource("4_2yyor"), ExtResource("5_16qra")])
+inputLabel = NodePath("Input/KeySprite/InputLabel")
+awaitingInput = NodePath("WaitingLabel")
+keyTextureRect = NodePath("Input/KeySprite")
+axisTextureRect = NodePath("Input/AxisSprite")
+buttonTextureRect = NodePath("Input/ButtonSprite")
+controllerResources = Array[Resource]([ExtResource("4_2yyor"), ExtResource("5_16qra"), ExtResource("4_17ddv")])
 inputID = &"button_pause"
 
 [node name="ActionLabel" type="Label" parent="."]
@@ -36,7 +39,24 @@ text = "control"
 vertical_alignment = 1
 uppercase = true
 
-[node name="Input" type="Control" parent="."]
+[node name="WaitingLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -840.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_ylei2")
+theme_override_font_sizes/font_size = 64
+text = "option_awaiting_input"
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Input" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -47,8 +67,15 @@ offset_right = -8.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(96, 48)
+theme_override_constants/separation = 20
 
-[node name="InputLabel" type="Label" parent="Input"]
+[node name="KeySprite" type="TextureRect" parent="Input"]
+custom_minimum_size = Vector2(192, 100)
+layout_mode = 2
+texture = ExtResource("3_cllrh")
+stretch_mode = 3
+
+[node name="InputLabel" type="Label" parent="Input/KeySprite"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -64,15 +91,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
+[node name="AxisSprite" type="TextureRect" parent="Input"]
+custom_minimum_size = Vector2(192, 100)
+layout_mode = 2
+texture = ExtResource("8_llhce")
+stretch_mode = 3
+
 [node name="ButtonSprite" type="TextureRect" parent="Input"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -2.0
-offset_bottom = 2.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(96, 50)
-texture = ExtResource("3_cllrh")
+custom_minimum_size = Vector2(192, 100)
+layout_mode = 2
+texture = ExtResource("7_b4hlo")
 stretch_mode = 3
