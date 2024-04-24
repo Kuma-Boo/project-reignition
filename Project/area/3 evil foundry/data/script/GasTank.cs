@@ -34,6 +34,8 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
+			if (Engine.IsEditorHint()) return;
+
 			startPosition = GlobalPosition;
 			StageSettings.instance.ConnectRespawnSignal(this);
 		}
