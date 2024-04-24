@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=51 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Material" uid="uid://jpwdaxh0ckoc" path="res://interface/menu/options/environment/material/Menu Overlay.tres" id="2_g15f7"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="8_wksl8"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="8_xb0ie"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="12_qlup6"]
 [ext_resource type="FontFile" uid="uid://dakokhex1lp8k" path="res://interface/font/otf/Greco Std B.otf" id="13_tx5t6"]
 [ext_resource type="PackedScene" uid="uid://c1806dq45a0kr" path="res://interface/menu/options/ControlOption.tscn" id="14_itn8j"]
 [ext_resource type="AudioStream" uid="uid://b5d5wemyoi5ap" path="res://sound/ost/treasure disc/4 MISGIVING.mp3" id="18_fr2tm"]
@@ -214,7 +215,19 @@ tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, -15)]
+"values": [Vector3(0, 0, -6)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_24v0k"]
@@ -738,7 +751,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector3(0, 0, -15)]
+"values": [Vector3(0, 0, -6)]
 }
 tracks/3/type = "method"
 tracks/3/imported = false
@@ -765,6 +778,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_pjjbd"]
@@ -809,6 +834,32 @@ tracks/2/keys = {
 "args": [],
 "method": &"Activate"
 }]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ControlBook/Collision/Wall")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_q1gli"]
@@ -937,6 +988,7 @@ Completion/Lockout = null
 "Completion/Demo Animator" = NodePath("")
 "Static/Path Parent" = NodePath("Path")
 Static/Environment = NodePath("Visuals/WorldEnvironment")
+isControlTest = true
 
 [node name="SFX" type="Node" parent="ControlBook"]
 
@@ -969,6 +1021,11 @@ transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 0, 0, 0)
 visible = false
 
 [node name="StaticBody3D" parent="ControlBook/Collision/Floor" index="0" groups=["floor"]]
+
+[node name="Wall" parent="ControlBook/Collision" index="1"]
+script = ExtResource("12_qlup6")
+
+[node name="StaticBody3D" parent="ControlBook/Collision/Wall" index="0" groups=["wall"]]
 
 [node name="ControlBook" parent="ControlBook" instance=ExtResource("6_jppea")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 0, 0, 0)
@@ -1096,12 +1153,13 @@ draw_pass_1 = SubResource("QuadMesh_md2q0")
 environment = SubResource("Environment_xk4ou")
 
 [node name="PlayerSpawn" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 8, -8)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 5, 0)
 script = ExtResource("4_g52h3")
 
 [node name="Player" parent="ControlBook/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("3_4o0co")]
 process_mode = 4
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+visible = false
 Camera = NodePath("../Camera")
 
 [node name="Camera" parent="ControlBook/PlayerSpawn" instance=ExtResource("5_1klrf")]
@@ -1116,11 +1174,12 @@ jumpHeight = 15.0
 autoAlign = true
 
 [node name="JumpStart" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 8.2, 7)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 5, 6)
 
 [node name="JumpStart" type="Node3D" parent="ControlBook/JumpStart"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, -4, 6)
 script = ExtResource("8_7asuc")
+jumpHeight = 2.0
 autoAlign = true
 
 [node name="Viewport" type="SubViewportContainer" parent="."]
@@ -1828,6 +1887,7 @@ loopStartPosition = 30.264
 loopEndPosition = 95.0
 
 [connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="EnableProcessing"]
+[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="ControlBook/Collision/Wall" method="Activate"]
 
 [editable path="ControlBook/Collision"]
 [editable path="ControlBook/ControlBook"]

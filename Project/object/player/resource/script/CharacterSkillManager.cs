@@ -323,8 +323,8 @@ namespace Project.Gameplay
 		private int soulPower; //Current soul power
 		private int maxSoulPower; //Calculated on start
 
-		private bool IsSoulGaugeEmpty => soulPower == 0;
-		private bool IsSoulGaugeCharged => soulPower >= MINIMUM_SOUL_POWER;
+		private bool IsSoulGaugeEmpty => !StageSettings.instance.isControlTest && soulPower == 0;
+		private bool IsSoulGaugeCharged => StageSettings.instance.isControlTest || soulPower >= MINIMUM_SOUL_POWER;
 
 		private const int MINIMUM_SOUL_POWER = 50; //Minimum amount of soul power needed to use soul skills.
 		private const int SOUL_GAUGE_BASE = 100; //Starting size of soul gauge

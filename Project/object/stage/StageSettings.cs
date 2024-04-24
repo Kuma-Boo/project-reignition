@@ -250,6 +250,8 @@ namespace Project.Gameplay
 		public WorldEnvironment Environment { get; private set; }
 		private NodePath environment;
 
+		[Export]
+		public bool isControlTest;
 
 		public override void _EnterTree()
 		{
