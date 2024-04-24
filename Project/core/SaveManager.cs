@@ -191,15 +191,6 @@ namespace Project.Core
 		/// <summary> Attempts to load config data from file. </summary>
 		public void LoadConfig()
 		{
-			foreach (StringName actionName in InputMap.GetActions())
-			{
-				foreach (InputEvent e in InputMap.ActionGetEvents(actionName))
-				{
-					if (e is InputEventJoypadMotion)
-						InputEventJoypadMotion m = e as InputEventJoypadMotion;
-				}
-			}
-
 			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
 
 			if (file.GetError() == Error.Ok)
