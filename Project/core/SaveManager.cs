@@ -196,10 +196,7 @@ namespace Project.Core
 				foreach (InputEvent e in InputMap.ActionGetEvents(actionName))
 				{
 					if (e is InputEventJoypadMotion)
-					{
 						InputEventJoypadMotion m = e as InputEventJoypadMotion;
-						GD.Print(m.Axis, m.AxisValue);
-					}
 				}
 			}
 
