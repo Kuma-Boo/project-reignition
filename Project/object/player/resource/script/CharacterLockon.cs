@@ -89,7 +89,7 @@ namespace Project.Gameplay
 					{
 						if (dst > closestDistance + DISTANCE_FUDGE_AMOUNT)
 							continue; // Check whether the object is close enough to be considered
-						else if (dst > closestDistance && activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
+						else if (dst > closestDistance || activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
 							continue; // Within fudge range, decide priority based on height
 					}
 
