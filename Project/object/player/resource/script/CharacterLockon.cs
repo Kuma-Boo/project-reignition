@@ -33,6 +33,8 @@ namespace Project.Gameplay
 			Invisible,
 			HitObstacle,
 		}
+		/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
+		private readonly float DISTANCE_FUDGE_AMOUNT = 4f;
 		private readonly Array<Node3D> activeTargets = new(); //List of targetable objects
 
 		/// <summary> Enables detection of new lockonTargets. </summary>
@@ -44,7 +46,6 @@ namespace Project.Gameplay
 		public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
 		public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 		public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
-
 
 		public void StartHomingAttack()
 		{
@@ -70,8 +71,9 @@ namespace Project.Gameplay
 
 			if (IsMonitoring)
 			{
-				int currentTarget = -1; // Index of the current target
+				Node3D currentTarget = Target;
 				float closestDistance = Mathf.Inf; // Current closest target
+
 				if (Target != null && Target.IsInsideTree()) // Current lockon target starts as the closest target
 					closestDistance = Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 
@@ -82,16 +84,22 @@ namespace Project.Gameplay
 						continue;
 
 					float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
-					if (dst > closestDistance)
-						continue;
+
+					if (currentTarget != null)
+					{
+						if (dst > closestDistance + DISTANCE_FUDGE_AMOUNT)
+							continue; // Check whether the object is close enough to be considered
+						else if (dst > closestDistance && activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
+							continue; // Within fudge range, decide priority based on height
+					}
 
 					// Update data
+					currentTarget = activeTargets[i];
 					closestDistance = dst;
-					currentTarget = i;
 				}
 
-				if (currentTarget != -1 && activeTargets[currentTarget] != Target) // Target has changed
-					Target = activeTargets[currentTarget];
+				if (currentTarget != null && currentTarget != Target) // Target has changed
+					Target = currentTarget;
 				else if (Target != null && IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
 					Target = null;
 			}
