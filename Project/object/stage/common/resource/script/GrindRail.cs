@@ -137,6 +137,8 @@ namespace Project.Gameplay
 		private float jumpBufferTimer;
 		/// <summary> Is a shuffle currently being buffered? </summary>
 		private float shuffleBufferTimer;
+		/// <summary> Basic measure for attaching at the end of the rail. </summary>
+		private float RAIL_FUDGE_FACTOR => Skills.grindSettings.speed * PhysicsManager.physicsDelta;
 		private const float JUMP_BUFFER_LENGTH = .2f;
 		private const float SHUFFLE_BUFFER_LENGTH = .4f;
 		/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
@@ -153,6 +155,9 @@ namespace Project.Gameplay
 			// Sync rail pathfollower
 			Vector3 delta = rail.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - rail.GlobalPosition);
 			pathFollower.Progress = rail.Curve.GetClosestOffset(delta);
+			pathFollower.Progress = Mathf.Clamp(pathFollower.Progress, 0, rail.Curve.GetBakedLength() - RAIL_FUDGE_FACTOR);
+			if (pathFollower.Progress >= rail.Curve.GetBakedLength() - RAIL_FUDGE_FACTOR) // Too close to the end of the rail; skip smoothing
+				return;
 
 			// Ignore grinds that would immediately put the player into a wall
 			if (CheckWall(Skills.grindSettings.speed * PhysicsManager.physicsDelta)) return;
@@ -197,8 +202,15 @@ namespace Project.Gameplay
 				UpdateInvisibleRailPosition();
 			}
 
+			float positionSmoothing = .2f;
+			float smoothFactor = RAIL_FUDGE_FACTOR * 5f;
+			if (pathFollower.Progress >= rail.Curve.GetBakedLength() - smoothFactor) // Calculate smoothing when activating at the end of the rail
+			{
+				float progressFactor = Mathf.Abs(pathFollower.Progress - rail.Curve.GetBakedLength());
+				positionSmoothing = Mathf.SmoothStep(0f, positionSmoothing, Mathf.Clamp(progressFactor / smoothFactor, 0f, 1f));
+			}
 			Character.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
-			Character.StartExternal(this, pathFollower, 0.2f);
+			Character.StartExternal(this, pathFollower, positionSmoothing);
 
 			Character.IsMovingBackward = false;
 			Character.LandOnGround(); // Rail counts as being on the ground
@@ -228,9 +240,6 @@ namespace Project.Gameplay
 			if (isInvisibleRail) // Hide rail model
 				railModel.Visible = false;
 
-			if (jumpBufferTimer > 0) // Player buffered a jump; allow cyote time
-				Character.Jump(true);
-
 			Character.IsOnGround = false; // Disconnect from the ground
 			Character.ResetMovementState();
 
@@ -247,6 +256,12 @@ namespace Project.Gameplay
 			// Disconnect signals
 			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
 			Character.Disconnect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
+
+			if (jumpBufferTimer > 0) // Player buffered a jump; allow cyote time
+			{
+				jumpBufferTimer = 0;
+				Character.Jump(true);
+			}
 
 			EmitSignal(SignalName.GrindCompleted);
 		}
@@ -287,9 +302,10 @@ namespace Project.Gameplay
 			if (!Character.Animator.IsBalanceShuffleActive)
 			{
 				if (shuffleBufferTimer > 0) // Shuffle was buffered perfectly
+				{
+					shuffleBufferTimer = 0;
 					StartShuffle(true);
-
-				shuffleBufferTimer = 0;
+				}
 
 				if (jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
 				{
@@ -324,12 +340,13 @@ namespace Project.Gameplay
 				Character.CheckCeiling();
 
 			pathFollower.Progress += movementDelta;
+			pathFollower.ProgressRatio = Mathf.Clamp(pathFollower.ProgressRatio, 0.0f, 1.0f);
 			Character.UpdateExternalControl(true);
 			Character.Animator.UpdateBalancing(Character.Animator.CalculateTurnRatio());
 			Character.Animator.UpdateBalanceSpeed(Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed));
 			grindParticles.GlobalTransform = Character.GlobalTransform; // Sync particle position with player
 
-			if (pathFollower.ProgressRatio >= 1 || Mathf.IsZeroApprox(Character.MoveSpeed)) // Disconnect from the rail
+			if (Mathf.IsEqualApprox(pathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Character.MoveSpeed)) // Disconnect from the rail
 				Deactivate();
 		}
 
