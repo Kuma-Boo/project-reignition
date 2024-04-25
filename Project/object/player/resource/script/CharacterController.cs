@@ -1716,7 +1716,16 @@ namespace Project.Gameplay
 					{
 						// Cancel speed break
 						if (Skills.IsSpeedBreakActive)
-							Skills.ToggleSpeedBreak();
+						{
+							float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
+							if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
+							{
+								MovementAngle = PathFollower.ForwardAngle;
+								return;
+							}
+							else
+								Skills.ToggleSpeedBreak();
+						}
 
 						// Running into wall head-on
 						if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + COLLISION_PADDING)
