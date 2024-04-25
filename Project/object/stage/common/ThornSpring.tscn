@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8s2qjmlhu5tc"]
+[gd_scene load_steps=6 format=3 uid="uid://b8s2qjmlhu5tc"]
 
 [ext_resource type="PackedScene" uid="uid://cxa3qctptxfxy" path="res://object/stage/common/resource/model/ThornSpring.gltf" id="1_4dkds"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/ThornSpring.cs" id="1_xlrx0"]
+[ext_resource type="AudioStream" uid="uid://cq48r8fmf6vox" path="res://sound/sfx/objects/spring.wav" id="3_dbxep"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_acfah"]
 radius = 1.0
@@ -9,7 +10,7 @@ radius = 1.0
 [sub_resource type="SphereShape3D" id="SphereShape3D_os8gp"]
 radius = 0.9
 
-[node name="ThornSpring" type="Area3D" node_paths=PackedStringArray("root")]
+[node name="ThornSpring" type="Area3D" node_paths=PackedStringArray("root", "sfxPlayer")]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_xlrx0")
@@ -20,6 +21,7 @@ root = NodePath("ThornSpring")
 distance = 5.0
 allowJumpDashing = true
 launchDirection = 1
+sfxPlayer = NodePath("SFX")
 
 [node name="ThornSpring" parent="." instance=ExtResource("1_4dkds")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
@@ -35,5 +37,12 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 shape = SubResource("SphereShape3D_os8gp")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_dbxep")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+attenuation_filter_cutoff_hz = 10000.0
 
 [connection signal="area_entered" from="." to="." method="Activate"]

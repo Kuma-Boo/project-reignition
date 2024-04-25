@@ -116,14 +116,14 @@ namespace Project.Gameplay.Objects
 
 		private bool SuccessfulLaunch()
 		{
-			if (isRotating)
-				return false;
-
 			if (Character.Lockon.IsHomingAttacking) //Always allow homing attacks
 				return true;
 
 			if (Character.CenterPosition.Y > GlobalPosition.Y)
-				return true;
+			{
+				if (isRotating)
+					return GetRotationRatio() < .1f || GetRotationRatio() > .9f;
+			}
 
 			return false;
 		}
