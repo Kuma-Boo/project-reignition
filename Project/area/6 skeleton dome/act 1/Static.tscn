@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=76 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://m68asxsb3okb" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -67,6 +67,9 @@ size = Vector3(240, 2, 200)
 [sub_resource type="BoxShape3D" id="BoxShape3D_si2xl"]
 size = Vector3(270, 2, 150)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_tupq3"]
+size = Vector3(150, 5, 150)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_51piv"]
 size = Vector3(30, 10, 100)
 
@@ -134,7 +137,6 @@ Static/Environment = NodePath("WorldEnvironment")
 visible = false
 
 [node name="Trigger" type="Node3D" parent="."]
-visible = false
 
 [node name="Object" type="Node3D" parent="Trigger"]
 
@@ -182,6 +184,16 @@ shape = SubResource("BoxShape3D_gyahw")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 20, -169)
 shape = SubResource("BoxShape3D_si2xl")
+
+[node name="FallTrigger" parent="Trigger/Object" instance=ExtResource("3_gut3n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 843, -42.9, -1303)
+"Enter Mode" = 0
+
+[node name="Fall" type="Node3D" parent="Trigger/Object/FallTrigger"]
+script = ExtResource("4_53b6j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/FallTrigger"]
+shape = SubResource("BoxShape3D_tupq3")
 
 [node name="Automation" parent="Trigger/Object" instance=ExtResource("5_keigm")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 216, 40, -1059.75)
