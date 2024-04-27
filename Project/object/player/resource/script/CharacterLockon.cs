@@ -34,7 +34,7 @@ namespace Project.Gameplay
 			HitObstacle,
 		}
 		/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
-		private readonly float DISTANCE_FUDGE_AMOUNT = 4f;
+		private readonly float DISTANCE_FUDGE_AMOUNT = 1f;
 		private readonly Array<Node3D> activeTargets = new(); //List of targetable objects
 
 		/// <summary> Enables detection of new lockonTargets. </summary>
