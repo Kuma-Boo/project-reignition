@@ -302,12 +302,12 @@ namespace Project.Gameplay
 		{
 			base.Defeat();
 
+			animationPlayer.Play("strike");
 			if (isDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 			{
 				if (tweener != null) // Kill any existing tween
 					tweener.Kill();
 
-				animationPlayer.Play("strike");
 				animationTree.Set(DEFEAT_TRANSITION_PARAMETER, ENABLED_STATE);
 				animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
@@ -328,10 +328,13 @@ namespace Project.Gameplay
 				tweener = CreateTween().SetParallel();
 				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
 				tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
-				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("defeat"))).SetDelay(defeatLaunchTime);
+				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("despawn"))).SetDelay(defeatLaunchTime);
 			}
 			else
-				animationPlayer.Play("defeat");
+			{
+				animationPlayer.Advance(0.0);
+				animationPlayer.Play("explode");
+			}
 		}
 
 		protected override void UpdateEnemy()

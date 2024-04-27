@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="9_6teur"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://byf5qdjpi8ur4" path="res://object/enemy/majin/data/animation/MajinAnimationTreeRoot.tres" id="9_osrkc"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="9_yw7li"]
-[ext_resource type="AudioStream" uid="uid://t8wiootnsl8g" path="res://sound/sfx/enemy/majin/majin defeat.wav" id="11_15qiw"]
 [ext_resource type="AudioStream" uid="uid://jpjrq8guepkq" path="res://sound/sfx/enemy/majin/majin stagger.wav" id="12_2cawu"]
 [ext_resource type="AudioStream" uid="uid://cvn3dgomxnoym" path="res://sound/sfx/enemy/majin/majin strike.wav" id="13_470oy"]
 [ext_resource type="AudioStream" uid="uid://cttipl3ihmbr5" path="res://sound/sfx/enemy/majin/majin travel.wav" id="14_41brs"]
@@ -498,7 +497,25 @@ tracks/11/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_hrty8"]
-resource_name = "defeat"
+resource_name = "despawn"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/SpawnFX/SpawnSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_xx2t8"]
+resource_name = "explode"
 length = 2.00001
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -623,20 +640,6 @@ tracks/8/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
-}
-tracks/9/type = "method"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("FX/DefeatFX/DefeatSFX")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
 }
 
 [sub_resource type="Animation" id="Animation_thps5"]
@@ -1058,7 +1061,8 @@ tracks/5/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
 "RESET": SubResource("Animation_ojgnd"),
-"defeat": SubResource("Animation_hrty8"),
+"despawn": SubResource("Animation_hrty8"),
+"explode": SubResource("Animation_xx2t8"),
 "fire-end": SubResource("Animation_thps5"),
 "fire-start": SubResource("Animation_c8j0n"),
 "spawn": SubResource("Animation_aucka"),
@@ -1207,7 +1211,7 @@ disabled = true
 [node name="FlameSFX" type="AudioStreamPlayer3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 stream = ExtResource("5_xr0sx")
-volume_db = -12.0
+attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
@@ -1248,7 +1252,7 @@ draw_pass_1 = SubResource("QuadMesh_txkmg")
 
 [node name="SpawnSFX" type="AudioStreamPlayer3D" parent="FX/SpawnFX"]
 stream = ExtResource("8_4kwy5")
-volume_db = -12.0
+attenuation_model = 3
 unit_size = 100.0
 max_db = 0.0
 max_distance = 200.0
@@ -1303,31 +1307,23 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_3crcx")
 draw_pass_1 = SubResource("QuadMesh_bbrsu")
 
-[node name="DefeatSFX" type="AudioStreamPlayer3D" parent="FX/DefeatFX"]
-stream = ExtResource("11_15qiw")
-volume_db = -12.0
-unit_size = 20.0
-max_db = 0.0
-max_distance = 100.0
-bus = &"SFX"
-
 [node name="StaggerSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("12_2cawu")
-volume_db = -12.0
+attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
 
 [node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("13_470oy")
-volume_db = -12.0
+attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
 
 [node name="TravelSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("14_41brs")
-volume_db = -6.0
+attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
