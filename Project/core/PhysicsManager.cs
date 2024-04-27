@@ -37,20 +37,21 @@ namespace Project.Core
 		{
 			Vector3 endPos = pos + dir;
 
-			PhysicsRayQueryParameters3D rayQuery = new PhysicsRayQueryParameters3D()
+			PhysicsRayQueryParameters3D rayQuery = new()
 			{
 				From = pos,
 				To = endPos,
 				CollisionMask = mask,
 				CollideWithBodies = true,
 				CollideWithAreas = hitAreas,
+				HitBackFaces = false
 			};
 
 			if (ex != null)
 				rayQuery.Exclude = ex;
 
 			Dictionary result = physicsState.IntersectRay(rayQuery);
-			RaycastHit raycast = new RaycastHit()
+			RaycastHit raycast = new()
 			{
 				startPoint = pos,
 				endPoint = endPos,

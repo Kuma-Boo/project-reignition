@@ -11,7 +11,7 @@ namespace Project
 		{
 			if (ex != null) // Reduce memory leakage
 			{
-				Array<Rid> excluded = new Array<Rid>();
+				Array<Rid> excluded = new();
 				for (int i = 0; i < ex.Count; i++)
 					excluded.Add(ex[i].GetRid());
 
@@ -25,7 +25,7 @@ namespace Project
 		/// <summary> Creates a property dictionary to be used in _GetPropertyList(). </summary>
 		public static Dictionary CreateProperty(string name, Variant.Type type, PropertyHint hint = PropertyHint.None, string hint_string = "")
 		{
-			Dictionary dictionary = new Dictionary
+			Dictionary dictionary = new()
 			{
 				{ "name", name },
 				{ "type", (long)type },
@@ -82,8 +82,8 @@ namespace Project
 		public static Vector3 Right(this Node3D s) => s.GlobalTransform.Basis.X.Normalized();
 		public static Vector3 Left(this Node3D s) => -s.GlobalTransform.Basis.X.Normalized();
 
-		public static Vector3 RemoveVertical(this Vector3 v) => new Vector3(v.X, 0, v.Z);
-		public static Vector2 Flatten(this Vector3 v) => new Vector2(v.X, v.Z);
+		public static Vector3 RemoveVertical(this Vector3 v) => new(v.X, 0, v.Z);
+		public static Vector2 Flatten(this Vector3 v) => new(v.X, v.Z);
 
 
 		/// <summary> Adds an explosive force to RigidBody3D. </summary>
