@@ -1,4 +1,4 @@
-[gd_scene load_steps=200 format=3 uid="uid://ms7rm6vsb708"]
+[gd_scene load_steps=201 format=3 uid="uid://ms7rm6vsb708"]
 
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="2_nivqw"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_n7uj2"]
@@ -72,6 +72,7 @@
 [ext_resource type="PackedScene" uid="uid://dbgi6c314yy6w" path="res://area/1 sand oasis/object/platform/Drawbridge.tscn" id="67_t6rhy"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="68_qyj4m"]
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="69_a710p"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="71_nnqh4"]
 
 [sub_resource type="BoxShape3D" id="305"]
 size = Vector3(15, 20, 2.5)
@@ -20501,6 +20502,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="GreenMajin" parent="MainAct/End/JarGroup3" instance=ExtResource("26_6vety")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+spawnMode = 1
 
 [node name="JarR2" parent="MainAct/End/JarGroup3" instance=ExtResource("24_2iptm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
@@ -20526,8 +20528,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
 [node name="RichRing" parent="MainAct/End/JarGroup3/JarR3" instance=ExtResource("32_uhn2k")]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 1, 0)
 
-[node name="BlueMajin" parent="MainAct/End" instance=ExtResource("25_wxgr8")]
+[node name="MajinMovement" type="Node3D" parent="MainAct/End" node_paths=PackedStringArray("root")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5, 18.3, 0)
+script = ExtResource("71_nnqh4")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 2.0
+Movement/Angle = 0.0
+"Vertical Orientation" = true
+root = NodePath("BlueMajin")
+
+[node name="BlueMajin" parent="MainAct/End/MajinMovement" instance=ExtResource("25_wxgr8")]
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(3, 2, 15)
