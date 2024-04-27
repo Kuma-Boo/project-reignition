@@ -1,4 +1,4 @@
-[gd_scene load_steps=199 format=3 uid="uid://ms7rm6vsb708"]
+[gd_scene load_steps=200 format=3 uid="uid://ms7rm6vsb708"]
 
 [ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="2_nivqw"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_n7uj2"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://yod8vu7f0eye" path="res://area/1 sand oasis/data/particle/WaterDustParticle.tscn" id="18_irrc0"]
 [ext_resource type="PackedScene" uid="uid://cr0mi68unq677" path="res://area/1 sand oasis/data/particle/WaterSplatterParticle.tscn" id="19_ytdgc"]
 [ext_resource type="AudioStream" uid="uid://20yid7bsdhcu" path="res://sound/sfx/stage/sand oasis/pillar impact.wav" id="20_daw2r"]
+[ext_resource type="AudioStream" uid="uid://y3tubvl50kyv" path="res://sound/sfx/stage/sand oasis/pillar fall.wav" id="20_myemt"]
 [ext_resource type="PackedScene" uid="uid://rn3uo7tgdchl" path="res://area/1 sand oasis/object/pillar/SquarePillarMid.tscn" id="20_wmhhg"]
 [ext_resource type="PackedScene" uid="uid://bx40lvnpwhjmi" path="res://area/1 sand oasis/data/particle/FallingSandDustParticle.tscn" id="21_ccewu"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="22_dagtm"]
@@ -2172,10 +2173,46 @@ tracks/12/keys = {
 "method": &"Respawn"
 }]
 }
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:playing")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:playing")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="101"]
 resource_name = "event"
-length = 1.33333
+length = 1.66667
 step = 0.0416667
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2368,6 +2405,78 @@ tracks/14/keys = {
 "args": [0.0],
 "method": &"play"
 }]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:volume_db")
+tracks/16/interp = 2
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 1, 1.20833),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:playing")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 1.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:volume_db")
+tracks/18/interp = 2
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0.166667, 0.25, 1.25, 1.45833),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:playing")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:volume_db")
+tracks/20/interp = 2
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 1.16667, 1.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8a7u8"]
@@ -2969,6 +3078,30 @@ tracks/17/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Pillar1/SquarePillarMid1/FallingSFX1:playing")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Pillar6/SquarePillarMid6/FallingSFX6:playing")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="140"]
 resource_name = "event"
@@ -3273,6 +3406,82 @@ tracks/23/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Pillar1/SquarePillarMid1/FallingSFX1:playing")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0, 1.36667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Pillar1/SquarePillarMid1/FallingSFX1:volume_db")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0, 0.0666666, 1.2, 1.36667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Pillar6/SquarePillarMid6/FallingSFX6:playing")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0, 1.83333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Pillar6/SquarePillarMid6/FallingSFX6:volume_db")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0.166667, 0.233333, 1.66667, 1.83333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/28/type = "method"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("Pillar1/SquarePillarMid1/ImpactSFX1")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(1.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/29/type = "method"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("Pillar6/SquarePillarMid6/ImpactSFX6")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(1.66667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vso2t"]
@@ -9161,10 +9370,22 @@ tracks/8/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("FallingSFX:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_qsudc"]
 resource_name = "event"
-length = 1.33334
+length = 1.5
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -9358,6 +9579,44 @@ tracks/14/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("FallingSFX:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 1.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("FallingSFX:volume_db")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.0666666, 1.26667, 1.43333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/17/type = "method"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("ImpactSFX")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(1.26667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r6umu"]
 _data = {
@@ -9463,10 +9722,34 @@ tracks/7/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pillar1/SquarePillarShort1/FallingSFX1:playing")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pillar2/SquarePillarShort2/FallingSFX2:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_dk4xm"]
 resource_name = "event"
-length = 1.00003
+length = 1.16667
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -9619,6 +9902,82 @@ tracks/11/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pillar1/SquarePillarShort1/FallingSFX1:playing")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.799999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pillar1/SquarePillarShort1/FallingSFX1:volume_db")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.0666666, 0.633333, 0.799999),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar1/SquarePillarShort1/ImpactSFX1")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0.633333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar2/SquarePillarShort2/FallingSFX2:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.899999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pillar2/SquarePillarShort2/FallingSFX2:volume_db")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0.266666, 0.333333, 0.9, 1.06667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/17/type = "method"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pillar2/SquarePillarShort2/ImpactSFX2")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7betf"]
@@ -9792,6 +10151,42 @@ tracks/13/path = NodePath("Pillar3/FallingSandSplatterParticle3:visible")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar1/Pillar1/FallingSFX1:playing")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar2/Pillar2/FallingSFX2:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pillar3/Pillar3/FallingSFX3:playing")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -10053,6 +10448,120 @@ tracks/19/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Pillar1/Pillar1/FallingSFX1:playing")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.833333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Pillar1/Pillar1/FallingSFX1:volume_db")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0, 0.0666666, 0.666667, 0.833333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/22/type = "method"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Pillar1/Pillar1/ImpactSFX1")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Pillar2/Pillar2/FallingSFX2:playing")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0, 1.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Pillar2/Pillar2/FallingSFX2:volume_db")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0, 0.0666666, 1.26667, 1.43333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/25/type = "method"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Pillar2/Pillar2/ImpactSFX2")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(1.26667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Pillar3/Pillar3/FallingSFX3:playing")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Pillar3/Pillar3/FallingSFX3:volume_db")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0, 0.0666666, 1.4, 1.56667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/28/type = "method"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("Pillar3/Pillar3/ImpactSFX3")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(1.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fcpew"]
@@ -12441,7 +12950,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("3_n7uj2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -620, -104, -821)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 visible = false
@@ -12664,7 +13172,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("305")
 
 [node name="Start" type="Node3D" parent="MainAct"]
-visible = false
 script = ExtResource("8_w6s07")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -13885,6 +14392,15 @@ transform = Transform3D(0.996187, 0, -0.0871551, 0, 1, 0, 0.0871551, 0, 0.996187
 
 [node name="SquarePillar1" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar1" groups=["crusher"] instance=ExtResource("20_wmhhg")]
 
+[node name="FallingSFX1" type="AudioStreamPlayer3D" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar1/SquarePillar1"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar1/SquarePillar1"]
 stream = ExtResource("20_daw2r")
 attenuation_model = 3
@@ -13901,6 +14417,15 @@ transform = Transform3D(0.99589, -0.0871557, -0.0243912, 0.0871291, 0.996195, -0
 
 [node name="SquarePillar2" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar2" groups=["crusher"] instance=ExtResource("20_wmhhg")]
 
+[node name="FallingSFX2" type="AudioStreamPlayer3D" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar2/SquarePillar2"]
+transform = Transform3D(1.00001, 1.86265e-09, 8.19564e-08, -1.86265e-09, 1.00001, -3.30806e-06, 2.32831e-09, 0, 1, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar2/SquarePillar2"]
 stream = ExtResource("20_daw2r")
 attenuation_model = 3
@@ -13916,6 +14441,15 @@ visible = false
 transform = Transform3D(0.989665, -0.139088, -0.0348995, 0.139173, 0.990267, 0, 0.0345599, -0.00485707, 0.999391, 39.6212, 1.81554, -4.87015)
 
 [node name="SquarePillar3" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar3" groups=["crusher"] instance=ExtResource("20_wmhhg")]
+
+[node name="FallingSFX3" type="AudioStreamPlayer3D" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar3/SquarePillar3"]
+transform = Transform3D(1, -3.72529e-08, 5.21541e-08, 0, 1, 4.61936e-07, -7.91624e-09, 0, 1, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="MainAct/Oasis/FallingPillarGroup/Event/Pillar3/SquarePillar3"]
 transform = Transform3D(1, -3.72529e-08, 5.16884e-08, 0, 1, 4.47035e-07, -7.91624e-09, 0, 1, 0, 0, 0)
@@ -14398,6 +14932,22 @@ transform = Transform3D(0.965874, 0, 0.259013, 0, 1, 0, -0.259013, 0, 0.965873, 
 
 [node name="SquarePillarMid1" parent="MainAct/Plain/FallingPillarGroup/Event/Pillar1" groups=["crusher"] instance=ExtResource("20_wmhhg")]
 
+[node name="FallingSFX1" type="AudioStreamPlayer3D" parent="MainAct/Plain/FallingPillarGroup/Event/Pillar1/SquarePillarMid1"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="MainAct/Plain/FallingPillarGroup/Event/Pillar1/SquarePillarMid1"]
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
 [node name="FallingSandDustParticle1" parent="MainAct/Plain/FallingPillarGroup/Event/Pillar1" instance=ExtResource("21_ccewu")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 0, 7)
 visible = false
@@ -14446,6 +14996,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
 visible = false
 
 [node name="SquarePillarMid6" parent="MainAct/Plain/FallingPillarGroup/Event/Pillar6" groups=["crusher"] instance=ExtResource("20_wmhhg")]
+
+[node name="FallingSFX6" type="AudioStreamPlayer3D" parent="MainAct/Plain/FallingPillarGroup/Event/Pillar6/SquarePillarMid6"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -47.9997
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX6" type="AudioStreamPlayer3D" parent="MainAct/Plain/FallingPillarGroup/Event/Pillar6/SquarePillarMid6"]
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Plain/FallingPillarGroup/Event"]
 callback_mode_process = 0
@@ -17593,6 +18159,23 @@ script = ExtResource("6_gjqoq")
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
+[node name="FallingSFX" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40744, 0, 0.0440674)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40744, 0, 0.0440674)
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
 [node name="Pillar1" type="Node3D" parent="MainAct/Beach/FallingPillarGroup1/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.71945, 0, 8.8916)
 
@@ -17671,6 +18254,22 @@ transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, 0.4246
 
 [node name="SquarePillarShort1" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar1" groups=["crusher"] instance=ExtResource("29_4m38a")]
 
+[node name="FallingSFX1" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar1/SquarePillarShort1"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar1/SquarePillarShort1"]
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
 [node name="FallingSandDustParticle1" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar1" instance=ExtResource("21_ccewu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 8)
 visible = false
@@ -17683,6 +18282,22 @@ visible = false
 transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, -0.0629578, 0.599998, -17.2737)
 
 [node name="SquarePillarShort2" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar2" groups=["crusher"] instance=ExtResource("29_4m38a")]
+
+[node name="FallingSFX2" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar2/SquarePillarShort2"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar2/SquarePillarShort2"]
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [node name="FallingSandDustParticle2" parent="MainAct/Beach/FallingPillarGroup2/Event/Pillar2" instance=ExtResource("21_ccewu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 8)
@@ -17719,6 +18334,22 @@ transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.08715
 
 [node name="Pillar1" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar1" groups=["crusher"] instance=ExtResource("29_4m38a")]
 
+[node name="FallingSFX1" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar1/Pillar1"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar1/Pillar1"]
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
 [node name="FallingSandDustParticle1" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar1" instance=ExtResource("21_ccewu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)
 visible = false
@@ -17732,6 +18363,22 @@ transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, 17.642
 
 [node name="Pillar2" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar2" groups=["crusher"] instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, -1.66533e-16, -1.38667e-32, 1.66533e-16, 1, 8.32667e-17, 4.55504e-38, -8.32667e-17, 1, 0, 10, 0)
+
+[node name="FallingSFX2" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar2/Pillar2"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar2/Pillar2"]
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [node name="BasePillar2" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar2" instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, 1.66533e-16, 2.98023e-08, 1.66533e-16, 1, -2.77556e-16, -2.98023e-08, -8.32667e-17, 1, 0, 0, 0)
@@ -17749,6 +18396,22 @@ transform = Transform3D(-0.173649, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173649
 
 [node name="Pillar3" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar3" groups=["crusher"] instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+
+[node name="FallingSFX3" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar3/Pillar3"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_myemt")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar3/Pillar3"]
+stream = ExtResource("20_daw2r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [node name="BasePillar3" parent="MainAct/Beach/FallingPillarGroup3/Event/Pillar3" instance=ExtResource("29_4m38a")]
 
