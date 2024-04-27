@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://wpj0smmgjk01"]
+[gd_scene load_steps=18 format=3 uid="uid://wpj0smmgjk01"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_5mwi3"]
 [ext_resource type="PackedScene" uid="uid://o86v4ui8fnjs" path="res://area/1 sand oasis/act 1/environment/sandfall event/SandfallEvent.gltf" id="1_yr102"]
 [ext_resource type="Resource" uid="uid://x18fw3sbrc3g" path="res://area/1 sand oasis/act 1/environment/sandfall event/SandfallLockout.tres" id="3_g58y6"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="4_he8ns"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="4_vy1ou"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="5_i1ahg"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="6_iexgt"]
@@ -10,6 +11,71 @@
 [ext_resource type="AudioStream" uid="uid://b2o77ww3axi4s" path="res://sound/sfx/stage/sand oasis/land.wav" id="9_okurp"]
 [ext_resource type="AudioStream" uid="uid://sm7nye4te7tx" path="res://sound/sfx/stage/sand oasis/event sandfall.ogg" id="9_pqrfn"]
 
+[sub_resource type="Gradient" id="Gradient_4qt1c"]
+offsets = PackedFloat32Array(0, 0.220077, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bs7mh"]
+gradient = SubResource("Gradient_4qt1c")
+width = 64
+
+[sub_resource type="Curve" id="Curve_nk4bs"]
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aepcf"]
+width = 64
+curve = SubResource("Curve_nk4bs")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_morp6"]
+lifetime_randomness = 0.6
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 6)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(-1, 1, 0)
+spread = 60.0
+initial_velocity_min = 4.0
+initial_velocity_max = 6.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+damping_min = 4.0
+damping_max = 8.0
+attractor_interaction_enabled = false
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_aepcf")
+color = Color(1, 1, 1, 0.478431)
+color_ramp = SubResource("GradientTexture1D_bs7mh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7nyph"]
+material = ExtResource("4_he8ns")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7h804"]
+lifetime_randomness = 0.6
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 5)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(-1, 1, 0)
+spread = 60.0
+initial_velocity_min = 4.0
+initial_velocity_max = 6.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+damping_min = 4.0
+damping_max = 8.0
+attractor_interaction_enabled = false
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_aepcf")
+color = Color(1, 1, 1, 0.478431)
+color_ramp = SubResource("GradientTexture1D_bs7mh")
 
 [node name="SandfallEvent" node_paths=PackedStringArray("animator") instance=ExtResource("1_yr102")]
 script = ExtResource("1_5mwi3")
@@ -33,12 +99,48 @@ bones/4/position = Vector3(2, 1.50001, -3.5)
 bones/5/position = Vector3(2, 1.50001, 3)
 
 [node name="Player" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="0"]
-transform = Transform3D(0, 1.07116e-07, 1, 1.07116e-07, 1, -1.07116e-07, -1, 1.07116e-07, 0, 44.8202, -47.0149, 0)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.25, 2.99434, 0)
 bone_name = "player"
 bone_idx = 2
 
-[node name="Camera" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="1"]
-transform = Transform3D(-0.349243, 0.141653, -0.926263, -4.47035e-08, 0.988508, 0.151172, 0.937032, 0.0527957, -0.345229, 41.2578, -46.0735, -1.32774)
+[node name="Piece1" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="1"]
+transform = Transform3D(1, 0, -4.37114e-08, 0, 1, 0, 4.37114e-08, 0, 1, 0, 1.50001, 0)
+bone_name = "piece1"
+bone_idx = 3
+
+[node name="DustParticleBottom" type="GPUParticles3D" parent="SandfallEventRoot/Skeleton3D/Piece1" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, -1, 5.68434e-14)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(-4, 0, -6, 8, 10, 12)
+process_material = SubResource("ParticleProcessMaterial_morp6")
+draw_pass_1 = SubResource("PlaneMesh_7nyph")
+
+[node name="DustParticleTop" type="GPUParticles3D" parent="SandfallEventRoot/Skeleton3D/Piece1" index="1"]
+transform = Transform3D(1, -1.42072e-15, 0, -1.42072e-15, 1, 0, 0, 0, 1, 3, 1.5, 6.75016e-14)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+explosiveness = 0.5
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(-4, 0, -6, 8, 10, 12)
+process_material = SubResource("ParticleProcessMaterial_7h804")
+draw_pass_1 = SubResource("PlaneMesh_7nyph")
+
+[node name="Camera" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="2"]
+transform = Transform3D(0.567124, -0.162999, 0.807342, 1.86265e-07, 0.980222, 0.197903, -0.823632, -0.112235, 0.555907, 6.41502, 4.37531, 2.86788)
 bone_name = "camera"
 bone_idx = 1
 
