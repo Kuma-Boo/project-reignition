@@ -80,8 +80,14 @@ namespace Project.Gameplay
 				// Check whether to pick a new target
 				for (int i = 0; i < activeTargets.Count; i++)
 				{
-					if (IsTargetValid(activeTargets[i]) != TargetState.Valid)
+					if (currentTarget == activeTargets[i])
 						continue;
+
+					if (IsTargetValid(activeTargets[i]) != TargetState.Valid)
+					{
+						GD.Print(IsTargetValid(activeTargets[i]));
+						continue;
+					}
 
 					float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 
@@ -89,7 +95,7 @@ namespace Project.Gameplay
 					{
 						if (dst > closestDistance + DISTANCE_FUDGE_AMOUNT)
 							continue; // Check whether the object is close enough to be considered
-						else if (dst > closestDistance || activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
+						else if (dst > closestDistance - DISTANCE_FUDGE_AMOUNT && activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
 							continue; // Within fudge range, decide priority based on height
 					}
 
