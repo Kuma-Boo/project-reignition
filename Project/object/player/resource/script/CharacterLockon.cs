@@ -84,10 +84,7 @@ namespace Project.Gameplay
 						continue;
 
 					if (IsTargetValid(activeTargets[i]) != TargetState.Valid)
-					{
-						GD.Print(IsTargetValid(activeTargets[i]));
 						continue;
-					}
 
 					float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 
