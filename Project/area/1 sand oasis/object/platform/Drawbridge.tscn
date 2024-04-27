@@ -1,6 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dbgi6c314yy6w"]
+[gd_scene load_steps=11 format=3 uid="uid://dbgi6c314yy6w"]
 
 [ext_resource type="PackedScene" uid="uid://cjoacvuft1jwx" path="res://area/1 sand oasis/object/model/platform/Drawbridge.gltf" id="1_wy6av"]
+[ext_resource type="AudioStream" uid="uid://d7el2xmn6i23" path="res://sound/sfx/stage/sand oasis/pillar rise.wav" id="2_m2b6m"]
+[ext_resource type="PackedScene" uid="uid://7xvlyn3or8c0" path="res://area/1 sand oasis/data/particle/SandDustParticle.tscn" id="3_m8vv6"]
 
 [sub_resource type="BoxShape3D" id="5"]
 size = Vector3(0.75, 3, 3)
@@ -56,6 +58,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_dcbsn"]
 resource_name = "drop"
+length = 2.0
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -64,10 +67,10 @@ tracks/0/path = NodePath("Drawbridge/DrawbridgeBridgeMesh:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(2, 0.5, 1),
+"times": PackedFloat32Array(0, 1.6, 1.73333, 1.86667, 1.93333, 2),
+"transitions": PackedFloat32Array(5, 0.5, 2, 0.5, 2, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.392699, 0, 0), Vector3(0.785398, 0, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0.785398, 0, 0), Vector3(0.698132, 0, 0), Vector3(0.785398, 0, 0), Vector3(0.767945, 0, 0), Vector3(0.785398, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -76,7 +79,7 @@ tracks/1/path = NodePath("Drawbridge/DrawbridgeCogMesh:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
+"times": PackedFloat32Array(0, 1, 2),
 "transitions": PackedFloat32Array(2, 0.5, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(1.5708, 0, 0), Vector3(3.14159, 0, 0)]
@@ -88,10 +91,38 @@ tracks/2/path = NodePath("FloorCollision:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 1),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SandDustParticle")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ogfah"]
@@ -139,5 +170,15 @@ disabled = true
 libraries = {
 "": SubResource("AnimationLibrary_ogfah")
 }
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_m2b6m")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="SandDustParticle" parent="." instance=ExtResource("3_m8vv6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 44)
 
 [editable path="Drawbridge"]
