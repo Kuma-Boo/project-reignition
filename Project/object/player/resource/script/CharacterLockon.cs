@@ -10,6 +10,9 @@ namespace Project.Gameplay
 	/// </summary>
 	public partial class CharacterLockon : Node3D
 	{
+		[Export]
+		private Area3D areaTrigger;
+
 		private CharacterController Character => CharacterController.instance;
 
 		/// <summary> Active lockon target shown on the HUD. </summary>
@@ -198,7 +201,16 @@ namespace Project.Gameplay
 			if (bounceUpward && Target != null) // Snap the player to the target
 			{
 				Character.MoveSpeed = 0; // Reset speed
-				Character.GlobalPosition = Target.GlobalPosition;
+
+				bool applySnapping = false;
+				if (Target is Area3D)
+					applySnapping = areaTrigger.GetOverlappingAreas().Contains(Target as Area3D);
+				else if (Target is PhysicsBody3D)
+					applySnapping = areaTrigger.GetOverlappingBodies().Contains(Target as PhysicsBody3D);
+
+				// Only snap when target being hit is correct
+				if (applySnapping)
+					Character.GlobalPosition = Target.GlobalPosition;
 			}
 			else // Only bounce the player backwards if bounceUpward is false
 				Character.MoveSpeed = -bounceSpeed;
