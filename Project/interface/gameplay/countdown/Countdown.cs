@@ -32,12 +32,14 @@ namespace Project.Interface
 			TweenCountdownTicks();
 
 			IsCountdownActive = true;
+			PauseMenu.AllowPausing = false;
 			EmitSignal(SignalName.CountdownStarted);
 		}
 
 		public void FinishCountdown()
 		{
 			IsCountdownActive = false;
+			PauseMenu.AllowPausing = true;
 			EmitSignal(SignalName.CountdownFinished);
 		}
 

@@ -22,10 +22,16 @@ namespace Project.Gameplay.Bosses
 		/// <summary> Boss's path follower. </summary>
 		private PathFollow3D bossPathFollower;
 
+
+		private enum FightState
+		{
+			Introduction,
+			Waiting,
+			Active,
+			Defeated
+		}
 		/// <summary> Is the boss being processed? </summary>
-		private bool isActive;
-		/// <summary> Are the boss's eyes tracking the player? </summary>
-		private bool isEyeTrackingEnabled;
+		private FightState fightState;
 		private readonly float STARTING_POSITION = 60;
 
 		private CharacterController Character => CharacterController.instance;
@@ -53,22 +59,16 @@ namespace Project.Gameplay.Bosses
 			SetUpEyes();
 			SetUpMissiles();
 
-			rootAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			lTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			GlobalTransform = Transform3D.Identity;
-
-			// Disable the player for the intro animation
-			Character.ProcessMode = ProcessModeEnum.Disabled;
-
 			StageSettings.instance.ConnectUnloadSignal(this);
 			StageSettings.instance.ConnectRespawnSignal(this);
+
+			StartIntroduction();
 		}
 
 
 		public void Respawn()
 		{
-			isActive = false;
+			fightState = FightState.Waiting;
 			currentHealth = MAX_HEALTH;
 
 			bossPathFollower.Progress = STARTING_POSITION;
@@ -110,7 +110,6 @@ namespace Project.Gameplay.Bosses
 			//Reset flying eye
 			flyingEyeRoot.Position = Vector3.Zero;
 			flyingEyeRoot.Rotation = Vector3.Zero;
-			isEyeTrackingEnabled = true;
 
 			RespawnMissiles();
 		}
@@ -124,8 +123,23 @@ namespace Project.Gameplay.Bosses
 		}
 
 
+		private void StartIntroduction()
+		{
+			rootAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			lTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			GlobalTransform = Transform3D.Identity;
+
+			// Disable the player for the intro animation
+			Character.ProcessMode = ProcessModeEnum.Disabled;
+			Interface.PauseMenu.AllowPausing = false;
+		}
+
+
 		private void FinishIntroduction()
 		{
+			if (TransitionManager.IsTransitionActive) return; // Player must have skipped the introduction animation
+
 			TransitionManager.StartTransition(new()
 			{
 				inSpeed = 0f,
@@ -138,30 +152,41 @@ namespace Project.Gameplay.Bosses
 
 		private void StartBattle()
 		{
-			GD.Print("Battle Started.");
+			rootAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			lTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+
 			Respawn();
 			Character.ProcessMode = ProcessModeEnum.Inherit;
 			TransitionManager.FinishTransition();
+			Interface.PauseMenu.AllowPausing = true;
+
 		}
 
 
 		public override void _PhysicsProcess(double _)
 		{
-			UpdateEyes();
-
-			if (!isActive)
+			switch (fightState)
 			{
-				if (Mathf.IsZeroApprox(Character.MoveSpeed))
-					return; //Wait for the player to do something
-
-				isActive = true;
+				case FightState.Introduction:
+					if (Input.IsActionJustPressed("button_pause"))
+						FinishIntroduction();
+					break;
+				case FightState.Waiting:
+					// Wait for the player to do something
+					if (!Mathf.IsZeroApprox(Character.MoveSpeed))
+						fightState = FightState.Active;
+					break;
+				case FightState.Active:
+					// Update Boss
+					UpdateEyes();
+					UpdatePhase();
+					UpdatePosition();
+					UpdateMissiles();
+					UpdateAttacks();
+					UpdateHitboxes();
+					break;
 			}
-
-			UpdatePhase();
-			UpdatePosition();
-			UpdateMissiles();
-			UpdateAttacks();
-			UpdateHitboxes();
 		}
 
 
@@ -305,7 +330,7 @@ namespace Project.Gameplay.Bosses
 		private Node3D[] missilePositions; //Where to fire missiles from
 		[Export]
 		private PackedScene missileScene; //Missile packed scene
-		private readonly Array<Missile> missilePool = new Array<Missile>(); //Pool of missiles
+		private readonly Array<Missile> missilePool = new(); //Pool of missiles
 		private readonly int MAX_MISSILE_COUNT = 5; //Same as the original game, only 5 missiles can be fired at a time
 
 		private void SetUpMissiles()
@@ -464,11 +489,12 @@ namespace Project.Gameplay.Bosses
 					{
 						float current = (float)lTailAnimationTree.Get(LIGHT_ATTACK_POSITION_PARAMETER);
 						float pos = PathFollower.LocalPlayerPositionDelta.X;
-						if ((attackSide == -1 && pos < 0) || (attackSide == 1 && pos > 0))
+						if ((attackSide == -1 && pos > 0) || (attackSide == 1 && pos < 0))
 							pos = 0;
 
 						pos = 2 * -Mathf.Abs(pos / 4) + 1;
 						current = Mathf.Lerp(current, pos, .2f);
+						GD.Print(pos);
 
 						lTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
 						rTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
@@ -506,7 +532,7 @@ namespace Project.Gameplay.Bosses
 		{
 			attackCounter++;
 			isAttacking = true;
-			if (PathFollower.LocalPlayerPositionDelta.X > 0) //Left Attack
+			if (PathFollower.LocalPlayerPositionDelta.X < 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-light-attack");
@@ -531,7 +557,7 @@ namespace Project.Gameplay.Bosses
 		{
 			attackCounter = 0;
 			isAttacking = true;
-			if (PathFollower.LocalPlayerPositionDelta.X > 0) //Left Attack
+			if (PathFollower.LocalPlayerPositionDelta.X < 0) //Left Attack
 			{
 				attackSide = -1;
 				eventAnimator.Play("l-heavy-attack");
@@ -594,8 +620,6 @@ namespace Project.Gameplay.Bosses
 		/// </summary>
 		private void UpdateEyes()
 		{
-			if (!isEyeTrackingEnabled) return;
-
 			//Update the eyes to always look at the player
 			for (int i = 0; i < eyes.Length; i++)
 			{

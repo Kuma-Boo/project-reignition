@@ -5,6 +5,8 @@ namespace Project.Interface
 {
 	public partial class PauseMenu : Node
 	{
+		public static bool AllowPausing = true;
+
 		[Export]
 		private AnimationMixer animator;
 		[Export]
@@ -15,7 +17,6 @@ namespace Project.Interface
 		private AnimationPlayer cursorAnimator;
 
 		private bool isActive;
-		private bool canInteractWithPauseMenu = true;
 
 		private readonly StringName SELECTION_PARAMETER = "parameters/selection/transition_request";
 		private readonly StringName CONFIRM_PARAMETER = "parameters/confirm/transition_request";
@@ -32,7 +33,7 @@ namespace Project.Interface
 
 		public override void _PhysicsProcess(double delta)
 		{
-			if (!canInteractWithPauseMenu || Countdown.IsCountdownActive) return;
+			if (!AllowPausing) return;
 
 			if (Input.IsActionJustPressed("button_pause"))
 				TogglePause();
@@ -41,7 +42,7 @@ namespace Project.Interface
 				int sign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
 				if (Input.IsActionJustPressed("button_jump"))
 				{
-					canInteractWithPauseMenu = false;
+					AllowPausing = false;
 					animator.Set(CONFIRM_PARAMETER, currentSelection.ToString());
 					animator.Set(CONFIRM_ENABLED_PARAMETER, "true");
 				}
@@ -98,11 +99,11 @@ namespace Project.Interface
 		}
 
 
-		private void EnableInteraction() => canInteractWithPauseMenu = true;
+		private void EnableInteraction() => AllowPausing = true;
 		private void TogglePause()
 		{
 			canMoveCursor = false; //Disable cursor movement
-			canInteractWithPauseMenu = false; //Disable pause inputs during the animation
+			AllowPausing = false; //Disable pause inputs during the animation
 
 			isActive = !isActive;
 			animator.Set(CONFIRM_ENABLED_PARAMETER, "false");
