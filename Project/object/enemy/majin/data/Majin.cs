@@ -284,17 +284,29 @@ namespace Project.Gameplay
 
 		public override void TakePlayerDamage()
 		{
+			TakeDamage();
+			base.TakePlayerDamage();
+
+			if (!IsDefeated)
+				animationPlayer.Play("stagger");
+		}
+
+
+		public override void TakeExternalDamage(int amount = -1)
+		{
+			TakeDamage();
+			base.TakeExternalDamage(amount);
+		}
+
+
+		private void TakeDamage()
+		{
 			staggerTimer = STAGGER_LENGTH;
 
 			if (isFlameActive)
 				ToggleFlameAttack();
 
 			animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-
-			base.TakePlayerDamage();
-
-			if (!IsDefeated)
-				animationPlayer.Play("stagger");
 		}
 
 
@@ -324,11 +336,13 @@ namespace Project.Gameplay
 				if (Runtime.randomNumberGenerator.Randf() > .5f)
 					targetRotation *= -1;
 
+				targetRotation += Vector3.Left * Mathf.Pi * .25f;
+
 				// Get knocked back
 				tweener = CreateTween().SetParallel();
 				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
 				tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
-				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("despawn"))).SetDelay(defeatLaunchTime);
+				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("despawn"))).SetDelay(defeatLaunchTime * .5f);
 			}
 			else
 			{
@@ -342,7 +356,6 @@ namespace Project.Gameplay
 			if (Engine.IsEditorHint()) return; // In Editor
 			if (!IsActive) return; // Hasn't spawned yet
 			if (IsDefeated) return; // Already defeated
-			if (attackType == AttackTypes.Spin) return; // No need to process when in AttackTypes.Spin
 
 			if (staggerTimer != 0)
 			{
@@ -398,6 +411,8 @@ namespace Project.Gameplay
 		/// </summary>
 		private void UpdateFidgets()
 		{
+			if (attackType == AttackTypes.Spin) return; // No need to process fidgets when in AttackTypes.Spin
+
 			float targetIdleFactor = 1.0f;
 			if (isFidgetActive) // Adjust movement strength based on fidget
 			{
