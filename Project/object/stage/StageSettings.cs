@@ -533,7 +533,9 @@ namespace Project.Gameplay
 		/// <summary> Completion demo advanced, play a crossfade. </summary>
 		public void OnCameraDemoAdvance()
 		{
-			completionAnimator.Play(completionAnimator.AnimationGetNext(completionAnimator.CurrentAnimation));
+			StringName nextAnimation = completionAnimator.AnimationGetNext(completionAnimator.CurrentAnimation);
+			if (completionAnimator.HasAnimation(nextAnimation))
+				completionAnimator.Play(nextAnimation);
 			CharacterController.instance.Camera.StartCrossfade();
 		}
 
