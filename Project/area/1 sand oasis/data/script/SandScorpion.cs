@@ -24,6 +24,8 @@ namespace Project.Gameplay.Bosses
 
 		/// <summary> Is the boss being processed? </summary>
 		private bool isActive;
+		/// <summary> Are the boss's eyes tracking the player? </summary>
+		private bool isEyeTrackingEnabled;
 		private readonly float STARTING_POSITION = 60;
 
 		private CharacterController Character => CharacterController.instance;
@@ -42,6 +44,7 @@ namespace Project.Gameplay.Bosses
 		private AnimationPlayer eventAnimator; //Extra animator that manages stuff like damage flashing, hitboxes, etc
 		private readonly StringName DISABLED_STATE = "disabled";
 		private readonly StringName ENABLED_STATE = "enabled";
+		private readonly StringName INTRO_PARAMETER = "parameters/intro_trigger/request";
 
 		public override void _Ready()
 		{
@@ -50,13 +53,18 @@ namespace Project.Gameplay.Bosses
 			SetUpEyes();
 			SetUpMissiles();
 
-			//_eventAnimator.Play("intro"); Intro animation isn't animated yet.
-			GD.Print("Skipping intro animation.");
+			rootAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			lTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			GlobalTransform = Transform3D.Identity;
+
+			// Disable the player for the intro animation
+			Character.ProcessMode = ProcessModeEnum.Disabled;
 
 			StageSettings.instance.ConnectUnloadSignal(this);
 			StageSettings.instance.ConnectRespawnSignal(this);
-			Respawn();
 		}
+
 
 		public void Respawn()
 		{
@@ -102,9 +110,11 @@ namespace Project.Gameplay.Bosses
 			//Reset flying eye
 			flyingEyeRoot.Position = Vector3.Zero;
 			flyingEyeRoot.Rotation = Vector3.Zero;
+			isEyeTrackingEnabled = true;
 
 			RespawnMissiles();
 		}
+
 
 		public void Unload()
 		{
@@ -112,6 +122,28 @@ namespace Project.Gameplay.Bosses
 			for (int i = 0; i < missilePool.Count; i++)
 				missilePool[i].QueueFree();
 		}
+
+
+		private void FinishIntroduction()
+		{
+			TransitionManager.StartTransition(new()
+			{
+				inSpeed = 0.1f,
+				outSpeed = .5f,
+				color = Colors.Black
+			});
+			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.StartBattle), (uint)ConnectFlags.OneShot);
+		}
+
+
+		private void StartBattle()
+		{
+			GD.Print("Battle Started.");
+			Respawn();
+			Character.ProcessMode = ProcessModeEnum.Inherit;
+			TransitionManager.FinishTransition();
+		}
+
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -131,6 +163,7 @@ namespace Project.Gameplay.Bosses
 			UpdateAttacks();
 			UpdateHitboxes();
 		}
+
 
 		/// <summary> Fastest possible movement speed, based on the player's top speed. </summary>
 		private float CharacterTopSpeed => Character.Skills.GroundSettings.speed;
@@ -561,6 +594,8 @@ namespace Project.Gameplay.Bosses
 		/// </summary>
 		private void UpdateEyes()
 		{
+			if (!isEyeTrackingEnabled) return;
+
 			//Update the eyes to always look at the player
 			for (int i = 0; i < eyes.Length; i++)
 			{
