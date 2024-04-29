@@ -128,7 +128,7 @@ namespace Project.Gameplay.Bosses
 		{
 			TransitionManager.StartTransition(new()
 			{
-				inSpeed = 0.1f,
+				inSpeed = 0f,
 				outSpeed = .5f,
 				color = Colors.Black
 			});

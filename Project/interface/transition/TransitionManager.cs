@@ -51,7 +51,7 @@ namespace Project.Core
 			if (CurrentTransitionData.inSpeed == 0)
 			{
 				animator.Seek(animator.CurrentAnimationLength, true);
-				EmitSignal(SignalName.TransitionProcess);
+				CallDeferred(MethodName.EmitSignal, SignalName.TransitionProcess);
 			}
 			else
 			{
