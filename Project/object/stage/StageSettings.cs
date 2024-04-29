@@ -17,11 +17,12 @@ namespace Project.Gameplay
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = new();
 
 			properties.Add(ExtensionMethods.CreateProperty("Level ID", Variant.Type.String));
 			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, MissionType.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty("Time Limit", Variant.Type.Int, PropertyHint.Range, "0,640"));
+			properties.Add(ExtensionMethods.CreateProperty("Disable Countdown", Variant.Type.Bool));
 
 			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race)
 				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
@@ -73,6 +74,8 @@ namespace Project.Gameplay
 					return MissionTimeLimit;
 				case "Objective Count":
 					return MissionObjectiveCount;
+				case "Disable Countdown":
+					return DisableCountdown;
 
 				case "Camera Settings":
 					return InitialCameraSettings;
@@ -138,6 +141,9 @@ namespace Project.Gameplay
 					break;
 				case "Objective Count":
 					MissionObjectiveCount = (int)value;
+					break;
+				case "Disable Countdown":
+					DisableCountdown = (bool)value;
 					break;
 
 				case "Camera Settings":
@@ -303,6 +309,8 @@ namespace Project.Gameplay
 		public int MissionObjectiveCount { get; private set; }
 		/// <summary> Level time limit, in seconds. </summary>
 		private float MissionTimeLimit { get; set; }
+		/// <summary> Should the countdown be disabled for this stage (i.e. bosses, control test, etc.)? </summary>
+		public bool DisableCountdown { get; private set; }
 
 
 		// Rank

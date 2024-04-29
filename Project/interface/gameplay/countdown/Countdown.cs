@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay;
 
 namespace Project.Interface
 {
@@ -21,7 +22,7 @@ namespace Project.Interface
 		{
 			BGMPlayer.StartStageMusic(); // Start BGM
 
-			if (DebugManager.Instance.SkipCountdown)
+			if (DebugManager.Instance.SkipCountdown || StageSettings.instance.DisableCountdown)
 			{
 				FinishCountdown();
 				return;
