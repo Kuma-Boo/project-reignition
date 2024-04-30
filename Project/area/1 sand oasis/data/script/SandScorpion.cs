@@ -21,6 +21,8 @@ namespace Project.Gameplay.Bosses
 		[Export]
 		/// <summary> Boss's path follower. </summary>
 		private PathFollow3D bossPathFollower;
+		[Export]
+		private Camera3D cutsceneCamera;
 
 
 		private enum FightState
@@ -130,9 +132,12 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			GlobalTransform = Transform3D.Identity;
 
+			cutsceneCamera.Current = true;
+
 			// Disable the player for the intro animation
 			Character.ProcessMode = ProcessModeEnum.Disabled;
 			Interface.PauseMenu.AllowPausing = false;
+			HeadsUpDisplay.instance.Visible = false;
 		}
 
 
@@ -160,7 +165,8 @@ namespace Project.Gameplay.Bosses
 			Character.ProcessMode = ProcessModeEnum.Inherit;
 			TransitionManager.FinishTransition();
 			Interface.PauseMenu.AllowPausing = true;
-
+			HeadsUpDisplay.instance.Visible = true;
+			Character.Camera.Camera.Current = true;
 		}
 
 
