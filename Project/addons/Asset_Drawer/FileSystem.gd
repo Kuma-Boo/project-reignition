@@ -6,6 +6,7 @@ var padding: int = 20
 
 # The file system
 var FileDock: Object
+var file_dock_container := TabContainer.new() # New container for the file system
 
 # Toggle for when the file system is moved to bottom
 var filesBottom: bool = false
@@ -24,6 +25,12 @@ func _enter_tree() -> void:
 	FileDock = self.get_editor_interface().get_file_system_dock()
 	await get_tree().create_timer(0.1).timeout
 	FilesToBottom()
+	
+	file_dock_container.tabs_visible = false # Hide the displayed tab
+	file_dock_container.tab_selected.connect(func(tab):
+				# Show bottom panel when tab selected
+		make_bottom_panel_item_visible(file_dock_container)
+	)
 
 #region show hide filesystem
 func _input(event: InputEvent) -> void:
@@ -81,13 +88,16 @@ func _process(delta: float) -> void:
 # Moves the files between the bottom panel and the original dock
 func FilesToBottom() -> void:
 	if filesBottom == true:
-		remove_control_from_bottom_panel(FileDock)
+		file_dock_container.remove_child(FileDock)
+		remove_control_from_bottom_panel(file_dock_container)
 		add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_BR, FileDock)
 		filesBottom = false
 		return
 
 	FileDock = self.get_editor_interface().get_file_system_dock()
 	remove_control_from_docks(FileDock)
-	add_control_to_bottom_panel(FileDock, "File System")
+	# Add container instead of FileDock
+	file_dock_container.add_child(FileDock)
+	add_control_to_bottom_panel(file_dock_container, "File System")
 	filesBottom = true
 
