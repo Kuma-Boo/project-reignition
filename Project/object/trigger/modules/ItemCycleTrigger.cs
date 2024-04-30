@@ -23,7 +23,6 @@ namespace Project.Gameplay.Triggers
 			for (int i = 0; i < itemCycles.Count; i++)
 			{
 				CullingTrigger trigger = GetNodeOrNull<CullingTrigger>(itemCycles[i]); // Empty item cycle
-				GD.Print(trigger);
 				if (trigger == null)
 				{
 					_itemCycles.Add(null);
