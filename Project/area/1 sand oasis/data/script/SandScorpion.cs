@@ -200,6 +200,7 @@ namespace Project.Gameplay.Bosses
 						FinishIntroduction();
 					break;
 				case FightState.Waiting:
+					UpdateEyes();
 					// Wait for the player to do something
 					if (!Mathf.IsZeroApprox(Character.MoveSpeed))
 						fightState = FightState.Active;
