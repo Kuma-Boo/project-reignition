@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using Project.Core;
+using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Bosses
 {
@@ -24,7 +25,6 @@ namespace Project.Gameplay.Bosses
 		[Export]
 		private Camera3D cutsceneCamera;
 
-
 		private enum FightState
 		{
 			Introduction,
@@ -38,6 +38,27 @@ namespace Project.Gameplay.Bosses
 
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PathFollower => Character.PathFollower;
+
+
+		[ExportGroup("Dialogs")]
+		[Export]
+		private Array<DialogTrigger> hitDialogs = new();
+		[Export]
+		private Array<DialogTrigger> hintDialogs = new();
+		private int[] dialogFlags = {
+			0, // Light attack hint flag
+			0, // Heavy attack hint flags
+			0 // Flying Eye flag
+		};
+
+		private bool PlayHint(int index)
+		{
+			if (!hintDialogs[index].Visible) return false; // Already played that hint
+
+			hintDialogs[index].Activate();
+			hintDialogs[index].Visible = false; // Use visibility as a flag to keep track of played hints
+			return true;
+		}
 
 		[ExportGroup("Animation")]
 		[Export]
@@ -244,10 +265,13 @@ namespace Project.Gameplay.Bosses
 
 				if (damageState == DamageState.Knockback)
 				{
-					if (MoveSpeed < 5.0f) //Because transitioning from speed 0 feels laggy
+					if (MoveSpeed < 5.0f) // Because transitioning from speed 0 feels laggy
 					{
-						if (currentHealth <= 3) //Check for second phase
+						if (currentHealth <= 3) // Check for second phase
+						{
 							isPhaseTwoActive = true;
+							hitDialogs[1].Activate();
+						}
 
 						damageState = DamageState.None;
 					}
@@ -535,6 +559,15 @@ namespace Project.Gameplay.Bosses
 		private readonly StringName LIGHT_ATTACK_POSITION_PARAMETER = "parameters/light_attack_blend/blend_position";
 		private void LightAttack()
 		{
+			// Play hint
+			if (dialogFlags[0] == 0)
+				dialogFlags[0]++;
+			else if (dialogFlags[0] == 1)
+			{
+				PlayHint(0);
+				dialogFlags[0] = 1;
+			}
+
 			attackCounter++;
 			isAttacking = true;
 			if (PathFollower.LocalPlayerPositionDelta.X < 0) //Left Attack
@@ -582,10 +615,21 @@ namespace Project.Gameplay.Bosses
 		{
 			if (!forced && (damageState == DamageState.Hitstun || Character.Lockon.IsHomingAttacking)) return;
 
+			// Player missed their chance, update hints.
+			if (dialogFlags[1] < 2)
+			{
+				if (dialogFlags[1] == 0)
+					PlayHint(1);
+				else if (dialogFlags[1] == 1)
+					PlayHint(2);
+
+				dialogFlags[1]++;
+			}
+
 			StopStrike();
 			FinishAttack();
 
-			//Disables all hurtboxes
+			// Disables all hurtboxes
 			eventAnimator.Play("disable-hurtbox-03");
 
 			if (attackSide == 1)
@@ -678,6 +722,12 @@ namespace Project.Gameplay.Bosses
 
 		private void FinishEyeAttack()
 		{
+			if (dialogFlags[2] == 0 && currentHealth == 1)
+			{
+				hitDialogs[3].Activate();
+				dialogFlags[2] = 1;
+			}
+
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); //Reset
 			rootAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); //Close eye cage
 
@@ -708,11 +758,17 @@ namespace Project.Gameplay.Bosses
 			currentHealth--;
 			if (currentHealth <= 0)
 			{
-				//eventAnimator.Play("defeat");
 				GD.Print("Boss Defeated.");
 			}
 			else
+			{
+				if (currentHealth == 4)
+					hitDialogs[0].Activate();
+				else if (isPhaseTwoActive && currentHealth == 2)
+					hitDialogs[2].Activate();
+
 				eventAnimator.Play("damage");
+			}
 
 			return currentHealth == 0;
 		}
@@ -834,7 +890,13 @@ namespace Project.Gameplay.Bosses
 			if (!Character.Lockon.IsHomingAttacking) return; //Player isn't attacking
 
 			if (IsHeavyAttackActive) //End active heavy attack
+			{
+				// Player can see what's happening; skip obvious hint
+				if (dialogFlags[1] < 2)
+					dialogFlags[1] = 1;
+
 				FinishHeavyAttack(true);
+			}
 
 			TakeDamage();
 			Character.Lockon.StartBounce(); //Bounce the player

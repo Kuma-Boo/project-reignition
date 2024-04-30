@@ -41,6 +41,8 @@ namespace Project.Core
 
 			currentDialog = dialog;
 			currentDialogIndex = 0;
+			if (currentDialog.randomize)
+				currentDialogIndex = Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount);
 			UpdateDialog(true);
 		}
 
@@ -67,7 +69,7 @@ namespace Project.Core
 		public void OnDialogFinished()
 		{
 			currentDialogIndex++;
-			if (currentDialogIndex < currentDialog.DialogCount) // Start next dialog line
+			if (!currentDialog.randomize && currentDialogIndex < currentDialog.DialogCount) // Start next dialog line
 			{
 				subtitleAnimator.Play("deactivate-text");
 				CallDeferred(MethodName.UpdateDialog, true);

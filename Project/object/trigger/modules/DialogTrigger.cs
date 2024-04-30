@@ -16,6 +16,8 @@ namespace Project.Gameplay.Triggers
 		public bool HasDelay(int index) => delays != null && delays.Count > index && !Mathf.IsZeroApprox(delays[index]);
 		public bool HasLength(int index) => displayLength != null && displayLength.Count > index && !Mathf.IsZeroApprox(displayLength[index]);
 
+		[Export]
+		public bool randomize;
 		[Export(PropertyHint.Range, "0, 10")]
 		public Array<float> delays;
 		[Export(PropertyHint.Range, "0, 10")]
