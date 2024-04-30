@@ -31,14 +31,6 @@ namespace Project.Gameplay
 			properties.Add(ExtensionMethods.CreateProperty("Story Event Index", Variant.Type.Int, PropertyHint.Range, "-1,30"));
 			properties.Add(ExtensionMethods.CreateProperty("Dialog Library", Variant.Type.Object));
 
-			properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Activation Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));
-			if (itemCycleActivationTrigger != null && !itemCycleActivationTrigger.IsEmpty)
-			{
-				properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Halfway Trigger", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Area3D"));
-				properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Enable Respawning", Variant.Type.Bool));
-				properties.Add(ExtensionMethods.CreateProperty("Item Cycling/Item Cycles", Variant.Type.Array, PropertyHint.TypeString, "22/0:"));
-			}
-
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Int));
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Int));
@@ -83,15 +75,6 @@ namespace Project.Gameplay
 					return storyEventIndex;
 				case "Dialog Library":
 					return dialogLibrary;
-
-				case "Item Cycling/Activation Trigger":
-					return itemCycleActivationTrigger;
-				case "Item Cycling/Halfway Trigger":
-					return itemCycleHalfwayTrigger;
-				case "Item Cycling/Enable Respawning":
-					return itemCycleRespawnEnabled;
-				case "Item Cycling/Item Cycles":
-					return itemCycles;
 
 				case "Ranking/Skip Score":
 					return skipScore;
@@ -154,20 +137,6 @@ namespace Project.Gameplay
 					break;
 				case "Dialog Library":
 					dialogLibrary = (SFXLibraryResource)value;
-					break;
-
-				case "Item Cycling/Activation Trigger":
-					itemCycleActivationTrigger = (NodePath)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Item Cycling/Halfway Trigger":
-					itemCycleHalfwayTrigger = (NodePath)value;
-					break;
-				case "Item Cycling/Enable Respawning":
-					itemCycleRespawnEnabled = (bool)value;
-					break;
-				case "Item Cycling/Item Cycles":
-					itemCycles = (Array<NodePath>)value;
 					break;
 
 				case "Ranking/Skip Score":
@@ -267,7 +236,6 @@ namespace Project.Gameplay
 
 			Environment = GetNodeOrNull<WorldEnvironment>(environment);
 
-			SetUpItemCycles();
 			Node pathParentNode = GetNode<Node>(pathParent);
 			for (int i = 0; i < pathParentNode.GetChildCount(); i++)
 			{
@@ -589,7 +557,7 @@ namespace Project.Gameplay
 
 		[Signal]
 		public delegate void OnRespawnedEventHandler();
-		private const string RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
+		public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
 		public void ConnectRespawnSignal(Node node)
 		{
 			if (!node.HasMethod(RESPAWN_FUNCTION))
@@ -606,100 +574,9 @@ namespace Project.Gameplay
 		public void RespawnObjects()
 		{
 			SoundManager.instance.CancelDialog(); // Cancel any active dialog
-
-			if (!itemCycleActivationTrigger.IsEmpty) // Respawn item cycles
-			{
-				itemCycleIndex = 0;
-				SpawnItemCycle();
-			}
-
 			EmitSignal(SignalName.OnRespawned);
 		}
 
-
-		private bool itemCycleRespawnEnabled = true; // Respawn items when cycling?
-		private bool itemCycleFlagSet; // Should we trigger an item switch?
-		private int itemCycleIndex; // Active item set
-
-		// Make sure itemCycle triggers are monitoring and collide with the player
-		private NodePath itemCycleActivationTrigger; // When to apply the item cycle
-		private NodePath itemCycleHalfwayTrigger; // So the player can't just move in and out of the activation trigger
-		private Array<NodePath> itemCycles = new Array<NodePath>();
-		private readonly List<Node3D> _itemCycles = new List<Node3D>();
-		private readonly List<SpawnData> _itemCyclesSpawnData = new List<SpawnData>();
-		private void SetUpItemCycles()
-		{
-			if (itemCycleActivationTrigger == null || itemCycleActivationTrigger.IsEmpty) return; // Item cycling disabled
-
-			GetNode<Area3D>(itemCycleActivationTrigger).Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnItemCycleActivate));
-			if (itemCycleHalfwayTrigger != null)
-				GetNode<Area3D>(itemCycleHalfwayTrigger).Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnItemCycleHalfwayEntered));
-
-			for (int i = 0; i < itemCycles.Count; i++)
-			{
-				if (itemCycles[i] == null || itemCycles[i].IsEmpty) // Nothing on this item cycle!
-				{
-					_itemCycles.Add(null);
-					_itemCyclesSpawnData.Add(new SpawnData());
-					continue;
-				}
-
-				Node3D node = GetNode<Node3D>(itemCycles[i]);
-				SpawnData spawnData = new SpawnData(node.GetParent(), node.Transform);
-				node.Visible = true;
-
-				_itemCycles.Add(node);
-				_itemCyclesSpawnData.Add(spawnData);
-
-				if (i != itemCycleIndex) // Disable inactive nodes
-					spawnData.parentNode.CallDeferred(MethodName.RemoveChild, node);
-			}
-		}
-
-
-		public void OnItemCycleActivate(Area3D a)
-		{
-			if (!a.IsInGroup("player")) return;
-			if (itemCycles.Count == 0 || !itemCycleFlagSet) return;
-
-			// Cycle items
-			if (itemCycleRespawnEnabled)
-				EmitSignal(SignalName.OnRespawned);
-
-			DespawnItemCycle();
-
-			// Increment counter
-			itemCycleIndex++;
-			if (itemCycleIndex > itemCycles.Count - 1)
-				itemCycleIndex = 0;
-
-			SpawnItemCycle();
-			itemCycleFlagSet = false;
-		}
-
-
-		private void DespawnItemCycle()
-		{
-			if (_itemCycles[itemCycleIndex] != null) // Despawn current item cycle
-				_itemCyclesSpawnData[itemCycleIndex].parentNode.CallDeferred(MethodName.RemoveChild, _itemCycles[itemCycleIndex]);
-		}
-
-
-		private void SpawnItemCycle()
-		{
-			if (_itemCycles[itemCycleIndex] != null) // Spawn current item cycle
-			{
-				_itemCyclesSpawnData[itemCycleIndex].parentNode.AddChild(_itemCycles[itemCycleIndex]);
-				_itemCycles[itemCycleIndex].Transform = _itemCyclesSpawnData[itemCycleIndex].spawnTransform;
-			}
-		}
-
-
-		public void OnItemCycleHalfwayEntered(Area3D a)
-		{
-			if (!a.IsInGroup("player")) return;
-			itemCycleFlagSet = true;
-		}
 		#endregion
 	}
 

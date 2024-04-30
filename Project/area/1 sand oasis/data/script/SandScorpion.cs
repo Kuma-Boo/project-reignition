@@ -494,7 +494,6 @@ namespace Project.Gameplay.Bosses
 
 						pos = 2 * -Mathf.Abs(pos / 4) + 1;
 						current = Mathf.Lerp(current, pos, .2f);
-						GD.Print(pos);
 
 						lTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
 						rTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);

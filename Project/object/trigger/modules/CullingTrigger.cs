@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay.Triggers
@@ -13,6 +14,9 @@ namespace Project.Gameplay.Triggers
 		private bool isStageVisuals;
 		private bool isActive;
 		private StageSettings Level => StageSettings.instance;
+		[Export]
+		private bool respawnOnActivation;
+		private Array<Node> respawnableNodes = new();
 
 		public override void _EnterTree()
 		{
@@ -28,6 +32,17 @@ namespace Project.Gameplay.Triggers
 
 		public override void _Ready()
 		{
+			// Cache all children with a respawn method
+			if (respawnOnActivation)
+			{
+				Array<Node> children = GetChildren(true);
+				foreach (Node child in children)
+				{
+					if (child.HasMethod(StageSettings.RESPAWN_FUNCTION))
+						respawnableNodes.Add(child);
+				}
+			}
+
 			if (saveVisibilityOnCheckpoint)
 			{
 				//Cache starting checkpoint state
@@ -68,6 +83,13 @@ namespace Project.Gameplay.Triggers
 		{
 			isActive = true;
 			UpdateCullingState();
+
+			// Respawn everything
+			if (respawnOnActivation)
+			{
+				foreach (Node node in respawnableNodes)
+					node.Call(StageSettings.RESPAWN_FUNCTION);
+			}
 		}
 
 		public override void Deactivate()
