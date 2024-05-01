@@ -74,6 +74,7 @@ namespace Project.Gameplay.Bosses
 		private readonly StringName DISABLED_STATE = "disabled";
 		private readonly StringName ENABLED_STATE = "enabled";
 		private readonly StringName INTRO_PARAMETER = "parameters/intro_trigger/request";
+		private readonly StringName DEFEAT_PARAMETER = "parameters/defeat_trigger/request";
 
 		public override void _Ready()
 		{
@@ -183,11 +184,35 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 			Respawn();
-			Character.ProcessMode = ProcessModeEnum.Inherit;
 			TransitionManager.FinishTransition();
+			Character.ProcessMode = ProcessModeEnum.Inherit;
 			Interface.PauseMenu.AllowPausing = true;
 			HeadsUpDisplay.instance.Visible = true;
 			Character.Camera.Camera.Current = true;
+		}
+
+
+		private void StartDefeat()
+		{
+			rootAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			lTailAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			rTailAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+			fightState = FightState.Defeated;
+			Character.ProcessMode = ProcessModeEnum.Disabled;
+			Interface.PauseMenu.AllowPausing = false;
+			HeadsUpDisplay.instance.Visible = false;
+		}
+
+
+		private void StartResults()
+		{
+			rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = false;
+			Character.ProcessMode = ProcessModeEnum.Inherit;
+			Interface.PauseMenu.AllowPausing = true;
+			HeadsUpDisplay.instance.Visible = true;
+			Character.Camera.Camera.Current = true;
+			StageSettings.instance.FinishLevel(true);
 		}
 
 
@@ -758,9 +783,7 @@ namespace Project.Gameplay.Bosses
 		{
 			currentHealth--;
 			if (currentHealth <= 0)
-			{
-				GD.Print("Boss Defeated.");
-			}
+				StartDefeat();
 			else
 			{
 				if (currentHealth == 4)
