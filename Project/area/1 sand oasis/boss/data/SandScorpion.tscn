@@ -1,4 +1,4 @@
-[gd_scene load_steps=145 format=3 uid="uid://b3folnh8hcqs"]
+[gd_scene load_steps=148 format=3 uid="uid://b3folnh8hcqs"]
 
 [ext_resource type="PackedScene" uid="uid://cyme78kdqgxjq" path="res://area/1 sand oasis/boss/data/model/SandScorpion.gltf" id="1_k7ra0"]
 [ext_resource type="Script" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_mewmp"]
@@ -1012,6 +1012,8 @@ _data = {
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8rgq1"]
 animation = &"l-defeat"
 
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_5pj3m"]
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_8swj6"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wsiw7"]
@@ -1067,7 +1069,9 @@ fadeout_time = 0.2
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wjd4q"]
 graph_offset = Vector2(-644.952, 128.276)
 nodes/defeat_animation/node = SubResource("AnimationNodeAnimation_8rgq1")
-nodes/defeat_animation/position = Vector2(120, 300)
+nodes/defeat_animation/position = Vector2(-40, 380)
+nodes/defeat_seek/node = SubResource("AnimationNodeTimeSeek_5pj3m")
+nodes/defeat_seek/position = Vector2(180, 260)
 nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_8swj6")
 nodes/defeat_trigger/position = Vector2(336.876, 172.245)
 nodes/heavy_attack_end_animation/node = SubResource("AnimationNodeAnimation_wsiw7")
@@ -1089,10 +1093,12 @@ nodes/light_attack_trigger/position = Vector2(-480, 64)
 nodes/movespeed/node = SubResource("AnimationNodeTimeScale_lwv08")
 nodes/movespeed/position = Vector2(-688, 64)
 nodes/output/position = Vector2(800, 140)
-node_connections = [&"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_animation", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"idle_animation", &"output", 0, &"intro_trigger"]
+node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_seek", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"idle_animation", &"output", 0, &"intro_trigger"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h87ys"]
 animation = &"r-defeat"
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_yf04b"]
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_q0js7"]
 
@@ -1147,9 +1153,11 @@ fadeout_time = 0.2
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_jx0dx"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m1chd"]
-graph_offset = Vector2(-442.307, 94.143)
+graph_offset = Vector2(-600.452, 137.267)
 nodes/defeat_animation/node = SubResource("AnimationNodeAnimation_h87ys")
-nodes/defeat_animation/position = Vector2(156.028, 257.395)
+nodes/defeat_animation/position = Vector2(-20, 360)
+nodes/defeat_seek/node = SubResource("AnimationNodeTimeSeek_yf04b")
+nodes/defeat_seek/position = Vector2(220, 240)
 nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_q0js7")
 nodes/defeat_trigger/position = Vector2(379.244, 131.614)
 nodes/heavy_attack_end_animation/node = SubResource("AnimationNodeAnimation_4tl1j")
@@ -1171,7 +1179,7 @@ nodes/light_attack_trigger/position = Vector2(-480, 64)
 nodes/movespeed/node = SubResource("AnimationNodeTimeScale_jx0dx")
 nodes/movespeed/position = Vector2(-688, 64)
 nodes/output/position = Vector2(800, 140)
-node_connections = [&"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_animation", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"idle_animation", &"output", 0, &"intro_trigger"]
+node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_seek", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"idle_animation", &"output", 0, &"intro_trigger"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o15kk"]
 material = ExtResource("11_npy58")
@@ -4773,6 +4781,8 @@ animation = &"attack-heavy"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ebj42"]
 animation = &"defeat"
 
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_w0k5t"]
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bgb0u"]
 
 [sub_resource type="Curve" id="Curve_0clkj"]
@@ -4835,11 +4845,13 @@ filters = ["ScorpionRoot/Skeleton3D:head", "ScorpionRoot/Skeleton3D:hip", "Scorp
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_kv6lr"]
-graph_offset = Vector2(-1095.44, 342.299)
+graph_offset = Vector2(-542.788, 202.729)
 nodes/attack_heavy_animation/node = SubResource("AnimationNodeAnimation_lnhkb")
 nodes/attack_heavy_animation/position = Vector2(-1200, 304)
 nodes/defeat_animation/node = SubResource("AnimationNodeAnimation_ebj42")
-nodes/defeat_animation/position = Vector2(100, 380)
+nodes/defeat_animation/position = Vector2(-20, 460)
+nodes/defeat_seek/node = SubResource("AnimationNodeTimeSeek_w0k5t")
+nodes/defeat_seek/position = Vector2(180, 380)
 nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_bgb0u")
 nodes/defeat_trigger/position = Vector2(320, 280)
 nodes/eye_transition/node = SubResource("AnimationNodeTransition_xbhmw")
@@ -4869,7 +4881,7 @@ nodes/phase_two_active_animation/node = SubResource("AnimationNodeAnimation_6gmx
 nodes/phase_two_active_animation/position = Vector2(-752, 384)
 nodes/phase_two_add/node = SubResource("AnimationNodeAdd2_ax5ah")
 nodes/phase_two_add/position = Vector2(-112, 288)
-node_connections = [&"defeat_trigger", 0, &"phase_two_add", &"defeat_trigger", 1, &"defeat_animation", &"eye_transition", 0, &"flying_eye_inactive_animation", &"eye_transition", 1, &"flying_eye_active_animation", &"flying_eye_add", 0, &"phase_two_active_animation", &"flying_eye_add", 1, &"eye_transition", &"heavy_attack_trigger", 0, &"movement_transition", &"heavy_attack_trigger", 1, &"attack_heavy_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"movement_transition", 0, &"idle_animation", &"movement_transition", 1, &"movespeed", &"movespeed", 0, &"move_animation", &"output", 0, &"intro_trigger", &"phase_two_add", 0, &"heavy_attack_trigger", &"phase_two_add", 1, &"flying_eye_add"]
+node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"phase_two_add", &"defeat_trigger", 1, &"defeat_seek", &"eye_transition", 0, &"flying_eye_inactive_animation", &"eye_transition", 1, &"flying_eye_active_animation", &"flying_eye_add", 0, &"phase_two_active_animation", &"flying_eye_add", 1, &"eye_transition", &"heavy_attack_trigger", 0, &"movement_transition", &"heavy_attack_trigger", 1, &"attack_heavy_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"movement_transition", 0, &"idle_animation", &"movement_transition", 1, &"movespeed", &"movespeed", 0, &"move_animation", &"output", 0, &"intro_trigger", &"phase_two_add", 0, &"heavy_attack_trigger", &"phase_two_add", 1, &"flying_eye_add"]
 
 [sub_resource type="Animation" id="Animation_74b1e"]
 resource_name = "RESET"
@@ -6227,6 +6239,7 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeBlendTree_wjd4q")
 anim_player = NodePath("../Tail/AnimationPlayer")
+parameters/defeat_seek/seek_request = -1.0
 parameters/defeat_trigger/active = false
 parameters/defeat_trigger/internal_active = false
 parameters/defeat_trigger/request = 0
@@ -6410,6 +6423,7 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeBlendTree_m1chd")
 anim_player = NodePath("../Tail/AnimationPlayer")
+parameters/defeat_seek/seek_request = -1.0
 parameters/defeat_trigger/active = false
 parameters/defeat_trigger/internal_active = false
 parameters/defeat_trigger/request = 0
@@ -6482,6 +6496,7 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeBlendTree_kv6lr")
 anim_player = NodePath("../SandScorpion/AnimationPlayer")
+parameters/defeat_seek/seek_request = -1.0
 parameters/defeat_trigger/active = false
 parameters/defeat_trigger/internal_active = false
 parameters/defeat_trigger/request = 0

@@ -75,6 +75,7 @@ namespace Project.Gameplay.Bosses
 		private readonly StringName ENABLED_STATE = "enabled";
 		private readonly StringName INTRO_PARAMETER = "parameters/intro_trigger/request";
 		private readonly StringName DEFEAT_PARAMETER = "parameters/defeat_trigger/request";
+		private readonly StringName DEFEAT_SEEK_PARAMETER = "parameters/defeat_seek/seek_request";
 
 		public override void _Ready()
 		{
@@ -249,6 +250,14 @@ namespace Project.Gameplay.Bosses
 					UpdateMissiles();
 					UpdateAttacks();
 					UpdateHitboxes();
+					break;
+				case FightState.Defeated:
+					if (Input.IsActionJustPressed("button_pause"))
+					{
+						rootAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
+						rTailAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
+						lTailAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
+					}
 					break;
 			}
 		}
