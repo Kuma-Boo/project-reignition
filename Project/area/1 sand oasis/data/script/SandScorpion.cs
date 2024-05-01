@@ -78,7 +78,7 @@ namespace Project.Gameplay.Bosses
 
 		public override void _Ready()
 		{
-			rootAnimationTree.Active = lTailAnimationTree.Active = rTailAnimationTree.Active = true; //Activate animation trees
+			rootAnimationTree.Active = lTailAnimationTree.Active = rTailAnimationTree.Active = flyingEyeAnimationTree.Active = true; //Activate animation trees
 
 			SetUpEyes();
 			SetUpMissiles();
@@ -103,6 +103,7 @@ namespace Project.Gameplay.Bosses
 			isPhaseTwoActive = false;
 			lTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, DISABLED_STATE);
 			rTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, DISABLED_STATE);
+			rootAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE);
 
 			lTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			rTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
@@ -192,6 +193,17 @@ namespace Project.Gameplay.Bosses
 		}
 
 
+		private void StartFinalBlow()
+		{
+			eventAnimator.Play("defeat");
+			eventAnimator.Advance(0.0);
+
+			Character.AddLockoutData(StageSettings.instance.CompletionLockout);
+			Interface.PauseMenu.AllowPausing = false;
+			HeadsUpDisplay.instance.Visible = false;
+		}
+
+
 		private void StartDefeat()
 		{
 			rootAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -199,18 +211,17 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
 			fightState = FightState.Defeated;
+			Character.Visible = false;
 			Character.ProcessMode = ProcessModeEnum.Disabled;
-			Interface.PauseMenu.AllowPausing = false;
-			HeadsUpDisplay.instance.Visible = false;
 		}
 
 
 		private void StartResults()
 		{
-			rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = false;
+			rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = flyingEyeAnimationTree.Active = false;
+
+			Character.Visible = true;
 			Character.ProcessMode = ProcessModeEnum.Inherit;
-			Interface.PauseMenu.AllowPausing = true;
-			HeadsUpDisplay.instance.Visible = true;
 			Character.Camera.Camera.Current = true;
 			StageSettings.instance.FinishLevel(true);
 		}
@@ -285,7 +296,9 @@ namespace Project.Gameplay.Bosses
 
 		private void UpdatePosition()
 		{
-			if (damageState != DamageState.None && !isPhaseTwoActive) //Knockback/hitstun
+			if (currentHealth == 0)
+				MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, 0, ref moveSpeedVelocity, HITSTUN_FRICTION);
+			else if (damageState != DamageState.None && !isPhaseTwoActive) //Knockback/hitstun
 			{
 				MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, 0, ref moveSpeedVelocity, HITSTUN_FRICTION); //Slow down
 
@@ -499,9 +512,9 @@ namespace Project.Gameplay.Bosses
 		private Vector3 flyingEyeTarget;
 		/// <summary> 0 - 1 value blend value. </summary>
 		private float flyingEyeBlend;
-		private readonly float FLYING_EYE_ATTACK_SPEED = 0.6f; //How fast does the eye move when attacking?
-		private readonly float FLYING_EYE_RETREAT_SPEED = 0.4f; //How fast does the eye move when retreating?
-		private readonly float FLYING_EYE_KNOCKBACK = 200.0f; //How quickly to knock the eye back
+		private readonly float FLYING_EYE_NORMAL_SPEED = 0.6f; // How fast does the eye typically move?
+		private readonly float FLYING_EYE_LOCKON_SPEED = 0.3f; // How fast does the eye move when targeted?
+		private readonly float FLYING_EYE_KNOCKBACK = 1.2f; // How quickly to knock the eye back on the final hit
 
 		private void UpdateAttacks()
 		{
@@ -515,7 +528,7 @@ namespace Project.Gameplay.Bosses
 					{
 						UpdateFlyingEyeTarget();
 
-						flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 1f, FLYING_EYE_ATTACK_SPEED * PhysicsManager.physicsDelta);
+						flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 1f, FLYING_EYE_NORMAL_SPEED * PhysicsManager.physicsDelta);
 						if (Mathf.IsEqualApprox(flyingEyeBlend, 1f))
 						{
 							isStriking = false;
@@ -525,7 +538,13 @@ namespace Project.Gameplay.Bosses
 					}
 					else
 					{
-						flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_RETREAT_SPEED * PhysicsManager.physicsDelta);
+						if (currentHealth == 0)
+							flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_KNOCKBACK * PhysicsManager.physicsDelta);
+						else if (Character.Lockon.IsHomingAttacking)
+							flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_LOCKON_SPEED * PhysicsManager.physicsDelta);
+						else
+							flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_NORMAL_SPEED * PhysicsManager.physicsDelta);
+
 						if (Mathf.IsZeroApprox(flyingEyeBlend))
 							FinishEyeAttack();
 					}
@@ -746,9 +765,12 @@ namespace Project.Gameplay.Bosses
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, EYE_BITE_STATE); //Start biting
 		}
 
+
 		private void FinishEyeAttack()
 		{
-			if (dialogFlags[2] == 0 && currentHealth == 1)
+			if (currentHealth == 0)
+				StartDefeat();
+			else if (dialogFlags[2] == 0 && currentHealth == 1)
 			{
 				hitDialogs[3].Activate();
 				dialogFlags[2] = 1;
@@ -779,11 +801,11 @@ namespace Project.Gameplay.Bosses
 		/// <summary>
 		/// Deals damage to the boss. Returns True if the boss is defeated.
 		/// </summary>
-		private bool TakeDamage()
+		private void TakeDamage()
 		{
-			currentHealth--;
-			if (currentHealth <= 0)
-				StartDefeat();
+			currentHealth = (int)Mathf.MoveToward(currentHealth, 0, 1);
+			if (currentHealth == 0)
+				StartFinalBlow();
 			else
 			{
 				if (currentHealth == 4)
@@ -793,8 +815,6 @@ namespace Project.Gameplay.Bosses
 
 				eventAnimator.Play("damage");
 			}
-
-			return currentHealth == 0;
 		}
 
 		private void UpdateHitboxes()
@@ -885,8 +905,8 @@ namespace Project.Gameplay.Bosses
 				return;
 			}
 
-			if (!TakeDamage())
-				Character.Lockon.StartBounce(false);
+			TakeDamage();
+			Character.Lockon.StartBounce(false);
 		}
 
 		/// <summary> Is the player currently colliding with the eye on the boss's back? </summary>
