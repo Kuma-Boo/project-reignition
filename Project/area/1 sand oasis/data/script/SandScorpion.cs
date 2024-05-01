@@ -196,9 +196,18 @@ namespace Project.Gameplay.Bosses
 
 		private void StartFinalBlow()
 		{
+			TransitionManager.StartTransition(new()
+			{
+				inSpeed = 0f,
+				outSpeed = .5f,
+				color = Colors.Black
+			});
+			TransitionManager.FinishTransition();
+
 			eventAnimator.Play("defeat");
 			eventAnimator.Advance(0.0);
 
+			Character.Visible = false;
 			Character.AddLockoutData(StageSettings.instance.CompletionLockout);
 			Interface.PauseMenu.AllowPausing = false;
 			HeadsUpDisplay.instance.Visible = false;
@@ -212,7 +221,6 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
 			fightState = FightState.Defeated;
-			Character.Visible = false;
 			Character.ProcessMode = ProcessModeEnum.Disabled;
 		}
 
@@ -254,6 +262,7 @@ namespace Project.Gameplay.Bosses
 				case FightState.Defeated:
 					if (Input.IsActionJustPressed("button_pause"))
 					{
+						eventAnimator.Play("defeat-skip");
 						rootAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
 						rTailAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
 						lTailAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);

@@ -33,6 +33,8 @@ namespace Project.Core
 		private DialogTrigger currentDialog;
 		public void PlayDialog(DialogTrigger dialog)
 		{
+			if (dialog.DialogCount == 0) return; // No dialog
+
 			IsDialogActive = true;
 			subtitleLabel.Text = string.Empty;
 
