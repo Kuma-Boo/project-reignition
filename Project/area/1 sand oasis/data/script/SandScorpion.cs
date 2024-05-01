@@ -92,7 +92,6 @@ namespace Project.Gameplay.Bosses
 		{
 			rootAnimationTree.Active = lTailAnimationTree.Active = rTailAnimationTree.Active = flyingEyeAnimationTree.Active = true; // Activate animation trees
 
-			SetUpEyes();
 			SetUpMissiles();
 
 			StageSettings.instance.ConnectUnloadSignal(this);
@@ -681,35 +680,55 @@ namespace Project.Gameplay.Bosses
 		#region Eyes
 		[ExportGroup("Eyes")]
 		[Export]
-		private Array<NodePath> eyePaths;
+		private Array<Node3D> mainEyes;
+		[Export]
+		private Array<Node3D> tailEyes;
 		/// <summary> Eyes that track the player. </summary>
-		private Node3D[] eyes;
-
-		private void SetUpEyes()
-		{
-			eyes = new Node3D[eyePaths.Count];
-			for (int i = 0; i < eyePaths.Count; i++)
-				eyes[i] = GetNode<Node3D>(eyePaths[i]);
-		}
+		private float eyeTrackingFactor;
+		private float eyeTrackingVelocity;
+		private const float EYE_TRACKING_SMOOTHING = 30.0f;
 
 		/// <summary>
 		/// Updates the eyes to look at the player's position.
 		/// </summary>
 		private void UpdateEyes()
 		{
-			// Update the eyes to always look at the player
-			for (int i = 0; i < eyes.Length; i++)
+			// Main eyes always look at the player
+			for (int i = 0; i < mainEyes.Count; i++)
 			{
-				if (currentHealth == 0) // Reset eyes when defeated
+				if (currentHealth == 0)
 				{
-					eyes[i].Rotation = Vector3.Zero;
+					mainEyes[i].Rotation = Vector3.Zero;
 					continue;
 				}
 
-				if ((eyes[i].GlobalPosition - Character.GlobalPosition).LengthSquared() < 1f) // Failsafe
+				if ((mainEyes[i].GlobalPosition - Character.GlobalPosition).LengthSquared() < 1f) // Failsafe
 					continue;
 
-				eyes[i].LookAt(Character.GlobalPosition, Vector3.Up);
+				mainEyes[i].LookAt(Character.GlobalPosition, Vector3.Up);
+			}
+
+			float targetTracking;
+			if (isPhaseTwoActive)
+				targetTracking = phaseTwoBlend;
+			else
+				targetTracking = attackState == AttackState.INACTIVE ? 1f : 0f;
+			eyeTrackingFactor = ExtensionMethods.SmoothDamp(eyeTrackingFactor, targetTracking, ref eyeTrackingVelocity, EYE_TRACKING_SMOOTHING * PhysicsManager.physicsDelta);
+
+			// Update tail eyes
+			for (int i = 0; i < tailEyes.Count; i++)
+			{
+				if (currentHealth == 0)
+				{
+					tailEyes[i].Rotation = Vector3.Zero;
+					continue;
+				}
+
+				if ((tailEyes[i].GlobalPosition - Character.GlobalPosition).LengthSquared() < 1f) // Failsafe
+					continue;
+
+				tailEyes[i].LookAt(Character.GlobalPosition, Vector3.Up);
+				tailEyes[i].Basis = tailEyes[i].Basis.Slerp(Basis.Identity, 1f - eyeTrackingFactor).Orthonormalized();
 			}
 		}
 
