@@ -194,6 +194,7 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 			Respawn();
+			eventAnimator.Play("activate-particles");
 			TransitionManager.FinishTransition();
 			Character.ProcessMode = ProcessModeEnum.Inherit;
 			Interface.PauseMenu.AllowPausing = true;

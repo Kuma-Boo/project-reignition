@@ -1,8 +1,8 @@
-[gd_scene load_steps=22 format=3 uid="uid://d4niu0q5cqdvj"]
+[gd_scene load_steps=21 format=3 uid="uid://d4niu0q5cqdvj"]
 
-[ext_resource type="Texture2D" uid="uid://c81morow3jatk" path="res://effect/particle/texture/environment/water splash ripple.png" id="1_8nrk5"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="2_kynw0"]
 [ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="3_qje2y"]
+[ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="3_u5mlv"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="4_00gtt"]
 
 [sub_resource type="Gradient" id="Gradient_qls6t"]
@@ -32,14 +32,8 @@ scale_max = 4.0
 scale_curve = SubResource("CurveTexture_jnxgk")
 color_ramp = SubResource("GradientTexture1D_h4qlt")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dhhmf"]
-blend_mode = 1
-shading_mode = 0
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_8nrk5")
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_xc2cj"]
-material = SubResource("StandardMaterial3D_dhhmf")
+material = ExtResource("3_u5mlv")
 
 [sub_resource type="Gradient" id="Gradient_taey7"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -114,9 +108,9 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_gy24x")
 draw_pass_1 = SubResource("PlaneMesh_xc2cj")
 script = ExtResource("2_kynw0")
-subSystems = [NodePath("MainSplash"), NodePath("SecondarySplash")]
+subSystems = [NodePath("Splash"), NodePath("Splatter")]
 
-[node name="MainSplash" type="GPUParticles3D" parent="."]
+[node name="Splash" type="GPUParticles3D" parent="."]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -131,7 +125,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_r6jjp")
 draw_pass_1 = SubResource("QuadMesh_jr0lt")
 
-[node name="SecondarySplash" type="GPUParticles3D" parent="."]
+[node name="Splatter" type="GPUParticles3D" parent="."]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0

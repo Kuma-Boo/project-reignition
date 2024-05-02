@@ -1,11 +1,11 @@
-[gd_scene load_steps=38 format=3 uid="uid://b8irusmhs8rjm"]
+[gd_scene load_steps=34 format=3 uid="uid://b8irusmhs8rjm"]
 
 [ext_resource type="Script" path="res://area/1 sand oasis/data/script/Missile.cs" id="1_1rlvb"]
 [ext_resource type="PackedScene" uid="uid://cmlev1vsg4lag" path="res://area/1 sand oasis/boss/data/model/Missile.gltf" id="1_q671j"]
-[ext_resource type="Texture2D" uid="uid://bhk8873bbly8l" path="res://area/1 sand oasis/boss/effect/texture/missile trail.png" id="3_bakte"]
-[ext_resource type="Texture2D" uid="uid://3y612aiqnbxl" path="res://area/1 sand oasis/boss/effect/texture/tail attack dust.png" id="4_8vbqs"]
-[ext_resource type="Texture2D" uid="uid://besivx868m8j4" path="res://area/1 sand oasis/boss/effect/texture/tail attack sand.png" id="5_o74f1"]
-[ext_resource type="Texture2D" uid="uid://b68qhdltp1cwf" path="res://area/1 sand oasis/boss/effect/texture/sand particle base.png" id="6_uw2mt"]
+[ext_resource type="Material" uid="uid://bfhjjudtxb3ec" path="res://area/1 sand oasis/boss/effect/material/Missile Trail.tres" id="3_qkr8x"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="4_bjx7k"]
+[ext_resource type="Material" uid="uid://boyiki4rgce2h" path="res://effect/particle/material/environment/Common Dust Splatter.tres" id="5_q67im"]
+[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://area/1 sand oasis/boss/effect/material/Sand Scorpion Splatter Add.tres" id="6_dbo2r"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ykuxf"]
 radius = 0.3
@@ -36,19 +36,8 @@ scale_max = 1.5
 scale_curve = SubResource("CurveTexture_wq6x3")
 color_ramp = SubResource("GradientTexture1D_v7pdi")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3o8or"]
-transparency = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("3_bakte")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
 [sub_resource type="QuadMesh" id="QuadMesh_ln563"]
-material = SubResource("StandardMaterial3D_3o8or")
+material = ExtResource("3_qkr8x")
 
 [sub_resource type="Gradient" id="Gradient_yeklr"]
 interpolation_mode = 2
@@ -65,8 +54,7 @@ _data = [Vector2(0, 0.4), 0.0, 3.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_o2bpr"]
-width = 128
-texture_mode = 1
+width = 64
 curve = SubResource("Curve_md06t")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lwa6m"]
@@ -82,29 +70,15 @@ scale_curve = SubResource("CurveTexture_o2bpr")
 color = Color(0.917647, 0.819608, 0.654902, 1)
 color_ramp = SubResource("GradientTexture1D_wrs2l")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mt5w0"]
-render_priority = 1
-transparency = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("4_8vbqs")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
+[sub_resource type="QuadMesh" id="QuadMesh_l3hqx"]
+material = ExtResource("4_bjx7k")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_r8h1n"]
-material = SubResource("StandardMaterial3D_mt5w0")
-orientation = 2
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_02m2k"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_i63ag"]
 gradient = SubResource("Gradient_yeklr")
 width = 128
 
-[sub_resource type="CurveTexture" id="CurveTexture_sjw1o"]
-width = 128
-texture_mode = 1
+[sub_resource type="CurveTexture" id="CurveTexture_ekugo"]
+width = 64
 curve = SubResource("Curve_md06t")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x83so"]
@@ -120,26 +94,16 @@ direction = Vector3(0, 1, 0)
 spread = 25.0
 initial_velocity_min = 6.0
 initial_velocity_max = 12.0
-scale_max = 1.5
-scale_curve = SubResource("CurveTexture_sjw1o")
+damping_min = 10.0
+damping_max = 20.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_ekugo")
 color = Color(0.909804, 0.772549, 0.690196, 1)
-color_ramp = SubResource("GradientTexture1D_02m2k")
+color_ramp = SubResource("GradientTexture1D_i63ag")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_47aal"]
-render_priority = 1
-transparency = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("5_o74f1")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_rf0ih"]
-material = SubResource("StandardMaterial3D_47aal")
-orientation = 2
+[sub_resource type="QuadMesh" id="QuadMesh_07a1k"]
+material = ExtResource("5_q67im")
 
 [sub_resource type="Gradient" id="Gradient_4uwxm"]
 offsets = PackedFloat32Array(0, 0.227437, 1)
@@ -169,17 +133,8 @@ scale_curve = SubResource("CurveTexture_824p4")
 color = Color(1, 0.92549, 0.870588, 1)
 color_ramp = SubResource("GradientTexture1D_coxrq")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_by3n8"]
-render_priority = 1
-blend_mode = 1
-cull_mode = 2
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("6_uw2mt")
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_0vxsp"]
-material = SubResource("StandardMaterial3D_by3n8")
+material = ExtResource("6_dbo2r")
 size = Vector2(1, 5)
 orientation = 2
 
@@ -512,6 +467,8 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="Trail" type="GPUParticles3D" parent="Particles"]
 layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
 emitting = false
 amount = 32
 lifetime = 0.8
@@ -524,6 +481,8 @@ draw_pass_1 = SubResource("QuadMesh_ln563")
 [node name="Dust" type="GPUParticles3D" parent="Particles"]
 visible = false
 layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
 emitting = false
 lifetime = 0.8
 one_shot = true
@@ -533,11 +492,13 @@ interpolate = false
 visibility_aabb = AABB(-7, -1, -7, 14, 8, 14)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_lwa6m")
-draw_pass_1 = SubResource("PlaneMesh_r8h1n")
+draw_pass_1 = SubResource("QuadMesh_l3hqx")
 
 [node name="Sand" type="GPUParticles3D" parent="Particles"]
 visible = false
 layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
 emitting = false
 lifetime = 0.8
 one_shot = true
@@ -547,11 +508,13 @@ interpolate = false
 visibility_aabb = AABB(-7, -1, -7, 14, 8, 14)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_x83so")
-draw_pass_1 = SubResource("PlaneMesh_rf0ih")
+draw_pass_1 = SubResource("QuadMesh_07a1k")
 
 [node name="Spark" type="GPUParticles3D" parent="Particles"]
 visible = false
 layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
 emitting = false
 lifetime = 0.4
 one_shot = true
