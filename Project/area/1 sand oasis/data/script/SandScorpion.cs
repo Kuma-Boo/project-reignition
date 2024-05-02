@@ -124,7 +124,8 @@ namespace Project.Gameplay.Bosses
 			// Reset movement
 			MoveSpeed = 0;
 			moveSpeedVelocity = 0;
-			rootAnimationTree.Set(MOVESTATE_PARAMETER, IDLE_STATE);
+			movementBlend = 0;
+			rootAnimationTree.Set(MOVEMENT_BLEND_PARAMETER, movementBlend);
 
 			// Reset phase
 			phaseTwoBlend = 0;
@@ -287,10 +288,9 @@ namespace Project.Gameplay.Bosses
 		private float MoveSpeed { get; set; }
 		private float moveSpeedVelocity;
 
-		private readonly StringName IDLE_STATE = "idle";
-		private readonly StringName MOVE_STATE = "move";
+		private float movementBlend;
 		private readonly StringName MOVESPEED_PARAMETER = "parameters/movespeed/scale";
-		private readonly StringName MOVESTATE_PARAMETER = "parameters/movement_transition/transition_request";
+		private readonly StringName MOVEMENT_BLEND_PARAMETER = "parameters/movement_blend/blend_amount";
 
 		/// <summary> Current distance to the player. </summary>
 		private float currentDistance;
@@ -304,6 +304,8 @@ namespace Project.Gameplay.Bosses
 		private const float RETREAT_DISTANCE = 55.0f;
 		/// <summary> Distance to start advancing towards the player. </summary>
 		private const float ADVANCE_DISTANCE = 65.0f;
+		/// <summary> Distance to teleport. </summary>
+		private const float TELEPORT_DISTANCE = 300.0f;
 
 		/// <summary> Traction amount to use when attacking. </summary>
 		private const float STRIKE_TRACTION = 20.0f;
@@ -364,8 +366,14 @@ namespace Project.Gameplay.Bosses
 					float speedFactor;
 					if (currentDistance < RETREAT_DISTANCE)
 						speedFactor = 1f - (currentDistance - CHASE_DISTANCE) / (RETREAT_DISTANCE - CHASE_DISTANCE);
-					else
+					else // Move towards player
+					{
 						speedFactor = -Mathf.Clamp((currentDistance - ADVANCE_DISTANCE) * .1f, 0f, 1f);
+
+						if (currentDistance > TELEPORT_DISTANCE
+							&& PathFollower.ActivePath.Curve.GetBakedLength() - currentDistance > 10) // Teleport when really far away
+							bossPathFollower.Progress -= (currentDistance - TELEPORT_DISTANCE) * PhysicsManager.physicsDelta;
+					}
 
 					MoveSpeed = ExtensionMethods.SmoothDamp(MoveSpeed, CharacterTopSpeed * speedFactor, ref moveSpeedVelocity, TRACTION);
 				}
@@ -373,11 +381,17 @@ namespace Project.Gameplay.Bosses
 
 			bossPathFollower.Progress += MoveSpeed * PhysicsManager.physicsDelta;
 
-			float speedRatio = 1f + (MoveSpeed / CharacterTopSpeed) * 1.2f;
+			float speedRatio = 1f + Mathf.Abs(MoveSpeed / CharacterTopSpeed) * 1.2f;
+			speedRatio *= Mathf.Sign(MoveSpeed);
+			if (isPhaseTwoActive)
+				speedRatio *= -1;
+
 			if (damageState == DamageState.Knockback)
 				speedRatio = 0f;
 			rootAnimationTree.Set(MOVESPEED_PARAMETER, speedRatio);
-			rootAnimationTree.Set(MOVESTATE_PARAMETER, Mathf.Abs(MoveSpeed) <= 2f ? IDLE_STATE : MOVE_STATE);
+
+			movementBlend = Mathf.MoveToward(movementBlend, Mathf.Abs(MoveSpeed) <= 2f ? 0 : 1, 2f * PhysicsManager.physicsDelta);
+			rootAnimationTree.Set(MOVEMENT_BLEND_PARAMETER, movementBlend);
 
 			GlobalPosition = bossPathFollower.GlobalPosition;
 		}
@@ -462,6 +476,9 @@ namespace Project.Gameplay.Bosses
 		private void UpdateMissiles()
 		{
 			if (missileGroupReset && currentDistance < ATTACK_DISTANCE) // Too close for missiles
+				return;
+
+			if (currentDistance > TELEPORT_DISTANCE) // Too far for missiles
 				return;
 
 			missileTimer = Mathf.MoveToward(missileTimer, 0, PhysicsManager.physicsDelta);
@@ -568,8 +585,9 @@ namespace Project.Gameplay.Bosses
 			}
 		}
 
+		private float lightAttackTrackingVelocity;
 		private readonly StringName LIGHT_ATTACK_PARAMETER = "parameters/light_attack_trigger/request";
-		private readonly StringName LIGHT_ATTACK_POSITION_PARAMETER = "parameters/light_attack_blend/blend_position";
+		private readonly StringName LIGHT_ATTACK_POSITION_PARAMETER = "parameters/light_attack_blend/blend_amount";
 		private void StartLightAttack()
 		{
 			// Play hint
@@ -581,6 +599,7 @@ namespace Project.Gameplay.Bosses
 				dialogFlags[0] = 1;
 			}
 
+			lightAttackTrackingVelocity = 0;
 			attackCounter++;
 			if (PathFollower.LocalPlayerPositionDelta.X < 0) // Left Attack
 			{
@@ -608,7 +627,7 @@ namespace Project.Gameplay.Bosses
 				pos = 0;
 
 			pos = 2 * -Mathf.Abs(pos / 4) + 1;
-			current = Mathf.Lerp(current, pos, .25f);
+			current = ExtensionMethods.SmoothDamp(current, pos, ref lightAttackTrackingVelocity, .2f);
 
 			lTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
 			rTailAnimationTree.Set(LIGHT_ATTACK_POSITION_PARAMETER, current);
