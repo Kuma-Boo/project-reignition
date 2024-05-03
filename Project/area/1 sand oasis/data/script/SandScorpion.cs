@@ -134,6 +134,7 @@ namespace Project.Gameplay.Bosses
 			rootAnimationTree.Set(PHASE_TWO_PARAMETER, phaseTwoBlend);
 			rootAnimationTree.Set(HEAVY_ATTACK_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			impactEffect.Visible = false;
+			flyingEyeHitbox.Monitorable = false;
 
 			eventAnimator.Play("RESET");
 
