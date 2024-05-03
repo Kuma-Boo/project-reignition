@@ -994,8 +994,8 @@ namespace Project.Gameplay.Bosses
 				return;
 			}
 
-			TakeDamage();
 			StartHitFX();
+			TakeDamage();
 			Character.Lockon.StartBounce(false);
 		}
 

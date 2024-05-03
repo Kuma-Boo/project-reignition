@@ -1,4 +1,4 @@
-[gd_scene load_steps=207 format=3 uid="uid://b3folnh8hcqs"]
+[gd_scene load_steps=210 format=3 uid="uid://b3folnh8hcqs"]
 
 [ext_resource type="PackedScene" uid="uid://cyme78kdqgxjq" path="res://area/1 sand oasis/boss/data/model/SandScorpion.gltf" id="1_k7ra0"]
 [ext_resource type="Script" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_mewmp"]
@@ -20,6 +20,7 @@
 [ext_resource type="Material" uid="uid://b8gp75f0k20mk" path="res://area/1 sand oasis/boss/effect/material/Shockwave.tres" id="13_65rq6"]
 [ext_resource type="Animation" uid="uid://libxmqu133e4" path="res://area/1 sand oasis/boss/data/model/animation/idle.res" id="15_g68fd"]
 [ext_resource type="Animation" uid="uid://ca4klcjt2eyxh" path="res://area/1 sand oasis/boss/data/model/animation/move-forward.res" id="15_p7xyf"]
+[ext_resource type="Material" uid="uid://41ul482823lb" path="res://area/1 sand oasis/boss/effect/material/Heavy Tail Attack.tres" id="16_2o83c"]
 [ext_resource type="Animation" uid="uid://blmd5a64x5mp6" path="res://area/1 sand oasis/boss/data/model/animation/defeat.res" id="17_coptg"]
 [ext_resource type="Animation" uid="uid://yssme3m720cs" path="res://area/1 sand oasis/boss/data/model/animation/intro.res" id="17_mcftm"]
 [ext_resource type="Animation" uid="uid://bga1nh8j7kwx2" path="res://area/1 sand oasis/boss/data/model/animation/RESET.res" id="17_wd27i"]
@@ -380,6 +381,37 @@ material = ExtResource("12_6ym8d")
 size = Vector2(0.2, 2)
 center_offset = Vector3(0, 1, 0)
 orientation = 2
+
+[sub_resource type="Curve" id="Curve_q7jo2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1pmud"]
+width = 64
+curve = SubResource("Curve_q7jo2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k8xwm"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+emission_shape_offset = Vector3(0, 0, 2)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 4)
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 90.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+damping_max = 5.0
+scale_min = 2.5
+scale_max = 5.0
+alpha_curve = SubResource("CurveTexture_1pmud")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+anim_offset_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_wjr6b"]
+material = ExtResource("16_2o83c")
 
 [sub_resource type="Animation" id="Animation_cbcg0"]
 resource_name = "l-attack-center-light"
@@ -1699,14 +1731,6 @@ alpha_curve = SubResource("CurveTexture_cessb")
 [sub_resource type="QuadMesh" id="QuadMesh_j327k"]
 material = ExtResource("19_0t3a5")
 size = Vector2(0.5, 1)
-
-[sub_resource type="Curve" id="Curve_q7jo2"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_1pmud"]
-width = 64
-curve = SubResource("Curve_q7jo2")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1e2i3"]
 lifetime_randomness = 0.4
@@ -4615,7 +4639,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/4/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -4627,7 +4651,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/5/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -4639,7 +4663,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/6/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -4699,7 +4723,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/11/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -4711,7 +4735,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox/Charge:emitting")
+tracks/12/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Charge:emitting")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -4723,7 +4747,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox/Charge:emitting")
+tracks/13/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Charge:emitting")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -4823,6 +4847,30 @@ tracks/21/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/SandScorpio
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/HeavyAttack:emitting")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/HeavyAttack:emitting")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -4947,7 +4995,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -4959,7 +5007,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -5019,7 +5067,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/8/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -5031,7 +5079,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/9/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -5103,7 +5151,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5115,7 +5163,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5127,7 +5175,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -5139,7 +5187,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -5155,7 +5203,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5167,7 +5215,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5203,7 +5251,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/4/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -5215,7 +5263,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/5/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -5255,7 +5303,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5267,7 +5315,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5327,7 +5375,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/6/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -5339,7 +5387,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/7/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -5379,7 +5427,7 @@ length = 3.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5391,7 +5439,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5477,6 +5525,18 @@ tracks/7/keys = {
 "method": &"FinishHeavyAttack"
 }]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/HeavyAttack:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
 
 [sub_resource type="Animation" id="Animation_6u87m"]
 resource_name = "l-light-attack"
@@ -5484,7 +5544,7 @@ length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox/Charge:emitting")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Charge:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5526,7 +5586,7 @@ length = 3.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitoring")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5538,7 +5598,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon:monitorable")
+tracks/1/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5624,6 +5684,18 @@ tracks/7/keys = {
 "method": &"FinishHeavyAttack"
 }]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/HeavyAttack:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
 
 [sub_resource type="Animation" id="Animation_7ofif"]
 resource_name = "r-light-attack"
@@ -5631,7 +5703,7 @@ length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox/Charge:emitting")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Charge:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -6100,38 +6172,40 @@ bone_idx = 6
 
 [node name="EyeSmall" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02" instance=ExtResource("2_a5gic")]
 
-[node name="Lockon" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02"]
-transform = Transform3D(-1, 1.0677e-07, -1.0677e-07, 5.1009e-16, 0.707107, 0.707107, 1.50996e-07, 0.707107, -0.707107, 0, 0.530331, -0.530331)
+[node name="Root" type="Node3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02"]
+transform = Transform3D(1, 4.59211e-08, -5.06927e-08, 3.37404e-09, 0.707107, 0.707107, 6.83163e-08, -0.707107, 0.707107, 0, 0, 0)
+
+[node name="Lockon" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.750001, 0)
 collision_layer = 12
 collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 0)
 shape = SubResource("SphereShape3D_6gfpm")
 
-[node name="Hitbox" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02"]
-transform = Transform3D(1, 4.59211e-08, -5.06927e-08, 3.37404e-09, 0.707107, 0.707107, 6.83163e-08, -0.707107, 0.707107, 0, 0, 0)
+[node name="Hitbox" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 
-[node name="TipCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, 3.97528e-08, -2.72043e-08, 4.04128e-08, -0.38502, 0.922908, 2.62141e-08, -0.922909, -0.385021, 0, -1.40005, -2.50001)
+[node name="TipCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 0.384295, -0.92321, 0, 0.92321, 0.384295, 0, -1.40005, -2.50001)
 shape = SubResource("BoxShape3D_0bw7n")
 
-[node name="BallCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, -4.78766e-14, 3.26576e-26, 4.78766e-14, 1, -9.09495e-13, 1.08859e-26, 9.09495e-13, 1, 0, -0.0999999, 0)
+[node name="BallCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0999999, 0)
 shape = SubResource("SphereShape3D_v7gw7")
 
-[node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, -4.26326e-14, -3.28283e-15, 4.2861e-14, -4.37128e-08, 1, 0, -1, -4.37115e-08, -2.38419e-07, -2.30002, -5)
+[node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38419e-07, -2.30002, -5)
 shape = SubResource("SphereShape3D_e7p6t")
 disabled = true
 
-[node name="TailTip" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, 1.77636e-14, 7.10543e-15, 0, 1, 0, 0, 0, 1, 0, -2.3, -5)
+[node name="TailTip" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38419e-07, -2.3, -5)
 layers = 32
 cast_shadow = 0
 lifetime = 0.2
@@ -6142,9 +6216,10 @@ visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
 process_material = SubResource("ParticleProcessMaterial_skcug")
 draw_pass_1 = SubResource("PlaneMesh_e01up")
 
-[node name="Charge" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, 1.77636e-14, 7.10543e-15, 0, 1, 0, 0, 0, 1, 0, -2.3, -5)
+[node name="Charge" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38419e-07, -2.3, -5)
 layers = 32
+cast_shadow = 0
 emitting = false
 amount = 32
 lifetime = 0.4
@@ -6154,6 +6229,20 @@ local_coords = true
 transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_0ysei")
 draw_pass_1 = SubResource("PlaneMesh_elby2")
+
+[node name="HeavyAttack" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_k8xwm")
+draw_pass_1 = SubResource("QuadMesh_wjr6b")
 
 [node name="LTailAnimationTree" type="AnimationTree" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail"]
 active = false
@@ -6288,38 +6377,41 @@ bone_idx = 6
 
 [node name="EyeSmall" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02" instance=ExtResource("2_a5gic")]
 
-[node name="Lockon" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02"]
-transform = Transform3D(-1, 1.0677e-07, -1.0677e-07, 5.1009e-16, 0.707107, 0.707107, 1.50996e-07, 0.707107, -0.707107, 0, 0.530331, -0.53033)
+[node name="Root" type="Node3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02"]
+transform = Transform3D(1, 4.59211e-08, -5.06927e-08, 3.37405e-09, 0.707107, 0.707107, 6.83163e-08, -0.707107, 0.707107, 0, 0, 0)
+
+[node name="Lockon" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 9.53674e-07)
 collision_layer = 12
 collision_mask = 2
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 0)
 shape = SubResource("SphereShape3D_6gfpm")
 
-[node name="Hitbox" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02"]
-transform = Transform3D(1, 4.59211e-08, -5.06927e-08, 3.37405e-09, 0.707107, 0.707107, 6.83163e-08, -0.707107, 0.707107, 0, 0, 0)
+[node name="Hitbox" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+transform = Transform3D(1, -5.42881e-15, 0, 2.57358e-15, 1, -1.13687e-12, 0, 9.09495e-13, 1, 0, 0, 0)
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 
-[node name="TipCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, 3.97528e-08, -2.72043e-08, 4.04128e-08, -0.38502, 0.922908, 2.62141e-08, -0.922909, -0.385021, 0, -1.40005, -2.50001)
+[node name="TipCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 0.384295, -0.92321, 0, 0.92321, 0.384295, 0, -1.40005, -2.50001)
 shape = SubResource("BoxShape3D_0bw7n")
 
-[node name="BallCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, -4.78766e-14, 3.26576e-26, 4.78766e-14, 1, -9.09495e-13, 1.08859e-26, 9.09495e-13, 1, 0, -0.0999999, 0)
+[node name="BallCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0999999, 0)
 shape = SubResource("SphereShape3D_v7gw7")
 
-[node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, -4.26326e-14, -3.28283e-15, 4.2861e-14, -4.37128e-08, 1, 0, -1, -4.37115e-08, -2.38419e-07, -2.30002, -5)
+[node name="StrikeCollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38419e-07, -2.30002, -5)
 shape = SubResource("SphereShape3D_e7p6t")
 disabled = true
 
-[node name="TailTip" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, -1.70849e-14, -3.55271e-15, 4.23171e-15, 1, 0, 0, 0, 1, 4.76837e-07, -2.3, -5)
+[node name="TailTip" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.15256e-07, -2.3, -5)
 layers = 32
 cast_shadow = 0
 lifetime = 0.2
@@ -6330,9 +6422,10 @@ visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
 process_material = SubResource("ParticleProcessMaterial_skcug")
 draw_pass_1 = SubResource("PlaneMesh_e01up")
 
-[node name="Charge" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox"]
-transform = Transform3D(1, -9.97947e-15, -3.55271e-15, -2.87372e-15, 1, 0, 0, 0, 1, 2.38419e-07, -2.3, -5)
+[node name="Charge" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.76837e-07, -2.3, -5)
 layers = 32
+cast_shadow = 0
 emitting = false
 amount = 32
 lifetime = 0.4
@@ -6342,6 +6435,20 @@ local_coords = true
 transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_0ysei")
 draw_pass_1 = SubResource("PlaneMesh_elby2")
+
+[node name="HeavyAttack" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_k8xwm")
+draw_pass_1 = SubResource("QuadMesh_wjr6b")
 
 [node name="RTailAnimationTree" type="AnimationTree" parent="SandScorpion/ScorpionRoot/Skeleton3D/RTail"]
 active = false
@@ -6583,9 +6690,9 @@ textKeys = Array[String]([])
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye01/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [false]]
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye01/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye01/Hitbox" to="." method="OnHitboxExited"]
-[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
-[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox" to="." method="OnHitboxEntered"]
-[connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
+[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox" to="." method="OnHitboxExited"]
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/RTail01/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/RTail01/Hitbox" to="." method="OnHitboxExited"]
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/RTail02/Hitbox" to="." method="OnHitboxEntered"]
@@ -6597,9 +6704,9 @@ textKeys = Array[String]([])
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye01/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [false]]
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye01/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye01/Hitbox" to="." method="OnHitboxExited"]
-[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
-[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox" to="." method="OnHitboxEntered"]
-[connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Hitbox" to="." method="OnHitboxExited"]
+[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon" to="." method="OnTraversalHurtboxCollision" binds= [true]]
+[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox" to="." method="OnHitboxExited"]
 
 [editable path="SandScorpion"]
 [editable path="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail"]
