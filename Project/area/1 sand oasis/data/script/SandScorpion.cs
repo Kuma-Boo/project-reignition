@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using Project.Core;
+using Project.CustomNodes;
 using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Bosses
@@ -691,13 +692,24 @@ namespace Project.Gameplay.Bosses
 
 		[ExportGroup("Effects")]
 		[Export]
-		public Node3D impactEffect;
-		public void SetImpactPosition(NodePath n)
+		private GroupGpuParticles3D impactEffect;
+		private void StartImpactFX(NodePath n)
 		{
 			impactEffect.Visible = true;
 			Vector3 p = GetNode<Node3D>(n).GlobalPosition;
-			p.Y = 0;
+			p.Y = 0; // Snap to the floor
 			impactEffect.GlobalPosition = p;
+			impactEffect.RestartGroup();
+		}
+
+
+		[Export]
+		private GroupGpuParticles3D hitEffect;
+		private void StartHitFX()
+		{
+			hitEffect.Visible = true;
+			hitEffect.GlobalPosition = Character.CenterPosition;
+			hitEffect.RestartGroup();
 		}
 		#endregion
 
@@ -983,6 +995,7 @@ namespace Project.Gameplay.Bosses
 			}
 
 			TakeDamage();
+			StartHitFX();
 			Character.Lockon.StartBounce(false);
 		}
 
@@ -1019,6 +1032,7 @@ namespace Project.Gameplay.Bosses
 				FinishHeavyAttack(true);
 			}
 
+			StartHitFX();
 			TakeDamage();
 			Character.Lockon.StartBounce(); // Bounce the player
 
@@ -1034,6 +1048,7 @@ namespace Project.Gameplay.Bosses
 			if (!a.IsInGroup("player")) return;
 			if (!Character.Lockon.IsHomingAttacking) return; // Player isn't attacking
 
+			StartHitFX();
 			Character.Lockon.StartBounce();
 			damageState = DamageState.Hitstun;
 
