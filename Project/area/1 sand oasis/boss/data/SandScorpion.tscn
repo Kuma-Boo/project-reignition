@@ -1,4 +1,4 @@
-[gd_scene load_steps=190 format=3 uid="uid://b3folnh8hcqs"]
+[gd_scene load_steps=193 format=3 uid="uid://b3folnh8hcqs"]
 
 [ext_resource type="PackedScene" uid="uid://cyme78kdqgxjq" path="res://area/1 sand oasis/boss/data/model/SandScorpion.gltf" id="1_k7ra0"]
 [ext_resource type="Script" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_mewmp"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b8irusmhs8rjm" path="res://area/1 sand oasis/boss/data/Missile.tscn" id="2_6mjm1"]
 [ext_resource type="PackedScene" uid="uid://bjidkwtacvmue" path="res://area/1 sand oasis/boss/data/model/FlyingEye.gltf" id="2_8luog"]
 [ext_resource type="PackedScene" uid="uid://wsxigaddy57x" path="res://area/1 sand oasis/boss/data/model/EyeSmall.gltf" id="2_a5gic"]
+[ext_resource type="PackedScene" uid="uid://0ve2qaciq6l8" path="res://area/1 sand oasis/boss/data/FootVFX.tscn" id="4_005gm"]
 [ext_resource type="Material" path="res://area/1 sand oasis/boss/effect/material/Sand Scorpion Dust.tres" id="6_6lmwm"]
 [ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://area/1 sand oasis/boss/effect/material/Sand Scorpion Splatter Add.tres" id="7_l8h1e"]
 [ext_resource type="Material" uid="uid://boyiki4rgce2h" path="res://effect/particle/material/environment/Common Dust Splatter.tres" id="7_ros00"]
@@ -18,11 +19,12 @@
 [ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="12_kvj2s"]
 [ext_resource type="Material" uid="uid://b8gp75f0k20mk" path="res://area/1 sand oasis/boss/effect/material/Shockwave.tres" id="13_65rq6"]
 [ext_resource type="Animation" uid="uid://libxmqu133e4" path="res://area/1 sand oasis/boss/data/model/animation/idle.res" id="15_g68fd"]
-[ext_resource type="Animation" uid="uid://dfy17mhd2kp6r" path="res://area/1 sand oasis/boss/data/model/animation/move.res" id="15_p7xyf"]
+[ext_resource type="Animation" uid="uid://ca4klcjt2eyxh" path="res://area/1 sand oasis/boss/data/model/animation/move-forward.res" id="15_p7xyf"]
 [ext_resource type="Animation" uid="uid://blmd5a64x5mp6" path="res://area/1 sand oasis/boss/data/model/animation/defeat.res" id="17_coptg"]
 [ext_resource type="Animation" uid="uid://yssme3m720cs" path="res://area/1 sand oasis/boss/data/model/animation/intro.res" id="17_mcftm"]
 [ext_resource type="Animation" uid="uid://bga1nh8j7kwx2" path="res://area/1 sand oasis/boss/data/model/animation/RESET.res" id="17_wd27i"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="19_vtm0w"]
+[ext_resource type="Animation" uid="uid://bb87c1p2wl50g" path="res://area/1 sand oasis/boss/data/model/animation/move-backward.res" id="23_4ch27"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_i57o6"]
 radius = 2.2
@@ -1649,7 +1651,7 @@ alpha_curve = SubResource("CurveTexture_i5ma8")
 [sub_resource type="QuadMesh" id="QuadMesh_rr8fq"]
 material = ExtResource("7_ros00")
 
-[sub_resource type="Animation" id="Animation_jn55g"]
+[sub_resource type="Animation" id="Animation_507ck"]
 resource_name = "attack-heavy"
 length = 1.33333
 tracks/0/type = "position_3d"
@@ -2192,7 +2194,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_8pjri"]
+[sub_resource type="Animation" id="Animation_srs2c"]
 resource_name = "flying-eye-active"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -2735,7 +2737,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_d8y4o"]
+[sub_resource type="Animation" id="Animation_47p57"]
 resource_name = "flying-eye-inactive"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -3278,7 +3280,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_pjxn2"]
+[sub_resource type="Animation" id="Animation_fnnu1"]
 resource_name = "phase-two-active"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -3308,7 +3310,7 @@ tracks/3/enabled = true
 tracks/3/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_01_1")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, -0.352404, -0.454715, -0.434304, 0.693127)
+tracks/3/keys = PackedFloat32Array(0, 1, -0.43504, -0.553257, -0.242169, 0.667834)
 tracks/4/type = "position_3d"
 tracks/4/imported = true
 tracks/4/enabled = true
@@ -3322,7 +3324,7 @@ tracks/5/enabled = true
 tracks/5/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_01_2")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
-tracks/5/keys = PackedFloat32Array(0, 1, -2.02039e-06, -3.34506e-07, 0.295231, 0.955426)
+tracks/5/keys = PackedFloat32Array(0, 1, -1.22563e-06, -3.32597e-07, 0.176995, 0.984212)
 tracks/6/type = "position_3d"
 tracks/6/imported = true
 tracks/6/enabled = true
@@ -3336,7 +3338,7 @@ tracks/7/enabled = true
 tracks/7/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_02_1")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
-tracks/7/keys = PackedFloat32Array(0, 1, -0.470539, -0.487166, -0.45668, 0.576806)
+tracks/7/keys = PackedFloat32Array(0, 1, -0.533289, -0.434167, -0.369604, 0.624896)
 tracks/8/type = "position_3d"
 tracks/8/imported = true
 tracks/8/enabled = true
@@ -3350,7 +3352,7 @@ tracks/9/enabled = true
 tracks/9/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_02_2")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
-tracks/9/keys = PackedFloat32Array(0, 1, 1.12994e-06, 1.77459e-07, 0.305796, 0.952097)
+tracks/9/keys = PackedFloat32Array(0, 1, 6.95538e-07, 1.77675e-07, 0.186627, 0.982431)
 tracks/10/type = "position_3d"
 tracks/10/imported = true
 tracks/10/enabled = true
@@ -3364,7 +3366,7 @@ tracks/11/enabled = true
 tracks/11/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_03_1")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
-tracks/11/keys = PackedFloat32Array(0, 1, -0.439605, -0.35697, -0.706991, 0.423654)
+tracks/11/keys = PackedFloat32Array(0, 1, -0.52026, -0.419328, -0.581346, 0.464253)
 tracks/12/type = "position_3d"
 tracks/12/imported = true
 tracks/12/enabled = true
@@ -3378,7 +3380,7 @@ tracks/13/enabled = true
 tracks/13/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_03_2")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
-tracks/13/keys = PackedFloat32Array(0, 1, 2.78618e-05, 1.19966e-06, 0.435638, 0.900122)
+tracks/13/keys = PackedFloat32Array(0, 1, 2.43497e-05, 1.22658e-06, 0.380741, 0.924682)
 tracks/14/type = "position_3d"
 tracks/14/imported = true
 tracks/14/enabled = true
@@ -3420,7 +3422,7 @@ tracks/19/enabled = true
 tracks/19/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_02_1")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
-tracks/19/keys = PackedFloat32Array(0, 1, -0.460131, 0.582944, 0.570926, 0.349998)
+tracks/19/keys = PackedFloat32Array(0, 1, -0.41759, 0.482539, 0.672531, 0.374802)
 tracks/20/type = "position_3d"
 tracks/20/imported = true
 tracks/20/enabled = true
@@ -3434,7 +3436,7 @@ tracks/21/enabled = true
 tracks/21/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_02_2")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
-tracks/21/keys = PackedFloat32Array(0, 1, 1.52797e-06, -7.22975e-08, -0.424108, 0.905612)
+tracks/21/keys = PackedFloat32Array(0, 1, 1.52787e-06, -7.68795e-08, -0.424108, 0.905612)
 tracks/22/type = "position_3d"
 tracks/22/imported = true
 tracks/22/enabled = true
@@ -3448,7 +3450,7 @@ tracks/23/enabled = true
 tracks/23/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_03_1")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
-tracks/23/keys = PackedFloat32Array(0, 1, -0.529999, 0.331333, 0.664596, 0.409428)
+tracks/23/keys = PackedFloat32Array(0, 1, -0.509237, 0.366673, 0.69111, 0.358603)
 tracks/24/type = "position_3d"
 tracks/24/imported = true
 tracks/24/enabled = true
@@ -3462,7 +3464,7 @@ tracks/25/enabled = true
 tracks/25/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_03_2")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
-tracks/25/keys = PackedFloat32Array(0, 1, 1.20905e-05, -1.33745e-06, -0.188789, 0.982018)
+tracks/25/keys = PackedFloat32Array(0, 1, 1.81756e-05, -1.28244e-06, -0.284158, 0.958777)
 tracks/26/type = "position_3d"
 tracks/26/imported = true
 tracks/26/enabled = true
@@ -3504,7 +3506,7 @@ tracks/31/enabled = true
 tracks/31/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_01")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
-tracks/31/keys = PackedFloat32Array(0, 1, 7.10142, -6.50032, 5.51112)
+tracks/31/keys = PackedFloat32Array(0, 1, 6.97376, -6.50031, 5.96741)
 tracks/32/type = "rotation_3d"
 tracks/32/imported = true
 tracks/32/enabled = true
@@ -3518,7 +3520,7 @@ tracks/33/enabled = true
 tracks/33/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_02")
 tracks/33/interp = 1
 tracks/33/loop_wrap = true
-tracks/33/keys = PackedFloat32Array(0, 1, 7.84703, -3.01942, 5.75191)
+tracks/33/keys = PackedFloat32Array(0, 1, 7.71938, -3.01942, 6.20819)
 tracks/34/type = "rotation_3d"
 tracks/34/imported = true
 tracks/34/enabled = true
@@ -3532,7 +3534,7 @@ tracks/35/enabled = true
 tracks/35/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_03")
 tracks/35/interp = 1
 tracks/35/loop_wrap = true
-tracks/35/keys = PackedFloat32Array(0, 1, 7.6232, 0.322708, 5.30321)
+tracks/35/keys = PackedFloat32Array(0, 1, 7.49554, 0.322709, 5.7595)
 tracks/36/type = "rotation_3d"
 tracks/36/imported = true
 tracks/36/enabled = true
@@ -3574,21 +3576,21 @@ tracks/41/enabled = true
 tracks/41/path = NodePath("ScorpionRoot/Skeleton3D:r_ik_03")
 tracks/41/interp = 1
 tracks/41/loop_wrap = true
-tracks/41/keys = PackedFloat32Array(0, 1, -8.05013, 1.85938, 4.25847)
+tracks/41/keys = PackedFloat32Array(0, 1, -7.92247, 1.85938, 4.25847)
 tracks/42/type = "rotation_3d"
 tracks/42/imported = true
 tracks/42/enabled = true
 tracks/42/path = NodePath("ScorpionRoot/Skeleton3D:r_ik_03")
 tracks/42/interp = 1
 tracks/42/loop_wrap = true
-tracks/42/keys = PackedFloat32Array(0, 1, 0.543023, -0.492396, 0.251721, 0.631909)
+tracks/42/keys = PackedFloat32Array(0, 1, 0.551381, -0.470312, 0.232844, 0.648514)
 tracks/43/type = "position_3d"
 tracks/43/imported = true
 tracks/43/enabled = true
 tracks/43/path = NodePath("ScorpionRoot/Skeleton3D:l_pole_01")
 tracks/43/interp = 1
 tracks/43/loop_wrap = true
-tracks/43/keys = PackedFloat32Array(0, 1, 4.4, -3.38704, -8.51965e-07)
+tracks/43/keys = PackedFloat32Array(0, 1, 4.4, -4.82213, 4.31663e-06)
 tracks/44/type = "position_3d"
 tracks/44/imported = true
 tracks/44/enabled = true
@@ -3602,21 +3604,21 @@ tracks/45/enabled = true
 tracks/45/path = NodePath("ScorpionRoot/Skeleton3D:l_pole_02")
 tracks/45/interp = 1
 tracks/45/loop_wrap = true
-tracks/45/keys = PackedFloat32Array(0, 1, 4.62384, -2.0962, 8.73575e-07)
+tracks/45/keys = PackedFloat32Array(0, 1, 4.62384, -2.20138, 1.29326e-06)
 tracks/46/type = "position_3d"
 tracks/46/imported = true
 tracks/46/enabled = true
 tracks/46/path = NodePath("ScorpionRoot/Skeleton3D:r_pole_02")
 tracks/46/interp = 1
 tracks/46/loop_wrap = true
-tracks/46/keys = PackedFloat32Array(0, 1, -4.62384, -2.17327, 1.15116e-06)
+tracks/46/keys = PackedFloat32Array(0, 1, -4.62384, -1.22023, -2.29883e-06)
 tracks/47/type = "position_3d"
 tracks/47/imported = true
 tracks/47/enabled = true
 tracks/47/path = NodePath("ScorpionRoot/Skeleton3D:l_pole_03")
 tracks/47/interp = 1
 tracks/47/loop_wrap = true
-tracks/47/keys = PackedFloat32Array(0, 1, 4.4, 1.3294, -4.82286e-06)
+tracks/47/keys = PackedFloat32Array(0, 1, 4.4, 0.28131, -1.08519e-06)
 tracks/48/type = "position_3d"
 tracks/48/imported = true
 tracks/48/enabled = true
@@ -3821,7 +3823,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_7u8b3"]
+[sub_resource type="Animation" id="Animation_hcv6s"]
 resource_name = "phase-two-inactive"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -3851,7 +3853,7 @@ tracks/3/enabled = true
 tracks/3/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_01_1")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, -0.352404, -0.454715, -0.434304, 0.693127)
+tracks/3/keys = PackedFloat32Array(0, 1, -0.43504, -0.553257, -0.242169, 0.667834)
 tracks/4/type = "position_3d"
 tracks/4/imported = true
 tracks/4/enabled = true
@@ -3865,7 +3867,7 @@ tracks/5/enabled = true
 tracks/5/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_01_2")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
-tracks/5/keys = PackedFloat32Array(0, 1, -2.02039e-06, -3.34506e-07, 0.295231, 0.955426)
+tracks/5/keys = PackedFloat32Array(0, 1, -1.22563e-06, -3.32597e-07, 0.176995, 0.984212)
 tracks/6/type = "position_3d"
 tracks/6/imported = true
 tracks/6/enabled = true
@@ -3879,7 +3881,7 @@ tracks/7/enabled = true
 tracks/7/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_02_1")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
-tracks/7/keys = PackedFloat32Array(0, 1, -0.470539, -0.487166, -0.45668, 0.576806)
+tracks/7/keys = PackedFloat32Array(0, 1, -0.533289, -0.434167, -0.369604, 0.624896)
 tracks/8/type = "position_3d"
 tracks/8/imported = true
 tracks/8/enabled = true
@@ -3893,7 +3895,7 @@ tracks/9/enabled = true
 tracks/9/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_02_2")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
-tracks/9/keys = PackedFloat32Array(0, 1, 1.12994e-06, 1.77459e-07, 0.305796, 0.952097)
+tracks/9/keys = PackedFloat32Array(0, 1, 6.95538e-07, 1.77675e-07, 0.186627, 0.982431)
 tracks/10/type = "position_3d"
 tracks/10/imported = true
 tracks/10/enabled = true
@@ -3907,7 +3909,7 @@ tracks/11/enabled = true
 tracks/11/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_03_1")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
-tracks/11/keys = PackedFloat32Array(0, 1, -0.439605, -0.35697, -0.706991, 0.423654)
+tracks/11/keys = PackedFloat32Array(0, 1, -0.52026, -0.419328, -0.581346, 0.464253)
 tracks/12/type = "position_3d"
 tracks/12/imported = true
 tracks/12/enabled = true
@@ -3921,7 +3923,7 @@ tracks/13/enabled = true
 tracks/13/path = NodePath("ScorpionRoot/Skeleton3D:l_leg_03_2")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
-tracks/13/keys = PackedFloat32Array(0, 1, 2.78618e-05, 1.19966e-06, 0.435638, 0.900122)
+tracks/13/keys = PackedFloat32Array(0, 1, 2.43497e-05, 1.22658e-06, 0.380741, 0.924682)
 tracks/14/type = "position_3d"
 tracks/14/imported = true
 tracks/14/enabled = true
@@ -3963,7 +3965,7 @@ tracks/19/enabled = true
 tracks/19/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_02_1")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
-tracks/19/keys = PackedFloat32Array(0, 1, -0.460131, 0.582944, 0.570926, 0.349998)
+tracks/19/keys = PackedFloat32Array(0, 1, -0.41759, 0.482539, 0.672531, 0.374802)
 tracks/20/type = "position_3d"
 tracks/20/imported = true
 tracks/20/enabled = true
@@ -3977,7 +3979,7 @@ tracks/21/enabled = true
 tracks/21/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_02_2")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
-tracks/21/keys = PackedFloat32Array(0, 1, 1.52797e-06, -7.22975e-08, -0.424108, 0.905612)
+tracks/21/keys = PackedFloat32Array(0, 1, 1.52787e-06, -7.68795e-08, -0.424108, 0.905612)
 tracks/22/type = "position_3d"
 tracks/22/imported = true
 tracks/22/enabled = true
@@ -3991,7 +3993,7 @@ tracks/23/enabled = true
 tracks/23/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_03_1")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
-tracks/23/keys = PackedFloat32Array(0, 1, -0.529999, 0.331333, 0.664596, 0.409428)
+tracks/23/keys = PackedFloat32Array(0, 1, -0.509237, 0.366673, 0.69111, 0.358603)
 tracks/24/type = "position_3d"
 tracks/24/imported = true
 tracks/24/enabled = true
@@ -4005,7 +4007,7 @@ tracks/25/enabled = true
 tracks/25/path = NodePath("ScorpionRoot/Skeleton3D:r_leg_03_2")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
-tracks/25/keys = PackedFloat32Array(0, 1, 1.20905e-05, -1.33745e-06, -0.188789, 0.982018)
+tracks/25/keys = PackedFloat32Array(0, 1, 1.81756e-05, -1.28244e-06, -0.284158, 0.958777)
 tracks/26/type = "position_3d"
 tracks/26/imported = true
 tracks/26/enabled = true
@@ -4033,7 +4035,7 @@ tracks/29/enabled = true
 tracks/29/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_01")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
-tracks/29/keys = PackedFloat32Array(0, 1, 7.10142, -6.50032, 5.51112)
+tracks/29/keys = PackedFloat32Array(0, 1, 6.97376, -6.50031, 5.96741)
 tracks/30/type = "rotation_3d"
 tracks/30/imported = true
 tracks/30/enabled = true
@@ -4047,7 +4049,7 @@ tracks/31/enabled = true
 tracks/31/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_02")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
-tracks/31/keys = PackedFloat32Array(0, 1, 7.84703, -3.01942, 5.75191)
+tracks/31/keys = PackedFloat32Array(0, 1, 7.71938, -3.01942, 6.20819)
 tracks/32/type = "rotation_3d"
 tracks/32/imported = true
 tracks/32/enabled = true
@@ -4061,7 +4063,7 @@ tracks/33/enabled = true
 tracks/33/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_03")
 tracks/33/interp = 1
 tracks/33/loop_wrap = true
-tracks/33/keys = PackedFloat32Array(0, 1, 7.6232, 0.322708, 5.30321)
+tracks/33/keys = PackedFloat32Array(0, 1, 7.49554, 0.322709, 5.7595)
 tracks/34/type = "rotation_3d"
 tracks/34/imported = true
 tracks/34/enabled = true
@@ -4103,21 +4105,21 @@ tracks/39/enabled = true
 tracks/39/path = NodePath("ScorpionRoot/Skeleton3D:r_ik_03")
 tracks/39/interp = 1
 tracks/39/loop_wrap = true
-tracks/39/keys = PackedFloat32Array(0, 1, -8.05013, 1.85938, 4.25847)
+tracks/39/keys = PackedFloat32Array(0, 1, -7.92247, 1.85938, 4.25847)
 tracks/40/type = "rotation_3d"
 tracks/40/imported = true
 tracks/40/enabled = true
 tracks/40/path = NodePath("ScorpionRoot/Skeleton3D:r_ik_03")
 tracks/40/interp = 1
 tracks/40/loop_wrap = true
-tracks/40/keys = PackedFloat32Array(0, 1, 0.543023, -0.492396, 0.251721, 0.631909)
+tracks/40/keys = PackedFloat32Array(0, 1, 0.551381, -0.470312, 0.232844, 0.648514)
 tracks/41/type = "position_3d"
 tracks/41/imported = true
 tracks/41/enabled = true
 tracks/41/path = NodePath("ScorpionRoot/Skeleton3D:l_pole_01")
 tracks/41/interp = 1
 tracks/41/loop_wrap = true
-tracks/41/keys = PackedFloat32Array(0, 1, 4.4, -3.38704, -8.51965e-07)
+tracks/41/keys = PackedFloat32Array(0, 1, 4.4, -4.82213, 4.31663e-06)
 tracks/42/type = "position_3d"
 tracks/42/imported = true
 tracks/42/enabled = true
@@ -4131,21 +4133,21 @@ tracks/43/enabled = true
 tracks/43/path = NodePath("ScorpionRoot/Skeleton3D:l_pole_02")
 tracks/43/interp = 1
 tracks/43/loop_wrap = true
-tracks/43/keys = PackedFloat32Array(0, 1, 4.62384, -2.0962, 8.73575e-07)
+tracks/43/keys = PackedFloat32Array(0, 1, 4.62384, -2.20138, 1.29326e-06)
 tracks/44/type = "position_3d"
 tracks/44/imported = true
 tracks/44/enabled = true
 tracks/44/path = NodePath("ScorpionRoot/Skeleton3D:r_pole_02")
 tracks/44/interp = 1
 tracks/44/loop_wrap = true
-tracks/44/keys = PackedFloat32Array(0, 1, -4.62384, -2.17327, 1.15116e-06)
+tracks/44/keys = PackedFloat32Array(0, 1, -4.62384, -1.22023, -2.29883e-06)
 tracks/45/type = "position_3d"
 tracks/45/imported = true
 tracks/45/enabled = true
 tracks/45/path = NodePath("ScorpionRoot/Skeleton3D:l_pole_03")
 tracks/45/interp = 1
 tracks/45/loop_wrap = true
-tracks/45/keys = PackedFloat32Array(0, 1, 4.4, 1.3294, -4.82286e-06)
+tracks/45/keys = PackedFloat32Array(0, 1, 4.4, 0.28131, -1.08519e-06)
 tracks/46/type = "position_3d"
 tracks/46/imported = true
 tracks/46/enabled = true
@@ -4364,18 +4366,19 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_2li4q"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7xg63"]
 _data = {
 "RESET": ExtResource("17_wd27i"),
-"attack-heavy": SubResource("Animation_jn55g"),
+"attack-heavy": SubResource("Animation_507ck"),
 "defeat": ExtResource("17_coptg"),
-"flying-eye-active": SubResource("Animation_8pjri"),
-"flying-eye-inactive": SubResource("Animation_d8y4o"),
+"flying-eye-active": SubResource("Animation_srs2c"),
+"flying-eye-inactive": SubResource("Animation_47p57"),
 "idle": ExtResource("15_g68fd"),
 "intro": ExtResource("17_mcftm"),
-"move": ExtResource("15_p7xyf"),
-"phase-two-active": SubResource("Animation_pjxn2"),
-"phase-two-inactive": SubResource("Animation_7u8b3")
+"move-backward": ExtResource("23_4ch27"),
+"move-forward": ExtResource("15_p7xyf"),
+"phase-two-active": SubResource("Animation_fnnu1"),
+"phase-two-inactive": SubResource("Animation_hcv6s")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lnhkb"]
@@ -4425,10 +4428,14 @@ animation = &"intro"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_rxdcg"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3v80a"]
-animation = &"move"
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rs6o1"]
+animation = &"move-backward"
 
-[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_gwfs4"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3v80a"]
+animation = &"move-forward"
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_0fgrp"]
+sync = true
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_tgoy3"]
 
@@ -4441,7 +4448,7 @@ filters = ["ScorpionRoot/Skeleton3D:head", "ScorpionRoot/Skeleton3D:hip", "Scorp
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_kv6lr"]
-graph_offset = Vector2(-1417.07, 0.629562)
+graph_offset = Vector2(-1851.93, -15.4041)
 nodes/attack_heavy_animation/node = SubResource("AnimationNodeAnimation_lnhkb")
 nodes/attack_heavy_animation/position = Vector2(-1200, 304)
 nodes/defeat_animation/node = SubResource("AnimationNodeAnimation_ebj42")
@@ -4461,23 +4468,25 @@ nodes/flying_eye_inactive_animation/position = Vector2(-896, 560)
 nodes/heavy_attack_trigger/node = SubResource("AnimationNodeOneShot_ga0lp")
 nodes/heavy_attack_trigger/position = Vector2(-720, 80)
 nodes/idle_animation/node = SubResource("AnimationNodeAnimation_2npr5")
-nodes/idle_animation/position = Vector2(-1440, 0)
+nodes/idle_animation/position = Vector2(-1380, 80)
 nodes/intro_animation/node = SubResource("AnimationNodeAnimation_spdmi")
 nodes/intro_animation/position = Vector2(500, 380)
 nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_rxdcg")
 nodes/intro_trigger/position = Vector2(740, 260)
-nodes/move_animation/node = SubResource("AnimationNodeAnimation_3v80a")
-nodes/move_animation/position = Vector2(-1456, 128)
-nodes/movement_blend/node = SubResource("AnimationNodeBlend2_gwfs4")
-nodes/movement_blend/position = Vector2(-1020, 20)
+nodes/move_backward_animation/node = SubResource("AnimationNodeAnimation_rs6o1")
+nodes/move_backward_animation/position = Vector2(-1460, -40)
+nodes/move_forward_animation/node = SubResource("AnimationNodeAnimation_3v80a")
+nodes/move_forward_animation/position = Vector2(-1440, 200)
+nodes/movement_blend/node = SubResource("AnimationNodeBlend3_0fgrp")
+nodes/movement_blend/position = Vector2(-1120, 20)
 nodes/movespeed/node = SubResource("AnimationNodeTimeScale_tgoy3")
-nodes/movespeed/position = Vector2(-1264, 128)
+nodes/movespeed/position = Vector2(-920, 60)
 nodes/output/position = Vector2(980, 220)
 nodes/phase_two_active_animation/node = SubResource("AnimationNodeAnimation_6gmxk")
 nodes/phase_two_active_animation/position = Vector2(-752, 384)
 nodes/phase_two_add/node = SubResource("AnimationNodeAdd2_ax5ah")
 nodes/phase_two_add/position = Vector2(-112, 288)
-node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"phase_two_add", &"defeat_trigger", 1, &"defeat_seek", &"eye_transition", 0, &"flying_eye_inactive_animation", &"eye_transition", 1, &"flying_eye_active_animation", &"flying_eye_add", 0, &"phase_two_active_animation", &"flying_eye_add", 1, &"eye_transition", &"heavy_attack_trigger", 0, &"movement_blend", &"heavy_attack_trigger", 1, &"attack_heavy_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"movement_blend", 0, &"idle_animation", &"movement_blend", 1, &"movespeed", &"movespeed", 0, &"move_animation", &"output", 0, &"intro_trigger", &"phase_two_add", 0, &"heavy_attack_trigger", &"phase_two_add", 1, &"flying_eye_add"]
+node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"phase_two_add", &"defeat_trigger", 1, &"defeat_seek", &"eye_transition", 0, &"flying_eye_inactive_animation", &"eye_transition", 1, &"flying_eye_active_animation", &"flying_eye_add", 0, &"phase_two_active_animation", &"flying_eye_add", 1, &"eye_transition", &"heavy_attack_trigger", 0, &"movespeed", &"heavy_attack_trigger", 1, &"attack_heavy_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"movement_blend", 0, &"move_backward_animation", &"movement_blend", 1, &"idle_animation", &"movement_blend", 2, &"move_forward_animation", &"movespeed", 0, &"movement_blend", &"output", 0, &"intro_trigger", &"phase_two_add", 0, &"heavy_attack_trigger", &"phase_two_add", 1, &"flying_eye_add"]
 
 [sub_resource type="Animation" id="Animation_74b1e"]
 resource_name = "RESET"
@@ -5716,22 +5725,70 @@ bones/47/rotation = Quaternion(-1.2335e-06, -0.707106, 0.707108, 1.23349e-06)
 bones/48/rotation = Quaternion(1.2335e-06, -0.707106, 0.707108, -1.23349e-06)
 
 [node name="LMissile" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="1"]
-transform = Transform3D(1, -3.17865e-08, -6.35733e-08, 3.17863e-08, 1, -3.49283e-06, 6.35734e-08, 3.49283e-06, 1, 1.8, 4.9, 0.600018)
+transform = Transform3D(1, -3.17863e-08, -6.32836e-08, 3.16646e-08, 0.999998, -0.00192255, 6.33446e-08, 0.00192255, 0.999998, 1.9431, 5.28074, 0.604238)
 bone_name = "l_dummy_missile"
 bone_idx = 18
 
 [node name="Missile" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="2"]
-transform = Transform3D(1, 7.99488e-10, -7.9973e-10, -7.99488e-10, 1, -3.61204e-06, 7.99727e-10, 3.61204e-06, 1, 5.68434e-14, 5.4, 0.60002)
+transform = Transform3D(1, 7.99758e-10, -5.09965e-10, -8.00753e-10, 0.999998, -0.00192267, 5.08426e-10, 0.00192267, 0.999998, 0.143098, 5.78074, 0.605199)
 bone_name = "dummy_missile"
 bone_idx = 17
 
 [node name="RMissile" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="3"]
-transform = Transform3D(1, -3.17865e-08, -6.35733e-08, 3.17863e-08, 1, -3.61204e-06, 6.35734e-08, 3.61204e-06, 1, -1.8, 4.9, 0.600018)
+transform = Transform3D(1, -3.17863e-08, -6.32835e-08, 3.16645e-08, 0.999998, -0.00192267, 6.33445e-08, 0.00192267, 0.999998, -1.6569, 5.28074, 0.604238)
 bone_name = "r_dummy_missile"
 bone_idx = 19
 
-[node name="FlyingEye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="4"]
-transform = Transform3D(1, 2.84217e-14, 7.20004e-15, -2.84217e-14, 1, -3.61204e-06, -7.20013e-15, 3.61204e-06, 1, 2.13163e-14, 2.94998, 6.60001)
+[node name="LFoot1" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="4"]
+transform = Transform3D(0.469984, 0.882046, 0.0333227, -0.882533, 0.468898, 0.0356208, 0.0157942, -0.0461496, 0.99881, 10.1181, 0.534706, 4.22986)
+bone_name = "dummy_l_foot_01"
+bone_idx = 27
+
+[node name="FootVFX" parent="SandScorpion/ScorpionRoot/Skeleton3D/LFoot1" instance=ExtResource("4_005gm")]
+transform = Transform3D(0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0, 1, 1, 0.6, 0)
+
+[node name="LFoot2" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="5"]
+transform = Transform3D(0.452007, 0.831051, 0.324105, -0.890745, 0.439893, 0.114313, -0.0475715, -0.340365, 0.939089, 10.2628, 0.331146, 0.852048)
+bone_name = "dummy_l_foot_02"
+bone_idx = 30
+
+[node name="FootVFX" parent="SandScorpion/ScorpionRoot/Skeleton3D/LFoot2" instance=ExtResource("4_005gm")]
+transform = Transform3D(0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0, 1, 1, 0.6, 0)
+
+[node name="LFoot3" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="6"]
+transform = Transform3D(0.407264, 0.815799, 0.410619, -0.89865, 0.438174, 0.0207651, -0.162982, -0.37746, 0.91157, 9.80657, 0.419928, -2.32735)
+bone_name = "dummy_l_foot_03"
+bone_idx = 33
+
+[node name="FootVFX" parent="SandScorpion/ScorpionRoot/Skeleton3D/LFoot3" instance=ExtResource("4_005gm")]
+transform = Transform3D(0.5, -0.866025, -2.38413e-07, 0.866025, 0.5, 4.09272e-12, 1.19203e-07, -2.06474e-07, 1, 1, 0.6, 0)
+
+[node name="RFoot1" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="7"]
+transform = Transform3D(0.464184, -0.813133, 0.35121, 0.849753, 0.520696, 0.0824395, -0.249908, 0.260174, 0.932661, -8.75239, 0.837224, 8.48201)
+bone_name = "dummmy_r_foot_01"
+bone_idx = 36
+
+[node name="FootVFX" parent="SandScorpion/ScorpionRoot/Skeleton3D/RFoot1" instance=ExtResource("4_005gm")]
+transform = Transform3D(0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0, 1, -1, 0.6, 0)
+
+[node name="RFoot2" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="8"]
+transform = Transform3D(0.506515, -0.829452, 0.23548, 0.852756, 0.522281, 0.00540698, -0.127472, 0.198069, 0.971864, -9.87267, 0.795558, 5.10182)
+bone_name = "dummy_r_foot_02"
+bone_idx = 39
+
+[node name="FootVFX" parent="SandScorpion/ScorpionRoot/Skeleton3D/RFoot2" instance=ExtResource("4_005gm")]
+transform = Transform3D(0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0, 1, -1, 0.6, 0)
+
+[node name="RFoot3" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="9"]
+transform = Transform3D(0.406827, -0.911523, 0.0601494, 0.910194, 0.410074, 0.058189, -0.0777063, 0.0310748, 0.996492, -9.54605, 0.306386, 1.5963)
+bone_name = "dummy_r_foot_03"
+bone_idx = 42
+
+[node name="FootVFX" parent="SandScorpion/ScorpionRoot/Skeleton3D/RFoot3" instance=ExtResource("4_005gm")]
+transform = Transform3D(0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0, 1, -1, 0.6, 0)
+
+[node name="FlyingEye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="10"]
+transform = Transform3D(1, 2.98428e-13, 2.89772e-10, 2.41585e-13, 0.999998, -0.00192267, -2.89772e-10, 0.00192267, 0.999998, 0.143098, 3.31921, 6.60048)
 bone_name = "dummy_flyingeye"
 bone_idx = 16
 
@@ -5739,7 +5796,7 @@ bone_idx = 16
 transform = Transform3D(1, -5.96228e-22, 0, 1.09788e-21, 1, 4.54747e-13, 0, -4.54747e-13, 1, 0, 0, 0)
 
 [node name="Eye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye"]
-transform = Transform3D(1, -4.33431e-13, -3.55271e-15, 4.33431e-13, 1, 0, 3.55271e-15, 0, 1, 6.53998e-13, 0, 0)
+transform = Transform3D(1, -4.33431e-13, -3.58047e-15, 4.33431e-13, 1, -1.16415e-10, 3.55271e-15, 1.16415e-10, 1, 0, 0, 0)
 bone_name = "dummy_eye"
 bone_idx = 1
 use_external_skeleton = true
@@ -5766,7 +5823,7 @@ parameters/eye_transition/current_state = "disabled"
 parameters/eye_transition/transition_request = ""
 parameters/eye_transition/current_index = 0
 
-[node name="Root" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="5"]
+[node name="Root" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="11"]
 transform = Transform3D(1, 0, 0, 0, 3.51667e-06, 1, 0, -1, 3.51667e-06, 0, 0, 0)
 bone_name = "root"
 bone_idx = 0
@@ -5774,6 +5831,7 @@ bone_idx = 0
 [node name="SandScorpionDust" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
 layers = 32
 cast_shadow = 0
+extra_cull_margin = 16384.0
 emitting = false
 amount = 24
 fixed_fps = 60
@@ -5861,8 +5919,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 3.56038e-06, 0, -3.56038e-06, 1, 0, 0, 5)
 shape = SubResource("BoxShape3D_apgua")
 disabled = true
 
-[node name="Hip" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="6"]
-transform = Transform3D(1, 0, 0, 0, -0.0636966, 0.997969, 0, -0.997969, -0.0636966, 0, 2.7, 9.49502e-06)
+[node name="Hip" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="12"]
+transform = Transform3D(1, 0, 0, 0, -0.0726211, 0.99736, 0, -0.99736, -0.0726211, 0.143098, 3.08302, 0.0175769)
 bone_name = "hip"
 bone_idx = 20
 
@@ -5884,8 +5942,8 @@ shape = SubResource("SphereShape3D_kcnvy")
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 4.37114e-08, -0.2, -4.6)
 shape = SubResource("CapsuleShape3D_xrasm")
 
-[node name="Chest" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="7"]
-transform = Transform3D(1, 7.20004e-15, 1.50996e-07, 1.50996e-07, -3.61204e-06, -1, 5.38203e-13, 1, -3.61204e-06, 0, 2.7, 9.49502e-06)
+[node name="Chest" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="13"]
+transform = Transform3D(1, 2.89772e-10, 1.50996e-07, 1.50996e-07, -0.00192267, -0.999998, 5.42591e-13, 0.999998, -0.00192267, 0.143098, 3.0819, 8.42795e-06)
 bone_name = "chest"
 bone_idx = 1
 
@@ -5899,8 +5957,8 @@ monitorable = false
 transform = Transform3D(1, 0, 1.89696e-18, 0, -1, -8.74227e-08, -1.94401e-18, 8.74227e-08, -1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_066p4")
 
-[node name="BackEye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="8"]
-transform = Transform3D(1, 0, 2.8058e-21, 9.66828e-27, 1, -3.39746e-06, -2.8058e-21, 3.39746e-06, 1, 0, 4.50001, -2.89999)
+[node name="BackEye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="14"]
+transform = Transform3D(1, 0, 2.8058e-21, -2.50887e-23, 0.99996, 0.00894181, -2.80568e-21, -0.00894181, 0.99996, 0.143098, 4.85702, -2.8984)
 bone_name = "dummy_backeye"
 bone_idx = 24
 
@@ -5915,8 +5973,8 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/BackEye/EyeLarge/Hurtbox"]
 shape = SubResource("SphereShape3D_c08po")
 
-[node name="LTail" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="9"]
-transform = Transform3D(1, 1.11022e-16, -2.14253e-09, -7.57727e-15, 1, -3.39746e-06, 2.14253e-09, 3.39746e-06, 1, 3.8, 2.50003, -7.39999)
+[node name="LTail" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="15"]
+transform = Transform3D(1, 1.11022e-16, -2.14253e-09, 1.91578e-11, 0.99996, 0.00894181, 2.14245e-09, -0.00894181, 0.99996, 3.9431, 2.81686, -7.38034)
 bone_name = "l_dummy_tail"
 bone_idx = 23
 
@@ -6103,8 +6161,8 @@ parameters/light_attack_trigger/internal_active = false
 parameters/light_attack_trigger/request = 0
 parameters/movespeed/scale = 1.0
 
-[node name="RTail" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="10"]
-transform = Transform3D(1, 1.11022e-16, -2.14253e-09, -7.57727e-15, 1, -3.39746e-06, 2.14253e-09, 3.39746e-06, 1, -3.8, 2.50003, -7.39999)
+[node name="RTail" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="16"]
+transform = Transform3D(1, 1.11022e-16, -2.14253e-09, 1.91578e-11, 0.99996, 0.00894181, 2.14245e-09, -0.00894181, 0.99996, -3.6569, 2.81686, -7.38034)
 bone_name = "r_dummy_tail"
 bone_idx = 22
 
@@ -6359,7 +6417,7 @@ draw_pass_1 = SubResource("QuadMesh_rr8fq")
 active = false
 root_node = NodePath("../SandScorpion")
 libraries = {
-"": SubResource("AnimationLibrary_2li4q")
+"": SubResource("AnimationLibrary_7xg63")
 }
 tree_root = SubResource("AnimationNodeBlendTree_kv6lr")
 anim_player = NodePath("../SandScorpion/AnimationPlayer")
@@ -6377,7 +6435,7 @@ parameters/heavy_attack_trigger/request = 0
 parameters/intro_trigger/active = false
 parameters/intro_trigger/internal_active = false
 parameters/intro_trigger/request = 0
-parameters/movement_blend/blend_amount = 0
+parameters/movement_blend/blend_amount = 0.0
 parameters/movespeed/scale = 1.0
 parameters/phase_two_add/add_amount = 0.0
 

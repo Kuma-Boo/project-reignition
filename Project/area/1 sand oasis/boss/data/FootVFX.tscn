@@ -1,0 +1,109 @@
+[gd_scene load_steps=16 format=3 uid="uid://0ve2qaciq6l8"]
+
+[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://area/1 sand oasis/boss/effect/material/Sand Scorpion Splatter Add.tres" id="1_6vjcx"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="2_dghyf"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="3_v8bgu"]
+
+[sub_resource type="Curve" id="Curve_ckw8e"]
+_data = [Vector2(0, 0), 0.0, 8.42216, 0, 0, Vector2(0.358553, 1), 0.0, 0.0, 0, 0, Vector2(0.990132, 0.0395778), -2.17238, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_aqgfh"]
+width = 64
+curve = SubResource("Curve_ckw8e")
+
+[sub_resource type="Curve" id="Curve_1qj12"]
+_data = [Vector2(1e-05, 0), 0.0, 3.58398, 0, 0, Vector2(1, 0.5), -2.15111, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tmfmp"]
+width = 64
+curve = SubResource("Curve_1qj12")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iqcet"]
+lifetime_randomness = 0.6
+particle_flag_align_y = true
+particle_flag_rotate_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.5
+angle_min = -45.0
+angle_max = 45.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 3.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 4.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_tmfmp")
+color = Color(1, 0.835, 0.7, 1)
+alpha_curve = SubResource("CurveTexture_aqgfh")
+
+[sub_resource type="QuadMesh" id="QuadMesh_u2m5u"]
+material = ExtResource("1_6vjcx")
+size = Vector2(0.4, 1)
+
+[sub_resource type="Curve" id="Curve_nc5fd"]
+_data = [Vector2(0, 0), 0.0, 17.3657, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.28007, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_7egt6"]
+width = 64
+curve = SubResource("Curve_nc5fd")
+
+[sub_resource type="Curve" id="Curve_3b1hl"]
+_data = [Vector2(0, 0.185356), 0.0, 2.60686, 0, 0, Vector2(0.6, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.8), -1.05247, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_f3rgu"]
+width = 64
+curve = SubResource("Curve_3b1hl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b4u7n"]
+lifetime_randomness = 0.4
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 30.0
+scale_min = 3.0
+scale_max = 6.0
+scale_curve = SubResource("CurveTexture_f3rgu")
+color = Color(1, 0.835, 0.7, 1)
+alpha_curve = SubResource("CurveTexture_7egt6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_gh5p2"]
+material = ExtResource("3_v8bgu")
+
+[node name="FootVFX" type="GPUParticles3D" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0218668, -2.38419e-07, -0.00148869)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_iqcet")
+draw_pass_1 = SubResource("QuadMesh_u2m5u")
+script = ExtResource("2_dghyf")
+subSystems = [NodePath("Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.7
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_b4u7n")
+draw_pass_1 = SubResource("QuadMesh_gh5p2")

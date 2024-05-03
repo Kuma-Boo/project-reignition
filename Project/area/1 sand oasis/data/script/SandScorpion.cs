@@ -381,16 +381,20 @@ namespace Project.Gameplay.Bosses
 
 			bossPathFollower.Progress += MoveSpeed * PhysicsManager.physicsDelta;
 
-			float speedRatio = 1f + Mathf.Abs(MoveSpeed / CharacterTopSpeed) * 1.2f;
-			speedRatio *= Mathf.Sign(MoveSpeed);
-			if (isPhaseTwoActive)
-				speedRatio *= -1;
 
+			float speedRatio = .5f + Mathf.Abs(MoveSpeed / CharacterTopSpeed) * 1.2f;
 			if (damageState == DamageState.Knockback)
 				speedRatio = 0f;
+
 			rootAnimationTree.Set(MOVESPEED_PARAMETER, speedRatio);
 
-			movementBlend = Mathf.MoveToward(movementBlend, Mathf.Abs(MoveSpeed) <= 2f ? 0 : 1, 2f * PhysicsManager.physicsDelta);
+			float direction = Mathf.Sign(MoveSpeed);
+			if (Mathf.Abs(MoveSpeed) <= 2f)
+				direction = 0;
+			else if (isPhaseTwoActive)
+				direction *= -1;
+
+			movementBlend = Mathf.MoveToward(movementBlend, direction, 4f * PhysicsManager.physicsDelta);
 			rootAnimationTree.Set(MOVEMENT_BLEND_PARAMETER, movementBlend);
 
 			GlobalPosition = bossPathFollower.GlobalPosition;
