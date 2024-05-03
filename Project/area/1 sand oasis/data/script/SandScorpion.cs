@@ -86,6 +86,7 @@ namespace Project.Gameplay.Bosses
 		private readonly StringName DISABLED_STATE = "disabled";
 		private readonly StringName ENABLED_STATE = "enabled";
 		private readonly StringName INTRO_PARAMETER = "parameters/intro_trigger/request";
+		private readonly StringName DAMAGE_PARAMETER = "parameters/damage_trigger/request";
 		private readonly StringName DEFEAT_PARAMETER = "parameters/defeat_trigger/request";
 		private readonly StringName DEFEAT_SEEK_PARAMETER = "parameters/defeat_seek/seek_request";
 
@@ -121,6 +122,7 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE);
+			flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 			// Reset movement
 			MoveSpeed = 0;
@@ -984,6 +986,7 @@ namespace Project.Gameplay.Bosses
 			// Player countered the attack
 			if (attackState == AttackState.STRIKE && Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
+				flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				RetreatEyeAttack();
 				Character.Lockon.StartBounce(false);
 				return;
@@ -995,6 +998,7 @@ namespace Project.Gameplay.Bosses
 				return;
 			}
 
+			flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			StartHitFX();
 			TakeDamage();
 			Character.Lockon.StartBounce(false);

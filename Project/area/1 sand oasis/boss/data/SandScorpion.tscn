@@ -1,4 +1,4 @@
-[gd_scene load_steps=210 format=3 uid="uid://b3folnh8hcqs"]
+[gd_scene load_steps=257 format=3 uid="uid://b3folnh8hcqs"]
 
 [ext_resource type="PackedScene" uid="uid://cyme78kdqgxjq" path="res://area/1 sand oasis/boss/data/model/SandScorpion.gltf" id="1_k7ra0"]
 [ext_resource type="Script" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_mewmp"]
@@ -13,13 +13,19 @@
 [ext_resource type="PackedScene" uid="uid://bgua8h0rey52v" path="res://area/1 sand oasis/boss/data/model/Tail.gltf" id="7_rxibo"]
 [ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="8_if22o"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="8_uqlp5"]
-[ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://area/1 sand oasis/boss/effect/material/Tail Tip.tres" id="10_lyiwb"]
+[ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://area/1 sand oasis/boss/effect/material/Hit Spark Billboard.tres" id="10_lyiwb"]
+[ext_resource type="Material" uid="uid://qm8ql8iysuye" path="res://area/1 sand oasis/boss/effect/material/Light Spark.tres" id="11_41jh7"]
 [ext_resource type="Material" uid="uid://ctkxyqv6hyynk" path="res://area/1 sand oasis/boss/effect/material/Charge.tres" id="12_6ym8d"]
+[ext_resource type="Material" uid="uid://wdp8vltltolc" path="res://area/1 sand oasis/boss/effect/material/Light Ray.tres" id="12_er3d7"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="12_hr7x8"]
 [ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="12_kvj2s"]
 [ext_resource type="Material" uid="uid://b8gp75f0k20mk" path="res://area/1 sand oasis/boss/effect/material/Shockwave.tres" id="13_65rq6"]
+[ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="14_anmgs"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="15_0eyrk"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="15_f3ej6"]
 [ext_resource type="Animation" uid="uid://libxmqu133e4" path="res://area/1 sand oasis/boss/data/model/animation/idle.res" id="15_g68fd"]
 [ext_resource type="Animation" uid="uid://ca4klcjt2eyxh" path="res://area/1 sand oasis/boss/data/model/animation/move-forward.res" id="15_p7xyf"]
+[ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="16_2l0j3"]
 [ext_resource type="Material" uid="uid://41ul482823lb" path="res://area/1 sand oasis/boss/effect/material/Heavy Tail Attack.tres" id="16_2o83c"]
 [ext_resource type="Animation" uid="uid://blmd5a64x5mp6" path="res://area/1 sand oasis/boss/data/model/animation/defeat.res" id="17_coptg"]
 [ext_resource type="Animation" uid="uid://yssme3m720cs" path="res://area/1 sand oasis/boss/data/model/animation/intro.res" id="17_mcftm"]
@@ -32,7 +38,71 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_i57o6"]
 radius = 2.2
 
-[sub_resource type="Animation" id="Animation_257v2"]
+[sub_resource type="Animation" id="Animation_pdm12"]
+resource_name = "eye-damage"
+length = 0.333333
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("FlyingEyeRoot/Skeleton3D:root")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.707071, -0.00707583, 0.00707584, 0.707071, 0.0666667, 1, -0.70648, -0.0297634, 0.0297634, 0.70648, 0.133333, 1, -0.707021, -0.0110218, 0.0110219, 0.707021, 0.2, 1, -0.707082, 0.00590642, -0.00590641, 0.707082, 0.266667, 1, -0.707107, 0.000431367, -0.000431356, 0.707107, 0.333333, 1, -0.707107, 1.25607e-15, 1.0677e-08, 0.707107)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("FlyingEyeRoot/Skeleton3D:dummy_eye")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.707107, -1.55753e-13, -1.06769e-08, 0.707107, 0.0666667, 1, 0.661472, 0.180427, 0.0116794, 0.72785, 0.133333, 1, 0.660988, 0.149385, 0.00966996, 0.735313, 0.2, 1, 0.707107, -0.122788, -5.34963e-09, 0.696364, 0.333333, 1, 0.707107, -1.55753e-13, -1.06769e-08, 0.707107)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_top")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0.957037, -4.9311e-09, -9.04621e-09, 0.289965, 0.0666667, 1, 0.999475, -7.62018e-09, -9.22986e-09, 0.0323856, 0.133333, 1, 0.997315, -6.86907e-09, -7.99589e-09, 0.0732317, 0.266667, 1, 0.968095, -5.4253e-09, -9.19561e-09, 0.250585, 0.333333, 1, 0.957037, -5.03623e-09, -9.41465e-09, 0.289965)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_bottom")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, -0.961171, 9.42871e-09, 5.0951e-09, 0.275954, 0.0666667, 1, -0.998115, 8.75515e-09, 5.56703e-09, 0.0613776, 0.133333, 1, -0.995443, 8.28753e-09, 7.33587e-09, 0.0953594, 0.266667, 1, -0.970018, 9.17094e-09, 5.46492e-09, 0.243035, 0.333333, 1, -0.961171, 9.33996e-09, 5.17309e-09, 0.275954)
+
+[sub_resource type="Animation" id="Animation_2xmi5"]
+resource_name = "eye-defeat"
+length = 10.0
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_top")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.986698, -6.22202e-09, -8.67675e-09, 0.162566, 5.66667, 1, 0.986698, -6.22202e-09, -8.67675e-09, 0.162566, 5.73333, 1, 0.988132, -6.30051e-09, -8.61992e-09, 0.153604, 5.8, 1, 0.991225, -6.48558e-09, -8.48156e-09, 0.132185, 5.86667, 1, 0.994309, -6.70248e-09, -8.31122e-09, 0.106539, 5.93333, 1, 0.996381, -6.88077e-09, -8.16423e-09, 0.0849973, 6, 1, 0.997112, -6.95458e-09, -8.10145e-09, 0.0759511, 7.33333, 1, 0.997112, -6.95458e-09, -8.10145e-09, 0.0759511, 7.4, 1, 0.996381, -6.88077e-09, -8.16423e-09, 0.0849973, 7.46667, 1, 0.994309, -6.70248e-09, -8.31122e-09, 0.106539, 7.53333, 1, 0.991225, -6.48558e-09, -8.48156e-09, 0.132185, 7.6, 1, 0.988132, -6.30051e-09, -8.61992e-09, 0.153605, 7.66667, 1, 0.986698, -6.22202e-09, -8.67675e-09, 0.162566, 8.66667, 1, 0.986698, -6.22202e-09, -8.67675e-09, 0.162566, 8.73333, 1, 0.988132, -6.30051e-09, -8.61992e-09, 0.153605, 8.8, 1, 0.991225, -6.48558e-09, -8.48156e-09, 0.132185, 8.86667, 1, 0.994309, -6.70248e-09, -8.31122e-09, 0.106539, 8.93333, 1, 0.996381, -6.88077e-09, -8.16423e-09, 0.0849973, 9, 1, 0.997112, -6.95458e-09, -8.10145e-09, 0.0759511, 10, 1, 0.997112, -6.95458e-09, -8.10145e-09, 0.0759511)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_bottom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.988967, 8.5849e-09, 6.34794e-09, 0.148135, 5.66667, 1, -0.988967, 8.5849e-09, 6.34794e-09, 0.148135, 5.73333, 1, -0.990271, 8.52694e-09, 6.4256e-09, 0.139154, 5.8, 1, -0.99305, 8.38589e-09, 6.60862e-09, 0.117691, 5.86667, 1, -0.995759, 8.21241e-09, 6.823e-09, 0.0920035, 5.93333, 1, -0.997517, 8.06283e-09, 6.99912e-09, 0.0704333, 6, 1, -0.998115, 7.99898e-09, 7.07201e-09, 0.0613773, 7.33333, 1, -0.998115, 7.99898e-09, 7.07201e-09, 0.0613773, 7.4, 1, -0.997517, 8.06283e-09, 6.99912e-09, 0.0704333, 7.46667, 1, -0.995759, 8.21241e-09, 6.823e-09, 0.0920035, 7.53333, 1, -0.99305, 8.38589e-09, 6.60862e-09, 0.117691, 7.6, 1, -0.990271, 8.52694e-09, 6.4256e-09, 0.139154, 7.66667, 1, -0.988967, 8.5849e-09, 6.34794e-09, 0.148135, 8.66667, 1, -0.988967, 8.5849e-09, 6.34794e-09, 0.148135, 8.73333, 1, -0.990271, 8.52694e-09, 6.4256e-09, 0.139154, 8.8, 1, -0.99305, 8.38589e-09, 6.60862e-09, 0.117691, 8.86667, 1, -0.995759, 8.21241e-09, 6.823e-09, 0.0920034, 8.93333, 1, -0.997517, 8.06283e-09, 6.99912e-09, 0.0704333, 9, 1, -0.998115, 7.99898e-09, 7.07201e-09, 0.0613773, 10, 1, -0.998115, 7.99898e-09, 7.07201e-09, 0.0613773)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("FlyingEyeRoot/Skeleton3D:root")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.707107, 1.25607e-15, 1.0677e-08, 0.707107)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("FlyingEyeRoot/Skeleton3D:dummy_eye")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.707107, -1.55753e-13, -1.06769e-08, 0.707107)
+
+[sub_resource type="Animation" id="Animation_ih5jm"]
 resource_name = "eye-retreat"
 length = 0.001
 tracks/0/type = "rotation_3d"
@@ -49,8 +119,22 @@ tracks/1/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_bottom")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, -0.961171, 9.33996e-09, 5.17309e-09, 0.275954)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("FlyingEyeRoot/Skeleton3D:root")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.707107, 1.25607e-15, 1.0677e-08, 0.707107)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("FlyingEyeRoot/Skeleton3D:dummy_eye")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.707107, -1.55753e-13, -1.06769e-08, 0.707107)
 
-[sub_resource type="Animation" id="Animation_l60do"]
+[sub_resource type="Animation" id="Animation_pbkye"]
 resource_name = "RESET"
 length = 0.001
 tracks/0/type = "rotation_3d"
@@ -67,10 +151,24 @@ tracks/1/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_bottom")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, -0.988967, 8.5849e-09, 6.34794e-09, 0.148135)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("FlyingEyeRoot/Skeleton3D:root")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.707107, 1.25607e-15, 1.0677e-08, 0.707107)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("FlyingEyeRoot/Skeleton3D:dummy_eye")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.707107, -1.55753e-13, -1.06769e-08, 0.707107)
 
-[sub_resource type="Animation" id="Animation_g5n08"]
+[sub_resource type="Animation" id="Animation_hx858"]
 resource_name = "bite-loop"
-length = 0.333333
+length = 0.266667
 loop_mode = 1
 tracks/0/type = "rotation_3d"
 tracks/0/imported = true
@@ -78,24 +176,46 @@ tracks/0/enabled = true
 tracks/0/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_top")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0.943478, -4.62076e-09, -9.62537e-09, 0.331434, 0.0666667, 1, 0.970639, -5.51207e-09, -9.14419e-09, 0.240539, 0.133333, 1, 0.994093, -6.68577e-09, -8.32466e-09, 0.108535, 0.2, 1, 0.994093, -6.68579e-09, -8.32466e-09, 0.108535, 0.266667, 1, 0.970639, -5.51211e-09, -9.14419e-09, 0.240539, 0.333333, 1, 0.943478, -4.62076e-09, -9.62537e-09, 0.331434)
+tracks/0/keys = PackedFloat32Array(0, 1, 0.943478, -4.62076e-09, -9.62537e-09, 0.331434, 0.2, 1, 0.978668, -5.83764e-09, -8.93989e-09, 0.20545, 0.266667, 1, 0.943478, -4.62076e-09, -9.62537e-09, 0.331434)
 tracks/1/type = "rotation_3d"
 tracks/1/imported = true
 tracks/1/enabled = true
 tracks/1/path = NodePath("FlyingEyeRoot/Skeleton3D:jaw_bottom")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, -0.948219, 9.55669e-09, 4.76076e-09, 0.317617, 0.0666667, 1, -0.97405, 9.06257e-09, 5.64493e-09, 0.226335, 0.133333, 1, -0.995572, 8.22604e-09, 6.80649e-09, 0.094002, 0.2, 1, -0.995572, 8.22612e-09, 6.8065e-09, 0.0940021, 0.266667, 1, -0.97405, 9.06268e-09, 5.64493e-09, 0.226335, 0.333333, 1, -0.948219, 9.55669e-09, 4.76076e-09, 0.317617)
+tracks/1/keys = PackedFloat32Array(0, 1, -0.948219, 9.55669e-09, 4.76076e-09, 0.317617, 0.2, 1, -0.981564, 8.85366e-09, 5.96743e-09, 0.191132, 0.266667, 1, -0.948219, 9.55669e-09, 4.76076e-09, 0.317617)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("FlyingEyeRoot/Skeleton3D:root")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.707107, 1.25607e-15, 1.0677e-08, 0.707107)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("FlyingEyeRoot/Skeleton3D:dummy_eye")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.707107, -1.55753e-13, -1.06769e-08, 0.707107)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_5voy6"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4vt01"]
 _data = {
-"RESET": SubResource("Animation_l60do"),
-"bite": SubResource("Animation_g5n08"),
-"eye-retreat": SubResource("Animation_257v2")
+"RESET": SubResource("Animation_pbkye"),
+"bite": SubResource("Animation_hx858"),
+"eye-damage": SubResource("Animation_pdm12"),
+"eye-defeat": SubResource("Animation_2xmi5"),
+"eye-retreat": SubResource("Animation_ih5jm")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1nx1v"]
 animation = &"bite"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e1of5"]
+animation = &"eye-damage"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_2rb3s"]
+fadeout_time = 0.1
 
 [sub_resource type="Curve" id="Curve_fkora"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.9, 0.9), 3.15351, 3.15351, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -121,47 +241,21 @@ animation = &"RESET"
 animation = &"eye-retreat"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_6uq47"]
-graph_offset = Vector2(-788, 138)
+graph_offset = Vector2(-579.428, 39.377)
 nodes/bite_animation/node = SubResource("AnimationNodeAnimation_1nx1v")
 nodes/bite_animation/position = Vector2(-224, 240)
+nodes/damage_animation/node = SubResource("AnimationNodeAnimation_e1of5")
+nodes/damage_animation/position = Vector2(40, 300)
+nodes/damage_trigger/node = SubResource("AnimationNodeOneShot_2rb3s")
+nodes/damage_trigger/position = Vector2(380, 120)
 nodes/eye_transition/node = SubResource("AnimationNodeTransition_1l0xm")
-nodes/eye_transition/position = Vector2(32, 112)
-nodes/output/position = Vector2(304, 112)
+nodes/eye_transition/position = Vector2(40, 100)
+nodes/output/position = Vector2(580, 120)
 nodes/reset_animation/node = SubResource("AnimationNodeAnimation_54dah")
 nodes/reset_animation/position = Vector2(-224, 112)
 nodes/retreat_animation/node = SubResource("AnimationNodeAnimation_wbwml")
 nodes/retreat_animation/position = Vector2(-224, 368)
-node_connections = [&"eye_transition", 0, &"reset_animation", &"eye_transition", 1, &"bite_animation", &"eye_transition", 2, &"retreat_animation", &"output", 0, &"eye_transition"]
-
-[sub_resource type="Curve" id="Curve_xr7gg"]
-_data = [Vector2(0, 0), 0.0, 2.27068, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.69668, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_oqd6r"]
-width = 64
-curve = SubResource("Curve_xr7gg")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rph5u"]
-lifetime_randomness = 0.2
-emission_shape_offset = Vector3(0, 0, -1)
-emission_shape = 3
-emission_box_extents = Vector3(5, 0, 1)
-angle_max = 360.0
-direction = Vector3(0, 0, 1)
-spread = 90.0
-initial_velocity_min = 5.0
-initial_velocity_max = 10.0
-angular_velocity_min = -180.0
-angular_velocity_max = 180.0
-gravity = Vector3(0, 0, 0)
-attractor_interaction_enabled = false
-scale_min = 4.0
-scale_max = 6.0
-color = Color(0.341176, 0.27451, 0.784314, 1)
-alpha_curve = SubResource("CurveTexture_oqd6r")
-
-[sub_resource type="QuadMesh" id="QuadMesh_b16i3"]
-material = ExtResource("6_6lmwm")
+node_connections = [&"damage_trigger", 0, &"eye_transition", &"damage_trigger", 1, &"damage_animation", &"eye_transition", 0, &"reset_animation", &"eye_transition", 1, &"bite_animation", &"eye_transition", 2, &"retreat_animation", &"output", 0, &"damage_trigger"]
 
 [sub_resource type="Curve" id="Curve_s3hd4"]
 _data = [Vector2(0, 0), 0.0, 31.6507, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.9, 0), -5.73818, 0.0, 0, 0]
@@ -275,8 +369,35 @@ alpha_curve = SubResource("CurveTexture_g2op2")
 [sub_resource type="QuadMesh" id="QuadMesh_wykmu"]
 material = ExtResource("8_if22o")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_apgua"]
-size = Vector3(30, 7, 20)
+[sub_resource type="Curve" id="Curve_xr7gg"]
+_data = [Vector2(0, 0), 0.0, 2.27068, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.69668, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_oqd6r"]
+width = 64
+curve = SubResource("Curve_xr7gg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rph5u"]
+lifetime_randomness = 0.2
+emission_shape_offset = Vector3(0, 0, -1)
+emission_shape = 3
+emission_box_extents = Vector3(5, 0, 1)
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 90.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+attractor_interaction_enabled = false
+scale_min = 4.0
+scale_max = 6.0
+color = Color(0.341176, 0.27451, 0.784314, 1)
+alpha_curve = SubResource("CurveTexture_oqd6r")
+
+[sub_resource type="QuadMesh" id="QuadMesh_b16i3"]
+material = ExtResource("6_6lmwm")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nm141"]
 size = Vector3(4.5, 4, 5)
@@ -291,6 +412,246 @@ height = 5.6
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_066p4"]
 radius = 3.0
 height = 12.0
+
+[sub_resource type="Curve" id="Curve_1wj6u"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.35666, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qp47u"]
+width = 64
+curve = SubResource("Curve_1wj6u")
+
+[sub_resource type="Curve" id="Curve_h4ui5"]
+_data = [Vector2(1e-05, 0), 0.0, 2.76915, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_es61l"]
+width = 64
+curve = SubResource("Curve_h4ui5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_850kn"]
+lifetime_randomness = 0.3
+emission_shape = 1
+emission_sphere_radius = 7.0
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_es61l")
+color = Color(0.921569, 0.627451, 0, 1)
+alpha_curve = SubResource("CurveTexture_qp47u")
+
+[sub_resource type="QuadMesh" id="QuadMesh_gashy"]
+material = ExtResource("8_if22o")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_omrxd"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 0, -1)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+color = Color(1, 0.592157, 0.388235, 1)
+alpha_curve = SubResource("CurveTexture_qp47u")
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_mu8t6"]
+material = ExtResource("11_41jh7")
+size = Vector2(0.5, 1)
+
+[sub_resource type="Curve" id="Curve_2y3cj"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.98093, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_li5i6"]
+_data = [Vector2(0, 0), 0.0, 10.628, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_8ux4l"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_8kafd"]
+width = 64
+curve_x = SubResource("Curve_2y3cj")
+curve_y = SubResource("Curve_li5i6")
+curve_z = SubResource("Curve_8ux4l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rvq2x"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 0, -1)
+spread = 3.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveXYZTexture_8kafd")
+color = Color(1, 0.741176, 0.611765, 1)
+alpha_curve = SubResource("CurveTexture_qp47u")
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_alev6"]
+material = ExtResource("12_er3d7")
+size = Vector2(0.5, 4)
+center_offset = Vector3(0, 1.5, 0)
+
+[sub_resource type="Curve" id="Curve_8s3da"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 0), -3.69966, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jtqbt"]
+width = 64
+curve = SubResource("Curve_8s3da")
+
+[sub_resource type="Gradient" id="Gradient_uwf2q"]
+offsets = PackedFloat32Array(0, 0.409722, 0.59375, 0.822917)
+colors = PackedColorArray(1, 0.0392157, 0.0823529, 1, 1, 0.366667, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6djhh"]
+gradient = SubResource("Gradient_uwf2q")
+width = 64
+
+[sub_resource type="Curve" id="Curve_xxt4f"]
+_data = [Vector2(0, 0), 0.0, 3.76901, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dtlk1"]
+width = 64
+curve = SubResource("Curve_xxt4f")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3snys"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 2, 1)
+emission_shape = 3
+emission_box_extents = Vector3(5, 4, 1)
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 20.0
+scale_curve = SubResource("CurveTexture_dtlk1")
+color_ramp = SubResource("GradientTexture1D_6djhh")
+alpha_curve = SubResource("CurveTexture_jtqbt")
+
+[sub_resource type="QuadMesh" id="QuadMesh_7ck8q"]
+material = ExtResource("14_anmgs")
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yt4yh"]
+gradient = SubResource("Gradient_uwf2q")
+width = 64
+
+[sub_resource type="Curve" id="Curve_ccsig"]
+max_value = 5.0
+_data = [Vector2(0, 0), 0.0, 61.2863, 0, 0, Vector2(0.2, 5), 0.0, 0.0, 0, 0, Vector2(1, 0), -14.077, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_wjyg6"]
+width = 64
+curve = SubResource("Curve_ccsig")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n37vd"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 2, 1)
+emission_shape = 3
+emission_box_extents = Vector3(5, 4, 1)
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_dtlk1")
+color_ramp = SubResource("GradientTexture1D_yt4yh")
+alpha_curve = SubResource("CurveTexture_jtqbt")
+emission_curve = SubResource("CurveTexture_wjyg6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_3qo6x"]
+material = ExtResource("15_0eyrk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w6tux"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 2, 3)
+emission_shape = 3
+emission_box_extents = Vector3(5, 4, 0)
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_dtlk1")
+alpha_curve = SubResource("CurveTexture_jtqbt")
+emission_curve = SubResource("CurveTexture_wjyg6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_hlt7s"]
+material = ExtResource("16_2l0j3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hpjvi"]
+lifetime_randomness = 0.5
+angle_max = 360.0
+direction = Vector3(0, 0, -1)
+spread = 10.0
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+damping_min = 5.0
+damping_max = 10.0
+scale_min = 3.0
+scale_max = 5.0
+color = Color(0, 0, 0, 1)
+alpha_curve = SubResource("CurveTexture_qp47u")
+
+[sub_resource type="QuadMesh" id="QuadMesh_xolfy"]
+material = ExtResource("15_f3ej6")
+
+[sub_resource type="Gradient" id="Gradient_7xmfv"]
+colors = PackedColorArray(0.273873, 0.273873, 0.273873, 1, 0.176419, 0.176419, 0.176419, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hxnrx"]
+gradient = SubResource("Gradient_7xmfv")
+width = 64
+
+[sub_resource type="Curve" id="Curve_3uw7d"]
+_data = [Vector2(0, 0.3), 0.0, 1.95593, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_copgv"]
+width = 64
+curve = SubResource("Curve_3uw7d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hr32l"]
+lifetime_randomness = 0.4
+emission_shape = 3
+emission_box_extents = Vector3(10, 8, 1)
+direction = Vector3(0, 0, -1)
+spread = 0.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 15.0
+scale_curve = SubResource("CurveTexture_copgv")
+color_initial_ramp = SubResource("GradientTexture1D_hxnrx")
+alpha_curve = SubResource("CurveTexture_qp47u")
+
+[sub_resource type="QuadMesh" id="QuadMesh_h6nxa"]
+material = ExtResource("10_lyiwb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nyc8i"]
+lifetime_randomness = 0.4
+emission_shape = 3
+emission_box_extents = Vector3(10, 8, 1)
+direction = Vector3(0, 0, -1)
+spread = 0.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_copgv")
+color = Color(0.886275, 0.596078, 1, 0.196078)
+alpha_curve = SubResource("CurveTexture_qp47u")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_c08po"]
 radius = 1.8
@@ -413,7 +774,7 @@ anim_offset_max = 1.0
 [sub_resource type="QuadMesh" id="QuadMesh_wjr6b"]
 material = ExtResource("16_2o83c")
 
-[sub_resource type="Animation" id="Animation_cbcg0"]
+[sub_resource type="Animation" id="Animation_i080q"]
 resource_name = "l-attack-center-light"
 length = 2.0
 tracks/0/type = "position_3d"
@@ -466,7 +827,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_q147v"]
+[sub_resource type="Animation" id="Animation_m4150"]
 resource_name = "l-attack-heavy-end"
 length = 0.466667
 tracks/0/type = "position_3d"
@@ -519,7 +880,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_0oyoc"]
+[sub_resource type="Animation" id="Animation_6pltx"]
 resource_name = "l-attack-heavy-start"
 length = 1.26667
 tracks/0/type = "position_3d"
@@ -572,7 +933,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_gdm74"]
+[sub_resource type="Animation" id="Animation_vnpf0"]
 resource_name = "l-attack-in-light"
 length = 2.0
 tracks/0/type = "position_3d"
@@ -625,7 +986,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_kto6l"]
+[sub_resource type="Animation" id="Animation_26cd4"]
 resource_name = "l-attack-out-light"
 length = 2.0
 tracks/0/type = "position_3d"
@@ -678,9 +1039,9 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_8vx2r"]
+[sub_resource type="Animation" id="Animation_1yd1p"]
 resource_name = "l-defeat"
-length = 9.33333
+length = 10.0
 tracks/0/type = "position_3d"
 tracks/0/imported = true
 tracks/0/enabled = true
@@ -694,35 +1055,35 @@ tracks/1/enabled = true
 tracks/1/path = NodePath("TailRoot/Skeleton3D:tail_01")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0.0558593, 0.10254, -0.0383418, 0.992419, 0.0666667, 1, 0.0530905, 0.102635, -0.0384945, 0.992555, 0.133333, 1, 0.0453105, 0.102907, -0.0391335, 0.992888, 0.2, 1, 0.0333089, 0.103353, -0.0405287, 0.99326, 0.266667, 1, 0.0178775, 0.104, -0.0429481, 0.993489, 0.333333, 1, -0.000186989, 0.104899, -0.0466567, 0.993388, 0.4, 1, -0.0200812, 0.106123, -0.0519159, 0.992794, 0.466667, 1, -0.0409953, 0.107757, -0.0589829, 0.991579, 0.533333, 1, -0.0621171, 0.109889, -0.0680864, 0.989662, 0.6, 1, -0.0826723, 0.112535, -0.0788779, 0.987056, 0.666667, 1, -0.101933, 0.115591, -0.0904442, 0.983905, 0.733333, 1, -0.119189, 0.118845, -0.101867, 0.980455, 0.8, 1, -0.133755, 0.122006, -0.112253, 0.977048, 0.866667, 1, -0.144964, 0.124719, -0.120733, 0.974092, 0.933333, 1, -0.152168, 0.126605, -0.12645, 0.972022, 1, 1, -0.154716, 0.127304, -0.128548, 0.971253, 1.06667, 1, -0.149021, 0.126516, -0.129103, 0.972172, 1.13333, 1, -0.133531, 0.124359, -0.130544, 0.974506, 1.2, 1, -0.11063, 0.121142, -0.132519, 0.977509, 1.26667, 1, -0.0827179, 0.117186, -0.134678, 0.980452, 1.4, 1, -0.0216477, 0.108445, -0.138284, 0.9842, 1.46667, 1, 0.00654254, 0.104404, -0.139201, 0.984723, 1.53333, 1, 0.0298458, 0.101091, -0.139245, 0.984632, 1.6, 1, 0.045785, 0.098872, -0.138239, 0.984387, 1.66667, 1, 0.0518936, 0.0980745, -0.136009, 0.984474, 1.73333, 1, 0.0514188, 0.0981959, -0.132923, 0.984909, 1.8, 1, 0.049327, 0.0985197, -0.129496, 0.98544, 1.86667, 1, 0.0457298, 0.0990113, -0.12576, 0.986048, 1.93333, 1, 0.0407389, 0.0996359, -0.121741, 0.986708, 2, 1, 0.0344657, 0.100359, -0.117471, 0.987391, 2.06667, 1, 0.0270228, 0.101148, -0.112977, 0.988066, 2.13333, 1, 0.018523, 0.10197, -0.108289, 0.988702, 2.2, 1, 0.00908002, 0.102796, -0.103438, 0.989268, 2.26667, 1, -0.00119178, 0.103599, -0.0984556, 0.989734, 2.33333, 1, -0.0121768, 0.104353, -0.0933727, 0.990073, 2.4, 1, -0.0237589, 0.105037, -0.0882223, 0.990262, 2.46667, 1, -0.0358209, 0.105633, -0.0830379, 0.990285, 2.53333, 1, -0.0482452, 0.106126, -0.0778534, 0.990126, 2.8, 1, -0.0992007, 0.106896, -0.0578065, 0.987619, 2.86667, 1, -0.111663, 0.106777, -0.0531411, 0.986563, 2.93333, 1, -0.12378, 0.10654, -0.0486828, 0.985372, 3, 1, -0.135435, 0.106194, -0.044465, 0.984075, 3.06667, 1, -0.146513, 0.10575, -0.0405204, 0.982705, 3.13333, 1, -0.156899, 0.105221, -0.036881, 0.981301, 3.2, 1, -0.16648, 0.104623, -0.0335778, 0.979904, 3.26667, 1, -0.175144, 0.10397, -0.030641, 0.978558, 3.33333, 1, -0.182778, 0.10328, -0.0281001, 0.97731, 3.4, 1, -0.189272, 0.102567, -0.0259838, 0.976207, 3.46667, 1, -0.194514, 0.101846, -0.0243202, 0.975295, 3.53333, 1, -0.198393, 0.101132, -0.023137, 0.974616, 3.6, 1, -0.200798, 0.100434, -0.0224617, 0.974212, 3.66667, 1, -0.201614, 0.0997604, -0.0223217, 0.974116, 3.73333, 1, -0.200378, 0.0992683, -0.0236155, 0.97439, 3.8, 1, -0.196863, 0.0990743, -0.0270629, 0.975037, 3.86667, 1, -0.191313, 0.0991026, -0.0324257, 0.975975, 3.93333, 1, -0.183968, 0.0992621, -0.0394681, 0.977111, 4, 1, -0.175075, 0.0994554, -0.047954, 0.978344, 4.06667, 1, -0.164879, 0.0995876, -0.0576454, 0.979579, 4.13333, 1, -0.153632, 0.0995735, -0.068302, 0.980723, 4.2, 1, -0.14159, 0.0993434, -0.0796802, 0.9817, 4.26667, 1, -0.12901, 0.0988478, -0.0915336, 0.98245, 4.4, 1, -0.103295, 0.0969817, -0.115674, 0.98313, 4.46667, 1, -0.0906888, 0.0956363, -0.127465, 0.983047, 4.53333, 1, -0.0786041, 0.0940756, -0.138742, 0.982711, 4.6, 1, -0.0673034, 0.0923737, -0.149265, 0.98217, 4.66667, 1, -0.0570464, 0.0906246, -0.158796, 0.981487, 4.73333, 1, -0.0480898, 0.0889372, -0.167104, 0.980742, 4.8, 1, -0.040687, 0.0874295, -0.173959, 0.98002, 4.86667, 1, -0.0350892, 0.0862218, -0.179136, 0.979411, 4.93333, 1, -0.0315463, 0.0854277, -0.18241, 0.978996, 5, 1, -0.0303092, 0.0851453, -0.183553, 0.978846, 5.06667, 1, -0.0558177, 0.0899301, -0.176115, 0.978663, 5.13333, 1, -0.125042, 0.101213, -0.155329, 0.974676, 5.2, 1, -0.226351, 0.11321, -0.123553, 0.959523, 5.26667, 1, -0.346631, 0.120264, -0.084217, 0.92644, 5.4, 1, -0.588129, 0.107835, -0.00256425, 0.801542, 5.46667, 1, -0.685314, 0.0903748, 0.0300341, 0.721994, 5.53333, 1, -0.757017, 0.0711846, 0.0532846, 0.647317, 5.6, 1, -0.8009, 0.0559872, 0.0668743, 0.592413, 5.66667, 1, -0.816034, 0.0499904, 0.0713939, 0.571395, 5.73333, 1, -0.763128, 0.0560225, 0.0667653, 0.640343, 5.8, 1, -0.802899, 0.0515927, 0.0702447, 0.58971, 5.86667, 1, -0.816034, 0.0499904, 0.0713939, 0.571395, 9.33333, 1, -0.816034, 0.0499904, 0.0713939, 0.571395)
+tracks/1/keys = PackedFloat32Array(0, 1, 0.0558593, 0.10254, -0.0383418, 0.992419, 0.0666667, 1, 0.0530905, 0.102635, -0.0384945, 0.992555, 0.133333, 1, 0.0453105, 0.102907, -0.0391335, 0.992888, 0.2, 1, 0.0333089, 0.103353, -0.0405287, 0.99326, 0.266667, 1, 0.0178775, 0.104, -0.0429481, 0.993489, 0.333333, 1, -0.000186989, 0.104899, -0.0466567, 0.993388, 0.4, 1, -0.0200812, 0.106123, -0.0519159, 0.992794, 0.466667, 1, -0.0409953, 0.107757, -0.0589829, 0.991579, 0.533333, 1, -0.0621171, 0.109889, -0.0680864, 0.989662, 0.6, 1, -0.0826723, 0.112535, -0.0788779, 0.987056, 0.666667, 1, -0.101933, 0.115591, -0.0904442, 0.983905, 0.733333, 1, -0.119189, 0.118845, -0.101867, 0.980455, 0.8, 1, -0.133755, 0.122006, -0.112253, 0.977048, 0.866667, 1, -0.144964, 0.124719, -0.120733, 0.974092, 0.933333, 1, -0.152168, 0.126605, -0.12645, 0.972022, 1, 1, -0.154716, 0.127304, -0.128548, 0.971253, 1.06667, 1, -0.149021, 0.126516, -0.129103, 0.972172, 1.13333, 1, -0.133531, 0.124359, -0.130544, 0.974506, 1.2, 1, -0.11063, 0.121142, -0.132519, 0.977509, 1.26667, 1, -0.0827179, 0.117186, -0.134678, 0.980452, 1.4, 1, -0.0216477, 0.108445, -0.138284, 0.9842, 1.46667, 1, 0.00654254, 0.104404, -0.139201, 0.984723, 1.53333, 1, 0.0298458, 0.101091, -0.139245, 0.984632, 1.6, 1, 0.045785, 0.098872, -0.138239, 0.984387, 1.66667, 1, 0.0518936, 0.0980745, -0.136009, 0.984474, 1.73333, 1, 0.0514188, 0.0981959, -0.132923, 0.984909, 1.8, 1, 0.049327, 0.0985197, -0.129496, 0.98544, 1.86667, 1, 0.0457298, 0.0990113, -0.12576, 0.986048, 1.93333, 1, 0.0407389, 0.0996359, -0.121741, 0.986708, 2, 1, 0.0344657, 0.100359, -0.117471, 0.987391, 2.06667, 1, 0.0270228, 0.101148, -0.112977, 0.988066, 2.13333, 1, 0.018523, 0.10197, -0.108289, 0.988702, 2.2, 1, 0.00908002, 0.102796, -0.103438, 0.989268, 2.26667, 1, -0.00119178, 0.103599, -0.0984556, 0.989734, 2.33333, 1, -0.0121768, 0.104353, -0.0933727, 0.990073, 2.4, 1, -0.0237589, 0.105037, -0.0882223, 0.990262, 2.46667, 1, -0.0358209, 0.105633, -0.0830379, 0.990285, 2.53333, 1, -0.0482452, 0.106126, -0.0778534, 0.990126, 2.8, 1, -0.0992007, 0.106896, -0.0578065, 0.987619, 2.86667, 1, -0.111663, 0.106777, -0.0531411, 0.986563, 2.93333, 1, -0.12378, 0.10654, -0.0486828, 0.985372, 3, 1, -0.135435, 0.106194, -0.044465, 0.984075, 3.06667, 1, -0.146513, 0.10575, -0.0405204, 0.982705, 3.13333, 1, -0.156899, 0.105221, -0.036881, 0.981301, 3.2, 1, -0.16648, 0.104623, -0.0335778, 0.979904, 3.26667, 1, -0.175144, 0.10397, -0.030641, 0.978558, 3.33333, 1, -0.182778, 0.10328, -0.0281001, 0.97731, 3.4, 1, -0.189272, 0.102567, -0.0259838, 0.976207, 3.46667, 1, -0.194514, 0.101846, -0.0243202, 0.975295, 3.53333, 1, -0.198393, 0.101132, -0.023137, 0.974616, 3.6, 1, -0.200798, 0.100434, -0.0224617, 0.974212, 3.66667, 1, -0.201614, 0.0997604, -0.0223217, 0.974116, 3.73333, 1, -0.200378, 0.0992683, -0.0236155, 0.97439, 3.8, 1, -0.196863, 0.0990743, -0.0270629, 0.975037, 3.86667, 1, -0.191313, 0.0991026, -0.0324257, 0.975975, 3.93333, 1, -0.183968, 0.0992621, -0.0394681, 0.977111, 4, 1, -0.175075, 0.0994554, -0.047954, 0.978344, 4.06667, 1, -0.164879, 0.0995876, -0.0576454, 0.979579, 4.13333, 1, -0.153632, 0.0995735, -0.068302, 0.980723, 4.2, 1, -0.14159, 0.0993434, -0.0796802, 0.9817, 4.26667, 1, -0.12901, 0.0988478, -0.0915336, 0.98245, 4.4, 1, -0.103295, 0.0969817, -0.115674, 0.98313, 4.46667, 1, -0.0906888, 0.0956363, -0.127465, 0.983047, 4.53333, 1, -0.0786041, 0.0940756, -0.138742, 0.982711, 4.6, 1, -0.0673034, 0.0923737, -0.149265, 0.98217, 4.66667, 1, -0.0570464, 0.0906246, -0.158796, 0.981487, 4.73333, 1, -0.0480898, 0.0889372, -0.167104, 0.980742, 4.8, 1, -0.040687, 0.0874295, -0.173959, 0.98002, 4.86667, 1, -0.0350892, 0.0862218, -0.179136, 0.979411, 4.93333, 1, -0.0315463, 0.0854277, -0.18241, 0.978996, 5, 1, -0.0303092, 0.0851453, -0.183553, 0.978846, 5.06667, 1, -0.0558177, 0.0899301, -0.176115, 0.978663, 5.13333, 1, -0.125042, 0.101213, -0.155329, 0.974676, 5.2, 1, -0.226351, 0.11321, -0.123553, 0.959523, 5.26667, 1, -0.346631, 0.120264, -0.084217, 0.92644, 5.4, 1, -0.588129, 0.107835, -0.00256425, 0.801542, 5.46667, 1, -0.685314, 0.0903748, 0.0300341, 0.721994, 5.53333, 1, -0.757017, 0.0711846, 0.0532846, 0.647317, 5.6, 1, -0.8009, 0.0559872, 0.0668743, 0.592413, 5.66667, 1, -0.816034, 0.0499904, 0.0713939, 0.571395, 5.73333, 1, -0.763128, 0.0560225, 0.0667653, 0.640343, 5.8, 1, -0.802899, 0.0515927, 0.0702447, 0.58971, 5.86667, 1, -0.816034, 0.0499904, 0.0713939, 0.571395, 10, 1, -0.816034, 0.0499904, 0.0713939, 0.571395)
 tracks/2/type = "rotation_3d"
 tracks/2/imported = true
 tracks/2/enabled = true
 tracks/2/path = NodePath("TailRoot/Skeleton3D:tail_02")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/keys = PackedFloat32Array(0, 1, -0.149124, 0.0263635, 0.11104, 0.98221, 0.0666667, 1, -0.144748, 0.02669, 0.110132, 0.982958, 0.133333, 1, -0.133298, 0.0274492, 0.107556, 0.98484, 0.2, 1, -0.117291, 0.0282852, 0.103536, 0.987281, 0.266667, 1, -0.0992616, 0.0288461, 0.0983106, 0.989773, 0.333333, 1, -0.0817732, 0.0288243, 0.0921276, 0.991965, 0.4, 1, -0.0674139, 0.0279854, 0.0852365, 0.993684, 0.466667, 1, -0.0587877, 0.0261867, 0.0778691, 0.994884, 0.533333, 1, -0.0589731, 0.0233526, 0.0702256, 0.995513, 0.6, 1, -0.0709798, 0.0195415, 0.0623378, 0.995336, 0.666667, 1, -0.0916921, 0.0152806, 0.0539652, 0.994207, 0.733333, 1, -0.117233, 0.0110617, 0.0448989, 0.992027, 0.8, 1, -0.143726, 0.00726752, 0.0350062, 0.988971, 0.866667, 1, -0.167327, 0.00414353, 0.024227, 0.985595, 0.933333, 1, -0.184242, 0.00176469, 0.0125529, 0.982799, 1, 1, -0.190715, 1.19682e-08, -1.83009e-08, 0.981645, 1.06667, 1, -0.189381, -0.00144906, -0.013341, 0.981812, 1.13333, 1, -0.185664, -0.00275876, -0.0270963, 0.982236, 1.2, 1, -0.179985, -0.00403418, -0.0408254, 0.982814, 1.26667, 1, -0.172763, -0.00534828, -0.054091, 0.983462, 1.33333, 1, -0.164417, -0.00673552, -0.0664598, 0.984127, 1.4, 1, -0.155359, -0.00818887, -0.0775024, 0.984779, 1.46667, 1, -0.146002, -0.00966082, -0.0867944, 0.985422, 1.53333, 1, -0.136757, -0.0110677, -0.0939165, 0.986081, 1.6, 1, -0.128031, -0.0122979, -0.0984537, 0.986795, 1.66667, 1, -0.120236, -0.0132227, -0.0999936, 0.987608, 1.73333, 1, -0.113458, -0.0137954, -0.0977156, 0.98863, 1.8, 1, -0.107475, -0.0140318, -0.0914768, 0.989891, 1.86667, 1, -0.102244, -0.0139189, -0.0818778, 0.991286, 1.93333, 1, -0.0977309, -0.0134712, -0.0695172, 0.992691, 2, 1, -0.0939019, -0.0127256, -0.0549946, 0.99398, 2.06667, 1, -0.0907219, -0.0117354, -0.0389116, 0.995047, 2.13333, 1, -0.0881512, -0.0105657, -0.0218728, 0.995811, 2.2, 1, -0.0861428, -0.00928813, -0.00448538, 0.996229, 2.26667, 1, -0.0846414, -0.00797713, 0.0126423, 0.996299, 2.33333, 1, -0.0835832, -0.00670625, 0.0289022, 0.996059, 2.4, 1, -0.0828964, -0.00554525, 0.0436877, 0.995585, 2.46667, 1, -0.0825031, -0.00455836, 0.0563953, 0.994983, 2.53333, 1, -0.0823214, -0.00380354, 0.0664238, 0.994383, 2.6, 1, -0.0822687, -0.00333268, 0.0731745, 0.993915, 2.66667, 1, -0.0822653, -0.00319319, 0.0760484, 0.9937, 2.93333, 1, -0.0821703, -0.00336165, 0.078736, 0.993498, 3.06667, 1, -0.0819746, -0.00343981, 0.0798976, 0.993421, 3.4, 1, -0.0805798, -0.0035696, 0.0823195, 0.993337, 3.53333, 1, -0.079505, -0.00357906, 0.0831115, 0.993357, 3.66667, 1, -0.0780462, -0.00355489, 0.0838117, 0.993414, 3.73333, 1, -0.0771542, -0.00352827, 0.0841293, 0.993457, 3.8, 1, -0.0761442, -0.00349086, 0.0844262, 0.99351, 3.86667, 1, -0.0750086, -0.00344194, 0.0847032, 0.993573, 3.93333, 1, -0.0737401, -0.00338071, 0.0849609, 0.993646, 4, 1, -0.0723312, -0.00330642, 0.0852003, 0.993729, 4.06667, 1, -0.0707745, -0.0032183, 0.0854218, 0.993823, 4.13333, 1, -0.0690626, -0.00311559, 0.0856263, 0.993926, 4.2, 1, -0.0671881, -0.00299752, 0.0858145, 0.994039, 4.26667, 1, -0.0651435, -0.00286336, 0.0859871, 0.99416, 4.33333, 1, -0.0629214, -0.00271238, 0.0861447, 0.99429, 4.4, 1, -0.0605143, -0.0025438, 0.086288, 0.994427, 4.46667, 1, -0.0579149, -0.00235693, 0.0864177, 0.994571, 4.53333, 1, -0.0551155, -0.00215099, 0.0865343, 0.994721, 4.6, 1, -0.0521089, -0.00192531, 0.0866385, 0.994874, 4.66667, 1, -0.0488874, -0.00167915, 0.0867309, 0.99503, 4.73333, 1, -0.0454437, -0.00141178, 0.0868121, 0.995187, 4.8, 1, -0.0417703, -0.00112249, 0.0868825, 0.995342, 4.86667, 1, -0.0378597, -0.000810595, 0.0869427, 0.995493, 4.93333, 1, -0.0337045, -0.000475336, 0.0869933, 0.995639, 5, 1, -0.0292972, -0.000116049, 0.0870346, 0.995774, 5.06667, 1, -0.0246305, 0.000267994, 0.0870671, 0.995898, 5.13333, 1, -0.0196969, 0.000677516, 0.0870911, 0.996005, 5.2, 1, -0.0144891, 0.00111316, 0.0871071, 0.996093, 5.26667, 1, -0.0089997, 0.00157575, 0.0871153, 0.996156, 5.33333, 1, -0.00322147, 0.0020659, 0.0871161, 0.996191, 5.4, 1, 0.0028528, 0.00258436, 0.0871096, 0.996191, 5.46667, 1, 0.00923031, 0.00313187, 0.0870962, 0.996152, 5.53333, 1, 0.0159182, 0.00370914, 0.0870758, 0.996068, 5.6, 1, 0.0229234, 0.00431691, 0.0870486, 0.995931, 5.66667, 1, 0.0302529, 0.00495591, 0.0870147, 0.995735, 5.73333, 1, 0.0736575, 0.00874672, 0.0867157, 0.993468, 5.8, 1, 0.0415148, 0.00593991, 0.0869531, 0.995329, 5.86667, 1, 0.0302529, 0.00495591, 0.0870147, 0.995735, 9.33333, 1, 0.0302529, 0.00495591, 0.0870147, 0.995735)
+tracks/2/keys = PackedFloat32Array(0, 1, -0.149124, 0.0263635, 0.11104, 0.98221, 0.0666667, 1, -0.144748, 0.02669, 0.110132, 0.982958, 0.133333, 1, -0.133298, 0.0274492, 0.107556, 0.98484, 0.2, 1, -0.117291, 0.0282852, 0.103536, 0.987281, 0.266667, 1, -0.0992616, 0.0288461, 0.0983106, 0.989773, 0.333333, 1, -0.0817732, 0.0288243, 0.0921276, 0.991965, 0.4, 1, -0.0674139, 0.0279854, 0.0852365, 0.993684, 0.466667, 1, -0.0587877, 0.0261867, 0.0778691, 0.994884, 0.533333, 1, -0.0589731, 0.0233526, 0.0702256, 0.995513, 0.6, 1, -0.0709798, 0.0195415, 0.0623378, 0.995336, 0.666667, 1, -0.0916921, 0.0152806, 0.0539652, 0.994207, 0.733333, 1, -0.117233, 0.0110617, 0.0448989, 0.992027, 0.8, 1, -0.143726, 0.00726752, 0.0350062, 0.988971, 0.866667, 1, -0.167327, 0.00414353, 0.024227, 0.985595, 0.933333, 1, -0.184242, 0.00176469, 0.0125529, 0.982799, 1, 1, -0.190715, 1.19682e-08, -1.83009e-08, 0.981645, 1.06667, 1, -0.189381, -0.00144906, -0.013341, 0.981812, 1.13333, 1, -0.185664, -0.00275876, -0.0270963, 0.982236, 1.2, 1, -0.179985, -0.00403418, -0.0408254, 0.982814, 1.26667, 1, -0.172763, -0.00534828, -0.054091, 0.983462, 1.33333, 1, -0.164417, -0.00673552, -0.0664598, 0.984127, 1.4, 1, -0.155359, -0.00818887, -0.0775024, 0.984779, 1.46667, 1, -0.146002, -0.00966082, -0.0867944, 0.985422, 1.53333, 1, -0.136757, -0.0110677, -0.0939165, 0.986081, 1.6, 1, -0.128031, -0.0122979, -0.0984537, 0.986795, 1.66667, 1, -0.120236, -0.0132227, -0.0999936, 0.987608, 1.73333, 1, -0.113458, -0.0137954, -0.0977156, 0.98863, 1.8, 1, -0.107475, -0.0140318, -0.0914768, 0.989891, 1.86667, 1, -0.102244, -0.0139189, -0.0818778, 0.991286, 1.93333, 1, -0.0977309, -0.0134712, -0.0695172, 0.992691, 2, 1, -0.0939019, -0.0127256, -0.0549946, 0.99398, 2.06667, 1, -0.0907219, -0.0117354, -0.0389116, 0.995047, 2.13333, 1, -0.0881512, -0.0105657, -0.0218728, 0.995811, 2.2, 1, -0.0861428, -0.00928813, -0.00448538, 0.996229, 2.26667, 1, -0.0846414, -0.00797713, 0.0126423, 0.996299, 2.33333, 1, -0.0835832, -0.00670625, 0.0289022, 0.996059, 2.4, 1, -0.0828964, -0.00554525, 0.0436877, 0.995585, 2.46667, 1, -0.0825031, -0.00455836, 0.0563953, 0.994983, 2.53333, 1, -0.0823214, -0.00380354, 0.0664238, 0.994383, 2.6, 1, -0.0822687, -0.00333268, 0.0731745, 0.993915, 2.66667, 1, -0.0822653, -0.00319319, 0.0760484, 0.9937, 2.93333, 1, -0.0821703, -0.00336165, 0.078736, 0.993498, 3.06667, 1, -0.0819746, -0.00343981, 0.0798976, 0.993421, 3.4, 1, -0.0805798, -0.0035696, 0.0823195, 0.993337, 3.53333, 1, -0.079505, -0.00357906, 0.0831115, 0.993357, 3.66667, 1, -0.0780462, -0.00355489, 0.0838117, 0.993414, 3.73333, 1, -0.0771542, -0.00352827, 0.0841293, 0.993457, 3.8, 1, -0.0761442, -0.00349086, 0.0844262, 0.99351, 3.86667, 1, -0.0750086, -0.00344194, 0.0847032, 0.993573, 3.93333, 1, -0.0737401, -0.00338071, 0.0849609, 0.993646, 4, 1, -0.0723312, -0.00330642, 0.0852003, 0.993729, 4.06667, 1, -0.0707745, -0.0032183, 0.0854218, 0.993823, 4.13333, 1, -0.0690626, -0.00311559, 0.0856263, 0.993926, 4.2, 1, -0.0671881, -0.00299752, 0.0858145, 0.994039, 4.26667, 1, -0.0651435, -0.00286336, 0.0859871, 0.99416, 4.33333, 1, -0.0629214, -0.00271238, 0.0861447, 0.99429, 4.4, 1, -0.0605143, -0.0025438, 0.086288, 0.994427, 4.46667, 1, -0.0579149, -0.00235693, 0.0864177, 0.994571, 4.53333, 1, -0.0551155, -0.00215099, 0.0865343, 0.994721, 4.6, 1, -0.0521089, -0.00192531, 0.0866385, 0.994874, 4.66667, 1, -0.0488874, -0.00167915, 0.0867309, 0.99503, 4.73333, 1, -0.0454437, -0.00141178, 0.0868121, 0.995187, 4.8, 1, -0.0417703, -0.00112249, 0.0868825, 0.995342, 4.86667, 1, -0.0378597, -0.000810595, 0.0869427, 0.995493, 4.93333, 1, -0.0337045, -0.000475336, 0.0869933, 0.995639, 5, 1, -0.0292972, -0.000116049, 0.0870346, 0.995774, 5.06667, 1, -0.0246305, 0.000267994, 0.0870671, 0.995898, 5.13333, 1, -0.0196969, 0.000677516, 0.0870911, 0.996005, 5.2, 1, -0.0144891, 0.00111316, 0.0871071, 0.996093, 5.26667, 1, -0.0089997, 0.00157575, 0.0871153, 0.996156, 5.33333, 1, -0.00322147, 0.0020659, 0.0871161, 0.996191, 5.4, 1, 0.0028528, 0.00258436, 0.0871096, 0.996191, 5.46667, 1, 0.00923031, 0.00313187, 0.0870962, 0.996152, 5.53333, 1, 0.0159182, 0.00370914, 0.0870758, 0.996068, 5.6, 1, 0.0229234, 0.00431691, 0.0870486, 0.995931, 5.66667, 1, 0.0302529, 0.00495591, 0.0870147, 0.995735, 5.73333, 1, 0.0736575, 0.00874672, 0.0867157, 0.993468, 5.8, 1, 0.0415148, 0.00593991, 0.0869531, 0.995329, 5.86667, 1, 0.0302529, 0.00495591, 0.0870147, 0.995735, 10, 1, 0.0302529, 0.00495591, 0.0870147, 0.995735)
 tracks/3/type = "rotation_3d"
 tracks/3/imported = true
 tracks/3/enabled = true
 tracks/3/path = NodePath("TailRoot/Skeleton3D:tail_03")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, -0.163706, 0.0816182, 0.167228, 0.9688, 0.0666667, 1, -0.155635, 0.0824608, 0.165512, 0.970352, 0.133333, 1, -0.134455, 0.0843823, 0.160692, 0.974156, 0.2, 1, -0.104709, 0.0863969, 0.15329, 0.978812, 0.266667, 1, -0.0710136, 0.0875333, 0.143885, 0.983154, 0.333333, 1, -0.0380942, 0.0869558, 0.133107, 0.986545, 0.4, 1, -0.0107589, 0.0840479, 0.121578, 0.988959, 0.466667, 1, 0.00614313, 0.0784565, 0.109819, 0.990831, 0.533333, 1, 0.00725422, 0.0700598, 0.0981755, 0.992673, 0.6, 1, -0.0111289, 0.0592302, 0.0866281, 0.994416, 0.666667, 1, -0.0438416, 0.0472804, 0.0745127, 0.995133, 0.733333, 1, -0.0846521, 0.0353888, 0.0613518, 0.99389, 0.8, 1, -0.127231, 0.0244357, 0.0470114, 0.990457, 0.866667, 1, -0.16526, 0.0149231, 0.0316851, 0.985628, 0.933333, 1, -0.192537, 0.0069104, 0.0158151, 0.981138, 1, 1, -0.202979, 1.37903e-08, -5.32436e-08, 0.979183, 1.06667, 1, -0.20295, -0.00643442, -0.0151665, 0.979051, 1.13333, 1, -0.202878, -0.0125391, -0.029457, 0.978681, 1.2, 1, -0.202783, -0.018307, -0.0427475, 0.978119, 1.26667, 1, -0.202685, -0.0237282, -0.054918, 0.977415, 1.33333, 1, -0.2026, -0.0287903, -0.0658521, 0.976621, 1.4, 1, -0.202546, -0.0334792, -0.075437, 0.975789, 1.46667, 1, -0.202538, -0.0377789, -0.0835627, 0.974971, 1.53333, 1, -0.202593, -0.0416726, -0.0901211, 0.974216, 1.6, 1, -0.202732, -0.045143, -0.0950053, 0.973569, 1.66667, 1, -0.202975, -0.0481728, -0.0981088, 0.973065, 1.73333, 1, -0.204553, -0.0504937, -0.100078, 0.972416, 1.8, 1, -0.208521, -0.0519198, -0.101683, 0.971331, 1.86667, 1, -0.214645, -0.0525636, -0.102992, 0.969823, 1.93333, 1, -0.222694, -0.0525419, -0.104066, 0.967893, 2, 1, -0.232433, -0.0519741, -0.10496, 0.965535, 2.06667, 1, -0.243628, -0.0509803, -0.105728, 0.96274, 2.13333, 1, -0.256044, -0.0496795, -0.106427, 0.959503, 2.2, 1, -0.269236, -0.0475736, -0.104534, 0.956201, 2.26667, 1, -0.281834, -0.0418773, -0.0866379, 0.954626, 2.33333, 1, -0.293847, -0.0339228, -0.0553965, 0.953643, 2.4, 1, -0.305391, -0.0253864, -0.0164627, 0.951746, 2.46667, 1, -0.316156, -0.0175572, 0.0242568, 0.948234, 2.53333, 1, -0.325353, -0.0113258, 0.0607161, 0.943574, 2.6, 1, -0.331815, -0.0072526, 0.0869046, 0.939305, 2.66667, 1, -0.334241, -0.00577348, 0.0969309, 0.937472, 2.73333, 1, -0.331004, -0.00564629, 0.0964609, 0.938669, 2.8, 1, -0.321692, -0.00528789, 0.0951405, 0.942038, 2.86667, 1, -0.306883, -0.00475152, 0.0931061, 0.94717, 2.93333, 1, -0.287138, -0.00410399, 0.0904956, 0.953596, 3, 1, -0.263019, -0.0034136, 0.0874495, 0.960813, 3.06667, 1, -0.235103, -0.00273996, 0.0841099, 0.968321, 3.13333, 1, -0.203992, -0.00212574, 0.0806189, 0.975645, 3.2, 1, -0.170317, -0.00159061, 0.0771167, 0.982366, 3.26667, 1, -0.13474, -0.00112751, 0.073738, 0.988133, 3.33333, 1, -0.0979512, -0.000700953, 0.0706087, 0.992683, 3.4, 1, -0.0606599, -0.000247795, 0.0678425, 0.99585, 3.46667, 1, -0.0235893, 0.000320467, 0.0655388, 0.997571, 3.53333, 1, 0.0125344, 0.00111345, 0.0637813, 0.997885, 3.6, 1, 0.0469903, 0.00225641, 0.0626384, 0.996927, 3.66667, 1, 0.0790694, 0.00388392, 0.0621665, 0.994921, 3.73333, 1, 0.108346, 0.00572341, 0.06213, 0.992153, 3.8, 1, 0.134939, 0.00742532, 0.0622565, 0.988868, 3.86667, 1, 0.158973, 0.00900859, 0.0625397, 0.985259, 3.93333, 1, 0.180581, 0.0104882, 0.0629712, 0.981486, 4, 1, 0.199895, 0.0118757, 0.063541, 0.977683, 4.06667, 1, 0.217054, 0.0131799, 0.0642383, 0.973955, 4.13333, 1, 0.232192, 0.0144068, 0.0650511, 0.970385, 4.2, 1, 0.245446, 0.0155606, 0.0659667, 0.967038, 4.26667, 1, 0.256948, 0.016644, 0.0669721, 0.963958, 4.33333, 1, 0.266831, 0.0176584, 0.0680535, 0.961175, 4.4, 1, 0.275224, 0.0186042, 0.0691963, 0.958706, 4.46667, 1, 0.282254, 0.0194814, 0.0703861, 0.956556, 4.53333, 1, 0.288046, 0.0202898, 0.0716073, 0.95472, 4.6, 1, 0.292724, 0.0210293, 0.0728443, 0.953186, 4.66667, 1, 0.296409, 0.0216997, 0.074081, 0.951936, 4.73333, 1, 0.29922, 0.0223014, 0.0753006, 0.950947, 4.8, 1, 0.301277, 0.0228354, 0.0764861, 0.95019, 4.86667, 1, 0.302697, 0.023303, 0.07762, 0.949635, 4.93333, 1, 0.303599, 0.0237067, 0.0786845, 0.94925, 5, 1, 0.304097, 0.024049, 0.0796614, 0.949, 5.13333, 1, 0.304352, 0.0245651, 0.0812786, 0.948768, 5.2, 1, 0.304239, 0.0247392, 0.0818848, 0.948747, 5.26667, 1, 0.301658, 0.0246565, 0.0824158, 0.949527, 5.33333, 1, 0.291947, 0.0239151, 0.0830122, 0.952525, 5.4, 1, 0.270253, 0.0220937, 0.0837923, 0.958882, 5.46667, 1, 0.231515, 0.0187529, 0.0848052, 0.968946, 5.53333, 1, 0.168839, 0.0132938, 0.0859847, 0.981796, 5.6, 1, 0.0909188, 0.00648241, 0.086873, 0.992041, 5.66667, 1, 0.0518673, 0.00306529, 0.0871018, 0.994844, 5.8, 1, 0.138376, 0.0106451, 0.0865032, 0.986537, 5.86667, 1, 0.0952124, 0.0068617, 0.0868852, 0.991634, 5.93333, 1, 0.0518673, 0.00306529, 0.0871018, 0.994844, 9.33333, 1, 0.0518673, 0.00306529, 0.0871018, 0.994844)
+tracks/3/keys = PackedFloat32Array(0, 1, -0.163706, 0.0816182, 0.167228, 0.9688, 0.0666667, 1, -0.155635, 0.0824608, 0.165512, 0.970352, 0.133333, 1, -0.134455, 0.0843823, 0.160692, 0.974156, 0.2, 1, -0.104709, 0.0863969, 0.15329, 0.978812, 0.266667, 1, -0.0710136, 0.0875333, 0.143885, 0.983154, 0.333333, 1, -0.0380942, 0.0869558, 0.133107, 0.986545, 0.4, 1, -0.0107589, 0.0840479, 0.121578, 0.988959, 0.466667, 1, 0.00614313, 0.0784565, 0.109819, 0.990831, 0.533333, 1, 0.00725422, 0.0700598, 0.0981755, 0.992673, 0.6, 1, -0.0111289, 0.0592302, 0.0866281, 0.994416, 0.666667, 1, -0.0438416, 0.0472804, 0.0745127, 0.995133, 0.733333, 1, -0.0846521, 0.0353888, 0.0613518, 0.99389, 0.8, 1, -0.127231, 0.0244357, 0.0470114, 0.990457, 0.866667, 1, -0.16526, 0.0149231, 0.0316851, 0.985628, 0.933333, 1, -0.192537, 0.0069104, 0.0158151, 0.981138, 1, 1, -0.202979, 1.37903e-08, -5.32436e-08, 0.979183, 1.06667, 1, -0.20295, -0.00643442, -0.0151665, 0.979051, 1.13333, 1, -0.202878, -0.0125391, -0.029457, 0.978681, 1.2, 1, -0.202783, -0.018307, -0.0427475, 0.978119, 1.26667, 1, -0.202685, -0.0237282, -0.054918, 0.977415, 1.33333, 1, -0.2026, -0.0287903, -0.0658521, 0.976621, 1.4, 1, -0.202546, -0.0334792, -0.075437, 0.975789, 1.46667, 1, -0.202538, -0.0377789, -0.0835627, 0.974971, 1.53333, 1, -0.202593, -0.0416726, -0.0901211, 0.974216, 1.6, 1, -0.202732, -0.045143, -0.0950053, 0.973569, 1.66667, 1, -0.202975, -0.0481728, -0.0981088, 0.973065, 1.73333, 1, -0.204553, -0.0504937, -0.100078, 0.972416, 1.8, 1, -0.208521, -0.0519198, -0.101683, 0.971331, 1.86667, 1, -0.214645, -0.0525636, -0.102992, 0.969823, 1.93333, 1, -0.222694, -0.0525419, -0.104066, 0.967893, 2, 1, -0.232433, -0.0519741, -0.10496, 0.965535, 2.06667, 1, -0.243628, -0.0509803, -0.105728, 0.96274, 2.13333, 1, -0.256044, -0.0496795, -0.106427, 0.959503, 2.2, 1, -0.269236, -0.0475736, -0.104534, 0.956201, 2.26667, 1, -0.281834, -0.0418773, -0.0866379, 0.954626, 2.33333, 1, -0.293847, -0.0339228, -0.0553965, 0.953643, 2.4, 1, -0.305391, -0.0253864, -0.0164627, 0.951746, 2.46667, 1, -0.316156, -0.0175572, 0.0242568, 0.948234, 2.53333, 1, -0.325353, -0.0113258, 0.0607161, 0.943574, 2.6, 1, -0.331815, -0.0072526, 0.0869046, 0.939305, 2.66667, 1, -0.334241, -0.00577348, 0.0969309, 0.937472, 2.73333, 1, -0.331004, -0.00564629, 0.0964609, 0.938669, 2.8, 1, -0.321692, -0.00528789, 0.0951405, 0.942038, 2.86667, 1, -0.306883, -0.00475152, 0.0931061, 0.94717, 2.93333, 1, -0.287138, -0.00410399, 0.0904956, 0.953596, 3, 1, -0.263019, -0.0034136, 0.0874495, 0.960813, 3.06667, 1, -0.235103, -0.00273996, 0.0841099, 0.968321, 3.13333, 1, -0.203992, -0.00212574, 0.0806189, 0.975645, 3.2, 1, -0.170317, -0.00159061, 0.0771167, 0.982366, 3.26667, 1, -0.13474, -0.00112751, 0.073738, 0.988133, 3.33333, 1, -0.0979512, -0.000700953, 0.0706087, 0.992683, 3.4, 1, -0.0606599, -0.000247795, 0.0678425, 0.99585, 3.46667, 1, -0.0235893, 0.000320467, 0.0655388, 0.997571, 3.53333, 1, 0.0125344, 0.00111345, 0.0637813, 0.997885, 3.6, 1, 0.0469903, 0.00225641, 0.0626384, 0.996927, 3.66667, 1, 0.0790694, 0.00388392, 0.0621665, 0.994921, 3.73333, 1, 0.108346, 0.00572341, 0.06213, 0.992153, 3.8, 1, 0.134939, 0.00742532, 0.0622565, 0.988868, 3.86667, 1, 0.158973, 0.00900859, 0.0625397, 0.985259, 3.93333, 1, 0.180581, 0.0104882, 0.0629712, 0.981486, 4, 1, 0.199895, 0.0118757, 0.063541, 0.977683, 4.06667, 1, 0.217054, 0.0131799, 0.0642383, 0.973955, 4.13333, 1, 0.232192, 0.0144068, 0.0650511, 0.970385, 4.2, 1, 0.245446, 0.0155606, 0.0659667, 0.967038, 4.26667, 1, 0.256948, 0.016644, 0.0669721, 0.963958, 4.33333, 1, 0.266831, 0.0176584, 0.0680535, 0.961175, 4.4, 1, 0.275224, 0.0186042, 0.0691963, 0.958706, 4.46667, 1, 0.282254, 0.0194814, 0.0703861, 0.956556, 4.53333, 1, 0.288046, 0.0202898, 0.0716073, 0.95472, 4.6, 1, 0.292724, 0.0210293, 0.0728443, 0.953186, 4.66667, 1, 0.296409, 0.0216997, 0.074081, 0.951936, 4.73333, 1, 0.29922, 0.0223014, 0.0753006, 0.950947, 4.8, 1, 0.301277, 0.0228354, 0.0764861, 0.95019, 4.86667, 1, 0.302697, 0.023303, 0.07762, 0.949635, 4.93333, 1, 0.303599, 0.0237067, 0.0786845, 0.94925, 5, 1, 0.304097, 0.024049, 0.0796614, 0.949, 5.13333, 1, 0.304352, 0.0245651, 0.0812786, 0.948768, 5.2, 1, 0.304239, 0.0247392, 0.0818848, 0.948747, 5.26667, 1, 0.301658, 0.0246565, 0.0824158, 0.949527, 5.33333, 1, 0.291947, 0.0239151, 0.0830122, 0.952525, 5.4, 1, 0.270253, 0.0220937, 0.0837923, 0.958882, 5.46667, 1, 0.231515, 0.0187529, 0.0848052, 0.968946, 5.53333, 1, 0.168839, 0.0132938, 0.0859847, 0.981796, 5.6, 1, 0.0909188, 0.00648241, 0.086873, 0.992041, 5.66667, 1, 0.0518673, 0.00306529, 0.0871018, 0.994844, 5.8, 1, 0.138376, 0.0106451, 0.0865032, 0.986537, 5.86667, 1, 0.0952124, 0.0068617, 0.0868852, 0.991634, 5.93333, 1, 0.0518673, 0.00306529, 0.0871018, 0.994844, 10, 1, 0.0518673, 0.00306529, 0.0871018, 0.994844)
 tracks/4/type = "rotation_3d"
 tracks/4/imported = true
 tracks/4/enabled = true
 tracks/4/path = NodePath("TailRoot/Skeleton3D:tail_04")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
-tracks/4/keys = PackedFloat32Array(0, 1, -0.16729, 0.0822366, 0.166925, 0.968187, 0.0666667, 1, -0.164039, 0.0822399, 0.165622, 0.968967, 0.133333, 1, -0.155489, 0.0820491, 0.161899, 0.97102, 0.2, 1, -0.143445, 0.0813337, 0.156041, 0.973889, 0.266667, 1, -0.12973, 0.0797617, 0.148342, 0.97714, 0.333333, 1, -0.116199, 0.0770406, 0.139092, 0.980416, 0.4, 1, -0.104739, 0.0729501, 0.128559, 0.983453, 0.466667, 1, -0.0972656, 0.0673678, 0.116968, 0.986063, 0.533333, 1, -0.096322, 0.0602247, 0.104518, 0.988014, 0.6, 1, -0.105559, 0.0515373, 0.0914355, 0.988858, 0.666667, 1, -0.122532, 0.0420576, 0.0776023, 0.988532, 0.733333, 1, -0.143917, 0.0324845, 0.0629591, 0.987051, 0.8, 1, -0.166361, 0.0233271, 0.0475907, 0.98464, 0.866667, 1, -0.186507, 0.0148713, 0.0317254, 0.981829, 0.933333, 1, -0.201025, 0.00716075, 0.0157134, 0.979434, 1, 1, -0.206602, -2.60366e-08, 1.83323e-07, 0.978425, 1.06667, 1, -0.205591, -0.00691986, -0.0149682, 0.978499, 1.13333, 1, -0.202854, -0.0136328, -0.0290175, 0.978684, 1.2, 1, -0.198835, -0.0200572, -0.0420642, 0.978924, 1.26667, 1, -0.193973, -0.0260771, -0.0540448, 0.97917, 1.33333, 1, -0.188704, -0.0315463, -0.0649157, 0.979378, 1.4, 1, -0.183463, -0.0362937, -0.0746513, 0.979516, 1.46667, 1, -0.178684, -0.040128, -0.0832408, 0.979557, 1.53333, 1, -0.174799, -0.0428436, -0.0906838, 0.979483, 1.6, 1, -0.17224, -0.0442255, -0.0969828, 0.979271, 1.66667, 1, -0.171443, -0.0440554, -0.102135, 0.978895, 1.73333, 1, -0.17168, -0.0431295, -0.10627, 0.978454, 1.8, 1, -0.172054, -0.042358, -0.109583, 0.978057, 1.86667, 1, -0.172754, -0.0416927, -0.112159, 0.97767, 1.93333, 1, -0.173965, -0.0410847, -0.114082, 0.977258, 2, 1, -0.175872, -0.0404851, -0.115438, 0.976782, 2.06667, 1, -0.178661, -0.039846, -0.116311, 0.976199, 2.13333, 1, -0.182516, -0.0391203, -0.116782, 0.975459, 2.2, 1, -0.187574, -0.0377113, -0.114463, 0.974829, 2.26667, 1, -0.193934, -0.0328794, -0.0966046, 0.975693, 2.33333, 1, -0.20232, -0.0256254, -0.0659155, 0.976763, 2.4, 1, -0.213436, -0.0175847, -0.0278844, 0.976401, 2.46667, 1, -0.22756, -0.0102906, 0.0118159, 0.973638, 2.53333, 1, -0.244437, -0.00499058, 0.0473754, 0.968494, 2.6, 1, -0.263404, -0.00246103, 0.0729547, 0.96192, 2.66667, 1, -0.283691, -0.00288209, 0.0827357, 0.955336, 2.73333, 1, -0.304983, -0.00496451, 0.0813188, 0.948867, 2.8, 1, -0.326901, -0.00739575, 0.0775521, 0.941842, 2.86667, 1, -0.348738, -0.00987853, 0.0719896, 0.934399, 2.93333, 1, -0.369803, -0.0121803, 0.0652064, 0.926739, 3, 1, -0.389418, -0.0141435, 0.0577958, 0.919137, 3.06667, 1, -0.406918, -0.0156871, 0.0503639, 0.91194, 3.13333, 1, -0.42165, -0.0167991, 0.0435229, 0.905558, 3.2, 1, -0.432971, -0.0175199, 0.0378854, 0.900441, 3.26667, 1, -0.440242, -0.0179155, 0.0340606, 0.897054, 3.33333, 1, -0.442812, -0.0180423, 0.0326523, 0.895838, 3.4, 1, -0.391083, -0.0167096, 0.034782, 0.919546, 3.46667, 1, -0.262945, -0.0129405, 0.0401155, 0.96389, 3.53333, 1, -0.103915, -0.00710667, 0.0470383, 0.993448, 3.6, 1, 0.0315353, -0.000769539, 0.0544205, 0.99802, 3.66667, 1, 0.0882521, 0.00266582, 0.062231, 0.994149, 3.73333, 1, 0.0880607, 0.00289827, 0.0707199, 0.993597, 3.8, 1, 0.0876076, 0.00290679, 0.0796494, 0.992961, 3.86667, 1, 0.0869386, 0.00271498, 0.088865, 0.992239, 4, 1, 0.0851325, 0.00183232, 0.107537, 0.990548, 4.06667, 1, 0.0840818, 0.00119725, 0.116687, 0.989603, 4.13333, 1, 0.0829881, 0.000473698, 0.125508, 0.988616, 4.2, 1, 0.0818908, -0.000305156, 0.133849, 0.987612, 4.26667, 1, 0.0808276, -0.00110424, 0.141559, 0.986624, 4.33333, 1, 0.0798349, -0.00188672, 0.14849, 0.985684, 4.4, 1, 0.0789474, -0.00261447, 0.154492, 0.984831, 4.46667, 1, 0.0781988, -0.0032484, 0.159417, 0.984104, 4.53333, 1, 0.0776226, -0.00374911, 0.163119, 0.983541, 4.6, 1, 0.0772518, -0.0040774, 0.165449, 0.98318, 4.66667, 1, 0.0771205, -0.00419505, 0.166258, 0.983053, 4.73333, 1, 0.091346, -0.00171312, 0.165298, 0.982003, 4.8, 1, 0.128395, 0.00463452, 0.162413, 0.978323, 4.86667, 1, 0.179732, 0.0130962, 0.157564, 0.970927, 4.93333, 1, 0.236769, 0.021931, 0.150884, 0.959528, 5, 1, 0.2911, 0.0295877, 0.14281, 0.945511, 5.06667, 1, 0.33475, 0.0348459, 0.134054, 0.932072, 5.13333, 1, 0.360219, 0.0368761, 0.125438, 0.92366, 5.2, 1, 0.363158, 0.0355872, 0.117569, 0.923595, 5.26667, 1, 0.355982, 0.0330805, 0.110207, 0.927382, 5.33333, 1, 0.33867, 0.0296579, 0.103549, 0.93472, 5.4, 1, 0.308204, 0.0252696, 0.0978531, 0.945937, 5.46667, 1, 0.261335, 0.0198448, 0.0933141, 0.960522, 5.53333, 1, 0.194445, 0.013214, 0.0900435, 0.976683, 5.6, 1, 0.10023, 0.00473141, 0.0880389, 0.99105, 5.66667, 1, -0.0318772, -0.00676799, 0.0868929, 0.995685, 5.73333, 1, -0.142178, -0.0163693, 0.085605, 0.985997, 5.8, 1, -0.092448, -0.0120466, 0.0863195, 0.991896, 5.86667, 1, 0.00927903, -0.00317292, 0.0870982, 0.996151, 5.93333, 1, 0.0661954, 0.00181003, 0.0871372, 0.993993, 9.33333, 1, 0.0661954, 0.00181003, 0.0871372, 0.993993)
+tracks/4/keys = PackedFloat32Array(0, 1, -0.16729, 0.0822366, 0.166925, 0.968187, 0.0666667, 1, -0.164039, 0.0822399, 0.165622, 0.968967, 0.133333, 1, -0.155489, 0.0820491, 0.161899, 0.97102, 0.2, 1, -0.143445, 0.0813337, 0.156041, 0.973889, 0.266667, 1, -0.12973, 0.0797617, 0.148342, 0.97714, 0.333333, 1, -0.116199, 0.0770406, 0.139092, 0.980416, 0.4, 1, -0.104739, 0.0729501, 0.128559, 0.983453, 0.466667, 1, -0.0972656, 0.0673678, 0.116968, 0.986063, 0.533333, 1, -0.096322, 0.0602247, 0.104518, 0.988014, 0.6, 1, -0.105559, 0.0515373, 0.0914355, 0.988858, 0.666667, 1, -0.122532, 0.0420576, 0.0776023, 0.988532, 0.733333, 1, -0.143917, 0.0324845, 0.0629591, 0.987051, 0.8, 1, -0.166361, 0.0233271, 0.0475907, 0.98464, 0.866667, 1, -0.186507, 0.0148713, 0.0317254, 0.981829, 0.933333, 1, -0.201025, 0.00716075, 0.0157134, 0.979434, 1, 1, -0.206602, -2.60366e-08, 1.83323e-07, 0.978425, 1.06667, 1, -0.205591, -0.00691986, -0.0149682, 0.978499, 1.13333, 1, -0.202854, -0.0136328, -0.0290175, 0.978684, 1.2, 1, -0.198835, -0.0200572, -0.0420642, 0.978924, 1.26667, 1, -0.193973, -0.0260771, -0.0540448, 0.97917, 1.33333, 1, -0.188704, -0.0315463, -0.0649157, 0.979378, 1.4, 1, -0.183463, -0.0362937, -0.0746513, 0.979516, 1.46667, 1, -0.178684, -0.040128, -0.0832408, 0.979557, 1.53333, 1, -0.174799, -0.0428436, -0.0906838, 0.979483, 1.6, 1, -0.17224, -0.0442255, -0.0969828, 0.979271, 1.66667, 1, -0.171443, -0.0440554, -0.102135, 0.978895, 1.73333, 1, -0.17168, -0.0431295, -0.10627, 0.978454, 1.8, 1, -0.172054, -0.042358, -0.109583, 0.978057, 1.86667, 1, -0.172754, -0.0416927, -0.112159, 0.97767, 1.93333, 1, -0.173965, -0.0410847, -0.114082, 0.977258, 2, 1, -0.175872, -0.0404851, -0.115438, 0.976782, 2.06667, 1, -0.178661, -0.039846, -0.116311, 0.976199, 2.13333, 1, -0.182516, -0.0391203, -0.116782, 0.975459, 2.2, 1, -0.187574, -0.0377113, -0.114463, 0.974829, 2.26667, 1, -0.193934, -0.0328794, -0.0966046, 0.975693, 2.33333, 1, -0.20232, -0.0256254, -0.0659155, 0.976763, 2.4, 1, -0.213436, -0.0175847, -0.0278844, 0.976401, 2.46667, 1, -0.22756, -0.0102906, 0.0118159, 0.973638, 2.53333, 1, -0.244437, -0.00499058, 0.0473754, 0.968494, 2.6, 1, -0.263404, -0.00246103, 0.0729547, 0.96192, 2.66667, 1, -0.283691, -0.00288209, 0.0827357, 0.955336, 2.73333, 1, -0.304983, -0.00496451, 0.0813188, 0.948867, 2.8, 1, -0.326901, -0.00739575, 0.0775521, 0.941842, 2.86667, 1, -0.348738, -0.00987853, 0.0719896, 0.934399, 2.93333, 1, -0.369803, -0.0121803, 0.0652064, 0.926739, 3, 1, -0.389418, -0.0141435, 0.0577958, 0.919137, 3.06667, 1, -0.406918, -0.0156871, 0.0503639, 0.91194, 3.13333, 1, -0.42165, -0.0167991, 0.0435229, 0.905558, 3.2, 1, -0.432971, -0.0175199, 0.0378854, 0.900441, 3.26667, 1, -0.440242, -0.0179155, 0.0340606, 0.897054, 3.33333, 1, -0.442812, -0.0180423, 0.0326523, 0.895838, 3.4, 1, -0.391083, -0.0167096, 0.034782, 0.919546, 3.46667, 1, -0.262945, -0.0129405, 0.0401155, 0.96389, 3.53333, 1, -0.103915, -0.00710667, 0.0470383, 0.993448, 3.6, 1, 0.0315353, -0.000769539, 0.0544205, 0.99802, 3.66667, 1, 0.0882521, 0.00266582, 0.062231, 0.994149, 3.73333, 1, 0.0880607, 0.00289827, 0.0707199, 0.993597, 3.8, 1, 0.0876076, 0.00290679, 0.0796494, 0.992961, 3.86667, 1, 0.0869386, 0.00271498, 0.088865, 0.992239, 4, 1, 0.0851325, 0.00183232, 0.107537, 0.990548, 4.06667, 1, 0.0840818, 0.00119725, 0.116687, 0.989603, 4.13333, 1, 0.0829881, 0.000473698, 0.125508, 0.988616, 4.2, 1, 0.0818908, -0.000305156, 0.133849, 0.987612, 4.26667, 1, 0.0808276, -0.00110424, 0.141559, 0.986624, 4.33333, 1, 0.0798349, -0.00188672, 0.14849, 0.985684, 4.4, 1, 0.0789474, -0.00261447, 0.154492, 0.984831, 4.46667, 1, 0.0781988, -0.0032484, 0.159417, 0.984104, 4.53333, 1, 0.0776226, -0.00374911, 0.163119, 0.983541, 4.6, 1, 0.0772518, -0.0040774, 0.165449, 0.98318, 4.66667, 1, 0.0771205, -0.00419505, 0.166258, 0.983053, 4.73333, 1, 0.091346, -0.00171312, 0.165298, 0.982003, 4.8, 1, 0.128395, 0.00463452, 0.162413, 0.978323, 4.86667, 1, 0.179732, 0.0130962, 0.157564, 0.970927, 4.93333, 1, 0.236769, 0.021931, 0.150884, 0.959528, 5, 1, 0.2911, 0.0295877, 0.14281, 0.945511, 5.06667, 1, 0.33475, 0.0348459, 0.134054, 0.932072, 5.13333, 1, 0.360219, 0.0368761, 0.125438, 0.92366, 5.2, 1, 0.363158, 0.0355872, 0.117569, 0.923595, 5.26667, 1, 0.355982, 0.0330805, 0.110207, 0.927382, 5.33333, 1, 0.33867, 0.0296579, 0.103549, 0.93472, 5.4, 1, 0.308204, 0.0252696, 0.0978531, 0.945937, 5.46667, 1, 0.261335, 0.0198448, 0.0933141, 0.960522, 5.53333, 1, 0.194445, 0.013214, 0.0900435, 0.976683, 5.6, 1, 0.10023, 0.00473141, 0.0880389, 0.99105, 5.66667, 1, -0.0318772, -0.00676799, 0.0868929, 0.995685, 5.73333, 1, -0.142178, -0.0163693, 0.085605, 0.985997, 5.8, 1, -0.092448, -0.0120466, 0.0863195, 0.991896, 5.86667, 1, 0.00927903, -0.00317292, 0.0870982, 0.996151, 5.93333, 1, 0.0661954, 0.00181003, 0.0871372, 0.993993, 10, 1, 0.0661954, 0.00181003, 0.0871372, 0.993993)
 tracks/5/type = "rotation_3d"
 tracks/5/imported = true
 tracks/5/enabled = true
 tracks/5/path = NodePath("TailRoot/Skeleton3D:tail_05")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
-tracks/5/keys = PackedFloat32Array(0, 1, -0.0745528, 0.0626502, 0.206975, 0.973488, 0.0666667, 1, -0.0612515, 0.0648887, 0.20504, 0.974677, 0.133333, 1, -0.0264239, 0.0704228, 0.199639, 0.976978, 0.2, 1, 0.0222758, 0.0773617, 0.191387, 0.978208, 0.266667, 1, 0.0770379, 0.0838779, 0.181069, 0.976854, 0.333333, 1, 0.129957, 0.0884272, 0.169687, 0.972881, 0.4, 1, 0.173221, 0.0898759, 0.158367, 0.967903, 0.466667, 1, 0.199218, 0.0875143, 0.148166, 0.964728, 0.533333, 1, 0.200128, 0.080913, 0.139861, 0.966354, 0.6, 1, 0.172699, 0.0702227, 0.133004, 0.973424, 0.666667, 1, 0.124549, 0.056851, 0.125648, 0.982582, 0.733333, 1, 0.0644526, 0.0422935, 0.11597, 0.990257, 0.8, 1, 0.00157448, 0.0280241, 0.102576, 0.994329, 0.866667, 1, -0.0546982, 0.0152849, 0.0845836, 0.994797, 0.933333, 1, -0.0950481, 0.00470064, 0.0615617, 0.993556, 1, 1, -0.110366, -0.00420857, 0.0333921, 0.993321, 1.06667, 1, -0.109918, -0.0134546, 0.000368187, 0.99385, 1.13333, 1, -0.109276, -0.0237095, -0.0361115, 0.993072, 1.26667, 1, -0.108732, -0.0455477, -0.112484, 0.986636, 1.33333, 1, -0.109156, -0.056188, -0.148946, 0.981195, 1.4, 1, -0.110022, -0.0659787, -0.182069, 0.974881, 1.46667, 1, -0.111156, -0.0744215, -0.210318, 0.968438, 1.53333, 1, -0.112299, -0.0810322, -0.232238, 0.96275, 1.6, 1, -0.113159, -0.0853408, -0.246426, 0.958742, 1.66667, 1, -0.113483, -0.0868817, -0.251478, 0.957252, 1.73333, 1, -0.113584, -0.085417, -0.247757, 0.958342, 1.8, 1, -0.114136, -0.0812546, -0.237259, 0.96129, 1.86667, 1, -0.115573, -0.0747692, -0.220941, 0.965525, 1.93333, 1, -0.118374, -0.0663847, -0.199733, 0.970406, 2, 1, -0.123011, -0.0565813, -0.174568, 0.975291, 2.06667, 1, -0.129906, -0.0458939, -0.146413, 0.979582, 2.13333, 1, -0.139396, -0.0348977, -0.116277, 0.982767, 2.2, 1, -0.151716, -0.024183, -0.0852206, 0.984447, 2.33333, 1, -0.185205, -0.00583132, -0.0248436, 0.982369, 2.4, 1, -0.206296, 0.00087266, 0.00212906, 0.978487, 2.46667, 1, -0.230108, 0.00550905, 0.0253416, 0.97282, 2.53333, 1, -0.256461, 0.00797133, 0.043554, 0.96554, 2.6, 1, -0.285191, 0.00836019, 0.0555101, 0.956825, 2.66667, 1, -0.31618, 0.00701554, 0.0599385, 0.946778, 2.73333, 1, -0.349074, 0.00151381, 0.0575529, 0.935325, 2.8, 1, -0.382784, -0.0100044, 0.0500141, 0.922429, 2.86667, 1, -0.416156, -0.0262039, 0.0375682, 0.908139, 2.93333, 1, -0.448034, -0.045871, 0.0206659, 0.8926, 3.06667, 1, -0.502685, -0.0917429, -0.0234142, 0.859269, 3.13333, 1, -0.523196, -0.116647, -0.0483813, 0.842804, 3.2, 1, -0.537741, -0.142446, -0.0734258, 0.827739, 3.26667, 1, -0.545337, -0.169125, -0.0968931, 0.81524, 3.33333, 1, -0.545044, -0.196809, -0.116966, 0.806544, 3.4, 1, -0.479505, -0.233596, -0.117105, 0.837732, 3.46667, 1, -0.321296, -0.279431, -0.0826794, 0.901028, 3.53333, 1, -0.123342, -0.317965, -0.0231232, 0.939761, 3.6, 1, 0.0451272, -0.340913, 0.0386534, 0.938215, 3.66667, 1, 0.116155, -0.356594, 0.0727116, 0.924155, 3.73333, 1, 0.11643, -0.372559, 0.0836154, 0.916871, 3.8, 1, 0.113291, -0.38602, 0.0960406, 0.910456, 4.06667, 1, 0.0801, -0.4236, 0.150594, 0.889645, 4.13333, 1, 0.0692464, -0.430592, 0.16369, 0.884873, 4.2, 1, 0.0582403, -0.437018, 0.176045, 0.880132, 4.26667, 1, 0.0474725, -0.442929, 0.18744, 0.875458, 4.33333, 1, 0.0373211, -0.448303, 0.197667, 0.870953, 4.4, 1, 0.0281565, -0.453054, 0.206523, 0.866774, 4.46667, 1, 0.0203469, -0.457041, 0.213806, 0.863126, 4.53333, 1, 0.0142662, -0.460091, 0.219307, 0.860242, 4.6, 1, 0.0103047, -0.462027, 0.2228, 0.858362, 4.66667, 1, 0.00888357, -0.462696, 0.224028, 0.857697, 4.73333, 1, 0.0237738, -0.444116, 0.223952, 0.867203, 4.8, 1, 0.0681066, -0.396321, 0.217123, 0.889465, 4.86667, 1, 0.142264, -0.334335, 0.192197, 0.911615, 4.93333, 1, 0.239916, -0.276559, 0.145183, 0.919172, 5, 1, 0.344111, -0.237803, 0.0848358, 0.904345, 5.06667, 1, 0.432119, -0.221328, 0.0286156, 0.873767, 5.13333, 1, 0.48363, -0.218569, -0.00593527, 0.847523, 5.2, 1, 0.482933, -0.223448, -0.00437039, 0.846656, 5.26667, 1, 0.430457, -0.258834, 0.0363736, 0.863938, 5.33333, 1, 0.352934, -0.320804, 0.0887316, 0.874442, 5.4, 1, 0.280504, -0.390958, 0.127827, 0.867254, 5.46667, 1, 0.236852, -0.440551, 0.145404, 0.853624, 5.53333, 1, 0.225831, -0.445819, 0.113341, 0.85872, 5.6, 1, 0.212285, -0.442509, -0.0752242, 0.868022, 5.66667, 1, 0.210854, -0.450737, -0.20045, 0.843917, 5.73333, 1, -0.000324246, -0.467357, 0.182515, 0.865023, 5.8, 1, 0.0220979, -0.485178, 0.147453, 0.86161, 5.86667, 1, 0.0509123, -0.49036, 0.0918671, 0.865168, 5.93333, 1, 0.0655555, -0.493281, 0.0625986, 0.865135, 9.33333, 1, 0.0655555, -0.493281, 0.0625986, 0.865135)
+tracks/5/keys = PackedFloat32Array(0, 1, -0.0745528, 0.0626502, 0.206975, 0.973488, 0.0666667, 1, -0.0612515, 0.0648887, 0.20504, 0.974677, 0.133333, 1, -0.0264239, 0.0704228, 0.199639, 0.976978, 0.2, 1, 0.0222758, 0.0773617, 0.191387, 0.978208, 0.266667, 1, 0.0770379, 0.0838779, 0.181069, 0.976854, 0.333333, 1, 0.129957, 0.0884272, 0.169687, 0.972881, 0.4, 1, 0.173221, 0.0898759, 0.158367, 0.967903, 0.466667, 1, 0.199218, 0.0875143, 0.148166, 0.964728, 0.533333, 1, 0.200128, 0.080913, 0.139861, 0.966354, 0.6, 1, 0.172699, 0.0702227, 0.133004, 0.973424, 0.666667, 1, 0.124549, 0.056851, 0.125648, 0.982582, 0.733333, 1, 0.0644526, 0.0422935, 0.11597, 0.990257, 0.8, 1, 0.00157448, 0.0280241, 0.102576, 0.994329, 0.866667, 1, -0.0546982, 0.0152849, 0.0845836, 0.994797, 0.933333, 1, -0.0950481, 0.00470064, 0.0615617, 0.993556, 1, 1, -0.110366, -0.00420857, 0.0333921, 0.993321, 1.06667, 1, -0.109918, -0.0134546, 0.000368187, 0.99385, 1.13333, 1, -0.109276, -0.0237095, -0.0361115, 0.993072, 1.26667, 1, -0.108732, -0.0455477, -0.112484, 0.986636, 1.33333, 1, -0.109156, -0.056188, -0.148946, 0.981195, 1.4, 1, -0.110022, -0.0659787, -0.182069, 0.974881, 1.46667, 1, -0.111156, -0.0744215, -0.210318, 0.968438, 1.53333, 1, -0.112299, -0.0810322, -0.232238, 0.96275, 1.6, 1, -0.113159, -0.0853408, -0.246426, 0.958742, 1.66667, 1, -0.113483, -0.0868817, -0.251478, 0.957252, 1.73333, 1, -0.113584, -0.085417, -0.247757, 0.958342, 1.8, 1, -0.114136, -0.0812546, -0.237259, 0.96129, 1.86667, 1, -0.115573, -0.0747692, -0.220941, 0.965525, 1.93333, 1, -0.118374, -0.0663847, -0.199733, 0.970406, 2, 1, -0.123011, -0.0565813, -0.174568, 0.975291, 2.06667, 1, -0.129906, -0.0458939, -0.146413, 0.979582, 2.13333, 1, -0.139396, -0.0348977, -0.116277, 0.982767, 2.2, 1, -0.151716, -0.024183, -0.0852206, 0.984447, 2.33333, 1, -0.185205, -0.00583132, -0.0248436, 0.982369, 2.4, 1, -0.206296, 0.00087266, 0.00212906, 0.978487, 2.46667, 1, -0.230108, 0.00550905, 0.0253416, 0.97282, 2.53333, 1, -0.256461, 0.00797133, 0.043554, 0.96554, 2.6, 1, -0.285191, 0.00836019, 0.0555101, 0.956825, 2.66667, 1, -0.31618, 0.00701554, 0.0599385, 0.946778, 2.73333, 1, -0.349074, 0.00151381, 0.0575529, 0.935325, 2.8, 1, -0.382784, -0.0100044, 0.0500141, 0.922429, 2.86667, 1, -0.416156, -0.0262039, 0.0375682, 0.908139, 2.93333, 1, -0.448034, -0.045871, 0.0206659, 0.8926, 3.06667, 1, -0.502685, -0.0917429, -0.0234142, 0.859269, 3.13333, 1, -0.523196, -0.116647, -0.0483813, 0.842804, 3.2, 1, -0.537741, -0.142446, -0.0734258, 0.827739, 3.26667, 1, -0.545337, -0.169125, -0.0968931, 0.81524, 3.33333, 1, -0.545044, -0.196809, -0.116966, 0.806544, 3.4, 1, -0.479505, -0.233596, -0.117105, 0.837732, 3.46667, 1, -0.321296, -0.279431, -0.0826794, 0.901028, 3.53333, 1, -0.123342, -0.317965, -0.0231232, 0.939761, 3.6, 1, 0.0451272, -0.340913, 0.0386534, 0.938215, 3.66667, 1, 0.116155, -0.356594, 0.0727116, 0.924155, 3.73333, 1, 0.11643, -0.372559, 0.0836154, 0.916871, 3.8, 1, 0.113291, -0.38602, 0.0960406, 0.910456, 4.06667, 1, 0.0801, -0.4236, 0.150594, 0.889645, 4.13333, 1, 0.0692464, -0.430592, 0.16369, 0.884873, 4.2, 1, 0.0582403, -0.437018, 0.176045, 0.880132, 4.26667, 1, 0.0474725, -0.442929, 0.18744, 0.875458, 4.33333, 1, 0.0373211, -0.448303, 0.197667, 0.870953, 4.4, 1, 0.0281565, -0.453054, 0.206523, 0.866774, 4.46667, 1, 0.0203469, -0.457041, 0.213806, 0.863126, 4.53333, 1, 0.0142662, -0.460091, 0.219307, 0.860242, 4.6, 1, 0.0103047, -0.462027, 0.2228, 0.858362, 4.66667, 1, 0.00888357, -0.462696, 0.224028, 0.857697, 4.73333, 1, 0.0237738, -0.444116, 0.223952, 0.867203, 4.8, 1, 0.0681066, -0.396321, 0.217123, 0.889465, 4.86667, 1, 0.142264, -0.334335, 0.192197, 0.911615, 4.93333, 1, 0.239916, -0.276559, 0.145183, 0.919172, 5, 1, 0.344111, -0.237803, 0.0848358, 0.904345, 5.06667, 1, 0.432119, -0.221328, 0.0286156, 0.873767, 5.13333, 1, 0.48363, -0.218569, -0.00593527, 0.847523, 5.2, 1, 0.482933, -0.223448, -0.00437039, 0.846656, 5.26667, 1, 0.430457, -0.258834, 0.0363736, 0.863938, 5.33333, 1, 0.352934, -0.320804, 0.0887316, 0.874442, 5.4, 1, 0.280504, -0.390958, 0.127827, 0.867254, 5.46667, 1, 0.236852, -0.440551, 0.145404, 0.853624, 5.53333, 1, 0.225831, -0.445819, 0.113341, 0.85872, 5.6, 1, 0.212285, -0.442509, -0.0752242, 0.868022, 5.66667, 1, 0.210854, -0.450737, -0.20045, 0.843917, 5.73333, 1, -0.000324246, -0.467357, 0.182515, 0.865023, 5.8, 1, 0.0220979, -0.485178, 0.147453, 0.86161, 5.86667, 1, 0.0509123, -0.49036, 0.0918671, 0.865168, 5.93333, 1, 0.0655555, -0.493281, 0.0625986, 0.865135, 10, 1, 0.0655555, -0.493281, 0.0625986, 0.865135)
 tracks/6/type = "rotation_3d"
 tracks/6/imported = true
 tracks/6/enabled = true
@@ -731,7 +1092,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_xdsv1"]
+[sub_resource type="Animation" id="Animation_o83qo"]
 resource_name = "l-intro"
 length = 10.0
 tracks/0/type = "position_3d"
@@ -784,7 +1145,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685, 0.0666667, 1, 0.923877, 0.000726399, 0.00175356, 0.382684, 0.133333, 1, 0.923854, 0.00280525, 0.00677232, 0.382675, 0.2, 1, 0.923762, 0.00608613, 0.014693, 0.382637, 0.266667, 1, 0.923536, 0.0104182, 0.0251515, 0.382543, 0.333333, 1, 0.923106, 0.0156499, 0.0377818, 0.382365, 0.4, 1, 0.922402, 0.0216288, 0.0522163, 0.382073, 0.466667, 1, 0.921367, 0.0282021, 0.0680854, 0.381644, 0.533333, 1, 0.919959, 0.0352159, 0.0850181, 0.381061, 0.6, 1, 0.918159, 0.0425165, 0.102643, 0.380316, 0.733333, 1, 0.91344, 0.0573653, 0.138491, 0.378361, 0.8, 1, 0.910616, 0.0646101, 0.155982, 0.377191, 0.866667, 1, 0.907594, 0.0715358, 0.172702, 0.375939, 0.933333, 1, 0.904487, 0.0779961, 0.188298, 0.374652, 1, 1, 0.901431, 0.0838468, 0.202423, 0.373387, 1.06667, 1, 0.898577, 0.0889464, 0.214734, 0.372205, 1.13333, 1, 0.896088, 0.093155, 0.224895, 0.371174, 1.2, 1, 0.894127, 0.096334, 0.232569, 0.370361, 1.26667, 1, 0.892851, 0.0983445, 0.237423, 0.369833, 1.33333, 1, 0.892399, 0.0990463, 0.239117, 0.369645, 1.4, 1, 0.895253, 0.0945229, 0.228197, 0.370828, 1.46667, 1, 0.902327, 0.0821761, 0.19839, 0.373758, 1.53333, 1, 0.910941, 0.06382, 0.154074, 0.377326, 1.6, 1, 0.918475, 0.0413298, 0.0997783, 0.380447, 1.73333, 1, 0.923676, -0.00801433, -0.0193483, 0.382601, 1.8, 1, 0.920903, -0.0306909, -0.0740941, 0.381452, 1.86667, 1, 0.916184, -0.0492881, -0.118992, 0.379498, 1.93333, 1, 0.911735, -0.0618434, -0.149302, 0.377655, 2, 1, 0.909843, -0.0664525, -0.16043, 0.376871, 2.06667, 1, 0.91304, -0.0584476, -0.141104, 0.378195, 2.13333, 1, 0.919446, -0.0374419, -0.0903925, 0.380849, 2.2, 1, 0.923676, -0.0080143, -0.0193483, 0.382601, 2.26667, 1, 0.921903, 0.0250165, 0.0603948, 0.381866, 2.33333, 1, 0.913687, 0.0566868, 0.136853, 0.378463, 2.4, 1, 0.902327, 0.0821761, 0.19839, 0.373758, 2.46667, 1, 0.893714, 0.0969898, 0.234153, 0.37019, 2.53333, 1, 0.893191, 0.0978127, 0.23614, 0.369974, 2.6, 1, 0.898577, 0.0889464, 0.214734, 0.372205, 2.66667, 1, 0.906561, 0.0737482, 0.178043, 0.375512, 2.73333, 1, 0.914321, 0.0549052, 0.132552, 0.378726, 2.8, 1, 0.919959, 0.0352159, 0.0850181, 0.381061, 2.86667, 1, 0.922905, 0.0175674, 0.0424111, 0.382282, 2.93333, 1, 0.923804, 0.00486824, 0.0117528, 0.382654, 3, 1, 0.923879, 4.5515e-08, -3.26319e-09, 0.382685, 3.06667, 1, 0.923868, 0.00187019, 0.0045149, 0.382681, 3.13333, 1, 0.923727, 0.00694594, 0.0167688, 0.382622, 3.2, 1, 0.923222, 0.0144235, 0.0348212, 0.382413, 3.26667, 1, 0.922136, 0.0234957, 0.0567234, 0.381963, 3.4, 1, 0.917976, 0.0431885, 0.104266, 0.38024, 3.46667, 1, 0.915243, 0.0522011, 0.126024, 0.379108, 3.53333, 1, 0.912605, 0.0596013, 0.143889, 0.378015, 3.6, 1, 0.910616, 0.0646101, 0.155982, 0.377191, 3.66667, 1, 0.909843, 0.0664526, 0.16043, 0.376871, 3.73333, 1, 0.910721, 0.0643565, 0.155369, 0.377235, 3.8, 1, 0.91304, 0.0584477, 0.141104, 0.378195, 3.86667, 1, 0.916184, 0.0492882, 0.118992, 0.379498, 3.93333, 1, 0.919446, 0.037442, 0.0903925, 0.380849, 4, 1, 0.922137, 0.0234859, 0.0566995, 0.381964, 4.06667, 1, 0.923676, 0.0080144, 0.0193482, 0.382601, 4.13333, 1, 0.923658, -0.00836055, -0.0201842, 0.382594, 4.2, 1, 0.921903, -0.0250164, -0.0603948, 0.381867, 4.26667, 1, 0.918475, -0.0413297, -0.0997783, 0.380447, 4.33333, 1, 0.913687, -0.0566868, -0.136853, 0.378463, 4.4, 1, 0.908069, -0.0704927, -0.170184, 0.376136, 4.46667, 1, 0.902327, -0.082176, -0.19839, 0.373758, 4.53333, 1, 0.897267, -0.091187, -0.220144, 0.371662, 4.6, 1, 0.893714, -0.0969897, -0.234153, 0.37019, 4.66667, 1, 0.892398, -0.0990461, -0.239117, 0.369645, 4.73333, 1, 0.894926, -0.0950524, -0.229476, 0.370692, 4.8, 1, 0.901226, -0.0842227, -0.203331, 0.373302, 4.86667, 1, 0.909059, -0.068269, -0.164815, 0.376546, 4.93333, 1, 0.91629, -0.0489486, -0.118172, 0.379542, 5, 1, 0.921384, -0.0281021, -0.0678442, 0.381652, 5.06667, 1, 0.923695, -0.00763872, -0.0184415, 0.382609, 5.13333, 1, 0.92353, 0.0105106, 0.0253746, 0.382541, 5.2, 1, 0.921993, 0.0244397, 0.0590023, 0.381904, 5.26667, 1, 0.920585, 0.032286, 0.0779449, 0.381321, 5.33333, 1, 0.920409, 0.0331341, 0.0799923, 0.381248, 5.4, 1, 0.920742, 0.03151, 0.0760714, 0.381386, 5.46667, 1, 0.921297, 0.0285909, 0.0690242, 0.381616, 5.53333, 1, 0.921949, 0.0247203, 0.0596796, 0.381886, 5.6, 1, 0.922586, 0.0202421, 0.0488685, 0.382149, 5.66667, 1, 0.923121, 0.0155018, 0.0374243, 0.382371, 5.73333, 1, 0.923508, 0.0108456, 0.0261833, 0.382531, 5.8, 1, 0.923741, 0.00662042, 0.0159829, 0.382628, 5.86667, 1, 0.923847, 0.00317336, 0.00766095, 0.382672, 5.93333, 1, 0.923877, 0.000851088, 0.00205455, 0.382684, 6, 1, 0.923879, 4.44764e-08, -3.33701e-09, 0.382685, 6.06667, 1, 0.923874, 0.00127647, 0.0030816, 0.382683, 6.13333, 1, 0.923804, 0.00486825, 0.0117528, 0.382654, 6.2, 1, 0.923536, 0.0104182, 0.0251515, 0.382543, 6.26667, 1, 0.922905, 0.0175674, 0.042411, 0.382282, 6.33333, 1, 0.921752, 0.0259544, 0.0626592, 0.381804, 6.4, 1, 0.919959, 0.0352159, 0.0850181, 0.381061, 6.46667, 1, 0.917473, 0.0449872, 0.108608, 0.380032, 6.53333, 1, 0.914321, 0.0549052, 0.132552, 0.378726, 6.6, 1, 0.910616, 0.0646101, 0.155982, 0.377191, 6.66667, 1, 0.906561, 0.0737482, 0.178043, 0.375512, 6.73333, 1, 0.902434, 0.0819731, 0.197899, 0.373802, 6.8, 1, 0.898577, 0.0889464, 0.214734, 0.372205, 6.86667, 1, 0.895368, 0.0943359, 0.227746, 0.370875, 6.93333, 1, 0.893191, 0.0978127, 0.236139, 0.369974, 7, 1, 0.892398, 0.0990462, 0.239117, 0.369645, 7.06667, 1, 0.896326, 0.0927624, 0.223947, 0.371272, 7.13333, 1, 0.905358, 0.0762419, 0.184063, 0.375013, 7.2, 1, 0.914977, 0.052995, 0.12794, 0.378998, 7.26667, 1, 0.921627, 0.0267047, 0.0644704, 0.381752, 7.33333, 1, 0.923874, 0.0012369, 0.00298606, 0.382683, 7.4, 1, 0.922679, -0.0194945, -0.0470638, 0.382188, 7.46667, 1, 0.920712, -0.0316573, -0.0764273, 0.381373, 7.53333, 1, 0.920452, -0.0329293, -0.079498, 0.381266, 7.6, 1, 0.921056, -0.0298919, -0.0721652, 0.381516, 7.66667, 1, 0.921949, -0.0247202, -0.0596796, 0.381886, 7.73333, 1, 0.922815, -0.018358, -0.04432, 0.382244, 7.8, 1, 0.923443, -0.0117533, -0.0283751, 0.382505, 7.86667, 1, 0.923771, -0.00585754, -0.0141414, 0.38264, 7.93333, 1, 0.923871, -0.00162271, -0.0039177, 0.382682, 8, 1, 0.923879, 4.56685e-08, 4.5347e-10, 0.382685, 10, 1, 0.923879, 2.90013e-08, -2.97533e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_4ctsd"]
+[sub_resource type="Animation" id="Animation_y6tl4"]
 resource_name = "r-attack-center-light"
 length = 2.0
 tracks/0/type = "position_3d"
@@ -837,7 +1198,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_jxqjh"]
+[sub_resource type="Animation" id="Animation_l2duv"]
 resource_name = "r-attack-heavy-end"
 length = 0.466667
 tracks/0/type = "position_3d"
@@ -890,7 +1251,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_mj2cq"]
+[sub_resource type="Animation" id="Animation_li7rf"]
 resource_name = "r-attack-heavy-start"
 length = 1.26667
 tracks/0/type = "position_3d"
@@ -943,7 +1304,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_76q2c"]
+[sub_resource type="Animation" id="Animation_40wy8"]
 resource_name = "r-attack-in-light"
 length = 2.0
 tracks/0/type = "position_3d"
@@ -996,7 +1357,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_27ufp"]
+[sub_resource type="Animation" id="Animation_hytnt"]
 resource_name = "r-attack-out-light"
 length = 2.0
 tracks/0/type = "position_3d"
@@ -1049,9 +1410,9 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_aqc37"]
+[sub_resource type="Animation" id="Animation_pv1pa"]
 resource_name = "r-defeat"
-length = 9.33333
+length = 10.0
 tracks/0/type = "position_3d"
 tracks/0/imported = true
 tracks/0/enabled = true
@@ -1065,35 +1426,35 @@ tracks/1/enabled = true
 tracks/1/path = NodePath("TailRoot/Skeleton3D:tail_01")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0.00739758, 0.239919, 0.209777, 0.947828, 0.0666667, 1, 0.00836164, 0.236617, 0.207475, 0.949156, 0.133333, 1, 0.0111869, 0.227232, 0.201047, 0.952796, 0.2, 1, 0.0158775, 0.212458, 0.191264, 0.958138, 0.266667, 1, 0.0224932, 0.192948, 0.178947, 0.964491, 0.333333, 1, 0.0310614, 0.169389, 0.164946, 0.971152, 0.4, 1, 0.0415107, 0.142559, 0.150098, 0.977458, 0.466667, 1, 0.0536258, 0.113363, 0.135196, 0.98285, 0.533333, 1, 0.067028, 0.0828378, 0.120947, 0.986923, 0.6, 1, 0.0811777, 0.0521471, 0.107929, 0.989466, 0.666667, 1, 0.0953973, 0.0225507, 0.0965713, 0.990487, 0.733333, 1, 0.108905, -0.00462995, 0.0871454, 0.990214, 0.8, 1, 0.12086, -0.0280497, 0.0797782, 0.989061, 0.866667, 1, 0.130403, -0.0463714, 0.0744944, 0.987571, 0.933333, 1, 0.136693, -0.0582875, 0.0712817, 0.986325, 1, 1, 0.13895, -0.0625327, 0.0701796, 0.985828, 1.06667, 1, 0.138077, -0.0623014, 0.0705189, 0.985941, 1.13333, 1, 0.13558, -0.0616243, 0.07149, 0.98626, 1.2, 1, 0.131643, -0.0605302, 0.0730254, 0.986749, 1.26667, 1, 0.12645, -0.0590512, 0.075061, 0.987365, 1.33333, 1, 0.120188, -0.0572209, 0.0775339, 0.988063, 1.4, 1, 0.113043, -0.0550724, 0.0803822, 0.988801, 1.46667, 1, 0.105201, -0.0526371, 0.083543, 0.989537, 1.53333, 1, 0.0968521, -0.0499431, 0.0869525, 0.990235, 1.6, 1, 0.0881827, -0.0470147, 0.0905447, 0.990866, 1.73333, 1, 0.0706311, -0.0405267, 0.0979996, 0.991849, 1.8, 1, 0.0621212, -0.0369894, 0.101716, 0.992183, 1.86667, 1, 0.0540336, -0.0332619, 0.105321, 0.992412, 1.93333, 1, 0.0465497, -0.0293415, 0.108734, 0.992547, 2, 1, 0.0398478, -0.0252205, 0.111867, 0.992604, 2.06667, 1, 0.0341042, -0.0208876, 0.114632, 0.992603, 2.13333, 1, 0.0294913, -0.0163285, 0.116932, 0.992568, 2.2, 1, 0.0261794, -0.011528, 0.118669, 0.992522, 2.26667, 1, 0.0243356, -0.00647191, 0.119739, 0.992486, 2.33333, 1, 0.0241249, -0.0011494, 0.120032, 0.992476, 2.4, 1, 0.0256261, 0.00444441, 0.119765, 0.992462, 2.46667, 1, 0.0285666, 0.0102742, 0.119219, 0.992404, 2.53333, 1, 0.0325824, 0.0162852, 0.118386, 0.992299, 2.6, 1, 0.0373099, 0.0224219, 0.117266, 0.992146, 2.73333, 1, 0.0474447, 0.034853, 0.114207, 0.991711, 2.8, 1, 0.0521257, 0.0410421, 0.112313, 0.991456, 2.86667, 1, 0.0560661, 0.0471483, 0.11022, 0.991204, 2.93333, 1, 0.0589046, 0.0531271, 0.107973, 0.990984, 3, 1, 0.0602801, 0.0589387, 0.105625, 0.990826, 3.46667, 1, 0.0615273, 0.0980653, 0.0862195, 0.989527, 3.66667, 1, 0.059235, 0.11382, 0.0770367, 0.988737, 4.06667, 1, 0.045939, 0.142319, 0.0597355, 0.986948, 4.13333, 1, 0.0423211, 0.146594, 0.0572176, 0.986633, 4.2, 1, 0.038243, 0.150715, 0.0548568, 0.986313, 4.26667, 1, 0.0336834, 0.154673, 0.052673, 0.985985, 4.33333, 1, 0.0286206, 0.158463, 0.0506855, 0.985648, 4.4, 1, 0.0230336, 0.162075, 0.0489135, 0.985296, 4.46667, 1, 0.0169016, 0.1655, 0.0473758, 0.984926, 4.53333, 1, 0.0102038, 0.168731, 0.0460908, 0.984531, 4.6, 1, 0.00291971, 0.171757, 0.0450763, 0.984103, 4.66667, 1, -0.004971, 0.174566, 0.0443493, 0.983634, 4.73333, 1, -0.0134886, 0.177148, 0.0439262, 0.983111, 4.8, 1, -0.022653, 0.179489, 0.0438223, 0.982522, 4.86667, 1, -0.0324845, 0.181575, 0.0440521, 0.981853, 4.93333, 1, -0.0430024, 0.183391, 0.0446287, 0.981085, 5, 1, -0.0542267, 0.184918, 0.0455637, 0.980198, 5.06667, 1, -0.0661767, 0.186138, 0.0468675, 0.979171, 5.13333, 1, -0.0788713, 0.187031, 0.0485484, 0.977978, 5.2, 1, -0.0923294, 0.187573, 0.0506129, 0.976591, 5.26667, 1, -0.106569, 0.187739, 0.0530652, 0.974977, 5.33333, 1, -0.121608, 0.187504, 0.0559068, 0.973102, 5.4, 1, -0.16885, 0.18563, 0.0662276, 0.965736, 5.46667, 1, -0.265652, 0.182496, 0.0936171, 0.941998, 5.53333, 1, -0.388228, 0.176655, 0.142749, 0.893138, 5.6, 1, -0.509014, 0.161357, 0.218105, 0.816884, 5.66667, 1, -0.598292, 0.126889, 0.320565, 0.723315, 5.73333, 1, -0.626969, 0.0670282, 0.443968, 0.636639, 5.8, 1, -0.534342, -0.0218695, 0.591389, 0.603539, 5.86667, 1, -0.483575, -0.0721897, 0.608935, 0.624614, 5.93333, 1, -0.481404, -0.108805, 0.549235, 0.674354, 6, 1, -0.482868, -0.109254, 0.543396, 0.677956, 6.06667, 1, -0.491306, -0.0722894, 0.588087, 0.638394, 6.13333, 1, -0.491488, -0.0535719, 0.620501, 0.608727, 9.33333, 1, -0.491488, -0.0535719, 0.620501, 0.608727)
+tracks/1/keys = PackedFloat32Array(0, 1, 0.00739758, 0.239919, 0.209777, 0.947828, 0.0666667, 1, 0.00836164, 0.236617, 0.207475, 0.949156, 0.133333, 1, 0.0111869, 0.227232, 0.201047, 0.952796, 0.2, 1, 0.0158775, 0.212458, 0.191264, 0.958138, 0.266667, 1, 0.0224932, 0.192948, 0.178947, 0.964491, 0.333333, 1, 0.0310614, 0.169389, 0.164946, 0.971152, 0.4, 1, 0.0415107, 0.142559, 0.150098, 0.977458, 0.466667, 1, 0.0536258, 0.113363, 0.135196, 0.98285, 0.533333, 1, 0.067028, 0.0828378, 0.120947, 0.986923, 0.6, 1, 0.0811777, 0.0521471, 0.107929, 0.989466, 0.666667, 1, 0.0953973, 0.0225507, 0.0965713, 0.990487, 0.733333, 1, 0.108905, -0.00462995, 0.0871454, 0.990214, 0.8, 1, 0.12086, -0.0280497, 0.0797782, 0.989061, 0.866667, 1, 0.130403, -0.0463714, 0.0744944, 0.987571, 0.933333, 1, 0.136693, -0.0582875, 0.0712817, 0.986325, 1, 1, 0.13895, -0.0625327, 0.0701796, 0.985828, 1.06667, 1, 0.138077, -0.0623014, 0.0705189, 0.985941, 1.13333, 1, 0.13558, -0.0616243, 0.07149, 0.98626, 1.2, 1, 0.131643, -0.0605302, 0.0730254, 0.986749, 1.26667, 1, 0.12645, -0.0590512, 0.075061, 0.987365, 1.33333, 1, 0.120188, -0.0572209, 0.0775339, 0.988063, 1.4, 1, 0.113043, -0.0550724, 0.0803822, 0.988801, 1.46667, 1, 0.105201, -0.0526371, 0.083543, 0.989537, 1.53333, 1, 0.0968521, -0.0499431, 0.0869525, 0.990235, 1.6, 1, 0.0881827, -0.0470147, 0.0905447, 0.990866, 1.73333, 1, 0.0706311, -0.0405267, 0.0979996, 0.991849, 1.8, 1, 0.0621212, -0.0369894, 0.101716, 0.992183, 1.86667, 1, 0.0540336, -0.0332619, 0.105321, 0.992412, 1.93333, 1, 0.0465497, -0.0293415, 0.108734, 0.992547, 2, 1, 0.0398478, -0.0252205, 0.111867, 0.992604, 2.06667, 1, 0.0341042, -0.0208876, 0.114632, 0.992603, 2.13333, 1, 0.0294913, -0.0163285, 0.116932, 0.992568, 2.2, 1, 0.0261794, -0.011528, 0.118669, 0.992522, 2.26667, 1, 0.0243356, -0.00647191, 0.119739, 0.992486, 2.33333, 1, 0.0241249, -0.0011494, 0.120032, 0.992476, 2.4, 1, 0.0256261, 0.00444441, 0.119765, 0.992462, 2.46667, 1, 0.0285666, 0.0102742, 0.119219, 0.992404, 2.53333, 1, 0.0325824, 0.0162852, 0.118386, 0.992299, 2.6, 1, 0.0373099, 0.0224219, 0.117266, 0.992146, 2.73333, 1, 0.0474447, 0.034853, 0.114207, 0.991711, 2.8, 1, 0.0521257, 0.0410421, 0.112313, 0.991456, 2.86667, 1, 0.0560661, 0.0471483, 0.11022, 0.991204, 2.93333, 1, 0.0589046, 0.0531271, 0.107973, 0.990984, 3, 1, 0.0602801, 0.0589387, 0.105625, 0.990826, 3.46667, 1, 0.0615273, 0.0980653, 0.0862195, 0.989527, 3.66667, 1, 0.059235, 0.11382, 0.0770367, 0.988737, 4.06667, 1, 0.045939, 0.142319, 0.0597355, 0.986948, 4.13333, 1, 0.0423211, 0.146594, 0.0572176, 0.986633, 4.2, 1, 0.038243, 0.150715, 0.0548568, 0.986313, 4.26667, 1, 0.0336834, 0.154673, 0.052673, 0.985985, 4.33333, 1, 0.0286206, 0.158463, 0.0506855, 0.985648, 4.4, 1, 0.0230336, 0.162075, 0.0489135, 0.985296, 4.46667, 1, 0.0169016, 0.1655, 0.0473758, 0.984926, 4.53333, 1, 0.0102038, 0.168731, 0.0460908, 0.984531, 4.6, 1, 0.00291971, 0.171757, 0.0450763, 0.984103, 4.66667, 1, -0.004971, 0.174566, 0.0443493, 0.983634, 4.73333, 1, -0.0134886, 0.177148, 0.0439262, 0.983111, 4.8, 1, -0.022653, 0.179489, 0.0438223, 0.982522, 4.86667, 1, -0.0324845, 0.181575, 0.0440521, 0.981853, 4.93333, 1, -0.0430024, 0.183391, 0.0446287, 0.981085, 5, 1, -0.0542267, 0.184918, 0.0455637, 0.980198, 5.06667, 1, -0.0661767, 0.186138, 0.0468675, 0.979171, 5.13333, 1, -0.0788713, 0.187031, 0.0485484, 0.977978, 5.2, 1, -0.0923294, 0.187573, 0.0506129, 0.976591, 5.26667, 1, -0.106569, 0.187739, 0.0530652, 0.974977, 5.33333, 1, -0.121608, 0.187504, 0.0559068, 0.973102, 5.4, 1, -0.16885, 0.18563, 0.0662276, 0.965736, 5.46667, 1, -0.265652, 0.182496, 0.0936171, 0.941998, 5.53333, 1, -0.388228, 0.176655, 0.142749, 0.893138, 5.6, 1, -0.509014, 0.161357, 0.218105, 0.816884, 5.66667, 1, -0.598292, 0.126889, 0.320565, 0.723315, 5.73333, 1, -0.626969, 0.0670282, 0.443968, 0.636639, 5.8, 1, -0.534342, -0.0218695, 0.591389, 0.603539, 5.86667, 1, -0.483575, -0.0721897, 0.608935, 0.624614, 5.93333, 1, -0.481404, -0.108805, 0.549235, 0.674354, 6, 1, -0.482868, -0.109254, 0.543396, 0.677956, 6.06667, 1, -0.491306, -0.0722894, 0.588087, 0.638394, 6.13333, 1, -0.491488, -0.0535719, 0.620501, 0.608727, 10, 1, -0.491488, -0.0535719, 0.620501, 0.608727)
 tracks/2/type = "rotation_3d"
 tracks/2/imported = true
 tracks/2/enabled = true
 tracks/2/path = NodePath("TailRoot/Skeleton3D:tail_02")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/keys = PackedFloat32Array(0, 1, -0.202883, 0.326695, -0.0720224, 0.920283, 0.0666667, 1, -0.203208, 0.322687, -0.0733358, 0.921521, 0.133333, 1, -0.204036, 0.311349, -0.0769895, 0.924935, 0.2, 1, -0.205114, 0.293672, -0.0825085, 0.929988, 0.266667, 1, -0.206164, 0.270628, -0.0893778, 0.936092, 0.333333, 1, -0.206906, 0.243208, -0.0970668, 0.942666, 0.4, 1, -0.207079, 0.212441, -0.105052, 0.949184, 0.466667, 1, -0.206459, 0.179415, -0.112839, 0.955224, 0.6, 1, -0.202161, 0.111215, -0.126107, 0.96481, 0.666667, 1, -0.198274, 0.0784685, -0.130907, 0.968191, 0.733333, 1, -0.193166, 0.0482923, -0.13417, 0.970749, 0.8, 1, -0.186842, 0.0219511, -0.135767, 0.972716, 0.866667, 1, -0.179331, 0.000708391, -0.135647, 0.974392, 0.933333, 1, -0.170684, -0.0141786, -0.13383, 0.976092, 1, 1, -0.160956, -0.0214569, -0.130387, 0.978076, 1.2, 1, -0.130549, -0.0298255, -0.116144, 0.984164, 1.26667, 1, -0.120688, -0.0322248, -0.110861, 0.985954, 1.33333, 1, -0.111043, -0.0344148, -0.105414, 0.98761, 1.4, 1, -0.101663, -0.0363922, -0.0998683, 0.989124, 1.46667, 1, -0.0925989, -0.0381571, -0.0942859, 0.990495, 1.53333, 1, -0.0838987, -0.0397129, -0.0887308, 0.991721, 1.6, 1, -0.0756129, -0.0410659, -0.0832664, 0.992806, 1.66667, 1, -0.0677914, -0.0422253, -0.0779558, 0.993753, 1.73333, 1, -0.060484, -0.0432026, -0.0728619, 0.994568, 1.8, 1, -0.0537404, -0.0440114, -0.0680468, 0.995261, 1.86667, 1, -0.04761, -0.044667, -0.0635725, 0.99584, 1.93333, 1, -0.0421416, -0.0451854, -0.0595003, 0.996314, 2, 1, -0.0373841, -0.0455835, -0.0558909, 0.996695, 2.06667, 1, -0.0333854, -0.0458782, -0.0528047, 0.996992, 2.13333, 1, -0.0301933, -0.0460853, -0.0503014, 0.997213, 2.2, 1, -0.0278553, -0.0462196, -0.0484405, 0.997367, 2.26667, 1, -0.0264184, -0.0462935, -0.0472809, 0.997459, 2.33333, 1, -0.025929, -0.0463167, -0.0468813, 0.997489, 2.4, 1, -0.0310969, -0.0460148, -0.0472535, 0.997338, 2.46667, 1, -0.0451198, -0.0451683, -0.0482851, 0.996791, 2.53333, 1, -0.0657687, -0.0438549, -0.0498405, 0.995624, 2.6, 1, -0.0908042, -0.0421495, -0.0517811, 0.993628, 2.73333, 1, -0.145075, -0.0379149, -0.0562993, 0.98709, 2.8, 1, -0.169875, -0.0356086, -0.0586547, 0.983074, 2.86667, 1, -0.19022, -0.0333622, -0.06096, 0.979279, 2.93333, 1, -0.203983, -0.0313438, -0.0631567, 0.976432, 3, 1, -0.209053, -0.0297424, -0.0652037, 0.975275, 3.06667, 1, -0.208488, -0.0284081, -0.0672205, 0.975299, 3.13333, 1, -0.2068, -0.0270622, -0.0693467, 0.975547, 3.2, 1, -0.204044, -0.025715, -0.071579, 0.976003, 3.26667, 1, -0.200277, -0.0243769, -0.0739144, 0.976643, 3.33333, 1, -0.195551, -0.0230585, -0.0763494, 0.977445, 3.4, 1, -0.189922, -0.0217702, -0.0788801, 0.978383, 3.46667, 1, -0.183445, -0.0205225, -0.0815025, 0.979431, 3.53333, 1, -0.176173, -0.0193253, -0.0842118, 0.98056, 3.6, 1, -0.168162, -0.0181881, -0.0870026, 0.981744, 3.66667, 1, -0.159467, -0.0171199, -0.0898691, 0.982955, 3.73333, 1, -0.150145, -0.0161291, -0.0928048, 0.984167, 3.8, 1, -0.140251, -0.0152233, -0.0958022, 0.985353, 3.86667, 1, -0.129844, -0.0144092, -0.0988535, 0.986489, 3.93333, 1, -0.118981, -0.0136926, -0.10195, 0.987554, 4, 1, -0.10772, -0.0130781, -0.105083, 0.988526, 4.06667, 1, -0.0961217, -0.0125695, -0.108242, 0.989387, 4.13333, 1, -0.0842446, -0.0121692, -0.111417, 0.990122, 4.2, 1, -0.0721494, -0.0118784, -0.114597, 0.990717, 4.53333, 1, -0.0105341, -0.0120185, -0.130167, 0.991363, 4.6, 1, 0.00158788, -0.0123374, -0.13313, 0.991021, 4.66667, 1, 0.0135, -0.012738, -0.136014, 0.990533, 4.73333, 1, 0.0251414, -0.0132113, -0.138808, 0.989912, 4.8, 1, 0.0364518, -0.0137473, -0.141498, 0.989172, 4.86667, 1, 0.0473712, -0.0143349, -0.144073, 0.988329, 4.93333, 1, 0.0578403, -0.0149623, -0.146522, 0.987402, 5, 1, 0.0677999, -0.0156166, -0.148834, 0.986412, 5.06667, 1, 0.0771919, -0.0162847, -0.150996, 0.985381, 5.13333, 1, 0.0859583, -0.0169527, -0.153, 0.984335, 5.2, 1, 0.0940419, -0.0176066, -0.154833, 0.983297, 5.26667, 1, 0.101386, -0.0182322, -0.156487, 0.982293, 5.33333, 1, 0.107933, -0.0188152, -0.157951, 0.98135, 5.4, 1, 0.113628, -0.0193418, -0.159215, 0.980492, 5.46667, 1, 0.118414, -0.0197984, -0.160271, 0.979745, 5.53333, 1, 0.122235, -0.0201725, -0.161109, 0.97913, 5.6, 1, 0.125034, -0.020452, -0.161719, 0.97867, 5.66667, 1, 0.126756, -0.0206263, -0.162092, 0.978383, 5.73333, 1, 0.127343, -0.0206862, -0.162219, 0.978285, 5.8, 1, 0.121799, -0.0402488, -0.00266661, 0.991735, 5.86667, 1, 0.122601, -0.04632, 0.0442755, 0.990385, 5.93333, 1, 0.124756, -0.0385495, -0.0165409, 0.9913, 6, 1, 0.127449, -0.0311157, -0.0764054, 0.988408, 6.06667, 1, 0.124018, -0.0390556, -0.0115138, 0.991444, 6.13333, 1, 0.122297, -0.0474865, 0.0532738, 0.989924, 9.33333, 1, 0.122297, -0.0474865, 0.0532738, 0.989924)
+tracks/2/keys = PackedFloat32Array(0, 1, -0.202883, 0.326695, -0.0720224, 0.920283, 0.0666667, 1, -0.203208, 0.322687, -0.0733358, 0.921521, 0.133333, 1, -0.204036, 0.311349, -0.0769895, 0.924935, 0.2, 1, -0.205114, 0.293672, -0.0825085, 0.929988, 0.266667, 1, -0.206164, 0.270628, -0.0893778, 0.936092, 0.333333, 1, -0.206906, 0.243208, -0.0970668, 0.942666, 0.4, 1, -0.207079, 0.212441, -0.105052, 0.949184, 0.466667, 1, -0.206459, 0.179415, -0.112839, 0.955224, 0.6, 1, -0.202161, 0.111215, -0.126107, 0.96481, 0.666667, 1, -0.198274, 0.0784685, -0.130907, 0.968191, 0.733333, 1, -0.193166, 0.0482923, -0.13417, 0.970749, 0.8, 1, -0.186842, 0.0219511, -0.135767, 0.972716, 0.866667, 1, -0.179331, 0.000708391, -0.135647, 0.974392, 0.933333, 1, -0.170684, -0.0141786, -0.13383, 0.976092, 1, 1, -0.160956, -0.0214569, -0.130387, 0.978076, 1.2, 1, -0.130549, -0.0298255, -0.116144, 0.984164, 1.26667, 1, -0.120688, -0.0322248, -0.110861, 0.985954, 1.33333, 1, -0.111043, -0.0344148, -0.105414, 0.98761, 1.4, 1, -0.101663, -0.0363922, -0.0998683, 0.989124, 1.46667, 1, -0.0925989, -0.0381571, -0.0942859, 0.990495, 1.53333, 1, -0.0838987, -0.0397129, -0.0887308, 0.991721, 1.6, 1, -0.0756129, -0.0410659, -0.0832664, 0.992806, 1.66667, 1, -0.0677914, -0.0422253, -0.0779558, 0.993753, 1.73333, 1, -0.060484, -0.0432026, -0.0728619, 0.994568, 1.8, 1, -0.0537404, -0.0440114, -0.0680468, 0.995261, 1.86667, 1, -0.04761, -0.044667, -0.0635725, 0.99584, 1.93333, 1, -0.0421416, -0.0451854, -0.0595003, 0.996314, 2, 1, -0.0373841, -0.0455835, -0.0558909, 0.996695, 2.06667, 1, -0.0333854, -0.0458782, -0.0528047, 0.996992, 2.13333, 1, -0.0301933, -0.0460853, -0.0503014, 0.997213, 2.2, 1, -0.0278553, -0.0462196, -0.0484405, 0.997367, 2.26667, 1, -0.0264184, -0.0462935, -0.0472809, 0.997459, 2.33333, 1, -0.025929, -0.0463167, -0.0468813, 0.997489, 2.4, 1, -0.0310969, -0.0460148, -0.0472535, 0.997338, 2.46667, 1, -0.0451198, -0.0451683, -0.0482851, 0.996791, 2.53333, 1, -0.0657687, -0.0438549, -0.0498405, 0.995624, 2.6, 1, -0.0908042, -0.0421495, -0.0517811, 0.993628, 2.73333, 1, -0.145075, -0.0379149, -0.0562993, 0.98709, 2.8, 1, -0.169875, -0.0356086, -0.0586547, 0.983074, 2.86667, 1, -0.19022, -0.0333622, -0.06096, 0.979279, 2.93333, 1, -0.203983, -0.0313438, -0.0631567, 0.976432, 3, 1, -0.209053, -0.0297424, -0.0652037, 0.975275, 3.06667, 1, -0.208488, -0.0284081, -0.0672205, 0.975299, 3.13333, 1, -0.2068, -0.0270622, -0.0693467, 0.975547, 3.2, 1, -0.204044, -0.025715, -0.071579, 0.976003, 3.26667, 1, -0.200277, -0.0243769, -0.0739144, 0.976643, 3.33333, 1, -0.195551, -0.0230585, -0.0763494, 0.977445, 3.4, 1, -0.189922, -0.0217702, -0.0788801, 0.978383, 3.46667, 1, -0.183445, -0.0205225, -0.0815025, 0.979431, 3.53333, 1, -0.176173, -0.0193253, -0.0842118, 0.98056, 3.6, 1, -0.168162, -0.0181881, -0.0870026, 0.981744, 3.66667, 1, -0.159467, -0.0171199, -0.0898691, 0.982955, 3.73333, 1, -0.150145, -0.0161291, -0.0928048, 0.984167, 3.8, 1, -0.140251, -0.0152233, -0.0958022, 0.985353, 3.86667, 1, -0.129844, -0.0144092, -0.0988535, 0.986489, 3.93333, 1, -0.118981, -0.0136926, -0.10195, 0.987554, 4, 1, -0.10772, -0.0130781, -0.105083, 0.988526, 4.06667, 1, -0.0961217, -0.0125695, -0.108242, 0.989387, 4.13333, 1, -0.0842446, -0.0121692, -0.111417, 0.990122, 4.2, 1, -0.0721494, -0.0118784, -0.114597, 0.990717, 4.53333, 1, -0.0105341, -0.0120185, -0.130167, 0.991363, 4.6, 1, 0.00158788, -0.0123374, -0.13313, 0.991021, 4.66667, 1, 0.0135, -0.012738, -0.136014, 0.990533, 4.73333, 1, 0.0251414, -0.0132113, -0.138808, 0.989912, 4.8, 1, 0.0364518, -0.0137473, -0.141498, 0.989172, 4.86667, 1, 0.0473712, -0.0143349, -0.144073, 0.988329, 4.93333, 1, 0.0578403, -0.0149623, -0.146522, 0.987402, 5, 1, 0.0677999, -0.0156166, -0.148834, 0.986412, 5.06667, 1, 0.0771919, -0.0162847, -0.150996, 0.985381, 5.13333, 1, 0.0859583, -0.0169527, -0.153, 0.984335, 5.2, 1, 0.0940419, -0.0176066, -0.154833, 0.983297, 5.26667, 1, 0.101386, -0.0182322, -0.156487, 0.982293, 5.33333, 1, 0.107933, -0.0188152, -0.157951, 0.98135, 5.4, 1, 0.113628, -0.0193418, -0.159215, 0.980492, 5.46667, 1, 0.118414, -0.0197984, -0.160271, 0.979745, 5.53333, 1, 0.122235, -0.0201725, -0.161109, 0.97913, 5.6, 1, 0.125034, -0.020452, -0.161719, 0.97867, 5.66667, 1, 0.126756, -0.0206263, -0.162092, 0.978383, 5.73333, 1, 0.127343, -0.0206862, -0.162219, 0.978285, 5.8, 1, 0.121799, -0.0402488, -0.00266661, 0.991735, 5.86667, 1, 0.122601, -0.04632, 0.0442755, 0.990385, 5.93333, 1, 0.124756, -0.0385495, -0.0165409, 0.9913, 6, 1, 0.127449, -0.0311157, -0.0764054, 0.988408, 6.06667, 1, 0.124018, -0.0390556, -0.0115138, 0.991444, 6.13333, 1, 0.122297, -0.0474865, 0.0532738, 0.989924, 10, 1, 0.122297, -0.0474865, 0.0532738, 0.989924)
 tracks/3/type = "rotation_3d"
 tracks/3/imported = true
 tracks/3/enabled = true
 tracks/3/path = NodePath("TailRoot/Skeleton3D:tail_03")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, -0.25449, 0.32211, -0.0903424, 0.907369, 0.0666667, 1, -0.255502, 0.318161, -0.091501, 0.908361, 0.133333, 1, -0.258204, 0.306978, -0.0947247, 0.911111, 0.2, 1, -0.262034, 0.289521, -0.0995943, 0.915203, 0.266667, 1, -0.266384, 0.266726, -0.10565, 0.920182, 0.333333, 1, -0.27064, 0.239544, -0.112411, 0.925601, 0.4, 1, -0.274211, 0.208969, -0.119387, 0.931068, 0.466667, 1, -0.276565, 0.176051, -0.126103, 0.936278, 0.6, 1, -0.275891, 0.107702, -0.136998, 0.94526, 0.666667, 1, -0.272237, 0.0746585, -0.140425, 0.948996, 0.733333, 1, -0.266114, 0.0440262, -0.142112, 0.952392, 0.8, 1, -0.257433, 0.0170773, -0.141862, 0.955673, 0.866667, 1, -0.246167, -0.00490374, -0.139572, 0.959113, 0.933333, 1, -0.232318, -0.0206241, -0.135238, 0.962971, 1, 1, -0.21589, -0.0287803, -0.128969, 0.967435, 1.06667, 1, -0.19742, -0.0326307, -0.121933, 0.972159, 1.13333, 1, -0.177765, -0.036267, -0.115173, 0.976637, 1.26667, 1, -0.136828, -0.0427022, -0.102563, 0.984345, 1.33333, 1, -0.116529, -0.0454378, -0.0967689, 0.987417, 1.4, 1, -0.0970091, -0.0478294, -0.09136, 0.989927, 1.46667, 1, -0.0787701, -0.0498723, -0.086373, 0.991891, 1.53333, 1, -0.062315, -0.0515683, -0.081846, 0.993357, 1.6, 1, -0.048145, -0.0529246, -0.0778165, 0.994397, 1.66667, 1, -0.0367584, -0.0539501, -0.0743213, 0.995095, 1.73333, 1, -0.0286505, -0.0546534, -0.0713952, 0.995538, 1.8, 1, -0.0243137, -0.0550398, -0.0690703, 0.995796, 1.86667, 1, -0.0236794, -0.0551916, -0.067336, 0.995921, 1.93333, 1, -0.0238575, -0.0555615, -0.0657938, 0.996, 2, 1, -0.0247115, -0.0561285, -0.063955, 0.996067, 2.06667, 1, -0.0266604, -0.05679, -0.0613514, 0.996143, 2.13333, 1, -0.0301225, -0.0574561, -0.0575158, 0.996235, 2.2, 1, -0.0355168, -0.0580604, -0.0519815, 0.996326, 2.26667, 1, -0.0432636, -0.0585752, -0.0442803, 0.996362, 2.33333, 1, -0.0537858, -0.0590311, -0.0339429, 0.996228, 2.4, 1, -0.0681496, -0.0580762, -0.0206511, 0.995769, 2.46667, 1, -0.0863919, -0.0549463, -0.00489263, 0.994733, 2.53333, 1, -0.107364, -0.0505492, 0.0125769, 0.992854, 2.66667, 1, -0.152596, -0.0409149, 0.0493064, 0.98621, 2.73333, 1, -0.174253, -0.0367218, 0.0666971, 0.981753, 2.8, 1, -0.193467, -0.0333362, 0.082082, 0.977099, 2.86667, 1, -0.208868, -0.0308617, 0.0943952, 0.972888, 2.93333, 1, -0.219095, -0.0293262, 0.102561, 0.969855, 3, 1, -0.222802, -0.0287819, 0.105516, 0.968709, 3.06667, 1, -0.221045, -0.0293433, 0.104466, 0.969209, 3.13333, 1, -0.215966, -0.0308841, 0.101549, 0.970614, 3.2, 1, -0.207858, -0.0332108, 0.0971303, 0.972758, 3.26667, 1, -0.197007, -0.0361446, 0.0915799, 0.975446, 3.33333, 1, -0.183701, -0.0395077, 0.0852705, 0.978479, 3.4, 1, -0.168223, -0.0431103, 0.0785676, 0.981667, 3.46667, 1, -0.15085, -0.0467413, 0.0718236, 0.984836, 3.53333, 1, -0.131855, -0.0501611, 0.0653702, 0.987839, 3.6, 1, -0.111503, -0.0530967, 0.0595124, 0.990559, 3.66667, 1, -0.0900526, -0.0552404, 0.0545228, 0.992908, 3.8, 1, -0.0451174, -0.0577105, 0.0472634, 0.996193, 3.86667, 1, -0.0225881, -0.0583984, 0.044487, 0.997046, 3.93333, 1, -0.000707209, -0.0587895, 0.0419146, 0.99739, 4, 1, 0.0200056, -0.0589542, 0.0392778, 0.997287, 4.06667, 1, 0.0390322, -0.0589762, 0.0363147, 0.996835, 4.13333, 1, 0.0558573, -0.0589483, 0.0327709, 0.996158, 4.2, 1, 0.0699688, -0.0589652, 0.0283992, 0.9954, 4.26667, 1, 0.0808572, -0.0591146, 0.0229581, 0.994706, 4.33333, 1, 0.0880131, -0.0594657, 0.016209, 0.994211, 4.4, 1, 0.0925491, -0.0581242, 0.0079418, 0.993979, 4.46667, 1, 0.0960804, -0.0534985, -0.00173423, 0.993933, 4.53333, 1, 0.0988434, -0.0460853, -0.0125567, 0.993956, 4.6, 1, 0.10106, -0.0363793, -0.0242402, 0.993919, 4.66667, 1, 0.102927, -0.0248774, -0.0364824, 0.993708, 4.73333, 1, 0.104616, -0.0120808, -0.0489719, 0.993233, 4.86667, 1, 0.107972, 0.0153643, -0.0734371, 0.991319, 4.93333, 1, 0.109812, 0.0289864, -0.0847981, 0.989904, 5, 1, 0.111822, 0.041854, -0.0951854, 0.988273, 5.06667, 1, 0.114014, 0.0534524, -0.10432, 0.98654, 5.13333, 1, 0.116381, 0.0632696, -0.111935, 0.984847, 5.2, 1, 0.118907, 0.0707982, -0.11777, 0.983351, 5.26667, 1, 0.121578, 0.0755349, -0.121563, 0.98221, 5.33333, 1, 0.124397, 0.0769814, -0.123043, 0.98156, 5.4, 1, 0.127238, 0.0731106, -0.122593, 0.981548, 5.46667, 1, 0.129727, 0.0630188, -0.119238, 0.982335, 5.53333, 1, 0.13164, 0.0479051, -0.110646, 0.983938, 5.6, 1, 0.13298, 0.0289739, -0.0944817, 0.98618, 5.66667, 1, 0.13403, 0.00742597, -0.0684373, 0.988583, 5.73333, 1, 0.135357, -0.0155396, -0.0302796, 0.990212, 5.8, 1, 0.137769, -0.0387012, 0.0220685, 0.989462, 5.86667, 1, 0.138487, -0.0591246, 0.102097, 0.983312, 5.93333, 1, 0.132147, -0.0673984, 0.179901, 0.972435, 6, 1, 0.135173, -0.0583275, 0.117419, 0.98211, 6.06667, 1, 0.139678, -0.0499555, 0.0541363, 0.987453, 9.33333, 1, 0.139678, -0.0499555, 0.0541363, 0.987453)
+tracks/3/keys = PackedFloat32Array(0, 1, -0.25449, 0.32211, -0.0903424, 0.907369, 0.0666667, 1, -0.255502, 0.318161, -0.091501, 0.908361, 0.133333, 1, -0.258204, 0.306978, -0.0947247, 0.911111, 0.2, 1, -0.262034, 0.289521, -0.0995943, 0.915203, 0.266667, 1, -0.266384, 0.266726, -0.10565, 0.920182, 0.333333, 1, -0.27064, 0.239544, -0.112411, 0.925601, 0.4, 1, -0.274211, 0.208969, -0.119387, 0.931068, 0.466667, 1, -0.276565, 0.176051, -0.126103, 0.936278, 0.6, 1, -0.275891, 0.107702, -0.136998, 0.94526, 0.666667, 1, -0.272237, 0.0746585, -0.140425, 0.948996, 0.733333, 1, -0.266114, 0.0440262, -0.142112, 0.952392, 0.8, 1, -0.257433, 0.0170773, -0.141862, 0.955673, 0.866667, 1, -0.246167, -0.00490374, -0.139572, 0.959113, 0.933333, 1, -0.232318, -0.0206241, -0.135238, 0.962971, 1, 1, -0.21589, -0.0287803, -0.128969, 0.967435, 1.06667, 1, -0.19742, -0.0326307, -0.121933, 0.972159, 1.13333, 1, -0.177765, -0.036267, -0.115173, 0.976637, 1.26667, 1, -0.136828, -0.0427022, -0.102563, 0.984345, 1.33333, 1, -0.116529, -0.0454378, -0.0967689, 0.987417, 1.4, 1, -0.0970091, -0.0478294, -0.09136, 0.989927, 1.46667, 1, -0.0787701, -0.0498723, -0.086373, 0.991891, 1.53333, 1, -0.062315, -0.0515683, -0.081846, 0.993357, 1.6, 1, -0.048145, -0.0529246, -0.0778165, 0.994397, 1.66667, 1, -0.0367584, -0.0539501, -0.0743213, 0.995095, 1.73333, 1, -0.0286505, -0.0546534, -0.0713952, 0.995538, 1.8, 1, -0.0243137, -0.0550398, -0.0690703, 0.995796, 1.86667, 1, -0.0236794, -0.0551916, -0.067336, 0.995921, 1.93333, 1, -0.0238575, -0.0555615, -0.0657938, 0.996, 2, 1, -0.0247115, -0.0561285, -0.063955, 0.996067, 2.06667, 1, -0.0266604, -0.05679, -0.0613514, 0.996143, 2.13333, 1, -0.0301225, -0.0574561, -0.0575158, 0.996235, 2.2, 1, -0.0355168, -0.0580604, -0.0519815, 0.996326, 2.26667, 1, -0.0432636, -0.0585752, -0.0442803, 0.996362, 2.33333, 1, -0.0537858, -0.0590311, -0.0339429, 0.996228, 2.4, 1, -0.0681496, -0.0580762, -0.0206511, 0.995769, 2.46667, 1, -0.0863919, -0.0549463, -0.00489263, 0.994733, 2.53333, 1, -0.107364, -0.0505492, 0.0125769, 0.992854, 2.66667, 1, -0.152596, -0.0409149, 0.0493064, 0.98621, 2.73333, 1, -0.174253, -0.0367218, 0.0666971, 0.981753, 2.8, 1, -0.193467, -0.0333362, 0.082082, 0.977099, 2.86667, 1, -0.208868, -0.0308617, 0.0943952, 0.972888, 2.93333, 1, -0.219095, -0.0293262, 0.102561, 0.969855, 3, 1, -0.222802, -0.0287819, 0.105516, 0.968709, 3.06667, 1, -0.221045, -0.0293433, 0.104466, 0.969209, 3.13333, 1, -0.215966, -0.0308841, 0.101549, 0.970614, 3.2, 1, -0.207858, -0.0332108, 0.0971303, 0.972758, 3.26667, 1, -0.197007, -0.0361446, 0.0915799, 0.975446, 3.33333, 1, -0.183701, -0.0395077, 0.0852705, 0.978479, 3.4, 1, -0.168223, -0.0431103, 0.0785676, 0.981667, 3.46667, 1, -0.15085, -0.0467413, 0.0718236, 0.984836, 3.53333, 1, -0.131855, -0.0501611, 0.0653702, 0.987839, 3.6, 1, -0.111503, -0.0530967, 0.0595124, 0.990559, 3.66667, 1, -0.0900526, -0.0552404, 0.0545228, 0.992908, 3.8, 1, -0.0451174, -0.0577105, 0.0472634, 0.996193, 3.86667, 1, -0.0225881, -0.0583984, 0.044487, 0.997046, 3.93333, 1, -0.000707209, -0.0587895, 0.0419146, 0.99739, 4, 1, 0.0200056, -0.0589542, 0.0392778, 0.997287, 4.06667, 1, 0.0390322, -0.0589762, 0.0363147, 0.996835, 4.13333, 1, 0.0558573, -0.0589483, 0.0327709, 0.996158, 4.2, 1, 0.0699688, -0.0589652, 0.0283992, 0.9954, 4.26667, 1, 0.0808572, -0.0591146, 0.0229581, 0.994706, 4.33333, 1, 0.0880131, -0.0594657, 0.016209, 0.994211, 4.4, 1, 0.0925491, -0.0581242, 0.0079418, 0.993979, 4.46667, 1, 0.0960804, -0.0534985, -0.00173423, 0.993933, 4.53333, 1, 0.0988434, -0.0460853, -0.0125567, 0.993956, 4.6, 1, 0.10106, -0.0363793, -0.0242402, 0.993919, 4.66667, 1, 0.102927, -0.0248774, -0.0364824, 0.993708, 4.73333, 1, 0.104616, -0.0120808, -0.0489719, 0.993233, 4.86667, 1, 0.107972, 0.0153643, -0.0734371, 0.991319, 4.93333, 1, 0.109812, 0.0289864, -0.0847981, 0.989904, 5, 1, 0.111822, 0.041854, -0.0951854, 0.988273, 5.06667, 1, 0.114014, 0.0534524, -0.10432, 0.98654, 5.13333, 1, 0.116381, 0.0632696, -0.111935, 0.984847, 5.2, 1, 0.118907, 0.0707982, -0.11777, 0.983351, 5.26667, 1, 0.121578, 0.0755349, -0.121563, 0.98221, 5.33333, 1, 0.124397, 0.0769814, -0.123043, 0.98156, 5.4, 1, 0.127238, 0.0731106, -0.122593, 0.981548, 5.46667, 1, 0.129727, 0.0630188, -0.119238, 0.982335, 5.53333, 1, 0.13164, 0.0479051, -0.110646, 0.983938, 5.6, 1, 0.13298, 0.0289739, -0.0944817, 0.98618, 5.66667, 1, 0.13403, 0.00742597, -0.0684373, 0.988583, 5.73333, 1, 0.135357, -0.0155396, -0.0302796, 0.990212, 5.8, 1, 0.137769, -0.0387012, 0.0220685, 0.989462, 5.86667, 1, 0.138487, -0.0591246, 0.102097, 0.983312, 5.93333, 1, 0.132147, -0.0673984, 0.179901, 0.972435, 6, 1, 0.135173, -0.0583275, 0.117419, 0.98211, 6.06667, 1, 0.139678, -0.0499555, 0.0541363, 0.987453, 10, 1, 0.139678, -0.0499555, 0.0541363, 0.987453)
 tracks/4/type = "rotation_3d"
 tracks/4/imported = true
 tracks/4/enabled = true
 tracks/4/path = NodePath("TailRoot/Skeleton3D:tail_04")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
-tracks/4/keys = PackedFloat32Array(0, 1, -0.161078, 0.329617, -0.0571814, 0.928513, 0.0666667, 1, -0.161181, 0.325651, -0.0586312, 0.929803, 0.133333, 1, -0.161401, 0.314431, -0.0626684, 0.933357, 0.2, 1, -0.161572, 0.29693, -0.0687764, 0.938614, 0.266667, 1, -0.161507, 0.274102, -0.0763987, 0.944959, 0.333333, 1, -0.161021, 0.246922, -0.0849669, 0.951779, 0.4, 1, -0.159951, 0.216405, -0.0939269, 0.958521, 0.466667, 1, -0.158171, 0.18363, -0.102763, 0.964729, 0.533333, 1, -0.155596, 0.149735, -0.111017, 0.970074, 0.6, 1, -0.152189, 0.115913, -0.118308, 0.974375, 0.666667, 1, -0.147953, 0.0833959, -0.124342, 0.977596, 0.733333, 1, -0.14293, 0.0534419, -0.128913, 0.979845, 0.8, 1, -0.13719, 0.0273155, -0.131905, 0.981343, 0.866667, 1, -0.130821, 0.00627741, -0.133273, 0.982387, 0.933333, 1, -0.123918, -0.00842178, -0.133032, 0.983299, 1, 1, -0.116581, -0.0155414, -0.131223, 0.984352, 1.06667, 1, -0.109408, -0.0182351, -0.128547, 0.985481, 1.13333, 1, -0.102925, -0.0205103, -0.125709, 0.9865, 1.2, 1, -0.0971167, -0.0224134, -0.122763, 0.987419, 1.26667, 1, -0.0919684, -0.0239922, -0.119763, 0.988242, 1.33333, 1, -0.0874644, -0.0252954, -0.116759, 0.988978, 1.4, 1, -0.0835885, -0.0263727, -0.113802, 0.98963, 1.46667, 1, -0.0803239, -0.0272739, -0.110938, 0.9902, 1.53333, 1, -0.0776528, -0.0280492, -0.108214, 0.990693, 1.6, 1, -0.0755572, -0.0287484, -0.105676, 0.991109, 1.66667, 1, -0.0740181, -0.029421, -0.103369, 0.991449, 1.73333, 1, -0.0730162, -0.0301157, -0.101337, 0.991712, 1.8, 1, -0.0725318, -0.0308806, -0.0996249, 0.991897, 1.86667, 1, -0.0728943, -0.0317266, -0.0982769, 0.991979, 1.93333, 1, -0.0759624, -0.0324826, -0.0971179, 0.991838, 2, 1, -0.0815085, -0.0331575, -0.0956388, 0.991519, 2.06667, 1, -0.0889292, -0.0338074, -0.093305, 0.991082, 2.13333, 1, -0.0976213, -0.0345071, -0.0895809, 0.990583, 2.2, 1, -0.106982, -0.0353517, -0.0839287, 0.990081, 2.26667, 1, -0.116412, -0.0364522, -0.0758085, 0.989633, 2.33333, 1, -0.12531, -0.037925, -0.0646772, 0.989281, 2.4, 1, -0.133152, -0.0387874, -0.0500517, 0.989071, 2.46667, 1, -0.139924, -0.0382458, -0.0324789, 0.98889, 2.53333, 1, -0.145789, -0.0366627, -0.0129794, 0.988551, 2.6, 1, -0.150873, -0.0343675, 0.00740016, 0.987928, 2.66667, 1, -0.155258, -0.0316645, 0.0275934, 0.986981, 2.73333, 1, -0.158969, -0.0288395, 0.0465227, 0.985765, 2.8, 1, -0.161985, -0.0261658, 0.0631085, 0.984426, 2.86667, 1, -0.164242, -0.0239113, 0.0762755, 0.983176, 2.93333, 1, -0.165654, -0.0223469, 0.0849555, 0.982264, 3, 1, -0.166139, -0.0217579, 0.0880849, 0.981919, 3.06667, 1, -0.16451, -0.0223876, 0.087102, 0.982267, 3.13333, 1, -0.159763, -0.0241022, 0.0843803, 0.983247, 3.2, 1, -0.152113, -0.0266588, 0.080272, 0.984737, 3.26667, 1, -0.141771, -0.0298285, 0.0751373, 0.986593, 3.33333, 1, -0.128947, -0.0333838, 0.0693367, 0.988661, 3.4, 1, -0.113844, -0.0370881, 0.0632228, 0.990791, 3.46667, 1, -0.0966578, -0.040687, 0.0571331, 0.992843, 3.53333, 1, -0.0775769, -0.0439015, 0.051382, 0.994693, 3.6, 1, -0.0567807, -0.0464231, 0.0462536, 0.996234, 3.66667, 1, -0.0344421, -0.0479111, 0.0419953, 0.997374, 3.73333, 1, -0.0107997, -0.0486455, 0.0386896, 0.998008, 3.8, 1, 0.0135146, -0.0491616, 0.0360984, 0.998047, 3.86667, 1, 0.0377382, -0.0494848, 0.033955, 0.997484, 3.93333, 1, 0.0611085, -0.049655, 0.0319938, 0.996382, 4, 1, 0.0828664, -0.0497273, 0.0299524, 0.994868, 4.06667, 1, 0.10226, -0.0497698, 0.0275734, 0.993129, 4.13333, 1, 0.118547, -0.0498573, 0.0246049, 0.991391, 4.2, 1, 0.130989, -0.0500619, 0.0207992, 0.989901, 4.26667, 1, 0.138855, -0.0504402, 0.0159111, 0.988899, 4.33333, 1, 0.141406, -0.0510172, 0.00969382, 0.988589, 4.4, 1, 0.140821, -0.0499667, 0.00194941, 0.988771, 4.46667, 1, 0.139873, -0.0457767, -0.0071648, 0.989085, 4.53333, 1, 0.138706, -0.0389091, -0.0173598, 0.989417, 4.6, 1, 0.137453, -0.0298289, -0.0283408, 0.989653, 4.66667, 1, 0.136229, -0.0190061, -0.03981, 0.989695, 4.73333, 1, 0.13513, -0.00691631, -0.0514688, 0.989466, 4.86667, 1, 0.133537, 0.0191356, -0.0741814, 0.988078, 4.93333, 1, 0.133092, 0.0321249, -0.0846669, 0.986958, 5, 1, 0.132866, 0.0444397, -0.0942108, 0.985645, 5.06667, 1, 0.132818, 0.0555936, -0.102557, 0.984251, 5.13333, 1, 0.132889, 0.0651031, -0.10946, 0.982914, 5.2, 1, 0.133013, 0.0724875, -0.114684, 0.981784, 5.26667, 1, 0.133124, 0.0772685, -0.117994, 0.981012, 5.33333, 1, 0.133169, 0.0789685, -0.119152, 0.980731, 5.4, 1, 0.134331, 0.0770085, -0.118974, 0.98075, 5.46667, 1, 0.137175, 0.0709527, -0.1177, 0.980967, 5.53333, 1, 0.140769, 0.0605494, -0.114189, 0.98157, 5.6, 1, 0.144256, 0.0455586, -0.107269, 0.982653, 5.66667, 1, 0.146902, 0.0257358, -0.0957771, 0.984167, 5.73333, 1, 0.148141, 0.000802251, -0.0786036, 0.985837, 5.8, 1, 0.147639, -0.0295906, -0.0547627, 0.987081, 5.86667, 1, 0.148699, -0.0502141, 0.0575393, 0.985929, 5.93333, 1, 0.145727, -0.0548885, 0.0915356, 0.983551, 6, 1, 0.147463, -0.0497165, 0.0575144, 0.986142, 6.06667, 1, 0.149596, -0.0447278, 0.0233504, 0.987459, 6.13333, 1, 0.149322, -0.0461394, 0.0322245, 0.987186, 6.2, 1, 0.14889, -0.0487813, 0.0486866, 0.986449, 6.26667, 1, 0.148699, -0.0502141, 0.0575392, 0.985929, 9.33333, 1, 0.148699, -0.0502141, 0.0575392, 0.985929)
+tracks/4/keys = PackedFloat32Array(0, 1, -0.161078, 0.329617, -0.0571814, 0.928513, 0.0666667, 1, -0.161181, 0.325651, -0.0586312, 0.929803, 0.133333, 1, -0.161401, 0.314431, -0.0626684, 0.933357, 0.2, 1, -0.161572, 0.29693, -0.0687764, 0.938614, 0.266667, 1, -0.161507, 0.274102, -0.0763987, 0.944959, 0.333333, 1, -0.161021, 0.246922, -0.0849669, 0.951779, 0.4, 1, -0.159951, 0.216405, -0.0939269, 0.958521, 0.466667, 1, -0.158171, 0.18363, -0.102763, 0.964729, 0.533333, 1, -0.155596, 0.149735, -0.111017, 0.970074, 0.6, 1, -0.152189, 0.115913, -0.118308, 0.974375, 0.666667, 1, -0.147953, 0.0833959, -0.124342, 0.977596, 0.733333, 1, -0.14293, 0.0534419, -0.128913, 0.979845, 0.8, 1, -0.13719, 0.0273155, -0.131905, 0.981343, 0.866667, 1, -0.130821, 0.00627741, -0.133273, 0.982387, 0.933333, 1, -0.123918, -0.00842178, -0.133032, 0.983299, 1, 1, -0.116581, -0.0155414, -0.131223, 0.984352, 1.06667, 1, -0.109408, -0.0182351, -0.128547, 0.985481, 1.13333, 1, -0.102925, -0.0205103, -0.125709, 0.9865, 1.2, 1, -0.0971167, -0.0224134, -0.122763, 0.987419, 1.26667, 1, -0.0919684, -0.0239922, -0.119763, 0.988242, 1.33333, 1, -0.0874644, -0.0252954, -0.116759, 0.988978, 1.4, 1, -0.0835885, -0.0263727, -0.113802, 0.98963, 1.46667, 1, -0.0803239, -0.0272739, -0.110938, 0.9902, 1.53333, 1, -0.0776528, -0.0280492, -0.108214, 0.990693, 1.6, 1, -0.0755572, -0.0287484, -0.105676, 0.991109, 1.66667, 1, -0.0740181, -0.029421, -0.103369, 0.991449, 1.73333, 1, -0.0730162, -0.0301157, -0.101337, 0.991712, 1.8, 1, -0.0725318, -0.0308806, -0.0996249, 0.991897, 1.86667, 1, -0.0728943, -0.0317266, -0.0982769, 0.991979, 1.93333, 1, -0.0759624, -0.0324826, -0.0971179, 0.991838, 2, 1, -0.0815085, -0.0331575, -0.0956388, 0.991519, 2.06667, 1, -0.0889292, -0.0338074, -0.093305, 0.991082, 2.13333, 1, -0.0976213, -0.0345071, -0.0895809, 0.990583, 2.2, 1, -0.106982, -0.0353517, -0.0839287, 0.990081, 2.26667, 1, -0.116412, -0.0364522, -0.0758085, 0.989633, 2.33333, 1, -0.12531, -0.037925, -0.0646772, 0.989281, 2.4, 1, -0.133152, -0.0387874, -0.0500517, 0.989071, 2.46667, 1, -0.139924, -0.0382458, -0.0324789, 0.98889, 2.53333, 1, -0.145789, -0.0366627, -0.0129794, 0.988551, 2.6, 1, -0.150873, -0.0343675, 0.00740016, 0.987928, 2.66667, 1, -0.155258, -0.0316645, 0.0275934, 0.986981, 2.73333, 1, -0.158969, -0.0288395, 0.0465227, 0.985765, 2.8, 1, -0.161985, -0.0261658, 0.0631085, 0.984426, 2.86667, 1, -0.164242, -0.0239113, 0.0762755, 0.983176, 2.93333, 1, -0.165654, -0.0223469, 0.0849555, 0.982264, 3, 1, -0.166139, -0.0217579, 0.0880849, 0.981919, 3.06667, 1, -0.16451, -0.0223876, 0.087102, 0.982267, 3.13333, 1, -0.159763, -0.0241022, 0.0843803, 0.983247, 3.2, 1, -0.152113, -0.0266588, 0.080272, 0.984737, 3.26667, 1, -0.141771, -0.0298285, 0.0751373, 0.986593, 3.33333, 1, -0.128947, -0.0333838, 0.0693367, 0.988661, 3.4, 1, -0.113844, -0.0370881, 0.0632228, 0.990791, 3.46667, 1, -0.0966578, -0.040687, 0.0571331, 0.992843, 3.53333, 1, -0.0775769, -0.0439015, 0.051382, 0.994693, 3.6, 1, -0.0567807, -0.0464231, 0.0462536, 0.996234, 3.66667, 1, -0.0344421, -0.0479111, 0.0419953, 0.997374, 3.73333, 1, -0.0107997, -0.0486455, 0.0386896, 0.998008, 3.8, 1, 0.0135146, -0.0491616, 0.0360984, 0.998047, 3.86667, 1, 0.0377382, -0.0494848, 0.033955, 0.997484, 3.93333, 1, 0.0611085, -0.049655, 0.0319938, 0.996382, 4, 1, 0.0828664, -0.0497273, 0.0299524, 0.994868, 4.06667, 1, 0.10226, -0.0497698, 0.0275734, 0.993129, 4.13333, 1, 0.118547, -0.0498573, 0.0246049, 0.991391, 4.2, 1, 0.130989, -0.0500619, 0.0207992, 0.989901, 4.26667, 1, 0.138855, -0.0504402, 0.0159111, 0.988899, 4.33333, 1, 0.141406, -0.0510172, 0.00969382, 0.988589, 4.4, 1, 0.140821, -0.0499667, 0.00194941, 0.988771, 4.46667, 1, 0.139873, -0.0457767, -0.0071648, 0.989085, 4.53333, 1, 0.138706, -0.0389091, -0.0173598, 0.989417, 4.6, 1, 0.137453, -0.0298289, -0.0283408, 0.989653, 4.66667, 1, 0.136229, -0.0190061, -0.03981, 0.989695, 4.73333, 1, 0.13513, -0.00691631, -0.0514688, 0.989466, 4.86667, 1, 0.133537, 0.0191356, -0.0741814, 0.988078, 4.93333, 1, 0.133092, 0.0321249, -0.0846669, 0.986958, 5, 1, 0.132866, 0.0444397, -0.0942108, 0.985645, 5.06667, 1, 0.132818, 0.0555936, -0.102557, 0.984251, 5.13333, 1, 0.132889, 0.0651031, -0.10946, 0.982914, 5.2, 1, 0.133013, 0.0724875, -0.114684, 0.981784, 5.26667, 1, 0.133124, 0.0772685, -0.117994, 0.981012, 5.33333, 1, 0.133169, 0.0789685, -0.119152, 0.980731, 5.4, 1, 0.134331, 0.0770085, -0.118974, 0.98075, 5.46667, 1, 0.137175, 0.0709527, -0.1177, 0.980967, 5.53333, 1, 0.140769, 0.0605494, -0.114189, 0.98157, 5.6, 1, 0.144256, 0.0455586, -0.107269, 0.982653, 5.66667, 1, 0.146902, 0.0257358, -0.0957771, 0.984167, 5.73333, 1, 0.148141, 0.000802251, -0.0786036, 0.985837, 5.8, 1, 0.147639, -0.0295906, -0.0547627, 0.987081, 5.86667, 1, 0.148699, -0.0502141, 0.0575393, 0.985929, 5.93333, 1, 0.145727, -0.0548885, 0.0915356, 0.983551, 6, 1, 0.147463, -0.0497165, 0.0575144, 0.986142, 6.06667, 1, 0.149596, -0.0447278, 0.0233504, 0.987459, 6.13333, 1, 0.149322, -0.0461394, 0.0322245, 0.987186, 6.2, 1, 0.14889, -0.0487813, 0.0486866, 0.986449, 6.26667, 1, 0.148699, -0.0502141, 0.0575392, 0.985929, 10, 1, 0.148699, -0.0502141, 0.0575392, 0.985929)
 tracks/5/type = "rotation_3d"
 tracks/5/imported = true
 tracks/5/enabled = true
 tracks/5/path = NodePath("TailRoot/Skeleton3D:tail_05")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
-tracks/5/keys = PackedFloat32Array(0, 1, -0.2472, 0.322825, -0.0877548, 0.909382, 0.0666667, 1, -0.243761, 0.285691, -0.104026, 0.920945, 0.133333, 1, -0.231692, 0.184933, -0.140336, 0.944682, 0.2, 1, -0.208653, 0.0379288, -0.175106, 0.961438, 0.266667, 1, -0.176859, -0.130831, -0.190913, 0.956638, 0.333333, 1, -0.143319, -0.29144, -0.182435, 0.92803, 0.4, 1, -0.115847, -0.416438, -0.158417, 0.887729, 0.466667, 1, -0.0994785, -0.486262, -0.136235, 0.857376, 0.533333, 1, -0.0964289, -0.490603, -0.1309, 0.856081, 0.6, 1, -0.103509, -0.451533, -0.13793, 0.875431, 0.666667, 1, -0.118785, -0.38251, -0.148932, 0.904099, 0.733333, 1, -0.140158, -0.294304, -0.156566, 0.932324, 0.8, 1, -0.164123, -0.200015, -0.156443, 0.953196, 0.866667, 1, -0.18626, -0.114422, -0.148668, 0.964423, 0.933333, 1, -0.202211, -0.0523642, -0.137518, 0.968224, 1, 1, -0.208119, -0.0277443, -0.129196, 0.969136, 1.06667, 1, -0.206112, -0.0266499, -0.124265, 0.97024, 1.13333, 1, -0.201189, -0.0261817, -0.11964, 0.971866, 1.2, 1, -0.193897, -0.0262073, -0.115333, 0.973866, 1.26667, 1, -0.184784, -0.0266097, -0.111351, 0.976088, 1.33333, 1, -0.174403, -0.027285, -0.107697, 0.978387, 1.46667, 1, -0.152083, -0.0290932, -0.101395, 0.982722, 1.53333, 1, -0.14128, -0.0300663, -0.0987631, 0.984572, 1.6, 1, -0.131481, -0.0309893, -0.0964932, 0.986124, 1.66667, 1, -0.123265, -0.0317945, -0.0946007, 0.987343, 1.73333, 1, -0.11721, -0.0324155, -0.093104, 0.988202, 1.8, 1, -0.113897, -0.0327851, -0.0920226, 0.988678, 1.86667, 1, -0.116971, -0.0325694, -0.0914686, 0.988378, 1.93333, 1, -0.142205, -0.0304177, -0.0917149, 0.98511, 2, 1, -0.18492, -0.0267713, -0.0920585, 0.978066, 2.06667, 1, -0.236924, -0.0224506, -0.0916922, 0.966931, 2.13333, 1, -0.290145, -0.0184012, -0.0899331, 0.95257, 2.2, 1, -0.336877, -0.0156367, -0.0862594, 0.937459, 2.26667, 1, -0.369911, -0.015098, -0.0802529, 0.925472, 2.33333, 1, -0.382358, -0.0174478, -0.0714419, 0.921083, 2.4, 1, -0.380526, -0.0201709, -0.058996, 0.922666, 2.46667, 1, -0.375698, -0.0207369, -0.0432216, 0.925501, 2.53333, 1, -0.36837, -0.0194133, -0.0252138, 0.929134, 2.6, 1, -0.359014, -0.0164917, -0.00609832, 0.933167, 2.73333, 1, -0.33594, -0.00733159, 0.0309175, 0.941347, 2.8, 1, -0.322978, -0.00204264, 0.0465934, 0.945257, 2.86667, 1, -0.309498, 0.00293156, 0.0589634, 0.949066, 2.93333, 1, -0.295781, 0.00688905, 0.0670274, 0.952877, 3, 1, -0.282102, 0.00905168, 0.0698347, 0.956796, 3.13333, 1, -0.255764, 0.00790167, 0.0655822, 0.96448, 3.2, 1, -0.24302, 0.00531803, 0.0609867, 0.968088, 3.26667, 1, -0.23042, 0.00172137, 0.0551931, 0.971523, 3.33333, 1, -0.217862, -0.0026241, 0.0485208, 0.974769, 3.4, 1, -0.205234, -0.00744125, 0.0412786, 0.977814, 3.46667, 1, -0.192419, -0.0124414, 0.0337648, 0.980653, 3.66667, 1, -0.151469, -0.0254958, 0.0123975, 0.988055, 3.73333, 1, -0.136491, -0.028442, 0.0064345, 0.990212, 3.8, 1, -0.120753, -0.0308623, 0.0010652, 0.992202, 3.86667, 1, -0.104296, -0.0328195, -0.00384655, 0.993997, 3.93333, 1, -0.0871685, -0.0343821, -0.00843529, 0.995564, 4, 1, -0.0694215, -0.0356245, -0.0128327, 0.996869, 4.06667, 1, -0.0511097, -0.0366281, -0.0171668, 0.997873, 4.13333, 1, -0.0322913, -0.0374815, -0.0215605, 0.998543, 4.2, 1, -0.0130279, -0.0382813, -0.0261313, 0.99884, 4.26667, 1, 0.00661611, -0.0391315, -0.0309895, 0.998732, 4.33333, 1, 0.0265724, -0.0401445, -0.0362383, 0.998183, 4.4, 1, 0.0468248, -0.0401387, -0.0420554, 0.99721, 4.46667, 1, 0.0673627, -0.0380649, -0.0485877, 0.995818, 4.53333, 1, 0.0881191, -0.0342367, -0.0558673, 0.993953, 4.6, 1, 0.109018, -0.0289623, -0.0639004, 0.991561, 4.66667, 1, 0.129973, -0.0225428, -0.072666, 0.988594, 4.73333, 1, 0.150885, -0.0152699, -0.0821152, 0.985017, 5, 1, 0.231786, 0.0169498, -0.12483, 0.964575, 5.06667, 1, 0.250674, 0.0245666, -0.136051, 0.958149, 5.13333, 1, 0.268753, 0.0315786, -0.147145, 0.951379, 5.2, 1, 0.285888, 0.0378007, -0.157916, 0.944406, 5.26667, 1, 0.301943, 0.0430636, -0.168157, 0.93739, 5.33333, 1, 0.316791, 0.0472116, -0.177657, 0.930512, 5.4, 1, 0.330267, 0.0501595, -0.186204, 0.923978, 5.46667, 1, 0.342057, 0.0520694, -0.193594, 0.918045, 5.53333, 1, 0.351816, 0.0531711, -0.199636, 0.912986, 5.6, 1, 0.359204, 0.0536949, -0.204154, 0.909071, 5.66667, 1, 0.363887, 0.0538628, -0.20698, 0.906556, 5.73333, 1, 0.365524, 0.0538782, -0.207957, 0.905673, 5.8, 1, 0.301021, 0.0456189, -0.186629, 0.934064, 5.86667, 1, 0.179253, 0.0111451, -0.0974222, 0.978904, 5.93333, 1, 0.132912, -0.0396225, 0.104284, 0.98483, 6, 1, 0.135304, -0.0346053, 0.0879726, 0.986284, 6.06667, 1, 0.134025, -0.0299735, 0.0601104, 0.988699, 6.13333, 1, 0.136349, -0.0140138, -0.0622554, 0.988603, 6.2, 1, 0.137816, -0.016012, -0.0494357, 0.989094, 6.26667, 1, 0.138446, -0.0195628, -0.0256368, 0.989845, 6.33333, 1, 0.13867, -0.0214609, -0.0128193, 0.990023, 9.33333, 1, 0.13867, -0.0214609, -0.0128193, 0.990023)
+tracks/5/keys = PackedFloat32Array(0, 1, -0.2472, 0.322825, -0.0877548, 0.909382, 0.0666667, 1, -0.243761, 0.285691, -0.104026, 0.920945, 0.133333, 1, -0.231692, 0.184933, -0.140336, 0.944682, 0.2, 1, -0.208653, 0.0379288, -0.175106, 0.961438, 0.266667, 1, -0.176859, -0.130831, -0.190913, 0.956638, 0.333333, 1, -0.143319, -0.29144, -0.182435, 0.92803, 0.4, 1, -0.115847, -0.416438, -0.158417, 0.887729, 0.466667, 1, -0.0994785, -0.486262, -0.136235, 0.857376, 0.533333, 1, -0.0964289, -0.490603, -0.1309, 0.856081, 0.6, 1, -0.103509, -0.451533, -0.13793, 0.875431, 0.666667, 1, -0.118785, -0.38251, -0.148932, 0.904099, 0.733333, 1, -0.140158, -0.294304, -0.156566, 0.932324, 0.8, 1, -0.164123, -0.200015, -0.156443, 0.953196, 0.866667, 1, -0.18626, -0.114422, -0.148668, 0.964423, 0.933333, 1, -0.202211, -0.0523642, -0.137518, 0.968224, 1, 1, -0.208119, -0.0277443, -0.129196, 0.969136, 1.06667, 1, -0.206112, -0.0266499, -0.124265, 0.97024, 1.13333, 1, -0.201189, -0.0261817, -0.11964, 0.971866, 1.2, 1, -0.193897, -0.0262073, -0.115333, 0.973866, 1.26667, 1, -0.184784, -0.0266097, -0.111351, 0.976088, 1.33333, 1, -0.174403, -0.027285, -0.107697, 0.978387, 1.46667, 1, -0.152083, -0.0290932, -0.101395, 0.982722, 1.53333, 1, -0.14128, -0.0300663, -0.0987631, 0.984572, 1.6, 1, -0.131481, -0.0309893, -0.0964932, 0.986124, 1.66667, 1, -0.123265, -0.0317945, -0.0946007, 0.987343, 1.73333, 1, -0.11721, -0.0324155, -0.093104, 0.988202, 1.8, 1, -0.113897, -0.0327851, -0.0920226, 0.988678, 1.86667, 1, -0.116971, -0.0325694, -0.0914686, 0.988378, 1.93333, 1, -0.142205, -0.0304177, -0.0917149, 0.98511, 2, 1, -0.18492, -0.0267713, -0.0920585, 0.978066, 2.06667, 1, -0.236924, -0.0224506, -0.0916922, 0.966931, 2.13333, 1, -0.290145, -0.0184012, -0.0899331, 0.95257, 2.2, 1, -0.336877, -0.0156367, -0.0862594, 0.937459, 2.26667, 1, -0.369911, -0.015098, -0.0802529, 0.925472, 2.33333, 1, -0.382358, -0.0174478, -0.0714419, 0.921083, 2.4, 1, -0.380526, -0.0201709, -0.058996, 0.922666, 2.46667, 1, -0.375698, -0.0207369, -0.0432216, 0.925501, 2.53333, 1, -0.36837, -0.0194133, -0.0252138, 0.929134, 2.6, 1, -0.359014, -0.0164917, -0.00609832, 0.933167, 2.73333, 1, -0.33594, -0.00733159, 0.0309175, 0.941347, 2.8, 1, -0.322978, -0.00204264, 0.0465934, 0.945257, 2.86667, 1, -0.309498, 0.00293156, 0.0589634, 0.949066, 2.93333, 1, -0.295781, 0.00688905, 0.0670274, 0.952877, 3, 1, -0.282102, 0.00905168, 0.0698347, 0.956796, 3.13333, 1, -0.255764, 0.00790167, 0.0655822, 0.96448, 3.2, 1, -0.24302, 0.00531803, 0.0609867, 0.968088, 3.26667, 1, -0.23042, 0.00172137, 0.0551931, 0.971523, 3.33333, 1, -0.217862, -0.0026241, 0.0485208, 0.974769, 3.4, 1, -0.205234, -0.00744125, 0.0412786, 0.977814, 3.46667, 1, -0.192419, -0.0124414, 0.0337648, 0.980653, 3.66667, 1, -0.151469, -0.0254958, 0.0123975, 0.988055, 3.73333, 1, -0.136491, -0.028442, 0.0064345, 0.990212, 3.8, 1, -0.120753, -0.0308623, 0.0010652, 0.992202, 3.86667, 1, -0.104296, -0.0328195, -0.00384655, 0.993997, 3.93333, 1, -0.0871685, -0.0343821, -0.00843529, 0.995564, 4, 1, -0.0694215, -0.0356245, -0.0128327, 0.996869, 4.06667, 1, -0.0511097, -0.0366281, -0.0171668, 0.997873, 4.13333, 1, -0.0322913, -0.0374815, -0.0215605, 0.998543, 4.2, 1, -0.0130279, -0.0382813, -0.0261313, 0.99884, 4.26667, 1, 0.00661611, -0.0391315, -0.0309895, 0.998732, 4.33333, 1, 0.0265724, -0.0401445, -0.0362383, 0.998183, 4.4, 1, 0.0468248, -0.0401387, -0.0420554, 0.99721, 4.46667, 1, 0.0673627, -0.0380649, -0.0485877, 0.995818, 4.53333, 1, 0.0881191, -0.0342367, -0.0558673, 0.993953, 4.6, 1, 0.109018, -0.0289623, -0.0639004, 0.991561, 4.66667, 1, 0.129973, -0.0225428, -0.072666, 0.988594, 4.73333, 1, 0.150885, -0.0152699, -0.0821152, 0.985017, 5, 1, 0.231786, 0.0169498, -0.12483, 0.964575, 5.06667, 1, 0.250674, 0.0245666, -0.136051, 0.958149, 5.13333, 1, 0.268753, 0.0315786, -0.147145, 0.951379, 5.2, 1, 0.285888, 0.0378007, -0.157916, 0.944406, 5.26667, 1, 0.301943, 0.0430636, -0.168157, 0.93739, 5.33333, 1, 0.316791, 0.0472116, -0.177657, 0.930512, 5.4, 1, 0.330267, 0.0501595, -0.186204, 0.923978, 5.46667, 1, 0.342057, 0.0520694, -0.193594, 0.918045, 5.53333, 1, 0.351816, 0.0531711, -0.199636, 0.912986, 5.6, 1, 0.359204, 0.0536949, -0.204154, 0.909071, 5.66667, 1, 0.363887, 0.0538628, -0.20698, 0.906556, 5.73333, 1, 0.365524, 0.0538782, -0.207957, 0.905673, 5.8, 1, 0.301021, 0.0456189, -0.186629, 0.934064, 5.86667, 1, 0.179253, 0.0111451, -0.0974222, 0.978904, 5.93333, 1, 0.132912, -0.0396225, 0.104284, 0.98483, 6, 1, 0.135304, -0.0346053, 0.0879726, 0.986284, 6.06667, 1, 0.134025, -0.0299735, 0.0601104, 0.988699, 6.13333, 1, 0.136349, -0.0140138, -0.0622554, 0.988603, 6.2, 1, 0.137816, -0.016012, -0.0494357, 0.989094, 6.26667, 1, 0.138446, -0.0195628, -0.0256368, 0.989845, 6.33333, 1, 0.13867, -0.0214609, -0.0128193, 0.990023, 10, 1, 0.13867, -0.0214609, -0.0128193, 0.990023)
 tracks/6/type = "rotation_3d"
 tracks/6/imported = true
 tracks/6/enabled = true
@@ -1102,7 +1463,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_wvew7"]
+[sub_resource type="Animation" id="Animation_vkh5s"]
 resource_name = "r-intro"
 length = 10.0
 tracks/0/type = "position_3d"
@@ -1155,7 +1516,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685, 0.0666667, 1, 0.923878, 0.000624142, 0.00150669, 0.382685, 0.133333, 1, 0.92386, 0.00242802, 0.00586162, 0.382677, 0.2, 1, 0.92379, 0.00530897, 0.0128168, 0.382648, 0.266667, 1, 0.923614, 0.00916398, 0.0221236, 0.382575, 0.333333, 1, 0.92327, 0.0138896, 0.0335321, 0.382433, 0.4, 1, 0.922693, 0.0193815, 0.0467907, 0.382194, 0.466667, 1, 0.92182, 0.0255348, 0.0616461, 0.381832, 0.533333, 1, 0.920594, 0.0322438, 0.0778429, 0.381324, 0.6, 1, 0.918969, 0.0394021, 0.0951244, 0.380651, 0.666667, 1, 0.916914, 0.0469028, 0.113233, 0.3798, 0.733333, 1, 0.914413, 0.0546391, 0.13191, 0.378764, 0.933333, 1, 0.904383, 0.0782011, 0.188793, 0.37461, 1, 1, 0.900345, 0.0858251, 0.207199, 0.372937, 1.06667, 1, 0.896083, 0.0931646, 0.224918, 0.371171, 1.13333, 1, 0.891699, 0.100121, 0.241713, 0.369356, 1.2, 1, 0.887312, 0.1066, 0.257353, 0.367538, 1.26667, 1, 0.883051, 0.112505, 0.271611, 0.365774, 1.33333, 1, 0.879059, 0.117748, 0.284267, 0.36412, 1.4, 1, 0.87548, 0.122237, 0.295105, 0.362637, 1.46667, 1, 0.872462, 0.125885, 0.303911, 0.361388, 1.53333, 1, 0.870149, 0.128602, 0.310471, 0.360429, 1.6, 1, 0.868676, 0.130299, 0.314569, 0.359819, 1.66667, 1, 0.868162, 0.130886, 0.315985, 0.359606, 1.73333, 1, 0.87344, 0.124716, 0.30109, 0.361792, 1.8, 1, 0.886472, 0.107792, 0.260231, 0.36719, 1.86667, 1, 0.902188, 0.082437, 0.199019, 0.3737, 1.93333, 1, 0.915592, 0.0511422, 0.123467, 0.379252, 2.06667, 1, 0.922868, -0.0178935, -0.0431985, 0.382267, 2.13333, 1, 0.916101, -0.049553, -0.119631, 0.379463, 2.2, 1, 0.905779, -0.0753786, -0.181979, 0.375188, 2.26667, 1, 0.896358, -0.0927095, -0.22382, 0.371285, 2.33333, 1, 0.892398, -0.0990462, -0.239117, 0.369645, 2.4, 1, 0.893485, -0.0973516, -0.235026, 0.370095, 2.46667, 1, 0.896436, -0.0925799, -0.223507, 0.371318, 2.53333, 1, 0.900696, -0.0851903, -0.205667, 0.373082, 2.6, 1, 0.905652, -0.0756405, -0.182611, 0.375135, 2.66667, 1, 0.910705, -0.064396, -0.155465, 0.377228, 2.73333, 1, 0.915331, -0.0519363, -0.125385, 0.379144, 2.8, 1, 0.919129, -0.0387558, -0.0935643, 0.380718, 2.86667, 1, 0.921848, -0.025362, -0.0612291, 0.381844, 2.93333, 1, 0.923404, -0.0122707, -0.0296241, 0.382488, 3, 1, 0.923879, 4.26817e-08, -1.58557e-09, 0.382685, 3.06667, 1, 0.923495, 0.0110314, 0.026632, 0.382526, 3.13333, 1, 0.922514, 0.020794, 0.0502008, 0.38212, 3.2, 1, 0.921156, 0.0293593, 0.0708791, 0.381557, 3.26667, 1, 0.919597, 0.0368019, 0.0888471, 0.380911, 3.33333, 1, 0.917974, 0.0431983, 0.104289, 0.380239, 3.4, 1, 0.91639, 0.0486258, 0.117392, 0.379583, 3.46667, 1, 0.914921, 0.0531615, 0.128342, 0.378975, 3.53333, 1, 0.913616, 0.0568825, 0.137326, 0.378434, 3.6, 1, 0.912504, 0.0598652, 0.144527, 0.377974, 3.66667, 1, 0.9116, 0.0621852, 0.150127, 0.377599, 3.73333, 1, 0.910901, 0.0639175, 0.15431, 0.377309, 3.8, 1, 0.910398, 0.0651367, 0.157253, 0.377101, 3.86667, 1, 0.91007, 0.0659166, 0.159136, 0.376965, 3.93333, 1, 0.909895, 0.0663308, 0.160136, 0.376893, 4, 1, 0.909843, 0.0664526, 0.16043, 0.376871, 4.06667, 1, 0.910893, 0.063937, 0.154357, 0.377306, 4.13333, 1, 0.91363, 0.0568434, 0.137231, 0.37844, 4.2, 1, 0.917226, 0.045842, 0.110672, 0.379929, 4.26667, 1, 0.920722, 0.0316081, 0.0763083, 0.381377, 4.33333, 1, 0.923184, 0.0148388, 0.0358237, 0.382397, 4.4, 1, 0.923835, -0.00374019, -0.00902972, 0.382667, 4.46667, 1, 0.922153, -0.0233771, -0.0564372, 0.38197, 4.53333, 1, 0.917944, -0.0433064, -0.10455, 0.380227, 4.6, 1, 0.911368, -0.0627659, -0.15153, 0.377503, 4.66667, 1, 0.902938, -0.0810159, -0.195589, 0.374011, 4.73333, 1, 0.893483, -0.0973534, -0.235031, 0.370095, 4.8, 1, 0.884073, -0.11112, -0.268265, 0.366197, 4.86667, 1, 0.87592, -0.121695, -0.293797, 0.36282, 4.93333, 1, 0.870251, -0.128484, -0.310187, 0.360472, 5, 1, 0.868162, -0.130886, -0.315985, 0.359606, 5.06667, 1, 0.868964, -0.12997, -0.313773, 0.359939, 5.13333, 1, 0.871249, -0.127318, -0.307372, 0.360885, 5.2, 1, 0.874797, -0.123073, -0.297124, 0.362355, 5.26667, 1, 0.879352, -0.117371, -0.283358, 0.364242, 5.33333, 1, 0.884637, -0.110348, -0.266401, 0.36643, 5.4, 1, 0.890364, -0.102139, -0.246585, 0.368803, 5.46667, 1, 0.89625, -0.0928871, -0.224248, 0.371241, 5.53333, 1, 0.902028, -0.0827364, -0.199742, 0.373634, 5.6, 1, 0.907454, -0.0718392, -0.173434, 0.375882, 5.66667, 1, 0.912317, -0.0603537, -0.145706, 0.377896, 5.73333, 1, 0.916446, -0.0484441, -0.116954, 0.379606, 5.93333, 1, 0.923434, -0.0118819, -0.0286855, 0.382501, 6, 1, 0.923879, 3.7555e-08, 1.7675e-08, 0.382685, 6.06667, 1, 0.923465, 0.0114567, 0.0276588, 0.382514, 6.13333, 1, 0.922293, 0.0224142, 0.0541123, 0.382028, 6.2, 1, 0.920475, 0.0328209, 0.0792362, 0.381275, 6.26667, 1, 0.918129, 0.042628, 0.102913, 0.380303, 6.33333, 1, 0.91538, 0.0517893, 0.12503, 0.379165, 6.4, 1, 0.912353, 0.060261, 0.145482, 0.377911, 6.46667, 1, 0.909176, 0.0680014, 0.164169, 0.376595, 6.53333, 1, 0.905976, 0.0749712, 0.180995, 0.37527, 6.6, 1, 0.902877, 0.081132, 0.195869, 0.373986, 6.66667, 1, 0.899998, 0.086447, 0.2087, 0.372793, 6.73333, 1, 0.897449, 0.0908796, 0.219402, 0.371738, 6.8, 1, 0.895333, 0.0943935, 0.227885, 0.370861, 6.86667, 1, 0.893738, 0.0969515, 0.23406, 0.3702, 6.93333, 1, 0.892741, 0.0985157, 0.237837, 0.369787, 7, 1, 0.892399, 0.0990463, 0.239117, 0.369645, 7.06667, 1, 0.893453, 0.0974013, 0.235146, 0.370082, 7.13333, 1, 0.896326, 0.0927624, 0.223947, 0.371272, 7.2, 1, 0.900489, 0.0855648, 0.20657, 0.372997, 7.26667, 1, 0.905358, 0.0762419, 0.184063, 0.375013, 7.33333, 1, 0.910357, 0.0652342, 0.157488, 0.377084, 7.4, 1, 0.914977, 0.052995, 0.12794, 0.378998, 7.46667, 1, 0.91882, 0.0399917, 0.0965479, 0.38059, 7.53333, 1, 0.921627, 0.0267047, 0.0644704, 0.381752, 7.6, 1, 0.923293, 0.0136226, 0.0328875, 0.382443, 7.66667, 1, 0.923874, 0.0012369, 0.00298605, 0.382683, 7.73333, 1, 0.923566, -0.0099631, -0.024053, 0.382555, 7.8, 1, 0.922679, -0.0194945, -0.0470638, 0.382188, 7.86667, 1, 0.921597, -0.0268823, -0.0648993, 0.38174, 7.93333, 1, 0.920712, -0.0316574, -0.0764273, 0.381373, 8, 1, 0.920363, -0.0333532, -0.0805214, 0.381229, 8.06667, 1, 0.920557, -0.0324216, -0.0782723, 0.381309, 8.13333, 1, 0.921056, -0.0298919, -0.0721652, 0.381516, 8.2, 1, 0.921717, -0.0261617, -0.0631597, 0.38179, 8.26667, 1, 0.922402, -0.0216288, -0.0522163, 0.382073, 8.4, 1, 0.923443, -0.0117533, -0.0283751, 0.382505, 8.46667, 1, 0.923715, -0.00721297, -0.0174137, 0.382617, 8.53333, 1, 0.923841, -0.00347305, -0.00838474, 0.382669, 8.6, 1, 0.923876, -0.000935025, -0.00225744, 0.382684, 8.66667, 1, 0.923879, 4.5338e-08, -1.04775e-09, 0.382685, 10, 1, 0.923879, 2.9246e-08, 1.70845e-08, 0.382685)
 
-[sub_resource type="Animation" id="Animation_xbies"]
+[sub_resource type="Animation" id="Animation_pt66j"]
 resource_name = "RESET"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -1208,7 +1569,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_j85bw"]
+[sub_resource type="Animation" id="Animation_43esd"]
 resource_name = "l-idle-loop"
 length = 4.26667
 loop_mode = 1
@@ -1262,7 +1623,7 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="Animation" id="Animation_0vj5o"]
+[sub_resource type="Animation" id="Animation_s4hyr"]
 resource_name = "r-idle-loop"
 length = 4.26667
 loop_mode = 1
@@ -1316,25 +1677,25 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 0.923879, 4.56194e-08, -1.79435e-09, 0.382685)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_0hyh6"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d8ipt"]
 _data = {
-"RESET": SubResource("Animation_xbies"),
-"l-attack-center-light": SubResource("Animation_cbcg0"),
-"l-attack-heavy-end": SubResource("Animation_q147v"),
-"l-attack-heavy-start": SubResource("Animation_0oyoc"),
-"l-attack-in-light": SubResource("Animation_gdm74"),
-"l-attack-out-light": SubResource("Animation_kto6l"),
-"l-defeat": SubResource("Animation_8vx2r"),
-"l-idle": SubResource("Animation_j85bw"),
-"l-intro": SubResource("Animation_xdsv1"),
-"r-attack-center-light": SubResource("Animation_4ctsd"),
-"r-attack-heavy-end": SubResource("Animation_jxqjh"),
-"r-attack-heavy-start": SubResource("Animation_mj2cq"),
-"r-attack-in-light": SubResource("Animation_76q2c"),
-"r-attack-out-light": SubResource("Animation_27ufp"),
-"r-defeat": SubResource("Animation_aqc37"),
-"r-idle": SubResource("Animation_0vj5o"),
-"r-intro": SubResource("Animation_wvew7")
+"RESET": SubResource("Animation_pt66j"),
+"l-attack-center-light": SubResource("Animation_i080q"),
+"l-attack-heavy-end": SubResource("Animation_m4150"),
+"l-attack-heavy-start": SubResource("Animation_6pltx"),
+"l-attack-in-light": SubResource("Animation_vnpf0"),
+"l-attack-out-light": SubResource("Animation_26cd4"),
+"l-defeat": SubResource("Animation_1yd1p"),
+"l-idle": SubResource("Animation_43esd"),
+"l-intro": SubResource("Animation_o83qo"),
+"r-attack-center-light": SubResource("Animation_y6tl4"),
+"r-attack-heavy-end": SubResource("Animation_l2duv"),
+"r-attack-heavy-start": SubResource("Animation_li7rf"),
+"r-attack-in-light": SubResource("Animation_40wy8"),
+"r-attack-out-light": SubResource("Animation_hytnt"),
+"r-defeat": SubResource("Animation_pv1pa"),
+"r-idle": SubResource("Animation_s4hyr"),
+"r-intro": SubResource("Animation_vkh5s")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8rgq1"]
@@ -1749,7 +2110,7 @@ alpha_curve = SubResource("CurveTexture_1pmud")
 [sub_resource type="QuadMesh" id="QuadMesh_kk32p"]
 material = ExtResource("20_4qglg")
 
-[sub_resource type="Animation" id="Animation_507ck"]
+[sub_resource type="Animation" id="Animation_jtqey"]
 resource_name = "attack-heavy"
 length = 1.33333
 tracks/0/type = "position_3d"
@@ -2292,7 +2653,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_srs2c"]
+[sub_resource type="Animation" id="Animation_ow0i3"]
 resource_name = "flying-eye-active"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -2336,7 +2697,7 @@ tracks/5/enabled = true
 tracks/5/path = NodePath("ScorpionRoot/Skeleton3D:jaw")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
-tracks/5/keys = PackedFloat32Array(0, 1, 0.162988, -2.87219e-08, 5.4243e-08, 0.986628)
+tracks/5/keys = PackedFloat32Array(0, 1, 0.248358, -2.3885e-08, 5.65399e-08, 0.968668)
 tracks/6/type = "position_3d"
 tracks/6/imported = true
 tracks/6/enabled = true
@@ -2835,7 +3196,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_47p57"]
+[sub_resource type="Animation" id="Animation_e4ljj"]
 resource_name = "flying-eye-inactive"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -3378,7 +3739,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_fnnu1"]
+[sub_resource type="Animation" id="Animation_nff2b"]
 resource_name = "phase-two-active"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -3921,7 +4282,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_hcv6s"]
+[sub_resource type="Animation" id="Animation_h56ud"]
 resource_name = "phase-two-inactive"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -4464,19 +4825,19 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_7xg63"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kv6p1"]
 _data = {
 "RESET": ExtResource("17_wd27i"),
-"attack-heavy": SubResource("Animation_507ck"),
+"attack-heavy": SubResource("Animation_jtqey"),
 "defeat": ExtResource("17_coptg"),
-"flying-eye-active": SubResource("Animation_srs2c"),
-"flying-eye-inactive": SubResource("Animation_47p57"),
+"flying-eye-active": SubResource("Animation_ow0i3"),
+"flying-eye-inactive": SubResource("Animation_e4ljj"),
 "idle": ExtResource("15_g68fd"),
 "intro": ExtResource("17_mcftm"),
 "move-backward": ExtResource("23_4ch27"),
 "move-forward": ExtResource("15_p7xyf"),
-"phase-two-active": SubResource("Animation_fnnu1"),
-"phase-two-inactive": SubResource("Animation_hcv6s")
+"phase-two-active": SubResource("Animation_nff2b"),
+"phase-two-inactive": SubResource("Animation_h56ud")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lnhkb"]
@@ -4759,7 +5120,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox/CollisionShape3D:disabled")
+tracks/14/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge/Hitbox/CollisionShape3D:disabled")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -4795,7 +5156,7 @@ tracks/16/keys = {
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/CommonDustSplatter:emitting")
+tracks/17/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/CommonDustSplatter:emitting")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -4807,7 +5168,7 @@ tracks/17/keys = {
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/SandDustConstant:emitting")
+tracks/18/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/SandDustConstant:emitting")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
@@ -4819,7 +5180,7 @@ tracks/18/keys = {
 tracks/19/type = "value"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Splatter:emitting")
+tracks/19/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/Splatter:emitting")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
@@ -4831,7 +5192,7 @@ tracks/19/keys = {
 tracks/20/type = "value"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/SandDustExplode:emitting")
+tracks/20/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/SandDustExplode:emitting")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -4843,7 +5204,7 @@ tracks/20/keys = {
 tracks/21/type = "value"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/SandScorpionSplatter:emitting")
+tracks/21/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/SandScorpionSplatter:emitting")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
@@ -4907,7 +5268,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/CommonDustSplatter:emitting")
+tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/CommonDustSplatter:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -4919,7 +5280,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/SandDustConstant:emitting")
+tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/SandDustConstant:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -4931,7 +5292,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Splatter:emitting")
+tracks/4/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/Splatter:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -4943,7 +5304,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/SandDustExplode:emitting")
+tracks/5/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/SandDustExplode:emitting")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -4955,7 +5316,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/SandScorpionSplatter:emitting")
+tracks/6/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro/SandScorpionSplatter:emitting")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -5120,7 +5481,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox/CollisionShape3D:disabled")
+tracks/0/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge/Hitbox/CollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5770,9 +6131,9 @@ missilePositionPaths = Array[NodePath]([NodePath("SandScorpion/ScorpionRoot/Skel
 missileScene = ExtResource("2_6mjm1")
 impactEffect = NodePath("Shockwave")
 hitEffect = NodePath("Hit")
-mainEyes = [NodePath("SandScorpion/ScorpionRoot/Skeleton3D/BackEye/EyeLarge"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge")]
+mainEyes = [NodePath("SandScorpion/ScorpionRoot/Skeleton3D/BackEye/EyeLarge"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge")]
 tailEyes = [NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye01/EyeSmall"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye02/EyeSmall"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye01/EyeSmall"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/EyeSmall")]
-flyingEyeHitbox = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox")
+flyingEyeHitbox = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge/Hitbox")
 flyingEyeRoot = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye")
 flyingEyeBone = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye")
 
@@ -5886,30 +6247,35 @@ bone_idx = 16
 [node name="FlyingEye" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye" instance=ExtResource("2_8luog")]
 transform = Transform3D(1, -5.96228e-22, 0, 1.09788e-21, 1, 4.54747e-13, 0, -4.54747e-13, 1, 0, 0, 0)
 
-[node name="Eye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye"]
-transform = Transform3D(1, -4.33431e-13, -3.55271e-15, 4.33431e-13, 1, 0, 3.55271e-15, 0, 1, 6.53998e-13, 0, 0)
+[node name="Skeleton3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot" index="0"]
+bones/1/rotation = Quaternion(0.707107, -1.55753e-13, -1.06769e-08, 0.707107)
+bones/3/rotation = Quaternion(0.988967, -8.5849e-09, -6.34794e-09, -0.148135)
+
+[node name="Eye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D" index="1"]
+transform = Transform3D(1, -4.33431e-13, -3.55271e-15, 4.33431e-13, 1, -2.27997e-16, 3.55271e-15, -2.2799e-16, 1, 6.53998e-13, 5.49896e-15, -1.31097e-20)
 bone_name = "dummy_eye"
 bone_idx = 1
-use_external_skeleton = true
-external_skeleton = NodePath("../FlyingEyeRoot/Skeleton3D")
 
-[node name="EyeLarge" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye" instance=ExtResource("2_0m58c")]
+[node name="EyeLarge" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye" instance=ExtResource("2_0m58c")]
 
-[node name="Hitbox" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge"]
+[node name="Hitbox" type="Area3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge"]
 transform = Transform3D(1, 2.00603e-21, 5.29396e-23, -7.88404e-21, 1, -2.27374e-13, -8.47033e-22, 2.27374e-13, 1, 0, 0, 0)
 collision_layer = 4
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge/Hitbox"]
 shape = SubResource("SphereShape3D_i57o6")
 
 [node name="FlyingEyeAnimationTree" type="AnimationTree" parent="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye"]
 libraries = {
-"": SubResource("AnimationLibrary_5voy6")
+"": SubResource("AnimationLibrary_4vt01")
 }
 tree_root = SubResource("AnimationNodeBlendTree_6uq47")
 anim_player = NodePath("../AnimationPlayer")
+parameters/damage_trigger/active = false
+parameters/damage_trigger/internal_active = false
+parameters/damage_trigger/request = 0
 parameters/eye_transition/current_state = "disabled"
 parameters/eye_transition/transition_request = ""
 parameters/eye_transition/current_index = 0
@@ -5919,19 +6285,9 @@ transform = Transform3D(1, 0, 0, 0, 3.51667e-06, 1, 0, -1, 3.51667e-06, 0, 0, 0)
 bone_name = "root"
 bone_idx = 0
 
-[node name="SandScorpionDust" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
-layers = 32
-cast_shadow = 0
-extra_cull_margin = 16384.0
-emitting = false
-amount = 24
-fixed_fps = 60
-interpolate = false
-visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
-process_material = SubResource("ParticleProcessMaterial_rph5u")
-draw_pass_1 = SubResource("QuadMesh_b16i3")
+[node name="Intro" type="Node3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
 
-[node name="SandScorpionSplatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
+[node name="SandScorpionSplatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro"]
 transform = Transform3D(1, -2.98023e-08, 2.98023e-08, -5.96046e-08, 1, -1.49012e-08, 0, -1.49012e-08, 1, 0, 4, 0.999986)
 layers = 32
 cast_shadow = 0
@@ -5946,7 +6302,7 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_8x1qx")
 draw_pass_1 = SubResource("QuadMesh_jp0r6")
 
-[node name="CommonDustSplatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
+[node name="CommonDustSplatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro"]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -5959,7 +6315,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_8wagh")
 draw_pass_1 = SubResource("QuadMesh_i2d8k")
 
-[node name="SandDustConstant" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
+[node name="SandDustConstant" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 2.91038e-11, -2.91038e-11, 1, 0, 10, 5)
 layers = 32
 cast_shadow = 0
@@ -5973,7 +6329,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_rbath")
 draw_pass_1 = SubResource("QuadMesh_151r5")
 
-[node name="SandDustExplode" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
+[node name="SandDustExplode" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro"]
 transform = Transform3D(1, -2.98023e-08, 2.98023e-08, -5.96046e-08, 1, -1.49012e-08, 0, -1.49012e-08, 1, 0, 4, -1.40667e-05)
 layers = 32
 cast_shadow = 0
@@ -5988,7 +6344,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_c3ohp")
 draw_pass_1 = SubResource("QuadMesh_151r5")
 
-[node name="Splatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
+[node name="Splatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root/Intro"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 5)
 layers = 32
 cast_shadow = 0
@@ -6002,13 +6358,17 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_2setx")
 draw_pass_1 = SubResource("QuadMesh_wykmu")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root" groups=["wall"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1, 3)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 3.56038e-06, 0, -3.56038e-06, 1, 0, 0, 5)
-shape = SubResource("BoxShape3D_apgua")
-disabled = true
+[node name="SandScorpionDust" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Root"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 24
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_rph5u")
+draw_pass_1 = SubResource("QuadMesh_b16i3")
 
 [node name="Hip" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="12"]
 transform = Transform3D(1, 0, 0, 0, -0.0636966, 0.997969, 0, -0.997969, -0.0636966, 0, 2.7, 9.49502e-06)
@@ -6047,6 +6407,262 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Hitbox"]
 transform = Transform3D(1, 0, 1.89696e-18, 0, -1, -8.74227e-08, -1.94401e-18, 8.74227e-08, -1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_066p4")
+
+[node name="Defeat" type="Node3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest"]
+
+[node name="Splatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.6
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_850kn")
+draw_pass_1 = SubResource("QuadMesh_gashy")
+
+[node name="Spark1" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.869865, -0.127673, -0.476481, 0, 0.965926, -0.258819, 0.493289, 0.225138, 0.840225, 2.31044, 2.17972, -1.75303)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_omrxd")
+draw_pass_1 = SubResource("QuadMesh_mu8t6")
+
+[node name="Spark2" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.915053, 0.159793, -0.370329, -0.221048, 0.966683, -0.129077, 0.337365, 0.199973, 0.919888, 1.93966, -2.32779, -4.07156)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_omrxd")
+draw_pass_1 = SubResource("QuadMesh_mu8t6")
+
+[node name="Spark3" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.958184, -0.225528, 0.176127, 0.19752, 0.966622, 0.163176, -0.207049, -0.121564, 0.970748, -1.1137, 3.05185, -1.24941)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_omrxd")
+draw_pass_1 = SubResource("QuadMesh_mu8t6")
+
+[node name="Ray1" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.925852, -1.36495e-06, -0.37789, 1.36495e-06, 1, -2.6783e-07, 0.37789, -2.67831e-07, 0.925852, 1.8087, 2.5898, -0.145521)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_rvq2x")
+draw_pass_1 = SubResource("QuadMesh_alev6")
+
+[node name="Ray2" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.967963, 0.147022, -0.203553, -0.201383, 0.93876, -0.279596, 0.149981, 0.311631, 0.938293, 1.54003, -2.48774, -3.3823)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_rvq2x")
+draw_pass_1 = SubResource("QuadMesh_alev6")
+
+[node name="Ray3" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.91548, -0.242208, 0.321301, 0.363135, 0.841271, -0.400496, -0.173298, 0.48332, 0.858121, -0.458322, -3.73454, -1.28852)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_rvq2x")
+draw_pass_1 = SubResource("QuadMesh_alev6")
+
+[node name="Ray4" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.945974, -0.0701421, 0.316566, 0.156512, 0.953827, -0.256355, -0.283968, 0.292051, 0.913274, -1.20556, 3.27888, -1.17212)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_rvq2x")
+draw_pass_1 = SubResource("QuadMesh_alev6")
+
+[node name="ExplosionSmoke" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 12
+lifetime = 0.8
+explosiveness = 0.2
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_3snys")
+draw_pass_1 = SubResource("QuadMesh_7ck8q")
+
+[node name="ExplosionSmoke2" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(1, 0, -1.94401e-18, -1.0842e-19, 1, 4.54747e-13, -1.94401e-18, 0, 1, 1, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 12
+lifetime = 0.8
+explosiveness = 0.2
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_n37vd")
+draw_pass_1 = SubResource("QuadMesh_3qo6x")
+
+[node name="ExplosionFlame" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(1, 0, -1.94401e-18, -1.0842e-19, 1, 4.54747e-13, -1.94401e-18, 0, 1, 1, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 4
+lifetime = 0.4
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_w6tux")
+draw_pass_1 = SubResource("QuadMesh_hlt7s")
+
+[node name="BlackSmoke1" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(1, 2.62201e-08, 2.29395e-09, -2.62201e-08, 0.984808, 0.173648, 2.29397e-09, -0.173648, 0.984808, 0.8, -1.5, 9.53674e-07)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 128
+lifetime = 2.0
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_hpjvi")
+draw_pass_1 = SubResource("QuadMesh_xolfy")
+
+[node name="BlackSmoke2" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.984808, 0, 0.173648, -1.7053e-13, 1, 2.95586e-12, -0.173648, 0, 0.984808, -2.98481, 1.5, 0.173649)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 128
+lifetime = 2.0
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_hpjvi")
+draw_pass_1 = SubResource("QuadMesh_xolfy")
+
+[node name="BlackSmoke3" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(0.939693, 0, -0.34202, -1.13687e-13, 1, 4.77485e-12, 0.34202, 0, 0.939693, 1.01519, 4.5, 0.173639)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 128
+lifetime = 2.0
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_hpjvi")
+draw_pass_1 = SubResource("QuadMesh_xolfy")
+
+[node name="Soul" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.8
+explosiveness = 0.2
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_hr32l")
+draw_pass_1 = SubResource("QuadMesh_h6nxa")
+
+[node name="SoulSpark" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+transform = Transform3D(1, 0, -1.94401e-18, -5.42101e-20, 1, 2.27374e-13, -1.94401e-18, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.8
+explosiveness = 0.2
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_nyc8i")
+draw_pass_1 = SubResource("QuadMesh_mu8t6")
+
+[node name="SoulSplatter" type="GPUParticles3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Defeat"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.8
+explosiveness = 0.2
+fixed_fps = 60
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_nyc8i")
+draw_pass_1 = SubResource("QuadMesh_gashy")
 
 [node name="BackEye" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D" index="14"]
 transform = Transform3D(1, 0, 2.8058e-21, 9.66828e-27, 1, -3.39746e-06, -2.8058e-21, 3.39746e-06, 1, 0, 4.50001, -2.89999)
@@ -6249,7 +6865,7 @@ draw_pass_1 = SubResource("QuadMesh_wjr6b")
 active = false
 root_node = NodePath("../Tail")
 libraries = {
-"": SubResource("AnimationLibrary_0hyh6")
+"": SubResource("AnimationLibrary_d8ipt")
 }
 tree_root = SubResource("AnimationNodeBlendTree_wjd4q")
 anim_player = NodePath("../Tail/AnimationPlayer")
@@ -6455,7 +7071,7 @@ draw_pass_1 = SubResource("QuadMesh_wjr6b")
 active = false
 root_node = NodePath("../Tail")
 libraries = {
-"": SubResource("AnimationLibrary_0hyh6")
+"": SubResource("AnimationLibrary_d8ipt")
 }
 tree_root = SubResource("AnimationNodeBlendTree_m1chd")
 anim_player = NodePath("../Tail/AnimationPlayer")
@@ -6603,7 +7219,7 @@ draw_pass_1 = SubResource("QuadMesh_kk32p")
 active = false
 root_node = NodePath("../SandScorpion")
 libraries = {
-"": SubResource("AnimationLibrary_7xg63")
+"": SubResource("AnimationLibrary_kv6p1")
 }
 tree_root = SubResource("AnimationNodeBlendTree_kv6lr")
 anim_player = NodePath("../SandScorpion/AnimationPlayer")
@@ -6672,8 +7288,8 @@ textKeys = Array[String](["boss_hit4_sh"])
 script = ExtResource("19_vtm0w")
 textKeys = Array[String]([])
 
-[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox" to="." method="OnFlyingEyeEntered"]
-[connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/Eye/EyeLarge/Hitbox" to="." method="OnFlyingEyeExited"]
+[connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge/Hitbox" to="." method="OnFlyingEyeEntered"]
+[connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye/FlyingEyeRoot/Skeleton3D/Eye/EyeLarge/Hitbox" to="." method="OnFlyingEyeExited"]
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/Hip/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/Hip/Hitbox" to="." method="OnHitboxExited"]
 [connection signal="area_entered" from="SandScorpion/ScorpionRoot/Skeleton3D/Chest/Hitbox" to="." method="OnHitboxEntered"]
@@ -6710,5 +7326,6 @@ textKeys = Array[String]([])
 [connection signal="area_exited" from="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Hitbox" to="." method="OnHitboxExited"]
 
 [editable path="SandScorpion"]
+[editable path="SandScorpion/ScorpionRoot/Skeleton3D/FlyingEye/FlyingEye"]
 [editable path="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail"]
 [editable path="SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail"]
