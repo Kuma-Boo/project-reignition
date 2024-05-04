@@ -199,7 +199,7 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(INTRO_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 			Respawn();
-			eventAnimator.Play("activate-particles");
+			eventAnimator.Play("finish-intro");
 			TransitionManager.FinishTransition();
 			Character.ProcessMode = ProcessModeEnum.Inherit;
 			Interface.PauseMenu.AllowPausing = true;
@@ -242,6 +242,7 @@ namespace Project.Gameplay.Bosses
 		private void StartResults()
 		{
 			rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = flyingEyeAnimationTree.Active = false;
+			eventAnimator.Play("finish-defeat");
 
 			Character.Visible = true;
 			Character.ProcessMode = ProcessModeEnum.Inherit;
@@ -276,7 +277,7 @@ namespace Project.Gameplay.Bosses
 				case FightState.Defeated:
 					if (Input.IsActionJustPressed("button_pause"))
 					{
-						eventAnimator.Play("defeat-skip");
+						eventAnimator.Play("finish-defeat");
 						rootAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
 						rTailAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
 						lTailAnimationTree.Set(DEFEAT_SEEK_PARAMETER, 10);
@@ -806,7 +807,7 @@ namespace Project.Gameplay.Bosses
 
 			// Cache current player position delta
 			flyingEyeAttackPosition = new Vector2(PathFollower.LocalPlayerPositionDelta.X, FLYING_EYE_RADIUS);
-
+			eventAnimator.Play("cage");
 			rootAnimationTree.Set(EYE_PARAMETER, ENABLED_STATE); // Open eye cage
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, EYE_BITE_STATE); // Start biting
 		}
@@ -862,6 +863,7 @@ namespace Project.Gameplay.Bosses
 				dialogFlags[2] = 1;
 			}
 
+			eventAnimator.Play("cage");
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); // Reset
 			rootAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); // Close eye cage
 
