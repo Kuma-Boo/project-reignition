@@ -137,6 +137,7 @@ namespace Project.Gameplay.Bosses
 			rootAnimationTree.Set(HEAVY_ATTACK_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			impactEffect.Visible = false;
 			flyingEyeHitbox.Monitorable = false;
+			flyingEyeVFX.Emitting = false;
 
 			eventAnimator.Play("RESET");
 
@@ -715,6 +716,9 @@ namespace Project.Gameplay.Bosses
 			hitEffect.GlobalPosition = Character.CenterPosition;
 			hitEffect.RestartGroup();
 		}
+
+		[Export]
+		private GpuParticles3D flyingEyeVFX;
 		#endregion
 
 		#region Eyes
@@ -808,6 +812,7 @@ namespace Project.Gameplay.Bosses
 			// Cache current player position delta
 			flyingEyeAttackPosition = new Vector2(PathFollower.LocalPlayerPositionDelta.X, FLYING_EYE_RADIUS);
 			eventAnimator.Play("cage");
+			flyingEyeVFX.Emitting = true;
 			rootAnimationTree.Set(EYE_PARAMETER, ENABLED_STATE); // Open eye cage
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, EYE_BITE_STATE); // Start biting
 		}
@@ -864,6 +869,7 @@ namespace Project.Gameplay.Bosses
 			}
 
 			eventAnimator.Play("cage");
+			flyingEyeVFX.Emitting = false;
 			flyingEyeAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); // Reset
 			rootAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE); // Close eye cage
 
