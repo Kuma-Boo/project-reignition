@@ -532,7 +532,7 @@ namespace Project.Gameplay.Bosses
 			float dot = Character.GetMovementDirection().Dot(PathFollower.Back());
 			float offsetPrediction = Character.MoveSpeed * Runtime.randomNumberGenerator.RandfRange(1f, 2f) * dot;
 			bossPathFollower.Progress = PathFollower.Progress + offsetPrediction;
-			bossPathFollower.HOffset = PathFollower.LocalPlayerPositionDelta.X; // Works since the path is flat
+			bossPathFollower.HOffset = -PathFollower.LocalPlayerPositionDelta.X; // Works since the path is flat
 			if (i != 0 && i < MAX_MISSILE_COUNT - 1) // Slightly randomize the middle missile's spread
 				bossPathFollower.HOffset += Runtime.randomNumberGenerator.RandfRange(-MISSILE_SPREAD, MISSILE_SPREAD);
 
