@@ -1,4 +1,4 @@
-[gd_scene load_steps=281 format=3 uid="uid://dr0pf7vprim86"]
+[gd_scene load_steps=283 format=3 uid="uid://dr0pf7vprim86"]
 
 [ext_resource type="Script" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_8xsd2"]
 [ext_resource type="PackedScene" uid="uid://b8irusmhs8rjm" path="res://area/1 sand oasis/boss/data/Missile.tscn" id="2_e5gye"]
@@ -208,6 +208,11 @@ animation = &"eye-damage"
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_2rb3s"]
 fadeout_time = 0.1
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_waanf"]
+animation = &"eye-defeat"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_pux7x"]
+
 [sub_resource type="Curve" id="Curve_ccwhf"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.9, 0.9), 3.15351, 3.15351, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -232,21 +237,25 @@ animation = &"RESET"
 animation = &"eye-retreat"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ryqab"]
-graph_offset = Vector2(-692.681, 84.7067)
+graph_offset = Vector2(-640.681, 37.7067)
 nodes/bite_animation/node = SubResource("AnimationNodeAnimation_1nx1v")
-nodes/bite_animation/position = Vector2(-224, 240)
+nodes/bite_animation/position = Vector2(-460, 240)
 nodes/damage_animation/node = SubResource("AnimationNodeAnimation_e1of5")
-nodes/damage_animation/position = Vector2(40, 300)
+nodes/damage_animation/position = Vector2(-200, 300)
 nodes/damage_trigger/node = SubResource("AnimationNodeOneShot_2rb3s")
-nodes/damage_trigger/position = Vector2(380, 120)
+nodes/damage_trigger/position = Vector2(140, 120)
+nodes/defeat_animation/node = SubResource("AnimationNodeAnimation_waanf")
+nodes/defeat_animation/position = Vector2(160, 340)
+nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_pux7x")
+nodes/defeat_trigger/position = Vector2(380, 100)
 nodes/eye_transition/node = SubResource("AnimationNodeTransition_1l0xm")
-nodes/eye_transition/position = Vector2(40, 100)
+nodes/eye_transition/position = Vector2(-200, 100)
 nodes/output/position = Vector2(580, 120)
 nodes/reset_animation/node = SubResource("AnimationNodeAnimation_54dah")
-nodes/reset_animation/position = Vector2(-224, 112)
+nodes/reset_animation/position = Vector2(-460, 100)
 nodes/retreat_animation/node = SubResource("AnimationNodeAnimation_wbwml")
-nodes/retreat_animation/position = Vector2(-224, 368)
-node_connections = [&"damage_trigger", 0, &"eye_transition", &"damage_trigger", 1, &"damage_animation", &"eye_transition", 0, &"reset_animation", &"eye_transition", 1, &"bite_animation", &"eye_transition", 2, &"retreat_animation", &"output", 0, &"damage_trigger"]
+nodes/retreat_animation/position = Vector2(-460, 360)
+node_connections = [&"damage_trigger", 0, &"eye_transition", &"damage_trigger", 1, &"damage_animation", &"defeat_trigger", 0, &"damage_trigger", &"defeat_trigger", 1, &"defeat_animation", &"eye_transition", 0, &"reset_animation", &"eye_transition", 1, &"bite_animation", &"eye_transition", 2, &"retreat_animation", &"output", 0, &"defeat_trigger"]
 
 [sub_resource type="Curve" id="Curve_s3hd4"]
 _data = [Vector2(0, 0), 0.0, 31.6507, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.9, 0), -5.73818, 0.0, 0, 0]
@@ -2101,7 +2110,7 @@ alpha_curve = SubResource("CurveTexture_1pmud")
 [sub_resource type="QuadMesh" id="QuadMesh_kk32p"]
 material = ExtResource("29_ytajl")
 
-[sub_resource type="Animation" id="Animation_42ca6"]
+[sub_resource type="Animation" id="Animation_ihtaa"]
 resource_name = "attack-heavy"
 length = 1.86667
 tracks/0/type = "position_3d"
@@ -2644,7 +2653,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_kcmr6"]
+[sub_resource type="Animation" id="Animation_2kee4"]
 resource_name = "damage"
 length = 0.666667
 tracks/0/type = "position_3d"
@@ -3187,7 +3196,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_558lr"]
+[sub_resource type="Animation" id="Animation_gh7q8"]
 resource_name = "flying-eye-active"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -3448,7 +3457,7 @@ tracks/36/enabled = true
 tracks/36/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_02")
 tracks/36/interp = 1
 tracks/36/loop_wrap = true
-tracks/36/keys = PackedFloat32Array(0, 1, 0.674378, 0.212632, 0.0308445, 0.706435)
+tracks/36/keys = PackedFloat32Array(0, 1, 0.674378, 0.212632, 0.0308444, 0.706435)
 tracks/37/type = "position_3d"
 tracks/37/imported = true
 tracks/37/enabled = true
@@ -3730,7 +3739,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_kglta"]
+[sub_resource type="Animation" id="Animation_kcm70"]
 resource_name = "flying-eye-inactive"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -3963,7 +3972,7 @@ tracks/32/enabled = true
 tracks/32/path = NodePath("ScorpionRoot/Skeleton3D:l_ik_02")
 tracks/32/interp = 1
 tracks/32/loop_wrap = true
-tracks/32/keys = PackedFloat32Array(0, 1, 0.674378, 0.212632, 0.0308445, 0.706435)
+tracks/32/keys = PackedFloat32Array(0, 1, 0.674378, 0.212632, 0.0308444, 0.706435)
 tracks/33/type = "position_3d"
 tracks/33/imported = true
 tracks/33/enabled = true
@@ -4273,7 +4282,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_uvbd3"]
+[sub_resource type="Animation" id="Animation_mvjfy"]
 resource_name = "phase-two-active"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -4816,7 +4825,7 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="Animation" id="Animation_8yo3p"]
+[sub_resource type="Animation" id="Animation_8h0gg"]
 resource_name = "phase-two-inactive"
 length = 0.001
 tracks/0/type = "position_3d"
@@ -5359,20 +5368,20 @@ tracks/76/interp = 1
 tracks/76/loop_wrap = true
 tracks/76/keys = PackedFloat32Array(0, 1, 6.07885e-08, 4.4, 8.74843e-09)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_evb14"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tocke"]
 _data = {
 "RESET": ExtResource("43_eaen3"),
-"attack-heavy": SubResource("Animation_42ca6"),
-"damage": SubResource("Animation_kcmr6"),
+"attack-heavy": SubResource("Animation_ihtaa"),
+"damage": SubResource("Animation_2kee4"),
 "defeat": ExtResource("44_jpi8q"),
-"flying-eye-active": SubResource("Animation_558lr"),
-"flying-eye-inactive": SubResource("Animation_kglta"),
+"flying-eye-active": SubResource("Animation_gh7q8"),
+"flying-eye-inactive": SubResource("Animation_kcm70"),
 "idle": ExtResource("45_i35nj"),
 "intro": ExtResource("46_npy2k"),
 "move-backward": ExtResource("47_s7u7l"),
 "move-forward": ExtResource("48_x8o82"),
-"phase-two-active": SubResource("Animation_uvbd3"),
-"phase-two-inactive": SubResource("Animation_8yo3p")
+"phase-two-active": SubResource("Animation_mvjfy"),
+"phase-two-inactive": SubResource("Animation_8h0gg")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lnhkb"]
@@ -7135,6 +7144,9 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/damage_trigger/active = false
 parameters/damage_trigger/internal_active = false
 parameters/damage_trigger/request = 0
+parameters/defeat_trigger/active = false
+parameters/defeat_trigger/internal_active = false
+parameters/defeat_trigger/request = 0
 parameters/eye_transition/current_state = "disabled"
 parameters/eye_transition/transition_request = ""
 parameters/eye_transition/current_index = 0
@@ -8197,7 +8209,7 @@ bus = &"SFX"
 active = false
 root_node = NodePath("../SandScorpion")
 libraries = {
-"": SubResource("AnimationLibrary_evb14")
+"": SubResource("AnimationLibrary_tocke")
 }
 tree_root = SubResource("AnimationNodeBlendTree_kv6lr")
 anim_player = NodePath("../SandScorpion/AnimationPlayer")
