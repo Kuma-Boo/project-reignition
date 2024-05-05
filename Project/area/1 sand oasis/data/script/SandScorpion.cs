@@ -118,6 +118,7 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(HEAVY_ATTACK_PARAMETER, DISABLED_STATE);
 			rootAnimationTree.Set(EYE_PARAMETER, DISABLED_STATE);
 
+			rootAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			lTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			rTailAnimationTree.Set(LIGHT_ATTACK_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
@@ -898,17 +899,15 @@ namespace Project.Gameplay.Bosses
 		private void TakeDamage()
 		{
 			currentHealth = (int)Mathf.MoveToward(currentHealth, 0, 1);
-			if (currentHealth == 0)
-				StartFinalBlow();
-			else
-			{
-				if (currentHealth == 4)
-					hitDialogs[0].Activate();
-				else if (isPhaseTwoActive && currentHealth == 2)
-					hitDialogs[2].Activate();
+			eventAnimator.Play("damage");
+			eventAnimator.Advance(0.0);
 
-				eventAnimator.Play("damage");
-			}
+			if (currentHealth == 4)
+				hitDialogs[0].Activate();
+			else if (isPhaseTwoActive && currentHealth == 2)
+				hitDialogs[2].Activate();
+			else if (currentHealth == 0)
+				StartFinalBlow();
 		}
 
 		private void UpdateHitboxes()
@@ -1062,6 +1061,7 @@ namespace Project.Gameplay.Bosses
 			if (!Character.Lockon.IsHomingAttacking) return; // Player isn't attacking
 
 			StartHitFX();
+			rootAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			Character.Lockon.StartBounce();
 			damageState = DamageState.Hitstun;
 
