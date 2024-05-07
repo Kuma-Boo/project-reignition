@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://coshp5qmt1aq7"]
+[gd_scene load_steps=98 format=3 uid="uid://coshp5qmt1aq7"]
 
 [ext_resource type="Script" path="res://interface/gameplay/pause/PauseMenu.cs" id="1"]
 [ext_resource type="Texture2D" uid="uid://tbukuwdkqg5w" path="res://interface/gameplay/pause/texture/paper.png" id="2_6a5br"]
@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="10_lpx5w"]
 [ext_resource type="Texture2D" uid="uid://cdrkqkq85qyj6" path="res://interface/gameplay/pause/texture/text/pause text en.png" id="11_t6p1e"]
 [ext_resource type="Texture2D" uid="uid://bnqtvxsv0llae" path="res://interface/gameplay/pause/texture/text/status/status value en.png" id="11_tq8dq"]
-[ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/gameplay/results/icon/gold.png" id="12_40s2i"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="12_mqlo7"]
 [ext_resource type="FontFile" uid="uid://b60t6w3shtof1" path="res://interface/font/Status Numbers en.fnt" id="12_tp5bp"]
 
@@ -121,37 +120,6 @@ tracks/0/keys = {
 "values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1e-05, 1e-05)]
 }
 
-[sub_resource type="Animation" id="Animation_8g051"]
-resource_name = "show"
-length = 0.200003
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Cursor:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.166667),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0.6, 1.5), Vector2(1.12, 0.8), Vector2(1, 1)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../..")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.166667),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"EnableCursorMovement"
-}]
-}
-
 [sub_resource type="Animation" id="Animation_pqbfb"]
 resource_name = "move"
 length = 0.200003
@@ -183,6 +151,37 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_8g051"]
+resource_name = "show"
+length = 0.200003
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cursor:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.166667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0.6, 1.5), Vector2(1.12, 0.8), Vector2(1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.166667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableCursorMovement"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qllxi"]
 _data = {
 "RESET": SubResource("Animation_vpj2a"),
@@ -194,6 +193,126 @@ _data = {
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4eg3h"]
 blend_mode = 1
 light_mode = 1
+
+[sub_resource type="Animation" id="Animation_c3bhf"]
+resource_name = "loop"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.3), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_gc03k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_qyq0t"]
+resource_name = "show"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 0), Vector2(1, 2), Vector2(1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../../../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableCursorMovement"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_nsrdk"]
+resource_name = "hide"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 2), Vector2(1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../../../../SFX/CancelSFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_5rcp8"]
+resource_name = "select"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../../../../../SFX/ScreenChangeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d6toc"]
+_data = {
+"RESET": SubResource("Animation_gc03k"),
+"hide": SubResource("Animation_nsrdk"),
+"loop": SubResource("Animation_c3bhf"),
+"select": SubResource("Animation_5rcp8"),
+"show": SubResource("Animation_qyq0t")
+}
 
 [sub_resource type="Animation" id="59"]
 length = 0.001
@@ -507,7 +626,7 @@ tracks/25/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/26/type = "value"
 tracks/26/imported = false
@@ -548,43 +667,43 @@ tracks/28/keys = {
 tracks/29/type = "value"
 tracks/29/imported = false
 tracks/29/enabled = true
-tracks/29/path = NodePath("StatusMenu/ValueMenu/Status:visible")
+tracks/29/path = NodePath("StatusMenu:modulate")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/30/type = "value"
 tracks/30/imported = false
 tracks/30/enabled = true
-tracks/30/path = NodePath("StatusMenu/ValueMenu/Mission:visible")
+tracks/30/path = NodePath("StatusMenu/Header:position")
 tracks/30/interp = 1
 tracks/30/loop_wrap = true
 tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(-88, 136)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("StatusMenu/ValueMenu/Skill:visible")
+tracks/31/path = NodePath("StatusMenu:position")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(416, 0)]
 }
 tracks/32/type = "value"
 tracks/32/imported = false
 tracks/32/enabled = true
-tracks/32/path = NodePath("StatusMenu:modulate")
+tracks/32/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
 tracks/32/interp = 1
 tracks/32/loop_wrap = true
 tracks/32/keys = {
@@ -596,91 +715,91 @@ tracks/32/keys = {
 tracks/33/type = "value"
 tracks/33/imported = false
 tracks/33/enabled = true
-tracks/33/path = NodePath("StatusMenu/Header:position")
+tracks/33/path = NodePath("StatusMenu/ValueMenu/LevelTop:position")
 tracks/33/interp = 1
 tracks/33/loop_wrap = true
 tracks/33/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-88, 136)]
+"values": [Vector2(0, -328)]
 }
 tracks/34/type = "value"
 tracks/34/imported = false
 tracks/34/enabled = true
-tracks/34/path = NodePath("StatusMenu:position")
+tracks/34/path = NodePath("StatusMenu/ValueMenu/BG:size")
 tracks/34/interp = 1
 tracks/34/loop_wrap = true
 tracks/34/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(416, 0)]
+"values": [Vector2(736, 532)]
 }
 tracks/35/type = "value"
 tracks/35/imported = false
 tracks/35/enabled = true
-tracks/35/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
+tracks/35/path = NodePath("StatusMenu/ValueMenu/Skill/HorizontalLine:size")
 tracks/35/interp = 1
 tracks/35/loop_wrap = true
 tracks/35/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Vector2(40, 0)]
 }
 tracks/36/type = "value"
 tracks/36/imported = false
 tracks/36/enabled = true
-tracks/36/path = NodePath("StatusMenu/ValueMenu/LevelTop:position")
+tracks/36/path = NodePath("StatusMenu/ValueMenu/Skill/HorizontalLine:scale")
 tracks/36/interp = 1
 tracks/36/loop_wrap = true
 tracks/36/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, -328)]
+"values": [Vector2(1e-05, 1)]
 }
 tracks/37/type = "value"
 tracks/37/imported = false
 tracks/37/enabled = true
-tracks/37/path = NodePath("StatusMenu/ValueMenu/BG:size")
+tracks/37/path = NodePath("StatusMenu/ValueMenu/Skill/Header:self_modulate")
 tracks/37/interp = 1
 tracks/37/loop_wrap = true
 tracks/37/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(736, 532)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/38/type = "value"
 tracks/38/imported = false
 tracks/38/enabled = true
-tracks/38/path = NodePath("StatusMenu/ValueMenu/Skill/HorizontalLine:size")
+tracks/38/path = NodePath("StatusMenu/ValueMenu/Mission/Header:self_modulate")
 tracks/38/interp = 1
 tracks/38/loop_wrap = true
 tracks/38/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(40, 0)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/39/type = "value"
 tracks/39/imported = false
 tracks/39/enabled = true
-tracks/39/path = NodePath("StatusMenu/ValueMenu/Skill/HorizontalLine:scale")
+tracks/39/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul:modulate")
 tracks/39/interp = 1
 tracks/39/loop_wrap = true
 tracks/39/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1e-05, 1)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/40/type = "value"
 tracks/40/imported = false
 tracks/40/enabled = true
-tracks/40/path = NodePath("StatusMenu/ValueMenu/Skill/Header:self_modulate")
+tracks/40/path = NodePath("StatusMenu/ValueMenu/Mission/Medal:modulate")
 tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = {
@@ -692,7 +811,7 @@ tracks/40/keys = {
 tracks/41/type = "value"
 tracks/41/imported = false
 tracks/41/enabled = true
-tracks/41/path = NodePath("StatusMenu/ValueMenu/Mission/Header:self_modulate")
+tracks/41/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/Soul1:modulate")
 tracks/41/interp = 1
 tracks/41/loop_wrap = true
 tracks/41/keys = {
@@ -704,7 +823,7 @@ tracks/41/keys = {
 tracks/42/type = "value"
 tracks/42/imported = false
 tracks/42/enabled = true
-tracks/42/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul:modulate")
+tracks/42/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/Soul2:modulate")
 tracks/42/interp = 1
 tracks/42/loop_wrap = true
 tracks/42/keys = {
@@ -716,7 +835,7 @@ tracks/42/keys = {
 tracks/43/type = "value"
 tracks/43/imported = false
 tracks/43/enabled = true
-tracks/43/path = NodePath("StatusMenu/ValueMenu/Mission/Medal:modulate")
+tracks/43/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/Soul3:modulate")
 tracks/43/interp = 1
 tracks/43/loop_wrap = true
 tracks/43/keys = {
@@ -728,7 +847,7 @@ tracks/43/keys = {
 tracks/44/type = "value"
 tracks/44/imported = false
 tracks/44/enabled = true
-tracks/44/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/Soul1:modulate")
+tracks/44/path = NodePath("StatusMenu/ValueMenu/Mission/Medal/Medal:modulate")
 tracks/44/interp = 1
 tracks/44/loop_wrap = true
 tracks/44/keys = {
@@ -740,7 +859,7 @@ tracks/44/keys = {
 tracks/45/type = "value"
 tracks/45/imported = false
 tracks/45/enabled = true
-tracks/45/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/Soul2:modulate")
+tracks/45/path = NodePath("StatusMenu/ValueMenu/Status/Level:modulate")
 tracks/45/interp = 1
 tracks/45/loop_wrap = true
 tracks/45/keys = {
@@ -752,7 +871,7 @@ tracks/45/keys = {
 tracks/46/type = "value"
 tracks/46/imported = false
 tracks/46/enabled = true
-tracks/46/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/Soul3:modulate")
+tracks/46/path = NodePath("StatusMenu/ValueMenu/Status/HighScore:modulate")
 tracks/46/interp = 1
 tracks/46/loop_wrap = true
 tracks/46/keys = {
@@ -764,7 +883,7 @@ tracks/46/keys = {
 tracks/47/type = "value"
 tracks/47/imported = false
 tracks/47/enabled = true
-tracks/47/path = NodePath("StatusMenu/ValueMenu/Mission/Medal/Medal:modulate")
+tracks/47/path = NodePath("StatusMenu/ValueMenu/Status/Score:modulate")
 tracks/47/interp = 1
 tracks/47/loop_wrap = true
 tracks/47/keys = {
@@ -776,7 +895,7 @@ tracks/47/keys = {
 tracks/48/type = "value"
 tracks/48/imported = false
 tracks/48/enabled = true
-tracks/48/path = NodePath("StatusMenu/ValueMenu/Status/Level:modulate")
+tracks/48/path = NodePath("StatusMenu/ValueMenu/Status/BestTime:modulate")
 tracks/48/interp = 1
 tracks/48/loop_wrap = true
 tracks/48/keys = {
@@ -788,7 +907,7 @@ tracks/48/keys = {
 tracks/49/type = "value"
 tracks/49/imported = false
 tracks/49/enabled = true
-tracks/49/path = NodePath("StatusMenu/ValueMenu/Status/HighScore:modulate")
+tracks/49/path = NodePath("StatusMenu/ValueMenu/Status/Time:modulate")
 tracks/49/interp = 1
 tracks/49/loop_wrap = true
 tracks/49/keys = {
@@ -800,7 +919,7 @@ tracks/49/keys = {
 tracks/50/type = "value"
 tracks/50/imported = false
 tracks/50/enabled = true
-tracks/50/path = NodePath("StatusMenu/ValueMenu/Status/Score:modulate")
+tracks/50/path = NodePath("StatusMenu/ValueMenu/Status/StageEXP:modulate")
 tracks/50/interp = 1
 tracks/50/loop_wrap = true
 tracks/50/keys = {
@@ -812,7 +931,7 @@ tracks/50/keys = {
 tracks/51/type = "value"
 tracks/51/imported = false
 tracks/51/enabled = true
-tracks/51/path = NodePath("StatusMenu/ValueMenu/Status/BestTime:modulate")
+tracks/51/path = NodePath("StatusMenu/ValueMenu/Status/TotalEXP:modulate")
 tracks/51/interp = 1
 tracks/51/loop_wrap = true
 tracks/51/keys = {
@@ -824,7 +943,7 @@ tracks/51/keys = {
 tracks/52/type = "value"
 tracks/52/imported = false
 tracks/52/enabled = true
-tracks/52/path = NodePath("StatusMenu/ValueMenu/Status/Time:modulate")
+tracks/52/path = NodePath("StatusMenu/ValueMenu/Status/SoulGauge:modulate")
 tracks/52/interp = 1
 tracks/52/loop_wrap = true
 tracks/52/keys = {
@@ -836,134 +955,134 @@ tracks/52/keys = {
 tracks/53/type = "value"
 tracks/53/imported = false
 tracks/53/enabled = true
-tracks/53/path = NodePath("StatusMenu/ValueMenu/Status/StageEXP:modulate")
+tracks/53/path = NodePath("StatusMenu/ValueMenu/Status/Level:position")
 tracks/53/interp = 1
 tracks/53/loop_wrap = true
 tracks/53/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(-168, -256)]
 }
 tracks/54/type = "value"
 tracks/54/imported = false
 tracks/54/enabled = true
-tracks/54/path = NodePath("StatusMenu/ValueMenu/Status/TotalEXP:modulate")
+tracks/54/path = NodePath("StatusMenu/ValueMenu/Status/HighScore:position")
 tracks/54/interp = 1
 tracks/54/loop_wrap = true
 tracks/54/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(-168, -196)]
 }
 tracks/55/type = "value"
 tracks/55/imported = false
 tracks/55/enabled = true
-tracks/55/path = NodePath("StatusMenu/ValueMenu/Status/SoulGauge:modulate")
+tracks/55/path = NodePath("StatusMenu/ValueMenu/Status/Score:position")
 tracks/55/interp = 1
 tracks/55/loop_wrap = true
 tracks/55/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(-168, -140)]
 }
 tracks/56/type = "value"
 tracks/56/imported = false
 tracks/56/enabled = true
-tracks/56/path = NodePath("StatusMenu/ValueMenu/Status/Level:position")
+tracks/56/path = NodePath("StatusMenu/ValueMenu/Status/BestTime:position")
 tracks/56/interp = 1
 tracks/56/loop_wrap = true
 tracks/56/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, -256)]
+"values": [Vector2(-168, -84)]
 }
 tracks/57/type = "value"
 tracks/57/imported = false
 tracks/57/enabled = true
-tracks/57/path = NodePath("StatusMenu/ValueMenu/Status/HighScore:position")
+tracks/57/path = NodePath("StatusMenu/ValueMenu/Status/Time:position")
 tracks/57/interp = 1
 tracks/57/loop_wrap = true
 tracks/57/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, -196)]
+"values": [Vector2(-168, -28)]
 }
 tracks/58/type = "value"
 tracks/58/imported = false
 tracks/58/enabled = true
-tracks/58/path = NodePath("StatusMenu/ValueMenu/Status/Score:position")
+tracks/58/path = NodePath("StatusMenu/ValueMenu/Status/StageEXP:position")
 tracks/58/interp = 1
 tracks/58/loop_wrap = true
 tracks/58/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, -140)]
+"values": [Vector2(-168, 28)]
 }
 tracks/59/type = "value"
 tracks/59/imported = false
 tracks/59/enabled = true
-tracks/59/path = NodePath("StatusMenu/ValueMenu/Status/BestTime:position")
+tracks/59/path = NodePath("StatusMenu/ValueMenu/Status/TotalEXP:position")
 tracks/59/interp = 1
 tracks/59/loop_wrap = true
 tracks/59/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, -84)]
+"values": [Vector2(-168, 84)]
 }
 tracks/60/type = "value"
 tracks/60/imported = false
 tracks/60/enabled = true
-tracks/60/path = NodePath("StatusMenu/ValueMenu/Status/Time:position")
+tracks/60/path = NodePath("StatusMenu/ValueMenu/Status/SoulGauge:position")
 tracks/60/interp = 1
 tracks/60/loop_wrap = true
 tracks/60/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, -28)]
+"values": [Vector2(-168, 140)]
 }
 tracks/61/type = "value"
 tracks/61/imported = false
 tracks/61/enabled = true
-tracks/61/path = NodePath("StatusMenu/ValueMenu/Status/StageEXP:position")
+tracks/61/path = NodePath("StatusMenu/ValueMenu/Status:modulate")
 tracks/61/interp = 1
 tracks/61/loop_wrap = true
 tracks/61/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, 28)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/62/type = "value"
 tracks/62/imported = false
 tracks/62/enabled = true
-tracks/62/path = NodePath("StatusMenu/ValueMenu/Status/TotalEXP:position")
+tracks/62/path = NodePath("StatusMenu/ValueMenu/Mission:modulate")
 tracks/62/interp = 1
 tracks/62/loop_wrap = true
 tracks/62/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, 84)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/63/type = "value"
 tracks/63/imported = false
 tracks/63/enabled = true
-tracks/63/path = NodePath("StatusMenu/ValueMenu/Status/SoulGauge:position")
+tracks/63/path = NodePath("StatusMenu/ValueMenu/Skill:modulate")
 tracks/63/interp = 1
 tracks/63/loop_wrap = true
 tracks/63/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-168, 140)]
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_fg5m5"]
@@ -1804,144 +1923,142 @@ tracks/15/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
-tracks/16/type = "method"
+tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("..")
+tracks/16/path = NodePath("Paper:scale")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0.9),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"ApplySelection"
-}]
+"update": 0,
+"values": [Vector2(1, 1)]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("Paper:scale")
+tracks/17/path = NodePath("StatusMenu:position")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Vector2(416, 0)]
 }
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("StatusMenu:position")
+tracks/18/path = NodePath("StatusMenu:modulate")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(416, 0)]
-}
-tracks/19/type = "value"
-tracks/19/imported = false
-tracks/19/enabled = true
-tracks/19/path = NodePath("StatusMenu:modulate")
-tracks/19/interp = 1
-tracks/19/loop_wrap = true
-tracks/19/keys = {
 "times": PackedFloat32Array(0, 0.8, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/20/type = "value"
-tracks/20/imported = false
-tracks/20/enabled = true
-tracks/20/path = NodePath("StatusMenu/Header:position")
-tracks/20/interp = 1
-tracks/20/loop_wrap = true
-tracks/20/keys = {
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("StatusMenu/Header:position")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
 "times": PackedFloat32Array(0.8, 1.00001),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(-88, 256), Vector2(-88, 136)]
 }
-tracks/21/type = "value"
-tracks/21/imported = false
-tracks/21/enabled = true
-tracks/21/path = NodePath("StatusMenu/Status:position")
-tracks/21/interp = 1
-tracks/21/loop_wrap = true
-tracks/21/keys = {
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("StatusMenu/Status:position")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
 "times": PackedFloat32Array(0.9, 1.1),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(120, 280), Vector2(-24, 280)]
 }
-tracks/22/type = "value"
-tracks/22/imported = false
-tracks/22/enabled = true
-tracks/22/path = NodePath("StatusMenu/Status:self_modulate")
-tracks/22/interp = 1
-tracks/22/loop_wrap = true
-tracks/22/keys = {
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("StatusMenu/Status:self_modulate")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
 "times": PackedFloat32Array(0.9, 1.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/23/type = "value"
-tracks/23/imported = false
-tracks/23/enabled = true
-tracks/23/path = NodePath("StatusMenu/Mission:position")
-tracks/23/interp = 1
-tracks/23/loop_wrap = true
-tracks/23/keys = {
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("StatusMenu/Mission:position")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
 "times": PackedFloat32Array(1, 1.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(100, 344), Vector2(0, 344)]
 }
-tracks/24/type = "value"
-tracks/24/imported = false
-tracks/24/enabled = true
-tracks/24/path = NodePath("StatusMenu/Mission:self_modulate")
-tracks/24/interp = 1
-tracks/24/loop_wrap = true
-tracks/24/keys = {
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("StatusMenu/Mission:self_modulate")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
 "times": PackedFloat32Array(1, 1.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.588235)]
 }
-tracks/25/type = "value"
-tracks/25/imported = false
-tracks/25/enabled = true
-tracks/25/path = NodePath("StatusMenu/Skills:position")
-tracks/25/interp = 1
-tracks/25/loop_wrap = true
-tracks/25/keys = {
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("StatusMenu/Skills:position")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
 "times": PackedFloat32Array(1.1, 1.3),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(100, 408), Vector2(0, 408)]
 }
-tracks/26/type = "value"
-tracks/26/imported = false
-tracks/26/enabled = true
-tracks/26/path = NodePath("StatusMenu/Skills:self_modulate")
-tracks/26/interp = 1
-tracks/26/loop_wrap = true
-tracks/26/keys = {
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("StatusMenu/Skills:self_modulate")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
 "times": PackedFloat32Array(1.1, 1.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.588235)]
 }
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 tracks/27/type = "value"
 tracks/27/imported = false
 tracks/27/enabled = true
-tracks/27/path = NodePath("StatusMenu/ValueMenu:modulate")
+tracks/27/path = NodePath("StatusMenu/Status/Glow:self_modulate")
 tracks/27/interp = 1
 tracks/27/loop_wrap = true
 tracks/27/keys = {
@@ -1953,7 +2070,7 @@ tracks/27/keys = {
 tracks/28/type = "value"
 tracks/28/imported = false
 tracks/28/enabled = true
-tracks/28/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
+tracks/28/path = NodePath("StatusMenu/Mission/Glow:self_modulate")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
@@ -1965,22 +2082,10 @@ tracks/28/keys = {
 tracks/29/type = "value"
 tracks/29/imported = false
 tracks/29/enabled = true
-tracks/29/path = NodePath("StatusMenu/Status/Glow:self_modulate")
+tracks/29/path = NodePath("StatusMenu/ValueMenu:modulate")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/30/type = "value"
-tracks/30/imported = false
-tracks/30/enabled = true
-tracks/30/path = NodePath("StatusMenu/Mission/Glow:self_modulate")
-tracks/30/interp = 1
-tracks/30/loop_wrap = true
-tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -2229,6 +2334,35 @@ tracks/3/path = NodePath("Paper:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_kycg1"]
+resource_name = "hide-static"
+length = 0.001
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Paper:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -3063,6 +3197,35 @@ tracks/3/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_c1m3d"]
+resource_name = "show-static"
+length = 0.001
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Paper:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_u7e6h"]
 resource_name = "status-0"
 loop_mode = 1
@@ -3411,6 +3574,90 @@ tracks/9/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_gc5ll"]
+resource_name = "status-hide"
+length = 0.416671
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.25, 0.375),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"ApplyPause"
+}, {
+"args": [],
+"method": &"EnableInteraction"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../SFX/CancelSFX")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Paper:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StatusMenu:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector2(416, 0), Vector2(416, 196)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StatusMenu:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_fam1d"]
 resource_name = "value-0"
 tracks/0/type = "method"
@@ -3490,38 +3737,38 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("StatusMenu/ValueMenu/Status:visible")
+tracks/6/path = NodePath("StatusMenu/ValueMenu/Status:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("StatusMenu/ValueMenu/Mission:visible")
+tracks/7/path = NodePath("StatusMenu/ValueMenu/Mission:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("StatusMenu/ValueMenu/Skill:visible")
+tracks/8/path = NodePath("StatusMenu/ValueMenu/Skill:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -3728,148 +3975,6 @@ tracks/25/keys = {
 "values": [Vector2(-168, 239.5), Vector2(-168, 168)]
 }
 
-[sub_resource type="Animation" id="Animation_c1m3d"]
-resource_name = "show-static"
-length = 0.001
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Paper:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_kycg1"]
-resource_name = "hide-static"
-length = 0.001
-step = 0.0416667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Paper:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_gc5ll"]
-resource_name = "status-hide"
-length = 0.416671
-step = 0.0416667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("..")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.25, 0.375),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"ApplyPause"
-}, {
-"args": [],
-"method": &"EnableInteraction"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../SFX/CancelSFX")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Paper:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StatusMenu:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(2, 1),
-"update": 0,
-"values": [Vector2(416, 0), Vector2(416, 196)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("StatusMenu:modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_qciop"]
 resource_name = "value-1"
 length = 2.0
@@ -3950,38 +4055,38 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("StatusMenu/ValueMenu/Status:visible")
+tracks/6/path = NodePath("StatusMenu/ValueMenu/Status:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("StatusMenu/ValueMenu/Mission:visible")
+tracks/7/path = NodePath("StatusMenu/ValueMenu/Mission:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("StatusMenu/ValueMenu/Skill:visible")
+tracks/8/path = NodePath("StatusMenu/ValueMenu/Skill:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -4002,7 +4107,7 @@ tracks/10/path = NodePath("StatusMenu/ValueMenu/BG:size")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(736, 320)]
@@ -4172,38 +4277,38 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("StatusMenu/ValueMenu/Status:visible")
+tracks/6/path = NodePath("StatusMenu/ValueMenu/Status:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("StatusMenu/ValueMenu/Mission:visible")
+tracks/7/path = NodePath("StatusMenu/ValueMenu/Mission:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("StatusMenu/ValueMenu/Skill:visible")
+tracks/8/path = NodePath("StatusMenu/ValueMenu/Skill:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -4279,12 +4384,6 @@ _data = {
 "value-1": SubResource("Animation_qciop"),
 "value-2": SubResource("Animation_5tncr")
 }
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jtug2"]
-animation = &"value-2"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3si8f"]
-animation = &"value-1"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2e06l"]
 animation = &"cancel-2"
@@ -4410,6 +4509,7 @@ fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_0522j"]
 xfade_time = 0.2
+allow_transition_to_self = true
 input_0/name = "0"
 input_0/auto_advance = false
 input_0/reset = true
@@ -4421,9 +4521,11 @@ input_2/auto_advance = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_7spoh"]
+sync = true
 fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_lq24n"]
+allow_transition_to_self = true
 input_0/name = "pause"
 input_0/auto_advance = false
 input_0/reset = true
@@ -4434,7 +4536,14 @@ input_1/reset = true
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_m6tlk"]
 animation = &"value-0"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3si8f"]
+animation = &"value-1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jtug2"]
+animation = &"value-2"
+
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6f5vy"]
+allow_transition_to_self = true
 input_0/name = "0"
 input_0/auto_advance = false
 input_0/reset = true
@@ -4446,11 +4555,7 @@ input_2/auto_advance = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sm8n7"]
-graph_offset = Vector2(-749.759, 331.419)
-nodes/Animation/node = SubResource("AnimationNodeAnimation_3si8f")
-nodes/Animation/position = Vector2(-1200, 920)
-"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_jtug2")
-"nodes/Animation 2/position" = Vector2(-1180, 1040)
+graph_offset = Vector2(-746.427, 438.71)
 nodes/cancel-2/node = SubResource("AnimationNodeAnimation_2e06l")
 nodes/cancel-2/position = Vector2(-240, 1020)
 nodes/confirm/node = SubResource("AnimationNodeTransition_86qql")
@@ -4512,11 +4617,15 @@ nodes/submenu_transition/node = SubResource("AnimationNodeTransition_lq24n")
 nodes/submenu_transition/position = Vector2(-620, 720)
 nodes/value-0/node = SubResource("AnimationNodeAnimation_m6tlk")
 nodes/value-0/position = Vector2(-1200, 800)
+nodes/value-1/node = SubResource("AnimationNodeAnimation_3si8f")
+nodes/value-1/position = Vector2(-1200, 920)
+nodes/value-2/node = SubResource("AnimationNodeAnimation_jtug2")
+nodes/value-2/position = Vector2(-1180, 1040)
 nodes/value_selection/node = SubResource("AnimationNodeTransition_6f5vy")
 nodes/value_selection/position = Vector2(-1020, 820)
-node_connections = [&"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"output", 0, &"confirm_enabled", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"Animation", &"value_selection", 2, &"Animation 2"]
+node_connections = [&"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"output", 0, &"confirm_enabled", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"value-1", &"value_selection", 2, &"value-2"]
 
-[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "statusCursor", "statusCursorAnimator", "values", "skillList", "levelSprite")]
+[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "statusCursor", "statusCursorAnimator", "values", "skillList", "skillCursor", "skillCursorAnimator", "levelSprite")]
 process_mode = 3
 layer = 64
 script = ExtResource("1")
@@ -4528,6 +4637,8 @@ statusCursor = NodePath("Pause/StatusMenu/StatusCursorAnchor/Cursor")
 statusCursorAnimator = NodePath("Pause/StatusMenu/StatusCursorAnchor/AnimationPlayer")
 values = []
 skillList = NodePath("Pause/StatusMenu/ValueMenu/Skill/SkillList")
+skillCursor = NodePath("Pause/StatusMenu/ValueMenu/Skill/CursorAnchor/Cursor")
+skillCursorAnimator = NodePath("Pause/StatusMenu/ValueMenu/Skill/CursorAnchor/AnimationPlayer")
 rectVerticalValues = PackedInt32Array(346, 8, 195, 244, 295, 98, 51, 145)
 levelSprite = NodePath("Pause/StatusMenu/ValueMenu/LevelTop")
 
@@ -4736,6 +4847,7 @@ region_enabled = true
 region_rect = Rect2(0, 436, 396, 32)
 
 [node name="LevelTop" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu"]
+visible = false
 position = Vector2(0, -328)
 scale = Vector2(2.25, 2.25)
 texture = ExtResource("10_lpx5w")
@@ -4750,7 +4862,6 @@ region_enabled = true
 region_rect = Rect2(0, 472, 396, 32)
 
 [node name="Status" type="Node2D" parent="Pause/StatusMenu/ValueMenu"]
-visible = false
 
 [node name="Level" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Status"]
 position = Vector2(-168, -256)
@@ -4881,7 +4992,7 @@ theme_override_font_sizes/font_size = 64
 text = "999/999"
 
 [node name="Mission" type="Node2D" parent="Pause/StatusMenu/ValueMenu"]
-visible = false
+modulate = Color(1, 1, 1, 0)
 
 [node name="Header" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Mission"]
 position = Vector2(-207, -256)
@@ -4924,8 +5035,10 @@ region_rect = Rect2(0, 48, 136, 20)
 
 [node name="Medal" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Mission/Medal"]
 position = Vector2(39.1111, 32)
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("12_40s2i")
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("9_eaqga")
+region_enabled = true
+region_rect = Rect2(136, 128, 40, 40)
 
 [node name="Type" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
 offset_left = -343.0
@@ -4946,7 +5059,7 @@ theme_override_font_sizes/font_size = 32
 text = "Find King Shahryar!"
 
 [node name="Skill" type="Node2D" parent="Pause/StatusMenu/ValueMenu"]
-visible = false
+modulate = Color(1, 1, 1, 0)
 
 [node name="Header" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Skill"]
 position = Vector2(-207, -256)
@@ -4954,6 +5067,29 @@ scale = Vector2(2.25, 2.25)
 texture = ExtResource("6_vpjv2")
 region_enabled = true
 region_rect = Rect2(0, 188, 136, 20)
+
+[node name="CursorAnchor" type="Node2D" parent="Pause/StatusMenu/ValueMenu/Skill"]
+position = Vector2(-352, -200)
+metadata/_edit_lock_ = true
+
+[node name="Cursor" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu/Skill/CursorAnchor"]
+offset_right = 696.0
+offset_bottom = 50.0
+scale = Vector2(1, 1e-05)
+pivot_offset = Vector2(0, 25)
+texture = ExtResource("9_eaqga")
+region_rect = Rect2(136, 96, 120, 16)
+patch_margin_left = 10
+patch_margin_top = 4
+patch_margin_right = 9
+patch_margin_bottom = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/StatusMenu/ValueMenu/Skill/CursorAnchor"]
+root_node = NodePath("../Cursor")
+libraries = {
+"": SubResource("AnimationLibrary_d6toc")
+}
+blend_times = [&"show", &"loop", 0.1]
 
 [node name="HorizontalLine" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu/Skill"]
 offset_left = -360.0
@@ -4971,7 +5107,7 @@ offset_left = -328.0
 offset_top = -192.0
 offset_right = 280.0
 offset_bottom = 216.0
-theme_override_constants/line_spacing = 28
+theme_override_constants/line_spacing = 27
 theme_override_fonts/font = ExtResource("12_mqlo7")
 theme_override_font_sizes/font_size = 32
 text = "Skill 1

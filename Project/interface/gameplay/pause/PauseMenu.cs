@@ -14,8 +14,6 @@ namespace Project.Interface
 		[Export]
 		private AnimationPlayer pauseCursorAnimator;
 		[Export]
-		private Node2D skillCursor;
-		[Export]
 		private AudioStreamPlayer selectSFX;
 
 		[ExportGroup("Status Menu")]
@@ -27,6 +25,10 @@ namespace Project.Interface
 		private Label[] values;
 		[Export]
 		private Label skillList;
+		[Export]
+		private Control skillCursor;
+		[Export]
+		private AnimationPlayer skillCursorAnimator;
 		[Export]
 		private int[] rectVerticalValues;
 		[Export]
@@ -79,10 +81,7 @@ namespace Project.Interface
 					{
 						AllowPausing = false;
 						if (currentSelection == 2)
-						{
-							pauseCursorAnimator.Play("hide");
-							animator.Set(STATUS_SHOW_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-						}
+							ApplySelection();
 						else
 						{
 							animator.Set(CONFIRM_PARAMETER, currentSelection.ToString());
@@ -90,19 +89,23 @@ namespace Project.Interface
 						}
 					}
 					else if (submenu == Submenu.STATUS && currentSelection == 2) // Enter skill menu
-					{
-
-					}
+						ApplySelection();
 				}
 				else if (Input.IsActionJustPressed("button_action"))
 				{
 					if (submenu == Submenu.PAUSE)
 						TogglePause();
-					else
+					else if (submenu == Submenu.STATUS)
 					{
 						AllowPausing = false;
 						statusCursorAnimator.Play("hide");
 						animator.Set(STATUS_HIDE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+					}
+					else
+					{
+						skillCursorAnimator.Play("hide");
+						submenu = Submenu.STATUS;
+						currentSelection = 2;
 					}
 				}
 				else if (sign != 0)
@@ -142,7 +145,9 @@ namespace Project.Interface
 						break;
 					case 2: // Status menu
 						submenu = Submenu.STATUS;
+						pauseCursorAnimator.Play("hide");
 						animator.Set(SUBMENU_PARAMETER, "status");
+						animator.Set(STATUS_SHOW_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 						UpdateSelection(0);
 						UpdateCursorPosition();
 						break;
@@ -151,14 +156,13 @@ namespace Project.Interface
 						break;
 				}
 			}
-			else if (submenu == Submenu.STATUS)
+			else if (submenu == Submenu.STATUS && currentSelection == 2) // Enter skill menu
 			{
-				if (currentSelection == 2) // Enter skill menu
-				{
-					submenu = Submenu.SKILL;
-					UpdateSelection(0); // Select the first skill
-					UpdateCursorPosition();
-				}
+				submenu = Submenu.SKILL;
+				skillCursorAnimator.Play("select");
+				skillCursorAnimator.Advance(0.0);
+				UpdateSelection(skillSelection); // Remember previously selected skill
+				UpdateCursorPosition();
 			}
 		}
 
@@ -173,9 +177,16 @@ namespace Project.Interface
 
 		/// <summary> Selected menu option. </summary>
 		private int currentSelection;
+		/// <summary> Current Selected skill option. </summary>
+		private int skillSelection;
 		/// <summary> Can the cursor currently be moved? </summary>
 		private bool canMoveCursor;
-		private void EnableCursorMovement() => canMoveCursor = true;
+		private void EnableCursorMovement()
+		{
+			canMoveCursor = true;
+			if (submenu == Submenu.SKILL)
+				skillCursorAnimator.Play("loop");
+		}
 		private void UpdateCursorPosition()
 		{
 			switch (submenu)
@@ -183,12 +194,29 @@ namespace Project.Interface
 				case Submenu.PAUSE:
 					pauseCursor.Position = Vector2.Down * currentSelection * 32;
 					pauseCursorAnimator.Play("show");
-					pauseCursorAnimator.Advance(0.0);
+					pauseCursorAnimator.Seek(0.0, true);
 					break;
 				case Submenu.STATUS:
 					statusCursor.Position = Vector2.Down * currentSelection * 32;
 					statusCursorAnimator.Play("show");
-					statusCursorAnimator.Advance(0.0);
+					statusCursorAnimator.Seek(0.0, true);
+					break;
+				case Submenu.SKILL:
+					int visualSelection = skillSelection - skillList.LinesSkipped;
+					if (skillSelection > skillList.LinesSkipped + 6)
+					{
+						visualSelection = 6;
+						skillList.LinesSkipped = skillSelection - visualSelection;
+					}
+					else if (skillSelection < skillList.LinesSkipped)
+					{
+						visualSelection = 0;
+						skillList.LinesSkipped = skillSelection;
+					}
+
+					skillCursor.Position = Vector2.Down * visualSelection * 60;
+					skillCursorAnimator.Play("show");
+					skillCursorAnimator.Seek(0.0, true);
 					break;
 			}
 		}
@@ -214,6 +242,8 @@ namespace Project.Interface
 					animator.Set(STATUS_SELECTION_PARAMETER, selection.ToString());
 					break;
 				case Submenu.SKILL:
+					skillSelection = selection;
+					UpdateCursorPosition();
 					break;
 			}
 		}
