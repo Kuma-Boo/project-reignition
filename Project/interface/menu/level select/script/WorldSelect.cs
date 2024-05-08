@@ -57,6 +57,10 @@ namespace Project.Interface.Menus
 
 		public override void ShowMenu()
 		{
+			VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
+			if (ActiveVideoPlayer != null)
+				ActiveVideoPlayer.Stream = videoStreams[VerticalSelection];
+
 			if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
 				animator.Play("show-fade-video");
 			else

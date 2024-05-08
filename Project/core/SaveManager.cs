@@ -461,6 +461,9 @@ namespace Project.Core
 					worldsUnlocked = WorldFlagEnum.LostPrologue,
 					lastPlayedWorld = WorldEnum.LostPrologue,
 				};
+
+				if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
+					data.worldsUnlocked = WorldFlagEnum.All;
 				data.skillRing.RefreshSkillRingData(data.level);
 				return data;
 			}
