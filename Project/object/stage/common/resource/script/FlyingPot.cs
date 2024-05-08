@@ -154,6 +154,7 @@ namespace Project.Gameplay.Objects
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Back());
 			Character.VerticalSpeed = Runtime.CalculateJumpPower(Character.jumpHeight);
 
+			Character.Animator.JumpAnimation();
 			Character.Animator.Visible = true;
 			Character.Animator.SnapRotation(Character.MovementAngle - Mathf.Pi * angleRatio);
 			Character.ResetMovementState();
