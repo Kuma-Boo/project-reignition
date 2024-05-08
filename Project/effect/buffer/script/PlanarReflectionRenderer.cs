@@ -35,13 +35,11 @@ namespace Project.Gameplay
 		public Array<ShaderMaterial> reflectionMaterials;
 
 		[Export]
-		/// <summary> Attempt to preview in the editor? </summary>
-		private bool editorPreview;
 		private Vector3 previousCapturePosition;
 		private Vector3 previousCaptureRotation;
 
-		private Callable UpdatePositionCallable => new Callable(this, MethodName.UpdatePosition);
-		private Callable ApplyTextureCallable => new Callable(this, MethodName.ApplyTexture);
+		private Callable UpdatePositionCallable => new(this, MethodName.UpdatePosition);
+		private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
 
 		public override void _EnterTree()
 		{
@@ -75,17 +73,13 @@ namespace Project.Gameplay
 			if (CharacterController.instance != null)
 				mainCamera = CharacterController.instance.Camera.Camera;
 
-			if (Engine.IsEditorHint())
-				mainCamera = Editor.StageObjectPreviewer.Plugin.editorCam;
-
-
 			return mainCamera != null && reflectionCamera != null;
 		}
 
 		//Mirror main camera along plane
 		private void UpdatePosition()
 		{
-			if (Engine.IsEditorHint() && !editorPreview) return;
+			if (Engine.IsEditorHint()) return;
 			if (!GetCamera() || !GetReflectionViewport()) return;
 
 			if (Engine.IsEditorHint())
