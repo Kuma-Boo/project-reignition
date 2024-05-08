@@ -122,7 +122,7 @@ namespace Project.Gameplay
 			if (IsDefeated)
 				Defeat();
 			else
-				Character.Camera.LockonTarget = this;
+				Character.Camera.SetDeferred("LockonTarget", this);
 		}
 
 
@@ -187,8 +187,8 @@ namespace Project.Gameplay
 				Defeat();
 			else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
-				Character.Lockon.StartBounce(IsDefeated);
 				TakePlayerDamage();
+				Character.Lockon.StartBounce(IsDefeated);
 			}
 			else if (damagePlayer)
 				Character.StartKnockback();
