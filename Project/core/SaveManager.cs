@@ -519,7 +519,7 @@ namespace Project.Core
 			}
 
 			// Debug game data
-			if (DebugManager.Instance.UseDebugSave) // For testing
+			if (DebugManager.Instance.UseDemoSave) // For testing
 			{
 				ActiveSaveSlotIndex = 0;
 				GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();

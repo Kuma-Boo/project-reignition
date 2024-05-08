@@ -27,13 +27,13 @@ namespace Project.Core
 			Instance = this;
 			ProcessMode = ProcessModeEnum.Always;
 
+			UseDemoSave = true; // Be sure to DISABLE this in the FINAL version of the game
 			IsStageCullingEnabled = true;
-
+			UnlockAllStages = UseDemoSave;
 
 			if (OS.IsDebugBuild()) // Editor Debug
 			{
 				UseEditorSkills = true;
-				UseDebugSave = true;
 				SkipCountdown = true;
 			}
 		}
@@ -166,8 +166,8 @@ namespace Project.Core
 			}
 		}
 
-		private static readonly List<Line3D> line3d = new List<Line3D>();
-		private static readonly List<Line2D> line2d = new List<Line2D>();
+		private static readonly List<Line3D> line3d = new();
+		private static readonly List<Line2D> line2d = new();
 
 		public static void DrawLn(Vector3 s, Vector3 e, Color c) => line3d.Add(new Line3D(s, e, c));
 		public static void DrawRay(Vector3 s, Vector3 r, Color c) => line3d.Add(new Line3D(s, s + r, c));
@@ -203,7 +203,7 @@ namespace Project.Core
 		/// <summary> Don't load skills from save data, use inspector values instead. </summary>
 		public bool UseEditorSkills { get; private set; }
 		/// <summary> Use a custom save. </summary>
-		public bool UseDebugSave { get; private set; }
+		public bool UseDemoSave { get; private set; }
 		#endregion
 
 		#region Gameplay Cheats

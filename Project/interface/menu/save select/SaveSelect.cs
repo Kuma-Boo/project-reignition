@@ -60,14 +60,17 @@ namespace Project.Interface.Menus
 				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex);
 				SaveManager.Instance.SaveGameToFile();
 
-				// Load directly into the first cutscene.
-				TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}1.tscn");
-				TransitionManager.StartTransition(new TransitionData()
+				if (!DebugManager.Instance.UseDemoSave)
 				{
-					color = Colors.Black,
-					inSpeed = 1f,
-				});
-				return;
+					// Load directly into the first cutscene.
+					TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}1.tscn");
+					TransitionManager.StartTransition(new()
+					{
+						color = Colors.Black,
+						inSpeed = 1f,
+					});
+					return;
+				}
 			}
 
 			menuMemory[MemoryKeys.WorldSelect] = (int)SaveManager.ActiveGameData.lastPlayedWorld;
