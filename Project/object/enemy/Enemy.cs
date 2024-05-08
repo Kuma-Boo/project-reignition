@@ -187,8 +187,8 @@ namespace Project.Gameplay
 				Defeat();
 			else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
-				TakePlayerDamage();
 				Character.Lockon.StartBounce(IsDefeated);
+				TakePlayerDamage();
 			}
 			else if (damagePlayer)
 				Character.StartKnockback();

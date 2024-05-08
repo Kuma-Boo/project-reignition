@@ -155,7 +155,6 @@ namespace Project.Gameplay
 		public void ResetLockonTarget()
 		{
 			Character.Camera.LockonTarget = null;
-
 			IsHomingAttacking = false;
 			IsPerfectHomingAttack = false;
 

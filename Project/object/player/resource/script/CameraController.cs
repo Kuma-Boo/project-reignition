@@ -84,7 +84,7 @@ namespace Project.Gameplay
 		/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
 		private const float LOCKON_BLEND_IN_SMOOTHING = .2f;
 		/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
-		private const float LOCKON_BLEND_OUT_SMOOTHING = .8f;
+		private const float LOCKON_BLEND_OUT_SMOOTHING = .4f;
 		/// <summary> How much extra distance to add when performing a homing attack. </summary>
 		private const float LOCKON_DISTANCE = 2.5f;
 		private void UpdateLockonTarget()
@@ -386,11 +386,21 @@ namespace Project.Gameplay
 					}
 				}
 
-				data.pitchTracking = Mathf.Lerp(targetPitchTracking, data.lockonPitchTracking, lockonBlend);
+
+				data.pitchTracking = targetPitchTracking;
 
 				// Recalculate position after applying rotational tracking
 				data.CalculatePosition(Character.CenterPosition);
 				data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
+
+				if (IsLockonCameraActive && LockonTarget != null)
+				{
+					globalDelta = LockonTarget.GlobalPosition.Lerp(Character.CenterPosition, .5f) - data.precalculatedPosition;
+					delta = data.offsetBasis.Inverse() * globalDelta;
+					delta.X = 0; // Ignore x axis for pitch tracking
+					data.blendData.lockonPitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+				}
+				data.pitchTracking += data.blendData.lockonPitchTracking * lockonBlend;
 			}
 			else
 			{
@@ -439,9 +449,6 @@ namespace Project.Gameplay
 			public float yawTracking;
 			/// <summary> Pitch rotation data used for tracking. </summary>
 			public float pitchTracking;
-
-			/// <summary> Last frame's lockon pitch tracking </summary>
-			public float lockonPitchTracking;
 
 			/// <summary> How much to move camera for horizontal tracking. </summary>
 			public float horizontalTrackingOffset;
@@ -612,6 +619,9 @@ namespace Project.Gameplay
 		public float yawAngle;
 		/// <summary> Current tilt angle. </summary>
 		public float tiltAngle;
+
+		/// <summary> Last frame's lockon pitch tracking </summary>
+		public float lockonPitchTracking;
 
 		/// <summary> How far the camera should be. </summary>
 		public float distance;
