@@ -245,7 +245,7 @@ namespace Project
 
 		public static Vector2 SmoothDamp(this Vector2 current, Vector2 target, ref Vector2 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
-			Vector2 output = new Vector2(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
+			Vector2 output = new(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
 				SmoothDamp(current.Y, target.Y, ref currentVelocity.Y, smoothTime, maxSpeed));
 			return output;
 		}
@@ -253,10 +253,22 @@ namespace Project
 
 		public static Vector3 SmoothDamp(this Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, float maxSpeed = Mathf.Inf)
 		{
-			Vector3 output = new Vector3(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
+			Vector3 output = new(SmoothDamp(current.X, target.X, ref currentVelocity.X, smoothTime, maxSpeed),
 				SmoothDamp(current.Y, target.Y, ref currentVelocity.Y, smoothTime, maxSpeed),
 				SmoothDamp(current.Z, target.Z, ref currentVelocity.Z, smoothTime, maxSpeed));
 			return output;
+		}
+
+
+		/// <summary> Formats exp into the typical format displayed on menus. </summary>
+		public static string FormatEXP(int exp) => exp.ToString("0000000") + "e";
+		/// <summary> Formats a score into the typical format displayed on menus. </summary>
+		public static string FormatScore(int score) => score.ToString("00000000");
+		/// <summary> Formats a number of seconds into the typical format displayed on menus. </summary>
+		public static string FormatTime(float time)
+		{
+			System.TimeSpan span = System.TimeSpan.FromSeconds(time);
+			return span.ToString("mm':'ss'.'ff");
 		}
 	}
 }

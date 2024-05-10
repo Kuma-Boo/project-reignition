@@ -4634,7 +4634,7 @@ pauseCursorAnimator = NodePath("Pause/Options/PauseCursorAnchor/AnimationPlayer"
 selectSFX = NodePath("SFX/SelectionSFX")
 statusCursor = NodePath("Pause/StatusMenu/StatusCursorAnchor/Cursor")
 statusCursorAnimator = NodePath("Pause/StatusMenu/StatusCursorAnchor/AnimationPlayer")
-values = []
+values = [NodePath("Pause/StatusMenu/ValueMenu/Status/Level/LevelValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Level/Ring/RingValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/HighScore/HighScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Score/ScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/BestTime/BestTimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Time/TimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/StageEXP/StageEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/TotalEXP/TotalEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/SoulGauge/SoulGaugeValue")]
 fireSoulParent = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul")
 fireSoulSprites = [NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul1"), NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul2"), NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul3")]
 rankSprite = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal/Rank")
@@ -4872,14 +4872,30 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 72, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/Level"]
-offset_left = 3.55556
-offset_top = -11.0
-offset_right = 27.5556
-offset_bottom = 49.0
+[node name="LevelValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/Level"]
+offset_left = 3.556
+offset_top = -12.0
+offset_right = 27.556
+offset_bottom = 20.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "99"
+
+[node name="Ring" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Status/Level"]
+position = Vector2(85.3333, 0)
+scale = Vector2(0.888889, 0.888889)
+texture = ExtResource("10_lpx5w")
+region_enabled = true
+region_rect = Rect2(452, 72, 36, 40)
+
+[node name="RingValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/Level/Ring"]
+offset_left = 24.0
+offset_top = -12.0
+offset_right = 120.0
+offset_bottom = 20.0
+theme_override_fonts/font = ExtResource("12_tp5bp")
+theme_override_font_sizes/font_size = 64
+text = "x999/999"
 
 [node name="HighScore" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Status"]
 position = Vector2(-168, -196)
@@ -4888,7 +4904,7 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 91, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/HighScore"]
+[node name="HighScoreValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/HighScore"]
 offset_left = 96.0
 offset_top = -10.0
 offset_right = 192.0
@@ -4904,7 +4920,7 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 113, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/Score"]
+[node name="ScoreValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/Score"]
 offset_left = 96.0
 offset_top = -10.0
 offset_right = 192.0
@@ -4920,7 +4936,7 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 133, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/BestTime"]
+[node name="BestTimeValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/BestTime"]
 offset_left = 96.0
 offset_top = -10.0
 offset_right = 192.0
@@ -4936,7 +4952,7 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 154, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/Time"]
+[node name="TimeValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/Time"]
 offset_left = 96.0
 offset_top = -10.0
 offset_right = 192.0
@@ -4952,7 +4968,7 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 174, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/StageEXP"]
+[node name="StageEXPValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/StageEXP"]
 offset_left = 96.0
 offset_top = -12.0
 offset_right = 256.0
@@ -4968,7 +4984,7 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 194, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/TotalEXP"]
+[node name="TotalEXPValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/TotalEXP"]
 offset_left = 96.0
 offset_top = -10.0
 offset_right = 256.0
@@ -4984,7 +5000,7 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 214, 136, 20)
 
-[node name="Value" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/SoulGauge"]
+[node name="SoulGaugeValue" type="Label" parent="Pause/StatusMenu/ValueMenu/Status/SoulGauge"]
 offset_left = 96.0
 offset_top = -10.0
 offset_right = 256.0
@@ -5100,7 +5116,7 @@ offset_right = -320.0
 offset_bottom = -232.0
 scale = Vector2(1e-05, 1)
 texture = ExtResource("10_lpx5w")
-region_rect = Rect2(428, 136, 24, 16)
+region_rect = Rect2(436, 136, 28, 12)
 patch_margin_left = 8
 patch_margin_right = 8
 

@@ -336,6 +336,10 @@ namespace Project.Gameplay
 			if (HeadsUpDisplay.instance != null)
 				HeadsUpDisplay.instance.ModifySoulGauge((float)soulPower / maxSoulPower, IsSoulGaugeCharged);
 		}
+
+
+		/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
+		public string TextDisplay => $"{soulPower}/{maxSoulPower}";
 		#endregion
 	}
 }

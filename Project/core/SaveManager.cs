@@ -442,9 +442,12 @@ namespace Project.Core
 				return 0; // No ranked
 			}
 
-			/// <summary> Sets the save value for the player's best rank. </summary>
+			/// <summary> Sets the save value for the player's best rank. Ignores lower ranks. </summary>
 			public void SetRank(StringName levelID, int rank)
 			{
+				// Discard lower ranks
+				if (rank <= ActiveGameData.GetRank(levelID)) return;
+
 				if (GetLevelData(levelID).ContainsKey(RANK_KEY))
 				{
 					GetLevelData(levelID)[RANK_KEY] = rank;
@@ -452,6 +455,58 @@ namespace Project.Core
 				}
 
 				GetLevelData(levelID).Add(RANK_KEY, rank);
+			}
+
+
+			private readonly StringName SCORE_KEY = "high_score";
+			/// <summary> Gets the save value for the player's high score. </summary>
+			public int GetHighScore(StringName levelID)
+			{
+				if (GetLevelData(levelID).TryGetValue(SCORE_KEY, out Variant score))
+					return (int)score;
+
+				return 0; // No score recorded
+			}
+
+			/// <summary> Sets the save value for the player's high score. Ignores lower scores. </summary>
+			public void SetHighScore(StringName levelID, int score)
+			{
+				// Discard lower scores
+				if (score <= ActiveGameData.GetHighScore(levelID)) return;
+
+				if (GetLevelData(levelID).ContainsKey(SCORE_KEY))
+				{
+					GetLevelData(levelID)[SCORE_KEY] = score;
+					return;
+				}
+
+				GetLevelData(levelID).Add(SCORE_KEY, score);
+			}
+
+
+			private readonly StringName TIME_KEY = "best_time";
+			/// <summary> Gets the save value for the player's best rank. </summary>
+			public float GetBestTime(StringName levelID)
+			{
+				if (GetLevelData(levelID).TryGetValue(TIME_KEY, out Variant time))
+					return (float)time;
+
+				return 0; // No time recorded
+			}
+
+			/// <summary> Sets the value for the player's best time. Ignores slower times. </summary>
+			public void SetBestTime(StringName levelID, float time)
+			{
+				// Discard lower scores
+				if (!Mathf.IsZeroApprox(ActiveGameData.GetBestTime(levelID)) && time > ActiveGameData.GetBestTime(levelID)) return;
+
+				if (GetLevelData(levelID).ContainsKey(TIME_KEY))
+				{
+					GetLevelData(levelID)[TIME_KEY] = time;
+					return;
+				}
+
+				GetLevelData(levelID).Add(TIME_KEY, time);
 			}
 
 
@@ -463,7 +518,6 @@ namespace Project.Core
 
 				return levelData[levelID];
 			}
-
 			#endregion
 
 

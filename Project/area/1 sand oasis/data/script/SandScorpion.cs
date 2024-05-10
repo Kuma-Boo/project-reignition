@@ -237,6 +237,8 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			flyingEyeAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
+			// TODO Award 1000 points for defeating the boss
+
 			fightState = FightState.Defeated;
 			Character.ProcessMode = ProcessModeEnum.Disabled;
 		}

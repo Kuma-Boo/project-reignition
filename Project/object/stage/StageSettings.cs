@@ -243,6 +243,8 @@ namespace Project.Gameplay
 				if (path != null)
 					pathList.Add(path);
 			}
+
+			UpdateScore(0, MathModeEnum.Replace);
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -366,14 +368,12 @@ namespace Project.Gameplay
 		public delegate void ScoreChangedEventHandler(); // Score has changed, normally occours from a bonus
 		public int CurrentScore { get; private set; } // How high is the current score?
 		public string DisplayScore { get; private set; } // Current score formatted to eight zeros
-		private const string SCORE_FORMATTING = "00000000";
 		public void UpdateScore(int amount, MathModeEnum mode)
 		{
 			CurrentScore = CalculateMath(CurrentScore, amount, mode);
-			DisplayScore = CurrentScore.ToString(SCORE_FORMATTING);
+			DisplayScore = ExtensionMethods.FormatScore(CurrentScore);
 			EmitSignal(SignalName.ScoreChanged);
 		}
-
 
 		public int RespawnCount { get; private set; } // How high many times did the player have to respawn?
 		public void IncrementRespawnCount() => RespawnCount++;
@@ -413,28 +413,27 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 		}
 
+
+
+
+		public int CurrentEXP { get; private set; } // How much exp is the player earning from this stage?
+
 		// Time
 		[Signal]
 		public delegate void TimeChangedEventHandler(); // Time has changed.
 
 		public float CurrentTime { get; private set; } // How long has the player been on this level? (In Seconds)
 		public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
-
-		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
 		private void UpdateTime()
 		{
 			if (IsLevelFinished || !Interface.PauseMenu.AllowPausing) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; // Add current time
 			if (MissionTimeLimit == 0) // No time limit
-			{
-				System.TimeSpan time = System.TimeSpan.FromSeconds(CurrentTime);
-				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
-			}
+				DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
 			else
 			{
-				System.TimeSpan time = System.TimeSpan.FromSeconds(Mathf.Clamp(MissionTimeLimit - CurrentTime, 0, MissionTimeLimit));
-				DisplayTime = time.ToString(TIME_LABEL_FORMAT);
+				DisplayTime = ExtensionMethods.FormatTime(Mathf.Clamp(MissionTimeLimit - CurrentTime, 0, MissionTimeLimit));
 				if (CurrentTime >= MissionTimeLimit) // Time's up!
 					FinishLevel(false);
 			}
@@ -468,6 +467,7 @@ namespace Project.Gameplay
 
 			BGMPlayer.StageMusicPaused = true;
 			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
+
 			EmitSignal(SignalName.LevelCompleted);
 		}
 
