@@ -100,7 +100,7 @@ namespace Project.Interface.Menus
 			}
 
 			UpdateLabels();
-			SaveManager.Instance.ApplyConfig();
+			SaveManager.ApplyConfig();
 		}
 
 
@@ -112,9 +112,8 @@ namespace Project.Interface.Menus
 					CancelSFX();
 					DisableProcessing();
 					FadeBGM(.5f);
-					SaveManager.Instance.SaveConfig();
+					SaveManager.SaveConfig();
 					menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
-					TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(SaveManager.Instance, SaveManager.MethodName.SaveConfig), (uint)ConnectFlags.OneShot);
 					TransitionManager.QueueSceneChange(TransitionManager.MENU_SCENE_PATH);
 					TransitionManager.StartTransition(new()
 					{
@@ -314,7 +313,7 @@ namespace Project.Interface.Menus
 			ConfirmSFX();
 			StartSelectionTimer();
 			UpdateLabels();
-			SaveManager.Instance.ApplyConfig();
+			SaveManager.ApplyConfig();
 		}
 
 

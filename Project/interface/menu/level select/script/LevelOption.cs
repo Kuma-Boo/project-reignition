@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Interface.Menus
 {
@@ -9,8 +10,10 @@ namespace Project.Interface.Menus
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
-			properties.Add(ExtensionMethods.CreateProperty("Apply Settings", Variant.Type.Bool));
+			Array<Dictionary> properties = new()
+			{
+				ExtensionMethods.CreateProperty("Apply Settings", Variant.Type.Bool)
+			};
 			return properties;
 		}
 
@@ -38,24 +41,6 @@ namespace Project.Interface.Menus
 
 			return true;
 		}
-
-		private void ApplySettings()
-		{
-			if (indentNode != null)
-				indentNode.SetAnchorAndOffset(Side.Left, 0, isSideMission ? 128 : 0);
-
-			if (missionLabel != null)
-			{
-				if (!Engine.IsEditorHint() && !IsUnlocked)
-					missionLabel.Text = "mission_locked";
-				else
-					missionLabel.Text = string.IsNullOrEmpty(missionNameKey) ? "Mission Name" : missionNameKey;
-
-			}
-
-			if (fireSoulNode != null)
-				fireSoulNode.Visible = hasFireSouls;
-		}
 		#endregion
 
 		[Export]
@@ -81,7 +66,11 @@ namespace Project.Interface.Menus
 		[Export]
 		private Control indentNode;
 		[Export]
-		private HBoxContainer fireSoulNode;
+		private Node2D fireSoulParent;
+		[Export]
+		private Sprite2D[] fireSoulSprites;
+		[Export]
+		private Sprite2D rankSprite;
 		[Export]
 		private AnimationPlayer animator;
 
@@ -107,9 +96,46 @@ namespace Project.Interface.Menus
 			animator.Advance(0);
 
 			ApplySettings();
+			UpdateLevelData();
 			animator.Play("show");
 		}
-
 		public void HideOption() => animator.Play("hide");
+
+
+		private void ApplySettings()
+		{
+			if (indentNode != null)
+				indentNode.SetAnchorAndOffset(Side.Left, 0, isSideMission ? 128 : 0);
+
+			if (missionLabel != null)
+			{
+				if (!Engine.IsEditorHint() && !IsUnlocked)
+					missionLabel.Text = "mission_locked";
+				else
+					missionLabel.Text = string.IsNullOrEmpty(missionNameKey) ? "Mission Name" : missionNameKey;
+			}
+
+			if (fireSoulParent != null)
+				fireSoulParent.Visible = hasFireSouls && (Engine.IsEditorHint() || IsUnlocked);
+		}
+
+
+		/// <summary> Updates level's visual data based on the player's save data. </summary>
+		public void UpdateLevelData()
+		{
+			if (string.IsNullOrEmpty(levelID)) return;
+
+			if (hasFireSouls)
+			{
+				for (int i = 0; i < fireSoulSprites.Length; i++)
+				{
+					bool isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(levelID, i + 1);
+					fireSoulSprites[i].RegionRect = new(new(fireSoulSprites[i].RegionRect.Position.X, isCollected ? 140 : 100), fireSoulSprites[i].RegionRect.Size);
+				}
+			}
+
+			int rank = SaveManager.ActiveGameData.GetRank(levelID);
+			rankSprite.RegionRect = new(new(96 + 40 * rank, rankSprite.RegionRect.Position.Y), rankSprite.RegionRect.Size);
+		}
 	}
 }

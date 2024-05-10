@@ -152,6 +152,7 @@ namespace Project.Interface
 						UpdateCursorPosition();
 						break;
 					case 3: // Return to the main menu
+						SaveManager.SaveGameData();
 						StartSceneTransition(TransitionManager.MENU_SCENE_PATH);
 						break;
 				}
@@ -288,7 +289,7 @@ namespace Project.Interface
 		{
 			TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 			TransitionManager.QueueSceneChange(targetScene);
-			TransitionManager.StartTransition(new TransitionData()
+			TransitionManager.StartTransition(new()
 			{
 				inSpeed = .5f,
 				outSpeed = .5f,

@@ -64,21 +64,21 @@ namespace Project.Core
 			{
 				SaveManager.Config.screenResolution = 0;
 				SaveManager.Config.isFullscreen = false;
-				SaveManager.Instance.ApplyConfig();
+				SaveManager.ApplyConfig();
 			}
 
 			if (Input.IsActionJustPressed("debug_window_medium"))
 			{
 				SaveManager.Config.screenResolution = 3;
 				SaveManager.Config.isFullscreen = false;
-				SaveManager.Instance.ApplyConfig();
+				SaveManager.ApplyConfig();
 			}
 
 			if (Input.IsActionJustPressed("debug_window_large"))
 			{
 				SaveManager.Config.screenResolution = 4;
 				SaveManager.Config.isFullscreen = true;
-				SaveManager.Instance.ApplyConfig();
+				SaveManager.ApplyConfig();
 			}
 
 			if (Input.IsActionJustPressed("debug_step"))

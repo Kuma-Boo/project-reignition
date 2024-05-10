@@ -43,6 +43,8 @@ namespace Project.Interface
 			else if (Input.IsActionJustPressed("button_jump") ||
 				Input.IsActionJustPressed("button_action"))
 			{
+				SaveManager.SaveGameData();
+
 				// Determine which scene to load
 				if (Input.IsActionJustPressed("button_action")) // Retry stage
 					TransitionManager.QueueSceneChange(string.Empty);
@@ -89,6 +91,9 @@ namespace Project.Interface
 
 			Stage.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);
 			total.Text = Stage.DisplayScore;
+
+			if (rank > SaveManager.ActiveGameData.GetRank(Stage.LevelID)) // Update rank data
+				SaveManager.ActiveGameData.SetRank(Stage.LevelID, rank);
 		}
 
 		public void SetInputProcessing(bool value) => isProcessingInputs = value;

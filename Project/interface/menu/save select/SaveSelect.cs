@@ -58,7 +58,7 @@ namespace Project.Interface.Menus
 			if (SaveManager.ActiveGameData.IsNewFile())
 			{
 				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex);
-				SaveManager.Instance.SaveGameToFile();
+				SaveManager.SaveGameData();
 
 				if (!DebugManager.Instance.UseDemoSave)
 				{

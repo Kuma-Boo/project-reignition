@@ -133,7 +133,7 @@ namespace Project.Interface.Menus
 			base.OpenParentMenu();
 			ActiveVideoPlayer.Stop();
 
-			SaveManager.Instance.SaveGameToFile();
+			SaveManager.SaveGameData();
 			SaveManager.ActiveSaveSlotIndex = -1;
 		}
 

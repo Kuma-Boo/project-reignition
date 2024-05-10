@@ -7,18 +7,29 @@ namespace Project.Core
 {
 	public partial class SaveManager : Node
 	{
-		public static SaveManager Instance;
 		private const string SAVE_DIRECTORY = "user://";
 
 		public override void _EnterTree()
 		{
-			Instance = this;
 			LoadConfig();
-			PreloadGameData();
+			LoadGameData();
 
-			if (!OS.IsDebugBuild())
+			if (!OS.IsDebugBuild()) // Editor build, use custom configuration
 			{
-				Config = DebugSettings; // Editor build
+				// Default debug settings for testing from the editor.
+				Config = new()
+				{
+					screenResolution = 3,
+					isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER),
+					isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM),
+					isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX),
+					isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE),
+
+					masterVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.MASTER)) * 100),
+					bgmVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.BGM)) * 100),
+					sfxVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.SFX)) * 100),
+					voiceVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.VOICE)) * 100),
+				};
 				ApplyConfig();
 			}
 		}
@@ -28,21 +39,6 @@ namespace Project.Core
 		public static ConfigData Config = new();
 		public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
 		private const string CONFIG_FILE_NAME = "config.cfg";
-
-		/// <summary> Default debug settings for testing from the editor. </summary>
-		private ConfigData DebugSettings => new()
-		{
-			screenResolution = 3,
-			isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER),
-			isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM),
-			isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX),
-			isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE),
-
-			masterVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.MASTER)) * 100),
-			bgmVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.BGM)) * 100),
-			sfxVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.SFX)) * 100),
-			voiceVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.VOICE)) * 100),
-		};
 
 		public enum ControllerType
 		{
@@ -58,7 +54,7 @@ namespace Project.Core
 		}
 		public enum TextLanguage
 		{
-			English, //English script (Uses Windii's retranslation when voiceover is set to Japanese)
+			English, // English script (Uses Windii's retranslation when voiceover is set to Japanese)
 			Japanese,
 			German,
 			Italian,
@@ -189,23 +185,23 @@ namespace Project.Core
 
 
 		/// <summary> Attempts to load config data from file. </summary>
-		public void LoadConfig()
+		public static void LoadConfig()
 		{
 			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
 
-			if (file.GetError() == Error.Ok)
+			try
 			{
-				// Attempt to load.
-				try
+				if (file.GetError() == Error.Ok)
 				{
+					// Attempt to load.
 					Dictionary d = (Dictionary)Json.ParseString(file.GetAsText());
 					Config.FromDictionary(d);
 					file.Close();
 				}
-				catch // Load Default settings
-				{
-					Config = new();
-				}
+			}
+			catch // Load Default settings
+			{
+				Config = new();
 			}
 
 			ApplyConfig();
@@ -213,7 +209,7 @@ namespace Project.Core
 
 
 		/// <summary> Attempts to save config data to file. </summary>
-		public void SaveConfig()
+		public static void SaveConfig()
 		{
 			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Write);
 			file.StoreString(Json.Stringify(Config.ToDictionary(), "\t"));
@@ -222,7 +218,7 @@ namespace Project.Core
 
 
 		/// <summary> Applies active configuration data. </summary>
-		public void ApplyConfig()
+		public static void ApplyConfig()
 		{
 			ApplyInputMap();
 			ApplyLocalization();
@@ -239,7 +235,7 @@ namespace Project.Core
 
 
 		/// <summary> Applies input map configuration. </summary>
-		public void ApplyInputMap()
+		public static void ApplyInputMap()
 		{
 			// No custom input map was created
 			if (Config.inputConfiguration == null) return;
@@ -283,7 +279,7 @@ namespace Project.Core
 
 
 		/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
-		private void ApplyLocalization()
+		private static void ApplyLocalization()
 		{
 			switch (Config.textLanguage)
 			{
@@ -310,7 +306,7 @@ namespace Project.Core
 
 
 		/// <summary> Changes the volume of an audio bus channel. </summary>
-		public void SetAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
+		public static void SetAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
 		{
 			if (volumePercentage == 0)
 				isMuted = true;
@@ -355,8 +351,8 @@ namespace Project.Core
 		public static int ActiveSaveSlotIndex = -1;
 		/// <summary> Reference to the current save being used. </summary>
 		public static GameData ActiveGameData => ActiveSaveSlotIndex == -1 ? null : GameSaveSlots[ActiveSaveSlotIndex];
-		public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; //List of all saves created.
-		public const int MAX_SAVE_SLOTS = 9; //Maximum number of save slots that can be created.
+		public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; // List of all saves created.
+		public const int MAX_SAVE_SLOTS = 9; // Maximum number of save slots that can be created.
 
 		public partial class GameData : GodotObject
 		{
@@ -434,7 +430,7 @@ namespace Project.Core
 			public int GetRank(StringName levelID)
 			{
 				if (GetLevelData(levelID).TryGetValue(RANK_KEY, out Variant rank))
-					return (int)rank;
+					return Mathf.Clamp((int)rank, 0, 3);
 
 				return 0; // No ranked
 			}
@@ -489,7 +485,7 @@ namespace Project.Core
 			/// <summary> Sets GameData based on dictionary. </summary>
 			public void FromDictionary(Dictionary dictionary)
 			{
-				//WorldEnum data
+				// WorldEnum data
 				if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 					lastPlayedWorld = (WorldEnum)(int)var;
 				if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
@@ -534,26 +530,12 @@ namespace Project.Core
 		}
 
 
-		public struct LevelSaveData
-		{
-			/// <summary> Player's best time. </summary>
-			public float time;
-			/// <summary> Player's best score. </summary>
-			public float score;
-			/// <summary> Player's best rank. </summary>
-			public int rank;
-
-			/// <summary> Fire soul collection status. </summary>
-			public int[] firesoul;
-		}
-
-
 		/// <summary> Saves active game data to a file. </summary>
-		public void SaveGameToFile()
+		public static void SaveGameData()
 		{
-			if (ActiveSaveSlotIndex == -1) return; //Invalid save slot
+			if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
-			//TODO Write save data to a file.
+			// TODO Write save data to a file.
 			string saveNumber = ActiveSaveSlotIndex.ToString("00");
 			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
 
@@ -564,13 +546,13 @@ namespace Project.Core
 			}
 			else
 			{
-				//TODO Show an error message to the player? 
+				// TODO Show an error message to the player? 
 			}
 		}
 
 
 		/// <summary> Preloads game data so it can be displayed on menus. </summary>
-		public void PreloadGameData()
+		public static void LoadGameData()
 		{
 			for (int i = 0; i < GameSaveSlots.Length; i++)
 			{
