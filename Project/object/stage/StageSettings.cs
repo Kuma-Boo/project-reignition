@@ -294,7 +294,7 @@ namespace Project.Gameplay
 		private int bronzeScore;
 
 		/// <summary>
-		/// Calculates the rank, from -1 <-> 3.
+		/// Calculates the rank [Fail = -1, None = 0, Bronze = 1, Silver = 2, Gold = 3]
 		/// </summary>
 		public int CalculateRank()
 		{
@@ -423,7 +423,7 @@ namespace Project.Gameplay
 		private const string TIME_LABEL_FORMAT = "mm':'ss'.'ff";
 		private void UpdateTime()
 		{
-			if (IsLevelFinished || Interface.Countdown.IsCountdownActive) return;
+			if (IsLevelFinished || !Interface.PauseMenu.AllowPausing) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; // Add current time
 			if (MissionTimeLimit == 0) // No time limit

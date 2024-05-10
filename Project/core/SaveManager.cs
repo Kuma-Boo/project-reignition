@@ -367,8 +367,6 @@ namespace Project.Core
 			/// <summary> Flag representation of worlds unlocked. </summary>
 			public WorldFlagEnum worldsUnlocked;
 
-			/// <summary> Individual level data. </summary>
-			public Dictionary<int, Dictionary> leveldata = new();
 
 			/// <summary> Player level, from 1 -> 99 </summary>
 			public int level;
@@ -384,11 +382,12 @@ namespace Project.Core
 			/// <summary> Calculates the soul gauge's level ratio, normalized from [0 -> 1] </summary>
 			public float CalculateSoulGaugeLevelRatio(int levelCap = 50) => Mathf.Clamp(level, 0, levelCap) / (float)levelCap;
 
+
+
 			/// <summary> Checks if a world is unlocked. </summary>
 			public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
 			/// <summary> Checks if a world ring was obtained. </summary>
 			public bool IsWorldRingObtained(int worldIndex) => worldRingsCollected.HasFlag(ConvertIntToWorldEnum(worldIndex));
-
 			/// <summary> Converts (WorldEnum)worldIndex to WorldFlagEnum. World index starts at zero. </summary>
 			private WorldFlagEnum ConvertIntToWorldEnum(int worldIndex)
 			{
@@ -400,6 +399,71 @@ namespace Project.Core
 			}
 
 
+			#region Level Data
+			/// <summary> Dictionaries for each individual level's data. </summary>
+			public Dictionary<StringName, Dictionary> levelData = new();
+
+			private readonly StringName FIRE_SOUL_KEY = "fire_soul";
+			/// <summary> Returns whether a particular fire soul has been collected or not. </summary>
+			public bool IsFireSoulCollected(StringName levelID, int index)
+			{
+				StringName key = FIRE_SOUL_KEY + index.ToString();
+				if (GetLevelData(levelID).TryGetValue(key, out Variant collected))
+					return (bool)collected;
+
+				return false;
+			}
+
+
+			/// <summary> Sets the save value for whether a particular fire soul is collected or not. </summary>
+			public void SetFireSoulCollected(StringName levelID, int index, bool collected)
+			{
+				StringName key = FIRE_SOUL_KEY + index.ToString();
+				if (GetLevelData(levelID).ContainsKey(key))
+				{
+					GetLevelData(levelID)[key] = collected;
+					return;
+				}
+
+				GetLevelData(levelID).Add(key, collected);
+			}
+
+
+			private readonly StringName RANK_KEY = "rank";
+			/// <summary> Gets the save value for the player's best rank. </summary>
+			public int GetRank(StringName levelID)
+			{
+				if (GetLevelData(levelID).TryGetValue(RANK_KEY, out Variant rank))
+					return (int)rank;
+
+				return 0; // No ranked
+			}
+
+			/// <summary> Sets the save value for the player's best rank. </summary>
+			public void SetRank(StringName levelID, int rank)
+			{
+				if (GetLevelData(levelID).ContainsKey(RANK_KEY))
+				{
+					GetLevelData(levelID)[RANK_KEY] = rank;
+					return;
+				}
+
+				GetLevelData(levelID).Add(RANK_KEY, rank);
+			}
+
+
+			/// <summary> Returns the dictionary of a particular level. </summary>
+			public Dictionary GetLevelData(StringName levelID)
+			{
+				if (!levelData.ContainsKey(levelID)) // Create new level data if it's missing
+					levelData.Add(levelID, new());
+
+				return levelData[levelID];
+			}
+
+			#endregion
+
+
 			/// <summary> Creates a dictionary based on GameData. </summary>
 			public Dictionary ToDictionary()
 			{
@@ -409,7 +473,7 @@ namespace Project.Core
 					{ nameof(lastPlayedWorld), (int)lastPlayedWorld },
 					{ nameof(worldRingsCollected), (int)worldRingsCollected },
 					{ nameof(worldsUnlocked), (int)worldsUnlocked },
-					{ nameof(leveldata), (Dictionary)leveldata },
+					{ nameof(levelData), (Dictionary)levelData },
 
 
 					// Player stats
@@ -433,8 +497,8 @@ namespace Project.Core
 				if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
 					worldsUnlocked = (WorldFlagEnum)(int)var;
 
-				if (dictionary.TryGetValue(nameof(leveldata), out var))
-					leveldata = (Dictionary<int, Dictionary>)var;
+				if (dictionary.TryGetValue(nameof(levelData), out var))
+					levelData = (Dictionary<StringName, Dictionary>)var;
 
 
 				if (dictionary.TryGetValue(nameof(level), out var))

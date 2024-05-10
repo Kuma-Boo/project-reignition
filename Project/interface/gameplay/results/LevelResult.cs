@@ -22,13 +22,13 @@ namespace Project.Interface
 		private AnimationPlayer animator;
 
 		private bool isProcessingInputs;
-		private StageSettings Level => StageSettings.instance;
+		private StageSettings Stage => StageSettings.instance;
 		private const string TECHNICAL_FORMATTING = "0.0";
 
 		public override void _Ready()
 		{
-			if (Level != null)
-				Level.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)));
+			if (Stage != null)
+				Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)));
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -62,8 +62,8 @@ namespace Project.Interface
 
 		public void StartResults()
 		{
-			int rank = Level.CalculateRank();
-			if (rank <= 0) //Didn't obtain a medal
+			int rank = Stage.CalculateRank();
+			if (rank <= 0) // Didn't obtain a medal
 				animator.Play("medal-none");
 			else if (rank == 1)
 				animator.Play("medal-bronze");
@@ -72,23 +72,23 @@ namespace Project.Interface
 			else
 				animator.Play("medal-gold");
 
-			animator.Seek(0.0, true);
-			animator.Play(Level.LevelState == StageSettings.LevelStateEnum.Success ? "success-start" : "fail-start");
+			animator.Advance(0.0);
+			animator.Play(Stage.LevelState == StageSettings.LevelStateEnum.Success ? "success-start" : "fail-start");
 
-			score.Text = Level.DisplayScore;
-			time.Text = Level.DisplayTime;
+			score.Text = Stage.DisplayScore;
+			time.Text = Stage.DisplayTime;
 
 			int enemyBonus = 0; //Level.CurrentEnemyCount * 50;
 			enemy.Text = enemyBonus.ToString();
 
-			int ringBonus = Level.CurrentRingCount * 10;
+			int ringBonus = Stage.CurrentRingCount * 10;
 			ring.Text = ringBonus.ToString();
 
 			float technicalBonus = 1.0f;
 			technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
 
-			Level.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);
-			total.Text = Level.DisplayScore;
+			Stage.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);
+			total.Text = Stage.DisplayScore;
 		}
 
 		public void SetInputProcessing(bool value) => isProcessingInputs = value;
