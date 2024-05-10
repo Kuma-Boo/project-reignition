@@ -374,27 +374,6 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.ScoreChanged);
 		}
 
-		// Bonuses
-		public enum BonusType
-		{
-			PerfectHomingAttack, // Obtained by attacking an enemy using a perfect homing attack
-			DriftBonus, // Obtained by performing a Drift
-			GrindShuffle, // Obtained by performing a grind shuffle
-			PerfectGrindShuffle, // Obtained by performing a perfect grind shuffle
-			GrindStep, // Obtained by using the Grind Step
-		}
-		[Signal]
-		public delegate void BonusAddedEventHandler(BonusType type);
-		public void AddBonus(BonusType type)
-		{
-			switch (type)
-			{
-				default:
-					break;
-			}
-
-			EmitSignal(SignalName.BonusAdded, (int)type);
-		}
 
 		public int RespawnCount { get; private set; } // How high many times did the player have to respawn?
 		public void IncrementRespawnCount() => RespawnCount++;

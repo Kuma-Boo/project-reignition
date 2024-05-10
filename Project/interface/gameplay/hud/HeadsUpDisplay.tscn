@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=38 format=3 uid="uid://chn7ckbhlrr2g"]
 
 [ext_resource type="Texture2D" uid="uid://btu2qfmfefcpo" path="res://interface/gameplay/hud/rings/ring atlas.png" id="2_8yr5f"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/HUD Numbers.fnt" id="2_lj78h"]
@@ -978,104 +978,7 @@ _data = {
 "charged": SubResource("55")
 }
 
-[sub_resource type="Animation" id="59"]
-resource_name = "AddBonus"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("LatestBonus:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector2(-528, 0), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("LatestBonus:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("List:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, 56)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("List/Bonus6:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"update": 3,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="60"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("LatestBonus:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("LatestBonus:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("List:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_hk0sm"]
-_data = {
-"AddBonus": SubResource("59"),
-"RESET": SubResource("60")
-}
-
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "time", "score", "bonusAnimator", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1090,8 +993,6 @@ ringDividerSprite = NodePath("Rings/Current/Divider")
 ringAnimator = NodePath("Rings/AnimationTree")
 time = NodePath("Values/Time")
 score = NodePath("Values/Score")
-bonusAnimator = NodePath("Bonus/AnimationPlayer")
-bonusLabels = [NodePath("Bonus/LatestBonus"), NodePath("Bonus/List/Bonus1"), NodePath("Bonus/List/Bonus2"), NodePath("Bonus/List/Bonus3"), NodePath("Bonus/List/Bonus4"), NodePath("Bonus/List/Bonus5"), NodePath("Bonus/List/Bonus6")]
 objectiveRoot = NodePath("Objectives")
 objectiveSprite = NodePath("Objectives/ObjectiveSprite")
 objectiveValue = NodePath("Objectives/Value")
@@ -1397,6 +1298,10 @@ anchor_left = 0.867
 anchor_top = 0.237
 anchor_right = 0.933
 anchor_bottom = 0.889
+offset_left = -0.640015
+offset_top = 0.0399933
+offset_right = -0.640015
+offset_bottom = 0.039917
 metadata/_edit_lock_ = true
 
 [node name="SoulGauge" type="NinePatchRect" parent="SoulGauge"]
@@ -1552,61 +1457,3 @@ libraries = {
 stream = ExtResource("9_glv62")
 volume_db = -6.0
 bus = &"SFX"
-
-[node name="Bonus" type="Control" parent="."]
-layout_mode = 1
-anchor_left = 0.067
-anchor_top = 0.296
-anchor_right = 0.067
-anchor_bottom = 0.296
-offset_left = -0.639999
-offset_top = 0.320007
-offset_right = 383.36
-offset_bottom = 320.32
-
-[node name="LatestBonus" type="Label" parent="Bonus"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_right = 384.0
-offset_bottom = 29.0
-text = "Perfect Homing Attack"
-
-[node name="List" type="VBoxContainer" parent="Bonus"]
-layout_mode = 0
-offset_right = 384.0
-offset_bottom = 320.0
-
-[node name="Bonus1" type="Label" parent="Bonus/List"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Bonus"
-
-[node name="Bonus2" type="Label" parent="Bonus/List"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Bonus"
-
-[node name="Bonus3" type="Label" parent="Bonus/List"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Bonus"
-
-[node name="Bonus4" type="Label" parent="Bonus/List"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Bonus"
-
-[node name="Bonus5" type="Label" parent="Bonus/List"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Bonus"
-
-[node name="Bonus6" type="Label" parent="Bonus/List"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Bonus"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Bonus"]
-libraries = {
-"": SubResource("AnimationLibrary_hk0sm")
-}
