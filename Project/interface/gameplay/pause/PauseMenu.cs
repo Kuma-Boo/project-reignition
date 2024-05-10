@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay;
 
 namespace Project.Interface
 {
@@ -23,6 +24,12 @@ namespace Project.Interface
 		private AnimationPlayer statusCursorAnimator;
 		[Export]
 		private Label[] values;
+		[Export]
+		private Sprite2D fireSoulParent;
+		[Export]
+		private Sprite2D[] fireSoulSprites;
+		[Export]
+		private Sprite2D rankSprite;
 		[Export]
 		private Label skillList;
 		[Export]
@@ -150,6 +157,7 @@ namespace Project.Interface
 						animator.Set(STATUS_SHOW_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 						UpdateSelection(0);
 						UpdateCursorPosition();
+						UpdateStatusMenuData();
 						break;
 					case 3: // Return to the main menu
 						SaveManager.SaveGameData();
@@ -173,6 +181,24 @@ namespace Project.Interface
 			submenu = Submenu.PAUSE;
 			UpdateSelection(2);
 			animator.Set(SUBMENU_PARAMETER, "pause");
+		}
+
+
+
+		private void UpdateStatusMenuData()
+		{
+			fireSoulParent.Visible = SaveManager.ActiveGameData.HasFireSouls(StageSettings.instance.LevelID);
+			if (fireSoulParent.Visible)
+			{
+				for (int i = 0; i < fireSoulSprites.Length; i++)
+				{
+					bool isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(StageSettings.instance.LevelID, i + 1);
+					fireSoulSprites[i].RegionRect = new(new(isCollected ? 450 : 400, fireSoulSprites[i].RegionRect.Position.Y), fireSoulSprites[i].RegionRect.Size);
+				}
+			}
+
+			int rank = SaveManager.ActiveGameData.GetRank(StageSettings.instance.LevelID);
+			rankSprite.RegionRect = new(new(rankSprite.RegionRect.Position.X, 110 + 60 * rank), rankSprite.RegionRect.Size);
 		}
 
 

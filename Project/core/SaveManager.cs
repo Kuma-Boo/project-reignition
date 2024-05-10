@@ -424,6 +424,13 @@ namespace Project.Core
 				GetLevelData(levelID).Add(key, collected);
 			}
 
+			/// <summary> Returns whether a level has any fire souls. </summary>
+			public bool HasFireSouls(StringName levelID)
+			{
+				StringName key = FIRE_SOUL_KEY + "1";
+				return GetLevelData(levelID).ContainsKey(key);
+			}
+
 
 			private readonly StringName RANK_KEY = "rank";
 			/// <summary> Gets the save value for the player's best rank. </summary>
