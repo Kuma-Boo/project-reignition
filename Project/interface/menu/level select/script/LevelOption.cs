@@ -51,7 +51,7 @@ namespace Project.Interface.Menus
 		private string levelID;
 
 		[Export]
-		/// <summary> Should this mission be indented on the mission screen? </summary>
+		/// <summary> Should this mission be shown as optional? </summary>
 		public bool isSideMission;
 		[Export]
 		public bool hasFireSouls;
@@ -63,8 +63,6 @@ namespace Project.Interface.Menus
 		[ExportGroup("Components")]
 		[Export]
 		private Label missionLabel;
-		[Export]
-		private Control indentNode;
 		[Export]
 		private Node2D fireSoulParent;
 		[Export]
@@ -104,9 +102,6 @@ namespace Project.Interface.Menus
 
 		private void ApplySettings()
 		{
-			if (indentNode != null)
-				indentNode.SetAnchorAndOffset(Side.Left, 0, isSideMission ? 128 : 0);
-
 			if (missionLabel != null)
 			{
 				if (!Engine.IsEditorHint() && !IsUnlocked)

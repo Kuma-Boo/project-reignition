@@ -61,7 +61,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("IndentNode/Light:modulate")
+tracks/4/path = NodePath("Light:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -73,7 +73,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("IndentNode/Light/Glow:self_modulate")
+tracks/5/path = NodePath("Light/Glow:self_modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -97,7 +97,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("IndentNode/Light/Glow:visible")
+tracks/7/path = NodePath("Light/Glow:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -109,7 +109,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("IndentNode/Light:region_rect")
+tracks/8/path = NodePath("Light:region_rect")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -126,7 +126,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("IndentNode/Light:modulate")
+tracks/0/path = NodePath("Light:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -154,7 +154,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("IndentNode/Light/Glow:visible")
+tracks/0/path = NodePath("Light/Glow:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -166,7 +166,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("IndentNode/Light:region_rect")
+tracks/1/path = NodePath("Light:region_rect")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -183,7 +183,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("IndentNode/Light/Glow:self_modulate")
+tracks/0/path = NodePath("Light/Glow:self_modulate")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -248,7 +248,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("IndentNode/Light:modulate")
+tracks/4/path = NodePath("Light:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -276,7 +276,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("IndentNode/Light/Glow:visible")
+tracks/0/path = NodePath("Light/Glow:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -288,7 +288,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("IndentNode/Light:region_rect")
+tracks/1/path = NodePath("Light:region_rect")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -308,7 +308,7 @@ _data = {
 "unlocked": SubResource("Animation_w71wl")
 }
 
-[node name="LevelOption" type="Control" node_paths=PackedStringArray("missionLabel", "indentNode", "fireSoulParent", "fireSoulSprites", "rankSprite", "animator")]
+[node name="LevelOption" type="Control" node_paths=PackedStringArray("missionLabel", "fireSoulParent", "fireSoulSprites", "rankSprite", "animator")]
 custom_minimum_size = Vector2(1020, 64)
 layout_mode = 3
 anchor_right = 0.53125
@@ -316,30 +316,21 @@ anchor_bottom = 0.0740741
 pivot_offset = Vector2(510, 40)
 script = ExtResource("1_dsbqj")
 "Apply Settings" = false
-missionLabel = NodePath("IndentNode/MissionLabel")
-indentNode = NodePath("IndentNode")
+missionLabel = NodePath("MissionLabel")
 fireSoulParent = NodePath("FireSouls")
 fireSoulSprites = [NodePath("FireSouls/FireSoul1"), NodePath("FireSouls/FireSoul2"), NodePath("FireSouls/FireSoul3")]
 rankSprite = NodePath("Rank")
 animator = NodePath("AnimationPlayer")
 metadata/_edit_use_anchors_ = true
 
-[node name="IndentNode" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Light" type="Sprite2D" parent="IndentNode"]
+[node name="Light" type="Sprite2D" parent="."]
 position = Vector2(48, 40)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_7n0bw")
 region_enabled = true
 region_rect = Rect2(170, 180, 40, 40)
 
-[node name="Glow" type="Sprite2D" parent="IndentNode/Light"]
+[node name="Glow" type="Sprite2D" parent="Light"]
 modulate = Color(0, 1, 0, 1)
 material = SubResource("CanvasItemMaterial_fvwl8")
 scale = Vector2(1.5, 1.5)
@@ -347,7 +338,7 @@ texture = ExtResource("2_7n0bw")
 region_enabled = true
 region_rect = Rect2(210, 180, 40, 40)
 
-[node name="MissionLabel" type="Label" parent="IndentNode"]
+[node name="MissionLabel" type="Label" parent="."]
 layout_mode = 0
 offset_left = 96.0
 offset_right = 377.0
@@ -361,6 +352,7 @@ text = "Mission Name"
 vertical_alignment = 1
 
 [node name="FireSouls" type="Node2D" parent="."]
+visible = false
 position = Vector2(744, 40)
 metadata/_edit_use_anchors_ = true
 
