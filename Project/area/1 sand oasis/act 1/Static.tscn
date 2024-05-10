@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://tvjx2wghc06t"]
+[gd_scene load_steps=77 format=3 uid="uid://tvjx2wghc06t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -41,6 +41,7 @@
 [ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="28_ximg0"]
 [ext_resource type="Resource" uid="uid://dbjigcuhmxju0" path="res://area/1 sand oasis/act 1/camera/ForestCam.tres" id="29_gte7b"]
 [ext_resource type="Material" uid="uid://5wxyrpeo8ycq" path="res://area/1 sand oasis/data/material/Water.tres" id="29_lfji7"]
+[ext_resource type="Resource" uid="uid://c7iaiv1o47m2d" path="res://area/1 sand oasis/act 1/camera/TownCam.tres" id="30_eqqmw"]
 [ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/1 sand oasis/act 1/camera/InteriorCam.tres" id="31_l0kwc"]
 [ext_resource type="Resource" uid="uid://cg68afq5jr66c" path="res://area/1 sand oasis/act 1/camera/IslandCam.tres" id="34_ger3f"]
 [ext_resource type="Resource" uid="uid://drgk50yomyihb" path="res://resource/preset/camera/common/OverheadCam.tres" id="34_ubrmr"]
@@ -547,10 +548,10 @@ script = ExtResource("1_0njhg")
 "Level ID" = "so_a1"
 "Mission Type" = 0
 "Time Limit" = 0.0
+"Disable Countdown" = false
 "Camera Settings" = ExtResource("2_gn5c4")
 "Story Event Index" = -1
 "Dialog Library" = ExtResource("3_g6e77")
-"Item Cycling/Activation Trigger" = NodePath("")
 "Ranking/Skip Score" = false
 "Ranking/Gold Time" = 0
 "Ranking/Silver Time" = 0
@@ -731,7 +732,6 @@ previousSettings = ExtResource("26_k5jwq")
 shape = SubResource("BoxShape3D_8dg41")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
-visible = false
 
 [node name="Hall1Trigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-4.37114e-08, -0.642788, -0.766044, 8.74228e-08, 0.766044, -0.642788, 1, -9.50669e-08, 2.27094e-08, -123.844, -45, -62.1165)
@@ -955,7 +955,7 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -328.081, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/TownTrigger"]
 script = ExtResource("13_3nlok")
 transitionTime = 0.5
-settings = ExtResource("24_qtnck")
+settings = ExtResource("30_eqqmw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/TownTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1338,7 +1338,6 @@ environment = ExtResource("21_xtian")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, -50, -250)
 renderMask = 19
 reflectionMaterials = [ExtResource("29_lfji7")]
-editorPreview = true
 
 [connection signal="DriftCompleted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/DriftCamera" method="Deactivate"]
 [connection signal="DriftStarted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/DriftCamera" method="Activate"]
