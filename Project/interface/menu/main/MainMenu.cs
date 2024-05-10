@@ -21,6 +21,7 @@ namespace Project.Interface.Menus
 			base.ShowMenu();
 			cursorVelocity = Vector2.Zero;
 			cursor.Position = options[currentSelection].Position;
+			menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
 		}
 
 		protected override void SetUp()
