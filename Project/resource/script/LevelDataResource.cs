@@ -38,9 +38,6 @@ namespace Project.Gameplay
 			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race)
 				properties.Add(ExtensionMethods.CreateProperty("Mission/Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
 
-			properties.Add(ExtensionMethods.CreateProperty("Camera Settings", Variant.Type.Object));
-			properties.Add(ExtensionMethods.CreateProperty("Dialog Library", Variant.Type.Object));
-
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Int));
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Int));
