@@ -16,7 +16,7 @@ namespace Project.Gameplay.Objects
 			base.SetUp();
 
 			// Check save data
-			isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.LevelID, fireSoulIndex);
+			isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
 			if (isCollected)
 				Despawn();
 		}
@@ -24,7 +24,7 @@ namespace Project.Gameplay.Objects
 		protected override void Collect()
 		{
 			// Write save data
-			SaveManager.ActiveGameData.SetFireSoulCollected(Stage.LevelID, fireSoulIndex, true);
+			SaveManager.ActiveGameData.SetFireSoulCollected(Stage.Data.LevelID, fireSoulIndex, true);
 			animator.Play("collect");
 		}
 	}

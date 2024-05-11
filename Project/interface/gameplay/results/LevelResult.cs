@@ -92,9 +92,9 @@ namespace Project.Interface
 			Stage.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);
 			total.Text = Stage.DisplayScore;
 
-			SaveManager.ActiveGameData.SetHighScore(Stage.LevelID, Stage.CurrentScore);
-			SaveManager.ActiveGameData.SetBestTime(Stage.LevelID, Stage.CurrentTime);
-			SaveManager.ActiveGameData.SetRank(Stage.LevelID, rank);
+			SaveManager.ActiveGameData.SetHighScore(Stage.Data.LevelID, Stage.CurrentScore);
+			SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
+			SaveManager.ActiveGameData.SetRank(Stage.Data.LevelID, rank);
 		}
 
 		public void SetInputProcessing(bool value) => isProcessingInputs = value;

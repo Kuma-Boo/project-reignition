@@ -7,17 +7,19 @@ namespace Project.Interface.Menus
 	{
 		[Export]
 		private string areaKey;
+		[Export]
+		private Description description;
+		[Export]
+		private ReadyMenu readyMenu;
 
 		[Export]
 		private Control cursor;
 		private int cursorPosition;
 		private Vector2 cursorWidthVelocity;
-		private Vector2 cursorSizeVelocity;
 
 		[Export]
 		private Control options;
 		private Vector2 optionVelocity;
-		private readonly List<LevelOption> levelOptions = new();
 		[Export]
 		private Sprite2D scrollbar;
 
@@ -25,11 +27,7 @@ namespace Project.Interface.Menus
 		private float scrollRatio;
 		private Vector2 scrollVelocity;
 		private const float SCROLL_SMOOTHING = .05f;
-
-		[Export]
-		private Description description;
-		[Export]
-		private ReadyMenu readyMenu;
+		private readonly List<LevelOption> levelOptions = new();
 
 		protected override void SetUp()
 		{
@@ -38,7 +36,6 @@ namespace Project.Interface.Menus
 				if (node is LevelOption)
 					levelOptions.Add(node as LevelOption);
 			}
-
 
 			base.SetUp();
 		}
@@ -81,9 +78,9 @@ namespace Project.Interface.Menus
 		public override void OpenSubmenu()
 		{
 			readyMenu.SetMapText(areaKey);
-			readyMenu.SetMissionText(levelOptions[VerticalSelection].missionNameKey);
+			readyMenu.SetMissionText(levelOptions[VerticalSelection].data.MissionTypeKey);
 			readyMenu.parentMenu = this;
-			readyMenu.LevelPath = levelOptions[VerticalSelection].levelPath;
+			readyMenu.LevelPath = levelOptions[VerticalSelection].data.LevelPath;
 			readyMenu.ShowMenu();
 		}
 
@@ -133,11 +130,7 @@ namespace Project.Interface.Menus
 
 		private void UpdateListPosition(float smoothing)
 		{
-			float targetCursorPosition = levelOptions[VerticalSelection].isSideMission ? 552 : 424;
-			float targetCursorWidth = levelOptions[VerticalSelection].isSideMission ? 882 : 1012;
-
-			cursor.Position = cursor.Position.SmoothDamp(new Vector2(targetCursorPosition, 220 + 96 * cursorPosition), ref cursorWidthVelocity, smoothing);
-			cursor.Size = cursor.Size.SmoothDamp(new Vector2(targetCursorWidth, cursor.Size.Y), ref cursorSizeVelocity, smoothing);
+			cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, 220 + 96 * cursorPosition), ref cursorWidthVelocity, smoothing);
 
 			options.Position = options.Position.SmoothDamp(Vector2.Up * (96 * scrollAmount - 8), ref optionVelocity, smoothing);
 			scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * (160 * scrollRatio - 80), ref scrollVelocity, smoothing);

@@ -10,7 +10,7 @@ namespace Project.Gameplay
 	public partial class HeadsUpDisplay : Control
 	{
 		public static HeadsUpDisplay instance;
-		private StageSettings Level => StageSettings.instance;
+		private StageSettings Stage => StageSettings.instance;
 
 		public override void _Ready()
 		{
@@ -20,12 +20,12 @@ namespace Project.Gameplay
 			InitializeObjectives();
 			InitializeSoulGauge();
 
-			if (Level != null) //Decouple from level settings
+			if (Stage != null) //Decouple from level settings
 			{
-				Level.Connect(nameof(StageSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
-				Level.Connect(nameof(StageSettings.TimeChanged), new Callable(this, MethodName.UpdateTime));
-				Level.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
-				Level.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.LevelComplete)); //Hide interface
+				Stage.Connect(nameof(StageSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
+				Stage.Connect(nameof(StageSettings.TimeChanged), new Callable(this, MethodName.UpdateTime));
+				Stage.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
+				Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.LevelComplete)); //Hide interface
 			}
 		}
 
@@ -58,16 +58,16 @@ namespace Project.Gameplay
 		private void InitializeRings()
 		{
 			//Initialize ring counter
-			if (Level != null)
+			if (Stage != null)
 			{
-				maxRingLabel.Visible = ringDividerSprite.Visible = Level.MissionType == StageSettings.MissionTypes.Ring; //Show/Hide max ring count
+				maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring; // Show/Hide max ring count
 				if (maxRingLabel.Visible)
-					maxRingLabel.Text = Level.MissionObjectiveCount.ToString(RING_LABEL_FORMAT);
+					maxRingLabel.Text = Stage.Data.MissionObjectiveCount.ToString(RING_LABEL_FORMAT);
 
 				int startingRingCount = 0; // TODO Determine by skills
 				ringAnimator.Active = true;
 				UpdateRingCount(startingRingCount, true);
-				Level.UpdateRingCount(startingRingCount, StageSettings.MathModeEnum.Replace, true);
+				Stage.UpdateRingCount(startingRingCount, StageSettings.MathModeEnum.Replace, true);
 			}
 		}
 
@@ -84,8 +84,8 @@ namespace Project.Gameplay
 				}
 			}
 
-			ringAnimator.Set(RINGLESS_PARAMETER, Level.CurrentRingCount == 0 ? ENABLED_PARAMETER : DISABLED_PARAMETER);
-			ringLabel.Text = Level.CurrentRingCount.ToString(RING_LABEL_FORMAT);
+			ringAnimator.Set(RINGLESS_PARAMETER, Stage.CurrentRingCount == 0 ? ENABLED_PARAMETER : DISABLED_PARAMETER);
+			ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
 		}
 		#endregion
 
@@ -93,11 +93,11 @@ namespace Project.Gameplay
 		[ExportGroup("Time & Score")]
 		[Export]
 		private Label time;
-		private void UpdateTime() => time.Text = Level.DisplayTime;
+		private void UpdateTime() => time.Text = Stage.DisplayTime;
 
 		[Export]
 		private Label score;
-		private void UpdateScore() => score.Text = Level.DisplayScore;
+		private void UpdateScore() => score.Text = Stage.DisplayScore;
 		#endregion
 
 		#region Objectives
@@ -112,17 +112,17 @@ namespace Project.Gameplay
 		private Label objectiveMaxValue;
 		private void InitializeObjectives()
 		{
-			objectiveRoot.Visible = Level != null && Level.MissionType == StageSettings.MissionTypes.Objective;
+			objectiveRoot.Visible = Stage != null && Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective;
 			if (!objectiveRoot.Visible) return; //Don't do anything when objective counter isn't visible
 
 			objectiveSprite.Visible = true;
-			objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");
-			objectiveMaxValue.Text = Level.MissionObjectiveCount.ToString("00");
+			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+			objectiveMaxValue.Text = Stage.Data.MissionObjectiveCount.ToString("00");
 
-			Level.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}
 
-		private void UpdateObjective() => objectiveValue.Text = Level.CurrentObjectiveCount.ToString("00");
+		private void UpdateObjective() => objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		#endregion
 
 		#region Soul Gauge

@@ -22,7 +22,7 @@ namespace Project.Interface
 		{
 			BGMPlayer.StartStageMusic(); // Start BGM
 
-			if (DebugManager.Instance.SkipCountdown || StageSettings.instance.DisableCountdown)
+			if (DebugManager.Instance.SkipCountdown || StageSettings.instance.Data.DisableCountdown)
 			{
 				FinishCountdown();
 				return;

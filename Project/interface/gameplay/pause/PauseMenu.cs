@@ -191,26 +191,26 @@ namespace Project.Interface
 			// Status menu
 			values[0].Text = SaveManager.ActiveGameData.level.ToString("00");
 			values[1].Text = "x" + Stage.CurrentRingCount.ToString("000") + "/999";
-			values[2].Text = ExtensionMethods.FormatScore(SaveManager.ActiveGameData.GetHighScore(Stage.LevelID));
+			values[2].Text = ExtensionMethods.FormatScore(SaveManager.ActiveGameData.GetHighScore(Stage.Data.LevelID));
 			values[3].Text = Stage.DisplayScore;
-			values[4].Text = ExtensionMethods.FormatTime(SaveManager.ActiveGameData.GetBestTime(Stage.LevelID));
+			values[4].Text = ExtensionMethods.FormatTime(SaveManager.ActiveGameData.GetBestTime(Stage.Data.LevelID));
 			values[5].Text = Stage.DisplayTime;
 			values[6].Text = ExtensionMethods.FormatEXP(Stage.CurrentEXP);
 			values[7].Text = ExtensionMethods.FormatEXP(SaveManager.ActiveGameData.exp);
 			values[8].Text = CharacterController.instance.Skills.TextDisplay;
 
 			// Mission menu
-			fireSoulParent.Visible = SaveManager.ActiveGameData.HasFireSouls(Stage.LevelID);
+			fireSoulParent.Visible = SaveManager.ActiveGameData.HasFireSouls(Stage.Data.LevelID);
 			if (fireSoulParent.Visible)
 			{
 				for (int i = 0; i < fireSoulSprites.Length; i++)
 				{
-					bool isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.LevelID, i + 1);
+					bool isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
 					fireSoulSprites[i].RegionRect = new(new(isCollected ? 450 : 400, fireSoulSprites[i].RegionRect.Position.Y), fireSoulSprites[i].RegionRect.Size);
 				}
 			}
 
-			int rank = SaveManager.ActiveGameData.GetRank(Stage.LevelID);
+			int rank = SaveManager.ActiveGameData.GetRank(Stage.Data.LevelID);
 			rankSprite.RegionRect = new(new(rankSprite.RegionRect.Position.X, 110 + 60 * rank), rankSprite.RegionRect.Size);
 		}
 

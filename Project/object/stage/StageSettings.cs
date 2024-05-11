@@ -17,24 +17,16 @@ namespace Project.Gameplay
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new();
-
-			properties.Add(ExtensionMethods.CreateProperty("Level ID", Variant.Type.String));
-			properties.Add(ExtensionMethods.CreateProperty("Mission Type", Variant.Type.Int, PropertyHint.Enum, MissionType.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty("Time Limit", Variant.Type.Int, PropertyHint.Range, "0,640"));
-			properties.Add(ExtensionMethods.CreateProperty("Disable Countdown", Variant.Type.Bool));
-
-			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race)
-				properties.Add(ExtensionMethods.CreateProperty("Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
-
-			properties.Add(ExtensionMethods.CreateProperty("Camera Settings", Variant.Type.Object));
-			properties.Add(ExtensionMethods.CreateProperty("Story Event Index", Variant.Type.Int, PropertyHint.Range, "-1,30"));
-			properties.Add(ExtensionMethods.CreateProperty("Dialog Library", Variant.Type.Object));
-
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool));
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Int));
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Int));
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int));
+			Array<Dictionary> properties = new()
+			{
+				ExtensionMethods.CreateProperty("Level Data", Variant.Type.Object),
+				ExtensionMethods.CreateProperty("Camera Settings", Variant.Type.Object),
+				ExtensionMethods.CreateProperty("Dialog Library", Variant.Type.Object),
+				ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool),
+				ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Int),
+				ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Int),
+				ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int)
+			};
 
 			if (!skipScore)
 			{
@@ -57,22 +49,11 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Level ID":
-					return (string)LevelID;
-
-				case "Mission Type":
-					return (int)MissionType;
-				case "Time Limit":
-					return MissionTimeLimit;
-				case "Objective Count":
-					return MissionObjectiveCount;
-				case "Disable Countdown":
-					return DisableCountdown;
+				case "Level Data":
+					return Data;
 
 				case "Camera Settings":
 					return InitialCameraSettings;
-				case "Story Event Index":
-					return storyEventIndex;
 				case "Dialog Library":
 					return dialogLibrary;
 
@@ -111,29 +92,12 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Level ID":
-					LevelID = (string)value;
-					break;
-
-				case "Mission Type":
-					MissionType = (MissionTypes)(int)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Time Limit":
-					MissionTimeLimit = (int)value;
-					break;
-				case "Objective Count":
-					MissionObjectiveCount = (int)value;
-					break;
-				case "Disable Countdown":
-					DisableCountdown = (bool)value;
+				case "Level Data":
+					Data = (LevelDataResource)value;
 					break;
 
 				case "Camera Settings":
 					InitialCameraSettings = (CameraSettingsResource)value;
-					break;
-				case "Story Event Index":
-					storyEventIndex = (int)value;
 					break;
 				case "Dialog Library":
 					dialogLibrary = (SFXLibraryResource)value;
@@ -190,7 +154,7 @@ namespace Project.Gameplay
 		#region Path Settings
 		private NodePath pathParent;
 		/// <summary> List of all level paths contained for this level. </summary>
-		private readonly Array<Path3D> pathList = new Array<Path3D>();
+		private readonly Array<Path3D> pathList = new();
 
 		/// <summary>
 		/// Returns the path the player is currently the closest to.
@@ -256,32 +220,10 @@ namespace Project.Gameplay
 
 
 		#region Level Settings
-		/// <summary> Level ID, used for determining save data. </summary>
-		public StringName LevelID { get; set; }
+		/// <summary> Reference to the level's data. </summary>
+		public LevelDataResource Data { get; private set; }
 		public CameraSettingsResource InitialCameraSettings { get; private set; }
-		/// <summary> Story event index to play after completing the stage. Leave at -1 if no story event is meant to be played. </summary>
-		public int storyEventIndex = -1;
 		public SFXLibraryResource dialogLibrary;
-
-		public enum MissionTypes
-		{
-			None, // Add a goal node or a boss so the player doesn't get stuck!
-			Objective, // Add custom nodes that call IncrementObjective()
-			Ring, // Collect a certain amount of rings
-			Pearl, // Collect a certain amount of pearls (normally zero)
-			Enemy, // Destroy a certain amount of enemies
-			Race, // Race against an enemy
-		}
-
-		/// <summary> Type of mission. </summary>
-		public MissionTypes MissionType { get; private set; }
-		/// <summary> What's the target amount for the mission objective? </summary>
-		public int MissionObjectiveCount { get; private set; }
-		/// <summary> Level time limit, in seconds. </summary>
-		private float MissionTimeLimit { get; set; }
-		/// <summary> Should the countdown be disabled for this stage (i.e. bosses, control test, etc.)? </summary>
-		public bool DisableCountdown { get; private set; }
-
 
 		// Rank
 		private bool skipScore; // Don't use score when ranking (i.e. for bosses)
@@ -387,9 +329,9 @@ namespace Project.Gameplay
 			CurrentObjectiveCount++;
 			EmitSignal(SignalName.ObjectiveChanged);
 
-			if (MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
+			if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
 				FinishLevel(false);
-			else if (CurrentObjectiveCount >= MissionObjectiveCount)
+			else if (CurrentObjectiveCount >= Data.MissionObjectiveCount)
 				FinishLevel(true);
 		}
 
@@ -401,9 +343,9 @@ namespace Project.Gameplay
 		{
 			int previousAmount = CurrentRingCount;
 			CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
-			if (MissionType == MissionTypes.Ring && CurrentRingCount >= MissionObjectiveCount) // For ring based missions
+			if (Data.MissionType == LevelDataResource.MissionTypes.Ring && CurrentRingCount >= Data.MissionObjectiveCount) // For ring based missions
 			{
-				CurrentRingCount = MissionObjectiveCount; // Clamp
+				CurrentRingCount = Data.MissionObjectiveCount; // Clamp
 				FinishLevel(true);
 			}
 
@@ -429,12 +371,12 @@ namespace Project.Gameplay
 			if (IsLevelFinished || !Interface.PauseMenu.AllowPausing) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; // Add current time
-			if (MissionTimeLimit == 0) // No time limit
+			if (Data.MissionTimeLimit == 0) // No time limit
 				DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
 			else
 			{
-				DisplayTime = ExtensionMethods.FormatTime(Mathf.Clamp(MissionTimeLimit - CurrentTime, 0, MissionTimeLimit));
-				if (CurrentTime >= MissionTimeLimit) // Time's up!
+				DisplayTime = ExtensionMethods.FormatTime(Mathf.Clamp(Data.MissionTimeLimit - CurrentTime, 0, Data.MissionTimeLimit));
+				if (CurrentTime >= Data.MissionTimeLimit) // Time's up!
 					FinishLevel(false);
 			}
 
