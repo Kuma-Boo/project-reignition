@@ -200,8 +200,8 @@ namespace Project.Interface
 			values[8].Text = CharacterController.instance.Skills.TextDisplay;
 
 			// Mission menu
-			fireSoulParent.Visible = SaveManager.ActiveGameData.HasFireSouls(Stage.Data.LevelID);
-			if (fireSoulParent.Visible)
+			fireSoulParent.Visible = Stage.Data.HasFireSouls;
+			if (Stage.Data.HasFireSouls)
 			{
 				for (int i = 0; i < fireSoulSprites.Length; i++)
 				{
