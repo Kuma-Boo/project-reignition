@@ -24,12 +24,20 @@ namespace Project.Interface
 		private AnimationPlayer statusCursorAnimator;
 		[Export]
 		private Label[] values;
+
+		[ExportSubgroup("Mission Menu")]
+		[Export]
+		private Label missionTypeLabel;
+		[Export]
+		private Label missionDescriptionLabel;
 		[Export]
 		private Sprite2D fireSoulParent;
 		[Export]
 		private Sprite2D[] fireSoulSprites;
 		[Export]
 		private Sprite2D rankSprite;
+
+		[ExportSubgroup("Skill Menu")]
 		[Export]
 		private Label skillList;
 		[Export]
@@ -200,6 +208,9 @@ namespace Project.Interface
 			values[8].Text = CharacterController.instance.Skills.TextDisplay;
 
 			// Mission menu
+			missionTypeLabel.Text = Stage.Data.MissionTypeKey;
+			missionDescriptionLabel.Text = Stage.Data.MissionDescriptionKey;
+
 			fireSoulParent.Visible = Stage.Data.HasFireSouls;
 			if (Stage.Data.HasFireSouls)
 			{

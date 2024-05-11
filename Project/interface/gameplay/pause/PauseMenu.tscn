@@ -4624,7 +4624,7 @@ nodes/value_selection/node = SubResource("AnimationNodeTransition_6f5vy")
 nodes/value_selection/position = Vector2(-1020, 820)
 node_connections = [&"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"output", 0, &"confirm_enabled", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"value-1", &"value_selection", 2, &"value-2"]
 
-[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "statusCursor", "statusCursorAnimator", "values", "fireSoulParent", "fireSoulSprites", "rankSprite", "skillList", "skillCursor", "skillCursorAnimator", "levelSprite")]
+[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulSprites", "rankSprite", "skillList", "skillCursor", "skillCursorAnimator", "levelSprite")]
 process_mode = 3
 layer = 64
 script = ExtResource("1")
@@ -4635,6 +4635,8 @@ selectSFX = NodePath("SFX/SelectionSFX")
 statusCursor = NodePath("Pause/StatusMenu/StatusCursorAnchor/Cursor")
 statusCursorAnimator = NodePath("Pause/StatusMenu/StatusCursorAnchor/AnimationPlayer")
 values = [NodePath("Pause/StatusMenu/ValueMenu/Status/Level/LevelValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Level/Ring/RingValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/HighScore/HighScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Score/ScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/BestTime/BestTimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Time/TimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/StageEXP/StageEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/TotalEXP/TotalEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/SoulGauge/SoulGaugeValue")]
+missionTypeLabel = NodePath("Pause/StatusMenu/ValueMenu/Mission/Type")
+missionDescriptionLabel = NodePath("Pause/StatusMenu/ValueMenu/Mission/Description")
 fireSoulParent = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul")
 fireSoulSprites = [NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul1"), NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul2"), NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul3")]
 rankSprite = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal/Rank")
@@ -5019,6 +5021,24 @@ texture = ExtResource("11_tq8dq")
 region_enabled = true
 region_rect = Rect2(0, 5, 136, 20)
 
+[node name="Type" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+offset_left = -343.0
+offset_top = -224.0
+offset_right = 11.0
+offset_bottom = -179.0
+theme_override_fonts/font = ExtResource("12_mqlo7")
+theme_override_font_sizes/font_size = 32
+text = "Go for the Goal"
+
+[node name="Description" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+offset_left = -343.0
+offset_top = -176.0
+offset_right = 344.0
+theme_override_fonts/font = ExtResource("12_mqlo7")
+theme_override_font_sizes/font_size = 32
+text = "Find King Shahryar!"
+autowrap_mode = 3
+
 [node name="FireSoul" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Mission"]
 position = Vector2(-207, 64)
 scale = Vector2(2.25, 2.25)
@@ -5057,24 +5077,6 @@ scale = Vector2(1.25, 1.25)
 texture = ExtResource("10_lpx5w")
 region_enabled = true
 region_rect = Rect2(420, 110, 60, 60)
-
-[node name="Type" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
-offset_left = -343.0
-offset_top = -224.0
-offset_right = 11.0
-offset_bottom = -179.0
-theme_override_fonts/font = ExtResource("12_mqlo7")
-theme_override_font_sizes/font_size = 32
-text = "Go for the Goal"
-
-[node name="Description" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
-offset_left = -343.0
-offset_top = -176.0
-offset_right = 26.0
-offset_bottom = -127.0
-theme_override_fonts/font = ExtResource("12_mqlo7")
-theme_override_font_sizes/font_size = 32
-text = "Find King Shahryar!"
 
 [node name="Skill" type="Node2D" parent="Pause/StatusMenu/ValueMenu"]
 modulate = Color(1, 1, 1, 0)

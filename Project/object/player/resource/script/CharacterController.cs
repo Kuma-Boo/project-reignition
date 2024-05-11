@@ -236,7 +236,7 @@ namespace Project.Gameplay
 		private float lockoutTimer;
 		public LockoutResource ActiveLockoutData { get; private set; }
 		public bool IsLockoutActive => ActiveLockoutData != null;
-		private readonly List<LockoutResource> lockoutDataList = new List<LockoutResource>();
+		private readonly List<LockoutResource> lockoutDataList = new();
 
 		/// <summary> Adds a ControlLockoutResource to the list, and switches to it depending on it's priority
 		public void AddLockoutData(LockoutResource resource)
