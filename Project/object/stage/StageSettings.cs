@@ -1,6 +1,5 @@
 using Godot;
 using Godot.Collections;
-using System.Collections.Generic;
 using Project.Core;
 
 namespace Project.Gameplay
@@ -9,201 +8,20 @@ namespace Project.Gameplay
 	/// Stage settings.
 	/// Must be the first thing loaded in a level.
 	/// </summary>
-	[Tool]
 	public partial class StageSettings : Node3D
 	{
 		public static StageSettings instance;
-
-		#region Editor
-		public override Array<Dictionary> _GetPropertyList()
-		{
-			Array<Dictionary> properties = new()
-			{
-				ExtensionMethods.CreateProperty("Level Data", Variant.Type.Object),
-				ExtensionMethods.CreateProperty("Camera Settings", Variant.Type.Object),
-				ExtensionMethods.CreateProperty("Dialog Library", Variant.Type.Object),
-				ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool),
-				ExtensionMethods.CreateProperty("Ranking/Gold Time", Variant.Type.Int),
-				ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Int),
-				ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int)
-			};
-
-			if (!skipScore)
-			{
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
-			}
-
-			properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,2.5,.1"));
-			properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object));
-			properties.Add(ExtensionMethods.CreateProperty("Completion/Demo Animator", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "AnimationPlayer"));
-
-			properties.Add(ExtensionMethods.CreateProperty("Static/Path Parent", Variant.Type.NodePath));
-			properties.Add(ExtensionMethods.CreateProperty("Static/Environment", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "WorldEnvironment"));
-
-			return properties;
-		}
-
-		public override Variant _Get(StringName property)
-		{
-			switch ((string)property)
-			{
-				case "Level Data":
-					return Data;
-
-				case "Camera Settings":
-					return InitialCameraSettings;
-				case "Dialog Library":
-					return dialogLibrary;
-
-				case "Ranking/Skip Score":
-					return skipScore;
-				case "Ranking/Gold Time":
-					return goldTime;
-				case "Ranking/Silver Time":
-					return silverTime;
-				case "Ranking/Bronze Time":
-					return bronzeTime;
-				case "Ranking/Gold Score":
-					return goldScore;
-				case "Ranking/Silver Score":
-					return silverScore;
-				case "Ranking/Bronze Score":
-					return bronzeScore;
-
-				case "Completion/Delay":
-					return completionDelay;
-				case "Completion/Lockout":
-					return CompletionLockout;
-				case "Completion/Demo Animator":
-					return completionDemoAnimator;
-
-				case "Static/Path Parent":
-					return pathParent;
-				case "Static/Environment":
-					return environment;
-			}
-
-			return base._Get(property);
-		}
-
-		public override bool _Set(StringName property, Variant value)
-		{
-			switch ((string)property)
-			{
-				case "Level Data":
-					Data = (LevelDataResource)value;
-					break;
-
-				case "Camera Settings":
-					InitialCameraSettings = (CameraSettingsResource)value;
-					break;
-				case "Dialog Library":
-					dialogLibrary = (SFXLibraryResource)value;
-					break;
-
-				case "Ranking/Skip Score":
-					skipScore = (bool)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Ranking/Gold Time":
-					goldTime = (int)value;
-					break;
-				case "Ranking/Silver Time":
-					silverTime = (int)value;
-					break;
-				case "Ranking/Bronze Time":
-					bronzeTime = (int)value;
-					break;
-				case "Ranking/Gold Score":
-					goldScore = (int)value;
-					break;
-				case "Ranking/Silver Score":
-					silverScore = (int)value;
-					break;
-				case "Ranking/Bronze Score":
-					bronzeScore = (int)value;
-					break;
-
-				case "Completion/Delay":
-					completionDelay = (float)value;
-					break;
-				case "Completion/Lockout":
-					CompletionLockout = (LockoutResource)value;
-					break;
-				case "Completion/Demo Animator":
-					completionDemoAnimator = (NodePath)value;
-					break;
-
-
-				case "Static/Path Parent":
-					pathParent = (NodePath)value;
-					break;
-				case "Static/Environment":
-					environment = (NodePath)value;
-					break;
-				default:
-					return false;
-			}
-
-			return true;
-		}
-		#endregion
-
-		#region Path Settings
-		private NodePath pathParent;
-		/// <summary> List of all level paths contained for this level. </summary>
-		private readonly Array<Path3D> pathList = new();
-
-		/// <summary>
-		/// Returns the path the player is currently the closest to.
-		/// Allows placing the player anywhere in the editor without needing to manually assign paths.
-		/// </summary>
-		public Path3D CalculateStartingPath(Vector3 globalPosition)
-		{
-			int closestPathIndex = -1;
-			float closestDistanceSquared = Mathf.Inf;
-
-			for (int i = 0; i < pathList.Count; i++)
-			{
-				Vector3 closestPoint = pathList[i].Curve.GetClosestPoint(globalPosition - pathList[i].GlobalPosition);
-				closestPoint += pathList[i].GlobalPosition;
-				float dstSquared = globalPosition.DistanceSquaredTo(closestPoint);
-
-				if (dstSquared < closestDistanceSquared)
-				{
-					closestPathIndex = i;
-					closestDistanceSquared = dstSquared;
-				}
-			}
-
-			if (closestPathIndex == -1)
-				return null;
-
-			return pathList[closestPathIndex];
-		}
-		#endregion
-
-		/// <summary> Reference to active area's WorldEnvironment node. </summary>
-		public WorldEnvironment Environment { get; private set; }
-		private NodePath environment;
 
 		[Export]
 		public bool isControlTest;
 
 		public override void _EnterTree()
 		{
-			if (Engine.IsEditorHint()) return;
-
 			instance = this; //Always override previous instance
 
-			Environment = GetNodeOrNull<WorldEnvironment>(environment);
-
-			Node pathParentNode = GetNode<Node>(pathParent);
-			for (int i = 0; i < pathParentNode.GetChildCount(); i++)
+			for (int i = 0; i < pathParent.GetChildCount(); i++)
 			{
-				Path3D path = pathParentNode.GetChildOrNull<Path3D>(i);
+				Path3D path = pathParent.GetChildOrNull<Path3D>(i);
 				if (path != null)
 					pathList.Add(path);
 			}
@@ -211,31 +29,18 @@ namespace Project.Gameplay
 			UpdateScore(0, MathModeEnum.Replace);
 		}
 
-		public override void _PhysicsProcess(double _)
-		{
-			if (Engine.IsEditorHint()) return;
 
-			UpdateTime();
-		}
+		public override void _PhysicsProcess(double _) => UpdateTime();
 
 
 		#region Level Settings
 		/// <summary> Reference to the level's data. </summary>
+		[Export]
 		public LevelDataResource Data { get; private set; }
+		[Export]
 		public CameraSettingsResource InitialCameraSettings { get; private set; }
+		[Export]
 		public SFXLibraryResource dialogLibrary;
-
-		// Rank
-		private bool skipScore; // Don't use score when ranking (i.e. for bosses)
-
-		// Requirements for time rank. Format is in seconds.
-		private int goldTime;
-		private int silverTime;
-		private int bronzeTime;
-		// Requirement for score rank
-		private int goldScore;
-		private int silverScore;
-		private int bronzeScore;
 
 		/// <summary>
 		/// Calculates the rank [Fail = -1, None = 0, Bronze = 1, Silver = 2, Gold = 3]
@@ -247,20 +52,20 @@ namespace Project.Gameplay
 
 			int rank = 0; // DEFAULT - No rank
 
-			if (skipScore)
+			if (Data.SkipScore)
 			{
-				if (CurrentTime <= goldTime)
+				if (CurrentTime <= Data.GoldTime)
 					rank = 3;
-				else if (CurrentTime <= silverTime)
+				else if (CurrentTime <= Data.SilverTime)
 					rank = 2;
-				else if (CurrentTime <= bronzeTime)
+				else if (CurrentTime <= Data.BronzeTime)
 					rank = 1;
 			}
-			else if (CurrentTime <= bronzeTime && CurrentScore >= bronzeScore)
+			else if (CurrentTime <= Data.BronzeTime && CurrentScore >= Data.BronzeScore)
 			{
-				if (CurrentTime <= goldTime && CurrentScore >= silverScore)
+				if (CurrentTime <= Data.GoldTime && CurrentScore >= Data.SilverScore)
 					rank = 3;
-				else if (CurrentTime >= silverTime || CurrentScore <= silverScore)
+				else if (CurrentTime >= Data.SilverTime || CurrentScore <= Data.SilverScore)
 					rank = 1;
 				else
 					rank = 2;
@@ -272,6 +77,7 @@ namespace Project.Gameplay
 			return rank;
 		}
 		#endregion
+
 
 		#region Level Data
 		public enum MathModeEnum // List of ways the score can be modified
@@ -384,59 +190,42 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		#region Level Completion
-		[Signal]
-		public delegate void LevelCompletedEventHandler(); // Called when the level is completed
-		[Signal]
-		public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
 
-		private float completionDelay;
-		public enum LevelStateEnum
+		#region Path Settings
+		[Export(PropertyHint.NodeType, "Node3D")]
+		private Node3D pathParent;
+		/// <summary> List of all level paths contained for this level. </summary>
+		private readonly Array<Path3D> pathList = new();
+
+		/// <summary>
+		/// Returns the path the player is currently the closest to.
+		/// Allows placing the player anywhere in the editor without needing to manually assign paths.
+		/// </summary>
+		public Path3D CalculateStartingPath(Vector3 globalPosition)
 		{
-			Incomplete,
-			Failed,
-			Success,
+			int closestPathIndex = -1;
+			float closestDistanceSquared = Mathf.Inf;
+
+			for (int i = 0; i < pathList.Count; i++)
+			{
+				Vector3 closestPoint = pathList[i].Curve.GetClosestPoint(globalPosition - pathList[i].GlobalPosition);
+				closestPoint += pathList[i].GlobalPosition;
+				float dstSquared = globalPosition.DistanceSquaredTo(closestPoint);
+
+				if (dstSquared < closestDistanceSquared)
+				{
+					closestPathIndex = i;
+					closestDistanceSquared = dstSquared;
+				}
+			}
+
+			if (closestPathIndex == -1)
+				return null;
+
+			return pathList[closestPathIndex];
 		}
-		public LevelStateEnum LevelState { get; private set; }
-		/// <summary> Control lockout to apply when the level is completed. Leave null to use Runtime.Instance.StopLockout. </summary>
-		public LockoutResource CompletionLockout { get; private set; }
-		private bool IsLevelFinished => LevelState != LevelStateEnum.Incomplete;
-		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
-		public void FinishLevel(bool wasSuccessful)
-		{
-			// Attempt to start the completion demo
-			GetTree().CreateTimer(wasSuccessful ? completionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
-
-			BGMPlayer.StageMusicPaused = true;
-			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
-
-			EmitSignal(SignalName.LevelCompleted);
-		}
-
-		/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
-		public NodePath completionDemoAnimator;
-		private AnimationPlayer completionAnimator;
-		private void StartCompletionDemo()
-		{
-			EmitSignal(SignalName.LevelDemoStarted);
-
-			completionAnimator = GetNodeOrNull<AnimationPlayer>(completionDemoAnimator);
-			if (completionAnimator == null) return;
-
-			OnCameraDemoAdvance();
-			completionAnimator.Play("demo1");
-		}
-
-		/// <summary> Completion demo advanced, play a crossfade. </summary>
-		public void OnCameraDemoAdvance()
-		{
-			StringName nextAnimation = completionAnimator.AnimationGetNext(completionAnimator.CurrentAnimation);
-			if (completionAnimator.HasAnimation(nextAnimation))
-				completionAnimator.Play(nextAnimation);
-			CharacterController.instance.Camera.StartCrossfade();
-		}
-
 		#endregion
+
 
 		#region Object Spawning
 		// Checkpoint data
@@ -499,6 +288,62 @@ namespace Project.Gameplay
 		}
 
 		#endregion
+
+
+		#region Level Completion
+		[Signal]
+		public delegate void LevelCompletedEventHandler(); // Called when the level is completed
+		[Signal]
+		public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
+
+		public enum LevelStateEnum
+		{
+			Incomplete,
+			Failed,
+			Success,
+		}
+		public LevelStateEnum LevelState { get; private set; }
+		private bool IsLevelFinished => LevelState != LevelStateEnum.Incomplete;
+		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
+		public void FinishLevel(bool wasSuccessful)
+		{
+			// Attempt to start the completion demo
+			GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
+
+			BGMPlayer.StageMusicPaused = true;
+			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
+
+			EmitSignal(SignalName.LevelCompleted);
+		}
+
+		/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
+		[Export]
+		private AnimationPlayer completionAnimator;
+		private void StartCompletionDemo()
+		{
+			EmitSignal(SignalName.LevelDemoStarted);
+
+			if (completionAnimator == null) return;
+
+			OnCameraDemoAdvance();
+			completionAnimator.Play("demo1");
+		}
+
+		/// <summary> Completion demo advanced, play a crossfade. </summary>
+		public void OnCameraDemoAdvance()
+		{
+			StringName nextAnimation = completionAnimator.AnimationGetNext(completionAnimator.CurrentAnimation);
+			if (completionAnimator.HasAnimation(nextAnimation))
+				completionAnimator.Play(nextAnimation);
+			CharacterController.instance.Camera.StartCrossfade();
+		}
+
+		#endregion
+
+
+		/// <summary> Reference to active area's WorldEnvironment node. </summary>
+		[Export]
+		public WorldEnvironment Environment { get; private set; }
 	}
 
 

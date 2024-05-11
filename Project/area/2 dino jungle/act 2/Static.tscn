@@ -1,8 +1,7 @@
-[gd_scene load_steps=56 format=3 uid="uid://dp60xb12an0s2"]
+[gd_scene load_steps=55 format=3 uid="uid://dp60xb12an0s2"]
 
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="1_d384b"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_tbi4j"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/run/StopLockout.tres" id="2_qo4fn"]
 [ext_resource type="PackedScene" uid="uid://bjkwrplubhwil" path="res://area/2 dino jungle/object/platform/CactusPlatform.tscn" id="2_y75g5"]
 [ext_resource type="PackedScene" uid="uid://cbs8o4mdf1wbo" path="res://area/2 dino jungle/object/platform/GrassPillar.tscn" id="3_f3x6u"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="4_7yy7k"]
@@ -369,25 +368,9 @@ _data = {
 
 [node name="Static" type="Node3D"]
 script = ExtResource("1_tbi4j")
-"Level ID" = "dj_a2"
-"Mission Type" = 0
-"Time Limit" = 0.0
-"Camera Settings" = null
-"Story Event Index" = -1
-"Dialog Library" = null
-"Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = ExtResource("2_qo4fn")
-"Completion/Demo Animator" = NodePath("DemoCamera/AnimationPlayer")
-"Static/Path Parent" = NodePath("Path")
-Static/Environment = NodePath("WorldEnvironment")
+pathParent = NodePath("Path")
+completionAnimator = NodePath("DemoCamera/AnimationPlayer")
+Environment = NodePath("WorldEnvironment")
 
 [node name="Common" type="Node3D" parent="." groups=["cull on complete"]]
 
@@ -447,6 +430,9 @@ transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 0.9, 4.21332, -5.34167, 14.493
 [node name="Dino" type="Node3D" parent="Common/Environment"]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -85.7683, -20.314, -31.0426)
 script = ExtResource("4_7yy7k")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = null
 
 [node name="DinoApatos" parent="Common/Environment/Dino" instance=ExtResource("5_tccji")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)

@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay;
 
 namespace Project.Interface.Menus
 {

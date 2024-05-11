@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-namespace Project.Core
+namespace Project.Gameplay
 {
 	[Tool]
 	public partial class LevelDataResource : Resource
@@ -28,7 +28,6 @@ namespace Project.Core
 				ExtensionMethods.CreateProperty("Is Side Mission", Variant.Type.Bool),
 				ExtensionMethods.CreateProperty("Has Fire Souls", Variant.Type.Bool),
 
-
 				ExtensionMethods.CreateProperty("Mission/Type", Variant.Type.Int, PropertyHint.Enum, MissionType.EnumToString()),
 				ExtensionMethods.CreateProperty("Mission/Type Key", Variant.Type.String),
 				ExtensionMethods.CreateProperty("Mission/Description Key", Variant.Type.String),
@@ -47,7 +46,7 @@ namespace Project.Core
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Time", Variant.Type.Int));
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int));
 
-			if (!skipScore)
+			if (!SkipScore)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
 				properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
@@ -89,32 +88,26 @@ namespace Project.Core
 				case "Mission/Objective Count":
 					return MissionObjectiveCount;
 
-					/*
-					case "Camera Settings":
-						return InitialCameraSettings;
-					case "Dialog Library":
-						return dialogLibrary;
 
-					case "Ranking/Skip Score":
-						return skipScore;
-					case "Ranking/Gold Time":
-						return goldTime;
-					case "Ranking/Silver Time":
-						return silverTime;
-					case "Ranking/Bronze Time":
-						return bronzeTime;
-					case "Ranking/Gold Score":
-						return goldScore;
-					case "Ranking/Silver Score":
-						return silverScore;
-					case "Ranking/Bronze Score":
-						return bronzeScore;
+				case "Ranking/Skip Score":
+					return SkipScore;
+				case "Ranking/Gold Time":
+					return GoldTime;
+				case "Ranking/Silver Time":
+					return SilverTime;
+				case "Ranking/Bronze Time":
+					return BronzeTime;
+				case "Ranking/Gold Score":
+					return GoldScore;
+				case "Ranking/Silver Score":
+					return SilverScore;
+				case "Ranking/Bronze Score":
+					return BronzeScore;
 
-					case "Completion/Delay":
-						return completionDelay;
-					case "Completion/Lockout":
-						return CompletionLockout;
-					*/
+				case "Completion/Delay":
+					return CompletionDelay;
+				case "Completion/Lockout":
+					return CompletionLockout;
 			}
 
 			return base._Get(property);
@@ -161,44 +154,36 @@ namespace Project.Core
 					MissionObjectiveCount = (int)value;
 					break;
 
-				/*
-				case "Camera Settings":
-					InitialCameraSettings = (CameraSettingsResource)value;
-					break;
-				case "Dialog Library":
-					dialogLibrary = (SFXLibraryResource)value;
-					break;
-
 				case "Ranking/Skip Score":
-					skipScore = (bool)value;
+					SkipScore = (bool)value;
 					NotifyPropertyListChanged();
 					break;
 				case "Ranking/Gold Time":
-					goldTime = (int)value;
+					GoldTime = (int)value;
 					break;
 				case "Ranking/Silver Time":
-					silverTime = (int)value;
+					SilverTime = (int)value;
 					break;
 				case "Ranking/Bronze Time":
-					bronzeTime = (int)value;
+					BronzeTime = (int)value;
 					break;
 				case "Ranking/Gold Score":
-					goldScore = (int)value;
+					GoldScore = (int)value;
 					break;
 				case "Ranking/Silver Score":
-					silverScore = (int)value;
+					SilverScore = (int)value;
 					break;
 				case "Ranking/Bronze Score":
-					bronzeScore = (int)value;
+					BronzeScore = (int)value;
 					break;
 
 				case "Completion/Delay":
-					completionDelay = (float)value;
+					CompletionDelay = (float)value;
 					break;
 				case "Completion/Lockout":
 					CompletionLockout = (LockoutResource)value;
 					break;
-				*/
+
 				default:
 					return false;
 			}
@@ -208,36 +193,53 @@ namespace Project.Core
 		#endregion
 
 
-		private bool skipScore; // Don't use score when ranking (i.e. for bosses)
-
 		/// <summary> Level's id - used for save data. </summary>
 		public StringName LevelID { get; private set; }
 		/// <summary> Path to the level's scene. </summary>
 		public string LevelPath { get; private set; }
+		/// <summary> Story event index to play after completing the stage. Set to -1 if no story event is meant to be played. </summary>
+		public int StoryEventIndex = -1;
+
 
 		/// <summary> Does this mission contain fire souls? </summary>
 		public bool HasFireSouls { get; private set; }
 		/// <summary> Should this mission be shown as optional? </summary>
 		public bool IsSideMission { get; private set; }
 
-		/// <summary> Localization key for the type of mission (Goal, Rampage, Rings, etc.). </summary>
-		public string MissionTypeKey { get; private set; }
-		/// <summary> Localization key for the more specific description. </summary>
-		public string MissionDescriptionKey { get; private set; }
 
 
 		/// <summary> Type of mission. </summary>
 		public MissionTypes MissionType { get; private set; }
-		/// <summary> What's the target amount for the mission objective? </summary>
-		public int MissionObjectiveCount { get; private set; }
-		/// <summary> Level time limit, in seconds. </summary>
-		public float MissionTimeLimit { get; private set; }
+		/// <summary> Localization key for the type of mission (Goal, Rampage, Rings, etc.). </summary>
+		public string MissionTypeKey { get; private set; }
+		/// <summary> Localization key for the more specific description. </summary>
+		public string MissionDescriptionKey { get; private set; }
 		/// <summary> Should the countdown be disabled for this stage (i.e. bosses, control test, etc.)? </summary>
 		public bool DisableCountdown { get; private set; }
+		/// <summary> Level time limit, in seconds. </summary>
+		public float MissionTimeLimit { get; private set; }
+		/// <summary> What's the target amount for the mission objective? </summary>
+		public int MissionObjectiveCount { get; private set; }
 
 
-		/// <summary> Story event index to play after completing the stage. Set to -1 if no story event is meant to be played. </summary>
-		public int StoryEventIndex = -1;
+		// Rank
+		/// <summary> Enable this to ignore score when calculating rank (i.e. for bosses) </summary>
+		public bool SkipScore { get; private set; }
+
+		// Requirements for time rank. Format is in seconds.
+		public int GoldTime { get; private set; }
+		public int SilverTime { get; private set; }
+		public int BronzeTime { get; private set; }
+		// Requirement for score rank
+		public int GoldScore { get; private set; }
+		public int SilverScore { get; private set; }
+		public int BronzeScore { get; private set; }
+
+
+		/// <summary> How long to wait before transitioning to the completion camera. </summary>
+		public float CompletionDelay { get; private set; }
+		/// <summary> Control lockout to apply when the level is completed. Leave null to use Runtime.Instance.StopLockout. </summary>
+		public LockoutResource CompletionLockout { get; private set; }
 
 	}
 }

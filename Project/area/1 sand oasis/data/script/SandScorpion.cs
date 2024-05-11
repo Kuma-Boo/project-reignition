@@ -224,7 +224,7 @@ namespace Project.Gameplay.Bosses
 			eventAnimator.Advance(0.0);
 
 			Character.Visible = false;
-			Character.AddLockoutData(StageSettings.instance.CompletionLockout);
+			Character.AddLockoutData(StageSettings.instance.Data.CompletionLockout);
 			Interface.PauseMenu.AllowPausing = false;
 			HeadsUpDisplay.instance.Visible = false;
 		}

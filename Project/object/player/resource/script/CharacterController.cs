@@ -10,8 +10,6 @@ namespace Project.Gameplay
 	public partial class CharacterController : CharacterBody3D
 	{
 		public static CharacterController instance;
-
-		public StageSettings Level => StageSettings.instance;
 		public StageSettings Stage => StageSettings.instance;
 
 		public override void _EnterTree() => instance = this; //Always Override Singleton
@@ -27,10 +25,10 @@ namespace Project.Gameplay
 			PathFollower.SetActivePath(startingPath); //Attempt to autoload the stage's default path
 			Camera.PathFollower.SetActivePath(startingPath);
 
-			Level.SetCheckpoint(GetParent<Triggers.CheckpointTrigger>()); //Initial checkpoint configuration
-			Level.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); //Start with the proper ring count
-			Level.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
-			Level.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
+			Stage.SetCheckpoint(GetParent<Triggers.CheckpointTrigger>()); //Initial checkpoint configuration
+			Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); //Start with the proper ring count
+			Stage.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
+			Stage.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -1196,7 +1194,7 @@ namespace Project.Gameplay
 		{
 			SetActionState(ActionStates.Damaged);
 
-			if (Level.CurrentRingCount == 0)
+			if (Stage.CurrentRingCount == 0)
 			{
 				Effect.PlayVoice("defeat");
 				StartRespawn();
@@ -1204,7 +1202,7 @@ namespace Project.Gameplay
 			else
 			{
 				Effect.PlayVoice("hurt");
-				Level.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
+				Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
 			}
 		}
 
@@ -1243,9 +1241,9 @@ namespace Project.Gameplay
 			MovementState = MovementStates.Normal;
 
 			invincibilityTimer = 0;
-			Teleport(Level.CurrentCheckpoint);
-			PathFollower.SetActivePath(Level.CheckpointPlayerPath); //Revert path
-			Camera.PathFollower.SetActivePath(Level.CheckpointCameraPath);
+			Teleport(Stage.CurrentCheckpoint);
+			PathFollower.SetActivePath(Stage.CheckpointPlayerPath); //Revert path
+			Camera.PathFollower.SetActivePath(Stage.CheckpointCameraPath);
 
 			IsDefeated = false;
 			IsMovingBackward = false;
@@ -1268,9 +1266,9 @@ namespace Project.Gameplay
 			SnapToGround();
 			areaTrigger.Disabled = false;
 
-			Level.RespawnObjects();
-			Level.IncrementRespawnCount();
-			Level.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); //Reset ring count
+			Stage.RespawnObjects();
+			Stage.IncrementRespawnCount();
+			Stage.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); //Reset ring count
 
 			TransitionManager.FinishTransition();
 		}
@@ -1752,10 +1750,10 @@ namespace Project.Gameplay
 		{
 			UpDirection = Vector3.Up;
 
-			if (Level.CurrentCheckpoint == null) //Default to parent node's position
+			if (Stage.CurrentCheckpoint == null) //Default to parent node's position
 				Transform = Transform3D.Identity;
 			else
-				GlobalTransform = Level.CurrentCheckpoint.GlobalTransform;
+				GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
 
 			MovementAngle = PathFollower.ForwardAngle; //Reset movement angle
 			Animator.SnapRotation(MovementAngle);
@@ -1835,10 +1833,10 @@ namespace Project.Gameplay
 			Skills.IsTimeBreakEnabled = false;
 			Skills.IsSpeedBreakEnabled = false;
 
-			if (Level.LevelState == StageSettings.LevelStateEnum.Failed || Level.CompletionLockout == null)
+			if (Stage.LevelState == StageSettings.LevelStateEnum.Failed || Stage.Data.CompletionLockout == null)
 				AddLockoutData(Runtime.Instance.StopLockout);
 			else
-				AddLockoutData(Level.CompletionLockout);
+				AddLockoutData(Stage.Data.CompletionLockout);
 		}
 
 
