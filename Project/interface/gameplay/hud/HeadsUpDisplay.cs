@@ -93,7 +93,17 @@ namespace Project.Gameplay
 		[ExportGroup("Time & Score")]
 		[Export]
 		private Label time;
-		private void UpdateTime() => time.Text = Stage.DisplayTime;
+		private void UpdateTime()
+		{
+			if (Stage.Data.MissionTimeLimit != 0) // Time limit; Draw time counting DOWN
+			{
+				float timeLeft = Mathf.Clamp(Stage.Data.MissionTimeLimit - Stage.CurrentTime, 0, Stage.Data.MissionTimeLimit);
+				time.Text = ExtensionMethods.FormatTime(timeLeft);
+				return;
+			}
+
+			time.Text = Stage.DisplayTime;
+		}
 
 		[Export]
 		private Label score;

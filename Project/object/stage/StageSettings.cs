@@ -177,14 +177,9 @@ namespace Project.Gameplay
 			if (IsLevelFinished || !Interface.PauseMenu.AllowPausing) return;
 
 			CurrentTime += PhysicsManager.physicsDelta; // Add current time
-			if (Data.MissionTimeLimit == 0) // No time limit
-				DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
-			else
-			{
-				DisplayTime = ExtensionMethods.FormatTime(Mathf.Clamp(Data.MissionTimeLimit - CurrentTime, 0, Data.MissionTimeLimit));
-				if (CurrentTime >= Data.MissionTimeLimit) // Time's up!
-					FinishLevel(false);
-			}
+			DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
+			if (Data.MissionTimeLimit != 0 && CurrentTime >= Data.MissionTimeLimit) // Time's up!
+				FinishLevel(false);
 
 			EmitSignal(SignalName.TimeChanged);
 		}
