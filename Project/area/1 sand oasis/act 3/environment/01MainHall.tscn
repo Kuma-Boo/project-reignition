@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdy7ivd82yprv"]
+[gd_scene load_steps=4 format=3 uid="uid://bdy7ivd82yprv"]
 
 [ext_resource type="PackedScene" uid="uid://wlncb0bx2qpy" path="res://area/1 sand oasis/act 3/environment/model/01MainHall.gltf" id="1_2gu8q"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_n7pua"]
+[ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_dno5y"]
 
 [node name="01MainHall" instance=ExtResource("1_2gu8q")]
 script = ExtResource("2_n7pua")
@@ -259,38 +260,37 @@ spot_range = 30.0
 spot_attenuation = 0.0853776
 spot_angle = 15.0
 
-[node name="LanternGroup" type="Node3D" parent="Lighting" index="3"]
-transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -20.8819, 0, -54.3974)
+[node name="LanternGroup1" type="Node3D" parent="Lighting" index="3"]
+transform = Transform3D(0.933581, 0, 0.358368, 0, 1, 0, -0.358368, 0, 0.933581, -20.8819, 0, -54.3974)
 
-[node name="OmniLight3d" type="OmniLight3D" parent="Lighting/LanternGroup" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74218, 3.50419, 6.90002)
-layers = 1024
-light_color = Color(0.741176, 0.403922, 0.2, 1)
-light_cull_mask = 4293918789
-omni_range = 10.0
+[node name="Lantern1" parent="Lighting/LanternGroup1" index="0" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, -5.74218, 2.00419, 6.90002)
 
-[node name="OmniLight3d2" type="OmniLight3D" parent="Lighting/LanternGroup" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.95781, 3.50419, 6.90002)
-layers = 1024
-light_color = Color(0.741176, 0.403922, 0.2, 1)
-light_cull_mask = 4293918789
-omni_range = 10.0
+[node name="Lantern2" parent="Lighting/LanternGroup1" index="1" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -2.98023e-08, 0, 1, 5.95781, 2.00419, 6.90002)
 
-[node name="OmniLight3d3" type="OmniLight3D" parent="Lighting/LanternGroup" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.89364, 0.0235144, -6.49998)
-layers = 1024
-light_color = Color(0.741176, 0.403922, 0.2, 1)
-light_cull_mask = 4293918789
-omni_range = 10.0
+[node name="Lantern3" parent="Lighting/LanternGroup1" index="2" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -5.96046e-08, 0, 1, -5.89364, -1.47649, -6.49998)
 
-[node name="OmniLight3d4" type="OmniLight3D" parent="Lighting/LanternGroup" index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.80636, 0.0235144, -6.49998)
-layers = 1024
-light_color = Color(0.741176, 0.403922, 0.2, 1)
-light_cull_mask = 4293918789
-omni_range = 10.0
+[node name="Lantern4" parent="Lighting/LanternGroup1" index="3" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, 8.9407e-08, 0, 1, 0, -5.96046e-08, 0, 1, 5.80636, -1.47649, -6.49998)
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="Lighting" index="4"]
+[node name="LanternGroup2" type="Node3D" parent="Lighting" index="4"]
+transform = Transform3D(-0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, 20.9368, 0, 54.3586)
+
+[node name="Lantern1" parent="Lighting/LanternGroup2" index="0" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, -5.74218, 2.00419, 6.90002)
+
+[node name="Lantern2" parent="Lighting/LanternGroup2" index="1" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -8.9407e-08, 0, 1, 6.06333, 2.00419, 6.75773)
+
+[node name="Lantern3" parent="Lighting/LanternGroup2" index="2" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -5.96046e-08, 0, 1, -5.89364, -1.47649, -6.49998)
+
+[node name="Lantern4" parent="Lighting/LanternGroup2" index="3" instance=ExtResource("3_dno5y")]
+transform = Transform3D(1, 0, 2.08616e-07, 0, 1, 0, -5.96046e-08, 0, 1, 5.92931, -1.47649, -6.54917)
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="Lighting" index="5"]
 transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 0, 0, 0)
 layers = 4
 size = Vector3(190, 36, 419)
@@ -298,3 +298,5 @@ interior = true
 cull_mask = 4
 ambient_mode = 2
 ambient_color = Color(1, 1, 1, 1)
+
+[node name="Node3D" type="Node3D" parent="Lighting" index="6"]
