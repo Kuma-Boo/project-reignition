@@ -132,11 +132,10 @@ namespace Project.Editor.StageObjectPreviewer
 		private void UpdateMajinPath()
 		{
 			Majin t = target as Majin;
-			if (t.spawnOffset == Vector3.Zero) return;
+			if (t.SpawnOffset.IsZeroApprox()) return;
 
 			Vector3 s = t.GlobalPosition;
-			Vector3 e = s + t.Basis * t.spawnOffset;
-			DrawLine(s, e, DEFAULT_DRAW_COLOR);
+			DrawLine(s, s + t.SpawnOffset, DEFAULT_DRAW_COLOR);
 		}
 
 		private readonly Color DEFAULT_DRAW_COLOR = Colors.Blue;

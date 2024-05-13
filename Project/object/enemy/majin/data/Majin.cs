@@ -153,11 +153,11 @@ namespace Project.Gameplay
 		private float spawnTravelTime;
 		/// <summary> How long should spawning be delayed? </summary>
 		private float spawnDelay;
+		public Vector3 SpawnOffset => GlobalBasis * spawnOffset;
 		/// <summary> Where to spawn from (Added with OriginalPosition) </summary>
-		public Vector3 spawnOffset;
+		private Vector3 spawnOffset;
 		/// <summary> Local Position to be after spawning is complete. </summary>
 		private Vector3 OriginalPosition => SpawnData.spawnTransform.Origin;
-		private Vector3 SpawnPosition => OriginalPosition + Basis * spawnOffset;
 		private bool isSpawning;
 
 		/// <summary> Use this to launch the enemy when defeated. </summary>
@@ -524,8 +524,8 @@ namespace Project.Gameplay
 			else // Travel
 			{
 				animationPlayer.Play("travel");
-				GlobalPosition = SpawnPosition;
-				tweener.TweenProperty(this, "position", OriginalPosition, spawnTravelTime).SetDelay(spawnDelay).From(SpawnPosition);
+				GlobalPosition = OriginalPosition + SpawnOffset;
+				tweener.TweenProperty(this, "position", OriginalPosition, spawnTravelTime).SetDelay(spawnDelay).From(GlobalPosition);
 				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
 
 				moveTransition.XfadeTime = 0;
