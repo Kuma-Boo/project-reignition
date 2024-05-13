@@ -122,7 +122,7 @@ namespace Project.Gameplay
 		/// <summary> Reference to active CameraSettingsResource. </summary>
 		public CameraSettingsResource ActiveSettings => ActiveBlendData.SettingsResource;
 		/// <summary> A list of all camera settings that are influencing camera. </summary>
-		private readonly List<CameraBlendData> CameraBlendList = new List<CameraBlendData>();
+		private readonly List<CameraBlendData> CameraBlendList = new();
 
 		public void StartCrossfade()
 		{
@@ -223,6 +223,7 @@ namespace Project.Gameplay
 				data.precalculatedPosition = data.precalculatedPosition.Lerp(iData.precalculatedPosition, CameraBlendList[i].SmoothedInfluence);
 
 				data.yawTracking = Mathf.LerpAngle(data.yawTracking, iData.yawTracking, CameraBlendList[i].SmoothedInfluence);
+				data.secondaryYawTracking = Mathf.LerpAngle(data.secondaryYawTracking, iData.secondaryYawTracking, CameraBlendList[i].SmoothedInfluence);
 				data.pitchTracking = Mathf.Lerp(data.pitchTracking, iData.pitchTracking, CameraBlendList[i].SmoothedInfluence);
 
 				data.horizontalTrackingOffset = Mathf.Lerp(data.horizontalTrackingOffset, iData.horizontalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
@@ -247,6 +248,9 @@ namespace Project.Gameplay
 			// Calculate xform angle before applying pitch tracking
 			xformAngle = ExtensionMethods.CalculateForwardAngle(-cameraTransform.Basis.Z, cameraTransform.Basis.Y);
 			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
+
+			// Apply secondary yaw tracking
+			cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.secondaryYawTracking);
 
 			// Update cameraTransform origin
 			viewportOffset.Y = Mathf.Lerp(viewportOffset.Y, 0, lockonBlend);
@@ -355,7 +359,7 @@ namespace Project.Gameplay
 					data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X;
 
 					if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
-						data.yawTracking = delta.Normalized().Flatten().AngleTo(Vector2.Up);
+						data.secondaryYawTracking = delta.Normalized().Flatten().AngleTo(Vector2.Up);
 				}
 				else if (!Mathf.IsZeroApprox(settings.hallWidth)) // Process hall width
 				{
@@ -365,10 +369,11 @@ namespace Project.Gameplay
 					data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X; // Recenter
 					data.horizontalTrackingOffset += data.blendData.hallPosition; // Add clamped position tracking
 
-					if (settings.isHallRotationEnabled)
+					if (!Mathf.IsZeroApprox(settings.hallRotationStrength) && Mathf.Abs(delta.X) > settings.hallWidth)
 					{
-						float rotationTracking = (delta + Vector3.Right * data.blendData.hallPosition).Normalized().Flatten().AngleTo(Vector2.Up);
-						data.yawTracking = rotationTracking;
+						delta.X -= Mathf.Sign(delta.X) * settings.hallWidth;
+						float rotationTracking = delta.Flatten().AngleTo(Vector2.Up) * settings.hallRotationStrength;
+						data.secondaryYawTracking = rotationTracking;
 					}
 				}
 
@@ -447,6 +452,8 @@ namespace Project.Gameplay
 
 			/// <summary> Yaw rotation data used for tracking. </summary>
 			public float yawTracking;
+			/// <summary> Secondary yaw rotation data that doesn't influence controls. </summary>
+			public float secondaryYawTracking;
 			/// <summary> Pitch rotation data used for tracking. </summary>
 			public float pitchTracking;
 
@@ -589,7 +596,7 @@ namespace Project.Gameplay
 		public float hallPosition;
 		/// <summary> Hall tracking velocity. </summary>
 		private float hallVelocity;
-		public const float HALL_SMOOTHING = 5.0f;
+		public const float HALL_SMOOTHING = 10.0f;
 		public void HallSmoothDamp(float target, bool snap)
 		{
 			if (snap || !WasInitialized)

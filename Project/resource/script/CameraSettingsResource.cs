@@ -31,11 +31,11 @@ namespace Project.Gameplay
 		private const string HORIZONTAL_TRACKING_KEY = "Tracking/Horizontal Tracking Mode";
 		private const string VERTICAL_TRACKING_KEY = "Tracking/Vertical Tracking Mode";
 		private const string HALL_WIDTH_KEY = "Tracking/Hall Width";
-		private const string HALL_ROTATION_KEY = "Tracking/Hall Rotation Tracking Enabled";
+		private const string HALL_ROTATION_KEY = "Tracking/Hall Rotation Tracking Strength";
 
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = new();
 
 			properties.Add(ExtensionMethods.CreateProperty(STATIC_CAMERA_KEY, Variant.Type.Bool));
 			if (!useStaticPosition)
@@ -51,7 +51,7 @@ namespace Project.Gameplay
 				if (horizontalTrackingMode == TrackingModeEnum.Move)
 				{
 					properties.Add(ExtensionMethods.CreateProperty(HALL_WIDTH_KEY, Variant.Type.Float));
-					properties.Add(ExtensionMethods.CreateProperty(HALL_ROTATION_KEY, Variant.Type.Bool));
+					properties.Add(ExtensionMethods.CreateProperty(HALL_ROTATION_KEY, Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 				}
 			}
 			else
@@ -127,7 +127,7 @@ namespace Project.Gameplay
 				case HALL_WIDTH_KEY:
 					return hallWidth;
 				case HALL_ROTATION_KEY:
-					return isHallRotationEnabled;
+					return hallRotationStrength;
 				default:
 					break;
 			}
@@ -207,7 +207,7 @@ namespace Project.Gameplay
 						hallWidth = 0;
 					break;
 				case HALL_ROTATION_KEY:
-					isHallRotationEnabled = (bool)value;
+					hallRotationStrength = (float)value;
 					break;
 
 				default:
@@ -273,7 +273,7 @@ namespace Project.Gameplay
 		/// <summary> Limit horizontal tracking to this value. </summary>
 		public float hallWidth;
 		/// <summary> Rotationally track the player when they go beyond the hall width. </summary>
-		public bool isHallRotationEnabled;
+		public float hallRotationStrength;
 
 		public enum TrackingModeEnum
 		{
