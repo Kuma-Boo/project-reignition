@@ -22,11 +22,13 @@ namespace Project.Gameplay.Objects
 		private bool isToggleable;
 		private bool isActive;
 		/// <summary> Was this switch already modified? Used when isToggleable is set to false. </summary>
-		private bool wasModified;
+		private bool wasToggled;
 
 		[ExportGroup("Components")]
 		[Export]
 		private AnimationPlayer animator;
+		[Export]
+		private Timer timer;
 
 		public override void _Ready()
 		{
@@ -37,23 +39,42 @@ namespace Project.Gameplay.Objects
 
 		public void Respawn()
 		{
-			wasModified = false;
+			wasToggled = false;
 			isActive = startActive;
 			animator.Play(isActive ? "activate-loop" : "RESET");
+
 			EmitSignal(SignalName.Respawned);
 		}
 
 
 		private void OnEntered(Area3D _) => Activate();
-		public void Activate()
+		private void Activate()
 		{
-			if (!isToggleable && wasModified) return;
+			// Check if switch was already toggled.
+			if (!isToggleable && wasToggled) return;
 
+			ToggleSwitch();
+
+			if (!wasToggled) // Deactivated; Disable any timers and return early
+			{
+				timer.Stop();
+				return;
+			}
+
+			if (!Mathf.IsZeroApprox(activationLength)) // Start timer
+			{
+				timer.WaitTime = activationLength;
+				timer.Start();
+			}
+		}
+
+		/// <summary> Just toggle the switch, without any checks and timers. </summary>
+		private void ToggleSwitch()
+		{
+			wasToggled = !wasToggled;
 			isActive = !isActive;
 			animator.Play(isActive ? "activate" : "deactivate");
 			EmitSignal(isActive ? SignalName.Activated : SignalName.Deactivated);
-
-			wasModified = true;
 		}
 	}
 }

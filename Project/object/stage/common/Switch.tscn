@@ -198,8 +198,63 @@ tracks/7/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_kqo2x"]
+resource_name = "deactivate"
+length = 0.166667
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SwitchMesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SwitchRay1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SwitchRay2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../SFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
 [sub_resource type="Animation" id="8"]
-resource_name = "activated-loop"
+resource_name = "activate-loop"
 length = 4.0
 loop_mode = 1
 step = 0.0333333
@@ -300,75 +355,21 @@ tracks/7/keys = {
 "values": [Vector3(1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_kqo2x"]
-resource_name = "deactivate"
-length = 0.166667
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SwitchMesh:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SwitchRay1:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SwitchRay2:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../SFX")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g6ndg"]
 _data = {
 "RESET": SubResource("6"),
 "activate": SubResource("7"),
-"activated-loop": SubResource("8"),
+"activate-loop": SubResource("8"),
 "deactivate": SubResource("Animation_kqo2x")
 }
 
-[node name="Switch" type="Area3D" node_paths=PackedStringArray("animator")]
+[node name="Switch" type="Area3D" node_paths=PackedStringArray("animator", "timer")]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("3")
 animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
 
 [node name="Switch" parent="." instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
@@ -382,10 +383,14 @@ root_node = NodePath("../Switch")
 libraries = {
 "": SubResource("AnimationLibrary_g6ndg")
 }
-next/activate = &"activated-loop"
+next/activate = &"activate-loop"
+blend_times = [&"activate", &"activate-loop", 0.01]
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_horin")
 bus = &"SFX"
 
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="timeout" from="Timer" to="." method="ToggleSwitch"]
