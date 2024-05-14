@@ -49,6 +49,8 @@ namespace Project.Gameplay.Objects
 		}
 		[Export]
 		private bool bouncePlayerOnJumpDash;
+		[Export]
+		private bool snapPlayerOnBounce = true;
 		private const float SHATTER_STRENGTH = 10.0f;
 
 		private ShatterFlags FlagSetting => (ShatterFlags)shatterFlags;
@@ -265,7 +267,7 @@ namespace Project.Gameplay.Objects
 			{
 				Shatter();
 				if (bouncePlayerOnJumpDash)
-					Character.Lockon.StartBounce();
+					Character.Lockon.StartBounce(snapPlayerOnBounce);
 			}
 			else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
 				Shatter();
