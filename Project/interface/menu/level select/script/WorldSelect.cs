@@ -59,7 +59,8 @@ namespace Project.Interface.Menus
 		{
 			VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
 
-			if (menuMemory[MemoryKeys.ActiveMenu] != (int)MemoryKeys.LevelSelect && ActiveVideoPlayer != null)
+			if (ActiveVideoPlayer != null &&
+			menuMemory[MemoryKeys.ActiveMenu] != (int)MemoryKeys.LevelSelect && menuMemory[MemoryKeys.ActiveMenu] != (int)MemoryKeys.WorldSelect)
 				ActiveVideoPlayer.Stream = videoStreams[VerticalSelection];
 
 			if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
