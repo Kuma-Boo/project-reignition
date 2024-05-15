@@ -10,10 +10,13 @@ namespace Project.Gameplay
 		{
 			None, // Add a goal node or a boss so the player doesn't get stuck!
 			Objective, // Add custom nodes that call IncrementObjective()
-			Ring, // Collect a certain amount of rings
-			Pearl, // Collect a certain amount of pearls (normally zero)
+			Ring, // Collect a certain amount of rings (set to zero for hands-off missions)
+			Pearl, // Collect a certain amount of pearls (normally zero for pearless)
 			Enemy, // Destroy a certain amount of enemies
 			Race, // Race against an enemy
+			Deathless, // Don't die
+			Perfect, // Don't take any damage or die
+			Chain, // Chain rings together
 		}
 
 		#region Editor
@@ -35,7 +38,8 @@ namespace Project.Gameplay
 				ExtensionMethods.CreateProperty("Mission/Time Limit", Variant.Type.Int, PropertyHint.Range, "0,640"),
 			};
 
-			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race)
+			if (MissionType != MissionTypes.None && MissionType != MissionTypes.Race
+				&& MissionType != MissionTypes.Deathless && MissionType != MissionTypes.Perfect)
 				properties.Add(ExtensionMethods.CreateProperty("Mission/Objective Count", Variant.Type.Int, PropertyHint.Range, "0,256"));
 
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Skip Score", Variant.Type.Bool));

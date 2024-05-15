@@ -1194,25 +1194,39 @@ namespace Project.Gameplay
 		{
 			SetActionState(ActionStates.Damaged);
 
+			// No rings; Respawn
 			if (Stage.CurrentRingCount == 0)
 			{
 				Effect.PlayVoice("defeat");
 				StartRespawn();
+				return;
 			}
-			else
-			{
-				Effect.PlayVoice("hurt");
-				Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
-			}
+
+			// Lose rings
+			Effect.PlayVoice("hurt");
+			Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
+			Stage.IncrementDamageCount();
+
+			// Level failed
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+				Stage.FinishLevel(false);
 		}
 
-		/// <summary> True after the player is defeated, but hasn't respawned yet. </summary>
+		/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
 		/// <summary>
 		/// Called when the player is returning to a checkpoint.
 		/// </summary>
 		public void StartRespawn()
 		{
+			// Level failed
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
+				|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+			{
+				Stage.FinishLevel(false);
+				return;
+			}
+
 			if (ActionState == ActionStates.Teleport || IsDefeated) return;
 
 			//Fade screen out, enable respawn flag, and connect signals
@@ -1220,6 +1234,7 @@ namespace Project.Gameplay
 
 			Lockon.IsMonitoring = false;
 			areaTrigger.Disabled = true;
+			Stage.IncrementRespawnCount();
 
 			TransitionManager.StartTransition(new TransitionData()
 			{
