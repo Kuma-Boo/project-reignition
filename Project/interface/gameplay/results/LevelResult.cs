@@ -64,19 +64,6 @@ namespace Project.Interface
 
 		public void StartResults()
 		{
-			int rank = Stage.CalculateRank();
-			if (rank <= 0) // Didn't obtain a medal
-				animator.Play("medal-none");
-			else if (rank == 1)
-				animator.Play("medal-bronze");
-			else if (rank == 2)
-				animator.Play("medal-silver");
-			else
-				animator.Play("medal-gold");
-
-			animator.Advance(0.0);
-			animator.Play(Stage.LevelState == StageSettings.LevelStateEnum.Success ? "success-start" : "fail-start");
-
 			score.Text = Stage.DisplayScore;
 			time.Text = Stage.DisplayTime;
 
@@ -92,6 +79,22 @@ namespace Project.Interface
 			Stage.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);
 			total.Text = Stage.DisplayScore;
 
+
+			// Calculate rank AFTER tallying final score
+			int rank = Stage.CalculateRank();
+			if (rank <= 0) // Didn't obtain a medal
+				animator.Play("medal-none");
+			else if (rank == 1)
+				animator.Play("medal-bronze");
+			else if (rank == 2)
+				animator.Play("medal-silver");
+			else
+				animator.Play("medal-gold");
+
+			animator.Advance(0.0);
+			animator.Play(Stage.LevelState == StageSettings.LevelStateEnum.Success ? "success-start" : "fail-start");
+
+			// Write to file
 			SaveManager.ActiveGameData.SetHighScore(Stage.Data.LevelID, Stage.CurrentScore);
 			SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
 			SaveManager.ActiveGameData.SetRank(Stage.Data.LevelID, rank);
