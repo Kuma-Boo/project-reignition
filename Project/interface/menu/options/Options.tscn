@@ -1,10 +1,11 @@
-[gd_scene load_steps=51 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=52 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Material" uid="uid://jpwdaxh0ckoc" path="res://interface/menu/options/environment/material/Menu Overlay.tres" id="2_g15f7"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
 [ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
 [ext_resource type="Resource" uid="uid://dt1prgn1x2xgg" path="res://interface/menu/options/camera/OptionCamera.tres" id="3_jnp5r"]
+[ext_resource type="Resource" uid="uid://bmc5r7uecj7vi" path="res://resource/level data/Options.tres" id="4_3wn11"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/Camera.tscn" id="5_1klrf"]
 [ext_resource type="AudioStream" uid="uid://pl5vnbme4wmg" path="res://sound/sfx/system/special book select.wav" id="5_boind"]
@@ -967,29 +968,12 @@ animator = NodePath("AnimationPlayer")
 isProcessing = true
 metadata/_edit_lock_ = true
 
-[node name="ControlBook" type="Node3D" parent="."]
+[node name="ControlBook" type="Node3D" parent="." node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("2_x1aix")
-"Level ID" = ""
-"Mission Type" = 0
-"Time Limit" = 0.0
-"Disable Countdown" = true
+Data = ExtResource("4_3wn11")
 InitialCameraSettings = ExtResource("3_jnp5r")
-"Story Event Index" = -1
-dialogLibrary = null
-"Item Cycling/Activation Trigger" = NodePath("")
-"Ranking/Skip Score" = false
-"Ranking/Gold Time" = 0
-"Ranking/Silver Time" = 0
-"Ranking/Bronze Time" = 0
-"Ranking/Gold Score" = 0
-"Ranking/Silver Score" = 0
-"Ranking/Bronze Score" = 0
-Completion/Delay = 0.0
-Completion/Lockout = null
-completionAnimator = NodePath("")
-pathParent  = NodePath("Path")
+pathParent = NodePath("Path")
 Environment = NodePath("Visuals/WorldEnvironment")
-isControlTest = true
 
 [node name="SFX" type="Node" parent="ControlBook"]
 

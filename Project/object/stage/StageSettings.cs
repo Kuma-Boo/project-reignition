@@ -12,8 +12,8 @@ namespace Project.Gameplay
 	{
 		public static StageSettings instance;
 
-		[Export]
-		public bool isControlTest;
+		public bool IsControlTest => Data.LevelID == OPTIONS_LEVEL_ID;
+		private readonly StringName OPTIONS_LEVEL_ID = "options";
 
 		public override void _EnterTree()
 		{
