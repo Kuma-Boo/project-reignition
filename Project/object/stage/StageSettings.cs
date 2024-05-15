@@ -30,7 +30,7 @@ namespace Project.Gameplay
 		}
 
 
-		public override void _PhysicsProcess(double _) => UpdateTime();
+		public override void _Process(double _) => UpdateTime();
 
 
 		#region Level Settings
@@ -196,7 +196,7 @@ namespace Project.Gameplay
 		{
 			if (IsLevelFinished || !Interface.PauseMenu.AllowPausing) return;
 
-			CurrentTime += PhysicsManager.physicsDelta; // Add current time
+			CurrentTime += PhysicsManager.normalDelta; // Add current time
 			DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
 			if (Data.MissionTimeLimit != 0 && CurrentTime >= Data.MissionTimeLimit) // Time's up!
 				FinishLevel(false);
