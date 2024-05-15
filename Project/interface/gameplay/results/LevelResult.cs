@@ -86,7 +86,7 @@ namespace Project.Interface
 			int ringBonus = Stage.CurrentRingCount * 10;
 			ring.Text = ringBonus.ToString();
 
-			float technicalBonus = 1.0f;
+			float technicalBonus = Stage.CalculateTechnicalBonus();
 			technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
 
 			Stage.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);

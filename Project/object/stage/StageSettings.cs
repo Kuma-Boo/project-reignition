@@ -123,8 +123,30 @@ namespace Project.Gameplay
 			EmitSignal(SignalName.ScoreChanged);
 		}
 
+		/// <summary> How many times has the player taken damage? </summary>
+		public int DamageCount { get; private set; }
+		/// <summary>  </summary>
 		public int RespawnCount { get; private set; } // How high many times did the player have to respawn?
+		public void IncrementDamageCount() => DamageCount++;
 		public void IncrementRespawnCount() => RespawnCount++;
+		public float CalculateTechnicalBonus()
+		{
+			if (LevelState == LevelStateEnum.Failed) // Failing the level gives a technical bonus of .5
+				return .5f;
+
+			if (RespawnCount != 0 || DamageCount >= 6) // Respawning automatically means 1.0
+				return 1.0f;
+
+			// Damage values
+			if (DamageCount >= 4) // 4-5
+				return 1.1f;
+			if (DamageCount >= 2) // 2-3
+				return 1.2f;
+			if (DamageCount == 1) // 1
+				return 1.5f;
+
+			return 2.0f; // Perfect run
+		}
 
 		//Objectives
 		public int CurrentObjectiveCount { get; private set; } // How much has the player currently completed?
@@ -160,8 +182,6 @@ namespace Project.Gameplay
 
 			EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 		}
-
-
 
 
 		public int CurrentEXP { get; private set; } // How much exp is the player earning from this stage?
