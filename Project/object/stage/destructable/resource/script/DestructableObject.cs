@@ -259,16 +259,17 @@ namespace Project.Gameplay.Objects
 
 		private void ProcessPlayerCollision()
 		{
-			if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
-				Shatter();
-			else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
-				Shatter();
-			else if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Character.ActionState == CharacterController.ActionStates.JumpDash)
+			// Prioritize Jump Dash
+			if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
 				Shatter();
 				if (bouncePlayerOnJumpDash)
 					Character.Lockon.StartBounce(snapPlayerOnBounce);
 			}
+			else if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
+				Shatter();
+			else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
+				Shatter();
 			else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
 				Shatter();
 		}

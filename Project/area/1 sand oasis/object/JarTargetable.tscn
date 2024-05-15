@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://dsms0ivmnpaq8"]
+[gd_scene load_steps=10 format=3 uid="uid://bqc2nbpbb4uhy"]
 
-[ext_resource type="PackedScene" uid="uid://dxaspwoin7dr1" path="res://area/1 sand oasis/object/model/Jar.gltf" id="1_qspct"]
-[ext_resource type="PackedScene" uid="uid://cnhlb8lynqjln" path="res://area/1 sand oasis/object/model/JarPieces.gltf" id="2_2vdbn"]
-[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="2_l0n6o"]
-[ext_resource type="AudioStream" uid="uid://1rnhdwqarpwj" path="res://sound/sfx/stage/sand oasis/jar.wav" id="4_040ue"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_cgond"]
+[ext_resource type="PackedScene" uid="uid://dxaspwoin7dr1" path="res://area/1 sand oasis/object/model/Jar.gltf" id="2_p3050"]
+[ext_resource type="PackedScene" uid="uid://cnhlb8lynqjln" path="res://area/1 sand oasis/object/model/JarPieces.gltf" id="3_h8t4o"]
+[ext_resource type="AudioStream" uid="uid://1rnhdwqarpwj" path="res://sound/sfx/stage/sand oasis/jar.wav" id="4_0p6u3"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yxr3g"]
 radius = 0.75
@@ -33,6 +33,18 @@ tracks/1/path = NodePath("Root:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -80,6 +92,18 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Trigger:monitorable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_f43ij"]
 _data = {
@@ -88,13 +112,15 @@ _data = {
 }
 
 [node name="Jar" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
-script = ExtResource("2_l0n6o")
+script = ExtResource("1_cgond")
 pieceMass = 0.6
 stopPlayerOnShatter = true
+disableRespawn = true
 root = NodePath("Root")
 pieceRoot = NodePath("JarPieces")
 animator = NodePath("AnimationPlayer")
 shatterFlags = 31
+bouncePlayerOnJumpDash = true
 
 [node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
 collision_layer = 8
@@ -104,22 +130,22 @@ collision_mask = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("SphereShape3D_yxr3g")
 
-[node name="Jar" parent="Root" instance=ExtResource("1_qspct")]
+[node name="Jar" parent="Root" instance=ExtResource("2_p3050")]
 
-[node name="JarPieces" parent="." instance=ExtResource("2_2vdbn")]
+[node name="JarPieces" parent="." instance=ExtResource("3_h8t4o")]
 visible = false
 
 [node name="Trigger" type="Area3D" parent="."]
-collision_layer = 0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 12
 collision_mask = 2
-monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0999999, 0)
 shape = SubResource("CapsuleShape3D_v3ose")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("4_040ue")
+stream = ExtResource("4_0p6u3")
 max_db = 0.0
 pitch_scale = 0.86
 max_distance = 100.0
