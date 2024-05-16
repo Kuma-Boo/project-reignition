@@ -160,6 +160,8 @@ namespace Project.Core
 			switch (key)
 			{
 				// Typical keys
+				case Key.Escape:
+					return "ESC";
 				case Key.Quoteleft:
 					return "`";
 				case Key.Minus:

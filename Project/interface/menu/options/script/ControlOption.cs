@@ -203,8 +203,6 @@ namespace Project.Interface.Menus
 						return false;
 					case Key.Alt:
 						return false;
-					case Key.Escape:
-						return false;
 					case Key.Meta:
 						return false;
 					case Key.Numlock:
