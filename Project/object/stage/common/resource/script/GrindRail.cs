@@ -187,9 +187,7 @@ namespace Project.Gameplay
 			isGrindstepping = false;
 
 			if (allowBonuses && Character.ActionState == CharacterController.ActionStates.Grindstep)
-			{
 				BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
-			}
 
 			// Reset buffer timers
 			jumpBufferTimer = 0;
@@ -309,10 +307,7 @@ namespace Project.Gameplay
 			if (!Character.Animator.IsBalanceShuffleActive)
 			{
 				if (shuffleBufferTimer > 0) // Shuffle was buffered perfectly
-				{
-					shuffleBufferTimer = 0;
 					StartShuffle(true);
-				}
 
 				if (jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
 				{
@@ -364,6 +359,12 @@ namespace Project.Gameplay
 
 			Character.MoveSpeed = isPerfectShuffle ? Skills.perfectShuffleSpeed : Skills.grindSettings.speed;
 			Character.Animator.StartGrindShuffle();
+
+			if (!isPerfectShuffle)
+				allowBonuses = false;
+
+			if (allowBonuses)
+				BonusManager.instance.QueueBonus(new(BonusType.GrindShuffle));
 		}
 
 

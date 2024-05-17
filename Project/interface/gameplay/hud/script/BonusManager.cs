@@ -72,20 +72,20 @@ namespace Project.Gameplay
 
 		private int enemyChain;
 		private float enemyChainTimer;
-		/// <summary> "Grace time" to allow player to chain attacks with a speed-break. </summary>
+		/// <summary> "Grace time" to allow player to chain attacks from a speed-break. </summary>
 		private readonly float ENEMY_CHAIN_BUFFER = .5f;
 		/// <summary> Increases the enemy chain. </summary>
-		public void AddEnemyChain()
-		{
-			enemyChain++;
-			enemyChainTimer = ENEMY_CHAIN_BUFFER;
-		}
+		public void AddEnemyChain() => enemyChain++;
 		/// <summary> Checks whether the enemy chain should end. </summary>
 		public void UpdateEnemyChain()
 		{
 			if (!Character.IsOnGround) return; // Chain is never counted when the player is in the air
-			if (Character.Skills.IsSpeedBreakActive) return; // Chain continues during speedbreak
 			if (Character.MovementState != CharacterController.MovementStates.Normal) return; // Chains only end during normal movement
+			if (Character.Skills.IsSpeedBreakActive)
+			{
+				enemyChainTimer = ENEMY_CHAIN_BUFFER;
+				return; // Chain continues during speedbreak
+			}
 
 			enemyChainTimer = Mathf.MoveToward(enemyChainTimer, 0, PhysicsManager.physicsDelta);
 			if (Mathf.IsZeroApprox(enemyChainTimer))
@@ -116,6 +116,7 @@ namespace Project.Gameplay
 		Boss,
 		Drift,
 		Grindstep,
+		GrindShuffle,
 	}
 
 	public struct BonusData
@@ -140,11 +141,13 @@ namespace Project.Gameplay
 					// 10 rings -> 100 pts
 					return 100;
 				case BonusType.Enemy:
-					return Mathf.Clamp(Amount, 2, 10) * 200; // +200 pts per enemy
+					return Mathf.Clamp(Amount, 2, 10) * 50; // +50 pts per enemy up to 10 (500 pts)
 				case BonusType.Drift:
-					return 1000;
-				case BonusType.Grindstep:
 					return 500;
+				case BonusType.Grindstep:
+					return 200;
+				case BonusType.GrindShuffle:
+					return 50;
 				default:
 					return Amount;
 			}
@@ -171,6 +174,8 @@ namespace Project.Gameplay
 					return "bonus_drift";
 				case BonusType.Grindstep:
 					return "bonus_grindstep";
+				case BonusType.GrindShuffle:
+					return "bonus_grind_shuffle";
 				default:
 					return string.Empty;
 			}
