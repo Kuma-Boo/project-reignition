@@ -73,7 +73,7 @@ namespace Project.Gameplay
 				Size = new Vector3(2f, .5f, railLength)
 			};
 			collider.Position = Vector3.Forward * railLength * .5f + Vector3.Down * .05f;
-			rail.Curve = new Curve3D();
+			rail.Curve = new();
 			rail.Curve.AddPoint(Vector3.Zero, null, Vector3.Forward);
 			rail.Curve.AddPoint(Vector3.Forward * railLength, Vector3.Back);
 		}
@@ -94,7 +94,8 @@ namespace Project.Gameplay
 		private bool isInteractingWithPlayer;
 		/// <summary> Is the player leaving via grindstep? </summary>
 		private bool isGrindstepping;
-
+		/// <summary> Can the player obtain bonuses on this rail? </summary>
+		private bool allowBonuses = true;
 
 		public override void _Ready()
 		{
@@ -102,7 +103,7 @@ namespace Project.Gameplay
 				return;
 
 			// Create a path follower
-			pathFollower = new PathFollow3D()
+			pathFollower = new()
 			{
 				Loop = false,
 			};
@@ -185,6 +186,11 @@ namespace Project.Gameplay
 			isActive = true;
 			isGrindstepping = false;
 
+			if (allowBonuses && Character.ActionState == CharacterController.ActionStates.Grindstep)
+			{
+				BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
+			}
+
 			// Reset buffer timers
 			jumpBufferTimer = 0;
 			shuffleBufferTimer = 0;
@@ -234,6 +240,7 @@ namespace Project.Gameplay
 			if (!isActive) return;
 			isActive = false;
 			isInteractingWithPlayer = false;
+			allowBonuses = false;
 
 			isFadingSFX = true; // Start fading sound effect
 			grindParticles.Emitting = false; // Stop emitting particles

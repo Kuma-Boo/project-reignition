@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Interface;
 
 namespace Project.Gameplay.Triggers
 {
@@ -222,6 +223,9 @@ namespace Project.Gameplay.Triggers
 		private void ApplyBonus()
 		{
 			if (wasBonusApplied) return; // Bonus was already applied
+
+			if (driftResult == DriftResults.SUCCESS)
+				BonusManager.instance.QueueBonus(new(BonusType.Drift));
 
 			wasBonusApplied = true;
 		}

@@ -143,8 +143,9 @@ namespace Project.Gameplay
 		/// </summary>
 		protected virtual void Defeat()
 		{
-			Character.Camera.LockonTarget = null;
 			SetHitboxStatus(false);
+			Character.Camera.LockonTarget = null;
+			BonusManager.instance.AddEnemyChain();
 			EmitSignal(SignalName.Defeated);
 		}
 

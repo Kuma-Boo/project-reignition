@@ -33,17 +33,8 @@ namespace Project.Gameplay.Objects
 				SoundManager.instance.PlayRingSFX();
 			}
 
-			if (animator != null && animator.HasAnimation("collect"))
-				animator.Play("collect");
-			else
-				Despawn();
-
+			animator.Play("collect");
 			base.Collect();
-		}
-
-		public void OnBodyEntered(Node3D other)
-		{
-			GD.Print(other.IsInGroup("player"));
 		}
 	}
 }

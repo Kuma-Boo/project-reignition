@@ -1,5 +1,6 @@
-[gd_scene load_steps=39 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=40 format=3 uid="uid://chn7ckbhlrr2g"]
 
+[ext_resource type="Script" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
 [ext_resource type="Texture2D" uid="uid://btu2qfmfefcpo" path="res://interface/gameplay/hud/rings/ring atlas.png" id="2_8yr5f"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/HUD Numbers.fnt" id="2_lj78h"]
 [ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="2_y70id"]
@@ -14,10 +15,10 @@
 [ext_resource type="Material" uid="uid://bch4e64imkayn" path="res://interface/gameplay/hud/soul gauge/Soul Gauge Surface.tres" id="10_k6fym"]
 [ext_resource type="Texture2D" uid="uid://bfpp6wa7clovs" path="res://interface/gameplay/hud/soul gauge/surface dimensions.png" id="11_8tr11"]
 [ext_resource type="Texture2D" uid="uid://2c2b843w6r0j" path="res://interface/gameplay/hud/soul gauge/fill orange.png" id="12_ib41r"]
-[ext_resource type="Script" path="res://interface/gameplay/hud/HeadsUpDisplay.cs" id="13"]
 [ext_resource type="Texture2D" uid="uid://d2chsgj5rnd0g" path="res://interface/gameplay/hud/soul gauge/surface blue.png" id="14_r84fg"]
 [ext_resource type="Texture2D" uid="uid://wehmqy1nfvqd" path="res://interface/gameplay/hud/soul gauge/surface orange.png" id="15_sbv1p"]
 [ext_resource type="PackedScene" uid="uid://cesb27ri52utw" path="res://interface/gameplay/hud/Bonus.tscn" id="18_auu0g"]
+[ext_resource type="Script" path="res://interface/gameplay/hud/script/BonusManager.cs" id="18_cynqg"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -425,6 +426,23 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../Bonuses")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.998),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"AddRingChain"
+}, {
+"args": [],
+"method": &"FinishRingChain"
+}]
 }
 
 [sub_resource type="Animation" id="46"]
@@ -981,14 +999,14 @@ _data = {
 "charged": SubResource("55")
 }
 
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "time", "score", "bonusParent", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("13")
+script = ExtResource("1_x1dw0")
 ringLabel = NodePath("Rings/Current/CurrentAmount")
 maxRingLabel = NodePath("Rings/Current/RingMax")
 ringLossLabel = NodePath("Rings/Loss/LossAmount")
@@ -996,7 +1014,6 @@ ringDividerSprite = NodePath("Rings/Current/Divider")
 ringAnimator = NodePath("Rings/AnimationTree")
 time = NodePath("Values/Time")
 score = NodePath("Values/Score")
-bonusParent = NodePath("Bonuses")
 objectiveRoot = NodePath("Objectives")
 objectiveSprite = NodePath("Objectives/ObjectiveSprite")
 objectiveValue = NodePath("Objectives/Value")
@@ -1469,6 +1486,7 @@ offset_top = 384.0
 offset_right = 192.0
 offset_bottom = 832.0
 theme_override_constants/separation = 0
+script = ExtResource("18_cynqg")
 
 [node name="Bonus1" parent="Bonuses" instance=ExtResource("18_auu0g")]
 layout_mode = 2

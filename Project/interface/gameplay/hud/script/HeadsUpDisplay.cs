@@ -1,6 +1,5 @@
 using Godot;
 using Project.Core;
-using System.Collections.Generic;
 
 namespace Project.Gameplay
 {
@@ -25,17 +24,11 @@ namespace Project.Gameplay
 				Stage.Connect(nameof(StageSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
 				Stage.Connect(nameof(StageSettings.TimeChanged), new Callable(this, MethodName.UpdateTime));
 				Stage.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
-				Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.LevelComplete)); //Hide interface
+				Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.OnLevelCompleted)); //Hide interface
 			}
 		}
 
-		public override void _PhysicsProcess(double _)
-		{
-			UpdateSoulGauge(); //Animate the soul gauge
-
-			if (bonusQueue.Count != 0)
-				PlayBonus();
-		}
+		public override void _PhysicsProcess(double _) => UpdateSoulGauge(); //Animate the soul gauge
 
 		#region Rings
 		[ExportGroup("Rings")]
@@ -111,30 +104,6 @@ namespace Project.Gameplay
 		[Export]
 		private Label score;
 		private void UpdateScore() => score.Text = Stage.DisplayScore;
-
-		[Export]
-		private Control bonusParent;
-		private int bonusesActive;
-		private readonly Queue<StringName> bonusQueue = new();
-
-		/// <summary> Queues a bonus to be played. </summary>
-		public void QueueBonus(StringName bonus) => bonusQueue.Enqueue(bonus);
-
-		/// <summary> Actually plays a bonus from the queue. </summary>
-		private void PlayBonus()
-		{
-			if (bonusesActive == bonusParent.GetChildCount()) return;
-
-			Bonus bonus = bonusParent.GetChildOrNull<Bonus>(bonusParent.GetChildCount() - 1);
-			if (!bonus.IsConnected(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished))) // Connect signal if needed
-				bonus.Connect(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished));
-
-			bonusParent.MoveChild(bonus, 0); // Re-order to appear first
-			bonus.ShowBonus(bonusQueue.Dequeue()); // Activate bonus
-			bonusesActive++;
-		}
-
-		private void BonusFinished() => bonusesActive--;
 		#endregion
 
 		#region Objectives
@@ -219,7 +188,7 @@ namespace Project.Gameplay
 		}
 		#endregion
 
-		public void LevelComplete() => SetVisibility(false); //Ignore parameter
+		public void OnLevelCompleted() => SetVisibility(false); // Ignore parameter
 		public void SetVisibility(bool value) => Visible = value;
 	}
 }

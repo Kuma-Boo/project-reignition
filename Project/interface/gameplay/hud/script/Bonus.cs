@@ -6,7 +6,6 @@ namespace Project.Gameplay
 	{
 		[Signal]
 		public delegate void BonusFinishedEventHandler(Bonus b);
-		public static void Queue(StringName bonus) => HeadsUpDisplay.instance.QueueBonus(bonus);
 
 		[Export]
 		private AnimationPlayer animator;
@@ -15,9 +14,9 @@ namespace Project.Gameplay
 
 
 		/// <summary> Updates the bonus text and shows the node. </summary>
-		public void ShowBonus(string bonus)
+		public void ShowBonus(BonusData bonus)
 		{
-			label.Text = bonus;
+			label.Text = bonus.Key;
 			animator.Play("show");
 		}
 

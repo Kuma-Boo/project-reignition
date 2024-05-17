@@ -226,7 +226,9 @@ namespace Project.Gameplay.Bosses
 			Character.Visible = false;
 			Character.AddLockoutData(Runtime.Instance.StopLockout);
 			Interface.PauseMenu.AllowPausing = false;
-			HeadsUpDisplay.instance.Visible = false;
+
+			// Award 1000 points for defeating the boss
+			BonusManager.instance.QueueBonus(new(BonusType.Boss, 1000));
 		}
 
 
@@ -237,7 +239,7 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			flyingEyeAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
-			// TODO Award 1000 points for defeating the boss
+			HeadsUpDisplay.instance.Visible = false;
 
 			fightState = FightState.Defeated;
 			Character.ProcessMode = ProcessModeEnum.Disabled;
