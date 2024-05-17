@@ -1,6 +1,6 @@
 using Godot;
-using Godot.Collections;
 using Project.Core;
+using System.Collections.Generic;
 
 namespace Project.Gameplay
 {
@@ -20,7 +20,7 @@ namespace Project.Gameplay
 			InitializeObjectives();
 			InitializeSoulGauge();
 
-			if (Stage != null) //Decouple from level settings
+			if (Stage != null) // Decouple from level settings
 			{
 				Stage.Connect(nameof(StageSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
 				Stage.Connect(nameof(StageSettings.TimeChanged), new Callable(this, MethodName.UpdateTime));
@@ -32,6 +32,9 @@ namespace Project.Gameplay
 		public override void _PhysicsProcess(double _)
 		{
 			UpdateSoulGauge(); //Animate the soul gauge
+
+			if (bonusQueue.Count != 0)
+				PlayBonus();
 		}
 
 		#region Rings
@@ -108,6 +111,30 @@ namespace Project.Gameplay
 		[Export]
 		private Label score;
 		private void UpdateScore() => score.Text = Stage.DisplayScore;
+
+		[Export]
+		private Control bonusParent;
+		private int bonusesActive;
+		private readonly Queue<StringName> bonusQueue = new();
+
+		/// <summary> Queues a bonus to be played. </summary>
+		public void QueueBonus(StringName bonus) => bonusQueue.Enqueue(bonus);
+
+		/// <summary> Actually plays a bonus from the queue. </summary>
+		private void PlayBonus()
+		{
+			if (bonusesActive == bonusParent.GetChildCount()) return;
+
+			Bonus bonus = bonusParent.GetChildOrNull<Bonus>(bonusParent.GetChildCount() - 1);
+			if (!bonus.IsConnected(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished))) // Connect signal if needed
+				bonus.Connect(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished));
+
+			bonusParent.MoveChild(bonus, 0); // Re-order to appear first
+			bonus.ShowBonus(bonusQueue.Dequeue()); // Activate bonus
+			bonusesActive++;
+		}
+
+		private void BonusFinished() => bonusesActive--;
 		#endregion
 
 		#region Objectives
