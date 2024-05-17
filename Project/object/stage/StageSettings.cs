@@ -61,15 +61,12 @@ namespace Project.Gameplay
 				else if (CurrentTime <= Data.BronzeTime)
 					rank = 1;
 			}
+			else if (CurrentTime <= Data.GoldTime && CurrentScore >= Data.GoldScore) // Perfect run
+				rank = 3;
+			else if (CurrentTime <= Data.SilverTime || CurrentScore >= Data.SilverScore) // Silver
+				rank = 2;
 			else if (CurrentTime <= Data.BronzeTime && CurrentScore >= Data.BronzeScore)
-			{
-				if (CurrentTime <= Data.GoldTime && CurrentScore >= Data.SilverScore)
-					rank = 3;
-				else if (CurrentTime >= Data.SilverTime || CurrentScore <= Data.SilverScore)
-					rank = 1;
-				else
-					rank = 2;
-			}
+				rank = 1;
 
 			if (rank >= 3 && RespawnCount != 0) // Limit to silver if a respawn occured
 				rank = 2;
