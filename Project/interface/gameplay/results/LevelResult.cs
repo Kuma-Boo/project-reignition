@@ -11,8 +11,6 @@ namespace Project.Interface
 		[Export]
 		private Label time;
 		[Export]
-		private Label enemy;
-		[Export]
 		private Label ring;
 		[Export]
 		private Label technical;
@@ -67,16 +65,13 @@ namespace Project.Interface
 			score.Text = Stage.DisplayScore;
 			time.Text = Stage.DisplayTime;
 
-			int enemyBonus = 0; //Level.CurrentEnemyCount * 50;
-			enemy.Text = enemyBonus.ToString();
-
 			int ringBonus = Stage.CurrentRingCount * 10;
 			ring.Text = ringBonus.ToString();
 
 			float technicalBonus = Stage.CalculateTechnicalBonus();
 			technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
 
-			Stage.UpdateScore(Mathf.CeilToInt((ringBonus + enemyBonus) * technicalBonus), StageSettings.MathModeEnum.Add);
+			Stage.UpdateScore(Mathf.CeilToInt(ringBonus * technicalBonus), StageSettings.MathModeEnum.Add);
 			total.Text = Stage.DisplayScore;
 
 
