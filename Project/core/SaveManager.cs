@@ -14,7 +14,7 @@ namespace Project.Core
 			LoadConfig();
 			LoadGameData();
 
-			if (!OS.IsDebugBuild()) // Editor build, use custom configuration
+			if (OS.IsDebugBuild()) // Editor build, use custom configuration
 			{
 				// Default debug settings for testing from the editor.
 				Config = new()
@@ -622,7 +622,7 @@ namespace Project.Core
 			}
 
 			// Debug game data
-			if (DebugManager.Instance.UseDemoSave) // For testing
+			if (OS.IsDebugBuild()) // For testing
 			{
 				ActiveSaveSlotIndex = 0;
 				GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();
