@@ -230,7 +230,7 @@ namespace Project.Gameplay
 						targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RUN_RATIO); //Normalize speed ratio
 
 						// Speed up animation if player is trying to start running
-						if (Character.InputVector.Length() >= .8f &&
+						if (Character.InputVector.Length() >= .5f &&
 							speedRatio < Character.GroundSettings.GetSpeedRatio(Character.BackstepSettings.speed) && !Character.IsOnWall())
 							targetAnimationSpeed += 1.0f;
 					}

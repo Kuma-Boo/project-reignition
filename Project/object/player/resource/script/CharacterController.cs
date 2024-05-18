@@ -427,7 +427,11 @@ namespace Project.Gameplay
 		public MovementResource BackstepSettings => Skills.BackstepSettings;
 
 		[Export]
-		public Curve turningSpeedCurve; //Curve of how speed is lost when turning
+		/// <summary> Determines how speed is lost when turning. </summary>
+		public Curve turningSpeedCurve;
+		[Export]
+		/// <summary> Determines how input lengths are calculated. </summary>
+		private Curve inputCurve;
 		private float turningVelocity;
 
 		/// <summary> Is the player moving backwards? </summary>
@@ -435,10 +439,10 @@ namespace Project.Gameplay
 
 		/// <summary> How much speed to lose when turning sharply. </summary>
 		private const float TURNING_SPEED_LOSS = .04f;
-		/// <summary> How much to smooth turning when moving slowly. </summary>
+		/// <summary> How quickly to turn when moving slowly. </summary>
 		private const float MIN_TURN_AMOUNT = .12f;
-		/// <summary> How much to smooth turning when moving at top speed. </summary>
-		private const float MAX_TURN_AMOUNT = .4f;
+		/// <summary> How quickly to turn when moving at top speed. </summary>
+		private const float MAX_TURN_AMOUNT = .8f;
 		/// <summary> How quickly to turnaround when at top speed. </summary>
 		private const float STRAFE_TURNAROUND_SPEED = .24f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
@@ -459,7 +463,7 @@ namespace Project.Gameplay
 			}
 
 			float inputAngle = GetInputAngle();
-			float inputLength = InputVector.Length(); // Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
+			float inputLength = inputCurve.Sample(InputVector.Length()); // Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(inputAngle, targetMovementAngle));
