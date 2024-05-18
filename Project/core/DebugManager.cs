@@ -7,6 +7,9 @@ namespace Project.Core
 	{
 		public static DebugManager Instance;
 
+		[Signal]
+		public delegate void FullscreenToggledEventHandler();
+
 		[Export]
 		private Control debugMenuRoot;
 
@@ -38,8 +41,16 @@ namespace Project.Core
 			}
 		}
 
+
 		public override void _PhysicsProcess(double _)
 		{
+			if (Input.IsActionJustPressed("toggle_fullscreen")) // Global shortcut used in final build as well
+			{
+				SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
+				SaveManager.ApplyConfig();
+				EmitSignal(SignalName.FullscreenToggled);
+			}
+
 			if (!OS.IsDebugBuild()) //Don't do anything in real build
 				return;
 
@@ -60,24 +71,22 @@ namespace Project.Core
 			if (Input.IsActionJustPressed("debug_pause"))
 				GetTree().Paused = !IsPaused;
 
+
 			if (Input.IsActionJustPressed("debug_window_small"))
 			{
 				SaveManager.Config.screenResolution = 0;
-				SaveManager.Config.isFullscreen = false;
 				SaveManager.ApplyConfig();
 			}
 
 			if (Input.IsActionJustPressed("debug_window_medium"))
 			{
 				SaveManager.Config.screenResolution = 3;
-				SaveManager.Config.isFullscreen = false;
 				SaveManager.ApplyConfig();
 			}
 
 			if (Input.IsActionJustPressed("debug_window_large"))
 			{
 				SaveManager.Config.screenResolution = 4;
-				SaveManager.Config.isFullscreen = true;
 				SaveManager.ApplyConfig();
 			}
 

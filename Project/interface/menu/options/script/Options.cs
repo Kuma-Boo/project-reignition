@@ -13,6 +13,7 @@ namespace Project.Interface.Menus
 		public Control cursor;
 
 		private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
+		private Callable FullscreenToggleCallable => new(this, MethodName.ToggleFullscreen);
 		public static readonly StringName MENU_PARAMETER = "menu_texture";
 
 		private Submenus currentSubmenu = Submenus.Options;
@@ -34,19 +35,24 @@ namespace Project.Interface.Menus
 
 			SetUpControlOptions();
 			UpdateLabels();
-			if (!RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable))
-				RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
+			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
+			DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 		}
 
 		public override void _ExitTree()
 		{
-			if (RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable))
-				RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
+			RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
+			DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 		}
 
 
-		public void ApplyTexture() => menuOverlay.SetShaderParameter(MENU_PARAMETER, menuViewport.GetTexture());
-
+		private void ApplyTexture() => menuOverlay.SetShaderParameter(MENU_PARAMETER, menuViewport.GetTexture());
+		private void ToggleFullscreen()
+		{
+			UpdateLabels();
+			DisableProcessing();
+			GetTree().CreateTimer(0.1, true, false, true).Connect(SceneTreeTimer.SignalName.Timeout, new(this, MethodName.EnableProcessing));
+		}
 
 		private void FlipBook(Submenus submenu, bool flipRight, int selection)
 		{
@@ -75,8 +81,7 @@ namespace Project.Interface.Menus
 					FlipBook((Submenus)VerticalSelection + 1, false, 0);
 					break;
 				case Submenus.Video:
-					if (SlideVideoOption(1))
-						ConfirmSFX();
+					ConfirmVideoOption();
 					break;
 				case Submenus.Audio:
 					ConfirmAudioOption();
@@ -232,11 +237,12 @@ namespace Project.Interface.Menus
 		private string ON_STRING = "option_on";
 		private string OFF_STRING = "option_off";
 		private string MUTE_STRING = "option_mute";
+		private string FULLSCREEN_STRING = "option_fullscreen";
 		private void UpdateLabels()
 		{
 			Vector2I resolution = SaveManager.SCREEN_RESOLUTIONS[SaveManager.Config.screenResolution];
-			videoLabels[0].Text = SaveManager.Config.useVsync ? ON_STRING : OFF_STRING;
-			videoLabels[1].Text = $"{resolution.X}:{resolution.Y}";
+			videoLabels[0].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
+			videoLabels[1].Text = SaveManager.Config.useVsync ? ON_STRING : OFF_STRING;
 
 			audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}%";
 			audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MUTE_STRING : $"{SaveManager.Config.bgmVolume}%";
@@ -320,17 +326,47 @@ namespace Project.Interface.Menus
 		private bool SlideVideoOption(int direction)
 		{
 			if (VerticalSelection == 0)
-				SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
-			else
 			{
+				// Just switch out of fullscreen mode
+				if (SaveManager.Config.useFullscreen)
+				{
+					SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
+					SaveManager.Config.screenResolution = FindLargestWindowResolution();
+					return true;
+				}
+
 				SaveManager.Config.screenResolution += direction;
+
 				if (SaveManager.Config.screenResolution < 0)
 					SaveManager.Config.screenResolution = SaveManager.SCREEN_RESOLUTIONS.Length - 1;
 				else if (SaveManager.Config.screenResolution >= SaveManager.SCREEN_RESOLUTIONS.Length)
 					SaveManager.Config.screenResolution = 0;
+
+				// Prevent user from choosing an impossible resolution
+				if (SaveManager.SCREEN_RESOLUTIONS[SaveManager.Config.screenResolution] >= DisplayServer.ScreenGetSize())
+				{
+					SaveManager.Config.useFullscreen = true;
+					SaveManager.Config.screenResolution = FindLargestWindowResolution() + 1;
+				}
 			}
+			else if (VerticalSelection == 1)
+				SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
 
 			return true;
+		}
+
+
+		private int FindLargestWindowResolution()
+		{
+			for (int i = SaveManager.SCREEN_RESOLUTIONS.Length - 1; i >= 0; i--)
+			{
+				if (SaveManager.SCREEN_RESOLUTIONS[i] >= DisplayServer.ScreenGetSize())
+					continue;
+
+				return i;
+			}
+
+			return -1;
 		}
 
 
@@ -418,10 +454,22 @@ namespace Project.Interface.Menus
 			return false;
 		}
 
+		private void ConfirmVideoOption()
+		{
+			if (VerticalSelection == 0)
+			{
+				SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
+				SaveManager.Config.screenResolution = FindLargestWindowResolution() + 1;
+			}
+			else
+				SlideVideoOption(1);
+
+			ConfirmSFX();
+		}
+
 
 		private void ConfirmAudioOption()
 		{
-			ConfirmSFX();
 			if (VerticalSelection == 0)
 				SaveManager.Config.isMasterMuted = !SaveManager.Config.isMasterMuted;
 			else if (VerticalSelection == 1)
@@ -430,18 +478,21 @@ namespace Project.Interface.Menus
 				SaveManager.Config.isSfxMuted = !SaveManager.Config.isSfxMuted;
 			else
 				SaveManager.Config.isVoiceMuted = !SaveManager.Config.isVoiceMuted;
+
+			ConfirmSFX();
 		}
 
 
 		private void ConfirmControlOption()
 		{
-			ConfirmSFX();
 			if (VerticalSelection == 0)
 				SlideControlOption(1);
 			else if (VerticalSelection == 1)
 				FlipBook(Submenus.Mapping, false, 0);
 			else
 				FlipBook(Submenus.Test, false, VerticalSelection);
+
+			ConfirmSFX();
 		}
 
 

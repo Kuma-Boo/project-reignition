@@ -85,7 +85,7 @@ namespace Project.Core
 		{
 			// Video
 			public bool useVsync;
-			public bool isFullscreen;
+			public bool useFullscreen;
 			public int screenResolution = 4; // Defaults to 1080p
 
 			// Audio
@@ -114,7 +114,7 @@ namespace Project.Core
 				{
 					// Video
 					{ nameof(useVsync), useVsync },
-					{ nameof(isFullscreen), isFullscreen },
+					{ nameof(useFullscreen), useFullscreen },
 					{ nameof(screenResolution), screenResolution },
 
 					// Audio
@@ -145,8 +145,8 @@ namespace Project.Core
 				// Video
 				if (dictionary.TryGetValue(nameof(useVsync), out Variant var))
 					useVsync = (bool)var;
-				if (dictionary.TryGetValue(nameof(isFullscreen), out var))
-					isFullscreen = (bool)var;
+				if (dictionary.TryGetValue(nameof(useFullscreen), out var))
+					useFullscreen = (bool)var;
 				if (dictionary.TryGetValue(nameof(screenResolution), out var))
 					screenResolution = (int)var;
 
@@ -224,7 +224,7 @@ namespace Project.Core
 			ApplyLocalization();
 
 			DisplayServer.WindowSetVsyncMode(Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
-			DisplayServer.WindowSetMode(Config.isFullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed);
+			DisplayServer.WindowSetMode(Config.useFullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed);
 			DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[Config.screenResolution]);
 
 			SetAudioBusVolume((int)AudioBuses.MASTER, Config.masterVolume, Config.isMasterMuted);
