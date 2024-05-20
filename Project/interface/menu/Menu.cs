@@ -125,7 +125,7 @@ namespace Project.Interface.Menus
 		{
 			if (Input.IsActionJustPressed("button_jump"))
 				Confirm();
-			else if (Input.IsActionJustPressed("button_action"))
+			else if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("escape"))
 				Cancel();
 			else if (!Input.GetVector("move_left", "move_right", "move_up", "move_down").IsZeroApprox())
 			{

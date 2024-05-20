@@ -58,6 +58,7 @@ namespace Project.Interface.Menus
 		{
 			currentSubmenu = submenu;
 			animator.Play(flipRight ? "flip-right" : "flip-left");
+			animator.Seek(0.0, true);
 			VerticalSelection = selection;
 		}
 
