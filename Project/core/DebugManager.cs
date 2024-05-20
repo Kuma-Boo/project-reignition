@@ -35,10 +35,7 @@ namespace Project.Core
 			UnlockAllStages = UseDemoSave;
 
 			if (OS.IsDebugBuild()) // Editor Debug
-			{
-				UseEditorSkills = true;
 				SkipCountdown = true;
-			}
 		}
 
 
@@ -209,8 +206,6 @@ namespace Project.Core
 			EmitSignal(SignalName.UnlockStagesToggled);
 		}
 
-		/// <summary> Don't load skills from save data, use inspector values instead. </summary>
-		public bool UseEditorSkills { get; private set; }
 		/// <summary> Use a custom save. </summary>
 		public bool UseDemoSave { get; private set; }
 		#endregion
