@@ -11,9 +11,11 @@ namespace Project.Interface
 		[Export]
 		private Label shaderCacheText;
 		[Export]
-		private MeshInstance3D mesh;
+		private MeshInstance3D[] meshInstances;
+		[Export]
+		private GpuParticles3D particles;
 
-		public override void _Ready() => CompileMaterials();
+		public override void _Ready() => CallDeferred(MethodName.CompileMaterials);
 
 
 		private async void CompileMaterials()
@@ -27,11 +29,24 @@ namespace Project.Interface
 					continue;
 
 				shaderCacheText.Text = $"{Tr("shader_cache_load")} ({i}/{tresFiles.Count})...";
-				mesh.MaterialOverride = ResourceLoader.Load<Material>(tresFiles[i], MATERIAL_HINT);
-				await ToSignal(GetTree().CreateTimer(PhysicsManager.normalDelta, false), SceneTreeTimer.SignalName.Timeout);
+				Material m = ResourceLoader.Load<Material>(tresFiles[i], MATERIAL_HINT);
+				if (m is ParticleProcessMaterial)
+				{
+					particles.ProcessMaterial = m;
+					particles.Restart();
+				}
+				else
+				{
+					particles.MaterialOverride = m;
+
+					for (int j = 0; j < meshInstances.Length; j++)
+						meshInstances[j].MaterialOverride = m;
+				}
+
+				await ToSignal(GetTree().CreateTimer(PhysicsManager.physicsDelta, false), SceneTreeTimer.SignalName.Timeout);
 			}
 
-			shaderCacheText.Text = $"{Tr("shader_cache_finished")}.";
+			shaderCacheText.Text = $"{Tr("shader_cache_finished")}. Compiled {tresFiles.Count} Shaders.";
 
 			await ToSignal(GetTree().CreateTimer(.5f, false), SceneTreeTimer.SignalName.Timeout);
 			animator.Play("shader_cache");
@@ -43,6 +58,7 @@ namespace Project.Interface
 		private readonly string MATERIAL_HINT = "Material";
 		private readonly string MATERIAL_FOLDER = "material";
 		private readonly string MATERIAL_EXTENSION = ".tres";
+		private readonly string EXPORTED_EXTENSION = ".remap";
 
 		private List<string> GetTresFilePaths(string path)
 		{
@@ -53,8 +69,12 @@ namespace Project.Interface
 			string fileName = directory.GetNext();
 			while (!string.IsNullOrEmpty(fileName))
 			{
-				string filePath = path + "/" + fileName;
+				GD.Print(fileName);
 
+				if (fileName.EndsWith(EXPORTED_EXTENSION))
+					fileName = fileName.Replace(EXPORTED_EXTENSION, string.Empty);
+
+				string filePath = path + "/" + fileName;
 				if (directory.CurrentIsDir())
 					materialPaths.AddRange(GetTresFilePaths(filePath));
 				else if (fileName.EndsWith(MATERIAL_EXTENSION) && filePath.Contains(MATERIAL_FOLDER))

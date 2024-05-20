@@ -1,42 +1,44 @@
-[gd_scene load_steps=10 format=3 uid="uid://bdpbe3up8hmmc"]
+[gd_scene load_steps=11 format=3 uid="uid://bdpbe3up8hmmc"]
 
-[ext_resource type="VideoStream" path="res://video/boot/logo ja.ogv" id="1_avmpc"]
 [ext_resource type="Script" path="res://interface/boot/Boot.cs" id="1_c3660"]
 [ext_resource type="AudioStream" uid="uid://c2y53tq5h1b76" path="res://video/boot/logo.wav" id="2_81oeg"]
 [ext_resource type="FontFile" uid="uid://dakokhex1lp8k" path="res://interface/font/otf/Greco Std B.otf" id="2_eryyg"]
+[ext_resource type="VideoStream" path="res://video/boot/logo en.ogv" id="2_remjm"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_qptrl"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_avxiy"]
 
 [sub_resource type="Animation" id="Animation_8b1cq"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Logo/Original:self_modulate")
+tracks/0/path = NodePath("Logo/Original:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Logo/Original:visible")
+tracks/1/path = NodePath("Logo/Video:paused")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [false]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ShaderCache:modulate")
+tracks/2/path = NodePath("Logo/Original:self_modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -48,46 +50,42 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Logo/Video:paused")
+tracks/3/path = NodePath("ShaderCache:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_svqda"]
 resource_name = "logo"
 length = 4.0
-tracks/0/type = "method"
+tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Logo/Video")
+tracks/0/path = NodePath("Logo/Original:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"play"
-}]
+"times": PackedFloat32Array(0, 1.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [false, true]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Logo/Audio")
+tracks/1/path = NodePath("Logo/Video:paused")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
+"times": PackedFloat32Array(0, 2.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [false, true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -101,43 +99,47 @@ tracks/2/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/3/type = "value"
+tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Logo/Original:visible")
+tracks/3/path = NodePath("Logo/Audio")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 1.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath(".")
+tracks/4/path = NodePath("Logo/Video")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(3.6),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"StartTitleTransition"
 }]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Logo/Video:paused")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 2.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
 }
 
 [sub_resource type="Animation" id="Animation_ehbyh"]
@@ -162,7 +164,7 @@ _data = {
 "shader_cache": SubResource("Animation_ehbyh")
 }
 
-[node name="Boot" type="Control" node_paths=PackedStringArray("animator", "shaderCacheText", "mesh")]
+[node name="Boot" type="Control" node_paths=PackedStringArray("animator", "shaderCacheText", "meshInstances", "particles")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -172,7 +174,8 @@ grow_vertical = 2
 script = ExtResource("1_c3660")
 animator = NodePath("AnimationPlayer")
 shaderCacheText = NodePath("ShaderCache/ProgressLabel")
-mesh = NodePath("ShaderCache/Mesh")
+meshInstances = [NodePath("ShaderCache/SubViewportContainer/SubViewport/SolidShadow"), NodePath("ShaderCache/SubViewportContainer/SubViewport/TransparentShadow"), NodePath("ShaderCache/SubViewportContainer/SubViewport/SolidNoShadow"), NodePath("ShaderCache/SubViewportContainer/SubViewport/TransparentNoShadow")]
+particles = NodePath("ShaderCache/SubViewportContainer/SubViewport/Particles")
 
 [node name="Logo" type="Control" parent="."]
 layout_mode = 1
@@ -198,7 +201,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-stream = ExtResource("1_avmpc")
+stream = ExtResource("2_remjm")
 expand = true
 
 [node name="Original" type="Label" parent="Logo"]
@@ -221,16 +224,6 @@ Presented By"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="BG" type="ColorRect" parent="Logo/Original"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
 [node name="Audio" type="AudioStreamPlayer" parent="Logo"]
 stream = ExtResource("2_81oeg")
 
@@ -241,6 +234,56 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="ShaderCache"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1984.0
+offset_right = -1984.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="ShaderCache/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="SolidShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.75, 0)
+mesh = SubResource("QuadMesh_qptrl")
+skeleton = NodePath("../../../..")
+
+[node name="TransparentNoShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, -0.75, 0)
+transparency = 0.3
+cast_shadow = 0
+mesh = SubResource("QuadMesh_qptrl")
+skeleton = NodePath("../../../..")
+
+[node name="SolidNoShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, -0.75, 0)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_qptrl")
+skeleton = NodePath("../../../..")
+
+[node name="TransparentShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.75, 0)
+transparency = 0.5
+mesh = SubResource("QuadMesh_qptrl")
+skeleton = NodePath("../../../..")
+
+[node name="Particles" type="GPUParticles3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+emitting = false
+preprocess = 10.0
+fixed_fps = 60
+fract_delta = false
+draw_pass_1 = SubResource("QuadMesh_avxiy")
+
+[node name="Camera3D" type="Camera3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+current = true
 
 [node name="ProgressLabel" type="Label" parent="ShaderCache"]
 layout_mode = 1
@@ -253,15 +296,6 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 48
 text = "shader_cache_load"
 vertical_alignment = 1
-
-[node name="Mesh" type="MeshInstance3D" parent="ShaderCache"]
-cast_shadow = 0
-mesh = SubResource("QuadMesh_qptrl")
-skeleton = NodePath("../..")
-
-[node name="Camera3D" type="Camera3D" parent="ShaderCache"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
-current = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
