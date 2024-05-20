@@ -26,7 +26,7 @@ namespace Project.Interface
 			animator.Play("shader_cache_start");
 
 			// Disable V-Sync to allow faster shader compilation
-			DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+			DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Enabled);
 		}
 
 
