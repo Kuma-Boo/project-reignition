@@ -24,6 +24,9 @@ namespace Project.Interface
 			tresFiles = GetTresFilePaths(RESOURCE_DIRECTORY);
 			shaderCompilationIndex = 0;
 			animator.Play("shader_cache_start");
+
+			// Disable V-Sync to allow faster shader compilation
+			DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
 		}
 
 
@@ -54,6 +57,9 @@ namespace Project.Interface
 			{
 				shaderCompilationIndex = -1;
 				shaderCacheText.Text = $"{Tr("shader_cache_finished")}.";
+
+				// Reapply v-sync
+				DisplayServer.WindowSetVsyncMode(SaveManager.Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
 				animator.Play("shader_cache_finish");
 			}
 		}
