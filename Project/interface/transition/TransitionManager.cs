@@ -56,7 +56,7 @@ namespace Project.Core
 			else
 			{
 				animator.SpeedScale = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
-				animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
+				animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace Project.Core
 				loadingAnimator.Play("hide");
 
 			animator.PlayBackwards("fade");
-			animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new Callable(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
+			animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 		}
 		#endregion
 
@@ -108,7 +108,9 @@ namespace Project.Core
 		public static void QueueSceneChange(string scene)
 		{
 			instance.queuedScene = scene;
-			instance.Connect(SignalName.TransitionProcess, new Callable(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
+
+			if (!instance.IsConnected(SignalName.TransitionProcess, new(instance, MethodName.ApplySceneChange)))
+				instance.Connect(SignalName.TransitionProcess, new(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
 		}
 
 		private string queuedScene;
