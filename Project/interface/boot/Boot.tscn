@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bdpbe3up8hmmc"]
+[gd_scene load_steps=12 format=3 uid="uid://bdpbe3up8hmmc"]
 
 [ext_resource type="Script" path="res://interface/boot/Boot.cs" id="1_c3660"]
 [ext_resource type="AudioStream" uid="uid://c2y53tq5h1b76" path="res://video/boot/logo.wav" id="2_81oeg"]
@@ -57,7 +57,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_svqda"]
@@ -142,8 +142,9 @@ tracks/5/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_ehbyh"]
-resource_name = "shader_cache"
+[sub_resource type="Animation" id="Animation_3gmsb"]
+resource_name = "shader_cache_start"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -151,17 +152,33 @@ tracks/0/path = NodePath("ShaderCache:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ehbyh"]
+resource_name = "shader_cache_finish"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ShaderCache:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_evdea"]
 _data = {
 "RESET": SubResource("Animation_8b1cq"),
 "logo": SubResource("Animation_svqda"),
-"shader_cache": SubResource("Animation_ehbyh")
+"shader_cache_finish": SubResource("Animation_ehbyh"),
+"shader_cache_start": SubResource("Animation_3gmsb")
 }
 
 [node name="Boot" type="Control" node_paths=PackedStringArray("animator", "shaderCacheText", "meshInstances", "particles")]
@@ -228,6 +245,7 @@ uppercase = true
 stream = ExtResource("2_81oeg")
 
 [node name="ShaderCache" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -301,4 +319,4 @@ vertical_alignment = 1
 libraries = {
 "": SubResource("AnimationLibrary_evdea")
 }
-next/shader_cache = &"logo"
+next/shader_cache_finish = &"logo"

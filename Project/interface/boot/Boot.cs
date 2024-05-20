@@ -15,21 +15,26 @@ namespace Project.Interface
 		[Export]
 		private GpuParticles3D particles;
 
-		public override void _Ready() => CallDeferred(MethodName.CompileMaterials);
+		private int shaderCompilationIndex = -1;
+		private List<string> tresFiles = new();
 
-
-		private async void CompileMaterials()
+		public override void _Ready()
 		{
 			// Get a list of all tres files in the project
-			List<string> tresFiles = GetTresFilePaths(RESOURCE_DIRECTORY);
+			tresFiles = GetTresFilePaths(RESOURCE_DIRECTORY);
+			shaderCompilationIndex = 0;
+			animator.Play("shader_cache_start");
+		}
 
-			for (int i = 0; i < tresFiles.Count; i++)
+
+		public override void _Process(double _)
+		{
+			if (shaderCompilationIndex == -1) return;
+
+			if (ResourceLoader.Exists(tresFiles[shaderCompilationIndex], MATERIAL_HINT))
 			{
-				if (!ResourceLoader.Exists(tresFiles[i], MATERIAL_HINT))
-					continue;
-
-				shaderCacheText.Text = $"{Tr("shader_cache_load")} ({i}/{tresFiles.Count})...";
-				Material m = ResourceLoader.Load<Material>(tresFiles[i], MATERIAL_HINT);
+				shaderCacheText.Text = $"{Tr("shader_cache_load")} ({shaderCompilationIndex}/{tresFiles.Count})...";
+				Material m = ResourceLoader.Load<Material>(tresFiles[shaderCompilationIndex], MATERIAL_HINT);
 				if (m is ParticleProcessMaterial)
 				{
 					particles.ProcessMaterial = m;
@@ -42,16 +47,16 @@ namespace Project.Interface
 					for (int j = 0; j < meshInstances.Length; j++)
 						meshInstances[j].MaterialOverride = m;
 				}
-
-				await ToSignal(GetTree().CreateTimer(PhysicsManager.physicsDelta, false), SceneTreeTimer.SignalName.Timeout);
 			}
 
-			shaderCacheText.Text = $"{Tr("shader_cache_finished")}. Compiled {tresFiles.Count} Shaders.";
-
-			await ToSignal(GetTree().CreateTimer(.5f, false), SceneTreeTimer.SignalName.Timeout);
-			animator.Play("shader_cache");
+			shaderCompilationIndex++;
+			if (shaderCompilationIndex >= tresFiles.Count)
+			{
+				shaderCompilationIndex = -1;
+				shaderCacheText.Text = $"{Tr("shader_cache_finished")}.";
+				animator.Play("shader_cache_finish");
+			}
 		}
-
 
 
 		private readonly string RESOURCE_DIRECTORY = "res://";
@@ -69,8 +74,6 @@ namespace Project.Interface
 			string fileName = directory.GetNext();
 			while (!string.IsNullOrEmpty(fileName))
 			{
-				GD.Print(fileName);
-
 				if (fileName.EndsWith(EXPORTED_EXTENSION))
 					fileName = fileName.Replace(EXPORTED_EXTENSION, string.Empty);
 

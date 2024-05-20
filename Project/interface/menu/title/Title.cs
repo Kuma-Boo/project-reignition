@@ -8,6 +8,9 @@ namespace Project.Interface.Menus
 	/// </summary>
 	public partial class Title : Menu
 	{
+		[Export]
+		private Label versionLabel;
+
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
 		private const float CUTSCENE_TIME_LENGTH = 20f;
@@ -16,6 +19,7 @@ namespace Project.Interface.Menus
 		protected override void SetUp()
 		{
 			isProcessing = menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.Title;
+			versionLabel.Text = $"Version {(string)ProjectSettings.GetSetting("application/config/version")}";
 			base.SetUp();
 		}
 

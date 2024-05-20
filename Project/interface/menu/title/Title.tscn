@@ -342,7 +342,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("FooterLabel:modulate")
+tracks/1/path = NodePath("VersionLabel:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -418,7 +418,7 @@ step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FooterLabel:modulate")
+tracks/0/path = NodePath("VersionLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -759,7 +759,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("FooterLabel:modulate")
+tracks/1/path = NodePath("VersionLabel:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -890,13 +890,13 @@ _data = {
 "show": SubResource("8")
 }
 
-[node name="Title" type="Control" node_paths=PackedStringArray("animator")]
-visible = false
+[node name="Title" type="Control" node_paths=PackedStringArray("versionLabel", "animator")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 script = ExtResource("35")
+versionLabel = NodePath("VersionLabel")
 animator = NodePath("AnimationPlayer")
 
 [node name="Background" type="Node2D" parent="."]
@@ -1159,13 +1159,17 @@ texture = ExtResource("1")
 [node name="Flames" parent="." instance=ExtResource("33_hglwt")]
 layout_mode = 1
 
-[node name="FooterLabel" type="Label" parent="."]
+[node name="VersionLabel" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 40.0
-offset_top = 968.0
-offset_right = 485.0
-offset_bottom = 1051.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -72.0
+offset_right = 509.0
+offset_bottom = -39.0
+grow_vertical = 0
 theme_override_colors/font_color = Color(0.917647, 0.803922, 0.611765, 1)
 theme_override_colors/font_shadow_color = Color(0.392157, 0.2, 0.156863, 0.784314)
 theme_override_colors/font_outline_color = Color(0.356863, 0.188235, 0.0980392, 1)
@@ -1175,8 +1179,7 @@ theme_override_constants/outline_size = 10
 theme_override_constants/shadow_outline_size = 10
 theme_override_fonts/font = ExtResource("28_g60da")
 theme_override_font_sizes/font_size = 32
-text = "Version 0.0.1a
-Original Game © 2007 SEGA™"
+text = "Version 0.0.1a"
 
 [node name="Cutscene" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
