@@ -1,10 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://cufdusdk0inmc"]
+[gd_scene load_steps=25 format=3 uid="uid://cufdusdk0inmc"]
 
 [ext_resource type="Script" path="res://interface/menu/save select/SaveSelect.cs" id="1_5ttjj"]
 [ext_resource type="PackedScene" uid="uid://dk6qdykjn185j" path="res://interface/menu/save select/SaveOption.tscn" id="2_xu0jl"]
 [ext_resource type="PackedScene" uid="uid://8rbdwpgjl48h" path="res://interface/menu/save select/SaveOptionLite.tscn" id="3_vex2l"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="5_rl4qb"]
 [ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="5_xekw3"]
+[ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="6_k81fx"]
 [ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="6_ldlys"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="8_rlf5s"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="9_l15xe"]
@@ -531,6 +532,18 @@ tracks/34/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/35/type = "value"
+tracks/35/imported = false
+tracks/35/enabled = true
+tracks/35/path = NodePath("Options/NavigationButtons:modulate")
+tracks/35/interp = 1
+tracks/35/loop_wrap = true
+tracks/35/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_v8528"]
 resource_name = "cancel"
@@ -813,6 +826,18 @@ tracks/22/path = NodePath("Scrollbar:modulate")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
+"times": PackedFloat32Array(0, 0.266666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Options/NavigationButtons:modulate")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
 "times": PackedFloat32Array(0, 0.266666),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -1118,6 +1143,18 @@ tracks/23/keys = {
 "args": [0.5],
 "method": &"FadeBGM"
 }]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Options/NavigationButtons:modulate")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0, 0.266666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_kuhfb"]
@@ -2222,6 +2259,18 @@ tracks/25/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Options/NavigationButtons:modulate")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0, 0.466666, 0.733333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jyorx"]
 _data = {
@@ -2393,13 +2442,24 @@ libraries = {
 autoplay = "loop"
 next/scroll = &"loop"
 
+[node name="NavigationButtons" type="HBoxContainer" parent="Options"]
+layout_mode = 0
+offset_left = 448.0
+offset_top = 728.0
+offset_right = 1474.0
+offset_bottom = 792.0
+theme_override_constants/separation = 64
+alignment = 2
+
+[node name="Select" parent="Options/NavigationButtons" instance=ExtResource("6_k81fx")]
+layout_mode = 2
+
+[node name="Cancel" parent="Options/NavigationButtons" instance=ExtResource("6_k81fx")]
+layout_mode = 2
+
 [node name="Description" parent="." instance=ExtResource("5_xekw3")]
 modulate = Color(1, 1, 1, 1)
 layout_mode = 1
-offset_left = 384.0
-offset_top = 768.0
-offset_right = 1536.0
-offset_bottom = 1024.0
 
 [node name="Scrollbar" type="NinePatchRect" parent="."]
 layout_mode = 0
