@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://x03eut8s4p3l"]
+[gd_scene load_steps=27 format=3 uid="uid://x03eut8s4p3l"]
 
 [ext_resource type="AudioStream" uid="uid://dbv5ecruxgfsy" path="res://sound/ost/jingle/Stage Clear.mp3" id="1"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://interface/gameplay/results/LevelResult.cs" id="4"]
 [ext_resource type="Texture2D" uid="uid://bmwc4e25fnuqd" path="res://interface/gameplay/results/result atlas.png" id="5"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/HUD Numbers.fnt" id="5_iuphe"]
+[ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="6_ms8ry"]
 [ext_resource type="Texture2D" uid="uid://covowu2nyy2gi" path="res://interface/gameplay/results/text/results en.png" id="7"]
 [ext_resource type="AudioStream" uid="uid://djog8y22u5a43" path="res://sound/sfx/system/result success.wav" id="8_5re71"]
 [ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/gameplay/results/icon/silver.png" id="8_mjqbr"]
@@ -1550,7 +1551,7 @@ _data = {
 "success-start": SubResource("1")
 }
 
-[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "enemy", "ring", "technical", "total", "animator")]
+[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "ring", "technical", "total", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1560,7 +1561,6 @@ grow_vertical = 2
 script = ExtResource("4")
 score = NodePath("Data/Labels/Score/Value")
 time = NodePath("Data/Labels/Time/Value")
-enemy = NodePath("")
 ring = NodePath("Data/Labels/Ring/Value")
 technical = NodePath("Data/Labels/Technical/Value")
 total = NodePath("Data/Labels/Total/Value")
@@ -1801,23 +1801,21 @@ vertical_alignment = 1
 modulate = Color(1, 1, 1, 0)
 position = Vector2(0, 40)
 
-[node name="Next" type="Sprite2D" parent="Data/Prompts"]
-position = Vector2(1488, 927.36)
-texture = ExtResource("7")
-region_enabled = true
-region_rect = Rect2(584, 376, 320, 56)
+[node name="Retry" parent="Data/Prompts" instance=ExtResource("6_ms8ry")]
+offset_left = 904.0
+offset_top = 896.0
+offset_right = 1133.0
+offset_bottom = 960.0
+actionKey = "sys_retry"
+inputKey = "button_action"
 
-[node name="ButtonIcon" type="Node2D" parent="Data/Prompts/Next"]
-position = Vector2(-184, 0)
-
-[node name="Retry" type="Sprite2D" parent="Data/Prompts"]
-position = Vector2(1120, 927)
-texture = ExtResource("7")
-region_enabled = true
-region_rect = Rect2(584, 312, 320, 56)
-
-[node name="ButtonIcon" type="Node2D" parent="Data/Prompts/Retry"]
-position = Vector2(-184, 0)
+[node name="Next" parent="Data/Prompts" instance=ExtResource("6_ms8ry")]
+offset_left = 1272.0
+offset_top = 896.0
+offset_right = 1501.0
+offset_bottom = 960.0
+actionKey = "sys_next"
+inputKey = "button_jump"
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1")
