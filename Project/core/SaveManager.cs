@@ -99,6 +99,7 @@ namespace Project.Core
 			public int voiceVolume = 100;
 
 			// Controls
+			public float deadZone = .5f;
 			public ControllerType controllerType = ControllerType.PlayStation;
 			public Dictionary inputConfiguration = new();
 
@@ -127,6 +128,7 @@ namespace Project.Core
 					{ nameof(isVoiceMuted), isVoiceMuted },
 					{ nameof(voiceVolume), voiceVolume },
 
+					{ nameof(deadZone), deadZone },
 					{ nameof(controllerType), (int)controllerType },
 					{ nameof(inputConfiguration), Json.Stringify(inputConfiguration) },
 
@@ -168,6 +170,8 @@ namespace Project.Core
 					voiceVolume = (int)var;
 
 
+				if (dictionary.TryGetValue(nameof(deadZone), out var))
+					deadZone = (float)var;
 				if (dictionary.TryGetValue(nameof(controllerType), out var))
 					controllerType = (ControllerType)(int)var;
 				if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
@@ -255,6 +259,7 @@ namespace Project.Core
 				int axisSign = mappings[3].ToInt();
 
 				InputMap.ActionEraseEvents(actions[i]);
+				InputMap.ActionSetDeadzone(actions[i], Config.deadZone);
 
 				if (key != Key.None)
 					InputMap.ActionAddEvent(actions[i], new InputEventKey()

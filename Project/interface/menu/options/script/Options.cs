@@ -131,7 +131,7 @@ namespace Project.Interface.Menus
 					if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 					CancelSFX();
-					FlipBook(Submenus.Control, true, 1);
+					FlipBook(Submenus.Control, true, 2);
 					break;
 				case Submenus.Test:
 					return;
@@ -181,7 +181,7 @@ namespace Project.Interface.Menus
 					VerticalSelection = WrapSelection(targetSelection, 3);
 					break;
 				case Submenus.Control:
-					VerticalSelection = WrapSelection(targetSelection, 3);
+					VerticalSelection = WrapSelection(targetSelection, 4);
 					break;
 				case Submenus.Mapping:
 					if (!controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
@@ -262,6 +262,8 @@ namespace Project.Interface.Menus
 					controlLabels[0].Text = "option_controller_xbox";
 					break;
 			}
+
+			controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
 		}
 
 
@@ -451,6 +453,14 @@ namespace Project.Interface.Menus
 
 				return true;
 			}
+			else if (VerticalSelection == 1)
+			{
+				float deadZone = SaveManager.Config.deadZone;
+				deadZone = Mathf.Clamp(deadZone + .1f * direction, 0f, .9f);
+				SaveManager.Config.deadZone = deadZone;
+				SaveManager.ApplyInputMap();
+				return true;
+			}
 
 			return false;
 		}
@@ -486,9 +496,11 @@ namespace Project.Interface.Menus
 
 		private void ConfirmControlOption()
 		{
+			if (VerticalSelection == 1) return;
+
 			if (VerticalSelection == 0)
 				SlideControlOption(1);
-			else if (VerticalSelection == 1)
+			else if (VerticalSelection == 2)
 				FlipBook(Submenus.Mapping, false, 0);
 			else
 				FlipBook(Submenus.Test, false, VerticalSelection);

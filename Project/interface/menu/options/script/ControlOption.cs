@@ -178,6 +178,9 @@ namespace Project.Interface.Menus
 
 			if (e is InputEventJoypadMotion) // Only allow joystick axis in a certain range
 			{
+				if (Mathf.Abs((e as InputEventJoypadMotion).AxisValue) < SaveManager.Config.deadZone)
+					return false;
+
 				switch ((e as InputEventJoypadMotion).Axis)
 				{
 					case JoyAxis.LeftX:

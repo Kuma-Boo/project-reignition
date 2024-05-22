@@ -1,13 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://crwawg2ivy3xd"]
+[gd_scene load_steps=7 format=3 uid="uid://crwawg2ivy3xd"]
 
 [ext_resource type="Texture2D" uid="uid://cqthy0ymdq1xi" path="res://resource/input sprites/navigation/button/button_plus.png" id="1_5m2jb"]
+[ext_resource type="Script" path="res://interface/menu/NavigationButton.cs" id="1_yihnq"]
 [ext_resource type="FontFile" uid="uid://cc17ag50dcrcr" path="res://interface/font/Bonus Font.fnt" id="2_31tg0"]
+[ext_resource type="Resource" uid="uid://bevga5botlnhx" path="res://resource/preset/controller/NavPS5.tres" id="2_ouv7c"]
+[ext_resource type="Resource" uid="uid://n44uccys1s8f" path="res://resource/preset/controller/NavXboxOne.tres" id="3_gwcke"]
+[ext_resource type="Resource" uid="uid://5pqg0e4ib3fl" path="res://resource/preset/controller/NavKeyboard.tres" id="4_4my10"]
 
-[node name="NavigationButton" type="HBoxContainer"]
+[node name="NavigationButton" type="HBoxContainer" node_paths=PackedStringArray("buttonLabel", "buttonTextureRect", "actionLabel")]
 custom_minimum_size = Vector2(0, 64)
 offset_right = 256.0
 offset_bottom = 64.0
 theme_override_constants/separation = 8
+script = ExtResource("1_yihnq")
+controllerResources = Array[Resource]([ExtResource("2_ouv7c"), ExtResource("3_gwcke"), ExtResource("4_4my10")])
+buttonLabel = NodePath("Sprite/Key")
+buttonTextureRect = NodePath("Sprite")
+actionLabel = NodePath("Action")
 
 [node name="Sprite" type="TextureRect" parent="."]
 layout_mode = 2
@@ -30,7 +39,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Label" type="Label" parent="."]
+[node name="Action" type="Label" parent="."]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("2_31tg0")

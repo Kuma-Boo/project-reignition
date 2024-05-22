@@ -127,7 +127,7 @@ namespace Project.Interface.Menus
 				Confirm();
 			else if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("escape"))
 				Cancel();
-			else if (!Input.GetVector("move_left", "move_right", "move_up", "move_down").IsZeroApprox())
+			else if (Input.GetVector("move_left", "move_right", "move_up", "move_down").Length() > SaveManager.Config.deadZone)
 			{
 				if (Mathf.IsZeroApprox(cursorSelectionTimer))
 					UpdateSelection();

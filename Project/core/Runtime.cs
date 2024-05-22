@@ -135,12 +135,18 @@ namespace Project.Core
 		{
 			EmitSignal(SignalName.EventInputed, e);
 
+			if (e is not InputEventKey && e is not InputEventJoypadButton && e is not InputEventJoypadMotion) return;
+
 			int targetController = -1;
 			if (e is InputEventJoypadButton)
-				ActiveController = e.Device; // Gamepad (ignore analog inputs due to noise)
+				targetController = e.Device; // Gamepad
+			else if (e is InputEventJoypadMotion)
+			{
+				if (Mathf.Abs((e as InputEventJoypadMotion).AxisValue) < SaveManager.Config.deadZone) return;
+				targetController = e.Device;
+			}
 
 			if (targetController == ActiveController) return;
-
 
 			ActiveController = targetController;
 			EmitSignal(SignalName.ControllerChanged, ActiveController);
