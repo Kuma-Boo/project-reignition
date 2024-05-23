@@ -56,7 +56,7 @@ namespace Project.Core
 		{
 			shaderTime += PhysicsManager.normalDelta;
 			if (shaderTime > SHADER_ROLLOVER)
-				shaderTime -= SHADER_ROLLOVER; //Copied from original shader time's rollover
+				shaderTime -= SHADER_ROLLOVER; // Copied from original shader time's rollover
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_TIME, shaderTime);
 		}
 
@@ -77,17 +77,10 @@ namespace Project.Core
 			RichPearlCollisionShape.Radius = RICH_PEARL_NORMAL_COLLISION * sizeMultiplier;
 		}
 
-		private Gameplay.Objects.Pearl SpawnPearl()
-		{
-			Gameplay.Objects.Pearl pearl = pearlScene.Instantiate<Gameplay.Objects.Pearl>();
-			pearl.DisableAutoRespawning = true; //Don't auto-respawn
-			pearl.Monitoring = pearl.Monitorable = false; //Unlike normal pearls, these are automatically collected
-			pearl.Connect(Gameplay.Objects.Pearl.SignalName.Despawned, Callable.From(() => pearlPool.Add(pearl)));
-			return pearl;
-		}
-
 		private const float PEARL_MIN_TRAVEL_TIME = .2f;
 		private const float PEARL_MAX_TRAVEL_TIME = .4f;
+		/// <summary> Maximum random delay used to prevent pearls from "clumping."  </summary>
+		private const float PEARL_DELAY_RANGE = .4f;
 		public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius, float heightOffset = 0)
 		{
 			Tween tween = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Cubic);
@@ -96,29 +89,35 @@ namespace Project.Core
 			{
 				Gameplay.Objects.Pearl pearl;
 
-				if (pearlPool.Count != 0) //Reuse pearls if possible.
+				if (pearlPool.Count != 0) // Reuse pearls if possible.
 				{
 					pearl = pearlPool[0];
 					pearlPool.RemoveAt(0);
 				}
-				else
-					pearl = SpawnPearl(); //Otherwise create new pearls.
+				else // Otherwise create a new pearl.
+				{
+					pearl = pearlScene.Instantiate<Gameplay.Objects.Pearl>();
+					pearl.DisableAutoRespawning = true; // Don't auto-respawn
+					pearl.Monitoring = pearl.Monitorable = false; // Unlike normal pearls, these are automatically collected
+					pearl.Connect(Gameplay.Objects.Pearl.SignalName.Despawned, Callable.From(() => pearlPool.Add(pearl)));
+				}
 
 				AddChild(pearl);
 				pearl.Respawn();
 
-				Vector3 spawnOffset = new Vector3(randomNumberGenerator.RandfRange(-radius.X, radius.X),
+				Vector3 spawnOffset = new(randomNumberGenerator.RandfRange(-radius.X, radius.X),
 					randomNumberGenerator.RandfRange(-radius.Y, radius.Y),
 					randomNumberGenerator.RandfRange(-radius.X, radius.X));
 				spawnOffset.Y += heightOffset;
 
 				float travelTime = randomNumberGenerator.RandfRange(PEARL_MIN_TRAVEL_TIME, PEARL_MAX_TRAVEL_TIME);
-				tween.TweenProperty(pearl, "global_position", spawnPosition + spawnOffset, travelTime).From(spawnPosition);
-				tween.TweenCallback(new Callable(pearl, Gameplay.Objects.Pickup.MethodName.Collect)).SetDelay(travelTime);
+				float delay = randomNumberGenerator.RandfRange(0, PEARL_DELAY_RANGE);
+				tween.TweenProperty(pearl, "global_position", spawnPosition + spawnOffset, travelTime).From(spawnPosition).SetDelay(delay);
+				tween.TweenCallback(new Callable(pearl, Gameplay.Objects.Pickup.MethodName.Collect)).SetDelay(travelTime + delay);
 			}
 
 			tween.Play();
-			tween.Connect(Tween.SignalName.Finished, Callable.From(() => tween.Kill())); //Kill tween after completing
+			tween.Connect(Tween.SignalName.Finished, Callable.From(() => tween.Kill())); // Kill tween after completing
 		}
 		#endregion
 

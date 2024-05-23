@@ -47,8 +47,8 @@ namespace Project.Gameplay.Objects
 			tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
 			float distance = Runtime.randomNumberGenerator.RandfRange(.2f, .8f);
 			float height = Runtime.randomNumberGenerator.RandfRange(.2f, .5f);
-			Vector3 endPoint = new Vector3(distance, height, -.5f);
-			Vector3 midPoint = new Vector3(distance * 2, height * 2f, .5f);
+			Vector3 endPoint = new(distance, height, -.5f);
+			Vector3 midPoint = new(distance * 2, height * 2f, .5f);
 
 			if (Runtime.randomNumberGenerator.Randf() > .5f)
 			{
@@ -66,7 +66,7 @@ namespace Project.Gameplay.Objects
 			tweener.TweenProperty(this, "position", endPoint, .2f).SetEase(Tween.EaseType.In);
 			tweener.Parallel().TweenProperty(this, "scale", Vector3.One * .001f, .2f).SetEase(Tween.EaseType.In);
 
-			tweener.TweenCallback(Callable.From(() => Character.Skills.ModifySoulGauge(isRichPearl ? 20 : 1))).SetDelay(.1f);
+			tweener.Parallel().TweenCallback(Callable.From(() => Character.Skills.ModifySoulGauge(isRichPearl ? 20 : 1)));
 			tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(3f);
 
 			if (isRichPearl) // Play the correct sfx
