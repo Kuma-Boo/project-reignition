@@ -20,6 +20,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void _EnterTree()
 		{
+			Visible = true;
 			if (isStageVisuals)
 				DebugManager.Instance.Connect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
 		}
@@ -49,11 +50,11 @@ namespace Project.Gameplay.Triggers
 				visibleOnCheckpoint = startEnabled;
 
 				//Listen for checkpoint signals
-				Level.Connect(StageSettings.SignalName.OnTriggeredCheckpoint, new Callable(this, MethodName.ProcessCheckpoint));
+				Level.Connect(StageSettings.SignalName.TriggeredCheckpoint, new Callable(this, MethodName.ProcessCheckpoint));
 				Level.ConnectRespawnSignal(this);
 			}
 
-			Respawn();
+			CallDeferred(MethodName.Respawn);
 		}
 
 		private bool visibleOnCheckpoint;
@@ -102,12 +103,12 @@ namespace Project.Gameplay.Triggers
 		{
 			if (isStageVisuals && !DebugManager.IsStageCullingEnabled) // Treat as active
 			{
-				Visible = true;
+				SetDeferred("visible", true);
 				ProcessMode = ProcessModeEnum.Inherit;
 				return;
 			}
 
-			Visible = isActive;
+			SetDeferred("visible", isActive);
 			ProcessMode = isActive ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
 		}
 	}
