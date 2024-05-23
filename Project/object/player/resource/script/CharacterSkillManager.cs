@@ -322,26 +322,26 @@ namespace Project.Gameplay
 				HeadsUpDisplay.instance.UpdateSoulGaugeColor(IsSoulGaugeCharged);
 		}
 
-		private int soulPower; //Current soul power
+		public int SoulPower { get; private set; } //Current soul power
 		private int maxSoulPower; //Calculated on start
 
-		private bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && soulPower == 0;
-		private bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || soulPower >= MINIMUM_SOUL_POWER;
+		private bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
+		private bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MINIMUM_SOUL_POWER;
 
 		private const int MINIMUM_SOUL_POWER = 50; //Minimum amount of soul power needed to use soul skills.
 		private const int SOUL_GAUGE_BASE = 100; //Starting size of soul gauge
 		private const int SOUL_GAUGE_MAX = 300; //Max size of soul gauge
 		public void ModifySoulGauge(int amount)
 		{
-			soulPower = Mathf.Clamp(soulPower + amount, 0, maxSoulPower);
+			SoulPower = Mathf.Clamp(SoulPower + amount, 0, maxSoulPower);
 
 			if (HeadsUpDisplay.instance != null)
-				HeadsUpDisplay.instance.ModifySoulGauge((float)soulPower / maxSoulPower, IsSoulGaugeCharged);
+				HeadsUpDisplay.instance.ModifySoulGauge((float)SoulPower / maxSoulPower, IsSoulGaugeCharged);
 		}
 
 
 		/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
-		public string TextDisplay => $"{soulPower}/{maxSoulPower}";
+		public string TextDisplay => $"{SoulPower}/{maxSoulPower}";
 		#endregion
 	}
 }

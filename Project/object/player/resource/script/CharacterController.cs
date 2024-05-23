@@ -1206,8 +1206,12 @@ namespace Project.Gameplay
 				return;
 			}
 
-			// Lose rings
 			Effect.PlayVoice("hurt");
+
+			// Lose soul power
+			Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .5f));
+
+			// Lose rings
 			Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
 			Stage.IncrementDamageCount();
 
