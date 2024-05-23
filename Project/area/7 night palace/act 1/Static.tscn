@@ -112,10 +112,9 @@ size = Vector3(75, 30, 30)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xr06l"]
 size = Vector3(320, 5, 140)
 
-[node name="Static" type="Node3D"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_siayx")
 pathParent = NodePath("Path")
-completionAnimator = NodePath("")
 Environment = NodePath("WorldEnvironment")
 
 [node name="Trigger" type="Node3D" parent="."]
@@ -308,7 +307,7 @@ path = NodePath("../../../../../Path/MainPath2")
 script = ExtResource("5_jhy1v")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
-"Trigger Settings/Player Stand-in" = null
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Sidle/SidleTrigger1/SidleActivation"]
@@ -418,10 +417,6 @@ path = NodePath("../../../Path/GasRoomPath")
 [node name="Camera" type="Node3D" parent="Trigger"]
 
 [node name="Reflection" type="Node3D" parent="Trigger"]
-
-[node name="PlanarReflectionRenderer" parent="Trigger/Reflection" instance=ExtResource("27_lklb2")]
-renderMask = 23
-reflectionMaterials = [ExtResource("25_6jp1c")]
 
 [node name="Path" type="Node3D" parent="Trigger/Reflection"]
 
@@ -565,12 +560,13 @@ visible = false
 visible = false
 
 [node name="06Ending" parent="Visuals/MainSection" instance=ExtResource("7_xctaf")]
-startEnabled = true
+visible = false
 
 [node name="Skybox" parent="Visuals/MainSection" instance=ExtResource("3_dbu0p")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 
 [node name="SpaceSection" type="Node3D" parent="Visuals"]
+visible = false
 script = ExtResource("9_ew8l8")
 saveVisibilityOnCheckpoint = true
 isStageVisuals = true
@@ -663,6 +659,10 @@ bus = &"BGM"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("10_jp8di")
+
+[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("27_lklb2")]
+renderMask = 119
+reflectionMaterials = [ExtResource("25_6jp1c")]
 
 [connection signal="Activated" from="Trigger/Object/WallRun1" to="Trigger/Object/WallRun1/WallRun" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/WallRun1" to="Trigger/Object/Sidle/SidleTrigger1/SidleActivation" method="Activate"]

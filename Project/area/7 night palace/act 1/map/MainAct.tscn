@@ -1,6 +1,7 @@
-[gd_scene load_steps=54 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=55 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
+[ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
 [ext_resource type="PackedScene" uid="uid://ctfcgpodfhnp0" path="res://area/7 night palace/act 1/Static.tscn" id="3_ksvvu"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_kcdaq"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_nmhcr"]
@@ -186,9 +187,7 @@ _data = {
 [node name="World" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("3_ksvvu")]
-"Level ID" = "np_a1_main"
-"Item Cycling/Activation Trigger" = NodePath("")
-completionAnimator = NodePath("")
+Data = ExtResource("2_wwd1j")
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -196,7 +195,6 @@ completionAnimator = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 352, -104, -480)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -298,10 +296,10 @@ lifetime = 3.0
 
 [node name="DashPanel" parent="MainAct/Start" instance=ExtResource("7_luf24")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 115.786, 2.5, -78.2942)
-speedRatio = 1.2
 
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0.01, -160)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -373,6 +371,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.100006, 0.8, -4)
+"Auto Advance" = true
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 0.4
@@ -383,6 +382,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.97501, 0, -15)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+"Auto Advance" = true
 "State Lengths/inactive" = 3.0
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 1.0
@@ -390,6 +390,7 @@ stateLengths = [3.0, 0.4, 1.0]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+"Auto Advance" = true
 "State Lengths/inactive" = 3.0
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 1.0
@@ -415,6 +416,7 @@ shape = SubResource("BoxShape3D_lcjye")
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 3.10001, 0.8, -24)
+"Auto Advance" = true
 "State Lengths/inactive" = 1.8
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 0.2
@@ -425,6 +427,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0249939, 0, -33)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 1.5)
+"Auto Advance" = true
 "State Lengths/inactive" = 1.0
 "State Lengths/warning" = 0.8
 "State Lengths/active" = 0.6
@@ -432,6 +435,7 @@ stateLengths = [1.0, 0.8, 0.6]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0)
+"Auto Advance" = true
 "State Lengths/inactive" = 1.0
 "State Lengths/warning" = 0.8
 "State Lengths/active" = 0.6
@@ -439,6 +443,7 @@ stateLengths = [1.0, 0.8, 0.6]
 
 [node name="SpikePanel3" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -1.5)
+"Auto Advance" = true
 "State Lengths/inactive" = 1.0
 "State Lengths/warning" = 0.8
 "State Lengths/active" = 0.6
@@ -486,6 +491,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
 [node name="SpikePanel" parent="MainAct/Sidle/SidleGroup3/SpikeGroup1" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0)
+"Auto Advance" = true
 "State Lengths/inactive" = 0.6
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 3.0
@@ -514,6 +520,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.5)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup3/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+"Auto Advance" = true
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
@@ -521,11 +528,11 @@ stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup3/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+"Auto Advance" = true
 "Start Time" = -0.5
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-startingTime = -0.5
 stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikeGroup3" type="Node3D" parent="MainAct/Sidle/SidleGroup3"]
@@ -533,24 +540,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.5)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 2.25)
+"Auto Advance" = true
 "Start Time" = 1.0
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-startingTime = 1.0
 stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+"Auto Advance" = true
 "Start Time" = 0.5
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-startingTime = 0.5
 stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel3" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+"Auto Advance" = true
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
@@ -558,15 +566,16 @@ stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel4" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -2.25)
+"Auto Advance" = true
 "Start Time" = -0.5
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-startingTime = -0.5
 stateLengths = [2.0, 1.0, 1.5]
 
 [node name="Hall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.1, 0.01, -245.6)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -679,6 +688,7 @@ distance = 36.0
 
 [node name="Tower" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -787,7 +797,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
 
 [node name="DashPanel" parent="MainAct/Tower" instance=ExtResource("7_luf24")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 51)
-speedRatio = 1.2
 
 [node name="MajinGroup2" type="Node3D" parent="MainAct/Tower"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, -5, 82.2)
@@ -869,6 +878,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, -7)
 
 [node name="Interior" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -195, 2, -502.3)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -977,6 +987,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
 [node name="Carpet" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
+visible = false
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -1028,8 +1039,8 @@ path = NodePath("../../../../Static/Path/CarpetPath")
 
 [node name="Ending" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -104, -490)
+visible = false
 script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="HallStretchEvent" parent="MainAct/Ending" instance=ExtResource("32_j58yj")]
@@ -1039,6 +1050,9 @@ visible = false
 [node name="GateA" type="Node3D" parent="MainAct/Ending" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.25, 6.85, 0)
 script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="Teleport" parent="MainAct/Ending/GateA" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
@@ -1047,6 +1061,9 @@ warpTarget = NodePath("../../../../Static/Trigger/Checkpoint/SpaceACheckpoint/Ch
 
 [node name="Gate" parent="MainAct/Ending/GateA" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.150002, 0)
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Ending/GateA"]
 libraries = {
@@ -1056,6 +1073,9 @@ libraries = {
 [node name="GateB" type="Node3D" parent="MainAct/Ending" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 182.2, 6.85, 0)
 script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="Teleport" parent="MainAct/Ending/GateB" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
@@ -1064,6 +1084,9 @@ warpTarget = NodePath("../../../../Static/Trigger/Checkpoint/SpaceBCheckpoint/Ch
 
 [node name="Gate" parent="MainAct/Ending/GateB" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.150002, 0)
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Ending/GateB"]
 libraries = {
@@ -1073,6 +1096,9 @@ libraries = {
 [node name="GateC" type="Node3D" parent="MainAct/Ending" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 263.2, 7, 0)
 script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="Teleport" parent="MainAct/Ending/GateC" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
@@ -1081,6 +1107,9 @@ warpTarget = NodePath("../../../../Static/Trigger/Checkpoint/SpaceCCheckpoint/Ch
 
 [node name="Gate" parent="MainAct/Ending/GateC" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.150002, 0)
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Ending/GateC"]
 libraries = {
@@ -1096,6 +1125,7 @@ shape = SubResource("BoxShape3D_ly3wh")
 
 [node name="SpaceA" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -640)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -1593,6 +1623,7 @@ warpTarget = NodePath("../../../Static/Trigger/Checkpoint/GasCheckpoint/Checkpoi
 
 [node name="SpaceB" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 787.3, 0, -460)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -2302,6 +2333,7 @@ warpTarget = NodePath("../../../Static/Trigger/Checkpoint/GasCheckpoint/Checkpoi
 
 [node name="SpaceC" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 788, 0, -300)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -2931,6 +2963,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -39.2)
 
 [node name="SpringEvent" type="Node3D" parent="MainAct/GasRoom/GasA/SwitchGroup/Switch" node_paths=PackedStringArray("animator")]
 script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="Spring" parent="MainAct/GasRoom/GasA/SwitchGroup/Switch/SpringEvent" instance=ExtResource("42_m3821")]
@@ -3305,47 +3340,47 @@ warpTarget = NodePath("../../../Ending/GateC")
 [connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Deactivate"]
-[connection signal="Activated" from="MainAct/Ending/GateA" to="MainAct/Ending" method="Activate"]
-[connection signal="Activated" from="MainAct/Ending/GateA" to="MainAct/Ending/GateA/Gate" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateA" to="Static/Trigger/Path/MainPath5" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateA" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateA" to="Static/Visuals/SpaceSection" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ending/GateA" to="Static/Visuals/SpaceSection/07GasRoom" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="MainAct/Ending" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="MainAct/SpaceA" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/GateA" to="MainAct/Ending" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/GateA" to="MainAct/Ending/GateA/Gate" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="Static/Trigger/Path/SpaceAPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="Static/Visuals/MainSection" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="Static/Visuals/SpaceSection" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="Static/Visuals/SpaceSection/NPSpaceA" method="Activate"]
-[connection signal="Activated" from="MainAct/Ending/GateB" to="MainAct/Ending" method="Activate"]
-[connection signal="Activated" from="MainAct/Ending/GateB" to="MainAct/Ending/GateB/Gate" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="MainAct/Ending" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="MainAct/SpaceA" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateB" to="Static/Trigger/Path/MainPath5" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateB" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateB" to="Static/Visuals/SpaceSection" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ending/GateB" to="Static/Visuals/SpaceSection/07GasRoom" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="MainAct/Ending" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="MainAct/SpaceB" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/GateB" to="MainAct/Ending" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/GateB" to="MainAct/Ending/GateB/Gate" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="Static/Trigger/Path/SpaceBPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="Static/Visuals/MainSection" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="Static/Visuals/SpaceSection" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="Static/Visuals/SpaceSection/NPSpaceB" method="Activate"]
-[connection signal="Activated" from="MainAct/Ending/GateC" to="MainAct/Ending" method="Activate"]
-[connection signal="Activated" from="MainAct/Ending/GateC" to="MainAct/Ending/GateC/Gate" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="MainAct/Ending" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="MainAct/SpaceB" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateC" to="Static/Trigger/Path/MainPath5" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateC" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateC" to="Static/Visuals/SpaceSection" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ending/GateC" to="Static/Visuals/SpaceSection/07GasRoom" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="MainAct/Ending" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="MainAct/SpaceC" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/GateC" to="MainAct/Ending" method="Activate"]
+[connection signal="Activated" from="MainAct/Ending/GateC" to="MainAct/Ending/GateC/Gate" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="Static/Trigger/Path/SpaceCPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="Static/Visuals/MainSection" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="Static/Visuals/SpaceSection" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="Static/Visuals/SpaceSection/NPSpaceC" method="Activate"]
-[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/SpaceA" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/GasRoom/GasA" method="Activate"]
+[connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="MainAct/Ending" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/Ending/GateC/Teleport" to="MainAct/SpaceC" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Trigger/Path/GasRoomPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Visuals/SpaceSection/NPSpaceA" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/SpaceA" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/GasRoom/GasA" method="Activate"]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/BlueMajin1" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/BlueMajin1" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/BlueMajin1" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone3" method="IncrementCounter"]
@@ -3361,16 +3396,16 @@ warpTarget = NodePath("../../../Ending/GateC")
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/RedMajin" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/RedMajin" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/SpaceB/EnemyGroup/RedMajin" to="MainAct/SpaceB/EnemyGroup/SpacePanel/EnemyStone3" method="IncrementCounter"]
-[connection signal="Teleport" from="MainAct/SpaceB/Hourglass" to="MainAct/SpaceB" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/SpaceB/Hourglass" to="MainAct/GasRoom/GasB" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceB/Hourglass" to="Static/Trigger/Path/GasRoomPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceB/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceB/Hourglass" to="Static/Visuals/SpaceSection/NPSpaceB" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="MainAct/SpaceC" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="MainAct/GasRoom/GasC" method="Activate"]
+[connection signal="Teleport" from="MainAct/SpaceB/Hourglass" to="MainAct/SpaceB" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/SpaceB/Hourglass" to="MainAct/GasRoom/GasB" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="Static/Trigger/Path/GasRoomPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="Static/Visuals/SpaceSection/NPSpaceC" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="MainAct/SpaceC" method="Deactivate"]
+[connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="MainAct/GasRoom/GasC" method="Activate"]
 [connection signal="Activated" from="MainAct/GasRoom/GasA/SwitchGroup/Switch" to="MainAct/GasRoom/GasA/SwitchGroup/Switch/SpringEvent" method="Activate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasA/Hourglass" to="MainAct/Ending/GateA" method="Activate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasA/Hourglass" to="MainAct/GasRoom/GasA" method="Deactivate"]

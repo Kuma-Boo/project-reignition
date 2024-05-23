@@ -39,26 +39,26 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Hourglass/HourglassRoot/Skeleton3D/HourglassSandBottomMesh:instance_shader_parameters/scroll")
+tracks/2/path = NodePath("LockonTrigger/CollisionShape3D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [null]
+"update": 1,
+"values": [false]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("LockonTrigger/CollisionShape3D:disabled")
+tracks/3/path = NodePath("Hourglass/HourglassRoot/Skeleton3D/HourglassSandBottomMesh:instance_shader_parameters/scroll")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [0.5]
 }
 
 [sub_resource type="Animation" id="Animation_qkead"]
@@ -86,7 +86,7 @@ tracks/1/path = NodePath("Hourglass/HourglassRoot/Skeleton3D/HourglassSandTopMes
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.466667, 0.666666),
+"times": PackedFloat32Array(0, 0.466667, 0.666),
 "transitions": PackedFloat32Array(1, 2, 1),
 "update": 0,
 "values": [0.0, 0.0, 0.5]
@@ -98,7 +98,7 @@ tracks/2/path = NodePath("Hourglass/HourglassRoot/Skeleton3D/HourglassSandBottom
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 1, 1.66667),
+"times": PackedFloat32Array(0, 0.999999, 1.66667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [0.0, 0.0, 0.5]
@@ -145,7 +145,7 @@ crossfade = true
 [node name="Hourglass" parent="." instance=ExtResource("1_tgpdv")]
 
 [node name="HourglassSandBottomMesh" parent="Hourglass/HourglassRoot/Skeleton3D" index="1"]
-instance_shader_parameters/scroll = 0.0
+instance_shader_parameters/scroll = 0.5
 
 [node name="HourglassSandTopMesh" parent="Hourglass/HourglassRoot/Skeleton3D" index="2"]
 instance_shader_parameters/scroll = 0.0
@@ -172,6 +172,9 @@ shape = SubResource("SphereShape3D_wiqb5")
 
 [node name="EventHandler" type="Node3D" parent="." node_paths=PackedStringArray("animator")]
 script = ExtResource("2_la6o2")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = null
 animator = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="EventHandler"]
