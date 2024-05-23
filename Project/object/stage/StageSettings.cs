@@ -242,7 +242,7 @@ namespace Project.Gameplay
 		#region Object Spawning
 		// Checkpoint data
 		[Signal]
-		public delegate void OnTriggeredCheckpointEventHandler();
+		public delegate void TriggeredCheckpointEventHandler();
 		public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
 		public Path3D CheckpointPlayerPath { get; private set; }
 		public Path3D CheckpointCameraPath { get; private set; }
@@ -256,14 +256,14 @@ namespace Project.Gameplay
 			CheckpointCameraPath = CharacterController.instance.Camera.PathFollower.ActivePath; // Store current camera path
 			CheckpointCameraSettings = CharacterController.instance.Camera.ActiveSettings;
 
-			EmitSignal(SignalName.OnTriggeredCheckpoint);
+			EmitSignal(SignalName.TriggeredCheckpoint);
 		}
 
 
 		[Signal]
-		public delegate void OnUnloadedEventHandler();
+		public delegate void UnloadedEventHandler();
 		private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
-		public override void _ExitTree() => EmitSignal(SignalName.OnUnloaded);
+		public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
 		public void ConnectUnloadSignal(Node node)
 		{
 			if (!node.HasMethod(UNLOAD_FUNCTION))
@@ -272,13 +272,13 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (!IsConnected(SignalName.OnUnloaded, new Callable(node, UNLOAD_FUNCTION)))
-				Connect(SignalName.OnUnloaded, new Callable(node, UNLOAD_FUNCTION));
+			if (!IsConnected(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION)))
+				Connect(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION));
 		}
 
 
 		[Signal]
-		public delegate void OnRespawnedEventHandler();
+		public delegate void RespawnedEventHandler();
 		public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
 		public void ConnectRespawnSignal(Node node)
 		{
@@ -288,15 +288,15 @@ namespace Project.Gameplay
 				return;
 			}
 
-			if (!IsConnected(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION)))
-				Connect(SignalName.OnRespawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
+			if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
+				Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
 		}
 
 
 		public void RespawnObjects()
 		{
 			SoundManager.instance.CancelDialog(); // Cancel any active dialog
-			EmitSignal(SignalName.OnRespawned);
+			EmitSignal(SignalName.Respawned);
 		}
 
 		#endregion
