@@ -1,41 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://ddqtfsujegqep"]
+[gd_scene load_steps=13 format=3 uid="uid://ddqtfsujegqep"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/SpikeBallSpawner.cs" id="1_0mkqx"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="1_5smtj"]
 [ext_resource type="PackedScene" uid="uid://bpd06h3747m1d" path="res://object/stage/common/resource/model/SpikeBall.gltf" id="2_5hgbt"]
+[ext_resource type="Material" uid="uid://dtk7d65l8yb7y" path="res://object/stage/common/resource/model/material/Spike Ball Despawn Process Material.tres" id="2_d2t1c"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="2_rgwob"]
-
-[sub_resource type="Curve" id="Curve_o1fqs"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_ecucp"]
-width = 64
-texture_mode = 1
-curve = SubResource("Curve_o1fqs")
-
-[sub_resource type="Curve" id="Curve_27asc"]
-_data = [Vector2(0, 0), 0.0, 8.12046, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_2wthk"]
-curve = SubResource("Curve_27asc")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_loyw5"]
-lifetime_randomness = 0.2
-angle_min = -180.0
-angle_max = 180.0
-direction = Vector3(0, 1, 0)
-spread = 90.0
-initial_velocity_min = 2.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, 0, 0)
-radial_accel_min = -24.0
-radial_accel_max = -12.8
-scale_min = 2.0
-scale_max = 3.0
-scale_curve = SubResource("CurveTexture_2wthk")
-alpha_curve = SubResource("CurveTexture_ecucp")
 
 [sub_resource type="QuadMesh" id="QuadMesh_udrot"]
 material = ExtResource("2_rgwob")
@@ -283,7 +252,7 @@ interpolate = false
 fract_delta = false
 visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_loyw5")
+process_material = ExtResource("2_d2t1c")
 draw_pass_1 = SubResource("QuadMesh_udrot")
 
 [node name="Root" parent="SpikeBall" instance=ExtResource("2_5hgbt")]

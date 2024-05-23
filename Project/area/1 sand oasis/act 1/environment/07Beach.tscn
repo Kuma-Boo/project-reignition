@@ -1,50 +1,20 @@
-[gd_scene load_steps=18 format=3 uid="uid://c1tblqj07pix8"]
+[gd_scene load_steps=16 format=3 uid="uid://c1tblqj07pix8"]
 
 [ext_resource type="PackedScene" uid="uid://c36jr32mbyabe" path="res://area/1 sand oasis/act 1/environment/model/07Beach.gltf" id="1_vix83"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_ia5ps"]
+[ext_resource type="Material" uid="uid://b1t6e7krslb4o" path="res://area/1 sand oasis/data/particle/material/Sandfall Process Material.tres" id="3_ku1u8"]
 [ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="3_y3sbj"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_bpbt4"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="5_a5l47"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="5_mhkj6"]
 [ext_resource type="AudioStream" uid="uid://du2kydx1f2bpe" path="res://sound/sfx/stage/sand oasis/area beach wave.ogg" id="7_b5jkw"]
-
-[sub_resource type="Gradient" id="Gradient_obxjw"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_s58w8"]
-gradient = SubResource("Gradient_obxjw")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2nr1i"]
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
-direction = Vector3(1, -0.5, 0)
-flatness = 0.8
-initial_velocity_min = 20.0
-initial_velocity_max = 40.0
-angular_velocity_min = -360.0
-angular_velocity_max = 360.0
-gravity = Vector3(0, -9.81, 0)
-scale_min = 3.0
-scale_max = 3.0
-color = Color(1, 0.827451, 0.588235, 1)
-color_ramp = SubResource("GradientTexture1D_s58w8")
+[ext_resource type="Material" uid="uid://dsmjgqhn6fdq5" path="res://area/1 sand oasis/data/particle/material/Sandfall Dust Process Material.tres" id="7_votfv"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_0xdqd"]
 material = ExtResource("3_y3sbj")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_giegx"]
 radius = 1.0
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oclrk"]
-lifetime_randomness = 0.2
-angle_max = 360.0
-direction = Vector3(0, -1, 0)
-spread = 0.0
-initial_velocity_min = 4.0
-initial_velocity_max = 4.0
-scale_max = 2.0
-color = Color(0.75, 0.621875, 0.4425, 0.588235)
-color_ramp = SubResource("GradientTexture1D_s58w8")
 
 [sub_resource type="QuadMesh" id="QuadMesh_5qb4q"]
 material = ExtResource("5_a5l47")
@@ -304,7 +274,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_2nr1i")
+process_material = ExtResource("3_ku1u8")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="RightParticles" type="GPUParticles3D" parent="SandfallParticles/Sandfall1" index="1"]
@@ -318,7 +288,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_2nr1i")
+process_material = ExtResource("3_ku1u8")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="Sandfall2" type="Node3D" parent="SandfallParticles" index="1"]
@@ -335,7 +305,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_2nr1i")
+process_material = ExtResource("3_ku1u8")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="RightParticles" type="GPUParticles3D" parent="SandfallParticles/Sandfall2" index="1"]
@@ -349,7 +319,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_2nr1i")
+process_material = ExtResource("3_ku1u8")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="Sandfall3" type="Node3D" parent="SandfallParticles" index="2"]
@@ -366,7 +336,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_2nr1i")
+process_material = ExtResource("3_ku1u8")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="RightParticles" type="GPUParticles3D" parent="SandfallParticles/Sandfall3" index="1"]
@@ -380,7 +350,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_2nr1i")
+process_material = ExtResource("3_ku1u8")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="CornerParticleGroup1" parent="SandfallParticles" index="3" instance=ExtResource("4_bpbt4")]
@@ -408,7 +378,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_5qb4q")
 
 [node name="SparkParticles" type="GPUParticles3D" parent="SandfallParticles/CornerParticleGroup1" index="3"]
@@ -422,7 +392,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup1" index="4"]
@@ -455,7 +425,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_5qb4q")
 
 [node name="SparkParticles" type="GPUParticles3D" parent="SandfallParticles/CornerParticleGroup2" index="3"]
@@ -469,7 +439,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup2" index="4"]
@@ -502,7 +472,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_5qb4q")
 
 [node name="SparkParticles" type="GPUParticles3D" parent="SandfallParticles/CornerParticleGroup3" index="3"]
@@ -516,7 +486,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup3" index="4"]
@@ -549,7 +519,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_5qb4q")
 
 [node name="SparkParticles" type="GPUParticles3D" parent="SandfallParticles/CornerParticleGroup4" index="3"]
@@ -563,7 +533,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup4" index="4"]
@@ -596,7 +566,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_5qb4q")
 
 [node name="SparkParticles" type="GPUParticles3D" parent="SandfallParticles/CornerParticleGroup5" index="3"]
@@ -610,7 +580,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup5" index="4"]
@@ -643,7 +613,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_5qb4q")
 
 [node name="SparkParticles" type="GPUParticles3D" parent="SandfallParticles/CornerParticleGroup6" index="3"]
@@ -657,7 +627,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_oclrk")
+process_material = ExtResource("7_votfv")
 draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup6" index="4"]

@@ -192,7 +192,7 @@ script = ExtResource("1_c3660")
 animator = NodePath("AnimationPlayer")
 shaderCacheText = NodePath("ShaderCache/ProgressLabel")
 meshInstances = [NodePath("ShaderCache/SubViewportContainer/SubViewport/SolidShadow"), NodePath("ShaderCache/SubViewportContainer/SubViewport/TransparentShadow"), NodePath("ShaderCache/SubViewportContainer/SubViewport/SolidNoShadow"), NodePath("ShaderCache/SubViewportContainer/SubViewport/TransparentNoShadow")]
-particles = NodePath("ShaderCache/SubViewportContainer/SubViewport/Particles")
+particles = [NodePath("ShaderCache/SubViewportContainer/SubViewport/Particles"), NodePath("ShaderCache/SubViewportContainer/SubViewport/ParticlesNoShadow")]
 
 [node name="Logo" type="Control" parent="."]
 layout_mode = 1
@@ -275,29 +275,43 @@ transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
 
 [node name="SolidShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.75, 0)
+extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_qptrl")
 skeleton = NodePath("../../../..")
 
 [node name="TransparentNoShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, -0.75, 0)
-transparency = 0.3
+transparency = 0.5
 cast_shadow = 0
+extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_qptrl")
 skeleton = NodePath("../../../..")
 
 [node name="SolidNoShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, -0.75, 0)
 cast_shadow = 0
+extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_qptrl")
 skeleton = NodePath("../../../..")
 
 [node name="TransparentShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.75, 0)
 transparency = 0.5
+extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_qptrl")
 skeleton = NodePath("../../../..")
 
 [node name="Particles" type="GPUParticles3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+extra_cull_margin = 16384.0
+emitting = false
+preprocess = 10.0
+fixed_fps = 60
+fract_delta = false
+draw_pass_1 = SubResource("QuadMesh_avxiy")
+
+[node name="ParticlesNoShadow" type="GPUParticles3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
+cast_shadow = 0
+extra_cull_margin = 16384.0
 emitting = false
 preprocess = 10.0
 fixed_fps = 60

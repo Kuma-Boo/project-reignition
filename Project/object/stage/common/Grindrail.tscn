@@ -1,34 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://dvoongbmetjfh"]
+[gd_scene load_steps=6 format=3 uid="uid://dvoongbmetjfh"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/GrindRail.cs" id="1_k4svk"]
 [ext_resource type="AudioStream" uid="uid://n4glservh4l2" path="res://sound/sfx/objects/grind rail.wav" id="2_p52bi"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_fogeh"]
-
-[sub_resource type="Gradient" id="Gradient_xonva"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_k7plw"]
-gradient = SubResource("Gradient_xonva")
-width = 64
-
-[sub_resource type="Curve" id="Curve_omd8m"]
-_data = [Vector2(0, 0), 0.0, 9.55266, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_sx00t"]
-width = 64
-curve = SubResource("Curve_omd8m")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4ppof"]
-direction = Vector3(0, 0.1, 1)
-spread = 20.0
-flatness = 0.5
-initial_velocity_min = 5.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, 0, 0)
-scale_max = 2.0
-scale_curve = SubResource("CurveTexture_sx00t")
-color_ramp = SubResource("GradientTexture1D_k7plw")
+[ext_resource type="Material" uid="uid://3j0tx2hxvynp" path="res://object/stage/common/resource/model/material/Grindrail Sparks Process Material.tres" id="3_oi74r"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_qnfqm"]
 material = ExtResource("3_fogeh")
@@ -62,7 +37,7 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 local_coords = true
 transform_align = 2
-process_material = SubResource("ParticleProcessMaterial_4ppof")
+process_material = ExtResource("3_oi74r")
 draw_pass_1 = SubResource("QuadMesh_qnfqm")
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]

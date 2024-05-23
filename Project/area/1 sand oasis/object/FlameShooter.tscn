@@ -1,9 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://dnfwvf2akhf1v"]
+[gd_scene load_steps=18 format=3 uid="uid://dnfwvf2akhf1v"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
 [ext_resource type="PackedScene" uid="uid://b1tirama0dt1b" path="res://area/1 sand oasis/object/model/FlameShooter.gltf" id="1_wwv3q"]
+[ext_resource type="Material" uid="uid://bbinn23j8d0we" path="res://area/1 sand oasis/data/material/Flame Shooter Base Process Material.tres" id="3_4n1tk"]
 [ext_resource type="Material" uid="uid://ckje67air1flv" path="res://area/1 sand oasis/data/particle/material/Flame Shooter Base Flame.tres" id="4_yfx5b"]
 [ext_resource type="Material" uid="uid://d200b5pyic62o" path="res://area/1 sand oasis/data/particle/material/Flame Shooter Explosion Flame.tres" id="5_2kp5f"]
+[ext_resource type="Material" uid="uid://c640g0eqwoeu3" path="res://area/1 sand oasis/data/material/Flame Shooter Explosion Process Material.tres" id="5_el5o5"]
 [ext_resource type="AudioStream" uid="uid://bs3ovsaon27bd" path="res://sound/sfx/objects/flame shooter.wav" id="5_kt73t"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_76o3t"]
 
@@ -14,23 +16,6 @@ radius = 0.4
 height = 5.0
 radius = 0.4
 
-[sub_resource type="Gradient" id="Gradient_hevx0"]
-offsets = PackedFloat32Array(0, 0.135231, 0.871886, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.868327, 0.868327, 0.868327, 1, 0.988772, 0.988772, 0.988772, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_31dby"]
-gradient = SubResource("Gradient_hevx0")
-width = 64
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rmjwo"]
-gravity = Vector3(0, 0, 0)
-attractor_interaction_enabled = false
-color = Color(1, 0.921569, 0.713726, 1)
-color_ramp = SubResource("GradientTexture1D_31dby")
-anim_speed_min = 1.0
-anim_speed_max = 1.0
-anim_offset_max = 1.0
-
 [sub_resource type="QuadMesh" id="QuadMesh_dr313"]
 material = ExtResource("4_yfx5b")
 size = Vector2(0.4, 1)
@@ -40,14 +25,6 @@ center_offset = Vector3(0, 0.3, 0)
 material = ExtResource("4_yfx5b")
 size = Vector2(2, 4)
 center_offset = Vector3(0, 2, 0)
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tiero"]
-lifetime_randomness = 0.4
-gravity = Vector3(0, 0, 0)
-attractor_interaction_enabled = false
-scale_max = 1.2
-anim_speed_min = 1.0
-anim_speed_max = 1.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_gcb82"]
 material = ExtResource("5_2kp5f")
@@ -198,6 +175,7 @@ _data = {
 [node name="FlameShooter" type="Node3D" node_paths=PackedStringArray("animator", "timer")]
 script = ExtResource("1_srdx0")
 "Current State" = 0
+"Auto Advance" = true
 "Start Time" = 0.0
 "State Lengths/inactive" = 0.5
 "State Lengths/active" = 1.0
@@ -235,7 +213,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-0.4, -0.5, -0.4, 0.8, 1.5, 0.8)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_rmjwo")
+process_material = ExtResource("3_4n1tk")
 draw_pass_1 = SubResource("QuadMesh_dr313")
 
 [node name="AttackFlameBase" type="GPUParticles3D" parent="VFX"]
@@ -251,7 +229,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_rmjwo")
+process_material = ExtResource("3_4n1tk")
 draw_pass_1 = SubResource("QuadMesh_qbdct")
 
 [node name="AttackFlameExplosion" type="GPUParticles3D" parent="VFX"]
@@ -267,7 +245,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_tiero")
+process_material = ExtResource("5_el5o5")
 draw_pass_1 = SubResource("QuadMesh_gcb82")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]

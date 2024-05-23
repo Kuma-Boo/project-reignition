@@ -1,22 +1,31 @@
-[gd_scene load_steps=83 format=3 uid="uid://rh85bh20fk6r"]
+[gd_scene load_steps=53 format=3 uid="uid://rh85bh20fk6r"]
 
 [ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
 [ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="2_onhwc"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_6ikv1"]
+[ext_resource type="Material" uid="uid://bqu7wt3ng1x5a" path="res://object/enemy/majin/data/particle/material/Majin Ember Charge Process Material.tres" id="3_pspvd"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_p44e7"]
+[ext_resource type="Material" uid="uid://8ykb6jg6tblb" path="res://object/enemy/majin/data/particle/material/Majin Flame Charge Process Material.tres" id="5_fva2p"]
 [ext_resource type="AudioStream" uid="uid://cf1drci6lgvsm" path="res://sound/sfx/enemy/majin/majin flame attack.wav" id="5_xr0sx"]
 [ext_resource type="Material" uid="uid://efv6ms0uv2sg" path="res://object/enemy/majin/data/particle/material/Majin Flame.tres" id="6_t5qur"]
+[ext_resource type="Material" uid="uid://nwln85mverv7" path="res://object/enemy/majin/data/particle/material/Majin Flame Process Material.tres" id="7_2ja3p"]
 [ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="7_6w2wy"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
 [ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="8_4kwy5"]
 [ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="8_a28yl"]
+[ext_resource type="Material" uid="uid://bwvsqjnpry0xm" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="8_awltq"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="9_4bnd7"]
 [ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="9_6teur"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://byf5qdjpi8ur4" path="res://object/enemy/majin/data/animation/MajinAnimationTreeRoot.tres" id="9_osrkc"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="9_yw7li"]
+[ext_resource type="Material" uid="uid://b4vmiws2hdmhs" path="res://object/enemy/majin/data/particle/material/Majin Spawn Smoke Process Material.tres" id="10_xll44"]
 [ext_resource type="AudioStream" uid="uid://jpjrq8guepkq" path="res://sound/sfx/enemy/majin/majin stagger.wav" id="12_2cawu"]
 [ext_resource type="AudioStream" uid="uid://cvn3dgomxnoym" path="res://sound/sfx/enemy/majin/majin strike.wav" id="13_470oy"]
+[ext_resource type="Material" uid="uid://chovk7baskmwi" path="res://object/enemy/majin/data/particle/material/Majin Defeat Letters Process Material.tres" id="13_imgj3"]
+[ext_resource type="Material" uid="uid://boc260pumvtga" path="res://object/enemy/majin/data/particle/material/Majin Defeat Smoke Process Material.tres" id="14_05hpu"]
 [ext_resource type="AudioStream" uid="uid://cttipl3ihmbr5" path="res://sound/sfx/enemy/majin/majin travel.wav" id="14_41brs"]
+[ext_resource type="Material" uid="uid://c5pcrpavpyreh" path="res://object/enemy/majin/data/particle/material/Majin Defeat Process Material.tres" id="16_ck7oa"]
+[ext_resource type="Material" uid="uid://do5esuoehqh56" path="res://object/enemy/majin/data/particle/material/Majin Flash Process Material.tres" id="24_rwypk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qrrup"]
 radius = 0.4
@@ -33,109 +42,16 @@ radius = 1.8
 height = 30.0
 radius = 50.0
 
-[sub_resource type="Curve" id="22"]
-min_value = -20.0
-max_value = 5.0
-_data = [Vector2(0, 0), 0.0, 22.4655, 0, 0, Vector2(0.514249, 5), 0.0, 0.0, 0, 0, Vector2(1, -20), -121.932, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="23"]
-curve = SubResource("22")
-
-[sub_resource type="Curve" id="Curve_kdg3s"]
-_data = [Vector2(0, 0), 0.0, 6.5, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -5.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_sqmcm"]
-width = 64
-curve = SubResource("Curve_kdg3s")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_awomk"]
-emission_shape = 6
-emission_ring_axis = Vector3(0, 0, 1)
-emission_ring_height = 1.0
-emission_ring_radius = 1.0
-emission_ring_inner_radius = 0.5
-direction = Vector3(0, 1, 0)
-gravity = Vector3(0, 0, 0)
-radial_accel_min = -5.0
-radial_accel_max = 5.0
-radial_accel_curve = SubResource("23")
-scale_min = 0.1
-scale_max = 0.2
-scale_curve = SubResource("CurveTexture_sqmcm")
-
 [sub_resource type="PlaneMesh" id="16"]
 material = ExtResource("3_6ikv1")
 size = Vector2(1, 4)
 center_offset = Vector3(0, 2, 0)
 orientation = 2
 
-[sub_resource type="Gradient" id="Gradient_j3hw8"]
-offsets = PackedFloat32Array(0, 0.0547112, 0.826748, 0.942249)
-colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_levwl"]
-gradient = SubResource("Gradient_j3hw8")
-width = 64
-
-[sub_resource type="Curve" id="Curve_t4f8n"]
-_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_q78c8"]
-width = 64
-curve = SubResource("Curve_t4f8n")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vt4pw"]
-angle_min = -180.0
-angle_max = 180.0
-direction = Vector3(0, 1, 0)
-spread = 30.0
-initial_velocity_min = 1.0
-initial_velocity_max = 2.0
-gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_q78c8")
-color = Color(0.980392, 0.443137, 0, 1)
-color_ramp = SubResource("GradientTexture1D_levwl")
-
 [sub_resource type="PlaneMesh" id="20"]
 material = ExtResource("6_t5qur")
 size = Vector2(1, 1)
 orientation = 2
-
-[sub_resource type="Gradient" id="Gradient_n8pk7"]
-offsets = PackedFloat32Array(0.0759878, 0.142857, 0.896657, 1)
-colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_g4afi"]
-gradient = SubResource("Gradient_n8pk7")
-width = 64
-
-[sub_resource type="Curve" id="Curve_msxut"]
-_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.28457, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_5rct8"]
-width = 64
-curve = SubResource("Curve_msxut")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mu1y7"]
-angle_min = -180.0
-angle_max = 180.0
-direction = Vector3(0, 0, 1)
-spread = 0.0
-initial_velocity_min = 25.0
-initial_velocity_max = 25.0
-angular_velocity_min = -720.0
-angular_velocity_max = 720.0
-gravity = Vector3(0, 0, 0)
-damping_min = 10.0
-damping_max = 10.0
-scale_min = 2.5
-scale_max = 2.5
-scale_curve = SubResource("CurveTexture_5rct8")
-color_ramp = SubResource("GradientTexture1D_g4afi")
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_l57xs"]
 height = 4.0
@@ -147,81 +63,10 @@ height = 4.0
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ft0xj"]
 radius = 0.8
 
-[sub_resource type="Curve" id="Curve_6880i"]
-_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_c4uk2"]
-width = 64
-curve = SubResource("Curve_6880i")
-
-[sub_resource type="Curve" id="Curve_bcysb"]
-_data = [Vector2(0, 0.2), 0.0, 3.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), -5.66667, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_dwnsb"]
-width = 64
-curve = SubResource("Curve_bcysb")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ekgjg"]
-lifetime_randomness = 0.2
-emission_shape = 2
-emission_sphere_radius = 3.0
-angle_min = -180.0
-angle_max = 180.0
-direction = Vector3(0, 1, 0)
-spread = 0.0
-initial_velocity_min = 2.0
-initial_velocity_max = 4.0
-angular_velocity_min = 100.0
-angular_velocity_max = 360.0
-gravity = Vector3(0, 0, 0)
-linear_accel_min = -10.0
-linear_accel_max = -8.0
-radial_accel_min = -20.0
-radial_accel_max = -10.0
-radial_accel_curve = SubResource("CurveTexture_c4uk2")
-tangential_accel_min = -20.0
-tangential_accel_max = -10.0
-scale_min = 0.8
-scale_max = 1.2
-scale_curve = SubResource("CurveTexture_dwnsb")
-color = Color(0.933333, 0.866667, 1, 1)
-anim_offset_max = 1.0
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_balcf"]
 material = ExtResource("4_p44e7")
 size = Vector2(1, 1)
 orientation = 2
-
-[sub_resource type="Gradient" id="Gradient_731c8"]
-offsets = PackedFloat32Array(0, 0.0769231, 0.759615, 0.947115)
-colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_5xnth"]
-gradient = SubResource("Gradient_731c8")
-width = 64
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7bsia"]
-lifetime_randomness = 0.5
-emission_shape = 6
-emission_ring_axis = Vector3(0, 1, 0)
-emission_ring_height = 0.0
-emission_ring_radius = 0.5
-emission_ring_inner_radius = 0.2
-angle_min = -180.0
-angle_max = 180.0
-direction = Vector3(0, 1, 0)
-spread = 10.0
-initial_velocity_min = 2.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, 0, 0)
-damping_min = 8.0
-damping_max = 8.0
-scale_min = 1.5
-scale_max = 2.0
-color = Color(0.294118, 0.294118, 0.294118, 1)
-color_ramp = SubResource("GradientTexture1D_5xnth")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eiiup"]
 transparency = 1
@@ -238,122 +83,11 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_txkmg"]
 material = SubResource("StandardMaterial3D_eiiup")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_783gj"]
-lifetime_randomness = 0.2
-emission_shape = 6
-emission_ring_axis = Vector3(0, 1, 0)
-emission_ring_height = 1.5
-emission_ring_radius = 0.0
-emission_ring_inner_radius = 0.0
-angle_min = -180.0
-angle_max = 180.0
-direction = Vector3(0, 1, 0)
-spread = 80.0
-initial_velocity_min = 4.0
-initial_velocity_max = 8.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.8
-scale_max = 1.2
-scale_curve = SubResource("CurveTexture_dwnsb")
-color = Color(0.933333, 0.698039, 0.0431373, 1)
-anim_offset_max = 1.0
-
-[sub_resource type="Gradient" id="Gradient_58f0m"]
-offsets = PackedFloat32Array(0, 0.0456621, 1)
-colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_y1b4x"]
-gradient = SubResource("Gradient_58f0m")
-width = 64
-
-[sub_resource type="Curve" id="Curve_w2bwe"]
-_data = [Vector2(0, 0.2), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_c5dsq"]
-width = 64
-curve = SubResource("Curve_w2bwe")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o1erl"]
-emission_shape = 6
-emission_ring_axis = Vector3(0, 1, 0)
-emission_ring_height = 1.5
-emission_ring_radius = 1.0
-emission_ring_inner_radius = 0.5
-angle_max = 360.0
-direction = Vector3(0, 1, 0)
-spread = 20.0
-initial_velocity_min = 2.0
-initial_velocity_max = 2.0
-gravity = Vector3(0, 0, 0)
-damping_min = 1.0
-damping_max = 1.0
-scale_min = 8.0
-scale_max = 10.0
-scale_curve = SubResource("CurveTexture_c5dsq")
-color = Color(1, 0.701961, 0, 1)
-color_ramp = SubResource("GradientTexture1D_y1b4x")
-
 [sub_resource type="QuadMesh" id="QuadMesh_p17fq"]
 material = ExtResource("8_a28yl")
 
-[sub_resource type="Gradient" id="Gradient_253g5"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_kahv6"]
-gradient = SubResource("Gradient_253g5")
-width = 64
-
-[sub_resource type="Curve" id="Curve_jvq1l"]
-_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_6dgam"]
-width = 64
-curve = SubResource("Curve_jvq1l")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3crcx"]
-emission_shape = 6
-emission_ring_axis = Vector3(0, 1, 0)
-emission_ring_height = 1.0
-emission_ring_radius = 0.0
-emission_ring_inner_radius = 0.0
-angle_max = 360.0
-direction = Vector3(0, 1, 0)
-spread = 30.0
-initial_velocity_min = 4.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, 0, 0)
-scale_min = 2.0
-scale_max = 4.0
-scale_curve = SubResource("CurveTexture_6dgam")
-color = Color(1, 0.713726, 0.278431, 1)
-color_ramp = SubResource("GradientTexture1D_kahv6")
-
 [sub_resource type="QuadMesh" id="QuadMesh_bbrsu"]
 material = ExtResource("9_yw7li")
-
-[sub_resource type="Gradient" id="Gradient_2rcfc"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ck6w1"]
-gradient = SubResource("Gradient_2rcfc")
-width = 64
-
-[sub_resource type="Curve" id="Curve_nqgxv"]
-_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_yoqy1"]
-width = 64
-curve = SubResource("Curve_nqgxv")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_63pau"]
-gravity = Vector3(0, 0, 0)
-scale_min = 7.0
-scale_max = 7.0
-scale_curve = SubResource("CurveTexture_yoqy1")
-color_ramp = SubResource("GradientTexture1D_ck6w1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_t1f3y"]
 material = ExtResource("7_6w2wy")
@@ -1161,7 +895,7 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 local_coords = true
 transform_align = 3
-process_material = SubResource("ParticleProcessMaterial_awomk")
+process_material = ExtResource("3_pspvd")
 draw_pass_1 = SubResource("16")
 
 [node name="FlameCharge" type="GPUParticles3D" parent="FX/FireFX"]
@@ -1177,7 +911,7 @@ explosiveness = 0.2
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
-process_material = SubResource("ParticleProcessMaterial_vt4pw")
+process_material = ExtResource("5_fva2p")
 draw_pass_1 = SubResource("20")
 
 [node name="FlameAttack" type="GPUParticles3D" parent="FX/FireFX"]
@@ -1193,7 +927,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_mu1y7")
+process_material = ExtResource("7_2ja3p")
 draw_pass_1 = SubResource("20")
 
 [node name="FlameHitbox" type="Area3D" parent="FX/FireFX"]
@@ -1243,7 +977,7 @@ randomness = 0.4
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
-process_material = SubResource("ParticleProcessMaterial_ekgjg")
+process_material = ExtResource("8_awltq")
 draw_pass_1 = SubResource("PlaneMesh_balcf")
 
 [node name="SpawnSmoke" type="GPUParticles3D" parent="FX/SpawnFX"]
@@ -1257,7 +991,7 @@ one_shot = true
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
-process_material = SubResource("ParticleProcessMaterial_7bsia")
+process_material = ExtResource("10_xll44")
 draw_pass_1 = SubResource("QuadMesh_txkmg")
 
 [node name="SpawnSFX" type="AudioStreamPlayer3D" parent="FX/SpawnFX"]
@@ -1285,7 +1019,7 @@ randomness = 0.4
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
-process_material = SubResource("ParticleProcessMaterial_783gj")
+process_material = ExtResource("13_imgj3")
 draw_pass_1 = SubResource("PlaneMesh_balcf")
 
 [node name="DefeatSmoke" type="GPUParticles3D" parent="FX/DefeatFX"]
@@ -1300,7 +1034,7 @@ explosiveness = 0.6
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
-process_material = SubResource("ParticleProcessMaterial_o1erl")
+process_material = ExtResource("14_05hpu")
 draw_pass_1 = SubResource("QuadMesh_p17fq")
 
 [node name="DefeatSplatter" type="GPUParticles3D" parent="FX/DefeatFX"]
@@ -1314,7 +1048,7 @@ explosiveness = 0.4
 fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
-process_material = SubResource("ParticleProcessMaterial_3crcx")
+process_material = ExtResource("16_ck7oa")
 draw_pass_1 = SubResource("QuadMesh_bbrsu")
 
 [node name="StaggerSFX" type="AudioStreamPlayer3D" parent="FX"]
@@ -1351,7 +1085,7 @@ fixed_fps = 60
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_63pau")
+process_material = ExtResource("24_rwypk")
 draw_pass_1 = SubResource("QuadMesh_t1f3y")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

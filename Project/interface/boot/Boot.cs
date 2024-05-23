@@ -13,7 +13,7 @@ namespace Project.Interface
 		[Export]
 		private MeshInstance3D[] meshInstances;
 		[Export]
-		private GpuParticles3D particles;
+		private GpuParticles3D[] particles;
 
 		private int shaderCompilationIndex = -1;
 		private List<string> tresFiles = new();
@@ -40,12 +40,16 @@ namespace Project.Interface
 				Material m = ResourceLoader.Load<Material>(tresFiles[shaderCompilationIndex], MATERIAL_HINT);
 				if (m is ParticleProcessMaterial)
 				{
-					particles.ProcessMaterial = m;
-					particles.Restart();
+					for (int j = 0; j < particles.Length; j++)
+					{
+						particles[j].ProcessMaterial = m;
+						particles[j].Restart();
+					}
 				}
 				else
 				{
-					particles.MaterialOverride = m;
+					for (int j = 0; j < particles.Length; j++)
+						particles[j].MaterialOverride = m;
 
 					for (int j = 0; j < meshInstances.Length; j++)
 						meshInstances[j].MaterialOverride = m;
