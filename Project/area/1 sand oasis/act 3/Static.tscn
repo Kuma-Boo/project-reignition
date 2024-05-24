@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://7kcasi6v1odv"]
+[gd_scene load_steps=25 format=3 uid="uid://7kcasi6v1odv"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fxxlg"]
 [ext_resource type="PackedScene" uid="uid://ctpgc4qaiar68" path="res://area/1 sand oasis/act 3/environment/collision/Collision.tscn" id="1_wbafh"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="5_qbof6"]
 [ext_resource type="PackedScene" uid="uid://cymqt8ap7er5w" path="res://area/1 sand oasis/act 3/environment/03LowerHall.tscn" id="6_86hsj"]
 [ext_resource type="Resource" uid="uid://3v6x6mv157fq" path="res://area/1 sand oasis/act 3/camera/HallCam.tres" id="6_gwtbf"]
+[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="7_77hua"]
 [ext_resource type="PackedScene" uid="uid://dj37itfdjb74j" path="res://area/1 sand oasis/act 3/environment/02Descent.tscn" id="7_dg1ex"]
 [ext_resource type="Curve3D" uid="uid://27uwgglqp1g6" path="res://area/1 sand oasis/act 3/environment/path/MainPath.tres" id="8_5ae3c"]
 [ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="10_f773a"]
@@ -494,9 +495,45 @@ settings = ExtResource("6_gwtbf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_kh3tl")
 
+[node name="Checkpoint" type="Node3D" parent="Trigger"]
+
+[node name="Checkpoint1" parent="Trigger/Checkpoint" instance=ExtResource("3_vakpl")]
+transform = Transform3D(0.928486, 0, 0.371368, 0, 1, 0, -0.371368, 0, 0.928486, 29.198, -10, 75.555)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/Checkpoint1"]
+script = ExtResource("7_77hua")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Checkpoint1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_nwi4p")
+
+[node name="Checkpoint2" parent="Trigger/Checkpoint" instance=ExtResource("3_vakpl")]
+transform = Transform3D(-0.933136, 0, 0.359524, 0, 1, 0, -0.359524, 0, -0.933136, -40.2194, -50.0001, 103.573)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/Checkpoint2"]
+script = ExtResource("7_77hua")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Checkpoint2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_nwi4p")
+
+[node name="Checkpoint3" parent="Trigger/Checkpoint" instance=ExtResource("3_vakpl")]
+transform = Transform3D(-0.933136, 0, 0.359524, 0, 1, 0, -0.359524, 0, -0.933136, 21.7402, -50.0001, -55.8079)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/Checkpoint3"]
+script = ExtResource("7_77hua")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Checkpoint3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_nwi4p")
+
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
 
 [node name="02L" parent="Visuals/CullingMap" instance=ExtResource("3_vakpl")]
 transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 39.784, -10, 102.58)
