@@ -20,6 +20,8 @@ namespace Project.Gameplay
 		private AnimationNodeTransition stateTransition;
 		/// <summary> Transition node for switching between ground and air trees. </summary>
 		private AnimationNodeTransition groundTransition;
+		/// <summary> Transition node for switching between crouch and moving. </summary>
+		private AnimationNodeTransition crouchTransition;
 
 		/// <summary> Determines facing directions for certain animation actions. </summary>
 		private bool isFacingRight;
@@ -39,6 +41,7 @@ namespace Project.Gameplay
 			animationRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
 			stateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
 			groundTransition = animationRoot.GetNode("ground_transition") as AnimationNodeTransition;
+			crouchTransition = (animationRoot.GetNode("ground_tree") as AnimationNodeBlendTree).GetNode("crouch_transition") as AnimationNodeTransition;
 			oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
 		}
 
@@ -386,12 +389,23 @@ namespace Project.Gameplay
 		private readonly StringName SLIDE_STATE_START = "slide-start";
 		private readonly StringName SLIDE_STATE_STOP = "slide-stop";
 		private readonly StringName CROUCH_TRANSITION = "parameters/ground_tree/crouch_transition/transition_request";
+		private readonly StringName CURRENT_CROUCH_STATE = "parameters/ground_tree/crouch_transition/current_state";
+
+		public bool IsCrouchingActive => (StringName)animationTree.Get(CURRENT_CROUCH_STATE) == ENABLED_CONSTANT;
 		public void StartCrouching()
 		{
 			if (Character.ActionState == CharacterController.ActionStates.Sliding)
+			{
+				crouchTransition.XfadeTime = .05;
 				CrouchStatePlayback.Travel(SLIDE_STATE_START);
+			}
 			else
+			{
+
 				CrouchStatePlayback.Travel(CROUCH_STATE_START);
+				crouchTransition.XfadeTime = .1;
+			}
+
 			animationTree.Set(CROUCH_TRANSITION, ENABLED_CONSTANT);
 		}
 
@@ -405,7 +419,16 @@ namespace Project.Gameplay
 
 		public void StopCrouching()
 		{
+			crouchTransition.XfadeTime = 0.0;
 			CrouchStatePlayback.Travel(CROUCH_STATE_STOP);
+		}
+
+
+		public void CrouchToMoveTransition()
+		{
+			// Limit blending to the time remaining in current animation
+			float max = CrouchStatePlayback.GetCurrentLength() - CrouchStatePlayback.GetCurrentPlayPosition();
+			crouchTransition.XfadeTime = Mathf.Clamp(0.2, 0, max);
 			animationTree.Set(CROUCH_TRANSITION, DISABLED_CONSTANT);
 		}
 

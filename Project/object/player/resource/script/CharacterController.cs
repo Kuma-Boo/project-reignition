@@ -84,7 +84,10 @@ namespace Project.Gameplay
 		private void SetActionState(ActionStates newState)
 		{
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
-				StopCrouching();
+			{
+				// TODO Alter hitbox
+				Animator.StopCrouching();
+			}
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
 			{
 				Effect.StopSpinFX();
@@ -453,6 +456,11 @@ namespace Project.Gameplay
 			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); // Store this for turning function
 
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding || ActionState == ActionStates.Backflip) return;
+			if (Animator.IsCrouchingActive)
+			{
+				if (Mathf.IsZeroApprox(InputVector.LengthSquared()) && turnInstantly) return;
+				Animator.CrouchToMoveTransition();
+			}
 
 			// Override to speedbreak speed
 			if (Skills.IsSpeedBreakActive)
@@ -544,6 +552,8 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
 			if (ActionState == ActionStates.Crouching || MoveSpeed == 0) return;
+			if (Animator.IsCrouchingActive)
+				turnInstantly = true;
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			bool overrideFacingDirection = IsLockoutActive &&
@@ -969,8 +979,6 @@ namespace Project.Gameplay
 			if (!Input.IsActionPressed("button_action"))
 				ResetActionState();
 		}
-
-		private void StopCrouching() => Animator.StopCrouching();
 		#endregion
 
 		#region Stomp
