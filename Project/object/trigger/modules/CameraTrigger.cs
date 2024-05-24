@@ -35,12 +35,15 @@ namespace Project.Gameplay.Triggers
 
 		public void UpdateStaticData(CameraBlendData data)
 		{
-			if (!data.SettingsResource.useStaticPosition) return;
+			if (data.SettingsResource != settings) return;
 
-			if (data.SettingsResource.copyPosition)
-				data.StaticPosition = GlobalPosition;
-			else
-				data.StaticPosition = data.SettingsResource.staticPosition;
+			if (data.SettingsResource.useStaticPosition)
+			{
+				if (data.SettingsResource.copyPosition)
+					data.StaticPosition = GlobalPosition;
+				else
+					data.StaticPosition = data.SettingsResource.staticPosition;
+			}
 
 			if (data.SettingsResource.copyRotation)
 				data.RotationBasis = GlobalBasis;
@@ -80,7 +83,7 @@ namespace Project.Gameplay.Triggers
 			if (Camera.ActiveSettings != settings) return; // Already overridden by a different trigger
 			if (Character.ActionState == CharacterController.ActionStates.Teleport) return;
 
-			Camera.UpdateCameraSettings(new CameraBlendData()
+			Camera.UpdateCameraSettings(new()
 			{
 				BlendTime = Mathf.IsEqualApprox(deactivationTransitionTime, -1) ? transitionTime : deactivationTransitionTime,
 				SettingsResource = previousSettings,

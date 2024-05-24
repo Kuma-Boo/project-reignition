@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://tvjx2wghc06t"]
+[gd_scene load_steps=80 format=3 uid="uid://tvjx2wghc06t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://wpj0smmgjk01" path="res://area/1 sand oasis/act 1/environment/sandfall event/SandfallEvent.tscn" id="13_6o732"]
 [ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="14_ej622"]
 [ext_resource type="Resource" uid="uid://djudi0tysqcu8" path="res://area/1 sand oasis/act 1/camera/ZipperCam.tres" id="15_68xag"]
+[ext_resource type="Resource" uid="uid://ck1uq7jg5cvr3" path="res://area/1 sand oasis/act 1/camera/UTurnCam.tres" id="15_f08sq"]
 [ext_resource type="Resource" uid="uid://j5fi2xlxml4n" path="res://area/1 sand oasis/act 1/camera/WallClimbBottomCam.tres" id="16_td0s2"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="17_vcxwi"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="19_gytq8"]
@@ -35,6 +36,8 @@
 [ext_resource type="Resource" uid="uid://dx47u8sre674v" path="res://area/1 sand oasis/act 1/camera/SidleCornerCam.tres" id="24_nfyes"]
 [ext_resource type="Resource" uid="uid://cfbyfp0sae1jm" path="res://area/1 sand oasis/act 1/camera/HallCam.tres" id="24_qtnck"]
 [ext_resource type="Resource" uid="uid://bx2aypq8wpw5o" path="res://area/1 sand oasis/act 1/camera/WallClimbTopCam.tres" id="26_k5jwq"]
+[ext_resource type="Resource" uid="uid://cb8bhkh42g1kt" path="res://area/1 sand oasis/act 1/camera/InteriorEntranceCam.tres" id="27_1iqnr"]
+[ext_resource type="Resource" uid="uid://men4otfrvbhp" path="res://area/1 sand oasis/act 1/camera/UTurnHallCam.tres" id="27_xwlvb"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="27_ypwqo"]
 [ext_resource type="Resource" uid="uid://dd0ulcjl72sfi" path="res://resource/preset/camera/common/WallForwardCam.tres" id="27_ywd2q"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="28_5kt56"]
@@ -658,7 +661,7 @@ path = NodePath("../../../../Path/BeachPath")
 [node name="Camera" type="Node3D" parent="Trigger/Object/UTurnTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 14, -5)
 script = ExtResource("13_3nlok")
-settings = ExtResource("20_0g5qj")
+settings = ExtResource("15_f08sq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/UTurnTrigger"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
@@ -834,17 +837,31 @@ previousSettings = ExtResource("29_gte7b")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
-[node name="Hall4Trigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
-transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -85.3005, -40, -312.115)
+[node name="UTurnHallTrigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.872696, -44.6, -436.04)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CameraTrigger" type="Node3D" parent="Trigger/Camera/Hall4Trigger"]
+[node name="CameraTrigger" type="Node3D" parent="Trigger/Camera/UTurnHallTrigger"]
 script = ExtResource("13_3nlok")
 transitionTime = 0.4
-settings = ExtResource("24_qtnck")
+settings = ExtResource("27_xwlvb")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall4Trigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/UTurnHallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_84q52")
+
+[node name="EntranceTrigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -86.1687, -40, -307.191)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CameraTrigger" type="Node3D" parent="Trigger/Camera/EntranceTrigger"]
+script = ExtResource("13_3nlok")
+transitionTime = 0.4
+settings = ExtResource("27_1iqnr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/EntranceTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
@@ -1331,6 +1348,7 @@ reflectionMaterials = [ExtResource("29_lfji7")]
 [connection signal="Activated" from="Trigger/Object/HallOneWayTrigger" to="Collision/HallOneWay" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/UTurnTrigger" to="Trigger/Object/UTurnTrigger/UTurnPath" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/UTurnTrigger" to="Trigger/Object/UTurnTrigger/Camera" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/UTurnTrigger" to="Collision/UTurnOneWay" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/UTurnTrigger" to="Trigger/Object/UTurnTrigger/BeachPath" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/WallClimbTrigger" to="Trigger/Object/WallClimbTrigger/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/WallClimbTrigger" to="Trigger/Object/WallClimbTrigger/Path" method="Activate"]
