@@ -25,6 +25,9 @@ namespace Project.Gameplay
 
 		/// <summary> Determines facing directions for certain animation actions. </summary>
 		private bool isFacingRight;
+		/// <summary> Keeps track of the leading foot during run animations. </summary>
+		private bool isLeadingWithRightFoot;
+		private void SetLeadingFoot(bool value) => isLeadingWithRightFoot = value;
 
 		// For toggle transitions
 		private readonly StringName ENABLED_CONSTANT = "enabled";
@@ -267,8 +270,54 @@ namespace Project.Gameplay
 
 			groundTurnRatio = Mathf.Lerp(((Vector2)animationTree.Get(TURN_BLEND_PARAMETER)).X, groundTurnRatio, TURN_SMOOTHING); // Blend from animator
 			animationTree.Set(TURN_BLEND_PARAMETER, new Vector2(groundTurnRatio, Character.IsMovingBackward ? 0 : speedRatio));
+			UpdateBrake();
 		}
 
+
+		public bool IsBrakeAnimationActive { get; private set; }
+		private AnimationNodeStateMachinePlayback BrakeState => animationTree.Get(BRAKE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
+
+		private readonly StringName BRAKE_PLAYBACK = "parameters/ground_tree/brake_state/playback";
+		private readonly StringName BRAKE_TRIGGER_PARAMETER = "parameters/ground_tree/brake_trigger/request";
+		private readonly StringName BRAKE_ACTIVE_PARAMETER = "parameters/ground_tree/brake_trigger/active";
+		private readonly StringName BRAKE_START_STATE = "-start";
+		private readonly StringName BRAKE_STOP_STATE = "-stop";
+		private const float BRAKE_DEADZONE = 5f;
+
+		public void StartBrake()
+		{
+			if (IsBrakeAnimationActive) return; // Already active
+
+			if (!Character.IsOnGround) return; // Only animate when moving forward
+			if (Character.IsMovingBackward) return; // Only animate when moving forward
+			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < RUN_RATIO)
+				return;
+
+
+			isFacingRight = isLeadingWithRightFoot;
+			Character.Effect.PlayActionSFX(Character.Effect.SLIDE_SFX);
+			animationTree.Set(BRAKE_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			BrakeState.Travel(isFacingRight ? "r" + BRAKE_START_STATE : "l" + BRAKE_START_STATE);
+			IsBrakeAnimationActive = true;
+		}
+
+
+		public void UpdateBrake()
+		{
+			if (!IsBrakeAnimationActive) return; // Not braking
+
+			if (Character.MoveSpeed <= BRAKE_DEADZONE || Character.IsMovingBackward)
+				StopBrake();
+		}
+
+
+		public void StopBrake()
+		{
+			if (!IsBrakeAnimationActive) return; // Not braking
+
+			IsBrakeAnimationActive = false;
+			BrakeState.Travel(isFacingRight ? "r" + BRAKE_STOP_STATE : "l" + BRAKE_STOP_STATE);
+		}
 
 		/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
 		private float groundTurnRatio;
@@ -392,6 +441,7 @@ namespace Project.Gameplay
 		private readonly StringName CURRENT_CROUCH_STATE = "parameters/ground_tree/crouch_transition/current_state";
 
 		public bool IsCrouchingActive => (StringName)animationTree.Get(CURRENT_CROUCH_STATE) == ENABLED_CONSTANT;
+		public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SLIDE_STATE_START;
 		public void StartCrouching()
 		{
 			if (Character.ActionState == CharacterController.ActionStates.Sliding)
@@ -419,7 +469,11 @@ namespace Project.Gameplay
 
 		public void StopCrouching()
 		{
-			crouchTransition.XfadeTime = 0.0;
+			if (Character.ActionState == CharacterController.ActionStates.Sliding)
+				crouchTransition.XfadeTime = 0.2;
+			else
+				crouchTransition.XfadeTime = 0.0;
+
 			CrouchStatePlayback.Travel(CROUCH_STATE_STOP);
 		}
 
@@ -578,7 +632,7 @@ namespace Project.Gameplay
 		private readonly int GRINDSTEP_VARIATION_COUNT = 3;
 		public void StartGrindStep()
 		{
-			int index = Core.Runtime.randomNumberGenerator.RandiRange(1, GRINDSTEP_VARIATION_COUNT);
+			int index = Runtime.randomNumberGenerator.RandiRange(1, GRINDSTEP_VARIATION_COUNT);
 			string targetPose = isFacingRight ? "step-right-0" : "step-left-0";
 			GrindStepState.Start(targetPose + index.ToString(), true);
 			animationTree.Set(BALANCE_GRINDSTEP_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);

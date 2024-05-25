@@ -510,14 +510,17 @@ namespace Project.Gameplay
 				}
 			}
 
-			if (Mathf.IsZeroApprox(inputLength) || InputVector.IsZeroApprox()) // Basic slow down
+			if (Mathf.IsZeroApprox(inputLength) && !Animator.IsBrakeAnimationActive) // Basic slow down
 				MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, 0);
 			else
 			{
 				float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, inputAngle);
 				bool isTurningAround = deltaAngle > MAX_TURNAROUND_ANGLE;
-				if (isTurningAround) //Skid to a stop
+				if (isTurningAround || Animator.IsBrakeAnimationActive) //Skid to a stop
+				{
 					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, -1);
+					Animator.StartBrake();
+				}
 				else
 				{
 					if (IsLockoutActive && ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) //Zipper exception
@@ -930,7 +933,7 @@ namespace Project.Gameplay
 		private const float MAX_SLIDE_ADJUSTMENT = Mathf.Pi * .4f;
 		private void StartCrouching()
 		{
-			if (!IsOnWall && ((!IsMovingBackward && MoveSpeed != 0) || MoveSpeed >= Skills.SlideSettings.speed))
+			if (!IsOnWall && !IsMovingBackward && MoveSpeed != 0)
 			{
 				if (MoveSpeed <= Skills.SlideSettings.speed)
 					MoveSpeed = Skills.SlideSettings.speed;
@@ -976,7 +979,7 @@ namespace Project.Gameplay
 					MoveSpeed *= .5f;
 			}
 
-			if (!Input.IsActionPressed("button_action"))
+			if (!Input.IsActionPressed("button_action") && !Animator.IsSlideTransitionActive)
 				ResetActionState();
 		}
 		#endregion
