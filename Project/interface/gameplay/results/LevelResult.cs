@@ -36,7 +36,7 @@ namespace Project.Interface
 			if (animator.IsPlaying())
 			{
 				if (Input.IsActionJustPressed("button_jump")) // Skip animation
-					animator.Seek(animator.CurrentAnimationLength, true);
+					animator.Advance(animator.CurrentAnimationLength);
 			}
 			else if (Input.IsActionJustPressed("button_jump") ||
 				Input.IsActionJustPressed("button_action"))
