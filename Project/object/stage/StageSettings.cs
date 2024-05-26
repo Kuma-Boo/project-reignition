@@ -323,6 +323,7 @@ namespace Project.Gameplay
 			GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
 			BGMPlayer.StageMusicPaused = true;
+			Interface.PauseMenu.AllowPausing = false;
 			LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 
 			EmitSignal(SignalName.LevelCompleted);
