@@ -63,7 +63,7 @@ namespace Project.Gameplay
 			}
 			else if (CurrentTime <= Data.GoldTime && CurrentScore >= Data.GoldScore) // Perfect run
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime || CurrentScore >= Data.SilverScore) // Silver
+			else if (CurrentTime <= Data.SilverTime && CurrentScore >= Data.SilverScore) // Silver
 				rank = 2;
 			else if (CurrentTime <= Data.BronzeTime && CurrentScore >= Data.BronzeScore)
 				rank = 1;
