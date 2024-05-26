@@ -70,6 +70,11 @@ namespace Project.Gameplay
 			if (Character.IsDefeated) return;
 
 			UpdateGameplayCamera();
+		}
+
+
+		public override void _Process(double _)
+		{
 			if (OS.IsDebugBuild())
 				UpdateFreeCam();
 		}
@@ -477,7 +482,10 @@ namespace Project.Gameplay
 
 		#region Free Cam
 		private float freecamMovespeed = 20;
+		private Vector3 freecamMovementVector;
+		private Vector3 freecamVelocity;
 		private const float MOUSE_SENSITIVITY = .1f;
+		private const float FREE_CAM_ACCELERATION = .1f;
 
 		private bool isFreeCamEnabled;
 		private bool freeCamRotating;
@@ -526,18 +534,23 @@ namespace Project.Gameplay
 			else if (Input.IsKeyPressed(Key.Ctrl))
 				targetMoveSpeed *= .5f;
 
+			Vector3 targetDirection = new();
+
 			if (Input.IsKeyPressed(Key.E))
-				Camera.GlobalTranslate(Camera.Up() * targetMoveSpeed * PhysicsManager.normalDelta);
+				targetDirection += Camera.Up();
 			if (Input.IsKeyPressed(Key.Q))
-				Camera.GlobalTranslate(Camera.Down() * targetMoveSpeed * PhysicsManager.normalDelta);
+				targetDirection += Camera.Down();
 			if (Input.IsKeyPressed(Key.W))
-				Camera.GlobalTranslate(Camera.Back() * targetMoveSpeed * PhysicsManager.normalDelta);
+				targetDirection += Camera.Back();
 			if (Input.IsKeyPressed(Key.S))
-				Camera.GlobalTranslate(Camera.Forward() * targetMoveSpeed * PhysicsManager.normalDelta);
+				targetDirection += Camera.Forward();
 			if (Input.IsKeyPressed(Key.D))
-				Camera.GlobalTranslate(Camera.Right() * targetMoveSpeed * PhysicsManager.normalDelta);
+				targetDirection += Camera.Right();
 			if (Input.IsKeyPressed(Key.A))
-				Camera.GlobalTranslate(Camera.Left() * targetMoveSpeed * PhysicsManager.normalDelta);
+				targetDirection += Camera.Left();
+
+			freecamMovementVector = freecamMovementVector.SmoothDamp(targetDirection * targetMoveSpeed, ref freecamVelocity, FREE_CAM_ACCELERATION);
+			Camera.GlobalTranslate(freecamMovementVector * PhysicsManager.normalDelta);
 
 			if (isFreeCamLocked)
 				Camera.GlobalTransform = freeCamLockedTransform;

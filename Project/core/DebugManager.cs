@@ -1,4 +1,5 @@
 using Godot;
+using Project.Gameplay;
 using System.Collections.Generic;
 
 namespace Project.Core
@@ -221,5 +222,13 @@ namespace Project.Core
 		public bool SkipCountdown { get; private set; }
 		private void OnSkipCountdownToggled(bool enabled) => SkipCountdown = enabled;
 		#endregion
+
+
+		public void OnHUDToggled(bool enabled)
+		{
+			if (!IsInstanceValid(HeadsUpDisplay.instance)) return;
+
+			HeadsUpDisplay.instance.Visible = !enabled;
+		}
 	}
 }
