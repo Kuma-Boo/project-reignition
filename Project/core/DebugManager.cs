@@ -207,6 +207,10 @@ namespace Project.Core
 			EmitSignal(SignalName.UnlockStagesToggled);
 		}
 
+
+		public bool DrawDebugCam { get; private set; }
+		public void ToggleCamera(bool enabled) => DrawDebugCam = enabled;
+
 		/// <summary> Use a custom save. </summary>
 		public bool UseDemoSave { get; private set; }
 		#endregion
@@ -228,10 +232,12 @@ namespace Project.Core
 		#endregion
 
 
+		public bool DisableHUD { get; private set; }
 		public void ToggleHUD(bool enabled)
 		{
-			if (!IsInstanceValid(HeadsUpDisplay.instance)) return;
+			DisableHUD = enabled;
 
+			if (!IsInstanceValid(HeadsUpDisplay.instance)) return;
 			HeadsUpDisplay.instance.Visible = !enabled;
 		}
 

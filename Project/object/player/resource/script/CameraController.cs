@@ -522,9 +522,10 @@ namespace Project.Gameplay
 				Input.MouseMode = Input.MouseModeEnum.Visible;
 
 			// Update visibility
-			debugMesh.Visible = isFreeCamEnabled;
-			PathFollower.Visible = isFreeCamEnabled;
-			Character.PathFollower.Visible = isFreeCamEnabled;
+			bool showCamera = isFreeCamEnabled && DebugManager.Instance.DrawDebugCam;
+			debugMesh.Visible = showCamera;
+			PathFollower.Visible = showCamera;
+			Character.PathFollower.Visible = showCamera;
 
 			if (!isFreeCamEnabled) return;
 			float targetMoveSpeed = freecamMovespeed;

@@ -189,6 +189,15 @@ namespace Project.Gameplay
 		#endregion
 
 		public void OnLevelCompleted() => SetVisibility(false); // Ignore parameter
-		public void SetVisibility(bool value) => Visible = value;
+		public void SetVisibility(bool value)
+		{
+			if (OS.IsDebugBuild() && DebugManager.Instance.DisableHUD)
+			{
+				Visible = false;
+				return;
+			}
+
+			Visible = value;
+		}
 	}
 }
