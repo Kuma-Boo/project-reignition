@@ -135,7 +135,7 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Controls
-		public Vector2 InputVector => new(InputHorizontal, InputVertical);
+		public Vector2 InputVector => Input.GetVector("move_left", "move_right", "move_up", "move_down", SaveManager.Config.deadZone);
 		public float InputHorizontal => Input.GetAxis("move_left", "move_right");
 		public float InputVertical => Input.GetAxis("move_up", "move_down");
 		private bool isAxisTapped; //Was the left stick tapped?
