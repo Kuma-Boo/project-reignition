@@ -555,8 +555,6 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
 			if (ActionState == ActionStates.Crouching || MoveSpeed == 0) return;
-			if (Animator.IsCrouchingActive)
-				turnInstantly = true;
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			bool overrideFacingDirection = IsLockoutActive &&
