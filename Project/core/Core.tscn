@@ -172,6 +172,13 @@ theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "Hide HUD"
 
+[node name="Dialog" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Disable Dialog"
+
 [node name="SaveManager" type="Node" parent="."]
 script = ExtResource("4_au3sm")
 
@@ -188,10 +195,11 @@ pearlScene = ExtResource("7_wy237")
 [node name="PhysicsManager" type="Node3D" parent="."]
 script = ExtResource("2_phpky")
 
-[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/DebugRays" to="DebugManager" method="OnRayToggled"]
-[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/StageCulling" to="DebugManager" method="OnStageCullingToggled"]
-[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/UnlockAllStages" to="DebugManager" method="OnUnlockStagesToggled"]
-[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/Countdown" to="DebugManager" method="OnSkipCountdownToggled"]
-[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteSoul" to="DebugManager" method="OnInfiniteSoulToggled"]
-[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteRing" to="DebugManager" method="OnInfiniteRingsToggled"]
-[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Countdown" to="DebugManager" method="OnHUDToggled"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/DebugRays" to="DebugManager" method="ToggleRays"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/StageCulling" to="DebugManager" method="ToggleStageCulling"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/UnlockAllStages" to="DebugManager" method="ToggleUnlockStages"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/Countdown" to="DebugManager" method="ToggleCountdown"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteSoul" to="DebugManager" method="ToggleInfiniteSoul"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteRing" to="DebugManager" method="ToggleInfiniteRings"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Countdown" to="DebugManager" method="ToggleHUD"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Dialog" to="DebugManager" method="ToggleDialog"]

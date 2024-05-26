@@ -186,12 +186,12 @@ namespace Project.Core
 		#region Debug Cheats
 		/// <summary> Draw debug rays? </summary>
 		private bool IsDebugRaysEnabled { get; set; }
-		public void OnRayToggled(bool enabled) => IsDebugRaysEnabled = enabled;
+		public void ToggleRays(bool enabled) => IsDebugRaysEnabled = enabled;
 
 		[Signal]
 		public delegate void StageCullingToggledEventHandler();
 		public static bool IsStageCullingEnabled { get; private set; }
-		private void OnStageCullingToggled(bool enabled)
+		private void ToggleStageCulling(bool enabled)
 		{
 			IsStageCullingEnabled = enabled;
 			EmitSignal(SignalName.StageCullingToggled);
@@ -201,7 +201,7 @@ namespace Project.Core
 		public bool UnlockAllStages { get; private set; }
 		[Signal]
 		public delegate void UnlockStagesToggledEventHandler();
-		private void OnUnlockStagesToggled(bool enabled)
+		private void ToggleUnlockStages(bool enabled)
 		{
 			UnlockAllStages = enabled;
 			EmitSignal(SignalName.UnlockStagesToggled);
@@ -214,21 +214,28 @@ namespace Project.Core
 		#region Gameplay Cheats
 		/// <summary> Infinite soul gauge. </summary>
 		public bool InfiniteSoulGauge { get; private set; }
-		private void OnInfiniteSoulToggled(bool enabled) => InfiniteSoulGauge = enabled;
+		private void ToggleInfiniteSoul(bool enabled) => InfiniteSoulGauge = enabled;
 		/// <summary> Infinite rings. </summary>
 		public bool InfiniteRings { get; private set; }
-		private void OnInfiniteRingsToggled(bool enabled) => InfiniteRings = enabled;
+		private void ToggleInfiniteRings(bool enabled)
+		{
+			InfiniteRings = enabled;
+			StageSettings.instance.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
+		}
 		/// <summary> Skip countdowns for faster debugging. </summary>
 		public bool SkipCountdown { get; private set; }
-		private void OnSkipCountdownToggled(bool enabled) => SkipCountdown = enabled;
+		private void ToggleCountdown(bool enabled) => SkipCountdown = enabled;
 		#endregion
 
 
-		public void OnHUDToggled(bool enabled)
+		public void ToggleHUD(bool enabled)
 		{
 			if (!IsInstanceValid(HeadsUpDisplay.instance)) return;
 
 			HeadsUpDisplay.instance.Visible = !enabled;
 		}
+
+		public bool DisableDialog { get; private set; }
+		public void ToggleDialog(bool enabled) => DisableDialog = enabled;
 	}
 }
