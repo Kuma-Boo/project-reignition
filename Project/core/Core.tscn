@@ -11,19 +11,19 @@
 [node name="Core" type="Node"]
 process_mode = 3
 
-[node name="DebugManager" type="Node2D" parent="." node_paths=PackedStringArray("debugMenuRoot")]
+[node name="DebugManager" type="Node2D" parent="." node_paths=PackedStringArray("debugMenuRoot", "freeCamData")]
 top_level = true
 script = ExtResource("3_exwps")
 debugMenuRoot = NodePath("CanvasLayer/Menu")
+freeCamData = [NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/X"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Y"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Z"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Pitch"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Yaw"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Roll")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="DebugManager"]
 layer = 127
 
 [node name="Menu" type="ColorRect" parent="DebugManager/CanvasLayer"]
-visible = false
 offset_right = 448.0
 offset_bottom = 1080.0
-mouse_filter = 2
+focus_mode = 1
 color = Color(0.211765, 0.239216, 0.290196, 1)
 metadata/_edit_lock_ = true
 
@@ -41,8 +41,10 @@ offset_bottom = 516.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 16
+current_tab = 2
 
 [node name="Debug" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
+visible = false
 layout_mode = 2
 
 [node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug"]
@@ -156,8 +158,8 @@ toggle_mode = true
 text = "Inifinite Ring"
 
 [node name="Promo" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
-visible = false
 layout_mode = 2
+focus_mode = 1
 
 [node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo"]
 layout_mode = 1
@@ -193,6 +195,82 @@ theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "Disable Dialog"
 
+[node name="CamPositionLabel" type="Label" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Camera Position"
+vertical_alignment = 1
+
+[node name="CamPosition" type="HBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="X" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamPosition"]
+custom_minimum_size = Vector2(112, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "0"
+alignment = 1
+max_length = 5
+select_all_on_focus = true
+
+[node name="Y" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamPosition"]
+custom_minimum_size = Vector2(112, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "0"
+alignment = 1
+max_length = 5
+select_all_on_focus = true
+
+[node name="Z" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamPosition"]
+custom_minimum_size = Vector2(112, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "0"
+alignment = 1
+max_length = 5
+select_all_on_focus = true
+
+[node name="CamRotationLabel" type="Label" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Camera Rotation"
+vertical_alignment = 1
+
+[node name="CamRotation" type="HBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Pitch" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamRotation"]
+custom_minimum_size = Vector2(112, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "0"
+alignment = 1
+max_length = 5
+select_all_on_focus = true
+
+[node name="Yaw" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamRotation"]
+custom_minimum_size = Vector2(112, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "0"
+alignment = 1
+max_length = 5
+select_all_on_focus = true
+
+[node name="Roll" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamRotation"]
+custom_minimum_size = Vector2(112, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "0"
+alignment = 1
+max_length = 5
+select_all_on_focus = true
+
 [node name="SaveManager" type="Node" parent="."]
 script = ExtResource("4_au3sm")
 
@@ -219,3 +297,9 @@ script = ExtResource("2_phpky")
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/HUD" to="DebugManager" method="ToggleHUD"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Countdown" to="DebugManager" method="ToggleCountdownVisibility"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Dialog" to="DebugManager" method="ToggleDialog"]
+[connection signal="text_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/X" to="DebugManager" method="UpdateCamData"]
+[connection signal="text_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Y" to="DebugManager" method="UpdateCamData"]
+[connection signal="text_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Z" to="DebugManager" method="UpdateCamData"]
+[connection signal="text_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Pitch" to="DebugManager" method="UpdateCamData"]
+[connection signal="text_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Yaw" to="DebugManager" method="UpdateCamData"]
+[connection signal="text_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Roll" to="DebugManager" method="UpdateCamData"]

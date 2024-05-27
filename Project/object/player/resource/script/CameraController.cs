@@ -14,11 +14,13 @@ namespace Project.Gameplay
 
 		[ExportGroup("Components")]
 		[Export]
+		public Camera3D Camera { get; private set; }
+		[Export]
+		public Node3D FreeCamRoot { get; private set; }
+		[Export]
 		private Node3D cameraRoot;
 		[Export]
 		private Node3D debugMesh;
-		[Export]
-		public Camera3D Camera { get; private set; }
 		public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => Camera.UnprojectPosition(worldSpace);
 		public bool IsOnScreen(Vector3 worldSpace) => Camera.IsPositionInFrustum(worldSpace);
 		public bool IsBehindCamera(Vector3 worldSpace) => Camera.IsPositionBehind(worldSpace);
@@ -485,24 +487,37 @@ namespace Project.Gameplay
 		private Vector3 freecamMovementVector;
 		private Vector3 freecamVelocity;
 		private const float MOUSE_SENSITIVITY = .1f;
-		private const float FREE_CAM_ACCELERATION = .1f;
+		private const float FREE_CAM_POSITION_SMOOTHING = .1f;
+		private const float FREE_CAM_ROTATION_SMOOTHING = .1f;
 
-		private bool isFreeCamEnabled;
-		private bool freeCamRotating;
-		private bool freeCamTilting;
+		private bool isFreeCamActive;
+		private bool isFreeCamRotating;
+		private bool isFreeCamTilting;
 
 		private bool isFreeCamLocked;
 		private Transform3D freeCamLockedTransform;
 
 		private void UpdateFreeCam()
 		{
+			bool wasFreeCamActive = isFreeCamActive;
+
 			if (Input.IsActionJustPressed("debug_free_cam_reset"))
+				isFreeCamActive = false;
+
+			isFreeCamRotating = Input.IsMouseButtonPressed(MouseButton.Right);
+			isFreeCamTilting = Input.IsMouseButtonPressed(MouseButton.Middle);
+			if (isFreeCamRotating || isFreeCamTilting)
 			{
-				isFreeCamLocked = false;
-				isFreeCamEnabled = freeCamRotating = false;
-				Camera.Transform = Transform3D.Identity;
-				GD.Print($"Free cam disabled.");
+				isFreeCamActive = true;
+				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
+			else
+				Input.MouseMode = Input.MouseModeEnum.Visible;
+
+			if (isFreeCamActive != wasFreeCamActive)
+				ToggleFreeCam();
+
+			if (!isFreeCamActive) return;
 
 			if (Input.IsActionJustPressed("debug_free_cam_lock"))
 			{
@@ -511,23 +526,6 @@ namespace Project.Gameplay
 				GD.Print($"Free cam lock set to {isFreeCamLocked}.");
 			}
 
-			freeCamRotating = Input.IsMouseButtonPressed(MouseButton.Right);
-			freeCamTilting = Input.IsMouseButtonPressed(MouseButton.Middle);
-			if (freeCamRotating || freeCamTilting)
-			{
-				isFreeCamEnabled = true;
-				Input.MouseMode = Input.MouseModeEnum.Captured;
-			}
-			else
-				Input.MouseMode = Input.MouseModeEnum.Visible;
-
-			// Update visibility
-			bool showCamera = isFreeCamEnabled && DebugManager.Instance.DrawDebugCam;
-			debugMesh.Visible = showCamera;
-			PathFollower.Visible = showCamera;
-			Character.PathFollower.Visible = showCamera;
-
-			if (!isFreeCamEnabled) return;
 			float targetMoveSpeed = freecamMovespeed;
 
 			if (Input.IsKeyPressed(Key.Shift))
@@ -550,26 +548,60 @@ namespace Project.Gameplay
 			if (Input.IsKeyPressed(Key.A))
 				targetDirection += Camera.Left();
 
-			freecamMovementVector = freecamMovementVector.SmoothDamp(targetDirection * targetMoveSpeed, ref freecamVelocity, FREE_CAM_ACCELERATION);
-			Camera.GlobalTranslate(freecamMovementVector * PhysicsManager.normalDelta);
+			freecamMovementVector = freecamMovementVector.SmoothDamp(targetDirection * targetMoveSpeed, ref freecamVelocity, FREE_CAM_POSITION_SMOOTHING);
+			FreeCamRoot.GlobalTranslate(freecamMovementVector * PhysicsManager.normalDelta);
 
 			if (isFreeCamLocked)
-				Camera.GlobalTransform = freeCamLockedTransform;
+				FreeCamRoot.GlobalTransform = freeCamLockedTransform;
+		}
+
+
+		private void ToggleFreeCam()
+		{
+			// Update visibility
+			bool showCamera = isFreeCamActive && DebugManager.Instance.DrawDebugCam;
+			debugMesh.Visible = showCamera;
+			PathFollower.Visible = showCamera;
+			Character.PathFollower.Visible = showCamera;
+
+			if (isFreeCamActive)
+			{
+				Camera.Rotation = FreeCamRoot.GlobalRotation.RemoveVertical();
+				FreeCamRoot.GlobalRotation = new(0, FreeCamRoot.GlobalRotation.Y, 0);
+			}
+			else
+			{
+				isFreeCamLocked = false;
+				isFreeCamActive = isFreeCamRotating = false;
+				Camera.Transform = Transform3D.Identity;
+				FreeCamRoot.Transform = Transform3D.Identity;
+				GD.Print($"Free cam disabled.");
+			}
+		}
+
+
+		public void UpdateFreeCamData(Vector3 position, Vector3 rotation)
+		{
+			if (!isFreeCamActive) return;
+
+			FreeCamRoot.GlobalPosition = position;
+			FreeCamRoot.GlobalRotation = Vector3.Up * rotation.Y;
+			Camera.Rotation = rotation.RemoveVertical();
 		}
 
 
 		private void ReceiveInput(InputEvent e)
 		{
-			if (!isFreeCamEnabled) return;
+			if (!isFreeCamActive) return;
 
 			if (e is InputEventMouseMotion)
 			{
-				if (freeCamRotating)
+				if (isFreeCamRotating)
 				{
-					Camera.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
+					FreeCamRoot.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
 					Camera.RotateObjectLocal(Vector3.Right, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.Y) * MOUSE_SENSITIVITY);
 				}
-				else if (freeCamTilting)
+				else if (isFreeCamTilting)
 					Camera.RotateObjectLocal(Vector3.Forward, Mathf.DegToRad((e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
 			}
 			else if (e is InputEventMouseButton emb)

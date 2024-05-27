@@ -52,6 +52,9 @@ namespace Project.Core
 			if (!OS.IsDebugBuild()) //Don't do anything in real build
 				return;
 
+
+			RedrawCamData();
+
 			if (isAdvancingFrame)
 			{
 				GetTree().Paused = true;
@@ -231,7 +234,7 @@ namespace Project.Core
 		private void ToggleCountdown(bool enabled) => SkipCountdown = enabled;
 		#endregion
 
-
+		#region Promo Settings
 		public bool DisableHUD { get; private set; }
 		public void ToggleHUD(bool enabled)
 		{
@@ -247,5 +250,40 @@ namespace Project.Core
 
 		public bool DisableDialog { get; private set; }
 		public void ToggleDialog(bool enabled) => DisableDialog = enabled;
+
+		[Export]
+		private LineEdit[] freeCamData;
+		private void RedrawCamData()
+		{
+			if (!IsInstanceValid(CharacterController.instance)) return;
+
+			for (int i = 0; i < freeCamData.Length; i++)
+			{
+				if (freeCamData[i].HasFocus())
+					return;
+			}
+
+			CameraController cam = CharacterController.instance.Camera;
+			freeCamData[0].Text = cam.FreeCamRoot.GlobalPosition.X.ToString();
+			freeCamData[1].Text = cam.FreeCamRoot.GlobalPosition.Y.ToString();
+			freeCamData[2].Text = cam.FreeCamRoot.GlobalPosition.Z.ToString();
+
+			freeCamData[3].Text = cam.Camera.RotationDegrees.X.ToString();
+			freeCamData[4].Text = cam.FreeCamRoot.GlobalRotationDegrees.Y.ToString();
+			freeCamData[5].Text = cam.Camera.RotationDegrees.Z.ToString();
+		}
+
+
+		private void UpdateCamData(string _)
+		{
+			if (!IsInstanceValid(CharacterController.instance)) return;
+			CameraController cam = CharacterController.instance.Camera;
+
+			Vector3 pos = new(freeCamData[0].Text.ToFloat(), freeCamData[1].Text.ToFloat(), freeCamData[2].Text.ToFloat());
+			Vector3 rot = new(freeCamData[3].Text.ToFloat(), freeCamData[4].Text.ToFloat(), freeCamData[5].Text.ToFloat());
+
+			cam.UpdateFreeCamData(pos, rot);
+		}
+		#endregion
 	}
 }

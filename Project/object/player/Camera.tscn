@@ -55,11 +55,12 @@ _data = {
 "activate": SubResource("5")
 }
 
-[node name="Camera" type="Node3D" node_paths=PackedStringArray("cameraRoot", "debugMesh", "Camera", "crossfade", "crossfadeAnimator", "PathFollower")]
+[node name="Camera" type="Node3D" node_paths=PackedStringArray("Camera", "FreeCamRoot", "cameraRoot", "debugMesh", "crossfade", "crossfadeAnimator", "PathFollower")]
 script = ExtResource("2")
+Camera = NodePath("CameraRoot/FreecamRoot/Camera")
+FreeCamRoot = NodePath("CameraRoot/FreecamRoot")
 cameraRoot = NodePath("CameraRoot")
 debugMesh = NodePath("CameraRoot/Debug")
-Camera = NodePath("CameraRoot/Camera")
 crossfade = NodePath("Crossfade")
 crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
 PathFollower = NodePath("PathFollower")
@@ -67,7 +68,9 @@ defaultSettings = ExtResource("2_hi8xo")
 
 [node name="CameraRoot" type="Node3D" parent="."]
 
-[node name="Camera" type="Camera3D" parent="CameraRoot"]
+[node name="FreecamRoot" type="Node3D" parent="CameraRoot"]
+
+[node name="Camera" type="Camera3D" parent="CameraRoot/FreecamRoot"]
 cull_mask = 32767
 current = true
 fov = 50.0
