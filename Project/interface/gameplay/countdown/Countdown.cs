@@ -4,7 +4,7 @@ using Project.Gameplay;
 
 namespace Project.Interface
 {
-	public partial class Countdown : Node
+	public partial class Countdown : Control
 	{
 		public static bool IsCountdownActive { get; private set; }
 
@@ -26,6 +26,13 @@ namespace Project.Interface
 			{
 				FinishCountdown();
 				return;
+			}
+
+			if (DebugManager.Instance.HideCountdown)
+			{
+				animator.Play("mute");
+				animator.Advance(0.0);
+				Visible = false;
 			}
 
 			animator.Play("countdown");

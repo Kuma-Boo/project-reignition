@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b33gqnpc4784k"]
+[gd_scene load_steps=17 format=3 uid="uid://b33gqnpc4784k"]
 
 [ext_resource type="Script" path="res://interface/gameplay/countdown/Countdown.cs" id="1"]
 [ext_resource type="Texture2D" uid="uid://dgufod6u2u62a" path="res://interface/gameplay/countdown/texture/Sparkle.png" id="2"]
@@ -252,6 +252,30 @@ tracks/19/path = NodePath("Go/Sparkle:rotation")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("CountdownVoice:volume_db")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("CountdownSFX:volume_db")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -581,10 +605,39 @@ tracks/22/keys = {
 "values": [0.0, 0.0, -0.0872665]
 }
 
+[sub_resource type="Animation" id="Animation_wm8nq"]
+resource_name = "mute"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CountdownVoice:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CountdownSFX:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cm1jq"]
 _data = {
 "RESET": SubResource("51"),
-"countdown": SubResource("50")
+"countdown": SubResource("50"),
+"mute": SubResource("Animation_wm8nq")
 }
 
 [node name="Countdown" type="Control" node_paths=PackedStringArray("tickParent", "animator")]

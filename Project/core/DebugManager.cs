@@ -241,6 +241,10 @@ namespace Project.Core
 			HeadsUpDisplay.instance.Visible = !enabled;
 		}
 
+		/// <summary> Hide countdown for recording. </summary>
+		public bool HideCountdown { get; private set; }
+		private void ToggleCountdownVisibility(bool enabled) => HideCountdown = enabled;
+
 		public bool DisableDialog { get; private set; }
 		public void ToggleDialog(bool enabled) => DisableDialog = enabled;
 	}
