@@ -172,7 +172,7 @@ namespace Project.Interface.Menus
 					VerticalSelection = WrapSelection(targetSelection, 4);
 					break;
 				case Submenus.Video:
-					VerticalSelection = WrapSelection(targetSelection, 2);
+					VerticalSelection = WrapSelection(targetSelection, 3);
 					break;
 				case Submenus.Audio:
 					VerticalSelection = WrapSelection(targetSelection, 4);
@@ -239,11 +239,14 @@ namespace Project.Interface.Menus
 		private string OFF_STRING = "option_off";
 		private string MUTE_STRING = "option_mute";
 		private string FULLSCREEN_STRING = "option_fullscreen";
+		private string FULLSCREEN_NORMAL_STRING = "option_normal_fullscreen";
+		private string FULLSCREEN_EXCLUSIVE_STRING = "option_exclusive_fullscreen";
 		private void UpdateLabels()
 		{
 			Vector2I resolution = SaveManager.SCREEN_RESOLUTIONS[SaveManager.Config.screenResolution];
 			videoLabels[0].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
-			videoLabels[1].Text = SaveManager.Config.useVsync ? ON_STRING : OFF_STRING;
+			videoLabels[1].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
+			videoLabels[2].Text = SaveManager.Config.useVsync ? ON_STRING : OFF_STRING;
 
 			audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}%";
 			audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MUTE_STRING : $"{SaveManager.Config.bgmVolume}%";
@@ -330,29 +333,33 @@ namespace Project.Interface.Menus
 		{
 			if (VerticalSelection == 0)
 			{
-				// Just switch out of fullscreen mode
+				int fullscreenResolution = FindLargestWindowResolution() + 1;
+
+				// Switch out of fullscreen mode
 				if (SaveManager.Config.useFullscreen)
 				{
 					SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
-					SaveManager.Config.screenResolution = FindLargestWindowResolution();
-					return true;
+					SaveManager.Config.screenResolution = fullscreenResolution;
 				}
 
 				SaveManager.Config.screenResolution += direction;
 
+				// Prevent user from choosing an impossible resolution
 				if (SaveManager.Config.screenResolution < 0)
-					SaveManager.Config.screenResolution = SaveManager.SCREEN_RESOLUTIONS.Length - 1;
-				else if (SaveManager.Config.screenResolution >= SaveManager.SCREEN_RESOLUTIONS.Length)
+					SaveManager.Config.screenResolution = fullscreenResolution;
+				else if (SaveManager.Config.screenResolution > fullscreenResolution)
 					SaveManager.Config.screenResolution = 0;
 
-				// Prevent user from choosing an impossible resolution
-				if (SaveManager.SCREEN_RESOLUTIONS[SaveManager.Config.screenResolution] >= DisplayServer.ScreenGetSize())
+				// Enter fullscreen mode
+				if (SaveManager.Config.screenResolution == fullscreenResolution)
 				{
 					SaveManager.Config.useFullscreen = true;
-					SaveManager.Config.screenResolution = FindLargestWindowResolution() + 1;
+					SaveManager.Config.screenResolution = FindLargestWindowResolution();
 				}
 			}
 			else if (VerticalSelection == 1)
+				SaveManager.Config.useExclusiveFullscreen = !SaveManager.Config.useExclusiveFullscreen;
+			else
 				SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
 
 			return true;
@@ -467,11 +474,13 @@ namespace Project.Interface.Menus
 
 		private void ConfirmVideoOption()
 		{
-			if (VerticalSelection == 0)
+			if (VerticalSelection == 0) // Toggle fullscreen mode
 			{
 				SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
-				SaveManager.Config.screenResolution = FindLargestWindowResolution() + 1;
+				SaveManager.Config.screenResolution = FindLargestWindowResolution();
 			}
+			else if (VerticalSelection == 1)
+				SlideVideoOption(1);
 			else
 				SlideVideoOption(1);
 
