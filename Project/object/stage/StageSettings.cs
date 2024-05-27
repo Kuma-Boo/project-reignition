@@ -17,7 +17,7 @@ namespace Project.Gameplay
 
 		public override void _EnterTree()
 		{
-			instance = this; //Always override previous instance
+			instance = this; // Always override previous instance
 
 			for (int i = 0; i < pathParent.GetChildCount(); i++)
 			{
@@ -27,10 +27,55 @@ namespace Project.Gameplay
 			}
 
 			UpdateScore(0, MathModeEnum.Replace);
+
+			if (!IsControlTest)
+				LevelState = LevelStateEnum.Loading;
 		}
 
 
-		public override void _Process(double _) => UpdateTime();
+		public override void _Ready()
+		{
+			// Fixes obnoxious flickering when testing from the editor
+			if (OS.IsDebugBuild() && !IsControlTest && !TransitionManager.IsTransitionActive)
+			{
+				TransitionManager.StartTransition(new()
+				{
+					outSpeed = .5f,
+					color = Colors.Black,
+					disableAutoTransition = true,
+				});
+			}
+		}
+
+
+		[Signal]
+		public delegate void ReflectionProbesCalculatedEventHandler();
+		private int probeFrameCounter;
+		private const int PROBE_FRAME_COUNT_LENGTH = 90;
+		public override void _Process(double _)
+		{
+			/*
+			TODO 
+			Temporary workaround because reflection probes are slow.
+			Remove this when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
+			*/
+
+			if (LevelState == LevelStateEnum.Loading)
+			{
+				probeFrameCounter++;
+
+				if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH)
+				{
+					LevelState = LevelStateEnum.Ingame;
+					TransitionManager.FinishTransition();
+					EmitSignal(SignalName.ReflectionProbesCalculated);
+				}
+
+				return;
+			}
+
+			UpdateTime();
+		}
 
 
 		#region Level Settings
@@ -310,12 +355,13 @@ namespace Project.Gameplay
 
 		public enum LevelStateEnum
 		{
-			Incomplete,
+			Loading, // TODO Delete this when Godot fixes reflection probes
+			Ingame,
 			Failed,
 			Success,
 		}
 		public LevelStateEnum LevelState { get; private set; }
-		private bool IsLevelFinished => LevelState != LevelStateEnum.Incomplete;
+		private bool IsLevelFinished => LevelState != LevelStateEnum.Ingame;
 		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 		public void FinishLevel(bool wasSuccessful)
 		{

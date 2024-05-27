@@ -29,10 +29,15 @@ namespace Project.Gameplay
 			Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); //Start with the proper ring count
 			Stage.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
 			Stage.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
+
+			SnapToGround();
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
+			// Still loading
+			if (Stage.LevelState == StageSettings.LevelStateEnum.Loading) return;
+
 			UpdateStateMachine();
 			UpdateOrientation();
 			UpdatePhysics();
@@ -1617,6 +1622,7 @@ namespace Project.Gameplay
 			}
 		}
 
+
 		public void LandOnGround()
 		{
 			IsOnGround = true;
@@ -1628,7 +1634,8 @@ namespace Project.Gameplay
 			isAccelerationJumpQueued = false;
 			Lockon.ResetLockonTarget();
 
-			if (IsDefeated || IsCountdownActive || ActionState == ActionStates.Teleport) return; //Don't do this stuff during countdown or respawn
+			if (Stage.LevelState == StageSettings.LevelStateEnum.Loading || IsCountdownActive) return; // Return early when not ingame
+			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			ResetActionState();
 
@@ -1824,7 +1831,6 @@ namespace Project.Gameplay
 
 			Animator.SnapRotation(PathFollower.ForwardAngle);
 			Animator.PlayCountdown();
-			SnapToGround();
 		}
 
 		private void UpdateCountdown()

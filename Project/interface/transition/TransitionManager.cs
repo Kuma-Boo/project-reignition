@@ -132,7 +132,9 @@ namespace Project.Core
 			}
 
 			queuedScene = string.Empty; //Clear queue
-			FinishFade();
+
+			if (!CurrentTransitionData.disableAutoTransition)
+				FinishFade();
 		}
 	}
 
@@ -143,5 +145,6 @@ namespace Project.Core
 		public float outSpeed;
 		public Color color;
 		public bool loadAsynchronously;
+		public bool disableAutoTransition;
 	}
 }

@@ -18,7 +18,14 @@ namespace Project.Interface
 		[Export]
 		private AnimationPlayer animator;
 
+
 		public override void _Ready()
+		{
+			StageSettings.instance.Connect(StageSettings.SignalName.ReflectionProbesCalculated, new(this, MethodName.StartCountdown));
+		}
+
+
+		public void StartCountdown()
 		{
 			BGMPlayer.StartStageMusic(); // Start BGM
 

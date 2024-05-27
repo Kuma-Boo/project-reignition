@@ -99,7 +99,7 @@ namespace Project.Gameplay.Bosses
 			StageSettings.instance.ConnectUnloadSignal(this);
 			StageSettings.instance.ConnectRespawnSignal(this);
 
-			StartIntroduction();
+			StageSettings.instance.Connect(StageSettings.SignalName.ReflectionProbesCalculated, new(this, MethodName.StartIntroduction));
 		}
 
 

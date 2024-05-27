@@ -343,7 +343,8 @@ namespace Project.Interface
 			{
 				inSpeed = .5f,
 				outSpeed = .5f,
-				color = Colors.Black
+				color = Colors.Black,
+				disableAutoTransition = string.IsNullOrEmpty(targetScene)
 			});
 		}
 

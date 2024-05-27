@@ -70,7 +70,8 @@ namespace Project.Interface.Menus
 			{
 				inSpeed = 1f,
 				color = Colors.Black,
-				loadAsynchronously = true
+				loadAsynchronously = true,
+				disableAutoTransition = true
 			});
 		}
 	}
