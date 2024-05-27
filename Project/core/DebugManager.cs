@@ -274,8 +274,9 @@ namespace Project.Core
 		}
 
 
-		private void UpdateCamData(string _)
+		private void UpdateCamData(string newData)
 		{
+			if (!newData.IsValidFloat()) return;
 			if (!IsInstanceValid(CharacterController.instance)) return;
 			CameraController cam = CharacterController.instance.Camera;
 
