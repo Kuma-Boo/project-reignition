@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://byf372uaewx1u"]
+[gd_scene load_steps=78 format=3 uid="uid://byf372uaewx1u"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/ReadyMenu.cs" id="1_ldudh"]
 [ext_resource type="Texture2D" uid="uid://bgtxik1dsbu0u" path="res://interface/menu/level select/texture/ready text/ready en.png" id="2_eg5ps"]
@@ -33,6 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://2n8cem8rawb7" path="res://interface/menu/level select/texture/transition/tile021.png" id="24_nttp3"]
 [ext_resource type="Texture2D" uid="uid://dycd1qhflhfle" path="res://interface/menu/level select/texture/transition/tile022.png" id="25_q4m67"]
 [ext_resource type="Texture2D" uid="uid://dlmkldnwn2j0b" path="res://interface/menu/level select/texture/transition/tile023.png" id="26_p1ct4"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="27_6mgb2"]
 [ext_resource type="Texture2D" uid="uid://dcfhonoq0ix2l" path="res://effect/particle/texture/flame/flame menu short.png" id="27_c5fyk"]
 [ext_resource type="AudioStream" uid="uid://bdykixhqk0n1m" path="res://sound/sfx/system/menu level transition.wav" id="28_1bnlw"]
 [ext_resource type="PackedScene" uid="uid://dad2hh4ttgaox" path="res://interface/menu/flames/Flames.tscn" id="31_1njce"]
@@ -119,10 +120,6 @@ animations = [{
 "name": &"default",
 "speed": 24.0
 }]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sv128"]
-blend_mode = 1
-light_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idxy4"]
 atlas = ExtResource("27_c5fyk")
@@ -455,14 +452,6 @@ _data = {
 "RESET": SubResource("Animation_0gx1k"),
 "transition": SubResource("Animation_dodqd")
 }
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ab41v"]
-shader = ExtResource("6_03cqa")
-shader_parameter/flash_amount = 0.0
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_au1vv"]
-blend_mode = 1
-light_mode = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ialef"]
 shader = ExtResource("6_03cqa")
@@ -1496,7 +1485,7 @@ sprite_frames = SubResource("SpriteFrames_ibf4p")
 
 [node name="WipeFlames" type="Node2D" parent="Background/WipePosition/Wipe"]
 modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_sv128")
+material = ExtResource("27_6mgb2")
 position = Vector2(0, 24)
 
 [node name="ShortFlame01" type="AnimatedSprite2D" parent="Background/WipePosition/Wipe/WipeFlames"]
@@ -1693,20 +1682,20 @@ region_enabled = true
 region_rect = Rect2(0, 0, 510, 45)
 
 [node name="Glow" type="Sprite2D" parent="Menu/Text/Base"]
-material = SubResource("ShaderMaterial_ab41v")
+material = ExtResource("27_6mgb2")
 texture = ExtResource("2_eg5ps")
 region_enabled = true
 region_rect = Rect2(0, 45, 510, 45)
 
 [node name="Glow" type="Sprite2D" parent="Menu/Text/Base/Glow"]
-material = SubResource("ShaderMaterial_ab41v")
+use_parent_material = true
 texture = ExtResource("2_eg5ps")
 region_enabled = true
 region_rect = Rect2(0, 45, 510, 45)
 
 [node name="Flames" type="Node2D" parent="Menu/Text/Base"]
 modulate = Color(1, 1, 1, 0.784314)
-material = SubResource("CanvasItemMaterial_au1vv")
+material = ExtResource("27_6mgb2")
 position = Vector2(0, 21.3333)
 
 [node name="FlameShort1" type="AnimatedSprite2D" parent="Menu/Text/Base/Flames"]
@@ -1880,6 +1869,7 @@ metadata/_edit_lock_ = true
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
+layout_mode = 0
 offset_left = 448.0
 offset_top = 760.0
 offset_right = 1474.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=3 uid="uid://coshp5qmt1aq7"]
+[gd_scene load_steps=97 format=3 uid="uid://coshp5qmt1aq7"]
 
 [ext_resource type="Script" path="res://interface/gameplay/pause/PauseMenu.cs" id="1"]
 [ext_resource type="Texture2D" uid="uid://tbukuwdkqg5w" path="res://interface/gameplay/pause/texture/paper.png" id="2_6a5br"]
@@ -10,19 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://xyajyr1w1dyh" path="res://interface/gameplay/pause/texture/text/status/status en.png" id="6_vpjv2"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="7_f2emr"]
 [ext_resource type="AudioStream" uid="uid://cruu5h1jr78lr" path="res://sound/sfx/system/menu screen change.wav" id="7_m12c2"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="7_u01fk"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="9_eaqga"]
 [ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="10_lpx5w"]
 [ext_resource type="Texture2D" uid="uid://cdrkqkq85qyj6" path="res://interface/gameplay/pause/texture/text/pause text en.png" id="11_t6p1e"]
 [ext_resource type="Texture2D" uid="uid://bnqtvxsv0llae" path="res://interface/gameplay/pause/texture/text/status/status value en.png" id="11_tq8dq"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="12_mqlo7"]
 [ext_resource type="FontFile" uid="uid://b60t6w3shtof1" path="res://interface/font/Status Numbers en.fnt" id="12_tp5bp"]
-
-[sub_resource type="CanvasItemMaterial" id="82"]
-blend_mode = 1
-light_mode = 1
-
-[sub_resource type="CanvasItemMaterial" id="61"]
-blend_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ubgac"]
 atlas = ExtResource("4_w7b4q")
@@ -189,10 +183,6 @@ _data = {
 "move": SubResource("Animation_pqbfb"),
 "show": SubResource("Animation_8g051")
 }
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4eg3h"]
-blend_mode = 1
-light_mode = 1
 
 [sub_resource type="Animation" id="Animation_gc03k"]
 length = 0.001
@@ -4663,7 +4653,7 @@ offset_bottom = 40.0
 color = Color(0, 0, 0, 0.588235)
 
 [node name="Paper" type="TextureRect" parent="Pause"]
-material = SubResource("82")
+material = ExtResource("7_u01fk")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -4690,7 +4680,7 @@ position = Vector2(-144, 0)
 metadata/_edit_lock_ = true
 
 [node name="Cursor" type="AnimatedSprite2D" parent="Pause/Options/PauseCursorAnchor"]
-material = SubResource("61")
+material = ExtResource("7_u01fk")
 sprite_frames = SubResource("SpriteFrames_fkuxm")
 autoplay = "default"
 offset = Vector2(0, -20)
@@ -4708,7 +4698,7 @@ region_rect = Rect2(0, 48, 256, 40)
 
 [node name="Glow" type="Sprite2D" parent="Pause/Options/Continue"]
 self_modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_4eg3h")
+material = ExtResource("7_u01fk")
 texture = ExtResource("11_t6p1e")
 region_enabled = true
 region_rect = Rect2(0, 48, 256, 40)
@@ -4722,7 +4712,7 @@ region_rect = Rect2(0, 81, 256, 40)
 
 [node name="Glow" type="Sprite2D" parent="Pause/Options/Restart"]
 self_modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_4eg3h")
+material = ExtResource("7_u01fk")
 texture = ExtResource("11_t6p1e")
 region_enabled = true
 region_rect = Rect2(0, 81, 256, 40)
@@ -4736,7 +4726,7 @@ region_rect = Rect2(0, 116, 256, 40)
 
 [node name="Glow" type="Sprite2D" parent="Pause/Options/Status"]
 self_modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_4eg3h")
+material = ExtResource("7_u01fk")
 texture = ExtResource("11_t6p1e")
 region_enabled = true
 region_rect = Rect2(0, 116, 256, 40)
@@ -4750,7 +4740,7 @@ region_rect = Rect2(0, 151, 256, 40)
 
 [node name="Glow" type="Sprite2D" parent="Pause/Options/Quit"]
 self_modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_4eg3h")
+material = ExtResource("7_u01fk")
 texture = ExtResource("11_t6p1e")
 region_enabled = true
 region_rect = Rect2(0, 151, 256, 40)
@@ -4771,7 +4761,7 @@ position = Vector2(-216, 288)
 scale = Vector2(2, 2)
 
 [node name="Cursor" type="AnimatedSprite2D" parent="Pause/StatusMenu/StatusCursorAnchor"]
-material = SubResource("61")
+material = ExtResource("7_u01fk")
 sprite_frames = SubResource("SpriteFrames_fkuxm")
 autoplay = "default"
 offset = Vector2(0, -20)
@@ -4791,7 +4781,7 @@ region_rect = Rect2(0, 36, 170, 24)
 
 [node name="Glow" type="Sprite2D" parent="Pause/StatusMenu/Status"]
 self_modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_4eg3h")
+material = ExtResource("7_u01fk")
 texture = ExtResource("6_vpjv2")
 region_enabled = true
 region_rect = Rect2(0, 36, 170, 24)
@@ -4806,7 +4796,7 @@ region_rect = Rect2(0, 62, 170, 24)
 
 [node name="Glow" type="Sprite2D" parent="Pause/StatusMenu/Mission"]
 self_modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_4eg3h")
+material = ExtResource("7_u01fk")
 texture = ExtResource("6_vpjv2")
 region_enabled = true
 region_rect = Rect2(0, 62, 170, 24)
@@ -4821,7 +4811,7 @@ region_rect = Rect2(0, 88, 170, 24)
 
 [node name="Glow" type="Sprite2D" parent="Pause/StatusMenu/Skills"]
 self_modulate = Color(1, 1, 1, 0)
-material = SubResource("CanvasItemMaterial_4eg3h")
+material = ExtResource("7_u01fk")
 texture = ExtResource("6_vpjv2")
 region_enabled = true
 region_rect = Rect2(0, 88, 170, 24)

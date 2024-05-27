@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/sprite atlas.png" id="4_63n04"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/ring.png" id="7_ggxti"]
 [ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/soul gauge/gradient.png" id="8"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="8_rl1c5"]
 [ext_resource type="Material" uid="uid://duq3egwjfpmil" path="res://interface/gameplay/hud/material/Soul Gauge Fill.tres" id="8_t3t32"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
 [ext_resource type="Texture2D" uid="uid://bypa7d6a6vjnr" path="res://interface/gameplay/hud/soul gauge/fill dimensions.png" id="9_i8ml4"]
@@ -872,9 +873,6 @@ nodes/ringless_transition/node = SubResource("AnimationNodeTransition_8ld87")
 nodes/ringless_transition/position = Vector2(-160, 352)
 node_connections = [&"gain_trigger", 0, &"hold-anim", &"gain_trigger", 1, &"gain-anim", &"loss_trigger", 0, &"gain_trigger", &"loss_trigger", 1, &"loss-anim", &"output", 0, &"ringless_add", &"ringless_add", 0, &"loss_trigger", &"ringless_add", 1, &"ringless_transition", &"ringless_transition", 0, &"ringless-anim", &"ringless_transition", 1, &"ring-anim"]
 
-[sub_resource type="CanvasItemMaterial" id="57"]
-blend_mode = 1
-
 [sub_resource type="Animation" id="56"]
 length = 0.001
 tracks/0/type = "value"
@@ -1341,7 +1339,7 @@ patch_margin_bottom = 176
 
 [node name="Glow" type="Control" parent="SoulGauge/SoulGauge"]
 modulate = Color(1, 1, 1, 0)
-material = SubResource("57")
+material = ExtResource("8_rl1c5")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1433,7 +1431,7 @@ region_rect = Rect2(112, 120, 88, 24)
 
 [node name="SparkleBottom" type="Node2D" parent="SoulGauge"]
 modulate = Color(1, 1, 1, 0)
-material = SubResource("57")
+material = ExtResource("8_rl1c5")
 position = Vector2(64, 704)
 
 [node name="SparkleBottom1" type="Sprite2D" parent="SoulGauge/SparkleBottom"]
