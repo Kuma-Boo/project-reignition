@@ -76,6 +76,8 @@ namespace Project.Core
 		private TransitionData CurrentTransitionData { get; set; }
 		public static bool IsTransitionActive { get; set; }
 		[Signal]
+		public delegate void SceneChangedEventHandler(); //Called when the scene changes
+		[Signal]
 		public delegate void TransitionProcessEventHandler(); //Called in the middle of the transition (i.e. when the screen is completely black)
 		[Signal]
 		public delegate void TransitionFinishEventHandler(); //Called when the transition is finished
@@ -132,6 +134,7 @@ namespace Project.Core
 			}
 
 			queuedScene = string.Empty; //Clear queue
+			EmitSignal(SignalName.SceneChanged);
 
 			if (!CurrentTransitionData.disableAutoTransition)
 				FinishFade();

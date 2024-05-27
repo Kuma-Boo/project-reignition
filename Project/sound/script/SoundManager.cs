@@ -15,6 +15,9 @@ namespace Project.Core
 			subtitleAnimator.Play("RESET");
 
 			InitializePearlSFX();
+
+			// Cancel Dialog when switching to a new scene
+			TransitionManager.instance.Connect(TransitionManager.SignalName.SceneChanged, new(this, MethodName.CancelDialog));
 		}
 
 		#region Dialog
@@ -53,18 +56,15 @@ namespace Project.Core
 			if (!IsDialogActive) return;
 
 			delayTimer.Stop();
+			dialogChannel.Stop();
 
-			CallDeferred(nameof(DisableDialog));
-			if (dialogChannel.Playing)
+			if (isSonicSpeaking)
 			{
-				dialogChannel.Stop();
-
-				if (isSonicSpeaking)
-				{
-					isSonicSpeaking = false;
-					EmitSignal(SignalName.SonicSpeechEnd);
-				}
+				isSonicSpeaking = false;
+				EmitSignal(SignalName.SonicSpeechEnd);
 			}
+
+			CallDeferred(MethodName.DisableDialog);
 		}
 		public void OnDialogDelayComplete() => UpdateDialog(false);
 
