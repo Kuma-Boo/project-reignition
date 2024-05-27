@@ -17,19 +17,16 @@ namespace Project.Core
 			if (OS.IsDebugBuild()) // Editor build, use custom configuration
 			{
 				// Default debug settings for testing from the editor.
-				Config = new()
-				{
-					screenResolution = 3,
-					isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER),
-					isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM),
-					isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX),
-					isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE),
+				Config.screenResolution = 3;
+				Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
+				Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
+				Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
+				Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
 
-					masterVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.MASTER)) * 100),
-					bgmVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.BGM)) * 100),
-					sfxVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.SFX)) * 100),
-					voiceVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.VOICE)) * 100),
-				};
+				Config.masterVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.MASTER)) * 100);
+				Config.bgmVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.BGM)) * 100);
+				Config.sfxVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.SFX)) * 100);
+				Config.voiceVolume = Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.VOICE)) * 100);
 				ApplyConfig();
 			}
 		}
