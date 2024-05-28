@@ -9,11 +9,8 @@ namespace Project.Gameplay
 	/// To have multiple reflections at different elevations, create multiple PlanarReflectionRenderers
 	/// and use separate materials for each.
 	/// </summary>
-	[Tool]
 	public partial class PlanarReflectionRenderer : Node3D
 	{
-		public static PlanarReflectionRenderer instance;
-
 		// All shaders that use reflections must have this parameter
 		public static readonly StringName REFLECTION_PARAMETER = "reflection_texture";
 
@@ -33,8 +30,6 @@ namespace Project.Gameplay
 
 		public override void _EnterTree()
 		{
-			instance = this;
-
 			if (!RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable))
 				RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable, (uint)ConnectFlags.Deferred);
 
@@ -50,7 +45,6 @@ namespace Project.Gameplay
 			if (RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable))
 				RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
 
-			instance = null;
 			ApplyTexture();
 		}
 

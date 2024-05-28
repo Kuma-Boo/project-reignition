@@ -1,6 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://b6tymj1vanl66"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fvbu3"]
+[ext_resource type="Resource" uid="uid://du86d7lfu3g3t" path="res://resource/level data/night palace/Boss.tres" id="2_wdw6t"]
 [ext_resource type="Script" path="res://area/7 night palace/boss/script/InfiniteHallway.cs" id="2_wuoms"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="3_3wins"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="4_8p504"]
@@ -15,15 +16,14 @@
 [ext_resource type="Curve3D" path="res://area/7 night palace/boss/environment/path/MainPath.tres" id="10_7yaqk"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="11_gi0oh"]
 [ext_resource type="PackedScene" uid="uid://digasi1lyp6oy" path="res://area/7 night palace/data/BGMBoss.tscn" id="11_s0jtr"]
-[ext_resource type="Material" uid="uid://sc8upcny5n7i" path="res://area/7 night palace/data/material/Effect Reflection.tres" id="12_6xu5p"]
 
 [sub_resource type="BoxShape3D" id="10"]
 size = Vector3(16, 28, 2)
 
-[node name="Static" type="Node3D"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_fvbu3")
+Data = ExtResource("2_wdw6t")
 pathParent = NodePath("Path")
-completionAnimator = NodePath("")
 Environment = NodePath("WorldEnvironment")
 
 [node name="Visuals" type="Node3D" parent="."]
@@ -147,9 +147,11 @@ shape = SubResource("10")
 [node name="MainPath" type="Path3D" parent="Path"]
 curve = ExtResource("10_7yaqk")
 
-[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("11_gi0oh")]
-renderMask = 19
-reflectionMaterials = [ExtResource("12_6xu5p")]
+[node name="PrimaryReflectionRenderer" parent="." instance=ExtResource("11_gi0oh")]
+reflectionMaterials = null
+
+[node name="SecondaryReflectionRenderer" parent="." instance=ExtResource("11_gi0oh")]
+reflectionMaterials = null
 
 [node name="BGM" parent="." instance=ExtResource("11_s0jtr")]
 autoplay = true

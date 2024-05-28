@@ -4,6 +4,9 @@ namespace Project.Gameplay.Triggers
 {
 	public partial class ReflectionTrigger : StageTriggerModule
 	{
+		[Export]
+		private PlanarReflectionRenderer reflectionRenderer;
+
 		// Store previous data for deactivation.
 		private Vector3 previousPosition;
 		private Path3D previousReflectionSyncPath;
@@ -11,12 +14,12 @@ namespace Project.Gameplay.Triggers
 		public override void Activate()
 		{
 			// Cache data
-			previousPosition = PlanarReflectionRenderer.instance.GlobalPosition;
+			previousPosition = reflectionRenderer.GlobalPosition;
 
 			// Move to new position
-			PlanarReflectionRenderer.instance.GlobalPosition = GlobalPosition;
+			reflectionRenderer.GlobalPosition = GlobalPosition;
 		}
 
-		public override void Deactivate() => PlanarReflectionRenderer.instance.GlobalPosition = previousPosition;
+		public override void Deactivate() => reflectionRenderer.GlobalPosition = previousPosition;
 	}
 }
