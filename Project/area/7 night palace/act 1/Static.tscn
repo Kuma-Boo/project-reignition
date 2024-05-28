@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=58 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -25,8 +25,6 @@
 [ext_resource type="Resource" uid="uid://bl2d766v1u5w3" path="res://area/7 night palace/act 1/trigger/camera/SpaceAAutoCamera.tres" id="11_onu37"]
 [ext_resource type="Curve3D" uid="uid://da2df8sqgk6fe" path="res://area/7 night palace/act 1/environment/path/MainPath2.tres" id="12_gech5"]
 [ext_resource type="Curve3D" uid="uid://7nar8sphbcx3" path="res://area/7 night palace/act 1/environment/path/MainPath3.tres" id="13_htggc"]
-[ext_resource type="Curve3D" uid="uid://dgoop554yliys" path="res://area/7 night palace/act 1/environment/path/MainPath4.tres" id="14_gh6jo"]
-[ext_resource type="Curve3D" uid="uid://bjk7l8jst8agl" path="res://area/7 night palace/act 1/environment/path/MainPath5.tres" id="15_c1pfp"]
 [ext_resource type="Curve3D" uid="uid://026ux1mkbpp5" path="res://area/7 night palace/act 1/environment/path/CarpetPath.tres" id="16_qmphs"]
 [ext_resource type="Curve3D" uid="uid://cmkw2yow867db" path="res://area/7 night palace/act 1/environment/path/WallRun1.tres" id="17_4n7m5"]
 [ext_resource type="Curve3D" uid="uid://bsnpkefxehx8g" path="res://area/7 night palace/act 1/environment/path/WallRun2.tres" id="18_6scab"]
@@ -301,7 +299,7 @@ script = ExtResource("8_irx0t")
 
 [node name="Path" type="Node3D" parent="Trigger/Object/Sidle/SidleTrigger1" node_paths=PackedStringArray("path")]
 script = ExtResource("7_omcuu")
-path = NodePath("../../../../../Path/MainPath2")
+path = NodePath("../../../../../Path/MainPath1")
 
 [node name="SidleActivation" type="Node3D" parent="Trigger/Object/Sidle/SidleTrigger1" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_jhy1v")
@@ -366,33 +364,21 @@ shape = SubResource("BoxShape3D_xr06l")
 
 [node name="Path" type="Node3D" parent="Trigger"]
 
-[node name="MainPath3" parent="Trigger/Path" instance=ExtResource("4_d1bik")]
+[node name="MainPath2" parent="Trigger/Path" instance=ExtResource("4_d1bik")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -83.2426, -4, -325.343)
 "Enter Mode" = 0
 
-[node name="Path" type="Node3D" parent="Trigger/Path/MainPath3" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Trigger/Path/MainPath2" node_paths=PackedStringArray("path")]
 script = ExtResource("7_omcuu")
-path = NodePath("../../../../Path/MainPath3")
+path = NodePath("../../../../Path/MainPath2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/MainPath3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/MainPath2"]
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="MainPath4" parent="Trigger/Path" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -194.966, -15, -364.218)
-"Enter Mode" = 0
-
-[node name="Path" type="Node3D" parent="Trigger/Path/MainPath4" node_paths=PackedStringArray("path")]
+[node name="MainPath3" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+transform = Transform3D(4.37114e-08, 0, 1, 0, 1, 0, -1, 0, 4.37114e-08, 315.034, -103.998, -490.018)
 script = ExtResource("7_omcuu")
-path = NodePath("../../../../Path/MainPath4")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/MainPath4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mow5f")
-
-[node name="MainPath5" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
-transform = Transform3D(4.37114e-08, 0, 1, 0, 1, 0, -1, 0, 4.37114e-08, 315.034, -15, -490.018)
-script = ExtResource("7_omcuu")
-path = NodePath("../../../Path/MainPath5")
+path = NodePath("../../../Path/MainPath3")
 
 [node name="SpaceAPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -640)
@@ -762,32 +748,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 108.243, 2.5, -79.859)
 curve = ExtResource("17_4n7m5")
 
 [node name="MainPath2" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 159.986, 0.01, -114.296)
-curve = ExtResource("12_gech5")
-
-[node name="MainPath3" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74.513, -9.999, -320.333)
-curve = ExtResource("13_htggc")
+curve = ExtResource("12_gech5")
 
 [node name="WallRun2" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -145, -10, -320.333)
 curve = ExtResource("18_6scab")
-
-[node name="MainPath4" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -195, -14.999, -347.85)
-curve = ExtResource("14_gh6jo")
 
 [node name="CarpetPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -140.162, 6.48, -481.848)
 curve = ExtResource("16_qmphs")
 
 [node name="CarpetPathFollower" type="PathFollow3D" parent="Path/CarpetPath"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-4.3711e-08, 0, -0.999993, 0, 0.999996, 0, 0.999992, 0, -4.37111e-08, 0, 0, 0)
 loop = false
 
-[node name="MainPath5" type="Path3D" parent="Path"]
+[node name="MainPath3" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 232.139, -103.998, -490)
-curve = ExtResource("15_c1pfp")
+curve = ExtResource("13_htggc")
 
 [node name="GasRoomPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1070, 0, -560)
@@ -826,6 +804,7 @@ reflectionMaterials = [ExtResource("47_eiuc0")]
 [connection signal="Activated" from="Trigger/Object/WallRun2" to="Trigger/Object/WallRun2/WallRun" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Path" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1/SidleActivation" to="Trigger/Object/Sidle/SidleTrigger1/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Deactivate"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=56 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -43,6 +43,9 @@
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="42_m3821"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="43_sswox"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="44_dyala"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
+size = Vector3(20, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
@@ -198,6 +201,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
+[node name="SidleLoad" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 91, 2.5, -79.85)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/SidleLoad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
 [node name="Start" type="Node3D" parent="MainAct"]
 script = ExtResource("4_kcdaq")
 startEnabled = true
@@ -298,7 +310,7 @@ lifetime = 3.0
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 115.786, 2.5, -78.2942)
 
 [node name="Sidle" type="Node3D" parent="MainAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0.01, -160)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0, -160)
 visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
@@ -997,10 +1009,9 @@ shape = SubResource("BoxShape3D_r3fog")
 [node name="EndTrigger" parent="MainAct/Carpet" instance=ExtResource("26_bkait")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.10059, -106, 425)
 
-[node name="Path" type="Node3D" parent="MainAct/Carpet/EndTrigger" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="MainAct/Carpet/EndTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
 script = ExtResource("31_pibmb")
-path = NodePath("../../../../Static/Path/MainPath5")
 
 [node name="JumpTrigger" type="Node3D" parent="MainAct/Carpet/EndTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
@@ -3310,6 +3321,8 @@ saveVisibilityOnCheckpoint = true
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 206, 0, 0)
 warpTarget = NodePath("../../../Ending/GateC")
 
+[connection signal="Activated" from="MainAct/CullingMap/SidleLoad" to="MainAct/Sidle" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/SidleLoad" to="MainAct/Sidle" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin1" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/GreenMajin" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin2" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
@@ -3321,7 +3334,6 @@ warpTarget = NodePath("../../../Ending/GateC")
 [connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Deactivate"]
-[connection signal="Activated" from="MainAct/Ending/GateA" to="Static/Trigger/Path/MainPath5" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateA" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateA" to="MainAct/Ending" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateA" to="MainAct/Ending/GateA/Gate" method="Activate"]
@@ -3329,7 +3341,6 @@ warpTarget = NodePath("../../../Ending/GateC")
 [connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="Static/Visuals/MainSection" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="MainAct/Ending" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/GateA/Teleport" to="MainAct/SpaceA" method="Activate"]
-[connection signal="Activated" from="MainAct/Ending/GateB" to="Static/Trigger/Path/MainPath5" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateB" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateB" to="MainAct/Ending" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateB" to="MainAct/Ending/GateB/Gate" method="Activate"]
@@ -3337,7 +3348,6 @@ warpTarget = NodePath("../../../Ending/GateC")
 [connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="Static/Visuals/MainSection" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="MainAct/Ending" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/GateB/Teleport" to="MainAct/SpaceB" method="Activate"]
-[connection signal="Activated" from="MainAct/Ending/GateC" to="Static/Trigger/Path/MainPath5" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateC" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateC" to="MainAct/Ending" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/GateC" to="MainAct/Ending/GateC/Gate" method="Activate"]
