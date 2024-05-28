@@ -418,108 +418,125 @@ path = NodePath("../../../Path/GasRoomPath")
 
 [node name="Reflection" type="Node3D" parent="Trigger"]
 
-[node name="HallReflection" parent="Trigger/Reflection" instance=ExtResource("4_d1bik")]
+[node name="SecondaryHallReflection" parent="Trigger/Reflection" instance=ExtResource("4_d1bik")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10.1, 0, -79.8549)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Hall" type="Node3D" parent="Trigger/Reflection/SecondaryHallReflection" node_paths=PackedStringArray("reflectionRenderer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -77)
+script = ExtResource("8_ucc6w")
+reflectionRenderer = NodePath("../../../../SecondaryReflectionRenderer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Reflection/SecondaryHallReflection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="PrimaryHallReflection" parent="Trigger/Reflection" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 101.1, 2.5, -79.8549)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Hall" type="Node3D" parent="Trigger/Reflection/HallReflection"]
+[node name="Hall" type="Node3D" parent="Trigger/Reflection/PrimaryHallReflection" node_paths=PackedStringArray("reflectionRenderer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -67.161, -2.5, -57.6026)
 script = ExtResource("8_ucc6w")
+reflectionRenderer = NodePath("../../../../PrimaryReflectionRenderer")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Reflection/HallReflection"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Reflection/PrimaryHallReflection"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
 
-[node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="02L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -70)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/02Load"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/02L"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="01Unload" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="01U" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 152.67, -1, -108.383)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/01Unload"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/01U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="03Load" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="03L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0, -236)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03Load"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03L"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="02Unload" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="02U" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, -7.26172, 5, -345.525)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/02Unload"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/02U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="04Load" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="04L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -160, -10, -320.3)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04Load"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04L"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="05Load" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="05L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -173.7, 10, -502.3)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/05Load"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/05L"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="03Unload" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="03U" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, -165.262, 10, -481.825)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03Unload"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="04Unload" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="04U" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, -143.262, 10, -481.825)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04Unload"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="06Load" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="06L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.3, -88.5, -559.3)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/06Load"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/06L"]
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="05Unload" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
+[node name="05U" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, 360.738, -102, -490.225)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/05Unload"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/05U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
@@ -530,18 +547,23 @@ saveVisibilityOnCheckpoint = true
 isStageVisuals = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Visuals/MainSection"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, -4.37114e-08)
 layers = 1024
-light_energy = 0.5
+light_energy = 1.4
 light_cull_mask = 4293918723
 shadow_enabled = true
 directional_shadow_blend_splits = true
+directional_shadow_max_distance = 50.0
+
+[node name="BounceLight3D" type="DirectionalLight3D" parent="Visuals/MainSection"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, -4.37114e-08)
+layers = 1024
+light_cull_mask = 4293918787
 
 [node name="01Start" parent="Visuals/MainSection" instance=ExtResource("1_c3xql")]
 startEnabled = true
 
 [node name="02Sidle" parent="Visuals/MainSection" instance=ExtResource("3_ch7dh")]
-visible = false
 
 [node name="03Tower" parent="Visuals/MainSection" instance=ExtResource("4_olu7y")]
 visible = false
@@ -668,23 +690,23 @@ reflectionMaterials = [ExtResource("47_eiuc0")]
 [connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/02Load" to="Visuals/MainSection/02Sidle" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/01Unload" to="Visuals/MainSection/01Start" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/01Unload" to="Visuals/MainSection/01Start" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/03Load" to="Visuals/MainSection/03Tower" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/03Load" to="Visuals/MainSection/03Tower" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/02Unload" to="Visuals/MainSection/02Sidle" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/02Unload" to="Visuals/MainSection/02Sidle" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/04Load" to="Visuals/MainSection/04Interior" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/04Load" to="Visuals/MainSection/04Interior" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/05Load" to="Visuals/MainSection/05Carpet" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/05Load" to="Visuals/MainSection/05Carpet" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/03Unload" to="Visuals/MainSection/03Tower" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/03Unload" to="Visuals/MainSection/03Tower" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/04Unload" to="Visuals/MainSection/04Interior" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/04Unload" to="Visuals/MainSection/04Interior" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/06Load" to="Visuals/MainSection/06Ending" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/06Load" to="Visuals/MainSection/06Ending" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/05Unload" to="Visuals/MainSection/05Carpet" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/05Unload" to="Visuals/MainSection/05Carpet" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/02L" to="Visuals/MainSection/02Sidle" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/02L" to="Visuals/MainSection/02Sidle" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/01U" to="Visuals/MainSection/01Start" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/01U" to="Visuals/MainSection/01Start" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/03L" to="Visuals/MainSection/03Tower" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03L" to="Visuals/MainSection/03Tower" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/02U" to="Visuals/MainSection/02Sidle" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/02U" to="Visuals/MainSection/02Sidle" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/04L" to="Visuals/MainSection/04Interior" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/04L" to="Visuals/MainSection/04Interior" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/05L" to="Visuals/MainSection/05Carpet" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/05L" to="Visuals/MainSection/05Carpet" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/03U" to="Visuals/MainSection/03Tower" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03U" to="Visuals/MainSection/03Tower" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/04U" to="Visuals/MainSection/04Interior" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/04U" to="Visuals/MainSection/04Interior" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/06L" to="Visuals/MainSection/06Ending" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/06L" to="Visuals/MainSection/06Ending" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/05U" to="Visuals/MainSection/05Carpet" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/05U" to="Visuals/MainSection/05Carpet" method="Activate"]
