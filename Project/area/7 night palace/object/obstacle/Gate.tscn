@@ -1,122 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://r47skp23jl1b"]
+[gd_scene load_steps=5 format=3 uid="uid://r47skp23jl1b"]
 
-[ext_resource type="PackedScene" uid="uid://iaqsmbs2mp6w" path="res://area/7 night palace/object/model/gate/GateBroken.gltf" id="1_bn3is"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_mj45b"]
-[ext_resource type="PackedScene" uid="uid://cke1glphuqnad" path="res://area/7 night palace/object/model/gate/GateFixed.gltf" id="2_oq3xw"]
-
-[sub_resource type="Animation" id="Animation_477vt"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GateFixed:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("GateBroken:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("GateBroken/AnimationPlayer")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["gate_RESET", -1, 1.0, false],
-"method": &"play"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CollisionShape3D:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="Animation_0gvf5"]
-resource_name = "event"
-length = 1.50001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GateFixed:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("GateBroken:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("GateBroken/AnimationPlayer")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["gate_fix", -1, 1.0, false],
-"method": &"play"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CollisionShape3D:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_p8wd7"]
-_data = {
-"RESET": SubResource("Animation_477vt"),
-"event": SubResource("Animation_0gvf5")
-}
+[ext_resource type="PackedScene" uid="uid://dqmopcxxj8h6q" path="res://area/7 night palace/object/model/gate/Gate.gltf" id="2_2x2ah"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0b08u"]
 size = Vector3(2.5, 20, 30)
@@ -126,62 +11,27 @@ size = Vector3(8, 20, 20)
 
 [node name="Gate" type="StaticBody3D" node_paths=PackedStringArray("animator") groups=["wall"]]
 script = ExtResource("1_mj45b")
-animator = NodePath("AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("Gate/AnimationPlayer")
 
-[node name="GateBroken" parent="." instance=ExtResource("1_bn3is")]
+[node name="Gate" parent="." instance=ExtResource("2_2x2ah")]
 
-[node name="GateBrokenBaseMesh" parent="GateBroken" index="0"]
-cast_shadow = 0
-
-[node name="Skeleton3D" parent="GateBroken/GateRoot" index="0"]
+[node name="Skeleton3D" parent="Gate/GateBrokenRoot" index="1"]
+bones/1/rotation = Quaternion(0.110993, 0.715822, -0.526837, 0.44466)
+bones/2/rotation = Quaternion(-0.0672202, 0.0467876, 0.141786, 0.986503)
+bones/3/rotation = Quaternion(-0.0366004, 0.161409, -0.44611, 0.879542)
+bones/4/rotation = Quaternion(-0.383247, -0.424154, -0.441804, 0.691393)
+bones/5/rotation = Quaternion(0.163834, 0.35391, -0.175949, 0.903852)
+bones/6/rotation = Quaternion(0.260803, 0.188323, -0.390183, 0.862713)
+bones/7/rotation = Quaternion(0.296567, 0.202081, -0.562423, 0.744911)
+bones/8/rotation = Quaternion(0.600887, -0.598652, -0.374574, 0.374493)
 bones/9/rotation = Quaternion(-0.571053, -0.244781, 0.742483, -0.2504)
+bones/10/rotation = Quaternion(-0.542932, -0.468419, 0.146655, 0.681396)
 
-[node name="Piece01" parent="GateBroken/GateRoot/Skeleton3D" index="0"]
-cast_shadow = 0
-
-[node name="Piece02" parent="GateBroken/GateRoot/Skeleton3D" index="1"]
-cast_shadow = 0
-
-[node name="Piece03" parent="GateBroken/GateRoot/Skeleton3D" index="2"]
-cast_shadow = 0
-
-[node name="Piece04" parent="GateBroken/GateRoot/Skeleton3D" index="3"]
-cast_shadow = 0
-
-[node name="Piece05" parent="GateBroken/GateRoot/Skeleton3D" index="4"]
-cast_shadow = 0
-
-[node name="Piece06" parent="GateBroken/GateRoot/Skeleton3D" index="5"]
-cast_shadow = 0
-
-[node name="Piece07" parent="GateBroken/GateRoot/Skeleton3D" index="6"]
-cast_shadow = 0
-
-[node name="Piece08" parent="GateBroken/GateRoot/Skeleton3D" index="7"]
-cast_shadow = 0
-
-[node name="Piece09" parent="GateBroken/GateRoot/Skeleton3D" index="8"]
-cast_shadow = 0
-
-[node name="Piece10" parent="GateBroken/GateRoot/Skeleton3D" index="9"]
-cast_shadow = 0
-
-[node name="Piece11" parent="GateBroken/GateRoot/Skeleton3D" index="10"]
-cast_shadow = 0
-
-[node name="AnimationPlayer" parent="GateBroken" index="2"]
-autoplay = "gate_RESET"
-
-[node name="GateFixed" parent="." instance=ExtResource("2_oq3xw")]
+[node name="GateFixedMesh" parent="Gate" index="1"]
 visible = false
-
-[node name="GateFixedMesh" parent="GateFixed" index="0"]
-cast_shadow = 0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_p8wd7")
-}
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 8, 0)
@@ -195,5 +45,4 @@ shape = SubResource("BoxShape3D_f5drb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 10, 13.6)
 shape = SubResource("BoxShape3D_f5drb")
 
-[editable path="GateBroken"]
-[editable path="GateFixed"]
+[editable path="Gate"]
