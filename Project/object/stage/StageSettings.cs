@@ -28,7 +28,9 @@ namespace Project.Gameplay
 
 			UpdateScore(0, MathModeEnum.Replace);
 
-			if (!IsControlTest)
+			if (IsControlTest)
+				LevelState = LevelStateEnum.Ingame;
+			else
 				LevelState = LevelStateEnum.Loading;
 		}
 
