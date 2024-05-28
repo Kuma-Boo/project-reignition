@@ -121,7 +121,9 @@ namespace Project.Gameplay
 			objectiveRoot.Visible = Stage != null && Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective;
 			if (!objectiveRoot.Visible) return; //Don't do anything when objective counter isn't visible
 
-			objectiveSprite.Visible = true;
+
+			// TODO Implement proper objective sprites
+			objectiveSprite.Visible = false;
 			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 			objectiveMaxValue.Text = Stage.Data.MissionObjectiveCount.ToString("00");
 
