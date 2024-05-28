@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b6tymj1vanl66"]
+[gd_scene load_steps=20 format=3 uid="uid://b6tymj1vanl66"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fvbu3"]
 [ext_resource type="Resource" uid="uid://du86d7lfu3g3t" path="res://resource/level data/night palace/Boss.tres" id="2_wdw6t"]
@@ -16,6 +16,8 @@
 [ext_resource type="Curve3D" path="res://area/7 night palace/boss/environment/path/MainPath.tres" id="10_7yaqk"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="11_gi0oh"]
 [ext_resource type="PackedScene" uid="uid://digasi1lyp6oy" path="res://area/7 night palace/data/BGMBoss.tscn" id="11_s0jtr"]
+[ext_resource type="Material" uid="uid://c3kendmmffv8b" path="res://area/7 night palace/data/material/Effect Primary Reflection.tres" id="15_48h34"]
+[ext_resource type="Material" uid="uid://dwmvujonhvjd7" path="res://area/7 night palace/data/material/Effect Secondary Reflection.tres" id="16_gcw3n"]
 
 [sub_resource type="BoxShape3D" id="10"]
 size = Vector3(16, 28, 2)
@@ -84,13 +86,13 @@ transform = Transform3D(0.999848, 0, 0.0174526, 0, 1, 0, -0.0174524, 0, 0.999858
 transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 0, 0, -87)
 
 [node name="Hall4" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3" instance=ExtResource("4_dw3fh")]
-transform = Transform3D(0.999849, 0, 0.0174512, 0, 1, 0, -0.0174515, 0, 0.999829, -0.000182629, 0, -86.9957)
+transform = Transform3D(0.999849, 0, 0.0174512, 0, 1, 0, -0.0174515, 0, 0.999829, 0, 0, -87)
 
 [node name="Hall5" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4" instance=ExtResource("4_dw3fh")]
 transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, -6.67572e-06, 0, -87)
 
 [node name="Hall6" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4/Hall5" instance=ExtResource("4_dw3fh")]
-transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, -1.51836, 0, -86.9868)
+transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 0, 0, -87)
 
 [node name="LOD1" parent="Visuals/InfiniteHall/HallRoot/Hall2/Hall3/Hall4/Hall5/Hall6" instance=ExtResource("5_h1u78")]
 transform = Transform3D(0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, 0.999848, 9.53674e-06, 0, -87)
@@ -111,14 +113,17 @@ transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, -0.62828
 transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, 0, 15, 0)
 shape = SubResource("10")
 
-[node name="Moonlight" type="DirectionalLight3D" parent="Visuals"]
-transform = Transform3D(2.54519e-06, -0.548177, 0.836362, -3.01604e-07, 0.836362, 0.548177, -1, -1.64747e-06, 1.96337e-06, 12.4917, 3, -7.73828)
-light_energy = 1.2
-shadow_enabled = true
-directional_shadow_blend_splits = true
-
 [node name="Skybox" parent="Visuals" instance=ExtResource("9_aohgx")]
 metadata/_edit_lock_ = true
+
+[node name="Moonlight" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(2.54519e-06, -0.548177, 0.836362, -3.01604e-07, 0.836362, 0.548177, -1, -1.64747e-06, 1.96337e-06, 12.4917, 3, -7.73828)
+layers = 1024
+light_energy = 1.2
+light_cull_mask = 4293918786
+shadow_enabled = true
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 50.0
 
 [node name="Collision" type="Node3D" parent="."]
 visible = false
@@ -148,14 +153,14 @@ shape = SubResource("10")
 curve = ExtResource("10_7yaqk")
 
 [node name="PrimaryReflectionRenderer" parent="." instance=ExtResource("11_gi0oh")]
-reflectionMaterials = null
+reflectionMaterials = [ExtResource("15_48h34")]
 
 [node name="SecondaryReflectionRenderer" parent="." instance=ExtResource("11_gi0oh")]
-reflectionMaterials = null
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+reflectionMaterials = [ExtResource("16_gcw3n")]
 
 [node name="BGM" parent="." instance=ExtResource("11_s0jtr")]
-autoplay = true
-bus = &"Master"
+bus = &"BGM"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("8_metfr")
