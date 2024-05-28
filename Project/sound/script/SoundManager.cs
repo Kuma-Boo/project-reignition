@@ -284,7 +284,7 @@ namespace Project.Core
 			return CalculateGroupSFXVolumeDB(key);
 		}
 
-		private float CalculateGroupSFXVolumeDB(StringName key)
+		public float CalculateGroupSFXVolumeDB(StringName key)
 		{
 			if (sfxGroups.ContainsKey(key)) // Calculate target db volume
 				return Mathf.LinearToDb(1.0f / sfxGroups[key]);

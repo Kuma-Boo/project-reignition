@@ -7,7 +7,7 @@ public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 	public StringName groupKey;
 	private Callable SignalCallable => Callable.From(() => SoundManager.instance.RemoveGroupSFX(groupKey));
 
-	public void Play()
+	public void PlayInGroup()
 	{
 		if (Playing)
 			SoundManager.instance.RemoveGroupSFX(groupKey);
@@ -16,6 +16,6 @@ public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 			Connect(SignalName.Finished, SignalCallable, (uint)ConnectFlags.OneShot);
 
 		MaxDb = SoundManager.instance.AddGroupSFX(groupKey);
-		base.Play();
+		Play();
 	}
 }
