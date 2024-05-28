@@ -59,7 +59,13 @@ namespace Project.Gameplay.Triggers
 
 		private bool visibleOnCheckpoint;
 		/// <summary> Saves the current visiblity. Called when the player passes a checkpoint. </summary>
-		private void ProcessCheckpoint() => visibleOnCheckpoint = Visible;
+		private void ProcessCheckpoint()
+		{
+			if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Loading)
+				visibleOnCheckpoint = startEnabled;
+			else
+				visibleOnCheckpoint = Visible;
+		}
 
 		public override void Respawn()
 		{
