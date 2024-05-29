@@ -181,7 +181,7 @@ namespace Project.Gameplay.Triggers
 				animator.Seek(0, true);
 
 			animator.Play(EVENT_ANIMATION);
-
+			animator.Advance(0);
 
 			if (playerStandin != null && !playerStandin.IsEmpty)
 			{
