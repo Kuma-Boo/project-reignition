@@ -93,7 +93,7 @@ namespace Project.Gameplay.Triggers
 			Vector3 castVector = Vector3.Down * Character.CollisionRadius * 2.0f;
 			RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
 			DebugManager.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
-			if (!hit) // No ground - Respawn
+			if (!hit) // No ground - Fall and respawn
 			{
 				GD.Print("Ground not found!!!");
 				StartRespawn();
@@ -139,9 +139,12 @@ namespace Project.Gameplay.Triggers
 
 		private void StopSidle()
 		{
-			if (!isActive) return; //Already deactivated
+			if (!isActive) return; // Already deactivated
 
 			isActive = false;
+
+			// Don't reset animations when respawning
+			if (Character.IsDefeated) return;
 
 			Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.BackAngle : Character.PathFollower.ForwardAngle;
 			Character.MoveSpeed = Mathf.Abs(Character.MoveSpeed);
@@ -184,7 +187,7 @@ namespace Project.Gameplay.Triggers
 			if (StageSettings.instance.CurrentRingCount == 0)
 			{
 				StopSidle();
-				Character.StartKnockback(new CharacterController.KnockbackSettings());
+				Character.StartKnockback();
 				return;
 			}
 
@@ -206,7 +209,7 @@ namespace Project.Gameplay.Triggers
 			switch (damageState)
 			{
 				case DamageStates.Hanging:
-					if (cycleTimer >= DAMAGE_HANG_LENGTH) //Fall
+					if (cycleTimer >= DAMAGE_HANG_LENGTH) // Fall
 					{
 						StartRespawn();
 						Character.Animator.SidleHangFall();
@@ -223,7 +226,7 @@ namespace Project.Gameplay.Triggers
 					break;
 
 				case DamageStates.Stagger:
-					if (cycleTimer >= DAMAGE_STAGGER_LENGTH) //Fall
+					if (cycleTimer >= DAMAGE_STAGGER_LENGTH) // Fall
 					{
 						cycleTimer = 0;
 						if (IsOverFoothold)
@@ -258,7 +261,7 @@ namespace Project.Gameplay.Triggers
 					}
 
 					cycleTimer = 0;
-					if (Character.Animator.IsSidleMoving) //Finished
+					if (Character.Animator.IsSidleMoving) // Finished
 					{
 						damageState = DamageStates.Disabled;
 						Character.Animator.UpdateSidle(cycleTimer);
