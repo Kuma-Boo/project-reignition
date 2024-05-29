@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode specular_disabled, shadows_disabled;
+render_mode specular_disabled;
 
 uniform sampler2D albedo : source_color;
 uniform float ambient_light_strength : hint_range(0, 1, .1) = 1.0;
