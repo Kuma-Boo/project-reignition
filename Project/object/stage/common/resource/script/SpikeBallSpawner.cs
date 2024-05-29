@@ -9,96 +9,43 @@ namespace Project.Gameplay.Hazards
 	/// </summary>
 	public partial class SpikeBallSpawner : Node3D
 	{
-		public partial class SpikeBallData : GodotObject
-		{
-			/// <summary> Spikeball's rigidbody. </summary>
-			public RigidBody3D rigidbody;
-			/// <summary> Spikeball's animator. </summary>
-			public AnimationPlayer animator;
-
-			/// <summary> Is this spikeball currently spawned? </summary>
-			public bool isSpawned;
-			/// <summary> Spikeball's current lifetime. </summary>
-			public float lifetime;
-			/// <summary> How long should the spikeball last? </summary>
-			public float maxLifetime;
-
-			public void Spawn()
-			{
-				rigidbody.Visible = true;
-				rigidbody.ProcessMode = ProcessModeEnum.Inherit;
-
-				rigidbody.LinearVelocity = Vector3.Zero;
-				rigidbody.AngularVelocity = Vector3.Zero;
-				rigidbody.Transform = Transform3D.Identity;
-				animator.Play("spawn");
-
-				lifetime = 0;
-				isSpawned = true;
-			}
-
-			public void Despawn()
-			{
-				isSpawned = false;
-				rigidbody.Visible = false;
-				rigidbody.ProcessMode = ProcessModeEnum.Disabled;
-			}
-
-			public void Process()
-			{
-				if (!isSpawned) return;
-
-				if (lifetime < maxLifetime)
-				{
-					lifetime += PhysicsManager.physicsDelta;
-					if (lifetime >= maxLifetime)
-						animator.Play("despawn");
-				}
-				else if (!animator.IsPlaying()) //Wait until despawn animation finishes
-					Despawn();
-			}
-		}
-
 		/// <summary> Timer to keep track of spawn interval. </summary>
 		private float timer;
 
 		[Export]
-		public bool isPaused;
+		private bool isPaused;
 
 		[Export]
 		/// <summary> The spikeball to make copies of. </summary>
-		public RigidBody3D spikeBall;
-		private readonly List<SpikeBallData> spikeBallPool = new List<SpikeBallData>();
+		private PackedScene spikeBallScene;
+
+		private readonly List<SpikeBallPhysics> spikeBallPool = new();
 
 		[Export]
 		/// <summary> How many spike balls can be pooled. </summary>
-		public int maxSpawnAmount;
-
+		private int maxSpawnAmount;
 		[Export]
 		/// <summary> How long should spike balls last? </summary>
-		public float lifetime;
-
+		private float lifetime;
 		/// <summary> How frequently to spawn spike balls. </summary>
 		[Export]
-		public float spawnInterval;
+		private float spawnInterval;
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-			spikeBall.Visible = false;
-			spikeBall.ProcessMode = ProcessModeEnum.Disabled;
+			// Hide the editor mesh
+			GetChild<Node3D>(0).Visible = false;
 
+			// Pool spike balls
 			for (int i = 0; i < maxSpawnAmount; i++)
 			{
-				RigidBody3D rb = spikeBall.Duplicate() as RigidBody3D;
-				spikeBallPool.Add(new SpikeBallData()
-				{
-					rigidbody = rb,
-					animator = rb.GetNode<AnimationPlayer>("AnimationPlayer"),
-					maxLifetime = lifetime
-				});
+				SpikeBallPhysics spikeBall = spikeBallScene.Instantiate<SpikeBallPhysics>();
+				spikeBall.MaxLifetime = lifetime;
+				spikeBallPool.Add(spikeBall);
+
 				spikeBallPool[i].Despawn();
-				AddChild(rb);
+				AddChild(spikeBall);
 			}
 
 			StageSettings.instance.ConnectUnloadSignal(this);
@@ -115,9 +62,6 @@ namespace Project.Gameplay.Hazards
 				timer -= spawnInterval;
 				SpawnBall();
 			}
-
-			for (int i = 0; i < spikeBallPool.Count; i++)
-				spikeBallPool[i].Process();
 		}
 
 		/// <summary>
@@ -127,7 +71,7 @@ namespace Project.Gameplay.Hazards
 		{
 			for (int i = 0; i < spikeBallPool.Count; i++)
 			{
-				if (!spikeBallPool[i].isSpawned)
+				if (!spikeBallPool[i].IsSpawned)
 				{
 					spikeBallPool[i].Spawn();
 					break;
@@ -139,15 +83,6 @@ namespace Project.Gameplay.Hazards
 		/// <summary>
 		/// Prevent memory leaks
 		/// </summary>
-		public void Unload()
-		{
-			for (int i = 0; i < spikeBallPool.Count; i++)
-			{
-				spikeBallPool[i].rigidbody.QueueFree();
-				spikeBallPool[i].Free();
-			}
-
-			spikeBallPool.Clear();
-		}
+		public void Unload() => spikeBallPool.Clear();
 	}
 }
