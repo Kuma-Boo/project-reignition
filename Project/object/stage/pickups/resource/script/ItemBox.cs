@@ -21,7 +21,7 @@ namespace Project.Gameplay.Objects
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Pickup Parent", Variant.Type.NodePath));
 
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Time", Variant.Type.Float, PropertyHint.Range, "0.2,2,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Delay", Variant.Type.Float, PropertyHint.Range, "0.2,2,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Delay", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Delay Range", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Travel Height", Variant.Type.Float, PropertyHint.Range, "0,20,0.1"));
 			}

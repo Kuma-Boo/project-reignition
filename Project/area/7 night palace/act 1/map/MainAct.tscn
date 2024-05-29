@@ -1,8 +1,9 @@
-[gd_scene load_steps=56 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=68 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
 [ext_resource type="PackedScene" uid="uid://ctfcgpodfhnp0" path="res://area/7 night palace/act 1/Static.tscn" id="3_ksvvu"]
+[ext_resource type="Resource" uid="uid://c8plnbhxxi7v3" path="res://area/7 night palace/act 1/camera/OpeningCam.tres" id="3_mltpg"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_kcdaq"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_nmhcr"]
 [ext_resource type="PackedScene" uid="uid://bo061vk53h0fv" path="res://area/7 night palace/object/foothold/SidleFooting.tscn" id="5_6dn8w"]
@@ -22,12 +23,14 @@
 [ext_resource type="PackedScene" uid="uid://b4omh0erkr8si" path="res://object/enemy/majin/data/night palace/RedMajin.tscn" id="19_3ua6y"]
 [ext_resource type="PackedScene" uid="uid://duoxr3yjsxaoi" path="res://area/7 night palace/object/grindrail/Grindrail03.tscn" id="20_kogq7"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="21_3irg0"]
+[ext_resource type="PackedScene" uid="uid://c61jp8ke67ib7" path="res://object/stage/common/SpikeBallPhysics.tscn" id="23_281oh"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="23_f4mat"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="24_i3gqp"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="25_t50ri"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="26_bkait"]
 [ext_resource type="PackedScene" uid="uid://b2ym415hopd85" path="res://area/7 night palace/object/Carpet.tscn" id="26_sio18"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="27_iu8fd"]
+[ext_resource type="Resource" uid="uid://drmbvsyw4u64k" path="res://area/7 night palace/act 1/camera/JumpPanelCam.tres" id="28_ru4gh"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="29_uohue"]
 [ext_resource type="Resource" uid="uid://b3ti60dq0o0ro" path="res://area/7 night palace/act 1/camera/CarpetCam.tres" id="30_m5m3w"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="31_pibmb"]
@@ -49,6 +52,247 @@ size = Vector3(20, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
+
+[sub_resource type="Animation" id="Animation_ksny5"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpikeBallPhysics1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpikeBallPhysics2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpikeBallPhysics1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-22.675, 20, -0.399994)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpikeBallPhysics2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-22.675, 20, -2.79999)]
+}
+
+[sub_resource type="Animation" id="Animation_6q5x5"]
+resource_name = "event"
+length = 0.5
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpikeBallPhysics1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Spawn"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpikeBallPhysics2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Spawn"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gukr6"]
+_data = {
+"RESET": SubResource("Animation_ksny5"),
+"event": SubResource("Animation_6q5x5")
+}
+
+[sub_resource type="Animation" id="Animation_tibcn"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpikeBallPhysics1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpikeBallPhysics2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpikeBallPhysics1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-30.675, 20, 3.3)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpikeBallPhysics2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-29.675, 20, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_x1ybp"]
+resource_name = "event"
+length = 0.5
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpikeBallPhysics1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Spawn"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpikeBallPhysics2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Spawn"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n34xa"]
+_data = {
+"RESET": SubResource("Animation_tibcn"),
+"event": SubResource("Animation_x1ybp")
+}
+
+[sub_resource type="Animation" id="Animation_t1lpx"]
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpikeBallPhysics")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpikeBallPhysics:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(28, 25, 0.6)]
+}
+
+[sub_resource type="Animation" id="Animation_5mf33"]
+resource_name = "event"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpikeBallPhysics")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Spawn"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j83vd"]
+_data = {
+"RESET": SubResource("Animation_t1lpx"),
+"event": SubResource("Animation_5mf33")
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r3fog"]
 size = Vector3(20, 20, 2.5)
@@ -191,26 +435,75 @@ _data = {
 
 [node name="Static" parent="." instance=ExtResource("3_ksvvu")]
 Data = ExtResource("2_wwd1j")
+InitialCameraSettings = ExtResource("3_mltpg")
 
 [node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.926, 0, -232.964)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
-[node name="SidleLoad" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+[node name="SidleL" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 91, 2.5, -79.85)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/SidleLoad"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/SidleL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="StartU" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 159.986, 0.0100317, -116.437)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/StartU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="HallL" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 159.978, 0.0103252, -197.247)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/HallL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="SidleU" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 139.26, 0.000968456, -265.884)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/SidleU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="TowerL" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.815662, 5.00124, -338.131)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/TowerL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="HallU" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(5.96046e-08, 0, -1, 0, 1, 0, 1, 0, 5.96046e-08, -87.8062, -9.99888, -320.263)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/HallU"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Start" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -311,6 +604,7 @@ transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 
 
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0, -160)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -321,7 +615,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
 [node name="SidleFooting1" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
-"Falling Platform Settings/Shake Length" = 0.5
+"Falling Platform Settings/Shake Length" = 1.5
 
 [node name="SidleFooting2" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
@@ -471,9 +765,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [node name="SidleFooting3" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"Falling Platform Settings/Shake Length" = 2.0
 
 [node name="SidleFooting4" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+"Falling Platform Settings/Shake Length" = 2.0
 
 [node name="SidleFooting5" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
@@ -575,87 +871,176 @@ stateLengths = [2.0, 1.0, 1.5]
 
 [node name="Hall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.1, 0.01, -245.6)
-visible = false
 script = ExtResource("4_kcdaq")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="MajinGroup1" type="Node3D" parent="MainAct/Hall"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.57361, 0, -14.9894)
 
 [node name="GreenMajin1" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2.28882e-05)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(-1, 2, 30)
-rangeOverride = 20
+rangeOverride = 15
 
 [node name="GreenMajin2" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00003, 0, -7.00001)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
-rangeOverride = 20
+rangeOverride = 15
 
 [node name="GreenMajin3" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299988, 0, -3.70001)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
-rangeOverride = 15
+rangeOverride = 10
 
 [node name="BlueMajin" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_ggltt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32391, 0, -12.713)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-30, 0, 0)
+rangeOverride = 15
 
 [node name="RedMajin" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("19_3ua6y")]
 transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -1.39404, 0, -20.3458)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 30)
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 1.0
+rangeOverride = 20
 
 [node name="GreenMajin4" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -5.95087, 0, -22.9364)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
+rangeOverride = 10
 
 [node name="ItemBox1" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.1, 0.5, -32)
-"Spawn Settings/Pickup Parent" = NodePath("SpawnPosition")
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
 "Spawn Settings/Travel Time" = 0.5
 
-[node name="SpawnPosition" type="Node3D" parent="MainAct/Hall/ItemBox1"]
+[node name="RichRing" parent="MainAct/Hall/ItemBox1" instance=ExtResource("7_fjkar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -1.5)
 
+[node name="Event" type="Node3D" parent="MainAct/Hall/ItemBox1" node_paths=PackedStringArray("animator")]
+script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="SpikeBallPhysics1" parent="MainAct/Hall/ItemBox1/Event" instance=ExtResource("23_281oh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.675, 20, -0.399994)
+MaxLifetime = 10.0
+
+[node name="SpikeBallPhysics2" parent="MainAct/Hall/ItemBox1/Event" instance=ExtResource("23_281oh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.675, 20, -2.79999)
+MaxLifetime = 10.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hall/ItemBox1/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_gukr6")
+}
+
 [node name="ItemBox2" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81, 5.5, -35.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 5.5, -35.5)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
+
+[node name="Event" type="Node3D" parent="MainAct/Hall/ItemBox2" node_paths=PackedStringArray("animator")]
+script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="SpikeBallPhysics1" parent="MainAct/Hall/ItemBox2/Event" instance=ExtResource("23_281oh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.675, 20, 3.3)
+MaxLifetime = 10.0
+
+[node name="SpikeBallPhysics2" parent="MainAct/Hall/ItemBox2/Event" instance=ExtResource("23_281oh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.675, 20, 0.5)
+MaxLifetime = 10.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hall/ItemBox2/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_n34xa")
+}
 
 [node name="ItemBox3" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -81, 5.5, -31.7)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
+[node name="Event" type="Node3D" parent="MainAct/Hall/ItemBox3" node_paths=PackedStringArray("animator")]
+script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="SpikeBallPhysics" parent="MainAct/Hall/ItemBox3/Event" instance=ExtResource("23_281oh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 25, 0.6)
+MaxLifetime = 10.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hall/ItemBox3/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_j83vd")
+}
+
 [node name="MajinGroup2" type="Node3D" parent="MainAct/Hall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -113.1, 10, -33.5)
 
 [node name="BlueMajin1" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_ggltt")]
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -33, 0, -5)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-5, 0, 30)
 
 [node name="BlueMajin2" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_ggltt")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -33.5858, 0, -12.4142)
+"Spawn Settings/Spawn Travel Time" = 1.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 2, 45)
 
 [node name="RedMajin" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("19_3ua6y")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -40, 0, -19)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 0.8
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 1.0
+rangeOverride = 25
 
 [node name="GreenMajin1" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -40.5042, 0, -13.8656)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
+rangeOverride = 25
 
 [node name="BlueMajin3" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_ggltt")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -43.9696, 0, -21.803)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(8, 2, 40)
 
 [node name="GreenMajin2" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -41.7014, 0, -26.5102)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
+rangeOverride = 10
 
 [node name="Grindrail1" parent="MainAct/Hall" instance=ExtResource("20_kogq7")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -155, 5.3, -101)
@@ -679,6 +1064,9 @@ endCapPath = NodePath("")
 
 [node name="RedMajin" parent="MainAct/Hall/Grindrail2" instance=ExtResource("19_3ua6y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -1)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-10, 0, -8)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 0.5
 "Attack Settings/Flame Active Time" = 3.0
@@ -689,6 +1077,11 @@ transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 
 middleHeight = 8.0
 finalHeight = -16.0
 distance = 36.0
+
+[node name="Camera" type="Node3D" parent="MainAct/Hall/JumpPanel"]
+script = ExtResource("29_uohue")
+transitionTime = 0.5
+settings = ExtResource("28_ru4gh")
 
 [node name="Tower" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
@@ -3323,8 +3716,27 @@ saveVisibilityOnCheckpoint = true
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 206, 0, 0)
 warpTarget = NodePath("../../../Ending/GateC")
 
-[connection signal="Activated" from="MainAct/CullingMap/SidleLoad" to="MainAct/Sidle" method="Activate"]
-[connection signal="Deactivated" from="MainAct/CullingMap/SidleLoad" to="MainAct/Sidle" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/SidleL" to="MainAct/Sidle" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/SidleL" to="MainAct/Sidle" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/StartU" to="MainAct/Start" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/StartU" to="MainAct/Start" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/HallL" to="MainAct/Hall" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/HallL" to="MainAct/Hall" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/SidleU" to="MainAct/Sidle" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/SidleU" to="MainAct/Sidle" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/TowerL" to="MainAct/Tower" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/TowerL" to="MainAct/Tower" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/HallU" to="MainAct/Hall" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/HallU" to="MainAct/Hall" method="Activate"]
+[connection signal="Collected" from="MainAct/Hall/ItemBox1" to="MainAct/Hall/ItemBox1/Event" method="Activate"]
+[connection signal="Respawned" from="MainAct/Hall/ItemBox1/RichRing" to="MainAct/Hall/ItemBox1/Event" method="Respawn"]
+[connection signal="Collected" from="MainAct/Hall/ItemBox2" to="MainAct/Hall/ItemBox2/Event" method="Activate"]
+[connection signal="Respawned" from="MainAct/Hall/ItemBox2" to="MainAct/Hall/ItemBox2/Event" method="Respawn"]
+[connection signal="Collected" from="MainAct/Hall/ItemBox3" to="MainAct/Hall/ItemBox3/Event" method="Activate"]
+[connection signal="Respawned" from="MainAct/Hall/ItemBox3" to="MainAct/Hall/ItemBox3/Event" method="Respawn"]
+[connection signal="Activated" from="MainAct/Hall/JumpPanel" to="Static/Collision/Collision/JumpPanelOneWay" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Hall/JumpPanel" to="MainAct/Hall/JumpPanel/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Hall/JumpPanel" to="MainAct/Hall/JumpPanel/Camera" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin1" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/GreenMajin" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup1/RedMajin2" to="MainAct/Tower/MajinGroup1/EnemyStone" method="IncrementCounter"]

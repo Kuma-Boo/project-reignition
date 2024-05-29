@@ -29,13 +29,12 @@ namespace Project.Gameplay.Triggers
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new();
-
-			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool));
-			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool));
-
-			properties.Add(ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath));
-
+			Array<Dictionary> properties = new()
+			{
+				ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool),
+				ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool),
+				ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath)
+			};
 
 			if (playerStandin != null && !playerStandin.IsEmpty) // Add player event settings
 			{
@@ -130,13 +129,14 @@ namespace Project.Gameplay.Triggers
 		}
 		#endregion
 
-
 		public override void _Ready()
 		{
 			if (Engine.IsEditorHint()) return;
 
 			if (autoRespawn)
 				StageSettings.instance.ConnectRespawnSignal(this);
+
+			Respawn();
 		}
 
 
@@ -161,6 +161,7 @@ namespace Project.Gameplay.Triggers
 
 			wasActivated = false;
 			animator.Play(RESET_ANIMATION);
+			animator.Advance(0);
 		}
 
 

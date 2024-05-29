@@ -6,8 +6,8 @@ namespace Project.Gameplay.Hazards
 	public partial class SpikeBallPhysics : RigidBody3D
 	{
 		/// <summary> Spikeball's current lifetime. </summary>
-		[Export]
 		private float Lifetime { get; set; }
+		[Export]
 		/// <summary> How long should the spikeball last? </summary>
 		public float MaxLifetime { get; set; }
 		/// <summary> Is this spikeball currently spawned? </summary>
@@ -40,12 +40,12 @@ namespace Project.Gameplay.Hazards
 
 			LinearVelocity = Vector3.Zero;
 			AngularVelocity = Vector3.Zero;
-			Transform = Transform3D.Identity;
 			animator.Play("spawn");
 
 			Lifetime = 0;
 			IsSpawned = true;
 		}
+
 
 		public void Despawn()
 		{

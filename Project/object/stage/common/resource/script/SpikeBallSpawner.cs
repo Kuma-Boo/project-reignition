@@ -74,6 +74,7 @@ namespace Project.Gameplay.Hazards
 				if (!spikeBallPool[i].IsSpawned)
 				{
 					spikeBallPool[i].Spawn();
+					spikeBallPool[i].Transform = Transform3D.Identity;
 					break;
 				}
 			}
