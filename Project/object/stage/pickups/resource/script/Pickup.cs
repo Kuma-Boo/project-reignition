@@ -22,7 +22,7 @@ namespace Project.Gameplay.Objects
 
 		protected virtual void SetUp()
 		{
-			SpawnData = new SpawnData(GetParent(), Transform);
+			SpawnData = new(GetParent(), Transform);
 
 			if (!DisableAutoRespawning) // Connect respawn triggers
 			{
@@ -50,7 +50,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (!IsInsideTree()) return;
 
-			GetParent().CallDeferred("remove_child", this);
+			GetParent().CallDeferred(MethodName.RemoveChild, this);
 			EmitSignal(SignalName.Despawned);
 		}
 

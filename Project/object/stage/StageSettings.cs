@@ -427,7 +427,7 @@ namespace Project.Gameplay
 				if (n.IsInsideTree()) // Object needs to be reparented first.
 					n.GetParent().RemoveChild(n);
 
-				parentNode.CallDeferred(Node.MethodName.AddChild, n);
+				parentNode.AddChild(n);
 			}
 
 			n.SetDeferred("transform", spawnTransform);

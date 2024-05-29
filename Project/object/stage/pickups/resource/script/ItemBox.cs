@@ -11,9 +11,10 @@ namespace Project.Gameplay.Objects
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
-
-			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Pearls", Variant.Type.Bool));
+			Array<Dictionary> properties = new()
+			{
+				ExtensionMethods.CreateProperty("Spawn Settings/Spawn Pearls", Variant.Type.Bool)
+			};
 
 			if (!spawnPearls)
 			{
@@ -128,12 +129,12 @@ namespace Project.Gameplay.Objects
 		private bool isMovingObjects;
 
 		// Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
-		private readonly List<float> travelTimes = new List<float>();
-		private readonly List<Pickup> objectPool = new List<Pickup>();
-		private readonly List<LaunchSettings> objectLaunchSettings = new List<LaunchSettings>();
+		private readonly List<float> travelTimes = new();
+		private readonly List<Pickup> objectPool = new();
+		private readonly List<LaunchSettings> objectLaunchSettings = new();
 
 		private readonly Vector3 SPAWN_OFFSET = Vector3.Up * .5f;
-		private readonly Vector2 PEARL_SPAWN_RADIUS = new Vector2(2.0f, 1.0f);
+		private readonly Vector2 PEARL_SPAWN_RADIUS = new(2.0f, 1.0f);
 
 		protected override void SetUp()
 		{
@@ -275,7 +276,7 @@ namespace Project.Gameplay.Objects
 			{
 				travelTimes[i] = Runtime.randomNumberGenerator.RandfRange(-travelDelayRange, 0) - travelDelay;
 				objectPool[i].Monitoring = objectPool[i].Monitorable = false; // Disable collision temporarily
-				objectLaunchSettings[i] = new LaunchSettings(); // Set as uninitialized LaunchSettings
+				objectLaunchSettings[i] = new(); // Set as uninitialized LaunchSettings
 				CallDeferred(MethodName.UpdateObjects);
 			}
 		}
