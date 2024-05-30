@@ -131,11 +131,33 @@ namespace Project.Editor.StageObjectPreviewer
 
 		private void UpdateMajinPath()
 		{
-			Majin t = target as Majin;
-			if (t.SpawnOffset.IsZeroApprox()) return;
+			Majin majin = target as Majin;
+			if (majin.SpawnTravelDisabled) return;
 
-			Vector3 s = t.GlobalPosition;
-			DrawLine(s, s + t.SpawnOffset, DEFAULT_DRAW_COLOR);
+			// Draw each of the handles
+			if (!editorCam.IsPositionBehind(majin.SpawnPosition))
+				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.SpawnPosition), 5f, SPECIAL_DRAW_COLOR);
+			if (!editorCam.IsPositionBehind(majin.InHandle))
+				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.InHandle), 5f, SPECIAL_DRAW_COLOR);
+			if (!editorCam.IsPositionBehind(majin.OutHandle))
+				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.OutHandle), 5f, SPECIAL_DRAW_COLOR);
+
+			// Draw the spawn curve
+			Array<Vector2> points = new();
+
+			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
+			{
+				float simulationRatio = i / ((float)PREVIEW_RESOLUTION - 1);
+				Vector3 position = majin.CalculateTravelPosition(simulationRatio);
+				if (!editorCam.IsPositionBehind(position))
+					points.Add(editorCam.UnprojectPosition(position));
+			}
+
+			if (points.Count < 2) return; //Can't draw!!!
+
+			Vector2[] pointsList = new Vector2[points.Count];
+			points.CopyTo(pointsList, 0);
+			viewportOverlay.DrawPolyline(pointsList, DEFAULT_DRAW_COLOR, 1, true);
 		}
 
 		private readonly Color DEFAULT_DRAW_COLOR = Colors.Blue;

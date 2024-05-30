@@ -13,13 +13,17 @@ namespace Project.Gameplay
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new();
+			Array<Dictionary> properties = new()
+			{
+				ExtensionMethods.CreateProperty("Spawn Settings/Spawn Travel Time", Variant.Type.Float, PropertyHint.Range, "0,2,.1")
+			};
 
-			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Travel Time", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
 			if (!SpawnTravelDisabled)
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Delay", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Offset", Variant.Type.Vector3));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn In Offset", Variant.Type.Vector3));
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Out Offset", Variant.Type.Vector3));
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
@@ -55,6 +59,10 @@ namespace Project.Gameplay
 					return spawnDelay;
 				case "Spawn Settings/Spawn Offset":
 					return spawnOffset;
+				case "Spawn Settings/Spawn In Offset":
+					return spawnInOffset;
+				case "Spawn Settings/Spawn Out Offset":
+					return spawnOutOffset;
 
 				case "Rotation Settings/Track Player":
 					return trackPlayer;
@@ -97,6 +105,12 @@ namespace Project.Gameplay
 					break;
 				case "Spawn Settings/Spawn Offset":
 					spawnOffset = (Vector3)value;
+					break;
+				case "Spawn Settings/Spawn In Offset":
+					spawnInOffset = (Vector3)value;
+					break;
+				case "Spawn Settings/Spawn Out Offset":
+					spawnOutOffset = (Vector3)value;
 					break;
 
 				case "Rotation Settings/Track Player":
@@ -143,22 +157,31 @@ namespace Project.Gameplay
 		[Export]
 		private Node3D fireRoot;
 		private AnimationNodeBlendTree animatorRoot;
-		private AnimationNodeTransition moveTransition;
+		private AnimationNodeTransition travelTransition;
 		private AnimationNodeTransition stateTransition;
 		private AnimationNodeStateMachinePlayback spinState;
 		private AnimationNodeStateMachinePlayback fireState;
 
-		private bool SpawnTravelDisabled => Mathf.IsZeroApprox(spawnTravelTime);
+		private bool isSpawning;
+		private float currentTravelRatio;
 		/// <summary> How long does spawn traveling take? Set to 0 to spawn instantly. </summary>
 		private float spawnTravelTime;
 		/// <summary> How long should spawning be delayed? </summary>
 		private float spawnDelay;
-		public Vector3 SpawnOffset => GlobalBasis * spawnOffset;
 		/// <summary> Where to spawn from (Added with OriginalPosition) </summary>
 		private Vector3 spawnOffset;
+		/// <summary> In handle for spawn traveling. Use this to shape the general curve. </summary>
+		private Vector3 spawnInOffset;
+		/// <summary> Out handle for spawn traveling. Use this to add a final bit of rotation easing. </summary>
+		private Vector3 spawnOutOffset;
+		public bool SpawnTravelDisabled => Mathf.IsZeroApprox(spawnTravelTime);
+		public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
+		private Basis calculationBasis;
 		/// <summary> Local Position to be after spawning is complete. </summary>
-		private Vector3 OriginalPosition => SpawnData.spawnTransform.Origin;
-		private bool isSpawning;
+		private Vector3 OriginalPosition => Engine.IsEditorHint() ? GlobalPosition : SpawnData.spawnTransform.Origin;
+		public Vector3 SpawnPosition => OriginalPosition + CalculationBasis * spawnOffset;
+		public Vector3 InHandle => SpawnPosition + CalculationBasis * spawnInOffset;
+		public Vector3 OutHandle => OriginalPosition + CalculationBasis * spawnOutOffset;
 
 		/// <summary> Use this to launch the enemy when defeated. </summary>
 		private bool isDefeatLaunchEnabled;
@@ -208,18 +231,19 @@ namespace Project.Gameplay
 
 		private readonly StringName ENABLED_STATE = "enabled";
 		private readonly StringName DISABLED_STATE = "disabled";
-		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/move_transition/transition_request";
+		private readonly StringName TRAVEL_TRANSITION_PARAMETER = "parameters/travel_transition/transition_request";
 		private readonly StringName TELEPORT_PARAMETER = "parameters/teleport_trigger/request";
 
-		private const float MOVE_TRANSITION_LENGTH = .2f;
+		private const float TRAVEL_TRANSITION_LENGTH = .2f;
 
 		protected override void SetUp()
 		{
 			if (Engine.IsEditorHint()) return; // In Editor
 
+			calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
 			animationTree.Active = true;
 			animatorRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
-			moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
+			travelTransition = animatorRoot.GetNode("travel_transition") as AnimationNodeTransition;
 			stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
 			fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
 			spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
@@ -246,11 +270,7 @@ namespace Project.Gameplay
 				rotationAmount = Mathf.Tau / rotationTime;
 
 			rotationVelocity = 0;
-			Vector2 spawnOffsetFlat = spawnOffset.Flatten();
-			if (!SpawnTravelDisabled && !spawnOffsetFlat.IsZeroApprox())
-				currentRotation = spawnOffsetFlat.AngleTo(Vector2.Up);
-			else
-				currentRotation = 0;
+			currentRotation = 0;
 			UpdateRotation();
 
 			// Reset idle movement
@@ -354,6 +374,13 @@ namespace Project.Gameplay
 		protected override void UpdateEnemy()
 		{
 			if (Engine.IsEditorHint()) return; // In Editor
+
+			if (isSpawning)
+			{
+				UpdateTravel();
+				return;
+			}
+
 			if (!IsActive) return; // Hasn't spawned yet
 			if (IsDefeated) return; // Already defeated
 
@@ -502,6 +529,7 @@ namespace Project.Gameplay
 			Spawn();
 		}
 
+
 		protected override void Spawn()
 		{
 			if (isSpawning || IsActive) return;
@@ -511,7 +539,7 @@ namespace Project.Gameplay
 
 			if (tweener != null)
 				tweener.Kill();
-			tweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.Out);
+			tweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine);
 
 			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); // Idle
 
@@ -519,24 +547,78 @@ namespace Project.Gameplay
 			{
 				animationPlayer.Play("spawn");
 				animationTree.Set(TELEPORT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
+				tweener.TweenCallback(new(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
 			}
 			else // Travel
 			{
-				animationPlayer.Play("travel");
-				GlobalPosition = OriginalPosition + SpawnOffset;
-				tweener.TweenProperty(this, "position", OriginalPosition, spawnTravelTime).SetDelay(spawnDelay).From(GlobalPosition);
-				tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
+				currentTravelRatio = 0;
+				Position = SpawnPosition;
 
-				moveTransition.XfadeTime = 0;
+				animationPlayer.Play("travel");
+				tweener.TweenProperty(this, nameof(currentTravelRatio), 1, spawnTravelTime).SetEase(Tween.EaseType.InOut).SetDelay(spawnDelay);
+				tweener.TweenCallback(new(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - TRAVEL_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
+
+				travelTransition.XfadeTime = 0;
 				if (!Mathf.IsZeroApprox(spawnOffset.X) || !Mathf.IsZeroApprox(spawnOffset.Z))
-					animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); // Travel animation
+					animationTree.Set(TRAVEL_TRANSITION_PARAMETER, ENABLED_STATE); // Travel animation
 				else
-					animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); // Immediately idle
+					animationTree.Set(TRAVEL_TRANSITION_PARAMETER, DISABLED_STATE); // Immediately idle
 			}
 
+			animationPlayer.Advance(0.0);
 			base.Spawn();
 		}
+
+
+		private void UpdateTravel()
+		{
+			// Calculate tangent (rotation)
+			Vector3 tangent = CalculationBasis.Inverse() * CalculateTravelTangent(currentTravelRatio).Normalized();
+			currentRotation = -tangent.SignedAngleTo(Vector3.Back, Vector3.Up);
+
+			Position = CalculateTravelPosition(currentTravelRatio);
+			UpdateRotation();
+
+			// TODO Update animations
+			Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
+		}
+
+
+		public Vector3 CalculateTravelPosition(float t)
+		{
+			if (!spawnInOffset.IsZeroApprox() || !spawnOutOffset.IsZeroApprox()) // Use cubic bezier interpolation
+			{
+				Vector3 a = SpawnPosition.Lerp(InHandle, t);
+				Vector3 b = InHandle.Lerp(OutHandle, t);
+				Vector3 c = OutHandle.Lerp(OriginalPosition, t);
+
+				Vector3 d = a.Lerp(b, t);
+				Vector3 e = b.Lerp(c, t);
+
+				return d.Lerp(e, t);
+			}
+
+			return SpawnPosition.Lerp(OriginalPosition, t);
+		}
+
+
+		public Vector3 CalculateTravelTangent(float t)
+		{
+			return SpawnPosition * (-3 * Mathf.Pow(t, 2) + 6 * t - 3) +
+			InHandle * (9 * Mathf.Pow(t, 2) - 12 * t + 3) +
+			OutHandle * (-9 * Mathf.Pow(t, 2) + 6 * t) +
+			OriginalPosition * (3 * Mathf.Pow(t, 2));
+		}
+
+
+		public Vector3 CalculateTravelAcceleration(float t)
+		{
+			return SpawnPosition * (-6 * t + 6) +
+			InHandle * (18 * t - 12) +
+			OutHandle * (-18 * t + 6) +
+			OriginalPosition * (6 * t);
+		}
+
 
 		private void FinishSpawning()
 		{
@@ -546,8 +628,9 @@ namespace Project.Gameplay
 
 			if (!SpawnTravelDisabled)
 			{
-				moveTransition.XfadeTime = MOVE_TRANSITION_LENGTH;
-				animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); // Stopped moving
+				Position = OriginalPosition;
+				travelTransition.XfadeTime = TRAVEL_TRANSITION_LENGTH;
+				animationTree.Set(TRAVEL_TRANSITION_PARAMETER, DISABLED_STATE); // Stopped moving
 			}
 
 			if (attackType == AttackTypes.Spin)

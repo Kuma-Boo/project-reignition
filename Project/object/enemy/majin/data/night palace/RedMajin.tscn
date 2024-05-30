@@ -1,14 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4omh0erkr8si"]
+[gd_scene load_steps=4 format=3 uid="uid://b4omh0erkr8si"]
 
 [ext_resource type="PackedScene" uid="uid://rh85bh20fk6r" path="res://object/enemy/majin/Majin.tscn" id="1_klasm"]
 [ext_resource type="PackedScene" uid="uid://dk660qfuv0poo" path="res://object/enemy/majin/data/night palace/model/RedMajin.gltf" id="2_xw124"]
 [ext_resource type="AnimationLibrary" uid="uid://duuj6x0f00ny7" path="res://object/enemy/majin/data/animation/red majin/MajinLibrary.gltf" id="3_ery0p"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_1p76c"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_s6ynk"]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_pb85e"]
 
 [node name="RedMajin" instance=ExtResource("1_klasm")]
 "Attack Settings/Attack Type" = 2
@@ -23,11 +17,12 @@ libraries = {
 "MajinLibrary": ExtResource("3_ery0p")
 }
 
-[node name="FireFX" parent="FX" index="0"]
-visible = true
-
-[node name="AnimationTree" parent="." index="5"]
+[node name="AnimationTree" parent="." index="6"]
+root_node = NodePath("../Root/RedMajin")
+libraries = {
+"MajinLibrary": ExtResource("3_ery0p")
+}
 anim_player = NodePath("../Root/RedMajin/AnimationPlayer")
-parameters/defeat_state/playback = SubResource("AnimationNodeStateMachinePlayback_1p76c")
-parameters/fire_state/playback = SubResource("AnimationNodeStateMachinePlayback_s6ynk")
-parameters/spin_state/playback = SubResource("AnimationNodeStateMachinePlayback_pb85e")
+parameters/travel_transition/current_state = "disabled"
+parameters/travel_transition/transition_request = ""
+parameters/travel_transition/current_index = 1
