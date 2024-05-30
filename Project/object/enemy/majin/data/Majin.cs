@@ -305,7 +305,7 @@ namespace Project.Gameplay
 
 		public override void TakePlayerDamage()
 		{
-			TakeDamage();
+			Stagger();
 			base.TakePlayerDamage();
 
 			if (!IsDefeated)
@@ -315,12 +315,12 @@ namespace Project.Gameplay
 
 		public override void TakeExternalDamage(int amount = -1)
 		{
-			TakeDamage();
+			Stagger();
 			base.TakeExternalDamage(amount);
 		}
 
 
-		private void TakeDamage()
+		private void Stagger()
 		{
 			staggerTimer = STAGGER_LENGTH;
 
@@ -411,6 +411,23 @@ namespace Project.Gameplay
 			UpdateRotation();
 			UpdateFidgets();
 		}
+
+
+
+		protected override void UpdateInteraction()
+		{
+			if (!IsHitboxEnabled) return;
+
+			if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
+			{
+				Stagger();
+				Character.Lockon.StartBounce(IsDefeated);
+				return;
+			}
+
+			base.UpdateInteraction();
+		}
+
 
 		private float idleFactorVelocity;
 		private const float IDLE_FACTOR_SMOOTHING = 30.0f; // Idle movement strength smoothing

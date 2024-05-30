@@ -180,7 +180,8 @@ namespace Project.Gameplay
 		protected int interactionCounter;
 		protected virtual void UpdateInteraction()
 		{
-			if (Character.Lockon.IsBouncingLockoutActive || !IsHitboxEnabled) return;
+			if ((Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
+				|| !IsHitboxEnabled) return;
 
 			if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
 				Defeat();
