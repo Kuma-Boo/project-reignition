@@ -540,7 +540,7 @@ namespace Project.Gameplay
 
 			if (tweener != null)
 				tweener.Kill();
-			tweener = CreateTween().SetParallel(true);
+			tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
 
 			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); // Idle
 
@@ -557,7 +557,7 @@ namespace Project.Gameplay
 
 				animationPlayer.Play("travel");
 				tweener.TweenProperty(this, nameof(currentTravelRatio), 1, spawnTravelTime).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut).SetDelay(spawnDelay);
-				tweener.TweenCallback(new(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
+				tweener.TweenCallback(new(this, MethodName.FinishSpawning));
 
 				moveTransition.XfadeTime = 0;
 				animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); // Travel animation
