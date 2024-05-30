@@ -195,7 +195,7 @@ namespace Project.Gameplay
 				Character.StartKnockback();
 		}
 
-		/// <summary> Current rotation of the enemy. </summary>
+		/// <summary> Current local rotation of the enemy. </summary>
 		protected float currentRotation;
 		protected float rotationVelocity;
 		protected const float TRACKING_SMOOTHING = .2f;

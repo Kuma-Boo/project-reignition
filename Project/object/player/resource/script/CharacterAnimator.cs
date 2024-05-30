@@ -556,7 +556,7 @@ namespace Project.Gameplay
 		}
 
 		/// <summary>
-		/// Apply currentRotation on Transform.
+		/// Apply VisualAngle onto Transform.
 		/// </summary>
 		private void ApplyVisualRotation() => Rotation = Vector3.Up * VisualAngle;
 		#endregion
