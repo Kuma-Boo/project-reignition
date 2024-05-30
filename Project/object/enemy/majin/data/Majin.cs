@@ -157,7 +157,7 @@ namespace Project.Gameplay
 		[Export]
 		private Node3D fireRoot;
 		private AnimationNodeBlendTree animatorRoot;
-		private AnimationNodeTransition travelTransition;
+		private AnimationNodeTransition moveTransition;
 		private AnimationNodeTransition stateTransition;
 		private AnimationNodeStateMachinePlayback spinState;
 		private AnimationNodeStateMachinePlayback fireState;
@@ -231,10 +231,11 @@ namespace Project.Gameplay
 
 		private readonly StringName ENABLED_STATE = "enabled";
 		private readonly StringName DISABLED_STATE = "disabled";
-		private readonly StringName TRAVEL_TRANSITION_PARAMETER = "parameters/travel_transition/transition_request";
+		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/move_transition/transition_request";
+		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/move_blend/blend_position";
 		private readonly StringName TELEPORT_PARAMETER = "parameters/teleport_trigger/request";
 
-		private const float TRAVEL_TRANSITION_LENGTH = .2f;
+		private const float MOVE_TRANSITION_LENGTH = .4f;
 
 		protected override void SetUp()
 		{
@@ -243,7 +244,7 @@ namespace Project.Gameplay
 			calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
 			animationTree.Active = true;
 			animatorRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
-			travelTransition = animatorRoot.GetNode("travel_transition") as AnimationNodeTransition;
+			moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
 			stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
 			fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
 			spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
@@ -539,7 +540,7 @@ namespace Project.Gameplay
 
 			if (tweener != null)
 				tweener.Kill();
-			tweener = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Sine);
+			tweener = CreateTween().SetParallel(true);
 
 			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); // Idle
 
@@ -555,14 +556,11 @@ namespace Project.Gameplay
 				Position = SpawnPosition;
 
 				animationPlayer.Play("travel");
-				tweener.TweenProperty(this, nameof(currentTravelRatio), 1, spawnTravelTime).SetEase(Tween.EaseType.InOut).SetDelay(spawnDelay);
-				tweener.TweenCallback(new(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - TRAVEL_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
+				tweener.TweenProperty(this, nameof(currentTravelRatio), 1, spawnTravelTime).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut).SetDelay(spawnDelay);
+				tweener.TweenCallback(new(this, MethodName.FinishSpawning)).SetDelay(spawnDelay + Mathf.Clamp(spawnTravelTime - MOVE_TRANSITION_LENGTH * .5f, 0, Mathf.Inf));
 
-				travelTransition.XfadeTime = 0;
-				if (!Mathf.IsZeroApprox(spawnOffset.X) || !Mathf.IsZeroApprox(spawnOffset.Z))
-					animationTree.Set(TRAVEL_TRANSITION_PARAMETER, ENABLED_STATE); // Travel animation
-				else
-					animationTree.Set(TRAVEL_TRANSITION_PARAMETER, DISABLED_STATE); // Immediately idle
+				moveTransition.XfadeTime = 0;
+				animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); // Travel animation
 			}
 
 			animationPlayer.Advance(0.0);
@@ -573,14 +571,19 @@ namespace Project.Gameplay
 		private void UpdateTravel()
 		{
 			// Calculate tangent (rotation)
-			Vector3 tangent = CalculationBasis.Inverse() * CalculateTravelTangent(currentTravelRatio).Normalized();
-			currentRotation = -tangent.SignedAngleTo(Vector3.Back, Vector3.Up);
+			Vector3 velocity = CalculationBasis.Inverse() * CalculateTravelVelocity(currentTravelRatio).Normalized();
+			if (Mathf.Abs(velocity.Dot(Vector3.Up)) < .9f)
+				currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
 
 			Position = CalculateTravelPosition(currentTravelRatio);
 			UpdateRotation();
 
 			// TODO Update animations
 			Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
+			Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));
+			if (Mathf.IsZeroApprox(acceleration.X))
+				moveBlend.Y = velocity.Y;
+			animationTree.Set(MOVE_BLEND_PARAMETER, moveBlend);
 		}
 
 
@@ -602,7 +605,7 @@ namespace Project.Gameplay
 		}
 
 
-		public Vector3 CalculateTravelTangent(float t)
+		public Vector3 CalculateTravelVelocity(float t)
 		{
 			return SpawnPosition * (-3 * Mathf.Pow(t, 2) + 6 * t - 3) +
 			InHandle * (9 * Mathf.Pow(t, 2) - 12 * t + 3) +
@@ -628,9 +631,8 @@ namespace Project.Gameplay
 
 			if (!SpawnTravelDisabled)
 			{
-				Position = OriginalPosition;
-				travelTransition.XfadeTime = TRAVEL_TRANSITION_LENGTH;
-				animationTree.Set(TRAVEL_TRANSITION_PARAMETER, DISABLED_STATE); // Stopped moving
+				moveTransition.XfadeTime = MOVE_TRANSITION_LENGTH;
+				animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); // Stopped moving
 			}
 
 			if (attackType == AttackTypes.Spin)
