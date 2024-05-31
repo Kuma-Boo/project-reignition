@@ -14,6 +14,8 @@ namespace Project.Gameplay.Hazards
 		public bool IsSpawned { get; private set; }
 		/// <summary> Spikeball's animator. </summary>
 		[Export]
+		private Vector3 startingVelocity;
+		[Export]
 		private AnimationPlayer animator;
 
 		public override void _Ready() => StageSettings.instance.ConnectUnloadSignal(this);
@@ -38,7 +40,7 @@ namespace Project.Gameplay.Hazards
 			Visible = true;
 			ProcessMode = ProcessModeEnum.Inherit;
 
-			LinearVelocity = Vector3.Zero;
+			LinearVelocity = GlobalBasis * startingVelocity;
 			AngularVelocity = Vector3.Zero;
 			animator.Play("spawn");
 

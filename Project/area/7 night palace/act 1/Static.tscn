@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=66 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -28,13 +28,16 @@
 [ext_resource type="Resource" uid="uid://cgcmy5si2ssfx" path="res://area/7 night palace/act 1/camera/WallRunCam.tres" id="12_jley7"]
 [ext_resource type="Resource" uid="uid://byu8chbtjywgo" path="res://area/7 night palace/act 1/camera/SidleHallCam.tres" id="13_ckvlo"]
 [ext_resource type="Curve3D" uid="uid://7nar8sphbcx3" path="res://area/7 night palace/act 1/environment/path/MainPath3.tres" id="13_htggc"]
+[ext_resource type="Resource" uid="uid://c1xaqej1krj0h" path="res://area/7 night palace/act 1/camera/WallRun2Cam.tres" id="13_yw38c"]
 [ext_resource type="Curve3D" uid="uid://026ux1mkbpp5" path="res://area/7 night palace/act 1/environment/path/CarpetPath.tres" id="16_qmphs"]
 [ext_resource type="Curve3D" uid="uid://cmkw2yow867db" path="res://area/7 night palace/act 1/environment/path/WallRun1.tres" id="17_4n7m5"]
 [ext_resource type="Resource" uid="uid://qs2jw2eruiy7" path="res://area/7 night palace/act 1/camera/SidleStartCam.tres" id="17_mmiee"]
 [ext_resource type="Curve3D" uid="uid://bsnpkefxehx8g" path="res://area/7 night palace/act 1/environment/path/WallRun2.tres" id="18_6scab"]
 [ext_resource type="PackedScene" uid="uid://d4ivgn14opv12" path="res://area/7 night palace/data/skybox/SpaceSkybox.tscn" id="19_grfne"]
 [ext_resource type="Resource" uid="uid://rlt4iyu1l7tg" path="res://area/7 night palace/act 1/camera/HallCam.tres" id="20_3f6kn"]
+[ext_resource type="Resource" uid="uid://b0sptyvrcousm" path="res://area/7 night palace/act 1/camera/TowerCam.tres" id="21_fl2ra"]
 [ext_resource type="PackedScene" uid="uid://dg3mda5pthols" path="res://area/7 night palace/act 1/environment/07GasRoom.tscn" id="23_fk3k1"]
+[ext_resource type="Resource" uid="uid://5e5cqnynb00x" path="res://area/7 night palace/act 1/camera/InteriorEntranceCam.tres" id="23_hvi5b"]
 [ext_resource type="PackedScene" uid="uid://c6s2w2y34qk3n" path="res://area/7 night palace/environment/NPSpaceA.tscn" id="24_2lmms"]
 [ext_resource type="PackedScene" uid="uid://c7nwnjbl6okjf" path="res://area/7 night palace/environment/NPSpaceB.tscn" id="25_n0r0x"]
 [ext_resource type="PackedScene" uid="uid://kig7ydnck6g5" path="res://area/7 night palace/environment/NPSpaceC.tscn" id="26_1px5b"]
@@ -47,6 +50,7 @@
 [ext_resource type="PackedScene" uid="uid://dt58vpb6kmhjw" path="res://area/7 night palace/environment/collision/NPSpaceC.tscn" id="31_8lu1i"]
 [ext_resource type="Curve3D" path="res://area/7 night palace/environment/path/SpaceCPath.tres" id="31_vfagc"]
 [ext_resource type="Curve3D" uid="uid://dpokcowfe8c78" path="res://area/7 night palace/act 1/environment/path/GasRoomPath.tres" id="40_nugtn"]
+[ext_resource type="Curve3D" uid="uid://0mdq7j1l2xsa" path="res://area/7 night palace/act 1/environment/path/MainPath4.tres" id="44_ee14p"]
 [ext_resource type="Curve3D" uid="uid://btaj2vveuk3yl" path="res://area/7 night palace/environment/path/SpaceAAutomationPath.tres" id="45_n5usr"]
 [ext_resource type="Material" uid="uid://c3kendmmffv8b" path="res://area/7 night palace/data/material/Effect Primary Reflection.tres" id="46_3fvhm"]
 [ext_resource type="Material" uid="uid://dwmvujonhvjd7" path="res://area/7 night palace/data/material/Effect Secondary Reflection.tres" id="47_eiuc0"]
@@ -162,6 +166,17 @@ transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107
 script = ExtResource("8_irx0t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/HallCheckpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="TowerCheckpoint" parent="Trigger/Checkpoint" instance=ExtResource("4_d1bik")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -90.9526, -9.99889, -320.33)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/TowerCheckpoint"]
+script = ExtResource("8_irx0t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/TowerCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
@@ -313,7 +328,7 @@ path = NodePath("../../../../Path/WallRun1")
 
 [node name="WallRunCam" type="Node3D" parent="Trigger/Object/WallRun1"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
+transitionTime = 1.0
 settings = ExtResource("12_jley7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/WallRun1"]
@@ -329,6 +344,11 @@ ignoreDirection = true
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -5.4)
 script = ExtResource("7_omcuu")
 path = NodePath("../../../../Path/WallRun2")
+
+[node name="WallRunCam" type="Node3D" parent="Trigger/Object/WallRun2"]
+script = ExtResource("10_7ghp2")
+transitionTime = 1.0
+settings = ExtResource("13_yw38c")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/WallRun2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -423,9 +443,14 @@ path = NodePath("../../../../Path/MainPath2")
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="MainPath3" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
-transform = Transform3D(4.37114e-08, 0, 1, 0, 1, 0, -1, 0, 4.37114e-08, 315.034, -103.998, -490.018)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -195.024, -14.9985, -351.506)
 script = ExtResource("7_omcuu")
 path = NodePath("../../../Path/MainPath3")
+
+[node name="MainPath4" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+transform = Transform3D(7.54979e-08, 0, 1, 0, 1, 0, -1, 0, 7.54979e-08, 315.034, -103.998, -490.018)
+script = ExtResource("7_omcuu")
+path = NodePath("../../../Path/MainPath4")
 
 [node name="SpaceAPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -640)
@@ -455,7 +480,6 @@ transform = Transform3D(-0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, -0.819152
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SidleStart"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 160.047, 0, -240.789)
 script = ExtResource("10_7ghp2")
 transitionTime = 0.5
 settings = ExtResource("17_mmiee")
@@ -470,7 +494,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Sidle1"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 160.047, 0, -240.789)
 script = ExtResource("10_7ghp2")
 transitionTime = 0.5
 settings = ExtResource("10_pw8g3")
@@ -485,7 +508,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SidleHall1"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 160.047, 0, -240.789)
 script = ExtResource("10_7ghp2")
 transitionTime = 0.5
 settings = ExtResource("13_ckvlo")
@@ -500,7 +522,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Sidle2"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 160.047, 0, -240.789)
 script = ExtResource("10_7ghp2")
 transitionTime = 0.5
 settings = ExtResource("10_pw8g3")
@@ -515,7 +536,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SidleHall2"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 160.047, 0, -240.789)
 script = ExtResource("10_7ghp2")
 transitionTime = 0.5
 settings = ExtResource("13_ckvlo")
@@ -530,7 +550,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Sidle3"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 160.047, 0, -240.789)
 script = ExtResource("10_7ghp2")
 transitionTime = 0.5
 settings = ExtResource("10_pw8g3")
@@ -539,22 +558,64 @@ settings = ExtResource("10_pw8g3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
-[node name="Hall" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
+[node name="Hall1" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 159.151, 0, -242.067)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Camera" type="Node3D" parent="Trigger/Camera/Hall"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 160.047, 0, -240.789)
+[node name="Camera" type="Node3D" parent="Trigger/Camera/Hall1"]
 script = ExtResource("10_7ghp2")
 transitionTime = 0.5
 settings = ExtResource("20_3f6kn")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
+[node name="Tower" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -93.6707, -9.99888, -320.352)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/Tower"]
+script = ExtResource("10_7ghp2")
+transitionTime = 0.5
+settings = ExtResource("21_fl2ra")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Tower"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="Hall2" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -131.192, -9.99888, -320.4)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/Hall2"]
+script = ExtResource("10_7ghp2")
+transitionTime = 0.5
+settings = ExtResource("20_3f6kn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="InteriorEntrance" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
+transform = Transform3D(-1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, -1, -193.919, -14.9986, -346.02)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/InteriorEntrance"]
+script = ExtResource("10_7ghp2")
+transitionTime = 0.5
+settings = ExtResource("23_hvi5b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/InteriorEntrance"]
+transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
 [node name="Reflection" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="SecondaryReflection" parent="Trigger/Reflection" instance=ExtResource("4_d1bik")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10.1, 0, -79.8549)
@@ -840,12 +901,13 @@ layers = 1024
 light_cull_mask = 4293918787
 
 [node name="01Start" parent="Visuals/MainSection" instance=ExtResource("1_c3xql")]
-visible = false
 startEnabled = true
 
 [node name="02Sidle" parent="Visuals/MainSection" instance=ExtResource("3_ch7dh")]
+visible = false
 
 [node name="03Tower" parent="Visuals/MainSection" instance=ExtResource("4_olu7y")]
+visible = false
 
 [node name="04Interior" parent="Visuals/MainSection" instance=ExtResource("5_ydwi4")]
 visible = false
@@ -880,6 +942,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 786, 0
 layers = 1024
 
 [node name="Path" type="Node3D" parent="."]
+visible = false
 
 [node name="MainPath1" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 34.501)
@@ -897,6 +960,10 @@ curve = ExtResource("12_gech5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -145, -10, -320.333)
 curve = ExtResource("18_6scab")
 
+[node name="MainPath3" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -195, -14.999, -347.85)
+curve = ExtResource("13_htggc")
+
 [node name="CarpetPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -140.162, 6.48, -481.848)
 curve = ExtResource("16_qmphs")
@@ -905,9 +972,9 @@ curve = ExtResource("16_qmphs")
 transform = Transform3D(-4.3711e-08, 0, -0.999993, 0, 0.999996, 0, 0.999992, 0, -4.37111e-08, 0, 0, 0)
 loop = false
 
-[node name="MainPath3" type="Path3D" parent="Path"]
+[node name="MainPath4" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 232.139, -103.998, -490)
-curve = ExtResource("13_htggc")
+curve = ExtResource("44_ee14p")
 
 [node name="GasRoomPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1070, 0, -560)
@@ -945,6 +1012,8 @@ reflectionMaterials = [ExtResource("47_eiuc0")]
 [connection signal="Activated" from="Trigger/Object/WallRun1" to="Trigger/Object/WallRun1/WallRunCam" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/WallRun1" to="Trigger/Object/Sidle/SidleTrigger1/SidleActivation" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/WallRun2" to="Trigger/Object/WallRun2/WallRun" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/WallRun2" to="Trigger/Object/WallRun2/WallRunCam" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/WallRun2" to="Trigger/Path/MainPath3" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle/SidleTrigger1" to="Trigger/Object/Sidle/SidleTrigger1/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SpaceAAutomation" to="Trigger/Object/SpaceAAutomation/Camera" method="Activate"]
