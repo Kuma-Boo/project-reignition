@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=67 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -39,6 +39,7 @@
 [ext_resource type="PackedScene" uid="uid://dg3mda5pthols" path="res://area/7 night palace/act 1/environment/07GasRoom.tscn" id="23_fk3k1"]
 [ext_resource type="Resource" uid="uid://5e5cqnynb00x" path="res://area/7 night palace/act 1/camera/InteriorEntranceCam.tres" id="23_hvi5b"]
 [ext_resource type="PackedScene" uid="uid://c6s2w2y34qk3n" path="res://area/7 night palace/environment/NPSpaceA.tscn" id="24_2lmms"]
+[ext_resource type="Resource" uid="uid://cr8img8j2ucsv" path="res://area/7 night palace/act 1/camera/InteriorCam.tres" id="24_c3npn"]
 [ext_resource type="PackedScene" uid="uid://c7nwnjbl6okjf" path="res://area/7 night palace/environment/NPSpaceB.tscn" id="25_n0r0x"]
 [ext_resource type="PackedScene" uid="uid://kig7ydnck6g5" path="res://area/7 night palace/environment/NPSpaceC.tscn" id="26_1px5b"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="27_lklb2"]
@@ -221,6 +222,17 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1128, 
 script = ExtResource("8_irx0t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/GasCheckpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="CarpetCheckpoint" parent="Trigger/Checkpoint" instance=ExtResource("4_d1bik")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -152.971, 10, -481.841)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/CarpetCheckpoint"]
+script = ExtResource("8_irx0t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/CarpetCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
@@ -614,6 +626,20 @@ settings = ExtResource("23_hvi5b")
 transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
+[node name="Interior" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
+transform = Transform3D(-1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, -1, -195.019, 2.0014, -439.02)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/Interior"]
+script = ExtResource("10_7ghp2")
+transitionTime = 0.5
+settings = ExtResource("24_c3npn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Interior"]
+transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
 [node name="Reflection" type="Node3D" parent="Trigger"]
 visible = false
 
@@ -864,8 +890,9 @@ shape = SubResource("BoxShape3D_mow5f")
 
 [node name="06L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.3, -88.5, -559.3)
-"Trigger Mode" = 2
-"Exit Mode" = 2
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/06L"]
 shape = SubResource("BoxShape3D_mow5f")
@@ -907,16 +934,14 @@ startEnabled = true
 visible = false
 
 [node name="03Tower" parent="Visuals/MainSection" instance=ExtResource("4_olu7y")]
-visible = false
+startEnabled = true
 
 [node name="04Interior" parent="Visuals/MainSection" instance=ExtResource("5_ydwi4")]
-visible = false
+startEnabled = true
 
 [node name="05Carpet" parent="Visuals/MainSection" instance=ExtResource("6_067x7")]
-visible = false
 
 [node name="06Ending" parent="Visuals/MainSection" instance=ExtResource("7_xctaf")]
-visible = false
 
 [node name="Skybox" parent="Visuals/MainSection" instance=ExtResource("3_dbu0p")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
@@ -942,7 +967,6 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 786, 0
 layers = 1024
 
 [node name="Path" type="Node3D" parent="."]
-visible = false
 
 [node name="MainPath1" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 34.501)
@@ -969,7 +993,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -140.162, 6.48, -481.848)
 curve = ExtResource("16_qmphs")
 
 [node name="CarpetPathFollower" type="PathFollow3D" parent="Path/CarpetPath"]
-transform = Transform3D(-4.3711e-08, 0, -0.999993, 0, 0.999996, 0, 0.999992, 0, -4.37111e-08, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+use_model_front = true
 loop = false
 
 [node name="MainPath4" type="Path3D" parent="Path"]

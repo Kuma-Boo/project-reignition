@@ -161,13 +161,13 @@ namespace Project.Gameplay.Objects
 		/// <summary> Call this from a trigger. </summary>
 		public void Activate()
 		{
-			EmitSignal(SignalName.Activated);
 			isActive = true;
 
-			Character.StartExternal(this, playerPosition);
+			Character.StartExternal(this, playerPosition, .1f);
 			Character.Animator.StartBalancing(); // Carpet uses balancing animations
 			Character.Animator.UpdateBalanceSpeed(1.0f);
-			Character.Animator.ExternalAngle = Mathf.Pi; // Rotate to follow pathfollower
+			Character.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
+			EmitSignal(SignalName.Activated);
 		}
 
 
