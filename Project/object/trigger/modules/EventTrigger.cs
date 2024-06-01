@@ -191,7 +191,9 @@ namespace Project.Gameplay.Triggers
 				Character.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
 				Character.Animator.ExternalAngle = 0; // Reset external angle
 				Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
-				Character.Animator.PlayOneshotAnimation(characterAnimation);
+				if (!characterAnimation.IsEmpty)
+					Character.Animator.PlayOneshotAnimation(characterAnimation);
+
 
 				// Disable break skills
 				Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = false;

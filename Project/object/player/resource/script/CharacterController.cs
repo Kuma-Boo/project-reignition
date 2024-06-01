@@ -1507,7 +1507,6 @@ namespace Project.Gameplay
 			TrueVelocity = GlobalPosition;
 
 			MoveAndSlide();
-
 			CheckMainWall(movementDirection);
 
 			// Collision checks
