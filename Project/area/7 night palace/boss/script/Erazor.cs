@@ -204,7 +204,7 @@ namespace Project.Gameplay.Bosses
 			RotateY(Mathf.Pi);
 
 			//Update Position
-			GlobalPosition = Character.PathFollower.GlobalPosition + Character.PathFollower.Back() * currentDistance;
+			GlobalPosition = Character.PathFollower.GlobalPosition + Character.PathFollower.Forward() * currentDistance;
 			currentStrafe = ExtensionMethods.SmoothDamp(currentStrafe, targetStrafe, ref currentStrafeVelocity, STRAFE_SMOOTHING);
 			GlobalPosition += this.Left() * currentStrafe;
 		}

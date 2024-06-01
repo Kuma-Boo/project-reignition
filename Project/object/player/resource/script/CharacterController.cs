@@ -316,7 +316,7 @@ namespace Project.Gameplay
 		{
 			if (!IsLockoutActive || !ActiveLockoutData.recenterPlayer) return;
 
-			Vector3 recenterDirection = PathFollower.Back().Rotated(UpDirection, Mathf.Pi * .5f);
+			Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
 			float currentOffset = PathFollower.LocalPlayerPositionDelta.X;
 			float movementOffset = currentOffset;
 			if (!isRecentered) // Smooth out recenter speed
@@ -1814,7 +1814,7 @@ namespace Project.Gameplay
 		public Vector3 GetMovementDirection()
 		{
 			float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-			return PathFollower.Back().Rotated(UpDirection, deltaAngle);
+			return PathFollower.Forward().Rotated(UpDirection, deltaAngle);
 		}
 
 		#region Signals

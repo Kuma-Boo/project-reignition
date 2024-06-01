@@ -535,7 +535,7 @@ namespace Project.Gameplay.Bosses
 			float progress = bossPathFollower.Progress; // Cache current progress
 
 			// Try to predict where the player will be when the missile lands
-			float dot = Character.GetMovementDirection().Dot(PathFollower.Back());
+			float dot = Character.GetMovementDirection().Dot(PathFollower.Forward());
 			float offsetPrediction = Character.MoveSpeed * Runtime.randomNumberGenerator.RandfRange(1f, 2f) * dot;
 			bossPathFollower.Progress = PathFollower.Progress + offsetPrediction;
 			bossPathFollower.HOffset = -PathFollower.LocalPlayerPositionDelta.X; // Works since the path is flat
@@ -804,7 +804,7 @@ namespace Project.Gameplay.Bosses
 			horizontalTracking = Mathf.Clamp(horizontalTracking, -FLYING_EYE_MAX_TRACKING, FLYING_EYE_MAX_TRACKING);
 			flyingEyeTarget = Character.PathFollower.GlobalPosition + Vector3.Up * flyingEyeAttackPosition.Y;
 			flyingEyeTarget += Character.PathFollower.Right() * (flyingEyeAttackPosition.X - horizontalTracking);
-			flyingEyeTarget += Character.PathFollower.Back() * FLYING_EYE_RADIUS;
+			flyingEyeTarget += Character.PathFollower.Forward() * FLYING_EYE_RADIUS;
 		}
 
 
