@@ -390,7 +390,7 @@ namespace Project.Gameplay
 					data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X;
 
 					if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
-						data.secondaryYawTracking = delta.Normalized().Flatten().AngleTo(Vector2.Up);
+						data.secondaryYawTracking = -delta.Normalized().Flatten().AngleTo(Vector2.Down);
 				}
 				else if (!Mathf.IsZeroApprox(settings.hallWidth)) // Process hall width
 				{
@@ -403,7 +403,7 @@ namespace Project.Gameplay
 					if (!Mathf.IsZeroApprox(settings.hallRotationStrength) && Mathf.Abs(delta.X) > settings.hallWidth)
 					{
 						delta.X -= Mathf.Sign(delta.X) * settings.hallWidth;
-						float rotationTracking = delta.Flatten().AngleTo(Vector2.Up) * settings.hallRotationStrength;
+						float rotationTracking = -delta.Flatten().AngleTo(Vector2.Down) * settings.hallRotationStrength;
 						data.secondaryYawTracking = rotationTracking;
 					}
 				}
