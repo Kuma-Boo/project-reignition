@@ -919,6 +919,7 @@ metadata/_edit_lock_ = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -88.4751, -8, -310.103)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
+visible = false
 
 [node name="SidleL" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 91, 2.5, -79.85)
@@ -1007,6 +1008,24 @@ transform = Transform3D(5.96046e-08, 0, -1, 0, 1, 0, 1, 0, 5.96046e-08, -145.529
 "Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/InteriorU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="EndL" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.3, -88.5, -559.3)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/EndL"]
+shape = SubResource("BoxShape3D_mow5f")
+
+[node name="CarpetU" parent="MainAct/CullingMap" instance=ExtResource("26_bkait")]
+transform = Transform3D(5.96046e-08, 0, -1, 0, 1, 0, 1, 0, 5.96046e-08, -145.529, 10.0265, -481.689)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/CarpetU"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
@@ -1621,6 +1640,7 @@ settings = ExtResource("28_ru4gh")
 
 [node name="Tower" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
+visible = false
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -2062,8 +2082,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
 [node name="Child08" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
+[node name="Carpet" type="Node3D" parent="MainAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
+script = ExtResource("4_kcdaq")
+saveVisibilityOnCheckpoint = true
+
 [node name="Ending" type="Node3D" parent="MainAct"]
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -4370,8 +4394,14 @@ warpTarget = NodePath("../../../Ending/Gate3")
 [connection signal="Deactivated" from="MainAct/CullingMap/InteriorL" to="MainAct/Interior" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/TowerU" to="MainAct/Tower" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/TowerU" to="MainAct/Tower" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/CarpetL" to="MainAct/Carpet" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/CarpetL" to="MainAct/Carpet" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/InteriorU" to="MainAct/Interior" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/InteriorU" to="MainAct/Interior" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/EndL" to="MainAct/Ending" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/EndL" to="MainAct/Ending" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/CarpetU" to="MainAct/Carpet" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/CarpetU" to="MainAct/Carpet" method="Activate"]
 [connection signal="Collected" from="MainAct/Hall/ItemBox1" to="MainAct/Hall/ItemBox1/Event" method="Activate"]
 [connection signal="Respawned" from="MainAct/Hall/ItemBox1/RichRing" to="MainAct/Hall/ItemBox1/Event" method="Respawn"]
 [connection signal="Collected" from="MainAct/Hall/ItemBox2" to="MainAct/Hall/ItemBox2/Event" method="Activate"]

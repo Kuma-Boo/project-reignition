@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=74 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -41,6 +41,7 @@
 [ext_resource type="PackedScene" uid="uid://c6s2w2y34qk3n" path="res://area/7 night palace/environment/NPSpaceA.tscn" id="24_2lmms"]
 [ext_resource type="Resource" uid="uid://cr8img8j2ucsv" path="res://area/7 night palace/act 1/camera/InteriorCam.tres" id="24_c3npn"]
 [ext_resource type="PackedScene" uid="uid://c7nwnjbl6okjf" path="res://area/7 night palace/environment/NPSpaceB.tscn" id="25_n0r0x"]
+[ext_resource type="Resource" uid="uid://baxautbq733dc" path="res://area/7 night palace/act 1/camera/EndCam.tres" id="25_sawgh"]
 [ext_resource type="PackedScene" uid="uid://kig7ydnck6g5" path="res://area/7 night palace/environment/NPSpaceC.tscn" id="26_1px5b"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="27_lklb2"]
 [ext_resource type="PackedScene" uid="uid://dftou328ishsn" path="res://area/7 night palace/data/BGM.tscn" id="28_dk7mm"]
@@ -57,6 +58,7 @@
 [ext_resource type="Material" uid="uid://dwmvujonhvjd7" path="res://area/7 night palace/data/material/Effect Secondary Reflection.tres" id="47_eiuc0"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="51_r4h1y"]
 [ext_resource type="PackedScene" uid="uid://b2ym415hopd85" path="res://area/7 night palace/object/Carpet.tscn" id="52_vgsxs"]
+[ext_resource type="Resource" uid="uid://blg2b6vgjsl4x" path="res://area/7 night palace/act 1/camera/CarpetJumpCam.tres" id="52_wlx14"]
 [ext_resource type="Resource" uid="uid://b3ti60dq0o0ro" path="res://area/7 night palace/act 1/camera/CarpetCam.tres" id="53_51kfd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
@@ -680,6 +682,20 @@ settings = ExtResource("24_c3npn")
 transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
+[node name="End" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
+transform = Transform3D(8.74228e-08, 0, 1, 0, 1, 0, -1, 0, 8.74228e-08, 282.485, -103.998, -490.143)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/End"]
+script = ExtResource("10_7ghp2")
+transitionTime = 0.5
+settings = ExtResource("25_sawgh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/End"]
+transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
 [node name="Reflection" type="Node3D" parent="Trigger"]
 
 [node name="SecondaryReflection" parent="Trigger/Reflection" instance=ExtResource("4_d1bik")]
@@ -853,7 +869,6 @@ shape = SubResource("BoxShape3D_mow5f")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
-visible = false
 
 [node name="02L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -70)
@@ -937,7 +952,7 @@ OneShot = true
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="05U" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, 360.738, -102, -490.225)
+transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, 334.738, -104, -490.025)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -1064,9 +1079,6 @@ curve = ExtResource("31_vfagc")
 
 [node name="Carpet" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
-script = ExtResource("9_ew8l8")
-startEnabled = true
-saveVisibilityOnCheckpoint = true
 
 [node name="StartTrigger" parent="Carpet" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
@@ -1077,19 +1089,14 @@ script = ExtResource("51_r4h1y")
 jumpHeight = 5.0
 autoAlign = true
 
+[node name="Camera" type="Node3D" parent="Carpet/StartTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 12)
+script = ExtResource("10_7ghp2")
+transitionTime = 2.0
+settings = ExtResource("52_wlx14")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Carpet/StartTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_pd5lb")
-
-[node name="EndTrigger" parent="Carpet" instance=ExtResource("4_d1bik")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.10059, -106, 425)
-
-[node name="JumpTrigger" type="Node3D" parent="Carpet/EndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
-script = ExtResource("51_r4h1y")
-jumpHeight = 2.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Carpet/EndTrigger"]
 shape = SubResource("BoxShape3D_pd5lb")
 
 [node name="Carpet" parent="Carpet" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("52_vgsxs")]
@@ -1105,6 +1112,17 @@ settings = ExtResource("53_51kfd")
 [node name="Path" type="Node3D" parent="Carpet/Carpet" node_paths=PackedStringArray("path")]
 script = ExtResource("7_omcuu")
 path = NodePath("../../../Path/CarpetPath")
+
+[node name="EndTrigger" parent="Carpet" instance=ExtResource("4_d1bik")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.10059, -106, 425)
+
+[node name="JumpTrigger" type="Node3D" parent="Carpet/EndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
+script = ExtResource("51_r4h1y")
+jumpHeight = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Carpet/EndTrigger"]
+shape = SubResource("BoxShape3D_pd5lb")
 
 [node name="BGM" parent="." instance=ExtResource("28_dk7mm")]
 bus = &"BGM"
@@ -1151,11 +1169,11 @@ reflectionMaterials = [ExtResource("47_eiuc0")]
 [connection signal="Deactivated" from="Visuals/CullingMap/05U" to="Visuals/MainSection/05Carpet" method="Activate"]
 [connection signal="Activated" from="Carpet/StartTrigger" to="Collision/Collision/CarpetWallOneWay" method="Deactivate"]
 [connection signal="JumpFinished" from="Carpet/StartTrigger/JumpTrigger" to="Carpet/Carpet" method="Activate"]
-[connection signal="Activated" from="Carpet/EndTrigger" to="Carpet/Carpet" method="Deactivate"]
-[connection signal="JumpFinished" from="Carpet/EndTrigger/JumpTrigger" to="Collision/Collision/CarpetWallOneWay" method="Activate"]
-[connection signal="JumpFinished" from="Carpet/EndTrigger/JumpTrigger" to="Trigger/Path/MainPath4" method="Activate"]
 [connection signal="Activated" from="Carpet/Carpet" to="Carpet/Carpet/Camera" method="Activate"]
 [connection signal="Activated" from="Carpet/Carpet" to="Carpet/Carpet/Path" method="Activate"]
 [connection signal="Deactivated" from="Carpet/Carpet" to="Carpet/Carpet/Camera" method="Deactivate"]
+[connection signal="Activated" from="Carpet/EndTrigger" to="Carpet/Carpet" method="Deactivate"]
+[connection signal="JumpFinished" from="Carpet/EndTrigger/JumpTrigger" to="Collision/Collision/CarpetWallOneWay" method="Activate"]
+[connection signal="JumpFinished" from="Carpet/EndTrigger/JumpTrigger" to="Trigger/Path/MainPath4" method="Activate"]
 
 [editable path="Collision/Collision"]

@@ -392,7 +392,7 @@ namespace Project.Gameplay
 					if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
 						data.secondaryYawTracking = -delta.Normalized().Flatten().AngleTo(Vector2.Down);
 				}
-				else if (!Mathf.IsZeroApprox(settings.hallWidth)) // Process hall width
+				else if (!Mathf.IsZeroApprox(settings.hallWidth) || !Mathf.IsZeroApprox(settings.hallRotationStrength)) // Process hall width
 				{
 					float positionTracking = Mathf.Clamp(PathFollower.GlobalPlayerPositionDelta.X, -settings.hallWidth, settings.hallWidth);
 					data.blendData.HallSmoothDamp(positionTracking, SnapFlag);
