@@ -1,5 +1,4 @@
 using Godot;
-using Project.CustomNodes;
 
 namespace Project.Gameplay
 {
@@ -60,22 +59,23 @@ namespace Project.Gameplay
 
 		public void RecalculateData()
 		{
-			float newForwardAngle = ExtensionMethods.CalculateForwardAngle(this.Back(), this.Up());
+			float newForwardAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), this.Up());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle);
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			LocalPlayerPositionDelta = GlobalBasis.Inverse() * (Character.GlobalPosition - GlobalPosition);
+			LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
 
 
 			// Update custom orientations
-			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, BackAngle).Normalized();
-			float upDotProduct = this.Back().Dot(Vector3.Up);
+			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, ForwardAngle).Normalized();
+			float upDotProduct = this.Forward().Dot(Vector3.Up);
 			if (upDotProduct < .9f)
 				SideAxis = this.Forward().Cross(Vector3.Up).Normalized();
 			else // Moving straight up/down
-				SideAxis = this.Back().Cross(ForwardAxis).Normalized();
+				SideAxis = this.Forward().Cross(ForwardAxis).Normalized();
 
 			HeightAxis = this.Forward().Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
 
