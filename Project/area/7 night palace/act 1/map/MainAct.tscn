@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=66 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -28,12 +28,8 @@
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="24_i3gqp"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="25_t50ri"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="26_bkait"]
-[ext_resource type="PackedScene" uid="uid://b2ym415hopd85" path="res://area/7 night palace/object/Carpet.tscn" id="26_sio18"]
-[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="27_iu8fd"]
 [ext_resource type="Resource" uid="uid://drmbvsyw4u64k" path="res://area/7 night palace/act 1/camera/JumpPanelCam.tres" id="28_ru4gh"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="29_uohue"]
-[ext_resource type="Resource" uid="uid://b3ti60dq0o0ro" path="res://area/7 night palace/act 1/camera/CarpetCam.tres" id="30_m5m3w"]
-[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="31_pibmb"]
 [ext_resource type="PackedScene" uid="uid://bil31auctbk52" path="res://area/7 night palace/act 1/environment/hall stretch event/HallStretchEvent.tscn" id="31_uuqrt"]
 [ext_resource type="PackedScene" uid="uid://dvp0eoegosx00" path="res://area/7 night palace/object/obstacle/Teleport.tscn" id="33_j541v"]
 [ext_resource type="PackedScene" uid="uid://r47skp23jl1b" path="res://area/7 night palace/object/obstacle/Gate.tscn" id="33_kvbsj"]
@@ -773,9 +769,6 @@ _data = {
 "event": SubResource("Animation_jm8av")
 }
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_r3fog"]
-size = Vector3(20, 20, 2.5)
-
 [sub_resource type="Animation" id="Animation_l4g0l"]
 length = 0.001
 tracks/0/type = "value"
@@ -923,7 +916,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 286.19, -103.9, -479.935)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -88.4751, -8, -310.103)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -1628,8 +1621,8 @@ settings = ExtResource("28_ru4gh")
 
 [node name="Tower" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
-visible = false
 script = ExtResource("4_kcdaq")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="BallGroup1" type="Node3D" parent="MainAct/Tower"]
@@ -2069,57 +2062,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
 [node name="Child08" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
-[node name="Carpet" type="Node3D" parent="MainAct"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
+[node name="Ending" type="Node3D" parent="MainAct"]
 visible = false
 script = ExtResource("4_kcdaq")
-saveVisibilityOnCheckpoint = true
-
-[node name="StartTrigger" parent="MainAct/Carpet" instance=ExtResource("26_bkait")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-
-[node name="JumpTrigger" type="Node3D" parent="MainAct/Carpet/StartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 12)
-script = ExtResource("27_iu8fd")
-jumpHeight = 5.0
-autoAlign = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Carpet/StartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_r3fog")
-
-[node name="EndTrigger" parent="MainAct/Carpet" instance=ExtResource("26_bkait")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.10059, -106, 425)
-
-[node name="Path" type="Node3D" parent="MainAct/Carpet/EndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
-script = ExtResource("31_pibmb")
-
-[node name="JumpTrigger" type="Node3D" parent="MainAct/Carpet/EndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
-script = ExtResource("27_iu8fd")
-jumpHeight = 2.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Carpet/EndTrigger"]
-shape = SubResource("BoxShape3D_r3fog")
-
-[node name="Carpet" parent="MainAct/Carpet" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("26_sio18")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 17)
-path = NodePath("../../../Static/Path/CarpetPath")
-pathFollower = NodePath("../../../Static/Path/CarpetPath/CarpetPathFollower")
-
-[node name="Camera" type="Node3D" parent="MainAct/Carpet/Carpet"]
-script = ExtResource("29_uohue")
-transitionTime = 0.5
-settings = ExtResource("30_m5m3w")
-
-[node name="Path" type="Node3D" parent="MainAct/Carpet/Carpet" node_paths=PackedStringArray("path")]
-script = ExtResource("31_pibmb")
-path = NodePath("../../../../Static/Path/CarpetPath")
-
-[node name="Ending" type="Node3D" parent="MainAct"]
-script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="HallStretchTrigger" parent="MainAct/Ending" instance=ExtResource("26_bkait")]
@@ -4425,8 +4370,6 @@ warpTarget = NodePath("../../../Ending/Gate3")
 [connection signal="Deactivated" from="MainAct/CullingMap/InteriorL" to="MainAct/Interior" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/TowerU" to="MainAct/Tower" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/TowerU" to="MainAct/Tower" method="Activate"]
-[connection signal="Activated" from="MainAct/CullingMap/CarpetL" to="MainAct/Carpet" method="Activate"]
-[connection signal="Deactivated" from="MainAct/CullingMap/CarpetL" to="MainAct/Carpet" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/InteriorU" to="MainAct/Interior" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/InteriorU" to="MainAct/Interior" method="Activate"]
 [connection signal="Collected" from="MainAct/Hall/ItemBox1" to="MainAct/Hall/ItemBox1/Event" method="Activate"]
@@ -4450,12 +4393,6 @@ warpTarget = NodePath("../../../Ending/Gate3")
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup2/BlueMajin3" to="MainAct/Tower/MajinGroup2/BlueMajin4" method="Spawn"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup2/BlueMajin3" to="MainAct/Tower/MajinGroup2/RedMajin" method="Spawn"]
 [connection signal="Spawned" from="MainAct/Interior/MajinGroup/GreenMajin1" to="MainAct/Interior/MajinGroup/GreenMajin2" method="Spawn"]
-[connection signal="JumpFinished" from="MainAct/Carpet/StartTrigger/JumpTrigger" to="MainAct/Carpet/Carpet" method="Activate"]
-[connection signal="Activated" from="MainAct/Carpet/EndTrigger" to="MainAct/Carpet/Carpet" method="Deactivate"]
-[connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Activate"]
-[connection signal="Activated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Camera" method="Deactivate"]
-[connection signal="Deactivated" from="MainAct/Carpet/Carpet" to="MainAct/Carpet/Carpet/Path" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ending/HallStretchTrigger" to="MainAct/Sidle" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Ending/HallStretchTrigger" to="MainAct/Sidle" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ending/Gate1" to="Static/Visuals/MainSection" method="Activate"]
@@ -4535,5 +4472,4 @@ warpTarget = NodePath("../../../Ending/Gate3")
 [connection signal="Teleport" from="MainAct/GasRoom/GasC/Hourglass" to="MainAct/Ending/Gate3" method="Activate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasC/Hourglass" to="MainAct/GasRoom/GasC" method="Deactivate"]
 
-[editable path="Static"]
 [editable path="MainAct/Ending/HallStretchTrigger/HallStretchEvent"]
