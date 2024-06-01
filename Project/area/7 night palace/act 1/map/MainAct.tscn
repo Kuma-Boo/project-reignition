@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=67 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -31,6 +31,7 @@
 [ext_resource type="Resource" uid="uid://drmbvsyw4u64k" path="res://area/7 night palace/act 1/camera/JumpPanelCam.tres" id="28_ru4gh"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="29_uohue"]
 [ext_resource type="PackedScene" uid="uid://bil31auctbk52" path="res://area/7 night palace/act 1/environment/hall stretch event/HallStretchEvent.tscn" id="31_uuqrt"]
+[ext_resource type="Resource" uid="uid://bxhtc1ryl1p4m" path="res://area/7 night palace/act 1/environment/hall stretch event/HallStretchCam.tres" id="32_q4oj0"]
 [ext_resource type="PackedScene" uid="uid://dvp0eoegosx00" path="res://area/7 night palace/object/obstacle/Teleport.tscn" id="33_j541v"]
 [ext_resource type="PackedScene" uid="uid://r47skp23jl1b" path="res://area/7 night palace/object/obstacle/Gate.tscn" id="33_kvbsj"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="33_o2ldu"]
@@ -916,7 +917,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -88.4751, -8, -310.103)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 289.42, -103, -479.572)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 visible = false
@@ -1642,7 +1643,6 @@ settings = ExtResource("28_ru4gh")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
 visible = false
 script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="BallGroup1" type="Node3D" parent="MainAct/Tower"]
@@ -2089,12 +2089,22 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Ending" type="Node3D" parent="MainAct"]
 script = ExtResource("4_kcdaq")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="HallStretchTrigger" parent="MainAct/Ending" instance=ExtResource("26_bkait")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 335, -104, -490)
 "Trigger Mode" = 2
 "Exit Mode" = 2
+
+[node name="CameraReference" type="Camera3D" parent="MainAct/Ending/HallStretchTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, 20, -30)
+
+[node name="Camera" type="Node3D" parent="MainAct/Ending/HallStretchTrigger/CameraReference" node_paths=PackedStringArray("referenceCamera")]
+script = ExtResource("29_uohue")
+UpdateEveryFrame = true
+settings = ExtResource("32_q4oj0")
+referenceCamera = NodePath("..")
 
 [node name="HallStretchEvent" parent="MainAct/Ending/HallStretchTrigger" instance=ExtResource("31_uuqrt")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 490, 104, 335)
@@ -4423,8 +4433,7 @@ warpTarget = NodePath("../../../Ending/Gate3")
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup2/BlueMajin3" to="MainAct/Tower/MajinGroup2/BlueMajin4" method="Spawn"]
 [connection signal="Defeated" from="MainAct/Tower/MajinGroup2/BlueMajin3" to="MainAct/Tower/MajinGroup2/RedMajin" method="Spawn"]
 [connection signal="Spawned" from="MainAct/Interior/MajinGroup/GreenMajin1" to="MainAct/Interior/MajinGroup/GreenMajin2" method="Spawn"]
-[connection signal="Activated" from="MainAct/Ending/HallStretchTrigger" to="MainAct/Sidle" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Ending/HallStretchTrigger" to="MainAct/Sidle" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Ending/HallStretchTrigger" to="MainAct/Ending/HallStretchTrigger/CameraReference/Camera" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/Gate1" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Activated" from="MainAct/Ending/Gate1" to="Static/Visuals/SpaceSection" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ending/Gate1" to="MainAct/Ending" method="Activate"]

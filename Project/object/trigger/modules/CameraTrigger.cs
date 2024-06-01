@@ -29,6 +29,9 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
 		private CameraSettingsResource previousSettings;
+		[Export]
+		private Camera3D referenceCamera;
+
 		private Vector3 previousStaticPosition;
 		private Basis previousStaticRotation;
 		private CameraController Camera => Character.Camera;
@@ -47,6 +50,9 @@ namespace Project.Gameplay.Triggers
 
 			if (data.SettingsResource.copyRotation)
 				data.RotationBasis = GlobalBasis;
+
+			if (data.SettingsResource.copyFov && referenceCamera != null)
+				data.Fov = referenceCamera.Fov;
 		}
 
 

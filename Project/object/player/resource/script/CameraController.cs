@@ -239,10 +239,7 @@ namespace Project.Gameplay
 				staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.useStaticPosition ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 
-				float targetFOV = CameraBlendList[i].SettingsResource.targetFOV;
-				if (Mathf.IsZeroApprox(targetFOV))
-					targetFOV = DEFAULT_FOV;
-				fov = Mathf.Lerp(fov, targetFOV, CameraBlendList[i].SmoothedInfluence);
+				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 			}
 
 			// Recalculate non-static camera positions for better transition rotations.
@@ -294,6 +291,9 @@ namespace Project.Gameplay
 			// Update static data before simulating camera
 			if (CameraBlendList[index].Trigger != null && CameraBlendList[index].Trigger.UpdateEveryFrame)
 				CameraBlendList[index].Trigger.UpdateStaticData(CameraBlendList[index]);
+
+			if (!settings.copyFov)
+				data.blendData.Fov = Mathf.IsZeroApprox(settings.targetFOV) ? DEFAULT_FOV : settings.targetFOV;
 
 			float targetYawAngle = settings.yawAngle;
 			float targetPitchAngle = settings.pitchAngle;
@@ -666,6 +666,9 @@ namespace Project.Gameplay
 
 		/// <summary> Camera's static rotation. Only used when CameraSettingsResource.useStaticRotation is true. </summary>
 		public Basis RotationBasis { get; set; }
+
+		/// <summary> Current fov. </summary>
+		public float Fov;
 
 		/// <summary> Current pitch angle. </summary>
 		public float pitchAngle;

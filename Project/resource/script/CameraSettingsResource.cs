@@ -26,6 +26,7 @@ namespace Project.Gameplay
 		private const string CONTROL_INFLUENCE_KEY = "Rotation/Control Influence";
 
 		private const string VIEW_OFFSET_KEY = "View/Offset";
+		private const string COPY_FOV_KEY = "View/Copy Fov";
 		private const string FOV_KEY = "View/FOV";
 
 		private const string HORIZONTAL_TRACKING_KEY = "Tracking/Horizontal Tracking Mode";
@@ -75,7 +76,10 @@ namespace Project.Gameplay
 			}
 
 			properties.Add(ExtensionMethods.CreateProperty(VIEW_OFFSET_KEY, Variant.Type.Vector2));
-			properties.Add(ExtensionMethods.CreateProperty(FOV_KEY, Variant.Type.Float, PropertyHint.Range, "0, 179, .1"));
+
+			properties.Add(ExtensionMethods.CreateProperty(COPY_FOV_KEY, Variant.Type.Bool));
+			if (!copyFov)
+				properties.Add(ExtensionMethods.CreateProperty(FOV_KEY, Variant.Type.Float, PropertyHint.Range, "0, 179, .1"));
 
 			return properties;
 		}
@@ -90,6 +94,8 @@ namespace Project.Gameplay
 					return copyPosition;
 				case COPY_ROTATION_KEY:
 					return copyRotation;
+				case COPY_FOV_KEY:
+					return copyFov;
 				case POSITION_KEY:
 					return staticPosition;
 
@@ -149,6 +155,10 @@ namespace Project.Gameplay
 					break;
 				case COPY_ROTATION_KEY:
 					copyRotation = (bool)value;
+					NotifyPropertyListChanged();
+					break;
+				case COPY_FOV_KEY:
+					copyFov = (bool)value;
 					NotifyPropertyListChanged();
 					break;
 				case POSITION_KEY:
@@ -224,6 +234,8 @@ namespace Project.Gameplay
 		public bool copyPosition = true;
 		/// <summary> Copy camera's rotation from the cameraTrigger node? </summary>
 		public bool copyRotation;
+		/// <summary> Copy camera's rotation from the cameraTrigger node (requires a reference camera)? </summary>
+		public bool copyFov;
 		/// <summary> Static position to use when copyPosition is false. </summary>
 		public Vector3 staticPosition;
 
