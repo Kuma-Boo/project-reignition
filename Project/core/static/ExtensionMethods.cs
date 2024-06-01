@@ -60,7 +60,7 @@ namespace Project
 			if (Mathf.Abs(dot) > .9f) // Moving vertically
 				forwardVector = -upVector * Mathf.Sign(dot);
 
-			return forwardVector.Flatten().Normalized().AngleTo(Vector2.Up);
+			return forwardVector.Flatten().Normalized().AngleTo(Vector2.Down);
 		}
 
 		/// <summary> Overload method that uses Vector3.Up as upVector. </summary>

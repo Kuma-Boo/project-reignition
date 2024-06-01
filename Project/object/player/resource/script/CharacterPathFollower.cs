@@ -68,7 +68,6 @@ namespace Project.Gameplay
 			LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Character.GlobalPosition);
 
-
 			// Update custom orientations
 			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, ForwardAngle).Normalized();
 			float upDotProduct = this.Forward().Dot(Vector3.Up);

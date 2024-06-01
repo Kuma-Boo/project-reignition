@@ -298,7 +298,31 @@ namespace Project.Gameplay
 			float targetYawAngle = settings.yawAngle;
 			float targetPitchAngle = settings.pitchAngle;
 
-			if (!settings.useStaticPosition)
+			if (settings.useStaticPosition)
+			{
+				data.precalculatedPosition = data.blendData.StaticPosition;
+
+				if (settings.copyRotation) // Override rotation w/ inherited basis
+					data.offsetBasis = data.blendData.RotationBasis.Orthonormalized();
+				else
+				{
+					Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
+					data.blendData.distance = delta.Length();
+					delta = delta.Normalized();
+
+					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						targetYawAngle += delta.Flatten().AngleTo(Vector2.Up);
+					targetYawAngle += Mathf.Pi;
+
+					if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+						targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+
+					data.blendData.yawAngle = targetYawAngle;
+					data.blendData.pitchAngle = targetPitchAngle;
+					data.CalculateBasis();
+				}
+			}
+			else
 			{
 				// Calculate distance
 				float targetDistance = settings.distance;
@@ -333,12 +357,12 @@ namespace Project.Gameplay
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					targetYawAngle += PathFollower.ForwardAngle;
 				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					targetPitchAngle += PathFollower.Back().AngleTo(PathFollower.Back().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Back().Y);
+					targetPitchAngle += PathFollower.Forward().AngleTo(PathFollower.Forward().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Forward().Y);
 
 				if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Auto) // Fixes slope changes
 				{
 					// Negative number -> Concave, Positive number -> Convex.
-					float slopeDifference = sampledForward.Y - PathFollower.Back().Y;
+					float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
 					if (Mathf.Abs(slopeDifference) > .05f) // Deadzone to prevent jittering
 						data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
 				}
@@ -414,30 +438,6 @@ namespace Project.Gameplay
 				}
 				data.pitchTracking += data.blendData.lockonPitchTracking * lockonBlend;
 			}
-			else
-			{
-				data.precalculatedPosition = data.blendData.StaticPosition;
-
-				if (settings.copyRotation) // Override rotation w/ inherited basis
-					data.offsetBasis = data.blendData.RotationBasis.Orthonormalized();
-				else
-				{
-					Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
-					data.blendData.distance = delta.Length();
-					delta = delta.Normalized();
-
-					if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-						targetYawAngle += delta.Flatten().AngleTo(Vector2.Up);
-					targetYawAngle += Mathf.Pi;
-
-					if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-						targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
-
-					data.blendData.yawAngle = targetYawAngle;
-					data.blendData.pitchAngle = targetPitchAngle;
-					data.CalculateBasis();
-				}
-			}
 
 			if (!data.blendData.WasInitialized)
 				data.blendData.WasInitialized = true;
@@ -454,7 +454,7 @@ namespace Project.Gameplay
 				offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi);
 				offsetBasis = offsetBasis.Rotated(Vector3.Up, blendData.yawAngle);
 				offsetBasis = offsetBasis.Rotated(offsetBasis.X.Normalized(), blendData.pitchAngle);
-				offsetBasis = offsetBasis.Rotated(-offsetBasis.Z.Normalized(), blendData.tiltAngle);
+				offsetBasis = offsetBasis.Rotated(offsetBasis.Z.Normalized(), blendData.tiltAngle);
 			}
 
 			/// <summary> Yaw rotation data used for tracking. </summary>
@@ -473,7 +473,7 @@ namespace Project.Gameplay
 			public Vector3 precalculatedPosition;
 			public void CalculatePosition(Vector3 referencePosition)
 			{
-				precalculatedPosition = offsetBasis.Z.Normalized() * blendData.distance;
+				precalculatedPosition = -offsetBasis.Z.Normalized() * blendData.distance;
 				precalculatedPosition += referencePosition;
 			}
 
@@ -488,7 +488,6 @@ namespace Project.Gameplay
 		private Vector3 freecamVelocity;
 		private const float MOUSE_SENSITIVITY = .1f;
 		private const float FREE_CAM_POSITION_SMOOTHING = .1f;
-		private const float FREE_CAM_ROTATION_SMOOTHING = .1f;
 
 		private bool isFreeCamActive;
 		private bool isFreeCamRotating;
