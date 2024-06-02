@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=72 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -37,9 +37,11 @@
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="33_o2ldu"]
 [ext_resource type="PackedScene" uid="uid://dqy65o3le786n" path="res://area/7 night palace/object/obstacle/SpacePanel.tscn" id="36_ghnrl"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="36_vtvks"]
+[ext_resource type="PackedScene" uid="uid://dyfndruxwjpbx" path="res://area/7 night palace/object/obstacle/Spear.tscn" id="37_627rn"]
 [ext_resource type="PackedScene" uid="uid://o1hcy4hf5kg" path="res://area/7 night palace/object/obstacle/Stopper.tscn" id="37_mso31"]
 [ext_resource type="PackedScene" uid="uid://bdntsfu7j7ix8" path="res://area/7 night palace/object/obstacle/Hourglass.tscn" id="38_8l44y"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="38_cjtko"]
+[ext_resource type="AudioStream" uid="uid://dmm7bvdsitykp" path="res://sound/sfx/stage/night palace/STG070_20.wav" id="38_jrfbg"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="42_m3821"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="43_sswox"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="44_dyala"]
@@ -832,6 +834,95 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ly3wh"]
 size = Vector3(30, 20, 2.5)
+
+[sub_resource type="Animation" id="Animation_wo6sg"]
+resource_name = "event"
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(13, 22.5167, 0), Vector3(-30, -51.9615, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear/SpearSFX")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpacePanel")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Shatter"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_u21n1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(13, 22.5167, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_88v55"]
+_data = {
+"RESET": SubResource("Animation_u21n1"),
+"event": SubResource("Animation_wo6sg")
+}
 
 [sub_resource type="Curve" id="Curve_c3fnw"]
 max_value = 5.0
@@ -2084,10 +2175,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
 [node name="Carpet" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
 [node name="Ending" type="Node3D" parent="MainAct"]
+visible = false
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -2182,9 +2275,42 @@ shape = SubResource("BoxShape3D_ly3wh")
 
 [node name="SpaceA" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -640)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
+
+[node name="Spear1" parent="MainAct/SpaceA" instance=ExtResource("26_bkait")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 15.2, 0, 0)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Event" type="Node3D" parent="MainAct/SpaceA/Spear1" node_paths=PackedStringArray("animator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 25)
+script = ExtResource("33_o2ldu")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="Spear" parent="MainAct/SpaceA/Spear1/Event" instance=ExtResource("37_627rn")]
+transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, 13, 22.5167, 0)
+visible = false
+
+[node name="SpearSFX" type="AudioStreamPlayer3D" parent="MainAct/SpaceA/Spear1/Event/Spear"]
+stream = ExtResource("38_jrfbg")
+max_db = 0.0
+bus = &"SFX"
+
+[node name="SpacePanel" parent="MainAct/SpaceA/Spear1/Event" instance=ExtResource("36_ghnrl")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.0999756, -0.25, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/SpaceA/Spear1/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_88v55")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/SpaceA/Spear1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
 
 [node name="SpacePanelGroup1" type="Node3D" parent="MainAct/SpaceA"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.4, -0.25, 0)
@@ -2200,9 +2326,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0, -3.09998)
 
 [node name="SpacePanel4" parent="MainAct/SpaceA/SpacePanelGroup1" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2, 0, 3.10004)
-
-[node name="SpacePanel5" parent="MainAct/SpaceA/SpacePanelGroup1" instance=ExtResource("36_ghnrl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0, -3.09998)
 
 [node name="Rings1" type="Node3D" parent="MainAct/SpaceA"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34, 1, 2.5)
@@ -4464,6 +4587,8 @@ warpTarget = NodePath("../../../Ending/Gate3")
 [connection signal="Teleport" from="MainAct/Ending/Gate3/Teleport" to="Static/Visuals/SpaceSection/NPSpaceC" method="Activate"]
 [connection signal="Teleport" from="MainAct/Ending/Gate3/Teleport" to="MainAct/Ending" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/Ending/Gate3/Teleport" to="MainAct/SpaceC" method="Activate"]
+[connection signal="Activated" from="MainAct/SpaceA/Spear1" to="MainAct/Sidle" method="Activate"]
+[connection signal="Deactivated" from="MainAct/SpaceA/Spear1" to="MainAct/Sidle" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Trigger/Path/GasRoomPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceA/Hourglass" to="MainAct/SpaceA" method="Deactivate"]

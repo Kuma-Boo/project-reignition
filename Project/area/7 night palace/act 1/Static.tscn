@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=75 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -30,6 +30,7 @@
 [ext_resource type="Curve3D" uid="uid://7nar8sphbcx3" path="res://area/7 night palace/act 1/environment/path/MainPath3.tres" id="13_htggc"]
 [ext_resource type="Resource" uid="uid://c1xaqej1krj0h" path="res://area/7 night palace/act 1/camera/WallRun2Cam.tres" id="13_yw38c"]
 [ext_resource type="Curve3D" uid="uid://026ux1mkbpp5" path="res://area/7 night palace/act 1/environment/path/CarpetPath.tres" id="16_qmphs"]
+[ext_resource type="Resource" uid="uid://dotssii44tooi" path="res://area/7 night palace/act 1/camera/SpaceAAutomationCam.tres" id="16_wlhs5"]
 [ext_resource type="Curve3D" uid="uid://cmkw2yow867db" path="res://area/7 night palace/act 1/environment/path/WallRun1.tres" id="17_4n7m5"]
 [ext_resource type="Resource" uid="uid://qs2jw2eruiy7" path="res://area/7 night palace/act 1/camera/SidleStartCam.tres" id="17_mmiee"]
 [ext_resource type="Curve3D" uid="uid://bsnpkefxehx8g" path="res://area/7 night palace/act 1/environment/path/WallRun2.tres" id="18_6scab"]
@@ -436,7 +437,7 @@ affectCamera = false
 [node name="Camera" type="Node3D" parent="Trigger/Object/SpaceAAutomation"]
 script = ExtResource("10_7ghp2")
 transitionTime = 1.0
-settings = ExtResource("11_onu37")
+settings = ExtResource("16_wlhs5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SpaceAAutomation"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 0)
@@ -696,6 +697,18 @@ settings = ExtResource("25_sawgh")
 transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
+[node name="SpaceACam" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 786.125, 0, -640)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/SpaceACam"]
+script = ExtResource("10_7ghp2")
+settings = ExtResource("11_onu37")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpaceACam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mow5f")
+
 [node name="Reflection" type="Node3D" parent="Trigger"]
 
 [node name="SecondaryReflection" parent="Trigger/Reflection" instance=ExtResource("4_d1bik")]
@@ -869,6 +882,7 @@ shape = SubResource("BoxShape3D_mow5f")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
 
 [node name="02L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -70)
@@ -961,6 +975,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="MainSection" type="Node3D" parent="Visuals"]
+visible = false
 script = ExtResource("9_ew8l8")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -999,7 +1014,6 @@ startEnabled = true
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 
 [node name="SpaceSection" type="Node3D" parent="Visuals"]
-visible = false
 script = ExtResource("9_ew8l8")
 saveVisibilityOnCheckpoint = true
 isStageVisuals = true
@@ -1010,7 +1024,6 @@ isStageVisuals = true
 visible = false
 
 [node name="NPSpaceA" parent="Visuals/SpaceSection" instance=ExtResource("24_2lmms")]
-visible = false
 
 [node name="NPSpaceB" parent="Visuals/SpaceSection" instance=ExtResource("25_n0r0x")]
 visible = false
