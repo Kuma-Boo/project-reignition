@@ -71,7 +71,10 @@ namespace Project.Gameplay.Triggers
 				previousStaticRotation = Camera.ActiveBlendData.RotationBasis; // Cache static rotation
 			}
 
-			Camera.UpdateCameraSettings(new CameraBlendData()
+			if (Camera.ActiveSettings == settings &&
+				!(settings.copyPosition || settings.copyRotation)) return;
+
+			Camera.UpdateCameraSettings(new()
 			{
 				BlendTime = transitionTime,
 				SettingsResource = settings,
