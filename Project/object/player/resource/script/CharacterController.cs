@@ -455,6 +455,8 @@ namespace Project.Gameplay
 		private const float STRAFE_TURNAROUND_SPEED = .24f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
+		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
+		private const float TURNING_SENSITIVITY = .6f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -590,6 +592,10 @@ namespace Project.Gameplay
 			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
 			if (Skills.IsSpeedBreakActive)
 				turnDelta = maxTurnAmount;
+
+			// Fix touchy controllers
+			float controllerFix = Mathf.SmoothStep(0f, 1f, .4f * ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
+			turnDelta += controllerFix * TURNING_SENSITIVITY;
 
 			if (IsSpeedLossActive())
 			{
