@@ -1,13 +1,13 @@
 # Project Reignition
 A Fan Remake of Sonic and the Secret Rings.
 
-Originally released for the Nintendo Wii in 2007 to a respectable level of critical and commercial success, Sonic and the Secret Rings' reputation has dwindled over time among fans. Some common complaints include:
+Originally released in 2007 for the Nintendo Wii, Sonic and the Secret Rings' initially saw a moderate amount of critical and commercial success. Despite this, its reputation has dwindled over time among fans. Some commonly cited complaints include:
  - Imprecise motion controls
  - Repetitive music
  - Unnecessary skills
  - Nonsensical level progression.
 
-While this remake intends to keep the core ideas of Secret Rings, many things will be changed to create a more enjoyable experience.
+While this remake intends to remain largely faithful to the original ideas of Secret Rings, many things will be changed to create a more enjoyable experience.
 
 
 <h2>Major Changes</h2>
@@ -20,8 +20,11 @@ While this remake intends to keep the core ideas of Secret Rings, many things wi
 - Skills that are weaker versions of other skills will be removed.
 - Time Break will maintain a smooth framerate.
 
-
 <h2>DISCLAIMER</h2>
 
 **Sonic and the Secret Rings** is copyrighted by SEGA. I am not affiliated or endorsed by SEGA in any way.
 This Fan Remake is distributed as **freeware**, and *should not be sold under any circumstances.*
+
+<h2> </h2>
+
+If you want to contribute to the project, or simply want access to the latest nightly builds, you can check out the wiki [here](https://project-reignition.gitbook.io/wiki/).
