@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Project.Core;
 using Project.Gameplay;
@@ -21,7 +22,6 @@ namespace Project.Interface
 
 		private bool isProcessingInputs;
 		private StageSettings Stage => StageSettings.instance;
-		private const string TECHNICAL_FORMATTING = "0.0";
 
 		public override void _Ready()
 		{
@@ -69,7 +69,7 @@ namespace Project.Interface
 			ring.Text = ringBonus.ToString();
 
 			float technicalBonus = Stage.CalculateTechnicalBonus();
-			technical.Text = "x" + technicalBonus.ToString(TECHNICAL_FORMATTING);
+			technical.Text = "x" + technicalBonus.ToString("0.0");
 
 			Stage.UpdateScore(Mathf.CeilToInt(ringBonus * technicalBonus), StageSettings.MathModeEnum.Add);
 			total.Text = Stage.DisplayScore;
