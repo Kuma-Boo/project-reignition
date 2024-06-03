@@ -1,4 +1,4 @@
-# sonic-wildfire-remake
+# Project Reignition
 A Fan Remake of Sonic and the Secret Rings.
 
 Originally released for the Nintendo Wii in 2007 to a respectable level of critical and commercial success, Sonic and the Secret Rings' reputation has dwindled over time among fans. Some common complaints include:
