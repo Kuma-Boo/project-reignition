@@ -54,6 +54,7 @@ namespace Project.Gameplay
 			Vector3 syncPoint = Character.GlobalPosition;
 			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
 
+			Loop = ActivePath.Curve.GetPointPosition(0).IsEqualApprox(ActivePath.Curve.GetPointPosition(ActivePath.Curve.PointCount - 1));
 			RecalculateData();
 		}
 
