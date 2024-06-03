@@ -228,13 +228,21 @@ namespace Project.Core
 			ApplyInputMap();
 			ApplyLocalization();
 
-			DisplayServer.WindowSetVsyncMode(Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
+			DisplayServer.VSyncMode targetVSyncMode = Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
+			if (DisplayServer.WindowGetVsyncMode() != targetVSyncMode)
+				DisplayServer.WindowSetVsyncMode(targetVSyncMode);
 
+			DisplayServer.WindowMode targetMode = DisplayServer.WindowMode.Windowed;
 			if (Config.useFullscreen)
-				DisplayServer.WindowSetMode(Config.useExclusiveFullscreen ? DisplayServer.WindowMode.ExclusiveFullscreen : DisplayServer.WindowMode.Fullscreen);
-			else
-				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
-			DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[Config.screenResolution]);
+				targetMode = Config.useExclusiveFullscreen ? DisplayServer.WindowMode.ExclusiveFullscreen : DisplayServer.WindowMode.Fullscreen;
+			if (DisplayServer.WindowGetMode() != targetMode)
+			{
+				GD.Print("Changing window mode");
+				DisplayServer.WindowSetMode(targetMode);
+			}
+
+			if (!Config.useFullscreen)
+				DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[Config.screenResolution]);
 
 			SetAudioBusVolume((int)AudioBuses.MASTER, Config.masterVolume, Config.isMasterMuted);
 			SetAudioBusVolume((int)AudioBuses.BGM, Config.bgmVolume, Config.isBgmMuted);

@@ -211,7 +211,7 @@ namespace Project.Interface.Menus
 			if (currentSubmenu == Submenus.Mapping && !IsMovementPage)
 				offset -= 4;
 
-			cursor.Position = new(0, 300 + offset * 96);
+			cursor.Position = new(0, 300 + offset * 64);
 		}
 
 
