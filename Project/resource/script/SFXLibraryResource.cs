@@ -136,9 +136,9 @@ namespace Project.Gameplay
 			for (int i = 0; i < KeyCount; i++)
 			{
 				if (string.IsNullOrEmpty(keys[i]))
-					GD.PrintErr($"Warning! Voice Key '{i}' is empty.");
+					GD.PushWarning($"Voice Key '{i}' is empty.");
 				else if (duplicateKeyChecker.Contains(keys[i]))
-					GD.PrintErr($"Warning! Voice Key '{keys[i]}' (Index {i}) is a duplicate.");
+					GD.PushWarning($"Voice Key '{keys[i]}' (Index {i}) is a duplicate.");
 				else
 					duplicateKeyChecker.Add(keys[i]);
 			}

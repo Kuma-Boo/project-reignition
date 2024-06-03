@@ -306,7 +306,7 @@ namespace Project.Core
 			if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
 			if (customCheckpoint == null)
 			{
-				GD.PrintErr("No custom checkpoint.");
+				GD.PushWarning("No custom checkpoint.");
 				return;
 			}
 

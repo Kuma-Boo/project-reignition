@@ -140,7 +140,7 @@ namespace Project.Core
 			{
 				if (!currentDialog.HasLength(currentDialogIndex)) // Skip
 				{
-					GD.PrintErr("Text-only dialog doesn't have a specified length. Skipping.");
+					GD.PushWarning("Text-only dialog doesn't have a specified length. Skipping.");
 					OnDialogFinished();
 					return;
 				}
