@@ -1642,12 +1642,14 @@ namespace Project.Gameplay
 			isAccelerationJumpQueued = false;
 			Lockon.ResetLockonTarget();
 
-			if (!Stage.IsLevelIngame || IsCountdownActive) return; // Return early when not ingame
+			if (IsCountdownActive) return;
 			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			ResetActionState();
 
 			JustLandedOnGround = true;
+
+			if (!Stage.IsLevelIngame) return; // Return early when not ingame
 			CheckLandingBoost(); // Landing boost skill
 
 			// Play FX
