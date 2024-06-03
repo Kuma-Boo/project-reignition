@@ -1218,6 +1218,8 @@ namespace Project.Gameplay
 		/// </summary>
 		public void TakeDamage()
 		{
+			if (!Stage.IsLevelIngame) return;
+
 			SetActionState(ActionStates.Damaged);
 
 			// No rings; Respawn
@@ -1640,7 +1642,7 @@ namespace Project.Gameplay
 			isAccelerationJumpQueued = false;
 			Lockon.ResetLockonTarget();
 
-			if (Stage.LevelState == StageSettings.LevelStateEnum.Loading || IsCountdownActive) return; // Return early when not ingame
+			if (!Stage.IsLevelIngame || IsCountdownActive) return; // Return early when not ingame
 			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			ResetActionState();

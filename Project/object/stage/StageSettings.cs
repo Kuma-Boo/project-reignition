@@ -238,7 +238,7 @@ namespace Project.Gameplay
 		public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
 		private void UpdateTime()
 		{
-			if (IsLevelFinished || !Interface.PauseMenu.AllowPausing) return;
+			if (!IsLevelIngame || !Interface.PauseMenu.AllowPausing) return;
 
 			CurrentTime += PhysicsManager.normalDelta; // Add current time
 			DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
@@ -356,7 +356,7 @@ namespace Project.Gameplay
 			Success,
 		}
 		public LevelStateEnum LevelState { get; private set; }
-		private bool IsLevelFinished => LevelState != LevelStateEnum.Ingame;
+		public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
 		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 		public void FinishLevel(bool wasSuccessful)
 		{
