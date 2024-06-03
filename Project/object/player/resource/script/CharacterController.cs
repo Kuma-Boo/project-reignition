@@ -593,9 +593,11 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive)
 				turnDelta = maxTurnAmount;
 
-			// Fix touchy controllers
-			float controllerFix = Mathf.SmoothStep(0f, 1f, .4f * ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
-			turnDelta += controllerFix * TURNING_SENSITIVITY;
+			if (Runtime.Instance.IsUsingController) // Fix touchy controllers
+			{
+				float controllerFix = Mathf.SmoothStep(0f, 1f, .4f * ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
+				turnDelta += controllerFix * TURNING_SENSITIVITY;
+			}
 
 			if (IsSpeedLossActive())
 			{
