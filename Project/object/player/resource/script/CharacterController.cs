@@ -797,7 +797,7 @@ namespace Project.Gameplay
 		public bool IsJumpClamped { get; private set; } // True after the player releases the jump button
 		private bool isAccelerationJumpQueued;
 		private float currentJumpTime; // Amount of time the jump button was held
-		private const float ACCELERATION_JUMP_LENGTH = .12f; // How fast the jump button needs to be released for an "acceleration jump"
+		private const float ACCELERATION_JUMP_LENGTH = .1f; // How fast the jump button needs to be released for an "acceleration jump"
 		public void Jump(bool ignoreAccelerationJump = default)
 		{
 			currentJumpTime = ignoreAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
