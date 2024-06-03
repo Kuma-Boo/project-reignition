@@ -1,5 +1,6 @@
 using Godot;
 using Project.Gameplay;
+using Project.Gameplay.Triggers;
 using System.Collections.Generic;
 
 namespace Project.Core
@@ -79,15 +80,9 @@ namespace Project.Core
 				SaveManager.ApplyConfig();
 			}
 
-			if (Input.IsActionJustPressed("debug_window_medium"))
-			{
-				SaveManager.Config.screenResolution = 3;
-				SaveManager.ApplyConfig();
-			}
-
 			if (Input.IsActionJustPressed("debug_window_large"))
 			{
-				SaveManager.Config.screenResolution = 4;
+				SaveManager.Config.screenResolution = 3;
 				SaveManager.ApplyConfig();
 			}
 
@@ -99,12 +94,12 @@ namespace Project.Core
 
 			if (Input.IsActionJustPressed("debug_restart"))
 			{
-				if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(Gameplay.CharacterController.instance))
-					Gameplay.CharacterController.instance.StartRespawn();
+				if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(CharacterController.instance))
+					CharacterController.instance.StartRespawn();
 				else
 				{
 					TransitionManager.QueueSceneChange(string.Empty);
-					TransitionManager.StartTransition(new TransitionData());
+					TransitionManager.StartTransition(new());
 				}
 			}
 
@@ -284,6 +279,39 @@ namespace Project.Core
 			Vector3 rot = new(freeCamData[3].Text.ToFloat(), freeCamData[4].Text.ToFloat(), freeCamData[5].Text.ToFloat());
 
 			cam.UpdateFreeCamData(pos, rot);
+		}
+		#endregion
+
+		#region Checkpoint Cheats
+		private CheckpointTrigger customCheckpoint;
+
+		private void SaveCustomCheckpoint()
+		{
+			if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
+
+			if (customCheckpoint == null)
+			{
+				customCheckpoint = new();
+				AddChild(customCheckpoint);
+			}
+
+			customCheckpoint.GlobalPosition = CharacterController.instance.GlobalPosition;
+			StageSettings.instance.SetCheckpoint(customCheckpoint);
+			GD.Print("Checkpoint created.");
+		}
+
+
+		private void LoadCustomCheckpoint()
+		{
+			if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
+			if (customCheckpoint == null)
+			{
+				GD.PrintErr("No custom checkpoint.");
+				return;
+			}
+
+			StageSettings.instance.SetCheckpoint(customCheckpoint);
+			CharacterController.instance.StartRespawn();
 		}
 		#endregion
 	}

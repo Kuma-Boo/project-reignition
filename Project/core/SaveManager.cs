@@ -82,7 +82,7 @@ namespace Project.Core
 		{
 			// Video
 			public bool useVsync;
-			public bool useFullscreen;
+			public bool useFullscreen = true;
 			public bool useExclusiveFullscreen;
 			public int screenResolution = 4; // Defaults to 1080p
 

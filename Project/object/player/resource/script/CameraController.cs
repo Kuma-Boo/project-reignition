@@ -30,6 +30,7 @@ namespace Project.Gameplay
 		private TextureRect crossfade;
 		[Export]
 		private AnimationPlayer crossfadeAnimator;
+		private bool IsCrossfading => crossfadeAnimator.IsPlaying();
 
 		[Export]
 		/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>
@@ -61,7 +62,7 @@ namespace Project.Gameplay
 			//Revert camera settings
 			UpdateCameraSettings(new CameraBlendData()
 			{
-				SettingsResource = StageSettings.instance.CheckpointCameraSettings,
+				SettingsResource = StageSettings.instance.CurrentCheckpoint.CameraSettings,
 			});
 		}
 
@@ -133,6 +134,10 @@ namespace Project.Gameplay
 
 		public void StartCrossfade()
 		{
+			// Already crossfading
+			if (IsCrossfading)
+				return;
+
 			// Update the crossfade texture
 			ImageTexture tex = new();
 			tex.SetImage(GetViewport().GetTexture().GetImage());
@@ -328,7 +333,7 @@ namespace Project.Gameplay
 				float targetDistance = settings.distance;
 				if (Character.IsMovingBackward)
 				{
-					if (PathFollower.Progress < settings.backstepDistance)
+					if (PathFollower.Progress < settings.backstepDistance && !PathFollower.Loop)
 						targetDistance += settings.backstepDistance - (settings.backstepDistance - PathFollower.Progress);
 					else
 						targetDistance += settings.backstepDistance;
