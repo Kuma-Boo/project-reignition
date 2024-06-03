@@ -59,6 +59,7 @@ namespace Project.Gameplay
 			else
 				AirAnimations();
 
+			UpdateBrake();
 			UpdateVisualRotation();
 			UpdateShaderVariables();
 		}
@@ -270,7 +271,6 @@ namespace Project.Gameplay
 
 			groundTurnRatio = Mathf.Lerp(((Vector2)animationTree.Get(TURN_BLEND)).X, groundTurnRatio, TURN_SMOOTHING); // Blend from animator
 			animationTree.Set(TURN_BLEND, new Vector2(groundTurnRatio, Character.IsMovingBackward ? 0 : speedRatio));
-			UpdateBrake();
 		}
 
 
@@ -293,7 +293,6 @@ namespace Project.Gameplay
 			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < RUN_RATIO)
 				return;
 
-
 			isFacingRight = isLeadingWithRightFoot;
 			Character.Effect.PlayActionSFX(Character.Effect.SLIDE_SFX);
 			animationTree.Set(BRAKE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -306,7 +305,7 @@ namespace Project.Gameplay
 		{
 			if (!IsBrakeAnimationActive) return; // Not braking
 
-			if (Character.MoveSpeed <= BRAKE_DEADZONE || Character.IsMovingBackward)
+			if (Character.MoveSpeed <= BRAKE_DEADZONE || Character.IsMovingBackward || !Character.IsOnGround)
 				StopBrake();
 		}
 
