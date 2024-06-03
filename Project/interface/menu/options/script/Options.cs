@@ -27,7 +27,6 @@ namespace Project.Interface.Menus
 			Mapping, // Menu for configuring input mappings
 			Test // Menu for testing controls
 		}
-		private bool IsMovementPage => VerticalSelection <= 3;
 
 		protected override void SetUp()
 		{
@@ -187,14 +186,7 @@ namespace Project.Interface.Menus
 					if (!controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
 						return;
 
-					bool movementPage = IsMovementPage;
 					VerticalSelection = WrapSelection(targetSelection, controlMappingOptions.Length);
-					if (IsMovementPage != movementPage)
-					{
-						animator.Play(IsMovementPage ? "flip-right" : "flip-left");
-						return;
-					}
-
 					break;
 				case Submenus.Test:
 					return;
@@ -208,9 +200,6 @@ namespace Project.Interface.Menus
 		private void UpdateCursor()
 		{
 			int offset = VerticalSelection;
-			if (currentSubmenu == Submenus.Mapping && !IsMovementPage)
-				offset -= 4;
-
 			cursor.Position = new(0, 236 + offset * 64);
 		}
 
@@ -221,9 +210,6 @@ namespace Project.Interface.Menus
 			UpdateCursor();
 			animator.Play(currentSubmenu.ToString().ToLower());
 			animator.Advance(0.0);
-
-			if (currentSubmenu == Submenus.Mapping)
-				animator.Play(IsMovementPage ? "mapping_movement" : "mapping_action");
 		}
 
 
