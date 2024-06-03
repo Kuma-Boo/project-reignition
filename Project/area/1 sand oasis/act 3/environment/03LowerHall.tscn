@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cymqt8ap7er5w"]
+[gd_scene load_steps=6 format=3 uid="uid://cymqt8ap7er5w"]
 
 [ext_resource type="PackedScene" uid="uid://bx8golkndh8ph" path="res://area/1 sand oasis/act 3/environment/model/03LowerHall.gltf" id="1_bsict"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_prflr"]
 [ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_2e86l"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_g6qwp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_837af"]
+size = Vector3(20, 20, 2.5)
 
 [node name="03LowerHall" instance=ExtResource("1_bsict")]
 script = ExtResource("2_prflr")
@@ -107,6 +111,9 @@ cast_shadow = 0
 
 [node name="LanternGroup1" type="Node3D" parent="." index="24"]
 transform = Transform3D(0.935734, -1.49502e-08, -0.352707, 1.49192e-08, 1, -2.80633e-09, 0.352707, -2.63612e-09, 0.935734, -30.7344, -47, 79.2453)
+script = ExtResource("2_prflr")
+saveVisibilityOnCheckpoint = true
+isStageVisuals = true
 
 [node name="Lantern1" parent="LanternGroup1" index="0" instance=ExtResource("3_2e86l")]
 transform = Transform3D(0.2, 3.33067e-16, 0, -2.63678e-16, 0.2, 2.22045e-15, 0, -2.33147e-15, 0.2, -2.10888, 0.466656, 28.4528)
@@ -164,6 +171,9 @@ transform = Transform3D(0.2, -1.76248e-15, 0, -2.63678e-16, 0.2, 9.4369e-16, 0, 
 
 [node name="LanternGroup2" type="Node3D" parent="." index="25"]
 transform = Transform3D(0.93358, 0, -0.358368, 0, 1, 0, 0.358368, 0, 0.93358, -2.99003e-08, -45, -5.27224e-09)
+script = ExtResource("2_prflr")
+saveVisibilityOnCheckpoint = true
+isStageVisuals = true
 
 [node name="Lantern1" parent="LanternGroup2" index="0" instance=ExtResource("3_2e86l")]
 transform = Transform3D(1, -3.16414e-15, 0, -6.66134e-16, 1, 0, 0, -3.55272e-15, 1, 28.0452, 0, 27.6633)
@@ -215,6 +225,9 @@ transform = Transform3D(1, -2.72005e-15, 0, -6.66134e-16, 1, 0, 0, -2.22045e-15,
 
 [node name="LanternGroup3" type="Node3D" parent="." index="26"]
 transform = Transform3D(0.935734, -1.49502e-08, -0.352707, 1.49192e-08, 1, -2.80633e-09, 0.352707, -2.63612e-09, 0.935734, 32.1961, -47, -83.0964)
+script = ExtResource("2_prflr")
+saveVisibilityOnCheckpoint = true
+isStageVisuals = true
 
 [node name="Lantern1" parent="LanternGroup3" index="0" instance=ExtResource("3_2e86l")]
 transform = Transform3D(0.2, 2.498e-16, 0, -2.63678e-16, 0.2, 2.22045e-15, 0, -2.55351e-15, 0.2, -2.03934, 0.466656, 28.4192)
@@ -270,7 +283,52 @@ transform = Transform3D(0.2, -8.46545e-16, 0, -2.63678e-16, 0.2, 9.4369e-16, 0, 
 [node name="Lantern18" parent="LanternGroup3" index="17" instance=ExtResource("3_2e86l")]
 transform = Transform3D(0.2, -1.88738e-15, 0, -2.63678e-16, 0.2, 9.4369e-16, 0, -4.10783e-15, 0.2, 2.09039, 0.466656, -24.3605)
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="27"]
+[node name="Lantern1L" parent="." index="27" instance=ExtResource("4_g6qwp")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.00127816, -43.4, 189.812)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lantern1L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_837af")
+
+[node name="Lantern2L" parent="." index="28" instance=ExtResource("4_g6qwp")]
+transform = Transform3D(-0.939092, -0.289085, 0.185837, 0.0174257, 0.500001, 0.86585, -0.343223, 0.816351, -0.464509, -43.2976, -50, 111.802)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lantern2L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_837af")
+
+[node name="Lantern3L" parent="." index="29" instance=ExtResource("4_g6qwp")]
+transform = Transform3D(-0.935734, -1.49502e-08, 0.352707, -1.49192e-08, 1, 2.80633e-09, -0.352707, -2.63612e-09, -0.935734, -13.9077, -50, 35.248)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lantern3L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_837af")
+
+[node name="Lantern2U" parent="." index="30" instance=ExtResource("4_g6qwp")]
+transform = Transform3D(-0.935734, -1.49502e-08, 0.352707, -1.49192e-08, 1, 2.80633e-09, -0.352707, -2.63612e-09, -0.935734, 22.1331, -50, -56.9664)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lantern2U" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_837af")
+
+[node name="Lantern3U" parent="." index="31" instance=ExtResource("4_g6qwp")]
+transform = Transform3D(-0.935734, -1.49502e-08, 0.352707, -1.49192e-08, 1, 2.80633e-09, -0.352707, -2.63612e-09, -0.935734, 46.4699, -50, -121.532)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lantern3U" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_837af")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="32"]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -40, 0)
 layers = 4
 size = Vector3(190, 36, 419)
@@ -278,3 +336,16 @@ interior = true
 cull_mask = 4
 ambient_mode = 2
 ambient_color = Color(1, 1, 1, 1)
+
+[connection signal="Activated" from="Lantern1L" to="LanternGroup1" method="Activate"]
+[connection signal="Deactivated" from="Lantern1L" to="LanternGroup1" method="Deactivate"]
+[connection signal="Activated" from="Lantern2L" to="LanternGroup2" method="Activate"]
+[connection signal="Deactivated" from="Lantern2L" to="LanternGroup2" method="Deactivate"]
+[connection signal="Activated" from="Lantern3L" to="LanternGroup1" method="Deactivate"]
+[connection signal="Activated" from="Lantern3L" to="LanternGroup3" method="Activate"]
+[connection signal="Deactivated" from="Lantern3L" to="LanternGroup1" method="Activate"]
+[connection signal="Deactivated" from="Lantern3L" to="LanternGroup3" method="Deactivate"]
+[connection signal="Activated" from="Lantern2U" to="LanternGroup2" method="Deactivate"]
+[connection signal="Deactivated" from="Lantern2U" to="LanternGroup2" method="Activate"]
+[connection signal="Activated" from="Lantern3U" to="LanternGroup3" method="Deactivate"]
+[connection signal="Deactivated" from="Lantern3U" to="LanternGroup3" method="Activate"]
