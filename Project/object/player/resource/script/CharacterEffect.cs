@@ -260,7 +260,7 @@ namespace Project.Gameplay
 
 			if (groundKeyIndex != 0) // Avoid being spammed with warnings
 			{
-				GD.PrintErr($"'{collision.Name}' isn't in any sound groups found in CharacterSound.cs.");
+				GD.PushWarning($"'{collision.Name}' isn't in any sound groups found in CharacterSound.cs.");
 				groundKeyIndex = 0; // Default to first key (pavement)
 			}
 		}

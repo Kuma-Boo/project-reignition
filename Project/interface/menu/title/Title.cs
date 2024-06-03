@@ -15,7 +15,6 @@ namespace Project.Interface.Menus
 		private float cutsceneTimer;
 		private const float CUTSCENE_TIME_LENGTH = 20f;
 
-
 		protected override void SetUp()
 		{
 			isProcessing = menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.Title;

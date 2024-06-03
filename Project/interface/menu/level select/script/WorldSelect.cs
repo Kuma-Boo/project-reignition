@@ -78,7 +78,15 @@ namespace Project.Interface.Menus
 		private void LoadVideos()
 		{
 			for (int i = 0; i < videoStreams.Length; i++)
-				videoStreams[i] = ResourceLoader.Load<VideoStream>(videoStreamPaths[i]);
+			{
+				if (ResourceLoader.Exists(videoStreamPaths[i], "VideoStream"))
+				{
+					videoStreams[i] = ResourceLoader.Load<VideoStream>(videoStreamPaths[i]);
+					continue;
+				}
+
+				GD.PushWarning($"Couldn't find video {videoStreams[i]}!");
+			}
 		}
 
 
