@@ -549,7 +549,7 @@ namespace Project.Gameplay
 			{
 				MoveSpeed = Mathf.Abs(MoveSpeed);
 				IsMovingBackward = !IsMovingBackward;
-				MovementAngle += Mathf.Pi;
+				turnInstantly = true;
 			}
 		}
 
