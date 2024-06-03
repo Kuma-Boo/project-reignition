@@ -291,18 +291,11 @@ namespace Project.Gameplay
 		[Signal]
 		public delegate void TriggeredCheckpointEventHandler();
 		public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
-		public Path3D CheckpointPlayerPath { get; private set; }
-		public Path3D CheckpointCameraPath { get; private set; }
-		public CameraSettingsResource CheckpointCameraSettings;
-		public void SetCheckpoint(Triggers.CheckpointTrigger newCheckpoint)
+		public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 		{
-			if (newCheckpoint == CurrentCheckpoint) return; // Already at this checkpoint
+			if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
-			CurrentCheckpoint = newCheckpoint; // Position transform
-			CheckpointPlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current player path
-			CheckpointCameraPath = CharacterController.instance.Camera.PathFollower.ActivePath; // Store current camera path
-			CheckpointCameraSettings = CharacterController.instance.Camera.ActiveSettings;
-
+			CurrentCheckpoint = checkpoint;
 			EmitSignal(SignalName.TriggeredCheckpoint);
 		}
 

@@ -1286,8 +1286,8 @@ namespace Project.Gameplay
 
 			invincibilityTimer = 0;
 			Teleport(Stage.CurrentCheckpoint);
-			PathFollower.SetActivePath(Stage.CheckpointPlayerPath); // Revert path
-			Camera.PathFollower.SetActivePath(Stage.CheckpointCameraPath);
+			PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
+			Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
 
 			IsDefeated = false;
 			IsMovingBackward = false;
