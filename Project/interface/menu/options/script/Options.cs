@@ -416,8 +416,8 @@ namespace Project.Interface.Menus
 				resizeMode = WrapSelection(resizeMode + direction, (int)RenderingServer.ViewportScaling3DMode.Max);
 				SaveManager.Config.resizeMode = (RenderingServer.ViewportScaling3DMode)resizeMode;
 			}
-			else if (VerticalSelection == 6)
-				SaveManager.Config.antiAliasing = WrapSelection(SaveManager.Config.antiAliasing + direction, 5);
+			else if (VerticalSelection == 6) // TODO Change this to 5 when upgrading to godot v4.3
+				SaveManager.Config.antiAliasing = WrapSelection(SaveManager.Config.antiAliasing + direction, 3);
 			else if (VerticalSelection == 7)
 				SaveManager.Config.useHDBloom = !SaveManager.Config.useHDBloom;
 			else if (VerticalSelection == 8)
