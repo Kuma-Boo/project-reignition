@@ -47,6 +47,15 @@ namespace Project.Gameplay
 					disableAutoTransition = true,
 				});
 			}
+
+			UpdatePostProcessingStatus();
+		}
+
+		public void UpdatePostProcessingStatus()
+		{
+			bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.DISABLED;
+			Environment.Environment.SsaoEnabled = postProcessingEnabled;
+			Environment.Environment.SsilEnabled = postProcessingEnabled;
 		}
 
 

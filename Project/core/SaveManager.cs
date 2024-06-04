@@ -315,7 +315,7 @@ namespace Project.Core
 
 			RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.useHDBloom);
 
-			int targetShadowAtlasSize = 2048;
+			int targetShadowAtlasSize = 4096;
 			bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.HIGH;
 			RenderingServer.ShadowQuality targetSoftShadowQuality = RenderingServer.ShadowQuality.Hard;
 			switch (Config.softShadowQuality)

@@ -14,6 +14,34 @@ namespace Project.Interface.Menus
 
 		private int maxSelection;
 		private int scrollOffset;
+		private void CalculateMaxSelection()
+		{
+			// Recalculate max selection
+			switch (currentSubmenu)
+			{
+				case Submenus.Options:
+					maxSelection = 4;
+					break;
+				case Submenus.Video:
+					maxSelection = videoLabels.Length;
+					break;
+				case Submenus.Audio:
+					maxSelection = 4;
+					break;
+				case Submenus.Language:
+					maxSelection = 3;
+					break;
+				case Submenus.Control:
+					maxSelection = 4;
+					break;
+				case Submenus.Mapping:
+					maxSelection = controlMappingOptions.Length;
+					break;
+				case Submenus.Test:
+					maxSelection = 0;
+					break;
+			}
+		}
 
 		private Callable FullscreenToggleCallable => new(this, MethodName.ToggleFullscreen);
 		public static readonly StringName MENU_PARAMETER = "menu_texture";
@@ -36,6 +64,7 @@ namespace Project.Interface.Menus
 
 			SetUpControlOptions();
 			UpdateLabels();
+			CalculateMaxSelection();
 			DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 		}
 
@@ -59,8 +88,8 @@ namespace Project.Interface.Menus
 
 		protected override void ProcessMenu()
 		{
-			UpdateCursor();
 			UpdateScrolling();
+			UpdateCursor();
 
 			if (Input.IsActionJustPressed("button_pause"))
 				Select();
@@ -181,7 +210,7 @@ namespace Project.Interface.Menus
 		private Control scrollBar;
 		private Vector2 scrollBarVelocity;
 		private const float scrollBarSmoothing = .2f;
-		private void UpdateScrolling()
+		private void UpdateScrolling(bool snap = false)
 		{
 			// Scroll
 			if (!scrollBar.IsVisibleInTree()) return;
@@ -191,50 +220,32 @@ namespace Project.Interface.Menus
 			else if (VerticalSelection < scrollOffset)
 				scrollOffset = VerticalSelection;
 
-			float scrollRatio = (float)scrollOffset / (maxSelection - 8);
-			scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, Vector2.Down * 880 * scrollRatio, ref scrollBarVelocity, scrollBarSmoothing);
-		}
+			float scrollRatio = (float)VerticalSelection / (maxSelection - 1);
+			Vector2 targetPosition = Vector2.Down * 880 * scrollRatio;
 
+			if (snap)
+			{
+				scrollBarVelocity = Vector2.Zero;
+				scrollBar.Position = targetPosition;
+			}
+			else
+				scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
+		}
 
 
 		private void UpdateCursor()
 		{
 			int offset = VerticalSelection - scrollOffset;
 			contentContainer.Position = Vector2.Up * scrollOffset * 60;
-			cursor.Position = new(cursor.Position.X, 280 + offset * 60);
+			cursor.Position = new(cursor.Position.X, 300 + offset * 60);
 		}
 
 
 		/// <summary> Changes the visible submenu. Called from the page flip animation. </summary>
 		private void UpdateSubmenuVisibility()
 		{
-			// Recalculate max selection
-			switch (currentSubmenu)
-			{
-				case Submenus.Options:
-					maxSelection = 4;
-					break;
-				case Submenus.Video:
-					maxSelection = videoLabels.Length;
-					break;
-				case Submenus.Audio:
-					maxSelection = 4;
-					break;
-				case Submenus.Language:
-					maxSelection = 3;
-					break;
-				case Submenus.Control:
-					maxSelection = 4;
-					break;
-				case Submenus.Mapping:
-					maxSelection = controlMappingOptions.Length;
-					break;
-				case Submenus.Test:
-					maxSelection = 0;
-					break;
-			}
-
-			scrollOffset = 0;
+			CalculateMaxSelection();
+			UpdateScrolling(true);
 			UpdateCursor();
 			animator.Play(currentSubmenu.ToString().ToLower());
 			animator.Advance(0.0);
@@ -459,6 +470,7 @@ namespace Project.Interface.Menus
 				int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 				postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.COUNT);
 				SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
+				Gameplay.StageSettings.instance.UpdatePostProcessingStatus();
 			}
 			else if (VerticalSelection == 10)
 			{
