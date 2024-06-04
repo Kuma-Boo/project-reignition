@@ -597,7 +597,6 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive)
 				turnSmoothing = maxTurnAmount;
 
-			/*
 			if (Runtime.Instance.IsUsingController && !isRecentering) // Fix touchy controllers
 			{
 				float controllerFix = Mathf.Abs(ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
@@ -606,7 +605,6 @@ namespace Project.Gameplay
 				else
 					turnSmoothing += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
 			}
-			*/
 
 			if (IsSpeedLossActive())
 			{
@@ -1090,17 +1088,17 @@ namespace Project.Gameplay
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
-		private readonly float GRIND_STEP_SPEED = 24.0f;
+		private readonly float GRIND_STEP_SPEED = 28.0f;
 		public void StartGrindstep()
 		{
 			// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(GetInputAngle(), MovementAngle);
 			// Calculate how far player is trying to go
 			float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
-			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, InputVector.Length()); // Give some smoothing based on controller strength
-			GD.Print(horizontalTarget);
+			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, inputCurve.Sample(InputVector.Length())); // Give some smoothing based on controller strength
 
 			// Keep some speed forward
+			turningVelocity = 0;
 			MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
 			VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
 			MoveSpeed = new Vector2(horizontalTarget, MoveSpeed).Length();
