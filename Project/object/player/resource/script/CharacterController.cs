@@ -152,7 +152,7 @@ namespace Project.Gameplay
 				return false;
 
 			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
-			return delta < Mathf.Pi * .4f;
+			return delta < Mathf.Pi * .45f;
 		}
 
 		/// <summary> Returns the input angle based on the camera view. </summary>
@@ -435,6 +435,9 @@ namespace Project.Gameplay
 		public MovementResource BackstepSettings => Skills.BackstepSettings;
 
 		[Export]
+		/// <summary> Determines how turning is affected. </summary>
+		public Curve controllerSensitivity;
+		[Export]
 		/// <summary> Determines how speed is lost when turning. </summary>
 		public Curve turningSpeedCurve;
 		[Export]
@@ -446,7 +449,7 @@ namespace Project.Gameplay
 		public bool IsMovingBackward { get; set; }
 
 		/// <summary> How much speed to lose when turning sharply. </summary>
-		private const float TURNING_SPEED_LOSS = .04f;
+		private const float TURNING_SPEED_LOSS = .02f;
 		/// <summary> How quickly to turn when moving slowly. </summary>
 		private const float MIN_TURN_AMOUNT = .12f;
 		/// <summary> How quickly to turn when moving at top speed. </summary>
@@ -456,7 +459,7 @@ namespace Project.Gameplay
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
-		private const float TURNING_SENSITIVITY = .6f;
+		private const float CONTROLLER_SENSITIVITY = 10.0f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -584,8 +587,9 @@ namespace Project.Gameplay
 			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
-			if (IsHoldingDirection(PathFollower.ForwardAngle) &&
-			(Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle)))
+			// Is the player trying to recenter themselves?
+			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+			if (isTurningAround)
 				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
 
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
@@ -593,10 +597,11 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive)
 				turnDelta = maxTurnAmount;
 
-			if (Runtime.Instance.IsUsingController) // Fix touchy controllers
+
+			if (Runtime.Instance.IsUsingController && !isTurningAround) // Fix touchy controllers
 			{
-				float controllerFix = Mathf.SmoothStep(0f, 1f, .4f * ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
-				turnDelta += controllerFix * TURNING_SENSITIVITY;
+				float controllerFix = Mathf.SmoothStep(0f, 1f, Mathf.Abs(ExtensionMethods.DotAngle(PathFollower.ForwardAngle, targetMovementAngle)));
+				turnDelta += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
 			}
 
 			if (IsSpeedLossActive())
