@@ -296,6 +296,7 @@ namespace Project.Gameplay
 			if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 			CurrentCheckpoint = checkpoint;
+			checkpoint.UpdateCheckpointData();
 			EmitSignal(SignalName.TriggeredCheckpoint);
 		}
 
