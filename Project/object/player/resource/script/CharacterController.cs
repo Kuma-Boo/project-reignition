@@ -459,7 +459,7 @@ namespace Project.Gameplay
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
-		private const float CONTROLLER_SENSITIVITY = 10.0f;
+		private const float CONTROLLER_SENSITIVITY = 0.6f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -588,20 +588,22 @@ namespace Project.Gameplay
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			// Is the player trying to recenter themselves?
-			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
-			if (isTurningAround)
+			bool isRecentering = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+			if (isRecentering)
 				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
 
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
-			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
+			float turnSmoothing = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
 			if (Skills.IsSpeedBreakActive)
-				turnDelta = maxTurnAmount;
+				turnSmoothing = maxTurnAmount;
 
-
-			if (Runtime.Instance.IsUsingController && !isTurningAround) // Fix touchy controllers
+			if (Runtime.Instance.IsUsingController && !isRecentering) // Fix touchy controllers
 			{
-				float controllerFix = Mathf.SmoothStep(0f, 1f, Mathf.Abs(ExtensionMethods.DotAngle(PathFollower.ForwardAngle, targetMovementAngle)));
-				turnDelta += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
+				float controllerFix = Mathf.Abs(ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
+				if (controllerFix > .9f)
+					turnSmoothing = Mathf.Inf;
+				else
+					turnSmoothing += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
 			}
 
 			if (IsSpeedLossActive())
@@ -613,7 +615,7 @@ namespace Project.Gameplay
 					MoveSpeed = 0;
 			}
 
-			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
+			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnSmoothing);
 			if (!Mathf.IsZeroApprox(Camera.ActiveSettings.pathControlInfluence) && !IsLockoutActive) // Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 
