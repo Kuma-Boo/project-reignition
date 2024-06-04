@@ -152,7 +152,7 @@ namespace Project.Gameplay
 				return false;
 
 			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
-			return delta < Mathf.Pi * .4f;
+			return delta < Mathf.Pi * .45f;
 		}
 
 		/// <summary> Returns the input angle based on the camera view. </summary>
@@ -435,6 +435,9 @@ namespace Project.Gameplay
 		public MovementResource BackstepSettings => Skills.BackstepSettings;
 
 		[Export]
+		/// <summary> Determines how turning is affected. </summary>
+		public Curve controllerSensitivity;
+		[Export]
 		/// <summary> Determines how speed is lost when turning. </summary>
 		public Curve turningSpeedCurve;
 		[Export]
@@ -446,7 +449,7 @@ namespace Project.Gameplay
 		public bool IsMovingBackward { get; set; }
 
 		/// <summary> How much speed to lose when turning sharply. </summary>
-		private const float TURNING_SPEED_LOSS = .04f;
+		private const float TURNING_SPEED_LOSS = .02f;
 		/// <summary> How quickly to turn when moving slowly. </summary>
 		private const float MIN_TURN_AMOUNT = .12f;
 		/// <summary> How quickly to turn when moving at top speed. </summary>
@@ -456,7 +459,7 @@ namespace Project.Gameplay
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
-		private const float TURNING_SENSITIVITY = .6f;
+		private const float CONTROLLER_SENSITIVITY = 0.8f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -584,19 +587,23 @@ namespace Project.Gameplay
 			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
-			if (IsHoldingDirection(PathFollower.ForwardAngle) &&
-			(Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle)))
+			// Is the player trying to recenter themselves?
+			bool isRecentering = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+			if (isRecentering)
 				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
 
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
-			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
+			float turnSmoothing = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
 			if (Skills.IsSpeedBreakActive)
-				turnDelta = maxTurnAmount;
+				turnSmoothing = maxTurnAmount;
 
-			if (Runtime.Instance.IsUsingController) // Fix touchy controllers
+			if (Runtime.Instance.IsUsingController && !isRecentering) // Fix touchy controllers
 			{
-				float controllerFix = Mathf.SmoothStep(0f, 1f, .4f * ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
-				turnDelta += controllerFix * TURNING_SENSITIVITY;
+				float controllerFix = Mathf.Abs(ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
+				if (controllerFix > .9f)
+					turnSmoothing = Mathf.Inf;
+				else
+					turnSmoothing += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
 			}
 
 			if (IsSpeedLossActive())
@@ -608,7 +615,7 @@ namespace Project.Gameplay
 					MoveSpeed = 0;
 			}
 
-			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
+			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnSmoothing);
 			if (!Mathf.IsZeroApprox(Camera.ActiveSettings.pathControlInfluence) && !IsLockoutActive) // Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 
@@ -1081,19 +1088,21 @@ namespace Project.Gameplay
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
-		private readonly float GRIND_STEP_SPEED = 24.0f;
+		private readonly float GRIND_STEP_SPEED = 28.0f;
 		public void StartGrindstep()
 		{
 			// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(GetInputAngle(), MovementAngle);
 			// Calculate how far player is trying to go
 			float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
-			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, InputVector.Length()); // Give some smoothing based on controller strength
+			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, inputCurve.Sample(InputVector.Length())); // Give some smoothing based on controller strength
 
 			// Keep some speed forward
+			turningVelocity = 0;
 			MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
 			VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
 			MoveSpeed = new Vector2(horizontalTarget, MoveSpeed).Length();
+			turnInstantly = true;
 
 			CanJumpDash = false; // Disable jumpdashing
 			SetActionState(ActionStates.Grindstep);

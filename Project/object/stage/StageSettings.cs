@@ -112,7 +112,7 @@ namespace Project.Gameplay
 				rank = 3;
 			else if (CurrentTime <= Data.SilverTime && CurrentScore >= Data.SilverScore) // Silver
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime && CurrentScore >= Data.BronzeScore)
+			else if (CurrentTime <= Data.BronzeTime || CurrentScore >= Data.BronzeScore) // Bronze is easy to get
 				rank = 1;
 
 			if (rank >= 3 && RespawnCount != 0) // Limit to silver if a respawn occured
@@ -296,6 +296,7 @@ namespace Project.Gameplay
 			if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 			CurrentCheckpoint = checkpoint;
+			checkpoint.UpdateCheckpointData();
 			EmitSignal(SignalName.TriggeredCheckpoint);
 		}
 
