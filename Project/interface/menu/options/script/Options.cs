@@ -6,13 +6,15 @@ namespace Project.Interface.Menus
 	public partial class Options : Menu
 	{
 		[Export]
-		public ShaderMaterial menuOverlay;
+		private Control cursor;
 		[Export]
-		public SubViewport menuViewport;
+		private AnimationPlayer cursorAnimator;
 		[Export]
-		public Control cursor;
+		private Control contentContainer;
 
-		private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
+		private int maxSelection;
+		private int scrollOffset;
+
 		private Callable FullscreenToggleCallable => new(this, MethodName.ToggleFullscreen);
 		public static readonly StringName MENU_PARAMETER = "menu_texture";
 
@@ -34,18 +36,11 @@ namespace Project.Interface.Menus
 
 			SetUpControlOptions();
 			UpdateLabels();
-			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
 			DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 		}
 
-		public override void _ExitTree()
-		{
-			RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
-			DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
-		}
+		public override void _ExitTree() => DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 
-
-		private void ApplyTexture() => menuOverlay.SetShaderParameter(MENU_PARAMETER, menuViewport.GetTexture());
 		private void ToggleFullscreen()
 		{
 			UpdateLabels();
@@ -65,6 +60,8 @@ namespace Project.Interface.Menus
 		protected override void ProcessMenu()
 		{
 			UpdateCursor();
+			UpdateScrolling();
+
 			if (Input.IsActionJustPressed("button_pause"))
 				Select();
 			else
@@ -156,6 +153,12 @@ namespace Project.Interface.Menus
 
 		protected override void UpdateSelection()
 		{
+			if (currentSubmenu == Submenus.Test)
+				return;
+
+			if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
+				return;
+
 			if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down")))
 			{
 				UpdateHorizontalSelection();
@@ -163,50 +166,75 @@ namespace Project.Interface.Menus
 			}
 
 			StartSelectionTimer();
-
 			int targetSelection = VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down"));
-			switch (currentSubmenu)
-			{
-				case Submenus.Options:
-					VerticalSelection = WrapSelection(targetSelection, 4);
-					break;
-				case Submenus.Video:
-					VerticalSelection = WrapSelection(targetSelection, videoLabels.Length);
-					break;
-				case Submenus.Audio:
-					VerticalSelection = WrapSelection(targetSelection, 4);
-					break;
-				case Submenus.Language:
-					VerticalSelection = WrapSelection(targetSelection, 3);
-					break;
-				case Submenus.Control:
-					VerticalSelection = WrapSelection(targetSelection, 4);
-					break;
-				case Submenus.Mapping:
-					if (!controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
-						return;
-
-					VerticalSelection = WrapSelection(targetSelection, controlMappingOptions.Length);
-					break;
-				case Submenus.Test:
-					return;
-			}
+			VerticalSelection = WrapSelection(targetSelection, maxSelection);
 
 			animator.Play("select");
 			animator.Seek(0, true);
+			cursorAnimator.Play("show");
+			cursorAnimator.AnimationSetNext("show", "loop");
+			cursorAnimator.Seek(0, true);
 		}
+
+
+		[Export]
+		private Control scrollBar;
+		private Vector2 scrollBarVelocity;
+		private const float scrollBarSmoothing = .2f;
+		private void UpdateScrolling()
+		{
+			// Scroll
+			if (!scrollBar.IsVisibleInTree()) return;
+
+			if (VerticalSelection > scrollOffset + 7)
+				scrollOffset = VerticalSelection - 7;
+			else if (VerticalSelection < scrollOffset)
+				scrollOffset = VerticalSelection;
+
+			float scrollRatio = (float)scrollOffset / (maxSelection - 8);
+			scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, Vector2.Down * 880 * scrollRatio, ref scrollBarVelocity, scrollBarSmoothing);
+		}
+
 
 
 		private void UpdateCursor()
 		{
-			int offset = VerticalSelection;
-			cursor.Position = new(0, 236 + offset * 64);
+			int offset = VerticalSelection - scrollOffset;
+			contentContainer.Position = Vector2.Up * scrollOffset * 60;
+			cursor.Position = new(cursor.Position.X, 280 + offset * 60);
 		}
 
 
 		/// <summary> Changes the visible submenu. Called from the page flip animation. </summary>
 		private void UpdateSubmenuVisibility()
 		{
+			// Recalculate max selection
+			switch (currentSubmenu)
+			{
+				case Submenus.Options:
+					maxSelection = 4;
+					break;
+				case Submenus.Video:
+					maxSelection = videoLabels.Length;
+					break;
+				case Submenus.Audio:
+					maxSelection = 4;
+					break;
+				case Submenus.Language:
+					maxSelection = 3;
+					break;
+				case Submenus.Control:
+					maxSelection = 4;
+					break;
+				case Submenus.Mapping:
+					maxSelection = controlMappingOptions.Length;
+					break;
+				case Submenus.Test:
+					maxSelection = 0;
+					break;
+			}
+
+			scrollOffset = 0;
 			UpdateCursor();
 			animator.Play(currentSubmenu.ToString().ToLower());
 			animator.Advance(0.0);
