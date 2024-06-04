@@ -24,8 +24,8 @@ namespace Project.Interface.Menus
 			Audio,  // Menu for configuring audio volume
 			Language, // Menu for localization and language
 			Control, // Menu for configuring general control settings
-			Mapping, // Menu for configuring input mappings
-			Test // Menu for testing controls
+			Mapping, // Control submenu for configuring input mappings
+			Test // Control submenu for testing controls
 		}
 
 		protected override void SetUp()
