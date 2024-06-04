@@ -459,7 +459,7 @@ namespace Project.Gameplay
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
-		private const float CONTROLLER_SENSITIVITY = 0.6f;
+		private const float CONTROLLER_SENSITIVITY = 0.8f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -597,6 +597,7 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive)
 				turnSmoothing = maxTurnAmount;
 
+			/*
 			if (Runtime.Instance.IsUsingController && !isRecentering) // Fix touchy controllers
 			{
 				float controllerFix = Mathf.Abs(ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
@@ -605,6 +606,7 @@ namespace Project.Gameplay
 				else
 					turnSmoothing += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
 			}
+			*/
 
 			if (IsSpeedLossActive())
 			{
@@ -1096,11 +1098,13 @@ namespace Project.Gameplay
 			// Calculate how far player is trying to go
 			float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
 			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, InputVector.Length()); // Give some smoothing based on controller strength
+			GD.Print(horizontalTarget);
 
 			// Keep some speed forward
 			MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
 			VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
 			MoveSpeed = new Vector2(horizontalTarget, MoveSpeed).Length();
+			turnInstantly = true;
 
 			CanJumpDash = false; // Disable jumpdashing
 			SetActionState(ActionStates.Grindstep);
