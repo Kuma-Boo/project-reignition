@@ -50,10 +50,11 @@ namespace Project.Interface
 				// TODO Load story event
 				//TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn");
 
-				TransitionManager.StartTransition(new TransitionData()
+				TransitionManager.StartTransition(new()
 				{
 					color = Colors.Black,
 					inSpeed = 1f,
+					disableAutoTransition = string.IsNullOrEmpty(TransitionManager.instance.QueuedScene),
 				});
 				SetInputProcessing(false);
 			}

@@ -109,31 +109,31 @@ namespace Project.Core
 		/// <summary> Queues a scene to load. Be sure to call StartTransition to actually transition to the scene. </summary>
 		public static void QueueSceneChange(string scene)
 		{
-			instance.queuedScene = scene;
+			instance.QueuedScene = scene;
 
 			if (!instance.IsConnected(SignalName.TransitionProcess, new(instance, MethodName.ApplySceneChange)))
 				instance.Connect(SignalName.TransitionProcess, new(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
 		}
 
-		private string queuedScene;
+		public string QueuedScene { get; private set; }
 		private async void ApplySceneChange()
 		{
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog
-			if (string.IsNullOrEmpty(queuedScene)) //Reload the current scene
+			if (string.IsNullOrEmpty(QueuedScene)) //Reload the current scene
 				GetTree().ReloadCurrentScene();
 			else
 			{
 				if (CurrentTransitionData.loadAsynchronously)
 				{
-					ResourceLoader.LoadThreadedRequest(queuedScene);
-					while (ResourceLoader.LoadThreadedGetStatus(queuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
+					ResourceLoader.LoadThreadedRequest(QueuedScene);
+					while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
 						await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
 				}
 
-				GetTree().ChangeSceneToFile(queuedScene);
+				GetTree().ChangeSceneToFile(QueuedScene);
 			}
 
-			queuedScene = string.Empty; //Clear queue
+			QueuedScene = string.Empty; //Clear queue
 			EmitSignal(SignalName.SceneChanged);
 
 			if (!CurrentTransitionData.disableAutoTransition)
