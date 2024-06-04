@@ -76,13 +76,13 @@ namespace Project.Core
 
 			if (Input.IsActionJustPressed("debug_window_small"))
 			{
-				SaveManager.Config.screenResolution = 0;
+				SaveManager.Config.windowSize = 0;
 				SaveManager.ApplyConfig();
 			}
 
 			if (Input.IsActionJustPressed("debug_window_large"))
 			{
-				SaveManager.Config.screenResolution = 3;
+				SaveManager.Config.windowSize = 3;
 				SaveManager.ApplyConfig();
 			}
 
