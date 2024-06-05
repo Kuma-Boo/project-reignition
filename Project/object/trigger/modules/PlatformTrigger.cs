@@ -125,7 +125,7 @@ namespace Project.Gameplay.Triggers
 			if (!isActive) return;
 
 			if (floorCalculationRoot != null)
-				UpdatePlayerMovement();
+				CallDeferred(MethodName.SyncPlayerMovement);
 		}
 
 
@@ -166,7 +166,7 @@ namespace Project.Gameplay.Triggers
 
 
 		/// <summary> Moves the player with the platform. </summary>
-		private void UpdatePlayerMovement()
+		private void SyncPlayerMovement()
 		{
 			if (!Character.IsOnGround) return; // Player isn't on the ground
 
