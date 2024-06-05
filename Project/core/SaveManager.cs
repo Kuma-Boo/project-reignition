@@ -17,7 +17,6 @@ namespace Project.Core
 			if (OS.IsDebugBuild()) // Editor build, use custom configuration
 			{
 				// Default debug settings for testing from the editor.
-				Config.windowSize = 3;
 				Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
 				Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
 				Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
@@ -92,7 +91,7 @@ namespace Project.Core
 		{
 			// Video
 			public int targetDisplay = DisplayServer.GetPrimaryScreen();
-			public int windowSize = 4; // Defaults to 1080p
+			public int windowSize = 3; // Defaults to one lower than 1080p
 			public bool useFullscreen = true;
 			public bool useExclusiveFullscreen;
 			public bool useVsync;
