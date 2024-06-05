@@ -451,8 +451,6 @@ namespace Project.Gameplay
 		private const float MIN_TURN_AMOUNT = .12f;
 		/// <summary> How quickly to turn when moving at top speed. </summary>
 		private const float MAX_TURN_AMOUNT = .6f;
-		/// <summary> How much to dampen turning speed. </summary>
-		private const float CONTROLLER_SENSITIVITY = 100.0f;
 		/// <summary> How quickly to turnaround when at top speed. </summary>
 		private const float RUN_TURNAROUND_SPEED = .24f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
