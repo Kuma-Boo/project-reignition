@@ -99,7 +99,10 @@ namespace Project.Core
 			}
 
 			for (int i = 0; i < meshInstances.Length; i++)
+			{
 				meshInstances[i].MaterialOverride = null;
+				meshInstances[i].Mesh = new QuadMesh();
+			}
 
 			materials.Clear();
 			meshes.Clear();
