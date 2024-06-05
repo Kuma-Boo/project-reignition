@@ -68,6 +68,9 @@ namespace Project.Gameplay
 		/// <summary> Gets ALL the materials in this stage, then compiles them. </summary>
 		public void InitializeShaders()
 		{
+			if (OS.IsDebugBuild() && !DebugManager.Instance.IsShaderCompilationEnabled)
+				return;
+
 			foreach (Node node in GetChildren(GetTree().Root, new List<Node>()))
 			{
 				if (node is MeshInstance3D)
