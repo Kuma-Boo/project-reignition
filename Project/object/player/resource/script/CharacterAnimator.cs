@@ -147,12 +147,12 @@ namespace Project.Gameplay
 		/// <summary> Disables speed smoothing. </summary>
 		public bool DisabledSpeedSmoothing { get; set; }
 		private float idleBlendVelocity;
-		/// <summary> What speedratio should be considered as fully running? </summary>
-		private const float RUN_RATIO = .9f;
 		/// <summary> How much should the animation speed be smoothed by? </summary>
 		private const float SPEED_SMOOTHING = .06f;
 		/// <summary> How much should the transition from idling be smoothed by? </summary>
 		private const float IDLE_SMOOTHING = .05f;
+		/// <summary> What speedratio should be considered as fully running? </summary>
+		public const float RUN_RATIO = .9f;
 
 
 		/// <summary> Forces the player's animation back to the grounded state. </summary>
@@ -216,7 +216,7 @@ namespace Project.Gameplay
 						idleBlend = ExtensionMethods.SmoothDamp(idleBlend, -1, ref idleBlendVelocity, IDLE_SMOOTHING);
 
 					speedRatio = Mathf.Abs(Character.BackstepSettings.GetSpeedRatio(Character.MoveSpeed));
-					targetAnimationSpeed = 1.2f + speedRatio;
+					targetAnimationSpeed = 1 + speedRatio * 1.5f;
 				}
 				else // Moving forward
 				{
