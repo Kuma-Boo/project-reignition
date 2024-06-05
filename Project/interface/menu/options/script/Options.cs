@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay;
 
 namespace Project.Interface.Menus
 {
@@ -95,6 +96,29 @@ namespace Project.Interface.Menus
 				Select();
 			else
 				base.ProcessMenu();
+
+			if (isPlayerLocked)
+				CallDeferred(MethodName.UpdatePlayerPosition);
+		}
+
+		[Export]
+		private Node3D lockNode;
+		private bool isPlayerLocked;
+		private void LockPlayer() => isPlayerLocked = true;
+		private void UnlockPlayer() => isPlayerLocked = false;
+		private void UpdatePlayerPosition()
+		{
+			CharacterController character = CharacterController.instance;
+
+			Vector3 lockPosition = character.GlobalPosition;
+			lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.5f, lockNode.GlobalPosition.X + 1.5f);
+			lockPosition.Z = lockNode.GlobalPosition.Z;
+			character.GlobalPosition = lockPosition;
+
+			if (character.IsMovingBackward && character.IsHoldingDirection(character.PathFollower.BackAngle))
+				character.MovementAngle = ExtensionMethods.ClampAngleRange(character.MovementAngle, 0, Mathf.Pi * .25f);
+			else if (!character.IsMovingBackward && character.IsHoldingDirection(character.PathFollower.ForwardAngle))
+				character.MovementAngle = ExtensionMethods.ClampAngleRange(character.MovementAngle, Mathf.Pi, Mathf.Pi * .25f);
 		}
 
 
@@ -172,6 +196,7 @@ namespace Project.Interface.Menus
 		{
 			if (currentSubmenu == Submenus.Test) // Cancel test
 			{
+				UnlockPlayer();
 				animator.Play("test_end");
 				currentSubmenu = Submenus.Control;
 			}
@@ -470,7 +495,7 @@ namespace Project.Interface.Menus
 				int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 				postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.COUNT);
 				SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
-				Gameplay.StageSettings.instance.UpdatePostProcessingStatus();
+				StageSettings.instance.UpdatePostProcessingStatus();
 			}
 			else if (VerticalSelection == 10)
 			{

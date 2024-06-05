@@ -249,6 +249,7 @@ namespace Project.Gameplay
 		/// <summary> Adds a ControlLockoutResource to the list, and switches to it depending on it's priority
 		public void AddLockoutData(LockoutResource resource)
 		{
+			GD.Print("Added Lockout");
 			if (!lockoutDataList.Contains(resource))
 			{
 				lockoutDataList.Add(resource); // Add the new lockout data

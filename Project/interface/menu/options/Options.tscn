@@ -1,16 +1,16 @@
-[gd_scene load_steps=57 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=56 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
 [ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
-[ext_resource type="Resource" uid="uid://dt1prgn1x2xgg" path="res://interface/menu/options/camera/OptionCamera.tres" id="3_jnp5r"]
+[ext_resource type="Resource" uid="uid://dt1prgn1x2xgg" path="res://interface/menu/options/resource/OptionCamera.tres" id="3_jnp5r"]
 [ext_resource type="Resource" uid="uid://bmc5r7uecj7vi" path="res://resource/level data/Options.tres" id="4_3wn11"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/Camera.tscn" id="5_1klrf"]
 [ext_resource type="AudioStream" uid="uid://pl5vnbme4wmg" path="res://sound/sfx/system/special book select.wav" id="5_boind"]
 [ext_resource type="AudioStream" uid="uid://dgybrdt0i5sok" path="res://sound/sfx/system/special book open.wav" id="5_f4e4n"]
 [ext_resource type="PackedScene" uid="uid://cgpnlulbvy8vl" path="res://interface/menu/options/environment/model/Collision.gltf" id="5_w565g"]
-[ext_resource type="Texture2D" uid="uid://bp7cfd20ijmmn" path="res://interface/menu/options/scrollbar.png" id="6_7p8ra"]
+[ext_resource type="Texture2D" uid="uid://bp7cfd20ijmmn" path="res://interface/menu/options/resource/scrollbar.png" id="6_7p8ra"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="6_j7003"]
 [ext_resource type="PackedScene" uid="uid://cskupol7nua05" path="res://interface/menu/options/environment/model/ControlBook.gltf" id="6_jppea"]
 [ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="6_v27kb"]
@@ -20,7 +20,6 @@
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="8_wksl8"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="8_xb0ie"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="12_qlup6"]
 [ext_resource type="PackedScene" uid="uid://c1806dq45a0kr" path="res://interface/menu/options/ControlOption.tscn" id="14_itn8j"]
 [ext_resource type="AudioStream" uid="uid://b5d5wemyoi5ap" path="res://sound/ost/treasure disc/4 MISGIVING.mp3" id="18_fr2tm"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="19_agawd"]
@@ -1359,7 +1358,7 @@ _data = {
 "video": SubResource("Animation_q1gli")
 }
 
-[node name="Options" type="Control" node_paths=PackedStringArray("cursor", "cursorAnimator", "contentContainer", "scrollBar", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "controlMappingOptions", "bgm", "animator")]
+[node name="Options" type="Control" node_paths=PackedStringArray("cursor", "cursorAnimator", "contentContainer", "lockNode", "scrollBar", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "controlMappingOptions", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1370,6 +1369,7 @@ script = ExtResource("1_yejdm")
 cursor = NodePath("MenuBase/Cursor")
 cursorAnimator = NodePath("MenuBase/Cursor/AnimationPlayer")
 contentContainer = NodePath("MenuBase/ContentClip/Content")
+lockNode = NodePath("ControlBook/JumpStart/JumpStart")
 scrollBar = NodePath("MenuBase/ScrollBar/ScrollPosition")
 videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/DisplayLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/WindowSizeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FullscreenLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/VsyncLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/RenderScaleLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ResizeModeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/AntiAliasingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/BloomLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ShadowLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/PostProcessingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ReflectionLabel")]
 audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel")]
@@ -1419,24 +1419,15 @@ visible = false
 
 [node name="StaticBody3D" parent="ControlBook/Collision/Floor" index="0" groups=["floor"]]
 
-[node name="Wall" parent="ControlBook/Collision" index="1"]
-script = ExtResource("12_qlup6")
-
-[node name="StaticBody3D" parent="ControlBook/Collision/Wall" index="0" groups=["wall"]]
-
 [node name="ControlBook" parent="ControlBook" instance=ExtResource("6_jppea")]
 
 [node name="Skeleton3D" parent="ControlBook/ControlBook/BookRoot" index="0"]
 bones/0/rotation = Quaternion(-0.5, -0.5, -0.5, 0.5)
-bones/2/rotation = Quaternion(0.707107, 2.23388e-08, 7.43768e-09, -0.707107)
+bones/2/rotation = Quaternion(-0.707107, -1.48754e-08, -1.48754e-08, 0.707107)
 bones/3/rotation = Quaternion(0.707106, 1.72081e-08, 1.72081e-08, 0.707107)
 bones/4/rotation = Quaternion(3.23117e-08, 0.707106, 0.707107, 5.3385e-08)
-bones/5/rotation = Quaternion(0.707107, 7.43768e-09, 7.43768e-09, -0.707107)
+bones/5/rotation = Quaternion(-0.707107, -1.48754e-08, -1.48754e-08, 0.707107)
 bones/6/rotation = Quaternion(-0.707107, 1.45739e-08, -1.45739e-08, 0.707107)
-bones/7/position = Vector3(0.0141335, -0.2125, -0.425)
-bones/7/rotation = Quaternion(0, 0, 0, 1)
-bones/8/position = Vector3(0.0141335, -0.2125, 0.425)
-bones/8/rotation = Quaternion(0, 0, 0, 1)
 
 [node name="obj_book01_Mesh_0001" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="0"]
 layers = 2
@@ -1488,7 +1479,7 @@ blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
 [node name="Page2" parent="ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.28608, 0)
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.575, 0)
 
 [node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page2" index="0"]
 layers = 2
@@ -1549,7 +1540,7 @@ draw_pass_1 = SubResource("QuadMesh_md2q0")
 environment = SubResource("Environment_xk4ou")
 
 [node name="PlayerSpawn" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 5, 0)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 0)
 script = ExtResource("4_g52h3")
 
 [node name="Player" parent="ControlBook/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("3_4o0co")]
@@ -1560,22 +1551,22 @@ Camera = NodePath("../Camera")
 
 [node name="Camera" parent="ControlBook/PlayerSpawn" instance=ExtResource("5_1klrf")]
 
+[node name="JumpStart" type="Node3D" parent="ControlBook"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 6)
+
+[node name="JumpStart" type="Node3D" parent="ControlBook/JumpStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, -4.3, 6)
+script = ExtResource("8_7asuc")
+jumpHeight = 2.0
+autoAlign = true
+
 [node name="JumpEnd" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 0.2, 0)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 0.2, 0)
 
 [node name="JumpEnd" type="Node3D" parent="ControlBook/JumpEnd"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54972e-06, 2, 18)
 script = ExtResource("8_7asuc")
 jumpHeight = 15.0
-autoAlign = true
-
-[node name="JumpStart" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 5, 6)
-
-[node name="JumpStart" type="Node3D" parent="ControlBook/JumpStart"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, -4, 6)
-script = ExtResource("8_7asuc")
-jumpHeight = 2.0
 autoAlign = true
 
 [node name="MenuBase" type="Control" parent="."]
@@ -2365,7 +2356,7 @@ loopStartPosition = 30.264
 loopEndPosition = 95.0
 
 [connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="EnableProcessing"]
-[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="ControlBook/Collision/Wall" method="Activate"]
+[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="LockPlayer"]
 
 [editable path="ControlBook/Collision"]
 [editable path="ControlBook/ControlBook"]
