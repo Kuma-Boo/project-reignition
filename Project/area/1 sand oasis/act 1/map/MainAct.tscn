@@ -1,6 +1,7 @@
-[gd_scene load_steps=201 format=3 uid="uid://ms7rm6vsb708"]
+[gd_scene load_steps=202 format=3 uid="uid://ms7rm6vsb708"]
 
 [ext_resource type="Resource" uid="uid://chdva6qp0d51h" path="res://resource/level data/sand oasis/Act1Main.tres" id="2_62va5"]
+[ext_resource type="Resource" uid="uid://cfbyfp0sae1jm" path="res://area/1 sand oasis/act 1/camera/HallCam.tres" id="3_76jrt"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_n7uj2"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_v6hfg"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="5_ox8ed"]
@@ -43,8 +44,8 @@
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="40_jisem"]
 [ext_resource type="PackedScene" uid="uid://chwt62jenntgq" path="res://area/1 sand oasis/object/grindrail/Grindrail03.tscn" id="41_b8mr3"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="42_gpj5q"]
-[ext_resource type="PackedScene" uid="uid://cosocodwyr4th" path="res://object/trigger/PlatformTrigger.tscn" id="43_6d6jt"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="44_7td3m"]
+[ext_resource type="Script" path="res://object/trigger/modules/PlatformTrigger.cs" id="45_eh00x"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="45_ldib5"]
 [ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="46_h1tgf"]
 [ext_resource type="PackedScene" uid="uid://c3nre8sxl3opx" path="res://area/1 sand oasis/object/Spear.tscn" id="47_1qr4i"]
@@ -3549,7 +3550,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Pillar1/SquarePillarShort1:position")
+tracks/0/path = NodePath("Pillar1/Pillar1Root:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -3621,17 +3622,17 @@ tracks/5/keys = {
 
 [sub_resource type="Animation" id="163"]
 resource_name = "event"
-length = 0.666669
+length = 1.33334
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Pillar1/SquarePillarShort1:position")
+tracks/0/path = NodePath("Pillar1/Pillar1Root:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.266667, 0.533333),
-"transitions": PackedFloat32Array(1, 0.5, 1),
+"times": PackedFloat32Array(0, 0.266667, 1),
+"transitions": PackedFloat32Array(1, 2.5, 1),
 "update": 0,
 "values": [Vector3(0, -10, 0), Vector3(0, -10, 0), Vector3(0, 0, 0)]
 }
@@ -3754,7 +3755,7 @@ tracks/9/keys = {
 tracks/10/type = "method"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Pillar1/SquarePillarShort1/SFX1")
+tracks/10/path = NodePath("Pillar1/Pillar1Root/SquarePillarShort1/SFX1")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -13136,6 +13137,7 @@ size = Vector3(12, 20, 2)
 
 [node name="Static" parent="." instance=ExtResource("69_a710p")]
 Data = ExtResource("2_62va5")
+InitialCameraSettings = ExtResource("3_76jrt")
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -13144,6 +13146,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("3_n7uj2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -111.13, -120, -412.507)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 visible = false
@@ -16239,8 +16242,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919254, -0.771345, 0)
 
 [node name="Hallway" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.1, -45, -359)
-visible = false
 script = ExtResource("8_w6s07")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Jar1" parent="MainAct/Hallway" instance=ExtResource("24_2iptm")]
@@ -16344,29 +16347,34 @@ script = ExtResource("6_gjqoq")
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
-[node name="Pillar1" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, -11)
+[node name="Pillar1" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger" node_paths=PackedStringArray("floorCalculationRoot", "parentCollider")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("45_eh00x")
+"Falling Platform Settings/Disabled" = true
+floorCalculationRoot = NodePath("Pillar1Root/PlatformTrigger")
+parentCollider = NodePath("Pillar1Root/SquarePillarShort1")
 
-[node name="SquarePillarShort1" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1" instance=ExtResource("29_4m38a")]
-process_priority = -22
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -10, 0)
-sync_to_physics = true
+[node name="Pillar1Root" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
 
-[node name="SFX1" type="AudioStreamPlayer3D" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1"]
+[node name="PlatformTrigger" type="Area3D" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 10, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/PlatformTrigger"]
+shape = SubResource("355")
+
+[node name="SquarePillarShort1" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root" instance=ExtResource("29_4m38a")]
+
+[node name="SFX1" type="AudioStreamPlayer3D" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/SquarePillarShort1"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("13_a22cu")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"SFX"
-
-[node name="PlatformTrigger" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1" node_paths=PackedStringArray("parentCollider") instance=ExtResource("43_6d6jt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-"Falling Platform Settings/Disabled" = true
-parentCollider = NodePath("..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger"]
-shape = SubResource("355")
 
 [node name="SandDustParticle1" parent="MainAct/Hallway/Switch/EventTrigger/Pillar1" instance=ExtResource("15_mu1ul")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -16377,7 +16385,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 visible = false
 
 [node name="Pillar2" type="Node3D" parent="MainAct/Hallway/Switch/EventTrigger"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -3.2, -13.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.2, -13.5)
 
 [node name="SquarePillarShort2" parent="MainAct/Hallway/Switch/EventTrigger/Pillar2" instance=ExtResource("29_4m38a")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -10, 0)
@@ -16398,7 +16406,6 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 3, 0)
 visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hallway/Switch/EventTrigger"]
-process_priority = 25
 callback_mode_process = 0
 libraries = {
 "": SubResource("AnimationLibrary_r83o7")
@@ -16503,7 +16510,9 @@ libraries = {
 }
 
 [node name="SpikeBall" parent="MainAct/Hallway/Switch" instance=ExtResource("45_ldib5")]
+process_mode = 4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 
 [node name="Rings2" type="Node3D" parent="MainAct/Hallway"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1, 0, -33.9)
@@ -21043,8 +21052,8 @@ shape = SubResource("65")
 [connection signal="Activated" from="MainAct/Hallway/Switch" to="MainAct/Hallway/Switch/EventTrigger" method="Activate"]
 [connection signal="Respawned" from="MainAct/Hallway/Switch" to="MainAct/Hallway/Switch/EventTrigger" method="Respawn"]
 [connection signal="Respawned" from="MainAct/Hallway/Switch" to="MainAct/Hallway/Switch/EventTrigger/EventTrigger" method="Respawn"]
-[connection signal="area_entered" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnEntered"]
-[connection signal="area_exited" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1/SquarePillarShort1/PlatformTrigger" method="OnExited"]
+[connection signal="area_entered" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1" method="OnEntered"]
+[connection signal="area_exited" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1" method="OnExited"]
 [connection signal="Defeated" from="MainAct/Hallway/Switch/EventTrigger/BlueMajin1" to="MainAct/Hallway/Switch/EventTrigger/EventTrigger" method="Activate"]
 [connection signal="Shattered" from="MainAct/End/JarGroup3/JarM2" to="MainAct/End/JarGroup3/GreenMajin" method="Spawn"]
 
