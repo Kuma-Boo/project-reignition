@@ -111,14 +111,9 @@ namespace Project.Interface.Menus
 			CharacterController character = CharacterController.instance;
 
 			Vector3 lockPosition = character.GlobalPosition;
-			lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.5f, lockNode.GlobalPosition.X + 1.5f);
+			lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
 			lockPosition.Z = lockNode.GlobalPosition.Z;
 			character.GlobalPosition = lockPosition;
-
-			if (character.IsMovingBackward && character.IsHoldingDirection(character.PathFollower.BackAngle))
-				character.MovementAngle = ExtensionMethods.ClampAngleRange(character.MovementAngle, 0, Mathf.Pi * .25f);
-			else if (!character.IsMovingBackward && character.IsHoldingDirection(character.PathFollower.ForwardAngle))
-				character.MovementAngle = ExtensionMethods.ClampAngleRange(character.MovementAngle, Mathf.Pi, Mathf.Pi * .25f);
 		}
 
 

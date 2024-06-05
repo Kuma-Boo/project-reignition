@@ -1795,13 +1795,11 @@ namespace Project.Gameplay
 
 					if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
 					{
-						float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi) * .4f, 0f, 1f); // Arbitrary formula that works well
+						float speedClamp = Mathf.Clamp(1.0f - wallDelta / Mathf.Pi * .4f, 0f, 1f); // Arbitrary formula that works well
 						if (GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
 							MoveSpeed *= speedClamp;
 					}
 				}
-				else if (ActionState == ActionStates.JumpDash)
-					Effect.StopTrailFX();
 			}
 		}
 

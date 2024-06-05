@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 using System.Collections.Generic;
 
 namespace Project.CustomNodes
@@ -28,7 +29,6 @@ namespace Project.CustomNodes
 		[Export]
 		public Material material;
 
-
 		private readonly List<Point> points = new(); // Data of each point
 		private readonly List<float> pointLifetimes = new(); // Lifetime of each point
 
@@ -50,10 +50,7 @@ namespace Project.CustomNodes
 		}
 
 
-		public override void _PhysicsProcess(double delta)
-		{
-			CallDeferred(MethodName.UpdateTrail, delta);
-		}
+		public override void _PhysicsProcess(double delta) => CallDeferred(MethodName.UpdateTrail, delta);
 
 
 		private void UpdateTrail(double delta)
@@ -82,6 +79,11 @@ namespace Project.CustomNodes
 				return;
 
 			float angleIncrement = Mathf.Tau / resolution;
+
+			for (int i = 0; i < points.Count; i++)
+				points[i].position += Gameplay.CharacterController.instance.Animator.Back() * Gameplay.CharacterController.instance.MoveSpeed * PhysicsManager.physicsDelta;
+
+			previousPosition = points[points.Count - 1].position;
 
 			for (int y = 0; y < resolution; y++)
 			{
@@ -120,9 +122,9 @@ namespace Project.CustomNodes
 			if (points.Count == 0)
 				previousPosition = trailMeshInstance.GlobalPosition + this.Back();
 
-			Vector3 tangentDirection = (trailMeshInstance.GlobalPosition - previousPosition).Normalized();
+			Vector3 tangentDirection = this.Back().Normalized();
 			Vector3 upDirection = tangentDirection.Rotated(this.Right(), Mathf.Pi * .5f);
-			points.Add(new Point(GlobalPosition, upDirection, tangentDirection));
+			points.Add(new(GlobalPosition, upDirection, tangentDirection));
 			pointLifetimes.Add(0);
 			previousPosition = trailMeshInstance.GlobalPosition;
 		}
@@ -134,12 +136,11 @@ namespace Project.CustomNodes
 			pointLifetimes.RemoveAt(index);
 		}
 
-		private struct Point
+		private class Point
 		{
 			public Vector3 position; // Origin of the point
 			public Vector3 normal; // "Up" direction of the point
 			public Vector3 tangent; // "Forward" direction of the point
-
 
 			public Point(Vector3 p, Vector3 n, Vector3 t)
 			{
