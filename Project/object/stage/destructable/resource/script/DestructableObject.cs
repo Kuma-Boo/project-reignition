@@ -222,7 +222,7 @@ namespace Project.Gameplay.Objects
 				pieces[i].rigidbody.Freeze = false;
 				pieces[i].rigidbody.AddExplosionForce(shatterPoint, shatterStrength);
 				pieces[i].mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off; // Particles don't cast shadows when shattering
-				tweener.TweenProperty(pieces[i].mesh, "transparency", 1f, 1f).From(0f);
+				tweener.TweenProperty(pieces[i].mesh, "transparency", 1f, 1f).From(0.01f);
 			}
 
 			isShattered = true;
