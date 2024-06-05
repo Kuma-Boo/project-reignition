@@ -197,7 +197,6 @@ namespace Project.Interface.Menus
 		{
 			if (bgm.Playing) return;
 
-
 			bgmFadeTime = 0.0f; // Stops any active fading
 			bgm.VolumeDb = 0.0f; // Reset volume
 			bgm.Play();
