@@ -187,7 +187,7 @@ namespace Project.Gameplay
 			isActive = true;
 			isGrindstepping = false;
 
-			if (allowBonuses && Character.ActionState == CharacterController.ActionStates.Grindstep)
+			if (allowBonuses && Character.IsGrindstepBonusActive)
 				BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
 
 			// Reset buffer timers

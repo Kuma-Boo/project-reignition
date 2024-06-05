@@ -249,7 +249,6 @@ namespace Project.Gameplay
 		/// <summary> Adds a ControlLockoutResource to the list, and switches to it depending on it's priority
 		public void AddLockoutData(LockoutResource resource)
 		{
-			GD.Print("Added Lockout");
 			if (!lockoutDataList.Contains(resource))
 			{
 				lockoutDataList.Add(resource); // Add the new lockout data
@@ -1086,6 +1085,8 @@ namespace Project.Gameplay
 		#endregion
 
 		#region GrindStep
+		/// <summary> Will the player get a grindstep bonus when landing on a rail? </summary>
+		public bool IsGrindstepBonusActive { get; private set; }
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
@@ -1104,6 +1105,7 @@ namespace Project.Gameplay
 			VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
 			MoveSpeed = new Vector2(horizontalTarget, MoveSpeed).Length();
 			turnInstantly = true;
+			IsGrindstepBonusActive = true;
 
 			CanJumpDash = false; // Disable jumpdashing
 			SetActionState(ActionStates.Grindstep);
@@ -1606,6 +1608,9 @@ namespace Project.Gameplay
 				}
 				else
 				{
+					if (JustLandedOnGround)
+						IsGrindstepBonusActive = false;
+
 					float snapDistance = groundHit.distance - CollisionRadius;
 					GlobalPosition -= UpDirection * snapDistance; // Remain snapped to the ground
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized(); // Update world direction
@@ -1656,7 +1661,6 @@ namespace Project.Gameplay
 			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			ResetActionState();
-
 			JustLandedOnGround = true;
 
 			if (!Stage.IsLevelIngame) return; // Return early when not ingame
