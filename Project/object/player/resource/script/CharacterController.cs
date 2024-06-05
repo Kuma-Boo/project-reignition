@@ -1280,6 +1280,12 @@ namespace Project.Gameplay
 			areaTrigger.Disabled = true;
 			Stage.IncrementRespawnCount();
 
+			// Disable break skills
+			if (Skills.IsTimeBreakActive)
+				Skills.ToggleTimeBreak();
+			if (Skills.IsSpeedBreakActive)
+				Skills.ToggleSpeedBreak();
+
 			TransitionManager.StartTransition(new()
 			{
 				inSpeed = .5f,
