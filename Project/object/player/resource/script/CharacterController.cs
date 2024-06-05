@@ -603,7 +603,6 @@ namespace Project.Gameplay
 			}
 
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnSmoothing);
-			GD.PrintS(turnInstantly, turningVelocity, turnSmoothing);
 			if (!Mathf.IsZeroApprox(Camera.ActiveSettings.pathControlInfluence) && !IsLockoutActive) // Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 
