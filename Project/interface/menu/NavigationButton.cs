@@ -29,6 +29,12 @@ namespace Project.Interface
 			Redraw();
 		}
 
+		public override void _ExitTree()
+		{
+			Runtime.Instance.Disconnect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
+			SaveManager.Instance.Disconnect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
+		}
+
 
 		private void Redraw(int _) => Redraw();
 		private void Redraw()
