@@ -25,7 +25,14 @@ namespace Project.Interface
 		public override void _Ready()
 		{
 			Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
+			SaveManager.Instance.Connect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
 			Redraw();
+		}
+
+		public override void _ExitTree()
+		{
+			Runtime.Instance.Disconnect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
+			SaveManager.Instance.Disconnect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
 		}
 
 

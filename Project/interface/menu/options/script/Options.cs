@@ -235,7 +235,9 @@ namespace Project.Interface.Menus
 			// Scroll
 			if (!scrollBar.IsVisibleInTree()) return;
 
-			if (VerticalSelection > scrollOffset + 7)
+			if (maxSelection < 8)
+				scrollOffset = 0;
+			else if (VerticalSelection > scrollOffset + 7)
 				scrollOffset = VerticalSelection - 7;
 			else if (VerticalSelection < scrollOffset)
 				scrollOffset = VerticalSelection;
@@ -265,10 +267,11 @@ namespace Project.Interface.Menus
 		private void UpdateSubmenuVisibility()
 		{
 			CalculateMaxSelection();
-			UpdateScrolling(true);
-			UpdateCursor();
 			animator.Play(currentSubmenu.ToString().ToLower());
 			animator.Advance(0.0);
+
+			CallDeferred(MethodName.UpdateScrolling, true);
+			CallDeferred(MethodName.UpdateCursor);
 		}
 
 
@@ -340,6 +343,12 @@ namespace Project.Interface.Menus
 					break;
 				case SaveManager.ControllerType.Xbox:
 					controlLabels[0].Text = "option_controller_xbox";
+					break;
+				case SaveManager.ControllerType.Nintendo:
+					controlLabels[0].Text = "option_controller_nintendo";
+					break;
+				case SaveManager.ControllerType.Steam:
+					controlLabels[0].Text = "option_controller_steam";
 					break;
 			}
 
@@ -591,10 +600,6 @@ namespace Project.Interface.Menus
 			{
 				int type = WrapSelection((int)SaveManager.Config.controllerType + direction, (int)SaveManager.ControllerType.Count);
 				SaveManager.Config.controllerType = (SaveManager.ControllerType)type;
-
-				foreach (ControlOption controlOption in controlMappingOptions) // Force redraw to update correct sprites
-					controlOption.RedrawBinding();
-
 				return true;
 			}
 			else if (VerticalSelection == 1)
