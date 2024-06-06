@@ -1,3 +1,4 @@
+using System.Globalization;
 using Godot;
 using Project.Core;
 using Project.Gameplay;
@@ -69,7 +70,7 @@ namespace Project.Interface
 			ring.Text = ringBonus.ToString();
 
 			float technicalBonus = Stage.CalculateTechnicalBonus();
-			technical.Text = "x" + technicalBonus.ToString("0.0");
+			technical.Text = "x" + technicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
 
 			Stage.UpdateScore(Mathf.CeilToInt(ringBonus * technicalBonus), StageSettings.MathModeEnum.Add);
 			total.Text = Stage.DisplayScore;
