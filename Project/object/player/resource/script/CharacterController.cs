@@ -435,9 +435,6 @@ namespace Project.Gameplay
 		public MovementResource BackstepSettings => Skills.BackstepSettings;
 
 		[Export]
-		/// <summary> Determines how turning is affected. </summary>
-		public Curve controllerSensitivity;
-		[Export]
 		/// <summary> Determines how speed is lost when turning. </summary>
 		public Curve turningSpeedCurve;
 		[Export]
@@ -453,13 +450,11 @@ namespace Project.Gameplay
 		/// <summary> How quickly to turn when moving slowly. </summary>
 		private const float MIN_TURN_AMOUNT = .12f;
 		/// <summary> How quickly to turn when moving at top speed. </summary>
-		private const float MAX_TURN_AMOUNT = .6f;
+		private const float MAX_TURN_AMOUNT = .8f;
 		/// <summary> How quickly to turnaround when at top speed. </summary>
-		private const float STRAFE_TURNAROUND_SPEED = .24f;
+		private const float RUN_TURNAROUND_SPEED = .24f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
-		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
-		private const float CONTROLLER_SENSITIVITY = 0.8f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -538,9 +533,6 @@ namespace Project.Gameplay
 					else if (inputDot < .8f) // Slow down while turning
 						inputLength *= inputDot;
 
-					if (IsMovingBackward && !IsOnGround) // Greatly reduce input strength when jumping backwards
-						inputLength *= .2f;
-
 					if (MoveSpeed < BackstepSettings.speed) // Accelerate faster when at low speeds
 						MoveSpeed = Mathf.Lerp(MoveSpeed, ActiveMovementSettings.speed * ActiveMovementSettings.GetSpeedRatio(BackstepSettings.speed), .05f * inputLength);
 
@@ -567,6 +559,7 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Crouching || MoveSpeed == 0) return;
 
 			float targetMovementAngle = GetTargetMovementAngle();
+
 			bool overrideFacingDirection = IsLockoutActive &&
 			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace;
 
@@ -584,33 +577,31 @@ namespace Project.Gameplay
 				return;
 			}
 
+			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
+			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
+			// Reduce sensitivity when player is running
+			if (speedRatio > CharacterAnimator.RUN_RATIO)
+			{
+				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle)) // Remap controls to provide more analog detail
+					targetMovementAngle -= inputDeltaAngle * .5f;
+
+				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
+			}
+
 			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			// Is the player trying to recenter themselves?
-			bool isRecentering = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
-			if (isRecentering)
-				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
+			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+			if (isTurningAround)
+				maxTurnAmount = RUN_TURNAROUND_SPEED;
 
-			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
 			float turnSmoothing = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
-			if (Skills.IsSpeedBreakActive)
-				turnSmoothing = maxTurnAmount;
-
-			if (Runtime.Instance.IsUsingController && !isRecentering) // Fix touchy controllers
-			{
-				float controllerFix = Mathf.Abs(ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
-				if (controllerFix > .9f)
-					turnSmoothing = Mathf.Inf;
-				else
-					turnSmoothing += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
-			}
 
 			if (IsSpeedLossActive())
 			{
 				// Calculate turn delta, relative to ground speed
-				float speedLossRatio = deltaAngle / MAX_TURNAROUND_ANGLE;
-				MoveSpeed -= GroundSettings.speed * speedRatio * turningSpeedCurve.Sample(speedLossRatio) * TURNING_SPEED_LOSS;
+				float speedLossRatio = (speedRatio * deltaAngle) / MAX_TURNAROUND_ANGLE;
+				MoveSpeed -= GroundSettings.speed * turningSpeedCurve.Sample(speedLossRatio) * TURNING_SPEED_LOSS;
 				if (MoveSpeed < 0)
 					MoveSpeed = 0;
 			}
