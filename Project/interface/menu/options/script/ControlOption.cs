@@ -37,13 +37,23 @@ namespace Project.Interface.Menus
 			REBINDING,
 		}
 
+
 		public override void _Ready()
 		{
 			actionLabel.Text = Tr(inputID.ToString());
 			SaveConfig();
 			RedrawBinding();
-			Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
 			Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
+			Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
+			SaveManager.Instance.Connect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.RedrawBinding));
+		}
+
+
+		public override void _ExitTree()
+		{
+			Runtime.Instance.Disconnect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
+			Runtime.Instance.Disconnect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
+			SaveManager.Instance.Disconnect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.RedrawBinding));
 		}
 
 
@@ -78,7 +88,6 @@ namespace Project.Interface.Menus
 			RemapInput(e);
 			State = RemapState.REBINDING;
 			StopListening();
-			//CallDeferred(MethodName.StopListening);
 		}
 
 
