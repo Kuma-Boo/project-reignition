@@ -41,6 +41,7 @@ namespace Project.Core
 		{
 			PlayStation, // Use PlayStation button prompts
 			Xbox, // Use XBox button prompts
+			Nintendo, // Use Nintendo button prompts
 			Count
 		}
 		public enum VoiceLanguage

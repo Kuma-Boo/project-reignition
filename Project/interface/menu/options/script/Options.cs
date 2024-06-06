@@ -341,6 +341,9 @@ namespace Project.Interface.Menus
 				case SaveManager.ControllerType.Xbox:
 					controlLabels[0].Text = "option_controller_xbox";
 					break;
+				case SaveManager.ControllerType.Nintendo:
+					controlLabels[0].Text = "option_controller_nintendo";
+					break;
 			}
 
 			controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
