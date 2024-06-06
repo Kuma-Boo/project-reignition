@@ -37,12 +37,14 @@ namespace Project.Interface.Menus
 			REBINDING,
 		}
 
+
 		public override void _Ready()
 		{
 			actionLabel.Text = Tr(inputID.ToString());
 			SaveConfig();
 			RedrawBinding();
 			Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
+			Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
 			Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
 		}
 

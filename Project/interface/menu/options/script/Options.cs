@@ -594,10 +594,6 @@ namespace Project.Interface.Menus
 			{
 				int type = WrapSelection((int)SaveManager.Config.controllerType + direction, (int)SaveManager.ControllerType.Count);
 				SaveManager.Config.controllerType = (SaveManager.ControllerType)type;
-
-				foreach (ControlOption controlOption in controlMappingOptions) // Force redraw to update correct sprites
-					controlOption.RedrawBinding();
-
 				return true;
 			}
 			else if (VerticalSelection == 1)
