@@ -7,10 +7,17 @@ namespace Project.Core
 {
 	public partial class SaveManager : Node
 	{
+		public static SaveManager Instance;
+
 		private const string SAVE_DIRECTORY = "user://";
+
+		[Signal]
+		public delegate void ConfigAppliedEventHandler();
 
 		public override void _EnterTree()
 		{
+			Instance = this;
+
 			LoadConfig();
 			LoadGameData();
 
@@ -41,6 +48,8 @@ namespace Project.Core
 		{
 			PlayStation, // Use PlayStation button prompts
 			Xbox, // Use XBox button prompts
+			Nintendo, // Use Nintendo button prompts
+			Steam, // Use Steam Deck button prompts
 			Count
 		}
 		public enum VoiceLanguage
@@ -357,6 +366,8 @@ namespace Project.Core
 			SetAudioBusVolume((int)AudioBuses.BGM, Config.bgmVolume, Config.isBgmMuted);
 			SetAudioBusVolume((int)AudioBuses.SFX, Config.sfxVolume, Config.isSfxMuted);
 			SetAudioBusVolume((int)AudioBuses.VOICE, Config.voiceVolume, Config.isVoiceMuted);
+
+			Instance.EmitSignal(SignalName.ConfigApplied);
 		}
 
 
