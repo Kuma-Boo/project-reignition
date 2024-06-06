@@ -185,6 +185,8 @@ namespace Project.Gameplay
 		private const float SATURATION_ADJUSTMENT_SPEED = 10.0f;
 		private void UpdateTimeBreak()
 		{
+			if (!Character.Stage.IsLevelIngame) return;
+
 			//Update timebreak satutration visuals
 			float targetSaturation = IsTimeBreakActive ? 0.2f : 1.0f;
 			StageSettings.instance.Environment.Environment.AdjustmentSaturation =
@@ -221,6 +223,8 @@ namespace Project.Gameplay
 
 		private void UpdateSpeedBreak()
 		{
+			if (!Character.Stage.IsLevelIngame) return;
+
 			if (IsSpeedBreakActive)
 			{
 				if (Mathf.IsZeroApprox(breakTimer))
