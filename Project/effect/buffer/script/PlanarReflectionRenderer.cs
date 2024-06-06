@@ -30,6 +30,20 @@ namespace Project.Gameplay
 
 		public override void _EnterTree()
 		{
+			reflectionViewport.Size = SaveManager.WINDOW_SIZES[SaveManager.Config.windowSize];
+			switch (SaveManager.Config.reflectionQuality)
+			{
+				case SaveManager.QualitySetting.DISABLED:
+					reflectionCamera.ClearCurrent();
+					return;
+				case SaveManager.QualitySetting.LOW: // Quarter resolution
+					reflectionViewport.Size /= 4;
+					break;
+				case SaveManager.QualitySetting.MEDIUM: // Half resolution
+					reflectionViewport.Size /= 2;
+					break;
+			}
+
 			if (!RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable))
 				RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePreDraw, UpdatePositionCallable, (uint)ConnectFlags.Deferred);
 

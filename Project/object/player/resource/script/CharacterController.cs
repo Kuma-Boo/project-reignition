@@ -152,7 +152,7 @@ namespace Project.Gameplay
 				return false;
 
 			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
-			return delta < Mathf.Pi * .4f;
+			return delta < Mathf.Pi * .45f;
 		}
 
 		/// <summary> Returns the input angle based on the camera view. </summary>
@@ -435,6 +435,9 @@ namespace Project.Gameplay
 		public MovementResource BackstepSettings => Skills.BackstepSettings;
 
 		[Export]
+		/// <summary> Determines how turning is affected. </summary>
+		public Curve controllerSensitivity;
+		[Export]
 		/// <summary> Determines how speed is lost when turning. </summary>
 		public Curve turningSpeedCurve;
 		[Export]
@@ -446,7 +449,7 @@ namespace Project.Gameplay
 		public bool IsMovingBackward { get; set; }
 
 		/// <summary> How much speed to lose when turning sharply. </summary>
-		private const float TURNING_SPEED_LOSS = .04f;
+		private const float TURNING_SPEED_LOSS = .02f;
 		/// <summary> How quickly to turn when moving slowly. </summary>
 		private const float MIN_TURN_AMOUNT = .12f;
 		/// <summary> How quickly to turn when moving at top speed. </summary>
@@ -456,7 +459,7 @@ namespace Project.Gameplay
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
-		private const float TURNING_SENSITIVITY = .6f;
+		private const float CONTROLLER_SENSITIVITY = 0.8f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -584,19 +587,23 @@ namespace Project.Gameplay
 			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
-			if (IsHoldingDirection(PathFollower.ForwardAngle) &&
-			(Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle)))
+			// Is the player trying to recenter themselves?
+			bool isRecentering = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+			if (isRecentering)
 				maxTurnAmount = STRAFE_TURNAROUND_SPEED;
 
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
-			float turnDelta = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
+			float turnSmoothing = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
 			if (Skills.IsSpeedBreakActive)
-				turnDelta = maxTurnAmount;
+				turnSmoothing = maxTurnAmount;
 
-			if (Runtime.Instance.IsUsingController) // Fix touchy controllers
+			if (Runtime.Instance.IsUsingController && !isRecentering) // Fix touchy controllers
 			{
-				float controllerFix = Mathf.SmoothStep(0f, 1f, .4f * ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
-				turnDelta += controllerFix * TURNING_SENSITIVITY;
+				float controllerFix = Mathf.Abs(ExtensionMethods.DotAngle(MovementAngle, targetMovementAngle));
+				if (controllerFix > .9f)
+					turnSmoothing = Mathf.Inf;
+				else
+					turnSmoothing += controllerSensitivity.Sample(controllerFix) * CONTROLLER_SENSITIVITY;
 			}
 
 			if (IsSpeedLossActive())
@@ -608,7 +615,7 @@ namespace Project.Gameplay
 					MoveSpeed = 0;
 			}
 
-			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnDelta);
+			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnSmoothing);
 			if (!Mathf.IsZeroApprox(Camera.ActiveSettings.pathControlInfluence) && !IsLockoutActive) // Only do this when camera is tilting
 				MovementAngle += PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 
@@ -797,7 +804,7 @@ namespace Project.Gameplay
 		public bool IsJumpClamped { get; private set; } // True after the player releases the jump button
 		private bool isAccelerationJumpQueued;
 		private float currentJumpTime; // Amount of time the jump button was held
-		private const float ACCELERATION_JUMP_LENGTH = .08f; // How fast the jump button needs to be released for an "acceleration jump"
+		private const float ACCELERATION_JUMP_LENGTH = .1f; // How fast the jump button needs to be released for an "acceleration jump"
 		public void Jump(bool ignoreAccelerationJump = default)
 		{
 			currentJumpTime = ignoreAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
@@ -1078,22 +1085,27 @@ namespace Project.Gameplay
 		#endregion
 
 		#region GrindStep
+		/// <summary> Will the player get a grindstep bonus when landing on a rail? </summary>
+		public bool IsGrindstepBonusActive { get; private set; }
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
-		private readonly float GRIND_STEP_SPEED = 24.0f;
+		private readonly float GRIND_STEP_SPEED = 28.0f;
 		public void StartGrindstep()
 		{
 			// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(GetInputAngle(), MovementAngle);
 			// Calculate how far player is trying to go
 			float horizontalTarget = GRIND_STEP_SPEED * Mathf.Sign(inputDeltaAngle);
-			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, InputVector.Length()); // Give some smoothing based on controller strength
+			horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, inputCurve.Sample(InputVector.Length())); // Give some smoothing based on controller strength
 
 			// Keep some speed forward
+			turningVelocity = 0;
 			MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
 			VerticalSpeed = Runtime.CalculateJumpPower(GRIND_STEP_HEIGHT);
 			MoveSpeed = new Vector2(horizontalTarget, MoveSpeed).Length();
+			turnInstantly = true;
+			IsGrindstepBonusActive = true;
 
 			CanJumpDash = false; // Disable jumpdashing
 			SetActionState(ActionStates.Grindstep);
@@ -1267,6 +1279,12 @@ namespace Project.Gameplay
 			Lockon.IsMonitoring = false;
 			areaTrigger.Disabled = true;
 			Stage.IncrementRespawnCount();
+
+			// Disable break skills
+			if (Skills.IsTimeBreakActive)
+				Skills.ToggleTimeBreak();
+			if (Skills.IsSpeedBreakActive)
+				Skills.ToggleSpeedBreak();
 
 			TransitionManager.StartTransition(new()
 			{
@@ -1596,6 +1614,9 @@ namespace Project.Gameplay
 				}
 				else
 				{
+					if (JustLandedOnGround)
+						IsGrindstepBonusActive = false;
+
 					float snapDistance = groundHit.distance - CollisionRadius;
 					GlobalPosition -= UpDirection * snapDistance; // Remain snapped to the ground
 					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized(); // Update world direction
@@ -1642,12 +1663,13 @@ namespace Project.Gameplay
 			isAccelerationJumpQueued = false;
 			Lockon.ResetLockonTarget();
 
-			if (!Stage.IsLevelIngame || IsCountdownActive) return; // Return early when not ingame
+			if (IsCountdownActive) return;
 			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			ResetActionState();
-
 			JustLandedOnGround = true;
+
+			if (!Stage.IsLevelIngame) return; // Return early when not ingame
 			CheckLandingBoost(); // Landing boost skill
 
 			// Play FX
@@ -1783,13 +1805,11 @@ namespace Project.Gameplay
 
 					if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
 					{
-						float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi) * .4f, 0f, 1f); // Arbitrary formula that works well
+						float speedClamp = Mathf.Clamp(1.0f - wallDelta / Mathf.Pi * .4f, 0f, 1f); // Arbitrary formula that works well
 						if (GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
 							MoveSpeed *= speedClamp;
 					}
 				}
-				else if (ActionState == ActionStates.JumpDash)
-					Effect.StopTrailFX();
 			}
 		}
 

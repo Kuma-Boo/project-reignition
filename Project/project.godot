@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Sonic and the Secret Rings Remake"
 config/description="A fan-remake of the 2007 Nintendo Wii title \"Sonic and the Secret Rings.\""
-config/version="0.0.1b"
+config/version="0.0.3"
 config/tags=PackedStringArray("active", "c#")
 run/main_scene="res://interface/boot/Boot.tscn"
 config/features=PackedStringArray("4.2", "C#")
@@ -156,13 +156,13 @@ button_action={
 button_speedbreak={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":88,"physical_keycode":0,"key_label":0,"unicode":120,"echo":false,"script":null)
-, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":2,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":10,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
 button_timebreak={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":90,"physical_keycode":0,"key_label":0,"unicode":122,"echo":false,"script":null)
-, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":3,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":9,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
 button_pause={
@@ -230,7 +230,7 @@ escape={
 [internationalization]
 
 locale/translation_remaps={
-"res://interface/font/Status Numbers en.fnt": PackedStringArray("res://interface/font/Status Numbers de.fnt:de", "res://interface/font/Status Numbers it.fnt:it"),
+"res://interface/font/bitmap fonts/Status Numbers en.fnt": PackedStringArray("res://interface/font/bitmap fonts/Status Numbers de.fnt:de", "res://interface/font/bitmap fonts/Status Numbers it.fnt:it"),
 "res://interface/gameplay/pause/texture/text/pause text en.png": PackedStringArray("res://interface/gameplay/pause/texture/text/paues text es.png:es", "res://interface/gameplay/pause/texture/text/pause text de.png:de", "res://interface/gameplay/pause/texture/text/pause text fr.png:fr", "res://interface/gameplay/pause/texture/text/pause text it.png:it", "res://interface/gameplay/pause/texture/text/pause text ja.png:ja"),
 "res://interface/gameplay/pause/texture/text/status/status common en.png": PackedStringArray("res://interface/gameplay/pause/texture/text/status/status common ja.png:ja"),
 "res://interface/gameplay/pause/texture/text/status/status en.png": PackedStringArray("res://interface/gameplay/pause/texture/text/status/status de.png:de", "res://interface/gameplay/pause/texture/text/status/status es.png:es", "res://interface/gameplay/pause/texture/text/status/status fr.png:fr", "res://interface/gameplay/pause/texture/text/status/status it.png:it", "res://interface/gameplay/pause/texture/text/status/status ja.png:ja"),
@@ -285,15 +285,18 @@ project/assembly_name="Sonic Remake Project"
 [physics]
 
 3d/physics_engine="JoltPhysics3D"
+jolt_3d/collisions/areas_detect_static_bodies=true
 
 [rendering]
 
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=0
 reflections/sky_reflections/texture_array_reflections=false
 reflections/sky_reflections/ggx_samples=8
 reflections/reflection_atlas/reflection_size=64
 reflections/reflection_atlas/reflection_size.mobile=32
-environment/ssao/half_size=false
-environment/ssil/half_size=false
+environment/screen_space_reflection/roughness_quality=0
+environment/subsurface_scattering/subsurface_scattering_quality=0
 anti_aliasing/quality/screen_space_aa=1
 mesh_lod/lod_change/threshold_pixels=0.1
 

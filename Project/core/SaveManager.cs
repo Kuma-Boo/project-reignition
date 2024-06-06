@@ -7,17 +7,23 @@ namespace Project.Core
 {
 	public partial class SaveManager : Node
 	{
+		public static SaveManager Instance;
+
 		private const string SAVE_DIRECTORY = "user://";
+
+		[Signal]
+		public delegate void ConfigAppliedEventHandler();
 
 		public override void _EnterTree()
 		{
+			Instance = this;
+
 			LoadConfig();
 			LoadGameData();
 
 			if (OS.IsDebugBuild()) // Editor build, use custom configuration
 			{
 				// Default debug settings for testing from the editor.
-				Config.screenResolution = 3;
 				Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
 				Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
 				Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
@@ -37,10 +43,13 @@ namespace Project.Core
 		public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
 		private const string CONFIG_FILE_NAME = "config.cfg";
 
+		#region Enums
 		public enum ControllerType
 		{
 			PlayStation, // Use PlayStation button prompts
 			Xbox, // Use XBox button prompts
+			Nintendo, // Use Nintendo button prompts
+			Steam, // Use Steam Deck button prompts
 			Count
 		}
 		public enum VoiceLanguage
@@ -59,6 +68,14 @@ namespace Project.Core
 			Spanish,
 			Count
 		}
+		public enum QualitySetting
+		{
+			DISABLED,
+			LOW,
+			MEDIUM,
+			HIGH,
+			COUNT
+		}
 		private enum AudioBuses
 		{
 			MASTER,
@@ -67,7 +84,7 @@ namespace Project.Core
 			VOICE,
 			COUNT
 		}
-		public static readonly Vector2I[] SCREEN_RESOLUTIONS =
+		public static readonly Vector2I[] WINDOW_SIZES =
 		{
 			new(640, 360), // 360p
 			new(854, 480), // 480p
@@ -77,14 +94,23 @@ namespace Project.Core
 			new(2560, 1440), // 1440p
 			new(3840, 2160), // 4K
 		};
+		#endregion
 
 		public partial class ConfigData : GodotObject
 		{
 			// Video
-			public bool useVsync;
+			public int targetDisplay = DisplayServer.GetPrimaryScreen();
+			public int windowSize = 3; // Defaults to one lower than 1080p
 			public bool useFullscreen = true;
 			public bool useExclusiveFullscreen;
-			public int screenResolution = 4; // Defaults to 1080p
+			public bool useVsync;
+			public int renderScale = 100;
+			public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
+			public int antiAliasing = 1; // Default to FXAA
+			public bool useHDBloom = true;
+			public QualitySetting softShadowQuality = QualitySetting.MEDIUM;
+			public QualitySetting postProcessingQuality = QualitySetting.MEDIUM;
+			public QualitySetting reflectionQuality = QualitySetting.HIGH;
 
 			// Audio
 			public bool isMasterMuted;
@@ -112,10 +138,20 @@ namespace Project.Core
 				Dictionary dictionary = new()
 				{
 					// Video
-					{ nameof(useVsync), useVsync },
+					{ nameof(targetDisplay), targetDisplay },
+					{ nameof(windowSize), windowSize },
 					{ nameof(useFullscreen), useFullscreen },
 					{ nameof(useExclusiveFullscreen), useExclusiveFullscreen },
-					{ nameof(screenResolution), screenResolution },
+					{ nameof(useVsync), useVsync },
+
+					{ nameof(renderScale), renderScale },
+					{ nameof(resizeMode), (int)resizeMode },
+					{ nameof(antiAliasing), antiAliasing },
+					{ nameof(useHDBloom), useHDBloom },
+					{ nameof(softShadowQuality), (int)softShadowQuality },
+					{ nameof(postProcessingQuality), (int)postProcessingQuality },
+					{ nameof(reflectionQuality), (int)reflectionQuality },
+
 
 					// Audio
 					{ nameof(isMasterMuted), isMasterMuted },
@@ -144,14 +180,31 @@ namespace Project.Core
 			public void FromDictionary(Dictionary dictionary)
 			{
 				// Video
-				if (dictionary.TryGetValue(nameof(useVsync), out Variant var))
-					useVsync = (bool)var;
+				if (dictionary.TryGetValue(nameof(targetDisplay), out Variant var))
+					targetDisplay = (int)var;
 				if (dictionary.TryGetValue(nameof(useFullscreen), out var))
 					useFullscreen = (bool)var;
 				if (dictionary.TryGetValue(nameof(useExclusiveFullscreen), out var))
 					useExclusiveFullscreen = (bool)var;
-				if (dictionary.TryGetValue(nameof(screenResolution), out var))
-					screenResolution = (int)var;
+				if (dictionary.TryGetValue(nameof(windowSize), out var))
+					windowSize = (int)var;
+				if (dictionary.TryGetValue(nameof(useVsync), out var))
+					useVsync = (bool)var;
+
+				if (dictionary.TryGetValue(nameof(renderScale), out var))
+					renderScale = (int)var;
+				if (dictionary.TryGetValue(nameof(resizeMode), out var))
+					resizeMode = (RenderingServer.ViewportScaling3DMode)(int)var;
+				if (dictionary.TryGetValue(nameof(antiAliasing), out var))
+					antiAliasing = (int)var;
+				if (dictionary.TryGetValue(nameof(useHDBloom), out var))
+					useHDBloom = (bool)var;
+				if (dictionary.TryGetValue(nameof(softShadowQuality), out var))
+					softShadowQuality = (QualitySetting)(int)var;
+				if (dictionary.TryGetValue(nameof(postProcessingQuality), out var))
+					postProcessingQuality = (QualitySetting)(int)var;
+				if (dictionary.TryGetValue(nameof(reflectionQuality), out var))
+					reflectionQuality = (QualitySetting)(int)var;
 
 				if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
 					isMasterMuted = (bool)var;
@@ -228,18 +281,93 @@ namespace Project.Core
 			ApplyInputMap();
 			ApplyLocalization();
 
-			DisplayServer.WindowSetVsyncMode(Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled);
-
+			// Display settings
+			DisplayServer.WindowMode targetMode = DisplayServer.WindowMode.Windowed;
 			if (Config.useFullscreen)
-				DisplayServer.WindowSetMode(Config.useExclusiveFullscreen ? DisplayServer.WindowMode.ExclusiveFullscreen : DisplayServer.WindowMode.Fullscreen);
-			else
-				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
-			DisplayServer.WindowSetSize(SCREEN_RESOLUTIONS[Config.screenResolution]);
+				targetMode = Config.useExclusiveFullscreen ? DisplayServer.WindowMode.ExclusiveFullscreen : DisplayServer.WindowMode.Fullscreen;
+			if (DisplayServer.WindowGetMode() != targetMode)
+				DisplayServer.WindowSetMode(targetMode);
+			if (!Config.useFullscreen)
+				DisplayServer.WindowSetSize(WINDOW_SIZES[Config.windowSize]);
+
+			DisplayServer.VSyncMode targetVSyncMode = Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
+			if (DisplayServer.WindowGetVsyncMode() != targetVSyncMode)
+				DisplayServer.WindowSetVsyncMode(targetVSyncMode);
+
+			Config.targetDisplay = Mathf.Clamp(Config.targetDisplay, 0, DisplayServer.GetScreenCount());
+			if (Config.targetDisplay != DisplayServer.WindowGetCurrentScreen())
+				DisplayServer.WindowSetCurrentScreen(Config.targetDisplay);
+
+			// Quality settings
+			Rid viewportRid = Runtime.Instance.GetViewport().GetViewportRid();
+
+			// Update rendering mode/scale
+			RenderingServer.ViewportSetScaling3DScale(viewportRid, Config.renderScale * .01f);
+			RenderingServer.ViewportSetScaling3DMode(viewportRid, Config.resizeMode);
+
+			// Update anti-aliasing
+			RenderingServer.ViewportScreenSpaceAA targetSSAA = RenderingServer.ViewportScreenSpaceAA.Disabled;
+			RenderingServer.ViewportMsaa targetMSAA = RenderingServer.ViewportMsaa.Disabled;
+			if (Config.antiAliasing == 1) // Use FXAA
+				targetSSAA = RenderingServer.ViewportScreenSpaceAA.Fxaa;
+			else if (Config.antiAliasing == 2) // Use MSAA
+				targetMSAA = RenderingServer.ViewportMsaa.Msaa2X;
+			else if (Config.antiAliasing == 3)
+				targetMSAA = RenderingServer.ViewportMsaa.Msaa4X;
+			else if (Config.antiAliasing == 4)
+				targetMSAA = RenderingServer.ViewportMsaa.Msaa8X;
+
+			RenderingServer.ViewportSetScreenSpaceAA(viewportRid, targetSSAA);
+			RenderingServer.ViewportSetMsaa3D(viewportRid, targetMSAA);
+
+			RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.useHDBloom);
+
+			int targetShadowAtlasSize = 4096;
+			bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.HIGH;
+			RenderingServer.ShadowQuality targetSoftShadowQuality = RenderingServer.ShadowQuality.Hard;
+			switch (Config.softShadowQuality)
+			{
+				case QualitySetting.LOW:
+					targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftLow;
+					break;
+				case QualitySetting.MEDIUM:
+					targetShadowAtlasSize = 4096;
+					targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftMedium;
+					break;
+				case QualitySetting.HIGH:
+					targetShadowAtlasSize = 8192;
+					targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftHigh;
+					break;
+			}
+
+			RenderingServer.DirectionalShadowAtlasSetSize(targetShadowAtlasSize, use16BitShadowAtlas);
+			RenderingServer.ViewportSetPositionalShadowAtlasSize(viewportRid, targetShadowAtlasSize, use16BitShadowAtlas);
+			RenderingServer.DirectionalSoftShadowFilterSetQuality(targetSoftShadowQuality);
+			RenderingServer.PositionalSoftShadowFilterSetQuality(targetSoftShadowQuality);
+
+			switch (Config.postProcessingQuality)
+			{
+				case QualitySetting.LOW:
+					RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Low, true, .5f, 2, 50, 300);
+					RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Low, true, .5f, 2, 50, 300);
+					break;
+				case QualitySetting.MEDIUM:
+					RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Medium, true, .5f, 2, 50, 300);
+					RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Medium, true, .5f, 2, 50, 300);
+					break;
+				case QualitySetting.HIGH:
+					RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.High, false, .5f, 2, 50, 300);
+					RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.High, false, .5f, 2, 50, 300);
+					break;
+			}
+
 
 			SetAudioBusVolume((int)AudioBuses.MASTER, Config.masterVolume, Config.isMasterMuted);
 			SetAudioBusVolume((int)AudioBuses.BGM, Config.bgmVolume, Config.isBgmMuted);
 			SetAudioBusVolume((int)AudioBuses.SFX, Config.sfxVolume, Config.isSfxMuted);
 			SetAudioBusVolume((int)AudioBuses.VOICE, Config.voiceVolume, Config.isVoiceMuted);
+
+			Instance.EmitSignal(SignalName.ConfigApplied);
 		}
 
 

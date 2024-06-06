@@ -76,13 +76,13 @@ namespace Project.Core
 
 			if (Input.IsActionJustPressed("debug_window_small"))
 			{
-				SaveManager.Config.screenResolution = 0;
+				SaveManager.Config.windowSize = 0;
 				SaveManager.ApplyConfig();
 			}
 
 			if (Input.IsActionJustPressed("debug_window_large"))
 			{
-				SaveManager.Config.screenResolution = 3;
+				SaveManager.Config.windowSize = 3;
 				SaveManager.ApplyConfig();
 			}
 
@@ -211,6 +211,9 @@ namespace Project.Core
 
 		/// <summary> Use a custom save. </summary>
 		public bool UseDemoSave { get; private set; }
+
+		public bool IsShaderCompilationEnabled { get; private set; }
+		private void SetShaderCompilation(bool enabled) => IsShaderCompilationEnabled = enabled;
 		#endregion
 
 		#region Gameplay Cheats
@@ -306,7 +309,7 @@ namespace Project.Core
 			if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
 			if (customCheckpoint == null)
 			{
-				GD.PrintErr("No custom checkpoint.");
+				GD.PushWarning("No custom checkpoint.");
 				return;
 			}
 

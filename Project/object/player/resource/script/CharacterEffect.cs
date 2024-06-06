@@ -125,7 +125,7 @@ namespace Project.Gameplay
 		/// Plays water splash sfx and vfx.
 		/// </summary>
 		[Export]
-		private CustomNodes.GroupGpuParticles3D landingWaterParticle;
+		private GroupGpuParticles3D landingWaterParticle;
 		public void PlayLandingWaterFX()
 		{
 			PlayActionSFX(SPLASH_SFX);
@@ -147,7 +147,7 @@ namespace Project.Gameplay
 		[ExportSubgroup("Step VFX")]
 		[Export]
 		/// <summary> Emitters responsible for dust when moving on the ground. </summary>
-		private CustomNodes.GroupGpuParticles3D[] stepEmitters;
+		private GroupGpuParticles3D[] stepEmitters;
 		/// <summary> Index of the current step emitter. </summary>
 		private int currentStepEmitter = -1;
 		/// <summary> Is step dust be emitted? </summary>
@@ -260,7 +260,7 @@ namespace Project.Gameplay
 
 			if (groundKeyIndex != 0) // Avoid being spammed with warnings
 			{
-				GD.PrintErr($"'{collision.Name}' isn't in any sound groups found in CharacterSound.cs.");
+				GD.PushWarning($"'{collision.Name}' isn't in any sound groups found in CharacterSound.cs.");
 				groundKeyIndex = 0; // Default to first key (pavement)
 			}
 		}

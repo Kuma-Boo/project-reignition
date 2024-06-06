@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using Project.Core;
@@ -27,6 +28,7 @@ namespace Project.Gameplay
 			}
 
 			UpdateScore(0, MathModeEnum.Replace);
+			UpdatePostProcessingStatus();
 
 			if (IsControlTest)
 				LevelState = LevelStateEnum.Ingame;
@@ -37,8 +39,11 @@ namespace Project.Gameplay
 
 		public override void _Ready()
 		{
+			if (IsControlTest)
+				return;
+
 			// Fixes obnoxious flickering when testing from the editor
-			if (OS.IsDebugBuild() && !IsControlTest && !TransitionManager.IsTransitionActive)
+			if (OS.IsDebugBuild() && !TransitionManager.IsTransitionActive)
 			{
 				TransitionManager.StartTransition(new()
 				{
@@ -47,6 +52,52 @@ namespace Project.Gameplay
 					disableAutoTransition = true,
 				});
 			}
+
+			InitializeShaders();
+		}
+
+
+		public void UpdatePostProcessingStatus()
+		{
+			bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.DISABLED;
+			Environment.Environment.SsaoEnabled = postProcessingEnabled;
+			Environment.Environment.SsilEnabled = postProcessingEnabled;
+		}
+
+
+		/// <summary> Gets ALL the materials in this stage, then compiles them. </summary>
+		public void InitializeShaders()
+		{
+			if (OS.IsDebugBuild() && !DebugManager.Instance.IsShaderCompilationEnabled)
+				return;
+
+			foreach (Node node in GetChildren(GetTree().Root, new List<Node>()))
+			{
+				if (node is MeshInstance3D)
+				{
+					ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
+					continue;
+				}
+
+				if (node is GpuParticles3D)
+				{
+					GpuParticles3D particles = node as GpuParticles3D;
+					ShaderManager.Instance.QueueMaterial(particles.ProcessMaterial);
+					ShaderManager.Instance.QueueMesh(particles.DrawPass1);
+					continue;
+				}
+			}
+
+			ShaderManager.Instance.StartCompilation();
+		}
+
+
+		private List<Node> GetChildren(Node parent, List<Node> nodes)
+		{
+			nodes.Add(parent);
+			foreach (Node child in parent.GetChildren())
+				nodes = GetChildren(child, nodes);
+			return nodes;
 		}
 
 
@@ -66,7 +117,7 @@ namespace Project.Gameplay
 			{
 				probeFrameCounter++;
 
-				if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH)
+				if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH && !ShaderManager.Instance.IsCompilingShaders)
 				{
 					LevelState = LevelStateEnum.Ingame;
 					TransitionManager.FinishTransition();
@@ -112,7 +163,7 @@ namespace Project.Gameplay
 				rank = 3;
 			else if (CurrentTime <= Data.SilverTime && CurrentScore >= Data.SilverScore) // Silver
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime && CurrentScore >= Data.BronzeScore)
+			else if (CurrentTime <= Data.BronzeTime || CurrentScore >= Data.BronzeScore) // Bronze is easy to get
 				rank = 1;
 
 			if (rank >= 3 && RespawnCount != 0) // Limit to silver if a respawn occured
@@ -296,6 +347,7 @@ namespace Project.Gameplay
 			if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 			CurrentCheckpoint = checkpoint;
+			checkpoint.UpdateCheckpointData();
 			EmitSignal(SignalName.TriggeredCheckpoint);
 		}
 

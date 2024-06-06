@@ -1,18 +1,49 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay;
 
 namespace Project.Interface.Menus
 {
 	public partial class Options : Menu
 	{
 		[Export]
-		public ShaderMaterial menuOverlay;
+		private Control cursor;
 		[Export]
-		public SubViewport menuViewport;
+		private AnimationPlayer cursorAnimator;
 		[Export]
-		public Control cursor;
+		private Control contentContainer;
 
-		private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
+		private int maxSelection;
+		private int scrollOffset;
+		private void CalculateMaxSelection()
+		{
+			// Recalculate max selection
+			switch (currentSubmenu)
+			{
+				case Submenus.Options:
+					maxSelection = 4;
+					break;
+				case Submenus.Video:
+					maxSelection = videoLabels.Length;
+					break;
+				case Submenus.Audio:
+					maxSelection = 4;
+					break;
+				case Submenus.Language:
+					maxSelection = 3;
+					break;
+				case Submenus.Control:
+					maxSelection = 4;
+					break;
+				case Submenus.Mapping:
+					maxSelection = controlMappingOptions.Length;
+					break;
+				case Submenus.Test:
+					maxSelection = 0;
+					break;
+			}
+		}
+
 		private Callable FullscreenToggleCallable => new(this, MethodName.ToggleFullscreen);
 		public static readonly StringName MENU_PARAMETER = "menu_texture";
 
@@ -24,10 +55,9 @@ namespace Project.Interface.Menus
 			Audio,  // Menu for configuring audio volume
 			Language, // Menu for localization and language
 			Control, // Menu for configuring general control settings
-			Mapping, // Menu for configuring input mappings
-			Test // Menu for testing controls
+			Mapping, // Control submenu for configuring input mappings
+			Test // Control submenu for testing controls
 		}
-		private bool IsMovementPage => VerticalSelection <= 3;
 
 		protected override void SetUp()
 		{
@@ -35,18 +65,12 @@ namespace Project.Interface.Menus
 
 			SetUpControlOptions();
 			UpdateLabels();
-			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
+			CalculateMaxSelection();
 			DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 		}
 
-		public override void _ExitTree()
-		{
-			RenderingServer.Singleton.Disconnect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
-			DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
-		}
+		public override void _ExitTree() => DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 
-
-		private void ApplyTexture() => menuOverlay.SetShaderParameter(MENU_PARAMETER, menuViewport.GetTexture());
 		private void ToggleFullscreen()
 		{
 			UpdateLabels();
@@ -65,11 +89,31 @@ namespace Project.Interface.Menus
 
 		protected override void ProcessMenu()
 		{
+			UpdateScrolling();
 			UpdateCursor();
+
 			if (Input.IsActionJustPressed("button_pause"))
 				Select();
 			else
 				base.ProcessMenu();
+
+			if (isPlayerLocked)
+				CallDeferred(MethodName.UpdatePlayerPosition);
+		}
+
+		[Export]
+		private Node3D lockNode;
+		private bool isPlayerLocked;
+		private void LockPlayer() => isPlayerLocked = true;
+		private void UnlockPlayer() => isPlayerLocked = false;
+		private void UpdatePlayerPosition()
+		{
+			CharacterController character = CharacterController.instance;
+
+			Vector3 lockPosition = character.GlobalPosition;
+			lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
+			lockPosition.Z = lockNode.GlobalPosition.Z;
+			character.GlobalPosition = lockPosition;
 		}
 
 
@@ -147,6 +191,7 @@ namespace Project.Interface.Menus
 		{
 			if (currentSubmenu == Submenus.Test) // Cancel test
 			{
+				UnlockPlayer();
 				animator.Play("test_end");
 				currentSubmenu = Submenus.Control;
 			}
@@ -157,6 +202,12 @@ namespace Project.Interface.Menus
 
 		protected override void UpdateSelection()
 		{
+			if (currentSubmenu == Submenus.Test)
+				return;
+
+			if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
+				return;
+
 			if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down")))
 			{
 				UpdateHorizontalSelection();
@@ -164,66 +215,63 @@ namespace Project.Interface.Menus
 			}
 
 			StartSelectionTimer();
-
 			int targetSelection = VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down"));
-			switch (currentSubmenu)
-			{
-				case Submenus.Options:
-					VerticalSelection = WrapSelection(targetSelection, 4);
-					break;
-				case Submenus.Video:
-					VerticalSelection = WrapSelection(targetSelection, 3);
-					break;
-				case Submenus.Audio:
-					VerticalSelection = WrapSelection(targetSelection, 4);
-					break;
-				case Submenus.Language:
-					VerticalSelection = WrapSelection(targetSelection, 3);
-					break;
-				case Submenus.Control:
-					VerticalSelection = WrapSelection(targetSelection, 4);
-					break;
-				case Submenus.Mapping:
-					if (!controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
-						return;
-
-					bool movementPage = IsMovementPage;
-					VerticalSelection = WrapSelection(targetSelection, controlMappingOptions.Length);
-					if (IsMovementPage != movementPage)
-					{
-						animator.Play(IsMovementPage ? "flip-right" : "flip-left");
-						return;
-					}
-
-					break;
-				case Submenus.Test:
-					return;
-			}
+			VerticalSelection = WrapSelection(targetSelection, maxSelection);
 
 			animator.Play("select");
 			animator.Seek(0, true);
+			cursorAnimator.Play("show");
+			cursorAnimator.AnimationSetNext("show", "loop");
+			cursorAnimator.Seek(0, true);
+		}
+
+
+		[Export]
+		private Control scrollBar;
+		private Vector2 scrollBarVelocity;
+		private const float scrollBarSmoothing = .2f;
+		private void UpdateScrolling(bool snap = false)
+		{
+			// Scroll
+			if (!scrollBar.IsVisibleInTree()) return;
+
+			if (maxSelection < 8)
+				scrollOffset = 0;
+			else if (VerticalSelection > scrollOffset + 7)
+				scrollOffset = VerticalSelection - 7;
+			else if (VerticalSelection < scrollOffset)
+				scrollOffset = VerticalSelection;
+
+			float scrollRatio = (float)VerticalSelection / (maxSelection - 1);
+			Vector2 targetPosition = Vector2.Down * 880 * scrollRatio;
+
+			if (snap)
+			{
+				scrollBarVelocity = Vector2.Zero;
+				scrollBar.Position = targetPosition;
+			}
+			else
+				scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
 		}
 
 
 		private void UpdateCursor()
 		{
-			int offset = VerticalSelection;
-			if (currentSubmenu == Submenus.Mapping && !IsMovementPage)
-				offset -= 4;
-
-			cursor.Position = new(0, 300 + offset * 96);
+			int offset = VerticalSelection - scrollOffset;
+			contentContainer.Position = Vector2.Up * scrollOffset * 60;
+			cursor.Position = new(cursor.Position.X, 300 + offset * 60);
 		}
 
 
 		/// <summary> Changes the visible submenu. Called from the page flip animation. </summary>
 		private void UpdateSubmenuVisibility()
 		{
-			UpdateCursor();
+			CalculateMaxSelection();
 			animator.Play(currentSubmenu.ToString().ToLower());
 			animator.Advance(0.0);
 
-			if (currentSubmenu == Submenus.Mapping)
-				animator.Play(IsMovementPage ? "mapping_movement" : "mapping_action");
+			CallDeferred(MethodName.UpdateScrolling, true);
+			CallDeferred(MethodName.UpdateCursor);
 		}
 
 
@@ -235,25 +283,57 @@ namespace Project.Interface.Menus
 		private Label[] languageLabels;
 		[Export]
 		private Label[] controlLabels;
-		private string ON_STRING = "option_on";
-		private string OFF_STRING = "option_off";
+		private string ENABLED_STRING = "option_enable";
+		private string DISABLED_STRING = "option_disable";
+		private string LOW_STRING = "option_low";
+		private string MEDIUM_STRING = "option_medium";
+		private string HIGH_STRING = "option_high";
 		private string MUTE_STRING = "option_mute";
 		private string FULLSCREEN_STRING = "option_fullscreen";
 		private string FULLSCREEN_NORMAL_STRING = "option_normal_fullscreen";
 		private string FULLSCREEN_EXCLUSIVE_STRING = "option_exclusive_fullscreen";
 		private void UpdateLabels()
 		{
-			Vector2I resolution = SaveManager.SCREEN_RESOLUTIONS[SaveManager.Config.screenResolution];
-			videoLabels[0].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
-			videoLabels[1].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
-			videoLabels[2].Text = SaveManager.Config.useVsync ? ON_STRING : OFF_STRING;
+			Vector2I resolution = SaveManager.WINDOW_SIZES[SaveManager.Config.windowSize];
+			videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
+			videoLabels[1].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
+			videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
+			videoLabels[3].Text = SaveManager.Config.useVsync ? ENABLED_STRING : DISABLED_STRING;
+			videoLabels[4].Text = $"{SaveManager.Config.renderScale}%";
+			videoLabels[5].Text = SaveManager.Config.resizeMode.ToString();
+			switch (SaveManager.Config.antiAliasing)
+			{
+				case 0:
+					videoLabels[6].Text = DISABLED_STRING;
+					break;
+				case 1:
+					videoLabels[6].Text = "FXAA";
+					break;
+				case 2:
+					videoLabels[6].Text = "2x MSAA";
+					break;
+				case 3:
+					videoLabels[6].Text = "4x MSAA";
+					break;
+				case 4:
+					videoLabels[6].Text = "8x MSAA";
+					break;
+			}
+			videoLabels[7].Text = SaveManager.Config.useHDBloom ? HIGH_STRING : LOW_STRING;
 
-			audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}%";
+			if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.DISABLED)
+				videoLabels[8].Text = "option_hard_shadows";
+			else
+				videoLabels[8].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
+			videoLabels[9].Text = CalculateQualityString(SaveManager.Config.postProcessingQuality);
+			videoLabels[10].Text = CalculateQualityString(SaveManager.Config.reflectionQuality);
+
+			audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}% ";
 			audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MUTE_STRING : $"{SaveManager.Config.bgmVolume}%";
 			audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MUTE_STRING : $"{SaveManager.Config.sfxVolume}%";
 			audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MUTE_STRING : $"{SaveManager.Config.voiceVolume}%";
 
-			languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? ON_STRING : OFF_STRING;
+			languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? ENABLED_STRING : DISABLED_STRING;
 			languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
 
 			switch (SaveManager.Config.controllerType)
@@ -264,9 +344,31 @@ namespace Project.Interface.Menus
 				case SaveManager.ControllerType.Xbox:
 					controlLabels[0].Text = "option_controller_xbox";
 					break;
+				case SaveManager.ControllerType.Nintendo:
+					controlLabels[0].Text = "option_controller_nintendo";
+					break;
+				case SaveManager.ControllerType.Steam:
+					controlLabels[0].Text = "option_controller_steam";
+					break;
 			}
 
 			controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
+		}
+
+
+		private string CalculateQualityString(SaveManager.QualitySetting setting)
+		{
+			switch (setting)
+			{
+				case SaveManager.QualitySetting.LOW:
+					return LOW_STRING;
+				case SaveManager.QualitySetting.MEDIUM:
+					return MEDIUM_STRING;
+				case SaveManager.QualitySetting.HIGH:
+					return HIGH_STRING;
+			}
+
+			return DISABLED_STRING;
 		}
 
 
@@ -333,34 +435,78 @@ namespace Project.Interface.Menus
 		{
 			if (VerticalSelection == 0)
 			{
+				if (DisplayServer.GetScreenCount() <= 1)
+					return false;
+
+				SaveManager.Config.targetDisplay = WrapSelection(SaveManager.Config.targetDisplay + direction, DisplayServer.GetScreenCount());
+			}
+			else if (VerticalSelection == 1)
+			{
 				int fullscreenResolution = FindLargestWindowResolution() + 1;
 
 				// Switch out of fullscreen mode
 				if (SaveManager.Config.useFullscreen)
 				{
 					SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
-					SaveManager.Config.screenResolution = fullscreenResolution;
+					SaveManager.Config.windowSize = fullscreenResolution;
 				}
 
-				SaveManager.Config.screenResolution += direction;
+				SaveManager.Config.windowSize += direction;
 
 				// Prevent user from choosing an impossible resolution
-				if (SaveManager.Config.screenResolution < 0)
-					SaveManager.Config.screenResolution = fullscreenResolution;
-				else if (SaveManager.Config.screenResolution > fullscreenResolution)
-					SaveManager.Config.screenResolution = 0;
+				if (SaveManager.Config.windowSize < 0)
+					SaveManager.Config.windowSize = fullscreenResolution;
+				else if (SaveManager.Config.windowSize > fullscreenResolution)
+					SaveManager.Config.windowSize = 0;
 
 				// Enter fullscreen mode
-				if (SaveManager.Config.screenResolution == fullscreenResolution)
+				if (SaveManager.Config.windowSize == fullscreenResolution)
 				{
 					SaveManager.Config.useFullscreen = true;
-					SaveManager.Config.screenResolution = FindLargestWindowResolution();
+					SaveManager.Config.windowSize = FindLargestWindowResolution();
 				}
 			}
-			else if (VerticalSelection == 1)
+			else if (VerticalSelection == 2)
 				SaveManager.Config.useExclusiveFullscreen = !SaveManager.Config.useExclusiveFullscreen;
-			else
+			else if (VerticalSelection == 3)
 				SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
+			else if (VerticalSelection == 4)
+			{
+				SaveManager.Config.renderScale += direction * 10;
+				if (SaveManager.Config.renderScale < 50)
+					SaveManager.Config.renderScale = 150;
+				else if (SaveManager.Config.renderScale >= 150)
+					SaveManager.Config.renderScale = 50;
+			}
+			else if (VerticalSelection == 5)
+			{
+				int resizeMode = (int)SaveManager.Config.resizeMode;
+				resizeMode = WrapSelection(resizeMode + direction, (int)RenderingServer.ViewportScaling3DMode.Max);
+				SaveManager.Config.resizeMode = (RenderingServer.ViewportScaling3DMode)resizeMode;
+			}
+			else if (VerticalSelection == 6) // TODO Change this to 5 when upgrading to godot v4.3
+				SaveManager.Config.antiAliasing = WrapSelection(SaveManager.Config.antiAliasing + direction, 3);
+			else if (VerticalSelection == 7)
+				SaveManager.Config.useHDBloom = !SaveManager.Config.useHDBloom;
+			else if (VerticalSelection == 8)
+			{
+				int softShadowQuality = (int)SaveManager.Config.softShadowQuality;
+				softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+				SaveManager.Config.softShadowQuality = (SaveManager.QualitySetting)softShadowQuality;
+			}
+			else if (VerticalSelection == 9)
+			{
+				int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
+				postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+				SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
+				StageSettings.instance.UpdatePostProcessingStatus();
+			}
+			else if (VerticalSelection == 10)
+			{
+				int reflectionQuality = (int)SaveManager.Config.reflectionQuality;
+				reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+				SaveManager.Config.reflectionQuality = (SaveManager.QualitySetting)reflectionQuality;
+			}
 
 			return true;
 		}
@@ -368,9 +514,9 @@ namespace Project.Interface.Menus
 
 		private int FindLargestWindowResolution()
 		{
-			for (int i = SaveManager.SCREEN_RESOLUTIONS.Length - 1; i >= 0; i--)
+			for (int i = SaveManager.WINDOW_SIZES.Length - 1; i >= 0; i--)
 			{
-				if (SaveManager.SCREEN_RESOLUTIONS[i] >= DisplayServer.ScreenGetSize())
+				if (SaveManager.WINDOW_SIZES[i] >= DisplayServer.ScreenGetSize())
 					continue;
 
 				return i;
@@ -454,10 +600,6 @@ namespace Project.Interface.Menus
 			{
 				int type = WrapSelection((int)SaveManager.Config.controllerType + direction, (int)SaveManager.ControllerType.Count);
 				SaveManager.Config.controllerType = (SaveManager.ControllerType)type;
-
-				foreach (ControlOption controlOption in controlMappingOptions) // Force redraw to update correct sprites
-					controlOption.RedrawBinding();
-
 				return true;
 			}
 			else if (VerticalSelection == 1)
@@ -474,13 +616,11 @@ namespace Project.Interface.Menus
 
 		private void ConfirmVideoOption()
 		{
-			if (VerticalSelection == 0) // Toggle fullscreen mode
+			if (VerticalSelection == 1) // Toggle fullscreen mode
 			{
 				SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
-				SaveManager.Config.screenResolution = FindLargestWindowResolution();
+				SaveManager.Config.windowSize = FindLargestWindowResolution();
 			}
-			else if (VerticalSelection == 1)
-				SlideVideoOption(1);
 			else
 				SlideVideoOption(1);
 

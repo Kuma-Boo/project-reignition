@@ -1,30 +1,32 @@
-[gd_scene load_steps=52 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=56 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
-[ext_resource type="Material" uid="uid://jpwdaxh0ckoc" path="res://interface/menu/options/environment/material/Menu Overlay.tres" id="2_g15f7"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
 [ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
-[ext_resource type="Resource" uid="uid://dt1prgn1x2xgg" path="res://interface/menu/options/camera/OptionCamera.tres" id="3_jnp5r"]
+[ext_resource type="Resource" uid="uid://dt1prgn1x2xgg" path="res://interface/menu/options/resource/OptionCamera.tres" id="3_jnp5r"]
 [ext_resource type="Resource" uid="uid://bmc5r7uecj7vi" path="res://resource/level data/Options.tres" id="4_3wn11"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/Camera.tscn" id="5_1klrf"]
 [ext_resource type="AudioStream" uid="uid://pl5vnbme4wmg" path="res://sound/sfx/system/special book select.wav" id="5_boind"]
 [ext_resource type="AudioStream" uid="uid://dgybrdt0i5sok" path="res://sound/sfx/system/special book open.wav" id="5_f4e4n"]
 [ext_resource type="PackedScene" uid="uid://cgpnlulbvy8vl" path="res://interface/menu/options/environment/model/Collision.gltf" id="5_w565g"]
+[ext_resource type="Texture2D" uid="uid://bp7cfd20ijmmn" path="res://interface/menu/options/resource/scrollbar.png" id="6_7p8ra"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="6_j7003"]
 [ext_resource type="PackedScene" uid="uid://cskupol7nua05" path="res://interface/menu/options/environment/model/ControlBook.gltf" id="6_jppea"]
+[ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="6_v27kb"]
 [ext_resource type="AudioStream" uid="uid://6c8swxoc7r2i" path="res://sound/sfx/system/page flip.wav" id="7_0sy78"]
 [ext_resource type="PackedScene" uid="uid://45i65dldyv8w" path="res://interface/menu/options/environment/model/Page.gltf" id="7_37jow"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="7_f15lq"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="8_wksl8"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="8_xb0ie"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="12_qlup6"]
-[ext_resource type="FontFile" uid="uid://dakokhex1lp8k" path="res://interface/font/otf/Greco Std B.otf" id="13_tx5t6"]
 [ext_resource type="PackedScene" uid="uid://c1806dq45a0kr" path="res://interface/menu/options/ControlOption.tscn" id="14_itn8j"]
 [ext_resource type="AudioStream" uid="uid://b5d5wemyoi5ap" path="res://sound/ost/treasure disc/4 MISGIVING.mp3" id="18_fr2tm"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="19_agawd"]
-[ext_resource type="Shader" path="res://interface/menu/options/environment/shader/OptionsCursor.gdshader" id="23_e741a"]
+[ext_resource type="LabelSettings" uid="uid://dnmqaq1ahkjk3" path="res://interface/font/HeaderLabelSettings.tres" id="21_egfsq"]
+[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="22_cq4kf"]
+[ext_resource type="LabelSettings" uid="uid://coxpm433wf04c" path="res://interface/font/OptionLabelSettings.tres" id="23_616uf"]
+[ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="27_30n1q"]
 
 [sub_resource type="Curve3D" id="Curve3D_eqptd"]
 _data = {
@@ -81,15 +83,98 @@ tonemap_white = 1.2
 ssao_enabled = true
 ssil_enabled = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a3jsd"]
-shader = ExtResource("23_e741a")
+[sub_resource type="Animation" id="Animation_voryi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1e-05)]
+}
+
+[sub_resource type="Animation" id="Animation_bfdgt"]
+resource_name = "hide"
+length = 0.30001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 2), Vector2(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_peicv"]
+resource_name = "loop"
+length = 0.40001
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.3), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_jya3g"]
+resource_name = "show"
+length = 0.30001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 0), Vector2(1, 2), Vector2(1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["loop", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fowp2"]
+_data = {
+"RESET": SubResource("Animation_voryi"),
+"hide": SubResource("Animation_bfdgt"),
+"loop": SubResource("Animation_peicv"),
+"show": SubResource("Animation_jya3g")
+}
 
 [sub_resource type="Animation" id="Animation_w5dih"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Options:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -101,7 +186,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/path = NodePath("MenuBase/ContentClip/Content/Language:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -113,7 +198,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/path = NodePath("MenuBase/ContentClip/Content/Audio:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -125,7 +210,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Video:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -137,7 +222,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -149,7 +234,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Viewport/MenuViewport/Base/Control/PG2:visible")
+tracks/5/path = NodePath("MenuBase/ContentClip/Content/Control/Mapping:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -161,7 +246,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Viewport/MenuViewport/Base/Control/PG1:visible")
+tracks/6/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -173,7 +258,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Viewport/MenuViewport/Base/Control/PG2/MovementControls:visible")
+tracks/7/path = NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -185,50 +270,134 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls:visible")
+tracks/8/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [4]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
+tracks/9/path = NodePath("ControlBook/PlayerSpawn/Player:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [4]
+"update": 0,
+"values": [Vector3(0, 0, -6)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("ControlBook/PlayerSpawn/Player:position")
+tracks/10/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, -6)]
+"update": 1,
+"values": [false]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/11/path = NodePath("MenuBase/Header:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
+"values": [true]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("MenuBase/Header:text")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["sys_options"]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("MenuBase/Cursor:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
 "values": [false]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_24v0k"]
@@ -237,7 +406,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Options:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -249,7 +418,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/path = NodePath("MenuBase/ContentClip/Content/Language:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -261,7 +430,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/path = NodePath("MenuBase/ContentClip/Content/Audio:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -273,7 +442,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Video:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -285,7 +454,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -293,6 +462,30 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MenuBase/Header:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MenuBase/Header:text")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_audio"]
 }
 
 [sub_resource type="Animation" id="Animation_krkl8"]
@@ -337,7 +530,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Options:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -349,7 +542,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/path = NodePath("MenuBase/ContentClip/Content/Language:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -361,7 +554,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/path = NodePath("MenuBase/ContentClip/Content/Audio:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -373,7 +566,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Video:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -385,7 +578,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -397,7 +590,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Viewport/MenuViewport/Base/Control/PG2:visible")
+tracks/5/path = NodePath("MenuBase/ContentClip/Content/Control/Mapping:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -409,10 +602,106 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Viewport/MenuViewport/Base/Control/PG1:visible")
+tracks/6/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("MenuBase/Header:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("MenuBase/Header:text")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_control"]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("MenuBase/Cursor:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -489,7 +778,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Options:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -501,7 +790,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/path = NodePath("MenuBase/ContentClip/Content/Language:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -513,7 +802,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/path = NodePath("MenuBase/ContentClip/Content/Audio:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -525,7 +814,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Video:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -537,7 +826,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -545,6 +834,30 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MenuBase/Header:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MenuBase/Header:text")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_lang"]
 }
 
 [sub_resource type="Animation" id="Animation_x1umr"]
@@ -553,7 +866,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Control/PG1:visible")
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -565,7 +878,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Control/PG2:visible")
+tracks/1/path = NodePath("MenuBase/ContentClip/Content/Control/Mapping:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -574,61 +887,17 @@ tracks/1/keys = {
 "update": 1,
 "values": [true]
 }
-
-[sub_resource type="Animation" id="Animation_5yeyn"]
-resource_name = "mapping_action"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Control/PG2/MovementControls:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
-}
-
-[sub_resource type="Animation" id="Animation_a7u48"]
-resource_name = "mapping_movement"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Control/PG2/MovementControls:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_kujvr"]
@@ -637,7 +906,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Options:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -649,7 +918,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/path = NodePath("MenuBase/ContentClip/Content/Language:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -661,7 +930,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/path = NodePath("MenuBase/ContentClip/Content/Audio:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -673,7 +942,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Video:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -685,10 +954,46 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MenuBase/Header:text")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["sys_options"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MenuBase/Header:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(200, 192)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -771,7 +1076,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -791,6 +1096,78 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MenuBase/Header:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("MenuBase/Cursor:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_pjjbd"]
@@ -836,27 +1213,13 @@ tracks/2/keys = {
 "method": &"Activate"
 }]
 }
-tracks/3/type = "method"
+tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ControlBook/Collision/Wall")
+tracks/3/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Deactivate"
-}]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
@@ -869,7 +1232,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Viewport/MenuViewport/Base/Options:visible")
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Options:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -881,7 +1244,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Viewport/MenuViewport/Base/Language:visible")
+tracks/1/path = NodePath("MenuBase/ContentClip/Content/Language:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -893,7 +1256,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Viewport/MenuViewport/Base/Audio:visible")
+tracks/2/path = NodePath("MenuBase/ContentClip/Content/Audio:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -905,7 +1268,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Viewport/MenuViewport/Base/Video:visible")
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Video:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -917,7 +1280,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Viewport/MenuViewport/Base/Control:visible")
+tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -925,6 +1288,42 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MenuBase/Header:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MenuBase/Header:text")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_video"]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6r0td"]
@@ -938,8 +1337,6 @@ _data = {
 "flip-right": SubResource("Animation_fjvqe"),
 "language": SubResource("Animation_oqo83"),
 "mapping": SubResource("Animation_x1umr"),
-"mapping_action": SubResource("Animation_5yeyn"),
-"mapping_movement": SubResource("Animation_a7u48"),
 "options": SubResource("Animation_kujvr"),
 "select": SubResource("Animation_k2y4w"),
 "test": SubResource("Animation_47ygc"),
@@ -947,7 +1344,7 @@ _data = {
 "video": SubResource("Animation_q1gli")
 }
 
-[node name="Options" type="Control" node_paths=PackedStringArray("menuViewport", "cursor", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "controlMappingOptions", "bgm", "animator")]
+[node name="Options" type="Control" node_paths=PackedStringArray("cursor", "cursorAnimator", "contentContainer", "lockNode", "scrollBar", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "controlMappingOptions", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -955,14 +1352,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_yejdm")
-menuOverlay = ExtResource("2_g15f7")
-menuViewport = NodePath("Viewport/MenuViewport")
-cursor = NodePath("Viewport/MenuViewport/Base/Cursor")
-videoLabels = [NodePath("Viewport/MenuViewport/Base/Video/RSide/Options/ResolutionLabel"), NodePath("Viewport/MenuViewport/Base/Video/RSide/Options/FullscreenLabel"), NodePath("Viewport/MenuViewport/Base/Video/RSide/Options/VsyncLabel")]
-audioLabels = [NodePath("Viewport/MenuViewport/Base/Audio/RSide/Options/MainLabel"), NodePath("Viewport/MenuViewport/Base/Audio/RSide/Options/MusicLabel"), NodePath("Viewport/MenuViewport/Base/Audio/RSide/Options/SFXLabel"), NodePath("Viewport/MenuViewport/Base/Audio/RSide/Options/VoiceLabel")]
-languageLabels = [NodePath("Viewport/MenuViewport/Base/Language/RSide/Options/UseSubtitleLabel"), NodePath("Viewport/MenuViewport/Base/Language/RSide/Options/TextLabel"), NodePath("Viewport/MenuViewport/Base/Language/RSide/Options/VoiceLabel")]
-controlLabels = [NodePath("Viewport/MenuViewport/Base/Control/PG1/RSide/Options/ControllerLabel"), NodePath("Viewport/MenuViewport/Base/Control/PG1/RSide/Options/DeadzoneLabel")]
-controlMappingOptions = [NodePath("Viewport/MenuViewport/Base/Control/PG2/MovementControls/MoveUp"), NodePath("Viewport/MenuViewport/Base/Control/PG2/MovementControls/MoveDown"), NodePath("Viewport/MenuViewport/Base/Control/PG2/MovementControls/MoveLeft"), NodePath("Viewport/MenuViewport/Base/Control/PG2/MovementControls/MoveRight"), NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls/Jump"), NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls/Action"), NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls/SpeedBreak"), NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls/TimeBreak"), NodePath("Viewport/MenuViewport/Base/Control/PG2/ActionControls/Pause")]
+cursor = NodePath("MenuBase/Cursor")
+cursorAnimator = NodePath("MenuBase/Cursor/AnimationPlayer")
+contentContainer = NodePath("MenuBase/ContentClip/Content")
+lockNode = NodePath("ControlBook/JumpStart/JumpStart")
+scrollBar = NodePath("MenuBase/ScrollBar/ScrollPosition")
+videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/DisplayLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/WindowSizeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FullscreenLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/VsyncLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/RenderScaleLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ResizeModeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/AntiAliasingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/BloomLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ShadowLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/PostProcessingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ReflectionLabel")]
+audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel")]
+languageLabels = [NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseSubtitleLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/TextLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/VoiceLabel")]
+controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/DeadzoneLabel")]
+controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause")]
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
@@ -1006,15 +1405,10 @@ visible = false
 
 [node name="StaticBody3D" parent="ControlBook/Collision/Floor" index="0" groups=["floor"]]
 
-[node name="Wall" parent="ControlBook/Collision" index="1"]
-script = ExtResource("12_qlup6")
-
-[node name="StaticBody3D" parent="ControlBook/Collision/Wall" index="0" groups=["wall"]]
-
 [node name="ControlBook" parent="ControlBook" instance=ExtResource("6_jppea")]
 
 [node name="Skeleton3D" parent="ControlBook/ControlBook/BookRoot" index="0"]
-bones/0/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
+bones/0/rotation = Quaternion(-0.5, -0.5, -0.5, 0.5)
 bones/2/rotation = Quaternion(-0.707107, -1.48754e-08, -1.48754e-08, 0.707107)
 bones/3/rotation = Quaternion(0.707106, 1.72081e-08, 1.72081e-08, 0.707107)
 bones/4/rotation = Quaternion(3.23117e-08, 0.707106, 0.707107, 5.3385e-08)
@@ -1071,7 +1465,7 @@ blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
 [node name="Page2" parent="ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.298, 0)
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.575, 0)
 
 [node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page2" index="0"]
 layers = 2
@@ -1089,11 +1483,7 @@ cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="MenuOverlay" parent="ControlBook/ControlBook" index="1"]
-transparency = 1.0
-cast_shadow = 0
-
-[node name="AnimationPlayer" parent="ControlBook/ControlBook" index="2"]
+[node name="AnimationPlayer" parent="ControlBook/ControlBook" index="1"]
 autoplay = "open"
 
 [node name="Path" type="Node3D" parent="ControlBook"]
@@ -1136,7 +1526,7 @@ draw_pass_1 = SubResource("QuadMesh_md2q0")
 environment = SubResource("Environment_xk4ou")
 
 [node name="PlayerSpawn" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 5, 0)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 0)
 script = ExtResource("4_g52h3")
 
 [node name="Player" parent="ControlBook/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("3_4o0co")]
@@ -1147,8 +1537,17 @@ Camera = NodePath("../Camera")
 
 [node name="Camera" parent="ControlBook/PlayerSpawn" instance=ExtResource("5_1klrf")]
 
+[node name="JumpStart" type="Node3D" parent="ControlBook"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 6)
+
+[node name="JumpStart" type="Node3D" parent="ControlBook/JumpStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, -4.3, 6)
+script = ExtResource("8_7asuc")
+jumpHeight = 2.0
+autoAlign = true
+
 [node name="JumpEnd" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 0.2, 0)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 0.2, 0)
 
 [node name="JumpEnd" type="Node3D" parent="ControlBook/JumpEnd"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54972e-06, 2, 18)
@@ -1156,748 +1555,783 @@ script = ExtResource("8_7asuc")
 jumpHeight = 15.0
 autoAlign = true
 
-[node name="JumpStart" type="Node3D" parent="ControlBook"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.5, 5, 6)
-
-[node name="JumpStart" type="Node3D" parent="ControlBook/JumpStart"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, -4, 6)
-script = ExtResource("8_7asuc")
-jumpHeight = 2.0
-autoAlign = true
-
-[node name="Viewport" type="SubViewportContainer" parent="."]
-layout_mode = 0
-offset_top = 1216.0
-offset_right = 2048.0
-offset_bottom = 2240.0
-
-[node name="MenuViewport" type="SubViewport" parent="Viewport"]
-disable_3d = true
-transparent_bg = true
-handle_input_locally = false
-gui_disable_input = true
-positional_shadow_atlas_size = 0
-positional_shadow_atlas_quad_0 = 0
-positional_shadow_atlas_quad_1 = 0
-positional_shadow_atlas_quad_2 = 0
-positional_shadow_atlas_quad_3 = 0
-size = Vector2i(2000, 1000)
-render_target_update_mode = 4
-
-[node name="Base" type="Control" parent="Viewport/MenuViewport"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Options" type="Control" parent="Viewport/MenuViewport/Base"]
-modulate = Color(0.6, 0, 0, 1)
+[node name="MenuBase" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 192.0
+offset_right = -192.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(960, 540)
 
-[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Options"]
+[node name="Header" type="Label" parent="MenuBase"]
 layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -900.0
-offset_top = 160.0
-offset_right = -100.0
-offset_bottom = 160.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide"]
-layout_mode = 1
-offset_top = 20.0
-offset_right = 347.0
-offset_bottom = 101.0
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 80
+offset_left = 200.0
+offset_top = 192.0
+offset_right = 840.0
+offset_bottom = 272.0
 text = "sys_options"
-horizontal_alignment = 1
+label_settings = ExtResource("21_egfsq")
 vertical_alignment = 1
 uppercase = true
 
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Options/RSide"]
+[node name="HorizontalLine" type="NinePatchRect" parent="MenuBase"]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 272.0
+offset_right = 1344.0
+offset_bottom = 284.0
+texture = ExtResource("6_v27kb")
+region_rect = Rect2(436, 136, 28, 12)
+patch_margin_left = 8
+patch_margin_right = 8
+
+[node name="Cursor" type="NinePatchRect" parent="MenuBase"]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 300.0
+offset_right = 1344.0
+offset_bottom = 350.0
+scale = Vector2(1, 1e-05)
+pivot_offset = Vector2(0, 25)
+texture = ExtResource("22_cq4kf")
+region_rect = Rect2(136, 96, 120, 16)
+patch_margin_left = 10
+patch_margin_top = 4
+patch_margin_right = 9
+patch_margin_bottom = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MenuBase/Cursor"]
+libraries = {
+"": SubResource("AnimationLibrary_fowp2")
+}
+
+[node name="ContentClip" type="ColorRect" parent="MenuBase"]
+clip_children = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
+offset_top = 280.0
+offset_bottom = -280.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
 
-[node name="VideoLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_video"
-vertical_alignment = 1
-uppercase = true
+[node name="Content" type="Control" parent="MenuBase/ContentClip"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 552.0
+grow_horizontal = 2
 
-[node name="AudioLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_audio"
-vertical_alignment = 1
-uppercase = true
-
-[node name="LanguageLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_lang"
-vertical_alignment = 1
-uppercase = true
-
-[node name="ControlLabel" type="Label" parent="Viewport/MenuViewport/Base/Options/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_control"
-vertical_alignment = 1
-uppercase = true
-
-[node name="Video" type="Control" parent="Viewport/MenuViewport/Base"]
-visible = false
-modulate = Color(0.6, 0, 0, 1)
+[node name="Options" type="Control" parent="MenuBase/ContentClip/Content"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LSide" type="Control" parent="Viewport/MenuViewport/Base/Video"]
+[node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Options"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
-offset_top = 160.0
 offset_right = 1000.0
-offset_bottom = 160.0
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Video/LSide"]
-layout_mode = 1
-offset_top = 20.0
-offset_right = 584.0
-offset_bottom = 101.0
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 80
-text = "option_video"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Video/LSide"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Options/LSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
+offset_bottom = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 16
 
-[node name="ResolutionLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="VideoLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_resolution"
+text = "option_video"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="FullscreenLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="AudioLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
+text = "option_audio"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="LanguageLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+layout_mode = 2
+text = "option_lang"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="ControlLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+layout_mode = 2
+text = "option_control"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Video" type="Control" parent="MenuBase/ContentClip/Content"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Video"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_right = 1000.0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Video/LSide"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="DisplayLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_target_display"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="WindowSizeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_window_size"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="FullscreenLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
 text = "option_fullscreen_mode"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="VsyncLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="VsyncLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "option_vsync"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Video"]
+[node name="RenderScaleLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_render_scale"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="ResizeModeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_resize_mode"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="AntiAliasingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_antialiasing"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="BloomLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_bloom"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="ShadowLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_shadow"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="PostProcessingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_post_processing"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="ReflectionLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+layout_mode = 2
+text = "option_reflection"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Video"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1000.0
-offset_top = 160.0
-offset_right = -200.0
-offset_bottom = 160.0
+offset_left = -992.0
+offset_right = -192.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Video/RSide"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Video/RSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
+offset_bottom = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 16
 
-[node name="ResolutionLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="DisplayLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
+text = "display 0"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="WindowSizeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
 text = "1920:1080"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="FullscreenLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="FullscreenLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "option_normal_fullscreen"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="VsyncLabel" type="Label" parent="Viewport/MenuViewport/Base/Video/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="VsyncLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "on"
+text = "enabled"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="Audio" type="Control" parent="Viewport/MenuViewport/Base"]
+[node name="RenderScaleLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
+text = "100%"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="ResizeModeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
+text = "bilnear"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="AntiAliasingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
+text = "FXAA"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="BloomLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
+text = "high"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="ShadowLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
+text = "high"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="PostProcessingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
+text = "medium"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="ReflectionLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+layout_mode = 2
+text = "high"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Audio" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
-modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LSide" type="Control" parent="Viewport/MenuViewport/Base/Audio"]
+[node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Audio"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
-offset_top = 160.0
 offset_right = 1000.0
-offset_bottom = 160.0
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide"]
-layout_mode = 1
-offset_top = 20.0
-offset_right = 597.0
-offset_bottom = 101.0
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 80
-text = "option_audio"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Audio/LSide"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Audio/LSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
+offset_bottom = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 16
 
-[node name="MainLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="MainLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "option_main_vol"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="BGMLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="BGMLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "option_bgm_vol"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="SFXLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="SFXLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "option_sfx_vol"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "option_voice_vol"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Audio"]
+[node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Audio"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1000.0
-offset_top = 160.0
-offset_right = -200.0
-offset_bottom = 160.0
+offset_left = -992.0
+offset_right = -192.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Audio/RSide"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Audio/RSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
+offset_bottom = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 16
 
-[node name="MainLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="MainLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "100%"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="MusicLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="MusicLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "100%"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="SFXLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="SFXLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "100%"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Audio/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
 text = "100%"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="Language" type="Control" parent="Viewport/MenuViewport/Base"]
+[node name="Language" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
-modulate = Color(0.6, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="LSide" type="Control" parent="Viewport/MenuViewport/Base/Language"]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_left = 200.0
-offset_top = 160.0
-offset_right = 1000.0
-offset_bottom = 160.0
-grow_vertical = 2
-
-[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide"]
-layout_mode = 1
 offset_top = 20.0
-offset_right = 556.0
-offset_bottom = 101.0
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 80
-text = "option_lang"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Language/LSide"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-
-[node name="UseSubtitleLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_sub_toggle"
-vertical_alignment = 1
-uppercase = true
-
-[node name="TextLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_text_lang"
-vertical_alignment = 1
-uppercase = true
-
-[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_voice_lang"
-vertical_alignment = 1
-uppercase = true
-
-[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Language"]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1000.0
-offset_top = 160.0
-offset_right = -200.0
-offset_bottom = 160.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Language/RSide"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-
-[node name="UseSubtitleLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "On"
-horizontal_alignment = 2
-vertical_alignment = 1
-uppercase = true
-
-[node name="TextLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "lang_local"
-horizontal_alignment = 2
-vertical_alignment = 1
-uppercase = true
-
-[node name="VoiceLabel" type="Label" parent="Viewport/MenuViewport/Base/Language/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "lang_en"
-horizontal_alignment = 2
-vertical_alignment = 1
-uppercase = true
-
-[node name="Control" type="Control" parent="Viewport/MenuViewport/Base"]
-visible = false
-modulate = Color(0.6, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Menu" type="Label" parent="Viewport/MenuViewport/Base/Control"]
-layout_mode = 1
-offset_left = 200.0
-offset_top = 180.0
-offset_right = 915.0
-offset_bottom = 261.0
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 80
-text = "option_control"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="PG1" type="Control" parent="Viewport/MenuViewport/Base/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="LSide" type="Control" parent="Viewport/MenuViewport/Base/Control/PG1"]
+[node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Language"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
-offset_top = 160.0
 offset_right = 1000.0
-offset_bottom = 160.0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Control/PG1/LSide"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Language/LSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
+offset_bottom = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 16
 
-[node name="ControllerLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="UseSubtitleLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_controller_ui"
+text = "option_sub_toggle"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="DeadzoneLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="TextLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_deadzone"
+text = "option_text_lang"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="MappingLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/LSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_mapping"
+text = "option_voice_lang"
+label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="TestLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/LSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "option_mapping_test"
-vertical_alignment = 1
-uppercase = true
-
-[node name="RSide" type="Control" parent="Viewport/MenuViewport/Base/Control/PG1"]
+[node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Language"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1000.0
-offset_top = 160.0
-offset_right = -200.0
-offset_bottom = 160.0
+offset_left = -992.0
+offset_right = -192.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Control/PG1/RSide"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Language/RSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 140.0
+offset_bottom = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 16
 
-[node name="ControllerLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="UseSubtitleLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "playstation"
+text = "enabled"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="DeadzoneLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="TextLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = "100%"
+text = "lang_local"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="MappingLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
+[node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/RSide/Options"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = ">>>"
+text = "lang_en"
+label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="TestLabel" type="Label" parent="Viewport/MenuViewport/Base/Control/PG1/RSide/Options"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("13_tx5t6")
-theme_override_font_sizes/font_size = 64
-text = ">>>"
-horizontal_alignment = 2
-vertical_alignment = 1
-uppercase = true
-
-[node name="PG2" type="Control" parent="Viewport/MenuViewport/Base/Control"]
+[node name="Control" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Common" type="Control" parent="MenuBase/ContentClip/Content/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Control/Common"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
-offset_top = 160.0
-offset_right = 1800.0
-offset_bottom = 160.0
+offset_right = 1000.0
 grow_vertical = 2
 
-[node name="MovementControls" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Control/PG2"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Common/LSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 204.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="ControllerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+layout_mode = 2
+text = "option_controller_ui"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="DeadzoneLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+layout_mode = 2
+text = "option_deadzone"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+layout_mode = 2
+text = "option_mapping"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="TestLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+layout_mode = 2
+text = "option_mapping_test"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Control/Common"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -992.0
+offset_right = -192.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Common/RSide"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="ControllerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+layout_mode = 2
+text = "playstation"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="DeadzoneLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+layout_mode = 2
+text = "100%"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+layout_mode = 2
+text = ">>>"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="TestLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+layout_mode = 2
+text = ">>>"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Mapping" type="Control" parent="MenuBase/ContentClip/Content/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 1536.0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Mapping"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 192.0
+offset_right = -192.0
+offset_bottom = 84.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="MoveUp" parent="Viewport/MenuViewport/Base/Control/PG2/MovementControls" instance=ExtResource("14_itn8j")]
+[node name="MoveUp" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"move_up"
 
-[node name="MoveDown" parent="Viewport/MenuViewport/Base/Control/PG2/MovementControls" instance=ExtResource("14_itn8j")]
+[node name="MoveDown" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"move_down"
 
-[node name="MoveLeft" parent="Viewport/MenuViewport/Base/Control/PG2/MovementControls" instance=ExtResource("14_itn8j")]
+[node name="MoveLeft" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"move_left"
 
-[node name="MoveRight" parent="Viewport/MenuViewport/Base/Control/PG2/MovementControls" instance=ExtResource("14_itn8j")]
+[node name="MoveRight" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"move_right"
 
-[node name="ActionControls" type="VBoxContainer" parent="Viewport/MenuViewport/Base/Control/PG2"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 140.0
-offset_bottom = 204.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-
-[node name="Jump" parent="Viewport/MenuViewport/Base/Control/PG2/ActionControls" instance=ExtResource("14_itn8j")]
+[node name="Jump" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"button_jump"
 
-[node name="Action" parent="Viewport/MenuViewport/Base/Control/PG2/ActionControls" instance=ExtResource("14_itn8j")]
+[node name="Action" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"button_action"
 
-[node name="SpeedBreak" parent="Viewport/MenuViewport/Base/Control/PG2/ActionControls" instance=ExtResource("14_itn8j")]
+[node name="SpeedBreak" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"button_speedbreak"
 
-[node name="TimeBreak" parent="Viewport/MenuViewport/Base/Control/PG2/ActionControls" instance=ExtResource("14_itn8j")]
+[node name="TimeBreak" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputID = &"button_timebreak"
 
-[node name="Pause" parent="Viewport/MenuViewport/Base/Control/PG2/ActionControls" instance=ExtResource("14_itn8j")]
+[node name="Pause" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 
-[node name="Cursor" type="ColorRect" parent="Viewport/MenuViewport/Base"]
-self_modulate = Color(1, 1, 1, 0.200575)
-material = SubResource("ShaderMaterial_a3jsd")
+[node name="ScrollBar" type="NinePatchRect" parent="MenuBase"]
+self_modulate = Color(0.6, 0, 0, 1)
 layout_mode = 0
-offset_top = 300.0
-offset_right = 2000.0
-offset_bottom = 396.0
-color = Color(1, 1, 0, 1)
+offset_left = 1400.0
+offset_top = 320.0
+offset_right = 1430.0
+offset_bottom = 1216.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_7p8ra")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_top = 14
+patch_margin_bottom = 16
+
+[node name="ScrollPosition" type="TextureRect" parent="MenuBase/ScrollBar"]
+self_modulate = Color(0.870588, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.0
+offset_right = 17.0
+offset_bottom = 32.0
+grow_horizontal = 2
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("6_7p8ra")
+
+[node name="NavigationButtons" type="HBoxContainer" parent="MenuBase"]
+layout_mode = 0
+offset_left = 352.0
+offset_top = 800.0
+offset_right = 1378.0
+offset_bottom = 864.0
+theme_override_constants/separation = 64
+alignment = 2
+
+[node name="Select" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
+layout_mode = 2
+actionKey = "sys_select"
+inputKey = "button_jump"
+
+[node name="Cancel" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
+layout_mode = 2
+actionKey = "sys_cancel"
+inputKey = "button_action"
+
+[node name="Return" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
+visible = false
+layout_mode = 2
+actionKey = "sys_return"
+inputKey = "button_pause"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_6r0td")
 }
+autoplay = "options"
 next/test_end = &"flip-right"
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
@@ -1908,7 +2342,7 @@ loopStartPosition = 30.264
 loopEndPosition = 95.0
 
 [connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="EnableProcessing"]
-[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="ControlBook/Collision/Wall" method="Activate"]
+[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="LockPlayer"]
 
 [editable path="ControlBook/Collision"]
 [editable path="ControlBook/ControlBook"]
