@@ -1304,6 +1304,11 @@ namespace Project.Gameplay
 			IsMovingBackward = false;
 			ResetVelocity();
 
+
+			// Clear any collision exceptions
+			foreach (Node exception in GetCollisionExceptions())
+				RemoveCollisionExceptionWith(exception);
+
 			// Wait a single physics frame to ensure objects update properly
 			GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
 		}
@@ -1545,6 +1550,7 @@ namespace Project.Gameplay
 
 		public bool IsOnGround { get; set; }
 		public bool JustLandedOnGround { get; private set; } // Flag for doing stuff on land
+		private RaycastHit groundHit;
 
 		private const int GROUND_CHECK_AMOUNT = 8; // How many "whiskers" to use when checking the ground
 		private void CheckGround()
@@ -1560,7 +1566,7 @@ namespace Project.Gameplay
 				castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
 
 			Vector3 checkOffset = Vector3.Zero;
-			RaycastHit groundHit = new();
+			groundHit = new();
 			Vector3 castVector = this.Down() * castLength;
 			int raysHit = 0;
 
@@ -1711,11 +1717,11 @@ namespace Project.Gameplay
 
 			if (ceilingHit)
 			{
-				if (ceilingHit.collidedObject.IsInGroup("crusher") && IsOnGround) // Check if the player is being crushed
+				if (ceilingHit.collidedObject.IsInGroup("crusher") && groundHit) // Check if the player is being crushed
 				{
 					GD.Print($"Crushed by {ceilingHit.collidedObject.Name}");
 					AddCollisionExceptionWith(ceilingHit.collidedObject); // Avoid clipping through the ground
-					StartKnockback(new KnockbackSettings()
+					StartKnockback(new()
 					{
 						ignoreInvincibility = true,
 					});
