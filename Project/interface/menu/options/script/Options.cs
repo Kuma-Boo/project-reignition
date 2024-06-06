@@ -232,12 +232,13 @@ namespace Project.Interface.Menus
 		private const float scrollBarSmoothing = .2f;
 		private void UpdateScrolling(bool snap = false)
 		{
-			// Scroll
-			if (!scrollBar.IsVisibleInTree()) return;
-
+			// Reset scroll
 			if (maxSelection < 8)
 				scrollOffset = 0;
-			else if (VerticalSelection > scrollOffset + 7)
+
+			if (!scrollBar.IsVisibleInTree()) return;
+
+			if (VerticalSelection > scrollOffset + 7)
 				scrollOffset = VerticalSelection - 7;
 			else if (VerticalSelection < scrollOffset)
 				scrollOffset = VerticalSelection;
