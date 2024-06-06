@@ -450,12 +450,11 @@ namespace Project.Gameplay
 		/// <summary> How quickly to turn when moving slowly. </summary>
 		private const float MIN_TURN_AMOUNT = .12f;
 		/// <summary> How quickly to turn when moving at top speed. </summary>
-		private const float MAX_TURN_AMOUNT = .6f;
+		private const float MAX_TURN_AMOUNT = .8f;
 		/// <summary> How quickly to turnaround when at top speed. </summary>
 		private const float RUN_TURNAROUND_SPEED = .24f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
-		/// <summary> Additionally turning sensitivity determined by input delta. </summary>
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
@@ -579,13 +578,18 @@ namespace Project.Gameplay
 			}
 
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
+			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			// Reduce sensitivity when player is running
 			if (speedRatio > CharacterAnimator.RUN_RATIO)
+			{
+				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle)) // Remap controls to provide more analog detail
+					targetMovementAngle -= inputDeltaAngle * .5f;
+
 				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
+			}
 
 			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			// Is the player trying to recenter themselves?
 			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 			if (isTurningAround)
