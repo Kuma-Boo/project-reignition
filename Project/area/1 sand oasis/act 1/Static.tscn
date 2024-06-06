@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://tvjx2wghc06t"]
+[gd_scene load_steps=82 format=3 uid="uid://tvjx2wghc06t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -57,7 +57,7 @@
 [ext_resource type="Curve3D" uid="uid://dryhqabeih5pq" path="res://area/1 sand oasis/act 1/environment/path/IslandEndPath.tres" id="40_i6qa6"]
 [ext_resource type="Curve3D" uid="uid://byicms7vwsqxd" path="res://area/1 sand oasis/act 1/environment/path/SidlePath.tres" id="41_2kxa5"]
 [ext_resource type="Curve3D" uid="uid://p2pt4ps3pmj" path="res://area/1 sand oasis/act 1/environment/path/Island2Path.tres" id="41_bop36"]
-[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/BeachPath.tres" id="41_tujp6"]
+[ext_resource type="Curve3D" uid="uid://b4qnnk3nkq7i4" path="res://area/1 sand oasis/act 1/environment/path/BeachPath.tres" id="41_tujp6"]
 [ext_resource type="Curve3D" uid="uid://dyf3xaw47l0tm" path="res://area/1 sand oasis/act 1/environment/path/EndingPath.tres" id="45_mavj3"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_eqslh"]
@@ -97,6 +97,9 @@ size = Vector3(40, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tlhfy"]
 size = Vector3(10, 10, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vwtnr"]
+size = Vector3(10, 7, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8ncqm"]
 size = Vector3(40, 40, 5)
@@ -737,7 +740,6 @@ previousSettings = ExtResource("26_k5jwq")
 shape = SubResource("BoxShape3D_8dg41")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
-visible = false
 
 [node name="Hall1Trigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-4.37114e-08, -0.642788, -0.766044, 8.74228e-08, 0.766044, -0.642788, 1, -9.50669e-08, 2.27094e-08, -123.844, -45, -62.1165)
@@ -808,6 +810,10 @@ transitionTime = 0.6
 settings = ExtResource("28_ximg0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/WallBackstepTrigger"]
+shape = SubResource("BoxShape3D_jsp8v")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Camera/WallBackstepTrigger"]
+transform = Transform3D(1, 1.49012e-07, -7.35375e-08, 0, 0.642788, -0.766044, 0, 0.766044, 0.642788, -1.52588e-05, -1.87642, -2.08066)
 shape = SubResource("BoxShape3D_jsp8v")
 
 [node name="FieldTrigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
@@ -940,6 +946,25 @@ shape = SubResource("BoxShape3D_tlhfy")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Camera/SidleCornerTrigger"]
 shape = SubResource("BoxShape3D_tlhfy")
+
+[node name="WallBackstepTrigger2" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-0.310925, 7.5904e-09, -0.950435, 2.99121e-09, 1, 7.00771e-09, 0.950434, -6.64075e-10, -0.310925, -618.288, -38.0463, -639.548)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CameraTrigger" type="Node3D" parent="Trigger/Camera/WallBackstepTrigger2"]
+script = ExtResource("13_3nlok")
+transitionTime = 0.6
+settings = ExtResource("28_ximg0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/WallBackstepTrigger2"]
+transform = Transform3D(1, 7.60503e-15, 0, 1.67089e-14, 0.999996, 4.16334e-17, 0, -1.69725e-14, 1, 3.05176e-05, 1.5, 0.900024)
+shape = SubResource("BoxShape3D_vwtnr")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Camera/WallBackstepTrigger2"]
+transform = Transform3D(1, 7.45058e-09, -1.49012e-07, 1.49325e-14, 0.906307, 0.422617, 0, -0.422618, 0.906304, 9.15527e-05, 0.889194, 2.54297)
+shape = SubResource("BoxShape3D_vwtnr")
 
 [node name="PillarTrigger" parent="Trigger/Camera" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -620, -30, -765)

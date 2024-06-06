@@ -228,6 +228,7 @@ namespace Project.Gameplay
 				return;
 			}
 
+			if (IsDefeated) return;
 			if (IsLockoutActive && ActiveLockoutData.disableActions) return;
 
 			actionBufferTimer = Mathf.MoveToward(actionBufferTimer, 0, PhysicsManager.physicsDelta);
