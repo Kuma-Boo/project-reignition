@@ -40,21 +40,39 @@ namespace Project.Gameplay
 		private SkillKeyEnum editingSkill;
 
 		[ExportGroup("DO NOT EDIT!")]
-		[Export]
+		/// <summary> Enum containing all skills. </summary>
 		private Array<SkillKeyEnum> skillKeyList = new();
-		[Export]
-		private Array<int> skillCostList = new(); // How much does the skill cost to equip?
+		/// <summary> How much does the skill cost to equip? </summary>
+		private Array<int> skillCostList = new();
+
+		// Unlock requiremnts
+		/// <summary> What level does the player need to be for the skill to be unlocked? </summary>
+		private Array<int> levelList = new();
+		/// <summary> How many fire souls does the player need to unlock this skill? </summary>
+		private Array<int> fireSoulList = new();
 
 
 		#region Editor
+
+		private const string REBUILD_KEY = "Rebuild Skill List";
+		private const string EDIT_KEY = "Editing Skill";
+		private const string COST_KEY = "Skill/Cost";
+		private const string LEVEL_KEY = "Skill/Level Requirement";
+		private const string FIRE_SOUL_KEY = "Skill/Fire Soul Requirement";
+
 		public override Array<Dictionary> _GetPropertyList()
 		{
+			ResizeLists();
+
 			Array<Dictionary> properties = new()
 			{
-				ExtensionMethods.CreateProperty("Rebuild Skill List", Variant.Type.Bool),
-				ExtensionMethods.CreateProperty("Editing Skill", Variant.Type.Int, PropertyHint.Enum, editingSkill.EnumToString()),
+				ExtensionMethods.CreateProperty(REBUILD_KEY, Variant.Type.Bool),
+				ExtensionMethods.CreateProperty(EDIT_KEY, Variant.Type.Int, PropertyHint.Enum, editingSkill.EnumToString()),
 
-				ExtensionMethods.CreateProperty("Skill/Cost", Variant.Type.Int),
+				ExtensionMethods.CreateProperty(COST_KEY, Variant.Type.Int),
+
+				ExtensionMethods.CreateProperty(LEVEL_KEY, Variant.Type.Int, PropertyHint.Range, "0, 99"),
+				ExtensionMethods.CreateProperty(FIRE_SOUL_KEY, Variant.Type.Int, PropertyHint.Range, "0, 126"),
 			};
 
 			return properties;
@@ -64,12 +82,16 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Rebuild Skill List":
+				case REBUILD_KEY:
 					return false;
-				case "Editing Skill":
+				case EDIT_KEY:
 					return (int)editingSkill;
-				case "Skill/Cost":
+				case COST_KEY:
 					return skillCostList[GetSkillIndex(editingSkill)];
+				case LEVEL_KEY:
+					return levelList[GetSkillIndex(editingSkill)];
+				case FIRE_SOUL_KEY:
+					return fireSoulList[GetSkillIndex(editingSkill)];
 				default:
 					break;
 			}
@@ -81,22 +103,42 @@ namespace Project.Gameplay
 		{
 			switch ((string)property)
 			{
-				case "Rebuild Skill List":
+				case REBUILD_KEY:
 					RebuildSkillList();
 					NotifyPropertyListChanged();
 					break;
-				case "Editing Skill":
+				case EDIT_KEY:
 					editingSkill = (SkillKeyEnum)(int)value;
 					NotifyPropertyListChanged();
 					break;
-				case "Skill/Cost":
+				case COST_KEY:
 					skillCostList[GetSkillIndex(editingSkill)] = (int)value;
+					break;
+				case LEVEL_KEY:
+					levelList[GetSkillIndex(editingSkill)] = (int)value;
+					break;
+				case FIRE_SOUL_KEY:
+					fireSoulList[GetSkillIndex(editingSkill)] = (int)value;
 					break;
 				default:
 					return false;
 			}
 
 			return true;
+		}
+
+
+		private void ResizeLists()
+		{
+			int targetSize = (int)SkillKeyEnum.Max;
+			if (skillCostList.Count != targetSize)
+				skillCostList.Resize(targetSize);
+
+			if (levelList.Count != targetSize)
+				levelList.Resize(targetSize);
+
+			if (fireSoulList.Count != targetSize)
+				fireSoulList.Resize(targetSize);
 		}
 		#endregion
 
@@ -115,6 +157,8 @@ namespace Project.Gameplay
 
 
 		public int GetSkillCost(SkillKeyEnum key) => skillCostList[GetSkillIndex(key)];
+		public int GetSkillLevelRequirement(SkillKeyEnum key) => levelList[GetSkillIndex(key)];
+		public int GetSkillFireSoulRequirement(SkillKeyEnum key) => fireSoulList[GetSkillIndex(key)];
 
 
 		/// <summary> Creates a skill. </summary>
@@ -173,6 +217,20 @@ namespace Project.Gameplay
 			TotalCost = 0;
 			for (int i = 0; i < equippedSkills.Count; i++)
 				TotalCost += Runtime.Instance.masterSkillList.GetSkillCost(equippedSkills[i]);
+		}
+
+		public static bool IsSkillUnlocked(SkillKeyEnum skill)
+		{
+			int levelRequirement = Runtime.Instance.masterSkillList.GetSkillLevelRequirement(skill);
+			int fireSoulRequirement = Runtime.Instance.masterSkillList.GetSkillFireSoulRequirement(skill);
+
+			if (levelRequirement != 0 && SaveManager.ActiveGameData.level < levelRequirement)
+				return false;
+
+			if (fireSoulRequirement != 0 && SaveManager.ActiveGameData.fireSoul < fireSoulRequirement)
+				return false;
+
+			return true;
 		}
 	}
 }

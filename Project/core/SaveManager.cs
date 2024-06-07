@@ -508,6 +508,8 @@ namespace Project.Core
 			public int exp;
 			/// <summary> Total playtime, in seconds. </summary>
 			public float playTime;
+			/// <summary> Total number of fire souls the player collected. </summary>
+			public int fireSoul;
 			/// <summary> Current skill ring. </summary>
 			public SkillRing skillRing = new();
 
