@@ -376,6 +376,7 @@ namespace Project.Gameplay
 			if (offensive)
 			{
 				// TODO Separate stomp animation
+				Character.Effect.StartStompFX();
 			}
 			else
 			{

@@ -99,6 +99,10 @@ namespace Project.Gameplay
 				Effect.StopTrailFX();
 				Animator.ResetState();
 			}
+			else if (ActionState == ActionStates.Stomping)
+			{
+				Effect.StopStompFX();
+			}
 			else if (ActionState == ActionStates.Grindstep)
 				StopGrindstep();
 
@@ -1027,7 +1031,7 @@ namespace Project.Gameplay
 			SetActionState(ActionStates.Stomping);
 
 			// TODO Play a separate stomping animation if using a stomp skill
-			Animator.StompAnimation(false);
+			Animator.StompAnimation(Skills.IsSkillEnabled(SkillKeyEnum.FlameStomp));
 		}
 		#endregion
 

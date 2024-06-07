@@ -10,22 +10,8 @@ namespace Project.Gameplay
 	/// </summary>
 	public partial class CharacterEffect : Node3D
 	{
-		/*
-		For some reason, there seem to be a lot of duplicate AudioStreams from the original game.
-		Will leave them unused for now.
-		*/
-
 		public override void _Ready()
 		{
-			/*
-			//Use this code snippet to figure out the hint key for arrays
-			foreach (Dictionary item in GetPropertyList())
-			{
-				if ((string)item["name"] == "test")
-					GD.Print(item);
-			}
-			*/
-
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechStart, new Callable(this, MethodName.MuteGameplayVoice));
 			SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
 		}
@@ -35,7 +21,10 @@ namespace Project.Gameplay
 		public readonly StringName SLIDE_SFX = "slide";
 		public readonly StringName SPLASH_SFX = "splash";
 		public readonly StringName SIDLE_SFX = "sidle";
+		private readonly StringName STOMP_SFX = "stomp";
 
+
+		#region Actions
 		// Actions (Jumping, sliding, etc)
 		[ExportGroup("Actions")]
 		[Export]
@@ -74,6 +63,20 @@ namespace Project.Gameplay
 		public void StartSpeedBreak() => speedBreakAnimator.Play("start");
 		public void StopSpeedBreak() => speedBreakAnimator.Play("stop");
 
+
+		[Export]
+		private GroupGpuParticles3D stompFX;
+		public void StartStompFX()
+		{
+			stompFX.SetEmitting(true);
+			PlayActionSFX(STOMP_SFX);
+
+		}
+		public void StopStompFX() => stompFX.SetEmitting(false);
+		#endregion
+
+
+		#region Ground
 		[ExportGroup("Ground Interactions")]
 		// SFX for different ground materials (footsteps, landing, etc)
 		[Export]
@@ -207,7 +210,7 @@ namespace Project.Gameplay
 
 		[Export]
 		private PackedScene footprintDecal;
-		private List<Node3D> footprintDecalList = new List<Node3D>();
+		private readonly List<Node3D> footprintDecalList = new();
 		private void CreateSandFootFX(Transform3D spawnTransform)
 		{
 			Node3D activeFootprintDecal = null;
@@ -264,6 +267,8 @@ namespace Project.Gameplay
 				groundKeyIndex = 0; // Default to first key (pavement)
 			}
 		}
+		#endregion
+
 
 		[ExportGroup("Voices")]
 		[Export]
