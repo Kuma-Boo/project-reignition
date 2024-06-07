@@ -27,3 +27,9 @@ namespace Project.Gameplay.Objects
 		}
 	}
 }
+
+
+private void Shatter()
+{
+	// Replace with function body.
+}

@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://duchuuu3o06gc"]
+[gd_scene load_steps=9 format=3 uid="uid://duchuuu3o06gc"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_8r8x5"]
 [ext_resource type="Resource" uid="uid://cgio2q1qnwk41" path="res://resource/level data/sand oasis/Act1Deathless.tres" id="2_gb6ys"]
 [ext_resource type="Resource" uid="uid://men4otfrvbhp" path="res://area/1 sand oasis/act 1/camera/UTurnHallCam.tres" id="3_uadyx"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_vokyw"]
+[ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="5_ofywg"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="6_krrlv"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="6_x7qjf"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="7_hkd0y"]
 
 [node name="Stage" type="Node"]
 
@@ -11,42 +15,37 @@
 Data = ExtResource("2_gb6ys")
 InitialCameraSettings = ExtResource("3_uadyx")
 
-[node name="01Opening" parent="Static/Visuals" index="1"]
-startEnabled = false
-
-[node name="02Slope" parent="Static/Visuals" index="2"]
-startEnabled = true
-
-[node name="03Oasis" parent="Static/Visuals" index="3"]
-startEnabled = true
-
-[node name="04Forest" parent="Static/Visuals" index="4"]
-startEnabled = true
-
-[node name="05Islands" parent="Static/Visuals" index="5"]
-startEnabled = true
-
-[node name="06Interior" parent="Static/Visuals" index="6"]
-startEnabled = true
-
-[node name="07Sandfall" parent="Static/Visuals" index="7"]
-startEnabled = true
-
-[node name="07SandfallLOD" parent="Static/Visuals" index="8"]
-startEnabled = true
-
-[node name="07Beach" parent="Static/Visuals" index="9"]
-startEnabled = true
-
-[node name="08End" parent="Static/Visuals" index="10"]
-startEnabled = true
-
 [node name="DeathlessAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="DeathlessAct"]
-transform = Transform3D(0.984546, 0, -0.175126, 0, 1, 0, 0.175126, 0, 0.984546, -59.2175, -44.9509, -385.384)
+transform = Transform3D(0.984546, 0, -0.175126, 0, 1, 0, 0.175126, 0, 0.984546, -61.116, -44.9509, -385.458)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("3_vokyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56617, 0, -0.100708)
 
-[editable path="Static"]
+[node name="Hallway" type="Node3D" parent="DeathlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.0778, 0, -372.785)
+
+[node name="Enemies" type="Node3D" parent="DeathlessAct/Hallway"]
+
+[node name="RedMajin" parent="DeathlessAct/Hallway/Enemies" instance=ExtResource("5_ofywg")]
+transform = Transform3D(-0.984726, 0, 0.174112, 0, 1, 0, -0.174112, 0, -0.984726, -6.16223, -44.5894, 9.65671)
+
+[node name="EnemyStone" parent="DeathlessAct/Hallway/Enemies/RedMajin" instance=ExtResource("6_x7qjf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.77022, 0.613369, -4.14636)
+enemyCount = 1
+
+[node name="Spring" parent="DeathlessAct/Hallway/Enemies/RedMajin/EnemyStone" instance=ExtResource("7_hkd0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.670895, 0)
+
+[node name="RichRing" parent="DeathlessAct/Hallway" instance=ExtResource("6_krrlv")]
+transform = Transform3D(0.98439, 0, -0.176002, 0, 1, 0, 0.176002, 0, 0.98439, -8.83377, -44.0485, 1.39301)
+
+[node name="Interior" type="Node3D" parent="DeathlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -216.083, -45.2027, -420.828)
+
+[node name="End" type="Node3D" parent="DeathlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -324.676, -45.268, -437.297)
+
+[connection signal="Defeated" from="DeathlessAct/Hallway/Enemies/RedMajin" to="DeathlessAct/Hallway/Enemies/RedMajin/EnemyStone" method="Shatter"]
