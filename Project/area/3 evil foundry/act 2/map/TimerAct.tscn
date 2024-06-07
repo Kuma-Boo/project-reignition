@@ -264,6 +264,9 @@ size = Vector3(12, 10, 2)
 [node name="Static" parent="." instance=ExtResource("40_byhqa")]
 Data = ExtResource("2_34eee")
 
+[node name="Trigger" parent="Static" index="1"]
+visible = true
+
 [node name="TimerAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="TimerAct"]
@@ -273,7 +276,6 @@ metadata/_edit_lock_ = true
 [node name="CharacterSpawn" parent="TimerAct/SpawnPosition" instance=ExtResource("3_6vb5h")]
 
 [node name="CullingMap" type="Node3D" parent="TimerAct"]
-visible = false
 
 [node name="StartUnload - PlatformHallLoad" parent="TimerAct/CullingMap" instance=ExtResource("4_6wf7v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 128, 40, -194.1)
@@ -876,7 +878,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.1, 28.5, -8.89998)
 
 [node name="SidleHall" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40, -194)
-visible = false
 script = ExtResource("5_gkrps")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -1084,7 +1085,6 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 33.2, 
 
 [node name="SidleObjects" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 160.6, 40, -290)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1276,7 +1276,6 @@ Movement/Distance = 5.0
 
 [node name="PlatformHall" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40, -340)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1487,7 +1486,6 @@ fireSoulIndex = 2
 
 [node name="Lava" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 40, -440)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1691,7 +1689,6 @@ transform = Transform3D(1, 0, -6.03961e-14, 0, 1, 0, 0, 0, 1.125, 0, -0.5, 82.85
 
 [node name="Elevator" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25, 40, -190)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2021,7 +2018,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 11.2, 0)
 
 [node name="Spiral" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -60, -180)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2189,7 +2185,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="End" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -100, -30, -120)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2460,3 +2455,5 @@ shape = SubResource("BoxShape3D_egyd0")
 [connection signal="GrindStarted" from="TimerAct/SidleHall/InvisibleGrindrails/InvisibleGrindrail3" to="TimerAct/SidleHall/InvisibleGrindrails/ExitCameraEvent" method="Activate"]
 [connection signal="Activated" from="TimerAct/SidleHall/InvisibleGrindrails/GrindPathExit" to="Static/Collision/GrindPathWall" method="Activate"]
 [connection signal="Activated" from="TimerAct/SidleHall/InvisibleGrindrails/GrindPathExit" to="TimerAct/SidleHall/InvisibleGrindrails/GrindrailCamera" method="Deactivate"]
+
+[editable path="Static"]
