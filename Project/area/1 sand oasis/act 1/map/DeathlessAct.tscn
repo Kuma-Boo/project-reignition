@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://duchuuu3o06gc"]
+[gd_scene load_steps=48 format=3 uid="uid://duchuuu3o06gc"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_8r8x5"]
 [ext_resource type="Resource" uid="uid://cgio2q1qnwk41" path="res://resource/level data/sand oasis/Act1Deathless.tres" id="2_gb6ys"]
@@ -23,6 +23,8 @@
 [ext_resource type="PackedScene" uid="uid://duho0arjo4rfh" path="res://area/1 sand oasis/data/particle/Rock1Particle.tscn" id="16_pnfnk"]
 [ext_resource type="AudioStream" uid="uid://d7el2xmn6i23" path="res://sound/sfx/stage/sand oasis/pillar rise.wav" id="17_c3fff"]
 [ext_resource type="PackedScene" uid="uid://crsn7131rf3ne" path="res://area/1 sand oasis/data/particle/Rock2Particle.tscn" id="17_o7gnr"]
+[ext_resource type="PackedScene" uid="uid://7xvlyn3or8c0" path="res://area/1 sand oasis/data/particle/SandDustParticle.tscn" id="18_1718j"]
+[ext_resource type="PackedScene" uid="uid://6e1tlgtsfkxd" path="res://area/1 sand oasis/data/particle/SandSplatterParticle.tscn" id="19_jm82n"]
 
 [sub_resource type="Animation" id="Animation_qgpvs"]
 length = 0.001
@@ -569,6 +571,1898 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_lswce"]
 size = Vector3(10, 20, 5)
 
+[sub_resource type="Animation" id="Animation_wwpxd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_x4lx5"]
+resource_name = "event"
+length = 0.333367
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Rock1Particle1")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Rock2Particle1")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear1/TravelSFX1")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.133333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Spear1/ImpactSFX1")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g1xip"]
+_data = {
+"RESET": SubResource("Animation_wwpxd"),
+"event": SubResource("Animation_x4lx5")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n3dwl"]
+size = Vector3(8, 20, 5)
+
+[sub_resource type="Animation" id="Animation_bwy4c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1/Spear1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1/Spear1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Spear2:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Spear2/Spear2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear2/Spear2:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Spear3:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear3/Spear3:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Spear3/Spear3:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Spear1/Rock1Particle1:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Spear1/Rock2Particle1:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Spear2/Rock1Particle2:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Spear2/Rock2Particle2:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Spear3/Rock1Particle3:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Spear3/Rock2Particle3:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_f872i"]
+resource_name = "event"
+length = 0.600033
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1/Spear1:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1/Spear1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Spear1/Rock1Particle1")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Spear1/Rock2Particle1")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear2:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Spear2/Spear2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear2/Spear2:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Spear2/Rock1Particle2")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Spear2/Rock2Particle2")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Spear3:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Spear3/Spear3:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.533333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Spear3/Spear3:scale")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Spear3/Rock1Particle3")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0.533333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Spear3/Rock2Particle3")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0.533333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Spear1/Rock1Particle1:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.266666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Spear1/Rock2Particle1:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.266666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Spear2/Rock1Particle2:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Spear2/Rock2Particle2:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Spear3/Rock1Particle3:visible")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Spear3/Rock2Particle3:visible")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/21/type = "method"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Spear1/Spear1/TravelSFX1")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0.133333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/22/type = "method"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Spear1/Spear1/ImpactSFX1")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/23/type = "method"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Spear2/Spear2/TravelSFX2")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/24/type = "method"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Spear2/Spear2/ImpactSFX2")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/25/type = "method"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Spear3/Spear3/TravelSFX3")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/26/type = "method"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Spear3/Spear3/ImpactSFX3")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0.533333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4vqq1"]
+_data = {
+"RESET": SubResource("Animation_bwy4c"),
+"event": SubResource("Animation_f872i")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ly0fh"]
+size = Vector3(10, 20, 5)
+
+[sub_resource type="Animation" id="Animation_8iix5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1/Spear1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1/Spear1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Spear2:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Spear2/Spear2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear2/Spear2:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Spear3/Spear3:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear3:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Spear3/Spear3:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Spear4:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Spear4/Spear4:position")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Spear4/Spear4:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Spear1/Rock1Particle1:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Spear1/Rock2Particle1:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Spear2/Rock1Particle2:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Spear2/Rock2Particle2:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Spear3/SandDustParticle3:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Spear3/SandSplatterParticle3:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Spear4/SandDustParticle4:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Spear4/SandSplatterParticle4:visible")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_d0hdg"]
+resource_name = "event"
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1/Spear1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1/Spear1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Spear1/Rock1Particle1")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Spear1/Rock2Particle1")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear2:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Spear2/Spear2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear2/Spear2:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Spear2/Rock1Particle2")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Spear2/Rock2Particle2")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Spear3:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Spear3/Spear3:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Spear3/Spear3:scale")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.533333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Spear3/SandDustParticle3")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Spear3/SandSplatterParticle3")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Spear4:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Spear4/Spear4:position")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.533333, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Spear4/Spear4:scale")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 0.533333, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/18/type = "method"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Spear4/SandDustParticle4")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/19/type = "method"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Spear4/SandSplatterParticle4")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Spear1/Rock1Particle1:visible")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(2.68221e-07, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Spear1/Rock2Particle1:visible")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0, 0.266666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Spear2/Rock1Particle2:visible")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Spear2/Rock2Particle2:visible")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Spear3/SandDustParticle3:visible")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0, 0.666666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Spear3/SandSplatterParticle3:visible")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0, 0.666666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Spear4/SandDustParticle4:visible")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Spear4/SandSplatterParticle4:visible")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/28/type = "method"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("Spear1/Spear1/TravelSFX1")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0.133333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/29/type = "method"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("Spear1/Spear1/ImpactSFX1")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/30/type = "method"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Spear2/Spear2/TravelSFX2")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/31/type = "method"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Spear2/Spear2/ImpactSFX2")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/32/type = "method"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Spear3/Spear3/TravelSFX3")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0.533333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/33/type = "method"
+tracks/33/imported = false
+tracks/33/enabled = true
+tracks/33/path = NodePath("Spear3/Spear3/ImpactSFX3")
+tracks/33/interp = 1
+tracks/33/loop_wrap = true
+tracks/33/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/34/type = "method"
+tracks/34/imported = false
+tracks/34/enabled = true
+tracks/34/path = NodePath("Spear4/Spear4/TravelSFX4")
+tracks/34/interp = 1
+tracks/34/loop_wrap = true
+tracks/34/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/35/type = "method"
+tracks/35/imported = false
+tracks/35/enabled = true
+tracks/35/path = NodePath("Spear4/Spear4/ImpactSFX4")
+tracks/35/interp = 1
+tracks/35/loop_wrap = true
+tracks/35/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jkr7i"]
+_data = {
+"RESET": SubResource("Animation_8iix5"),
+"event": SubResource("Animation_d0hdg")
+}
+
+[sub_resource type="Animation" id="Animation_11mk5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1/Spear1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1/Spear1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Spear2:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Spear2/Spear2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear2/Spear2:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Spear3:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear3/Spear3:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.4, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Spear3/Spear3:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Spear1/SandDustParticle1:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Spear1/SandSplatterParticle1:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Spear2/SandDustParticle2:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Spear2/SandSplatterParticle2:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Spear3/SandDustParticle3:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Spear3/SandSplatterParticle3:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_do81e"]
+resource_name = "event"
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear1/Spear1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Spear1/Spear1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Spear1/SandDustParticle1")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Spear1/SandSplatterParticle1")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Spear2:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Spear2/Spear2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Spear2/Spear2:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Spear2/SandDustParticle2")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Spear2/SandSplatterParticle2")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Spear3:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Spear3/Spear3:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 40, 0), Vector3(0, 40, 0), Vector3(0, 2.4, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Spear3/Spear3:scale")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.166667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Spear3/SandDustParticle3")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Spear3/SandSplatterParticle3")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Spear1/SandDustParticle1:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.266666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Spear1/SandSplatterParticle1:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.266666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Spear2/SandDustParticle2:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Spear2/SandSplatterParticle2:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Spear3/SandDustParticle3:visible")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Spear3/SandSplatterParticle3:visible")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/21/type = "method"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("TravelSFX")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0.133333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/22/type = "method"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("ImpactSFX")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0.266667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jphx6"]
+_data = {
+"RESET": SubResource("Animation_11mk5"),
+"event": SubResource("Animation_do81e")
+}
+
 [sub_resource type="Animation" id="177"]
 resource_name = "RESET"
 length = 0.001
@@ -912,12 +2806,11 @@ transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 
 OneShot = true
 "Respawn Mode" = 0
 
-[node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup1" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup1"]
 script = ExtResource("13_h7bmr")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("")
 
 [node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup1/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, -12.5)
@@ -1015,6 +2908,386 @@ libraries = {
 transform = Transform3D(1, 0, -7.45058e-08, 0, 1, 0, 7.45058e-08, 0, 1, 0, 9, -20)
 shape = SubResource("BoxShape3D_lswce")
 
+[node name="WallSpearGroup" parent="DeathlessAct/Hallway" instance=ExtResource("12_bresa")]
+transform = Transform3D(0.999887, 0, 0.0150269, 0, 1, 0, -0.0150269, 0, 0.999887, -26.1688, -28.584, 75.6843)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Event" type="Node3D" parent="DeathlessAct/Hallway/WallSpearGroup"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+script = ExtResource("13_h7bmr")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Spear1" parent="DeathlessAct/Hallway/WallSpearGroup/Event" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(0.866025, 1.69747e-15, 0.5, 0, 1, -3.39494e-15, -0.5, 2.9401e-15, 0.866025, 0, 2.4, 0)
+visible = false
+
+[node name="TravelSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/WallSpearGroup/Event/Spear1"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/WallSpearGroup/Event/Spear1"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Rock1Particle1" parent="DeathlessAct/Hallway/WallSpearGroup/Event" instance=ExtResource("16_pnfnk")]
+visibility_aabb = AABB(-4, 0, -12, 8, 8, 16)
+
+[node name="Rock2Particle1" parent="DeathlessAct/Hallway/WallSpearGroup/Event" instance=ExtResource("17_o7gnr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 3.55271e-15, 1, 0, 0, 0)
+visibility_aabb = AABB(-4, 0, -12, 8, 8, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/WallSpearGroup/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_g1xip")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/WallSpearGroup"]
+transform = Transform3D(0, 0.173648, 0.984808, -1, -4.37114e-08, 0, 4.09782e-08, -0.984808, 0.173648, 4.78546, 1.99985, -8.73834)
+shape = SubResource("BoxShape3D_n3dwl")
+
+[node name="SpearGroup2" parent="DeathlessAct/Hallway" instance=ExtResource("12_bresa")]
+transform = Transform3D(0.987306, 0, -0.15883, 0, 1, 0, 0.15883, 0, 0.987306, -31.5159, -40.0912, 64.0098)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup2"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("13_h7bmr")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup2/Event"]
+transform = Transform3D(0.996195, 0, 0.0871558, 0, 1, 0, -0.0871558, 0, 0.996195, 2.467, 0, 4.465)
+visible = false
+
+[node name="Spear1" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1" instance=ExtResource("13_6hfyg")]
+isDisabled = true
+
+[node name="TravelSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1/Spear1"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1/Spear1"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Rock1Particle1" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1" instance=ExtResource("16_pnfnk")]
+visible = false
+
+[node name="Rock2Particle1" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1" instance=ExtResource("17_o7gnr")]
+visible = false
+
+[node name="Spear2" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup2/Event"]
+transform = Transform3D(0.173648, 0, -0.984807, 0, 1, 0, 0.984807, 0, 0.173648, 4.3, 0, 0.3)
+visible = false
+
+[node name="Spear2" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="TravelSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2/Spear2"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2/Spear2"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Rock1Particle2" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2" instance=ExtResource("16_pnfnk")]
+visible = false
+
+[node name="Rock2Particle2" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2" instance=ExtResource("17_o7gnr")]
+visible = false
+
+[node name="Spear3" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup2/Event"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.372, 0, -0.54)
+visible = false
+
+[node name="Spear3" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="TravelSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3/Spear3"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3/Spear3"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Rock1Particle3" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3" instance=ExtResource("16_pnfnk")]
+visible = false
+
+[node name="Rock2Particle3" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3" instance=ExtResource("17_o7gnr")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/SpearGroup2/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_4vqq1")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/SpearGroup2"]
+transform = Transform3D(0.999999, 0, 1.04308e-07, 0, 1, 0, -1.04308e-07, 0, 0.999999, 0, 9.5, 4)
+shape = SubResource("BoxShape3D_ly0fh")
+
+[node name="SpearGroup3" parent="DeathlessAct/Hallway" instance=ExtResource("12_bresa")]
+transform = Transform3D(0.987306, 0, -0.15883, 0, 1, 0, 0.15883, 0, 0.987306, -27.4291, -40.0912, 46.1246)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup3"]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0, 0)
+script = ExtResource("13_h7bmr")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup3/Event"]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 2.257, 0, 2.179)
+visible = false
+
+[node name="Spear1" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 4.65661e-08, 0, 1, 0, -4.65661e-08, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="TravelSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1/Spear1"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1/Spear1"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Rock1Particle1" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1" instance=ExtResource("16_pnfnk")]
+visible = false
+
+[node name="Rock2Particle1" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1" instance=ExtResource("17_o7gnr")]
+visible = false
+
+[node name="Spear2" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup3/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.207, 0, -0.414)
+visible = false
+
+[node name="Spear2" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 2.4, 0)
+isDisabled = true
+
+[node name="TravelSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2/Spear2"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2/Spear2"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Rock1Particle2" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2" instance=ExtResource("16_pnfnk")]
+visible = false
+
+[node name="Rock2Particle2" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2" instance=ExtResource("17_o7gnr")]
+visible = false
+
+[node name="Spear3" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup3/Event"]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.163, 0, -5.80701)
+visible = false
+
+[node name="Spear3" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="TravelSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3/Spear3"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3/Spear3"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="SandDustParticle3" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3" instance=ExtResource("18_1718j")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="SandSplatterParticle3" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3" instance=ExtResource("19_jm82n")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="Spear4" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup3/Event"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -6.3931, -0.692822, -12.0898)
+visible = false
+
+[node name="Spear4" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="TravelSFX4" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4/Spear4"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX4" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4/Spear4"]
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="SandDustParticle4" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4" instance=ExtResource("18_1718j")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="SandSplatterParticle4" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4" instance=ExtResource("19_jm82n")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/SpearGroup3/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_jkr7i")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/SpearGroup3"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 9.5, 14)
+shape = SubResource("BoxShape3D_ly0fh")
+
+[node name="SpearGroup4" parent="DeathlessAct/Hallway" instance=ExtResource("12_bresa")]
+transform = Transform3D(0.999887, 0, 0.0150269, 0, 1, 0, -0.0150269, 0, 0.999887, -47.6745, -45.0912, 47.2864)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28882e-05, 0, -3.05176e-05)
+script = ExtResource("13_h7bmr")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="TravelSFX" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.378, -0.799995, -1.60001)
+stream = ExtResource("14_6nemi")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="ImpactSFX" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.378, -0.799995, -1.60001)
+stream = ExtResource("15_jy5l8")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+
+[node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.74625, -1.9, -3.33997)
+visible = false
+
+[node name="Spear1" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear1" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="SandDustParticle1" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear1" instance=ExtResource("18_1718j")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="SandSplatterParticle1" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear1" instance=ExtResource("19_jm82n")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="Spear2" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 2.622, 0.400002, 0.199982)
+visible = false
+
+[node name="Spear2" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear2" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="SandDustParticle2" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear2" instance=ExtResource("18_1718j")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="SandSplatterParticle2" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear2" instance=ExtResource("19_jm82n")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="Spear3" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -6.70356, -2.74121, 2.43423)
+visible = false
+
+[node name="Spear3" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear3" instance=ExtResource("13_6hfyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+isDisabled = true
+
+[node name="SandDustParticle3" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear3" instance=ExtResource("18_1718j")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="SandSplatterParticle3" parent="DeathlessAct/Hallway/SpearGroup4/Event/Spear3" instance=ExtResource("19_jm82n")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_jphx6")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/SpearGroup4"]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 14.2625, 4, -9.91043)
+shape = SubResource("BoxShape3D_ly0fh")
+
 [node name="Interior" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -216.083, -45.2027, -420.828)
 
@@ -1024,38 +3297,28 @@ transform = Transform3D(0.72176, 0, 0.692143, 0, 1, 0, -0.692143, 0, 0.72176, 38
 [node name="FlameGroup1" type="Node3D" parent="DeathlessAct/Interior"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 50.8371, -19.7861, 41.7776)
 
-[node name="FlameShooter1" parent="DeathlessAct/Interior/FlameGroup1" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter1" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.764404, 0, -3.38519)
 "State Lengths/active" = 1.6
 stateLengths = [0.5, 1.6]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter2" parent="DeathlessAct/Interior/FlameGroup1" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter2" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.90451, 0, -33.1978)
 "State Lengths/active" = 1.6
 stateLengths = [0.5, 1.6]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter3" parent="DeathlessAct/Interior/FlameGroup1" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter3" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92688, 0, -54.8362)
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter4" parent="DeathlessAct/Interior/FlameGroup1" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter4" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.41512, 0.699997, -74.9699)
 "State Lengths/active" = 2.5
 stateLengths = [0.5, 2.5]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup1" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.41512, 1.8, -74.9699)
 "State Lengths/active" = 2.5
 stateLengths = [0.5, 2.5]
-animator = NodePath("")
-timer = NodePath("")
 
 [node name="RedMajin" parent="DeathlessAct/Interior" instance=ExtResource("5_ofywg")]
 transform = Transform3D(0.72176, 0, 0.692143, 0, 1, 0, -0.692143, 0, 0.72176, 19.8176, -19.4939, 10.1891)
@@ -1063,76 +3326,59 @@ transform = Transform3D(0.72176, 0, 0.692143, 0, 1, 0, -0.692143, 0, 0.72176, 19
 [node name="FlameGroup2" type="Node3D" parent="DeathlessAct/Interior"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.0915, -19.7861, -14.221)
 
-[node name="FlameShooter1" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter1" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61285, 0, -1.09691)
 "State Lengths/active" = 1.5
 stateLengths = [0.5, 1.5]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter2" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter2" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.512848, 0, -1.09691)
 "State Lengths/active" = 1.5
 stateLengths = [0.5, 1.5]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter3" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter3" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.387146, 0, -12.6978)
 "State Lengths/active" = 1.5
 stateLengths = [0.5, 1.5]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter4" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter4" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.48715, 0, -12.6978)
 "State Lengths/active" = 1.5
 stateLengths = [0.5, 1.5]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.53714, 0.750015, -19.6006)
 "State Lengths/inactive" = 1.2
 stateLengths = [1.2, 1.0]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter6" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter6" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.53714, 1.85002, -19.6006)
 "State Lengths/inactive" = 1.2
 stateLengths = [1.2, 1.0]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter7" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter7" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -1.94202, 5.24909, -32.0121)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
 stateLengths = [1.0, 3.0]
-animator = NodePath("")
-timer = NodePath("")
 
-[node name="FlameShooter8" parent="DeathlessAct/Interior/FlameGroup2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("11_a6cyj")]
+[node name="FlameShooter8" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -1.94202, 4.14908, -32.0121)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
 stateLengths = [1.0, 3.0]
-animator = NodePath("")
-timer = NodePath("")
 
 [node name="DoorCrumble" parent="DeathlessAct/Interior" instance=ExtResource("12_bresa")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -66.7541, -19.7949, -0.332336)
 collision_layer = 0
 "Enter Mode" = 0
 
-[node name="Event" type="Node3D" parent="DeathlessAct/Interior/DoorCrumble" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="DeathlessAct/Interior/DoorCrumble"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4001, 0, 3.05176e-05)
 script = ExtResource("13_h7bmr")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("")
 
 [node name="FallingSandDustParticle1" parent="DeathlessAct/Interior/DoorCrumble/Event" instance=ExtResource("14_xyixh")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.999985, 0, 0)
