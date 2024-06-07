@@ -1,17 +1,51 @@
-[gd_scene load_steps=4 format=3 uid="uid://duchuuu3o06gc"]
+[gd_scene load_steps=5 format=3 uid="uid://duchuuu3o06gc"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_8r8x5"]
 [ext_resource type="Resource" uid="uid://cgio2q1qnwk41" path="res://resource/level data/sand oasis/Act1Deathless.tres" id="2_gb6ys"]
+[ext_resource type="Resource" uid="uid://men4otfrvbhp" path="res://area/1 sand oasis/act 1/camera/UTurnHallCam.tres" id="3_uadyx"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_vokyw"]
 
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_8r8x5")]
 Data = ExtResource("2_gb6ys")
+InitialCameraSettings = ExtResource("3_uadyx")
+
+[node name="01Opening" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="02Slope" parent="Static/Visuals" index="2"]
+startEnabled = true
+
+[node name="03Oasis" parent="Static/Visuals" index="3"]
+startEnabled = true
+
+[node name="04Forest" parent="Static/Visuals" index="4"]
+startEnabled = true
+
+[node name="05Islands" parent="Static/Visuals" index="5"]
+startEnabled = true
+
+[node name="06Interior" parent="Static/Visuals" index="6"]
+startEnabled = true
+
+[node name="07Sandfall" parent="Static/Visuals" index="7"]
+startEnabled = true
+
+[node name="07SandfallLOD" parent="Static/Visuals" index="8"]
+startEnabled = true
+
+[node name="07Beach" parent="Static/Visuals" index="9"]
+startEnabled = true
+
+[node name="08End" parent="Static/Visuals" index="10"]
+startEnabled = true
 
 [node name="DeathlessAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="DeathlessAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.7773, -44.9509, -299.913)
+transform = Transform3D(0.984546, 0, -0.175126, 0, 1, 0, 0.175126, 0, 0.984546, -60.2335, -44.9509, -382.779)
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("3_vokyw")]
+
+[editable path="Static"]
