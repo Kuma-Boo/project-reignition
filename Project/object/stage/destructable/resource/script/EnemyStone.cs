@@ -33,3 +33,15 @@ private void Shatter()
 {
 	// Replace with function body.
 }
+
+
+private void Shatter()
+{
+	// Replace with function body.
+}
+
+
+private void _on_red_majin_defeated()
+{
+	// Replace with function body.
+}

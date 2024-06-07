@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://duchuuu3o06gc"]
+[gd_scene load_steps=50 format=3 uid="uid://duchuuu3o06gc"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_8r8x5"]
 [ext_resource type="Resource" uid="uid://cgio2q1qnwk41" path="res://resource/level data/sand oasis/Act1Deathless.tres" id="2_gb6ys"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_vokyw"]
 [ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="5_ofywg"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="6_krrlv"]
-[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="6_x7qjf"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="7_hkd0y"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="9_jbtra"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="9_kte0a"]
@@ -2775,14 +2774,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.0778, 0, -372.785)
 [node name="RichRing" parent="DeathlessAct/Hallway" instance=ExtResource("6_krrlv")]
 transform = Transform3D(0.98439, 0, -0.176002, 0, 1, 0, 0.176002, 0, 0.98439, -8.83377, -44.0485, 1.39301)
 
-[node name="Enemies" type="Node3D" parent="DeathlessAct/Hallway"]
-
-[node name="RedMajin" parent="DeathlessAct/Hallway/Enemies" instance=ExtResource("5_ofywg")]
+[node name="RedMajin" parent="DeathlessAct/Hallway" instance=ExtResource("5_ofywg")]
 transform = Transform3D(-0.984726, 0, 0.174112, 0, 1, 0, -0.174112, 0, -0.984726, -6.16223, -44.5894, 9.65671)
-
-[node name="EnemyStone" parent="DeathlessAct/Hallway" instance=ExtResource("6_x7qjf")]
-transform = Transform3D(-0.984726, 0, 0.174112, 0, 1, 0, -0.174112, 0, -0.984726, -13.551, -43.9761, 12.561)
-enemyCount = 1
 
 [node name="Spring" parent="DeathlessAct/Hallway" instance=ExtResource("7_hkd0y")]
 transform = Transform3D(-0.984726, 0, 0.174112, 0, 1, 0, -0.174112, 0, -0.984726, -13.551, -44.647, 12.561)
@@ -3737,7 +3730,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.88568, -8.42093, 1.08972)
 
 [node name="Goal" parent="DeathlessAct/End" instance=ExtResource("9_sxgf1")]
 transform = Transform3D(0.686199, 0, 0.727414, 0, 1, 0, -0.727414, 0, 0.686199, -12.4487, -0.524151, -11.2633)
-
-[connection signal="Defeated" from="DeathlessAct/Hallway/Enemies/RedMajin" to="DeathlessAct/Hallway/EnemyStone" method="Shatter"]
 
 [editable path="Static"]
