@@ -83,7 +83,7 @@ namespace Project.Interface
 
 		public override void _PhysicsProcess(double delta)
 		{
-			if (!AllowPausing) return;
+			if (!AllowPausing || !Stage.IsLevelIngame) return;
 
 			if (Input.IsActionJustPressed("button_pause"))
 				TogglePause();
