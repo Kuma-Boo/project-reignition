@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://duchuuu3o06gc"]
+[gd_scene load_steps=54 format=3 uid="uid://duchuuu3o06gc"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_8r8x5"]
 [ext_resource type="Resource" uid="uid://cgio2q1qnwk41" path="res://resource/level data/sand oasis/Act1Deathless.tres" id="2_gb6ys"]
@@ -27,7 +27,9 @@
 [ext_resource type="PackedScene" uid="uid://7xvlyn3or8c0" path="res://area/1 sand oasis/data/particle/SandDustParticle.tscn" id="18_1718j"]
 [ext_resource type="PackedScene" uid="uid://6e1tlgtsfkxd" path="res://area/1 sand oasis/data/particle/SandSplatterParticle.tscn" id="19_jm82n"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="22_y6heq"]
-[ext_resource type="PackedScene" uid="uid://c61jp8ke67ib7" path="res://object/stage/common/SpikeBallPhysics.tscn" id="26_cwwky"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="23_qygr0"]
+[ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="28_y5rtn"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="30_q71cr"]
 
 [sub_resource type="Animation" id="Animation_qgpvs"]
 length = 0.001
@@ -2760,8 +2762,10 @@ size = Vector3(12, 20, 2)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_8r8x5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.311768, 1.52588e-05, 0.15712)
 Data = ExtResource("2_gb6ys")
 InitialCameraSettings = ExtResource("3_uadyx")
+metadata/_edit_group_ = true
 
 [node name="05Islands" parent="Static/Visuals" index="5"]
 startEnabled = true
@@ -2811,10 +2815,12 @@ enemyCount = 1
 
 [node name="Spring" parent="DeathlessAct/Hallway" instance=ExtResource("7_hkd0y")]
 transform = Transform3D(-0.984726, 0, 0.174112, 0, 1, 0, -0.174112, 0, -0.984726, -13.551, -44.5126, 12.561)
-finalHeight = -0.155
-distance = 4.54
+distance = 9.02
 launchDirection = 1
 voiceKey = &""
+
+[node name="FireSoul" parent="DeathlessAct/Hallway" instance=ExtResource("30_q71cr")]
+transform = Transform3D(0.987359, 0, -0.158503, 0, 1, 0, 0.158503, 0, 0.987359, -13.5598, -35.9781, 12.5323)
 
 [node name="Rings1" type="Node3D" parent="DeathlessAct/Hallway"]
 transform = Transform3D(0.987689, 0, -0.156435, 0, 1, 0, 0.156435, 0, 0.987689, -16.0282, -44.2711, 47.0921)
@@ -2846,7 +2852,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.2)
 transform = Transform3D(0.986572, 0, -0.163326, 0, 1, 0, 0.163326, 0, 0.986572, -20.2607, -45.0003, 76.1675)
 
 [node name="DashPanel2" parent="DeathlessAct/Hallway" instance=ExtResource("9_kte0a")]
-transform = Transform3D(0.986572, 0, -0.163326, 0, 1, 0, 0.163326, 0, 0.986572, -18.5249, -44.8975, 64.5856)
+transform = Transform3D(0.986572, 0, -0.163326, 0, 1, 0, 0.163326, 0, 0.986572, -18.539, -45, 64.603)
 
 [node name="SpearGroup1" parent="DeathlessAct/Hallway" instance=ExtResource("12_bresa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.0778, 0, 372.785)
@@ -3451,7 +3457,7 @@ transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.4151
 stateLengths = [0.5, 2.5]
 
 [node name="Pearls1" type="Node3D" parent="DeathlessAct/Interior"]
-transform = Transform3D(-0.704981, 0, -0.709226, 0, 1, 0, 0.709226, 0, -0.704981, -3.48874, -16.2456, -12.4498)
+transform = Transform3D(-0.704981, 0, -0.709226, 0, 1, 0, 0.709226, 0, -0.704981, -3.489, -15.321, -12.45)
 script = ExtResource("9_jbtra")
 Generate = false
 Source = null
@@ -3583,6 +3589,26 @@ transform = Transform3D(0.72176, 0, 0.692143, 0, 1, 0, -0.692143, 0, 0.72176, 19
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 0.8
 
+[node name="SpikeBall" parent="DeathlessAct/Interior" instance=ExtResource("23_qygr0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.2111, -18.5598, -15.268)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="FireSoul" parent="DeathlessAct/Interior" instance=ExtResource("30_q71cr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.3009, -19.2134, -13.0142)
+fireSoulIndex = 2
+
+[node name="SpikeBall2" parent="DeathlessAct/Interior" instance=ExtResource("23_qygr0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.7907, -18.5672, -13.2812)
+Movement/Mode = 2
+"Movement/Cycle Length" = -3.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
 [node name="FlameGroup2" type="Node3D" parent="DeathlessAct/Interior"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.0915, -19.7861, -14.221)
 
@@ -3628,8 +3654,11 @@ transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37
 "State Lengths/active" = 3.0
 stateLengths = [1.0, 3.0]
 
+[node name="RichRing" parent="DeathlessAct/Interior" instance=ExtResource("6_krrlv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -47.308, -15.3205, -14.2531)
+
 [node name="Pearls4" type="Node3D" parent="DeathlessAct/Interior"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -47.308, -15.78, -14.2531)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -47.308, -15.3205, -14.2531)
 script = ExtResource("9_jbtra")
 Generate = false
 Source = null
@@ -3732,14 +3761,24 @@ shape = SubResource("BoxShape3D_63lfy")
 [node name="End" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -324.676, -45.268, -437.297)
 
-[node name="SpikeBallPhysics" parent="DeathlessAct/End" instance=ExtResource("26_cwwky")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.87064, -5.90218, 0.476135)
+[node name="FireSoul" parent="DeathlessAct/End" instance=ExtResource("30_q71cr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.65878, -17.4153, 7.62903)
+fireSoulIndex = 3
 
-[node name="SpikeBallPhysics2" parent="DeathlessAct/End" instance=ExtResource("26_cwwky")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.88568, -8.42093, 1.08972)
+[node name="SpikeBallSpawner" parent="DeathlessAct/End" instance=ExtResource("28_y5rtn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.87064, -3.03476, 0.476135)
+maxSpawnAmount = 3
+lifetime = 7.0
+spawnInterval = 3.0
+
+[node name="SpikeBallSpawner2" parent="DeathlessAct/End" instance=ExtResource("28_y5rtn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.88568, -6.36343, 1.08972)
+maxSpawnAmount = 3
+lifetime = 7.0
+spawnInterval = 3.0
 
 [node name="Goal" parent="DeathlessAct/End" instance=ExtResource("9_sxgf1")]
-transform = Transform3D(0.686199, 0, 0.727414, 0, 1, 0, -0.727414, 0, 0.686199, -12.4487, 3.47585, -11.2633)
+transform = Transform3D(0.686199, 0, 0.727414, 0, 1, 0, -0.727414, 0, 0.686199, -12.4487, 0.647701, -11.2633)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/End/Goal"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 2)
