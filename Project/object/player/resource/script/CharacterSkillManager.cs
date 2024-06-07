@@ -86,7 +86,12 @@ namespace Project.Gameplay
 
 		#region Skills
 		private SkillRing SkillRing => SaveManager.ActiveGameData.skillRing;
-		public bool IsSkillEnabled(SkillKeyEnum key) => SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
+		public bool IsSkillEnabled(SkillKeyEnum key)
+		{
+			if (key == SkillKeyEnum.FlameStomp) return true;
+
+			return SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
+		}
 
 
 		[ExportCategory("Countdown Skills")]

@@ -43,17 +43,19 @@ namespace Project.Gameplay
 		/// <summary> Enum containing all skills. </summary>
 		private Array<SkillKeyEnum> skillKeyList = new();
 		/// <summary> How much does the skill cost to equip? </summary>
+		[Export]
 		private Array<int> skillCostList = new();
 
 		// Unlock requiremnts
 		/// <summary> What level does the player need to be for the skill to be unlocked? </summary>
+		[Export]
 		private Array<int> levelList = new();
 		/// <summary> How many fire souls does the player need to unlock this skill? </summary>
+		[Export]
 		private Array<int> fireSoulList = new();
 
 
 		#region Editor
-
 		private const string REBUILD_KEY = "Rebuild Skill List";
 		private const string EDIT_KEY = "Editing Skill";
 		private const string COST_KEY = "Skill/Cost";
@@ -62,8 +64,6 @@ namespace Project.Gameplay
 
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			ResizeLists();
-
 			Array<Dictionary> properties = new()
 			{
 				ExtensionMethods.CreateProperty(REBUILD_KEY, Variant.Type.Bool),
@@ -126,20 +126,6 @@ namespace Project.Gameplay
 
 			return true;
 		}
-
-
-		private void ResizeLists()
-		{
-			int targetSize = (int)SkillKeyEnum.Max;
-			if (skillCostList.Count != targetSize)
-				skillCostList.Resize(targetSize);
-
-			if (levelList.Count != targetSize)
-				levelList.Resize(targetSize);
-
-			if (fireSoulList.Count != targetSize)
-				fireSoulList.Resize(targetSize);
-		}
 		#endregion
 
 
@@ -195,6 +181,8 @@ namespace Project.Gameplay
 			// Remove extras
 			skillKeyList.Resize((int)SkillKeyEnum.Max);
 			skillCostList.Resize((int)SkillKeyEnum.Max);
+			levelList.Resize((int)SkillKeyEnum.Max);
+			fireSoulList.Resize((int)SkillKeyEnum.Max);
 		}
 	}
 

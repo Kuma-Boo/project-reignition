@@ -355,6 +355,7 @@ namespace Project.Gameplay
 			animationTree.Set(ACCEL_JUMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			animationTree.Set(BOUNCE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			animationTree.Set(STOMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
 
 		public void JumpAnimation()
@@ -370,16 +371,20 @@ namespace Project.Gameplay
 		public void LaunchAnimation() => UpdateAirState("launch", false);
 
 
+		private readonly StringName STOMP_STATE = "stomp";
+		private readonly StringName STOMP_TRIGGER = "parameters/air_tree/stomp_trigger/request";
 		public void StompAnimation(bool offensive)
 		{
-			UpdateAirState(FALL_STATE, false);
 			if (offensive)
 			{
-				// TODO Separate stomp animation
+				// Offensive stomp animation
 				Character.Effect.StartStompFX();
+				UpdateAirState(STOMP_STATE, false);
+				animationTree.Set(STOMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
 			else
 			{
+				UpdateAirState(FALL_STATE, false);
 				animationTree.Set(FALL_SPEED, 2.5f);
 				animationTree.Set(FALL_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}

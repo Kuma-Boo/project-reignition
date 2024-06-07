@@ -1002,11 +1002,17 @@ namespace Project.Gameplay
 		/// <summary> How fast to fall when stomping </summary>
 		private const int STOMP_SPEED = -32;
 		/// <summary> How much gravity to add each frame. </summary>
-		private const int STOMP_GRAVITY = 180;
+		private const int JUMP_CANCEL_GRAVITY = 180;
+		/// <summary> How much gravity to add each frame. </summary>
+		private const int STOMP_GRAVITY = 540;
 		private void UpdateStomp()
 		{
 			MoveSpeed = 0; // Go STRAIGHT down
-			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
+
+			if (SkillRing.IsSkillUnlocked(SkillKeyEnum.FlameStomp))
+				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
+			else
+				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, JUMP_CANCEL_GRAVITY * PhysicsManager.physicsDelta);
 		}
 
 		private void CheckStomp()
