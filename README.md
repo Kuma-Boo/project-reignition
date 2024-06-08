@@ -1,4 +1,4 @@
-# Project Reignition
+<h1 align="center"><img src="Project Reignition logo.png" width="512" align="center"></h1>
 A Fan Remake of Sonic and the Secret Rings.
 
 Originally released in 2007 for the Nintendo Wii, Sonic and the Secret Rings' initially saw a moderate amount of critical and commercial success. Despite this, its reputation has dwindled over time among fans. Some commonly cited complaints include:
