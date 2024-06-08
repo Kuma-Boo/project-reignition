@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, unshaded;
+render_mode diffuse_burley, unshaded, fog_disabled;
 
 global uniform float time;
 
