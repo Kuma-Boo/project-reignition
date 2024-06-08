@@ -34,6 +34,8 @@ namespace Project.Gameplay
 				LevelState = LevelStateEnum.Ingame;
 			else
 				LevelState = LevelStateEnum.Loading;
+
+			StartingSaturation = Environment.Environment.AdjustmentSaturation;
 		}
 
 
@@ -450,6 +452,7 @@ namespace Project.Gameplay
 		/// <summary> Reference to active area's WorldEnvironment node. </summary>
 		[Export]
 		public WorldEnvironment Environment { get; private set; }
+		public float StartingSaturation { get; private set; }
 	}
 
 
