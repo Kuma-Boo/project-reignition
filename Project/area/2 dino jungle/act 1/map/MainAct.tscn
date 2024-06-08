@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=84 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="4_1j3qj"]
@@ -7,11 +7,10 @@
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="7_ys7sj"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="24_wi7s4"]
-[ext_resource type="Resource" uid="uid://dyjpi8d72jkne" path="res://resource/preset/lockout/EventLockout.tres" id="25_18tm7"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="29_prhwm"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="37_8fetv"]
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_158q5"]
-[ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="39_p0jth"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="39_p0jth"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="40_m082x"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="41_nmbev"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="42_o7jek"]
@@ -41,7 +40,6 @@
 [ext_resource type="PackedScene" uid="uid://cfnw72eh8em4c" path="res://area/2 dino jungle/object/rock/GrayRock.tscn" id="67_82x8e"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="68_wfrq5"]
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="69_kptet"]
-
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1mwhh"]
 size = Vector3(100, 100, 250)
@@ -310,9 +308,6 @@ size = Vector3(8, 15, 6)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("69_kptet")]
-"Level ID" = "dj_a1_main"
-"Item Cycling/Activation Trigger" = NodePath("")
-completionAnimator = NodePath("")
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -321,6 +316,7 @@ metadata/_edit_lock_ = true
 
 [node name="AutorunLockout" parent="MainAct/SpawnPosition" instance=ExtResource("3_bw6cf")]
 "Trigger Mode" = 2
+"Enter Mode" = 0
 "Exit Mode" = 0
 
 [node name="Autorun" type="Node3D" parent="MainAct/SpawnPosition/AutorunLockout"]
@@ -344,7 +340,7 @@ shape = SubResource("BoxShape3D_1mwhh")
 [node name="Trigger" type="Node3D" parent="MainAct"]
 
 [node name="TrioStartTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioStartTrigger"]
 script = ExtResource("7_ys7sj")
@@ -352,40 +348,40 @@ delays = []
 textKeys = ["din_event_trio_so", "din_event_trio_sh", "din_event_trio2_so", "din_event_trio2_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioStartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
 [node name="TrioTutorialTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -2.01432, -331.724)
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -1.03775, -331.724)
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioTutorialTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_tutorial_trio_so", "din_tutorial_trio_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioTutorialTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
 [node name="TrioEndTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -39.7, -425.59)
+transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioEndTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_event_trio3_so", "din_event_trio3_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioEndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
 [node name="WaterfallTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -192.58, -27.92, -476.569)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -192.58, -36.4183, -476.569)
 
-[node name="FallsEvent" type="Node3D" parent="MainAct/Trigger/WaterfallTrigger" node_paths=PackedStringArray("animator", "playerStandin", "cameraStandin")]
+[node name="FallsEvent" type="Node3D" parent="MainAct/Trigger/WaterfallTrigger" node_paths=PackedStringArray("animator")]
 script = ExtResource("24_wi7s4")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
-playerStandin = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/RiverEventRoot/Skeleton3D/PlayerBone/Player")
-cameraStandin = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/RiverEventRoot/Skeleton3D/Camera")
-lockout = ExtResource("25_18tm7")
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/WaterfallTrigger/FallsEvent"]
 script = ExtResource("7_ys7sj")
@@ -399,10 +395,11 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/WaterfallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_msrs8")
 
 [node name="CaveSplitTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.011, -223.311, -621.829)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
 
 [node name="Dialog" type="Node3D" parent="MainAct/Trigger/CaveSplitTrigger"]
 script = ExtResource("7_ys7sj")
@@ -1080,7 +1077,6 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 5.12425, 0.45, -14
 
 [node name="DashPanelM4" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.983521, 0.174284, -0.0480792, 0.167216, 0.978013, 0.124617, 0.0687401, 0.114524, -0.991039, -50.4943, 1.28003, -187.255)
-alignToPath = true
 
 [node name="WhiteRock6" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(-0.00591561, 0.108652, 0.994062, 0.126349, 0.986194, -0.10704, -0.991968, 0.124965, -0.0195619, -55.5291, 2.22895, -186.769)
@@ -4041,6 +4037,7 @@ transform = Transform3D(0.941347, 0, -0.33744, 0, 1, 0, 0.33744, 0, 0.941347, -2
 [node name="Spring" parent="MainAct/Cave/LeftPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.9378, 3.5, -107.222)
 finalHeight = 9.0
+voiceKey = &""
 
 [node name="EnemyStone" parent="MainAct/Cave/LeftPath" instance=ExtResource("49_g35os")]
 transform = Transform3D(3.70769, 0, -0.750507, 0, 3, 0, 1.50101, 0, 1.85384, -22.9299, 6.09999, -106.68)
@@ -4250,12 +4247,15 @@ transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195
 
 [node name="ThornSpring1" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 6.32635, 1, -68.9848)
+voiceKey = &""
 
 [node name="ThornSpring2" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 9.22369, 1, -75.5882)
+voiceKey = &""
 
 [node name="ThornSpring3" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 6.21219, 1, -81.1497)
+voiceKey = &""
 
 [node name="ItemBox" parent="MainAct/Cave/RightPath" instance=ExtResource("56_7lmmf")]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 8.23538, 2.44427, -92.154)
@@ -4269,18 +4269,21 @@ transform = Transform3D(0.91496, 0.307059, -0.261846, 3.72529e-09, 0.648864, 0.7
 middleHeight = 8.0
 finalHeight = 7.5
 distance = 19.0
+voiceKey = &""
 
 [node name="Spring2" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.762668, -0.621734, 0.178279, 0, 0.275637, 0.961261, -0.64679, -0.733124, 0.21022, 18.5703, 9.46794, -115.317)
 middleHeight = 1.0
 finalHeight = -10.0
 distance = 17.0
+voiceKey = &""
 
 [node name="Spring3" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.939692, -0.262003, 0.219846, 0, 0.642788, 0.766044, -0.34202, -0.719846, 0.604023, 8.16901, 0.653503, -127.508)
 middleHeight = 5.0
 finalHeight = 3.0
 distance = 25.0
+voiceKey = &""
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Cave"]
 transform = Transform3D(0.999794, 0.00633547, 0.0192991, -0.00467379, 0.996373, -0.0849611, -0.0197674, 0.0848534, 0.996197, 0.0536499, 4.8562, -155.972)
@@ -4331,6 +4334,7 @@ transform = Transform3D(0.642787, -0.0667652, 0.763129, 0, 0.996195, 0.0871557, 
 middleHeight = 20.0
 finalHeight = -4.0
 distance = 2.0
+voiceKey = &""
 
 [node name="Ring" parent="MainAct/Cave/Spring" instance=ExtResource("40_m082x")]
 transform = Transform3D(0.984808, 0, 0.173648, 0.0151344, 0.996195, -0.0858316, -0.172987, 0.0871558, 0.98106, 0.113525, 11.0006, 0.473633)
@@ -4625,10 +4629,10 @@ transform = Transform3D(0.993961, 0.103117, -0.0375313, 0, 0.34202, 0.939693, 0.
 middleHeight = 0.05
 finalHeight = -6.0
 distance = 34.0
+voiceKey = &""
 
 [node name="DashPanel2" parent="MainAct/Cave" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -78.5685, 2.95007, -221.977)
-alignToPath = true
 sfxPlayer = NodePath("../DashPanel/SFX")
 
 [node name="Spiral" type="Node3D" parent="MainAct"]
@@ -5914,6 +5918,7 @@ transform = Transform3D(-1.20533, 0, 0.892844, 0, 1.5, 0, -0.892844, 0, -1.20533
 [node name="Spring1" parent="MainAct/FeedingTunnel" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 27.6446, 5.10001, -4.49023)
 finalHeight = 4.0
+voiceKey = &""
 
 [node name="Rings4" type="Node3D" parent="MainAct/FeedingTunnel"]
 transform = Transform3D(-0.98468, 0, 0.17437, 0, 1, 0, -0.17437, 0, -0.98468, 27.9858, 8.39999, -1.81665)
@@ -5941,6 +5946,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5.4)
 [node name="Spring2" parent="MainAct/FeedingTunnel" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.987538, 0, -0.157383, 0, 1, 0, 0.157383, 0, 0.987538, 27.7892, 7.70001, 5.94324)
 finalHeight = 5.0
+voiceKey = &""
 
 [node name="WhiteRock4" parent="MainAct/FeedingTunnel" instance=ExtResource("38_158q5")]
 transform = Transform3D(0.898431, 0, 1.20118, 0, 1.4, 0, -1.20118, 0, 0.898431, 21.3189, 10.4714, 22.4683)
@@ -5977,7 +5983,6 @@ transform = Transform3D(-1.15497, 0, -0.325648, 0, 2, 0, 0.325648, 0, -1.15497, 
 
 [node name="DashPanel" parent="MainAct/FeedingTunnel" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615, -16.6152, 11.4794, 25.6758)
-alignToPath = true
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
@@ -6149,6 +6154,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, -0.707107, 0)
 [node name="Spring" parent="MainAct/End" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(-0.725386, 0, 0.688342, 0, 1, 0, -0.688342, 0, -0.725386, -18, -7.70001, 17)
 finalHeight = 5.0
+voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
 transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
