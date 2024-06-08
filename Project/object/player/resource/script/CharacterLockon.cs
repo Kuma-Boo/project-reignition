@@ -60,6 +60,7 @@ namespace Project.Gameplay
 		public void StopHomingAttack()
 		{
 			IsHomingAttacking = false;
+			IsPerfectHomingAttack = false;
 			Character.ResetActionState();
 			ResetLockonTarget();
 		}
@@ -153,8 +154,6 @@ namespace Project.Gameplay
 		public void ResetLockonTarget()
 		{
 			Character.Camera.LockonTarget = null;
-			IsHomingAttacking = false;
-			IsPerfectHomingAttack = false;
 
 			if (Target != null) //Reset Active Target
 			{
@@ -200,10 +199,13 @@ namespace Project.Gameplay
 				Character.MoveSpeed = 0; // Reset speed
 
 				bool applySnapping = false;
-				if (Target is Area3D)
-					applySnapping = areaTrigger.GetOverlappingAreas().Contains(Target as Area3D);
-				else if (Target is PhysicsBody3D)
-					applySnapping = areaTrigger.GetOverlappingBodies().Contains(Target as PhysicsBody3D);
+				if (!IsBouncingLockoutActive)
+				{
+					if (Target is Area3D)
+						applySnapping = areaTrigger.GetOverlappingAreas().Contains(Target as Area3D);
+					else if (Target is PhysicsBody3D)
+						applySnapping = areaTrigger.GetOverlappingBodies().Contains(Target as PhysicsBody3D);
+				}
 
 				// Only snap when target being hit is correct
 				if (applySnapping)
@@ -212,7 +214,8 @@ namespace Project.Gameplay
 			else // Only bounce the player backwards if bounceUpward is false
 				Character.MoveSpeed = -bounceSpeed;
 
-			ResetLockonTarget();
+			if (IsBouncingLockoutActive) return;
+
 			Character.CanJumpDash = true;
 			Character.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;

@@ -27,6 +27,8 @@ namespace Project.Gameplay
 		SplashJump, // Bounce the player when jump dashing into an obstacle
 		ManualDrift, // Manually perform a drift for more speed and points/exp
 
+		PerfectHomingAttack, // Colors Ultimate style
+
 		Max, // Number of skills
 	}
 

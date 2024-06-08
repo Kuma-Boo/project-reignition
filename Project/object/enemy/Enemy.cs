@@ -112,29 +112,33 @@ namespace Project.Gameplay
 		protected virtual void UpdateEnemy() { }
 
 
-		public virtual void TakePlayerDamage()
+		public virtual void TakeHomingAttackDamage()
 		{
-			if (Character.Lockon.IsPerfectHomingAttack)
-				currentHealth -= 2; // float damage
-			else
-				currentHealth--; // TODO increase player attack based on skills?
+			if (Character.Skills.IsSkillEnabled(SkillKeyEnum.PerfectHomingAttack) && Character.Lockon.IsPerfectHomingAttack)
+				currentHealth--;
 
-			if (IsDefeated)
-				Defeat();
-			else
-				Character.Camera.SetDeferred("LockonTarget", this);
+			Character.Lockon.StopHomingAttack();
+			TakeDamage(1);
+
+			if (!IsDefeated)
+			{
+				Character.Camera.LockonTarget = hurtbox;
+				GD.Print("SET");
+			}
 		}
 
 
-		public virtual void TakeExternalDamage(int amount = -1)
+		public virtual void TakeDamage(int amount = -1)
 		{
 			if (amount == -1)
 				currentHealth = 0;
 			else
 				currentHealth -= amount;
 
-			if (IsDefeated)
-				Defeat();
+			if (!IsDefeated) return;
+
+			Defeat();
+			Character.Lockon.ResetLockonTarget();
 		}
 
 
@@ -144,7 +148,7 @@ namespace Project.Gameplay
 		protected virtual void Defeat()
 		{
 			SetHitboxStatus(false);
-			Character.Camera.LockonTarget = null;
+			GD.Print("Set null from DEFEAT");
 			BonusManager.instance.AddEnemyChain();
 			EmitSignal(SignalName.Defeated);
 		}
@@ -187,9 +191,11 @@ namespace Project.Gameplay
 				Defeat();
 			else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
 				Defeat();
+			else if (Character.Skills.IsAttacking)
+				TakeDamage(1);
 			else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
-				TakePlayerDamage();
+				TakeHomingAttackDamage();
 				Character.Lockon.StartBounce(IsDefeated);
 			}
 			else if (damagePlayer)

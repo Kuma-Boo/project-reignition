@@ -303,20 +303,20 @@ namespace Project.Gameplay
 		}
 
 
-		public override void TakePlayerDamage()
+		public override void TakeHomingAttackDamage()
 		{
 			Stagger();
-			base.TakePlayerDamage();
+			base.TakeHomingAttackDamage();
 
 			if (!IsDefeated)
 				animationPlayer.Play("stagger");
 		}
 
 
-		public override void TakeExternalDamage(int amount = -1)
+		public override void TakeDamage(int amount = -1)
 		{
 			Stagger();
-			base.TakeExternalDamage(amount);
+			base.TakeDamage(amount);
 		}
 
 
@@ -421,7 +421,7 @@ namespace Project.Gameplay
 			if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
 			{
 				Stagger();
-				Character.Lockon.StartBounce(IsDefeated);
+				Character.Lockon.StartBounce(true);
 				return;
 			}
 

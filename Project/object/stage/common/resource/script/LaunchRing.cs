@@ -232,7 +232,7 @@ namespace Project.Gameplay.Objects
 
 			//Disable homing reticle
 			Character.Lockon.IsMonitoring = false;
-			Character.Lockon.ResetLockonTarget();
+			Character.Lockon.StopHomingAttack();
 		}
 
 		private void OnExited(Area3D a)

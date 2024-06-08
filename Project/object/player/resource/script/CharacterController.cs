@@ -101,6 +101,7 @@ namespace Project.Gameplay
 			}
 			else if (ActionState == ActionStates.Stomping)
 			{
+				Skills.IsAttacking = false;
 				Effect.StopStompFX();
 			}
 			else if (ActionState == ActionStates.Grindstep)
@@ -1032,11 +1033,13 @@ namespace Project.Gameplay
 			MoveSpeed = 0; // Kill horizontal speed
 
 			canLandingBoost = true;
-			Lockon.ResetLockonTarget();
+
 			Lockon.IsMonitoring = false;
+			if (Lockon.IsHomingAttacking)
+				Lockon.StopHomingAttack();
 			SetActionState(ActionStates.Stomping);
 
-			// TODO Play a separate stomping animation if using a stomp skill
+			Skills.IsAttacking = Skills.IsSkillEnabled(SkillKeyEnum.FlameStomp);
 			Animator.StompAnimation(Skills.IsSkillEnabled(SkillKeyEnum.FlameStomp));
 		}
 		#endregion
