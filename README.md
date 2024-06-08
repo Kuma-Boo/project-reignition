@@ -9,9 +9,13 @@ Originally released in 2007 for the Nintendo Wii, Sonic and the Secret Rings' in
 
 While this remake intends to remain largely faithful to the original ideas of Secret Rings, many things will be changed to create a more enjoyable experience.
 
-<h1 align="center"><img src="./misc/joindiscordimage.png" width="712" align="center"></h1>
+<h2> </h2>
 
-[![Join our Discord](https://discord.com/api/guilds/1216572589275611217/embed.png?style=banner2)](https://discord.gg/k53GGE6CDM)
+<h2 align="center">
+ <a href="https://discord.gg/k53GGE6CDM"> 
+  <img src="./misc/joindiscordimage.png" width="712" align="center">
+  </a>
+ </h2>
 
 
 <h1 align="center"><img src="./misc/MajorChangesimage.png" width="712" align="center"></h1>
