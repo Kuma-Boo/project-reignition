@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cmo5j0toe1y46"]
+[gd_scene load_steps=56 format=3 uid="uid://cmo5j0toe1y46"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_8r8x5"]
 [ext_resource type="Resource" uid="uid://cgio2q1qnwk41" path="res://resource/level data/sand oasis/Act1Deathless.tres" id="2_gb6ys"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="5_ofywg"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="6_krrlv"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="6_x7qjf"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="6_ylwrq"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="7_hkd0y"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="9_jbtra"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="9_kte0a"]
@@ -30,6 +31,9 @@
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="23_qygr0"]
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="28_y5rtn"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="30_q71cr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ulmyf"]
+size = Vector3(15, 20, 2.5)
 
 [sub_resource type="Animation" id="Animation_qgpvs"]
 length = 0.001
@@ -2767,6 +2771,9 @@ Data = ExtResource("2_gb6ys")
 InitialCameraSettings = ExtResource("3_uadyx")
 metadata/_edit_group_ = true
 
+[node name="01Opening" parent="Static/Visuals" index="1"]
+startEnabled = false
+
 [node name="05Islands" parent="Static/Visuals" index="5"]
 startEnabled = true
 
@@ -2782,9 +2789,6 @@ startEnabled = true
 [node name="07Beach" parent="Static/Visuals" index="9"]
 startEnabled = true
 
-[node name="08End" parent="Static/Visuals" index="10"]
-startEnabled = true
-
 [node name="DeathlessAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="DeathlessAct"]
@@ -2794,8 +2798,48 @@ metadata/_edit_lock_ = true
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("3_vokyw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56617, 0, -0.100708)
 
+[node name="CullingMap" type="Node3D" parent="DeathlessAct"]
+
+[node name="Hallway-U" parent="DeathlessAct/CullingMap" instance=ExtResource("12_bresa")]
+transform = Transform3D(-0.725723, 0, -0.687987, 0, 1, 0, 0.687987, 0, -0.725723, -130.188, -62.9275, -343.89)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Hallway-U"]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ulmyf")
+
+[node name="Interior-L" parent="DeathlessAct/CullingMap" instance=ExtResource("12_bresa")]
+transform = Transform3D(0.21678, 0, 0.97622, 0, 1, 0, -0.97622, 0, 0.21678, -108.536, -48.1386, -326.801)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Interior-L"]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ulmyf")
+
+[node name="Interior-U" parent="DeathlessAct/CullingMap" instance=ExtResource("12_bresa")]
+transform = Transform3D(0.721047, 0, 0.692886, 0, 1, 0, -0.692886, 0, 0.721047, -307.795, -64.9829, -419.304)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Interior-U"]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ulmyf")
+
+[node name="End-L" parent="DeathlessAct/CullingMap" instance=ExtResource("12_bresa")]
+transform = Transform3D(-0.685666, 0, 0.727916, 0, 1, 0, -0.727916, 0, -0.685666, -275.233, -65.1529, -427.642)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/End-L"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ulmyf")
+
 [node name="Hallway" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.0778, 0, -372.785)
+script = ExtResource("6_ylwrq")
+startEnabled = true
 
 [node name="RichRing" parent="DeathlessAct/Hallway" instance=ExtResource("6_krrlv")]
 transform = Transform3D(0.98439, 0, -0.176002, 0, 1, 0, 0.176002, 0, 0.98439, -8.83377, -44.0485, 1.39301)
@@ -3420,6 +3464,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.601, -12.2663, 13.2398)
 
 [node name="Interior" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -216.083, -45.2027, -420.828)
+script = ExtResource("6_ylwrq")
 
 [node name="RedMajin" parent="DeathlessAct/Interior" instance=ExtResource("5_ofywg")]
 transform = Transform3D(0.692143, 0, -0.72176, 0, 1, 0, 0.72176, 0, 0.692143, 38.6805, -19.4644, 29.8221)
@@ -3445,12 +3490,12 @@ stateLengths = [0.5, 1.6]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92688, 0, -54.8362)
 
 [node name="FlameShooter4" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
-transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.41512, 0.699997, -74.9699)
+transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.51, 0.7, -74.97)
 "State Lengths/active" = 2.5
 stateLengths = [0.5, 2.5]
 
 [node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
-transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.41512, 1.8, -74.9699)
+transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.51004, 1.8, -74.9699)
 "State Lengths/active" = 2.5
 stateLengths = [0.5, 2.5]
 
@@ -3633,23 +3678,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.48715, 0, -12.6978)
 stateLengths = [0.5, 1.5]
 
 [node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
-transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.53714, 0.750015, -19.6006)
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.66339, 0.750015, -19.6006)
 "State Lengths/inactive" = 1.2
 stateLengths = [1.2, 1.0]
 
 [node name="FlameShooter6" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
-transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.53714, 1.85002, -19.6006)
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.66339, 1.85002, -19.6006)
 "State Lengths/inactive" = 1.2
 stateLengths = [1.2, 1.0]
 
 [node name="FlameShooter7" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
-transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -1.94202, 5.24909, -32.0121)
+transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -2.08038, 5.24909, -31.8737)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
 stateLengths = [1.0, 3.0]
 
 [node name="FlameShooter8" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
-transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -1.94202, 4.14908, -32.0121)
+transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -2.08051, 4.149, -31.8877)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
 stateLengths = [1.0, 3.0]
@@ -3760,6 +3805,7 @@ shape = SubResource("BoxShape3D_63lfy")
 
 [node name="End" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -324.676, -45.268, -437.297)
+script = ExtResource("6_ylwrq")
 
 [node name="FireSoul" parent="DeathlessAct/End" instance=ExtResource("30_q71cr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.65878, -17.4153, 7.62903)
@@ -3769,13 +3815,13 @@ fireSoulIndex = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.87064, 0.169285, 0.476135)
 maxSpawnAmount = 3
 lifetime = 5.0
-spawnInterval = 2.5
+spawnInterval = 1.5
 
 [node name="SpikeBallSpawner2" parent="DeathlessAct/End" instance=ExtResource("28_y5rtn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6839, -3.15939, 0.93869)
 maxSpawnAmount = 3
 lifetime = 5.0
-spawnInterval = 2.5
+spawnInterval = 1.5
 
 [node name="Goal" parent="DeathlessAct/End" instance=ExtResource("9_sxgf1")]
 transform = Transform3D(0.686199, 0, 0.727414, 0, 1, 0, -0.727414, 0, 0.686199, -12.4487, 0.647701, -11.2633)
@@ -3784,6 +3830,14 @@ transform = Transform3D(0.686199, 0, 0.727414, 0, 1, 0, -0.727414, 0, 0.686199, 
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 2)
 shape = SubResource("BoxShape3D_ha137")
 
+[connection signal="Activated" from="DeathlessAct/CullingMap/Hallway-U" to="DeathlessAct/Hallway" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Hallway-U" to="DeathlessAct/Hallway" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Interior-L" to="DeathlessAct/Interior" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Interior-L" to="DeathlessAct/Interior" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Interior-U" to="DeathlessAct/Interior" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Interior-U" to="DeathlessAct/Interior" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/End-L" to="DeathlessAct/End" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/End-L" to="DeathlessAct/End" method="Deactivate"]
 [connection signal="Defeated" from="DeathlessAct/Hallway/RedMajin" to="DeathlessAct/Hallway/EnemyStone" method="IncrementCounter"]
 
 [editable path="Static"]
