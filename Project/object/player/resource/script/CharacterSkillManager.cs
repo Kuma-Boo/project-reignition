@@ -99,9 +99,9 @@ namespace Project.Gameplay
 		public float countdownBoostSpeed;
 
 		/// <summary> How many rings to start with when the level starts. </summary>
-		public int StartingRingCount => 0;
+		public int StartingRingCount => IsSkillEnabled(SkillKeyEnum.RingBonus) ? 5 : 0;
 		/// <summary> How many rings to start with when respawning. </summary>
-		public int RespawnRingCount => 0;
+		public int RespawnRingCount => IsSkillEnabled(SkillKeyEnum.RingRespawn) ? 5 : 0;
 
 		public void SplashJump()
 		{
