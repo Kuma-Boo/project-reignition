@@ -1,12 +1,14 @@
-[gd_scene load_steps=84 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=83 format=3 uid="uid://b3gupr30ahvvi"]
 
+[ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="4_1j3qj"]
 [ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/run/AutorunLockout.tres" id="5_ntl2g"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="6_4xrcy"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="7_ys7sj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uj3dw"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
-[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="24_wi7s4"]
+[ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="29_prhwm"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="37_8fetv"]
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_158q5"]
@@ -46,83 +48,6 @@ size = Vector3(100, 100, 250)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
-
-[sub_resource type="Animation" id="Animation_l3fdx"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0, true],
-"method": &"seek"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_hdoe6"]
-resource_name = "event"
-length = 4.0
-step = 0.0333333
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["river-event", -1, 1.0, false],
-"method": &"play"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(3, 3.33333),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [0.0, -30.0],
-"method": &"SetCharacterSpeed"
-}, {
-"args": [],
-"method": &"FinishEvent"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Dialog")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Activate"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_hl5y4"]
-_data = {
-"RESET": SubResource("Animation_l3fdx"),
-"event": SubResource("Animation_hdoe6")
-}
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_msrs8"]
-size = Vector3(14, 20, 8)
 
 [sub_resource type="Curve" id="Curve_6lpk3"]
 min_value = -1.0
@@ -179,6 +104,9 @@ point_count = 2
 max_value = 2.0
 _data = [Vector2(0, 0), 0.0, 2.8, 0, 0, Vector2(1, 1.6), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
+size = Vector3(15, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_u7iwk"]
 size = Vector3(18, 14, 6)
@@ -308,7 +236,42 @@ size = Vector3(8, 15, 6)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("69_kptet")]
+Data = ExtResource("2_p4x35")
 metadata/_edit_group_ = true
+
+[node name="Skeleton3D" parent="Static/Trigger/Object/Apatos/Apatos1/DinoApatos/DinoApatoRoot" index="0"]
+bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
+bones/1/position = Vector3(1.06802e-05, -38.526, 19.7418)
+bones/1/rotation = Quaternion(0.999995, 0, 0.00320137, 0.00014644)
+bones/2/rotation = Quaternion(6.30126e-07, 0.999995, 0.000207154, 0.00320132)
+bones/2/scale = Vector3(1, 1, 1)
+bones/3/rotation = Quaternion(0.980406, -2.89897e-14, 2.76165e-06, -0.196989)
+bones/3/scale = Vector3(1, 1, 1)
+bones/4/rotation = Quaternion(-0.13886, -1.7957e-05, 3.21686e-06, 0.990312)
+bones/5/rotation = Quaternion(-0.0590873, 0.00352094, -0.000206972, 0.998247)
+bones/6/rotation = Quaternion(3.47858e-07, -0.00991414, -1.45249e-06, 0.999951)
+bones/7/rotation = Quaternion(2.81226e-07, 0.000798047, 1.14939e-07, 1)
+bones/8/rotation = Quaternion(-1.26594e-06, 0.00986442, 1.4473e-06, 0.999951)
+bones/9/rotation = Quaternion(2.04945e-07, -0.000292533, -4.2207e-08, 1)
+bones/10/rotation = Quaternion(-7.27003e-07, -0.01132, -1.66762e-06, 0.999936)
+bones/10/scale = Vector3(1, 1, 1)
+
+[node name="Skeleton3D" parent="Static/Trigger/Object/Apatos/Apatos2/DinoApatos/DinoApatoRoot" index="0"]
+bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
+bones/1/position = Vector3(1.06802e-05, -38.526, 19.7418)
+bones/1/rotation = Quaternion(0.999995, 0, 0.00320137, 0.00014644)
+bones/2/rotation = Quaternion(6.30126e-07, 0.999995, 0.000207154, 0.00320132)
+bones/2/scale = Vector3(1, 1, 1)
+bones/3/rotation = Quaternion(0.980406, -2.89897e-14, 2.76165e-06, -0.196989)
+bones/3/scale = Vector3(1, 1, 1)
+bones/4/rotation = Quaternion(-0.13886, -1.7957e-05, 3.21686e-06, 0.990312)
+bones/5/rotation = Quaternion(-0.0590873, 0.00352094, -0.000206972, 0.998247)
+bones/6/rotation = Quaternion(3.47858e-07, -0.00991414, -1.45249e-06, 0.999951)
+bones/7/rotation = Quaternion(2.81226e-07, 0.000798047, 1.14939e-07, 1)
+bones/8/rotation = Quaternion(-1.26594e-06, 0.00986442, 1.4473e-06, 0.999951)
+bones/9/rotation = Quaternion(2.04945e-07, -0.000292533, -4.2207e-08, 1)
+bones/10/rotation = Quaternion(-7.27003e-07, -0.01132, -1.66762e-06, 0.999936)
+bones/10/scale = Vector3(1, 1, 1)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -338,81 +301,64 @@ shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
 
-[node name="Trigger" type="Node3D" parent="MainAct"]
+[node name="CullingMap" type="Node3D" parent="MainAct"]
+visible = false
 
-[node name="TrioStartTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
+[node name="DialogTrigger" type="Node3D" parent="MainAct"]
+
+[node name="TrioStartTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
 
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioStartTrigger"]
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioStartTrigger"]
 script = ExtResource("7_ys7sj")
 delays = []
 textKeys = ["din_event_trio_so", "din_event_trio_sh", "din_event_trio2_so", "din_event_trio2_sh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioStartTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioStartTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="TrioTutorialTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
+[node name="TrioTutorialTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -1.03775, -331.724)
 
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioTutorialTrigger"]
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioTutorialTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_tutorial_trio_so", "din_tutorial_trio_sh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioTutorialTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioTutorialTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="TrioEndTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
+[node name="TrioEndTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
 
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioEndTrigger"]
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioEndTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_event_trio3_so", "din_event_trio3_sh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioEndTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioEndTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="WaterfallTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -192.58, -36.4183, -476.569)
-
-[node name="FallsEvent" type="Node3D" parent="MainAct/Trigger/WaterfallTrigger" node_paths=PackedStringArray("animator")]
-script = ExtResource("24_wi7s4")
-"Trigger Settings/Automatically Respawn" = false
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
-
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/WaterfallTrigger/FallsEvent"]
-script = ExtResource("7_ys7sj")
-delays = [0.0, 0.4, 1.0, 0.0]
-displayLength = []
-textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Trigger/WaterfallTrigger/FallsEvent"]
-libraries = {
-"": SubResource("AnimationLibrary_hl5y4")
-}
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/WaterfallTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_msrs8")
-
-[node name="CaveSplitTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
+[node name="CaveSplitTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
 
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/CaveSplitTrigger"]
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/CaveSplitTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_split_sh", "din_split_so"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/CaveSplitTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/CaveSplitTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="DinoTrioGroup" parent="MainAct" instance=ExtResource("10_3r4lq")]
-
 [node name="Chase" type="Node3D" parent="MainAct"]
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Dinos" type="Node3D" parent="MainAct/Chase"]
+
+[node name="DinoTrioGroup" parent="MainAct/Chase/Dinos" instance=ExtResource("10_3r4lq")]
 
 [node name="WhiteRock1" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(2.82843, 0, 2.82843, 0, 1.5, 0, -2.82843, 0, 2.82843, -2, 0, 19)
@@ -2081,11 +2027,35 @@ transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -12.6553, 1.57586, 
 [node name="Child10" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -14.0784, 1.6, -3.0834)
 
+[node name="RiverEvent" parent="MainAct" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193.347, -39.102, -495.023)
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/RiverEvent"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
+script = ExtResource("7_ys7sj")
+delays = [0.0, 0.4, 1.0, 0.0]
+displayLength = []
+textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
+
+[node name="RiverEvent" parent="MainAct/RiverEvent" instance=ExtResource("19_rr5sk")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/RiverEvent"]
+transform = Transform3D(-0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, -0.996195, 0.464157, 10.9, 18.6349)
+shape = SubResource("BoxShape3D_7im1x")
+
 [node name="River" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -190, -95, -495)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
-[node name="Boat" parent="MainAct/River" instance=ExtResource("44_j45ek")]
+[node name="Boat" parent="MainAct/River" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 9.795, 0, 4.20499)
+path = NodePath("../../../Static/Path/MainPath")
+pathFollower = NodePath("../../../Static/Path/MainPath/RiverBoatPathFollower")
 
 [node name="JumpTrigger" parent="MainAct/River" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -173.5, -113.9, -101)
@@ -3895,6 +3865,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
 
 [node name="Cave" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362, -223, -621)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
 [node name="LeftPath" type="Node3D" parent="MainAct/Cave"]
 
@@ -4638,6 +4611,9 @@ sfxPlayer = NodePath("../DashPanel/SFX")
 
 [node name="Spiral" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
 [node name="Pearls1" type="Node3D" parent="MainAct/Spiral"]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 1.09097, -2.15932, -17.4142)
@@ -5064,6 +5040,9 @@ shape = SubResource("SphereShape3D_mwx1a")
 
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Crossing"]
 transform = Transform3D(0.0871561, -0.00015166, -0.996195, -0.000940684, 1, -0.000234539, 0.996194, 0.000957546, 0.087156, 29.5846, 1.00977, -11.8819)
@@ -5324,9 +5303,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.70001, -6.99994)
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
-[node name="Boat" parent="MainAct/Cavern" instance=ExtResource("44_j45ek")]
+[node name="Boat" parent="MainAct/Cavern" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -4.53979, -5.5, 2.1073)
+bounds = Vector2(3, 0)
+path = NodePath("../../../Static/Path/MainPath")
+pathFollower = NodePath("../../../Static/Path/MainPath/CavernBoatPathFollower")
 
 [node name="BoatStartTrigger" parent="MainAct/Cavern" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 14.7638, 6, -13.55)
@@ -5834,6 +5819,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [node name="FeedingTunnel" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
 [node name="DinoRex" parent="MainAct/FeedingTunnel" instance=ExtResource("66_a6b1t")]
 transform = Transform3D(0.97237, 0, -0.233445, 0, 1, 0, 0.233445, 0, 0.97237, 0, 0, 0)
@@ -5987,6 +5975,9 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
 [node name="WhiteRock1" parent="MainAct/End" instance=ExtResource("38_158q5")]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0.799988, 0.0613403, 2)
@@ -6394,6 +6385,8 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
 shape = SubResource("BoxShape3D_co0c0")
 
+[connection signal="Activated" from="MainAct/DialogTrigger/TrioStartTrigger" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Activate"]
+[connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Despawn"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin1" to="MainAct/Cave/EnemyStone1" method="IncrementCounter"]
@@ -6406,3 +6399,7 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Despawn"]
+
+[editable path="Static"]
+[editable path="Static/Trigger/Object/Apatos/Apatos1/DinoApatos"]
+[editable path="Static/Trigger/Object/Apatos/Apatos2/DinoApatos"]

@@ -1,10 +1,26 @@
-[gd_scene load_steps=24 format=3 uid="uid://cc1ft0jnv1sql"]
+[gd_scene load_steps=31 format=3 uid="uid://cc1ft0jnv1sql"]
 
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoTrio.cs" id="1_6nsvh"]
 [ext_resource type="PackedScene" uid="uid://ctbsi13u4rad0" path="res://area/2 dino jungle/object/model/dino/DinoTrio.gltf" id="1_57frd"]
+[ext_resource type="Animation" uid="uid://b35l8jmvwhggs" path="res://area/2 dino jungle/object/model/animation/trio-attack.res" id="3_nimag"]
+[ext_resource type="Animation" uid="uid://dihftewai7ebt" path="res://area/2 dino jungle/object/model/animation/trio-fidget-paw.res" id="4_riycf"]
+[ext_resource type="Animation" uid="uid://b8qq4ni6sldpi" path="res://area/2 dino jungle/object/model/animation/trio-fidget-shake.res" id="5_jopv0"]
+[ext_resource type="Animation" uid="uid://d0mntblo3suki" path="res://area/2 dino jungle/object/model/animation/trio-idle.res" id="6_e4qy7"]
+[ext_resource type="Animation" uid="uid://3oohcwkgcvkk" path="res://area/2 dino jungle/object/model/animation/trio-run.res" id="7_h1mir"]
+[ext_resource type="Animation" uid="uid://t40b2n0f4jai" path="res://area/2 dino jungle/object/model/animation/trio-walk.res" id="8_6oer6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rux8y"]
 size = Vector3(2.5, 5, 9)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wglx5"]
+_data = {
+"trio-attack": ExtResource("3_nimag"),
+"trio-fidget-paw": ExtResource("4_riycf"),
+"trio-fidget-shake": ExtResource("5_jopv0"),
+"trio-idle": ExtResource("6_e4qy7"),
+"trio-run": ExtResource("7_h1mir"),
+"trio-walk": ExtResource("8_6oer6")
+}
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8caol"]
 animation = &"trio-attack"
@@ -83,7 +99,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dcn5s"]
-graph_offset = Vector2(-170.369, 62.2325)
+graph_offset = Vector2(-877.367, 100.627)
 nodes/attack/node = SubResource("AnimationNodeAnimation_8caol")
 nodes/attack/position = Vector2(-160, 368)
 nodes/attack_speed/node = SubResource("AnimationNodeTimeScale_dklgt")
@@ -105,12 +121,14 @@ nodes/moving_transition/position = Vector2(-144, 112)
 node_connections = [&"attack_speed", 0, &"attack", &"attack_trigger", 0, &"moving_transition", &"attack_trigger", 1, &"attack_speed", &"idle_seek", 0, &"idle_state", &"movement_seek", 0, &"movement_speed", &"movement_speed", 0, &"movement_blend", &"moving_transition", 0, &"idle_seek", &"moving_transition", 1, &"movement_seek", &"output", 0, &"attack_trigger"]
 
 [node name="DinoTrio" type="PathFollow3D" node_paths=PackedStringArray("animationTree")]
+use_model_front = true
 script = ExtResource("1_6nsvh")
 traction = 20.0
 friction = 40.0
 preferredOffset = 5.0
 attackOffset = 10.0
 rubberbandingStrength = 0.6
+speedMultiplier = 1.0
 animationTree = NodePath("AnimationTree")
 
 [node name="Trigger" type="Area3D" parent="."]
@@ -122,17 +140,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_rux8y")
 
 [node name="DinoTrio" parent="." instance=ExtResource("1_57frd")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="DinoTrio/DinoTrioRoot" index="0"]
-bones/2/rotation = Quaternion(-0.986246, 1.19156e-08, -2.61644e-06, 0.165285)
-bones/3/rotation = Quaternion(0.149306, -2.22548e-06, 7.68762e-07, 0.988791)
+bones/2/rotation = Quaternion(0.986246, -1.19156e-08, 2.61644e-06, -0.165285)
+bones/3/rotation = Quaternion(0.149306, -2.22548e-06, 7.68763e-07, 0.988791)
 bones/4/rotation = Quaternion(0.762143, -1.10277e-06, 2.20587e-06, 0.647409)
 bones/5/rotation = Quaternion(-0.32846, 4.87986e-07, -9.76097e-07, 0.944518)
 bones/6/rotation = Quaternion(0.762261, 7.26845e-05, -1.01596e-05, 0.64727)
 bones/7/rotation = Quaternion(-0.32846, -9.96412e-06, -3.14196e-05, 0.944518)
-bones/8/rotation = Quaternion(-0.729554, 1.42996e-08, 2.66168e-05, 0.683923)
-bones/9/rotation = Quaternion(0.125925, 4.06579e-05, -4.27046e-05, 0.99204)
+bones/8/rotation = Quaternion(-0.729554, 1.42981e-08, 2.66168e-05, 0.683923)
 bones/10/rotation = Quaternion(-0.729554, 1.44258e-08, -9.59512e-07, 0.683923)
 bones/11/rotation = Quaternion(0.125924, -6.11157e-07, 7.42576e-07, 0.99204)
 bones/12/rotation = Quaternion(-0.0339461, 4.57378e-08, 1.83396e-07, 0.999424)
@@ -140,6 +156,11 @@ bones/13/rotation = Quaternion(-0.0742523, -2.51855e-09, -4.30046e-07, 0.997239)
 bones/20/rotation = Quaternion(-0.707108, 0.000270456, 0.000270456, 0.707106)
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../DinoTrio")
+libraries = {
+"": SubResource("AnimationLibrary_wglx5")
+}
 tree_root = SubResource("AnimationNodeBlendTree_dcn5s")
 anim_player = NodePath("../DinoTrio/AnimationPlayer")
 parameters/attack_speed/scale = 1.2
@@ -150,9 +171,9 @@ parameters/idle_seek/seek_request = -1.0
 parameters/movement_blend/blend_position = 1.0
 parameters/movement_seek/seek_request = -1.0
 parameters/movement_speed/scale = 1.0
-parameters/moving_transition/current_state = "enabled"
+parameters/moving_transition/current_state = "disabled"
 parameters/moving_transition/transition_request = ""
-parameters/moving_transition/current_index = 1
+parameters/moving_transition/current_index = 0
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Trigger" to="." method="OnExited"]

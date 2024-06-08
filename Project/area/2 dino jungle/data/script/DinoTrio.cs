@@ -6,7 +6,7 @@ namespace Project.Gameplay
 {
 	public partial class DinoTrio : PathFollow3D
 	{
-		private static List<DinoTrio> registeredDinoTrio = new List<DinoTrio>();
+		private static List<DinoTrio> registeredDinoTrio = new();
 		private static float playerHitTimer; // Dinos will wait a bit after hitting the player
 		private static float attackTimer; // Timer to determine when to attack
 		private static float playerProgress; // Player's offset on the curve
@@ -77,6 +77,7 @@ namespace Project.Gameplay
 			StageSettings.instance.ConnectRespawnSignal(this);
 			Respawn();
 		}
+
 
 		private void Respawn()
 		{
