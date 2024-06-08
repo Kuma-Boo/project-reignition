@@ -175,9 +175,9 @@ namespace Project.Gameplay
 			if (IsMovementInvalid()) return; //No movement
 			if (IsPaused) return;
 
-			currentTime += PhysicsManager.physicsDelta * TimeScale;
+			currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
 			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) //Rollover
-				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength);
+				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
 
 			if (root != null && root.IsInsideTree())
 				root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
