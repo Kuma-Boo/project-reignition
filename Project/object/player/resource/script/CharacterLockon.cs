@@ -53,7 +53,7 @@ namespace Project.Gameplay
 		public void StartHomingAttack()
 		{
 			IsHomingAttacking = true;
-			IsPerfectHomingAttack = monitoringPerfectHomingAttack;
+			IsPerfectHomingAttack = Character.Skills.IsSkillEnabled(SkillKeyEnum.PerfectHomingAttack) && monitoringPerfectHomingAttack;
 		}
 
 

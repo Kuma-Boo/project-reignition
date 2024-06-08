@@ -115,7 +115,7 @@ namespace Project.Gameplay
 		public virtual void TakeHomingAttackDamage()
 		{
 			if (Character.Skills.IsSkillEnabled(SkillKeyEnum.PerfectHomingAttack) && Character.Lockon.IsPerfectHomingAttack)
-				currentHealth--;
+				currentHealth--; // Take an extra point of damage
 
 			Character.Lockon.StopHomingAttack();
 			TakeDamage(1);

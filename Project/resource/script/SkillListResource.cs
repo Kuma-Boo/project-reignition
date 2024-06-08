@@ -21,6 +21,7 @@ namespace Project.Gameplay
 		AegisSlide, // Intangible to attacks when sliding
 
 		// Action skills
+		CancelDash, // Gives a speed boost when landing
 		LandingDash, // Gives a speed boost when landing
 		RocketStart, // Press a button during countdown for a speedboost
 		FlameStomp, // Replace jump cancel with an attack
