@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=58 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -20,8 +20,8 @@
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/DinoPath.tres" id="16_smtuj"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="16_vyk20"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="17_18ult"]
-[ext_resource type="Curve3D" uid="uid://b03g4on2b6pxo" path="res://area/2 dino jungle/act 1/environment/path/SpiralAutomationPath.tres" id="17_sttw3"]
-[ext_resource type="Curve3D" uid="uid://ba2m6q801h088" path="res://area/2 dino jungle/act 1/environment/path/LogPath.tres" id="18_6nrhg"]
+[ext_resource type="Curve3D" uid="uid://bk014xjj2ilex" path="res://area/2 dino jungle/act 1/environment/path/SpiralAutomationPath.tres" id="17_sttw3"]
+[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/LogPath.tres" id="18_6nrhg"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/TreeAutomationPath.tres" id="19_p1hyv"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/BoatPath.tres" id="22_dpojg"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="22_vku8w"]
@@ -30,7 +30,9 @@
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="24_0y0cf"]
 [ext_resource type="PackedScene" uid="uid://7nr1lmccsbg6" path="res://area/2 dino jungle/object/dino/DinoApatos.tscn" id="25_s85nr"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="26_d64di"]
-[ext_resource type="Curve3D" uid="uid://bmbki4lc3d1kq" path="res://area/2 dino jungle/act 1/environment/path/CavePath.tres" id="28_t1ofp"]
+[ext_resource type="Resource" uid="uid://c7gn6l1iam748" path="res://area/2 dino jungle/act 1/camera/CaveLeftCam.tres" id="27_aqrt3"]
+[ext_resource type="Resource" uid="uid://br8on51nea28o" path="res://area/2 dino jungle/act 1/camera/CaveRightCam.tres" id="27_h0ugs"]
+[ext_resource type="Curve3D" uid="uid://dnpb2isgqp77k" path="res://area/2 dino jungle/act 1/environment/path/CavePath.tres" id="28_t1ofp"]
 [ext_resource type="Curve3D" uid="uid://dw630kxbepoc1" path="res://area/2 dino jungle/act 1/environment/path/CaveRightPath.tres" id="29_uuyxq"]
 [ext_resource type="Curve3D" uid="uid://bd4u0fcvtfbem" path="res://area/2 dino jungle/act 1/environment/path/DinoRightPath.tres" id="31_5iw22"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="33_q44ch"]
@@ -39,6 +41,8 @@
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="35_vf0rg"]
 [ext_resource type="Material" uid="uid://d0klutkn8da67" path="res://area/2 dino jungle/data/material/Water.tres" id="36_7bv1x"]
 [ext_resource type="PackedScene" uid="uid://bqikfuweybrc6" path="res://area/2 dino jungle/data/BGM.tscn" id="36_8otvo"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="36_8t574"]
+[ext_resource type="Resource" uid="uid://nf07w7wsy4tn" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="37_lloeo"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 2.5)
@@ -233,11 +237,11 @@ _data = {
 "event": SubResource("Animation_liynt")
 }
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_0h2id"]
-radius = 2.0
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_iq0gp"]
 radius = 2.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jw4vw"]
+size = Vector3(5, 20, 17)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x053g"]
 size = Vector3(218, 2, 244)
@@ -419,66 +423,6 @@ startEnabled = true
 [node name="09End" parent="Visuals" instance=ExtResource("12_lr60q")]
 
 [node name="09Scenery" parent="Visuals" instance=ExtResource("13_53845")]
-
-[node name="Path" type="Node3D" parent="."]
-
-[node name="ChasePath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.778, 0, 90.293)
-curve = ExtResource("13_yh5pu")
-
-[node name="RiverPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -223.936, -94.982, -491.404)
-curve = ExtResource("14_0jylt")
-
-[node name="RiverBoatPathFollower" type="PathFollow3D" parent="Path/RiverPath"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-use_model_front = true
-cubic_interp = false
-loop = false
-
-[node name="CavePath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.68, -222.587, -620.275)
-curve = ExtResource("28_t1ofp")
-
-[node name="CaveRightPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.549, -220.997, -626.717)
-curve = ExtResource("29_uuyxq")
-
-[node name="SpiralAutomationPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.579, -220.149, -845.828)
-curve = ExtResource("17_sttw3")
-
-[node name="TreePath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -431.391, -264.933, -911.261)
-curve = ExtResource("18_6nrhg")
-
-[node name="TreeAutomationPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -394.067, -265.059, -935.379)
-curve = ExtResource("19_p1hyv")
-
-[node name="DinoPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -391.836, -254.997, -939.049)
-curve = ExtResource("16_smtuj")
-
-[node name="DinoRightPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -384.945, -269.195, -1130.43)
-curve = ExtResource("31_5iw22")
-
-[node name="BoatPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -462.663, -280.996, -1129.26)
-curve = ExtResource("22_dpojg")
-
-[node name="CavernBoatPathFollower" type="PathFollow3D" parent="Path/BoatPath"]
-transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
-use_model_front = true
-cubic_interp = false
-loop = false
-
-[node name="EndPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -619.189, -280.996, -1071.37)
-curve = ExtResource("23_d4n23")
-
-[node name="Event" type="Node3D" parent="."]
 
 [node name="Trigger" type="Node3D" parent="."]
 
@@ -666,7 +610,35 @@ script = ExtResource("35_vf0rg")
 path = NodePath("../../../../Path/SpiralAutomationPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SpiralAutomationTrigger"]
-shape = SubResource("SphereShape3D_0h2id")
+shape = SubResource("SphereShape3D_iq0gp")
+
+[node name="CaveLogLockoutTrigger1" parent="Trigger/Object" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.999457, 0, -0.0329635, 0, 1, 0, 0.0329635, 0, -0.999457, -368.511, -218.064, -666.653)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Object/CaveLogLockoutTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.7302, 43.764, -98.5685)
+script = ExtResource("23_rku1n")
+lockoutData = ExtResource("24_0y0cf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/CaveLogLockoutTrigger1"]
+shape = SubResource("BoxShape3D_jw4vw")
+
+[node name="CaveLogLockoutTrigger2" parent="Trigger/Object" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.729387, 0, -0.684102, 0, 1, 0, 0.684102, 0, -0.729387, -377.836, -217.464, -692.687)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Object/CaveLogLockoutTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.7302, 43.764, -98.5685)
+script = ExtResource("23_rku1n")
+lockoutData = ExtResource("24_0y0cf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/CaveLogLockoutTrigger2"]
+shape = SubResource("BoxShape3D_jw4vw")
 
 [node name="LogAutomationTrigger" parent="Trigger/Object" instance=ExtResource("14_lokxv")]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -392.077, -264.264, -936.318)
@@ -702,6 +674,109 @@ shape = SubResource("BoxShape3D_x053g")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
 shape = SubResource("BoxShape3D_x053g")
+
+[node name="Camera" type="Node3D" parent="Trigger"]
+
+[node name="CaveCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -362.876, -220.882, -614.435)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/CaveCam"]
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("37_lloeo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="CaveLeftCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.999079, 0, -0.0429044, 0, 1, 0, 0.0429044, 0, -0.999079, -368.037, -220.882, -656.421)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/CaveLeftCam"]
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("27_aqrt3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveLeftCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="CaveRightCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.991538, 0, -0.129817, 0, 1, 0, 0.129817, 0, -0.991538, -349.919, -220.882, -678.014)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/CaveRightCam"]
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("27_h0ugs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveRightCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="ChasePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.778, 0, 90.293)
+curve = ExtResource("13_yh5pu")
+
+[node name="RiverPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -223.936, -94.982, -491.404)
+curve = ExtResource("14_0jylt")
+
+[node name="RiverBoatPathFollower" type="PathFollow3D" parent="Path/RiverPath"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+use_model_front = true
+cubic_interp = false
+loop = false
+
+[node name="CavePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360.724, -222.587, -616.794)
+curve = ExtResource("28_t1ofp")
+
+[node name="CaveRightPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.549, -220.997, -626.717)
+curve = ExtResource("29_uuyxq")
+
+[node name="SpiralAutomationPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.579, -220.149, -845.828)
+curve = ExtResource("17_sttw3")
+
+[node name="TreePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -431.391, -264.933, -911.261)
+curve = ExtResource("18_6nrhg")
+
+[node name="TreeAutomationPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -394.067, -265.059, -935.379)
+curve = ExtResource("19_p1hyv")
+
+[node name="DinoPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -391.836, -254.997, -939.049)
+curve = ExtResource("16_smtuj")
+
+[node name="DinoRightPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -384.945, -269.195, -1130.43)
+curve = ExtResource("31_5iw22")
+
+[node name="BoatPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -462.663, -280.996, -1129.26)
+curve = ExtResource("22_dpojg")
+
+[node name="CavernBoatPathFollower" type="PathFollow3D" parent="Path/BoatPath"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
+use_model_front = true
+cubic_interp = false
+loop = false
+
+[node name="EndPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -619.189, -280.996, -1071.37)
+curve = ExtResource("23_d4n23")
+
+[node name="Event" type="Node3D" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("4_gsi68")
