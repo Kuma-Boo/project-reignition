@@ -111,8 +111,9 @@ namespace Project.Core
 		{
 			instance.QueuedScene = scene;
 
-			if (!instance.IsConnected(SignalName.TransitionProcess, new(instance, MethodName.ApplySceneChange)))
-				instance.Connect(SignalName.TransitionProcess, new(instance, MethodName.ApplySceneChange), (uint)ConnectFlags.OneShot);
+			var call = new Callable(instance, MethodName.ApplySceneChange);
+			if (!instance.IsConnected(SignalName.TransitionProcess, call))
+				instance.Connect(SignalName.TransitionProcess, call, (uint)ConnectFlags.OneShot);
 		}
 
 		public string QueuedScene { get; private set; }
@@ -128,9 +129,14 @@ namespace Project.Core
 					ResourceLoader.LoadThreadedRequest(QueuedScene);
 					while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
 						await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
+					
+					var scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
+					GetTree().ChangeSceneToPacked(scene);
 				}
-
-				GetTree().ChangeSceneToFile(QueuedScene);
+				else
+				{
+					GetTree().ChangeSceneToFile(QueuedScene);
+				}
 			}
 
 			QueuedScene = string.Empty; //Clear queue
