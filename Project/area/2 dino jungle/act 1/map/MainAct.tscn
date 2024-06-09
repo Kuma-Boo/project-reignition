@@ -245,9 +245,11 @@ startEnabled = false
 [node name="03Cave" parent="Static/Visuals" index="3"]
 startEnabled = true
 
-[node name="04Spiral" parent="Static/Visuals" index="4"]
-script = ExtResource("9_uj3dw")
-isStageVisuals = true
+[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -4217,14 +4219,12 @@ transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0, 0.5, 
 
 [node name="Spring1" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.91496, 0.307059, -0.261846, 3.72529e-09, 0.648864, 0.760905, 0.403545, -0.696197, 0.593684, 11.1937, 2, -98.4982)
-middleHeight = 8.0
-finalHeight = 7.5
-distance = 19.0
+finalHeight = 7.0
+distance = 18.0
 voiceKey = &""
 
 [node name="Spring2" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(0.762668, -0.621734, 0.178279, 0, 0.275637, 0.961261, -0.64679, -0.733124, 0.21022, 18.5703, 9.46794, -115.317)
-middleHeight = 1.0
+transform = Transform3D(0.779982, -0.537696, -0.320173, 0.0155834, -0.494774, 0.868881, -0.625608, -0.682702, -0.377535, 18.1687, 9.4415, -115.037)
 finalHeight = -10.0
 distance = 17.0
 voiceKey = &""
@@ -6375,6 +6375,9 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin1" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="Shatter"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="Shatter"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="Shatter"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Despawn"]
 
 [editable path="Static"]
