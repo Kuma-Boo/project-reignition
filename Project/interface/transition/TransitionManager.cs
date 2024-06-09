@@ -126,7 +126,7 @@ namespace Project.Core
 			{
 				if (CurrentTransitionData.loadAsynchronously)
 				{
-					ResourceLoader.LoadThreadedRequest(QueuedScene);
+					ResourceLoader.LoadThreadedRequest(QueuedScene, "", true);
 					while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
 						await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
 					
