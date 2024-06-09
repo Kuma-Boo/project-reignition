@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=84 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uj3dw"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
 [ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="27_l6k7w"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="29_prhwm"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="37_8fetv"]
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_158q5"]
@@ -239,11 +240,44 @@ size = Vector3(8, 15, 6)
 Data = ExtResource("2_p4x35")
 metadata/_edit_group_ = true
 
+[node name="Collision" parent="Static" index="0"]
+visible = true
+
+[node name="Wall" parent="Static/Collision" index="0"]
+visible = false
+
+[node name="WallDinoRight" parent="Static/Collision" index="1"]
+visible = false
+
+[node name="WallDinoLeft" parent="Static/Collision" index="2"]
+visible = false
+
+[node name="FloorPavement1" parent="Static/Collision" index="3"]
+visible = false
+
+[node name="FloorWood" parent="Static/Collision" index="4"]
+visible = false
+
+[node name="FloorGrass" parent="Static/Collision" index="5"]
+visible = false
+
+[node name="FloorPavement2" parent="Static/Collision" index="6"]
+visible = false
+
+[node name="FloorDino" parent="Static/Collision" index="7"]
+visible = false
+
+[node name="FloorDinoRight" parent="Static/Collision" index="8"]
+visible = false
+
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
 
 [node name="03Cave" parent="Static/Visuals" index="3"]
 startEnabled = true
+
+[node name="SpiralAutomationPath" parent="Static/Path" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.253, -219.907, -845.788)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -4186,6 +4220,10 @@ middleHeight = 8.0
 finalHeight = 1.0
 distance = 26.0
 
+[node name="Path" type="Node3D" parent="MainAct/Cave/RightPath/JumpPanel" node_paths=PackedStringArray("path")]
+script = ExtResource("27_l6k7w")
+path = NodePath("../../../../../Static/Path/CaveRightPath")
+
 [node name="Stone1" parent="MainAct/Cave/RightPath" instance=ExtResource("54_ay5i2")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 10.6996, 2, -62.0087)
 
@@ -4230,6 +4268,10 @@ finalHeight = 3.0
 distance = 25.0
 voiceKey = &""
 
+[node name="Path" type="Node3D" parent="MainAct/Cave/RightPath/Spring3" node_paths=PackedStringArray("path")]
+script = ExtResource("27_l6k7w")
+path = NodePath("../../../../../Static/Path/CavePath")
+
 [node name="RingsM1" type="Node3D" parent="MainAct/Cave"]
 transform = Transform3D(0.999794, 0.00633547, 0.0192991, -0.00467379, 0.996373, -0.0849611, -0.0197674, 0.0848534, 0.996197, 0.0536499, 4.8562, -155.972)
 script = ExtResource("39_p0jth")
@@ -4257,10 +4299,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 0, -4.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, -6)
 
 [node name="BlueMajin1" parent="MainAct/Cave" instance=ExtResource("58_fnmsc")]
-transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, -3.03259, 9.5, -166.618)
+transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, -3.02313, 9.36086, -167.508)
 
 [node name="BlueMajin2" parent="MainAct/Cave" instance=ExtResource("58_fnmsc")]
-transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, 1.05573, 7.3, -166.309)
+transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, 1.05573, 7.3, -164.849)
 
 [node name="EnemyStone1" parent="MainAct/Cave" instance=ExtResource("49_g35os")]
 transform = Transform3D(1.69593, 0, -1.0601, 0, 1, 0, 1.0601, 0, 1.69593, -3.03259, 6.09999, -166.618)
@@ -4568,13 +4610,6 @@ transform = Transform3D(0.981591, 0.0807556, 0.173081, -0.0795287, 0.996734, -0.
 
 [node name="GrassPillar3" parent="MainAct/Cave" instance=ExtResource("50_sikom")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -77.734, 0, -214.273)
-
-[node name="Spring2" parent="MainAct/Cave" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(0.993961, 0.103117, -0.0375313, 0, 0.34202, 0.939693, 0.109734, -0.934018, 0.339955, -77.7342, 10.1501, -214.273)
-middleHeight = 0.05
-finalHeight = -6.0
-distance = 34.0
-voiceKey = &""
 
 [node name="DashPanel2" parent="MainAct/Cave" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -78.5685, 2.95007, -221.977)
@@ -4981,6 +5016,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94489, -1.21237, 5.09827)
 
 [node name="Child10" parent="MainAct/Spiral/Pearls9" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82309, -1.38196, 4.85889)
+
+[node name="Spring2" parent="MainAct/Spiral" instance=ExtResource("48_p6m4r")]
+transform = Transform3D(0.993961, 0.103117, -0.0375313, 0, 0.34202, 0.939693, 0.109734, -0.934018, 0.339955, -0.53418, 7.55009, 12.727)
+middleHeight = 0.05
+finalHeight = -6.0
+distance = 34.0
+voiceKey = &""
 
 [node name="JumpTrigger1" parent="MainAct/Spiral" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.10001, 2.3, -19.9)
@@ -6360,6 +6402,9 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Despawn"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/Cave/RightPath/Spring3" to="MainAct/Cave/RightPath/Spring3/Path" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Cave/RightPath/Spring3" to="Static/Collision/CaveRightOneWay" method="Activate"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin1" to="MainAct/Cave/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin1" to="MainAct/Cave/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin1" to="MainAct/Cave/EnemyStone3" method="IncrementCounter"]
@@ -6369,11 +6414,13 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin1" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
-[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="Shatter"]
-[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="Shatter"]
-[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="Shatter"]
+[connection signal="Activated" from="MainAct/Spiral/Spring2" to="Static/Collision/CaveOneWay" method="Deactivate"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Despawn"]
 
 [editable path="Static"]
+[editable path="Static/Collision"]
 [editable path="Static/Trigger/Object/Apatos/Apatos1/DinoApatos"]
 [editable path="Static/Trigger/Object/Apatos/Apatos2/DinoApatos"]
