@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://ctt8k8ju64i3l"]
+[gd_scene load_steps=26 format=3 uid="uid://ctt8k8ju64i3l"]
 
 [ext_resource type="PackedScene" uid="uid://ci1q4ubgknkjc" path="res://object/enemy/flower/data/model/FlowerMajin.gltf" id="1_g4mq2"]
 [ext_resource type="Script" path="res://object/enemy/flower/data/FlowerMajin.cs" id="2_14l8s"]
@@ -12,6 +12,10 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4r0or"]
 radius = 0.4
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xhbgn"]
+height = 0.4
+radius = 1.3
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iip0l"]
 radius = 0.2
@@ -148,9 +152,15 @@ enemy = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HeadAttachment/Hitbox"]
 shape = SubResource("SphereShape3D_4r0or")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="HeadAttachment/Hitbox"]
+transform = Transform3D(1, 0, 1.77636e-15, -1.36394e-15, 0.422618, -0.906308, 0, 0.906308, 0.422618, 0, -0.0422618, -0.0906308)
+shape = SubResource("CylinderShape3D_xhbgn")
+disabled = true
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 shape = SubResource("CapsuleShape3D_iip0l")
+disabled = true
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false

@@ -43,7 +43,7 @@ namespace Project.Gameplay
 		/// <summary> Flower is only considered be damaged while not in a passive state. </summary>
 		private bool IsOpen => currentState != State.Passive;
 		/// <summary> Returns true if the flower's stagger animation is active. </summary>
-		private bool IsStaggered => (bool)animationPlayer.Get(STAGGER_ACTIVE);
+		private bool IsStaggered => (bool)animationTree.Get(STAGGER_ACTIVE);
 
 		private readonly StringName STATE_TRANSITION = "parameters/state_transition/transition_request";
 		private readonly StringName SHOW_STATE = "show";
@@ -95,9 +95,11 @@ namespace Project.Gameplay
 		{
 			base.Respawn();
 
-			// Snap out of the defeat animation
+			// Reset animations
 			defeatTransition.XfadeTime = 0;
 			animationTree.Set(DEFEAT_TRANSITION, DISABLED_CONSTANT);
+			animationTree.Set(ATTACK_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			animationTree.Set(STAGGER_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 			// Reset to passive state
 			currentState = State.Passive;
@@ -119,11 +121,17 @@ namespace Project.Gameplay
 
 		protected override void UpdateInteraction()
 		{
-			if (!IsOpen && Character.ActionState == CharacterController.ActionStates.JumpDash)
+			if (!Character.Skills.IsAttacking && !Character.Lockon.IsHomingAttacking)
 			{
-				Character.Lockon.StartBounce();
+				if (IsOpen)
+					StartStaggerState();
+
+				Character.Lockon.StartBounce(false);
 				return;
 			}
+
+			if (!IsOpen)
+				return;
 
 			base.UpdateInteraction();
 		}
@@ -175,7 +183,6 @@ namespace Project.Gameplay
 
 			if (IsStaggered)
 				return; // Let stagger finish
-
 
 			stateTimer += PhysicsManager.physicsDelta;
 			switch (currentState)
@@ -263,8 +270,11 @@ namespace Project.Gameplay
 		private void StartStaggerState()
 		{
 			animationTree.Set(STAGGER_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			if (currentState == State.Attack)
-				StopAttackState();
+			if (currentState != State.Attack)
+				return;
+
+			StopAttackState();
+			animationTree.Set(ATTACK_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
 
 
