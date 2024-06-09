@@ -11,7 +11,7 @@ namespace Project.Gameplay
 		/// <summary> Skip passive phase when activated? </summary>
 		private bool attackInstantly;
 		[Export]
-		/// <summary> How long to remain passive </summary>
+		/// <summary> How long to remain passive. </summary>
 		private float passiveLength;
 		[Export]
 		/// <summary> How long to wait before firing seeds after turning aggressive. </summary>
@@ -19,6 +19,8 @@ namespace Project.Gameplay
 		[Export]
 		/// <summary> How long to wait after firing seeds before turning passive. </summary>
 		private float postAttackLength;
+		/// <summary> How much extra time to wait for when staggered. </summary>
+		private const float STAGGER_LENGTH = .5f;
 
 		/// <summary> Tracks how long FlowerMajin has been in the current state. </summary>
 		private float stateTimer;
@@ -38,11 +40,10 @@ namespace Project.Gameplay
 		/// <summary> Only three seeds are ever spawned at a time. </summary>
 		private readonly Seed[] seedPool = new Seed[MAX_SEED_COUNT];
 
-		[ExportGroup("Animation Settings")]
-		[Export]
-		private bool isInHitstun; // Is this enemy being clobbered by a homing attack?
 		/// <summary> Flower is only considered be damaged while not in a passive state. </summary>
 		private bool IsOpen => currentState != State.Passive;
+		/// <summary> Returns true if the flower's stagger animation is active. </summary>
+		private bool IsStaggered => (bool)animationPlayer.Get(STAGGER_ACTIVE);
 
 		private readonly StringName STATE_TRANSITION = "parameters/state_transition/transition_request";
 		private readonly StringName SHOW_STATE = "show";
@@ -51,12 +52,14 @@ namespace Project.Gameplay
 
 		private readonly StringName ATTACK_TRIGGER = "parameters/attack_trigger/request";
 		private readonly StringName STAGGER_TRIGGER = "parameters/stagger_trigger/request";
+		private readonly StringName STAGGER_ACTIVE = "parameters/stagger_trigger/active";
 
 		/// <summary> Reference to AnimationTree's defeat_transition node. Required to change transition fade. </summary>
 		private AnimationNodeTransition defeatTransition;
 		private readonly StringName DEFEAT_TRANSITION = "parameters/defeat_transition/transition_request";
 		private readonly StringName ENABLED_CONSTANT = "enabled";
 		private readonly StringName DISABLED_CONSTANT = "disabled";
+
 
 		protected override void SetUp()
 		{
@@ -118,7 +121,6 @@ namespace Project.Gameplay
 		{
 			if (!IsOpen && Character.ActionState == CharacterController.ActionStates.JumpDash)
 			{
-				stateTimer = 0; // Reset state timer and deflect the player
 				Character.Lockon.StartBounce();
 				return;
 			}
@@ -165,9 +167,15 @@ namespace Project.Gameplay
 			root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z); // Apply rotation
 		}
 
+
 		private void UpdateState()
 		{
-			if (isInHitstun || currentState == State.Attack) return;
+			if (currentState == State.Attack)
+				return; // Let the attack finish
+
+			if (IsStaggered)
+				return; // Let stagger finish
+
 
 			stateTimer += PhysicsManager.physicsDelta;
 			switch (currentState)
