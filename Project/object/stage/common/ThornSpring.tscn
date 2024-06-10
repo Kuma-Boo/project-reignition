@@ -100,46 +100,6 @@ tracks/2/keys = {
 "values": [false, true]
 }
 
-[sub_resource type="Animation" id="Animation_wtclb"]
-resource_name = "loop"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ThornSpring:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(6.28319, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Hitbox:isDisabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
 [sub_resource type="Animation" id="Animation_ekudj"]
 resource_name = "full"
 step = 0.0333333
@@ -220,6 +180,46 @@ tracks/2/keys = {
 "values": [true, false]
 }
 
+[sub_resource type="Animation" id="Animation_wtclb"]
+resource_name = "loop"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ThornSpring:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(6.28319, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Hitbox:isDisabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_aox05"]
 _data = {
 "RESET": SubResource("Animation_hw64t"),
@@ -229,14 +229,13 @@ _data = {
 "loop": SubResource("Animation_wtclb")
 }
 
-[node name="ThornSpring" type="Area3D" node_paths=PackedStringArray("animator", "sfxPlayer")]
+[node name="ThornSpring" type="Area3D" node_paths=PackedStringArray("sfxPlayer")]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_xlrx0")
 height = 5.0
 rotationTime = 2.0
 staticTime = 2.0
-animator = NodePath("AnimationPlayer")
 distance = 5.0
 allowJumpDashing = true
 launchDirection = 1
@@ -250,19 +249,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 shape = SubResource("SphereShape3D_acfah")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-callback_mode_process = 0
-libraries = {
-"": SubResource("AnimationLibrary_aox05")
-}
-
-[node name="SFX" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("3_dbxep")
-max_db = 0.0
-max_distance = 100.0
-bus = &"SFX"
-attenuation_filter_cutoff_hz = 10000.0
-
 [node name="Hitbox" type="Area3D" parent="."]
 collision_layer = 0
 collision_mask = 2
@@ -274,7 +260,20 @@ isDisabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 shape = SubResource("SphereShape3D_acfah")
 
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_dbxep")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+attenuation_filter_cutoff_hz = 10000.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_aox05")
+}
+
 [connection signal="area_entered" from="." to="." method="Activate"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]
 [connection signal="area_exited" from="Hitbox" to="Hitbox" method="OnExited"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]
