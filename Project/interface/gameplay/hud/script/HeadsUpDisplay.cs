@@ -15,6 +15,8 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
+
+			CurrentRank = Stage.CalculateRank();
 			InitializeRings();
 			InitializeObjectives();
 			InitializeSoulGauge();
@@ -88,6 +90,68 @@ namespace Project.Gameplay
 		#region Time and Score
 		[ExportGroup("Time & Score")]
 		[Export]
+		private Sprite2D mainRank;
+		[Export]
+		private Sprite2D transitionRank;
+		[Export]
+		private AudioStreamPlayer rankUpSFX;
+		[Export]
+		private AudioStreamPlayer rankDownSFX;
+		private int CurrentRank { get; set; }
+		private Tween rankTween;
+		private void UpdateRank()
+		{
+			int rank = Stage.CalculateRank();
+			if (CurrentRank == rank || rankTween?.IsRunning() == true)
+				return;
+
+			int rankDirection = rank - CurrentRank;
+			if (rankDirection < 0)
+				StartRankDownTween(rankDirection);
+			else
+				StartRankUpTween(rankDirection);
+
+			CurrentRank = rank;
+		}
+
+
+		private void StartRankDownTween(int amount)
+		{
+			rankDownSFX.Play();
+			transitionRank.RegionRect = mainRank.RegionRect;
+			transitionRank.SelfModulate = Colors.White;
+			mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
+			rankTween = CreateTween().SetParallel();
+			rankTween.TweenProperty(transitionRank, "self_modulate", Colors.Transparent, .5f);
+			rankTween.TweenProperty(transitionRank, "position", Vector2.Down * 128, .5f).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.In);
+			rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankDownTween)).SetDelay(.5f);
+		}
+
+
+		private void StartRankUpTween(int amount)
+		{
+			rankUpSFX.Play();
+			transitionRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
+			transitionRank.Position += Vector2.Up * 256;
+			rankTween = CreateTween().SetParallel();
+			rankTween.TweenProperty(transitionRank, "self_modulate", Colors.White, .5f);
+			rankTween.TweenProperty(transitionRank, "position", Vector2.Zero, .5f).SetTrans(Tween.TransitionType.Bounce);
+			rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankUpTween)).SetDelay(.5f);
+		}
+
+
+		private void CompleteRankUpTween()
+		{
+			mainRank.RegionRect = transitionRank.RegionRect;
+			transitionRank.SelfModulate = Colors.Transparent;
+			rankTween.Kill();
+		}
+
+
+		private void CompleteRankDownTween() => rankTween.Kill();
+
+
+		[Export]
 		private Label time;
 		private void UpdateTime()
 		{
@@ -99,6 +163,7 @@ namespace Project.Gameplay
 			}
 
 			time.Text = Stage.DisplayTime;
+			UpdateRank(); // Update rank every frame
 		}
 
 		[Export]
