@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3 uid="uid://dumttajjtpqta"]
+
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_8cup1"]
+[ext_resource type="PackedScene" uid="uid://bpm4bnrc0twqf" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.gltf" id="1_wmk6n"]
+
+[node name="RiverEvent" type="Node3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_8cup1")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("PlayerBone/Player")
+"Player Event Settings/Animation" = &""
+"Player Event Settings/Animation Fadeout Time" = 0.0
+"Player Event Settings/Position Smoothing" = 0.2
+"Player Event Settings/Normalize Exit Move Speed" = true
+"Player Event Settings/Exit Move Speed" = 0.0
+"Player Event Settings/Exit Vertical Speed" = 0.0
+"Player Event Settings/Exit Lockout" = null
+animator = NodePath("RiverEvent/AnimationPlayer")
+
+[node name="RiverEvent" parent="." instance=ExtResource("1_wmk6n")]
+
+[node name="Skeleton3D" parent="RiverEvent/RiverEventRoot" index="0"]
+bones/2/rotation = Quaternion(-0.500022, 0.500026, 0.499982, -0.49997)
+bones/3/rotation = Quaternion(-0.500008, 0.500013, 0.49998, -0.499999)
+bones/4/rotation = Quaternion(-0.500011, 0.500015, 0.499995, -0.499978)
+bones/6/rotation = Quaternion(-0.500012, 0.500016, 0.500039, -0.499934)
+bones/8/rotation = Quaternion(-0.121753, 0.0432943, 0.00531587, 0.991602)
+
+[node name="PlayerBone" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.996195, -0.0210849, 0.0845668, 0, 0.970296, 0.241922, -0.0871557, -0.241001, 0.966603, 0.868011, 2.4655, 18.728)
+bone_name = "player"
+bone_idx = 8
+use_external_skeleton = true
+external_skeleton = NodePath("../RiverEvent/RiverEventRoot/Skeleton3D")
+
+[node name="Player" type="Node3D" parent="PlayerBone"]
+
+[node name="Camera" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.21767, 4.4655, 22.1372)
+bone_name = "camera"
+bone_idx = 9
+use_external_skeleton = true
+external_skeleton = NodePath("../RiverEvent/RiverEventRoot/Skeleton3D")
+
+[editable path="RiverEvent"]

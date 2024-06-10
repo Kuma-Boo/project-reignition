@@ -1,18 +1,27 @@
-[gd_scene load_steps=85 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=93 format=3 uid="uid://b3gupr30ahvvi"]
 
+[ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
+[ext_resource type="Resource" uid="uid://nf07w7wsy4tn" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="3_p8ttf"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="4_1j3qj"]
 [ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/run/AutorunLockout.tres" id="5_ntl2g"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="6_4xrcy"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="7_ys7sj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uj3dw"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
-[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="24_wi7s4"]
-[ext_resource type="Resource" uid="uid://dyjpi8d72jkne" path="res://resource/preset/lockout/EventLockout.tres" id="25_18tm7"]
+[ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
+[ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="26_qkiaj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="27_dpcvf"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="27_l6k7w"]
+[ext_resource type="Resource" uid="uid://edhpc2jt1013" path="res://area/2 dino jungle/act 1/camera/CaveRightStartCam.tres" id="28_lvbi5"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="29_prhwm"]
+[ext_resource type="Resource" uid="uid://tqbsu2t584pv" path="res://area/2 dino jungle/act 1/camera/CaveRightEndCam.tres" id="35_4jgx6"]
+[ext_resource type="Resource" uid="uid://bv82an0hfcens" path="res://area/2 dino jungle/act 1/camera/CaveRightSpringCam.tres" id="36_358w5"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="37_8fetv"]
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_158q5"]
-[ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="39_p0jth"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="39_p0jth"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="40_m082x"]
+[ext_resource type="Resource" uid="uid://drebwyd3x78iv" path="res://area/2 dino jungle/act 1/camera/JumpChainStaticCam.tres" id="41_6eimj"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="41_nmbev"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="42_o7jek"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="43_4v8c0"]
@@ -42,89 +51,11 @@
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="68_wfrq5"]
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="69_kptet"]
 
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_1mwhh"]
 size = Vector3(100, 100, 250)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
-
-[sub_resource type="Animation" id="Animation_l3fdx"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0, true],
-"method": &"seek"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_hdoe6"]
-resource_name = "event"
-length = 4.0
-step = 0.0333333
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["river-event", -1, 1.0, false],
-"method": &"play"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(3, 3.33333),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [0.0, -30.0],
-"method": &"SetCharacterSpeed"
-}, {
-"args": [],
-"method": &"FinishEvent"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Dialog")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Activate"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_hl5y4"]
-_data = {
-"RESET": SubResource("Animation_l3fdx"),
-"event": SubResource("Animation_hdoe6")
-}
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_msrs8"]
-size = Vector3(14, 20, 8)
 
 [sub_resource type="Curve" id="Curve_6lpk3"]
 min_value = -1.0
@@ -182,11 +113,14 @@ max_value = 2.0
 _data = [Vector2(0, 0), 0.0, 2.8, 0, 0, Vector2(1, 1.6), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
+size = Vector3(15, 20, 2.5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_u7iwk"]
 size = Vector3(18, 14, 6)
 
-[sub_resource type="Curve" id="Curve_uabxg"]
-_data = [Vector2(0, 0), 0.0, 2.0, 0, 0, Vector2(1, 0.3), -0.6, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_bs2kb"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_cgfgf"]
@@ -227,10 +161,19 @@ max_value = 1.5
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 2.5, 2.5, 0, 0, Vector2(1, 1), -1.15358, 0.0, 0, 0]
 point_count = 4
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_0ln2g"]
+size = Vector3(6, 15, 2)
+
 [sub_resource type="Curve" id="Curve_x2j5i"]
 min_value = -1.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.6), -2.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_iq0gp"]
+radius = 2.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mwx1a"]
+radius = 0.2
 
 [sub_resource type="Curve" id="Curve_7fkq0"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0]
@@ -243,8 +186,6 @@ point_count = 1
 [sub_resource type="Curve" id="Curve_j161l"]
 _data = [Vector2(0, 0.4), 0.0, 0.0, 0, 0]
 point_count = 1
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_mwx1a"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fe0e4"]
 size = Vector3(15, 20, 2)
@@ -310,9 +251,45 @@ size = Vector3(8, 15, 6)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("69_kptet")]
-"Level ID" = "dj_a1_main"
-"Item Cycling/Activation Trigger" = NodePath("")
-completionAnimator = NodePath("")
+Data = ExtResource("2_p4x35")
+InitialCameraSettings = ExtResource("3_p8ttf")
+metadata/_edit_group_ = true
+
+[node name="01Chase" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="03Cave" parent="Static/Visuals" index="3"]
+startEnabled = true
+
+[node name="04Spiral" parent="Static/Visuals" index="4"]
+startEnabled = true
+
+[node name="05Crossing" parent="Static/Visuals" index="5"]
+startEnabled = true
+
+[node name="06CavernEntrance" parent="Static/Visuals" index="6"]
+startEnabled = true
+
+[node name="07Cavern" parent="Static/Visuals" index="7"]
+startEnabled = true
+
+[node name="08FeedingTunnel" parent="Static/Visuals" index="8"]
+startEnabled = true
+
+[node name="09End" parent="Static/Visuals" index="9"]
+startEnabled = true
+
+[node name="09Scenery" parent="Static/Visuals" index="10"]
+startEnabled = true
+
+[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
+transform = Transform3D(-4.37112e-08, 0, 0.999995, 0, 0.999995, 0, -0.999996, 0, -4.37112e-08, 0, 0, 0)
+
+[node name="SpiralAutomationPath" parent="Static/Path" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.253, -219.907, -845.788)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -321,6 +298,7 @@ metadata/_edit_lock_ = true
 
 [node name="AutorunLockout" parent="MainAct/SpawnPosition" instance=ExtResource("3_bw6cf")]
 "Trigger Mode" = 2
+"Enter Mode" = 0
 "Exit Mode" = 0
 
 [node name="Autorun" type="Node3D" parent="MainAct/SpawnPosition/AutorunLockout"]
@@ -340,81 +318,65 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -350.5, -219.52, -683.28)
 
-[node name="Trigger" type="Node3D" parent="MainAct"]
+[node name="CullingMap" type="Node3D" parent="MainAct"]
 
-[node name="TrioStartTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+[node name="DialogTrigger" type="Node3D" parent="MainAct"]
 
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioStartTrigger"]
+[node name="TrioStartTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioStartTrigger"]
 script = ExtResource("7_ys7sj")
 delays = []
 textKeys = ["din_event_trio_so", "din_event_trio_sh", "din_event_trio2_so", "din_event_trio2_sh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioStartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioStartTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="TrioTutorialTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -2.01432, -331.724)
+[node name="TrioTutorialTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -1.03775, -331.724)
 
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioTutorialTrigger"]
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioTutorialTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_tutorial_trio_so", "din_tutorial_trio_sh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioTutorialTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioTutorialTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="TrioEndTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -39.7, -425.59)
+[node name="TrioEndTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
 
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/TrioEndTrigger"]
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioEndTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_event_trio3_so", "din_event_trio3_sh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/TrioEndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioEndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="WaterfallTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -192.58, -27.92, -476.569)
+[node name="CaveSplitTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
 
-[node name="FallsEvent" type="Node3D" parent="MainAct/Trigger/WaterfallTrigger" node_paths=PackedStringArray("animator", "playerStandin", "cameraStandin")]
-script = ExtResource("24_wi7s4")
-animator = NodePath("AnimationPlayer")
-playerStandin = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/RiverEventRoot/Skeleton3D/PlayerBone/Player")
-cameraStandin = NodePath("../../../../Static/Event/RiverEvent/RiverEvent/RiverEventRoot/Skeleton3D/Camera")
-lockout = ExtResource("25_18tm7")
-
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/WaterfallTrigger/FallsEvent"]
-script = ExtResource("7_ys7sj")
-delays = [0.0, 0.4, 1.0, 0.0]
-displayLength = []
-textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Trigger/WaterfallTrigger/FallsEvent"]
-libraries = {
-"": SubResource("AnimationLibrary_hl5y4")
-}
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/WaterfallTrigger"]
-shape = SubResource("BoxShape3D_msrs8")
-
-[node name="CaveSplitTrigger" parent="MainAct/Trigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.011, -223.311, -621.829)
-
-[node name="Dialog" type="Node3D" parent="MainAct/Trigger/CaveSplitTrigger"]
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/CaveSplitTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_split_sh", "din_split_so"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Trigger/CaveSplitTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/CaveSplitTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="DinoTrioGroup" parent="MainAct" instance=ExtResource("10_3r4lq")]
-
 [node name="Chase" type="Node3D" parent="MainAct"]
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Dinos" type="Node3D" parent="MainAct/Chase"]
+
+[node name="DinoTrioGroup" parent="MainAct/Chase/Dinos" instance=ExtResource("10_3r4lq")]
 
 [node name="WhiteRock1" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(2.82843, 0, 2.82843, 0, 1.5, 0, -2.82843, 0, 2.82843, -2, 0, 19)
@@ -423,7 +385,7 @@ transform = Transform3D(2.82843, 0, 2.82843, 0, 1.5, 0, -2.82843, 0, 2.82843, -2
 transform = Transform3D(1.06066, 0, 1.06066, 0, 1.5, 0, -1.06066, 0, 1.06066, -7.2, 0, 9)
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.683649, -7)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -756,10 +718,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -5.075, -28.75)
 transform = Transform3D(-0.984356, 0.000181966, -0.17619, -0.0455434, 0.96575, 0.255446, 0.170201, 0.259474, -0.950634, -2.57442, -2.91197, -85.0826)
 
 [node name="DashPanelR2" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(-0.984158, 0.0249691, -0.175522, -0.0235322, 0.962875, 0.268919, 0.175721, 0.26879, -0.947034, 2.41808, -2.86406, -85.567)
+transform = Transform3D(-0.983512, 0.0435317, -0.175522, -0.00536253, 0.963148, 0.268919, 0.180761, 0.265427, -0.947034, 2.41771, -2.87233, -85.5693)
 
 [node name="RingsL1" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999709, 0.00759611, 0.0229147, 0.00125795, 0.931524, -0.363677, -0.0241081, 0.3636, 0.931243, -2.74037, -1.12414, -87.0341)
+transform = Transform3D(0.999709, 0.00759611, 0.0229147, 0.00125795, 0.931524, -0.363677, -0.0241081, 0.3636, 0.931243, -2.74037, -1.37339, -87.0341)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -794,7 +756,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
 
 [node name="RingsR1" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999709, 0.00759611, 0.0229147, 0.00125795, 0.931524, -0.363677, -0.0241081, 0.3636, 0.931243, 1.89918, -0.993944, -87.4646)
+transform = Transform3D(0.999709, 0.00759611, 0.0229147, 0.00125795, 0.931524, -0.363677, -0.0241081, 0.3636, 0.931243, 1.89918, -1.39725, -87.4646)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -829,7 +791,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
 
 [node name="WhiteRock3" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
-transform = Transform3D(1.40954, 0, 0.51303, 0.144343, 1.43941, -0.396579, -0.492306, 0.42203, 1.3526, -5.15173, -2.75703, -84.3855)
+transform = Transform3D(1.40954, 0, 0.51303, 0.144343, 1.43941, -0.396579, -0.492306, 0.42203, 1.3526, -5.67534, -2.75702, -85.4178)
 
 [node name="WhiteRock4" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(1.49933, 0.0447135, -0.00183448, -0.0423911, 1.39936, -0.538499, -0.0143406, 0.538311, 1.40001, 4.73894, -0.943071, -90.6495)
@@ -929,7 +891,7 @@ Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
@@ -973,13 +935,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0472, -1.17956, -10.2984)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11899, -1.2, -11.1097)
 
 [node name="RingsR2" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49305, -0.781694, -143.545)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49305, -0.943838, -143.545)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -987,25 +949,25 @@ Spacing = 1.2
 "Vertical Offset" = SubResource("Curve_h6fmk")
 
 [node name="Child01" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0279, 0, 0.190994)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0279, -0.16726, 0.190994)
 
 [node name="Child02" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18384, -0.111814, -1.10713)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18384, -0.333524, -1.10713)
 
 [node name="Child03" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.453654, -0.258978, -2.40955)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.453654, -0.480688, -2.40955)
 
 [node name="Child04" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.790032, -0.431799, -3.71342)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.790032, -0.66355, -3.71342)
 
 [node name="Child05" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.20157, -0.620586, -5.01381)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.20157, -0.832867, -5.01381)
 
 [node name="Child06" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69492, -0.815646, -6.30034)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69492, -0.949728, -6.30034)
 
 [node name="Child07" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.27565, -1.00729, -7.56413)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.27565, -1.1075, -7.56413)
 
 [node name="Child08" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.94472, -1.18582, -8.79204)
@@ -1023,19 +985,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.42388, -1.54583, -12.1441)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.37213, -1.575, -13.1292)
 
 [node name="DashPanelL3" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(-0.551027, 0.126621, -0.824825, 0.0777049, 0.991912, 0.10036, 0.830861, -0.00879209, -0.55641, -14.1152, -2.30222, -155.549)
+transform = Transform3D(-0.544186, 0.153378, -0.824825, 0.12605, 0.986934, 0.10036, 0.82944, -0.0493545, -0.55641, -14.1221, -2.35289, -155.548)
 
 [node name="DashPanelR3" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.571841, 0.032402, -0.819724, 0.0777108, 0.996866, -0.0148073, 0.816674, -0.0721689, -0.572568, -6.83688, -3.09867, -158.272)
 
 [node name="RingsM2" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -39.5177, 1.08042, -172.88)
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -39.5177, 0.864384, -172.88)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
@@ -1080,7 +1042,6 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 5.12425, 0.45, -14
 
 [node name="DashPanelM4" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.983521, 0.174284, -0.0480792, 0.167216, 0.978013, 0.124617, 0.0687401, 0.114524, -0.991039, -50.4943, 1.28003, -187.255)
-alignToPath = true
 
 [node name="WhiteRock6" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(-0.00591561, 0.108652, 0.994062, 0.126349, 0.986194, -0.10704, -0.991968, 0.124965, -0.0195619, -55.5291, 2.22895, -186.769)
@@ -1265,7 +1226,7 @@ transform = Transform3D(-0.990104, 0.140313, 0.00215388, 0.1374, 0.966204, 0.218
 transform = Transform3D(-0.984156, 0.173528, 0.0363608, 0.176743, 0.944032, 0.278505, 0.0140029, 0.28052, -0.959746, -47.4626, 1.56576, -229.103)
 
 [node name="RingsL3" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999262, -0.00133972, -0.0383644, 0, 0.999391, -0.0348995, 0.0383878, 0.0348738, 0.998654, -53.725, 3.75587, -231.652)
+transform = Transform3D(0.999262, -0.00133972, -0.0383644, 0, 0.999391, -0.0348995, 0.0383878, 0.0348738, 0.998654, -53.725, 3.60375, -231.652)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -1277,42 +1238,43 @@ Spacing = 1.4
 "Vertical Offset" = SubResource("Curve_mce4p")
 
 [node name="Child01" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
+transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -0.0869999, 0.0030365)
 
 [node name="Child02" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.210744, -1.4)
+transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 3.8147e-06, -0.00168705, -1.39258)
 
 [node name="Child03" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.305785, -2.8)
+transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 0, 0.0952129, -2.79265)
 
 [node name="Child04" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.297521, -4.2)
+transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 0, 0.102624, -4.19322)
 
 [node name="Child05" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198347, -5.6)
+transform = Transform3D(1, -1.16415e-10, 0, -5.82077e-10, 1, 0, -2.23517e-08, 2.23517e-08, 1, 1.14441e-05, -0.00409412, -5.59302)
 
 [node name="Child06" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0206613, -7)
+transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, -3.8147e-06, -0.297733, -6.98894)
 
 [node name="Child07" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22314, -8.4)
+transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 0, -0.582906, -8.38747)
 
 [node name="Child08" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.520661, -9.8)
+transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -0.868787, -9.78784)
 
 [node name="Child09" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.859504, -11.2)
+transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, -3.8147e-06, -1.1908, -11.1885)
 
 [node name="Child10" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.22727, -12.6)
+transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -1.49245, -12.5907)
 
 [node name="Child11" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.61157, -14)
+transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -1.82156, -13.9927)
 
 [node name="Child12" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -15.4)
 
 [node name="RingsR3" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999313, -0.00123211, -0.0370244, 0, 0.999447, -0.0332598, 0.0370448, 0.033237, 0.998761, -47.4, 2.85363, -231.277)
+transform = Transform3D(0.999313, -0.00123211, -0.0370244, 0, 0.999447, -0.0332598, 0.0370448, 0.033237, 0.998761, -47.4, 2.70151, -231.277)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -1469,13 +1431,13 @@ transform = Transform3D(-0.721463, 0.221359, 0.656117, 0.0810582, 0.968011, -0.2
 transform = Transform3D(-0.70577, 0.192597, 0.681758, 0.0284386, 0.969263, -0.244377, -0.707869, -0.153086, -0.689555, -36.3736, -0.540885, -265.796)
 
 [node name="RingsL4" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -36.0743, -0.829034, -276.081)
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -36.0743, -1.07825, -276.081)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.8
@@ -1519,13 +1481,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09743, 1.96246, -13.6789)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1976, 2.5, -15.4045)
 
 [node name="RingsR4" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -28.8743, -1.52903, -273.381)
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -28.8743, -1.66985, -273.381)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.4
@@ -1569,7 +1531,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.95188, 1.96246, -14.4119)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.01076, 2.5, -15.7084)
 
 [node name="DashPanelL6" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(-0.999585, 0.0287765, -8.9407e-08, 0.028667, 0.995782, -0.0871558, -0.00250794, -0.0871196, -0.996195, -30.5235, 3.00257, -310.987)
+transform = Transform3D(-0.999585, 0.0287765, -8.9407e-08, 0.028667, 0.995782, -0.0871558, -0.00250794, -0.0871196, -0.996195, -30.333, 2.9828, -311.077)
 
 [node name="DashPanelR6" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.999138, 0.041492, -9.49949e-08, 0.0412383, 0.99303, -0.110411, -0.00458107, -0.110316, -0.993886, -23.1972, 2.69886, -311.016)
@@ -1755,7 +1717,7 @@ transform = Transform3D(-1, 1.86265e-09, -9.12696e-08, -1.49012e-08, 1, 1.49012e
 transform = Transform3D(-1, 1.86265e-09, -9.12696e-08, -1.49012e-08, 1, 1.49012e-07, 8.3819e-08, 8.9407e-08, -1, -8.00001, 1.52588e-05, -3.05176e-05)
 
 [node name="RingsM3" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.997126, 0.0735489, 0.0181252, -0.071354, 0.831664, 0.550676, 0.0254275, -0.550386, 0.834523, -30.3415, -8.27163, -347.349)
+transform = Transform3D(0.997126, 0.0735489, 0.0181252, -0.071354, 0.831664, 0.550676, 0.0254275, -0.550386, 0.834523, -30.3415, -8.55417, -347.349)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -1767,7 +1729,7 @@ Spacing = 1.5
 "Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsM3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 9.31323e-10, -3.72529e-09, 1.86265e-09, 1, 0, -3.72529e-09, 2.98023e-08, 1, 0, 0, 0)
+transform = Transform3D(1, 5.58794e-09, -3.72529e-09, -9.31323e-10, 1, -5.96046e-08, -5.58794e-09, 0, 1, 0, 0, 0)
 
 [node name="Child02" parent="MainAct/Chase/RingsM3" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
@@ -1815,7 +1777,7 @@ transform = Transform3D(-1.28558, 0, -1.53209, 0, 2, 0, 1.53209, 0, -1.28558, -2
 transform = Transform3D(-1.99239, 0, -0.174311, 0, 2, 0, 0.174311, 0, -1.99239, -35.5921, -39.1148, -413.895)
 
 [node name="RingsM4" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.996266, 0.0717303, -0.0480397, -0.0353484, 0.846608, 0.531042, 0.0787625, -0.527361, 0.845983, -25.9949, -27.5289, -375.362)
+transform = Transform3D(0.996266, 0.0717303, -0.0480397, -0.0353484, 0.846608, 0.531042, 0.0787625, -0.527361, 0.845983, -25.9949, -27.9394, -375.362)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -1974,7 +1936,7 @@ transform = Transform3D(0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 0, 0, 1
 transform = Transform3D(1.45827, 0.351364, 0, -0.351364, 1.45827, 0, 0, 0, 1.5, -118.988, -46.463, -439.691)
 
 [node name="RingsL5" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(-0.00711997, 0.340309, 0.940287, 0.0506227, 0.939228, -0.339542, -0.998691, 0.0451824, -0.0239147, -129.205, -43.0778, -436.983)
+transform = Transform3D(-0.00711997, 0.340309, 0.940287, 0.0506227, 0.939228, -0.339542, -0.998691, 0.0451824, -0.0239147, -129.205, -43.3476, -436.983)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -2003,7 +1965,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
 
 [node name="RingsR5" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(-0.00711997, 0.340309, 0.940287, 0.0506227, 0.939228, -0.339542, -0.998691, 0.0451824, -0.0239147, -129.247, -42.7741, -442.975)
+transform = Transform3D(-0.00711997, 0.340309, 0.940287, 0.0506227, 0.939228, -0.339542, -0.998691, 0.0451824, -0.0239147, -129.247, -43.0439, -442.975)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -2032,22 +1994,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
 
 [node name="DashPanelL7" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(0.00712006, 0.340309, -0.940287, -0.0506227, 0.939228, 0.339542, 0.998691, 0.0451824, 0.0239148, -138.948, -40.6216, -436.789)
+transform = Transform3D(0.00712006, 0.340309, -0.940287, -0.0506227, 0.939228, 0.339542, 0.998691, 0.0451824, 0.0239148, -138.948, -40.7012, -436.789)
 
 [node name="DashPanelR7" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(0.00712006, 0.340309, -0.940287, -0.0506227, 0.939228, 0.339542, 0.998691, 0.0451824, 0.0239148, -138.99, -40.3179, -442.781)
+transform = Transform3D(0.00712006, 0.340309, -0.940287, -0.0506227, 0.939228, 0.339542, 0.998691, 0.0451824, 0.0239148, -138.99, -40.3428, -442.781)
 
 [node name="Cactus7" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.943709, 0.330388, -0.0160431, -0.330777, 0.942598, -0.0457709, -9.00155e-10, 0.0485011, 0.998823, -147.693, -37.5155, -439.692)
 
 [node name="RingsM5" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.989775, 0, -0.142629, 0, 1, 0, 0.142629, 0, 0.989776, -162.026, -32.1629, -439.512)
+transform = Transform3D(0.989775, 0, -0.142629, 0, 1, 0, 0.142629, 0, 0.989776, -162.568, -32.5833, -439.512)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
@@ -2084,11 +2046,35 @@ transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -12.6553, 1.57586, 
 [node name="Child10" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -14.0784, 1.6, -3.0834)
 
+[node name="RiverEvent" parent="MainAct" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193.347, -39.102, -495.023)
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/RiverEvent"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
+script = ExtResource("7_ys7sj")
+delays = [0.0, 0.4, 1.0, 0.0]
+displayLength = []
+textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
+
+[node name="RiverEvent" parent="MainAct/RiverEvent" instance=ExtResource("19_rr5sk")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/RiverEvent"]
+transform = Transform3D(-0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, -0.996195, 0.464157, 10.9, 18.6349)
+shape = SubResource("BoxShape3D_7im1x")
+
 [node name="River" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -190, -95, -495)
+visible = false
+script = ExtResource("9_uj3dw")
+saveVisibilityOnCheckpoint = true
 
-[node name="Boat" parent="MainAct/River" instance=ExtResource("44_j45ek")]
+[node name="Boat" parent="MainAct/River" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 9.795, 0, 4.20499)
+path = NodePath("../../../Static/Path/RiverPath")
+pathFollower = NodePath("../../../Static/Path/RiverPath/RiverBoatPathFollower")
 
 [node name="JumpTrigger" parent="MainAct/River" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -173.5, -113.9, -101)
@@ -2459,132 +2445,132 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
 [node name="RingsL3" type="Node3D" parent="MainAct/River"]
-transform = Transform3D(0.866025, -0.0868241, 0.492404, 0, 0.984808, 0.173648, -0.5, -0.150384, 0.852869, 64.867, -14.4933, -37.5359)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.767, -14.4933, -37.7359)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_uabxg")
+"Horizontal Offset" = SubResource("Curve_bs2kb")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/River/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.170883, -0.121628, -0.55127)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000442505, -0.00105286, -0.00390625)
 
 [node name="Child02" parent="MainAct/River/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.591949, -0.20755, -2.24695)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.365784, -0.67318, -1.63971)
 
 [node name="Child03" parent="MainAct/River/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.741028, -0.471619, -4.04388)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.959198, -1.35903, -3.22571)
 
 [node name="Child04" parent="MainAct/River/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.593399, -0.858131, -5.8598)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788, -2.05176, -4.71082)
 
 [node name="Child05" parent="MainAct/River/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.172943, -1.31197, -7.61719)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.83757, -2.74198, -6.04059)
 
 [node name="Child06" parent="MainAct/River/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, -0.462646, -1.78394, -9.26489)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.07085, -3.4192, -7.17126)
 
 [node name="RingsR3" type="Node3D" parent="MainAct/River"]
-transform = Transform3D(0.866025, -0.0868241, 0.492404, 0, 0.984808, 0.173648, -0.5, -0.150384, 0.852869, 66.1345, -13.9662, -38.1405)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.9319, -13.9933, -38.1479)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_uabxg")
+"Horizontal Offset" = SubResource("Curve_bs2kb")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/River/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.180573, -0.13427, -0.608215)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000358582, 0.000793457, 0.00299072)
 
 [node name="Child02" parent="MainAct/River/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.623367, -0.266617, -2.51093)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.377632, -0.771255, -1.76062)
 
 [node name="Child03" parent="MainAct/River/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.759888, -0.580383, -4.52856)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.01226, -1.56335, -3.4856)
 
 [node name="Child04" parent="MainAct/River/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.564697, -1.01535, -6.55927)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9133, -2.36674, -5.11096)
 
 [node name="Child05" parent="MainAct/River/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.0736542, -1.50963, -8.4964)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.06294, -3.16958, -6.56982)
 
 [node name="Child06" parent="MainAct/River/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, -0.639328, -2.01295, -10.2847)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.41518, -3.95882, -7.80725)
 
 [node name="PearlsL3" type="Node3D" parent="MainAct/River"]
-transform = Transform3D(0.866025, -0.0868241, 0.492404, 0, 0.984808, 0.173648, -0.5, -0.150384, 0.852869, 64.867, -14.4933, -37.5359)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.767, -14.4933, -37.7359)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_uabxg")
+"Horizontal Offset" = SubResource("Curve_bs2kb")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/River/PearlsL3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.170883, -0.121628, -0.55127)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000442505, -0.00105286, -0.00390625)
 
 [node name="Child02" parent="MainAct/River/PearlsL3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.591949, -0.20755, -2.24695)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.365784, -0.67318, -1.63971)
 
 [node name="Child03" parent="MainAct/River/PearlsL3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.741028, -0.471619, -4.04388)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.959198, -1.35903, -3.22571)
 
 [node name="Child04" parent="MainAct/River/PearlsL3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.593399, -0.858131, -5.8598)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788, -2.05176, -4.71082)
 
 [node name="Child05" parent="MainAct/River/PearlsL3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.172943, -1.31197, -7.61719)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.83757, -2.74198, -6.04059)
 
 [node name="Child06" parent="MainAct/River/PearlsL3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, -0.462646, -1.78394, -9.26489)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.07085, -3.4192, -7.17126)
 
 [node name="PearlsR3" type="Node3D" parent="MainAct/River"]
-transform = Transform3D(0.866025, -0.0868241, 0.492404, 0, 0.984808, 0.173648, -0.5, -0.150384, 0.852869, 66.1345, -13.9662, -38.1405)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.9319, -13.9933, -38.1479)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 6
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_uabxg")
+"Horizontal Offset" = SubResource("Curve_bs2kb")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/River/PearlsR3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.180573, -0.13427, -0.608215)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000358582, 0.000793457, 0.00299072)
 
 [node name="Child02" parent="MainAct/River/PearlsR3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.623367, -0.266617, -2.51093)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.377632, -0.771255, -1.76062)
 
 [node name="Child03" parent="MainAct/River/PearlsR3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.759888, -0.580383, -4.52856)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.01226, -1.56335, -3.4856)
 
 [node name="Child04" parent="MainAct/River/PearlsR3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.564697, -1.01535, -6.55927)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9133, -2.36674, -5.11096)
 
 [node name="Child05" parent="MainAct/River/PearlsR3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, 0.0736542, -1.50963, -8.4964)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.06294, -3.16958, -6.56982)
 
 [node name="Child06" parent="MainAct/River/PearlsR3" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 0, -2.98023e-08, -2.98023e-08, 1, -0.639328, -2.01295, -10.2847)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.41518, -3.95882, -7.80725)
 
 [node name="WaterRock1" parent="MainAct/River" instance=ExtResource("46_88fdv")]
 transform = Transform3D(-1.73205, 0, -1, 0, 1, 0, 1, 0, -1.73205, 53.1148, -21.5575, -50.7377)
@@ -3047,7 +3033,7 @@ Generate = false
 Source = ExtResource("40_m082x")
 Amount = 18
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 2.0
@@ -3115,7 +3101,7 @@ Generate = false
 Source = ExtResource("40_m082x")
 Amount = 18
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 2.0
@@ -3183,7 +3169,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 18
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 2.0
@@ -3251,7 +3237,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 18
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 2.0
@@ -3319,7 +3305,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 18
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 2.0
@@ -3662,7 +3648,7 @@ Generate = false
 Source = ExtResource("40_m082x")
 Amount = 18
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -1.8
 "Disable Path Y" = false
 Spacing = 1.8
@@ -3730,7 +3716,7 @@ Generate = false
 Source = ExtResource("40_m082x")
 Amount = 18
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -1.8
 "Disable Path Y" = false
 Spacing = 1.8
@@ -3898,11 +3884,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
 
 [node name="Cave" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362, -223, -621)
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
 [node name="LeftPath" type="Node3D" parent="MainAct/Cave"]
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Cave/LeftPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02095, -4)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -3931,10 +3920,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
 
 [node name="Cactus1" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.399994, 0.400009, -18.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.628754, 0.400009, -18.3753)
 
 [node name="PearlRing1" type="Node3D" parent="MainAct/Cave/LeftPath"]
-transform = Transform3D(0.957434, -0.277653, 0.0789289, 0.278522, 0.96043, -1.16415e-10, -0.0758056, 0.0219834, 0.99688, -0.399994, 4.10001, -18.6)
+transform = Transform3D(0.957434, -0.277653, 0.0789289, 0.278522, 0.96043, -1.16415e-10, -0.0758056, 0.0219834, 0.99688, 0.628754, 4.10001, -18.4753)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("42_o7jek")
@@ -3975,10 +3964,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370821, -1.14127, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.970821, -0.705342, 0)
 
 [node name="Cactus2" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
-transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -4.60001, 1.33487, -25.8985)
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -5.73776, 1.33487, -25.7996)
 
 [node name="RingsM2" type="Node3D" parent="MainAct/Cave/LeftPath"]
-transform = Transform3D(0.998935, 0.00683618, 0.0456384, 4.65661e-10, 0.988967, -0.148137, -0.0461476, 0.14798, 0.987913, -6.46436, 4.92671, -40.8811)
+transform = Transform3D(0.998935, 0.00683618, 0.0456384, 4.65661e-10, 0.988967, -0.148137, -0.0461476, 0.14798, 0.987913, -6.46436, 4.82309, -40.8811)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -4010,7 +3999,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.00034, 6.46199, -60.1761)
 transform = Transform3D(0.999919, 0.0126882, 0, -0.012672, 0.998645, -0.0504709, -0.000640385, 0.0504669, 0.998726, -10.5999, 6.75247, -63.0671)
 
 [node name="RingsM3" type="Node3D" parent="MainAct/Cave/LeftPath"]
-transform = Transform3D(0.731354, -0.0795692, 0.677341, 0, 0.993171, 0.116671, -0.681998, -0.0853276, 0.726359, -12.8338, 6.50735, -68.3223)
+transform = Transform3D(0.731354, -0.0795692, 0.677341, 0, 0.993171, 0.116671, -0.681998, -0.0853276, 0.726359, -12.8338, 6.4501, -68.3223)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -4041,6 +4030,7 @@ transform = Transform3D(0.941347, 0, -0.33744, 0, 1, 0, 0.33744, 0, 0.941347, -2
 [node name="Spring" parent="MainAct/Cave/LeftPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.9378, 3.5, -107.222)
 finalHeight = 9.0
+voiceKey = &""
 
 [node name="EnemyStone" parent="MainAct/Cave/LeftPath" instance=ExtResource("49_g35os")]
 transform = Transform3D(3.70769, 0, -0.750507, 0, 3, 0, 1.50101, 0, 1.85384, -22.9299, 6.09999, -106.68)
@@ -4051,6 +4041,20 @@ transform = Transform3D(1.37749, 0, -0.316654, 0, 0.25, 0, 0.593727, 0, 0.734664
 
 [node name="GrassPillar2" parent="MainAct/Cave/LeftPath" instance=ExtResource("50_sikom")]
 transform = Transform3D(1.63135, 0, -0.760713, 0, 1, 0, 0.760713, 0, 1.63135, -19.9575, 0.699997, -112.847)
+
+[node name="BackstepCam" parent="MainAct/Cave/LeftPath/GrassPillar2" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(-0.996195, 0, 0.0871558, 0, 1, 0, -0.0871558, 0, -0.996195, 0.261993, 0, -4.01129)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Cave/LeftPath/GrassPillar2/BackstepCam"]
+script = ExtResource("27_dpcvf")
+transitionTime = 0.5
+settings = ExtResource("26_qkiaj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cave/LeftPath/GrassPillar2/BackstepCam"]
+shape = SubResource("BoxShape3D_0ln2g")
 
 [node name="RingRing1" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.0117, 11.3972, -112.615)
@@ -4237,25 +4241,40 @@ transform = Transform3D(0.822661, -7.77534e-10, -0.568534, -0.0086821, 0.999883,
 [node name="RightPath" type="Node3D" parent="MainAct/Cave"]
 
 [node name="JumpPanel" parent="MainAct/Cave/RightPath" instance=ExtResource("53_8w2hc")]
-transform = Transform3D(-0.966111, 0, 0.258128, 0, 1, 0, -0.258128, 0, -0.966111, 4.93036, 0.637695, -17.4201)
+transform = Transform3D(-0.96358, 0, 0.267424, 0, 1, 0, -0.267424, 0, -0.96358, 4.27084, 0.637695, -15.4406)
 middleHeight = 8.0
-finalHeight = 1.0
-distance = 26.0
+distance = 28.0
+recenterSpeed = 32
+
+[node name="Camera" type="Node3D" parent="MainAct/Cave/RightPath/JumpPanel"]
+script = ExtResource("27_dpcvf")
+transitionTime = 0.5
+settings = ExtResource("28_lvbi5")
+
+[node name="Path" type="Node3D" parent="MainAct/Cave/RightPath/JumpPanel" node_paths=PackedStringArray("path")]
+script = ExtResource("27_l6k7w")
+path = NodePath("../../../../../Static/Path/CaveRightPath")
 
 [node name="Stone1" parent="MainAct/Cave/RightPath" instance=ExtResource("54_ay5i2")]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 10.6996, 2, -62.0087)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 10.6996, 2, -62.2087)
 
 [node name="Stone2" parent="MainAct/Cave/RightPath" instance=ExtResource("54_ay5i2")]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 12.692, 2, -62.183)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 12.692, 2, -62.383)
 
 [node name="ThornSpring1" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
-transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 6.32635, 1, -68.9848)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 8.02637, 1, -68.9848)
+rotationTime = 1.0
+staticTime = 3.0
 
 [node name="ThornSpring2" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
-transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 9.22369, 1, -75.5882)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 10.9237, 1, -75.5882)
+rotationTime = 1.0
+staticTime = 3.0
 
 [node name="ThornSpring3" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
-transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 6.21219, 1, -81.1497)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 7.9122, 1, -81.1497)
+rotationTime = 1.0
+staticTime = 3.0
 
 [node name="ItemBox" parent="MainAct/Cave/RightPath" instance=ExtResource("56_7lmmf")]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 8.23538, 2.44427, -92.154)
@@ -4266,21 +4285,37 @@ transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0, 0.5, 
 
 [node name="Spring1" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.91496, 0.307059, -0.261846, 3.72529e-09, 0.648864, 0.760905, 0.403545, -0.696197, 0.593684, 11.1937, 2, -98.4982)
-middleHeight = 8.0
-finalHeight = 7.5
-distance = 19.0
+finalHeight = 7.0
+distance = 18.0
+voiceKey = &""
+
+[node name="Camera" type="Node3D" parent="MainAct/Cave/RightPath/Spring1"]
+script = ExtResource("27_dpcvf")
+transitionTime = 0.5
+settings = ExtResource("36_358w5")
 
 [node name="Spring2" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(0.762668, -0.621734, 0.178279, 0, 0.275637, 0.961261, -0.64679, -0.733124, 0.21022, 18.5703, 9.46794, -115.317)
-middleHeight = 1.0
+transform = Transform3D(0.779982, -0.537696, -0.320173, 0.0155834, -0.494774, 0.868881, -0.625608, -0.682702, -0.377535, 18.0406, 9.78905, -115.188)
 finalHeight = -10.0
 distance = 17.0
+voiceKey = &""
 
 [node name="Spring3" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.939692, -0.262003, 0.219846, 0, 0.642788, 0.766044, -0.34202, -0.719846, 0.604023, 8.16901, 0.653503, -127.508)
 middleHeight = 5.0
 finalHeight = 3.0
 distance = 25.0
+voiceKey = &""
+
+[node name="Path" type="Node3D" parent="MainAct/Cave/RightPath/Spring3" node_paths=PackedStringArray("path")]
+script = ExtResource("27_l6k7w")
+path = NodePath("../../../../../Static/Path/CavePath")
+
+[node name="Camera" type="Node3D" parent="MainAct/Cave/RightPath/Spring3"]
+script = ExtResource("27_dpcvf")
+transitionTime = 0.5
+settings = ExtResource("35_4jgx6")
+previousSettings = ExtResource("3_p8ttf")
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Cave"]
 transform = Transform3D(0.999794, 0.00633547, 0.0192991, -0.00467379, 0.996373, -0.0849611, -0.0197674, 0.0848534, 0.996197, 0.0536499, 4.8562, -155.972)
@@ -4309,10 +4344,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 0, -4.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, -6)
 
 [node name="BlueMajin1" parent="MainAct/Cave" instance=ExtResource("58_fnmsc")]
-transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, -3.03259, 9.5, -166.618)
+transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, -3.02313, 9.36086, -167.508)
 
 [node name="BlueMajin2" parent="MainAct/Cave" instance=ExtResource("58_fnmsc")]
-transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, 1.05573, 7.3, -166.309)
+transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, 1.05573, 7.3, -164.849)
 
 [node name="EnemyStone1" parent="MainAct/Cave" instance=ExtResource("49_g35os")]
 transform = Transform3D(1.69593, 0, -1.0601, 0, 1, 0, 1.0601, 0, 1.69593, -3.03259, 6.09999, -166.618)
@@ -4331,6 +4366,7 @@ transform = Transform3D(0.642787, -0.0667652, 0.763129, 0, 0.996195, 0.0871557, 
 middleHeight = 20.0
 finalHeight = -4.0
 distance = 2.0
+voiceKey = &""
 
 [node name="Ring" parent="MainAct/Cave/Spring" instance=ExtResource("40_m082x")]
 transform = Transform3D(0.984808, 0, 0.173648, 0.0151344, 0.996195, -0.0858316, -0.172987, 0.0871558, 0.98106, 0.113525, 11.0006, 0.473633)
@@ -4620,19 +4656,87 @@ transform = Transform3D(0.981591, 0.0807556, 0.173081, -0.0795287, 0.996734, -0.
 [node name="GrassPillar3" parent="MainAct/Cave" instance=ExtResource("50_sikom")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -77.734, 0, -214.273)
 
-[node name="Spring2" parent="MainAct/Cave" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(0.993961, 0.103117, -0.0375313, 0, 0.34202, 0.939693, 0.109734, -0.934018, 0.339955, -77.7342, 10.1501, -214.273)
-middleHeight = 0.05
-finalHeight = -6.0
-distance = 34.0
-
 [node name="DashPanel2" parent="MainAct/Cave" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -78.5685, 2.95007, -221.977)
-alignToPath = true
 sfxPlayer = NodePath("../DashPanel/SFX")
 
 [node name="Spiral" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="JumpChainGroup" type="Node3D" parent="MainAct/Spiral"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53418, 7.55009, 12.727)
+
+[node name="Spring2" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("48_p6m4r")]
+transform = Transform3D(0.993961, 0.103116, -0.0375312, -7.00126e-09, 0.34202, 0.939693, 0.109734, -0.934018, 0.339955, 0, 0, 0)
+middleHeight = 0.05
+finalHeight = -6.0
+distance = 34.0
+voiceKey = &""
+
+[node name="StaticCameraTrigger" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.34058, -0.553787, -14.1421)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Spiral/JumpChainGroup/StaticCameraTrigger"]
+script = ExtResource("27_dpcvf")
+settings = ExtResource("41_6eimj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpChainGroup/StaticCameraTrigger"]
+shape = SubResource("SphereShape3D_iq0gp")
+
+[node name="FollowCameraTrigger" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.34058, -0.553787, -14.1421)
+"Enter Mode" = 0
+
+[node name="FollowCam" type="Node3D" parent="MainAct/Spiral/JumpChainGroup/FollowCameraTrigger"]
+script = ExtResource("27_dpcvf")
+settings = ExtResource("41_6eimj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpChainGroup/FollowCameraTrigger"]
+shape = SubResource("SphereShape3D_iq0gp")
+
+[node name="JumpTrigger1" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, -1.11759e-08, 3.52971e-07, -7.45058e-08, 1, -1.19209e-07, 1.92784e-07, 8.9407e-08, 0.999999, 3.63419, -5.25014, -32.627)
+
+[node name="Jump" type="Node3D" parent="MainAct/Spiral/JumpChainGroup/JumpTrigger1"]
+transform = Transform3D(1, -1.113e-14, 0, -9.07052e-14, 1, -1.84741e-13, 0, 9.23706e-14, 1, -6.5, 1.5, -5.40076)
+script = ExtResource("45_bbxl7")
+jumpHeight = 3.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpChainGroup/JumpTrigger1"]
+shape = SubResource("SphereShape3D_mwx1a")
+
+[node name="JumpTrigger2" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 3.18512e-07, -8.56817e-08, 1, -1.49012e-07, 1.93715e-07, -2.98023e-08, 0.999999, -2.86563, -3.95009, -38.0269)
+
+[node name="Jump" type="Node3D" parent="MainAct/Spiral/JumpChainGroup/JumpTrigger2"]
+transform = Transform3D(1, 2.33147e-15, -5.68434e-14, 7.86038e-14, 1, -1.42109e-14, -9.9476e-14, -3.55271e-14, 1, -0.799988, -0.299942, 12.4)
+script = ExtResource("45_bbxl7")
+jumpHeight = 3.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpChainGroup/JumpTrigger2"]
+shape = SubResource("SphereShape3D_mwx1a")
+
+[node name="JumpTrigger3" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, -1.49012e-08, 3.60422e-07, -7.45058e-08, 1, -1.19209e-07, 1.92784e-07, 1.19209e-07, 0.999999, -3.66577, -4.05002, -25.627)
+
+[node name="Jump" type="Node3D" parent="MainAct/Spiral/JumpChainGroup/JumpTrigger3"]
+transform = Transform3D(1, 5.88422e-15, -8.52651e-14, 1.01141e-13, 0.999999, 9.9476e-14, -1.98952e-13, -7.81597e-14, 0.999999, 9.79999, -40.9605, -21.4)
+script = ExtResource("45_bbxl7")
+jumpHeight = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpChainGroup/JumpTrigger3"]
+shape = SubResource("SphereShape3D_mwx1a")
+
+[node name="TODO REPLACE THIS SPRING" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("48_p6m4r")]
+transform = Transform3D(0.993821, 0.055529, -0.0961071, 0.0709099, 0.348505, 0.934621, 0.0853918, -0.93566, 0.342414, 6.11823, -45, -47.0812)
+middleHeight = 2.0
+finalHeight = -7.0
+distance = 30.0
+voiceKey = &""
 
 [node name="Pearls1" type="Node3D" parent="MainAct/Spiral"]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 1.09097, -2.15932, -17.4142)
@@ -4641,7 +4745,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4685,7 +4789,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4729,7 +4833,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4773,7 +4877,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4817,7 +4921,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4861,7 +4965,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4905,7 +5009,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4949,7 +5053,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -4993,7 +5097,7 @@ Generate = false
 Source = ExtResource("42_o7jek")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/MainPath")
+Path = NodePath("../../../Static/Path/RiverPath")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -5030,38 +5134,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94489, -1.21237, 5.09827)
 [node name="Child10" parent="MainAct/Spiral/Pearls9" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82309, -1.38196, 4.85889)
 
-[node name="JumpTrigger1" parent="MainAct/Spiral" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.10001, 2.3, -19.9)
-
-[node name="Jump" type="Node3D" parent="MainAct/Spiral/JumpTrigger1"]
-script = ExtResource("45_bbxl7")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpTrigger1"]
-shape = SubResource("SphereShape3D_mwx1a")
-
-[node name="JumpTrigger2" parent="MainAct/Spiral" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39999, 2.90001, -23)
-
-[node name="Jump" type="Node3D" parent="MainAct/Spiral/JumpTrigger2"]
-script = ExtResource("45_bbxl7")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpTrigger2"]
-shape = SubResource("SphereShape3D_mwx1a")
-
-[node name="JumpTrigger3" parent="MainAct/Spiral" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.19998, 3.50002, -12.9)
-
-[node name="Jump" type="Node3D" parent="MainAct/Spiral/JumpTrigger3"]
-script = ExtResource("45_bbxl7")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpTrigger3"]
-shape = SubResource("SphereShape3D_mwx1a")
-
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Crossing"]
-transform = Transform3D(0.0871561, -0.00015166, -0.996195, -0.000940684, 1, -0.000234539, 0.996194, 0.000957546, 0.087156, 29.5846, 1.00977, -11.8819)
+transform = Transform3D(0.0871561, -0.00015166, -0.996195, -0.000940684, 1, -0.000234539, 0.996194, 0.000957546, 0.087156, 29.5846, 0.833618, -11.8819)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -5275,7 +5355,7 @@ transform = Transform3D(1.26785, 0, 1.81262, 0, 2, 0, -2.71892, 0, 0.845236, 97.
 enemyCount = 3
 
 [node name="RingsM4" type="Node3D" parent="MainAct/Crossing"]
-transform = Transform3D(-0.607196, -0.00015166, 0.794552, 0.000668732, 1, 0.00070192, -0.794552, 0.000957546, -0.607196, -3.88239, -1.99472, -221.371)
+transform = Transform3D(-0.607196, -0.00015166, 0.794552, 0.000668732, 1, 0.00070192, -0.794552, 0.000957546, -0.607196, -3.88239, -2.14008, -221.371)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -5319,9 +5399,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.70001, -6.99994)
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
-[node name="Boat" parent="MainAct/Cavern" instance=ExtResource("44_j45ek")]
+[node name="Boat" parent="MainAct/Cavern" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -4.53979, -5.5, 2.1073)
+bounds = Vector2(3, 0)
+path = NodePath("../../../Static/Path/BoatPath")
+pathFollower = NodePath("../../../Static/Path/BoatPath/CavernBoatPathFollower")
 
 [node name="BoatStartTrigger" parent="MainAct/Cavern" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 14.7638, 6, -13.55)
@@ -5829,6 +5915,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [node name="FeedingTunnel" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
 [node name="DinoRex" parent="MainAct/FeedingTunnel" instance=ExtResource("66_a6b1t")]
 transform = Transform3D(0.97237, 0, -0.233445, 0, 1, 0, 0.233445, 0, 0.97237, 0, 0, 0)
@@ -5857,7 +5946,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 transform = Transform3D(0.921978, 0, 0.387242, 0, 1, 0, -0.387242, 0, 0.921978, 11.421, 0, 19.8297)
 
 [node name="Rings2" type="Node3D" parent="MainAct/FeedingTunnel"]
-transform = Transform3D(0.222382, 0, 0.974959, 0, 1, 0, -0.974959, 0, 0.222382, -3.98126, 1, 24.2358)
+transform = Transform3D(0.222382, 0, 0.974959, 0, 1, 0, -0.974959, 0, 0.222382, -3.98126, 0.737518, 24.2358)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -5880,7 +5969,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 transform = Transform3D(0.911109, 0, -0.412166, 0, 1, 0, 0.412166, 0, 0.911109, -5.41125, 0, 21.9141)
 
 [node name="Rings3" type="Node3D" parent="MainAct/FeedingTunnel"]
-transform = Transform3D(0.858208, 0, 0.513302, 0, 1, 0, -0.513302, 0, 0.858208, -19.4109, 1, 14.6466)
+transform = Transform3D(0.858208, 0, 0.513302, 0, 1, 0, -0.513302, 0, 0.858208, -19.4109, 0.920563, 14.6466)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -5914,9 +6003,10 @@ transform = Transform3D(-1.20533, 0, 0.892844, 0, 1.5, 0, -0.892844, 0, -1.20533
 [node name="Spring1" parent="MainAct/FeedingTunnel" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 27.6446, 5.10001, -4.49023)
 finalHeight = 4.0
+voiceKey = &""
 
 [node name="Rings4" type="Node3D" parent="MainAct/FeedingTunnel"]
-transform = Transform3D(-0.98468, 0, 0.17437, 0, 1, 0, -0.17437, 0, -0.98468, 27.9858, 8.39999, -1.81665)
+transform = Transform3D(-0.98468, 0, 0.17437, 0, 1, 0, -0.17437, 0, -0.98468, 27.9858, 8.32703, -1.81665)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -5941,6 +6031,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5.4)
 [node name="Spring2" parent="MainAct/FeedingTunnel" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.987538, 0, -0.157383, 0, 1, 0, 0.157383, 0, 0.987538, 27.7892, 7.70001, 5.94324)
 finalHeight = 5.0
+voiceKey = &""
 
 [node name="WhiteRock4" parent="MainAct/FeedingTunnel" instance=ExtResource("38_158q5")]
 transform = Transform3D(0.898431, 0, 1.20118, 0, 1.4, 0, -1.20118, 0, 0.898431, 21.3189, 10.4714, 22.4683)
@@ -5977,10 +6068,12 @@ transform = Transform3D(-1.15497, 0, -0.325648, 0, 2, 0, 0.325648, 0, -1.15497, 
 
 [node name="DashPanel" parent="MainAct/FeedingTunnel" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615, -16.6152, 11.4794, 25.6758)
-alignToPath = true
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
 [node name="WhiteRock1" parent="MainAct/End" instance=ExtResource("38_158q5")]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0.799988, 0.0613403, 2)
@@ -6149,6 +6242,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, -0.707107, 0)
 [node name="Spring" parent="MainAct/End" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(-0.725386, 0, 0.688342, 0, 1, 0, -0.688342, 0, -0.725386, -18, -7.70001, 17)
 finalHeight = 5.0
+voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
 transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
@@ -6387,8 +6481,18 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
 shape = SubResource("BoxShape3D_co0c0")
 
+[connection signal="Activated" from="MainAct/DialogTrigger/TrioStartTrigger" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Activate"]
+[connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Despawn"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Cave/RightPath/JumpPanel" to="Static/Collision/CaveRightOneWay" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Cave/RightPath/JumpPanel" to="Static/Collision/CaveRightOneWay" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Camera" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/Cave/RightPath/Spring3" to="MainAct/Cave/RightPath/Spring3/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Cave/RightPath/Spring3" to="MainAct/Cave/RightPath/Spring3/Path" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Cave/RightPath/Spring3" to="MainAct/Cave/RightPath/Spring3/Camera" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin1" to="MainAct/Cave/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin1" to="MainAct/Cave/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin1" to="MainAct/Cave/EnemyStone3" method="IncrementCounter"]
@@ -6398,4 +6502,13 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin1" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/Spring2" to="Static/Collision/CaveOneWay" method="Deactivate"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Despawn"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
+[editable path="Static/Trigger/Object/Apatos/Apatos1/DinoApatos"]
+[editable path="Static/Trigger/Object/Apatos/Apatos2/DinoApatos"]
