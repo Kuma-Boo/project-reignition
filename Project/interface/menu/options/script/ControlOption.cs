@@ -10,37 +10,37 @@ namespace Project.Interface.Menus
 		public delegate void SwapMappingEventHandler(StringName id, InputEvent e); // Emitted when a remap results in a mapping swap
 
 		[Export]
-		public Label actionLabel;
+		private Label actionLabel;
 		[Export]
-		public Label inputLabel;
+		private Label inputLabel;
 		[Export]
-		public Control awaitingInput;
+		private Control awaitingInput;
 		[Export]
-		public TextureRect keyTextureRect;
+		private TextureRect keyTextureRect;
 		[Export]
-		public TextureRect axisTextureRect;
+		private TextureRect axisTextureRect;
 		[Export]
-		public TextureRect buttonTextureRect;
+		private TextureRect buttonTextureRect;
 		[Export]
-		public ControllerSpriteResource[] controllerResources;
+		private ControllerSpriteResource[] controllerResources;
 
 		[Export]
-		public StringName inputID;
+		public StringName InputId { get; private set; }
 
-		public bool IsReady => State == RemapState.READY;
+		public bool IsReady => state == RemapState.Ready;
 
-		private RemapState State;
+		private RemapState state;
 		private enum RemapState
 		{
-			READY,
-			LISTENING,
-			REBINDING,
+			Ready,
+			Listening,
+			Rebinding,
 		}
 
 
 		public override void _Ready()
 		{
-			actionLabel.Text = Tr(inputID.ToString());
+			actionLabel.Text = Tr(InputId.ToString());
 			SaveConfig();
 			RedrawBinding();
 			Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
@@ -59,7 +59,7 @@ namespace Project.Interface.Menus
 
 		public void StartListening()
 		{
-			State = RemapState.LISTENING;
+			state = RemapState.Listening;
 			Input.ActionRelease("button_jump");
 			RedrawBinding();
 		}
@@ -68,7 +68,7 @@ namespace Project.Interface.Menus
 		private async void StopListening()
 		{
 			await ToSignal(GetTree().CreateTimer(PhysicsManager.physicsDelta, false), SceneTreeTimer.SignalName.Timeout);
-			State = RemapState.READY;
+			state = RemapState.Ready;
 			RedrawBinding();
 		}
 
@@ -78,15 +78,15 @@ namespace Project.Interface.Menus
 		{
 			if (!swapInput)
 			{
-				if (State != RemapState.LISTENING) return;
+				if (state != RemapState.Listening) return;
 				if (!e.IsPressed() || e.IsEcho()) return; // Only listen for press
-				if (!(e is InputEventKey || e is InputEventJoypadButton || e is InputEventJoypadMotion)) return; // Only listen for keys and button presses.
+				if (e is not (InputEventKey or InputEventJoypadButton or InputEventJoypadMotion)) return; // Only listen for keys and button presses.
 
 				if (!FilterInput(e)) return;
 			}
 
 			RemapInput(e);
-			State = RemapState.REBINDING;
+			state = RemapState.Rebinding;
 			StopListening();
 		}
 
@@ -94,9 +94,8 @@ namespace Project.Interface.Menus
 		/// <summary> Remaps the target input to the given input event's binding. </summary>
 		private void RemapInput(InputEvent e)
 		{
-			if (e is InputEventJoypadMotion)
+			if (e is InputEventJoypadMotion denoisedEvent) // Snap sign
 			{
-				InputEventJoypadMotion denoisedEvent = e as InputEventJoypadMotion;
 				denoisedEvent.AxisValue = Mathf.Sign(denoisedEvent.AxisValue);
 				e = denoisedEvent;
 			}
@@ -104,93 +103,96 @@ namespace Project.Interface.Menus
 			// Check for conflicting input mappings
 			Array<StringName> actionList = InputMap.GetActions();
 			StringName swapAction = null;
+			bool mappedAction = false;
 
 			for (int i = 0; i < actionList.Count; i++)
 			{
 				if (!SaveManager.Config.inputConfiguration.ContainsKey(actionList[i]))
 					continue;
 
-				if (InputMap.ActionHasEvent(actionList[i], e))
-				{
-					if (actionList[i] == inputID)
-					{
-						EmitSignal(SignalName.SwapMapping, string.Empty, new());
-						return; // Nothing changed
-					}
+				if (!InputMap.ActionHasEvent(actionList[i], e)) continue;
 
-					// Store conflict for a swap later
-					swapAction = actionList[i];
+				if (actionList[i] == InputId)
+				{
+					EmitSignal(SignalName.SwapMapping, string.Empty, new());
+					return; // Nothing changed
 				}
+
+				// Store conflict for a swap later
+				swapAction = actionList[i];
 			}
 
-			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID);
+			Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId);
 
 			for (int i = 0; i < eventList.Count; i++)
 			{
 				if (e.GetType() != eventList[i].GetType())
 					continue;
 
-				InputMap.ActionEraseEvent(inputID, eventList[i]); // Erase the old action
+				InputMap.ActionEraseEvent(InputId, eventList[i]); // Erase the old action
 
 				// Resolve the mapping conflict by swapping input mapping with this menu option's mapping
 				if (swapAction != null)
 					EmitSignal(SignalName.SwapMapping, swapAction, eventList[i]);
 
-				InputMap.ActionAddEvent(inputID, e); // Add the new action
+				InputMap.ActionAddEvent(InputId, e); // Add the new action
 				break;
 			}
 
-			EmitSignal(SignalName.SwapMapping, inputID, new());
+			if (!InputMap.ActionHasEvent(InputId, e))
+				InputMap.ActionAddEvent(InputId, e); // Add the new action
+
+			EmitSignal(SignalName.SwapMapping, InputId, new());
 			SaveConfig();
 		}
 
 
 		private void SaveConfig()
 		{
-			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID); // Refresh event list
+			Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId); // Refresh event list
 
 			// Construct the mapping string
-			int[] mappingList = { (int)Key.None, (int)JoyAxis.Invalid, (int)JoyButton.Invalid };
+			int[] mappingList = [(int)Key.None, (int)JoyAxis.Invalid, (int)JoyButton.Invalid];
 			int axisSign = 0;
-			foreach (InputEvent e in eventList)
+			foreach (var e in eventList)
 			{
-				if (e is InputEventKey)
-					mappingList[0] = (int)(e as InputEventKey).Keycode;
-				else if (e is InputEventJoypadMotion)
+				if (e is InputEventKey key)
+					mappingList[0] = (int)key.Keycode;
+				else if (e is InputEventJoypadMotion motion)
 				{
-					mappingList[1] = (int)(e as InputEventJoypadMotion).Axis;
-					axisSign = Mathf.Sign((e as InputEventJoypadMotion).AxisValue);
+					mappingList[1] = (int)motion.Axis;
+					axisSign = Mathf.Sign(motion.AxisValue);
 				}
-				else if (e is InputEventJoypadButton)
-					mappingList[2] = (int)(e as InputEventJoypadButton).ButtonIndex;
+				else if (e is InputEventJoypadButton button)
+					mappingList[2] = (int)button.ButtonIndex;
 			}
 			string mappingString = $"{mappingList[0]}, {mappingList[1]}, {mappingList[2]}, {axisSign}";
 
-			if (SaveManager.Config.inputConfiguration.ContainsKey(inputID))
-				SaveManager.Config.inputConfiguration[inputID] = mappingString;
+			if (SaveManager.Config.inputConfiguration.ContainsKey(InputId))
+				SaveManager.Config.inputConfiguration[InputId] = mappingString;
 			else
-				SaveManager.Config.inputConfiguration.Add(inputID, mappingString);
+				SaveManager.Config.inputConfiguration.Add(InputId, mappingString);
 		}
 
 
 		/// <summary> Checks whether the input can be remapped to the target binding. </summary>
 		private bool FilterInput(InputEvent e)
 		{
-			if (e is InputEventJoypadButton) // Exclude certain buttons (such as guides)
+			if (e is InputEventJoypadButton button) // Exclude certain buttons (such as guides)
 			{
-				switch ((e as InputEventJoypadButton).ButtonIndex)
+				switch (button.ButtonIndex)
 				{
 					case JoyButton.Guide:
 						return false;
 				}
 			}
 
-			if (e is InputEventJoypadMotion) // Only allow joystick axis in a certain range
+			if (e is InputEventJoypadMotion motion) // Only allow joystick axis in a certain range
 			{
-				if (Mathf.Abs((e as InputEventJoypadMotion).AxisValue) < SaveManager.Config.deadZone)
+				if (Mathf.Abs(motion.AxisValue) < SaveManager.Config.deadZone)
 					return false;
 
-				switch ((e as InputEventJoypadMotion).Axis)
+				switch (motion.Axis)
 				{
 					case JoyAxis.LeftX:
 						return true;
@@ -200,14 +202,18 @@ namespace Project.Interface.Menus
 						return true;
 					case JoyAxis.RightY:
 						return true;
+					case JoyAxis.TriggerLeft:
+						return true;
+					case JoyAxis.TriggerRight:
+						return true;
 					default:
 						return false;
 				}
 			}
 
-			if (e is InputEventKey) // Only allow keys in a certain range
+			if (e is InputEventKey key) // Only allow keys in a certain range
 			{
-				switch ((e as InputEventKey).Keycode)
+				switch (key.Keycode)
 				{
 					case Key.Shift:
 						return false;
@@ -234,41 +240,37 @@ namespace Project.Interface.Menus
 			keyTextureRect.Modulate = Colors.Transparent;
 			buttonTextureRect.Modulate = Colors.Transparent;
 			axisTextureRect.Modulate = Colors.Transparent;
-			awaitingInput.Visible = State == RemapState.LISTENING;
+			awaitingInput.Visible = state == RemapState.Listening;
 
 			if (!IsReady)
 				return;
 
-			Array<InputEvent> eventList = InputMap.ActionGetEvents(inputID);
+			Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId);
 
 			for (int i = 0; i < eventList.Count; i++)
 			{
-				if (eventList[i] is InputEventJoypadButton)
+				if (eventList[i] is InputEventJoypadButton button1)
 				{
 					buttonTextureRect.Modulate = Colors.White;
 
-					JoyButton button = (eventList[i] as InputEventJoypadButton).ButtonIndex;
-					buttonTextureRect.Texture = controllerResources[(int)SaveManager.Config.controllerType].buttons[(int)button];
+					JoyButton button = button1.ButtonIndex;
+					buttonTextureRect.Texture = controllerResources[(int)Runtime.Instance.GetActiveControllerType() - 1].buttons[(int)button];
 					continue;
 				}
 
-				if (eventList[i] is InputEventJoypadMotion)
+				if (eventList[i] is InputEventJoypadMotion motion)
 				{
 					axisTextureRect.Modulate = Colors.White;
-
-					int axis = (int)(eventList[i] as InputEventJoypadMotion).Axis;
-					axis = (axis * 2) + Mathf.Clamp(Mathf.RoundToInt((eventList[i] as InputEventJoypadMotion).AxisValue), 0, 1);
-
-					axisTextureRect.Texture = controllerResources[(int)SaveManager.Config.controllerType].axis[axis];
+					int axis = Runtime.Instance.ControllerAxisToIndex(motion);
+					axisTextureRect.Texture = controllerResources[(int)Runtime.Instance.GetActiveControllerType() - 1].axis[axis];
 					continue;
 				}
 
-				if (eventList[i] is InputEventKey)
+				if (eventList[i] is InputEventKey key)
 				{
 					keyTextureRect.Modulate = Colors.White;
 
-					Key key = (eventList[i] as InputEventKey).Keycode;
-					inputLabel.Text = Runtime.Instance.GetKeyLabel(key);
+					inputLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
 					int keySpriteIndex = inputLabel.Text.Length <= 3 ? 0 : 1;
 					keyTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 					continue;
