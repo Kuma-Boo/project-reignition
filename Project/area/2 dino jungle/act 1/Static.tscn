@@ -21,7 +21,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="16_vyk20"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="17_18ult"]
 [ext_resource type="Curve3D" uid="uid://bk014xjj2ilex" path="res://area/2 dino jungle/act 1/environment/path/SpiralAutomationPath.tres" id="17_sttw3"]
-[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/LogPath.tres" id="18_6nrhg"]
+[ext_resource type="Curve3D" uid="uid://ba2m6q801h088" path="res://area/2 dino jungle/act 1/environment/path/LogPath.tres" id="18_6nrhg"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/TreeAutomationPath.tres" id="19_p1hyv"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/BoatPath.tres" id="22_dpojg"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="22_vku8w"]
@@ -428,15 +428,17 @@ startEnabled = true
 
 [node name="Path" type="Node3D" parent="Trigger"]
 
-[node name="Dinopath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.418596, 0, -0.908172, 0, 1, 0, 0.908172, 0, 0.418596, -361.635, -255.028, -965.287)
+[node name="Treepath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.696614, 0, -0.717446, 0, 1, 0, 0.717446, 0, -0.696614, -426.713, -265.001, -927.323)
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Trigger/Path/Dinopath" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Trigger/Path/Treepath" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/DinoPath")
+path = NodePath("../../../../Path/TreePath")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Dinopath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49632, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Treepath"]
+transform = Transform3D(0.453773, 0, 0.891117, 0, 1, 0, -0.891117, 0, 0.453773, 0, -1.49631, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
 [node name="TreeAutomationPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
@@ -450,15 +452,28 @@ path = NodePath("../../../../Path/TreeAutomationPath")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49632, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
-[node name="Treepath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.696614, 0, -0.717446, 0, 1, 0, 0.717446, 0, -0.696614, -428.992, -264.933, -926.412)
+[node name="Dinopath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.418596, 0, -0.908172, 0, 1, 0, 0.908172, 0, 0.418596, -361.635, -255.028, -965.287)
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Trigger/Path/Treepath" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Trigger/Path/Dinopath" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/TreePath")
+path = NodePath("../../../../Path/DinoPath")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Treepath"]
-transform = Transform3D(0.453773, 0, 0.891117, 0, 1, 0, -0.891117, 0, 0.453773, 0, -1.49631, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Dinopath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49632, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="Endpath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.418596, 0, -0.908172, 0, 1, 0, 0.908172, 0, 0.418596, -635.723, -280.028, -1055.87)
+
+[node name="Path" type="Node3D" parent="Trigger/Path/Endpath" node_paths=PackedStringArray("path")]
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/EndPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Endpath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49632, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
 [node name="Object" type="Node3D" parent="Trigger"]

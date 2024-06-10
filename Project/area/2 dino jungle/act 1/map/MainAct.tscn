@@ -255,9 +255,6 @@ Data = ExtResource("2_p4x35")
 InitialCameraSettings = ExtResource("3_p8ttf")
 metadata/_edit_group_ = true
 
-[node name="Collision" parent="Static" index="0"]
-visible = true
-
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
 
@@ -267,11 +264,32 @@ startEnabled = true
 [node name="04Spiral" parent="Static/Visuals" index="4"]
 startEnabled = true
 
+[node name="05Crossing" parent="Static/Visuals" index="5"]
+startEnabled = true
+
+[node name="06CavernEntrance" parent="Static/Visuals" index="6"]
+startEnabled = true
+
+[node name="07Cavern" parent="Static/Visuals" index="7"]
+startEnabled = true
+
+[node name="08FeedingTunnel" parent="Static/Visuals" index="8"]
+startEnabled = true
+
+[node name="09End" parent="Static/Visuals" index="9"]
+startEnabled = true
+
+[node name="09Scenery" parent="Static/Visuals" index="10"]
+startEnabled = true
+
 [node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
 transform = Transform3D(-4.37112e-08, 0, 0.999995, 0, 0.999995, 0, -0.999996, 0, -4.37112e-08, 0, 0, 0)
 
 [node name="SpiralAutomationPath" parent="Static/Path" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.253, -219.907, -845.788)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -4247,19 +4265,16 @@ transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 8.02637, 1, -68.9848)
 rotationTime = 1.0
 staticTime = 3.0
-pauseHalfway = true
 
 [node name="ThornSpring2" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 10.9237, 1, -75.5882)
 rotationTime = 1.0
 staticTime = 3.0
-pauseHalfway = true
 
 [node name="ThornSpring3" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 7.9122, 1, -81.1497)
 rotationTime = 1.0
 staticTime = 3.0
-pauseHalfway = true
 
 [node name="ItemBox" parent="MainAct/Cave/RightPath" instance=ExtResource("56_7lmmf")]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 8.23538, 2.44427, -92.154)
@@ -4654,8 +4669,8 @@ saveVisibilityOnCheckpoint = true
 [node name="JumpChainGroup" type="Node3D" parent="MainAct/Spiral"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53418, 7.55009, 12.727)
 
-[node name="Spring" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(0.993961, 0.103117, -0.0375313, -7.00126e-09, 0.34202, 0.939693, 0.109734, -0.934018, 0.339955, 0, 0, 0)
+[node name="Spring2" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("48_p6m4r")]
+transform = Transform3D(0.993961, 0.103116, -0.0375312, -7.00126e-09, 0.34202, 0.939693, 0.109734, -0.934018, 0.339955, 0, 0, 0)
 middleHeight = 0.05
 finalHeight = -6.0
 distance = 34.0
@@ -5121,8 +5136,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82309, -1.38196, 4.85889)
 
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
-visible = false
 script = ExtResource("9_uj3dw")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Crossing"]
@@ -5384,8 +5399,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.70001, -6.99994)
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
-visible = false
 script = ExtResource("9_uj3dw")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Boat" parent="MainAct/Cavern" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
@@ -5900,8 +5915,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [node name="FeedingTunnel" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
-visible = false
 script = ExtResource("9_uj3dw")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="DinoRex" parent="MainAct/FeedingTunnel" instance=ExtResource("66_a6b1t")]
@@ -6056,8 +6071,8 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
-visible = false
 script = ExtResource("9_uj3dw")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="WhiteRock1" parent="MainAct/End" instance=ExtResource("38_158q5")]
@@ -6487,7 +6502,7 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin1" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
-[connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/Spring" to="Static/Collision/CaveOneWay" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/Spring2" to="Static/Collision/CaveOneWay" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
