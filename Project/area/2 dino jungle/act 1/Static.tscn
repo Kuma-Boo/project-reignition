@@ -6,13 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://c5dih136fv3wc" path="res://area/2 dino jungle/act 1/environment/01Chase.tscn" id="5_8hbmi"]
 [ext_resource type="PackedScene" uid="uid://iij01cwh2ttg" path="res://area/2 dino jungle/act 1/environment/02River.tscn" id="6_51sf7"]
 [ext_resource type="PackedScene" uid="uid://8hi2u5lp8ujo" path="res://area/2 dino jungle/act 1/environment/03Cave.tscn" id="7_fyuv1"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/06CavernEntrance.tscn" id="8_6iish"]
+[ext_resource type="PackedScene" uid="uid://dt0slod03tj2g" path="res://area/2 dino jungle/act 1/environment/06CavernEntrance.tscn" id="8_6iish"]
 [ext_resource type="PackedScene" uid="uid://xtvjxondy70e" path="res://area/2 dino jungle/act 1/environment/04Spiral.tscn" id="8_y6qf8"]
 [ext_resource type="PackedScene" uid="uid://cgq7hgxh4d6eq" path="res://area/2 dino jungle/act 1/environment/05Crossing.tscn" id="9_66gld"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/07Cavern.tscn" id="10_ufrux"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/08FeedingTunnel.tscn" id="11_0xivn"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/09End.tscn" id="12_lr60q"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/09Scenery.tscn" id="13_53845"]
+[ext_resource type="PackedScene" uid="uid://cw6cmbjhg4xa8" path="res://area/2 dino jungle/act 1/environment/07Cavern.tscn" id="10_ufrux"]
+[ext_resource type="PackedScene" uid="uid://bh513knx8203u" path="res://area/2 dino jungle/act 1/environment/08FeedingTunnel.tscn" id="11_0xivn"]
+[ext_resource type="PackedScene" uid="uid://bqiwoost47is4" path="res://area/2 dino jungle/act 1/environment/09End.tscn" id="12_lr60q"]
+[ext_resource type="PackedScene" uid="uid://y3nx7i4rauu5" path="res://area/2 dino jungle/act 1/environment/09Scenery.tscn" id="13_53845"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/ChasePath.tres" id="13_yh5pu"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/RiverPath.tres" id="14_0jylt"]
 [ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="14_lokxv"]
@@ -22,7 +22,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="17_18ult"]
 [ext_resource type="Curve3D" uid="uid://bk014xjj2ilex" path="res://area/2 dino jungle/act 1/environment/path/SpiralAutomationPath.tres" id="17_sttw3"]
 [ext_resource type="Curve3D" uid="uid://ba2m6q801h088" path="res://area/2 dino jungle/act 1/environment/path/LogPath.tres" id="18_6nrhg"]
-[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/TreeAutomationPath.tres" id="19_p1hyv"]
+[ext_resource type="Curve3D" uid="uid://b0iuvlb5xb8bd" path="res://area/2 dino jungle/act 1/environment/path/TreeAutomationPath.tres" id="19_p1hyv"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/BoatPath.tres" id="22_dpojg"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="22_vku8w"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/EndPath.tres" id="23_d4n23"]
@@ -429,7 +429,7 @@ startEnabled = true
 [node name="Path" type="Node3D" parent="Trigger"]
 
 [node name="Treepath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.696614, 0, -0.717446, 0, 1, 0, 0.717446, 0, -0.696614, -426.713, -265.001, -927.323)
+transform = Transform3D(-0.934552, 0, -0.355825, 0, 1, 0, 0.355825, 0, -0.934552, -432.401, -264.901, -913.516)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -438,18 +438,7 @@ script = ExtResource("35_vf0rg")
 path = NodePath("../../../../Path/TreePath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Treepath"]
-transform = Transform3D(0.453773, 0, 0.891117, 0, 1, 0, -0.891117, 0, 0.453773, 0, -1.49631, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="TreeAutomationPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.75785, 0, -0.652429, 0, 1, 0, 0.652429, 0, 0.75785, -394.067, -265.059, -935.379)
-
-[node name="Path" type="Node3D" parent="Trigger/Path/TreeAutomationPath" node_paths=PackedStringArray("path")]
-script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/TreeAutomationPath")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/TreeAutomationPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49632, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
 [node name="Dinopath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
