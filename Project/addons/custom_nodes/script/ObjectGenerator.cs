@@ -45,7 +45,7 @@ namespace Project.CustomNodes
 
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = new();
 
 			properties.Add(ExtensionMethods.CreateProperty("Generate", Variant.Type.Bool));
 
@@ -239,7 +239,12 @@ namespace Project.CustomNodes
 				return;
 			}
 
-			PathFollow3D follow = new PathFollow3D();
+			PathFollow3D follow = new()
+			{
+				RotationMode = PathFollow3D.RotationModeEnum.Xyz,
+				UseModelFront = true
+			};
+
 			path.AddChild(follow);
 			follow.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition) + progressOffset;
 
