@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=43 format=3 uid="uid://chn7ckbhlrr2g"]
 
 [ext_resource type="Script" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
 [ext_resource type="Texture2D" uid="uid://btu2qfmfefcpo" path="res://interface/gameplay/hud/rings/ring atlas.png" id="2_8yr5f"]
@@ -8,11 +8,14 @@
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/sprite atlas.png" id="4_63n04"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/ring.png" id="7_ggxti"]
 [ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/soul gauge/gradient.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="8_4xdo7"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="8_rl1c5"]
 [ext_resource type="Material" uid="uid://duq3egwjfpmil" path="res://interface/gameplay/hud/material/Soul Gauge Fill.tres" id="8_t3t32"]
+[ext_resource type="AudioStream" uid="uid://c2ntlq8k605f0" path="res://sound/sfx/system/SYSTEM_57.wav" id="9_52u7d"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
 [ext_resource type="Texture2D" uid="uid://bypa7d6a6vjnr" path="res://interface/gameplay/hud/soul gauge/fill dimensions.png" id="9_i8ml4"]
 [ext_resource type="Texture2D" uid="uid://y6m76qloqq21" path="res://interface/gameplay/hud/soul gauge/fill blue.png" id="9_vmawo"]
+[ext_resource type="AudioStream" uid="uid://dnehqc85xb54p" path="res://sound/sfx/system/SYSTEM_58.wav" id="10_el1o5"]
 [ext_resource type="Material" uid="uid://bch4e64imkayn" path="res://interface/gameplay/hud/material/Soul Gauge Surface.tres" id="10_k6fym"]
 [ext_resource type="Texture2D" uid="uid://bfpp6wa7clovs" path="res://interface/gameplay/hud/soul gauge/surface dimensions.png" id="11_8tr11"]
 [ext_resource type="Texture2D" uid="uid://2c2b843w6r0j" path="res://interface/gameplay/hud/soul gauge/fill orange.png" id="12_ib41r"]
@@ -997,7 +1000,7 @@ _data = {
 "charged": SubResource("55")
 }
 
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1010,6 +1013,10 @@ maxRingLabel = NodePath("Rings/Current/RingMax")
 ringLossLabel = NodePath("Rings/Loss/LossAmount")
 ringDividerSprite = NodePath("Rings/Current/Divider")
 ringAnimator = NodePath("Rings/AnimationTree")
+mainRank = NodePath("Values/Rank/MainRank")
+transitionRank = NodePath("Values/Rank/TransitionRank")
+rankUpSFX = NodePath("Values/Rank/RankUp")
+rankDownSFX = NodePath("Values/Rank/RankDown")
 time = NodePath("Values/Time")
 score = NodePath("Values/Score")
 objectiveRoot = NodePath("Objectives")
@@ -1021,7 +1028,6 @@ soulGaugeRoot = NodePath("SoulGauge")
 soulGaugeFill = NodePath("SoulGauge/SoulGauge/Gradient/Fill")
 soulGaugeBackground = NodePath("SoulGauge/SoulGauge/Gradient")
 soulGaugeAnimator = NodePath("SoulGauge/AnimationPlayer")
-metadata/_edit_lock_ = true
 
 [node name="Rings" type="Control" parent="."]
 layout_mode = 1
@@ -1030,7 +1036,6 @@ offset_left = 176.0
 offset_top = 64.0
 offset_right = 592.0
 offset_bottom = 192.0
-metadata/_edit_lock_ = true
 
 [node name="Current" type="Control" parent="Rings"]
 anchors_preset = 0
@@ -1213,9 +1218,6 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="Rings"]
-libraries = {
-"": SubResource("AnimationLibrary_kw3qf")
-}
 tree_root = SubResource("AnimationNodeBlendTree_06lyc")
 anim_player = NodePath("../AnimationPlayer")
 parameters/gain_trigger/active = false
@@ -1286,16 +1288,18 @@ vertical_alignment = 1
 
 [node name="Values" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 0
-offset_left = 1408.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
 offset_top = 64.0
-offset_right = 1792.0
+offset_right = -128.0
 offset_bottom = 192.0
-metadata/_edit_lock_ = true
+grow_horizontal = 0
 
 [node name="Score" type="Label" parent="Values"]
 layout_mode = 0
-offset_right = 353.0
+offset_right = 384.0
 offset_bottom = 67.0
 theme_override_fonts/font = ExtResource("2_lj78h")
 theme_override_font_sizes/font_size = 64
@@ -1305,24 +1309,46 @@ vertical_alignment = 1
 [node name="Time" type="Label" parent="Values"]
 layout_mode = 0
 offset_top = 67.0
-offset_right = 353.0
+offset_right = 384.0
 offset_bottom = 134.0
 theme_override_fonts/font = ExtResource("2_lj78h")
 theme_override_font_sizes/font_size = 64
 text = "00:00.00"
 vertical_alignment = 1
 
+[node name="Rank" type="Node2D" parent="Values"]
+position = Vector2(-64, 64)
+scale = Vector2(2, 2)
+
+[node name="MainRank" type="Sprite2D" parent="Values/Rank"]
+texture = ExtResource("8_4xdo7")
+region_enabled = true
+region_rect = Rect2(420, 110, 60, 60)
+
+[node name="TransitionRank" type="Sprite2D" parent="Values/Rank"]
+self_modulate = Color(1, 1, 1, 0)
+texture = ExtResource("8_4xdo7")
+region_enabled = true
+region_rect = Rect2(420, 290, 60, 60)
+
+[node name="RankUp" type="AudioStreamPlayer" parent="Values/Rank"]
+stream = ExtResource("9_52u7d")
+bus = &"SFX"
+
+[node name="RankDown" type="AudioStreamPlayer" parent="Values/Rank"]
+stream = ExtResource("10_el1o5")
+bus = &"SFX"
+
 [node name="SoulGauge" type="Control" parent="."]
 layout_mode = 1
-anchor_left = 0.867
+anchor_left = 1.0
 anchor_top = 0.237
-anchor_right = 0.933
+anchor_right = 1.0
 anchor_bottom = 0.889
-offset_left = -0.640015
-offset_top = 0.0399933
-offset_right = -0.640015
-offset_bottom = 0.039917
-metadata/_edit_lock_ = true
+offset_left = -256.0
+offset_top = 0.039978
+offset_right = -129.28
+offset_bottom = 0.039856
 
 [node name="SoulGauge" type="NinePatchRect" parent="SoulGauge"]
 layout_mode = 1
@@ -1336,6 +1362,7 @@ texture = ExtResource("4_63n04")
 region_rect = Rect2(8, 10, 96, 326)
 patch_margin_top = 82
 patch_margin_bottom = 176
+metadata/_edit_use_anchors_ = true
 
 [node name="Glow" type="Control" parent="SoulGauge/SoulGauge"]
 modulate = Color(1, 1, 1, 0)
