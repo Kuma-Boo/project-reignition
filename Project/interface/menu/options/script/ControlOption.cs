@@ -103,7 +103,6 @@ namespace Project.Interface.Menus
 			// Check for conflicting input mappings
 			Array<StringName> actionList = InputMap.GetActions();
 			StringName swapAction = null;
-			bool mappedAction = false;
 
 			for (int i = 0; i < actionList.Count; i++)
 			{
@@ -139,8 +138,8 @@ namespace Project.Interface.Menus
 				break;
 			}
 
-			if (!InputMap.ActionHasEvent(InputId, e))
-				InputMap.ActionAddEvent(InputId, e); // Add the new action
+			if (!InputMap.ActionHasEvent(InputId, e)) // Failed to add the new action
+				InputMap.ActionAddEvent(InputId, e); // Add the new action anyway
 
 			EmitSignal(SignalName.SwapMapping, InputId, new());
 			SaveConfig();
