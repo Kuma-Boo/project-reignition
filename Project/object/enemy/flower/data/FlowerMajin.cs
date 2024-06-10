@@ -38,7 +38,7 @@ public partial class FlowerMajin : Enemy
 	}
 
 	[Export]
-	private PackedScene seed;
+	private PackedScene seedScene;
 	private int seedIndex;
 	private const int MaxSeedCount = 3;
 	/// <summary> Only three seeds are ever spawned at a time. </summary>
@@ -47,31 +47,31 @@ public partial class FlowerMajin : Enemy
 	/// <summary> Flower is only considered be damaged while not in a passive state. </summary>
 	private bool IsOpen => currentState != State.Passive;
 	/// <summary> Returns true if the flower's stagger animation is active. </summary>
-	private bool IsStaggered => (bool)animationTree.Get(StaggerActive);
+	private bool IsStaggered => (bool)animationTree.Get(staggerActive);
 
-	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
-	private readonly StringName ShowState = "show";
-	private readonly StringName PassiveState = "passive";
-	private readonly StringName HideState = "hide";
+	private readonly StringName stateTransition = "parameters/state_transition/transition_request";
+	private readonly StringName showState = "show";
+	private readonly StringName passiveState = "passive";
+	private readonly StringName hideState = "hide";
 
-	private readonly StringName AttackTrigger = "parameters/attack_trigger/request";
-	private readonly StringName StaggerTrigger = "parameters/stagger_trigger/request";
-	private readonly StringName StaggerActive = "parameters/stagger_trigger/active";
+	private readonly StringName attackTrigger = "parameters/attack_trigger/request";
+	private readonly StringName staggerTrigger = "parameters/stagger_trigger/request";
+	private readonly StringName staggerActive = "parameters/stagger_trigger/active";
 
 	/// <summary> Reference to AnimationTree's defeat_transition node. Required to change transition fade. </summary>
-	private AnimationNodeTransition defeatTransition;
-	private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
-	private readonly StringName EnabledConstant = "enabled";
-	private readonly StringName DisabledConstant = "disabled";
+	private AnimationNodeTransition defeatTransitionNode;
+	private readonly StringName defeatTransition = "parameters/defeat_transition/transition_request";
+	private readonly StringName enabledConstant = "enabled";
+	private readonly StringName disabledConstant = "disabled";
 
 
 	protected override void SetUp()
 	{
 		animationTree.Active = true;
-		defeatTransition = (animationTree.TreeRoot as AnimationNodeBlendTree).GetNode("defeat_transition") as AnimationNodeTransition;
+		defeatTransitionNode = ((AnimationNodeBlendTree)animationTree.TreeRoot).GetNode("defeat_transition") as AnimationNodeTransition;
 
-		for (int i = 0; i < MaxSeedCount; i++) // Initialize seeds
-			seedPool[i] = seed.Instantiate<Seed>();
+		for (var i = 0; i < MaxSeedCount; i++) // Initialize seeds
+			seedPool[i] = seedScene.Instantiate<Seed>();
 
 		base.SetUp();
 	}
@@ -79,8 +79,8 @@ public partial class FlowerMajin : Enemy
 
 	public override void Unload()
 	{
-		for (int i = 0; i < seedPool.Length; i++) // Clear memory
-			seedPool[i].QueueFree();
+		foreach (var seed in seedPool)
+			seed.QueueFree();
 
 		base.Unload();
 	}
@@ -100,14 +100,14 @@ public partial class FlowerMajin : Enemy
 		base.Respawn();
 
 		// Reset animations
-		defeatTransition.XfadeTime = 0;
-		animationTree.Set(DefeatTransition, DisabledConstant);
-		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-		animationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		defeatTransitionNode.XfadeTime = 0;
+		animationTree.Set(defeatTransition, disabledConstant);
+		animationTree.Set(attackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(staggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		// Reset to passive state
 		currentState = State.Passive;
-		animationTree.Set(StateTransition, PassiveState);
+		animationTree.Set(stateTransition, passiveState);
 
 		// Reset variables
 		stateTimer = 0;
@@ -115,7 +115,7 @@ public partial class FlowerMajin : Enemy
 
 		// Remove seeds
 		seedIndex = 0;
-		for (int i = 0; i < MaxSeedCount; i++)
+		for (var i = 0; i < MaxSeedCount; i++)
 		{
 			if (seedPool[i].IsInsideTree())
 				seedPool[i].GetParent().CallDeferred(MethodName.RemoveChild, seedPool[i]);
@@ -216,7 +216,7 @@ public partial class FlowerMajin : Enemy
 	{
 		stateTimer = 0;
 		currentState = State.Passive;
-		animationTree.Set(StateTransition, HideState);
+		animationTree.Set(stateTransition, hideState);
 	}
 
 
@@ -224,7 +224,7 @@ public partial class FlowerMajin : Enemy
 	{
 		stateTimer = 0;
 		currentState = State.PreAttack;
-		animationTree.Set(StateTransition, ShowState);
+		animationTree.Set(stateTransition, showState);
 	}
 
 
@@ -232,7 +232,7 @@ public partial class FlowerMajin : Enemy
 	{
 		stateTimer = 0;
 		currentState = State.Attack;
-		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(attackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 
@@ -273,14 +273,14 @@ public partial class FlowerMajin : Enemy
 
 	private void StartStaggerState()
 	{
-		animationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(staggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		if (currentState != State.Attack)
 			return;
 
 		StopAttackState();
-		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(attackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 
-	private void StartDefeatState() => animationTree.Set(DefeatTransition, EnabledConstant);
+	private void StartDefeatState() => animationTree.Set(defeatTransition, enabledConstant);
 }
