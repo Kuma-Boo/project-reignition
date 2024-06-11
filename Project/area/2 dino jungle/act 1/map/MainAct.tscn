@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=95 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="39_p0jth"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="40_m082x"]
 [ext_resource type="Resource" uid="uid://dlcemgeioxa5h" path="res://area/2 dino jungle/act 1/camera/JumpChainStaticCam.tres" id="41_6eimj"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="41_cv4lt"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="41_nmbev"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="42_o7jek"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="43_4v8c0"]
@@ -4643,6 +4644,9 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 [node name="DashPanel2" parent="MainAct/Cave" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -78.5685, 2.95007, -221.977)
 
+[node name="FireSoul" parent="MainAct/Cave" instance=ExtResource("41_cv4lt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59692, 22.2663, -138.182)
+
 [node name="Spiral" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
 script = ExtResource("9_uj3dw")
@@ -5117,6 +5121,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94489, -1.21237, 5.09827)
 [node name="Child10" parent="MainAct/Spiral/Pearls9" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82309, -1.38196, 4.85889)
 
+[node name="FireSoul" parent="MainAct/Spiral" instance=ExtResource("41_cv4lt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.62738, -36.3613, -34.3152)
+fireSoulIndex = 2
+
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
 script = ExtResource("9_uj3dw")
@@ -5330,13 +5338,9 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 3.05176e
 
 [node name="FlowerMajin1" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 124, -12, -184)
-skipPassive = true
-disableAttacking = true
 
 [node name="FlowerMajin2" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 113.67, -12, -176.108)
-skipPassive = true
-disableAttacking = true
 
 [node name="FlowerMajinMover" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 103.23, -12, -179.588)
@@ -5347,12 +5351,9 @@ Movement/Mode = 1
 Movement/Distance = 8.0
 Movement/Angle = -90.0
 "Vertical Orientation" = false
-startPaused = true
-smoothPausing = true
 root = NodePath("FlowerMajin3")
 
 [node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("47_fimbn")]
-skipPassive = true
 passiveLength = 4.0
 preAttackLength = 1.0
 postAttackLength = 2.0
@@ -5416,6 +5417,7 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Boat" parent="MainAct/Cavern" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -4.53979, -5.5, 2.1073)
+maxSpeed = 5.0
 bounds = Vector2(3, 0)
 path = NodePath("../../../Static/Path/BoatPath")
 pathFollower = NodePath("../../../Static/Path/BoatPath/CavernBoatPathFollower")
@@ -5931,6 +5933,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05899, 0, -9.6)
 
 [node name="Child10" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="FireSoul" parent="MainAct/Cavern" instance=ExtResource("41_cv4lt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -119.085, -4.84949, 30.938)
+fireSoulIndex = 3
 
 [node name="FeedingTunnel" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
@@ -6521,12 +6527,8 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
-[connection signal="Aggressive" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Unpause"]
-[connection signal="Attack" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
-[connection signal="Passive" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
-[connection signal="Stagger" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
 [connection signal="Activated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/LeftPathEvent" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/RightPathEvent" method="Activate"]
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatStartTrigger/Jump" to="MainAct/Cavern/Boat" method="Activate"]
