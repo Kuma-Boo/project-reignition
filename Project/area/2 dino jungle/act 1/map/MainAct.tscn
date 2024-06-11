@@ -1,22 +1,22 @@
-[gd_scene load_steps=93 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=94 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
-[ext_resource type="Resource" uid="uid://nf07w7wsy4tn" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="3_p8ttf"]
+[ext_resource type="Resource" uid="uid://dx4cl2qt7u36h" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="3_p8ttf"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="4_1j3qj"]
 [ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/run/AutorunLockout.tres" id="5_ntl2g"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="6_4xrcy"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="7_ys7sj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uj3dw"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
+[ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
 [ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="26_qkiaj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="27_dpcvf"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="27_l6k7w"]
-[ext_resource type="Resource" uid="uid://edhpc2jt1013" path="res://area/2 dino jungle/act 1/camera/CaveRightStartCam.tres" id="28_lvbi5"]
+[ext_resource type="Resource" uid="uid://b7kb4nv775pns" path="res://area/2 dino jungle/act 1/camera/CaveRightStartCam.tres" id="28_lvbi5"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="29_prhwm"]
-[ext_resource type="Resource" uid="uid://tqbsu2t584pv" path="res://area/2 dino jungle/act 1/camera/CaveRightEndCam.tres" id="35_4jgx6"]
-[ext_resource type="Resource" uid="uid://bv82an0hfcens" path="res://area/2 dino jungle/act 1/camera/CaveRightSpringCam.tres" id="36_358w5"]
+[ext_resource type="Resource" uid="uid://bsqd6jd6jmnb0" path="res://area/2 dino jungle/act 1/camera/CaveRightEndCam.tres" id="35_4jgx6"]
+[ext_resource type="Resource" uid="uid://up7pf0acg1x1" path="res://area/2 dino jungle/act 1/camera/CaveRightSpringCam.tres" id="36_358w5"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="37_8fetv"]
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_158q5"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="39_p0jth"]
@@ -29,6 +29,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="45_bbxl7"]
 [ext_resource type="PackedScene" uid="uid://e43vdgi280co" path="res://area/2 dino jungle/object/rock/WaterRock.tscn" id="46_88fdv"]
 [ext_resource type="PackedScene" uid="uid://ctt8k8ju64i3l" path="res://object/enemy/flower/FlowerMajin.tscn" id="47_fimbn"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="47_r25bh"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="48_p6m4r"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="49_g35os"]
 [ext_resource type="PackedScene" uid="uid://cbs8o4mdf1wbo" path="res://area/2 dino jungle/object/platform/GrassPillar.tscn" id="50_sikom"]
@@ -255,6 +256,9 @@ Data = ExtResource("2_p4x35")
 InitialCameraSettings = ExtResource("3_p8ttf")
 metadata/_edit_group_ = true
 
+[node name="Collision" parent="Static" index="0"]
+visible = true
+
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
 
@@ -265,9 +269,7 @@ startEnabled = true
 startEnabled = true
 
 [node name="05Crossing" parent="Static/Visuals" index="5"]
-script = ExtResource("9_uj3dw")
 startEnabled = true
-isStageVisuals = true
 
 [node name="06CavernEntrance" parent="Static/Visuals" index="6"]
 startEnabled = true
@@ -285,38 +287,14 @@ startEnabled = true
 startEnabled = true
 
 [node name="Skeleton3D" parent="Static/Trigger/Object/Apatos1/DinoApatos/DinoApatoRoot" index="0"]
-bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
 bones/1/position = Vector3(1.06802e-05, -38.526, 19.7418)
 bones/1/rotation = Quaternion(0.999995, 0, 0.00320137, 0.00014644)
-bones/2/rotation = Quaternion(6.30126e-07, 0.999995, 0.000207154, 0.00320132)
-bones/2/scale = Vector3(1, 1, 1)
-bones/3/rotation = Quaternion(0.980406, -2.89897e-14, 2.76165e-06, -0.196989)
-bones/3/scale = Vector3(1, 1, 1)
-bones/4/rotation = Quaternion(-0.13886, -1.7957e-05, 3.21686e-06, 0.990312)
-bones/5/rotation = Quaternion(-0.0590873, 0.00352094, -0.000206972, 0.998247)
-bones/6/rotation = Quaternion(3.47858e-07, -0.00991414, -1.45249e-06, 0.999951)
-bones/7/rotation = Quaternion(2.81226e-07, 0.000798047, 1.14939e-07, 1)
 bones/8/rotation = Quaternion(-1.26594e-06, 0.00986442, 1.4473e-06, 0.999951)
-bones/9/rotation = Quaternion(2.04945e-07, -0.000292533, -4.2207e-08, 1)
-bones/10/rotation = Quaternion(-7.27003e-07, -0.01132, -1.66762e-06, 0.999936)
-bones/10/scale = Vector3(1, 1, 1)
 
 [node name="Skeleton3D" parent="Static/Trigger/Object/Apatos2/DinoApatos/DinoApatoRoot" index="0"]
-bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
 bones/1/position = Vector3(1.06802e-05, -38.526, 19.7418)
 bones/1/rotation = Quaternion(0.999995, 0, 0.00320137, 0.00014644)
-bones/2/rotation = Quaternion(6.30126e-07, 0.999995, 0.000207154, 0.00320132)
-bones/2/scale = Vector3(1, 1, 1)
-bones/3/rotation = Quaternion(0.980406, -2.89897e-14, 2.76165e-06, -0.196989)
-bones/3/scale = Vector3(1, 1, 1)
-bones/4/rotation = Quaternion(-0.13886, -1.7957e-05, 3.21686e-06, 0.990312)
-bones/5/rotation = Quaternion(-0.0590873, 0.00352094, -0.000206972, 0.998247)
-bones/6/rotation = Quaternion(3.47858e-07, -0.00991414, -1.45249e-06, 0.999951)
-bones/7/rotation = Quaternion(2.81226e-07, 0.000798047, 1.14939e-07, 1)
 bones/8/rotation = Quaternion(-1.26594e-06, 0.00986442, 1.4473e-06, 0.999951)
-bones/9/rotation = Quaternion(2.04945e-07, -0.000292533, -4.2207e-08, 1)
-bones/10/rotation = Quaternion(-7.27003e-07, -0.01132, -1.66762e-06, 0.999936)
-bones/10/scale = Vector3(1, 1, 1)
 
 [node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
 transform = Transform3D(-4.37112e-08, 0, 0.999995, 0, 0.999995, 0, -0.999996, 0, -4.37112e-08, 0, 0, 0)
@@ -351,7 +329,7 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -442.756, -220.54, -823.813)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -308.831, -276.54, -1097.42)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -5379,12 +5357,29 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 3.05176e
 
 [node name="FlowerMajin1" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 124, -12, -184)
+attackInstantly = true
 
 [node name="FlowerMajin2" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 113.67, -12, -176.108)
+attackInstantly = true
 
-[node name="FlowerMajin3" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
-transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 104.701, -12, -183.629)
+[node name="FlowerMajinMover" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
+transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 103.23, -12, -179.588)
+script = ExtResource("47_r25bh")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.8
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 8.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+TimeScale = 0.0
+smoothPausing = true
+root = NodePath("FlowerMajin3")
+
+[node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("47_fimbn")]
+passiveLength = 4.0
+preAttackLength = 1.0
+postAttackLength = 2.0
 
 [node name="Switch" parent="MainAct/Crossing" instance=ExtResource("65_n8hm0")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 97.5173, -11.8943, -185.035)
@@ -6542,7 +6537,11 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
-[connection signal="Defeated" from="MainAct/Crossing/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
+[connection signal="Aggressive" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Unpause"]
+[connection signal="Attack" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
+[connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
+[connection signal="Passive" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
+[connection signal="Stagger" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
 [connection signal="Activated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/LeftPathEvent" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/RightPathEvent" method="Activate"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Despawn"]

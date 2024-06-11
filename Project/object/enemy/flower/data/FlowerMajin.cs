@@ -7,9 +7,13 @@ namespace Project.Gameplay;
 public partial class FlowerMajin : Enemy
 {
 	[Signal]
-	public delegate void OnPassiveEventHandler();
+	public delegate void PassiveEventHandler();
 	[Signal]
-	public delegate void OnAggressiveEventHandler();
+	public delegate void AggressiveEventHandler();
+	[Signal]
+	public delegate void StaggerEventHandler();
+	[Signal]
+	public delegate void AttackEventHandler();
 
 
 	/// <summary> Skip passive phase when activated? </summary>
@@ -222,6 +226,7 @@ public partial class FlowerMajin : Enemy
 		stateTimer = 0;
 		currentState = State.Passive;
 		animationTree.Set(StateTransition, HideState);
+		EmitSignal(SignalName.Passive);
 	}
 
 
@@ -230,6 +235,7 @@ public partial class FlowerMajin : Enemy
 		stateTimer = 0;
 		currentState = State.PreAttack;
 		animationTree.Set(StateTransition, ShowState);
+		EmitSignal(SignalName.Aggressive);
 	}
 
 
@@ -238,6 +244,7 @@ public partial class FlowerMajin : Enemy
 		stateTimer = 0;
 		currentState = State.Attack;
 		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		EmitSignal(SignalName.Attack);
 	}
 
 
@@ -280,7 +287,10 @@ public partial class FlowerMajin : Enemy
 	{
 		animationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		if (currentState != State.Attack)
+		{
+			EmitSignal(SignalName.Stagger);
 			return;
+		}
 
 		StopAttackState();
 		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);

@@ -3,10 +3,10 @@
 [ext_resource type="Script" path="res://object/stage/common/resource/script/PathTraveller.cs" id="1_712du"]
 [ext_resource type="PackedScene" uid="uid://basm3ynnw1lsn" path="res://area/2 dino jungle/object/model/Boat.gltf" id="3_tcnkk"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_yrin3"]
-radius = 0.4
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_j10iq"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_sv5hb"]
+radius = 0.323898
 
 [sub_resource type="Animation" id="Animation_5h4yi"]
 length = 0.001
@@ -134,10 +134,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 [node name="BoatMesh" parent="Boat" index="1"]
 cast_shadow = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-shape = SubResource("SphereShape3D_yrin3")
-
 [node name="Activation" type="Area3D" parent="."]
 collision_layer = 8
 collision_mask = 2
@@ -152,21 +148,13 @@ collision_mask = 8
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.0608291, 2.65892e-09)
+shape = SubResource("CylinderShape3D_sv5hb")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_e4dfs")
 }
-
-[node name="FrontOrientationChecker" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
-enabled = false
-target_position = Vector3(0, -5, 0)
-
-[node name="RearOrientationChecker" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
-enabled = false
-target_position = Vector3(0, -5, 0)
 
 [connection signal="area_entered" from="Activation" to="." method="PlayerEntered"]
 
