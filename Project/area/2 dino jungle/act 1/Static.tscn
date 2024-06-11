@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=70 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -278,6 +278,15 @@ _data = {
 "event": SubResource("Animation_liynt")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_h6oaw"]
+size = Vector3(8.67432, 10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7rdj2"]
+size = Vector3(92.4473, 50, 64.1128)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a306m"]
+size = Vector3(38.0654, 52.6053, 56.8087)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_1o6c3"]
 size = Vector3(53, 50, 60)
 
@@ -536,14 +545,14 @@ script = ExtResource("15_1ew2u")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.13379, 8, -3.05176e-05)
 shape = SubResource("BoxShape3D_7jbaj")
 
-[node name="Dinopathcheckpoint4" parent="Trigger" instance=ExtResource("15_86eng")]
+[node name="Dinopathcheckpoint4" parent="Trigger/Checkpoints" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.708352, 0, -0.705859, 0, 1, 0, 0.705859, 0, 0.708352, -633.953, -280.715, -1057.09)
 "Enter Mode" = 0
 
-[node name="checkpoint" type="Node3D" parent="Trigger/Dinopathcheckpoint4"]
+[node name="checkpoint" type="Node3D" parent="Trigger/Checkpoints/Dinopathcheckpoint4"]
 script = ExtResource("15_1ew2u")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Dinopathcheckpoint4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/Dinopathcheckpoint4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_7jbaj")
 
@@ -674,6 +683,8 @@ autoplay = "apato-1"
 
 [node name="ActivateTrigger" parent="Trigger/Object/Apatos1" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -4.77853, 38.2302, 41.1746)
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="EventTrigger" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0)
@@ -798,8 +809,8 @@ script = ExtResource("23_rku1n")
 lockoutData = ExtResource("24_0y0cf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/FeedingRecenterTrigger"]
-transform = Transform3D(1.39753, 0, 0, 0, 1.39753, 0, 0, 0, 1.39753, 0, 0, 0)
-shape = SubResource("BoxShape3D_1o6c3")
+transform = Transform3D(9.18642, 0, 0, 0, 9.18642, 0, 0, 0, 9.18642, -6.08917, 0, 0)
+shape = SubResource("BoxShape3D_h6oaw")
 
 [node name="EndIslandRecenterTrigger" parent="Trigger/Object" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.856791, 0, -0.371779, 0, 0.933975, 0, 0.371779, 0, 0.856791, -793.633, -262, -1075.81)
@@ -813,7 +824,8 @@ script = ExtResource("23_rku1n")
 lockoutData = ExtResource("24_0y0cf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/EndIslandRecenterTrigger"]
-shape = SubResource("BoxShape3D_1o6c3")
+transform = Transform3D(0.999998, 0, 3.8743e-07, 0, 1, 0, -3.8743e-07, 0, 0.999998, -19.7236, 0, 2.05688)
+shape = SubResource("BoxShape3D_7rdj2")
 
 [node name="EndIslandRecenterTrigger2" parent="Trigger/Object" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.677796, 0, -0.642575, 0, 0.933975, 0, 0.642575, 0, 0.677796, -738.237, -262, -1050.76)
@@ -827,8 +839,8 @@ script = ExtResource("23_rku1n")
 lockoutData = ExtResource("24_0y0cf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/EndIslandRecenterTrigger2"]
-transform = Transform3D(1, 0, 2.08616e-07, 0, 1, 0, -2.08616e-07, 0, 1, 0, 0, 0)
-shape = SubResource("BoxShape3D_1o6c3")
+transform = Transform3D(1, 0, -2.98023e-08, 0, 0.999973, 0, 2.98023e-08, 0, 1, -9.22852, 1.30276, 18.0031)
+shape = SubResource("BoxShape3D_a306m")
 
 [node name="EndRecenterTrigger" parent="Trigger/Object" instance=ExtResource("15_86eng")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -876, -262, -1085)
