@@ -28,5 +28,5 @@ void fragment()
 	ROUGHNESS = roughness;
 	SPECULAR = clamp(spec * specular_multiplier, 0, 1);
 	ALBEDO = col.rgb;
-	EMISSION = clamp((col.rgb + vec3(rim)) * rim * .5, vec3(0.0), vec3(1.0));
+	EMISSION = clamp(vec3(rim) * rim * .5, vec3(0.0), vec3(1.0));
 }

@@ -1,12 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://efrfjkjxlfc8"]
+[gd_scene load_steps=8 format=3 uid="uid://efrfjkjxlfc8"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="1_5ixjs"]
 [ext_resource type="PackedScene" uid="uid://bbceaj0i3h310" path="res://area/1 sand oasis/act 1/environment/model/01Opening.gltf" id="1_j448r"]
 [ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_rkhi3"]
-[ext_resource type="Material" uid="uid://bkomapq40bxlw" path="res://effect/material/door light.tres" id="3_w5ikh"]
+[ext_resource type="Texture2D" uid="uid://v845jakv7sc5" path="res://area/1 sand oasis/act 1/environment/decal/C010_K001.png" id="4_qpj5x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1huf"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(1.95, 1.9, 1.7, 1)
+proximity_fade_enabled = true
+proximity_fade_distance = 2.0
+distance_fade_mode = 1
 
 [sub_resource type="QuadMesh" id="QuadMesh_otn7s"]
-material = ExtResource("3_w5ikh")
+material = SubResource("StandardMaterial3D_p1huf")
 size = Vector2(7.5, 15)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_fvupk"]
@@ -116,28 +125,49 @@ mesh = SubResource("QuadMesh_otn7s")
 transform = Transform3D(0.0174524, -0.532795, 0.846064, -2.32831e-10, 0.846193, 0.532876, -0.999848, -0.00929996, 0.0147681, 97, 82, -57)
 layers = 1024
 light_color = Color(1, 0.843137, 0.639216, 1)
+light_angular_distance = 0.1
 light_cull_mask = 4293918788
 shadow_enabled = true
 shadow_bias = 0.02
+shadow_blur = 10.0
 directional_shadow_mode = 0
 
 [node name="BounceLight" type="DirectionalLight3D" parent="Lights"]
 transform = Transform3D(-0.0919132, -0.17301, 0.980622, 0.146591, 0.97171, 0.185177, -0.984918, 0.16077, -0.0639514, 97, 82, -57)
+visible = false
 layers = 1024
 light_color = Color(0.639216, 0.639216, 0.639216, 1)
 light_energy = 0.6
 light_cull_mask = 4293918788
 directional_shadow_mode = 0
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="Lights"]
+[node name="EnvironmentProbe" type="ReflectionProbe" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.003, 96.1018, -17.2035)
 layers = 4
 size = Vector3(104.685, 86.5015, 121.889)
 interior = true
 cull_mask = 5
 ambient_mode = 2
-ambient_color = Color(1, 1, 1, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(0.80419, 0.882119, 0.981411, 1)
+ambient_color_energy = 0.7
+
+[node name="ObjectProbe" type="ReflectionProbe" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.7585, 96.1018, -17.2035)
+layers = 64
+size = Vector3(105.174, 86.5015, 121.889)
+interior = true
+cull_mask = 64
+ambient_mode = 2
+ambient_color = Color(0.98, 0.96824, 0.8036, 1)
+ambient_color_energy = 0.1
+
+[node name="ObjectProbe2" type="ReflectionProbe" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.764381, 108.86, -62.0098)
+layers = 64
+size = Vector3(12.6107, 45.2644, 32.2763)
+cull_mask = 64
+ambient_color = Color(0.98, 0.96824, 0.8036, 1)
+ambient_color_energy = 0.1
 
 [node name="Lantern1" parent="Lights" instance=ExtResource("3_rkhi3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5, 80, 23.9)
@@ -157,166 +187,15 @@ layers = 1024
 
 [node name="Windows" type="Node3D" parent="Lights"]
 
-[node name="WindowL1" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, 10)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowL2" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, 3.5)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowL3" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -7)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowL4" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -13.7)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowL5" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -24.3)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowL6" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -31)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowL7" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -41.5)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowL8" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-3.09086e-08, 0.707107, -0.707107, 3.09086e-08, 0.707107, 0.707107, 1, -5.32907e-15, -4.37114e-08, 41, 104, -48.2)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowR1" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 27.2)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowR2" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 20.5)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowR3" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 10.1)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowR4" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, 3.4)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowR5" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, -7.1)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
-[node name="WindowR6" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-5.65142e-08, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -1, 6.18172e-08, -1.81059e-08, 118.701, 104, -13.8)
-layers = 1024
-light_energy = 1.5
-light_cull_mask = 4293918788
-shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 1e-05
-spot_angle = 10.0
-spot_angle_attenuation = 1e-05
-
 [node name="WindowM1" type="SpotLight3D" parent="Lights/Windows"]
-transform = Transform3D(-1, 9.27259e-08, -4.90145e-08, 3.09086e-08, 0.707107, 0.707107, 1.00226e-07, 0.707107, -0.707107, 70.2505, 104, -88)
+transform = Transform3D(-1, 9.27262e-08, -4.90148e-08, 3.09086e-08, 0.707107, 0.707107, 1.00226e-07, 0.707107, -0.707107, 70.2505, 104, -88)
 layers = 1024
-light_energy = 1.5
+light_color = Color(0.999999, 0.828805, 0.737317, 1)
+light_energy = 1.75
+light_size = 0.519
 light_cull_mask = 4293918788
 shadow_enabled = true
+shadow_blur = 0.949
 spot_range = 50.0
 spot_attenuation = 1e-05
 spot_angle = 10.0
@@ -325,13 +204,150 @@ spot_angle_attenuation = 1e-05
 [node name="WindowM2" type="SpotLight3D" parent="Lights/Windows"]
 transform = Transform3D(-1, 9.27259e-08, -4.90145e-08, 3.09086e-08, 0.707107, 0.707107, 1.00226e-07, 0.707107, -0.707107, 63.5505, 104, -88)
 layers = 1024
-light_energy = 1.5
+light_color = Color(0.999999, 0.828805, 0.737317, 1)
+light_energy = 1.75
+light_size = 0.519
 light_cull_mask = 4293918788
 shadow_enabled = true
+shadow_blur = 0.949
 spot_range = 50.0
 spot_attenuation = 1e-05
 spot_angle = 10.0
 spot_angle_attenuation = 1e-05
+
+[node name="WindowR1" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 94.5144, 75.5801, -13.7591)
+size = Vector3(3.42188, 2, 6.36472)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.1
+modulate = Color(1, 0.898039, 0.87451, 1)
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowR2" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 94.5144, 75.5801, -7.08982)
+size = Vector3(3.42188, 2, 6.36472)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.1
+modulate = Color(1, 0.898039, 0.87451, 1)
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowR3" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 94.5144, 75.5801, 3.39189)
+size = Vector3(3.42188, 2, 6.36472)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.1
+modulate = Color(1, 0.898039, 0.87451, 1)
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowR4" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 94.5144, 75.5801, 10.1596)
+size = Vector3(3.42188, 2, 6.36472)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.1
+modulate = Color(1, 0.898039, 0.87451, 1)
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowR5" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 94.5144, 75.5801, 20.6153)
+size = Vector3(3.42188, 2, 6.36472)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.1
+modulate = Color(1, 0.898039, 0.87451, 1)
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowR6" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 94.5144, 75.5801, 27.3763)
+size = Vector3(3.42188, 2, 6.36472)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.1
+modulate = Color(1, 0.898039, 0.87451, 1)
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL1" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.2712, 75.9536, 9.89194)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.15
+modulate = Color(1, 0.768492, 0.582346, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL2" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.2712, 75.9536, 3.22262)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.15
+modulate = Color(1, 0.768492, 0.582346, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL3" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.2712, 75.9536, -7.25909)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.15
+modulate = Color(1, 0.768492, 0.582346, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL4" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.2712, 75.9536, -14.0268)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.15
+modulate = Color(1, 0.768492, 0.582346, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL5" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.2712, 75.9536, -24.4825)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.15
+modulate = Color(1, 0.768492, 0.582346, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL6" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.2712, 75.9536, -31.2435)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.15
+modulate = Color(1, 0.768492, 0.582346, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL7" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.3806, 76.6149, -41.4427)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.3
+modulate = Color(1, 0.556, 0.28, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
+
+[node name="WindowL8" type="Decal" parent="Lights/Windows"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65.3806, 76.091, -48.2037)
+size = Vector3(3.42188, 6, 6.844)
+texture_emission = ExtResource("4_qpj5x")
+emission_energy = 0.3
+modulate = Color(1, 0.556, 0.28, 1)
+normal_fade = 0.028
+upper_fade = 0.0111488
+lower_fade = 1.0
 
 [node name="Blockers" type="Node3D" parent="Lights"]
 

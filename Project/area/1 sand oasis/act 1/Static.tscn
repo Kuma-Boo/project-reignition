@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://tvjx2wghc06t"]
+[gd_scene load_steps=83 format=3 uid="uid://tvjx2wghc06t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -59,6 +59,7 @@
 [ext_resource type="Curve3D" uid="uid://p2pt4ps3pmj" path="res://area/1 sand oasis/act 1/environment/path/Island2Path.tres" id="41_bop36"]
 [ext_resource type="Curve3D" uid="uid://b4qnnk3nkq7i4" path="res://area/1 sand oasis/act 1/environment/path/BeachPath.tres" id="41_tujp6"]
 [ext_resource type="Curve3D" uid="uid://dyf3xaw47l0tm" path="res://area/1 sand oasis/act 1/environment/path/EndingPath.tres" id="45_mavj3"]
+[ext_resource type="PackedScene" uid="uid://co2akledxygt2" path="res://effect/sun/Sun.tscn" id="45_tmkcr"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_eqslh"]
 
@@ -1266,6 +1267,9 @@ startEnabled = true
 
 [node name="08End" parent="Visuals" instance=ExtResource("9_pbgai")]
 
+[node name="Sun" parent="Visuals" instance=ExtResource("45_tmkcr")]
+transform = Transform3D(1, 0, 0, 0, 0.819152, -0.573576, 0, 0.573576, 0.819152, -200, 662.481, -2146.96)
+
 [node name="Skybox" parent="Visuals" instance=ExtResource("12_qxfqh")]
 
 [node name="Lighting" type="Node3D" parent="Visuals"]
@@ -1273,18 +1277,19 @@ startEnabled = true
 [node name="ExteriorLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(0.999903, -0.00751761, -0.0117014, 0.00859075, -0.327816, 0.944703, -0.0109378, -0.944712, -0.32772, -11, 108, -67)
 layers = 1024
-light_color = Color(0.85098, 0.807843, 0.705882, 1)
-light_energy = 1.5
+light_color = Color(1, 0.950349, 0.749735, 1)
+light_energy = 1.4
 light_cull_mask = 4293918787
 shadow_enabled = true
 shadow_bias = 0.02
+shadow_blur = 0.5
 directional_shadow_blend_splits = true
 
 [node name="ExteriorBounceLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
-transform = Transform3D(-0.430447, -0.541281, 0.722309, 0.899382, -0.18953, 0.393942, -0.0763344, 0.819203, 0.568401, -11, 108, -67)
+transform = Transform3D(0.88626, 0, 0.463188, 0, 1, 0, -0.463188, 0, 0.88626, -11, 108, -67)
 layers = 1024
-light_color = Color(0.74902, 0.631373, 0.509804, 1)
-light_energy = 0.3
+light_color = Color(0.891009, 0.817167, 0.742457, 1)
+light_energy = 0.5
 light_cull_mask = 4293918787
 directional_shadow_mode = 0
 
@@ -1303,6 +1308,60 @@ mesh = SubResource("PlaneMesh_njmjg")
 
 [node name="HallBuildingBlock2" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
 transform = Transform3D(2.70174, -0.454371, -7.08216, 3.21795, 0.765371, -1.22569e-06, 2.71024, -0.455801, 7.05995, -317.546, -55.6154, -429.518)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock3" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(39.7546, 0.70834, 4.46591e-07, 0, -4.37114e-08, 14.4236, 39.8936, -0.705872, -4.45035e-07, -158.603, -53.9595, -387.057)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock4" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(50.4589, 0.369801, -10.6763, -3.38239e-06, 0.852904, 9.22579, 50.6353, -0.368512, 10.6391, -182.113, -40.674, -410.043)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock5" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(13.5325, 0.619047, 5.12598, 8.08571e-07, 0.483282, -13.132, -13.5325, 0.619047, 5.12598, -132.027, -57.1021, -355.345)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock6" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(29.9043, -0.000715813, -4.51177e-10, 6.63241e-15, -4.37261e-08, 14.4236, -0.0213994, -1.00034, -6.30475e-07, -234.062, -54.2585, -444.63)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock7" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(37.9563, -0.000373697, 0.0107839, -2.65159e-06, 0.853054, 9.22315, -0.0271622, -0.522158, 15.0679, -230.964, -40.973, -444.178)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock8" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(17.3089, -0.641545, -4.04342e-07, -3.48207e-14, -4.37261e-08, 14.4236, -14.4679, -0.767524, -4.83742e-07, -283.61, -54.2585, -437.502)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock10" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(-44.6839, 0.630523, -4.04342e-07, -3.59193e-08, 4.37217e-08, 14.4236, 36.2787, 0.776606, -4.83742e-07, -260.48, -31.0871, -398.353)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock9" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(22.3798, -0.334875, 9.6635, -1.22708e-06, 0.853054, 9.22314, -18.7064, -0.400634, 11.5611, -277.856, -35.8413, -436.198)
+layers = 2
+cast_shadow = 3
+mesh = SubResource("PlaneMesh_njmjg")
+
+[node name="HallBuildingBlock11" type="MeshInstance3D" parent="Visuals/Lighting/LightBlockers"]
+transform = Transform3D(21.7821, -0.334875, 9.6635, -1.19432e-06, 0.853054, 9.22314, -18.2069, -0.400634, 11.5611, -307.455, -41.0742, -422.599)
 layers = 2
 cast_shadow = 3
 mesh = SubResource("PlaneMesh_njmjg")
