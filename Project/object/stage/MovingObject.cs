@@ -136,26 +136,25 @@ public partial class MovingObject : Node3D
 	public MovementModes movementMode;
 	public enum MovementModes
 	{
-		Static, //Don't move object
-		Linear, //Move along a line
-		Circle, //Move around origin. Stretch by size
+		Static, // Don't move object
+		Linear, // Move along a line
+		Circle, // Move around origin. Stretch by size
 	}
 
 	/// <summary> Starting offset of the object. </summary>
 	public float StartingOffset { get; private set; }
 
 	/// <summary> Processing time scale. </summary>
-	[Export]
 	public float TimeScale = 1f;
-	/// <summary> Amount to smooth pausing. </summary>
-	[Export]
-	private bool smoothPausing;
 	/// <summary> Current travel time. </summary>
 	private float currentTime;
-
+	[Export]
+	private bool startPaused;
+	[Export]
+	private bool smoothPausing;
 	/// <summary> Is movement paused? </summary>
-	public bool IsPaused { get; private set; }
-	private const float PauseSmoothing = .5f;
+	private bool isPaused;
+	private const float PauseSmoothing = .1f;
 
 	[Export]
 	/// <summary> Object to actually move. </summary>
@@ -179,27 +178,28 @@ public partial class MovingObject : Node3D
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint()) return;
-		if (IsMovementInvalid()) return; //No movement
-		if (IsPaused && !smoothPausing) return;
+		if (IsMovementInvalid()) return; // No movement
+		if (isPaused && !smoothPausing) return;
 
 		if (smoothPausing)
-			TimeScale = Mathf.MoveToward(TimeScale, IsPaused ? 0 : 1, PauseSmoothing * PhysicsManager.physicsDelta);
+			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0 : 1, PauseSmoothing);
 
 		currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
-		if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) //Rollover
+		if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
 			currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
 
 		if (root?.IsInsideTree() == true)
 			root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
 	}
 
-	public void Pause() => IsPaused = true;
-	public void Unpause() => IsPaused = false;
+	public void Pause() => isPaused = true;
+	public void Unpause() => isPaused = false;
 
 	/// <summary> Resets currentTime to StartingOffset. </summary>
 	public void Reset()
 	{
-		Unpause();
+		TimeScale = 1f;
+		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
 	}
 
@@ -209,7 +209,7 @@ public partial class MovingObject : Node3D
 
 		if (movementMode == MovementModes.Linear)
 		{
-			float linearRatio = 1f - (2 * ratio); //Convert ratio to -1 <-> 1
+			float linearRatio = 1f - (2 * ratio); // Convert ratio to -1 <-> 1
 			ratio = Mathf.SmoothStep(0, 1, 1f - Mathf.Abs(linearRatio));
 
 			targetPosition = Vector3.Forward.Rotated(Vector3.Up, Mathf.DegToRad(angle));

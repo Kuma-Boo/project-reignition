@@ -19,15 +19,18 @@ public partial class FlowerMajin : Enemy
 	/// <summary> Skip passive phase when activated? </summary>
 	[ExportGroup("Enemy Settings")]
 	[Export]
-	private bool attackInstantly;
-	/// <summary> How long to remain passive. </summary>
+	private bool skipPassive;
+	/// <summary> Don't attack. NOTE: This will lead the flower majin to never move onto the PostAttack state. </summary>
 	[Export]
+	private bool disableAttacking;
+	/// <summary> How long to remain passive. </summary>
+	[Export(PropertyHint.Range, "0, 5, .1")]
 	private float passiveLength;
 	/// <summary> How long to wait before firing seeds after turning aggressive. </summary>
-	[Export]
+	[Export(PropertyHint.Range, "0, 5, .1")]
 	private float preAttackLength;
 	/// <summary> How long to wait after firing seeds before turning passive. </summary>
-	[Export]
+	[Export(PropertyHint.Range, "0, 5, .1")]
 	private float postAttackLength;
 
 	/// <summary> Tracks how long FlowerMajin has been in the current state. </summary>
@@ -92,7 +95,7 @@ public partial class FlowerMajin : Enemy
 
 	protected override void Spawn()
 	{
-		if (attackInstantly && !IsOpen) // Skip passive phase
+		if (skipPassive && !IsOpen) // Skip passive phase
 			StartAggressiveState();
 
 		base.Spawn();
@@ -207,7 +210,7 @@ public partial class FlowerMajin : Enemy
 			case State.PreAttack:
 				if (stateTimer >= preAttackLength)
 				{
-					if (IsInRange)
+					if (IsInRange && !disableAttacking)
 						StartAttackState();
 					else // Player has left range; return to passive state
 						StartPassiveState();
