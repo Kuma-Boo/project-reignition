@@ -132,7 +132,7 @@ namespace Project.Gameplay
 		/// <summary> A list of all camera settings that are influencing camera. </summary>
 		private readonly List<CameraBlendData> CameraBlendList = new();
 
-		public void StartCrossfade()
+		public void StartCrossfade(float speed = 1.0f)
 		{
 			// Already crossfading
 			if (IsCrossfading)
@@ -143,6 +143,7 @@ namespace Project.Gameplay
 			tex.SetImage(GetViewport().GetTexture().GetImage());
 			crossfade.Texture = tex;
 			crossfadeAnimator.Play("activate");// Start crossfade animation
+			crossfadeAnimator.SpeedScale = speed;
 
 			// Warp the camera
 			SnapFlag = true;
@@ -156,11 +157,18 @@ namespace Project.Gameplay
 			if (data.SettingsResource == null) return; // Invalid data
 
 			if (Mathf.IsZeroApprox(data.BlendTime)) // Cut transition
+			{
 				SnapFlag = true;
+			}
 			else if (data.IsCrossfadeEnabled) // Crossfade transition
-				StartCrossfade();
+			{
+				StartCrossfade(1.0f / data.BlendTime);
+				SnapFlag = true;
+			}
 			else
+			{
 				data.CalculateBlendSpeed(); // Cache blend speed so we don't have to do it every frame
+			}
 
 			// Add current data to blend list
 			if (data.Trigger == null && data.SettingsResource.useStaticPosition) // Fallback to static position value
