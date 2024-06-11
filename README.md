@@ -1,4 +1,4 @@
-# Project Reignition
+<h1 align="center"><img src="./misc/Project Reignition logo.png" width="512" align="center"></h1>
 A Fan Remake of Sonic and the Secret Rings.
 
 Originally released in 2007 for the Nintendo Wii, Sonic and the Secret Rings' initially saw a moderate amount of critical and commercial success. Despite this, its reputation has dwindled over time among fans. Some commonly cited complaints include:
@@ -9,8 +9,16 @@ Originally released in 2007 for the Nintendo Wii, Sonic and the Secret Rings' in
 
 While this remake intends to remain largely faithful to the original ideas of Secret Rings, many things will be changed to create a more enjoyable experience.
 
+<h2> </h2>
 
-<h2>Major Changes</h2>
+<h2 align="center">
+ <a href="https://discord.gg/k53GGE6CDM"> 
+  <img src="./misc/joindiscordimage.png" width="712" align="center">
+  </a>
+ </h2>
+
+
+<h1 align="center"><img src="./misc/MajorChangesimage.png" width="712" align="center"></h1>
 
 - Controls will be remapped for a traditional controller.
 - Level Select will have an indication for story-critical missions.
@@ -24,6 +32,8 @@ While this remake intends to remain largely faithful to the original ideas of Se
 
 **Sonic and the Secret Rings** is copyrighted by SEGA. I am not affiliated or endorsed by SEGA in any way.
 This Fan Remake is distributed as **freeware**, and *should not be sold under any circumstances.*
+
+The game has been built with [**Godot Engine**](https://godotengine.org/)
 
 <h2> </h2>
 
