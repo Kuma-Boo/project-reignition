@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1o8jxmiiryrj"]
+
+[ext_resource type="Script" path="res://object/stage/common/resource/script/JumpCarpet.cs" id="1_7j8ed"]
+[ext_resource type="PackedScene" uid="uid://7jb7tlxafgo8" path="res://object/stage/common/resource/model/JumpCarpet.gltf" id="2_vapfi"]
+[ext_resource type="AudioStream" uid="uid://4w7opf8u4m2r" path="res://sound/sfx/objects/jump carpet.wav" id="3_kgplj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bqhir"]
+size = Vector3(3, 0.5, 3)
+
+[node name="JumpCarpet" type="Area3D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_7j8ed")
+finalHeight = 5.0
+allowJumpDashing = true
+
+[node name="JumpCarpet" parent="." instance=ExtResource("2_vapfi")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_bqhir")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_kgplj")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[connection signal="area_entered" from="." to="." method="Activate"]

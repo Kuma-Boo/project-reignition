@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay.Objects;
 
@@ -59,13 +60,27 @@ public partial class Catapult : Node3D
 	private Node3D launchNode;
 	[Export]
 	private Node3D armNode;
+	[Export]
+	private AudioStreamPlayer3D enterSFX;
+	[Export]
+	private AudioStreamPlayer3D aimSFX;
+	[Export]
+	private AudioStreamPlayer3D launchSFX;
 	private Tween tweener;
 	public CharacterController Character => CharacterController.instance;
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint() || !isProcessing)
+		if (Engine.IsEditorHint())
 			return;
+
+		if (!isProcessing)
+		{
+			if (aimSFX.Playing)
+				SoundManager.FadeAudioPlayer(aimSFX);
+
+			return;
+		}
 
 		if (currentState == CatapultState.Eject) // Launch the player at the right time
 		{
@@ -103,6 +118,10 @@ public partial class Catapult : Node3D
 		targetLaunchPower = Mathf.Clamp(targetLaunchPower, 0, 1);
 		launchPower = ExtensionMethods.SmoothDamp(launchPower, targetLaunchPower, ref launchPowerVelocity, PowerAdjustmentSmoothing);
 
+		aimSFX.VolumeDb = Mathf.LinearToDb(Mathf.Abs(launchPower - targetLaunchPower) / .1f);
+		if (!aimSFX.Playing)
+			aimSFX.Play();
+
 		float targetRotation = Mathf.Lerp(Mathf.Pi * .25f, 0, launchPower);
 		armNode.Rotation = Vector3.Right * targetRotation;
 
@@ -120,6 +139,7 @@ public partial class Catapult : Node3D
 		launchPowerVelocity = 0f;
 
 		tweener?.Kill();
+		enterSFX.Play();
 	}
 
 	private void EjectPlayer(bool isCancel)
@@ -146,6 +166,7 @@ public partial class Catapult : Node3D
 	{
 		currentState = CatapultState.Disabled;
 		Character.StartLauncher(GetLaunchSettings(), null);
+		launchSFX.Play();
 	}
 
 	private void CancelCatapult()
@@ -160,6 +181,7 @@ public partial class Catapult : Node3D
 		var settings = LaunchSettings.Create(Character.GlobalPosition, destination, 1f);
 		settings.IsJump = true;
 		Character.StartLauncher(settings);
+		enterSFX.Play();
 	}
 
 	public void OnEntered(Area3D a)
