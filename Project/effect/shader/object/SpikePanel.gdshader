@@ -21,5 +21,5 @@ void fragment()
 	//Calculate specularity
 	ROUGHNESS = rough;
 	SPECULAR = spec;
-	ALBEDO = col.rgb;
+	ALBEDO = col.rgb * .8;
 }
