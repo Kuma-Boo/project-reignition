@@ -1,149 +1,174 @@
 using Godot;
 using Project.Core;
 
-namespace Project.Gameplay.Objects
+namespace Project.Gameplay.Objects;
+
+[Tool]
+public partial class ThornSpring : Launcher
 {
-	[Tool]
-	public partial class ThornSpring : Launcher
+	[Export]
+	private float height;
+	/// <summary> How long a rotation phase (full or half) takes in seconds. </summary>
+	[Export(PropertyHint.Range, "0,5,.1")]
+	private float rotationTime;
+	/// <summary> How long to wait between rotation phases. </summary>
+	[Export(PropertyHint.Range, "0,5,.1")]
+	private float staticTime;
+	/// <summary> Should this spring rotate when player gets launched? </summary>
+	[Export]
+	private bool rotateOnLaunch;
+	/// <summary> Split rotation phase into two? </summary>
+	[Export]
+	private bool pauseHalfway;
+	/// <summary> Should this spring only allow targeting when time break is active? </summary>
+	[Export]
+	private bool isTimeBreakSpring;
+
+	/// <summary> The amount of time spent in the current state. </summary>
+	private float currentTime;
+	/// <summary> The current state of the spring. </summary>
+	private RotationStates rotationState;
+	private enum RotationStates
 	{
-		[Export]
-		private float height;
-		[Export(PropertyHint.Range, "0,5,.1")]
-		/// <summary> How long rotation takes, in seconds. </summary>
-		private float rotationTime;
-		[Export(PropertyHint.Range, "0,5,.1")]
-		/// <summary> How long to remain static, in seconds. </summary>
-		private float staticTime;
+		Upright,
+		Rotating,
+		Halfway,
+		Looping,
+	}
 
-		/// <summary> Is the thorn spring currently rotating? </summary>
-		private bool isRotating;
-		/// <summary> Current rotation ratio [0 <-> 1]. </summary>
-		private float rotationRatio;
-		/// <summary> How fast to rotate. </summary>
-		private float rotationSpeed;
+	[Export]
+	private AnimationPlayer animator;
+	private readonly StringName resetKey = "RESET";
+	/// <summary> Animation name for a single, full rotation. </summary>
+	private readonly StringName fullKey = "full";
+	/// <summary> First half of the thorn spring's animation. </summary>
+	private readonly StringName halfKey = "half";
+	/// <summary> Second half of the thorn spring's animation and time break activation. </summary>
+	private readonly StringName enableKey = "enable";
+	/// <summary> Time Break thorn springs' looping animation. </summary>
+	private readonly StringName timeBreakKey = "loop";
+	/// <summary> Animator timescale for Time Break springs when Time Break isn't active. </summary>
+	private const float TimeBreakLoopTimeScale = 4f;
 
-		private bool LoopRotation => (IsTimebreakSpring && !Character.Skills.IsTimeBreakActive)
-			&& rotationMode != RotationMode.Launcher;
 
-		/// <summary> How long rotations should take for inactive timebreak springs. </summary>
-		private const float TIME_BREAK_ROTATION_TIME = .5f;
-		/// <summary> How much to smooth rotation transitions for timebreak springs. </summary>
-		private const float ROTATION_SMOOTHING = .2f;
+	public override Vector3 GetLaunchDirection() => Vector3.Up;
+	public override void Activate(Area3D a)
+	{
+		base.Activate(a);
 
-		[Export]
-		public RotationMode rotationMode;
-		public enum RotationMode
+		if (rotateOnLaunch)
+			StartRotation();
+	}
+
+
+	public override void _PhysicsProcess(double _)
+	{
+		if (Engine.IsEditorHint()) return;
+
+		if (isTimeBreakSpring)
 		{
-			Loop, //Default rotation
-			Launcher, //Only rotate once when player gets launched.
-			TimeBreak, //Only enable staticTime when timebreak is active.
+			UpdateTimeBreakSpring();
+			return;
 		}
 
-		private bool IsTimebreakSpring => rotationMode == RotationMode.TimeBreak;
+		UpdateRotationTimer();
+	}
 
-		[Export]
-		public Node3D root;
 
-		public override void _PhysicsProcess(double _)
+	/// <summary> Updates a time break spring based on the player's break skills. </summary>
+	private void UpdateTimeBreakSpring()
+	{
+		GD.Print(rotationState);
+
+		if (!Character.Skills.IsTimeBreakActive)
 		{
-			if (Engine.IsEditorHint()) return;
+			if (rotationState != RotationStates.Looping) // Return to spinning quickly
+				StartTimeBreakRotation();
 
-			UpdateRotationSpeed();
-			UpdateRotationRatio();
-
-			if (IsTimebreakSpring && !Character.Skills.IsTimeBreakActive)
-			{
-				if (!Character.IsLockoutActive || Character.Lockon.Target != this)
-				{
-					if (!isRotating)
-						rotationRatio = 0;
-
-					isRotating = true;
-				}
-			}
-
-			root.Rotation = Vector3.Right * GetRotationRatio() * Mathf.Tau;
-			Monitorable = !isRotating;
+			return;
 		}
 
-		private void UpdateRotationRatio()
+
+		if (rotationState == RotationStates.Looping)
+			StopTimeBreakRotation(); // Stop spinning
+		else
+			UpdateRotationTimer();
+	}
+
+
+	private void StartTimeBreakRotation()
+	{
+		if (animator.CurrentAnimation == timeBreakKey)
+			return; // Already in the looping animation
+
+		rotationState = RotationStates.Looping;
+		animator.Play(timeBreakKey);
+		animator.SpeedScale = TimeBreakLoopTimeScale;
+	}
+
+
+	/// <summary> Transitions from quickly spinning to stationary. </summary>
+	private void StopTimeBreakRotation() => animator.Play(enableKey);
+
+
+	private void UpdateRotationTimer()
+	{
+		if (rotationState == RotationStates.Rotating)
+			return; // Don't update times when rotating
+
+		currentTime = Mathf.MoveToward(currentTime, staticTime, PhysicsManager.physicsDelta);
+		if (!Mathf.IsEqualApprox(currentTime, staticTime))
+			return; // Still waiting
+
+
+		if (rotationState == RotationStates.Halfway)
 		{
-			if (rotationMode == RotationMode.Launcher && !isRotating) return; //Don't rotate
-
-			//Update timer
-			if (IsTimebreakSpring && Character.Skills.IsTimeBreakActive)
-				rotationRatio += rotationSpeed * PhysicsManager.physicsDelta * (float)(1.0 / Engine.TimeScale); //Unscaled time
-			else
-				rotationRatio += rotationSpeed * PhysicsManager.physicsDelta;
-
-			if (rotationRatio >= 1.0f)
-			{
-				if (isRotating && LoopRotation)
-					rotationRatio -= 1.0f;
-				else
-				{
-					rotationRatio = 0;
-					isRotating = !isRotating;
-				}
-			}
+			FinishRotation(); // Finish the current rotation
+			return;
 		}
 
-		private void UpdateRotationSpeed()
-		{
-			float target = isRotating ? rotationTime : staticTime;
-			if (IsTimebreakSpring && !Character.Skills.IsTimeBreakActive)
-				target = TIME_BREAK_ROTATION_TIME;
-			target = 1.0f / target;
+		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this)
+			return; // Don't start rotating if the player is attacking this spring
 
-			if (IsTimebreakSpring)
-				rotationSpeed = Mathf.Lerp(rotationSpeed, target, ROTATION_SMOOTHING);
-			else
-				rotationSpeed = target;
+		// Start a new rotation
+		StartRotation();
+	}
+
+
+	/// <summary> Reset time and stop rotating. </summary>
+	private void OnAnimationFinished(StringName animationName)
+	{
+		currentTime = 0;
+
+		if (animationName == halfKey)
+		{
+			// Switch to halfway state
+			rotationState = RotationStates.Halfway;
+			return;
 		}
 
-		private float GetRotationRatio()
-		{
-			if (isRotating)
-			{
-				if (LoopRotation)
-					return rotationRatio;
+		if (animationName != fullKey && animationName != enableKey) return;
+		
+		// Reset rotation to avoid incorrect transitions
+		animator.Play(resetKey);
+		animator.Advance(0.0);
+		rotationState = RotationStates.Upright;
+	}
 
-				return Mathf.SmoothStep(0, 1, rotationRatio);
-			}
 
-			return 0;
-		}
+	private void StartRotation()
+	{
+		rotationState = RotationStates.Rotating;
+		animator.SpeedScale = 1.0f / rotationTime;
+		animator.Play(pauseHalfway ? halfKey : fullKey);
+	}
 
-		private bool SuccessfulLaunch()
-		{
-			if (Character.Lockon.IsHomingAttacking) //Always allow homing attacks
-				return true;
 
-			if (Character.CenterPosition.Y > GlobalPosition.Y)
-			{
-				if (isRotating)
-					return GetRotationRatio() < .1f || GetRotationRatio() > .9f;
-			}
-
-			return false;
-		}
-
-		public override Vector3 GetLaunchDirection() => Vector3.Up;
-
-		public override void Activate(Area3D a)
-		{
-			if (SuccessfulLaunch())
-			{
-				base.Activate(a);
-
-				if (rotationMode == RotationMode.Launcher)
-				{
-					rotationRatio = 0;
-					isRotating = true;
-				}
-			}
-			else
-				Character.StartKnockback(); //Damage the player
-		}
+	/// <summary> Completes the spring's rotation. </summary>
+	private void FinishRotation()
+	{
+		rotationState = RotationStates.Rotating;
+		animator.SpeedScale = 1.0f / rotationTime;
+		animator.Play(enableKey);
 	}
 }
