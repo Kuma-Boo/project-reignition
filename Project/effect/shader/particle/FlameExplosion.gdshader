@@ -1,7 +1,4 @@
-[gd_resource type="Shader" format=3 uid="uid://c22mebv0p716d"]
-
-[resource]
-code = "shader_type spatial;
+shader_type spatial;
 render_mode blend_add, unshaded;
 
 uniform sampler2D albedo : source_color;
@@ -40,4 +37,3 @@ void fragment() {
 	ALBEDO = col.rgb + vec3(1, 1, 1);
 	ALPHA = col.a;
 }
-"
