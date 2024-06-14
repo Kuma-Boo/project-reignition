@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=96 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -64,8 +64,9 @@
 [ext_resource type="Resource" uid="uid://4mo2mpw0hy55" path="res://area/2 dino jungle/act 1/camera/EndIslandCam.tres" id="46_oc3qf"]
 [ext_resource type="Resource" uid="uid://ebyfdg2fcuro" path="res://area/2 dino jungle/act 1/camera/EndCam.tres" id="47_6j2j6"]
 [ext_resource type="Resource" uid="uid://cca1d3n17a0yw" path="res://area/2 dino jungle/act 1/camera/EndFollowCam.tres" id="47_cd0o2"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 1/camera/FirstEndIslandCam.tres" id="49_qyyaa"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 1/camera/FirstEncIslandWallCam.tres" id="50_cgjti"]
+[ext_resource type="Resource" uid="uid://cdt773y1qarnf" path="res://area/2 dino jungle/act 1/camera/FirstEndIslandCam.tres" id="49_qyyaa"]
+[ext_resource type="Resource" uid="uid://fccvq4s8bh6q" path="res://area/2 dino jungle/act 1/camera/FirstEncIslandWallCam.tres" id="50_cgjti"]
+[ext_resource type="Resource" uid="uid://bsj7mi64dl786" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandFieldCam.tres" id="51_3eohj"]
 [ext_resource type="Curve3D" uid="uid://bw5h3dppkx2um" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelEntrancePath.tres" id="56_hmb1c"]
 [ext_resource type="Curve3D" uid="uid://j6ibsm4rchko" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelMiddlePath.tres" id="57_h6v6r"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="58_vm1cj"]
@@ -318,7 +319,10 @@ size = Vector3(25, 80, 15)
 size = Vector3(10, 10, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ljge0"]
-size = Vector3(3.59311, 13.0239, 7.11548)
+size = Vector3(9.1475, 11.0452, 7.11548)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hyom4"]
+size = Vector3(5.72754, 10.5288, 1)
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_hpjme")
@@ -1267,11 +1271,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -754.627, -257.764, -1045.94)
 
 [node name="Cam" type="Node3D" parent="Trigger/Camera/FirstEndIslandCamWall"]
 script = ExtResource("36_8t574")
-transitionTime = 0.2
+transitionTime = 0.5
 settings = ExtResource("50_cgjti")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FirstEndIslandCamWall"]
-transform = Transform3D(0.889361, 0, -0.457207, 0, 1, 0, 0.457207, 0, 0.889361, 1.06177, 6.27853, -1.03357)
+transform = Transform3D(0.889361, 0, -0.457207, 0, 1, 0, 0.457207, 0, 0.889361, -0.573303, 5.28915, -1.87415)
 shape = SubResource("BoxShape3D_ljge0")
 
 [node name="EndIslandCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
@@ -1329,6 +1333,19 @@ settings = ExtResource("47_cd0o2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/EndFollowCam2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_c5pbm")
+
+[node name="StageTrigger" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -813.384, -266.901, -1064.96)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Cam" type="Node3D" parent="Trigger/Camera/StageTrigger"]
+script = ExtResource("36_8t574")
+transitionTime = 0.4
+settings = ExtResource("51_3eohj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/StageTrigger"]
+shape = SubResource("BoxShape3D_hyom4")
 
 [node name="Reflection" type="Node3D" parent="Trigger"]
 
