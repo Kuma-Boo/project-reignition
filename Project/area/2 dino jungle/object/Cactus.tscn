@@ -1,17 +1,131 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhb5ti1oiktuk"]
+[gd_scene load_steps=7 format=3 uid="uid://dhb5ti1oiktuk"]
 
 [ext_resource type="PackedScene" uid="uid://c0lo56q5efgix" path="res://area/2 dino jungle/object/model/Cactus.gltf" id="1_ak5kj"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_jgpvl"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_717xn"]
 radius = 1.0
 
-[node name="Cactus" type="Area3D"]
+[sub_resource type="Animation" id="Animation_qn240"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_r5e3u"]
+resource_name = "shatter"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xs2lq"]
+_data = {
+"RESET": SubResource("Animation_qn240"),
+"shatter": SubResource("Animation_r5e3u")
+}
+
+[node name="Cactus" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_jgpvl")
+pieceMass = 0.2
+damagePlayer = true
+disableEnvironmentCollision = true
+root = NodePath("Root")
+pieceRoot = NodePath("CactusPieces")
+animator = NodePath("AnimationPlayer")
+shatterFlags = 18
+
+[node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
 collision_layer = 8
-collision_mask = 2
-monitorable = false
+collision_mask = 0
 
-[node name="Cactus" parent="." instance=ExtResource("1_ak5kj")]
+[node name="Cactus" parent="Root" instance=ExtResource("1_ak5kj")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("SphereShape3D_717xn")
+
+[node name="CactusPieces" type="Node3D" parent="."]
+visible = false
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 10
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_717xn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xs2lq")
+}
+
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]
