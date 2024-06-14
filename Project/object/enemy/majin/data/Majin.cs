@@ -260,7 +260,6 @@ public partial class Majin : Enemy
 		// Kill any active tweens
 		tweener?.Kill();
 
-		base.Respawn();
 		isSpawning = false;
 
 		animationPlayer.Play("RESET");
@@ -292,12 +291,9 @@ public partial class Majin : Enemy
 		flameTimer = 0;
 		isFlameActive = false;
 
-		if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
-		{
-			EnterRange();
-		}
-		else // Start hidden
+		base.Respawn();
+
+		if (!isSpawning) // Start hidden
 		{
 			Visible = false;
 			SetHitboxStatus(false);
@@ -545,12 +541,6 @@ public partial class Majin : Enemy
 		}
 
 		flameTimer = 0; // Reset timer
-	}
-
-	protected override void EnterRange()
-	{
-		if (spawnMode == SpawnModes.Signal) return;
-		Spawn();
 	}
 
 
