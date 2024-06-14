@@ -117,8 +117,9 @@ script = ExtResource("1_712du")
 maxSpeed = 20.0
 turnSpeed = 10.0
 isVerticalMovementDisabled = true
+tiltAmount = 20.0
 root = NodePath("Boat/BoatMesh")
-playerPosition = NodePath("Boat/BoatRipple/PlayerPosition")
+playerPosition = NodePath("Boat/BoatMesh/PlayerPosition")
 animator = NodePath("AnimationPlayer")
 
 [node name="Boat" parent="." instance=ExtResource("3_tcnkk")]
@@ -126,11 +127,11 @@ animator = NodePath("AnimationPlayer")
 [node name="BoatRipple" parent="Boat" index="0"]
 cast_shadow = 0
 
-[node name="PlayerPosition" type="Node3D" parent="Boat/BoatRipple" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
-
 [node name="BoatMesh" parent="Boat" index="1"]
 cast_shadow = 0
+
+[node name="PlayerPosition" type="Node3D" parent="Boat/BoatMesh" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 
 [node name="Hurtbox" type="Area3D" parent="."]
 collision_layer = 8

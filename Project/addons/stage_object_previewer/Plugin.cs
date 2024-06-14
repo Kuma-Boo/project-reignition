@@ -43,7 +43,7 @@ namespace Project.Editor.StageObjectPreviewer
 			viewportOverlay = overlay;
 
 			if (target is Launcher)
-				DrawLaunchSettings((target as Launcher).GetLaunchSettings(), DEFAULT_DRAW_COLOR);
+				DrawLaunchSettings((target as Launcher).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as Launcher).GetLaunchRatio()));
 			else if (target is JumpTrigger)
 				DrawLaunchSettings((target as JumpTrigger).GetLaunchSettings(), DEFAULT_DRAW_COLOR);
 			else if (target is Catapult)

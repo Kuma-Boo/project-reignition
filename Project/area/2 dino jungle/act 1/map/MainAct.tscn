@@ -1,4 +1,4 @@
-[gd_scene load_steps=95 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=97 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="41_nmbev"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="42_o7jek"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="43_4v8c0"]
+[ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="43_sc0lf"]
 [ext_resource type="PackedScene" uid="uid://cuplakh6fkalc" path="res://area/2 dino jungle/object/Boat.tscn" id="44_j45ek"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="45_bbxl7"]
 [ext_resource type="PackedScene" uid="uid://e43vdgi280co" path="res://area/2 dino jungle/object/rock/WaterRock.tscn" id="46_88fdv"]
@@ -166,6 +167,9 @@ point_count = 4
 [sub_resource type="BoxShape3D" id="BoxShape3D_0ln2g"]
 size = Vector3(6, 15, 2)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_t1618"]
+radius = 2.0
+
 [sub_resource type="Curve" id="Curve_x2j5i"]
 min_value = -1.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.6), -2.0, 0.0, 0, 0]
@@ -291,6 +295,9 @@ transform = Transform3D(-4.37112e-08, 0, 0.999995, 0, 0.999995, 0, -0.999996, 0,
 [node name="SpiralAutomationPath" parent="Static/Path" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.253, -219.907, -845.788)
 
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
+
 [node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
@@ -318,7 +325,7 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -740.594, -262.005, -1072.42)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -386.635, -221.005, -719.429)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -4029,6 +4036,7 @@ transform = Transform3D(0.941347, 0, -0.33744, 0, 1, 0, 0.33744, 0, 0.941347, -2
 
 [node name="Spring" parent="MainAct/Cave/LeftPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.9378, 3.5, -107.222)
+"Secondary Settings/Enabled" = false
 finalHeight = 9.0
 voiceKey = &""
 
@@ -4126,11 +4134,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38498e-08, 0, -2)
 [node name="Child08" parent="MainAct/Cave/LeftPath/PearlRing2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41421, 0, -1.41421)
 
+[node name="JumpCarpet1" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_sc0lf")]
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, -14.2059, 12, -122.947)
+"Secondary Settings/Final Height" = 8.0
+finalHeight = 3.0
+
+[node name="JumpCarpet2" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_sc0lf")]
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, -8.90686, 17, -129.125)
+"Secondary Settings/Final Height" = 8.0
+finalHeight = 3.0
+
 [node name="CactusPlatform1" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(0.88202, 0, -0.471211, 0, 1, 0, 0.471211, 0, 0.88202, -6.89041, 20.9972, -140.085)
 
 [node name="CactusPlatform" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("51_xmrkn")]
-transform = Transform3D(3, 0, 1.07288e-06, 0, 2.4, 0, 0, 0, 2.39999, 0, 0, 0)
+transform = Transform3D(3, 0, 0, 0, 2.4, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="Cactus5" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.89703, 0, 0.633448, 0, 2, 0, -0.633448, 0, 1.89703, -0.359802, 0.600006, -0.306458)
@@ -4140,6 +4158,21 @@ transform = Transform3D(0.993503, 0, -0.113811, 0, 1, 0, 0.113811, 0, 0.993503, 
 
 [node name="Cage" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("52_oj3ef")]
 transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 3.87323, 1.75113, 0.182556)
+
+[node name="FireSoul" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("41_cv4lt")]
+transform = Transform3D(0.882021, 0, 0.471211, 0, 1, 0, -0.471211, 0, 0.882021, 3.80164, 1.2691, 0.126617)
+
+[node name="JumpTrigger" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(-0.999458, 0, 0.0329294, 0, 1, 0, -0.0329294, 0, -0.999458, 3.91687, 1.2691, -3.37146)
+
+[node name="Jump" type="Node3D" parent="MainAct/Cave/LeftPath/CactusPlatform1/JumpTrigger"]
+transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 18.0016, -16.4454, 26.5863)
+script = ExtResource("45_bbxl7")
+jumpHeight = 5.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cave/LeftPath/CactusPlatform1/JumpTrigger"]
+shape = SubResource("SphereShape3D_t1618")
 
 [node name="WaterRock" parent="MainAct/Cave/LeftPath" instance=ExtResource("46_88fdv")]
 transform = Transform3D(0.937689, 0, -0.347476, 0, 2, 0, 0.347476, 0, 0.937689, -5.67664, 2.54832, -134.295)
@@ -4242,6 +4275,7 @@ transform = Transform3D(0.822661, -7.77534e-10, -0.568534, -0.0086821, 0.999883,
 
 [node name="JumpPanel" parent="MainAct/Cave/RightPath" instance=ExtResource("53_8w2hc")]
 transform = Transform3D(-0.96358, 0, 0.267424, 0, 1, 0, -0.267424, 0, -0.96358, 4.27084, 0.637695, -15.4406)
+"Secondary Settings/Enabled" = false
 middleHeight = 8.0
 distance = 28.0
 recenterSpeed = 32
@@ -4263,18 +4297,21 @@ transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195
 
 [node name="ThornSpring1" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 8.02637, 1, -68.9848)
+"Secondary Settings/Enabled" = false
 rotationTime = 1.0
 staticTime = 3.0
 pauseHalfway = true
 
 [node name="ThornSpring2" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 10.9237, 1, -75.5882)
+"Secondary Settings/Enabled" = false
 rotationTime = 1.0
 staticTime = 3.0
 pauseHalfway = true
 
 [node name="ThornSpring3" parent="MainAct/Cave/RightPath" instance=ExtResource("55_3vfss")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 7.9122, 1, -81.1497)
+"Secondary Settings/Enabled" = false
 rotationTime = 1.0
 staticTime = 3.0
 pauseHalfway = true
@@ -4288,6 +4325,7 @@ transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0, 0.5, 
 
 [node name="Spring1" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.91496, 0.307059, -0.261846, 3.72529e-09, 0.648864, 0.760905, 0.403545, -0.696197, 0.593684, 11.1937, 2, -98.4982)
+"Secondary Settings/Enabled" = false
 finalHeight = 7.0
 distance = 18.0
 voiceKey = &""
@@ -4299,12 +4337,14 @@ settings = ExtResource("36_358w5")
 
 [node name="Spring2" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.779982, -0.537696, -0.320173, 0.0155834, -0.494774, 0.868881, -0.625608, -0.682702, -0.377535, 18.0406, 9.78905, -115.188)
+"Secondary Settings/Enabled" = false
 finalHeight = -10.0
 distance = 17.0
 voiceKey = &""
 
 [node name="Spring3" parent="MainAct/Cave/RightPath" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.939692, -0.262003, 0.219846, 0, 0.642788, 0.766044, -0.34202, -0.719846, 0.604023, 8.16901, 0.653503, -127.508)
+"Secondary Settings/Enabled" = false
 middleHeight = 5.0
 finalHeight = 3.0
 distance = 25.0
@@ -4366,6 +4406,7 @@ enemyCount = 2
 
 [node name="Spring" parent="MainAct/Cave" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.642787, -0.0667652, 0.763129, 0, 0.996195, 0.0871557, -0.766044, -0.0560226, 0.640341, -1.59833, 5.84, -170.999)
+"Secondary Settings/Enabled" = false
 middleHeight = 20.0
 finalHeight = -4.0
 distance = 2.0
@@ -4662,9 +4703,6 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 [node name="DashPanel2" parent="MainAct/Cave" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -78.5685, 2.95007, -221.977)
 
-[node name="FireSoul" parent="MainAct/Cave" instance=ExtResource("41_cv4lt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.59692, 22.2663, -138.182)
-
 [node name="Spiral" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
 script = ExtResource("9_uj3dw")
@@ -4676,6 +4714,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53418, 7.55009, 12.727)
 
 [node name="Spring2" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.993961, 0.103116, -0.0375312, -7.00126e-09, 0.34202, 0.939693, 0.109734, -0.934018, 0.339955, 0, 0, 0)
+"Secondary Settings/Enabled" = false
 middleHeight = 0.05
 finalHeight = -6.0
 distance = 34.0
@@ -4736,12 +4775,17 @@ jumpHeight = 10.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/JumpChainGroup/JumpTrigger3"]
 shape = SubResource("SphereShape3D_mwx1a")
 
-[node name="TODO REPLACE THIS SPRING" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(0.993821, 0.055529, -0.0961071, 0.0709099, 0.348505, 0.934621, 0.0853918, -0.93566, 0.342414, 6.11823, -45, -47.0812)
+[node name="JumpCarpet" parent="MainAct/Spiral/JumpChainGroup" instance=ExtResource("43_sc0lf")]
+transform = Transform3D(-0.999391, 0, 0.0348994, 0, 1, 0, -0.0348994, 0, -0.999391, 6.11823, -45, -47.0812)
+"Secondary Settings/Enabled" = false
+maxBounceCount = 0
 middleHeight = 2.0
 finalHeight = -7.0
-distance = 30.0
-voiceKey = &""
+distance = 32.0
+
+[node name="FireSoul" parent="MainAct/Spiral" instance=ExtResource("41_cv4lt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.62738, -36.3613, -34.3152)
+fireSoulIndex = 2
 
 [node name="Pearls1" type="Node3D" parent="MainAct/Spiral"]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 1.09097, -2.15932, -17.4142)
@@ -5139,10 +5183,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94489, -1.21237, 5.09827)
 [node name="Child10" parent="MainAct/Spiral/Pearls9" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82309, -1.38196, 4.85889)
 
-[node name="FireSoul" parent="MainAct/Spiral" instance=ExtResource("41_cv4lt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.62738, -36.3613, -34.3152)
-fireSoulIndex = 2
-
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
 script = ExtResource("9_uj3dw")
@@ -5435,7 +5475,7 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Boat" parent="MainAct/Cavern" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -4.53979, -5.5, 2.1073)
-maxSpeed = 6.0
+maxSpeed = 10.0
 bounds = Vector2(3, 0)
 path = NodePath("../../../Static/Path/BoatPath")
 pathFollower = NodePath("../../../Static/Path/BoatPath/CavernBoatPathFollower")
@@ -6057,6 +6097,7 @@ transform = Transform3D(-1.20533, 0, 0.892844, 0, 1.5, 0, -0.892844, 0, -1.20533
 
 [node name="Spring1" parent="MainAct/FeedingTunnel" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 27.6446, 5.10001, -4.49023)
+"Secondary Settings/Enabled" = false
 finalHeight = 4.0
 voiceKey = &""
 
@@ -6085,6 +6126,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5.4)
 
 [node name="Spring2" parent="MainAct/FeedingTunnel" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.987538, 0, -0.157383, 0, 1, 0, 0.157383, 0, 0.987538, 27.7892, 7.70001, 5.94324)
+"Secondary Settings/Enabled" = false
 finalHeight = 5.0
 voiceKey = &""
 
@@ -6296,11 +6338,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, -0.707107, 0)
 
 [node name="Spring" parent="MainAct/End" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(-0.725386, 0, 0.688342, 0, 1, 0, -0.688342, 0, -0.725386, -18, -7.70001, 17)
+"Secondary Settings/Enabled" = false
 finalHeight = 5.0
 voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
 transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
+"Secondary Settings/Enabled" = false
 middleHeight = 4.0
 finalHeight = -12.0
 distance = 31.0
@@ -6517,6 +6561,7 @@ transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 
 
 [node name="JumpPanel2" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
 transform = Transform3D(-0.245476, 0, -0.969403, 0, 1, 0, 0.969403, 0, -0.245476, -99.6812, -17.7676, -32.0621)
+"Secondary Settings/Enabled" = false
 middleHeight = 5.0
 finalHeight = 3.0
 distance = 16.0
