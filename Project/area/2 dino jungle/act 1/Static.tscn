@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=98 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -67,6 +67,7 @@
 [ext_resource type="Resource" uid="uid://cdt773y1qarnf" path="res://area/2 dino jungle/act 1/camera/FirstEndIslandCam.tres" id="49_qyyaa"]
 [ext_resource type="Resource" uid="uid://fccvq4s8bh6q" path="res://area/2 dino jungle/act 1/camera/FirstEncIslandWallCam.tres" id="50_cgjti"]
 [ext_resource type="Resource" uid="uid://bsj7mi64dl786" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandFieldCam.tres" id="51_3eohj"]
+[ext_resource type="Resource" uid="uid://cgs27a8s7oemd" path="res://area/2 dino jungle/act 1/camera/DinoFeedingRockBitesCam.tres" id="52_tpulw"]
 [ext_resource type="Curve3D" uid="uid://bw5h3dppkx2um" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelEntrancePath.tres" id="56_hmb1c"]
 [ext_resource type="Curve3D" uid="uid://j6ibsm4rchko" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelMiddlePath.tres" id="57_h6v6r"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="58_vm1cj"]
@@ -314,6 +315,9 @@ size = Vector3(6, 11, 6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1y700"]
 size = Vector3(25, 80, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mxt57"]
+size = Vector3(48.7063, 18.5681, 37.9772)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q701v"]
 size = Vector3(10, 10, 5)
@@ -1180,6 +1184,7 @@ transform = Transform3D(0.397148, 0, 0.917755, 0, 1, 0, -0.917755, 0, 0.397148, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/LogCam"]
 script = ExtResource("36_8t574")
 transitionTime = 0.5
+deactivationTransitionTime = 1.0
 settings = ExtResource("29_jpgcf")
 previousSettings = ExtResource("36_hewn5")
 
@@ -1232,6 +1237,21 @@ settings = ExtResource("37_lloeo")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FeedingTunnelCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
+
+[node name="DinoFeedingRocksBitesCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.998279, 0, -0.0586443, 0, 1, 0, 0.0586443, 0, 0.998279, -644.948, -265.736, -1060.93)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Cam" type="Node3D" parent="Trigger/Camera/DinoFeedingRocksBitesCam"]
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("52_tpulw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/DinoFeedingRocksBitesCam"]
+transform = Transform3D(0.966518, 0, -0.256648, 0, 1, 0, 0.256648, 0, 0.966518, -20.7731, 7.29648, 12.7622)
+shape = SubResource("BoxShape3D_mxt57")
 
 [node name="BackstepWallCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.590071, 0, -0.807352, 0, 1, 0, 0.807352, 0, 0.590071, -747.599, -269.996, -1069.2)

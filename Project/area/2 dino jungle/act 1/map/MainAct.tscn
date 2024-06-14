@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=104 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="40_m082x"]
 [ext_resource type="Resource" uid="uid://dlcemgeioxa5h" path="res://area/2 dino jungle/act 1/camera/JumpChainStaticCam.tres" id="41_6eimj"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="41_cv4lt"]
+[ext_resource type="Resource" uid="uid://diplfgoupv4eq" path="res://area/2 dino jungle/act 1/camera/CaveEndSpringCam.tres" id="41_hykdp"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="41_nmbev"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="42_o7jek"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="43_4v8c0"]
@@ -268,6 +269,15 @@ Data = ExtResource("2_p4x35")
 InitialCameraSettings = ExtResource("3_p8ttf")
 metadata/_edit_group_ = true
 
+[node name="02River" parent="Static/Visuals" index="2"]
+startEnabled = true
+
+[node name="03Cave" parent="Static/Visuals" index="3"]
+startEnabled = true
+
+[node name="04Spiral" parent="Static/Visuals" index="4"]
+startEnabled = true
+
 [node name="05Crossing" parent="Static/Visuals" index="5"]
 startEnabled = true
 
@@ -285,12 +295,6 @@ startEnabled = true
 
 [node name="09Scenery" parent="Static/Visuals" index="10"]
 startEnabled = true
-
-[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-
-[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
-transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -319,7 +323,7 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
-transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, -296.349, -276.505, -1076.26)
+transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, -0.348532, 0.022316, -1.00548)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -1052,6 +1056,7 @@ transform = Transform3D(0.981169, 0.189745, 0.0361204, -0.190784, 0.981236, 0.02
 
 [node name="Cactus1" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.986439, 0.162872, 0.0202515, -0.16398, 0.983227, 0.0798492, -0.00690668, -0.0820873, 0.996601, -51.6225, -0.901849, -211.695)
+damagePlayer = false
 
 [node name="WhiteRock8" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(1.48354, 0.219769, 0.028383, -0.219607, 1.4838, -0.0104849, -0.0296127, 0.00621445, 1.4997, -50.9283, -0.724856, -213.382)
@@ -1920,21 +1925,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -9)
 
 [node name="Cactus2" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.41433, -0.499674, 0, 0.499674, 1.41433, 0, 0, 0, 1.5, -73.7417, -36.0369, -443.091)
+damagePlayer = false
 
 [node name="DashPanelM5" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(0.0115324, -0.287129, -0.957823, -0.038439, 0.957051, -0.28736, 0.999193, 0.0401318, 1.57217e-07, -77.4123, -37.3062, -438.572)
 
 [node name="Cactus3" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.40954, -0.51303, 0, 0.51303, 1.40954, 0, 0, 0, 1.5, -88.9136, -42.5119, -435.391)
+damagePlayer = false
 
 [node name="Cactus4" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.47721, -0.260472, 0, 0.260472, 1.47721, 0, 0, 0, 1.5, -103.707, -47.3672, -442.691)
+damagePlayer = false
 
 [node name="Cactus5" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 0, 0, 1, -110.731, -47.3976, -435.991)
+damagePlayer = false
 
 [node name="Cactus6" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.45827, 0.351364, 0, -0.351364, 1.45827, 0, 0, 0, 1.5, -118.988, -46.463, -439.691)
+damagePlayer = false
 
 [node name="RingsL5" type="Node3D" parent="MainAct/Chase"]
 transform = Transform3D(-0.00711997, 0.340309, 0.940287, 0.0506227, 0.939228, -0.339542, -0.998691, 0.0451824, -0.0239147, -129.205, -43.3476, -436.983)
@@ -2002,6 +2012,7 @@ transform = Transform3D(0.00712006, 0.340309, -0.940287, -0.0506227, 0.939228, 0
 
 [node name="Cactus7" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.943709, 0.330388, -0.0160431, -0.330777, 0.942598, -0.0457709, -9.00155e-10, 0.0485011, 0.998823, -147.693, -37.5155, -439.692)
+damagePlayer = false
 
 [node name="RingsM5" type="Node3D" parent="MainAct/Chase"]
 transform = Transform3D(0.989775, 0, -0.142629, 0, 1, 0, 0.142629, 0, 0.989776, -162.568, -32.5833, -439.512)
@@ -2068,8 +2079,8 @@ shape = SubResource("BoxShape3D_7im1x")
 
 [node name="River" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -190, -95, -495)
-visible = false
 script = ExtResource("9_uj3dw")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Boat" parent="MainAct/River" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
@@ -3922,6 +3933,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
 
 [node name="Cactus1" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.628754, 0.400009, -18.3753)
+damagePlayer = false
 
 [node name="PearlRing1" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(0.957434, -0.277653, 0.0789289, 0.278522, 0.96043, -1.16415e-10, -0.0758056, 0.0219834, 0.99688, 0.628754, 4.10001, -18.4753)
@@ -3966,6 +3978,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.970821, -0.705342, 0)
 
 [node name="Cactus2" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -5.73776, 1.33487, -25.7996)
+damagePlayer = false
 
 [node name="RingsM2" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(0.998935, 0.00683618, 0.0456384, 4.65661e-10, 0.988967, -0.148137, -0.0461476, 0.14798, 0.987913, -6.46436, 4.82309, -40.8811)
@@ -3995,9 +4008,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="Cactus3" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.00034, 6.46199, -60.1761)
+damagePlayer = false
 
 [node name="Cactus4" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.999919, 0.0126882, 0, -0.012672, 0.998645, -0.0504709, -0.000640385, 0.0504669, 0.998726, -10.5999, 6.75247, -63.0671)
+damagePlayer = false
 
 [node name="RingsM3" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(0.731354, -0.0795692, 0.677341, 0, 0.993171, 0.116671, -0.681998, -0.0853276, 0.726359, -12.8338, 6.4501, -68.3223)
@@ -4037,6 +4052,7 @@ voiceKey = &""
 [node name="EnemyStone" parent="MainAct/Cave/LeftPath" instance=ExtResource("49_g35os")]
 transform = Transform3D(3.70769, 0, -0.750507, 0, 3, 0, 1.50101, 0, 1.85384, -22.9299, 6.09999, -106.68)
 enemyCount = 1
+disableEnvironmentCollision = false
 
 [node name="GrassPillar1" parent="MainAct/Cave/LeftPath" instance=ExtResource("50_sikom")]
 transform = Transform3D(1.37749, 0, -0.316654, 0, 0.25, 0, 0.593727, 0, 0.734664, -23.0377, 0.699997, -106.939)
@@ -4146,9 +4162,11 @@ transform = Transform3D(3, 0, 0, 0, 2.4, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="Cactus5" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.89703, 0, 0.633448, 0, 2, 0, -0.633448, 0, 1.89703, -0.359802, 0.600006, -0.306458)
+damagePlayer = false
 
 [node name="Cactus6" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.993503, 0, -0.113811, 0, 1, 0, 0.113811, 0, 0.993503, 0.681458, 0.600006, 2.02728)
+damagePlayer = false
 
 [node name="Cage" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("52_oj3ef")]
 transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 3.87323, 1.75113, 0.182556)
@@ -4217,6 +4235,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
 
 [node name="Cactus7" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.822661, -7.77534e-10, -0.568534, -0.0086821, 0.999883, -0.0125629, 0.568467, 0.015271, 0.822565, -5.04477, 2.8972, -142.576)
+damagePlayer = false
 
 [node name="Ring2" parent="MainAct/Cave/LeftPath" instance=ExtResource("40_m082x")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, -0.244751, 6.3972, -140.676)
@@ -4264,6 +4283,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
 
 [node name="Cactus8" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.822661, -7.77534e-10, -0.568534, -0.0086821, 0.999883, -0.0125629, 0.568467, 0.015271, 0.822565, -0.344788, 2.8972, -140.776)
+damagePlayer = false
 
 [node name="RightPath" type="Node3D" parent="MainAct/Cave"]
 
@@ -4389,14 +4409,17 @@ transform = Transform3D(0.974405, 0, 0.224798, 0, 1, 0, -0.224798, 0, 0.974405, 
 [node name="EnemyStone1" parent="MainAct/Cave" instance=ExtResource("49_g35os")]
 transform = Transform3D(1.69593, 0, -1.0601, 0, 1, 0, 1.0601, 0, 1.69593, -3.03259, 6.09999, -166.618)
 enemyCount = 2
+disableEnvironmentCollision = false
 
 [node name="EnemyStone2" parent="MainAct/Cave" instance=ExtResource("49_g35os")]
 transform = Transform3D(1.69593, 0, -1.0601, 0, 0.5, 0, 1.0601, 0, 1.69593, 1.21649, 5.5, -166.127)
 enemyCount = 2
+disableEnvironmentCollision = false
 
 [node name="EnemyStone3" parent="MainAct/Cave" instance=ExtResource("49_g35os")]
 transform = Transform3D(0.866025, 0, -0.5, 0, 0.5, 0, 0.5, 0, 0.866025, -1.60001, 5.99001, -171)
 enemyCount = 2
+disableEnvironmentCollision = false
 
 [node name="Spring" parent="MainAct/Cave" instance=ExtResource("48_p6m4r")]
 transform = Transform3D(0.642787, -0.0667652, 0.763129, 0, 0.996195, 0.0871557, -0.766044, -0.0560226, 0.640341, -1.59833, 5.84, -170.999)
@@ -4405,6 +4428,11 @@ middleHeight = 20.0
 finalHeight = -4.0
 distance = 2.0
 voiceKey = &""
+
+[node name="Cam" type="Node3D" parent="MainAct/Cave/Spring"]
+transform = Transform3D(1, -3.72529e-09, 2.98023e-08, 0, 1, 3.72529e-09, 0, 0, 1, 0, 0, 0)
+script = ExtResource("27_dpcvf")
+settings = ExtResource("41_hykdp")
 
 [node name="Ring" parent="MainAct/Cave/Spring" instance=ExtResource("40_m082x")]
 transform = Transform3D(0.984808, 0, 0.173648, 0.0151344, 0.996195, -0.0858316, -0.172987, 0.0871558, 0.98106, 0.113525, 11.0006, 0.473633)
@@ -4637,9 +4665,11 @@ transform = Transform3D(0.347296, 0, 1.96962, 0, 1.5, 0, -1.96962, 0, 0.347296, 
 
 [node name="Cactus1" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.196567, -0.443965, 1.09739, 0.0373772, 1.11418, 0.444066, -1.1832, -0.0385596, 0.196338, -32.7121, 2.32358, -184.101)
+damagePlayer = false
 
 [node name="Cactus2" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.261874, -0.76568, 1.82898, 0.223904, 1.84448, 0.740111, -1.9701, 0.10785, 0.32723, -41.0294, -1.87166, -180.198)
+damagePlayer = false
 
 [node name="WaterRock3" parent="MainAct/Cave" instance=ExtResource("46_88fdv")]
 transform = Transform3D(0.842181, -0.265909, 1.21244, 0.159256, 1.47621, 0.213137, -1.231, 0.00905932, 0.857059, -44.5937, -1.83867, -188.38)
@@ -4670,9 +4700,11 @@ transform = Transform3D(1.18177, 0, 0.208378, 0, 1.2, 0, -0.208378, 0, 1.18177, 
 
 [node name="Cactus3" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -78.4341, -1.84995, -188.173)
+damagePlayer = false
 
 [node name="Cactus4" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -79.6342, -1.24994, -190.373)
+damagePlayer = false
 
 [node name="Catapult" parent="MainAct/Cave" instance=ExtResource("60_jn18j")]
 transform = Transform3D(-0.990263, 0, 0.139225, 0, 1, 0, -0.139225, 0, -0.990263, -81.1916, 10.7501, -196.367)
@@ -4687,9 +4719,11 @@ launchPower = 1.0
 [node name="EnemyStone4" parent="MainAct/Cave" instance=ExtResource("49_g35os")]
 transform = Transform3D(-0.990263, 0, 0.139225, 0, 1, 0, -0.139225, 0, -0.990263, -81.6092, 11.75, -193.396)
 enemyCount = 3
+disableEnvironmentCollision = false
 
 [node name="Cactus5" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.981591, 0.0807556, 0.173081, -0.0795287, 0.996734, -0.0140231, -0.173648, 2.79397e-09, 0.984808, -78.6342, 2.58553, -209.373)
+damagePlayer = false
 
 [node name="GrassPillar3" parent="MainAct/Cave" instance=ExtResource("50_sikom")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -77.734, 0, -214.273)
@@ -5434,6 +5468,7 @@ isToggleable = true
 [node name="EnemyStone" parent="MainAct/Crossing" instance=ExtResource("49_g35os")]
 transform = Transform3D(1.26785, 0, 1.81262, 0, 2, 0, -2.71892, 0, 0.845236, 97.3905, -9.99435, -184.763)
 enemyCount = 3
+disableEnvironmentCollision = false
 
 [node name="RingsM4" type="Node3D" parent="MainAct/Crossing"]
 transform = Transform3D(-0.607196, -0.00015166, 0.794552, 0.000668732, 1, 0.00070192, -0.794552, 0.000957546, -0.607196, -3.88239, -2.14008, -221.371)
@@ -6617,6 +6652,8 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin2" to="MainAct/Cave/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin2" to="MainAct/Cave/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/BlueMajin2" to="MainAct/Cave/EnemyStone3" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Cave/Spring" to="MainAct/Cave/Spring/Cam" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Cave/Spring" to="MainAct/Cave/Spring/Cam" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin1" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
