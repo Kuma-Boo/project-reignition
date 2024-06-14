@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="54_ay5i2"]
 [ext_resource type="PackedScene" uid="uid://b8s2qjmlhu5tc" path="res://object/stage/common/ThornSpring.tscn" id="55_3vfss"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="56_7lmmf"]
+[ext_resource type="Resource" uid="uid://ekxc4e71eau4" path="res://area/2 dino jungle/act 1/camera/EndJumpPanelCam.tres" id="57_ywra7"]
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="58_fnmsc"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="59_fvrl3"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="60_jn18j"]
@@ -258,9 +259,6 @@ point_count = 2
 max_value = 1.5
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1.275), 3.0, 0.0, 0, 0]
 point_count = 2
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_co0c0"]
-size = Vector3(8, 15, 6)
 
 [node name="Stage" type="Node"]
 
@@ -5376,8 +5374,7 @@ transform = Transform3D(0.573577, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573577, 
 [node name="ItemBoxFlying1" parent="MainAct/Crossing" instance=ExtResource("37_8fetv")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 151, 2.5, -97)
 "Spawn Settings/Pickup Parent" = NodePath("RichRing")
-"Spawn Settings/Travel Time" = 1.5
-"Spawn Settings/Travel Height" = 3.0
+"Spawn Settings/Travel Height" = 1.0
 
 [node name="RichRing" parent="MainAct/Crossing/ItemBoxFlying1" instance=ExtResource("29_prhwm")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 3.05176e-05, -5.5, -7)
@@ -6337,9 +6334,14 @@ voiceKey = &""
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
 transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
 "Secondary Settings/Enabled" = false
-middleHeight = 4.0
+middleHeight = 2.0
 finalHeight = -12.0
 distance = 31.0
+
+[node name="Camera" type="Node3D" parent="MainAct/End/JumpPanel1"]
+script = ExtResource("27_dpcvf")
+transitionTime = 0.2
+settings = ExtResource("57_ywra7")
 
 [node name="Pearls4" type="Node3D" parent="MainAct/End"]
 transform = Transform3D(0.430322, 0, 0.902675, 0, 1, 0, -0.902675, 0, 0.430322, -50.744, 2.5, 14.9149)
@@ -6555,8 +6557,8 @@ transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 
 transform = Transform3D(-0.245476, 0, -0.969403, 0, 1, 0, 0.969403, 0, -0.245476, -99.6812, -17.7676, -32.0621)
 "Secondary Settings/Enabled" = false
 middleHeight = 5.0
-finalHeight = 3.0
-distance = 16.0
+finalHeight = 1.5
+distance = 15.0
 
 [node name="Catapult2" parent="MainAct/End" instance=ExtResource("60_jn18j")]
 transform = Transform3D(-0.309017, 0, -0.951057, 0, 1, 0, 0.951057, 0, -0.309017, -60.5261, -7.60001, -18.9193)
@@ -6568,10 +6570,11 @@ farMidHeight = 12.0
 farEndHeight = -11.3
 
 [node name="Goal" parent="MainAct/End" instance=ExtResource("68_wfrq5")]
-transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, -126.145, 20.1, -29.8315)
+transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, -126.145, 22.1, -29.8315)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
-shape = SubResource("BoxShape3D_co0c0")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000244141, 0, -4.00003)
+shape = SubResource("BoxShape3D_7im1x")
 
 [connection signal="Activated" from="Static/Trigger/Object/Apatos1/ActivateTrigger" to="Static/Collision/WallDinoOneWay" method="Deactivate"]
 [connection signal="JumpFinished" from="Static/Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Static/Collision/WallDinoOneWay" method="Activate"]
@@ -6609,6 +6612,8 @@ shape = SubResource("BoxShape3D_co0c0")
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatStartTrigger/Jump" to="MainAct/Cavern/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
+[connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
