@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=88 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -59,7 +59,13 @@
 [ext_resource type="Resource" uid="uid://dx4cl2qt7u36h" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="37_lloeo"]
 [ext_resource type="Resource" uid="uid://soypa8ekc0sw" path="res://area/2 dino jungle/act 1/camera/DinoCrossingFlyingPotCam.tres" id="38_j47cl"]
 [ext_resource type="Curve3D" uid="uid://ckrkmlgb0kqok" path="res://area/2 dino jungle/act 1/environment/path/CaveExitPath.tres" id="42_rkm8b"]
+[ext_resource type="Resource" uid="uid://bxeyvsitnxwk3" path="res://area/2 dino jungle/act 1/camera/SidleCam.tres" id="44_d1e8a"]
+[ext_resource type="Curve3D" uid="uid://bw5h3dppkx2um" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelEntrancePath.tres" id="56_hmb1c"]
+[ext_resource type="Curve3D" uid="uid://j6ibsm4rchko" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelMiddlePath.tres" id="57_h6v6r"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="58_vm1cj"]
+[ext_resource type="Curve3D" uid="uid://cl10lspkaiv7g" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelExitPath.tres" id="58_xpyy1"]
+[ext_resource type="Curve3D" uid="uid://cdgbys8rewlpn" path="res://area/2 dino jungle/act 1/environment/path/EndMiddleIslandPath.tres" id="59_mdw42"]
+[ext_resource type="Curve3D" uid="uid://ds1gfxyce2hww" path="res://area/2 dino jungle/act 1/environment/path/EndIslandPath.tres" id="60_xhla3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 2.5)
@@ -303,7 +309,7 @@ size = Vector3(38.0654, 52.6053, 56.8087)
 size = Vector3(53, 50, 60)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ppten"]
-size = Vector3(0, 0, 0)
+size = Vector3(6, 11, 6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1y700"]
 size = Vector3(25, 80, 15)
@@ -526,6 +532,8 @@ shape = SubResource("BoxShape3D_ibe76")
 
 [node name="DinoPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.409222, 0, 0.912434, 0, 1, 0, -0.912434, 0, 0.409222, -349.375, -256.515, -960.106)
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Path" type="Node3D" parent="Trigger/Path/DinoPath" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
@@ -535,14 +543,80 @@ path = NodePath("../../../../Path/DinoPath")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
-[node name="Endpath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.418596, 0, -0.908172, 0, 1, 0, 0.908172, 0, 0.418596, -635.723, -280.028, -1055.87)
+[node name="FeedingTunnelEntrancePath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.569939, 0, -0.821686, 0, 1, 0, 0.821686, 0, 0.569939, -628.743, -280.028, -1059.63)
+"Enter Mode" = 0
 
-[node name="Path" type="Node3D" parent="Trigger/Path/Endpath" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Trigger/Path/FeedingTunnelEntrancePath" node_paths=PackedStringArray("path")]
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/FeedingTunnelEntrancePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/FeedingTunnelEntrancePath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="FeedingTunnelMiddlePath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.946379, 0, 0.323058, 0, 1, 0, -0.323058, 0, -0.946379, -695.418, -277.028, -1085.61)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Path" type="Node3D" parent="Trigger/Path/FeedingTunnelMiddlePath" node_paths=PackedStringArray("path")]
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/FeedingTunnelMiddlePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/FeedingTunnelMiddlePath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="FeedingTunnelExitPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.984028, 0, -0.178012, 0, 1, 0, 0.178012, 0, 0.984028, -643.153, -265.601, -1066.8)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Path" type="Node3D" parent="Trigger/Path/FeedingTunnelExitPath" node_paths=PackedStringArray("path")]
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/FeedingTunnelExitPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/FeedingTunnelExitPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="EndMiddleIslandPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.373927, 0, -0.927458, 0, 1, 0, 0.927458, 0, -0.373927, -764.907, -245.575, -1046.4)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Path" type="Node3D" parent="Trigger/Path/EndMiddleIslandPath" node_paths=PackedStringArray("path")]
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/EndMiddleIslandPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndMiddleIslandPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="EndIslandPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.33946, 0, -0.94062, 0, 1, 0, 0.94062, 0, -0.33946, -808.64, -269.575, -1094.12)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Path" type="Node3D" parent="Trigger/Path/EndIslandPath" node_paths=PackedStringArray("path")]
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/EndIslandPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndIslandPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="EndPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.170966, 0, -0.985276, 0, 1, 0, 0.985276, 0, -0.170966, -853.784, -277.228, -1106.86)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Path" type="Node3D" parent="Trigger/Path/EndPath" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
 path = NodePath("../../../../Path/EndPath")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Endpath"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
@@ -928,18 +1002,26 @@ lockoutData = ExtResource("24_0y0cf")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/EndRecenterTrigger"]
 shape = SubResource("BoxShape3D_1o6c3")
 
-[node name="Sidle Triggers" parent="Trigger/Object" instance=ExtResource("15_86eng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -652.103, -276.914, -1057.32)
+[node name="SidleTrigger" parent="Trigger/Object" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.389108, 0, -0.921192, 0, 1, 0, 0.921192, 0, 0.389108, -652.119, -276.959, -1057.08)
 script = ExtResource("25_sf384")
-isFacingRight = true
+isFacingRight = false
 lockout = ExtResource("26_dq6cl")
 
-[node name="Path" type="Node3D" parent="Trigger/Object/Sidle Triggers" node_paths=PackedStringArray("path")]
-script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/EndPath")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000610352, 3, 1.35001)
+shape = SubResource("BoxShape3D_ppten")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Sidle Triggers"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.258301, 3, 16.3159)
+shape = SubResource("BoxShape3D_ppten")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -10.9794, 3, 30.7729)
+shape = SubResource("BoxShape3D_ppten")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(-0.15302, 0, -0.988223, 0, 1, 0, 0.988223, 0, -0.15302, -28.597, 3, 33.2859)
 shape = SubResource("BoxShape3D_ppten")
 
 [node name="Camera" type="Node3D" parent="Trigger"]
@@ -1106,6 +1188,36 @@ previousSettings = ExtResource("36_hewn5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_1y700")
 
+[node name="SidleCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.0993197, 0, -0.995056, 0, 1, 0, 0.995056, 0, -0.0993197, -649.659, -277.297, -1057.45)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/SidleCam"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("44_d1e8a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SidleCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="FeedingTunnelCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.981084, 0, -0.193584, 0, 1, 0, 0.193584, 0, -0.981084, -695.334, -277.008, -1076.39)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/FeedingTunnelCam"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("37_lloeo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FeedingTunnelCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
 [node name="Reflection" type="Node3D" parent="Trigger"]
 
 [node name="LowerReflection" parent="Trigger/Reflection" instance=ExtResource("15_86eng")]
@@ -1174,8 +1286,28 @@ use_model_front = true
 cubic_interp = false
 loop = false
 
-[node name="EndPath" type="Path3D" parent="Path"]
+[node name="FeedingTunnelEntrancePath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -619.189, -280.996, -1071.37)
+curve = ExtResource("56_hmb1c")
+
+[node name="FeedingTunnelMiddlePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -695.305, -273.09, -1076.24)
+curve = ExtResource("57_h6v6r")
+
+[node name="FeedingTunnelExitPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -642.422, -265.596, -1075.18)
+curve = ExtResource("58_xpyy1")
+
+[node name="EndMiddleIslandPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -757.914, -259.802, -1043.49)
+curve = ExtResource("59_mdw42")
+
+[node name="EndIslandPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -803.328, -279.996, -1092.31)
+curve = ExtResource("60_xhla3")
+
+[node name="EndPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -834.995, -277.225, -1103.48)
 curve = ExtResource("23_d4n23")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -1229,11 +1361,10 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger" to="Collision/WallDinoOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
+[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/LeftPathEvent" to="Trigger/Object/Apatos2/LeftPathEvent/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/RightPathEvent" to="Trigger/Object/Apatos2/RightPathEvent/Path" method="Activate"]
-[connection signal="Activated" from="Trigger/Object/Sidle Triggers" to="Trigger/Object/Sidle Triggers/Path" method="Activate"]
 
 [editable path="Collision"]
 [editable path="Trigger/Object/Apatos1/DinoApatos"]

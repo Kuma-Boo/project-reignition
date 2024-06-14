@@ -269,14 +269,8 @@ Data = ExtResource("2_p4x35")
 InitialCameraSettings = ExtResource("3_p8ttf")
 metadata/_edit_group_ = true
 
-[node name="05Crossing" parent="Static/Visuals" index="5"]
+[node name="08FeedingTunnel" parent="Static/Visuals" index="8"]
 startEnabled = true
-
-[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
-transform = Transform3D(-4.37112e-08, 0, 0.999995, 0, 0.999995, 0, -0.999996, 0, -4.37112e-08, 0, 0, 0)
-
-[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
-transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -305,7 +299,7 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
-transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, -433.528, -264.9, -917.74)
+transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, -634.508, -279.9, -1055.54)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -6123,7 +6117,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.849742, 0, -3.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5.4)
 
 [node name="Spring2" parent="MainAct/FeedingTunnel" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(0.987538, 0, -0.157383, 0, 1, 0, 0.157383, 0, 0.987538, 27.7892, 7.70001, 5.94324)
+transform = Transform3D(0.991681, 0, -0.128727, 0, 1, 0, 0.128727, 0, 0.991681, 27.6848, 7.70001, 5.92664)
 "Secondary Settings/Enabled" = false
 finalHeight = 5.0
 voiceKey = &""
@@ -6335,7 +6329,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19249e-08, -1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, -0.707107, 0)
 
 [node name="Spring" parent="MainAct/End" instance=ExtResource("48_p6m4r")]
-transform = Transform3D(-0.725386, 0, 0.688342, 0, 1, 0, -0.688342, 0, -0.725386, -18, -7.70001, 17)
+transform = Transform3D(0.744929, 0, -0.667144, 0, 1, 0, 0.667144, 0, 0.744929, -18.0754, -7.70001, 16.9222)
 "Secondary Settings/Enabled" = false
 finalHeight = 5.0
 voiceKey = &""
@@ -6579,6 +6573,8 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
 shape = SubResource("BoxShape3D_co0c0")
 
+[connection signal="Activated" from="Static/Trigger/Object/Apatos1/ActivateTrigger" to="Static/Collision/WallDinoOneWay" method="Deactivate"]
+[connection signal="JumpFinished" from="Static/Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Static/Collision/WallDinoOneWay" method="Activate"]
 [connection signal="Activated" from="MainAct/DialogTrigger/TrioStartTrigger" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Activate"]
 [connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Despawn"]
