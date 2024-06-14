@@ -269,6 +269,9 @@ Data = ExtResource("2_p4x35")
 InitialCameraSettings = ExtResource("3_p8ttf")
 metadata/_edit_group_ = true
 
+[node name="Collision" parent="Static" index="0"]
+visible = true
+
 [node name="03Cave" parent="Static/Visuals" index="3"]
 startEnabled = true
 
@@ -5402,9 +5405,11 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 3.05176e
 
 [node name="FlowerMajin1" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 124, -12, -184)
+disableAttacking = true
 
 [node name="FlowerMajin2" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 113.67, -12, -176.108)
+disableAttacking = true
 
 [node name="FlowerMajinMover" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 103.23, -12, -179.588)
@@ -6589,6 +6594,8 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
 shape = SubResource("BoxShape3D_co0c0")
 
+[connection signal="Activated" from="Static/Trigger/Object/Apatos1/ActivateTrigger" to="Static/Collision/WallDinoOneWay" method="Deactivate"]
+[connection signal="JumpFinished" from="Static/Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Static/Collision/WallDinoOneWay" method="Activate"]
 [connection signal="Activated" from="MainAct/DialogTrigger/TrioStartTrigger" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Activate"]
 [connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Despawn"]
