@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=82 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -15,7 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://bjgna8b7y1tha" path="res://area/2 dino jungle/act 1/environment/09Scenery.tscn" id="13_53845"]
 [ext_resource type="Curve3D" uid="uid://b66albso17hxt" path="res://area/2 dino jungle/act 1/environment/path/ChasePath.tres" id="13_yh5pu"]
 [ext_resource type="Curve3D" uid="uid://b057uqculv71i" path="res://area/2 dino jungle/act 1/environment/path/RiverPath.tres" id="14_0jylt"]
+[ext_resource type="PackedScene" uid="uid://cv8wawfkxffx" path="res://area/2 dino jungle/data/skybox/Skybox.tscn" id="14_jkuak"]
 [ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="14_lokxv"]
+[ext_resource type="PackedScene" uid="uid://co2akledxygt2" path="res://effect/sun/Sun.tscn" id="14_tj504"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="15_1ew2u"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="15_86eng"]
 [ext_resource type="Curve3D" uid="uid://bec8e0k0w0tiy" path="res://area/2 dino jungle/act 1/environment/path/DinoPath.tres" id="16_smtuj"]
@@ -57,6 +59,7 @@
 [ext_resource type="Resource" uid="uid://dx4cl2qt7u36h" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="37_lloeo"]
 [ext_resource type="Resource" uid="uid://soypa8ekc0sw" path="res://area/2 dino jungle/act 1/camera/DinoCrossingFlyingPotCam.tres" id="38_j47cl"]
 [ext_resource type="Curve3D" uid="uid://ckrkmlgb0kqok" path="res://area/2 dino jungle/act 1/environment/path/CaveExitPath.tres" id="42_rkm8b"]
+[ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="58_vm1cj"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 2.5)
@@ -480,6 +483,11 @@ startEnabled = true
 [node name="09End" parent="Visuals" instance=ExtResource("12_lr60q")]
 
 [node name="09Scenery" parent="Visuals" instance=ExtResource("13_53845")]
+
+[node name="Skybox" parent="Visuals" instance=ExtResource("14_jkuak")]
+
+[node name="Sun" parent="Visuals/Skybox" instance=ExtResource("14_tj504")]
+transform = Transform3D(0.380209, -0.775037, -0.504736, -0.0410142, 0.531054, -0.846345, 0.923991, 0.34249, 0.170124, 883.765, 303.007, -1278.92)
 
 [node name="Trigger" type="Node3D" parent="."]
 
@@ -1175,6 +1183,8 @@ environment = ExtResource("4_gsi68")
 
 [node name="BGM" parent="." instance=ExtResource("36_8otvo")]
 
+[node name="DepthRenderer" parent="." instance=ExtResource("58_vm1cj")]
+
 [node name="PlanarReflectionRenderer" parent="." instance=ExtResource("35_c15gk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -310, -237, -718)
 reflectionMaterials = [ExtResource("36_7bv1x")]
@@ -1219,8 +1229,8 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger" to="Collision/WallDinoOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
+[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/LeftPathEvent" to="Trigger/Object/Apatos2/LeftPathEvent/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/RightPathEvent" to="Trigger/Object/Apatos2/RightPathEvent/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Sidle Triggers" to="Trigger/Object/Sidle Triggers/Path" method="Activate"]
