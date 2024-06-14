@@ -317,6 +317,7 @@ public partial class SidleTrigger : Area3D
 
 		isInteractingWithPlayer = false;
 		Character.RemoveLockoutData(lockout);
+		Character.Skills.IsSpeedBreakEnabled = true; // Re-enable speed break
 
 		StopSidle();
 		EmitSignal(SignalName.Deactivated); // Deactivate signals
