@@ -1,6 +1,7 @@
-[gd_scene load_steps=107 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=108 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
+[ext_resource type="Resource" uid="uid://covb6cdfu44gv" path="res://area/2 dino jungle/act 1/camera/ChaseStartCam.tres" id="3_51j1g"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
 [ext_resource type="Resource" uid="uid://dx4cl2qt7u36h" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="3_p8ttf"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="4_1j3qj"]
@@ -271,7 +272,7 @@ point_count = 2
 
 [node name="Static" parent="." instance=ExtResource("69_kptet")]
 Data = ExtResource("2_p4x35")
-InitialCameraSettings = ExtResource("3_p8ttf")
+InitialCameraSettings = ExtResource("3_51j1g")
 metadata/_edit_group_ = true
 
 [node name="02River" parent="Static/Visuals" index="2"]
@@ -300,12 +301,6 @@ startEnabled = true
 
 [node name="09Scenery" parent="Static/Visuals" index="10"]
 startEnabled = true
-
-[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-
-[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
-transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -460,59 +455,63 @@ transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="DialogTrigger" type="Node3D" parent="MainAct"]
-
-[node name="TrioStartTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioStartTrigger"]
-script = ExtResource("7_ys7sj")
-delays = []
-textKeys = ["din_event_trio_so", "din_event_trio_sh", "din_event_trio2_so", "din_event_trio2_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioStartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="TrioTutorialTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -1.03775, -331.724)
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioTutorialTrigger"]
-script = ExtResource("7_ys7sj")
-textKeys = ["din_tutorial_trio_so", "din_tutorial_trio_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioTutorialTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="TrioEndTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/TrioEndTrigger"]
-script = ExtResource("7_ys7sj")
-textKeys = ["din_event_trio3_so", "din_event_trio3_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/TrioEndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="CaveSplitTrigger" parent="MainAct/DialogTrigger" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTrigger/CaveSplitTrigger"]
-script = ExtResource("7_ys7sj")
-textKeys = ["din_split_sh", "din_split_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTrigger/CaveSplitTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
 [node name="Chase" type="Node3D" parent="MainAct"]
 script = ExtResource("9_uj3dw")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Dinos" type="Node3D" parent="MainAct/Chase"]
+
+[node name="DinoTriggers" type="Node3D" parent="MainAct/Chase/Dinos"]
+
+[node name="TrioStartTrigger" parent="MainAct/Chase/Dinos/DinoTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
+monitoring = false
+OneShot = true
+"Respawn Mode" = 2
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Chase/Dinos/DinoTriggers/TrioStartTrigger"]
+script = ExtResource("7_ys7sj")
+delays = []
+textKeys = ["din_event_trio_so", "din_event_trio_sh", "din_event_trio2_so", "din_event_trio2_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Chase/Dinos/DinoTriggers/TrioStartTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="TrioTutorialTrigger" parent="MainAct/Chase/Dinos/DinoTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -1.03775, -331.724)
+
+[node name="Dialog" type="Node3D" parent="MainAct/Chase/Dinos/DinoTriggers/TrioTutorialTrigger"]
+script = ExtResource("7_ys7sj")
+textKeys = ["din_tutorial_trio_so", "din_tutorial_trio_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Chase/Dinos/DinoTriggers/TrioTutorialTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="TrioEndTrigger" parent="MainAct/Chase/Dinos/DinoTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
+
+[node name="Dialog" type="Node3D" parent="MainAct/Chase/Dinos/DinoTriggers/TrioEndTrigger"]
+script = ExtResource("7_ys7sj")
+textKeys = ["din_event_trio3_so", "din_event_trio3_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Chase/Dinos/DinoTriggers/TrioEndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="CaveSplitTrigger" parent="MainAct/Chase/Dinos/DinoTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
+
+[node name="Dialog" type="Node3D" parent="MainAct/Chase/Dinos/DinoTriggers/CaveSplitTrigger"]
+script = ExtResource("7_ys7sj")
+textKeys = ["din_split_sh", "din_split_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Chase/Dinos/DinoTriggers/CaveSplitTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
 
 [node name="DinoTrioGroup" parent="MainAct/Chase/Dinos" instance=ExtResource("10_3r4lq")]
 
@@ -6798,7 +6797,7 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Deactivated" from="MainAct/CullingMap/End-L" to="MainAct/End" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Activate"]
-[connection signal="Activated" from="MainAct/DialogTrigger/TrioStartTrigger" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Activate"]
+[connection signal="Activated" from="MainAct/Chase/Dinos/DinoTriggers/TrioStartTrigger" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Activate"]
 [connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/RiverEvent/FallLockout" to="MainAct/River/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/River/Boat" to="MainAct/River/Boat/Path" method="Activate"]
