@@ -63,16 +63,16 @@ namespace Project.Interface
 				if (button == null && motion == null) return;
 				buttonLabel.Visible = false;
 
+				int controllerIndex = (int)Runtime.Instance.GetActiveControllerType() - 1;
+
 				if (motion == null)
 				{
-					buttonTextureRect.Texture = controllerResources[(int)SaveManager.Config.controllerType].buttons[(int)button.ButtonIndex];
+					buttonTextureRect.Texture = controllerResources[controllerIndex].buttons[(int)button.ButtonIndex];
 					return;
 				}
 
-				int axis = (int)motion.Axis;
-				axis = (axis * 2) + Mathf.Clamp(Mathf.RoundToInt(motion.AxisValue), 0, 1);
-
-				buttonTextureRect.Texture = controllerResources[(int)SaveManager.Config.controllerType].axis[axis];
+				int axis = Runtime.Instance.ControllerAxisToIndex(motion);
+				buttonTextureRect.Texture = controllerResources[controllerIndex].axis[axis];
 				return;
 			}
 
