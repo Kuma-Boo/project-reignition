@@ -24,7 +24,6 @@ namespace Project.Gameplay
 
 			SetUpStats();
 			SetUpSkills();
-			Character.Stage.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.DisableBreakSkills));
 		}
 
 		#region Stats
@@ -182,8 +181,6 @@ namespace Project.Gameplay
 		private const float SATURATION_ADJUSTMENT_SPEED = 10.0f;
 		private void UpdateTimeBreak()
 		{
-			if (!Character.Stage.IsLevelIngame) return;
-
 			// Update timebreak satutration visuals
 			float targetSaturation = IsTimeBreakActive ? 0.2f : StageSettings.instance.StartingSaturation;
 			StageSettings.instance.Environment.Environment.AdjustmentSaturation =
@@ -220,8 +217,6 @@ namespace Project.Gameplay
 
 		private void UpdateSpeedBreak()
 		{
-			if (!Character.Stage.IsLevelIngame) return;
-
 			if (IsSpeedBreakActive)
 			{
 				if (Mathf.IsZeroApprox(breakTimer))
@@ -325,7 +320,6 @@ namespace Project.Gameplay
 		}
 
 		public void DisableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = false;
-
 
 		public int SoulPower { get; private set; } // Current soul power
 		private int maxSoulPower; // Calculated on start
