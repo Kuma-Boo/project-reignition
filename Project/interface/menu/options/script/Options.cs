@@ -342,6 +342,9 @@ public partial class Options : Menu
 
 		switch (SaveManager.Config.controllerType)
 		{
+			case SaveManager.ControllerType.Automatic:
+				controlLabels[0].Text = "option_controller_auto";
+				break;
 			case SaveManager.ControllerType.PlayStation:
 				controlLabels[0].Text = "option_controller_ps";
 				break;
