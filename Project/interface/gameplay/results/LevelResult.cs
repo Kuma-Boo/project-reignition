@@ -66,15 +66,9 @@ namespace Project.Interface
 			score.Text = Stage.DisplayScore;
 			time.Text = Stage.DisplayTime;
 
-			int ringBonus = Stage.CurrentRingCount * 10;
-			ring.Text = ringBonus.ToString();
-
-			float technicalBonus = Stage.CalculateTechnicalBonus();
-			technical.Text = "x" + technicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
-
-			Stage.UpdateScore(Mathf.CeilToInt(ringBonus * technicalBonus), StageSettings.MathModeEnum.Add);
-			total.Text = Stage.DisplayScore;
-
+			ring.Text = Stage.RingBonus.ToString();
+			technical.Text = "x" + Stage.TechnicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
+			total.Text = Stage.TotalScore.ToString();
 
 			// Calculate rank AFTER tallying final score
 			int rank = Stage.CalculateRank();

@@ -1894,8 +1894,7 @@ namespace Project.Gameplay
 			ResetActionState();
 			// Disable everything
 			Lockon.IsMonitoring = false;
-			Skills.IsTimeBreakEnabled = false;
-			Skills.IsSpeedBreakEnabled = false;
+			Skills.DisableBreakSkills();
 
 			if (Stage.LevelState == StageSettings.LevelStateEnum.Failed || Stage.Data.CompletionLockout == null)
 				AddLockoutData(Runtime.Instance.StopLockout);

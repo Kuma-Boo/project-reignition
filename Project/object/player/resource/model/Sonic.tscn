@@ -350,9 +350,10 @@ animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
-[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot") instance=ExtResource("3_5mek6")]
+[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot", "stepEmitters") instance=ExtResource("3_5mek6")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot/SoleOffset")
 leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot/SoleOffset")
+stepEmitters = [NodePath("VFX/StepFX/PavementStepParticle"), NodePath("VFX/StepFX/SandStepParticle"), null, null, null, null, NodePath("VFX/StepFX/WaterStepParticle")]
 
 [node name="TeleportFX" type="Node3D" parent="Effect" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -548,13 +549,6 @@ settings = ExtResource("11_ihqo8")
 [node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 active = false
 callback_mode_process = 0
-libraries = {
-"": SubResource("AnimationLibrary_6smkh"),
-"ActionLibrary": ExtResource("5_21j6r"),
-"BalanceLibrary": ExtResource("5_a0jad"),
-"EventLibrary": ExtResource("8_7bg0r"),
-"SidleLibrary": ExtResource("6_pf4ty")
-}
 tree_root = ExtResource("8_sfnih")
 anim_player = NodePath("../AnimationPlayer")
 parameters/air_tree/backflip_trigger/active = false

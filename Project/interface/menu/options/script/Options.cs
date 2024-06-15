@@ -6,13 +6,15 @@ namespace Project.Interface.Menus;
 
 public partial class Options : Menu
 {
-	[Export] private Control cursor;
-	[Export] private AnimationPlayer cursorAnimator;
-	[Export] private Control contentContainer;
+	[Export]
+	private Control cursor;
+	[Export]
+	private AnimationPlayer cursorAnimator;
+	[Export]
+	private Control contentContainer;
 
 	private int maxSelection;
 	private int scrollOffset;
-
 	private void CalculateMaxSelection()
 	{
 		// Recalculate max selection
@@ -46,12 +48,11 @@ public partial class Options : Menu
 	public static readonly StringName MENU_PARAMETER = "menu_texture";
 
 	private Submenus currentSubmenu = Submenus.Options;
-
 	private enum Submenus
 	{
 		Options, // Main menu
 		Video, // Menu for configuring video settings
-		Audio, // Menu for configuring audio volume
+		Audio,  // Menu for configuring audio volume
 		Language, // Menu for localization and language
 		Control, // Menu for configuring general control settings
 		Mapping, // Control submenu for configuring input mappings
@@ -68,15 +69,13 @@ public partial class Options : Menu
 		DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 	}
 
-	public override void _ExitTree() =>
-		DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
+	public override void _ExitTree() => DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 
 	private void ToggleFullscreen()
 	{
 		UpdateLabels();
 		DisableProcessing();
-		GetTree().CreateTimer(0.1, true, false, true)
-			.Connect(SceneTreeTimer.SignalName.Timeout, new(this, MethodName.EnableProcessing));
+		GetTree().CreateTimer(0.1, true, false, true).Connect(SceneTreeTimer.SignalName.Timeout, new(this, MethodName.EnableProcessing));
 	}
 
 	private void FlipBook(Submenus submenu, bool flipRight, int selection)
@@ -102,18 +101,17 @@ public partial class Options : Menu
 			CallDeferred(MethodName.UpdatePlayerPosition);
 	}
 
-	[Export] private Node3D lockNode;
+	[Export]
+	private Node3D lockNode;
 	private bool isPlayerLocked;
 	private void LockPlayer() => isPlayerLocked = true;
 	private void UnlockPlayer() => isPlayerLocked = false;
-
 	private void UpdatePlayerPosition()
 	{
 		CharacterController character = CharacterController.instance;
 
 		Vector3 lockPosition = character.GlobalPosition;
-		lockPosition.X =
-			Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
+		lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
 		lockPosition.Z = lockNode.GlobalPosition.Z;
 		character.GlobalPosition = lockPosition;
 	}
@@ -196,9 +194,12 @@ public partial class Options : Menu
 			UnlockPlayer();
 			animator.Play("test_end");
 			currentSubmenu = Submenus.Control;
+			CharacterController.instance.Skills.DisableBreakSkills();
 		}
 		else
+		{
 			Confirm();
+		}
 	}
 
 
@@ -207,8 +208,7 @@ public partial class Options : Menu
 		if (currentSubmenu == Submenus.Test)
 			return;
 
-		if (currentSubmenu == Submenus.Mapping &&
-		    !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
+		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
 			return;
 
 		if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down")))
@@ -229,10 +229,10 @@ public partial class Options : Menu
 	}
 
 
-	[Export] private Control scrollBar;
+	[Export]
+	private Control scrollBar;
 	private Vector2 scrollBarVelocity;
 	private const float scrollBarSmoothing = .2f;
-
 	private void UpdateScrolling(bool snap = false)
 	{
 		// Reset scroll
@@ -255,8 +255,7 @@ public partial class Options : Menu
 			scrollBar.Position = targetPosition;
 		}
 		else
-			scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, targetPosition, ref scrollBarVelocity,
-				scrollBarSmoothing);
+			scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
 	}
 
 
@@ -280,10 +279,14 @@ public partial class Options : Menu
 	}
 
 
-	[Export] private Label[] videoLabels;
-	[Export] private Label[] audioLabels;
-	[Export] private Label[] languageLabels;
-	[Export] private Label[] controlLabels;
+	[Export]
+	private Label[] videoLabels;
+	[Export]
+	private Label[] audioLabels;
+	[Export]
+	private Label[] languageLabels;
+	[Export]
+	private Label[] controlLabels;
 	private string ENABLED_STRING = "option_enable";
 	private string DISABLED_STRING = "option_disable";
 	private string LOW_STRING = "option_low";
@@ -293,15 +296,12 @@ public partial class Options : Menu
 	private string FULLSCREEN_STRING = "option_fullscreen";
 	private string FULLSCREEN_NORMAL_STRING = "option_normal_fullscreen";
 	private string FULLSCREEN_EXCLUSIVE_STRING = "option_exclusive_fullscreen";
-
 	private void UpdateLabels()
 	{
 		Vector2I resolution = SaveManager.WINDOW_SIZES[SaveManager.Config.windowSize];
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
 		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
-		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen
-			? FULLSCREEN_EXCLUSIVE_STRING
-			: FULLSCREEN_NORMAL_STRING;
+		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
 		videoLabels[3].Text = SaveManager.Config.useVsync ? ENABLED_STRING : DISABLED_STRING;
 		videoLabels[4].Text = $"{SaveManager.Config.renderScale}%";
 		videoLabels[5].Text = SaveManager.Config.resizeMode.ToString();
@@ -323,7 +323,6 @@ public partial class Options : Menu
 				videoLabels[6].Text = "8x MSAA";
 				break;
 		}
-
 		videoLabels[7].Text = SaveManager.Config.useHDBloom ? HIGH_STRING : LOW_STRING;
 
 		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.DISABLED)
@@ -339,15 +338,10 @@ public partial class Options : Menu
 		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MUTE_STRING : $"{SaveManager.Config.voiceVolume}%";
 
 		languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? ENABLED_STRING : DISABLED_STRING;
-		languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English
-			? "lang_en"
-			: "lang_ja";
+		languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
 
 		switch (SaveManager.Config.controllerType)
 		{
-			case SaveManager.ControllerType.Automatic:
-				controlLabels[0].Text = "option_controller_auto";
-				break;
 			case SaveManager.ControllerType.PlayStation:
 				controlLabels[0].Text = "option_controller_ps";
 				break;
@@ -382,8 +376,8 @@ public partial class Options : Menu
 	}
 
 
-	[Export] private ControlOption[] controlMappingOptions;
-
+	[Export]
+	private ControlOption[] controlMappingOptions;
 	private void SetUpControlOptions()
 	{
 		foreach (ControlOption controlOption in controlMappingOptions)
@@ -403,7 +397,7 @@ public partial class Options : Menu
 
 		foreach (ControlOption controlOption in controlMappingOptions)
 		{
-			if (controlOption.InputId == id)
+			if (controlOption.inputID == id)
 				controlOption.ReceiveInput(e, true);
 		}
 	}
@@ -448,8 +442,7 @@ public partial class Options : Menu
 			if (DisplayServer.GetScreenCount() <= 1)
 				return false;
 
-			SaveManager.Config.targetDisplay = WrapSelection(SaveManager.Config.targetDisplay + direction,
-				DisplayServer.GetScreenCount());
+			SaveManager.Config.targetDisplay = WrapSelection(SaveManager.Config.targetDisplay + direction, DisplayServer.GetScreenCount());
 		}
 		else if (VerticalSelection == 1)
 		{
@@ -508,8 +501,7 @@ public partial class Options : Menu
 		else if (VerticalSelection == 9)
 		{
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
-			postProcessingQuality =
-				WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.COUNT);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
 			StageSettings.instance.UpdatePostProcessingStatus();
 		}
@@ -577,9 +569,7 @@ public partial class Options : Menu
 	}
 
 	private int SlideVolume(int current, int direction) => Mathf.Clamp(current + direction * 5, 0, 100);
-
-	private bool IsSlideVolumeValid(int current, int direction) =>
-		(current > 0 && direction == -1) || (current < 100 && direction == 1);
+	private bool IsSlideVolumeValid(int current, int direction) => (current > 0 && direction == -1) || (current < 100 && direction == 1);
 
 
 	private bool SlideLanguageOption(int direction)
@@ -592,16 +582,14 @@ public partial class Options : Menu
 
 		if (VerticalSelection == 1)
 		{
-			int lang = WrapSelection((int)SaveManager.Config.textLanguage + direction,
-				(int)SaveManager.TextLanguage.Count);
+			int lang = WrapSelection((int)SaveManager.Config.textLanguage + direction, (int)SaveManager.TextLanguage.Count);
 			SaveManager.Config.textLanguage = (SaveManager.TextLanguage)lang;
 			return true;
 		}
 
 		if (VerticalSelection == 2)
 		{
-			int lang = WrapSelection((int)SaveManager.Config.voiceLanguage + direction,
-				(int)SaveManager.VoiceLanguage.Count);
+			int lang = WrapSelection((int)SaveManager.Config.voiceLanguage + direction, (int)SaveManager.VoiceLanguage.Count);
 			SaveManager.Config.voiceLanguage = (SaveManager.VoiceLanguage)lang;
 			return true;
 		}
@@ -614,8 +602,7 @@ public partial class Options : Menu
 	{
 		if (VerticalSelection == 0)
 		{
-			int type = WrapSelection((int)SaveManager.Config.controllerType + direction,
-				(int)SaveManager.ControllerType.Count);
+			int type = WrapSelection((int)SaveManager.Config.controllerType + direction, (int)SaveManager.ControllerType.Count);
 			SaveManager.Config.controllerType = (SaveManager.ControllerType)type;
 			return true;
 		}
@@ -682,9 +669,10 @@ public partial class Options : Menu
 	}
 
 
-	private void CancelSFX()
-	{
-		animator.Play("cancel");
-		animator.Advance(0.0);
+		private void CancelSFX()
+		{
+			animator.Play("cancel");
+			animator.Advance(0.0);
+		}
 	}
 }
