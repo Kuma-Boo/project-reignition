@@ -397,7 +397,7 @@ public partial class Options : Menu
 
 		foreach (ControlOption controlOption in controlMappingOptions)
 		{
-			if (controlOption.inputID == id)
+			if (controlOption.InputId == id)
 				controlOption.ReceiveInput(e, true);
 		}
 	}
@@ -669,10 +669,9 @@ public partial class Options : Menu
 	}
 
 
-		private void CancelSFX()
-		{
-			animator.Play("cancel");
-			animator.Advance(0.0);
-		}
+	private void CancelSFX()
+	{
+		animator.Play("cancel");
+		animator.Advance(0.0);
 	}
 }
