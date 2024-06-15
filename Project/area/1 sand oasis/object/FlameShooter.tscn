@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dnfwvf2akhf1v"]
+[gd_scene load_steps=20 format=3 uid="uid://dnfwvf2akhf1v"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
 [ext_resource type="PackedScene" uid="uid://b1tirama0dt1b" path="res://area/1 sand oasis/object/model/FlameShooter.gltf" id="1_wwv3q"]
@@ -7,7 +7,8 @@
 [ext_resource type="Material" uid="uid://c640g0eqwoeu3" path="res://area/1 sand oasis/data/material/Flame Shooter Explosion Process Material.tres" id="5_el5o5"]
 [ext_resource type="AudioStream" uid="uid://bs3ovsaon27bd" path="res://sound/sfx/objects/flame shooter.wav" id="5_kt73t"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_76o3t"]
-[ext_resource type="Material" uid="uid://ct2vl8eygebn6" path="res://effect/particle/material/flame/Flame Explosion.tres" id="6_v848u"]
+[ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="6_lx0m3"]
+[ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="7_csnr6"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hqwbi"]
 radius = 0.4
@@ -26,8 +27,16 @@ material = ExtResource("4_yfx5b")
 size = Vector2(2, 4)
 center_offset = Vector3(0, 2, 0)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gx563"]
+render_priority = 0
+shader = ExtResource("6_lx0m3")
+shader_parameter/particles_anim_loop = false
+shader_parameter/particles_anim_h_frames = 4
+shader_parameter/particles_anim_v_frames = 4
+shader_parameter/albedo = ExtResource("7_csnr6")
+
 [sub_resource type="QuadMesh" id="QuadMesh_gcb82"]
-material = ExtResource("6_v848u")
+material = SubResource("ShaderMaterial_gx563")
 size = Vector2(2, 5)
 center_offset = Vector3(0, 2.5, 0)
 
