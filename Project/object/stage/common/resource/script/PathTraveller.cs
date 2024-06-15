@@ -215,10 +215,35 @@ public partial class PathTraveller : Node3D
 
 	private void TakeDamage()
 	{
-		currentSpeed = 0;
+		Deactivate();
 		isRespawning = true;
-		Character.StopExternal();
+
+		// Bump the player off
+		LaunchSettings launchSettings = LaunchSettings.Create(Character.GlobalPosition, Character.GlobalPosition, 2);
+		Character.StartLauncher(launchSettings);
+		Character.Effect.StartSpinFX();
+		Character.Animator.StartSpin(3.0f);
+		Character.Animator.ResetState(0.1f);
 	}
 
-	public void OnBodyEntered(PhysicsBody3D b) => TakeDamage();
+
+	private void Stagger()
+	{
+		currentSpeed = speedVelocity = 0;
+		currentTurnAmount = turnVelocity = Vector2.Zero;
+
+		// TODO Play stagger animation
+	}
+
+
+	public void OnBodyEntered(PhysicsBody3D b)
+	{
+		if (b.IsInGroup("stagger"))
+		{
+			Stagger();
+			return;
+		}
+
+		TakeDamage();
+	}
 }

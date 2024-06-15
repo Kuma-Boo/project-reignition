@@ -1,11 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://dumttajjtpqta"]
+[gd_scene load_steps=6 format=3 uid="uid://dumttajjtpqta"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_8cup1"]
 [ext_resource type="PackedScene" uid="uid://bpm4bnrc0twqf" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.gltf" id="1_wmk6n"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="3_4d2ap"]
+[ext_resource type="AudioStream" uid="uid://cbgfmexm35fhk" path="res://sound/sfx/stage/dinosaur jungle/event river.ogg" id="3_6r8nl"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="4_hjfi8"]
 
 [node name="RiverEvent" type="Node3D" node_paths=PackedStringArray("animator")]
 script = ExtResource("1_8cup1")
-"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Player Stand-in" = NodePath("PlayerBone/Player")
 "Player Event Settings/Animation" = &""
@@ -13,7 +16,7 @@ script = ExtResource("1_8cup1")
 "Player Event Settings/Position Smoothing" = 0.2
 "Player Event Settings/Normalize Exit Move Speed" = true
 "Player Event Settings/Exit Move Speed" = 0.0
-"Player Event Settings/Exit Vertical Speed" = 0.0
+"Player Event Settings/Exit Vertical Speed" = -15.0
 "Player Event Settings/Exit Lockout" = null
 animator = NodePath("RiverEvent/AnimationPlayer")
 
@@ -24,10 +27,13 @@ bones/2/rotation = Quaternion(-0.500022, 0.500026, 0.499982, -0.49997)
 bones/3/rotation = Quaternion(-0.500008, 0.500013, 0.49998, -0.499999)
 bones/4/rotation = Quaternion(-0.500011, 0.500015, 0.499995, -0.499978)
 bones/6/rotation = Quaternion(-0.500012, 0.500016, 0.500039, -0.499934)
-bones/8/rotation = Quaternion(-0.121753, 0.0432943, 0.00531587, 0.991602)
+bones/8/rotation = Quaternion(0.121753, -0.0432943, -0.00531587, -0.991601)
+
+[node name="AnimationPlayer" parent="RiverEvent" index="1"]
+callback_mode_process = 0
 
 [node name="PlayerBone" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.996195, -0.0210849, 0.0845668, 0, 0.970296, 0.241922, -0.0871557, -0.241001, 0.966603, 0.868011, 2.4655, 18.728)
+transform = Transform3D(0.996195, -0.0210849, 0.0845669, 9.31323e-10, 0.970296, 0.241922, -0.0871558, -0.241001, 0.966603, 0.868011, 2.4655, 18.728)
 bone_name = "player"
 bone_idx = 8
 use_external_skeleton = true
@@ -41,5 +47,19 @@ bone_name = "camera"
 bone_idx = 9
 use_external_skeleton = true
 external_skeleton = NodePath("../RiverEvent/RiverEventRoot/Skeleton3D")
+
+[node name="CameraReference" type="Camera3D" parent="Camera"]
+transform = Transform3D(0.656059, 0, 0.75471, 0, 1, 0, -0.75471, 0, 0.656059, 2.26413, 0, -2.03182)
+fov = 50.0
+script = ExtResource("3_4d2ap")
+deactivationTransitionTime = 0.5
+UpdateEveryFrame = true
+settings = ExtResource("4_hjfi8")
+
+[node name="RiverSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_6r8nl")
+bus = &"SFX"
+
+[connection signal="Activated" from="." to="Camera/CameraReference" method="Activate"]
 
 [editable path="RiverEvent"]

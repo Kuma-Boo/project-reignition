@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=107 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="7_ys7sj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uj3dw"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/run/StopLockout.tres" id="17_u5no3"]
 [ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
 [ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="26_qkiaj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="27_dpcvf"]
@@ -123,6 +124,9 @@ point_count = 2
 max_value = 2.0
 _data = [Vector2(0, 0), 0.0, 2.8, 0, 0, Vector2(1, 1.6), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8gxbx"]
+size = Vector3(20, 50, 12)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
 size = Vector3(15, 20, 2.5)
@@ -297,6 +301,12 @@ startEnabled = true
 [node name="09Scenery" parent="Static/Visuals" index="10"]
 startEnabled = true
 
+[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
+
 [node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
@@ -324,7 +334,7 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
-transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, -468.975, -277.083, -1122.92)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -359.235, -216, -620.45)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -1057,7 +1067,6 @@ transform = Transform3D(0.981169, 0.189745, 0.0361204, -0.190784, 0.981236, 0.02
 
 [node name="Cactus1" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.986439, 0.162872, 0.0202515, -0.16398, 0.983227, 0.0798492, -0.00690668, -0.0820873, 0.996601, -51.6225, -0.901849, -211.695)
-damagePlayer = false
 
 [node name="WhiteRock8" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(1.48354, 0.219769, 0.028383, -0.219607, 1.4838, -0.0104849, -0.0296127, 0.00621445, 1.4997, -50.9283, -0.724856, -213.382)
@@ -1926,26 +1935,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -9)
 
 [node name="Cactus2" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.41433, -0.499674, 0, 0.499674, 1.41433, 0, 0, 0, 1.5, -73.7417, -36.0369, -443.091)
-damagePlayer = false
 
 [node name="DashPanelM5" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(0.0115324, -0.287129, -0.957823, -0.038439, 0.957051, -0.28736, 0.999193, 0.0401318, 1.57217e-07, -77.4123, -37.3062, -438.572)
 
 [node name="Cactus3" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.40954, -0.51303, 0, 0.51303, 1.40954, 0, 0, 0, 1.5, -88.9136, -42.5119, -435.391)
-damagePlayer = false
 
 [node name="Cactus4" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.47721, -0.260472, 0, 0.260472, 1.47721, 0, 0, 0, 1.5, -103.707, -47.3672, -442.691)
-damagePlayer = false
 
 [node name="Cactus5" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 0, 0, 1, -110.731, -47.3976, -435.991)
-damagePlayer = false
 
 [node name="Cactus6" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.45827, 0.351364, 0, -0.351364, 1.45827, 0, 0, 0, 1.5, -118.988, -46.463, -439.691)
-damagePlayer = false
 
 [node name="RingsL5" type="Node3D" parent="MainAct/Chase"]
 transform = Transform3D(-0.00711997, 0.340309, 0.940287, 0.0506227, 0.939228, -0.339542, -0.998691, 0.0451824, -0.0239147, -129.205, -43.3476, -436.983)
@@ -2013,7 +2017,6 @@ transform = Transform3D(0.00712006, 0.340309, -0.940287, -0.0506227, 0.939228, 0
 
 [node name="Cactus7" parent="MainAct/Chase" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.943709, 0.330388, -0.0160431, -0.330777, 0.942598, -0.0457709, -9.00155e-10, 0.0485011, 0.998823, -147.693, -37.5155, -439.692)
-damagePlayer = false
 
 [node name="RingsM5" type="Node3D" parent="MainAct/Chase"]
 transform = Transform3D(0.989775, 0, -0.142629, 0, 1, 0, 0.142629, 0, 0.989776, -162.568, -32.5833, -439.512)
@@ -2062,7 +2065,7 @@ transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -14.0784, 1.6, -3.0
 [node name="RiverEvent" parent="MainAct" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193.347, -39.102, -495.023)
 OneShot = true
-"Respawn Mode" = 3
+"Respawn Mode" = 2
 "Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/RiverEvent"]
@@ -2071,6 +2074,21 @@ script = ExtResource("7_ys7sj")
 delays = [0.0, 0.4, 1.0, 0.0]
 displayLength = []
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
+
+[node name="FallLockout" parent="MainAct/RiverEvent" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9, -30, 4.20001)
+OneShot = true
+"Respawn Mode" = 2
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Lockout" type="Node3D" parent="MainAct/RiverEvent/FallLockout"]
+script = ExtResource("4_1j3qj")
+lockoutData = ExtResource("17_u5no3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/RiverEvent/FallLockout"]
+shape = SubResource("BoxShape3D_8gxbx")
 
 [node name="RiverEvent" parent="MainAct/RiverEvent" instance=ExtResource("19_rr5sk")]
 
@@ -2086,17 +2104,29 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Boat" parent="MainAct/River" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 9.795, 0, 4.20499)
+maxSpeed = 30.0
+bounds = Vector2(20, 0)
+autosetBounds = true
 path = NodePath("../../../Static/Path/RiverPath")
 pathFollower = NodePath("../../../Static/Path/RiverPath/RiverBoatPathFollower")
+
+[node name="Path" type="Node3D" parent="MainAct/River/Boat" node_paths=PackedStringArray("path")]
+script = ExtResource("27_l6k7w")
+path = NodePath("../../../../Static/Path/RiverPath")
+
+[node name="Cam" type="Node3D" parent="MainAct/River/Boat"]
+script = ExtResource("27_dpcvf")
+transitionTime = 0.5
+settings = ExtResource("56_fw8kb")
 
 [node name="JumpTrigger" parent="MainAct/River" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -173.5, -113.9, -101)
 
 [node name="Jump" type="Node3D" parent="MainAct/River/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.39999, -13.3, -26)
 script = ExtResource("45_bbxl7")
-
-[node name="Target" type="Node3D" parent="MainAct/River/JumpTrigger/Jump"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29999, -14, -26)
+jumpHeight = 3.0
+autoAlign = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/River/JumpTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -2586,10 +2616,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.06294, -3.16958, -6.56982)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.41518, -3.95882, -7.80725)
 
 [node name="WaterRock1" parent="MainAct/River" instance=ExtResource("46_88fdv")]
-transform = Transform3D(-1.73205, 0, -1, 0, 1, 0, 1, 0, -1.73205, 53.1148, -21.5575, -50.7377)
+transform = Transform3D(-1.73205, -0.17101, -0.939693, 0, 0.939693, -0.68404, 1, -0.296198, -1.62759, 53.1661, -21.8394, -50.6488)
 
 [node name="WaterRock2" parent="MainAct/River" instance=ExtResource("46_88fdv")]
-transform = Transform3D(-1, 0, 1.73205, 0, 1, 0, -1.73205, 0, -1, 44.1148, -22.2575, -44.1377)
+transform = Transform3D(-0.984808, -0.0868241, 1.73205, -0.347296, 0.984808, 1.49012e-08, -1.70574, -0.150384, -1, 44.1148, -22.2575, -44.1377)
 
 [node name="WaterRock3" parent="MainAct/River" instance=ExtResource("46_88fdv")]
 transform = Transform3D(-0.704769, 0, -0.256515, 0, 2, 0, 0.256515, 0, -0.704769, 33.9148, -25.9575, -50.8376)
@@ -2752,10 +2782,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
 
 [node name="WaterRock4" parent="MainAct/River" instance=ExtResource("46_88fdv")]
-transform = Transform3D(1.04953, -0.403689, -1.49888, 0.258749, 0.907995, -0.797014, 1.68272, 0.112163, 1.05742, 10.9148, -35.4765, -67.7045)
+transform = Transform3D(1.04953, -0.403689, -1.49888, 0.258749, 0.907995, -0.797014, 1.68272, 0.112163, 1.05742, 11.157, -36.0213, -67.7718)
 
 [node name="WaterRock5" parent="MainAct/River" instance=ExtResource("46_88fdv")]
-transform = Transform3D(-0.15798, -0.422618, 1.80572, -0.0736673, 0.906308, 0.84202, -1.99239, -2.54825e-09, -0.174312, 5.91483, -38.8765, -61.3376)
+transform = Transform3D(-0.15798, -0.422618, 1.80572, -0.0736673, 0.906308, 0.84202, -1.99239, -2.54825e-09, -0.174312, 6.1684, -39.4203, -61.3376)
 
 [node name="RingsL5" type="Node3D" parent="MainAct/River"]
 transform = Transform3D(-0.443443, -0.348788, 0.825654, -0.0201366, 0.924823, 0.379865, -0.896076, 0.151823, -0.41713, 0.505219, -41.6196, -60.5585)
@@ -2915,7 +2945,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
 [node name="WaterRock6" parent="MainAct/River" instance=ExtResource("46_88fdv")]
-transform = Transform3D(-0.962407, -0.271609, 0.00134374, -0.270508, 0.958038, -0.0948081, 0.0244634, -0.0916073, -0.995495, -20.501, -49.8272, -47.218)
+transform = Transform3D(-0.962407, -0.271609, 0.00134374, -0.270508, 0.958038, -0.0948081, 0.0244634, -0.0916073, -0.995495, -20.4738, -49.923, -47.2089)
 
 [node name="WaterRock7" parent="MainAct/River" instance=ExtResource("46_88fdv")]
 transform = Transform3D(0.929615, -0.271609, 0.24909, 0.236527, 0.958038, 0.16192, -0.282616, -0.0916074, 0.954849, -28.3787, -53.3342, -48.6542)
@@ -3383,7 +3413,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9753, -8.7365, -27.8247)
 transform = Transform3D(1.7583, -0.22807, -0.925402, -0.00110823, 1.9414, -0.480575, 0.953091, 0.42301, 1.70666, -99.2084, -78.4924, -74.8648)
 
 [node name="WaterRock10" parent="MainAct/River" instance=ExtResource("46_88fdv")]
-transform = Transform3D(0.740633, -0.150371, -1.83331, -0.066024, 0.984057, -0.349529, 1.85664, 0.0949789, 0.718896, -100.308, -79.7297, -65.8917)
+transform = Transform3D(0.740633, -0.150371, -1.83331, -0.066024, 0.984057, -0.349529, 1.85664, 0.0949789, 0.718896, -100.263, -80.0249, -65.9202)
 
 [node name="RingsM2" type="Node3D" parent="MainAct/River"]
 transform = Transform3D(-0.716874, -0.438976, 0.541656, -0.1915, 0.870994, 0.452435, -0.670387, 0.220611, -0.708457, -108.12, -81.4918, -64.783)
@@ -3904,7 +3934,7 @@ saveVisibilityOnCheckpoint = true
 [node name="LeftPath" type="Node3D" parent="MainAct/Cave"]
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Cave/LeftPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02095, -4)
+transform = Transform3D(0.988159, 0, 0.153434, 0, 1, 0, -0.153434, 0, 0.988159, 0.586121, 1.02095, -4.091)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
@@ -3934,7 +3964,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
 
 [node name="Cactus1" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.628754, 0.400009, -18.3753)
-damagePlayer = false
 
 [node name="PearlRing1" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(0.957434, -0.277653, 0.0789289, 0.278522, 0.96043, -1.16415e-10, -0.0758056, 0.0219834, 0.99688, 0.628754, 4.10001, -18.4753)
@@ -3979,7 +4008,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.970821, -0.705342, 0)
 
 [node name="Cactus2" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -5.73776, 1.33487, -25.7996)
-damagePlayer = false
 
 [node name="RingsM2" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(0.998935, 0.00683618, 0.0456384, 4.65661e-10, 0.988967, -0.148137, -0.0461476, 0.14798, 0.987913, -6.46436, 4.82309, -40.8811)
@@ -4009,11 +4037,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="Cactus3" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.00034, 6.46199, -60.1761)
-damagePlayer = false
 
 [node name="Cactus4" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.999919, 0.0126882, 0, -0.012672, 0.998645, -0.0504709, -0.000640385, 0.0504669, 0.998726, -10.5999, 6.75247, -63.0671)
-damagePlayer = false
 
 [node name="RingsM3" type="Node3D" parent="MainAct/Cave/LeftPath"]
 transform = Transform3D(0.731354, -0.0795692, 0.677341, 0, 0.993171, 0.116671, -0.681998, -0.0853276, 0.726359, -12.8338, 6.4501, -68.3223)
@@ -4163,11 +4189,9 @@ transform = Transform3D(3, 0, 0, 0, 2.4, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="Cactus5" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(1.89703, 0, 0.633448, 0, 2, 0, -0.633448, 0, 1.89703, -0.359802, 0.600006, -0.306458)
-damagePlayer = false
 
 [node name="Cactus6" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.993503, 0, -0.113811, 0, 1, 0, 0.113811, 0, 0.993503, 0.681458, 0.600006, 2.02728)
-damagePlayer = false
 
 [node name="Cage" parent="MainAct/Cave/LeftPath/CactusPlatform1" instance=ExtResource("52_oj3ef")]
 transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 3.87323, 1.75113, 0.182556)
@@ -4236,7 +4260,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
 
 [node name="Cactus7" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.822661, -7.77534e-10, -0.568534, -0.0086821, 0.999883, -0.0125629, 0.568467, 0.015271, 0.822565, -5.04477, 2.8972, -142.576)
-damagePlayer = false
 
 [node name="Ring2" parent="MainAct/Cave/LeftPath" instance=ExtResource("40_m082x")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, -0.244751, 6.3972, -140.676)
@@ -4284,7 +4307,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
 
 [node name="Cactus8" parent="MainAct/Cave/LeftPath" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.822661, -7.77534e-10, -0.568534, -0.0086821, 0.999883, -0.0125629, 0.568467, 0.015271, 0.822565, -0.344788, 2.8972, -140.776)
-damagePlayer = false
 
 [node name="RightPath" type="Node3D" parent="MainAct/Cave"]
 
@@ -4666,11 +4688,9 @@ transform = Transform3D(0.347296, 0, 1.96962, 0, 1.5, 0, -1.96962, 0, 0.347296, 
 
 [node name="Cactus1" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.196567, -0.443965, 1.09739, 0.0373772, 1.11418, 0.444066, -1.1832, -0.0385596, 0.196338, -32.7121, 2.32358, -184.101)
-damagePlayer = false
 
 [node name="Cactus2" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.261874, -0.76568, 1.82898, 0.223904, 1.84448, 0.740111, -1.9701, 0.10785, 0.32723, -41.0294, -1.87166, -180.198)
-damagePlayer = false
 
 [node name="WaterRock3" parent="MainAct/Cave" instance=ExtResource("46_88fdv")]
 transform = Transform3D(0.842181, -0.265909, 1.21244, 0.159256, 1.47621, 0.213137, -1.231, 0.00905932, 0.857059, -44.5937, -1.83867, -188.38)
@@ -4701,11 +4721,9 @@ transform = Transform3D(1.18177, 0, 0.208378, 0, 1.2, 0, -0.208378, 0, 1.18177, 
 
 [node name="Cactus3" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -78.4341, -1.84995, -188.173)
-damagePlayer = false
 
 [node name="Cactus4" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -79.6342, -1.24994, -190.373)
-damagePlayer = false
 
 [node name="Catapult" parent="MainAct/Cave" instance=ExtResource("60_jn18j")]
 transform = Transform3D(-0.990263, 0, 0.139225, 0, 1, 0, -0.139225, 0, -0.990263, -81.1916, 10.7501, -196.367)
@@ -4724,7 +4742,6 @@ disableEnvironmentCollision = false
 
 [node name="Cactus5" parent="MainAct/Cave" instance=ExtResource("43_4v8c0")]
 transform = Transform3D(0.981591, 0.0807556, 0.173081, -0.0795287, 0.996734, -0.0140231, -0.173648, 2.79397e-09, 0.984808, -78.6342, 2.58553, -209.373)
-damagePlayer = false
 
 [node name="GrassPillar3" parent="MainAct/Cave" instance=ExtResource("50_sikom")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -77.734, 0, -214.273)
@@ -5529,7 +5546,6 @@ path = NodePath("../../../Static/Path/BoatPath")
 pathFollower = NodePath("../../../Static/Path/BoatPath/CavernBoatPathFollower")
 
 [node name="Camera" type="Node3D" parent="MainAct/Cavern/Boat"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("27_dpcvf")
 transitionTime = 0.5
 settings = ExtResource("56_fw8kb")
@@ -6642,11 +6658,12 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000244141, 0, -4.00003)
 shape = SubResource("BoxShape3D_7im1x")
 
-[connection signal="Activated" from="Static/Trigger/Object/Apatos1/ActivateTrigger" to="Static/Collision/WallDinoOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Static/Collision/WallDinoOneWay" method="Activate"]
 [connection signal="Activated" from="MainAct/DialogTrigger/TrioStartTrigger" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Activate"]
 [connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/Chase/Dinos/DinoTrioGroup" method="Deactivate"]
-[connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Despawn"]
+[connection signal="Deactivated" from="MainAct/RiverEvent/FallLockout" to="MainAct/River/Boat" method="Activate"]
+[connection signal="Activated" from="MainAct/River/Boat" to="MainAct/River/Boat/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/River/Boat" to="MainAct/River/Boat/Cam" method="Activate"]
+[connection signal="Activated" from="MainAct/River/JumpTrigger" to="MainAct/River/Boat" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Camera" method="Deactivate"]
@@ -6681,11 +6698,9 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Activated" from="MainAct/Cavern/Boat" to="MainAct/Cavern/Boat/Path" method="Activate"]
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatStartTrigger/Jump" to="MainAct/Cavern/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Deactivate"]
-[connection signal="JumpFinished" from="MainAct/Cavern/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 
 [editable path="Static"]
-[editable path="Static/Collision"]
 [editable path="Static/Trigger/Object/Apatos1/DinoApatos"]
 [editable path="Static/Trigger/Object/Apatos2/DinoApatos"]
