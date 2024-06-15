@@ -1,4 +1,4 @@
-[gd_scene load_steps=104 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=105 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_bw6cf"]
@@ -46,9 +46,10 @@
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="54_ay5i2"]
 [ext_resource type="PackedScene" uid="uid://b8s2qjmlhu5tc" path="res://object/stage/common/ThornSpring.tscn" id="55_3vfss"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="56_7lmmf"]
+[ext_resource type="Resource" uid="uid://cyvx5oyil8svy" path="res://area/2 dino jungle/act 1/camera/CavernBoatCam.tres" id="56_fw8kb"]
 [ext_resource type="Resource" uid="uid://ekxc4e71eau4" path="res://area/2 dino jungle/act 1/camera/EndJumpPanelCam.tres" id="57_ywra7"]
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="58_fnmsc"]
-[ext_resource type="Resource" uid="uid://dhwqg5pqdd5d0" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandCam.tres" id="58_xae1w"]
+[ext_resource type="Resource" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandCam.tres" id="58_xae1w"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="59_fvrl3"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="60_jn18j"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="61_edv0r"]
@@ -323,7 +324,7 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
-transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, -0.348532, 0.022316, -1.00548)
+transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, -468.975, -277.083, -1122.92)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -5521,24 +5522,31 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Boat" parent="MainAct/Cavern" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -4.53979, -5.5, 2.1073)
-maxSpeed = 10.0
-bounds = Vector2(3, 0)
+maxSpeed = 15.0
+bounds = Vector2(20, 0)
+autosetBounds = true
 path = NodePath("../../../Static/Path/BoatPath")
 pathFollower = NodePath("../../../Static/Path/BoatPath/CavernBoatPathFollower")
 
+[node name="Camera" type="Node3D" parent="MainAct/Cavern/Boat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("27_dpcvf")
+transitionTime = 0.5
+settings = ExtResource("56_fw8kb")
+
+[node name="Path" type="Node3D" parent="MainAct/Cavern/Boat" node_paths=PackedStringArray("path")]
+script = ExtResource("27_l6k7w")
+path = NodePath("../../../../Static/Path/BoatPath")
+
 [node name="BoatStartTrigger" parent="MainAct/Cavern" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 14.7638, -3, -13.55)
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 12.1592, -3, -11.3646)
+"Enter Mode" = 0
 
 [node name="Jump" type="Node3D" parent="MainAct/Cavern/BoatStartTrigger"]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.41272, -2.24225, 24.989)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.170166, -2.24225, 20.1578)
 script = ExtResource("45_bbxl7")
 jumpHeight = 4.0
 autoAlign = true
-
-[node name="Path" type="Node3D" parent="MainAct/Cavern/BoatStartTrigger" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
-script = ExtResource("27_l6k7w")
-path = NodePath("../../../../Static/Path/BoatPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/BoatStartTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -6084,7 +6092,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 
 [node name="GrayRock1" parent="MainAct/FeedingTunnel" instance=ExtResource("67_82x8e")]
-transform = Transform3D(0.921978, 0, 0.387242, 0, 1, 0, -0.387242, 0, 0.921978, 11.421, 0, 19.8297)
+transform = Transform3D(0.921978, 0, 0.387242, 0, 1.5, 0, -0.387242, 0, 0.921978, 11.421, 0, 19.8297)
 
 [node name="Rings2" type="Node3D" parent="MainAct/FeedingTunnel"]
 transform = Transform3D(0.222382, 0, 0.974959, 0, 1, 0, -0.974959, 0, 0.222382, -3.98126, 0.737518, 24.2358)
@@ -6107,7 +6115,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 
 [node name="GrayRock2" parent="MainAct/FeedingTunnel" instance=ExtResource("67_82x8e")]
-transform = Transform3D(0.911109, 0, -0.412166, 0, 1, 0, 0.412166, 0, 0.911109, -5.41125, 0, 21.9141)
+transform = Transform3D(0.911109, 0, -0.412166, 0, 1.2, 0, 0.412166, 0, 0.911109, -5.41125, 0, 21.9141)
 
 [node name="Rings3" type="Node3D" parent="MainAct/FeedingTunnel"]
 transform = Transform3D(0.858208, 0, 0.513302, 0, 1, 0, -0.513302, 0, 0.858208, -19.4109, 0.920563, 14.6466)
@@ -6130,7 +6138,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 
 [node name="GrayRock3" parent="MainAct/FeedingTunnel" instance=ExtResource("67_82x8e")]
-transform = Transform3D(0.372421, 0, -0.928064, 0, 1, 0, 0.928064, 0, 0.372421, -18.7092, 0, 11.8687)
+transform = Transform3D(0.372421, 0, -0.928064, 0, 1.2, 0, 0.928064, 0, 0.372421, -18.7092, 0, 11.8687)
 
 [node name="WhiteRock1" parent="MainAct/FeedingTunnel" instance=ExtResource("38_158q5")]
 transform = Transform3D(0.388229, 0, 1.44889, 0, 1.5, 0, -1.44889, 0, 0.388229, -9, 4, -25.6)
@@ -6669,6 +6677,8 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Stagger" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
 [connection signal="Activated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/LeftPathEvent" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/RightPathEvent" method="Activate"]
+[connection signal="Activated" from="MainAct/Cavern/Boat" to="MainAct/Cavern/Boat/Camera" method="Activate"]
+[connection signal="Activated" from="MainAct/Cavern/Boat" to="MainAct/Cavern/Boat/Path" method="Activate"]
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatStartTrigger/Jump" to="MainAct/Cavern/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]

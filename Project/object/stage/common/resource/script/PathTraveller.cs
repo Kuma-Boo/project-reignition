@@ -16,67 +16,65 @@ public partial class PathTraveller : Node3D
 	[Signal]
 	public delegate void DeactivatedEventHandler();
 
-
+	/// <summary> How fast to move. </summary>
 	[ExportGroup("Settings")]
 	[Export]
-	/// <summary> How fast to move. </summary>
 	private float maxSpeed;
-	[Export]
 	/// <summary> How fast to turn. </summary>
+	[Export]
 	private float turnSpeed;
 
-	[Export]
 	/// <summary> Allow object to move vertically? </summary>
+	[Export]
 	private bool isVerticalMovementDisabled;
 
 	[Export]
 	private float tiltAmount = 45;
 
-	[Export]
 	/// <summary> Maximum distance from the path allowed. </summary>
+	[Export]
 	private Vector2 bounds;
-	private float HorizontalTurnSmoothing => bounds.X * TURN_SMOOTHING_RATIO;
-	private float VerticalTurnSmoothing => bounds.Y * TURN_SMOOTHING_RATIO;
-	/// <summary> At what ratio should inputs start being smoothed? </summary>
-	private readonly float TURN_SMOOTHING_RATIO = .8f;
-
+	[Export]
+	private bool autosetBounds;
+	private float HorizontalTurnSmoothing => bounds.X - COLLISION_SMOOTHING_DISTANCE;
+	private float VerticalTurnSmoothing => bounds.Y - COLLISION_SMOOTHING_DISTANCE;
 
 	/// <summary> How fast is the object currently moving? </summary>
-	private float speedDelta;
-	private Vector2 turnDelta;
+	private float currentSpeed;
+	/// <summary> How much is the object currently turning? </summary>
+	private Vector2 currentTurnAmount;
 	// Values for smooth damp
 	private float speedVelocity;
 	private Vector2 turnVelocity;
 	private readonly float SPEED_SMOOTHING = .5f;
 	private readonly float TURN_SMOOTHING = .25f;
+	/// <summary> At what distance should inputs start being smoothed? </summary>
+	private readonly float COLLISION_SMOOTHING_DISTANCE = 1f;
 
-
+	/// <summary> Reference to the travel path. </summary>
 	[ExportGroup("Components")]
 	[Export]
-	/// <summary> Reference to the travel path. </summary>
 	private Path3D path;
-	[Export]
 	/// <summary> Reference to the pathfollower. </summary>
+	[Export]
 	private PathFollow3D pathFollower;
-	[Export]
 	/// <summary> Reference to the root. </summary>
+	[Export]
 	private Node3D root;
-	[Export]
 	/// <summary> Reference to the player's position. </summary>
-	private Node3D playerPosition;
 	[Export]
+	private Node3D playerPosition;
 	/// <summary> Reference to the animator. </summary>
+	[Export]
 	private AnimationPlayer animator;
-
 
 	/// <summary> Is the carpet currently active? </summary>
 	private bool isActive;
+	private bool isRespawning;
 	private float startingProgress;
 	private SpawnData spawnData;
 
-
 	private CharacterController Character => CharacterController.instance;
-
 
 	public override void _Ready()
 	{
@@ -89,13 +87,22 @@ public partial class PathTraveller : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (!isActive) return;
+		if (!isActive)
+			return;
 
-		ProcessMovement();
+		if (isRespawning)
+			return;
+
+		CalculateMovement();
+		if (autosetBounds)
+			bounds.X = Mathf.Inf;
+		UpdateCollisions(1);
+		UpdateCollisions(-1);
+		ApplyMovement();
 	}
 
-	/// <summary> Handles object's movement. </summary>
-	private void ProcessMovement()
+	/// <summary> Handles player input. </summary>
+	private void CalculateMovement()
 	{
 		Vector2 inputVector = Character.InputVector * turnSpeed;
 		if (isVerticalMovementDisabled) // Ignore vertical input
@@ -106,21 +113,43 @@ public partial class PathTraveller : Node3D
 			Mathf.Sign(inputVector.X) != Mathf.Sign(pathFollower.HOffset);
 		bool isSmoothingVertical = Mathf.Abs(pathFollower.VOffset) > VerticalTurnSmoothing &&
 			Mathf.Sign(inputVector.Y) != Mathf.Sign(pathFollower.VOffset);
+
 		if (isSmoothingHorizontal)
 			inputVector.X *= 1.0f - ((Mathf.Abs(pathFollower.HOffset) - HorizontalTurnSmoothing) / (bounds.X - HorizontalTurnSmoothing));
 
 		if (isSmoothingVertical)
 			inputVector.Y *= 1.0f - ((Mathf.Abs(pathFollower.VOffset) - VerticalTurnSmoothing) / (bounds.Y - VerticalTurnSmoothing));
 
-		speedDelta = ExtensionMethods.SmoothDamp(speedDelta, maxSpeed, ref speedVelocity, SPEED_SMOOTHING);
-		turnDelta = turnDelta.SmoothDamp(inputVector, ref turnVelocity, TURN_SMOOTHING);
+		currentSpeed = ExtensionMethods.SmoothDamp(currentSpeed, maxSpeed, ref speedVelocity, SPEED_SMOOTHING);
+		currentTurnAmount = currentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TURN_SMOOTHING);
+		Character.Animator.UpdateBalancing(inputVector.X / turnSpeed);
+	}
 
+	/// <summary> Check for walls. </summary>
+	private void UpdateCollisions(int direction)
+	{
+		if (!autosetBounds)
+			return;
+
+		float pathTravellerCollisionSize = Character.CollisionRadius;
+		float castDistance = pathTravellerCollisionSize + COLLISION_SMOOTHING_DISTANCE;
+		if (Mathf.Sign(currentTurnAmount.X) == direction)
+			castDistance += Mathf.Abs(currentTurnAmount.X * PhysicsManager.physicsDelta);
+
+		Vector3 castVector = pathFollower.Left() * direction * castDistance;
+		RaycastHit wallCast = this.CastRay(GlobalPosition, castVector, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(GlobalPosition, castVector, wallCast ? Colors.Green : Colors.White);
+		if (wallCast)
+			bounds.X = Mathf.Abs(pathFollower.HOffset) + (wallCast.distance - pathTravellerCollisionSize);
+	}
+
+	private void ApplyMovement()
+	{
 		// Update path follower
-		pathFollower.Progress += speedDelta * PhysicsManager.physicsDelta;
-
+		pathFollower.Progress += currentSpeed * PhysicsManager.physicsDelta;
 		// Add offsets
-		pathFollower.HOffset -= turnDelta.X * PhysicsManager.physicsDelta;
-		pathFollower.VOffset -= turnDelta.Y * PhysicsManager.physicsDelta;
+		pathFollower.HOffset -= currentTurnAmount.X * PhysicsManager.physicsDelta;
+		pathFollower.VOffset -= currentTurnAmount.Y * PhysicsManager.physicsDelta;
 		// Clamp offsets
 		pathFollower.HOffset = Mathf.Clamp(pathFollower.HOffset, -bounds.X, bounds.X);
 		pathFollower.VOffset = Mathf.Clamp(pathFollower.VOffset, -bounds.Y, bounds.Y);
@@ -129,21 +158,17 @@ public partial class PathTraveller : Node3D
 		if (root != null) // Update visual rotations
 		{
 			root.Rotation = Vector3.Zero;
-			root.RotateX(Mathf.DegToRad(tiltAmount) * (turnDelta.Y / turnSpeed));
-			root.RotateZ(Mathf.DegToRad(tiltAmount) * (turnDelta.X / turnSpeed));
+			root.RotateX(Mathf.DegToRad(tiltAmount) * (currentTurnAmount.Y / turnSpeed));
+			root.RotateZ(Mathf.DegToRad(tiltAmount) * (currentTurnAmount.X / turnSpeed));
 		}
 
 		if (animator != null) // Update animation speeds
-			animator.SpeedScale = 1.0f + (speedDelta / maxSpeed * 1.5f);
-
-		Character.Animator.UpdateBalancing(inputVector.X / turnSpeed);
-
+			animator.SpeedScale = 1.0f + (currentSpeed / maxSpeed * 1.5f);
 
 		// Sync transforms
 		GlobalTransform = pathFollower.GlobalTransform;
 		Character.UpdateExternalControl();
 	}
-
 
 	public void Respawn()
 	{
@@ -158,8 +183,9 @@ public partial class PathTraveller : Node3D
 
 		if (animator != null) // Reset speed scale
 			animator.SpeedScale = 1.0f;
-	}
 
+		isRespawning = false;
+	}
 
 	/// <summary> Call this from a trigger. </summary>
 	public void Activate()
@@ -173,18 +199,26 @@ public partial class PathTraveller : Node3D
 		EmitSignal(SignalName.Activated);
 	}
 
-
 	public void Deactivate()
 	{
 		EmitSignal(SignalName.Deactivated);
 		isActive = false;
 
 		// Reset damping values
-		speedDelta = speedVelocity = 0;
-		turnDelta = turnVelocity = Vector2.Zero;
+		currentSpeed = speedVelocity = 0;
+		currentTurnAmount = turnVelocity = Vector2.Zero;
 
 		if (Character.ExternalParent == this)
 			Character.StopExternal();
 		Character.Animator.ResetState();
 	}
+
+	private void TakeDamage()
+	{
+		currentSpeed = 0;
+		isRespawning = true;
+		Character.StopExternal();
+	}
+
+	public void OnBodyEntered(PhysicsBody3D b) => TakeDamage();
 }
