@@ -273,6 +273,7 @@ transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0
 shape = SubResource("BoxShape3D_1mwhh")
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("6_4xrcy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -298.844, -276.49, -1085.59)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -347,7 +348,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
 [node name="Cavern-L" parent="MainAct/CullingMap" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(-0.397596, 0, -0.91756, 0, 1, 0, 0.91756, 0, -0.397596, -379.124, -269.393, -1127.63)
+transform = Transform3D(-0.851982, 0, -0.523569, 0, 1, 0, 0.523569, 0, -0.851982, -299.194, -276.99, -1092.07)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -5305,8 +5306,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82309, -1.38196, 4.85889)
 
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
-visible = false
 script = ExtResource("9_uj3dw")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="RingsM1" type="Node3D" parent="MainAct/Crossing"]
@@ -5521,9 +5522,11 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 3.05176e
 
 [node name="FlowerMajin1" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 124, -12, -184)
+disableAttacking = true
 
 [node name="FlowerMajin2" parent="MainAct/Crossing" instance=ExtResource("47_fimbn")]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 113.67, -12, -176.108)
+disableAttacking = true
 
 [node name="FlowerMajinMover" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 103.23, -12, -179.588)
@@ -5534,6 +5537,8 @@ Movement/Mode = 1
 Movement/Distance = 8.0
 Movement/Angle = -90.0
 "Vertical Orientation" = false
+startPaused = true
+smoothPausing = true
 root = NodePath("FlowerMajin3")
 
 [node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("47_fimbn")]
@@ -5543,7 +5548,7 @@ postAttackLength = 2.0
 
 [node name="Switch" parent="MainAct/Crossing" instance=ExtResource("65_n8hm0")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 97.5173, -11.8943, -185.035)
-isToggleable = true
+toggleMode = true
 
 [node name="EnemyStone" parent="MainAct/Crossing" instance=ExtResource("49_g35os")]
 transform = Transform3D(1.26785, 0, 1.81262, 0, 2, 0, -2.71892, 0, 0.845236, 97.3905, -9.99435, -184.763)
@@ -6719,6 +6724,18 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000244141, 0, -4.00003)
 shape = SubResource("BoxShape3D_7im1x")
 
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Deactivate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/River-L" to="MainAct/River" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/River-L" to="MainAct/River" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/Chase-U" to="MainAct/Chase" method="Deactivate"]
@@ -6772,13 +6789,20 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Deactivated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin2" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
+[connection signal="Aggressive" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Unpause"]
+[connection signal="Attack" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
-[connection signal="Activated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/LeftPathEvent" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/RightPathEvent" method="Activate"]
+[connection signal="Passive" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
+[connection signal="Stagger" from="MainAct/Crossing/FlowerMajinMover/FlowerMajin3" to="MainAct/Crossing/FlowerMajinMover" method="Pause"]
+[connection signal="Activated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Cavern/Boat" to="MainAct/Cavern/Boat/Camera" method="Activate"]
 [connection signal="Activated" from="MainAct/Cavern/Boat" to="MainAct/Cavern/Boat/Path" method="Activate"]
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatStartTrigger/Jump" to="MainAct/Cavern/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/Cavern/BoatEndTrigger" to="MainAct/Cavern/Boat" method="Deactivate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]

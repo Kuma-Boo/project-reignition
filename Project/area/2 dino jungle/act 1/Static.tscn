@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=98 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -36,6 +36,7 @@
 [ext_resource type="Resource" uid="uid://duxi5ucuhx7qa" path="res://resource/preset/lockout/SidleLockout.tres" id="26_dq6cl"]
 [ext_resource type="Resource" uid="uid://dtu8pc2uwaej1" path="res://area/2 dino jungle/act 1/camera/CaveLeftCam.tres" id="27_aqrt3"]
 [ext_resource type="Resource" uid="uid://cvgf6u6m7ckcs" path="res://area/2 dino jungle/act 1/camera/CaveRightCam.tres" id="27_h0ugs"]
+[ext_resource type="AnimationLibrary" uid="uid://cw882jmvbd4on" path="res://area/2 dino jungle/object/model/animation/apato/DinoApato1AnimationLibrary.gltf" id="27_vi4ly"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="28_7w0ww"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/CavePath.tres" id="28_t1ofp"]
 [ext_resource type="Resource" uid="uid://dj5jss65sqknh" path="res://area/2 dino jungle/act 1/camera/DinoApatos1Cam.tres" id="29_eqruc"]
@@ -47,6 +48,7 @@
 [ext_resource type="Curve3D" uid="uid://bdenxtkcgsy5b" path="res://area/2 dino jungle/act 1/environment/path/DinoRightPath.tres" id="31_5iw22"]
 [ext_resource type="Script" path="res://object/trigger/modules/ReflectionTrigger.cs" id="31_x7ms6"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="33_q44ch"]
+[ext_resource type="AnimationLibrary" uid="uid://dkn0qsuhlfgge" path="res://area/2 dino jungle/object/model/animation/apato/DinoApato2AnimationLibrary.gltf" id="34_7qy8o"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="34_eyh5k"]
 [ext_resource type="Resource" uid="uid://beferl7qs7k41" path="res://area/2 dino jungle/act 1/camera/CaveExitCam.tres" id="34_qb2qj"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="35_c15gk"]
@@ -97,132 +99,11 @@ size = Vector3(5, 20, 17)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ey50s"]
 size = Vector3(4, 30, 30)
 
-[sub_resource type="Animation" id="Animation_yuvsa"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../DinoApatos/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0, true],
-"method": &"seek"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_x2rco"]
-resource_name = "event"
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../DinoApatos/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["apato-1", -1, 1.0, false],
-"method": &"play"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0],
-"method": &"PlayDialog"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_sdgia"]
-_data = {
-"RESET": SubResource("Animation_yuvsa"),
-"event": SubResource("Animation_x2rco")
-}
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_u63uw"]
 size = Vector3(14, 50, 88)
 
-[sub_resource type="Animation" id="Animation_qjeqw"]
-resource_name = "RESET"
-length = 0.0333367
-step = 0.0333333
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DinoApatos/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.02),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [true],
-"method": &"stop"
-}, {
-"args": [0.0, true],
-"method": &"seek"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_5u5st"]
-resource_name = "event"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DinoApatos/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["apato-2-reverse", -1, 1.0, false],
-"method": &"play"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wuklm"]
-_data = {
-"RESET": SubResource("Animation_qjeqw"),
-"event": SubResource("Animation_5u5st")
-}
-
-[sub_resource type="Animation" id="Animation_liynt"]
-resource_name = "event"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DinoApatos/AnimationPlayer")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": ["apato-2", -1, 1.0, false],
-"method": &"play"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_cfxy7"]
-_data = {
-"event": SubResource("Animation_liynt")
-}
+[sub_resource type="BoxShape3D" id="BoxShape3D_skfpg"]
+size = Vector3(30, 50, 74)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5pbm"]
 size = Vector3(11, 20, 2.5)
@@ -739,26 +620,6 @@ shape = SubResource("BoxShape3D_ey50s")
 [node name="Apatos1" type="Node3D" parent="Trigger/Object"]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -284.89, -295.392, -1024.57)
 
-[node name="DinoApatos" parent="Trigger/Object/Apatos1" instance=ExtResource("25_s85nr")]
-
-[node name="Skeleton3D" parent="Trigger/Object/Apatos1/DinoApatos/DinoApatoRoot" index="0"]
-bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
-bones/2/rotation = Quaternion(6.30126e-07, 0.999995, 0.000207154, 0.00320132)
-bones/2/scale = Vector3(1, 1, 1)
-bones/3/rotation = Quaternion(0.980406, -2.89897e-14, 2.76165e-06, -0.196989)
-bones/3/scale = Vector3(1, 1, 1)
-bones/4/rotation = Quaternion(-0.13886, -1.7957e-05, 3.21686e-06, 0.990312)
-bones/5/rotation = Quaternion(-0.0590873, 0.00352094, -0.000206972, 0.998247)
-bones/6/rotation = Quaternion(3.47858e-07, -0.00991414, -1.45249e-06, 0.999951)
-bones/7/rotation = Quaternion(2.81226e-07, 0.000798047, 1.14939e-07, 1)
-bones/9/rotation = Quaternion(2.04945e-07, -0.000292533, -4.2207e-08, 1)
-bones/10/rotation = Quaternion(-7.27003e-07, -0.01132, -1.66762e-06, 0.999936)
-bones/10/scale = Vector3(1, 1, 1)
-
-[node name="AnimationPlayer" parent="Trigger/Object/Apatos1/DinoApatos" index="1"]
-reset_on_save = false
-autoplay = "apato-1"
-
 [node name="ActivateTrigger" parent="Trigger/Object/Apatos1" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -4.77853, 38.2302, 41.1746)
 "Trigger Mode" = 2
@@ -770,18 +631,22 @@ script = ExtResource("16_vyk20")
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
+animator = NodePath("DinoApatos/AnimationPlayer")
 
-[node name="Dialog" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger"]
+[node name="DinoApatos" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" instance=ExtResource("25_s85nr")]
+transform = Transform3D(-0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, -0.984808, 2.44394, -38.2302, 41.3788)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/DinoApatos"]
+libraries = {
+"": ExtResource("27_vi4ly")
+}
+
+[node name="Dialog" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger"]
+transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0)
 script = ExtResource("17_18ult")
 delays = [0.0, 0.5]
 displayLength = []
 textKeys = ["din_event_apato_so", "din_event_apato_so2"]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger"]
-libraries = {
-"": SubResource("AnimationLibrary_sdgia")
-}
 
 [node name="JumpTrigger" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger"]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -0.446075, 5.46184, 9.80847)
@@ -838,61 +703,30 @@ lockoutData = ExtResource("24_0y0cf")
 shape = SubResource("BoxShape3D_u63uw")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/Apatos2/RecenterTrigger"]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 0)
-shape = SubResource("BoxShape3D_u63uw")
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 3.5, 0, 10)
+shape = SubResource("BoxShape3D_skfpg")
 
-[node name="DinoApatos" parent="Trigger/Object/Apatos2" instance=ExtResource("25_s85nr")]
-
-[node name="Skeleton3D" parent="Trigger/Object/Apatos2/DinoApatos/DinoApatoRoot" index="0"]
-bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
-bones/2/rotation = Quaternion(6.30126e-07, 0.999995, 0.000207154, 0.00320132)
-bones/2/scale = Vector3(1, 1, 1)
-bones/3/rotation = Quaternion(0.980406, -2.89897e-14, 2.76165e-06, -0.196989)
-bones/3/scale = Vector3(1, 1, 1)
-bones/4/rotation = Quaternion(-0.13886, -1.7957e-05, 3.21686e-06, 0.990312)
-bones/5/rotation = Quaternion(-0.0590873, 0.00352094, -0.000206972, 0.998247)
-bones/6/rotation = Quaternion(3.47858e-07, -0.00991414, -1.45249e-06, 0.999951)
-bones/7/rotation = Quaternion(2.81226e-07, 0.000798047, 1.14939e-07, 1)
-bones/9/rotation = Quaternion(2.04945e-07, -0.000292533, -4.2207e-08, 1)
-bones/10/rotation = Quaternion(-7.27003e-07, -0.01132, -1.66762e-06, 0.999936)
-bones/10/scale = Vector3(1, 1, 1)
-
-[node name="AnimationPlayer" parent="Trigger/Object/Apatos2/DinoApatos" index="1"]
-reset_on_save = false
-
-[node name="LeftPathEvent" type="Node3D" parent="Trigger/Object/Apatos2" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="Trigger/Object/Apatos2" node_paths=PackedStringArray("animator")]
 script = ExtResource("16_vyk20")
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = false
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
+animator = NodePath("DinoApatos/AnimationPlayer")
 
-[node name="Path" type="Node3D" parent="Trigger/Object/Apatos2/LeftPathEvent" node_paths=PackedStringArray("path")]
+[node name="DinoApatos" parent="Trigger/Object/Apatos2/Event" instance=ExtResource("25_s85nr")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos2/Event/DinoApatos"]
+libraries = {
+"": ExtResource("34_7qy8o")
+}
+
+[node name="LeftPath" type="Node3D" parent="Trigger/Object/Apatos2/Event" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
 path = NodePath("../../../../../Path/DinoPath")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos2/LeftPathEvent"]
-root_node = NodePath("../..")
-libraries = {
-"": SubResource("AnimationLibrary_wuklm")
-}
-
-[node name="RightPathEvent" type="Node3D" parent="Trigger/Object/Apatos2" node_paths=PackedStringArray("animator")]
-script = ExtResource("16_vyk20")
-"Trigger Settings/Automatically Respawn" = false
-"Trigger Settings/Is One Shot" = false
-"Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
-
-[node name="Path" type="Node3D" parent="Trigger/Object/Apatos2/RightPathEvent" node_paths=PackedStringArray("path")]
+[node name="RightPath" type="Node3D" parent="Trigger/Object/Apatos2/Event" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
 path = NodePath("../../../../../Path/DinoRightPath")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos2/RightPathEvent"]
-root_node = NodePath("../..")
-libraries = {
-"": SubResource("AnimationLibrary_cfxy7")
-}
 
 [node name="FeedingRecenterTrigger" type="Node3D" parent="Trigger/Object"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.544, -283.473, -1075.94)
@@ -1540,8 +1374,20 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Deactivate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
-[connection signal="Activated" from="Trigger/Object/Apatos2/LeftPathEvent" to="Trigger/Object/Apatos2/LeftPathEvent/Path" method="Activate"]
-[connection signal="Activated" from="Trigger/Object/Apatos2/RightPathEvent" to="Trigger/Object/Apatos2/RightPathEvent/Path" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/RightPath" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/LeftPath" method="Activate"]
+[connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/FeedingRecenterTrigger/StopTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
@@ -1551,6 +1397,3 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Activated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
-
-[editable path="Trigger/Object/Apatos1/DinoApatos"]
-[editable path="Trigger/Object/Apatos2/DinoApatos"]
