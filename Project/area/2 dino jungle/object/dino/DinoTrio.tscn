@@ -1,10 +1,21 @@
-[gd_scene load_steps=20 format=3 uid="uid://cc1ft0jnv1sql"]
+[gd_scene load_steps=23 format=3 uid="uid://cc1ft0jnv1sql"]
 
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoTrio.cs" id="1_6nsvh"]
 [ext_resource type="PackedScene" uid="uid://ctbsi13u4rad0" path="res://area/2 dino jungle/object/model/dino/DinoTrio.gltf" id="1_57frd"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_rux8y"]
-size = Vector3(2.5, 5, 9)
+[sub_resource type="SphereShape3D" id="SphereShape3D_wqtdo"]
+radius = 1.5
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hkr6g"]
+radius = 0.799598
+height = 2.50401
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_11mds"]
+radius = 1.31596
+height = 4.08923
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5goga"]
+size = Vector3(2.435, 3.5, 2)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8caol"]
 animation = &"trio-attack"
@@ -101,18 +112,10 @@ use_model_front = true
 script = ExtResource("1_6nsvh")
 traction = 20.0
 friction = 40.0
-preferredOffset = 8.0
+preferredOffset = 5.0
 rubberbandingStrength = 0.8
 speedMultiplier = 1.0
 animationTree = NodePath("AnimationTree")
-
-[node name="Trigger" type="Area3D" parent="."]
-collision_layer = 8
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("BoxShape3D_rux8y")
 
 [node name="DinoTrio" parent="." instance=ExtResource("1_57frd")]
 
@@ -124,6 +127,48 @@ bones/7/rotation = Quaternion(-0.32846, -9.96382e-06, -3.14188e-05, 0.944518)
 bones/13/rotation = Quaternion(1.74276e-05, 3.29326e-12, -4.33084e-07, 1)
 bones/16/rotation = Quaternion(-0.707246, 0.000317547, 0.000317547, 0.706967)
 bones/20/rotation = Quaternion(-0.707108, 0.000270456, 0.000270456, 0.707106)
+
+[node name="Head" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 1.63549e-07, 5.00357e-07, 5.00376e-07, -0.590619, -0.806948, 1.63551e-07, 0.80695, -0.590619, 1.71783e-06, 2.72624, 1.92318)
+bone_name = "head"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoTrio/DinoTrioRoot/Skeleton3D")
+
+[node name="Trigger" type="Area3D" parent="Head"]
+transform = Transform3D(1, -1.42109e-14, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Trigger"]
+transform = Transform3D(1, 5.68434e-14, 7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 1.13687e-12, 0.719882, -1.05753)
+shape = SubResource("SphereShape3D_wqtdo")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Head/Trigger"]
+transform = Transform3D(1, 1.27898e-13, -4.26326e-14, 0, 0.984808, -0.173648, 7.10543e-15, 0.173648, 0.984808, 6.82121e-13, 1.36527, -0.203038)
+shape = SubResource("CapsuleShape3D_hkr6g")
+
+[node name="Hip" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, -2.41637e-08, 0, 0, 0, 1, -2.41637e-08, -1, 0, -1.84096e-09, 3.04308, 0.0421269)
+bone_name = "hip"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoTrio/DinoTrioRoot/Skeleton3D")
+
+[node name="Trigger" type="Area3D" parent="Hip"]
+transform = Transform3D(1, -1.42109e-14, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hip/Trigger"]
+transform = Transform3D(1, 5.68434e-14, 7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 1.11666e-12, 0.28457, -0.333864)
+shape = SubResource("CapsuleShape3D_11mds")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Hip/Trigger"]
+transform = Transform3D(1, 5.68434e-14, 7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, -2.085)
+shape = SubResource("BoxShape3D_5goga")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
@@ -148,7 +193,9 @@ parameters/movement_transition/current_state = "disabled"
 parameters/movement_transition/transition_request = ""
 parameters/movement_transition/current_index = 0
 
-[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
-[connection signal="area_exited" from="Trigger" to="." method="OnExited"]
+[connection signal="area_entered" from="Head/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Head/Trigger" to="." method="OnExited"]
+[connection signal="area_entered" from="Hip/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hip/Trigger" to="." method="OnExited"]
 
 [editable path="DinoTrio"]

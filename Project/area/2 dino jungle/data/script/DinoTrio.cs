@@ -87,6 +87,13 @@ public partial class DinoTrio : PathFollow3D
 
 	private void CalculateMovespeed()
 	{
+		if (Character.Skills.IsSpeedBreakCharging) // Kill speed quickly when starting a speed break
+		{
+			moveSpeed *= .8f;
+			rubberbandingSpeed = 0;
+			return;
+		}
+
 		if (Processor.IsSlowingDown ||
 			(CurrentAttackState != AttackStates.Charge && CurrentAttackState != AttackStates.Inactive) ||
 			(Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer))
@@ -101,13 +108,6 @@ public partial class DinoTrio : PathFollow3D
 		if (CurrentAttackState == AttackStates.Charge)
 		{
 			moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(DeltaProgress) * 1.5f, .5f);
-			rubberbandingSpeed = 0;
-			return;
-		}
-
-		if (Character.Skills.IsSpeedBreakCharging) // Kill speed quickly when starting a speed break
-		{
-			moveSpeed *= .9f;
 			rubberbandingSpeed = 0;
 			return;
 		}
