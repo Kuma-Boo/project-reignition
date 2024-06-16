@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://dumttajjtpqta"]
+[gd_scene load_steps=8 format=3 uid="uid://dumttajjtpqta"]
 
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="1_8cup1"]
 [ext_resource type="PackedScene" uid="uid://bpm4bnrc0twqf" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.gltf" id="1_wmk6n"]
+[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/run/StopLockout.tres" id="2_qspwl"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="3_4d2ap"]
 [ext_resource type="AudioStream" uid="uid://cbgfmexm35fhk" path="res://sound/sfx/stage/dinosaur jungle/event river.ogg" id="3_6r8nl"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="4_hjfi8"]
+[ext_resource type="Resource" uid="uid://cha3usfe6mq68" path="res://area/2 dino jungle/act 1/camera/ChaseFollowCam.tres" id="6_pp3eo"]
 
 [node name="RiverEvent" type="Node3D" node_paths=PackedStringArray("animator")]
 script = ExtResource("1_8cup1")
@@ -17,7 +19,7 @@ script = ExtResource("1_8cup1")
 "Player Event Settings/Normalize Exit Move Speed" = true
 "Player Event Settings/Exit Move Speed" = 0.0
 "Player Event Settings/Exit Vertical Speed" = -15.0
-"Player Event Settings/Exit Lockout" = null
+"Player Event Settings/Exit Lockout" = ExtResource("2_qspwl")
 animator = NodePath("RiverEvent/AnimationPlayer")
 
 [node name="RiverEvent" parent="." instance=ExtResource("1_wmk6n")]
@@ -33,7 +35,7 @@ bones/8/rotation = Quaternion(0.121753, -0.0432943, -0.00531587, -0.991601)
 callback_mode_process = 0
 
 [node name="PlayerBone" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.996195, -0.0210849, 0.0845669, 9.31323e-10, 0.970296, 0.241922, -0.0871558, -0.241001, 0.966603, 0.868011, 2.4655, 18.728)
+transform = Transform3D(0.996195, -0.0210849, 0.084567, 2.23517e-08, 0.970296, 0.241921, -0.0871559, -0.241001, 0.966604, 0.868011, 2.4655, 18.728)
 bone_name = "player"
 bone_idx = 8
 use_external_skeleton = true
@@ -55,6 +57,7 @@ script = ExtResource("3_4d2ap")
 deactivationTransitionTime = 0.5
 UpdateEveryFrame = true
 settings = ExtResource("4_hjfi8")
+previousSettings = ExtResource("6_pp3eo")
 
 [node name="RiverSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_6r8nl")
