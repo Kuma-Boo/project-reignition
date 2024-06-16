@@ -30,7 +30,7 @@ namespace Project.Gameplay
 		private TextureRect crossfade;
 		[Export]
 		private AnimationPlayer crossfadeAnimator;
-		private bool IsCrossfading => crossfadeAnimator.IsPlaying();
+		public bool IsCrossfading => crossfadeAnimator.IsPlaying();
 
 		[Export]
 		/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>

@@ -1209,6 +1209,9 @@ namespace Project.Gameplay
 
 			if (MovementState == MovementStates.External) return; // Only allow autorespawning when not using external controller
 
+			if (!knockbackSettings.disableDamage)
+				SetActionState(ActionStates.Damaged);
+
 			// Apply invincibility and drop rings
 			if (!IsInvincible)
 			{

@@ -1,316 +1,225 @@
 using Godot;
 using Project.Core;
-using System.Collections.Generic;
 
-namespace Project.Gameplay
+namespace Project.Gameplay;
+
+public partial class DinoTrio : PathFollow3D
 {
-	public partial class DinoTrio : PathFollow3D
+	[Signal]
+	public delegate void DamagedPlayerEventHandler();
+
+	private DinoTrioProcessor Processor => DinoTrioProcessor.Instance;
+	private CharacterController Character => CharacterController.instance;
+
+	[ExportGroup("Movement")]
+	[Export]
+	private float traction;
+	[Export]
+	private float friction;
+	/// <summary> Target offset from player. </summary>
+	[Export]
+	private float preferredOffset;
+	[Export(PropertyHint.Range, "0, 1")]
+	private float rubberbandingStrength;
+
+	/// <summary> Base movespeed (without rubberbanding). </summary>
+	private float moveSpeed;
+	private float rubberbandingSpeed;
+	public float DeltaProgress => Processor.PlayerProgress - Progress;
+
+	/// <summary> Total movespeed (currentMoveSpeed + rubberbanding). </summary>
+	private float TotalMoveSpeed
 	{
-		private static List<DinoTrio> registeredDinoTrio = new();
-		private static float playerHitTimer; // Dinos will wait a bit after hitting the player
-		private static float attackTimer; // Timer to determine when to attack
-		private static float playerProgress; // Player's offset on the curve
-
-		private bool IsMainDino => reversePrevention != null; // Is this the first registered dino?
-
-		[Export]
-		private Path3D path;
-		[Export]
-		private PathFollow3D reversePrevention; // Object to prevent player from ending up behind dinosaurs
-
-		[ExportGroup("Movement")]
-		[Export]
-		private float traction;
-		[Export]
-		private float friction;
-		[Export]
-		private float preferredOffset; // Target offset from player
-		[Export]
-		private float attackOffset;
-		[Export(PropertyHint.Range, "0, 1")]
-		private float rubberbandingStrength;
-
-		private float moveSpeed; // Base movespeed (without rubberbanding)
-		private float rubberbandingSpeed; // Rubberbanding speed
-
-		// Total movespeed (currentMoveSpeed + rubberbanding)
-		private float TotalMoveSpeed
+		get
 		{
-			get
-			{
-				float spd = (moveSpeed + rubberbandingSpeed);
-				if (attackState != AttackState.Inactive)
-					spd *= speedMultiplier;
-				if (spd < 2f)
-					spd = 0;
-				return spd;
-			}
+			float spd = moveSpeed + rubberbandingSpeed;
+			if (CurrentAttackState != AttackStates.Inactive)
+				spd *= speedMultiplier;
+
+			return spd < 2f ? 0 : spd;
+		}
+	}
+
+	[ExportGroup("Animation")]
+	[Export]
+	public AttackStates CurrentAttackState { get; private set; }
+	public enum AttackStates
+	{
+		Inactive,
+		Windup,
+		Charge,
+		Toss,
+		Recovery
+	}
+	[Export(PropertyHint.Range, "0, 5")]
+	private float speedMultiplier;
+
+	public override void _Ready()
+	{
+		animationTree.Active = true;
+		StageSettings.instance.ConnectRespawnSignal(this);
+		Respawn();
+	}
+
+	private void Respawn()
+	{
+		Progress = 0;
+		moveSpeed = rubberbandingSpeed = 0;
+
+		tossedPlayer = false;
+		CurrentAttackState = AttackStates.Inactive;
+
+		// Reset animations
+		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(FidgetTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+	}
+
+	public void ProcessDino()
+	{
+		CalculateMovespeed();
+		UpdateAnimations();
+
+		Progress += TotalMoveSpeed * PhysicsManager.physicsDelta;
+
+		if (isInteractingWithPlayer)
+			DamagePlayer();
+	}
+
+	private void CalculateMovespeed()
+	{
+		if (Processor.IsSlowingDown ||
+			(CurrentAttackState != AttackStates.Charge && CurrentAttackState != AttackStates.Inactive) ||
+			(Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer))
+		{
+			// Dino is slowing down
+			moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
+			rubberbandingSpeed = 0;
+			return;
 		}
 
-		// Used during attacks
-		[ExportGroup("Animation")]
-		//[Export]
-		//private bool isAttacking;
-		[Export]
-		private AttackState attackState;
-		private enum AttackState
+		// Accelerate
+		if (CurrentAttackState == AttackStates.Charge)
 		{
-			Inactive,
-			Windup,
-			Charge,
-			Toss,
-			Recovery
-		}
-		[Export(PropertyHint.Range, "0, 5")]
-		private float speedMultiplier;
-
-		private CharacterController Character => CharacterController.instance;
-
-		private const float SPEED_DIFFERENCE = 2f; // How much faster the player should be
-		private const float PLAYER_HIT_WAIT_TIME = 3f; // How long to wait after hitting the player
-		private const float ATTACK_INTERVAL = 3f; // How long to wait between attacks
-
-
-		public override void _Ready()
-		{
-			animationTree.Active = true;
-			StageSettings.instance.ConnectRespawnSignal(this);
-			Respawn();
+			moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(DeltaProgress) * 1.5f, .5f);
+			rubberbandingSpeed = 0;
+			return;
 		}
 
-
-		private void Respawn()
+		if (Character.Skills.IsSpeedBreakCharging) // Kill speed quickly when starting a speed break
 		{
-			if (IsMainDino)
-			{
-				playerHitTimer = 0;
-				attackTimer = ATTACK_INTERVAL;
-			}
-
-			Progress = 0;
-			moveSpeed = rubberbandingSpeed = 0;
-			CancelAttack();
-
-			// Desync animations
-			animationTree.Set(MOVEMENT_SEEK_PARAMETER, Runtime.randomNumberGenerator.RandfRange(0, 5));
+			moveSpeed *= .9f;
+			rubberbandingSpeed = 0;
+			return;
 		}
 
-		public override void _EnterTree()
+		// Normal chasing
+		float targetSpeed = Mathf.Clamp(Character.MoveSpeed - Processor.SpeedDifference, 0, Character.Skills.GroundSettings.speed);
+		if (Mathf.Abs(DeltaProgress) > DinoTrioProcessor.AttackOffset)
+			targetSpeed = Character.Skills.GroundSettings.speed - Processor.SpeedDifference;
+
+		moveSpeed = Mathf.MoveToward(moveSpeed, targetSpeed, traction * PhysicsManager.physicsDelta);
+
+		// Rubberbanding
+		rubberbandingSpeed = (DeltaProgress - preferredOffset) * rubberbandingStrength;
+	}
+
+	[Export]
+	private AnimationTree animationTree;
+	private readonly StringName EnabledConstant = "enabled";
+	private readonly StringName DisabledConstant = "disabled";
+
+	private readonly StringName IdleSeekParameter = "parameters/idle_seek/seek_request";
+	private readonly StringName FidgetTrigger = "parameters/fidget_trigger/request";
+	private readonly StringName FidgetTransition = "parameters/fidget/transition_request";
+	private readonly StringName PawFidgetAnimation = "paw";
+	private readonly StringName ShakeFidgetAnimation = "shake";
+
+	private readonly StringName MovingTransition = "parameters/movement_transition/current_state";
+	private readonly StringName MovingTransitionRequest = "parameters/movement_transition/transition_request";
+
+	private readonly StringName MovementBlendParameter = "parameters/movement_blend/blend_position";
+	private readonly StringName MovementSpeedParameter = "parameters/movement_speed/scale";
+	private readonly StringName MovementSeekParameter = "parameters/movement_seek/seek_request";
+
+	private readonly StringName AttackTrigger = "parameters/attack_trigger/request";
+	private void UpdateAnimations()
+	{
+		string movingState = (string)animationTree.Get(MovingTransition);
+		if (Mathf.IsZeroApprox(TotalMoveSpeed) && movingState == EnabledConstant)
 		{
-			if (!registeredDinoTrio.Contains(this))
-				registeredDinoTrio.Add(this);
+			animationTree.Set(MovingTransitionRequest, DisabledConstant);
+			animationTree.Set(IdleSeekParameter, Runtime.randomNumberGenerator.RandfRange(0, 5));
+		}
+		else if (!Mathf.IsZeroApprox(TotalMoveSpeed) && movingState == DisabledConstant)
+		{
+			animationTree.Set(MovingTransitionRequest, EnabledConstant);
+			animationTree.Set(MovementSeekParameter, Runtime.randomNumberGenerator.RandfRange(0, 5));
 		}
 
+		animationTree.Set(MovementSpeedParameter, 1.5f + (Character.Skills.GroundSettings.GetSpeedRatio(TotalMoveSpeed) * .8f));
+		animationTree.Set(MovementBlendParameter, Character.Skills.GroundSettings.GetSpeedRatioClamped(TotalMoveSpeed * 1.5f));
+	}
 
-		public override void _ExitTree()
+	public void StartIdleFidget()
+	{
+		if (Runtime.randomNumberGenerator.Randf() < .2f) // Don't fidget
+			return;
+
+		animationTree.Set(FidgetTransition, Runtime.randomNumberGenerator.Randf() > .5f ? PawFidgetAnimation : ShakeFidgetAnimation);
+		animationTree.Set(FidgetTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public void StartAttack() => animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+	private bool tossedPlayer; // Last state we processed damage in
+	private void DamagePlayer()
+	{
+		switch (CurrentAttackState)
 		{
-			if (registeredDinoTrio.Contains(this))
-				registeredDinoTrio.Remove(this);
-		}
+			case AttackStates.Toss: // Powerful launch
+				if (tossedPlayer) return; // Already tossed the player
 
-
-		public override void _PhysicsProcess(double _)
-		{
-			if (IsMainDino) // Main dino processes extra things
-			{
-				ProcessPositions();
-				ProcessAttacks();
-			}
-
-			CalculateMovespeed();
-			UpdateAnimations();
-
-			Progress += TotalMoveSpeed * PhysicsManager.physicsDelta;
-
-			if (isInteractingWithPlayer)
-				DamagePlayer();
-		}
-
-
-		private void ProcessPositions()
-		{
-			Vector3 localPosition = path.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - path.GlobalPosition);
-			playerProgress = path.Curve.GetClosestOffset(localPosition);
-
-			// Update reverse prevention
-			float targetProgress = Progress;
-			for (int i = 0; i < registeredDinoTrio.Count; i++)
-			{
-				if (registeredDinoTrio[i].Progress < targetProgress)
-					targetProgress = registeredDinoTrio[i].Progress;
-			}
-			reversePrevention.Progress = targetProgress;
-		}
-
-
-		private void ProcessAttacks()
-		{
-			if (!IsMainDino) return; // Only the main dino can process attack timer
-			if (Character.Camera.IsBehindCamera(GlobalPosition)) return; // Don't attack when off-camera for fairness
-
-			for (int i = 0; i < registeredDinoTrio.Count; i++)
-			{
-				if (registeredDinoTrio[i].attackState != AttackState.Inactive) // Don't update timer when a dino is already attacking
-					return;
-			}
-
-			attackTimer = Mathf.MoveToward(attackTimer, 0, PhysicsManager.physicsDelta);
-			if (!Mathf.IsZeroApprox(attackTimer)) return;
-
-			// Calculate which dino attacks
-			Vector3 closestPosition = path.GlobalPosition + path.Curve.SampleBaked(playerProgress);
-			float targetDeltaPosition = (path.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - closestPosition)).X;
-
-			float closestDeltaPosition = Mathf.Inf;
-			int closestDinoIndex = 0;
-			for (int i = 0; i < registeredDinoTrio.Count; i++)
-			{
-				float deltaPosition = Mathf.Abs(targetDeltaPosition - registeredDinoTrio[i].HOffset);
-				if (deltaPosition < closestDeltaPosition)
+				Character.StartKnockback(new()
 				{
-					closestDinoIndex = i;
-					closestDeltaPosition = deltaPosition;
-				}
-			}
+					knockForward = true, // Always knock forward
+					ignoreInvincibility = true, // Always knockback the player
+					overrideKnockbackSpeed = true,
+					knockbackSpeed = 40f,
+					overrideKnockbackHeight = true,
+					knockbackHeight = 3
+				});
 
-			if (Mathf.Abs(registeredDinoTrio[closestDinoIndex].Progress - playerProgress) > attackOffset) // Too far away to attack
-				return;
-
-			registeredDinoTrio[closestDinoIndex].StartAttack();
-			attackTimer = ATTACK_INTERVAL; // Reset timer
-		}
-
-
-		private void CalculateMovespeed()
-		{
-			float deltaProgress = playerProgress - Progress;
-
-			if (!Mathf.IsZeroApprox(playerHitTimer))
-			{
-				if (IsMainDino) // Update timer
-					playerHitTimer = Mathf.MoveToward(playerHitTimer, 0, PhysicsManager.physicsDelta);
-
-				moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
-				rubberbandingSpeed = 0;
-
-				if (Mathf.Abs(deltaProgress) > attackOffset)
-					playerHitTimer = 0; // Start chase again
-				return;
-			}
-
-
-			// Accelerate
-			if (attackState != AttackState.Inactive)
-				moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(deltaProgress), .25f);
-			else
-			{
-				float targetSpeed = Mathf.Clamp(Character.MoveSpeed - SPEED_DIFFERENCE, 0, Character.Skills.GroundSettings.speed);
-				if (Mathf.Abs(deltaProgress) > attackOffset)
-					targetSpeed = Character.Skills.GroundSettings.speed - SPEED_DIFFERENCE;
-
-				moveSpeed = Mathf.MoveToward(moveSpeed, targetSpeed, traction * PhysicsManager.physicsDelta);
-
-				// Rubberbanding
-				rubberbandingSpeed = (deltaProgress - preferredOffset) * rubberbandingStrength;
-			}
-		}
-
-
-		[Export]
-		private AnimationTree animationTree;
-		private AnimationNodeStateMachinePlayback IdleState => animationTree.Get(IDLE_STATE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
-		private readonly StringName ENABLED_CONSTANT = "enabled";
-		private readonly StringName DISABLED_CONSTANT = "disabled";
-
-		private readonly StringName IDLE_STATE_PLAYBACK = "parameters/idle_state/playback";
-		private readonly StringName IDLE_STATE_PARAMETER = "trio-idle";
-		private readonly StringName IDLE_SEEK_PARAMETER = "parameters/idle_seek/seek_request";
-		private readonly StringName PAW_STATE_PARAMETER = "trio-fidget-paw";
-		private readonly StringName SHAKE_STATE_PARAMETER = "trio-fidget-shake";
-
-		private readonly StringName MOVING_TRANSITION = "parameters/moving_transition/current_state";
-		private readonly StringName MOVING_TRANSITION_REQUEST = "parameters/moving_transition/transition_request";
-
-		private readonly StringName MOVEMENT_BLEND_PARAMETER = "parameters/movement_blend/blend_position";
-		private readonly StringName MOVEMENT_SPEED_PARAMETER = "parameters/movement_speed/scale";
-		private readonly StringName MOVEMENT_SEEK_PARAMETER = "parameters/movement_seek/seek_request";
-
-		private readonly StringName ATTACK_TRIGGER = "parameters/attack_trigger/request";
-
-		private void UpdateAnimations()
-		{
-			if (Mathf.IsZeroApprox(TotalMoveSpeed))
-			{
-				if ((string)animationTree.Get(MOVING_TRANSITION) == ENABLED_CONSTANT)
+				break;
+			default: // Normal knockback
+				Character.StartKnockback(new()
 				{
-					animationTree.Set(MOVING_TRANSITION_REQUEST, DISABLED_CONSTANT);
-					animationTree.Set(IDLE_SEEK_PARAMETER, Runtime.randomNumberGenerator.RandfRange(0, 5));
-				}
-			}
-			else
-			{
-				animationTree.Set(MOVING_TRANSITION_REQUEST, ENABLED_CONSTANT);
-				animationTree.Set(MOVEMENT_BLEND_PARAMETER, Character.Skills.GroundSettings.GetSpeedRatioClamped(TotalMoveSpeed));
-				animationTree.Set(MOVEMENT_SPEED_PARAMETER, .6f + Character.Skills.GroundSettings.GetSpeedRatio(TotalMoveSpeed) * 1.4f);
-			}
+					knockForward = true,
+					ignoreInvincibility = true,
+					overrideKnockbackSpeed = true,
+					knockbackSpeed = Mathf.Max(TotalMoveSpeed, 20f),
+				});
+				break;
 		}
 
+		tossedPlayer = CurrentAttackState == AttackStates.Toss;
+		EmitSignal(SignalName.DamagedPlayer);
+	}
 
-		public void SelectIdleFidget() => IdleState.Travel(Runtime.randomNumberGenerator.Randf() > .5f ? PAW_STATE_PARAMETER : SHAKE_STATE_PARAMETER);
+	private bool isInteractingWithPlayer;
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player"))
+			return;
 
+		isInteractingWithPlayer = true;
+		tossedPlayer = false;
+	}
 
-		public void StartAttack() => animationTree.Set(ATTACK_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-		public void CancelAttack() => animationTree.Set(ATTACK_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+	public void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player"))
+			return;
 
-
-		private bool tossedPlayer; // last state we processed damage in
-		private void DamagePlayer()
-		{
-			playerHitTimer = PLAYER_HIT_WAIT_TIME;
-			attackTimer = ATTACK_INTERVAL; // Reset attack timer
-
-			switch (attackState)
-			{
-				case AttackState.Toss: // Powerful launch
-					if (tossedPlayer) return; // Already tossed the player
-
-					CharacterController.instance.StartKnockback(new CharacterController.KnockbackSettings()
-					{
-						knockForward = true, // Always knock forward
-						ignoreInvincibility = true, // Always knockback the player
-						disableDamage = CharacterController.instance.IsInvincible, // Don't hurt player during invincibility
-						overrideKnockbackSpeed = true,
-						knockbackSpeed = 40f,
-						overrideKnockbackHeight = true,
-						knockbackHeight = 3
-					});
-
-					break;
-				default: //Normal knockback
-					CharacterController.instance.StartKnockback(new CharacterController.KnockbackSettings()
-					{
-						knockForward = true,
-						overrideKnockbackSpeed = true,
-						knockbackSpeed = TotalMoveSpeed
-					});
-					break;
-			}
-
-			tossedPlayer = attackState == AttackState.Toss;
-		}
-
-		private bool isInteractingWithPlayer;
-		public void OnEntered(Area3D area)
-		{
-			if (!area.IsInGroup("player")) return;
-			isInteractingWithPlayer = true;
-			tossedPlayer = false;
-		}
-
-		public void OnExited(Area3D area)
-		{
-			if (!area.IsInGroup("player")) return;
-			isInteractingWithPlayer = false;
-		}
+		isInteractingWithPlayer = false;
 	}
 }
