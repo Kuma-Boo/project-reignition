@@ -1,4 +1,4 @@
-[gd_scene load_steps=108 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=102 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="Resource" uid="uid://covb6cdfu44gv" path="res://area/2 dino jungle/act 1/camera/ChaseStartCam.tres" id="3_51j1g"]
@@ -70,9 +70,10 @@ size = Vector3(100, 100, 250)
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
 
-[sub_resource type="Curve" id="Curve_6lpk3"]
-min_value = -1.0
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0), 0.0, 0.0, 0, 0, Vector2(1, -1), -6.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_5osdg"]
+min_value = -1.5
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0), 0.0, 0.0, 0, 0, Vector2(1, -1.5), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_rpcoj"]
@@ -82,33 +83,9 @@ point_count = 3
 
 [sub_resource type="Curve" id="Curve_exccj"]
 min_value = -1.0
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 6.0, 0.0, 0, 0]
+max_value = 1.5
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0), 0.0, 0.0, 0, 0, Vector2(1, 1.5), 0.0, 0.0, 0, 0]
 point_count = 3
-
-[sub_resource type="Curve" id="Curve_0et4o"]
-min_value = -2.0
-_data = [Vector2(0, 0), 0.0, -1.0, 0, 0, Vector2(1, -1.2), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_h6fmk"]
-min_value = -2.0
-_data = [Vector2(0, 0), 0.0, -1.0, 0, 0, Vector2(1, -1.575), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_2417x"]
-min_value = -1.0
-_data = [Vector2(0, 0), 0.0, -4.0, 0, 0, Vector2(0.4, -0.6), 0.0, 0.0, 0, 0, Vector2(1, 0.45), 2.8, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_mce4p"]
-min_value = -2.0
-_data = [Vector2(0, 0), 0.0, 3.0, 0, 0, Vector2(1, -2), -4.25, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_d2c0c"]
-max_value = 2.5
-_data = [Vector2(0.00381679, 0), 0.0, -1.28264, 0, 0, Vector2(1, 2.5), 6.25, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="Curve" id="Curve_3p528"]
 min_value = -1.0
@@ -119,11 +96,6 @@ point_count = 3
 [sub_resource type="Curve" id="Curve_wmt81"]
 min_value = -1.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -1), -2.4, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_bbjeg"]
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, 2.8, 0, 0, Vector2(1, 1.6), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
@@ -431,7 +403,6 @@ shape = SubResource("BoxShape3D_mynxt")
 
 [node name="TrioStartTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
-monitoring = false
 OneShot = true
 "Respawn Mode" = 2
 "Enter Mode" = 0
@@ -484,6 +455,7 @@ startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Dinos" type="Node3D" parent="MainAct/Chase"]
+visible = false
 
 [node name="DinoTrioGroup" parent="MainAct/Chase/Dinos" instance=ExtResource("10_3r4lq")]
 
@@ -643,10 +615,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
 
 [node name="DashPanelM2" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(-1, -0.000575523, -2.24785e-05, -0.000575871, 0.998384, 0.0568149, -1.0256e-05, 0.0568148, -0.998385, 0.4, 1.36195, -52)
+transform = Transform3D(-1, -0.000575523, -2.24785e-05, -0.000575871, 0.998384, 0.0568149, -1.0256e-05, 0.0568148, -0.998385, -0.2, 1.36195, -52)
 
 [node name="PearlsL2" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 2, -54.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 2, -54.4)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("42_o7jek")
@@ -654,7 +626,7 @@ Amount = 26
 Shape = 0
 Orientation = 0
 Spacing = 1.15
-"Horizontal Offset" = SubResource("Curve_6lpk3")
+"Horizontal Offset" = SubResource("Curve_5osdg")
 "Vertical Offset" = SubResource("Curve_rpcoj")
 
 [node name="Child01" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
@@ -705,37 +677,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.72909, -16.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.28919, -17.25)
 
 [node name="Child17" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00639999, -3.90575, -18.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0419999, -3.90575, -18.4)
 
 [node name="Child18" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0272, -4.43345, -19.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.156, -4.43345, -19.55)
 
 [node name="Child19" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0648, -4.84078, -20.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.324, -4.84078, -20.7)
 
 [node name="Child20" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1216, -5.13671, -21.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.528, -5.13671, -21.85)
 
 [node name="Child21" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, -5.33021, -23)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, -5.33021, -23)
 
 [node name="Child22" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3024, -5.43025, -24.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.972, -5.43025, -24.15)
 
 [node name="Child23" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4312, -5.44577, -25.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.176, -5.44577, -25.3)
 
 [node name="Child24" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5888, -5.38577, -26.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.344, -5.38577, -26.45)
 
 [node name="Child25" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7776, -5.25919, -27.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.458, -5.25919, -27.6)
 
 [node name="Child26" parent="MainAct/Chase/PearlsL2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -5.075, -28.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, -5.075, -28.75)
 
 [node name="PearlsR2" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, -54.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 2, -54.5)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("42_o7jek")
@@ -794,40 +766,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.72909, -16.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.28919, -17.25)
 
 [node name="Child17" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00639999, -3.90575, -18.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0419999, -3.90575, -18.4)
 
 [node name="Child18" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0272, -4.43345, -19.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.156, -4.43345, -19.55)
 
 [node name="Child19" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0648, -4.84078, -20.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.324, -4.84078, -20.7)
 
 [node name="Child20" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1216, -5.13671, -21.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.528, -5.13671, -21.85)
 
 [node name="Child21" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -5.33021, -23)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, -5.33021, -23)
 
 [node name="Child22" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3024, -5.43025, -24.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.972, -5.43025, -24.15)
 
 [node name="Child23" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4312, -5.44577, -25.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.176, -5.44577, -25.3)
 
 [node name="Child24" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5888, -5.38577, -26.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.344, -5.38577, -26.45)
 
 [node name="Child25" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7776, -5.25919, -27.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.458, -5.25919, -27.6)
 
 [node name="Child26" parent="MainAct/Chase/PearlsR2" instance=ExtResource("42_o7jek")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -5.075, -28.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -5.075, -28.75)
 
 [node name="DashPanelL2" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(-0.984356, 0.000181966, -0.17619, -0.0455434, 0.96575, 0.255446, 0.170201, 0.259474, -0.950634, -2.57442, -2.91197, -85.0826)
+transform = Transform3D(-0.999945, 0.000181969, -0.0104179, -0.00252713, 0.96575, 0.259462, 0.0101074, 0.259474, -0.965697, -2.57442, -2.91197, -85.0826)
 
 [node name="DashPanelR2" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(-0.983512, 0.0435317, -0.175522, -0.00536253, 0.963148, 0.268919, 0.180761, 0.265427, -0.947034, 2.41771, -2.87233, -85.5693)
+transform = Transform3D(-0.998917, 0.0436194, -0.0161804, 0.0377468, 0.963178, 0.266202, 0.0271962, 0.265303, -0.963781, 2.01809, -2.85551, -85.5647)
 
 [node name="RingsL1" type="Node3D" parent="MainAct/Chase"]
 transform = Transform3D(0.999709, 0.00759611, 0.0229147, 0.00125795, 0.931524, -0.363677, -0.0241081, 0.3636, 0.931243, -2.74037, -1.37339, -87.0341)
@@ -994,104 +966,104 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
 [node name="RingsL2" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.80695, -0.681694, -142.845)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.66183, -0.681694, -143.465)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("../../../Static/Path/ChasePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_0et4o")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0292821, 0, 0.178116)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00167418, -0.0010637, -0.00660706)
 
 [node name="Child02" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.212104, -0.10308, -1.1059)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.364414, -0.2131, -1.23575)
 
 [node name="Child03" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.521936, -0.226296, -2.3419)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.806716, -0.395557, -2.42328)
 
 [node name="Child04" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.906458, -0.363336, -3.52275)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.33188, -0.547034, -3.56349)
 
 [node name="Child05" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.37105, -0.507889, -4.64362)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.94204, -0.667011, -4.6517)
 
 [node name="Child06" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.92108, -0.653644, -5.70474)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.63834, -0.756213, -5.68484)
 
 [node name="Child07" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.56161, -0.79429, -6.71043)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4206, -0.816691, -6.66106)
 
 [node name="Child08" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.29661, -0.923516, -7.66739)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2871, -0.85178, -7.57971)
 
 [node name="Child09" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.12578, -1.03501, -8.58093)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.23428, -0.865753, -8.44089)
 
 [node name="Child10" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.04574, -1.12246, -9.45683)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.28458, -0.860664, -9.27361)
 
 [node name="Child11" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0472, -1.17956, -10.2984)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.39706, -0.786009, -10.1071)
 
 [node name="Child12" parent="MainAct/Chase/RingsL2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11899, -1.2, -11.1097)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.52594, -0.631542, -10.9195)
 
 [node name="RingsR2" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49305, -0.943838, -143.545)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99758, -0.943838, -143.431)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("../../../Static/Path/ChasePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_h6fmk")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0279, -0.16726, 0.190994)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00168347, -0.00153267, -0.00869751)
 
 [node name="Child02" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18384, -0.333524, -1.10713)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.293897, -0.199429, -1.33301)
 
 [node name="Child03" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.453654, -0.480688, -2.40955)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.656747, -0.380017, -2.65811)
 
 [node name="Child04" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.790032, -0.66355, -3.71342)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.09619, -0.542153, -3.97798)
 
 [node name="Child05" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.20157, -0.832867, -5.01381)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61746, -0.684957, -5.28529)
 
 [node name="Child06" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69492, -0.949728, -6.30034)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.22399, -0.807772, -6.57082)
 
 [node name="Child07" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.27565, -1.1075, -7.56413)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.91699, -0.91038, -7.82408)
 
 [node name="Child08" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.94472, -1.18582, -8.79204)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.69483, -0.993093, -9.03464)
 
 [node name="Child09" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.69862, -1.34155, -9.97142)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55284, -1.05676, -10.1921)
 
 [node name="Child10" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.52893, -1.46478, -11.0912)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.48356, -1.1028, -11.288)
 
 [node name="Child11" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.42388, -1.54583, -12.1441)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4777, -1.13313, -12.3162)
 
 [node name="Child12" parent="MainAct/Chase/RingsR2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.37213, -1.575, -13.1292)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.52505, -1.15002, -13.2736)
 
 [node name="DashPanelL3" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.544186, 0.153378, -0.824825, 0.12605, 0.986934, 0.10036, 0.82944, -0.0493545, -0.55641, -14.1221, -2.35289, -155.548)
@@ -1106,51 +1078,51 @@ Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("../../../Static/Path/ChasePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_2417x")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0.00341797, 0, 0.085434)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.06828e-05, -6.86646e-05)
 
 [node name="Child02" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, -0.0388031, -0.296018, -1.4125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022171, -0.395335, -1.42159)
 
 [node name="Child03" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, -0.0292053, -0.475582, -2.91141)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0325317, -0.667937, -2.86208)
 
 [node name="Child04" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0.052475, -0.566867, -4.40669)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0299225, -0.781827, -4.31613)
 
 [node name="Child05" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0.229156, -0.598047, -5.8934)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0274811, -0.766212, -5.80036)
 
 [node name="Child06" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0.524231, -0.588167, -7.36041)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.210022, -0.701678, -7.27666)
 
 [node name="Child07" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0.956955, -0.519593, -8.7923)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.533218, -0.588754, -8.72544)
 
 [node name="Child08" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 1.53702, -0.39755, -10.1709)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.007, -0.430103, -10.1284)
 
 [node name="Child09" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 2.26099, -0.230804, -11.4796)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.63307, -0.232637, -11.467)
 
 [node name="Child10" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 3.11432, -0.0281202, -12.7087)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.40346, -0.00711805, -12.7264)
 
 [node name="Child11" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 4.076, 0.201736, -13.8557)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3018, 0.233486, -13.8986)
 
 [node name="Child12" parent="MainAct/Chase/RingsM2" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 5.12425, 0.45, -14.9243)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.30751, 0.47607, -14.9836)
 
 [node name="DashPanelM4" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
-transform = Transform3D(-0.983521, 0.174284, -0.0480792, 0.167216, 0.978013, 0.124617, 0.0687401, 0.114524, -0.991039, -50.4943, 1.28003, -187.255)
+transform = Transform3D(-0.973787, 0.183602, -0.134271, 0.167216, 0.978013, 0.124617, 0.154198, 0.0988983, -0.983077, -50.7943, 1.28003, -186.755)
 
 [node name="WhiteRock6" parent="MainAct/Chase" instance=ExtResource("38_158q5")]
 transform = Transform3D(-0.00591561, 0.108652, 0.994062, 0.126349, 0.986194, -0.10704, -0.991968, 0.124965, -0.0195619, -55.5291, 2.22895, -186.769)
@@ -1340,47 +1312,49 @@ script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/ChasePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_mce4p")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -0.0869999, 0.0030365)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, 0, -9.53674e-07, 1.52588e-05)
 
 [node name="Child02" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 3.8147e-06, -0.00168705, -1.39258)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.0292625, 0.096499, -1.43349)
 
 [node name="Child03" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 0, 0.0952129, -2.79265)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.055294, 0.146679, -2.86855)
 
 [node name="Child04" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 0, 0.102624, -4.19322)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.078289, 0.151495, -4.30319)
 
 [node name="Child05" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, -1.16415e-10, 0, -5.82077e-10, 1, 0, -2.23517e-08, 2.23517e-08, 1, 1.14441e-05, -0.00409412, -5.59302)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.101517, 0.100228, -5.75169)
 
 [node name="Child06" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, -3.8147e-06, -0.297733, -6.98894)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.134495, -0.0918455, -7.21016)
 
 [node name="Child07" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, -1.16415e-10, 0, -4.65661e-10, 1, 0, -1.49012e-08, 1.49012e-08, 1, 0, -0.582906, -8.38747)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.168293, -0.372946, -8.6236)
 
 [node name="Child08" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -0.868787, -9.78784)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.202389, -0.70549, -10.008)
 
 [node name="Child09" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, -3.8147e-06, -1.1908, -11.1885)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.236488, -1.066, -11.3728)
 
 [node name="Child10" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -1.49245, -12.5907)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.270279, -1.43459, -12.7235)
 
 [node name="Child11" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, -2.32831e-10, 1, 0, -7.45058e-09, 7.45058e-09, 1, 0, -1.82156, -13.9927)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.303329, -1.78648, -14.0624)
 
 [node name="Child12" parent="MainAct/Chase/RingsL3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -15.4)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, -3.72529e-09, 3.72529e-09, 1, -0.334492, -2.07142, -15.3782)
 
 [node name="RingsR3" type="Node3D" parent="MainAct/Chase"]
 transform = Transform3D(0.999313, -0.00123211, -0.0370244, 0, 0.999447, -0.0332598, 0.0370448, 0.033237, 0.998761, -47.4, 2.70151, -231.277)
@@ -1388,46 +1362,49 @@ script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/ChasePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_mce4p")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -3.43323e-05, 0.000148773, -0.00157166)
 
 [node name="Child02" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.210744, -1.4)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.0271645, 0.10957, -1.38936)
 
 [node name="Child03" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.305785, -2.8)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.0512466, 0.17365, -2.7823)
 
 [node name="Child04" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.297521, -4.2)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.0724144, 0.192883, -4.1772)
 
 [node name="Child05" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198347, -5.6)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.0908318, 0.168925, -5.56956)
 
 [node name="Child06" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0206613, -7)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.111088, 0.0897179, -6.98737)
 
 [node name="Child07" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22314, -8.4)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.134254, -0.0970478, -8.38777)
 
 [node name="Child08" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.520661, -9.8)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.159115, -0.347908, -9.77422)
 
 [node name="Child09" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.859504, -11.2)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.18499, -0.634892, -11.1499)
 
 [node name="Child10" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.22727, -12.6)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.211346, -0.935516, -12.518)
 
 [node name="Child11" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.61157, -14)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.237617, -1.2242, -13.8805)
 
 [node name="Child12" parent="MainAct/Chase/RingsR3" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -15.4)
+transform = Transform3D(1, 0, 0, -1.16415e-10, 1, 0, 0, -3.72529e-09, 1, -0.262756, -1.45546, -15.2334)
 
 [node name="PearlsR6" type="Node3D" parent="MainAct/Chase"]
 transform = Transform3D(0.695879, 0.259158, -0.669768, -0.0810586, 0.955002, 0.285307, 0.713569, -0.144249, 0.685573, -40.7514, 1.46533, -261.891)
@@ -1540,104 +1517,104 @@ transform = Transform3D(-0.721463, 0.221359, 0.656117, 0.0810582, 0.968011, -0.2
 transform = Transform3D(-0.70577, 0.192597, 0.681758, 0.0284386, 0.969263, -0.244377, -0.707869, -0.153086, -0.689555, -36.3736, -0.540885, -265.796)
 
 [node name="RingsL4" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -36.0743, -1.07825, -276.081)
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -36.0743, -0.97825, -276.081)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("../../../Static/Path/ChasePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.8
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_d2c0c")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0770149, 0, 0.0757446)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00274658, -0.000511408, -0.00335693)
 
 [node name="Child02" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02647, -0.0824734, -1.15689)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.994804, -0.192512, -1.27658)
 
 [node name="Child03" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.03089, -0.106343, -2.39297)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91976, -0.306032, -2.57846)
 
 [node name="Child04" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.89946, -0.0668932, -3.62186)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.76217, -0.333995, -3.90292)
 
 [node name="Child05" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6003, 0.0356418, -4.83774)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5038, -0.268209, -5.24033)
 
 [node name="Child06" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.12398, 0.201026, -6.05875)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.12366, -0.0996528, -6.5752)
 
 [node name="Child07" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.49245, 0.429025, -7.35022)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.59989, 0.180987, -7.88507)
 
 [node name="Child08" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.73735, 0.719402, -8.77161)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.91355, 0.581316, -9.14017)
 
 [node name="Child09" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.89466, 1.07192, -10.3253)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.08007, 1.11322, -10.5208)
 
 [node name="Child10" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.00358, 1.48635, -11.9736)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19478, 1.70355, -12.1165)
 
 [node name="Child11" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09743, 1.96246, -13.6789)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26827, 2.30272, -13.7335)
 
 [node name="Child12" parent="MainAct/Chase/RingsL4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1976, 2.5, -15.4045)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.30713, 2.89223, -15.3796)
 
 [node name="RingsR4" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -28.8743, -1.66985, -273.381)
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -30.7084, -1.66985, -271.637)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 12
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("../../../Static/Path/ChasePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
-Spacing = 1.4
+Spacing = 1.8
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_d2c0c")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.114641, 0, 0.116974)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.72205e-05, -1.09673e-05, -6.10352e-05)
 
 [node name="Child02" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.856503, -0.0824734, -1.1315)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19737, -0.146197, -1.52585)
 
 [node name="Child03" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78342, -0.106343, -2.47495)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.34023, -0.210312, -3.12592)
 
 [node name="Child04" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.63507, -0.0668931, -3.92542)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4133, -0.184965, -4.80832)
 
 [node name="Child05" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.36959, 0.0356418, -5.47601)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.39603, -0.0617384, -6.58237)
 
 [node name="Child06" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.94722, 0.201026, -7.08615)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26033, 0.168529, -8.45801)
 
 [node name="Child07" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35483, 0.429025, -8.68817)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96753, 0.5148, -10.4436)
 
 [node name="Child08" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.61751, 0.719402, -10.2286)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.46522, 0.983748, -12.5403)
 
 [node name="Child09" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.77931, 1.07192, -11.6891)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.69745, 1.55235, -14.5257)
 
 [node name="Child10" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.881, 1.48635, -13.0776)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82179, 2.14395, -16.3184)
 
 [node name="Child11" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.95188, 1.96246, -14.4119)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.89901, 2.74295, -18.0993)
 
 [node name="Child12" parent="MainAct/Chase/RingsR4" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.01076, 2.5, -15.7084)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.93806, 3.33075, -19.8713)
 
 [node name="DashPanelL6" parent="MainAct/Chase" instance=ExtResource("41_nmbev")]
 transform = Transform3D(-0.999585, 0.0287765, -8.9407e-08, 0.028667, 0.995782, -0.0871558, -0.00250794, -0.0871196, -0.996195, -30.333, 2.9828, -311.077)
@@ -2112,48 +2089,48 @@ transform = Transform3D(0.00712006, 0.340309, -0.940287, -0.0506227, 0.939228, 0
 transform = Transform3D(0.943709, 0.330388, -0.0160431, -0.330777, 0.942598, -0.0457709, -9.00155e-10, 0.0485011, 0.998823, -147.693, -37.5155, -439.692)
 
 [node name="RingsM5" type="Node3D" parent="MainAct/Chase"]
-transform = Transform3D(0.989775, 0, -0.142629, 0, 1, 0, 0.142629, 0, 0.989776, -162.568, -32.5833, -439.512)
+transform = Transform3D(0.989775, 0, -0.142629, 0, 1, 0, 0.142629, 0, 0.989776, -162.568, -32.5833, -439.212)
 script = ExtResource("39_p0jth")
 Generate = false
 Source = ExtResource("40_m082x")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("../../../Static/Path/ChasePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.5
 "Horizontal Offset" = null
-"Vertical Offset" = SubResource("Curve_bbjeg")
+"Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, 0.0146484, 0, 0.387512)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -0.000259399, 4.95911e-05, -3.05176e-05)
 
 [node name="Child02" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -1.61511, 0.300686, 0.435028)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -1.47603, 0.309593, -0.0184021)
 
 [node name="Child03" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -3.24922, 0.578327, 0.369659)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -2.95465, 0.596397, -0.104156)
 
 [node name="Child04" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -4.88156, 0.82963, 0.190491)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -4.43175, 0.858059, -0.268127)
 
 [node name="Child05" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -6.49879, 1.0513, -0.100647)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -5.90132, 1.09245, -0.520203)
 
 [node name="Child06" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -8.0929, 1.24006, -0.500854)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -7.35533, 1.29797, -0.868134)
 
 [node name="Child07" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -9.65634, 1.39259, -1.00577)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -8.78528, 1.47401, -1.31641)
 
 [node name="Child08" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -11.1794, 1.50562, -1.60904)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -10.1824, 1.62108, -1.86465)
 
 [node name="Child09" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -12.6553, 1.57586, -2.30399)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -11.5427, 1.74072, -2.50616)
 
 [node name="Child10" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
-transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, 0, 0, 1, -14.0784, 1.6, -3.0834)
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -12.8808, 1.82914, -3.20444)
 
 [node name="RiverEvent" parent="MainAct" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193.347, -39.102, -495.023)
@@ -2180,6 +2157,7 @@ shape = SubResource("BoxShape3D_7im1x")
 
 [node name="River" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -190, -95, -495)
+visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -4814,13 +4792,13 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -79.6342, -1.24994, -190.373)
 
 [node name="Catapult" parent="MainAct/Cave" instance=ExtResource("60_jn18j")]
-transform = Transform3D(-0.990263, 0, 0.139225, 0, 1, 0, -0.139225, 0, -0.990263, -81.1916, 10.7501, -196.367)
+transform = Transform3D(-0.981629, 0, 0.190809, 0, 1, 0, -0.190809, 0, -0.981629, -81.1916, 10.7501, -196.367)
 closeDistance = 5.0
 closeMidHeight = 0.5
 closeEndHeight = -2.0
-farDistance = 19.0
+farDistance = 18.5
 farMidHeight = 3.0
-farEndHeight = -5.0
+farEndHeight = -4.0
 launchPower = 1.0
 
 [node name="EnemyStone4" parent="MainAct/Cave" instance=ExtResource("49_g35os")]

@@ -363,7 +363,7 @@ namespace Project.Gameplay
 
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					sampledTargetYawAngle += ExtensionMethods.CalculateForwardAngle(sampledForward);
-				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					sampledTargetPitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
 
 				// Calculate target angles when DistanceMode is set to Offset
@@ -380,15 +380,26 @@ namespace Project.Gameplay
 						data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
 				}
 				else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)
+				{
 					data.blendData.SampleBlend = 1.0f;
+				}
 				else
+				{
 					data.blendData.SampleBlend = 0.0f;
+				}
+
+				// Fix rotated sampling cameras
+				data.blendData.yawAngle = sampledTargetYawAngle;
+				data.blendData.pitchAngle = sampledTargetPitchAngle;
+				data.CalculateBasis();
+				int yawSamplingFix = Mathf.Sign(sampledForward.Dot(-data.offsetBasis.Z));
+				sampledTargetPitchAngle *= yawSamplingFix;
 
 				// Interpolate angles
 				data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend);
 				data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
-				if (settings.followPathTilt) //Calculate tilt
-					data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.SideAxis, PathFollower.Forward()); //Update tilt
+				if (settings.followPathTilt) // Calculate tilt
+					data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.SideAxis, PathFollower.Forward()) * yawSamplingFix;
 
 				// Update Tracking
 				// Calculate position for tracking calculations

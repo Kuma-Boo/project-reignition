@@ -569,7 +569,11 @@ namespace Project.Gameplay
 
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Sliding) return;
-			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) return; // Turning around
+			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) // Check for turning around
+			{
+				if (!IsLockoutActive || ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+					return;
+			}
 
 			if (turnInstantly) // Instantly set movement angle to target movement angle
 			{
