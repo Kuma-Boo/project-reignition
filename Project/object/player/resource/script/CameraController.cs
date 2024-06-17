@@ -357,9 +357,11 @@ namespace Project.Gameplay
 
 				float currentProgress = PathFollower.Progress; // Cache progress
 				PathFollower.Progress -= data.blendData.distance;
+				PathFollower.Progress += data.blendData.SettingsResource.sampleOffset;
 				Vector3 sampledPosition = PathFollower.GlobalPosition;
-				PathFollower.Progress = currentProgress; // Revert progress
+				PathFollower.Progress = currentProgress + data.blendData.SettingsResource.sampleOffset; // Sample current
 				Vector3 sampledForward = (PathFollower.GlobalPosition - sampledPosition).Normalized();
+				PathFollower.Progress = currentProgress; // Revert progress
 
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					sampledTargetYawAngle += ExtensionMethods.CalculateForwardAngle(sampledForward);

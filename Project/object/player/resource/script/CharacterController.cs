@@ -541,15 +541,18 @@ namespace Project.Gameplay
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
-			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
-			if (ActionState == ActionStates.Crouching || MoveSpeed == 0) return;
+			if (ActionState == ActionStates.Backflip ||
+				ActionState == ActionStates.Stomping ||
+				ActionState == ActionStates.Crouching)
+			{
+				return;
+			}
 
 			float targetMovementAngle = GetTargetMovementAngle();
 			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 
 			bool overrideFacingDirection = IsLockoutActive &&
 			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace;
-
 			if (overrideFacingDirection) // Direction is being overridden
 				MovementAngle = targetMovementAngle + pathControlAmount;
 

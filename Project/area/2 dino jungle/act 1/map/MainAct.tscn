@@ -1,4 +1,4 @@
-[gd_scene load_steps=104 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=102 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="Resource" uid="uid://covb6cdfu44gv" path="res://area/2 dino jungle/act 1/camera/ChaseStartCam.tres" id="3_51j1g"]
@@ -12,9 +12,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uj3dw"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
 [ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/run/StopLockout.tres" id="22_hdjwl"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="25_jk8df"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="26_c85ph"]
+[ext_resource type="Resource" uid="uid://bc7jtdg5d7q8c" path="res://area/2 dino jungle/act 1/environment/river event/AlignLockout.tres" id="20_gl5qy"]
 [ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="26_qkiaj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="27_dpcvf"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="27_l6k7w"]
@@ -51,7 +49,7 @@
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="54_ay5i2"]
 [ext_resource type="PackedScene" uid="uid://b8s2qjmlhu5tc" path="res://object/stage/common/ThornSpring.tscn" id="55_3vfss"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="56_7lmmf"]
-[ext_resource type="Resource" uid="uid://bfbyijcgdiudd" path="res://area/2 dino jungle/act 1/camera/CavernBoatCam.tres" id="56_fw8kb"]
+[ext_resource type="Resource" uid="uid://bfbyijcgdiudd" path="res://area/2 dino jungle/act 1/camera/BoatCam.tres" id="56_fw8kb"]
 [ext_resource type="Resource" uid="uid://c68trpv4sbq1b" path="res://area/2 dino jungle/act 1/camera/EndJumpPanelCam.tres" id="57_ywra7"]
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="58_fnmsc"]
 [ext_resource type="Resource" uid="uid://dhwqg5pqdd5d0" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandCam.tres" id="58_xae1w"]
@@ -2188,6 +2186,7 @@ displayLength = []
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent" instance=ExtResource("19_rr5sk")]
+"Player Event Settings/Exit Lockout" = ExtResource("20_gl5qy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/RiverEvent"]
 transform = Transform3D(-0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, -0.996195, 0.464157, 10.9, 18.6349)
@@ -2205,10 +2204,6 @@ maxSpeed = 30.0
 tiltAmount = 45.0
 path = NodePath("../../../Static/Path/RiverPath")
 pathFollower = NodePath("../../../Static/Path/RiverPath/RiverBoatPathFollower")
-
-[node name="Lockout" type="Node3D" parent="MainAct/River/Boat"]
-script = ExtResource("4_1j3qj")
-lockoutData = ExtResource("22_hdjwl")
 
 [node name="BoatStartTrigger" parent="MainAct/River" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.99501, 0, 4.405)
@@ -2233,10 +2228,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.39999, -13.3, -26)
 script = ExtResource("45_bbxl7")
 jumpHeight = 3.0
 autoAlign = true
-
-[node name="Path" type="Node3D" parent="MainAct/River/BoatEndTrigger" node_paths=PackedStringArray("path")]
-script = ExtResource("27_l6k7w")
-path = NodePath("../../../../Static/Path/CavePath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/River/BoatEndTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -2454,69 +2445,29 @@ Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child01" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, -0.00180054, -0.000671387, 0.00616455)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child02" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child02" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.215759, 0.0649185, -1.06528)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child03" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.297119, 0.0898132, -2.24908)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child04" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.257935, 0.0625153, -3.5191)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child05" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.120392, -0.0232315, -4.84686)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child06" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, -0.0923462, -0.169548, -6.21021)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child07" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, -0.359802, -0.3759, -7.59375)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="MainAct/River/RingsL2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child08" parent="MainAct/River/RingsL2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, -0.665314, -0.640297, -8.98749)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
 [node name="RingsR2" type="Node3D" parent="MainAct/River"]
 transform = Transform3D(0.965926, 0.0449435, -0.254887, 0, 0.984808, 0.173648, 0.258819, -0.167731, 0.951251, 59.4447, 0.594299, -2.53146)
@@ -2532,69 +2483,29 @@ Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child01" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.00115967, 0.000488281, -0.00457764)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child02" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child02" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.227036, 0.096405, -1.31665)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child03" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.288101, 0.141022, -2.69638)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child04" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.217056, 0.123886, -4.11612)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child05" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, 0.0466766, 0.0410233, -5.55521)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child06" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, -0.195175, -0.107559, -7.00082)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child07" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, -0.486511, -0.319679, -8.44519)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="MainAct/River/RingsR2" node_paths=PackedStringArray("animator") instance=ExtResource("40_m082x")]
+[node name="Child08" parent="MainAct/River/RingsR2" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 3.72529e-09, -2.98023e-08, -3.72529e-09, 1, -1.49012e-08, 0, 0, 1, -0.810623, -0.592194, -9.88373)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("25_jk8df")
-animator = NodePath("AnimationPlayer")
 
 [node name="PearlsR2" type="Node3D" parent="MainAct/River"]
 transform = Transform3D(0.965926, 0.0449435, -0.254887, -0.0147047, 0.992747, 0.119323, 0.258401, -0.111509, 0.959581, 64.8292, 1.27921, -1.85434)
@@ -2610,53 +2521,23 @@ Spacing = 1.8
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/River/PearlsR2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child01" parent="MainAct/River/PearlsR2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.00305176, -0.000423431, 0.0256042)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child02" type="Area3D" parent="MainAct/River/PearlsR2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child02" parent="MainAct/River/PearlsR2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, 0.0914307, 0.040657, -2.34631)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child03" type="Area3D" parent="MainAct/River/PearlsR2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child03" parent="MainAct/River/PearlsR2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.0639038, -0.0412674, -4.56738)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child04" type="Area3D" parent="MainAct/River/PearlsR2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child04" parent="MainAct/River/PearlsR2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.363998, -0.241901, -6.65024)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child05" type="Area3D" parent="MainAct/River/PearlsR2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child05" parent="MainAct/River/PearlsR2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.743958, -0.551643, -8.6214)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child06" type="Area3D" parent="MainAct/River/PearlsR2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child06" parent="MainAct/River/PearlsR2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -1.16472, -0.960094, -10.5038)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
 [node name="PearlsM2" type="Node3D" parent="MainAct/River"]
 transform = Transform3D(0.965926, 0.0449435, -0.254887, -0.0147047, 0.992747, 0.119323, 0.258401, -0.111509, 0.959581, 63.8658, 1.04832, -2.13583)
@@ -2672,53 +2553,23 @@ Spacing = 1.8
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/River/PearlsM2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child01" parent="MainAct/River/PearlsM2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, 0.00202942, 0.000286102, -0.0169373)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child02" type="Area3D" parent="MainAct/River/PearlsM2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child02" parent="MainAct/River/PearlsM2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, 0.0966644, 0.0272255, -2.24786)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child03" type="Area3D" parent="MainAct/River/PearlsM2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child03" parent="MainAct/River/PearlsM2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.0463409, -0.0631828, -4.36661)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child04" type="Area3D" parent="MainAct/River/PearlsM2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child04" parent="MainAct/River/PearlsM2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.331497, -0.268139, -6.37695)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child05" type="Area3D" parent="MainAct/River/PearlsM2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child05" parent="MainAct/River/PearlsM2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.697861, -0.579243, -8.29675)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child06" type="Area3D" parent="MainAct/River/PearlsM2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child06" parent="MainAct/River/PearlsM2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -1.10771, -0.987064, -10.1429)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
 [node name="PearlsL2" type="Node3D" parent="MainAct/River"]
 transform = Transform3D(0.965926, 0.0449435, -0.254887, -0.0147047, 0.992747, 0.119323, 0.258401, -0.111509, 0.959581, 62.8974, 0.809418, -2.39957)
@@ -2734,53 +2585,23 @@ Spacing = 1.8
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/River/PearlsL2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child01" parent="MainAct/River/PearlsL2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, 1.52588e-05, 3.8147e-06, -0.000274658)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child02" type="Area3D" parent="MainAct/River/PearlsL2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child02" parent="MainAct/River/PearlsL2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, 0.105118, 0.0167847, -2.09198)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child03" type="Area3D" parent="MainAct/River/PearlsL2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child03" parent="MainAct/River/PearlsL2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.0188293, -0.0779381, -4.11005)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child04" type="Area3D" parent="MainAct/River/PearlsL2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child04" parent="MainAct/River/PearlsL2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.28479, -0.283142, -6.04974)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child05" type="Area3D" parent="MainAct/River/PearlsL2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child05" parent="MainAct/River/PearlsL2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -0.635025, -0.591846, -7.91986)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child06" type="Area3D" parent="MainAct/River/PearlsL2" node_paths=PackedStringArray("collider") instance=ExtResource("42_o7jek")]
+[node name="Child06" parent="MainAct/River/PearlsL2" instance=ExtResource("42_o7jek")]
 transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 1.86265e-09, 1, -7.45058e-09, -1.49012e-08, 0, 1, -1.03246, -0.995537, -9.73105)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_c85ph")
-collider = NodePath("CollisionShape3D")
 
 [node name="RingsL3" type="Node3D" parent="MainAct/River"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.991, -15.1171, -37.7359)
@@ -6979,43 +6800,8 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Deactivated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Activate"]
 [connection signal="Activated" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Activate"]
 [connection signal="Respawned" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Deactivate"]
-[connection signal="Deactivated" from="MainAct/River/Boat" to="MainAct/River/Boat/Lockout" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/BoatStartTrigger" to="MainAct/River/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/River/BoatEndTrigger" to="MainAct/River/Boat" method="Deactivate"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child01" to="MainAct/River/RingsL2/Child01" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child02" to="MainAct/River/RingsL2/Child02" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child03" to="MainAct/River/RingsL2/Child03" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child04" to="MainAct/River/RingsL2/Child04" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child05" to="MainAct/River/RingsL2/Child05" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child06" to="MainAct/River/RingsL2/Child06" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child07" to="MainAct/River/RingsL2/Child07" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsL2/Child08" to="MainAct/River/RingsL2/Child08" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child01" to="MainAct/River/RingsR2/Child01" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child02" to="MainAct/River/RingsR2/Child02" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child03" to="MainAct/River/RingsR2/Child03" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child04" to="MainAct/River/RingsR2/Child04" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child05" to="MainAct/River/RingsR2/Child05" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child06" to="MainAct/River/RingsR2/Child06" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child07" to="MainAct/River/RingsR2/Child07" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/RingsR2/Child08" to="MainAct/River/RingsR2/Child08" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsR2/Child01" to="MainAct/River/PearlsR2/Child01" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsR2/Child02" to="MainAct/River/PearlsR2/Child02" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsR2/Child03" to="MainAct/River/PearlsR2/Child03" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsR2/Child04" to="MainAct/River/PearlsR2/Child04" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsR2/Child05" to="MainAct/River/PearlsR2/Child05" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsR2/Child06" to="MainAct/River/PearlsR2/Child06" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsM2/Child01" to="MainAct/River/PearlsM2/Child01" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsM2/Child02" to="MainAct/River/PearlsM2/Child02" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsM2/Child03" to="MainAct/River/PearlsM2/Child03" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsM2/Child04" to="MainAct/River/PearlsM2/Child04" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsM2/Child05" to="MainAct/River/PearlsM2/Child05" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsM2/Child06" to="MainAct/River/PearlsM2/Child06" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsL2/Child01" to="MainAct/River/PearlsL2/Child01" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsL2/Child02" to="MainAct/River/PearlsL2/Child02" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsL2/Child03" to="MainAct/River/PearlsL2/Child03" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsL2/Child04" to="MainAct/River/PearlsL2/Child04" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsL2/Child05" to="MainAct/River/PearlsL2/Child05" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/River/PearlsL2/Child06" to="MainAct/River/PearlsL2/Child06" method="OnEntered"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Cave/RightPath/JumpPanel" to="MainAct/Cave/RightPath/JumpPanel/Camera" method="Deactivate"]
