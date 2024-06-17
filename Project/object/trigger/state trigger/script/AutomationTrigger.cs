@@ -58,7 +58,11 @@ public partial class AutomationTrigger : Area3D
 		{
 			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < .8f) // Accelerate quicker to reduce low-speed jank
 				Character.MoveSpeed += LOW_SPEED_ACCELERATION * PhysicsManager.physicsDelta;
-			Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); // Move to max speed
+
+			if (Character.IsLockoutActive && Character.ActiveLockoutData.overrideSpeed)
+				Character.MoveSpeed = Character.ActiveLockoutData.ApplySpeed(Character.MoveSpeed, Character.GroundSettings);
+			else
+				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); // Move to max speed
 		}
 
 		Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
@@ -86,10 +90,6 @@ public partial class AutomationTrigger : Area3D
 	{
 		EmitSignal(SignalName.Activated);
 		isActive = true;
-
-		// Cancel any lockout that doesn't have an assigned priority (i.e. Dash Panels)
-		if (Character.IsLockoutActive && Character.ActiveLockoutData.priority == -1)
-			Character.RemoveLockoutData(Character.ActiveLockoutData);
 
 		automationPath = Character.PathFollower.ActivePath;
 		Character.PathFollower.Resync();

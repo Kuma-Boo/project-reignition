@@ -30,6 +30,8 @@ public partial class PathTraveller : Node3D
 
 	[Export]
 	private float tiltAmount = 45;
+	[Export]
+	private bool rotateY;
 
 	/// <summary> Maximum distance from the path allowed. </summary>
 	[Export]
@@ -160,6 +162,7 @@ public partial class PathTraveller : Node3D
 			root.Rotation = Vector3.Zero;
 			root.RotateX(Mathf.DegToRad(tiltAmount) * (currentTurnAmount.Y / turnSpeed));
 			root.RotateZ(Mathf.DegToRad(tiltAmount) * (currentTurnAmount.X / turnSpeed));
+			root.RotateY(-Mathf.DegToRad(tiltAmount) * (currentTurnAmount.X / turnSpeed));
 		}
 
 		if (animator != null) // Update animation speeds

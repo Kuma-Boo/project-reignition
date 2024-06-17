@@ -209,10 +209,10 @@ public partial class EventTrigger : StageTriggerModule
 
 		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
 
-		Character.Skills.DisableBreakSkills();
 		Character.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
 		Character.Animator.ExternalAngle = 0; // Reset external angle
 		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
+		Character.Skills.DisableBreakSkills();
 		if (!characterAnimation.IsEmpty)
 			Character.Animator.PlayOneshotAnimation(characterAnimation);
 	}

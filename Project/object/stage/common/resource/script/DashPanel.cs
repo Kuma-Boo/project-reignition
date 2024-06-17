@@ -40,35 +40,32 @@ public partial class DashPanel : Area3D
 			Character.Effect.PlayVoice("dash panel");
 		}
 
-		if (Character.MovementState != CharacterController.MovementStates.External) //Add lockout if not in automation
+		LockoutResource lockout = new()
 		{
-			LockoutResource lockout = new()
-			{
-				movementMode = LockoutResource.MovementModes.Replace,
-				spaceMode = LockoutResource.SpaceModes.Local,
-				movementAngle = 0,
-				speedRatio = speedRatio,
-				disableActions = true,
-				overrideSpeed = true,
-				tractionMultiplier = -1,
-				frictionMultiplier = 0,
-				length = length,
-				priority = -1, //Not using priority
-			};
+			movementMode = LockoutResource.MovementModes.Replace,
+			spaceMode = LockoutResource.SpaceModes.Local,
+			movementAngle = 0,
+			speedRatio = speedRatio,
+			disableActions = true,
+			overrideSpeed = true,
+			tractionMultiplier = -1,
+			frictionMultiplier = 0,
+			length = length,
+			priority = -1, //Not using priority
+		};
 
-			if (alignToPath)
-			{
-				lockout.movementAngle = 0f;
-				lockout.spaceMode = LockoutResource.SpaceModes.PathFollower;
-				Character.MovementAngle = Character.PathFollower.ForwardAngle;
-				lockout.recenterPlayer = Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer;
-			}
-			else
-			{
-				Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), Character.PathFollower.Up());
-			}
-
-			Character.AddLockoutData(lockout);
+		if (alignToPath)
+		{
+			lockout.movementAngle = 0f;
+			lockout.spaceMode = LockoutResource.SpaceModes.PathFollower;
+			Character.MovementAngle = Character.PathFollower.ForwardAngle;
+			lockout.recenterPlayer = Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer;
 		}
+		else
+		{
+			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), Character.PathFollower.Up());
+		}
+
+		Character.AddLockoutData(lockout);
 	}
 }
