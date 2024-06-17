@@ -128,7 +128,7 @@ namespace Project.Gameplay
 			if (IsDefeated)
 				Defeat();
 			else
-				Character.Camera.SetDeferred("LockonTarget", this);
+				Character.Camera.SetDeferred("LockonTarget", hurtbox);
 		}
 
 
