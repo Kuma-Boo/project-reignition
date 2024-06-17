@@ -1768,7 +1768,12 @@ namespace Project.Gameplay
 
 			if (ValidateWallCast(ref wallHit))
 			{
-				if (ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
+				if (ActionState == ActionStates.JumpDash)
+				{
+					// Kill vertical speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+					VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
+				}
+				else if (ActionState != ActionStates.Backflip)
 				{
 					float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
 					if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
@@ -1782,8 +1787,8 @@ namespace Project.Gameplay
 								MovementAngle = PathFollower.ForwardAngle;
 								return;
 							}
-							else
-								Skills.ToggleSpeedBreak();
+
+							Skills.ToggleSpeedBreak();
 						}
 
 						// Running into wall head-on
