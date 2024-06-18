@@ -169,6 +169,9 @@ namespace Project.Gameplay
 		/// </summary>
 		private float GetTargetMovementAngle()
 		{
+			if (Skills.IsSpeedBreakCharging)
+				return PathFollower.ForwardAngle;
+
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
 				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
@@ -458,7 +461,7 @@ namespace Project.Gameplay
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
 		private void UpdateMoveSpeed()
 		{
-			turnInstantly = Mathf.IsZeroApprox(MoveSpeed); // Store this for turning function
+			turnInstantly = Mathf.IsZeroApprox(MoveSpeed) && !Skills.IsSpeedBreakActive; // Store this for turning function
 
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding || ActionState == ActionStates.Backflip) return;
 			if (Animator.IsCrouchingActive)
@@ -1389,7 +1392,13 @@ namespace Project.Gameplay
 		private Objects.Launcher activeLauncher;
 		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null)
 		{
-			if (activeLauncher != null && activeLauncher == newLauncher) return; // Already launching that!
+			if (MovementState == MovementStates.Launcher)
+			{
+				if (activeLauncher != null && activeLauncher == newLauncher)
+					return; // Already launching that!
+
+				FinishLauncher();
+			}
 
 			ResetMovementState();
 			ResetActionState();
@@ -1420,6 +1429,7 @@ namespace Project.Gameplay
 			if (data.IsJump) // Play jump effects
 			{
 				Animator.JumpAnimation();
+				UpDirection = Vector3.Up;
 				Effect.PlayActionSFX(Effect.JUMP_SFX);
 			}
 		}

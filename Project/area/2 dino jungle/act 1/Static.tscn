@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
+[ext_resource type="Resource" uid="uid://dgl1qo3c2ocum" path="res://area/2 dino jungle/data/DialogLibrary.tres" id="2_2vrnn"]
 [ext_resource type="Environment" path="res://area/2 dino jungle/data/Environment.tres" id="4_gsi68"]
 [ext_resource type="PackedScene" uid="uid://c5dih136fv3wc" path="res://area/2 dino jungle/act 1/environment/01Chase.tscn" id="5_8hbmi"]
 [ext_resource type="PackedScene" uid="uid://iij01cwh2ttg" path="res://area/2 dino jungle/act 1/environment/02River.tscn" id="6_51sf7"]
@@ -22,7 +23,6 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="15_86eng"]
 [ext_resource type="Curve3D" uid="uid://dwcdosh24d0y2" path="res://area/2 dino jungle/act 1/environment/path/DinoPath.tres" id="16_smtuj"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="16_vyk20"]
-[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="17_18ult"]
 [ext_resource type="Curve3D" uid="uid://b450opvokjmsg" path="res://area/2 dino jungle/act 1/environment/path/SpiralAutomationPath.tres" id="17_sttw3"]
 [ext_resource type="Curve3D" uid="uid://uyy1x2hj58jb" path="res://area/2 dino jungle/act 1/environment/path/LogAutomationPath.tres" id="19_p1hyv"]
 [ext_resource type="Curve3D" uid="uid://bjvkgbw6pqfdl" path="res://area/2 dino jungle/act 1/environment/path/BoatPath.tres" id="22_dpojg"]
@@ -136,6 +136,7 @@ size = Vector3(5.72754, 10.5288, 1)
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_hpjme")
+dialogLibrary = ExtResource("2_2vrnn")
 pathParent = NodePath("Path")
 Environment = NodePath("WorldEnvironment")
 
@@ -641,13 +642,6 @@ libraries = {
 "": ExtResource("27_vi4ly")
 }
 
-[node name="Dialog" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger"]
-transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0)
-script = ExtResource("17_18ult")
-delays = [0.0, 0.5]
-displayLength = []
-textKeys = ["din_event_apato_so", "din_event_apato_so2"]
-
 [node name="JumpTrigger" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger"]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -0.446075, 5.46184, 9.80847)
 script = ExtResource("22_vku8w")
@@ -705,6 +699,21 @@ shape = SubResource("BoxShape3D_u63uw")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/Apatos2/RecenterTrigger"]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 15)
 shape = SubResource("BoxShape3D_skfpg")
+
+[node name="JumpTrigger" parent="Trigger/Object/Apatos2" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.965473, 0, 0.260504, 0, 1, 0, -0.260504, 0, 0.965473, 0.102966, 27.4072, 46.2336)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="JumpTrigger" type="Node3D" parent="Trigger/Object/Apatos2/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.11975, -0.0570679, 6.55676)
+script = ExtResource("22_vku8w")
+jumpHeight = 3.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos2/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
 
 [node name="Event" type="Node3D" parent="Trigger/Object/Apatos2" node_paths=PackedStringArray("animator")]
 script = ExtResource("16_vyk20")

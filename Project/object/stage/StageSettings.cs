@@ -223,7 +223,7 @@ namespace Project.Gameplay
 		public void UpdateScore(int amount, MathModeEnum mode)
 		{
 			CurrentScore = CalculateMath(CurrentScore, amount, mode);
-			DisplayScore = ExtensionMethods.FormatScore(CurrentScore);
+			DisplayScore = ExtensionMethods.FormatScore(TotalScore);
 			EmitSignal(SignalName.ScoreChanged);
 		}
 
@@ -455,6 +455,9 @@ namespace Project.Gameplay
 		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 		public void FinishLevel(bool wasSuccessful)
 		{
+			if (!IsLevelIngame)
+				return;
+
 			// Attempt to start the completion demo
 			GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
