@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_add, depth_draw_never;
+render_mode unshaded, blend_add, depth_draw_never, fog_disabled;
 
 global uniform float sun_movement;
 global uniform float sun_occlusion;

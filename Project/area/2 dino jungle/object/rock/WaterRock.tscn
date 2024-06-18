@@ -1,23 +1,19 @@
 [gd_scene load_steps=9 format=3 uid="uid://e43vdgi280co"]
 
-[ext_resource type="Script" path="res://area/2 dino jungle/data/script/WhiteRock.cs" id="1_gaqfb"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_mm0fn"]
 [ext_resource type="PackedScene" uid="uid://b7n51v7g5c2w7" path="res://area/2 dino jungle/object/model/rock/WaterRock.gltf" id="2_nt46s"]
 [ext_resource type="PackedScene" uid="uid://b7a57ov731pxl" path="res://area/2 dino jungle/object/model/rock/WaterRockBroken.gltf" id="3_tl3ui"]
+[ext_resource type="PackedScene" uid="uid://c0ph8vi1nx1vs" path="res://area/2 dino jungle/object/model/rock/WhiteRockPieces.gltf" id="4_1igcp"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_4hj74"]
-height = 6.6
-radius = 0.9
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_8hm55"]
-height = 6.0
-radius = 1.0
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f08fp"]
+points = PackedVector3Array(-1.20871, -4.4576, 0.166089, -1.13393, -4.47688, -0.023914, -0.78869, -4.58903, -0.900083, -0.0861336, -5.04262, -0.00217134, -0.989353, -4.54117, 0.826986, -0.919547, 0.746912, 0.172553, -0.647422, 1.06121, -0.619975, -0.114766, -4.62189, -1.00057, -0.68126, -0.29599, -0.687358, 0.768103, -4.46188, -0.754936, 0.601042, -4.77404, 0.1228, 1.20871, -4.56117, 0.661468, 0.433744, -4.58903, 1.00034, -0.0575013, -4.38402, 0.996422, -0.361335, 0.407611, 0.949607, -0.580692, 0.753341, 0.705541, -0.638666, 0.856202, 0.59389, -0.525793, 1.20907, 0.468919, -0.430195, 1.42766, 0.366474, -0.0548984, 2.17554, 0.0775516, -0.70232, 1.1705, -0.0423266, -0.00828207, 2.18697, 0.0354375, -0.308566, 1.40123, -0.490303, -0.0690962, 0.506187, -0.630357, 0.228112, 0.589048, -0.54652, 0.539991, -0.450996, -0.530654, 0.759348, 0.526902, -0.221556, 0.368434, -0.541715, 0.961164, 0.793186, 0.584048, 0.541786, 0.643872, 0.635478, 0.676355, 0.35045, 0.569047, 0.95039, 0.42002, 1.99196, 0.444042, 0.129674, 2.1634, 0.297132, -0.266919, 1.43908, 0.512404, -0.365595, 1.42265, 0.468527, 0.0892098, 2.23769, 0.176079, 0.161619, 2.25483, 0.0742216, 0.170611, 1.50052, -0.288351, 0.468292, 1.56409, -0.0317491, 0.50426, 1.95268, 0.29439, 0.608378, 1.24193, 0.514363, 0.222433, 2.19412, 0.21075, 0.176053, 2.22269, 0.22309, 0.230242, 2.19483, 0.159625)
 
 [sub_resource type="Animation" id="Animation_3q1s1"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("WaterRockBroken:visible")
+tracks/0/path = NodePath("Root/WaterRockBroken:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -29,10 +25,34 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WaterRock:visible")
+tracks/1/path = NodePath("Root/WaterRock:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/WaterRock/WaterRockMesh/StaticBody3D/CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Trigger:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -45,7 +65,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("WaterRockBroken:visible")
+tracks/0/path = NodePath("Root/WaterRockBroken:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -57,10 +77,34 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WaterRock:visible")
+tracks/1/path = NodePath("Root/WaterRock:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/WaterRock/WaterRockMesh/StaticBody3D/CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Trigger:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -73,32 +117,40 @@ _data = {
 "shatter": SubResource("Animation_oqsl4")
 }
 
-[node name="WaterRock" type="Area3D" node_paths=PackedStringArray("animator")]
-collision_layer = 8
-collision_mask = 8
-script = ExtResource("1_gaqfb")
+[node name="WaterRock" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_mm0fn")
+pieceMass = 0.2
+root = NodePath("Root")
+pieceRoot = NodePath("WhiteRockPieces")
 animator = NodePath("AnimationPlayer")
+shatterFlags = 18
 
-[node name="WaterRock" parent="." instance=ExtResource("2_nt46s")]
+[node name="Root" type="Node3D" parent="."]
 
-[node name="WaterRockBroken" parent="." instance=ExtResource("3_tl3ui")]
+[node name="WaterRock" parent="Root" instance=ExtResource("2_nt46s")]
+
+[node name="StaticBody3D" parent="Root/WaterRock/WaterRockMesh" index="0" groups=["splash jump", "stagger", "wall"]]
+
+[node name="WaterRockBroken" parent="Root" instance=ExtResource("3_tl3ui")]
 visible = false
 
-[node name="Collision" type="StaticBody3D" parent="." groups=["floor", "splash jump", "wall"]]
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 10
+monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, 0)
-shape = SubResource("CylinderShape3D_4hj74")
-disabled = true
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+shape = SubResource("ConvexPolygonShape3D_f08fp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0.15)
-shape = SubResource("CylinderShape3D_8hm55")
-disabled = true
+[node name="WhiteRockPieces" parent="." instance=ExtResource("4_1igcp")]
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_ghebx")
 }
 
-[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]
+
+[editable path="Root/WaterRock"]

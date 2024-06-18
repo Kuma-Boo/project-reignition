@@ -24,17 +24,19 @@ namespace Project.Gameplay
 		public void Spawn()
 		{
 			animator.Play("RESET");
-			animator.Seek(0, true);
+			animator.Advance(0.0);
 
 			animator.Play("move");
 			isMoving = true;
 		}
+
 
 		private void Explode()
 		{
 			isMoving = false;
 			animator.Play("explode");
 		}
+
 
 		public void OnEntered(Area3D a)
 		{
@@ -48,6 +50,7 @@ namespace Project.Gameplay
 			Explode();
 		}
 
-		public void OnBodyEntered(PhysicsBody3D b) => Explode();
+
+		public void OnBodyEntered(PhysicsBody3D _) => Explode();
 	}
 }

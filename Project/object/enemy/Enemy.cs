@@ -94,6 +94,12 @@ namespace Project.Gameplay
 			currentHealth = maxHealth;
 
 			SetHitboxStatus(true);
+
+			if (spawnMode == SpawnModes.Always ||
+				(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
+			{
+				EnterRange();
+			}
 		}
 
 		/// <summary>
@@ -122,7 +128,7 @@ namespace Project.Gameplay
 			if (IsDefeated)
 				Defeat();
 			else
-				Character.Camera.SetDeferred("LockonTarget", this);
+				Character.Camera.SetDeferred("LockonTarget", hurtbox);
 		}
 
 
@@ -172,7 +178,11 @@ namespace Project.Gameplay
 		protected bool IsActive { get; set; }
 		/// <summary> Is the player within the enemies range trigger? </summary>
 		protected bool IsInRange { get; set; }
-		protected virtual void EnterRange() { }
+		protected virtual void EnterRange()
+		{
+			if (spawnMode == SpawnModes.Signal) return;
+			Spawn();
+		}
 		protected virtual void ExitRange() { }
 
 		// True when colliding with the player

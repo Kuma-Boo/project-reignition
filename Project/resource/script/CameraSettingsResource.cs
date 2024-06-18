@@ -16,6 +16,7 @@ namespace Project.Gameplay
 		private const string DISTANCE_KEY = "Distance/Distance";
 		private const string BACKSTEP_DISTANCE_KEY = "Distance/Backstep Distance";
 		private const string DISTANCE_MODE_KEY = "Distance/Distance Calculation Mode";
+		private const string SAMPLE_OFFSET_KEY = "Distance/Sample Offset";
 		private const string HOMING_ATTACK_DISTANCE_KEY = "Distance/Ignore Homing Attack";
 
 		private const string PITCH_ANGLE_KEY = "Rotation/Pitch Angle";
@@ -45,6 +46,9 @@ namespace Project.Gameplay
 				properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
 				properties.Add(ExtensionMethods.CreateProperty(HOMING_ATTACK_DISTANCE_KEY, Variant.Type.Bool));
 				properties.Add(ExtensionMethods.CreateProperty(DISTANCE_MODE_KEY, Variant.Type.Int, PropertyHint.Enum, distanceCalculationMode.EnumToString()));
+
+				if (distanceCalculationMode != DistanceModeEnum.Offset)
+					properties.Add(ExtensionMethods.CreateProperty(SAMPLE_OFFSET_KEY, Variant.Type.Float));
 
 				properties.Add(ExtensionMethods.CreateProperty(HORIZONTAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, horizontalTrackingMode.EnumToString()));
 				properties.Add(ExtensionMethods.CreateProperty(VERTICAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
@@ -107,6 +111,8 @@ namespace Project.Gameplay
 					return ignoreHomingAttackDistance;
 				case DISTANCE_MODE_KEY:
 					return (int)distanceCalculationMode;
+				case SAMPLE_OFFSET_KEY:
+					return (float)sampleOffset;
 
 				case PITCH_ANGLE_KEY:
 					return Mathf.RadToDeg(pitchAngle);
@@ -176,7 +182,12 @@ namespace Project.Gameplay
 					break;
 				case DISTANCE_MODE_KEY:
 					distanceCalculationMode = (DistanceModeEnum)(int)value;
+					NotifyPropertyListChanged();
 					break;
+				case SAMPLE_OFFSET_KEY:
+					sampleOffset = Mathf.Round((float)value * 10.0f) * .1f;
+					break;
+
 
 				case PITCH_ANGLE_KEY:
 					pitchAngle = Mathf.DegToRad((float)value);
@@ -271,6 +282,8 @@ namespace Project.Gameplay
 			Offset, //Add distance * PathFollower.Back() (Better for sharp corners)
 			Sample, //Physically sample to move pathfollower's progress by distance (Better for slopes)
 		}
+		/// <summary> How much to offset sampling. Can be used for cameras that "look ahead." </summary>
+		public float sampleOffset;
 
 		/// <summary> Viewport offset. Use this offset height or lead the player (sidescrolling) </summary>
 		public Vector2 viewportOffset;
