@@ -96,7 +96,8 @@ public partial class DinoTrio : PathFollow3D
 
 		if (Processor.IsSlowingDown ||
 			(CurrentAttackState != AttackStates.Charge && CurrentAttackState != AttackStates.Inactive) ||
-			(Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer))
+			(Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer) ||
+			Character.Skills.IsSpeedBreakActive)
 		{
 			// Dino is slowing down
 			moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
@@ -107,7 +108,7 @@ public partial class DinoTrio : PathFollow3D
 		// Accelerate
 		if (CurrentAttackState == AttackStates.Charge)
 		{
-			moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(DeltaProgress) * 1.5f, .5f);
+			moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(DeltaProgress * 1.5f), .5f);
 			rubberbandingSpeed = 0;
 			return;
 		}
