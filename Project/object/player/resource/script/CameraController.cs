@@ -48,6 +48,7 @@ namespace Project.Gameplay
 			if (StageSettings.instance != null && StageSettings.instance.InitialCameraSettings != null)
 				targetSettings = StageSettings.instance.InitialCameraSettings;
 
+			SnapXform();
 			UpdateCameraSettings(new CameraBlendData()
 			{
 				SettingsResource = targetSettings,
@@ -59,6 +60,7 @@ namespace Project.Gameplay
 
 		public void Respawn()
 		{
+			SnapXform();
 			//Revert camera settings
 			UpdateCameraSettings(new CameraBlendData()
 			{
@@ -117,13 +119,8 @@ namespace Project.Gameplay
 		/// <summary> Skips smoothing for the current frame. </summary>
 		public bool SnapFlag { get; set; }
 
-		/// <summary> Angle to use when transforming from world space to camera space </summary>
-		private float xformAngle;
-		public float TransformAngle(float angle) => xformAngle + angle;
-
-
 		[Export]
-		/// <summary> Default camera settings to use when nothing is set </summary>
+		/// <summary> Default camera settings to use when nothing is set. </summary>
 		public CameraSettingsResource defaultSettings;
 		/// <summary> Reference to active CameraBlendData. </summary>
 		public CameraBlendData ActiveBlendData => CameraBlendList[CameraBlendList.Count - 1];
@@ -159,11 +156,13 @@ namespace Project.Gameplay
 			if (Mathf.IsZeroApprox(data.BlendTime)) // Cut transition
 			{
 				SnapFlag = true;
+				StartXformBlend();
 			}
 			else if (data.IsCrossfadeEnabled) // Crossfade transition
 			{
 				StartCrossfade(1.0f / data.BlendTime);
 				SnapFlag = true;
+				StartXformBlend();
 			}
 			else
 			{
@@ -263,7 +262,9 @@ namespace Project.Gameplay
 			cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
 
 			// Calculate xform angle before applying pitch tracking
-			xformAngle = ExtensionMethods.CalculateForwardAngle(-cameraTransform.Basis.Z, cameraTransform.Basis.Y);
+			UpdateInputXForm(cameraTransform.Basis);
+
+			// Apply pitch tracking
 			cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
 
 			// Apply secondary yaw tracking
@@ -284,6 +285,44 @@ namespace Project.Gameplay
 			if (SnapFlag) // Reset flag after camera was updated
 				SnapFlag = false;
 		}
+
+
+		/// <summary> Angle to use when transforming from world space to camera space. </summary>
+		private float xformAngle;
+		/// <summary> Previous xform angle used right before the last camera change. </summary>
+		private float previousXformAngle;
+		private float xformBlend = 1;
+		private readonly float XformSmoothing = 1.5f;
+		public float TransformAngle(float angle) => xformAngle + angle;
+
+		/// <summary> Starts blending the xform angle. </summary>
+		private void StartXformBlend()
+		{
+			xformBlend = 0;
+			previousXformAngle = xformAngle;
+		}
+
+		/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
+		private void UpdateInputXForm(Basis cameraBasis)
+		{
+			float targetXformAngle = ExtensionMethods.CalculateForwardAngle(-cameraBasis.Z, cameraBasis.Y);
+
+			// Snap xform blend when no input is held
+			if (Character.InputVector.IsZeroApprox())
+			{
+				SnapXform();
+			}
+			else if (Character.IsLockoutActive)
+			{
+				if (Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe && Mathf.IsZeroApprox(Character.InputHorizontal))
+					SnapXform();
+			}
+
+			xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
+			xformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
+		}
+
+		private void SnapXform() => xformBlend = 1;
 
 		private Vector3 AddTrackingOffset(Vector3 position, CameraPositionData data)
 		{
