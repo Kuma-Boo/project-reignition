@@ -203,8 +203,7 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive)
 				return GetStrafeAngle();
 
-			float inputAngle = GetInputAngle();
-			return inputAngle;
+			return GetInputAngle();
 		}
 
 
@@ -212,9 +211,9 @@ namespace Project.Gameplay
 		{
 			float targetAngle = GetInputAngle();
 			if (InputVector.IsZeroApprox())
-				targetAngle = PathFollower.ForwardAngle + PathFollower.DeltaAngle * .5f;
+				return PathFollower.ForwardAngle + (PathFollower.DeltaAngle * .5f);
 			else if (IsHoldingDirection(PathFollower.BackAngle))
-				targetAngle = ExtensionMethods.ReflectAngle(targetAngle, PathFollower.ForwardAngle + PathFollower.DeltaAngle * .5f);
+				return ExtensionMethods.ReflectAngle(targetAngle, PathFollower.ForwardAngle + (PathFollower.DeltaAngle * .5f));
 
 			return targetAngle;
 		}
@@ -491,21 +490,7 @@ namespace Project.Gameplay
 			{
 				if (ActiveLockoutData.overrideSpeed)
 				{
-					// Override speed to the correct value
-					float targetSpd = ActiveMovementSettings.speed * ActiveLockoutData.speedRatio;
-					float delta = PhysicsManager.physicsDelta;
-					if (MoveSpeed <= targetSpd) // Accelerate using traction
-						delta *= ActiveMovementSettings.traction * ActiveLockoutData.tractionMultiplier;
-					else // Slow down with friction
-						delta *= ActiveMovementSettings.friction * ActiveLockoutData.frictionMultiplier;
-
-					if (delta < 0) // Snap speed (i.e. Dash Panels)
-					{
-						MoveSpeed = targetSpd;
-						return;
-					}
-
-					MoveSpeed = Mathf.MoveToward(MoveSpeed, targetSpd, delta);
+					MoveSpeed = ActiveLockoutData.ApplySpeed(MoveSpeed, ActiveMovementSettings);
 					return;
 				}
 
@@ -561,25 +546,33 @@ namespace Project.Gameplay
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
-			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Stomping) return;
-			if (ActionState == ActionStates.Crouching || MoveSpeed == 0) return;
+			if (ActionState == ActionStates.Backflip ||
+				ActionState == ActionStates.Stomping ||
+				ActionState == ActionStates.Crouching)
+			{
+				return;
+			}
 
 			float targetMovementAngle = GetTargetMovementAngle();
+			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 
 			bool overrideFacingDirection = IsLockoutActive &&
 			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace;
-
 			if (overrideFacingDirection) // Direction is being overridden
-				MovementAngle = targetMovementAngle;
+				MovementAngle = targetMovementAngle + pathControlAmount;
 
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Sliding) return;
-			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) return; // Turning around
+			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) // Check for turning around
+			{
+				if (!IsLockoutActive || ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+					return;
+			}
 
 			if (turnInstantly) // Instantly set movement angle to target movement angle
 			{
 				turningVelocity = 0;
-				MovementAngle = targetMovementAngle;
+				MovementAngle = targetMovementAngle + pathControlAmount;
 				return;
 			}
 
@@ -588,10 +581,10 @@ namespace Project.Gameplay
 			// Reduce sensitivity when player is running
 			if (speedRatio > CharacterAnimator.RUN_RATIO)
 			{
-				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle)) // Remap controls to provide more analog detail
+				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount)) // Remap controls to provide more analog detail
 					targetMovementAngle -= inputDeltaAngle * .5f;
 
-				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
+				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle + pathControlAmount, Mathf.Pi * .25f);
 			}
 
 			float maxTurnAmount = MAX_TURN_AMOUNT;
@@ -612,9 +605,7 @@ namespace Project.Gameplay
 					MoveSpeed = 0;
 			}
 
-			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnSmoothing);
-			if (!Mathf.IsZeroApprox(Camera.ActiveSettings.pathControlInfluence) && !IsLockoutActive) // Only do this when camera is tilting
-				MovementAngle += PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle + pathControlAmount, targetMovementAngle, ref turningVelocity, turnSmoothing);
 
 			// Strafe implementation
 			if (Skills.IsSpeedBreakActive ||
@@ -1220,6 +1211,9 @@ namespace Project.Gameplay
 
 			if (MovementState == MovementStates.External) return; // Only allow autorespawning when not using external controller
 
+			if (!knockbackSettings.disableDamage)
+				SetActionState(ActionStates.Damaged);
+
 			// Apply invincibility and drop rings
 			if (!IsInvincible)
 			{
@@ -1620,7 +1614,6 @@ namespace Project.Gameplay
 				{
 					UpDirection = groundHit.normal;
 					UpdateOrientation();
-					MoveAndCollide(UpDirection * VerticalSpeed); // Snap to ground
 					LandOnGround();
 				}
 				else
@@ -1665,6 +1658,12 @@ namespace Project.Gameplay
 
 		public void LandOnGround()
 		{
+			// Snap to ground
+			Vector3 originalVelocity = Velocity;
+			Velocity = Vector3.Down * 100.0f;
+			MoveAndSlide();
+			Velocity = originalVelocity;
+
 			IsOnGround = true;
 			VerticalSpeed = 0;
 
@@ -1787,7 +1786,7 @@ namespace Project.Gameplay
 
 			if (ValidateWallCast(ref wallHit))
 			{
-				if (ActionState != ActionStates.JumpDash && ActionState != ActionStates.Backflip)
+				if (ActionState != ActionStates.Backflip)
 				{
 					float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
 					if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
@@ -1801,8 +1800,15 @@ namespace Project.Gameplay
 								MovementAngle = PathFollower.ForwardAngle;
 								return;
 							}
-							else
-								Skills.ToggleSpeedBreak();
+
+							Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
+						}
+
+						// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+						if (ActionState == ActionStates.JumpDash && wallHit.collidedObject.IsInGroup("splash jump"))
+						{
+							MoveSpeed = 0;
+							VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
 						}
 
 						// Running into wall head-on
@@ -1907,8 +1913,7 @@ namespace Project.Gameplay
 			ResetActionState();
 			// Disable everything
 			Lockon.IsMonitoring = false;
-			Skills.IsTimeBreakEnabled = false;
-			Skills.IsSpeedBreakEnabled = false;
+			Skills.DisableBreakSkills();
 
 			if (Stage.LevelState == StageSettings.LevelStateEnum.Failed || Stage.Data.CompletionLockout == null)
 				AddLockoutData(Runtime.Instance.StopLockout);

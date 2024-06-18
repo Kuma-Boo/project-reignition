@@ -243,10 +243,7 @@ namespace Project.Gameplay
 					}
 				}
 
-				if (Character.MovementState == CharacterController.MovementStates.External) //Disable turning when controlled externally
-					groundTurnRatio = 0;
-				else if (!Character.IsLockoutActive || Character.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Replace)
-					groundTurnRatio = CalculateTurnRatio();
+				groundTurnRatio = CalculateTurnRatio();
 			}
 			else
 			{
@@ -325,10 +322,13 @@ namespace Project.Gameplay
 		/// <summary> Max amount of turning allowed. </summary>
 		private readonly float MAX_TURN_ANGLE = Mathf.Pi * .4f;
 		/// <summary> How much to visually lean into turns. </summary>
-		private readonly float PATH_TURN_STRENGTH = 15.0f;
+		private readonly float PATH_TURN_STRENGTH = 5.0f;
 		/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
 		public float CalculateTurnRatio()
 		{
+			if (Character.MovementState == CharacterController.MovementStates.External)
+				return 0; //Disable turning when controlled externally
+
 			float referenceAngle = Character.IsMovingBackward ? Character.PathFollower.ForwardAngle : Character.MovementAngle;
 			float inputAngle = Character.GetInputAngle() + Character.PathFollower.DeltaAngle * PATH_TURN_STRENGTH;
 			float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);

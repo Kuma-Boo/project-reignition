@@ -1,7 +1,37 @@
-[gd_scene load_steps=3 format=3 uid="uid://dj37itfdjb74j"]
+[gd_scene load_steps=13 format=3 uid="uid://dj37itfdjb74j"]
 
 [ext_resource type="PackedScene" uid="uid://dro806win64vw" path="res://area/1 sand oasis/act 3/environment/model/02Descent.gltf" id="1_3upyo"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_ajy6y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fucfv"]
+albedo_color = Color(0.984314, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fwqok"]
+material = SubResource("StandardMaterial3D_fucfv")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0yeme"]
+albedo_color = Color(0.98, 0.800333, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e0wcc"]
+material = SubResource("StandardMaterial3D_0yeme")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v1nsg"]
+albedo_color = Color(0, 1, 0.333333, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2rsp4"]
+material = SubResource("StandardMaterial3D_v1nsg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8x4h8"]
+albedo_color = Color(0, 0.15, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v0s5w"]
+material = SubResource("StandardMaterial3D_8x4h8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hdlbj"]
+albedo_color = Color(0.983334, 0, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_f87m5"]
+material = SubResource("StandardMaterial3D_hdlbj")
 
 [node name="02Descent" instance=ExtResource("1_3upyo")]
 script = ExtResource("2_ajy6y")
@@ -76,11 +106,85 @@ cast_shadow = 0
 layers = 4
 cast_shadow = 0
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="17"]
+[node name="EnvironmentProbe" type="ReflectionProbe" parent="." index="17"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.662484, -24.405, 140.465)
 layers = 4
+max_distance = 100.0
 size = Vector3(136, 48.8101, 129)
 interior = true
 cull_mask = 4
 ambient_mode = 2
-ambient_color = Color(1, 1, 1, 1)
+ambient_color = Color(0.767381, 0.794726, 0.98972, 1)
+ambient_color_energy = 0.75
+
+[node name="ObjectProbe" type="ReflectionProbe" parent="." index="18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.3239, -7.71537, 176.74)
+layers = 65
+max_distance = 100.0
+size = Vector3(68.6772, 35.9216, 56.4503)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.15
+
+[node name="ObjectProbe2" type="ReflectionProbe" parent="." index="19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.2391, -14.3471, 120.365)
+layers = 65
+max_distance = 100.0
+size = Vector3(58.8407, 41.8371, 102.567)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.15
+
+[node name="ObjectProbe3" type="ReflectionProbe" parent="." index="20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.021, -20.9571, 120.365)
+layers = 65
+max_distance = 100.0
+size = Vector3(90.8327, 44.5267, 102.567)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.15
+
+[node name="ObjectProbe4" type="ReflectionProbe" parent="." index="21"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9198, -32.162, 184.999)
+layers = 65
+max_distance = 100.0
+size = Vector3(88.8942, 22.1168, 63.4525)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.15
+
+[node name="debug" type="Node3D" parent="." index="22"]
+visible = false
+
+[node name="debugCyl" type="MeshInstance3D" parent="debug" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47733, -15.0292, 182.811)
+mesh = SubResource("CylinderMesh_fwqok")
+skeleton = NodePath("../..")
+
+[node name="debugCyl2" type="MeshInstance3D" parent="debug" index="1"]
+transform = Transform3D(-0.0257408, 0, -0.999669, 0, 1, 0, 0.999669, 0, -0.0257408, -45.4118, -22.206, 137.731)
+mesh = SubResource("CylinderMesh_e0wcc")
+skeleton = NodePath("../..")
+
+[node name="debugCyl3" type="MeshInstance3D" parent="debug" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47733, -28.7871, 94.9129)
+mesh = SubResource("CylinderMesh_2rsp4")
+skeleton = NodePath("../..")
+
+[node name="debugCyl4" type="MeshInstance3D" parent="debug" index="3"]
+transform = Transform3D(-0.0257408, 0, -0.999669, 0, 1, 0, 0.999669, 0, -0.0257408, 42.4571, -35.9639, 139.993)
+mesh = SubResource("CylinderMesh_v0s5w")
+skeleton = NodePath("../..")
+
+[node name="debugCyl5" type="MeshInstance3D" parent="debug" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47733, -41.4452, 182.811)
+mesh = SubResource("CylinderMesh_f87m5")
+skeleton = NodePath("../..")

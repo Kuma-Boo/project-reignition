@@ -27,6 +27,7 @@ namespace Project.Gameplay
 					pathList.Add(path);
 			}
 
+			CalculateTechnicalBonus();
 			UpdateScore(0, MathModeEnum.Replace);
 			UpdatePostProcessingStatus();
 
@@ -34,6 +35,8 @@ namespace Project.Gameplay
 				LevelState = LevelStateEnum.Ingame;
 			else
 				LevelState = LevelStateEnum.Loading;
+
+			StartingSaturation = Environment.Environment.AdjustmentSaturation;
 		}
 
 
@@ -159,12 +162,16 @@ namespace Project.Gameplay
 				else if (CurrentTime <= Data.BronzeTime)
 					rank = 1;
 			}
-			else if (CurrentTime <= Data.GoldTime && CurrentScore >= Data.GoldScore) // Perfect run
-				rank = 3;
-			else if (CurrentTime <= Data.SilverTime && CurrentScore >= Data.SilverScore) // Silver
-				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime || CurrentScore >= Data.BronzeScore) // Bronze is easy to get
-				rank = 1;
+			else
+			{
+				int score = TotalScore;
+				if (CurrentTime <= Data.GoldTime && score >= Data.GoldScore) // Perfect run
+					rank = 3;
+				else if (CurrentTime <= Data.SilverTime && score >= Data.SilverScore) // Silver
+					rank = 2;
+				else if (CurrentTime <= Data.BronzeTime || score >= Data.BronzeScore) // Bronze is easy to get
+					rank = 1;
+			}
 
 			if (rank >= 3 && RespawnCount != 0) // Limit to silver if a respawn occured
 				rank = 2;
@@ -211,6 +218,8 @@ namespace Project.Gameplay
 		public delegate void ScoreChangedEventHandler(); // Score has changed, normally occours from a bonus
 		public int CurrentScore { get; private set; } // How high is the current score?
 		public string DisplayScore { get; private set; } // Current score formatted to eight zeros
+		/// <summary> Total score, including ring and technical bonus. </summary>
+		public int TotalScore => CurrentScore + Mathf.CeilToInt(RingBonus * TechnicalBonus);
 		public void UpdateScore(int amount, MathModeEnum mode)
 		{
 			CurrentScore = CalculateMath(CurrentScore, amount, mode);
@@ -220,27 +229,59 @@ namespace Project.Gameplay
 
 		/// <summary> How many times has the player taken damage? </summary>
 		public int DamageCount { get; private set; }
-		/// <summary>  </summary>
+		/// <summary> The number of times the player has respawned. </summary>
 		public int RespawnCount { get; private set; } // How high many times did the player have to respawn?
-		public void IncrementDamageCount() => DamageCount++;
-		public void IncrementRespawnCount() => RespawnCount++;
-		public float CalculateTechnicalBonus()
+		public void IncrementDamageCount()
 		{
-			if (LevelState == LevelStateEnum.Failed) // Failing the level gives a technical bonus of .5
-				return .5f;
+			DamageCount++;
+			CalculateTechnicalBonus();
+		}
+		public void IncrementRespawnCount()
+		{
+			RespawnCount++;
+			CalculateTechnicalBonus();
+		}
+		public float TechnicalBonus { get; private set; }
 
-			if (RespawnCount != 0 || DamageCount >= 6) // Respawning automatically means 1.0
-				return 1.0f;
+		private void CalculateTechnicalBonus()
+		{
+			if (LevelState == LevelStateEnum.Failed)
+			{
+				// Failing the level gives a technical bonus of .5
+				TechnicalBonus = .5f;
+				return;
+			}
+
+			if (RespawnCount != 0 || DamageCount >= 6)
+			{
+				// Respawning automatically means 1.0
+				TechnicalBonus = 1.0f;
+				return;
+			}
 
 			// Damage values
-			if (DamageCount >= 4) // 4-5
-				return 1.1f;
-			if (DamageCount >= 2) // 2-3
-				return 1.2f;
-			if (DamageCount == 1) // 1
-				return 1.5f;
+			if (DamageCount >= 4)
+			{
+				// 4-5
+				TechnicalBonus = 1.1f;
+				return;
+			}
 
-			return 2.0f; // Perfect run
+			if (DamageCount >= 2)
+			{
+				// 2-3
+				TechnicalBonus = 1.2f;
+				return;
+			}
+
+			if (DamageCount == 1)
+			{
+				// 1
+				TechnicalBonus = 1.5f;
+				return;
+			}
+
+			TechnicalBonus = 2.0f; // Perfect run
 		}
 
 		//Objectives
@@ -260,12 +301,14 @@ namespace Project.Gameplay
 
 		// Rings
 		public int CurrentRingCount { get; private set; } // How many rings is the player currently holding?
+		public int RingBonus { get; private set; }
 		[Signal]
 		public delegate void RingChangedEventHandler(int change); // Ring count has changed
 		public void UpdateRingCount(int amount, MathModeEnum mode, bool disableAnimations = false)
 		{
 			int previousAmount = CurrentRingCount;
 			CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
+			RingBonus = CurrentRingCount * 10;
 			if (Data.MissionType == LevelDataResource.MissionTypes.Ring && CurrentRingCount >= Data.MissionObjectiveCount) // For ring based missions
 			{
 				CurrentRingCount = Data.MissionObjectiveCount; // Clamp
@@ -450,6 +493,7 @@ namespace Project.Gameplay
 		/// <summary> Reference to active area's WorldEnvironment node. </summary>
 		[Export]
 		public WorldEnvironment Environment { get; private set; }
+		public float StartingSaturation { get; private set; }
 	}
 
 
