@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://du6fbvh15yi1s"]
+[gd_scene load_steps=46 format=3 uid="uid://c6vlrltnp4jhp"]
 
 [ext_resource type="Resource" uid="uid://dvavd6iy1q2qp" path="res://resource/level data/dinosaur jungle/Act1Ring.tres" id="2_rdov5"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_tlcwl"]
@@ -104,7 +104,7 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0), 0.0, 0.0, 0, 0, Vector
 point_count = 4
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wioka"]
-size = Vector3(26.33, 15.305, 2.615)
+size = Vector3(26.33, 15.305, 13.309)
 
 [node name="Stage" type="Node"]
 
@@ -278,54 +278,14 @@ transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
-[node name="DialogTriggers" type="Node3D" parent="MainAct"]
-
-[node name="TrioStartTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("2_tlcwl")]
+[node name="TrioStartTrigger" parent="MainAct" instance=ExtResource("2_tlcwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
 OneShot = true
 "Respawn Mode" = 2
 "Enter Mode" = 0
 
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioStartTrigger"]
-script = ExtResource("15_cgo7e")
-delays = []
-textKeys = ["din_event_trio_so", "din_event_trio_sh", "din_event_trio2_so", "din_event_trio2_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TrioStartTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/TrioStartTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="TrioTutorialTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("2_tlcwl")]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -1.03775, -331.724)
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioTutorialTrigger"]
-script = ExtResource("15_cgo7e")
-textKeys = ["din_tutorial_trio_so", "din_tutorial_trio_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TrioTutorialTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="TrioEndTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("2_tlcwl")]
-transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioEndTrigger"]
-script = ExtResource("15_cgo7e")
-textKeys = ["din_event_trio3_so", "din_event_trio3_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TrioEndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="CaveSplitTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("2_tlcwl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/CaveSplitTrigger"]
-script = ExtResource("15_cgo7e")
-textKeys = ["din_split_sh", "din_split_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/CaveSplitTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
 [node name="Chase" type="Node3D" parent="MainAct"]
@@ -3927,7 +3887,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -172.885, -123.104, -145.285)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/River/Goal"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.96408, 2.08997)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.96408, 0.00128174)
 shape = SubResource("BoxShape3D_wioka")
 
 [connection signal="Activated" from="MainAct/CullingMap/River-L" to="MainAct/River" method="Activate"]
@@ -3935,7 +3895,7 @@ shape = SubResource("BoxShape3D_wioka")
 [connection signal="Activated" from="MainAct/CullingMap/Chase-U" to="MainAct/Chase" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/Chase-U" to="MainAct/Chase" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/River-U" to="MainAct/River" method="Deactivate"]
-[connection signal="Activated" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Activate"]
-[connection signal="Respawned" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Deactivate"]
+[connection signal="Activated" from="MainAct/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Activate"]
+[connection signal="Respawned" from="MainAct/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/BoatStartTrigger" to="MainAct/River/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/River/BoatEndTrigger" to="MainAct/River/Boat" method="Deactivate"]
