@@ -531,17 +531,16 @@ public partial class SaveManager : Node
 		/// <summary> Flag representation of worlds unlocked. </summary>
 		public WorldFlagEnum worldsUnlocked;
 
-
-			/// <summary> Player level, from 1 -> 99 </summary>
-			public int level;
-			/// <summary> How much exp the player currently has. </summary>
-			public int exp;
-			/// <summary> Total playtime, in seconds. </summary>
-			public float playTime;
-			/// <summary> Total number of fire souls the player collected. </summary>
-			public int fireSoul;
-			/// <summary> Current skill ring. </summary>
-			public SkillRing skillRing = new();
+		/// <summary> Player level, from 1 -> 99 </summary>
+		public int level;
+		/// <summary> How much exp the player currently has. </summary>
+		public int exp;
+		/// <summary> Total playtime, in seconds. </summary>
+		public float playTime;
+		/// <summary> Total number of fire souls the player collected. </summary>
+		public int fireSoul;
+		/// <summary> Current skill ring. </summary>
+		public SkillRing skillRing = new();
 
 		/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
 		public bool IsNewFile() => level == 0;
@@ -549,8 +548,6 @@ public partial class SaveManager : Node
 		/// <summary> Calculates the soul gauge's level ratio, normalized from [0 -> 1] </summary>
 		public float CalculateSoulGaugeLevelRatio(int levelCap = 50) =>
 			Mathf.Clamp(level, 0, levelCap) / (float)levelCap;
-
-
 
 		/// <summary> Checks if a world is unlocked. </summary>
 		public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
@@ -571,7 +568,6 @@ public partial class SaveManager : Node
 
 
 		#region Level Data
-
 		/// <summary> Dictionaries for each individual level's data. </summary>
 		public Dictionary<StringName, Dictionary> levelData = new();
 
