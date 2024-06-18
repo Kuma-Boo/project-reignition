@@ -23,16 +23,28 @@ namespace Project
 
 
 		/// <summary> Creates a property dictionary to be used in _GetPropertyList(). </summary>
-		public static Dictionary CreateProperty(string name, Variant.Type type, PropertyHint hint = PropertyHint.None, string hint_string = "")
+		public static Dictionary CreateProperty(string name, Variant.Type type, PropertyHint hint = PropertyHint.None, string hint_string = "", PropertyUsageFlags usage = PropertyUsageFlags.Default)
 		{
-			Dictionary dictionary = new()
+			return new()
 			{
 				{ "name", name },
 				{ "type", (long)type },
 				{ "hint", (long)hint },
-				{ "hint_string", hint_string }
+				{ "hint_string", hint_string },
+				{ "usage", (long)usage }
 			};
-			return dictionary;
+		}
+
+		public static Dictionary CreateCategory(string name)
+		{
+			return new()
+			{
+				{ "name", name },
+				{ "type", (long)Variant.Type.Nil },
+				{ "hint", (long)PropertyHint.None },
+				{ "hint_string", string.Empty },
+				{ "usage", (int)PropertyUsageFlags.Category }
+			};
 		}
 
 		/// <summary> Returns a string containing all enum values. For Inspector. </summary>
