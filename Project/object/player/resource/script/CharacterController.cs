@@ -1392,7 +1392,13 @@ namespace Project.Gameplay
 		private Objects.Launcher activeLauncher;
 		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null)
 		{
-			if (activeLauncher != null && activeLauncher == newLauncher) return; // Already launching that!
+			if (MovementState == MovementStates.Launcher)
+			{
+				if (activeLauncher != null && activeLauncher == newLauncher)
+					return; // Already launching that!
+
+				FinishLauncher();
+			}
 
 			ResetMovementState();
 			ResetActionState();
@@ -1423,6 +1429,7 @@ namespace Project.Gameplay
 			if (data.IsJump) // Play jump effects
 			{
 				Animator.JumpAnimation();
+				UpDirection = Vector3.Up;
 				Effect.PlayActionSFX(Effect.JUMP_SFX);
 			}
 		}
