@@ -1601,7 +1601,6 @@ namespace Project.Gameplay
 				{
 					UpDirection = groundHit.normal;
 					UpdateOrientation();
-					MoveAndCollide(UpDirection * VerticalSpeed); // Snap to ground
 					LandOnGround();
 				}
 				else
@@ -1646,6 +1645,12 @@ namespace Project.Gameplay
 
 		public void LandOnGround()
 		{
+			// Snap to ground
+			Vector3 originalVelocity = Velocity;
+			Velocity = Vector3.Down * 100.0f;
+			MoveAndSlide();
+			Velocity = originalVelocity;
+
 			IsOnGround = true;
 			VerticalSpeed = 0;
 
@@ -1768,12 +1773,7 @@ namespace Project.Gameplay
 
 			if (ValidateWallCast(ref wallHit))
 			{
-				if (ActionState == ActionStates.JumpDash)
-				{
-					// Kill vertical speed when jump dashing into a wall to prevent splash jump from becoming obsolete
-					VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
-				}
-				else if (ActionState != ActionStates.Backflip)
+				if (ActionState != ActionStates.Backflip)
 				{
 					float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
 					if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
@@ -1788,7 +1788,14 @@ namespace Project.Gameplay
 								return;
 							}
 
-							Skills.ToggleSpeedBreak();
+							Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
+						}
+
+						// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+						if (ActionState == ActionStates.JumpDash && wallHit.collidedObject.IsInGroup("splash jump"))
+						{
+							MoveSpeed = 0;
+							VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
 						}
 
 						// Running into wall head-on

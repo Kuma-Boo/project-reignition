@@ -133,9 +133,10 @@ public partial class Catapult : Node3D
 		currentState = CatapultState.Control;
 		Character.StartExternal(this, launchNode);
 		Character.Effect.StartSpinFX();
-		Character.Animator.StartSpin(3.0f);
+		Character.Animator.StartSpin(3f);
+
 		launchPower = 1f;
-		targetLaunchPower = 0.0f;
+		targetLaunchPower = 0f;
 		launchPowerVelocity = 0f;
 
 		tweener?.Kill();
@@ -164,6 +165,8 @@ public partial class Catapult : Node3D
 
 	private void LaunchPlayer()
 	{
+		// Cheat launch power slightly towards extremes
+		launchPower = Mathf.SmoothStep(0, 1, launchPower);
 		currentState = CatapultState.Disabled;
 		Character.StartLauncher(GetLaunchSettings(), null);
 		launchSFX.Play();

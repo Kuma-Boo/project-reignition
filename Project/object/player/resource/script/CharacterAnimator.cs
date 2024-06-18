@@ -322,7 +322,7 @@ namespace Project.Gameplay
 		/// <summary> Max amount of turning allowed. </summary>
 		private readonly float MAX_TURN_ANGLE = Mathf.Pi * .4f;
 		/// <summary> How much to visually lean into turns. </summary>
-		private readonly float PATH_TURN_STRENGTH = 15.0f;
+		private readonly float PATH_TURN_STRENGTH = 5.0f;
 		/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
 		public float CalculateTurnRatio()
 		{
