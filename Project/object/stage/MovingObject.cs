@@ -172,7 +172,8 @@ public partial class MovingObject : Node3D
 		if (animator != null)
 			animator.SpeedScale = animatorSpeedScale;
 
-		Reset();
+		StageSettings.instance.ConnectRespawnSignal(this);
+		Respawn();
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -196,11 +197,14 @@ public partial class MovingObject : Node3D
 	public void Unpause() => isPaused = false;
 
 	/// <summary> Resets currentTime to StartingOffset. </summary>
-	public void Reset()
+	public void Respawn()
 	{
 		TimeScale = 1f;
 		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
+
+		if (root?.IsInsideTree() == true)
+			root.GlobalPosition = InterpolatePosition(currentTime);
 	}
 
 	public Vector3 InterpolatePosition(float ratio)

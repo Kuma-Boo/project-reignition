@@ -49,17 +49,20 @@ public partial class ThornSpring : Launcher
 	private readonly StringName timeBreakKey = "loop";
 	/// <summary> Animator timescale for Time Break springs when Time Break isn't active. </summary>
 	private const float TimeBreakLoopTimeScale = 4f;
-
+	/// <summary> Flag to pause timebreak rotation so the player doesn't get hurt. </summary>
+	private bool pauseTimebreakRotation;
 
 	public override Vector3 GetLaunchDirection() => Vector3.Up;
 	public override void Activate(Area3D a)
 	{
+		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this) // Pause time break rotation temporarily
+			pauseTimebreakRotation = true;
+
 		base.Activate(a);
 
 		if (rotateOnLaunch)
 			StartRotation();
 	}
-
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -74,25 +77,23 @@ public partial class ThornSpring : Launcher
 		UpdateRotationTimer();
 	}
 
-
 	/// <summary> Updates a time break spring based on the player's break skills. </summary>
 	private void UpdateTimeBreakSpring()
 	{
-		if (!Character.Skills.IsTimeBreakActive)
+		if (!Character.Skills.IsTimeBreakActive &&
+			(!Character.Lockon.IsHomingAttacking || Character.Lockon.Target != this))
 		{
-			if (rotationState != RotationStates.Looping) // Return to spinning quickly
+			if (rotationState != RotationStates.Looping && !pauseTimebreakRotation) // Return to spinning quickly
 				StartTimeBreakRotation();
 
 			return;
 		}
-
 
 		if (rotationState == RotationStates.Looping)
 			StopTimeBreakRotation(); // Stop spinning
 		else
 			UpdateRotationTimer();
 	}
-
 
 	private void StartTimeBreakRotation()
 	{
@@ -104,10 +105,8 @@ public partial class ThornSpring : Launcher
 		animator.SpeedScale = TimeBreakLoopTimeScale;
 	}
 
-
 	/// <summary> Transitions from quickly spinning to stationary. </summary>
 	private void StopTimeBreakRotation() => animator.Play(enableKey);
-
 
 	private void UpdateRotationTimer()
 	{
@@ -117,7 +116,6 @@ public partial class ThornSpring : Launcher
 		currentTime = Mathf.MoveToward(currentTime, staticTime, PhysicsManager.physicsDelta);
 		if (!Mathf.IsEqualApprox(currentTime, staticTime))
 			return; // Still waiting
-
 
 		if (rotationState == RotationStates.Halfway)
 		{
@@ -131,7 +129,6 @@ public partial class ThornSpring : Launcher
 		// Start a new rotation
 		StartRotation();
 	}
-
 
 	/// <summary> Reset time and stop rotating. </summary>
 	private void OnAnimationFinished(StringName animationName)
@@ -153,14 +150,12 @@ public partial class ThornSpring : Launcher
 		rotationState = RotationStates.Upright;
 	}
 
-
 	private void StartRotation()
 	{
 		rotationState = RotationStates.Rotating;
 		animator.SpeedScale = 1.0f / rotationTime;
 		animator.Play(pauseHalfway ? halfKey : fullKey);
 	}
-
 
 	/// <summary> Completes the spring's rotation. </summary>
 	private void FinishRotation()
@@ -169,4 +164,6 @@ public partial class ThornSpring : Launcher
 		animator.SpeedScale = 1.0f / rotationTime;
 		animator.Play(enableKey);
 	}
+
+	public void OnExited(Area3D _) => pauseTimebreakRotation = false;
 }

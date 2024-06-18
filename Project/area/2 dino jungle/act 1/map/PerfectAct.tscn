@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bkoobmlw11ke"]
+[gd_scene load_steps=22 format=3 uid="uid://vcmdwsohkoen"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_dkeii"]
 [ext_resource type="Resource" uid="uid://dcsmed3l5ath0" path="res://resource/level data/dinosaur jungle/Act1Perfect.tres" id="2_3og88"]
@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="16_h0qf6"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="17_tg82s"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="19_iu87j"]
-[ext_resource type="PackedScene" uid="uid://c0wwow83r4jry" path="res://object/enemy/majin/data/sand oasis/BlueMajin.tscn" id="20_pchu4"]
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="21_ggtwu"]
 [ext_resource type="PackedScene" uid="uid://ctt8k8ju64i3l" path="res://object/enemy/flower/FlowerMajin.tscn" id="26_dqck0"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="28_nvlkf"]
@@ -91,7 +90,7 @@ transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 3.72529e-09, 5.96046e
 transform = Transform3D(1, 0, 2.98023e-08, 7.45058e-09, 1, 3.72529e-09, 5.96046e-08, 5.21541e-08, 1, 0, 0, -15)
 
 [node name="MajinMover" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.471, -0.430145, -34.2693)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.471, -1.43015, -34.2693)
 script = ExtResource("58_2r0fu")
 Movement/Mode = 1
 "Movement/Cycle Length" = 5.0
@@ -100,11 +99,9 @@ Movement/Distance = 6.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
 startPaused = true
-smoothPausing = true
-root = NodePath("BlueMajin")
+root = NodePath("BlueMajin6")
 
-[node name="BlueMajin" parent="MainAct/Crossing/MajinMover" instance=ExtResource("44_htkmd")]
-transform = Transform3D(0.617832, 0, -0.78631, 0, 1, 0, 0.78631, 0, 0.617832, 0, -1.04764, 0)
+[node name="BlueMajin6" parent="MainAct/Crossing/MajinMover" instance=ExtResource("44_htkmd")]
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -117,15 +114,14 @@ rangeOverride = 15
 
 [node name="ThornSpring1" parent="MainAct/Crossing" instance=ExtResource("38_grd2y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 136.354, 4.70102, -38.8067)
-"Secondary Settings/Enabled" = false
 rotationTime = 1.0
 pauseHalfway = true
 distance = 6.0
 
-[node name="Cactus" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
+[node name="Cactus1" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140.422, 7.76501, -47.7293)
 
-[node name="Pearls" type="Node3D" parent="MainAct/Crossing/Cactus"]
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/Cactus1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.934448, 0)
 script = ExtResource("13_v5r1w")
 Generate = false
@@ -136,34 +132,34 @@ Orientation = 0
 "Ring Size" = 1.6
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child01" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
 
-[node name="Child02" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child02" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, 0.940456)
 
-[node name="Child03" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child03" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.494427, 0, 1.52169)
 
-[node name="Child04" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child04" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.494427, 0, 1.52169)
 
-[node name="Child05" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child05" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29443, 0, 0.940456)
 
-[node name="Child06" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child06" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, -1.39876e-07)
 
-[node name="Child07" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child07" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29443, 0, -0.940457)
 
-[node name="Child08" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child08" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.494427, 0, -1.52169)
 
-[node name="Child09" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child09" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.494428, 0, -1.52169)
 
-[node name="Child10" parent="MainAct/Crossing/Cactus/Pearls" instance=ExtResource("16_h0qf6")]
+[node name="Child10" parent="MainAct/Crossing/Cactus1/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, -0.940456)
 
 [node name="Cactus2" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
@@ -254,6 +250,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.494428, 0, -1.52169)
 [node name="Child10" parent="MainAct/Crossing/Cactus3/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, -0.940456)
 
+[node name="BlueMajin1" parent="MainAct/Crossing" instance=ExtResource("44_htkmd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.549, 2.31631, -99.9558)
+
 [node name="Cactus4" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(1, 0, 0, 0, 0.99113, 0.132896, 0, -0.132896, 0.99113, 148.513, -4.73972, -110.254)
 
@@ -297,6 +296,45 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.494428, 0, -1.52169)
 
 [node name="Child10" parent="MainAct/Crossing/Cactus4/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, -0.940456)
+
+[node name="BlueMajin2" parent="MainAct/Crossing" instance=ExtResource("44_htkmd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 148.39, -0.690765, -113.119)
+
+[node name="Cactus5" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
+transform = Transform3D(0.996181, 0, 0.0873122, -0.0151886, 0.984753, 0.173293, -0.085981, -0.173958, 0.980992, 146.908, -7.68256, -119.946)
+
+[node name="WhiteRock1" parent="MainAct/Crossing" instance=ExtResource("12_a834n")]
+transform = Transform3D(0.996181, 0, 0.0977897, -0.0151886, 2.52589, 0.194088, -0.085981, -0.446201, 1.09871, 146.561, -8.04941, -122.023)
+
+[node name="Rings2" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.988555, 0, 0.150864, 0, 1, 0, -0.150864, 0, 0.988555, 145.839, -7.487, -126.716)
+script = ExtResource("13_v5r1w")
+Generate = false
+Source = ExtResource("14_tixjw")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0834808, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
+transform = Transform3D(0.999985, 0, -0.00542794, 0, 1, 0, 0.00542794, 0, 0.999985, -0.179062, 0, -3.00098)
+
+[node name="Child03" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203918, 0, -6)
+
+[node name="Child04" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312546, -0.11377, -9.00024)
+
+[node name="Child05" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37468, -0.261108, -12)
+
+[node name="Child06" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.420975, -0.596436, -15)
 
 [node name="Cactus6" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 126.831, -12.0246, -177.331)
@@ -386,6 +424,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.494428, 0, -1.52169)
 [node name="Child10" parent="MainAct/Crossing/Cactus7/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, -0.940456)
 
+[node name="FlowerMajinMover1" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
+transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 106.049, -12, -178.562)
+script = ExtResource("58_2r0fu")
+Movement/Mode = 1
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 8.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+startPaused = true
+smoothPausing = true
+root = NodePath("FlowerMajin1")
+
+[node name="FlowerMajin1" parent="MainAct/Crossing/FlowerMajinMover1" instance=ExtResource("26_dqck0")]
+passiveLength = 4.0
+preAttackLength = 1.0
+postAttackLength = 2.0
+
+[node name="FlowerMajinMover2" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
+transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 106.042, -12, -187.313)
+script = ExtResource("58_2r0fu")
+Movement/Mode = 1
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 8.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+startPaused = true
+smoothPausing = true
+root = NodePath("FlowerMajin2")
+
+[node name="FlowerMajin2" parent="MainAct/Crossing/FlowerMajinMover2" instance=ExtResource("26_dqck0")]
+passiveLength = 4.0
+preAttackLength = 1.0
+postAttackLength = 2.0
+
 [node name="Cactus8" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(0.884731, 0.0492008, -0.463497, -0.0555252, 0.998457, 0, 0.462782, 0.0257358, 0.886098, 80.4708, -8.3472, -193.076)
 
@@ -474,8 +548,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.494428, 0, -1.52169)
 [node name="Child10" parent="MainAct/Crossing/Cactus9/Pearls" instance=ExtResource("16_h0qf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, -0.940456)
 
+[node name="RedMajin1" parent="MainAct/Crossing" instance=ExtResource("56_i1247")]
+transform = Transform3D(0.463497, 0, 0.886098, 0, 1, 0, -0.886098, 0, 0.463497, 63.5272, -5.76218, -201.116)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 1.0
+
 [node name="Cactus10" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(0.859687, 0.214727, -0.463497, -0.242328, 0.970194, 7.45058e-09, 0.449682, 0.112318, 0.886098, 58.4382, -5.03604, -203.345)
+
+[node name="ThornSpring2" parent="MainAct/Crossing" instance=ExtResource("38_grd2y")]
+transform = Transform3D(0.877732, 0, -0.479151, 0, 1, 0, 0.479151, 0, 0.877732, 53.468, 0.161896, -205.875)
+isTimeBreakSpring = true
 
 [node name="Cactus11" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(0.875463, -0.136875, -0.463497, 0.154469, 0.987998, 1.49012e-08, 0.457934, -0.071596, 0.886098, 47.8503, -4.23218, -208.367)
@@ -483,14 +568,16 @@ transform = Transform3D(0.875463, -0.136875, -0.463497, 0.154469, 0.987998, 1.49
 [node name="Cactus12" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(0.861136, 0.20884, -0.463497, -0.235685, 0.971829, 0, 0.45044, 0.109239, 0.886098, 34.61, -5.21402, -214.507)
 
+[node name="BlueMajin3" parent="MainAct/Crossing" instance=ExtResource("44_htkmd")]
+transform = Transform3D(0.450379, 0, 0.892838, 0, 1, 0, -0.892838, 0, 0.450379, 40.024, -5.15411, -211.974)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
 [node name="Cactus13" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(0.861136, 0.20884, -0.463497, -0.235685, 0.971829, 0, 0.45044, 0.109239, 0.886098, 26.0364, -2.5148, -218.638)
-
-[node name="Cactus5" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
-transform = Transform3D(0.996181, 0, 0.0873122, -0.0151886, 0.984753, 0.173293, -0.085981, -0.173958, 0.980992, 146.908, -7.68256, -119.946)
-
-[node name="WhiteRock" parent="MainAct/Crossing" instance=ExtResource("12_a834n")]
-transform = Transform3D(0.996181, 0, 0.0977897, -0.0151886, 2.52589, 0.194088, -0.085981, -0.446201, 1.09871, 146.561, -8.04941, -122.023)
 
 [node name="WhiteRock2" parent="MainAct/Crossing" instance=ExtResource("12_a834n")]
 transform = Transform3D(0.954844, 0, 0.297108, 0, 1.245, 0, -0.297108, 0, 0.954844, 32.9394, -4.86151, -215.306)
@@ -501,98 +588,26 @@ transform = Transform3D(0.591419, 0, 2.44497, 0, 4.24, 0, -1.51355, 0, 0.95537, 
 [node name="WhiteRock4" parent="MainAct/Crossing" instance=ExtResource("12_a834n")]
 transform = Transform3D(1.55845, 0, -0.743519, 0, 4.24, 0, 0.460274, 0, 2.5175, -17.2385, -3.16843, -215.29)
 
-[node name="Rings2" type="Node3D" parent="MainAct/Crossing"]
-transform = Transform3D(0.988555, 0, 0.150864, 0, 1, 0, -0.150864, 0, 0.988555, 145.839, -7.487, -126.716)
-script = ExtResource("13_v5r1w")
-Generate = false
-Source = ExtResource("14_tixjw")
-Amount = 6
-Shape = 0
-Orientation = 0
-Spacing = 3.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0834808, 0, 0)
-
-[node name="Child02" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
-transform = Transform3D(0.999985, 0, -0.00542794, 0, 1, 0, 0.00542794, 0, 0.999985, -0.179062, 0, -3.00098)
-
-[node name="Child03" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203918, 0, -6)
-
-[node name="Child04" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312546, -0.11377, -9.00024)
-
-[node name="Child05" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37468, -0.261108, -12)
-
-[node name="Child06" parent="MainAct/Crossing/Rings2" instance=ExtResource("14_tixjw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.420975, -0.596436, -15)
-
-[node name="BlueMajin" parent="MainAct/Crossing" instance=ExtResource("20_pchu4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.549, 2.31631, -99.9558)
-
-[node name="BlueMajin2" parent="MainAct/Crossing" instance=ExtResource("20_pchu4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 148.39, -0.690765, -113.119)
-
-[node name="BlueMajin3" parent="MainAct/Crossing" instance=ExtResource("20_pchu4")]
-transform = Transform3D(0.450379, 0, 0.892838, 0, 1, 0, -0.892838, 0, 0.450379, 40.024, -5.15411, -211.974)
-
-[node name="BlueMajin4" parent="MainAct/Crossing" instance=ExtResource("20_pchu4")]
+[node name="BlueMajin4" parent="MainAct/Crossing" instance=ExtResource("44_htkmd")]
 transform = Transform3D(0.450379, 0, 0.892838, 0, 1, 0, -0.892838, 0, 0.450379, 29.4173, -2.71667, -217.324)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 
-[node name="BlueMajin5" parent="MainAct/Crossing" instance=ExtResource("20_pchu4")]
+[node name="BlueMajin5" parent="MainAct/Crossing" instance=ExtResource("44_htkmd")]
 transform = Transform3D(0.450379, 0, 0.892838, 0, 1, 0, -0.892838, 0, 0.450379, 22.5148, 0.458221, -220.806)
-
-[node name="FlowerMajinMover1" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
-transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 104.17, -12, -179.246)
-script = ExtResource("58_2r0fu")
-Movement/Mode = 1
-"Movement/Cycle Length" = 2.8
-"Movement/Starting Offset" = 0.25
-Movement/Distance = 8.0
-Movement/Angle = -90.0
-"Vertical Orientation" = false
-startPaused = true
-smoothPausing = true
-root = NodePath("FlowerMajin1")
-
-[node name="FlowerMajin1" parent="MainAct/Crossing/FlowerMajinMover1" instance=ExtResource("26_dqck0")]
-passiveLength = 4.0
-preAttackLength = 1.0
-postAttackLength = 2.0
-
-[node name="FlowerMajinMover2" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
-transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 105.102, -12, -187.655)
-script = ExtResource("58_2r0fu")
-Movement/Mode = 1
-"Movement/Cycle Length" = 2.8
-"Movement/Starting Offset" = 0.25
-Movement/Distance = 8.0
-Movement/Angle = 90.0
-"Vertical Orientation" = false
-startPaused = true
-smoothPausing = true
-root = NodePath("FlowerMajin2")
-
-[node name="FlowerMajin2" parent="MainAct/Crossing/FlowerMajinMover2" instance=ExtResource("26_dqck0")]
-passiveLength = 4.0
-preAttackLength = 1.0
-postAttackLength = 2.0
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 
 [node name="EnemyStone" parent="MainAct/Crossing" instance=ExtResource("28_nvlkf")]
 transform = Transform3D(1.69047, 0, 2.71892, 0, 4.02, 0, -3.62523, 0, 1.26785, 96.5929, -7.90256, -185.135)
 enemyCount = 2
 disableEnvironmentCollision = false
-
-[node name="RedMajin" parent="MainAct/Crossing" instance=ExtResource("56_i1247")]
-transform = Transform3D(0.886098, 0, -0.463497, 0, 1, 0, 0.463497, 0, 0.886098, 63.5272, -5.76218, -201.116)
-"Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 1.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 1.0
 
 [node name="RedMajin2" parent="MainAct/Crossing" instance=ExtResource("56_i1247")]
 transform = Transform3D(-0.655492, 0, -0.755202, 0, 1, 0, 0.755202, 0, -0.655492, -4.88312, -2.14761, -216.672)
@@ -608,14 +623,8 @@ transform = Transform3D(-0.0942302, 0, 0.99555, 0, 1, 0, -0.99555, 0, -0.0942302
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 1.0
 
-[node name="ThornSpring2" parent="MainAct/Crossing" instance=ExtResource("38_grd2y")]
-transform = Transform3D(0.877732, 0, -0.479151, 0, 1, 0, 0.479151, 0, 0.877732, 53.468, -0.838104, -205.875)
-"Secondary Settings/Enabled" = false
-isTimeBreakSpring = true
-
 [node name="ThornSpring3" parent="MainAct/Crossing" instance=ExtResource("38_grd2y")]
 transform = Transform3D(0.877732, 0, -0.479151, 0, 1, 0, 0.479151, 0, 0.877732, 19.6318, 3.6239, -221.737)
-"Secondary Settings/Enabled" = false
 isTimeBreakSpring = true
 distance = 10.0
 
@@ -645,7 +654,7 @@ shape = SubResource("BoxShape3D_wiqay")
 [node name="LotusPlatform" parent="MainAct/Crossing" instance=ExtResource("21_ggtwu")]
 transform = Transform3D(-1.01445, 0, 1.10494, 0, 1, 0, -1.10494, 0, -1.01445, -41.7177, -26.2108, -190.106)
 
-[connection signal="Spawned" from="MainAct/Crossing/MajinMover/BlueMajin" to="MainAct/Crossing/MajinMover" method="Unpause"]
+[connection signal="SpinStarted" from="MainAct/Crossing/MajinMover/BlueMajin6" to="MainAct/Crossing/MajinMover" method="Unpause"]
 [connection signal="Aggressive" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Unpause"]
 [connection signal="Attack" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Pause"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Pause"]

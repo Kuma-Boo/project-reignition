@@ -10,13 +10,16 @@ namespace Project.Gameplay;
 [Tool]
 public partial class Majin : Enemy
 {
+	[Signal]
+	public delegate void SpinStartedEventHandler();
+
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties = new()
-			{
+		Array<Dictionary> properties =
+			[
 				ExtensionMethods.CreateProperty("Spawn Settings/Spawn Travel Time", Variant.Type.Float, PropertyHint.Range, "0,2,.1")
-			};
+			];
 
 		if (!SpawnTravelDisabled)
 		{
@@ -220,9 +223,6 @@ public partial class Majin : Enemy
 	private float staggerTimer;
 	private const float STAGGER_LENGTH = 1.2f;
 
-	/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
-	private MovingObject movementController;
-
 	// Animation parameters
 	private readonly StringName IdleState = "idle";
 	private readonly StringName SPIN_STATE = "spin";
@@ -248,10 +248,6 @@ public partial class Majin : Enemy
 		stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
 		fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
 		spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
-
-		if (attackType == AttackTypes.Spin) // Try to get movement controller parent
-			movementController = GetParentOrNull<MovingObject>();
-
 		base.SetUp();
 	}
 
@@ -277,12 +273,6 @@ public partial class Majin : Enemy
 		idleFactorVelocity = 0;
 		animationTree.Set(IdleFactorParameter, 0);
 		animationTree.Set(DefeatTransitionParameter, DISABLED_STATE);
-
-		if (movementController != null) // Reset/Pause movement
-		{
-			movementController.Reset();
-			movementController.Pause();
-		}
 
 		// Reset stagger
 		staggerTimer = 0;
@@ -598,42 +588,12 @@ public partial class Majin : Enemy
 		animationTree.Set(MoveBlendParameter, moveBlend);
 	}
 
-
-	public Vector3 CalculateTravelPosition(float t)
-	{
-		if (!spawnInOffset.IsZeroApprox() || !spawnOutOffset.IsZeroApprox()) // Use cubic bezier interpolation
-		{
-			Vector3 a = SpawnPosition.Lerp(InHandle, t);
-			Vector3 b = InHandle.Lerp(OutHandle, t);
-			Vector3 c = OutHandle.Lerp(OriginalPosition, t);
-
-			Vector3 d = a.Lerp(b, t);
-			Vector3 e = b.Lerp(c, t);
-
-			return d.Lerp(e, t);
-		}
-
-		return SpawnPosition.Lerp(OriginalPosition, t);
-	}
-
-
-	public Vector3 CalculateTravelVelocity(float t)
-	{
-		return (SpawnPosition * ((-3 * Mathf.Pow(t, 2)) + (6 * t) - 3)) +
-		(InHandle * ((9 * Mathf.Pow(t, 2)) - (12 * t) + 3)) +
-		(OutHandle * ((-9 * Mathf.Pow(t, 2)) + (6 * t))) +
-		(OriginalPosition * (3 * Mathf.Pow(t, 2)));
-	}
-
-
-	public Vector3 CalculateTravelAcceleration(float t)
-	{
-		return (SpawnPosition * ((-6 * t) + 6)) +
-		(InHandle * ((18 * t) - 12)) +
-		(OutHandle * ((-18 * t) + 6)) +
-		(OriginalPosition * (6 * t));
-	}
-
+	/// <summary> Use Bezier interpolation to get the majin's position. </summary>
+	public Vector3 CalculateTravelPosition(float t) => SpawnPosition.BezierInterpolate(InHandle, OutHandle, OriginalPosition, t);
+	/// <summary> The derivative is the majin's velocity. </summary>
+	public Vector3 CalculateTravelVelocity(float t) => SpawnPosition.BezierDerivative(InHandle, OutHandle, OriginalPosition, t);
+	/// <summary> The derivative of velocity is the majin's acceleration. </summary>
+	public Vector3 CalculateTravelAcceleration(float t) => CalculateTravelVelocity(t).BezierDerivative(InHandle, OutHandle, OriginalPosition, t);
 
 	private void FinishSpawning()
 	{
@@ -665,8 +625,6 @@ public partial class Majin : Enemy
 	private void OnSpinActivated()
 	{
 		animationPlayer.Play("spin");
-
-		// Start movement
-		movementController?.Unpause();
+		EmitSignal(SignalName.SpinStarted);
 	}
 }
