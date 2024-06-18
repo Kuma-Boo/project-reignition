@@ -4,9 +4,7 @@ using Project.Core;
 
 namespace Project.Gameplay;
 
-/// <summary>
-/// Most common enemy type in Secret Rings.
-/// </summary>
+/// <summary> Most common enemy type in Secret Rings. </summary>
 [Tool]
 public partial class Majin : Enemy
 {
@@ -38,7 +36,7 @@ public partial class Majin : Enemy
 		{
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
-			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Aggression Radius", Variant.Type.Int, PropertyHint.Range, "0,20,1"));
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Aggression Radius", Variant.Type.Int, PropertyHint.Range, "0,100,1"));
 		}
 
 		properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
@@ -299,7 +297,6 @@ public partial class Majin : Enemy
 		}
 	}
 
-
 	public override void TakePlayerDamage()
 	{
 		Stagger();
@@ -309,13 +306,11 @@ public partial class Majin : Enemy
 			animationPlayer.Play("stagger");
 	}
 
-
 	public override void TakeExternalDamage(int amount = -1)
 	{
 		Stagger();
 		base.TakeExternalDamage(amount);
 	}
-
 
 	private void Stagger()
 	{
@@ -326,7 +321,6 @@ public partial class Majin : Enemy
 
 		animationTree.Set(HitTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
-
 
 	protected override void Defeat()
 	{

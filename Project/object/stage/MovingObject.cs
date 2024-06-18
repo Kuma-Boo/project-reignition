@@ -179,6 +179,7 @@ public partial class MovingObject : Node3D
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint()) return;
+
 		if (IsMovementInvalid()) return; // No movement
 		if (isPaused && !smoothPausing) return;
 
@@ -191,6 +192,14 @@ public partial class MovingObject : Node3D
 
 		if (root?.IsInsideTree() == true)
 			root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
+	}
+
+	public void ApplyEditorPosition()
+	{
+		if (root == null)
+			return;
+
+		root.GlobalPosition = InterpolatePosition(StartingOffset);
 	}
 
 	public void Pause() => isPaused = true;

@@ -6,8 +6,6 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class ThornSpring : Launcher
 {
-	[Export]
-	private float height;
 	/// <summary> How long a rotation phase (full or half) takes in seconds. </summary>
 	[Export(PropertyHint.Range, "0,5,.1")]
 	private float rotationTime;

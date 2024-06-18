@@ -112,7 +112,7 @@ namespace Project.Editor.StageObjectPreviewer
 			MovingObject obj = target as MovingObject;
 			if (obj.IsMovementInvalid()) return; //Don't draw
 
-			Array<Vector2> points = new();
+			Array<Vector2> points = [];
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
@@ -128,6 +128,7 @@ namespace Project.Editor.StageObjectPreviewer
 			points.CopyTo(pointsList, 0);
 			viewportOverlay.DrawPolyline(pointsList, DefaultDrawColor, 1, true);
 
+			obj.ApplyEditorPosition();
 			Vector3 startingPoint = obj.InterpolatePosition(obj.StartingOffset);
 			if (!editorCam.IsPositionBehind(startingPoint))
 				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(startingPoint), 5f, SpecialDrawColor);

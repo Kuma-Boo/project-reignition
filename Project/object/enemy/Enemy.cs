@@ -26,8 +26,8 @@ public partial class Enemy : Node3D
 		Always, // Always spawned
 	}
 
-	[Export(PropertyHint.Range, "-1, 100")]
-	public int rangeOverride = -1;
+	[Export(PropertyHint.Range, "0, 100")]
+	public int rangeOverride = 50;
 
 	[Export]
 	/// <summary> Number of pearls to spawn when the enemy is defeated. </summary>
@@ -62,12 +62,12 @@ public partial class Enemy : Node3D
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
-		SpawnData = new SpawnData(GetParent(), Transform);
+		SpawnData = new(GetParent(), Transform);
 		StageSettings.instance.ConnectRespawnSignal(this);
 		StageSettings.instance.ConnectUnloadSignal(this);
 		Respawn();
 
-		if (rangeCollider == null || rangeOverride == -1)
+		if (rangeCollider == null)
 			return;
 
 		if (rangeOverride == 0) // Disable range collider
@@ -122,9 +122,7 @@ public partial class Enemy : Node3D
 		EmitSignal(SignalName.Respawned);
 	}
 
-	/// <summary>
-	/// Overload function to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal.
-	/// </summary>
+	/// <summary> Overload function to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal. </summary>
 	protected void Spawn(Area3D _) => Spawn();
 	protected virtual void Spawn() => EmitSignal(SignalName.Spawned);
 
@@ -135,9 +133,8 @@ public partial class Enemy : Node3D
 		EmitSignal(SignalName.Despawned);
 	}
 
-
+	/// <summary> Override this from an inherited class. </summary>
 	protected virtual void UpdateEnemy() { }
-
 
 	public virtual void TakePlayerDamage()
 	{
@@ -152,7 +149,6 @@ public partial class Enemy : Node3D
 			Character.Camera.SetDeferred("LockonTarget", hurtbox);
 	}
 
-
 	public virtual void TakeExternalDamage(int amount = -1)
 	{
 		if (amount == -1)
@@ -164,10 +160,7 @@ public partial class Enemy : Node3D
 			Defeat();
 	}
 
-
-	/// <summary>
-	/// Called when the enemy is defeated.
-	/// </summary>
+	/// <summary> Called when the enemy is defeated. </summary>
 	protected virtual void Defeat()
 	{
 		SetHitboxStatus(false);
