@@ -455,6 +455,9 @@ namespace Project.Gameplay
 		private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 		public void FinishLevel(bool wasSuccessful)
 		{
+			if (!IsLevelIngame)
+				return;
+
 			// Attempt to start the completion demo
 			GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
