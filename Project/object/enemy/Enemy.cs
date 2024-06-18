@@ -27,7 +27,7 @@ public partial class Enemy : Node3D
 	}
 
 	[Export(PropertyHint.Range, "-1, 100")]
-	protected int rangeOverride = -1;
+	public int rangeOverride = -1;
 
 	[Export]
 	/// <summary> Number of pearls to spawn when the enemy is defeated. </summary>
@@ -132,6 +132,7 @@ public partial class Enemy : Node3D
 	{
 		if (!IsInsideTree()) return;
 		GetParent().CallDeferred("remove_child", this);
+		EmitSignal(SignalName.Despawned);
 	}
 
 

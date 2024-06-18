@@ -34,10 +34,11 @@ public partial class Majin : Enemy
 			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
 
 		properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
-		if (attackType == AttackTypes.Fire) // Show relevant fire-related settings
+		if (IsRedMajin) // Show relevant fire-related settings
 		{
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Aggression Radius", Variant.Type.Int, PropertyHint.Range, "0,20,1"));
 		}
 
 		properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
@@ -78,6 +79,8 @@ public partial class Majin : Enemy
 				return flameActiveTime;
 			case "Attack Settings/Flame Inactive Time":
 				return flameInactiveTime;
+			case "Attack Settings/Flame Aggression Radius":
+				return FlameAggressionRadius;
 
 			case "Defeat Settings/Enable Enemy Launching":
 				return isDefeatLaunchEnabled;
@@ -133,6 +136,9 @@ public partial class Majin : Enemy
 				break;
 			case "Attack Settings/Flame Inactive Time":
 				flameInactiveTime = (float)value;
+				break;
+			case "Attack Settings/Flame Aggression Radius":
+				FlameAggressionRadius = (int)value;
 				break;
 
 			case "Defeat Settings/Enable Enemy Launching":
@@ -202,7 +208,6 @@ public partial class Majin : Enemy
 	private bool trackPlayer = true;
 	/// <summary> How long to complete a rotation cycle when trackPlayer is false. </summary>
 	private float rotationTime;
-
 	private float rotationAmount;
 
 	private AttackTypes attackType;
@@ -213,12 +218,16 @@ public partial class Majin : Enemy
 		Fire, // Spit fire out
 	}
 
+	public bool IsRedMajin => attackType == AttackTypes.Fire;
+	/// <summary> Only become aggressive within a certain radius? </summary>
+	public int FlameAggressionRadius { get; private set; }
+	/// <summary> Is the flame attack currently active? </summary>
+	private bool isFlameActive;
 	private float flameActiveTime = 1.0f;
 	private float flameInactiveTime;
 	/// <summary> Timer to keep track of flame cycles. </summary>
 	private float flameTimer;
-	/// <summary> Is the flame attack currently active? </summary>
-	private bool isFlameActive;
+
 	/// <summary> Timer to keep track of stagger length. </summary>
 	private float staggerTimer;
 	private const float STAGGER_LENGTH = 1.2f;
@@ -267,7 +276,7 @@ public partial class Majin : Enemy
 
 		rotationVelocity = 0;
 		currentRotation = 0;
-		UpdateRotation();
+		ApplyRotation();
 
 		// Reset idle movement
 		idleFactorVelocity = 0;
@@ -278,7 +287,7 @@ public partial class Majin : Enemy
 		staggerTimer = 0;
 
 		// Reset flame attack
-		flameTimer = 0;
+		flameTimer = (IsRedMajin && FlameAggressionRadius != 0) ? flameInactiveTime : 0;
 		isFlameActive = false;
 
 		base.Respawn();
@@ -379,32 +388,43 @@ public partial class Majin : Enemy
 			return;
 		}
 
-		if (attackType == AttackTypes.Fire)
+		if (IsRedMajin)
 			UpdateFlameAttack();
 
-		// Update rotation
-		if (IsInRange)
-		{
-			if (trackPlayer) // Rotate to face player
-			{
-				TrackPlayer();
-			}
-			else if (!Mathf.IsZeroApprox(rotationTime))
-			{
-				rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TRACKING_SMOOTHING);
-				currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
-			}
-		}
-		else
-		{
-			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
-		}
-
 		UpdateRotation();
+		ApplyRotation();
 		UpdateFidgets();
 	}
 
+	private void UpdateRotation()
+	{
+		bool OutsideFlameAggression = IsRedMajin && !isFlameActive && !IsInFlameAggressionRange();
+		if (OutsideFlameAggression || !IsInRange)
+		{
+			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
+			if (OutsideFlameAggression && !isFlameActive)
+				flameTimer = flameInactiveTime;
+			return;
+		}
 
+		if (trackPlayer) // Rotate to face player
+		{
+			TrackPlayer();
+			return;
+		}
+
+		if (!Mathf.IsZeroApprox(rotationTime))
+		{
+			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TRACKING_SMOOTHING);
+			currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
+		}
+	}
+
+	private void ApplyRotation()
+	{
+		root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z);
+		fireRoot.Rotation = Vector3.Up * currentRotation;
+	}
 
 	protected override void UpdateInteraction()
 	{
@@ -478,12 +498,6 @@ public partial class Majin : Enemy
 		animationTree.Set(IdleFactorParameter, idleFactor);
 	}
 
-	private void UpdateRotation()
-	{
-		root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z);
-		fireRoot.Rotation = Vector3.Up * currentRotation;
-	}
-
 	private void UpdateFlameAttack()
 	{
 		if (!IsInRange || isFidgetActive) // Out of range or fidget is active
@@ -504,10 +518,21 @@ public partial class Majin : Enemy
 		}
 		else
 		{
+			// Return early if the player is outside of the majin's aggression radius
+			if (!Mathf.IsZeroApprox(FlameAggressionRadius) && !IsInFlameAggressionRange())
+				return;
+
 			flameTimer = Mathf.MoveToward(flameTimer, flameInactiveTime, PhysicsManager.physicsDelta);
 			if (Mathf.IsEqualApprox(flameTimer, flameInactiveTime)) // Switch on
 				ToggleFlameAttack();
 		}
+	}
+
+	private bool IsInFlameAggressionRange()
+	{
+		float distance = (GlobalPosition - Character.GlobalPosition).Flatten().LengthSquared();
+		// Because raising to the 2nd power is better than taking a square root...
+		return distance < Mathf.Pow(FlameAggressionRadius, 2);
 	}
 
 	private void ToggleFlameAttack()
@@ -570,6 +595,18 @@ public partial class Majin : Enemy
 	}
 
 
+	public override void Despawn()
+	{
+		if (IsDefeated) // Remove from the scene tree
+		{
+			base.Despawn();
+			return;
+		}
+
+		EmitSignal(SignalName.Despawned);
+	}
+
+
 	private void UpdateTravel()
 	{
 		// Calculate tangent (rotation)
@@ -578,7 +615,7 @@ public partial class Majin : Enemy
 			currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
 
 		Position = CalculateTravelPosition(currentTravelRatio);
-		UpdateRotation();
+		ApplyRotation();
 
 		// TODO Update animations
 		Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
