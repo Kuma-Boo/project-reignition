@@ -1,42 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://junmdgv0jj83"]
+[gd_scene load_steps=5 format=3 uid="uid://junmdgv0jj83"]
 
-[ext_resource type="Curve3D" uid="uid://ypoahq7nayxa" path="res://area/2 dino jungle/act 1/environment/path/DinoTrioPath.tres" id="1_1rfum"]
+[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/DinoTrioPath.tres" id="1_1rfum"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="1_3idhk"]
 [ext_resource type="PackedScene" uid="uid://cc1ft0jnv1sql" path="res://area/2 dino jungle/object/dino/DinoTrio.tscn" id="2_7etxf"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_diafk"]
-size = Vector3(20, 10, 5)
+[ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoTrioProcessor.cs" id="3_so6xo"]
 
 [node name="DinoTrioGroup" type="Node3D"]
+script = ExtResource("1_3idhk")
 
-[node name="DinoTrioPath" type="Path3D" parent="."]
+[node name="DinoTrioPath" type="Path3D" parent="." node_paths=PackedStringArray("dinos")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.778, 0, 90.293)
 curve = ExtResource("1_1rfum")
+script = ExtResource("3_so6xo")
+SpeedDifference = 2.0
+dinos = [NodePath("DinoTrio1"), NodePath("DinoTrio2"), NodePath("DinoTrio3")]
 
-[node name="DinoTrio1" parent="DinoTrioPath" node_paths=PackedStringArray("path", "reversePrevention") instance=ExtResource("2_7etxf")]
-transform = Transform3D(0.500001, 0, -0.866025, 0, 1, 0, 0.866024, 0, 0.500002, 0, 0, 0)
+[node name="DinoTrio1" parent="DinoTrioPath" instance=ExtResource("2_7etxf")]
+transform = Transform3D(-0.500001, 0, 0.866025, 0, 1, 0, -0.866024, 0, -0.500002, 0, 0, 0)
 loop = false
-path = NodePath("..")
-reversePrevention = NodePath("../ReversePrevention")
 
-[node name="DinoTrio2" parent="DinoTrioPath" node_paths=PackedStringArray("path") instance=ExtResource("2_7etxf")]
-transform = Transform3D(0.500001, 0, -0.866025, 0, 1, 0, 0.866024, 0, 0.500002, 1.5, 0, 2.59807)
+[node name="DinoTrio2" parent="DinoTrioPath" instance=ExtResource("2_7etxf")]
+transform = Transform3D(-0.500001, 0, 0.866025, 0, 1, 0, -0.866024, 0, -0.500002, -1.5, 0, -2.59807)
 h_offset = 3.0
 loop = false
-path = NodePath("..")
 
-[node name="DinoTrio3" parent="DinoTrioPath" node_paths=PackedStringArray("path") instance=ExtResource("2_7etxf")]
-transform = Transform3D(0.499998, 0, -0.866019, 0, 1, 0, 0.866019, 0, 0.499998, -1.5, 0, -2.59807)
+[node name="DinoTrio3" parent="DinoTrioPath" instance=ExtResource("2_7etxf")]
+transform = Transform3D(-0.499998, 0, 0.866019, 0, 1, 0, -0.866019, 0, -0.499998, 1.5, 0, 2.59807)
 h_offset = -3.0
 loop = false
-path = NodePath("..")
-
-[node name="ReversePrevention" type="PathFollow3D" parent="DinoTrioPath"]
-transform = Transform3D(0.500001, 0, -0.866023, 0, 0.999999, 0, 0.866023, 0, 0.5, 0, 0, 0)
-loop = false
-
-[node name="StaticBody3D" type="StaticBody3D" parent="DinoTrioPath/ReversePrevention"]
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DinoTrioPath/ReversePrevention/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
-shape = SubResource("BoxShape3D_diafk")

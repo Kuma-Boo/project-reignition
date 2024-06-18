@@ -30,7 +30,7 @@ namespace Project.Gameplay
 		private TextureRect crossfade;
 		[Export]
 		private AnimationPlayer crossfadeAnimator;
-		private bool IsCrossfading => crossfadeAnimator.IsPlaying();
+		public bool IsCrossfading => crossfadeAnimator.IsPlaying();
 
 		[Export]
 		/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>
@@ -132,7 +132,7 @@ namespace Project.Gameplay
 		/// <summary> A list of all camera settings that are influencing camera. </summary>
 		private readonly List<CameraBlendData> CameraBlendList = new();
 
-		public void StartCrossfade()
+		public void StartCrossfade(float speed = 1.0f)
 		{
 			// Already crossfading
 			if (IsCrossfading)
@@ -143,6 +143,7 @@ namespace Project.Gameplay
 			tex.SetImage(GetViewport().GetTexture().GetImage());
 			crossfade.Texture = tex;
 			crossfadeAnimator.Play("activate");// Start crossfade animation
+			crossfadeAnimator.SpeedScale = speed;
 
 			// Warp the camera
 			SnapFlag = true;
@@ -156,11 +157,18 @@ namespace Project.Gameplay
 			if (data.SettingsResource == null) return; // Invalid data
 
 			if (Mathf.IsZeroApprox(data.BlendTime)) // Cut transition
+			{
 				SnapFlag = true;
+			}
 			else if (data.IsCrossfadeEnabled) // Crossfade transition
-				StartCrossfade();
+			{
+				StartCrossfade(1.0f / data.BlendTime);
+				SnapFlag = true;
+			}
 			else
+			{
 				data.CalculateBlendSpeed(); // Cache blend speed so we don't have to do it every frame
+			}
 
 			// Add current data to blend list
 			if (data.Trigger == null && data.SettingsResource.useStaticPosition) // Fallback to static position value
@@ -349,13 +357,15 @@ namespace Project.Gameplay
 
 				float currentProgress = PathFollower.Progress; // Cache progress
 				PathFollower.Progress -= data.blendData.distance;
+				PathFollower.Progress += data.blendData.SettingsResource.sampleOffset;
 				Vector3 sampledPosition = PathFollower.GlobalPosition;
-				PathFollower.Progress = currentProgress; // Revert progress
+				PathFollower.Progress = currentProgress + data.blendData.SettingsResource.sampleOffset; // Sample current
 				Vector3 sampledForward = (PathFollower.GlobalPosition - sampledPosition).Normalized();
+				PathFollower.Progress = currentProgress; // Revert progress
 
 				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					sampledTargetYawAngle += ExtensionMethods.CalculateForwardAngle(sampledForward);
-				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 					sampledTargetPitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
 
 				// Calculate target angles when DistanceMode is set to Offset
@@ -372,15 +382,26 @@ namespace Project.Gameplay
 						data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
 				}
 				else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)
+				{
 					data.blendData.SampleBlend = 1.0f;
+				}
 				else
+				{
 					data.blendData.SampleBlend = 0.0f;
+				}
+
+				// Fix rotated sampling cameras
+				data.blendData.yawAngle = sampledTargetYawAngle;
+				data.blendData.pitchAngle = sampledTargetPitchAngle;
+				data.CalculateBasis();
+				int yawSamplingFix = Mathf.Sign(sampledForward.Dot(-data.offsetBasis.Z));
+				sampledTargetPitchAngle *= yawSamplingFix;
 
 				// Interpolate angles
 				data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend);
 				data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
-				if (settings.followPathTilt) //Calculate tilt
-					data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.SideAxis, PathFollower.Forward()); //Update tilt
+				if (settings.followPathTilt) // Calculate tilt
+					data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.SideAxis, PathFollower.Forward()) * yawSamplingFix;
 
 				// Update Tracking
 				// Calculate position for tracking calculations

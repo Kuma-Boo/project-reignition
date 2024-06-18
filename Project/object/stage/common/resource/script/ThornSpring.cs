@@ -78,8 +78,6 @@ public partial class ThornSpring : Launcher
 	/// <summary> Updates a time break spring based on the player's break skills. </summary>
 	private void UpdateTimeBreakSpring()
 	{
-		GD.Print(rotationState);
-
 		if (!Character.Skills.IsTimeBreakActive)
 		{
 			if (rotationState != RotationStates.Looping) // Return to spinning quickly
@@ -148,7 +146,7 @@ public partial class ThornSpring : Launcher
 		}
 
 		if (animationName != fullKey && animationName != enableKey) return;
-		
+
 		// Reset rotation to avoid incorrect transitions
 		animator.Play(resetKey);
 		animator.Advance(0.0);
