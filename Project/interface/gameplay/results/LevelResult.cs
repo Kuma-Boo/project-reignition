@@ -85,7 +85,7 @@ namespace Project.Interface
 			animator.Play(Stage.LevelState == StageSettings.LevelStateEnum.Success ? "success-start" : "fail-start");
 
 			// Write to file
-			SaveManager.ActiveGameData.SetHighScore(Stage.Data.LevelID, Stage.CurrentScore);
+			SaveManager.ActiveGameData.SetHighScore(Stage.Data.LevelID, Stage.TotalScore);
 			SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
 			SaveManager.ActiveGameData.SetRank(Stage.Data.LevelID, rank);
 		}

@@ -24,13 +24,13 @@
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_158q5"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="39_p0jth"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="40_m082x"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 1/camera/JumpChainStaticCam.tres" id="41_6eimj"]
+[ext_resource type="Resource" uid="uid://dlcemgeioxa5h" path="res://area/2 dino jungle/act 1/camera/JumpChainStaticCam.tres" id="41_6eimj"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="41_cv4lt"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 1/camera/CaveEndSpringCam.tres" id="41_hykdp"]
+[ext_resource type="Resource" uid="uid://diplfgoupv4eq" path="res://area/2 dino jungle/act 1/camera/CaveEndSpringCam.tres" id="41_hykdp"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="41_nmbev"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="42_o7jek"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="43_4v8c0"]
-[ext_resource type="PackedScene" path="res://object/stage/common/JumpCarpet.tscn" id="43_sc0lf"]
+[ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="43_sc0lf"]
 [ext_resource type="Resource" uid="uid://dwburj7d31l2q" path="res://area/2 dino jungle/act 1/camera/JumpChainCarpetCam.tres" id="44_4nhfr"]
 [ext_resource type="Resource" uid="uid://cj8h17ww8ohd" path="res://area/2 dino jungle/act 1/camera/JumpChainFollowCam.tres" id="44_27eim"]
 [ext_resource type="PackedScene" uid="uid://cuplakh6fkalc" path="res://area/2 dino jungle/object/Boat.tscn" id="44_j45ek"]
@@ -52,7 +52,7 @@
 [ext_resource type="Resource" uid="uid://bfbyijcgdiudd" path="res://area/2 dino jungle/act 1/camera/BoatCam.tres" id="56_fw8kb"]
 [ext_resource type="Resource" uid="uid://c68trpv4sbq1b" path="res://area/2 dino jungle/act 1/camera/EndJumpPanelCam.tres" id="57_ywra7"]
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="58_fnmsc"]
-[ext_resource type="Resource" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandCam.tres" id="58_xae1w"]
+[ext_resource type="Resource" uid="uid://dhwqg5pqdd5d0" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandCam.tres" id="58_xae1w"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="59_fvrl3"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="60_jn18j"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="61_edv0r"]
@@ -421,10 +421,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
 [node name="TrioTutorialTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, -26.2, -1.03775, -331.724)
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, -26.6, -1.23471, -331.689)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioTutorialTrigger"]
 script = ExtResource("7_ys7sj")
+randomize = true
 textKeys = ["din_tutorial_trio_so", "din_tutorial_trio_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TrioTutorialTrigger"]
@@ -433,6 +436,8 @@ shape = SubResource("BoxShape3D_mynxt")
 
 [node name="TrioEndTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
+OneShot = true
+"Respawn Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioEndTrigger"]
 script = ExtResource("7_ys7sj")
@@ -444,12 +449,81 @@ shape = SubResource("BoxShape3D_mynxt")
 
 [node name="CaveSplitTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
+OneShot = true
+"Respawn Mode" = 3
 
 [node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/CaveSplitTrigger"]
 script = ExtResource("7_ys7sj")
 textKeys = ["din_split_sh", "din_split_so"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/CaveSplitTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="ApatosTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -282.279, -257.286, -986.73)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/ApatosTrigger"]
+script = ExtResource("7_ys7sj")
+delays = Array[float]([0.0, 1.0])
+textKeys = ["din_event_apato_so", "din_event_apato2_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/ApatosTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="RexTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, -623.956, -281.186, -1067)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexTrigger"]
+script = ExtResource("7_ys7sj")
+textKeys = Array[String](["din_rex_sh", "din_rex_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="RexLowerTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -653.545, -276.986, -1056.5)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexLowerTrigger"]
+script = ExtResource("7_ys7sj")
+textKeys = Array[String](["din_rex_lower_so", "din_rex_lower_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexLowerTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="RexTailTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(-0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, -0.906308, -694.113, -272.173, -1088.4)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexTailTrigger"]
+script = ExtResource("7_ys7sj")
+textKeys = Array[String](["din_rex_tail_sh", "din_rex_tail_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexTailTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="RexUpperTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("3_bw6cf")]
+transform = Transform3D(0.975951, 0, -0.21799, 0, 1, 0, 0.21799, 0, 0.975951, -643.599, -265.596, -1064.8)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexUpperTrigger"]
+script = ExtResource("7_ys7sj")
+textKeys = Array[String](["din_rex_upper_so", "din_rex_upper_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexUpperTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
@@ -6801,6 +6875,7 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Deactivated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Activate"]
 [connection signal="Activated" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Activate"]
 [connection signal="Respawned" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Deactivate"]
+[connection signal="Activated" from="MainAct/RiverEvent" to="MainAct/RiverEvent/Dialog" method="Activate"]
 [connection signal="Activated" from="MainAct/River/BoatStartTrigger" to="MainAct/River/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/River/BoatEndTrigger" to="MainAct/River/Boat" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]

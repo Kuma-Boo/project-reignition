@@ -223,7 +223,7 @@ namespace Project.Gameplay
 		public void UpdateScore(int amount, MathModeEnum mode)
 		{
 			CurrentScore = CalculateMath(CurrentScore, amount, mode);
-			DisplayScore = ExtensionMethods.FormatScore(CurrentScore);
+			DisplayScore = ExtensionMethods.FormatScore(TotalScore);
 			EmitSignal(SignalName.ScoreChanged);
 		}
 
