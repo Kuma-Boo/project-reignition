@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=101 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -8,7 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://iij01cwh2ttg" path="res://area/2 dino jungle/act 1/environment/02River.tscn" id="6_51sf7"]
 [ext_resource type="PackedScene" uid="uid://8hi2u5lp8ujo" path="res://area/2 dino jungle/act 1/environment/03Cave.tscn" id="7_fyuv1"]
 [ext_resource type="PackedScene" uid="uid://ban3idx4lt045" path="res://area/2 dino jungle/act 1/environment/06CavernEntrance.tscn" id="8_6iish"]
+[ext_resource type="PackedScene" uid="uid://bbqpbxdsvgh1r" path="res://area/2 dino jungle/act 1/environment/03CaveSky.tscn" id="8_17ely"]
 [ext_resource type="PackedScene" uid="uid://xtvjxondy70e" path="res://area/2 dino jungle/act 1/environment/04Spiral.tscn" id="8_y6qf8"]
+[ext_resource type="PackedScene" uid="uid://disl6mjefqp7s" path="res://area/2 dino jungle/act 1/environment/03CaveReverse.tscn" id="9_4edov"]
 [ext_resource type="PackedScene" uid="uid://cgq7hgxh4d6eq" path="res://area/2 dino jungle/act 1/environment/05Crossing.tscn" id="9_66gld"]
 [ext_resource type="PackedScene" uid="uid://caqiuuvpry7nb" path="res://area/2 dino jungle/act 1/environment/07Cavern.tscn" id="10_ufrux"]
 [ext_resource type="PackedScene" uid="uid://bh513knx8203u" path="res://area/2 dino jungle/act 1/environment/08FeedingTunnel.tscn" id="11_0xivn"]
@@ -184,15 +186,6 @@ transform = Transform3D(-0.144544, -0.309975, -0.939693, 0.397131, 0.851651, -0.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
-[node name="03-U" parent="Visuals/CullingMap" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.939693, 0.0885213, 0.330366, 0, 0.965926, -0.258819, -0.34202, -0.24321, -0.907673, -433.547, -243.871, -869.335)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03-U"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
 [node name="04-L" parent="Visuals/CullingMap" instance=ExtResource("15_86eng")]
 transform = Transform3D(-1.19209e-07, 0, -1, 0, 1, 0, 1, 0, -1.19209e-07, -380.507, -217.465, -796.974)
 "Trigger Mode" = 2
@@ -295,6 +288,10 @@ startEnabled = true
 [node name="02River" parent="Visuals" instance=ExtResource("6_51sf7")]
 
 [node name="03Cave" parent="Visuals" instance=ExtResource("7_fyuv1")]
+
+[node name="03CaveSky" parent="Visuals" instance=ExtResource("8_17ely")]
+
+[node name="03CaveReverse" parent="Visuals" instance=ExtResource("9_4edov")]
 
 [node name="04Spiral" parent="Visuals" instance=ExtResource("8_y6qf8")]
 
@@ -1352,16 +1349,20 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Visuals/CullingMap/02-L" to="Visuals/02River" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/02-U" to="Visuals/02River" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02-U" to="Visuals/02River" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/03-L" to="Visuals/03CaveSky" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/03-L" to="Visuals/03Cave" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03-L" to="Visuals/03CaveSky" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/03-L" to="Visuals/03Cave" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/03-U" to="Visuals/03Cave" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/03-U" to="Visuals/03Cave" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/04-L" to="Visuals/04Spiral" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/04-L" to="Visuals/04Spiral" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/04-U" to="Visuals/04Spiral" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/04-U" to="Visuals/04Spiral" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/05Crossing" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveSky" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveReverse" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/05Crossing" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveSky" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveReverse" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/06-L" to="Visuals/06CavernEntrance" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/06-L" to="Visuals/06CavernEntrance" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/0506-U" to="Visuals/05Crossing" method="Deactivate"]
@@ -1381,6 +1382,8 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Activated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/SpiralAutomationTrigger" to="Trigger/Object/SpiralAutomationTrigger/Path" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/SpiralAutomationTrigger" to="Visuals/03Cave" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Object/SpiralAutomationTrigger" to="Visuals/03CaveReverse" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
