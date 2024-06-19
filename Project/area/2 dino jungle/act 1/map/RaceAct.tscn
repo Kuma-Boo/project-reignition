@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cmm65k2v3ds3l"]
+[gd_scene load_steps=31 format=3 uid="uid://cdtk2f8g8liws"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_07rmt"]
 [ext_resource type="Resource" uid="uid://dkgpftu1txklj" path="res://resource/level data/dinosaur jungle/Act2Race.tres" id="2_wpd7y"]
@@ -11,8 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="15_sm2p2"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="17_djk1t"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="18_mtiqb"]
-[ext_resource type="Resource" uid="uid://8glu7r6t15d6" path="res://area/2 dino jungle/act 1/camera/CactusFieldRaceAct2Cam.tres" id="19_fo15p"]
-[ext_resource type="Resource" uid="uid://cb1yaeev1x218" path="res://area/2 dino jungle/act 1/camera/WhiteRockRaceAct2Cam.tres" id="19_jd5a0"]
+[ext_resource type="Resource" uid="uid://wr8kk1ny7bra" path="res://area/2 dino jungle/act 1/camera/CactusFieldRaceAct2Cam.tres" id="19_fo15p"]
+[ext_resource type="Resource" uid="uid://dc7rmqfn0uy5v" path="res://area/2 dino jungle/act 1/camera/WhiteRockRaceAct2Cam.tres" id="19_jd5a0"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="22_er5c1"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="22_si71f"]
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="24_k57n0"]
@@ -26,6 +26,9 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lfopx"]
+size = Vector3(0.35, 8.50104, 13.175)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hpf2h"]
 size = Vector3(16.8638, 26.19, 22.8381)
@@ -206,6 +209,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
 script = ExtResource("10_c22fn")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="InvisibleWall" type="StaticBody3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.743729, 0, 0.668482, 0, 1, 0, -0.668482, 0, 0.743729, 70.1944, 10.9284, -41.4109)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Crossing/InvisibleWall"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.226929, 2.01035, 0)
+shape = SubResource("BoxShape3D_lfopx")
 
 [node name="Rings" type="Node3D" parent="MainAct/Crossing"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.018, 1.2778, -29.0001)
@@ -416,6 +426,7 @@ transform = Transform3D(0.292989, 0, 0.956116, 0, 1, 0, -0.956116, 0, 0.292989, 
 transform = Transform3D(0.410257, 0, 0.91197, 0, 1, 0, -0.91197, 0, 0.410257, 11.6612, 2.064, -224.856)
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="ItemBox" parent="MainAct/Crossing" instance=ExtResource("39_m3xki")]
 transform = Transform3D(-0.856492, 0, 0.51616, 0, 1, 0, -0.51616, 0, -0.856492, -19.663, -11.593, -223.42)
