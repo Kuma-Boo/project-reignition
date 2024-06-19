@@ -606,7 +606,7 @@ public partial class SaveManager : Node
 			if (GetLevelData(levelID).TryGetValue(RANK_KEY, out Variant rank))
 				return Mathf.Clamp((int)rank, 0, 3);
 
-			return 0; // No ranked
+			return -1; // No recorded rank; Return -1 to avoid getting confused with "no medal"
 		}
 
 		/// <summary> Sets the save value for the player's best rank. Ignores lower ranks. </summary>

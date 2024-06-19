@@ -96,7 +96,7 @@ public partial class CharacterSkillManager : Node
 	public float countdownBoostSpeed;
 
 	/// <summary> How many rings to start with when the level starts. </summary>
-	public int StartingRingCount => IsSkillEnabled(SkillKeys.RingStart) ? 5 : 0;
+	public int StartingRingCount => IsSkillEnabled(SkillKeys.RingSpawn) ? 5 : 0;
 	/// <summary> How many rings to start with when respawning. </summary>
 	public int RespawnRingCount => IsSkillEnabled(SkillKeys.RingRespawn) ? 5 : 0;
 
@@ -114,7 +114,7 @@ public partial class CharacterSkillManager : Node
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
-		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKeys.PearlCollector) ? 5 : 1);
+		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKeys.PearlRange) ? 5 : 1);
 	}
 	#endregion
 

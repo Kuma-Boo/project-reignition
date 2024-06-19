@@ -9,11 +9,11 @@ public enum SkillKeys
 {
 	// Passive skills
 	AllRounder, // Reduces acceleration loss caused by steep terrain
-	PearlCollector, // Makes collecting pearls easier
-	RingCollector, // Makes collecting rings easier
+	PearlRange, // Makes collecting pearls easier
+	RingRange, // Makes collecting rings easier
 
 	// Ring skills
-	RingStart, // Start with some rings at the game's start
+	RingSpawn, // Start with some rings at the game's start
 	RingRespawn, // Respawn with a few rings handy
 	RingDamage, // Reduce the number of rings lost when taking damage
 
@@ -36,31 +36,30 @@ public enum SkillKeys
 	Max, // Number of skills
 }
 
-[Tool]
 /// <summary> Master skill list. </summary>
+[Tool]
 public partial class SkillListResource : Resource
 {
+	public override Array<Dictionary> _GetPropertyList() => [ExtensionMethods.CreateProperty("Rebuild", Variant.Type.Bool)];
+
+	public override bool _Set(StringName property, Variant value)
+	{
+		if (property == "Rebuild")
+		{
+			RebuildSkillList();
+			NotifyPropertyListChanged();
+		}
+
+		return base._Set(property, value);
+	}
+
 	[Export]
 	private string skillResourcePath;
 	[Export]
 	private Array<SkillResource> skillList = [];
 
-	private SkillKeys editingSkill;
-
-	[ExportGroup("DO NOT EDIT!")]
-	/// <summary> Enum containing all skills. </summary>
-	private Array<SkillKeys> skillKeyList = [];
-	/// <summary> How much does the skill cost to equip? </summary>
-	[Export]
-	private Array<int> skillCostList = [];
-
-	/// <summary> Returns the cost required to equip a skill. </summary>
-	public int GetSkillCost(SkillKeys key) => GetSkill(key).Cost;
-	public int GetSkillLevelRequirement(SkillKeys key) => GetSkill(key).LevelRequirement;
-	public int GetSkillFireSoulRequirement(SkillKeys key) => GetSkill(key).FireSoulRequirement;
-
 	/// <summary> Creates a skill. </summary>
-	private SkillResource GetSkill(SkillKeys key)
+	public SkillResource GetSkill(SkillKeys key)
 	{
 		foreach (var skill in skillList)
 		{
@@ -83,14 +82,21 @@ public partial class SkillListResource : Resource
 			SkillKeys key = (SkillKeys)i;
 			string targetFile = skillResourcePath + key.ToString() + ".tres";
 			if (!ResourceLoader.Exists(targetFile))
+			{
+				GD.Print($"Couldn't find file {targetFile}.");
 				continue;
+			}
 
-			SkillResource skill = ResourceLoader.Load<SkillResource>(targetFile);
+			Resource resource = ResourceLoader.Load<SkillResource>(targetFile, "SkillResource");
+			GD.PrintT(targetFile, resource, resource is SkillResource);
+			SkillResource skill = (SkillResource)resource;
 			skillList.Add(skill);
 
 			if (skill.Key != key)
 				skill.Key = key;
 		}
+
+		GD.Print("Skill List has been rebuilt.");
 	}
 }
 
@@ -112,20 +118,36 @@ public class SkillRing
 
 		TotalCost = 0;
 		for (int i = 0; i < equippedSkills.Count; i++)
-			TotalCost += Runtime.Instance.masterSkillList.GetSkillCost(equippedSkills[i]);
+			TotalCost += Runtime.Instance.completeSkillList.GetSkill(equippedSkills[i]).Cost;
 	}
 
-	public static bool IsSkillUnlocked(SkillKeys skill)
+	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
+	public static bool IsSkillUnlocked(SkillKeys key)
 	{
-		int levelRequirement = Runtime.Instance.masterSkillList.GetSkillLevelRequirement(skill);
-		int fireSoulRequirement = Runtime.Instance.masterSkillList.GetSkillFireSoulRequirement(skill);
+		SkillResource skill = Runtime.Instance.completeSkillList.GetSkill(key);
 
-		if (levelRequirement != 0 && SaveManager.ActiveGameData.level < levelRequirement)
+		if (SaveManager.ActiveGameData.level < skill.LevelRequirement) // Under-leveled
 			return false;
 
-		if (fireSoulRequirement != 0 && SaveManager.ActiveGameData.fireSoul < fireSoulRequirement)
-			return false;
+		// Check stage and medal requirements
+		if (skill.StageRequirement?.IsEmpty == false) // Check required stage
+		{
+			if (!SaveManager.ActiveGameData.levelData.ContainsKey(skill.StageRequirement))
+				return false; // Player didn't finish the required stage
 
-		return true;
+			if (SaveManager.ActiveGameData.GetRank(skill.StageRequirement) < skill.MedalRequirement)
+				return false; // Best rank is too low
+		}
+		else
+		{
+			if (skill.MedalRequirement != 0) // Global medal conditions
+			{
+				// TODO check global medal requirements
+				return false;
+			}
+		}
+
+		// Finish with firesoul requirements
+		return SaveManager.ActiveGameData.fireSoul >= skill.FireSoulRequirement;
 	}
 }

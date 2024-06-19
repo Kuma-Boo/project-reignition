@@ -1,9 +1,11 @@
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using Godot;
 
 namespace Project.Gameplay;
 
 /// <summary> A single skill. </summary>
+[Tool]
 public partial class SkillResource : Resource
 {
 	[ExportCategory("General Settings")]
@@ -38,16 +40,16 @@ public partial class SkillResource : Resource
 	public int Cost { get; private set; }
 
 	// Unlock requiremnts
-	[ExportCategory("Unlock Settings")]
 	/// <summary> The level required to unlock this skill. Don't confuse this with StageRequirement. </summary>
+	[ExportCategory("Unlock Settings")]
 	[Export(PropertyHint.Range, "0, 99")]
 	public int LevelRequirement { get; private set; }
 	/// <summary> The level id of the stage required to unlock this skill. Pair with RankRequirement to specify the unlock criteria. </summary>
 	[Export]
 	public StringName StageRequirement { get; private set; }
 	/// <summary> The medal rank required to unlock this skill. </summary>
-	[Export(PropertyHint.Range, "0, 3, 1")]
-	public int RankRequirement { get; private set; }
+	[Export(PropertyHint.Enum, "None, Bronze, Silver, Gold")]
+	public int MedalRequirement { get; private set; }
 	/// <summary> How many stages the player must have medals on. The required medal is determined by RankRequirement. </summary>
 	[Export]
 	public int MedalRequirementCount { get; private set; }
@@ -63,4 +65,10 @@ public partial class SkillResource : Resource
 	public StringName NameKey => $"skill_{NameString}";
 	/// <summary> Returns the localization description key for this skill. </summary>
 	public StringName DescriptionKey => $"skill_{NameString}_description";
+
+	/// <summary> Compares two skill resources based on their key (number). </summary>
+	public class KeyComparer : IComparer<SkillResource>
+	{
+		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
+	}
 }

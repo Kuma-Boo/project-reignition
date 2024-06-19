@@ -46,7 +46,7 @@ public partial class Runtime : Node
 	[Export]
 	public LockoutResource StopLockout { get; private set; }
 
-	[Export] public SkillListResource masterSkillList;
+	[Export] public SkillListResource completeSkillList;
 
 	public static readonly float GRAVITY = 28.0f;
 	public static readonly float MAX_GRAVITY = -48.0f;
