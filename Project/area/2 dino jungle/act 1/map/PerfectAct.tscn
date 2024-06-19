@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://vcmdwsohkoen"]
+[gd_scene load_steps=23 format=3 uid="uid://vcmdwsohkoen"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_dkeii"]
 [ext_resource type="Resource" uid="uid://dcsmed3l5ath0" path="res://resource/level data/dinosaur jungle/Act1Perfect.tres" id="2_3og88"]
@@ -20,6 +20,9 @@
 [ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="56_i1247"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="58_2r0fu"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="64_p8f4s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wppu5"]
+size = Vector3(2, 10.3289, 18.4282)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wiqay"]
 size = Vector3(20, 20, 2.5)
@@ -58,6 +61,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
 script = ExtResource("10_qfxcl")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="InvisibleWall" type="StaticBody3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.744451, 0, 0.667677, 0, 1, 0, -0.667677, 0, 0.744451, 70.112, 8.33936, -41.8466)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Crossing/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 4.66446, -2.4632)
+shape = SubResource("BoxShape3D_wppu5")
 
 [node name="RingsM4" type="Node3D" parent="MainAct/Crossing"]
 transform = Transform3D(0.411179, 0.262786, 0.872855, -0.0445072, 0.962191, -0.268716, -0.910468, 0.071642, 0.407328, 96.239, 5.91766, -32.3646)
@@ -117,8 +127,6 @@ rangeOverride = 20
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 136.354, 4.70102, -38.8067)
 rotationTime = 1.0
 pauseHalfway = true
-startRotated = true
-startingTimeOffset = 1.5
 
 [node name="Cactus1" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140.422, 7.76501, -47.7293)
@@ -254,10 +262,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, -0.940456)
 
 [node name="BlueMajin1" parent="MainAct/Crossing" instance=ExtResource("44_htkmd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.549, 2.31631, -99.9558)
-"Spawn Interval Settings/Enable Spawn Interval" = true
-"Spawn Interval Settings/Spawn Delay" = 1.0
-"Spawn Interval Settings/Separate Despawn Interval" = true
-"Spawn Interval Settings/Despawn Delay" = 1.2
+rangeOverride = -1
 
 [node name="Cactus4" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(1, 0, 0, 0, 0.99113, 0.132896, 0, -0.132896, 0.99113, 148.513, -4.73972, -110.254)
@@ -305,9 +310,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29443, 0, -0.940456)
 
 [node name="BlueMajin2" parent="MainAct/Crossing" instance=ExtResource("44_htkmd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 148.39, -0.690765, -113.119)
-"Spawn Interval Settings/Enable Spawn Interval" = true
-"Spawn Interval Settings/Spawn Delay" = 0.8
-"Spawn Interval Settings/Separate Despawn Interval" = false
+rangeOverride = -1
 
 [node name="Cactus5" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(0.996181, 0, 0.0873122, -0.0151886, 0.984753, 0.173293, -0.085981, -0.173958, 0.980992, 146.908, -7.68256, -119.946)
@@ -563,7 +566,8 @@ transform = Transform3D(0.463497, 0, 0.886098, 0, 1, 0, -0.886098, 0, 0.463497, 
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 1.0
-"Attack Settings/Flame Aggression Radius" = 15
+"Attack Settings/Flame Aggression Radius" = 0
+rangeOverride = -1
 
 [node name="Cactus10" parent="MainAct/Crossing" instance=ExtResource("17_tg82s")]
 transform = Transform3D(0.859687, 0.214727, -0.463497, -0.242328, 0.970194, 7.45058e-09, 0.449682, 0.112318, 0.886098, 58.4382, -5.03604, -203.345)
@@ -628,7 +632,8 @@ transform = Transform3D(-0.655492, 0, -0.755202, 0, 1, 0, 0.755202, 0, -0.655492
 "Rotation Settings/Rotation Time" = 60.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 1.0
-"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Flame Aggression Radius" = 0
+rangeOverride = -1
 
 [node name="RedMajin3" parent="MainAct/Crossing" instance=ExtResource("56_i1247")]
 transform = Transform3D(-0.0942302, 0, 0.99555, 0, 1, 0, -0.99555, 0, -0.0942302, -11.6505, -2.14761, -219.264)
@@ -636,7 +641,8 @@ transform = Transform3D(-0.0942302, 0, 0.99555, 0, 1, 0, -0.99555, 0, -0.0942302
 "Rotation Settings/Rotation Time" = 60.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 1.0
-"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Flame Aggression Radius" = 0
+rangeOverride = -1
 
 [node name="ThornSpring3" parent="MainAct/Crossing" instance=ExtResource("38_grd2y")]
 transform = Transform3D(0.877732, 0, -0.479151, 0, 1, 0, 0.479151, 0, 0.877732, 19.6318, 3.6239, -221.737)
@@ -669,7 +675,6 @@ shape = SubResource("BoxShape3D_wiqay")
 [node name="LotusPlatform" parent="MainAct/Crossing" instance=ExtResource("21_ggtwu")]
 transform = Transform3D(-1.01445, 0, 1.10494, 0, 1, 0, -1.10494, 0, -1.01445, -41.7177, -26.2108, -190.106)
 
-[connection signal="SpinStarted" from="MainAct/Crossing/MajinMover/BlueMajin6" to="MainAct/Crossing/MajinMover" method="Unpause"]
 [connection signal="Aggressive" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Unpause"]
 [connection signal="Attack" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Pause"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Pause"]
