@@ -200,7 +200,7 @@ namespace Project.Interface
 			values[0].Text = SaveManager.ActiveGameData.level.ToString("00");
 			values[1].Text = "x" + Stage.CurrentRingCount.ToString("000") + "/999";
 			values[2].Text = ExtensionMethods.FormatScore(SaveManager.ActiveGameData.GetHighScore(Stage.Data.LevelID));
-			values[3].Text = Stage.DisplayScore;
+			values[3].Text = ExtensionMethods.FormatScore(Stage.TotalScore);
 			values[4].Text = ExtensionMethods.FormatTime(SaveManager.ActiveGameData.GetBestTime(Stage.Data.LevelID));
 			values[5].Text = Stage.DisplayTime;
 			values[6].Text = ExtensionMethods.FormatEXP(Stage.CurrentEXP);

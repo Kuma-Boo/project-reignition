@@ -1482,6 +1482,7 @@ namespace Project.Gameplay
 				if (IsOnGround || LaunchSettings.IsLauncherFinished(launcherTime)) // Revert to normal state
 				{
 					FinishLauncher();
+					IsMovingBackward = false;
 					MoveSpeed = LaunchSettings.HorizontalVelocity * .5f; // Prevent too much movement
 					VerticalSpeed = LaunchSettings.FinalVerticalVelocity;
 				}
