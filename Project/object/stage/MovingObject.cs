@@ -167,7 +167,11 @@ public partial class MovingObject : Node3D
 
 	public override void _EnterTree()
 	{
-		if (Engine.IsEditorHint()) return;
+		if (Engine.IsEditorHint())
+		{
+			CallDeferred(MethodName.ApplyEditorPosition);
+			return;
+		}
 
 		if (animator != null)
 			animator.SpeedScale = animatorSpeedScale;
@@ -196,7 +200,7 @@ public partial class MovingObject : Node3D
 
 	public void ApplyEditorPosition()
 	{
-		if (root == null)
+		if (root?.IsInsideTree() != true)
 			return;
 
 		root.GlobalPosition = InterpolatePosition(StartingOffset);

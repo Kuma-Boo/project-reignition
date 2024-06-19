@@ -325,8 +325,9 @@ shape = SubResource("BoxShape3D_mynxt")
 
 [node name="Cave-U" parent="MainAct/CullingMap" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -438.628, -220.715, -850.722)
-"Trigger Mode" = 2
-"Exit Mode" = 2
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Cave-U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -494,7 +495,8 @@ OneShot = true
 
 [node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/ApatosTrigger"]
 script = ExtResource("7_ys7sj")
-delays = Array[float]([0.0, 0.5])
+delays = Array[float]([0.0, 1.0])
+displayLength = Array[float]([0.5, 0.0])
 textKeys = ["din_event_apato_so", "din_event_apato2_so"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/ApatosTrigger"]
@@ -2297,8 +2299,8 @@ path = NodePath("../../../Static/Path/RiverPath")
 [node name="Dialog" type="Node3D" parent="MainAct/RiverEvent"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
 script = ExtResource("7_ys7sj")
-delays = [0.0, 0.4, 1.0, 0.0]
-displayLength = []
+delays = [0.0, 0.4, 4.0, 0.0]
+displayLength = [2.0, 0.5, 0.0, null]
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent" instance=ExtResource("19_rr5sk")]
@@ -6936,6 +6938,8 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin1" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/StaticCameraTrigger" to="Static/Visuals/03Cave" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/StaticCameraTrigger" to="Static/Visuals/03CaveReverse" method="Activate"]
 [connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
