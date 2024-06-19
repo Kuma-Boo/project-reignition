@@ -1250,14 +1250,17 @@ namespace Project.Gameplay
 		/// <summary>
 		/// Called when the player is returning to a checkpoint.
 		/// </summary>
-		public void StartRespawn()
+		public void StartRespawn(bool debugRespawn = false)
 		{
-			// Level failed
-			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
-				|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+			if (!debugRespawn)
 			{
-				Stage.FinishLevel(false);
-				return;
+				// Level failed
+				if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
+					|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+				{
+					Stage.FinishLevel(false);
+					return;
+				}
 			}
 
 			if (ActionState == ActionStates.Teleport || IsDefeated) return;
