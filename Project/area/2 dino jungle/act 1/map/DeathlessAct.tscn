@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://buev0obyngb7e"]
+[gd_scene load_steps=44 format=3 uid="uid://buev0obyngb7e"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_pfnnp"]
 [ext_resource type="Resource" uid="uid://fpmqt2xm6j88" path="res://resource/level data/dinosaur jungle/Act1Deathless.tres" id="2_eujgb"]
@@ -35,6 +35,9 @@
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="64_e3ve0"]
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="64_o1ga3"]
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="67_rc23u"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5oh23"]
+size = Vector3(20, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
@@ -91,6 +94,13 @@ transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("8_uurof")]
+
+[node name="InvisibleWall" type="StaticBody3D" parent="MainAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(0.897119, 0, -0.441787, 0, 1, 0, 0.441787, 0, 0.897119, 1.37537, -1.74265, -10.0179)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_5oh23")
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
