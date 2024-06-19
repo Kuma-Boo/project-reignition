@@ -95,7 +95,7 @@ namespace Project.Core
 			if (Input.IsActionJustPressed("debug_restart"))
 			{
 				if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(CharacterController.instance))
-					CharacterController.instance.StartRespawn();
+					CharacterController.instance.StartRespawn(true);
 				else
 				{
 					TransitionManager.QueueSceneChange(string.Empty);
@@ -314,7 +314,7 @@ namespace Project.Core
 			}
 
 			StageSettings.instance.SetCheckpoint(customCheckpoint);
-			CharacterController.instance.StartRespawn();
+			CharacterController.instance.StartRespawn(true);
 		}
 		#endregion
 	}

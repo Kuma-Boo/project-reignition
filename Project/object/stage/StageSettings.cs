@@ -167,7 +167,7 @@ namespace Project.Gameplay
 				int score = TotalScore;
 				if (CurrentTime <= Data.GoldTime && score >= Data.Score) // Perfect run
 					rank = 3;
-				else if (CurrentTime <= Data.SilverTime || score >= Data.Score) // Silver
+				else if (CurrentTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
 					rank = 2;
 				else if (CurrentTime <= Data.BronzeTime) // Bronze is easy to get
 					rank = 1;

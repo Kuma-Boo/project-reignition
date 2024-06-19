@@ -42,12 +42,17 @@ namespace Project.Gameplay
 		{
 			if (!a.IsInGroup("player")) return;
 
-			if (Character.ActionState == CharacterController.ActionStates.JumpDash || Character.Lockon.IsHomingAttacking)
-				Character.Lockon.StartBounce();
-			else
-				Character.StartKnockback();
-
 			Explode();
+
+			if (Character.ActionState == CharacterController.ActionStates.JumpDash ||
+				Character.Lockon.IsHomingAttacking ||
+				Character.Lockon.IsBouncingLockoutActive)
+			{
+				Character.Lockon.StartBounce();
+				return;
+			}
+
+			Character.StartKnockback();
 		}
 
 
