@@ -136,45 +136,45 @@ public partial class Enemy : Node3D
 	/// <summary> Override this from an inherited class. </summary>
 	protected virtual void UpdateEnemy() { }
 
-		public virtual void TakeHomingAttackDamage()
-		{
-			if (Character.Skills.IsSkillEnabled(SkillKeyEnum.PerfectHomingAttack) && Character.Lockon.IsPerfectHomingAttack)
-				currentHealth--; // Take an extra point of damage
+	public virtual void TakeHomingAttackDamage()
+	{
+		if (Character.Skills.IsSkillEnabled(SkillKeys.PerfectHomingAttack) && Character.Lockon.IsPerfectHomingAttack)
+			currentHealth--; // Take an extra point of damage
 
-			Character.Lockon.StopHomingAttack();
-			TakeDamage(1);
+		Character.Lockon.StopHomingAttack();
+		TakeDamage(1);
 
-			if (IsDefeated)
-				Defeat();
-			else
-				Character.Camera.SetDeferred("LockonTarget", hurtbox);
-		}
-
-
-		public virtual void TakeDamage(int amount = -1)
-		{
-			if (amount == -1)
-				currentHealth = 0;
-			else
-				currentHealth -= amount;
-
-			if (!IsDefeated) return;
-
+		if (IsDefeated)
 			Defeat();
-			Character.Lockon.ResetLockonTarget();
-		}
+		else
+			Character.Camera.SetDeferred("LockonTarget", hurtbox);
+	}
 
 
-		/// <summary>
-		/// Called when the enemy is defeated.
-		/// </summary>
-		protected virtual void Defeat()
-		{
-			SetHitboxStatus(false);
-			Character.Camera.LockonTarget = null;
-			BonusManager.instance.AddEnemyChain();
-			EmitSignal(SignalName.Defeated);
-		}
+	public virtual void TakeDamage(int amount = -1)
+	{
+		if (amount == -1)
+			currentHealth = 0;
+		else
+			currentHealth -= amount;
+
+		if (!IsDefeated) return;
+
+		Defeat();
+		Character.Lockon.ResetLockonTarget();
+	}
+
+
+	/// <summary>
+	/// Called when the enemy is defeated.
+	/// </summary>
+	protected virtual void Defeat()
+	{
+		SetHitboxStatus(false);
+		Character.Camera.LockonTarget = null;
+		BonusManager.instance.AddEnemyChain();
+		EmitSignal(SignalName.Defeated);
+	}
 
 	/// <summary>
 	/// Spawns pearls. Call this somewhere in Defeat(), or from an AnimationPlayer.
@@ -218,20 +218,20 @@ public partial class Enemy : Node3D
 			return;
 		}
 
-			if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
-				Defeat();
-			else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
-				Defeat();
-			else if (Character.Skills.IsAttacking)
-				TakeDamage(1);
-			else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-			{
-				TakeHomingAttackDamage();
-				Character.Lockon.StartBounce(IsDefeated);
-			}
-			else if (damagePlayer)
-				Character.StartKnockback();
+		if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
+			Defeat();
+		else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
+			Defeat();
+		else if (Character.Skills.IsAttacking)
+			TakeDamage(1);
+		else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+		{
+			TakeHomingAttackDamage();
+			Character.Lockon.StartBounce(IsDefeated);
 		}
+		else if (damagePlayer)
+			Character.StartKnockback();
+	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;

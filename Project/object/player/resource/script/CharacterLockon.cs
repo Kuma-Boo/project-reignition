@@ -51,20 +51,20 @@ public partial class CharacterLockon : Node3D
 	public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 	public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
-		public void StartHomingAttack()
-		{
-			IsHomingAttacking = true;
-			IsPerfectHomingAttack = Character.Skills.IsSkillEnabled(SkillKeyEnum.PerfectHomingAttack) && monitoringPerfectHomingAttack;
-		}
+	public void StartHomingAttack()
+	{
+		IsHomingAttacking = true;
+		IsPerfectHomingAttack = Character.Skills.IsSkillEnabled(SkillKeys.PerfectHomingAttack) && monitoringPerfectHomingAttack;
+	}
 
 
-		public void StopHomingAttack()
-		{
-			IsHomingAttacking = false;
-			IsPerfectHomingAttack = false;
-			Character.ResetActionState();
-			ResetLockonTarget();
-		}
+	public void StopHomingAttack()
+	{
+		IsHomingAttacking = false;
+		IsPerfectHomingAttack = false;
+		Character.ResetActionState();
+		ResetLockonTarget();
+	}
 
 
 	public void UpdateLockonTargets()
@@ -168,9 +168,9 @@ public partial class CharacterLockon : Node3D
 	}
 
 
-		public void ResetLockonTarget()
-		{
-			Character.Camera.LockonTarget = null;
+	public void ResetLockonTarget()
+	{
+		Character.Camera.LockonTarget = null;
 
 		if (Target != null) //Reset Active Target
 		{
@@ -215,14 +215,14 @@ public partial class CharacterLockon : Node3D
 		{
 			Character.MoveSpeed = 0; // Reset speed
 
-				bool applySnapping = false;
-				if (!IsBouncingLockoutActive)
-				{
-					if (Target is Area3D)
-						applySnapping = areaTrigger.GetOverlappingAreas().Contains(Target as Area3D);
-					else if (Target is PhysicsBody3D)
-						applySnapping = areaTrigger.GetOverlappingBodies().Contains(Target as PhysicsBody3D);
-				}
+			bool applySnapping = false;
+			if (!IsBouncingLockoutActive)
+			{
+				if (Target is Area3D)
+					applySnapping = areaTrigger.GetOverlappingAreas().Contains(Target as Area3D);
+				else if (Target is PhysicsBody3D)
+					applySnapping = areaTrigger.GetOverlappingBodies().Contains(Target as PhysicsBody3D);
+			}
 
 			// Only snap when target being hit is correct
 			if (applySnapping)
@@ -231,13 +231,13 @@ public partial class CharacterLockon : Node3D
 		else // Only bounce the player backwards if bounceUpward is false
 			Character.MoveSpeed = -bounceSpeed;
 
-			if (IsBouncingLockoutActive) return;
+		if (IsBouncingLockoutActive) return;
 
-			Character.CanJumpDash = true;
-			Character.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
-			Character.MovementAngle = Character.PathFollower.ForwardAngle;
-			Character.AddLockoutData(bounceLockoutSettings);
-			Character.ResetActionState();
+		Character.CanJumpDash = true;
+		Character.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
+		Character.MovementAngle = Character.PathFollower.ForwardAngle;
+		Character.AddLockoutData(bounceLockoutSettings);
+		Character.ResetActionState();
 
 		Character.Animator.ResetState(0.1f);
 		Character.Animator.BounceTrick();

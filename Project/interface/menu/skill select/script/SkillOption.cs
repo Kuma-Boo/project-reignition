@@ -5,7 +5,7 @@ namespace Project.Interface.Menus
 {
 	public partial class SkillOption : Control
 	{
-		public SkillKeyEnum Key { get; set; }
+		public SkillKeys Key { get; set; }
 
 		public int Number { get; set; }
 		public int Cost { get; set; }

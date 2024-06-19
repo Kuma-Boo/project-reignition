@@ -41,10 +41,10 @@ namespace Project.Interface.Menus
 
 		protected override void SetUp()
 		{
-			for (int i = 0; i < (int)SkillKeyEnum.Max; i++)
+			for (int i = 0; i < (int)SkillKeys.Max; i++)
 			{
 				SkillOption newSkill = skillOption.Instantiate<SkillOption>();
-				newSkill.Key = (SkillKeyEnum)i;
+				newSkill.Key = (SkillKeys)i;
 				newSkill.Number = i + 1;
 				newSkill.Cost = MasterSkillList.GetSkillCost(newSkill.Key);
 				newSkill.IsSkillActive = ActiveSkillRing.equippedSkills.Contains(newSkill.Key);
@@ -73,17 +73,17 @@ namespace Project.Interface.Menus
 			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
 			if (inputSign != 0)
 			{
-				VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SkillKeyEnum.Max);
+				VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SkillKeys.Max);
 
-				if (VerticalSelection == 0 || VerticalSelection == (int)SkillKeyEnum.Max - 1)
+				if (VerticalSelection == 0 || VerticalSelection == (int)SkillKeys.Max - 1)
 					cursorPosition = scrollAmount = VerticalSelection;
 				else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
 					scrollAmount += inputSign;
 				else
 					cursorPosition += inputSign;
 
-				scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKeyEnum.Max - PAGE_SIZE);
-				scrollRatio = (float)scrollAmount / ((int)SkillKeyEnum.Max - PAGE_SIZE);
+				scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKeys.Max - PAGE_SIZE);
+				scrollRatio = (float)scrollAmount / ((int)SkillKeys.Max - PAGE_SIZE);
 				cursorPosition = Mathf.Clamp(cursorPosition, 0, PAGE_SIZE - 1);
 				optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * SCROLL_INTERVAL);
 				cursor.Position = Vector2.Up * -cursorPosition * SCROLL_INTERVAL;
@@ -117,7 +117,7 @@ namespace Project.Interface.Menus
 		}
 
 
-		private bool ToggleSkill(SkillKeyEnum key)
+		private bool ToggleSkill(SkillKeys key)
 		{
 			if (ActiveSkillRing.equippedSkills.Contains(key))
 			{

@@ -81,24 +81,24 @@ public partial class CharacterSkillManager : Node
 	#endregion
 
 
-		#region Skills
-		private SkillRing SkillRing => SaveManager.ActiveGameData.skillRing;
-		public bool IsSkillEnabled(SkillKeyEnum key)
-		{
-			if (key == SkillKeyEnum.FlameStomp) return true;
+	#region Skills
+	private SkillRing SkillRing => SaveManager.ActiveGameData.skillRing;
+	public bool IsSkillEnabled(SkillKeys key)
+	{
+		if (key == SkillKeys.StompAttack) return true;
 
-			return SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
-		}
+		return SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
+	}
 
 
-		[ExportCategory("Countdown Skills")]
-		[Export]
-		public float countdownBoostSpeed;
+	[ExportCategory("Countdown Skills")]
+	[Export]
+	public float countdownBoostSpeed;
 
-		/// <summary> How many rings to start with when the level starts. </summary>
-		public int StartingRingCount => IsSkillEnabled(SkillKeyEnum.RingBonus) ? 5 : 0;
-		/// <summary> How many rings to start with when respawning. </summary>
-		public int RespawnRingCount => IsSkillEnabled(SkillKeyEnum.RingRespawn) ? 5 : 0;
+	/// <summary> How many rings to start with when the level starts. </summary>
+	public int StartingRingCount => IsSkillEnabled(SkillKeys.RingStart) ? 5 : 0;
+	/// <summary> How many rings to start with when respawning. </summary>
+	public int RespawnRingCount => IsSkillEnabled(SkillKeys.RingRespawn) ? 5 : 0;
 
 	public void SplashJump()
 	{
@@ -114,7 +114,7 @@ public partial class CharacterSkillManager : Node
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
-		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKeyEnum.PearlCollector) ? 5 : 1);
+		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKeys.PearlCollector) ? 5 : 1);
 	}
 	#endregion
 

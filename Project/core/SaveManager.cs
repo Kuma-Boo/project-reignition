@@ -495,7 +495,7 @@ public partial class SaveManager : Node
 		NightPalace = 128,
 
 		All = LostPrologue + SandOasis + DinosaurJungle + EvilFoundry + LevitatedRuin + PirateStorm + SkeletonDome +
-		      NightPalace
+			  NightPalace
 	}
 
 	public enum WorldEnum
@@ -668,7 +668,7 @@ public partial class SaveManager : Node
 		{
 			// Discard lower scores
 			if (!Mathf.IsZeroApprox(ActiveGameData.GetBestTime(levelID)) &&
-			    time > ActiveGameData.GetBestTime(levelID)) return;
+				time > ActiveGameData.GetBestTime(levelID)) return;
 
 			if (GetLevelData(levelID).ContainsKey(TIME_KEY))
 			{
@@ -738,7 +738,7 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(skillRing), out var))
 			{
-				skillRing.equippedSkills = (Array<SkillKeyEnum>)var;
+				skillRing.equippedSkills = (Array<SkillKeys>)var;
 				skillRing.RefreshSkillRingData(level);
 			}
 		}

@@ -809,7 +809,7 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			canLandingBoost = Skills.IsSkillEnabled(SkillKeyEnum.LandingDash);
+			canLandingBoost = Skills.IsSkillEnabled(SkillKeys.LandDash);
 			SetActionState(ActionStates.Jumping);
 			VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 
@@ -1011,7 +1011,7 @@ namespace Project.Gameplay
 		{
 			MoveSpeed = 0; // Go STRAIGHT down
 
-			if (SkillRing.IsSkillUnlocked(SkillKeyEnum.FlameStomp))
+			if (SkillRing.IsSkillUnlocked(SkillKeys.StompAttack))
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
 			else
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, JUMP_CANCEL_GRAVITY * PhysicsManager.physicsDelta);
@@ -1033,15 +1033,15 @@ namespace Project.Gameplay
 			actionBufferTimer = 0;
 			MoveSpeed = 0; // Kill horizontal speed
 
-			canLandingBoost = true;
+			canLandingBoost = Skills.IsSkillEnabled(SkillKeys.StompDash);
 
 			Lockon.IsMonitoring = false;
 			if (Lockon.IsHomingAttacking)
 				Lockon.StopHomingAttack();
 			SetActionState(ActionStates.Stomping);
 
-			Skills.IsAttacking = Skills.IsSkillEnabled(SkillKeyEnum.FlameStomp);
-			Animator.StompAnimation(Skills.IsSkillEnabled(SkillKeyEnum.FlameStomp));
+			Skills.IsAttacking = Skills.IsSkillEnabled(SkillKeys.StompAttack);
+			Animator.StompAnimation(Skills.IsSkillEnabled(SkillKeys.StompAttack));
 		}
 		#endregion
 
@@ -1908,7 +1908,7 @@ namespace Project.Gameplay
 
 		public void OnCountdownFinished()
 		{
-			if (Skills.IsSkillEnabled(SkillKeyEnum.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
+			if (Skills.IsSkillEnabled(SkillKeys.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
 			{
 				MoveSpeed = Skills.countdownBoostSpeed;
 				AddLockoutData(new LockoutResource()
@@ -1961,7 +1961,7 @@ namespace Project.Gameplay
 
 			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))
 			{
-				if (Skills.IsSkillEnabled(SkillKeyEnum.SplashJump)) // Perform a splash jump
+				if (Skills.IsSkillEnabled(SkillKeys.SplashJump)) // Perform a splash jump
 					Skills.SplashJump();
 				else // Cancel HomingAttack
 					Lockon.StopHomingAttack();
