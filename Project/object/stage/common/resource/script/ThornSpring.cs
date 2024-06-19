@@ -6,8 +6,7 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class ThornSpring : Launcher
 {
-	[Export]
-	private float height;
+	[ExportGroup("Behavior Settings")]
 	/// <summary> How long a rotation phase (full or half) takes in seconds. </summary>
 	[Export(PropertyHint.Range, "0,5,.1")]
 	private float rotationTime;
@@ -23,6 +22,12 @@ public partial class ThornSpring : Launcher
 	/// <summary> Should this spring only allow targeting when time break is active? </summary>
 	[Export]
 	private bool isTimeBreakSpring;
+
+	[ExportGroup("Spawn Settings")]
+	[Export]
+	private bool startRotated;
+	[Export(PropertyHint.Range, "0,5,.1")]
+	private float startingTimeOffset;
 
 	/// <summary> The amount of time spent in the current state. </summary>
 	private float currentTime;
@@ -49,17 +54,32 @@ public partial class ThornSpring : Launcher
 	private readonly StringName timeBreakKey = "loop";
 	/// <summary> Animator timescale for Time Break springs when Time Break isn't active. </summary>
 	private const float TimeBreakLoopTimeScale = 4f;
+	/// <summary> Flag to pause timebreak rotation so the player doesn't get hurt. </summary>
+	private bool pauseTimebreakRotation;
 
+	public override void _Ready()
+	{
+		currentTime = startingTimeOffset;
+		if (pauseHalfway && startRotated)
+		{
+			animator.Play(halfKey);
+			animator.Advance(0.0);
+			animator.Stop();
+			rotationState = RotationStates.Halfway;
+		}
+	}
 
 	public override Vector3 GetLaunchDirection() => Vector3.Up;
 	public override void Activate(Area3D a)
 	{
+		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this) // Pause time break rotation temporarily
+			pauseTimebreakRotation = true;
+
 		base.Activate(a);
 
 		if (rotateOnLaunch)
 			StartRotation();
 	}
-
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -74,25 +94,23 @@ public partial class ThornSpring : Launcher
 		UpdateRotationTimer();
 	}
 
-
 	/// <summary> Updates a time break spring based on the player's break skills. </summary>
 	private void UpdateTimeBreakSpring()
 	{
-		if (!Character.Skills.IsTimeBreakActive)
+		if (!Character.Skills.IsTimeBreakActive &&
+			(!Character.Lockon.IsHomingAttacking || Character.Lockon.Target != this))
 		{
-			if (rotationState != RotationStates.Looping) // Return to spinning quickly
+			if (rotationState != RotationStates.Looping && !pauseTimebreakRotation) // Return to spinning quickly
 				StartTimeBreakRotation();
 
 			return;
 		}
-
 
 		if (rotationState == RotationStates.Looping)
 			StopTimeBreakRotation(); // Stop spinning
 		else
 			UpdateRotationTimer();
 	}
-
 
 	private void StartTimeBreakRotation()
 	{
@@ -104,10 +122,8 @@ public partial class ThornSpring : Launcher
 		animator.SpeedScale = TimeBreakLoopTimeScale;
 	}
 
-
 	/// <summary> Transitions from quickly spinning to stationary. </summary>
 	private void StopTimeBreakRotation() => animator.Play(enableKey);
-
 
 	private void UpdateRotationTimer()
 	{
@@ -117,7 +133,6 @@ public partial class ThornSpring : Launcher
 		currentTime = Mathf.MoveToward(currentTime, staticTime, PhysicsManager.physicsDelta);
 		if (!Mathf.IsEqualApprox(currentTime, staticTime))
 			return; // Still waiting
-
 
 		if (rotationState == RotationStates.Halfway)
 		{
@@ -131,7 +146,6 @@ public partial class ThornSpring : Launcher
 		// Start a new rotation
 		StartRotation();
 	}
-
 
 	/// <summary> Reset time and stop rotating. </summary>
 	private void OnAnimationFinished(StringName animationName)
@@ -153,14 +167,12 @@ public partial class ThornSpring : Launcher
 		rotationState = RotationStates.Upright;
 	}
 
-
 	private void StartRotation()
 	{
 		rotationState = RotationStates.Rotating;
 		animator.SpeedScale = 1.0f / rotationTime;
 		animator.Play(pauseHalfway ? halfKey : fullKey);
 	}
-
 
 	/// <summary> Completes the spring's rotation. </summary>
 	private void FinishRotation()
@@ -169,4 +181,6 @@ public partial class ThornSpring : Launcher
 		animator.SpeedScale = 1.0f / rotationTime;
 		animator.Play(enableKey);
 	}
+
+	public void OnExited(Area3D _) => pauseTimebreakRotation = false;
 }
