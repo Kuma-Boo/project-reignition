@@ -770,7 +770,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -758.911, -265.473, -1039)
 [node name="StartTrigger" parent="Trigger/Object/IslandRecenterTrigger" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.752691, 0, -0.658374, 0, 1, 0, 0.658374, 0, 0.752691, -3.30157, -0.454224, -14.6886)
 "Trigger Mode" = 2
+"Enter Mode" = 0
 "Exit Mode" = 2
+
+[node name="Cam" type="Node3D" parent="Trigger/Object/IslandRecenterTrigger/StartTrigger"]
+transform = Transform3D(0.990212, 0, 0.13957, 0, 1, 0, -0.13957, 0, 0.990212, 0.234131, 0.16922, 5.67874)
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("47_q66r8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/IslandRecenterTrigger/StartTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1142,20 +1149,6 @@ settings = ExtResource("45_r78fw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_q701v")
 
-[node name="FirstEndIslandCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.837213, 0, -0.546877, 0, 1, 0, 0.546877, 0, 0.837213, -765.775, -265.758, -1049.26)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="Cam" type="Node3D" parent="Trigger/Camera/FirstEndIslandCam"]
-script = ExtResource("36_8t574")
-transitionTime = 0.5
-settings = ExtResource("47_q66r8")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FirstEndIslandCam"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_c5pbm")
-
 [node name="FirstEndIslandCamWall" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.515038, 0, -0.857167, 0, 1, 0, 0.857167, 0, -0.515038, -753.016, -257.764, -1044.97)
 "Trigger Mode" = 2
@@ -1389,16 +1382,16 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Deactivate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
-[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/RightPath" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Deactivate"]
-[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/LeftPath" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/RightPath" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/LeftPath" method="Activate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]

@@ -313,7 +313,8 @@ namespace Project.Gameplay
 		}
 
 		private bool isRecentered; // Is the recenter complete?
-		private const float RECENTER_POWER = .1f;
+		private const float MinRecenterPower = .1f;
+		private const float MaxRecenterPower = .2f;
 		/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
 		private void UpdateRecenter()
 		{
@@ -324,7 +325,13 @@ namespace Project.Gameplay
 			float movementOffset = currentOffset;
 			if (!isRecentered) // Smooth out recenter speed
 			{
-				movementOffset = Mathf.MoveToward(movementOffset, 0, Mathf.Abs(MoveSpeed) * RECENTER_POWER * PhysicsManager.physicsDelta);
+				float inputInfluence = ExtensionMethods.DotAngle(PathFollower.ForwardAngle + (Mathf.Pi * .5f), GetInputAngle());
+				inputInfluence *= Mathf.Sign(PathFollower.LocalPlayerPositionDelta.X);
+				inputInfluence = (inputInfluence + 1) * 0.5f;
+				inputInfluence = Mathf.SmoothStep(MinRecenterPower, MaxRecenterPower, inputInfluence);
+
+				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence * PhysicsManager.physicsDelta;
+				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed);
 				if (Mathf.IsZeroApprox(movementOffset))
 					isRecentered = true;
 				movementOffset = currentOffset - movementOffset;
