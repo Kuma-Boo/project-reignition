@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://bxfcgpvn63oaw"]
+[gd_scene load_steps=60 format=3 uid="uid://cltlg1hvrjoa1"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_15mb8"]
 [ext_resource type="Resource" uid="uid://bfhobpge3ljn2" path="res://resource/level data/dinosaur jungle/Act2Rampage.tres" id="2_e23ug"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="9_3ulwd"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="10_tx4o8"]
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="12_mrc1a"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="13_l7ghh"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="13_ymm10"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="14_2lsue"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="15_21fnw"]
@@ -17,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="20_imscf"]
 [ext_resource type="PackedScene" uid="uid://cuplakh6fkalc" path="res://area/2 dino jungle/object/Boat.tscn" id="21_lbw4y"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="22_aligo"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="22_wo0e7"]
 [ext_resource type="Resource" uid="uid://bfbyijcgdiudd" path="res://area/2 dino jungle/act 1/camera/BoatCam.tres" id="23_sepwn"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="24_2wsqy"]
 [ext_resource type="PackedScene" uid="uid://ctt8k8ju64i3l" path="res://object/enemy/flower/FlowerMajin.tscn" id="26_6ufbs"]
@@ -140,19 +138,19 @@ startEnabled = false
 [node name="03Cave" parent="Static/Visuals" index="3"]
 startEnabled = true
 
-[node name="04Spiral" parent="Static/Visuals" index="4"]
+[node name="04Spiral" parent="Static/Visuals" index="6"]
 startEnabled = true
 
-[node name="05Crossing" parent="Static/Visuals" index="5"]
+[node name="05Crossing" parent="Static/Visuals" index="7"]
 startEnabled = true
 
-[node name="06CavernEntrance" parent="Static/Visuals" index="6"]
+[node name="06CavernEntrance" parent="Static/Visuals" index="8"]
 startEnabled = true
 
-[node name="07Cavern" parent="Static/Visuals" index="7"]
+[node name="07Cavern" parent="Static/Visuals" index="9"]
 startEnabled = true
 
-[node name="08FeedingTunnel" parent="Static/Visuals" index="8"]
+[node name="08FeedingTunnel" parent="Static/Visuals" index="10"]
 startEnabled = true
 
 [node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
@@ -294,61 +292,6 @@ shape = SubResource("BoxShape3D_mynxt")
 
 [node name="DialogTriggers" type="Node3D" parent="MainAct"]
 
-[node name="TrioStartTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2381, 0.0230178, -4)
-OneShot = true
-"Respawn Mode" = 2
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioStartTrigger"]
-script = ExtResource("9_3ulwd")
-delays = []
-textKeys = ["din_event_trio_so", "din_event_trio_sh", "din_event_trio2_so", "din_event_trio2_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TrioStartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="TrioHintrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, -26.6, -1.23471, -331.689)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioHintrigger"]
-script = ExtResource("9_3ulwd")
-randomize = true
-textKeys = ["din_trio_hint_so", "din_trio_hint_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TrioHintrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="TrioEndTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(0.866025, 0.0399342, 0.498403, 0, 0.996805, -0.0798684, -0.5, 0.069168, 0.863259, -33.8349, -38.1764, -425.59)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TrioEndTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = ["din_event_trio3_so", "din_event_trio3_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TrioEndTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="FlowerMajinTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(-0.766044, -0.166366, -0.620885, 0, 0.965925, -0.258819, 0.642787, -0.198267, -0.739942, -384.994, -219.476, -700.687)
-OneShot = true
-"Respawn Mode" = 3
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/FlowerMajinTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = ["din_flower_sh", "din_flower_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/FlowerMajinTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
 [node name="CaveSplitTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
 OneShot = true
@@ -359,101 +302,6 @@ script = ExtResource("9_3ulwd")
 textKeys = ["din_split_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/CaveSplitTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="PotHintTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(0.12322, 0, 0.992379, 0, 1, 0, -0.992379, 0, 0.12322, -320.56, -264.335, -951.295)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/PotHintTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = ["din_pot_hint_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/PotHintTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="ApatosTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, -283.267, -257.286, -983.581)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/ApatosTrigger"]
-script = ExtResource("9_3ulwd")
-delays = Array[float]([0.0, 0.5])
-textKeys = ["din_event_apato_so", "din_event_apato2_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/ApatosTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="BallHintTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(-0.12322, 0, -0.992379, 0, 1, 0, 0.992379, 0, -0.12322, -494.709, -281.035, -1107.3)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/BallHintTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = ["din_ball_hint_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/BallHintTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="RexTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(0.642787, 3.06325e-05, -0.766045, -0.000123395, 1, -6.35529e-05, 0.766045, 0.000135377, 0.642787, -619.41, -281.186, -1071.02)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = Array[String](["din_rex_sh", "din_rex_so"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="RexLowerTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -653.545, -276.986, -1056.5)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexLowerTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = Array[String](["din_rex_lower_so", "din_rex_lower_sh"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexLowerTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="RexTailTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(-0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, -0.906308, -694.113, -272.173, -1088.4)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexTailTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = Array[String](["din_rex_tail_sh", "din_rex_tail_so"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexTailTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="RexUpperTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_8l10n")]
-transform = Transform3D(0.975951, 0, -0.21799, 0, 1, 0, 0.21799, 0, 0.975951, -643.599, -265.596, -1064.8)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RexUpperTrigger"]
-script = ExtResource("9_3ulwd")
-textKeys = Array[String](["din_rex_upper_so", "din_rex_upper_sh"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RexUpperTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
@@ -504,12 +352,11 @@ transform = Transform3D(0.978046, 3.72529e-09, -0.20839, 0.20411, -0.201625, 0.9
 script = ExtResource("10_tx4o8")
 
 [node name="Spring" parent="MainAct/Cave/Switch/CullingTrigger" instance=ExtResource("27_n236x")]
-transform = Transform3D(0.293085, 0.296147, 0.909065, -0.829472, 0.551616, 0.0877229, -0.475476, -0.779754, 0.407316, 2.00775, 1.02547, -21.5217)
+transform = Transform3D(-0.908508, 0.208933, 0.361884, 0, 0.866025, -0.5, -0.417867, -0.454254, -0.786792, 2.00775, 1.02547, -21.5217)
 "Secondary Settings/Enabled" = false
-middleHeight = 1.0
-finalHeight = -11.0
-distance = 25.0
-launchDirection = 1
+middleHeight = 4.0
+finalHeight = 1.0
+distance = 23.0
 voiceKey = &""
 
 [node name="Path" type="Node3D" parent="MainAct/Cave/Switch/CullingTrigger/Spring" node_paths=PackedStringArray("path")]
@@ -568,7 +415,7 @@ enemyCount = 1
 
 [node name="FlowerMajin" parent="MainAct/Cave" instance=ExtResource("26_6ufbs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3456, 2.26663, -54.9971)
-rangeOverride = 13
+rangeOverride = 15
 
 [node name="LogPlatform" parent="MainAct/Cave" instance=ExtResource("54_475jn")]
 transform = Transform3D(0.884133, 0, -0.467236, 0, 1, 0, 0.467236, 0, 0.884133, 10.966, 2.35539, -97.5439)
@@ -588,44 +435,19 @@ Spacing = 3.2
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/Cave/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("14_2lsue")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("13_l7ghh")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="MainAct/Cave/Rings3" instance=ExtResource("14_2lsue")]
 
-[node name="Child02" type="Area3D" parent="MainAct/Cave/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("14_2lsue")]
+[node name="Child02" parent="MainAct/Cave/Rings3" instance=ExtResource("14_2lsue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("13_l7ghh")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="MainAct/Cave/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("14_2lsue")]
+[node name="Child03" parent="MainAct/Cave/Rings3" instance=ExtResource("14_2lsue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("13_l7ghh")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="MainAct/Cave/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("14_2lsue")]
+[node name="Child04" parent="MainAct/Cave/Rings3" instance=ExtResource("14_2lsue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("13_l7ghh")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="MainAct/Cave/Rings3" node_paths=PackedStringArray("animator") instance=ExtResource("14_2lsue")]
+[node name="Child05" parent="MainAct/Cave/Rings3" instance=ExtResource("14_2lsue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("13_l7ghh")
-animator = NodePath("AnimationPlayer")
 
 [node name="ThornSpring" parent="MainAct/Cave" instance=ExtResource("38_vw8kh")]
 transform = Transform3D(0.861408, 0, -0.507914, 0, 1, 0, 0.507914, 0, 0.861408, -22.1738, 2.92746, -106.745)
@@ -660,164 +482,64 @@ Spacing = 1.2
 "Horizontal Offset" = SubResource("Curve_qm4ns")
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
+[node name="Child01" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 
-[node name="Child02" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child02" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.108037, 0, -1.2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child03" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child03" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0301229, 0, -2.4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child04" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child04" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.209989, 0, -3.6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child05" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child05" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.588544, 0, -4.8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child06" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child06" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08179, 0, -6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child07" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child07" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.66597, 0, -7.2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child08" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child08" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31733, 0, -8.4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child09" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child09" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.01213, 0, -9.6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child10" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child10" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.72659, 0, -10.8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child11" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child11" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.43698, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child12" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child12" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.11953, 0, -13.2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child13" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child13" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7505, 0, -14.4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child14" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child14" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.30612, 0, -15.6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child15" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child15" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.76266, 0, -16.8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child16" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child16" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.09634, 0, -18)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child17" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child17" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.28342, 0, -19.2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child18" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child18" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.30014, 0, -20.4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child19" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child19" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.12275, 0, -21.6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
-[node name="Child20" type="Area3D" parent="MainAct/Cave/Pearl" node_paths=PackedStringArray("collider") instance=ExtResource("16_rxraj")]
+[node name="Child20" parent="MainAct/Cave/Pearl" instance=ExtResource("16_rxraj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7275, 0, -22.8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("22_wo0e7")
-collider = NodePath("CollisionShape3D")
 
 [node name="Spiral" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
@@ -1515,7 +1237,6 @@ transform = Transform3D(0.573577, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573577, 
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 0
-rangeOverride = -1
 
 [node name="ItemBoxFlying1" parent="MainAct/Crossing" instance=ExtResource("57_p8d1j")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 151, 2.5, -97)
@@ -1547,6 +1268,7 @@ smoothPausing = true
 root = NodePath("FlowerMajin3")
 
 [node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("26_6ufbs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6.10352e-05)
 passiveLength = 4.0
 preAttackLength = 1.0
 postAttackLength = 2.0
@@ -2331,31 +2053,6 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 [connection signal="Activated" from="MainAct/Cave/Switch/CullingTrigger/Spring" to="MainAct/Cave/Switch/CullingTrigger/Spring/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Cave/Switch/CullingTrigger/Spring" to="Static/Collision/CaveRightOneWay" method="Activate"]
 [connection signal="Defeated" from="MainAct/Cave/FlowerMajin" to="MainAct/Cave/EnemyStone" method="IncrementCounter"]
-[connection signal="area_entered" from="MainAct/Cave/Rings3/Child01" to="MainAct/Cave/Rings3/Child01" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Rings3/Child02" to="MainAct/Cave/Rings3/Child02" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Rings3/Child03" to="MainAct/Cave/Rings3/Child03" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Rings3/Child04" to="MainAct/Cave/Rings3/Child04" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Rings3/Child05" to="MainAct/Cave/Rings3/Child05" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child01" to="MainAct/Cave/Pearl/Child01" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child02" to="MainAct/Cave/Pearl/Child02" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child03" to="MainAct/Cave/Pearl/Child03" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child04" to="MainAct/Cave/Pearl/Child04" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child05" to="MainAct/Cave/Pearl/Child05" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child06" to="MainAct/Cave/Pearl/Child06" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child07" to="MainAct/Cave/Pearl/Child07" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child08" to="MainAct/Cave/Pearl/Child08" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child09" to="MainAct/Cave/Pearl/Child09" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child10" to="MainAct/Cave/Pearl/Child10" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child11" to="MainAct/Cave/Pearl/Child11" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child12" to="MainAct/Cave/Pearl/Child12" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child13" to="MainAct/Cave/Pearl/Child13" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child14" to="MainAct/Cave/Pearl/Child14" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child15" to="MainAct/Cave/Pearl/Child15" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child16" to="MainAct/Cave/Pearl/Child16" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child17" to="MainAct/Cave/Pearl/Child17" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child18" to="MainAct/Cave/Pearl/Child18" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child19" to="MainAct/Cave/Pearl/Child19" method="OnEntered"]
-[connection signal="area_entered" from="MainAct/Cave/Pearl/Child20" to="MainAct/Cave/Pearl/Child20" method="OnEntered"]
 [connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
