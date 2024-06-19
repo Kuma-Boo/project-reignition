@@ -110,12 +110,12 @@ namespace Project.Gameplay.Triggers
 			if (isStageVisuals && !DebugManager.IsStageCullingEnabled) // Treat as active
 			{
 				SetDeferred("visible", true);
-				ProcessMode = ProcessModeEnum.Inherit;
+				SetDeferred("process_mode", (long)ProcessModeEnum.Inherit);
 				return;
 			}
 
 			SetDeferred("visible", isActive);
-			ProcessMode = isActive ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
+			SetDeferred("process_mode", (long)(isActive ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled));
 		}
 	}
 }
