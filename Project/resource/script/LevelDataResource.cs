@@ -48,11 +48,7 @@ namespace Project.Gameplay
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int));
 
 			if (!SkipScore)
-			{
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Gold Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Silver Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
-				properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Score", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
-			}
+				properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
 
 			properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,5,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object));
@@ -98,13 +94,8 @@ namespace Project.Gameplay
 					return SilverTime;
 				case "Ranking/Bronze Time":
 					return BronzeTime;
-				case "Ranking/Gold Score":
-					return GoldScore;
-				case "Ranking/Silver Score":
-					return SilverScore;
-				case "Ranking/Bronze Score":
-					return BronzeScore;
-
+				case "Ranking/Score Requirement":
+					return Score;
 				case "Completion/Delay":
 					return CompletionDelay;
 				case "Completion/Lockout":
@@ -168,14 +159,8 @@ namespace Project.Gameplay
 				case "Ranking/Bronze Time":
 					BronzeTime = (int)value;
 					break;
-				case "Ranking/Gold Score":
-					GoldScore = (int)value;
-					break;
-				case "Ranking/Silver Score":
-					SilverScore = (int)value;
-					break;
-				case "Ranking/Bronze Score":
-					BronzeScore = (int)value;
+				case "Ranking/Score Requirement":
+					Score = (int)value;
 					break;
 
 				case "Completion/Delay":
@@ -232,10 +217,7 @@ namespace Project.Gameplay
 		public int SilverTime { get; private set; }
 		public int BronzeTime { get; private set; }
 		// Requirement for score rank
-		public int GoldScore { get; private set; }
-		public int SilverScore { get; private set; }
-		public int BronzeScore { get; private set; }
-
+		public int Score { get; private set; }
 
 		/// <summary> How long to wait before transitioning to the completion camera. </summary>
 		public float CompletionDelay { get; private set; }
