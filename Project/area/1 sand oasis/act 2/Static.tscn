@@ -1,0 +1,100 @@
+[gd_scene load_steps=17 format=3 uid="uid://dlahdqcelwoq6"]
+
+[ext_resource type="PackedScene" uid="uid://bju5wbc52yu36" path="res://area/1 sand oasis/act 2/environment/collision/Collision.tscn" id="1_3wq42"]
+[ext_resource type="PackedScene" uid="uid://bqb57kpdy3sol" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
+[ext_resource type="PackedScene" uid="uid://cthfyh01j304c" path="res://area/1 sand oasis/act 2/environment/02Islands.tscn" id="2_6nnkp"]
+[ext_resource type="PackedScene" uid="uid://ymgoo55dnl82" path="res://area/1 sand oasis/act 2/environment/03Forest.tscn" id="3_2hkcl"]
+[ext_resource type="PackedScene" uid="uid://b68n6b3kxew50" path="res://area/1 sand oasis/act 2/environment/04Oasis.tscn" id="4_yda5x"]
+[ext_resource type="PackedScene" uid="uid://d1bkok8ul55i5" path="res://area/1 sand oasis/act 2/environment/05Slope.tscn" id="5_c5ona"]
+[ext_resource type="PackedScene" uid="uid://urib6vl71yjq" path="res://area/1 sand oasis/act 2/environment/06End.tscn" id="6_2ngjg"]
+[ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="9_f1xur"]
+
+[sub_resource type="Gradient" id="Gradient_lbers"]
+offsets = PackedFloat32Array(0.791045)
+colors = PackedColorArray(1, 0.415, 0.1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_auj1f"]
+gradient = SubResource("Gradient_lbers")
+
+[sub_resource type="Gradient" id="Gradient_4slir"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.149485, 0.365979, 0.5, 0.994845)
+colors = PackedColorArray(0, 0.654735, 0.948889, 1, 0.952253, 0.690817, 1, 1, 0, 0.116667, 1, 1, 0, 0.654735, 0.948889, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_inq5n"]
+gradient = SubResource("Gradient_4slir")
+use_hdr = true
+fill_from = Vector2(0.982906, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ea1lp"]
+panorama = SubResource("GradientTexture2D_inq5n")
+
+[sub_resource type="Sky" id="Sky_cdpwp"]
+resource_local_to_scene = true
+sky_material = SubResource("PanoramaSkyMaterial_ea1lp")
+radiance_size = 1
+
+[sub_resource type="Environment" id="Environment_raoto"]
+background_mode = 2
+sky = SubResource("Sky_cdpwp")
+sky_rotation = Vector3(0.307178, 0, 0)
+ambient_light_source = 3
+ambient_light_color = Color(0.402667, 0.36, 1, 1)
+ambient_light_sky_contribution = 0.4
+ambient_light_energy = 0.3
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 0.79
+tonemap_white = 1.3
+ssao_radius = 3.19
+ssao_intensity = 3.36
+ssao_detail = 0.0
+ssil_enabled = true
+ssil_sharpness = 0.9
+ssil_normal_rejection = 0.8
+glow_enabled = true
+glow_intensity = 6.0
+glow_strength = 0.97
+glow_blend_mode = 1
+glow_hdr_threshold = 3.5
+glow_hdr_scale = 1.0
+glow_map_strength = 1.0
+glow_map = SubResource("GradientTexture1D_auj1f")
+fog_enabled = true
+fog_light_color = Color(0.533585, 0.699592, 1, 1)
+fog_density = 0.0002
+fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_saturation = 1.2
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent")]
+script = ExtResource("1_yumdi")
+pathParent = NodePath("Paths")
+
+[node name="Collision" parent="." instance=ExtResource("1_3wq42")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="CullingMap" type="Node3D" parent="Visuals"]
+
+[node name="01Opening" parent="Visuals" instance=ExtResource("1_vn5mm")]
+startEnabled = true
+
+[node name="02Islands" parent="Visuals" instance=ExtResource("2_6nnkp")]
+
+[node name="03Forest" parent="Visuals" instance=ExtResource("3_2hkcl")]
+
+[node name="04Oasis" parent="Visuals" instance=ExtResource("4_yda5x")]
+
+[node name="05Slope" parent="Visuals" instance=ExtResource("5_c5ona")]
+
+[node name="06End" parent="Visuals" instance=ExtResource("6_2ngjg")]
+
+[node name="Paths" type="Node3D" parent="."]
+
+[node name="BGM" parent="." instance=ExtResource("9_f1xur")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_raoto")
