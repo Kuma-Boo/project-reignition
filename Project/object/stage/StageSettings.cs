@@ -165,11 +165,11 @@ namespace Project.Gameplay
 			else
 			{
 				int score = TotalScore;
-				if (CurrentTime <= Data.GoldTime && score >= Data.GoldScore) // Perfect run
+				if (CurrentTime <= Data.GoldTime && score >= Data.Score) // Perfect run
 					rank = 3;
-				else if (CurrentTime <= Data.SilverTime && score >= Data.SilverScore) // Silver
+				else if (CurrentTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
 					rank = 2;
-				else if (CurrentTime <= Data.BronzeTime || score >= Data.BronzeScore) // Bronze is easy to get
+				else if (CurrentTime <= Data.BronzeTime) // Bronze is easy to get
 					rank = 1;
 			}
 
@@ -457,6 +457,9 @@ namespace Project.Gameplay
 		{
 			if (!IsLevelIngame)
 				return;
+
+			// Recalculate technical bonus
+			CalculateTechnicalBonus();
 
 			// Attempt to start the completion demo
 			GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));

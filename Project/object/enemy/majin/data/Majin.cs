@@ -451,7 +451,7 @@ public partial class Majin : Enemy
 		if (OutsideFlameAggression || !IsInRange)
 		{
 			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
-			if (OutsideFlameAggression && !isFlameActive)
+			if (OutsideFlameAggression && FlameAggressionRadius != 0 && !isFlameActive)
 				flameTimer = flameInactiveTime;
 			return;
 		}
