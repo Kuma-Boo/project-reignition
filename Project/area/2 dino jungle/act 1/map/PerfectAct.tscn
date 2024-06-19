@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://vcmdwsohkoen"]
+[gd_scene load_steps=23 format=3 uid="uid://vcmdwsohkoen"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_dkeii"]
 [ext_resource type="Resource" uid="uid://dcsmed3l5ath0" path="res://resource/level data/dinosaur jungle/Act1Perfect.tres" id="2_3og88"]
@@ -21,6 +21,9 @@
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="58_2r0fu"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="64_p8f4s"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_6pe4g"]
+size = Vector3(20, 20, 2.5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_wiqay"]
 size = Vector3(20, 20, 2.5)
 
@@ -33,10 +36,10 @@ metadata/_edit_group_ = true
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
 
-[node name="05Crossing" parent="Static/Visuals" index="5"]
+[node name="05Crossing" parent="Static/Visuals" index="7"]
 startEnabled = true
 
-[node name="06CavernEntrance" parent="Static/Visuals" index="6"]
+[node name="06CavernEntrance" parent="Static/Visuals" index="8"]
 startEnabled = true
 
 [node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
@@ -52,6 +55,13 @@ transform = Transform3D(0.512103, 0, 0.858924, 0, 1, 0, -0.858924, 0, 0.512103, 
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("8_kslgs")]
+
+[node name="InvisibleWall" type="StaticBody3D" parent="MainAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(0.895167, 0, 0.445731, 0, 1, 0, -0.445731, 0, 0.895167, -2.01453, 0.514709, -1.30383)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_6pe4g")
 
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
@@ -99,9 +109,9 @@ Movement/Distance = 6.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
 startPaused = true
-root = NodePath("BlueMajin6")
+root = NodePath("BlueMajin")
 
-[node name="BlueMajin6" parent="MainAct/Crossing/MajinMover" instance=ExtResource("44_htkmd")]
+[node name="BlueMajin" parent="MainAct/Crossing/MajinMover" instance=ExtResource("44_htkmd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
@@ -669,7 +679,7 @@ shape = SubResource("BoxShape3D_wiqay")
 [node name="LotusPlatform" parent="MainAct/Crossing" instance=ExtResource("21_ggtwu")]
 transform = Transform3D(-1.01445, 0, 1.10494, 0, 1, 0, -1.10494, 0, -1.01445, -41.7177, -26.2108, -190.106)
 
-[connection signal="SpinStarted" from="MainAct/Crossing/MajinMover/BlueMajin6" to="MainAct/Crossing/MajinMover" method="Unpause"]
+[connection signal="SpinStarted" from="MainAct/Crossing/MajinMover/BlueMajin" to="MainAct/Crossing/MajinMover" method="Unpause"]
 [connection signal="Aggressive" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Unpause"]
 [connection signal="Attack" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Pause"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajinMover1/FlowerMajin1" to="MainAct/Crossing/FlowerMajinMover1" method="Pause"]
