@@ -21,8 +21,8 @@
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="58_2r0fu"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="64_p8f4s"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_wppu5"]
-size = Vector3(2, 10.3289, 18.4282)
+[sub_resource type="BoxShape3D" id="BoxShape3D_6pe4g"]
+size = Vector3(20, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wiqay"]
 size = Vector3(20, 20, 2.5)
@@ -56,18 +56,18 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("8_kslgs")]
 
+[node name="InvisibleWall" type="StaticBody3D" parent="MainAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(0.895167, 0, 0.445731, 0, 1, 0, -0.445731, 0, 0.895167, -2.01453, 0.514709, -1.30383)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_6pe4g")
+
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
 script = ExtResource("10_qfxcl")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
-
-[node name="InvisibleWall" type="StaticBody3D" parent="MainAct/Crossing"]
-transform = Transform3D(0.73809, 0, 0.674702, 0, 1, 0, -0.674702, 0, 0.73809, 70.112, 8.33936, -41.8466)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Crossing/InvisibleWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 4.66446, -2.4632)
-shape = SubResource("BoxShape3D_wppu5")
 
 [node name="RingsM4" type="Node3D" parent="MainAct/Crossing"]
 transform = Transform3D(0.411179, 0.262786, 0.872855, -0.0445072, 0.962191, -0.268716, -0.910468, 0.071642, 0.407328, 96.239, 5.91766, -32.3646)
