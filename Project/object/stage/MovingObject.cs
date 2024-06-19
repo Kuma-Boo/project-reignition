@@ -172,12 +172,14 @@ public partial class MovingObject : Node3D
 		if (animator != null)
 			animator.SpeedScale = animatorSpeedScale;
 
-		Reset();
+		StageSettings.instance.ConnectRespawnSignal(this);
+		Respawn();
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint()) return;
+
 		if (IsMovementInvalid()) return; // No movement
 		if (isPaused && !smoothPausing) return;
 
@@ -192,15 +194,26 @@ public partial class MovingObject : Node3D
 			root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
 	}
 
+	public void ApplyEditorPosition()
+	{
+		if (root == null)
+			return;
+
+		root.GlobalPosition = InterpolatePosition(StartingOffset);
+	}
+
 	public void Pause() => isPaused = true;
 	public void Unpause() => isPaused = false;
 
 	/// <summary> Resets currentTime to StartingOffset. </summary>
-	public void Reset()
+	public void Respawn()
 	{
 		TimeScale = 1f;
 		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
+
+		if (root?.IsInsideTree() == true)
+			root.GlobalPosition = InterpolatePosition(currentTime);
 	}
 
 	public Vector3 InterpolatePosition(float ratio)

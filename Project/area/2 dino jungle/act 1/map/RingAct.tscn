@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://c6vlrltnp4jhp"]
+[gd_scene load_steps=45 format=3 uid="uid://c6vlrltnp4jhp"]
 
 [ext_resource type="Resource" uid="uid://dvavd6iy1q2qp" path="res://resource/level data/dinosaur jungle/Act1Ring.tres" id="2_rdov5"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="2_tlcwl"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="13_hhdbi"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="14_5ifj7"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="14_jpj76"]
-[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="15_cgo7e"]
 [ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="16_t4kow"]
 [ext_resource type="Resource" uid="uid://bc7jtdg5d7q8c" path="res://area/2 dino jungle/act 1/environment/river event/AlignLockout.tres" id="17_f6y0o"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="18_xx2ks"]
@@ -2007,9 +2006,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -12.8808, 1.82914,
 [node name="RichRing" parent="MainAct/Chase" instance=ExtResource("40_uxikd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.0806, 0.663807, -214.886)
 
-[node name="RichRing2" parent="MainAct/Chase" node_paths=PackedStringArray("animator") instance=ExtResource("40_uxikd")]
+[node name="RichRing2" parent="MainAct/Chase" instance=ExtResource("40_uxikd")]
 transform = Transform3D(-0.0189183, 0, 0.999821, 0, 1, 0, -0.999821, 0, -0.0189183, -145.16, -37.357, -439.596)
-animator = NodePath("../RichRing/AnimationPlayer")
 
 [node name="RiverEvent" parent="MainAct" instance=ExtResource("2_tlcwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193.347, -39.102, -495.023)
@@ -2020,13 +2018,6 @@ OneShot = true
 [node name="Path" type="Node3D" parent="MainAct/RiverEvent" node_paths=PackedStringArray("path")]
 script = ExtResource("14_5ifj7")
 path = NodePath("../../../Static/Path/RiverPath")
-
-[node name="Dialog" type="Node3D" parent="MainAct/RiverEvent"]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
-script = ExtResource("15_cgo7e")
-delays = [0.0, 0.4, 1.0, 0.0]
-displayLength = []
-textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent" instance=ExtResource("16_t4kow")]
 "Player Event Settings/Exit Lockout" = ExtResource("17_f6y0o")

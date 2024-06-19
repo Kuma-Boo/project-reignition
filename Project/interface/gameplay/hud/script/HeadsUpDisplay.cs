@@ -15,8 +15,7 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
-
-			CurrentRank = Stage.CalculateRank();
+			InitializeRankPreviewer();
 			InitializeRings();
 			InitializeObjectives();
 			InitializeSoulGauge();
@@ -99,6 +98,12 @@ namespace Project.Gameplay
 		private AudioStreamPlayer rankDownSFX;
 		private int CurrentRank { get; set; }
 		private Tween rankTween;
+		private void InitializeRankPreviewer()
+		{
+			CurrentRank = Stage.CalculateRank();
+			mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * CurrentRank * 60), mainRank.RegionRect.Size);
+		}
+
 		private void UpdateRank()
 		{
 			int rank = Stage.CalculateRank();
@@ -114,7 +119,6 @@ namespace Project.Gameplay
 			CurrentRank = rank;
 		}
 
-
 		private void StartRankDownTween(int amount)
 		{
 			rankDownSFX.Play();
@@ -126,7 +130,6 @@ namespace Project.Gameplay
 			rankTween.TweenProperty(transitionRank, "position", Vector2.Down * 128, .5f).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.In);
 			rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankDownTween)).SetDelay(.5f);
 		}
-
 
 		private void StartRankUpTween(int amount)
 		{
