@@ -87,7 +87,7 @@ public partial class Enemy : Node3D
 		CylinderShape3D cylinderShape = new()
 		{
 			Radius = rangeOverride,
-			Height = 15
+			Height = 30
 		};
 		rangeCollider.Shape = cylinderShape;
 		CollisionShapeList.Add(rangeOverride, cylinderShape);

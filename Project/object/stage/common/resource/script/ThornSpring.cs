@@ -6,6 +6,7 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class ThornSpring : Launcher
 {
+	[ExportGroup("Behavior Settings")]
 	/// <summary> How long a rotation phase (full or half) takes in seconds. </summary>
 	[Export(PropertyHint.Range, "0,5,.1")]
 	private float rotationTime;
@@ -21,6 +22,12 @@ public partial class ThornSpring : Launcher
 	/// <summary> Should this spring only allow targeting when time break is active? </summary>
 	[Export]
 	private bool isTimeBreakSpring;
+
+	[ExportGroup("Spawn Settings")]
+	[Export]
+	private bool startRotated;
+	[Export(PropertyHint.Range, "0,5,.1")]
+	private float startingTimeOffset;
 
 	/// <summary> The amount of time spent in the current state. </summary>
 	private float currentTime;
@@ -49,6 +56,18 @@ public partial class ThornSpring : Launcher
 	private const float TimeBreakLoopTimeScale = 4f;
 	/// <summary> Flag to pause timebreak rotation so the player doesn't get hurt. </summary>
 	private bool pauseTimebreakRotation;
+
+	public override void _Ready()
+	{
+		currentTime = startingTimeOffset;
+		if (pauseHalfway && startRotated)
+		{
+			animator.Play(halfKey);
+			animator.Advance(0.0);
+			animator.Stop();
+			rotationState = RotationStates.Halfway;
+		}
+	}
 
 	public override Vector3 GetLaunchDirection() => Vector3.Up;
 	public override void Activate(Area3D a)

@@ -146,7 +146,7 @@ namespace Project.Editor.StageObjectPreviewer
 		private void DrawMajin()
 		{
 			Majin majin = target as Majin;
-			if (!majin.SpawnTravelDisabled)
+			if (!majin.SpawnTravelEnabled)
 				DrawMajinPath(majin);
 
 			if (majin.IsRedMajin && majin.FlameAggressionRadius != 0)
