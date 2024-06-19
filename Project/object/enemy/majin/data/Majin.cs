@@ -721,7 +721,7 @@ public partial class Majin : Enemy
 		}
 
 		if (SpawnIntervalEnabled)
-			timer.Start(spawnIntervalDelay);
+			timer.Start(SeparateDespawninterval ? despawnIntervalDelay : spawnIntervalDelay);
 	}
 
 	private void FinishDespawning()
@@ -729,7 +729,7 @@ public partial class Majin : Enemy
 		IsActive = false;
 
 		if (SpawnIntervalEnabled)
-			timer.Start(SeparateDespawninterval ? despawnIntervalDelay : spawnIntervalDelay);
+			timer.Start(spawnIntervalDelay);
 	}
 
 	/// <summary> Called after spin attack's windup animation. </summary>
