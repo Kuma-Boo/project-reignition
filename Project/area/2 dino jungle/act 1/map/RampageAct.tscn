@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://vrtenlmxl5s4"]
+[gd_scene load_steps=55 format=3 uid="uid://bxfcgpvn63oaw"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_15mb8"]
 [ext_resource type="Resource" uid="uid://bfhobpge3ljn2" path="res://resource/level data/dinosaur jungle/Act2Rampage.tres" id="2_e23ug"]
@@ -120,6 +120,9 @@ point_count = 2
 [node name="Static" parent="." instance=ExtResource("1_15mb8")]
 Data = ExtResource("2_e23ug")
 metadata/_edit_group_ = true
+
+[node name="Collision" parent="Static" index="0"]
+visible = true
 
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
@@ -491,9 +494,17 @@ transform = Transform3D(0.978046, 3.72529e-09, -0.20839, 0.20411, -0.201625, 0.9
 script = ExtResource("10_tx4o8")
 
 [node name="Spring" parent="MainAct/Cave/Switch/CullingTrigger" instance=ExtResource("27_n236x")]
-transform = Transform3D(0.327563, 0.353198, 0.87633, -0.829472, 0.551616, 0.0877229, -0.452414, -0.755626, 0.473657, 2.38199, 1.02547, -21.9256)
+transform = Transform3D(0.293085, 0.296147, 0.909065, -0.829472, 0.551616, 0.0877229, -0.475476, -0.779754, 0.407316, 2.00775, 1.02547, -21.5217)
 "Secondary Settings/Enabled" = false
+middleHeight = 1.0
+finalHeight = -11.0
+distance = 25.0
+launchDirection = 1
 voiceKey = &""
+
+[node name="Path" type="Node3D" parent="MainAct/Cave/Switch/CullingTrigger/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("18_klrop")
+path = NodePath("../../../../../../Static/Path/CaveRightPath")
 
 [node name="Rings2" type="Node3D" parent="MainAct/Cave/Switch/CullingTrigger"]
 transform = Transform3D(0.903545, 0.0564338, 0.424761, -2.23517e-08, 0.991289, -0.131703, -0.428494, 0.118999, 0.895674, -6.10352e-05, 1.12376, -19.2726)
@@ -2032,6 +2043,9 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 [connection signal="Activated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Activate"]
 [connection signal="Activated" from="MainAct/Cave/Switch" to="MainAct/Cave/Switch/CullingTrigger" method="Activate"]
+[connection signal="Activated" from="MainAct/Cave/Switch/CullingTrigger/Spring" to="Static/Collision/CaveRightOneWay" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Cave/Switch/CullingTrigger/Spring" to="MainAct/Cave/Switch/CullingTrigger/Spring/Path" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Cave/Switch/CullingTrigger/Spring" to="Static/Collision/CaveRightOneWay" method="Activate"]
 [connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Crossing/FlowerMajin1" to="MainAct/Crossing/EnemyStone" method="IncrementCounter"]
@@ -2051,3 +2065,4 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 
 [editable path="Static"]
+[editable path="Static/Collision"]
