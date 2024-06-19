@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=104 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="Resource" uid="uid://covb6cdfu44gv" path="res://area/2 dino jungle/act 1/camera/ChaseStartCam.tres" id="3_51j1g"]
@@ -39,6 +39,7 @@
 [ext_resource type="Resource" uid="uid://beferl7qs7k41" path="res://area/2 dino jungle/act 1/camera/CaveExitCam.tres" id="46_ri24v"]
 [ext_resource type="PackedScene" uid="uid://ctt8k8ju64i3l" path="res://object/enemy/flower/FlowerMajin.tscn" id="47_fimbn"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="47_r25bh"]
+[ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="48_5fd6j"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="48_p6m4r"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="49_g35os"]
 [ext_resource type="Resource" uid="uid://u1ajlm54dtyt" path="res://area/2 dino jungle/act 1/camera/DinoCrossingFlyingPotCam.tres" id="50_ldfj6"]
@@ -151,6 +152,9 @@ min_value = -1.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.6), -2.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_y0gjs"]
+radius = 2.0
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_iq0gp"]
 radius = 2.5
 
@@ -237,6 +241,12 @@ point_count = 2
 Data = ExtResource("2_p4x35")
 InitialCameraSettings = ExtResource("3_51j1g")
 metadata/_edit_group_ = true
+
+[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -4980,9 +4990,19 @@ length = 10.0
 
 [node name="Spiral" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
+
+[node name="SpiralAutomationTrigger" parent="MainAct/Spiral" instance=ExtResource("48_5fd6j")]
+transform = Transform3D(-0.980615, 0, 0.195946, 0, 1, 0, -0.195946, 0, -0.980615, -0.360779, 1.03506, 2.17096)
+endPoint = 365.0
+ignoreDirection = true
+
+[node name="Path" type="Node3D" parent="MainAct/Spiral/SpiralAutomationTrigger"]
+script = ExtResource("27_l6k7w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/SpiralAutomationTrigger"]
+shape = SubResource("SphereShape3D_y0gjs")
 
 [node name="JumpChainGroup" type="Node3D" parent="MainAct/Spiral"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53418, 7.55009, 12.727)
@@ -5468,7 +5488,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82309, -1.38196, 4.85889)
 
 [node name="Crossing" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -5705,6 +5724,7 @@ smoothPausing = true
 root = NodePath("FlowerMajin3")
 
 [node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("47_fimbn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6.10352e-05)
 passiveLength = 4.0
 preAttackLength = 1.0
 postAttackLength = 2.0
@@ -5763,7 +5783,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.70001, -6.99994)
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6310,7 +6329,6 @@ fireSoulIndex = 3
 
 [node name="FeedingTunnel" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6467,7 +6485,6 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6936,6 +6953,9 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin1" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin2" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Cave/GreenMajin3" to="MainAct/Cave/EnemyStone4" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Spiral/SpiralAutomationTrigger" to="Static/Visuals/03Cave" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Spiral/SpiralAutomationTrigger" to="Static/Visuals/03CaveReverse" method="Activate"]
+[connection signal="Activated" from="MainAct/Spiral/SpiralAutomationTrigger" to="MainAct/Spiral/SpiralAutomationTrigger/Path" method="Activate"]
 [connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/StaticCameraTrigger" to="Static/Visuals/03Cave" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/StaticCameraTrigger" to="Static/Visuals/03CaveReverse" method="Activate"]
 [connection signal="Activated" from="MainAct/Spiral/JumpChainGroup/JumpCarpet" to="MainAct/Spiral/JumpChainGroup/JumpCarpet/Camera" method="Activate"]
@@ -6957,3 +6977,5 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="JumpFinished" from="MainAct/Cavern/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
+
+[editable path="Static"]

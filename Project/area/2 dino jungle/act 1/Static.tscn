@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://iij01cwh2ttg" path="res://area/2 dino jungle/act 1/environment/02River.tscn" id="6_51sf7"]
 [ext_resource type="PackedScene" uid="uid://8hi2u5lp8ujo" path="res://area/2 dino jungle/act 1/environment/03Cave.tscn" id="7_fyuv1"]
 [ext_resource type="PackedScene" uid="uid://ban3idx4lt045" path="res://area/2 dino jungle/act 1/environment/06CavernEntrance.tscn" id="8_6iish"]
-[ext_resource type="PackedScene" uid="uid://bbqpbxdsvgh1r" path="res://area/2 dino jungle/act 1/environment/03CaveSky.tscn" id="8_17ely"]
+[ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/03CaveSky.tscn" id="8_17ely"]
 [ext_resource type="PackedScene" uid="uid://xtvjxondy70e" path="res://area/2 dino jungle/act 1/environment/04Spiral.tscn" id="8_y6qf8"]
 [ext_resource type="PackedScene" path="res://area/2 dino jungle/act 1/environment/03CaveReverse.tscn" id="9_4edov"]
 [ext_resource type="PackedScene" uid="uid://cgq7hgxh4d6eq" path="res://area/2 dino jungle/act 1/environment/05Crossing.tscn" id="9_66gld"]
@@ -94,11 +94,11 @@ size = Vector3(24.2676, 20, 2.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_x053g"]
 size = Vector3(218, 2, 244)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_iq0gp"]
-radius = 2.0
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_jw4vw"]
 size = Vector3(5, 20, 17)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_iq0gp"]
+radius = 2.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ey50s"]
 size = Vector3(4, 30, 30)
@@ -531,18 +531,6 @@ shape = SubResource("BoxShape3D_x053g")
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -516, 0, -128.403)
 shape = SubResource("BoxShape3D_x053g")
-
-[node name="SpiralAutomationTrigger" parent="Trigger/Object" instance=ExtResource("14_lokxv")]
-transform = Transform3D(-0.980615, 0, 0.195946, 0, 1, 0, -0.195946, 0, -0.980615, -439.622, -219.5, -845.88)
-endPoint = 365.0
-ignoreDirection = true
-
-[node name="Path" type="Node3D" parent="Trigger/Object/SpiralAutomationTrigger" node_paths=PackedStringArray("path")]
-script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/SpiralAutomationPath")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SpiralAutomationTrigger"]
-shape = SubResource("SphereShape3D_iq0gp")
 
 [node name="CaveLogLockoutTrigger1" parent="Trigger/Object" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.999457, 0, -0.0329635, 0, 1, 0, 0.0329635, 0, -0.999457, -368.511, -218.064, -666.653)
@@ -1374,9 +1362,6 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Visuals/CullingMap/09-L" to="Visuals/09End" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Deactivate"]
-[connection signal="Activated" from="Trigger/Object/SpiralAutomationTrigger" to="Visuals/03Cave" method="Deactivate"]
-[connection signal="Activated" from="Trigger/Object/SpiralAutomationTrigger" to="Visuals/03CaveReverse" method="Activate"]
-[connection signal="Activated" from="Trigger/Object/SpiralAutomationTrigger" to="Trigger/Object/SpiralAutomationTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
