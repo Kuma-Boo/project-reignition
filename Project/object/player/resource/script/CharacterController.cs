@@ -1911,20 +1911,21 @@ namespace Project.Gameplay
 		{
 			if (Skills.IsSkillEnabled(SkillKey.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
 			{
+				Effect.StartWind();
 				MoveSpeed = Skills.countdownBoostSpeed;
 				AddLockoutData(new LockoutResource()
 				{
 					length = .5f,
 					overrideSpeed = true,
 					speedRatio = Skills.countdownBoostSpeed,
-					resetFlags = LockoutResource.ResetFlags.OnJump
+					resetFlags = LockoutResource.ResetFlags.OnJump,
 				});
-				GD.Print("Successful countdown boost");
 			}
 
 			Animator.CancelOneshot();
 
 			// Snap camera to gameplay
+			Camera.SnapXform();
 			Camera.SnapFlag = true;
 			actionBufferTimer = 0; // Reset action buffer from starting boost
 		}
