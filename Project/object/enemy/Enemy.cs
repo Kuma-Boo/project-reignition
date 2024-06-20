@@ -166,6 +166,11 @@ public partial class Enemy : Node3D
 		SetHitboxStatus(false);
 		Character.Camera.LockonTarget = null;
 		BonusManager.instance.AddEnemyChain();
+
+		// Automatically increment objective count
+		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+			StageSettings.instance.IncrementObjective();
+
 		EmitSignal(SignalName.Defeated);
 	}
 

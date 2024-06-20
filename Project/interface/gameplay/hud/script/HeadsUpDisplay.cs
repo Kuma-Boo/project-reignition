@@ -186,9 +186,10 @@ namespace Project.Gameplay
 		private Label objectiveMaxValue;
 		private void InitializeObjectives()
 		{
-			objectiveRoot.Visible = Stage != null && Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective;
-			if (!objectiveRoot.Visible) return; //Don't do anything when objective counter isn't visible
-
+			objectiveRoot.Visible = Stage != null &&
+				(Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy);
+			if (!objectiveRoot.Visible) return; // Don't do anything when objective counter isn't visible
 
 			// TODO Implement proper objective sprites
 			objectiveSprite.Visible = false;
