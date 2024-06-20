@@ -203,7 +203,6 @@ public partial class CharacterLockon : Node3D
 		Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
 	}
 
-
 	public void StartBounce(bool bounceUpward = true) // Bounce the player
 	{
 		IsHomingAttacking = false;
