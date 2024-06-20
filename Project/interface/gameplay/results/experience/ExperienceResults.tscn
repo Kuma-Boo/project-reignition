@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbt02mctaofmt"]
+[gd_scene load_steps=6 format=3 uid="uid://cbt02mctaofmt"]
 
 [ext_resource type="Texture2D" uid="uid://bmwc4e25fnuqd" path="res://interface/gameplay/results/result atlas.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://bf56rdojlu8ef" path="res://interface/gameplay/results/experience/ref.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://covowu2nyy2gi" path="res://interface/gameplay/results/text/results en.png" id="4"]
+[ext_resource type="LabelSettings" uid="uid://bd74c653xatd0" path="res://interface/font/ExperienceLabelSettings.tres" id="5_4kecg"]
 
 [node name="ExperienceResults" type="Control"]
 layout_mode = 3
@@ -14,12 +15,15 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="TextureRect" parent="."]
+self_modulate = Color(0.783523, 0.783523, 0.783523, 1)
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("3")
 
 [node name="Ref" type="TextureRect" parent="."]
 visible = false
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("2")
@@ -75,9 +79,9 @@ region_rect = Rect2(24, 496, 168, 168)
 [node name="Stats" type="Node2D" parent="."]
 
 [node name="ExperienceBar" type="Sprite2D" parent="Stats"]
+z_index = 5
 position = Vector2(600, 296)
 scale = Vector2(1.14, 1.07)
-z_index = 5
 texture = ExtResource("1")
 region_enabled = true
 region_rect = Rect2(384, 512, 400, 48)
@@ -89,51 +93,66 @@ region_enabled = true
 region_rect = Rect2(384, 560, 400, 56)
 
 [node name="EdgeLeft" type="Sprite2D" parent="Stats/ExperienceBar"]
-position = Vector2(-176, 0)
 z_index = -1
+position = Vector2(-176, 0)
 texture = ExtResource("1")
 region_enabled = true
 region_rect = Rect2(816, 560, 48, 56)
 
 [node name="EdgeRight" type="Sprite2D" parent="Stats/ExperienceBar"]
-position = Vector2(176, 0)
 z_index = -1
+position = Vector2(176, 0)
 texture = ExtResource("1")
 flip_h = true
 region_enabled = true
 region_rect = Rect2(816, 560, 48, 56)
 
 [node name="Fill" type="Sprite2D" parent="Stats/ExperienceBar"]
+z_index = -2
 position = Vector2(-176, -16)
 scale = Vector2(2.875, 1)
-z_index = -2
 texture = ExtResource("1")
 centered = false
 region_enabled = true
 region_rect = Rect2(832, 520, 32, 32)
 
-[node name="Exp" type="Node2D" parent="Stats"]
+[node name="EXP" type="Node2D" parent="Stats"]
 
-[node name="Label" type="Sprite2D" parent="Stats/Exp"]
-position = Vector2(824, 272)
+[node name="Sprite" type="Sprite2D" parent="Stats/EXP"]
+visible = false
+position = Vector2(824, 312)
 scale = Vector2(1.15, 1.15)
 texture = ExtResource("4")
 centered = false
 region_enabled = true
 region_rect = Rect2(528, 920, 152, 48)
 
-[node name="Value" type="Label" parent="Stats/Exp"]
+[node name="Label" type="Label" parent="Stats/EXP"]
+offset_left = 888.0
+offset_top = 272.0
+offset_right = 1032.0
+offset_bottom = 344.0
+scale = Vector2(0.72, 0.72)
+text = "exp_current"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Stats/EXP"]
 offset_left = 1000.0
-offset_top = 280.0
+offset_top = 272.0
 offset_right = 1660.0
 offset_bottom = 344.0
 scale = Vector2(0.72, 0.72)
 text = "0000000/0000000"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="Total" type="Node2D" parent="Stats"]
 
-[node name="Label" type="Sprite2D" parent="Stats/Total"]
+[node name="Sprite" type="Sprite2D" parent="Stats/Total"]
+visible = false
 position = Vector2(568, 352)
 scale = Vector2(1.1, 1.1)
 texture = ExtResource("4")
@@ -141,12 +160,23 @@ centered = false
 region_enabled = true
 region_rect = Rect2(112, 624, 272, 64)
 
+[node name="Label" type="Label" parent="Stats/Total"]
+offset_left = 427.0
+offset_top = 352.0
+offset_right = 784.0
+offset_bottom = 440.0
+text = "exp_total"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
 [node name="Colon" type="Label" parent="Stats/Total"]
 offset_left = 872.0
 offset_top = 352.0
 offset_right = 920.0
-offset_bottom = 416.0
+offset_bottom = 424.0
 text = ":"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="Value" type="Label" parent="Stats/Total"]
@@ -155,16 +185,29 @@ offset_top = 352.0
 offset_right = 1248.0
 offset_bottom = 416.0
 text = "0000000"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="Mission" type="Node2D" parent="Stats"]
 
-[node name="Label" type="Sprite2D" parent="Stats/Mission"]
+[node name="Sprite" type="Sprite2D" parent="Stats/Mission"]
+visible = false
 position = Vector2(592, 440)
 texture = ExtResource("4")
 centered = false
 region_enabled = true
 region_rect = Rect2(448, 624, 400, 56)
+
+[node name="Label" type="Label" parent="Stats/Mission"]
+offset_left = 427.0
+offset_top = 440.0
+offset_right = 845.0
+offset_bottom = 528.0
+scale = Vector2(0.9, 0.9)
+text = "exp_mission"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
 
 [node name="Colon" type="Label" parent="Stats/Mission"]
 offset_left = 1056.0
@@ -173,6 +216,7 @@ offset_right = 1104.0
 offset_bottom = 504.0
 scale = Vector2(0.9, 0.9)
 text = ":"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="Value" type="Label" parent="Stats/Mission"]
@@ -182,16 +226,29 @@ offset_right = 1416.0
 offset_bottom = 504.0
 scale = Vector2(0.9, 0.9)
 text = "0000000"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="Experience" type="Node2D" parent="Stats"]
 
-[node name="Label" type="Sprite2D" parent="Stats/Experience"]
+[node name="Sprite" type="Sprite2D" parent="Stats/Experience"]
+visible = false
 position = Vector2(592, 512)
 texture = ExtResource("4")
 centered = false
 region_enabled = true
 region_rect = Rect2(448, 688, 400, 48)
+
+[node name="Label" type="Label" parent="Stats/Experience"]
+offset_left = 427.0
+offset_top = 512.0
+offset_right = 795.0
+offset_bottom = 600.0
+scale = Vector2(0.9, 0.9)
+text = "exp_bonus"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
 
 [node name="Colon" type="Label" parent="Stats/Experience"]
 offset_left = 1056.0
@@ -200,6 +257,7 @@ offset_right = 1104.0
 offset_bottom = 576.0
 scale = Vector2(0.9, 0.9)
 text = ":"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="Value2" type="Label" parent="Stats/Experience"]
@@ -209,13 +267,15 @@ offset_right = 1371.0
 offset_bottom = 576.0
 scale = Vector2(0.9, 0.9)
 text = "000000"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="Lower" type="Node2D" parent="."]
 
 [node name="Level" type="Node2D" parent="Lower"]
 
-[node name="Label" type="Sprite2D" parent="Lower/Level"]
+[node name="Sprite" type="Sprite2D" parent="Lower/Level"]
+visible = false
 position = Vector2(528, 744)
 scale = Vector2(1.15, 1.15)
 texture = ExtResource("4")
@@ -223,17 +283,29 @@ centered = false
 region_enabled = true
 region_rect = Rect2(80, 792, 240, 56)
 
+[node name="Label" type="Label" parent="Lower/Level"]
+offset_left = 427.0
+offset_top = 720.0
+offset_right = 864.0
+offset_bottom = 808.0
+text = "exp_level"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 2
+uppercase = true
+
 [node name="Value" type="Label" parent="Lower/Level"]
 offset_left = 1056.0
 offset_top = 744.0
 offset_right = 1232.0
 offset_bottom = 808.0
 text = ":99"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
 
 [node name="SkillPoint" type="Node2D" parent="Lower"]
 
-[node name="Label" type="Sprite2D" parent="Lower/SkillPoint"]
+[node name="Sprite" type="Sprite2D" parent="Lower/SkillPoint"]
+visible = false
 position = Vector2(528, 824)
 scale = Vector2(1.15, 1.15)
 texture = ExtResource("4")
@@ -241,10 +313,21 @@ centered = false
 region_enabled = true
 region_rect = Rect2(568, 856, 400, 56)
 
+[node name="Label" type="Label" parent="Lower/SkillPoint"]
+offset_left = 427.0
+offset_top = 800.0
+offset_right = 864.0
+offset_bottom = 888.0
+text = "exp_skill"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 2
+uppercase = true
+
 [node name="Value" type="Label" parent="Lower/SkillPoint"]
 offset_left = 1056.0
 offset_top = 824.0
 offset_right = 1232.0
 offset_bottom = 888.0
 text = ":999"
+label_settings = ExtResource("5_4kecg")
 vertical_alignment = 1
