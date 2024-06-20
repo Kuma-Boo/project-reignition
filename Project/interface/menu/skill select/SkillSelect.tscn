@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=24 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
@@ -12,7 +12,110 @@
 [ext_resource type="AudioStream" uid="uid://fjiifn0tycil" path="res://sound/sfx/system/skill ring save.wav" id="7_n4imj"]
 [ext_resource type="AudioStream" uid="uid://dmf8plsfsakc6" path="res://sound/sfx/system/skill unequip.wav" id="8_rnu1p"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="9_1265f"]
-[ext_resource type="Texture2D" uid="uid://kjbyfqhar2s0" path="res://interface/menu/skill select/RSRE8P_2024-01-04_22-59-50.png" id="12_noaoy"]
+[ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="9_kp51v"]
+
+[sub_resource type="Animation" id="Animation_fxopk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_u2gll"]
+resource_name = "hide"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 2), Vector2(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0576b"]
+resource_name = "loop"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.3), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_52dtb"]
+resource_name = "select"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../../SFX/Select")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_g47ve"]
+resource_name = "show"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 0), Vector2(1, 2), Vector2(1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gc54t"]
+_data = {
+"RESET": SubResource("Animation_fxopk"),
+"hide": SubResource("Animation_u2gll"),
+"loop": SubResource("Animation_0576b"),
+"select": SubResource("Animation_52dtb"),
+"show": SubResource("Animation_g47ve")
+}
 
 [sub_resource type="Animation" id="Animation_qo4fo"]
 resource_name = "equip"
@@ -75,7 +178,7 @@ _data = {
 "unequip": SubResource("Animation_tf8ok")
 }
 
-[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "skillPointLabel", "animator")]
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "scrollbar", "skillPointFill", "skillPointLabel", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,12 +187,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_v1nov")
 skillOption = ExtResource("4_sgi6g")
-optionContainer = NodePath("Clip/Options")
-cursor = NodePath("CursorOrigin/Cursor")
-description = NodePath("Description")
-scrollbar = NodePath("ScrollBar/ScrollPosition")
-skillPointFill = NodePath("SkillPointBar/Fill")
-skillPointLabel = NodePath("SkillPointBar/SPLabel")
+optionContainer = NodePath("Content/Clip/Options")
+cursor = NodePath("Content/CursorOrigin/Cursor")
+scrollbar = NodePath("Content/ScrollBar/ScrollPosition")
+skillPointFill = NodePath("Content/SkillPointBar/Fill")
+skillPointLabel = NodePath("Content/Header/SPLabel")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
 metadata/_edit_lock_ = true
@@ -104,29 +206,40 @@ grow_vertical = 2
 texture = ExtResource("2_ww16u")
 metadata/_edit_lock_ = true
 
-[node name="Window" type="Sprite2D" parent="."]
-position = Vector2(960, 480)
+[node name="Content" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 320.0
+offset_right = -320.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Window" type="Node2D" parent="Content"]
+position = Vector2(640, 480)
 scale = Vector2(2.4, 2.25)
 
-[node name="Header" type="Sprite2D" parent="Window"]
+[node name="Header" type="Sprite2D" parent="Content/Window"]
 position = Vector2(0, -135.111)
 texture = ExtResource("4_x4q03")
 region_enabled = true
 region_rect = Rect2(0, 232, 512, 40)
 
-[node name="Body" type="Sprite2D" parent="Window"]
+[node name="Body" type="Sprite2D" parent="Content/Window"]
 texture = ExtResource("4_x4q03")
 region_enabled = true
 region_rect = Rect2(0, 280, 512, 232)
 
-[node name="CursorOrigin" type="Node2D" parent="."]
-position = Vector2(944, 232)
+[node name="CursorOrigin" type="Node2D" parent="Content"]
+position = Vector2(624, 232)
+scale = Vector2(2.25, 2.25)
 metadata/_edit_lock_ = true
 
-[node name="Cursor" type="Node2D" parent="CursorOrigin"]
-scale = Vector2(2.25, 2.25)
+[node name="Cursor" type="Node2D" parent="Content/CursorOrigin"]
+scale = Vector2(1, 1e-05)
 
-[node name="L" type="Sprite2D" parent="CursorOrigin/Cursor"]
+[node name="L" type="Sprite2D" parent="Content/CursorOrigin/Cursor"]
 position = Vector2(0, -24)
 scale = Vector2(-1, 1)
 texture = ExtResource("4_x4q03")
@@ -135,7 +248,7 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(264, 0, 248, 48)
 
-[node name="R" type="Sprite2D" parent="CursorOrigin/Cursor"]
+[node name="R" type="Sprite2D" parent="Content/CursorOrigin/Cursor"]
 position = Vector2(0, -24)
 texture = ExtResource("4_x4q03")
 centered = false
@@ -143,17 +256,76 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(264, 0, 248, 48)
 
-[node name="SkillPointBar" type="Node2D" parent="."]
-position = Vector2(1072, 96)
-scale = Vector2(2.5, 2.5)
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Content/CursorOrigin/Cursor"]
+libraries = {
+"": SubResource("AnimationLibrary_gc54t")
+}
+blend_times = [&"show", &"loop", 0.1]
 
-[node name="Background" type="Sprite2D" parent="SkillPointBar"]
-position = Vector2(0, 3.8147e-06)
+[node name="ScrollBar" type="Sprite2D" parent="Content"]
+position = Vector2(1192, 456)
+rotation = 1.57079
+scale = Vector2(2.25002, 2.25002)
+texture = ExtResource("5_q6eds")
+region_enabled = true
+region_rect = Rect2(32, 224, 224, 32)
+metadata/_edit_lock_ = true
+
+[node name="ScrollPosition" type="Sprite2D" parent="Content/ScrollBar"]
+position = Vector2(-80, 0)
+rotation = -1.5708
+texture = ExtResource("5_q6eds")
+region_enabled = true
+region_rect = Rect2(8, 224, 24, 24)
+
+[node name="Header" type="Control" parent="Content"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 64.0
+offset_bottom = 144.0
+grow_horizontal = 2
+
+[node name="LevelLabel" type="Label" parent="Content/Header"]
+layout_mode = 0
+offset_left = 256.0
+offset_right = 512.0
+offset_bottom = 64.0
+text = "level:99"
+label_settings = ExtResource("6_4a5gt")
+vertical_alignment = 1
+uppercase = true
+
+[node name="SPLabel" type="Label" parent="Content/Header"]
+layout_mode = 0
+offset_left = 576.0
+offset_right = 660.0
+offset_bottom = 64.0
+text = "sp"
+label_settings = ExtResource("6_4a5gt")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="SPValue" type="Label" parent="Content/Header"]
+layout_mode = 0
+offset_left = 928.0
+offset_right = 1216.0
+offset_bottom = 64.0
+text = "000/000"
+label_settings = ExtResource("6_4a5gt")
+vertical_alignment = 1
+
+[node name="SkillPointBar" type="Node2D" parent="Content"]
+position = Vector2(792, 104)
+scale = Vector2(2.3, 2.3)
+
+[node name="Background" type="Sprite2D" parent="Content/SkillPointBar"]
 texture = ExtResource("5_803ye")
 region_enabled = true
 region_rect = Rect2(0, 136, 112, 16)
 
-[node name="Fill" type="Sprite2D" parent="SkillPointBar"]
+[node name="Fill" type="Sprite2D" parent="Content/SkillPointBar"]
 position = Vector2(-44, -6)
 scale = Vector2(1, 0.7)
 texture = ExtResource("5_803ye")
@@ -161,7 +333,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2(120, 88, 88, 16)
 
-[node name="Border" type="Sprite2D" parent="SkillPointBar"]
+[node name="Border" type="Sprite2D" parent="Content/SkillPointBar"]
 position = Vector2(0, 3.8147e-06)
 rotation = 3.14159
 scale = Vector2(1, -1)
@@ -169,53 +341,58 @@ texture = ExtResource("5_803ye")
 region_enabled = true
 region_rect = Rect2(0, 111.5, 112, 16)
 
-[node name="SPLabel" type="Label" parent="SkillPointBar"]
-offset_left = 57.6
-offset_top = -16.0
-offset_right = 192.6
-offset_bottom = 16.0
-text = "000/000"
-label_settings = ExtResource("6_4a5gt")
-vertical_alignment = 1
-
-[node name="Clip" type="Control" parent="."]
+[node name="Clip" type="Control" parent="Content"]
 clip_contents = true
 custom_minimum_size = Vector2(1020, 472)
 layout_mode = 1
-anchor_left = 0.217
-anchor_top = 0.148
-anchor_right = 0.779
-anchor_bottom = 0.63
-offset_left = -48.64
-offset_top = 40.16
-offset_right = -23.6799
-offset_bottom = 15.6
+anchor_left = 0.102
+anchor_top = 0.178
+anchor_right = 0.894
+anchor_bottom = 0.652
+offset_left = -42.56
+offset_top = 7.75999
+offset_right = 7.67993
+offset_bottom = 7.83997
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 0
 
-[node name="Options" type="VBoxContainer" parent="Clip"]
+[node name="Options" type="VBoxContainer" parent="Content/Clip"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 631.0
+offset_bottom = 883.0
 grow_horizontal = 2
 theme_override_constants/separation = -1
 
-[node name="ScrollBar" type="Sprite2D" parent="."]
-position = Vector2(1512, 456)
-rotation = 1.57079
-scale = Vector2(2.25002, 2.25002)
-texture = ExtResource("5_q6eds")
-region_enabled = true
-region_rect = Rect2(32, 224, 224, 32)
+[node name="SkillOption" parent="Content/Clip/Options" instance=ExtResource("4_sgi6g")]
+layout_mode = 2
 
-[node name="ScrollPosition" type="Sprite2D" parent="ScrollBar"]
-position = Vector2(-80, 0)
-rotation = -1.5708
-texture = ExtResource("5_q6eds")
-region_enabled = true
-region_rect = Rect2(8, 224, 24, 24)
+[node name="NavigationButtons" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 448.0
+offset_top = 728.0
+offset_right = -446.0
+offset_bottom = -288.0
+theme_override_constants/separation = 64
+alignment = 2
+
+[node name="Select" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
+layout_mode = 2
+actionKey = "sys_select"
+inputKey = "button_jump"
+
+[node name="Cancel" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
+layout_mode = 2
+actionKey = "sys_cancel"
+inputKey = "button_action"
 
 [node name="Description" parent="." instance=ExtResource("3_ud304")]
+z_index = 100
+z_as_relative = false
 layout_mode = 1
 
 [node name="SFX" type="Node" parent="."]
@@ -240,14 +417,3 @@ bus = &"SFX"
 libraries = {
 "": SubResource("AnimationLibrary_wky6r")
 }
-
-[node name="REF" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -741.0
-offset_right = -741.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("12_noaoy")

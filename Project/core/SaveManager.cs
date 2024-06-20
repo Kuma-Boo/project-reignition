@@ -604,10 +604,13 @@ public partial class SaveManager : Node
 		public int GetRank(StringName levelID)
 		{
 			if (GetLevelData(levelID).TryGetValue(RANK_KEY, out Variant rank))
-				return Mathf.Clamp((int)rank, 0, 3);
+				return (int)rank;
 
 			return -1; // No recorded rank; Return -1 to avoid getting confused with "no medal"
 		}
+
+		/// <summary> Gets the save value for the player's best rank, clamped so unplayed stages count as 0. </summary>
+		public int GetRankClamped(StringName levelID) => Mathf.Clamp(GetRank(levelID), 0, 3);
 
 		/// <summary> Sets the save value for the player's best rank. Ignores lower ranks. </summary>
 		public void SetRank(StringName levelID, int rank)

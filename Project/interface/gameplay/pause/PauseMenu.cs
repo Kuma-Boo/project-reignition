@@ -221,8 +221,8 @@ namespace Project.Interface
 				}
 			}
 
-			int rank = SaveManager.ActiveGameData.GetRank(Stage.Data.LevelID);
-			rankSprite.RegionRect = new(new(rankSprite.RegionRect.Position.X, 110 + 60 * rank), rankSprite.RegionRect.Size);
+			int rank = SaveManager.ActiveGameData.GetRankClamped(Stage.Data.LevelID);
+			rankSprite.RegionRect = new(new(rankSprite.RegionRect.Position.X, 110 + (60 * rank)), rankSprite.RegionRect.Size);
 		}
 
 

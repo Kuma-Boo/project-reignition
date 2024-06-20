@@ -30,11 +30,11 @@ public partial class SkillSelect : Menu
 	private int scrollAmount;
 	private float scrollRatio;
 	private Vector2 scrollVelocity;
-	private const float SCROLL_SMOOTHING = .05f;
+	private const float ScrollSmoothing = .05f;
 	/// <summary> How much to scroll per skill. </summary>
-	private readonly int SCROLL_INTERVAL = 63;
+	private readonly int ScrollInterval = 63;
 	/// <summary> Number of skills on a single page. </summary>
-	private readonly int PAGE_SIZE = 8;
+	private readonly int PageSize = 8;
 
 	private Array<SkillOption> skillOptionList = [];
 
@@ -60,9 +60,11 @@ public partial class SkillSelect : Menu
 		base.SetUp();
 	}
 
+
 	public override void _Process(double _)
 	{
-		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * (160 * scrollRatio - 80), ref scrollVelocity, SCROLL_SMOOTHING);
+		float targetScrollPosition = (160 * scrollRatio) - 80;
+		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
 	}
 
 	protected override void UpdateSelection()
@@ -79,11 +81,11 @@ public partial class SkillSelect : Menu
 			else
 				cursorPosition += inputSign;
 
-			scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKey.Max - PAGE_SIZE);
-			scrollRatio = (float)scrollAmount / ((int)SkillKey.Max - PAGE_SIZE);
-			cursorPosition = Mathf.Clamp(cursorPosition, 0, PAGE_SIZE - 1);
-			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * SCROLL_INTERVAL);
-			cursor.Position = Vector2.Up * -cursorPosition * SCROLL_INTERVAL;
+			scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKey.Max - PageSize);
+			scrollRatio = (float)scrollAmount / ((int)SkillKey.Max - PageSize);
+			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
+			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
+			cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
 			description.SetText(skillOptionList[VerticalSelection].DescriptionKey);
 
 			animator.Play("select");

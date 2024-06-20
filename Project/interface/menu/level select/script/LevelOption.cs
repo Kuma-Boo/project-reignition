@@ -78,8 +78,8 @@ namespace Project.Interface.Menus
 				}
 			}
 
-			int rank = SaveManager.ActiveGameData.GetRank(data.LevelID);
-			rankSprite.RegionRect = new(new(96 + 40 * rank, rankSprite.RegionRect.Position.Y), rankSprite.RegionRect.Size);
+			int rank = SaveManager.ActiveGameData.GetRankClamped(data.LevelID);
+			rankSprite.RegionRect = new(new(96 + (40 * rank), rankSprite.RegionRect.Position.Y), rankSprite.RegionRect.Size);
 		}
 	}
 }
