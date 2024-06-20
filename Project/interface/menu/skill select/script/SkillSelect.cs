@@ -40,9 +40,9 @@ public partial class SkillSelect : Menu
 
 	protected override void SetUp()
 	{
-		for (int i = 0; i < (int)SkillKeys.Max; i++)
+		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
-			SkillKeys key = (SkillKeys)i;
+			SkillKey key = (SkillKey)i;
 			SkillOption newSkill = skillOption.Instantiate<SkillOption>();
 			newSkill.Key = key;
 			newSkill.Number = i + 1;
@@ -70,17 +70,17 @@ public partial class SkillSelect : Menu
 		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
 		if (inputSign != 0)
 		{
-			VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SkillKeys.Max);
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SkillKey.Max);
 
-			if (VerticalSelection == 0 || VerticalSelection == (int)SkillKeys.Max - 1)
+			if (VerticalSelection == 0 || VerticalSelection == (int)SkillKey.Max - 1)
 				cursorPosition = scrollAmount = VerticalSelection;
 			else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
 				scrollAmount += inputSign;
 			else
 				cursorPosition += inputSign;
 
-			scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKeys.Max - PAGE_SIZE);
-			scrollRatio = (float)scrollAmount / ((int)SkillKeys.Max - PAGE_SIZE);
+			scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKey.Max - PAGE_SIZE);
+			scrollRatio = (float)scrollAmount / ((int)SkillKey.Max - PAGE_SIZE);
 			cursorPosition = Mathf.Clamp(cursorPosition, 0, PAGE_SIZE - 1);
 			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * SCROLL_INTERVAL);
 			cursor.Position = Vector2.Up * -cursorPosition * SCROLL_INTERVAL;
@@ -109,7 +109,7 @@ public partial class SkillSelect : Menu
 		skillOptionList[VerticalSelection].IsSkillActive = ActiveSkillRing.equippedSkills.Contains(skillOptionList[VerticalSelection].Key);
 	}
 
-	private bool ToggleSkill(SkillKeys key)
+	private bool ToggleSkill(SkillKey key)
 	{
 		if (ActiveSkillRing.equippedSkills.Remove(key))
 		{

@@ -11,7 +11,7 @@ public partial class SkillResource : Resource
 	[ExportCategory("General Settings")]
 	[Export]
 	/// <summary> Which skill does this resource represent? </summary>
-	public SkillKeys Key { get; set; }
+	public SkillKey Key { get; set; }
 	/// <summary> The skill's elemental type. </summary>
 	[Export]
 	public SkillElement Element { get; private set; }

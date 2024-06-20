@@ -54,7 +54,7 @@ public partial class CharacterLockon : Node3D
 	public void StartHomingAttack()
 	{
 		IsHomingAttacking = true;
-		IsPerfectHomingAttack = Character.Skills.IsSkillEnabled(SkillKeys.PerfectHomingAttack) && monitoringPerfectHomingAttack;
+		IsPerfectHomingAttack = Character.Skills.IsSkillEnabled(SkillKey.PerfectHomingAttack) && monitoringPerfectHomingAttack;
 	}
 
 
@@ -241,7 +241,7 @@ public partial class CharacterLockon : Node3D
 
 		Character.Animator.ResetState(0.1f);
 		Character.Animator.BounceTrick();
-		Character.Effect.PlayActionSFX(Character.Effect.JUMP_SFX);
+		Character.Effect.PlayActionSFX(Character.Effect.JumpSfx);
 	}
 	#endregion
 

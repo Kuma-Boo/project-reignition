@@ -5,7 +5,7 @@ using Project.Core;
 namespace Project.Gameplay;
 
 /// <summary> Dev keys for all possible skills in the game, in numerical order. </summary>
-public enum SkillKeys
+public enum SkillKey
 {
 	// Passive skills
 	AllRounder, // Reduces acceleration loss caused by steep terrain
@@ -58,8 +58,8 @@ public partial class SkillListResource : Resource
 	[Export]
 	private Array<SkillResource> skillList = [];
 
-	/// <summary> Creates a skill. </summary>
-	public SkillResource GetSkill(SkillKeys key)
+	/// <summary> Gets the matching skill based on a SkillKey. </summary>
+	public SkillResource GetSkill(SkillKey key)
 	{
 		foreach (var skill in skillList)
 		{
@@ -74,12 +74,15 @@ public partial class SkillListResource : Resource
 	// Rebuilds the skill list
 	private void RebuildSkillList()
 	{
+		if (!Engine.IsEditorHint())
+			return;
+
 		skillList.Clear();
 
 		// Create missing skills
-		for (int i = 0; i < (int)SkillKeys.Max; i++)
+		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
-			SkillKeys key = (SkillKeys)i;
+			SkillKey key = (SkillKey)i;
 			string targetFile = skillResourcePath + key.ToString() + ".tres";
 			if (!ResourceLoader.Exists(targetFile))
 			{
@@ -91,6 +94,7 @@ public partial class SkillListResource : Resource
 			GD.PrintT(targetFile, resource, resource is SkillResource);
 			SkillResource skill = (SkillResource)resource;
 			skillList.Add(skill);
+			ResourceSaver.Singleton.Save(skill, targetFile, ResourceSaver.SaverFlags.None);
 
 			if (skill.Key != key)
 				skill.Key = key;
@@ -103,7 +107,7 @@ public partial class SkillListResource : Resource
 public class SkillRing
 {
 	/// <summary> List of equipped skills. </summary>
-	public Array<SkillKeys> equippedSkills = [];
+	public Array<SkillKey> equippedSkills = [];
 	/// <summary> Cost of all equipped skills. </summary>
 	public int TotalCost { get; set; }
 	/// <summary> Amount of available skill points. </summary>
@@ -122,7 +126,7 @@ public class SkillRing
 	}
 
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
-	public static bool IsSkillUnlocked(SkillKeys key)
+	public static bool IsSkillUnlocked(SkillKey key)
 	{
 		SkillResource skill = Runtime.Instance.completeSkillList.GetSkill(key);
 

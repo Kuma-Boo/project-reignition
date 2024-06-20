@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=64 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -122,6 +122,33 @@ particles_anim_loop = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_y03cx"]
 material = SubResource("StandardMaterial3D_ixb4p")
+
+[sub_resource type="Curve" id="Curve_vncbq"]
+_data = [Vector2(0, 0), 0.0, 3.17666, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jv5es"]
+width = 64
+curve = SubResource("Curve_vncbq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c4e0w"]
+emission_shape_offset = Vector3(0, 0, 2)
+direction = Vector3(0, 0, -1)
+spread = 80.0
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -40.0
+radial_accel_max = -40.0
+radial_accel_curve = SubResource("CurveTexture_mak0a")
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_jv5es")
+alpha_curve = SubResource("CurveTexture_5h5ag")
+
+[sub_resource type="QuadMesh" id="QuadMesh_6vbwi"]
+material = ExtResource("20_rtch5")
+size = Vector2(0.5, 5)
+center_offset = Vector3(0, 3, 0)
 
 [sub_resource type="Curve" id="Curve_fi1cr"]
 _data = [Vector2(0.1, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 0), -7.04173, 0.0, 0, 0]
@@ -527,7 +554,7 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "stompFX", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "windParticle", "stompFX", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -536,6 +563,7 @@ spinFX = NodePath("VFX/ActionFX/SpinMesh")
 timeBreakAnimator = NodePath("VFX/TimeBreak/AnimationPlayer")
 speedBreakAnimator = NodePath("VFX/SpeedBreak/AnimationPlayer")
 dustParticle = NodePath("VFX/ActionFX/DustParticle")
+windParticle = NodePath("VFX/ActionFX/Wind")
 stompFX = NodePath("VFX/ActionFX/Stomp")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
@@ -618,6 +646,23 @@ interpolate = false
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_qktwv")
 draw_pass_1 = SubResource("QuadMesh_y03cx")
+
+[node name="Wind" type="GPUParticles3D" parent="VFX/ActionFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.450349, 0.5)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.8
+randomness = 0.5
+fixed_fps = 60
+interpolate = false
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_c4e0w")
+draw_pass_1 = SubResource("QuadMesh_6vbwi")
 
 [node name="LandingFX" type="Node3D" parent="VFX"]
 

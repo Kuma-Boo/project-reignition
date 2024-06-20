@@ -787,10 +787,11 @@ namespace Project.Gameplay
 			if (MovementState != MovementStates.Normal) return;
 
 			// Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
-			if (IsHoldingDirection(PathFollower.ForwardAngle) && MoveSpeed < Skills.landingDashSpeed)
+			if (IsHoldingDirection(PathFollower.ForwardAngle))
 			{
+				Effect.StartWind();
 				MovementAngle = PathFollower.ForwardAngle;
-				MoveSpeed = Skills.landingDashSpeed;
+				MoveSpeed = Mathf.Max(MoveSpeed, Skills.landingDashSpeed);
 			}
 		}
 
@@ -809,14 +810,14 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			canLandingBoost = Skills.IsSkillEnabled(SkillKeys.LandDash);
+			canLandingBoost = Skills.IsSkillEnabled(SkillKey.LandDash);
 			SetActionState(ActionStates.Jumping);
 			VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 
 			if (IsMovingBackward || MoveSpeed < 0) // Kill speed when jumping backwards
 				MoveSpeed = 0;
 
-			Effect.PlayActionSFX(Effect.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JumpSfx);
 			Animator.JumpAnimation();
 		}
 
@@ -891,7 +892,7 @@ namespace Project.Gameplay
 			else // Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
-			Effect.PlayActionSFX(Effect.JUMP_DASH_SFX);
+			Effect.PlayActionSFX(Effect.JumpDashSfx);
 			Effect.StartTrailFX();
 
 			CanJumpDash = false;
@@ -954,7 +955,7 @@ namespace Project.Gameplay
 				if (MoveSpeed <= Skills.SlideSettings.speed)
 					MoveSpeed = Skills.SlideSettings.speed;
 
-				Effect.PlayActionSFX(Effect.SLIDE_SFX);
+				Effect.PlayActionSFX(Effect.SlideSfx);
 				SetActionState(ActionStates.Sliding);
 			}
 			else
@@ -1011,7 +1012,7 @@ namespace Project.Gameplay
 		{
 			MoveSpeed = 0; // Go STRAIGHT down
 
-			if (SkillRing.IsSkillUnlocked(SkillKeys.StompAttack))
+			if (SkillRing.IsSkillUnlocked(SkillKey.StompAttack))
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
 			else
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, JUMP_CANCEL_GRAVITY * PhysicsManager.physicsDelta);
@@ -1033,15 +1034,15 @@ namespace Project.Gameplay
 			actionBufferTimer = 0;
 			MoveSpeed = 0; // Kill horizontal speed
 
-			canLandingBoost = Skills.IsSkillEnabled(SkillKeys.StompDash);
+			canLandingBoost = Skills.IsSkillEnabled(SkillKey.StompDash);
 
 			Lockon.IsMonitoring = false;
 			if (Lockon.IsHomingAttacking)
 				Lockon.StopHomingAttack();
 			SetActionState(ActionStates.Stomping);
 
-			Skills.IsAttacking = Skills.IsSkillEnabled(SkillKeys.StompAttack);
-			Animator.StompAnimation(Skills.IsSkillEnabled(SkillKeys.StompAttack));
+			Skills.IsAttacking = Skills.IsSkillEnabled(SkillKey.StompAttack);
+			Animator.StompAnimation(Skills.IsSkillEnabled(SkillKey.StompAttack));
 		}
 		#endregion
 
@@ -1065,7 +1066,7 @@ namespace Project.Gameplay
 			IsOnGround = false;
 			SetActionState(ActionStates.Backflip);
 
-			Effect.PlayActionSFX(Effect.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JumpSfx);
 			Animator.BackflipAnimation();
 		}
 
@@ -1115,7 +1116,7 @@ namespace Project.Gameplay
 
 			CanJumpDash = false; // Disable jumpdashing
 			SetActionState(ActionStates.Grindstep);
-			Effect.PlayActionSFX(Effect.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JumpSfx);
 			Animator.StartGrindStep();
 		}
 
@@ -1453,7 +1454,7 @@ namespace Project.Gameplay
 			{
 				Animator.JumpAnimation();
 				UpDirection = Vector3.Up;
-				Effect.PlayActionSFX(Effect.JUMP_SFX);
+				Effect.PlayActionSFX(Effect.JumpSfx);
 			}
 		}
 
@@ -1908,7 +1909,7 @@ namespace Project.Gameplay
 
 		public void OnCountdownFinished()
 		{
-			if (Skills.IsSkillEnabled(SkillKeys.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
+			if (Skills.IsSkillEnabled(SkillKey.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
 			{
 				MoveSpeed = Skills.countdownBoostSpeed;
 				AddLockoutData(new LockoutResource()
@@ -1961,7 +1962,7 @@ namespace Project.Gameplay
 
 			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))
 			{
-				if (Skills.IsSkillEnabled(SkillKeys.SplashJump)) // Perform a splash jump
+				if (Skills.IsSkillEnabled(SkillKey.SplashJump)) // Perform a splash jump
 					Skills.SplashJump();
 				else // Cancel HomingAttack
 					Lockon.StopHomingAttack();

@@ -83,9 +83,10 @@ public partial class CharacterSkillManager : Node
 
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveGameData.skillRing;
-	public bool IsSkillEnabled(SkillKeys key)
+	public bool IsSkillEnabled(SkillKey key)
 	{
-		if (key == SkillKeys.StompAttack) return true;
+		if (key == SkillKey.LandDash) return true;
+		if (key == SkillKey.StompAttack) return true;
 
 		return SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
 	}
@@ -96,9 +97,9 @@ public partial class CharacterSkillManager : Node
 	public float countdownBoostSpeed;
 
 	/// <summary> How many rings to start with when the level starts. </summary>
-	public int StartingRingCount => IsSkillEnabled(SkillKeys.RingSpawn) ? 5 : 0;
+	public int StartingRingCount => IsSkillEnabled(SkillKey.RingSpawn) ? 5 : 0;
 	/// <summary> How many rings to start with when respawning. </summary>
-	public int RespawnRingCount => IsSkillEnabled(SkillKeys.RingRespawn) ? 5 : 0;
+	public int RespawnRingCount => IsSkillEnabled(SkillKey.RingRespawn) ? 5 : 0;
 
 	public void SplashJump()
 	{
@@ -114,7 +115,7 @@ public partial class CharacterSkillManager : Node
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
-		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKeys.PearlRange) ? 5 : 1);
+		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKey.PearlRange) ? 5 : 1);
 	}
 	#endregion
 

@@ -291,7 +291,7 @@ namespace Project.Gameplay
 				return;
 
 			isFacingRight = isLeadingWithRightFoot;
-			Character.Effect.PlayActionSFX(Character.Effect.SLIDE_SFX);
+			Character.Effect.PlayActionSFX(Character.Effect.SlideSfx);
 			animationTree.Set(BRAKE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			BrakeState.Travel(isFacingRight ? "r" + BRAKE_START_STATE : "l" + BRAKE_START_STATE);
 			IsBrakeAnimationActive = true;

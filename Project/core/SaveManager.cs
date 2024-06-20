@@ -738,7 +738,7 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(skillRing), out var))
 			{
-				skillRing.equippedSkills = (Array<SkillKeys>)var;
+				skillRing.equippedSkills = (Array<SkillKey>)var;
 				skillRing.RefreshSkillRingData(level);
 			}
 		}
