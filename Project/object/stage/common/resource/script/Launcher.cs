@@ -8,7 +8,7 @@ namespace Project.Gameplay.Objects;
 /// Launches the player. Use <see cref="CreateLaunchSettings(Vector3, Vector3, float, bool)"/> to bypass needing a Launcher node.
 /// </summary>
 [Tool]
-public partial class Launcher : Area3D // Jumps between static points w/ custom sfx support
+public partial class Launcher : Node3D // Jumps between static points w/ custom sfx support
 {
 	#region Editor
 	private const string SecondarySettingsEnabled = "Secondary Settings/Enabled";
