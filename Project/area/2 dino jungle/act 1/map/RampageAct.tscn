@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://i8evercntdlb"]
+[gd_scene load_steps=55 format=3 uid="uid://4ku8otmttbdw"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_15mb8"]
 [ext_resource type="Resource" uid="uid://bfhobpge3ljn2" path="res://resource/level data/dinosaur jungle/Act2Rampage.tres" id="2_e23ug"]
@@ -9,11 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="12_mrc1a"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="13_ymm10"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="14_2lsue"]
-[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="15_21fnw"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="16_rxraj"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="17_khxoo"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="18_klrop"]
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="20_imscf"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="22_aligo"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="24_2wsqy"]
 [ext_resource type="PackedScene" uid="uid://ctt8k8ju64i3l" path="res://object/enemy/flower/FlowerMajin.tscn" id="26_6ufbs"]
 [ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="26_bgqbi"]
@@ -23,8 +23,13 @@
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="30_kbooq"]
 [ext_resource type="PackedScene" uid="uid://bjkwrplubhwil" path="res://area/2 dino jungle/object/platform/CactusPlatform.tscn" id="30_lpril"]
 [ext_resource type="PackedScene" uid="uid://2h6xrqn3jp6l" path="res://object/stage/destructable/Cage.tscn" id="33_3024m"]
+[ext_resource type="Resource" uid="uid://d3rdm2cjtdkxv" path="res://area/2 dino jungle/act 1/camera/CavernUpPathRightCam.tres" id="34_qslp2"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="34_qx5mi"]
+[ext_resource type="Resource" uid="uid://c0po4hbuglkj3" path="res://area/2 dino jungle/act 1/camera/CavernUpPathLeftCam.tres" id="35_5x61b"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="35_bnpic"]
+[ext_resource type="Resource" uid="uid://gp5oyx4iu6wq" path="res://area/2 dino jungle/act 1/camera/CavernUpPathRightENDCam.tres" id="35_elure"]
+[ext_resource type="Resource" uid="uid://ysgb4weske7h" path="res://area/2 dino jungle/act 1/camera/FeedingLotusArenaRampageCam.tres" id="37_1usas"]
+[ext_resource type="Script" path="res://object/trigger/modules/TeleportTrigger.cs" id="38_rrtn0"]
 [ext_resource type="PackedScene" uid="uid://b8s2qjmlhu5tc" path="res://object/stage/common/ThornSpring.tscn" id="38_vw8kh"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="40_kc0hy"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="47_sasol"]
@@ -33,8 +38,6 @@
 [ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="56_2sanu"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="57_p8d1j"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="59_4wx81"]
-[ext_resource type="PackedScene" uid="uid://bhiih5oodiq1w" path="res://area/2 dino jungle/object/dino/DinoRex.tscn" id="60_mln32"]
-[ext_resource type="PackedScene" uid="uid://cfnw72eh8em4c" path="res://area/2 dino jungle/object/rock/GrayRock.tscn" id="61_lk7n5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
@@ -70,53 +73,30 @@ point_count = 1
 _data = [Vector2(0, 0.4), 0.0, 0.0, 0, 0]
 point_count = 1
 
-[sub_resource type="Curve" id="Curve_rgxks"]
-min_value = -2.0
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, -17.3333, 0, 0, Vector2(0.25, -2), 0.0, 0.0, 0, 0, Vector2(0.75, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -17.3333, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="Curve" id="Curve_wxkyl"]
-min_value = -2.0
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, -13.0, 0, 0, Vector2(0.25, -1.2), 0.0, 0.0, 0, 0, Vector2(0.75, 1.4), 0.0, 0.0, 0, 0, Vector2(1, 0), -14.6667, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="Curve" id="Curve_mtxbu"]
-min_value = -4.0
-_data = [Vector2(0, 0), 0.0, -17.5, 0, 0, Vector2(0.5, -3), 0.0, 0.0, 0, 0, Vector2(1, 0), 15.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_hrcpv"]
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, 12.0, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -12.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_eoed6"]
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, 12.0, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -12.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_e7lop"]
-min_value = -2.0
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, -10.0, 0, 0, Vector2(0.5, -2), 0.0, 0.0, 0, 0, Vector2(1, 0), 12.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_ax43e"]
-min_value = -2.0
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, -10.0, 0, 0, Vector2(0.5, -2), 0.0, 0.0, 0, 0, Vector2(1, 0), 12.0, 0.0, 0, 0]
-point_count = 3
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_a46qn"]
 size = Vector3(31.375, 18.215, 2.485)
 
-[sub_resource type="Curve" id="Curve_aiw50"]
-min_value = -1.0
-max_value = 0.0
-_data = [Vector2(0, 0), 0.0, -1.47152, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
-point_count = 2
+[sub_resource type="BoxShape3D" id="BoxShape3D_3fhna"]
+size = Vector3(81.7991, 19.675, 22.8894)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8r160"]
+size = Vector3(46.0268, 21.2066, 23.9358)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dgf46"]
+size = Vector3(51.792, 12.563, 37.3386)
+
+[sub_resource type="Curve" id="Curve_hw12k"]
+_data = [Vector2(0, 0.00832176), 0.0, 2.61033, 0, 0, Vector2(0.501923, 0.508669), 0.0, 0.0, 0, 0, Vector2(0.998077, 0), -2.79473, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s1xlk"]
+size = Vector3(2.929, 19.0295, 13.489)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yv2yh"]
+size = Vector3(29.63, 32.535, 35.645)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_p8tb8"]
+radius = 4.5973
 
 [node name="Stage" type="Node"]
 
@@ -146,13 +126,19 @@ startEnabled = true
 [node name="08FeedingTunnel" parent="Static/Visuals" index="10"]
 startEnabled = true
 
+[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
+
 [node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 transform = Transform3D(-0.999423, 0, -0.033975, 0, 1, 0, 0.033975, 0, -0.999423, -362.037, -222.507, -620.102)
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("8_aa84t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.1375, 0.263214, 103.71)
+transform = Transform3D(-0.0564489, 0, 0.998406, 0, 1, 0, -0.998406, 0, -0.0564489, 105.697, -58.0484, 491.181)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -492,7 +478,7 @@ transform = Transform3D(0.486015, 0, -0.117427, 0, 1, 0, 0.117427, 0, 0.486015, 
 transform = Transform3D(0.777625, 0, -0.187883, 0, 1, 0, 0.187883, 0, 0.777625, -3.64749, -2.77341, -132.416)
 
 [node name="FlowerMajin2" parent="MainAct/Cave" instance=ExtResource("26_6ufbs")]
-transform = Transform3D(0.799202, 0, -0.601062, 0, 1, 0, 0.601062, 0, 0.799202, -3.69177, 10.4377, -132.313)
+transform = Transform3D(0.799202, 0, -0.601062, 0, 1, 0, 0.601062, 0, 0.799202, -3.69177, 10.8817, -132.313)
 
 [node name="Pearl" type="Node3D" parent="MainAct/Cave"]
 transform = Transform3D(0.928454, -0.0159562, -0.371106, 1.86265e-09, 0.999077, -0.0429568, 0.371449, 0.0398834, 0.927596, -21.8385, 1.66974, -112.949)
@@ -629,10 +615,12 @@ transform = Transform3D(0.228878, 0, 0.973455, 0, 1, 0, -0.973455, 0, 0.228878, 
 
 [node name="RedMajin" parent="MainAct/Cave" instance=ExtResource("56_2sanu")]
 transform = Transform3D(0.00930247, 0, 0.999956, 0, 1, 0, -0.999956, 0, 0.00930247, -22.6184, 5.9733, -174.782)
+"Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 0
 
 [node name="RedMajin2" parent="MainAct/Cave" instance=ExtResource("56_2sanu")]
 transform = Transform3D(0.407422, 0, 0.91324, 0, 1, 0, -0.91324, 0, 0.407422, -31.3275, 4.24059, -181.115)
+"Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 0
 
 [node name="Cage" parent="MainAct/Cave" instance=ExtResource("33_3024m")]
@@ -1281,7 +1269,7 @@ pieceRoot = NodePath("../WhiteRock/WhiteRockPieces")
 animator = NodePath("../WhiteRock/AnimationPlayer")
 
 [node name="WhiteRock6" parent="MainAct/Crossing" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("12_mrc1a")]
-transform = Transform3D(2.19147, -0.00030332, -0.193578, 0.000146998, 2, -0.00212779, 0.193578, 0.00191509, 2.19147, -26.8626, -12.0418, -213.127)
+transform = Transform3D(2.19147, -0.00030332, -0.193578, 0.000146998, 2, -0.00212779, 0.193578, 0.00191509, 2.19147, -26.8626, -11.7524, -213.127)
 root = NodePath("../WhiteRock/WhiteRock")
 pieceRoot = NodePath("../WhiteRock/WhiteRockPieces")
 animator = NodePath("../WhiteRock/AnimationPlayer")
@@ -1404,11 +1392,11 @@ transform = Transform3D(-0.607196, -0.00015166, 0.794552, 0.000668732, 0.999999,
 [node name="FlowerMajin" parent="MainAct/Crossing" instance=ExtResource("26_6ufbs")]
 transform = Transform3D(-0.0128976, 0, -0.999917, 0, 1, 0, 0.999917, 0, -0.0128976, 31.6438, 0.327972, -11.9946)
 
+[node name="FlowerMajin2" parent="MainAct/Crossing" instance=ExtResource("26_6ufbs")]
+transform = Transform3D(0.759419, 0, -0.650602, 0, 1, 0, 0.650602, 0, 0.759419, 138.151, 4.14911, -41.0321)
+
 [node name="CactusPlatform" parent="MainAct/Crossing" instance=ExtResource("30_lpril")]
 transform = Transform3D(0.704374, 0, 0.709829, 0, 1, 0, -0.709829, 0, 0.704374, 138.151, 4.14911, -41.0321)
-
-[node name="FlowerMajin" parent="MainAct/Crossing/CactusPlatform" instance=ExtResource("26_6ufbs")]
-transform = Transform3D(0.0730989, 0, -0.997325, 0, 1, 0, 0.997325, 0, 0.0730989, 0, 0, 0)
 
 [node name="GrassPillar" parent="MainAct/Crossing" instance=ExtResource("29_pv0x1")]
 transform = Transform3D(0.905939, 0, -0.398004, 0, 0.81, 0, 0.423409, 0, 0.851582, 115.75, -12.3609, -181.108)
@@ -1420,7 +1408,7 @@ transform = Transform3D(0.236059, 0, -0.146201, 0, 0.77, 0, 0.141071, 0, 0.24464
 transform = Transform3D(2.06015, 0, -1.17987, 0, 1, 0, 1.23117, 0, 1.97431, -50.4002, -28.9489, -184.92)
 
 [node name="LotusPlatform5" parent="MainAct/Crossing" instance=ExtResource("20_imscf")]
-transform = Transform3D(1.11592, 0, -0.666883, 0, 1, 0, 0.666883, 0, 1.11592, -67.1716, -28.7199, -187.665)
+transform = Transform3D(1.11592, 0, -0.666883, 0, 1, 0, 0.666883, 0, 1.11592, -67.1716, -28.1089, -187.665)
 
 [node name="LotusPlatform2" parent="MainAct/Crossing" instance=ExtResource("20_imscf")]
 transform = Transform3D(0.236059, 0, -0.146201, 0, 0.77, 0, 0.141071, 0, 0.244643, 122.002, -17.9851, -179.072)
@@ -1456,503 +1444,6 @@ script = ExtResource("10_tx4o8")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
-[node name="SpikeBall1" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.3167, -5.5, -10.1681)
-
-[node name="SpikeBall2" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.3167, -5.5, -7.96814)
-
-[node name="SpikeBall3" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(-0.0871558, 0, 0.996195, 0, 1, 0, -0.996195, 0, -0.0871558, -43.9681, -5.5, -6.4834)
-"Movement/Cycle Length" = 6.0
-Movement/Distance = 7.0
-Movement/Angle = -90.0
-
-[node name="PearlsM1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -22.471, -4.8, -6.61206)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("16_rxraj")
-Amount = 20
-Shape = 0
-Orientation = 0
-Spacing = 1.0
-"Horizontal Offset" = SubResource("Curve_rgxks")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-
-[node name="Child02" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.797201, 0, -1)
-
-[node name="Child03" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.37668, 0, -2)
-
-[node name="Child04" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75711, 0, -3)
-
-[node name="Child05" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95714, 0, -4)
-
-[node name="Child06" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99184, 0, -5)
-
-[node name="Child07" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.81047, 0, -6)
-
-[node name="Child08" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43315, 0, -7)
-
-[node name="Child09" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.915877, 0, -8)
-
-[node name="Child10" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.314623, 0, -9)
-
-[node name="Child11" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.314623, 0, -10)
-
-[node name="Child12" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.915877, 0, -11)
-
-[node name="Child13" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.43315, 0, -12)
-
-[node name="Child14" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.81047, 0, -13)
-
-[node name="Child15" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99184, 0, -14)
-
-[node name="Child16" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95714, 0, -15)
-
-[node name="Child17" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75711, 0, -16)
-
-[node name="Child18" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.37668, 0, -17)
-
-[node name="Child19" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.797201, 0, -18)
-
-[node name="Child20" parent="MainAct/Cavern/PearlsM1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
-
-[node name="PearlsM2" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, -0.642788, -47.7812, -4.8, -10.6445)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("16_rxraj")
-Amount = 20
-Shape = 0
-Orientation = 0
-Spacing = 1.0
-"Horizontal Offset" = SubResource("Curve_wxkyl")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-
-[node name="Child02" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56361, 0, -1)
-
-[node name="Child03" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.917743, 0, -2)
-
-[node name="Child04" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.10999, 0, -3)
-
-[node name="Child05" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.18793, 0, -4)
-
-[node name="Child06" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19469, 0, -5)
-
-[node name="Child07" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0768, 0, -6)
-
-[node name="Child08" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.83155, 0, -7)
-
-[node name="Child09" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.49532, 0, -8)
-
-[node name="Child10" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.104505, 0, -9)
-
-[node name="Child11" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.304505, 0, -10)
-
-[node name="Child12" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.69532, 0, -11)
-
-[node name="Child13" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03155, 0, -12)
-
-[node name="Child14" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2768, 0, -13)
-
-[node name="Child15" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.39469, 0, -14)
-
-[node name="Child16" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38329, 0, -15)
-
-[node name="Child17" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.28427, 0, -16)
-
-[node name="Child18" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05306, 0, -17)
-
-[node name="Child19" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.641143, 0, -18)
-
-[node name="Child20" parent="MainAct/Cavern/PearlsM2" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
-
-[node name="SpikeBall4" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(-0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, -0.906308, -68.9669, -5.5, 10.4598)
-"Movement/Cycle Length" = 6.0
-Movement/Distance = 5.0
-Movement/Angle = -90.0
-
-[node name="RingsM1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.799181, 0, 0.60109, 0, 1, 0, -0.60109, 0, -0.799181, -59.6644, -4.8, 7.07397)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 10
-Shape = 0
-Orientation = 0
-Spacing = 1.8
-"Horizontal Offset" = SubResource("Curve_mtxbu")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55487, 0, -1.8)
-
-[node name="Child03" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4513, 0, -3.6)
-
-[node name="Child04" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.87037, 0, -5.4)
-
-[node name="Child05" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.99314, 0, -7.2)
-
-[node name="Child06" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.97942, 0, -9)
-
-[node name="Child07" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.77778, 0, -10.8)
-
-[node name="Child08" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.27984, 0, -12.6)
-
-[node name="Child09" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38683, 0, -14.4)
-
-[node name="Child10" parent="MainAct/Cavern/RingsM1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
-
-[node name="RingsL1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.140072, 0, 0.990141, 0, 1, 0, -0.990141, 0, -0.140072, -83.6968, -4.79999, 25.5663)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.6
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/RingsL1" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/Cavern/RingsL1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
-
-[node name="Child03" parent="MainAct/Cavern/RingsL1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
-
-[node name="Child04" parent="MainAct/Cavern/RingsL1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
-
-[node name="Child05" parent="MainAct/Cavern/RingsL1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
-
-[node name="RingsR1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.140072, 0, 0.990141, 0, 1, 0, -0.990141, 0, -0.140072, -83.8649, -4.79999, 24.3782)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.6
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/RingsR1" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/Cavern/RingsR1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
-
-[node name="Child03" parent="MainAct/Cavern/RingsR1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
-
-[node name="Child04" parent="MainAct/Cavern/RingsR1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
-
-[node name="Child05" parent="MainAct/Cavern/RingsR1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
-
-[node name="SpikeBall5" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(-0.0969923, 0, 0.995285, 0, 1, 0, -0.995285, 0, -0.0969923, -91.2596, -5.5, 29.9072)
-"Movement/Cycle Length" = 6.0
-Movement/Distance = 8.0
-Movement/Angle = -90.0
-
-[node name="RingsL2" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.140072, 0, 0.990141, 0, 1, 0, -0.990141, 0, -0.140072, -93.1031, -4.79999, 26.8971)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.6
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/RingsL2" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/Cavern/RingsL2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
-
-[node name="Child03" parent="MainAct/Cavern/RingsL2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
-
-[node name="Child04" parent="MainAct/Cavern/RingsL2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
-
-[node name="Child05" parent="MainAct/Cavern/RingsL2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
-
-[node name="RingsR2" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.140072, 0, 0.990141, 0, 1, 0, -0.990141, 0, -0.140072, -93.2712, -4.79999, 25.709)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.6
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/RingsR2" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/Cavern/RingsR2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
-
-[node name="Child03" parent="MainAct/Cavern/RingsR2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
-
-[node name="Child04" parent="MainAct/Cavern/RingsR2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
-
-[node name="Child05" parent="MainAct/Cavern/RingsR2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
-
-[node name="SpikeBall6" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(-0.0969923, 0, 0.995285, 0, 1, 0, -0.995285, 0, -0.0969923, -100.814, -5.5, 30.8615)
-"Movement/Cycle Length" = 4.0
-Movement/Distance = 8.0
-Movement/Angle = -90.0
-
-[node name="SpikeBall7" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(-0.243615, 0, 0.969872, 0, 1, 0, -0.969872, 0, -0.243615, -110.685, -5.5, 38.6373)
-"Movement/Cycle Length" = 5.5
-Movement/Distance = 9.0
-Movement/Angle = -80.0
-
-[node name="SpikeBall8" parent="MainAct/Cavern" instance=ExtResource("53_ai6is")]
-transform = Transform3D(-0.243615, 0, 0.969872, 0, 1, 0, -0.969872, 0, -0.243615, -118.491, -5.51495, 19.9705)
-"Movement/Cycle Length" = 5.5
-Movement/Distance = 9.0
-Movement/Angle = 100.0
-
-[node name="RingsL3" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.391567, 0, 0.92015, 0, 1, 0, -0.92015, 0, -0.391567, -116.652, -4.79999, 24.0551)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 10
-Shape = 0
-Orientation = 0
-Spacing = 1.2
-"Horizontal Offset" = SubResource("Curve_hrcpv")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05898, 0, -1.2)
-
-[node name="Child03" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65706, 0, -2.4)
-
-[node name="Child04" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92593, 0, -3.6)
-
-[node name="Child05" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99726, 0, -4.8)
-
-[node name="Child06" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99726, 0, -6)
-
-[node name="Child07" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92593, 0, -7.2)
-
-[node name="Child08" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65706, 0, -8.4)
-
-[node name="Child09" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05898, 0, -9.6)
-
-[node name="Child10" parent="MainAct/Cavern/RingsL3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
-
-[node name="RingsR3" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.391567, 0, 0.92015, 0, 1, 0, -0.92015, 0, -0.391567, -117.122, -4.79999, 22.9509)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 10
-Shape = 0
-Orientation = 0
-Spacing = 1.2
-"Horizontal Offset" = SubResource("Curve_eoed6")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05898, 0, -1.2)
-
-[node name="Child03" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65706, 0, -2.4)
-
-[node name="Child04" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92593, 0, -3.6)
-
-[node name="Child05" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99726, 0, -4.8)
-
-[node name="Child06" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99726, 0, -6)
-
-[node name="Child07" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92593, 0, -7.2)
-
-[node name="Child08" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65706, 0, -8.4)
-
-[node name="Child09" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05898, 0, -9.6)
-
-[node name="Child10" parent="MainAct/Cavern/RingsR3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
-
-[node name="PearlsL1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.225836, 0, 0.974165, 0, 1, 0, -0.974165, 0, -0.225836, -111.857, -4.79999, 35.5892)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("16_rxraj")
-Amount = 10
-Shape = 0
-Orientation = 0
-Spacing = 1.2
-"Horizontal Offset" = SubResource("Curve_e7lop")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-
-[node name="Child02" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.924554, 0, -1.2)
-
-[node name="Child03" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.51989, 0, -2.4)
-
-[node name="Child04" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85185, 0, -3.6)
-
-[node name="Child05" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.98628, 0, -4.8)
-
-[node name="Child06" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99726, 0, -6)
-
-[node name="Child07" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.92593, 0, -7.2)
-
-[node name="Child08" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65706, 0, -8.4)
-
-[node name="Child09" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05899, 0, -9.6)
-
-[node name="Child10" parent="MainAct/Cavern/PearlsL1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
-
-[node name="PearlsR1" type="Node3D" parent="MainAct/Cavern"]
-transform = Transform3D(-0.225836, 0, 0.974165, 0, 1, 0, -0.974165, 0, -0.225836, -112.128, -4.79999, 34.4204)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("16_rxraj")
-Amount = 10
-Shape = 0
-Orientation = 0
-Spacing = 1.2
-"Horizontal Offset" = SubResource("Curve_ax43e")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-
-[node name="Child02" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.924554, 0, -1.2)
-
-[node name="Child03" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.51989, 0, -2.4)
-
-[node name="Child04" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85185, 0, -3.6)
-
-[node name="Child05" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.98628, 0, -4.8)
-
-[node name="Child06" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99726, 0, -6)
-
-[node name="Child07" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.92593, 0, -7.2)
-
-[node name="Child08" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65706, 0, -8.4)
-
-[node name="Child09" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05899, 0, -9.6)
-
-[node name="Child10" parent="MainAct/Cavern/PearlsR1" instance=ExtResource("16_rxraj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
-
-[node name="FireSoul" parent="MainAct/Cavern" instance=ExtResource("34_qx5mi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -119.085, -4.84949, 30.938)
-fireSoulIndex = 3
-
 [node name="JumpTrigger2" parent="MainAct/Cavern" instance=ExtResource("4_8l10n")]
 transform = Transform3D(0.632449, 0, -0.774602, 0, 1, 0, 0.774602, 0, 0.632449, 15.6767, 0, -9.71753)
 
@@ -1961,85 +1452,181 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -3.52
 script = ExtResource("24_2wsqy")
 jumpHeight = 2.0
 
+[node name="LandPathTrigger" type="Node3D" parent="MainAct/Cavern/JumpTrigger2/LandJump" node_paths=PackedStringArray("path")]
+script = ExtResource("18_klrop")
+path = NodePath("../../../../../Static/Path/BoatPath")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/JumpTrigger2"]
 shape = SubResource("BoxShape3D_a46qn")
+
+[node name="Spring" parent="MainAct/Cavern" instance=ExtResource("27_n236x")]
+transform = Transform3D(0.825054, -0.421133, 0.376739, 0.10405, 0.768562, 0.631258, -0.555391, -0.481622, 0.677924, -16.9166, -4.02515, 1.35742)
+"Secondary Settings/Enabled" = false
+middleHeight = 2.635
+finalHeight = -6.77
+distance = 32.62
+launchDirection = 1
+voiceKey = &""
+
+[node name="JumpPanel" parent="MainAct/Cavern" instance=ExtResource("35_bnpic")]
+transform = Transform3D(0.880783, 0, 0.473519, 0, 1, 0, -0.473519, 0, 0.880783, -60.4252, 10.3963, -8.23499)
+"Secondary Settings/Enabled" = false
+finalHeight = 2.2
+distance = 23.0
+
+[node name="CameraTriggerRight" parent="MainAct/Cavern" instance=ExtResource("4_8l10n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.1503, 14.1552, -16.5494)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Cavern/CameraTriggerRight"]
+script = ExtResource("22_aligo")
+transitionTime = 0.5
+settings = ExtResource("34_qslp2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/CameraTriggerRight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.7847, 0, 0.480591)
+shape = SubResource("BoxShape3D_3fhna")
+
+[node name="CameraTriggerRightENDing" parent="MainAct/Cavern" instance=ExtResource("4_8l10n")]
+transform = Transform3D(0.94652, 0, 0.322646, 0, 1, 0, -0.322646, 0, 0.94652, -127.735, 12.6141, 19.1925)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Cavern/CameraTriggerRightENDing"]
+script = ExtResource("22_aligo")
+transitionTime = 0.5
+settings = ExtResource("35_elure")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/CameraTriggerRightENDing"]
+transform = Transform3D(1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 7.29626, 2.45444, 3.73779)
+shape = SubResource("BoxShape3D_8r160")
+
+[node name="CameraTriggerLeft" parent="MainAct/Cavern" instance=ExtResource("4_8l10n")]
+transform = Transform3D(-0.0174699, 0, 0.999847, 0, 1, 0, -0.999847, 0, -0.0174699, -48.2474, 14.1552, 36.4906)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Cavern/CameraTriggerLeft"]
+script = ExtResource("22_aligo")
+transitionTime = 0.5
+settings = ExtResource("35_5x61b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/CameraTriggerLeft"]
+transform = Transform3D(0.907838, 0, 0.419345, 0, 1, 0, -0.419345, 0, 0.907838, 12.334, 0.210205, -4.76611)
+shape = SubResource("BoxShape3D_dgf46")
+
+[node name="Rings10" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(-0.264176, 0, 0.964474, 0, 1, 0, -0.964474, 0, -0.264176, -41.4177, 11.21, -18.0607)
+script = ExtResource("13_ymm10")
+Generate = false
+Source = ExtResource("14_2lsue")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = SubResource("Curve_hw12k")
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00832176, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.210744, 0, -1.4)
+
+[node name="Child03" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35076, 0, -2.8)
+
+[node name="Child04" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.439404, 0, -4.2)
+
+[node name="Child05" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.487708, 0, -5.6)
+
+[node name="Child06" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.506708, 0, -7)
+
+[node name="Child07" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.507346, 0, -8.4)
+
+[node name="Child08" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.491087, 0, -9.8)
+
+[node name="Child09" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.445314, 0, -11.2)
+
+[node name="Child10" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.356395, 0, -12.6)
+
+[node name="Child11" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.210703, 0, -14)
+
+[node name="Child12" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.4)
+
+[node name="JumpPanel2" parent="MainAct/Cavern" instance=ExtResource("35_bnpic")]
+transform = Transform3D(-0.415154, 0, -0.909751, 0, 1, 0, 0.909751, 0, -0.415154, -56.6532, 9.90942, 38.8787)
+"Secondary Settings/Enabled" = false
+finalHeight = 3.21
+distance = 56.0
+
+[node name="RedMajin" parent="MainAct/Cavern" instance=ExtResource("56_2sanu")]
+transform = Transform3D(-0.922962, 0, 0.384891, 0, 1, 0, -0.384891, 0, -0.922962, -50.0273, 12.4188, 34.3934)
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+
+[node name="RedMajin2" parent="MainAct/Cavern" instance=ExtResource("56_2sanu")]
+transform = Transform3D(-0.999596, 0, 0.0284275, 0, 1, 0, -0.0284275, 0, -0.999596, -48.3423, 10.5901, 28.7238)
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+
+[node name="RedMajin4" parent="MainAct/Cavern" instance=ExtResource("56_2sanu")]
+transform = Transform3D(-0.244309, 0, 0.969697, 0, 1, 0, -0.969697, 0, -0.244309, -130.619, 12.4231, 20.3331)
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+
+[node name="RedMajin3" parent="MainAct/Cavern" instance=ExtResource("56_2sanu")]
+transform = Transform3D(-0.244309, 0, 0.969697, 0, 1, 0, -0.969697, 0, -0.244309, -124.544, 10.9953, 18.8026)
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+
+[node name="JumpTrigger3" parent="MainAct/Cavern" instance=ExtResource("4_8l10n")]
+transform = Transform3D(0.942426, 0, 0.334416, 0, 1, 0, -0.334416, 0, 0.942426, -137.789, 10.3256, 23.9546)
+
+[node name="Land" type="Node3D" parent="MainAct/Cavern/JumpTrigger3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2403, 4.52209, 19.4633)
+script = ExtResource("24_2wsqy")
+jumpHeight = 1.0
+
+[node name="Land2" type="Node3D" parent="MainAct/Cavern/JumpTrigger3/Land"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.12799, -20.2479, -6.43469)
+script = ExtResource("24_2wsqy")
+jumpHeight = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/JumpTrigger3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.77527, 0)
+shape = SubResource("BoxShape3D_s1xlk")
+
+[node name="LotusPlatform6" parent="MainAct/Cavern" instance=ExtResource("20_imscf")]
+transform = Transform3D(0.670364, 0, -1.22907, 0, 1.18, 0, 1.22907, 0, 0.670364, -127.708, -20.2808, 34.2776)
+
+[node name="LotusPlatform9" parent="MainAct/Cavern" instance=ExtResource("20_imscf")]
+transform = Transform3D(1.67591, 0, -3.07267, 0, 1.83, 0, 3.07267, 0, 1.67591, -184.078, -25.4339, 34.6372)
+
+[node name="LotusPlatform8" parent="MainAct/Cavern" instance=ExtResource("20_imscf")]
+transform = Transform3D(0.622481, 0, -1.14128, 0, 1.18, 0, 1.14128, 0, 0.622481, -143.435, -20.8114, 48.2001)
+
+[node name="LotusPlatform7" parent="MainAct/Cavern" instance=ExtResource("20_imscf")]
+transform = Transform3D(0.478831, 0, -0.877907, 0, 1.18, 0, 0.877907, 0, 0.478831, -136.919, -18.9161, 39.3019)
 
 [node name="FeedingTunnel" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
 script = ExtResource("10_tx4o8")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
-
-[node name="DinoRex" parent="MainAct/FeedingTunnel" instance=ExtResource("60_mln32")]
-
-[node name="Rings1" type="Node3D" parent="MainAct/FeedingTunnel"]
-transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 14, 1, 20.6001)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 3
-Shape = 0
-Orientation = 0
-Spacing = 1.8
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/FeedingTunnel/Rings1" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/FeedingTunnel/Rings1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
-
-[node name="Child03" parent="MainAct/FeedingTunnel/Rings1" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
-
-[node name="GrayRock1" parent="MainAct/FeedingTunnel" instance=ExtResource("61_lk7n5")]
-transform = Transform3D(0.921978, 0, 0.387242, 0, 1.2, 0, -0.387242, 0, 0.921978, 11.421, 0, 19.8297)
-
-[node name="Rings2" type="Node3D" parent="MainAct/FeedingTunnel"]
-transform = Transform3D(0.222382, 0, 0.974959, 0, 1, 0, -0.974959, 0, 0.222382, -3.98126, 0.737518, 24.2358)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 3
-Shape = 0
-Orientation = 0
-Spacing = 1.8
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/FeedingTunnel/Rings2" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/FeedingTunnel/Rings2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
-
-[node name="Child03" parent="MainAct/FeedingTunnel/Rings2" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
-
-[node name="GrayRock2" parent="MainAct/FeedingTunnel" instance=ExtResource("61_lk7n5")]
-transform = Transform3D(0.911109, 0, -0.412166, 0, 1.2, 0, 0.412166, 0, 0.911109, -5.41125, 0, 21.9141)
-
-[node name="Rings3" type="Node3D" parent="MainAct/FeedingTunnel"]
-transform = Transform3D(0.858208, 0, 0.513302, 0, 1, 0, -0.513302, 0, 0.858208, -19.4109, 0.920563, 14.6466)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 3
-Shape = 0
-Orientation = 0
-Spacing = 1.8
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/FeedingTunnel/Rings3" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/FeedingTunnel/Rings3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
-
-[node name="Child03" parent="MainAct/FeedingTunnel/Rings3" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
-
-[node name="GrayRock3" parent="MainAct/FeedingTunnel" instance=ExtResource("61_lk7n5")]
-transform = Transform3D(0.372421, 0, -0.928064, 0, 1.2, 0, 0.928064, 0, 0.372421, -18.7092, 0, 11.8687)
 
 [node name="WhiteRock1" parent="MainAct/FeedingTunnel" instance=ExtResource("12_mrc1a")]
 transform = Transform3D(0.388229, 0, 1.44889, 0, 1.5, 0, -1.44889, 0, 0.388229, -9, 4, -25.6)
@@ -2049,41 +1636,6 @@ transform = Transform3D(1.29904, 0, 0.75, 0, 1, 0, -0.75, 0, 1.29904, 0.200073, 
 
 [node name="WhiteRock3" parent="MainAct/FeedingTunnel" instance=ExtResource("12_mrc1a")]
 transform = Transform3D(-1.20533, 0, 0.892844, 0, 1.5, 0, -0.892844, 0, -1.20533, 19.1281, 3.96786, -19.8405)
-
-[node name="Spring1" parent="MainAct/FeedingTunnel" instance=ExtResource("27_n236x")]
-transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 27.6446, 5.10001, -4.49023)
-"Secondary Settings/Enabled" = false
-finalHeight = 4.0
-voiceKey = &""
-
-[node name="Rings4" type="Node3D" parent="MainAct/FeedingTunnel"]
-transform = Transform3D(-0.98468, 0, 0.17437, 0, 1, 0, -0.17437, 0, -0.98468, 27.9858, 8.32703, -1.81665)
-script = ExtResource("13_ymm10")
-Generate = false
-Source = ExtResource("14_2lsue")
-Amount = 4
-Shape = 0
-Orientation = 0
-Spacing = 1.8
-"Horizontal Offset" = SubResource("Curve_aiw50")
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/FeedingTunnel/Rings4" instance=ExtResource("14_2lsue")]
-
-[node name="Child02" parent="MainAct/FeedingTunnel/Rings4" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.477262, 0, -1.8)
-
-[node name="Child03" parent="MainAct/FeedingTunnel/Rings4" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.849742, 0, -3.6)
-
-[node name="Child04" parent="MainAct/FeedingTunnel/Rings4" instance=ExtResource("14_2lsue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5.4)
-
-[node name="Spring2" parent="MainAct/FeedingTunnel" instance=ExtResource("27_n236x")]
-transform = Transform3D(0.991681, 0, -0.128727, 0, 1, 0, 0.128727, 0, 0.991681, 27.6848, 7.70001, 5.92664)
-"Secondary Settings/Enabled" = false
-finalHeight = 5.0
-voiceKey = &""
 
 [node name="WhiteRock4" parent="MainAct/FeedingTunnel" instance=ExtResource("12_mrc1a")]
 transform = Transform3D(0.898431, 0, 1.20118, 0, 1.4, 0, -1.20118, 0, 0.898431, 21.3189, 10.4714, 22.4683)
@@ -2118,21 +1670,74 @@ transform = Transform3D(-0.49983, 0, 0.0130536, 0, 1, 0, -0.0130536, 0, -0.49983
 [node name="WhiteRock14" parent="MainAct/FeedingTunnel" instance=ExtResource("12_mrc1a")]
 transform = Transform3D(-1.44371, 0, -0.40706, 0, 3, 0, 0.40706, 0, -1.44371, -9.3252, 11.51, 28.9358)
 
-[node name="DashPanel" parent="MainAct/FeedingTunnel" instance=ExtResource("15_21fnw")]
-transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615, -16.6152, 11.4794, 25.6758)
+[node name="JumpPanel" parent="MainAct/FeedingTunnel" instance=ExtResource("35_bnpic")]
+transform = Transform3D(-0.893097, 0, -0.449865, 0, 1, 0, 0.449865, 0, -0.893097, 11.4149, 0, 20.0909)
+"Secondary Settings/Enabled" = false
+finalHeight = 7.0
+distance = 14.0
 
-[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Deactivate"]
-[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Activate"]
-[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
-[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
-[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
-[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
-[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
-[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
+[node name="Rings11" type="Node3D" parent="MainAct/FeedingTunnel"]
+transform = Transform3D(-0.499894, 0, 0.866086, 0, 1, 0, -0.866086, 0, -0.499894, 17.9733, 0.829529, 18.199)
+script = ExtResource("13_ymm10")
+Generate = false
+Source = ExtResource("14_2lsue")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/FeedingTunnel/Rings11" instance=ExtResource("14_2lsue")]
+
+[node name="Child02" parent="MainAct/FeedingTunnel/Rings11" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="MainAct/FeedingTunnel/Rings11" instance=ExtResource("14_2lsue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="CamTriggerArena" parent="MainAct/FeedingTunnel" instance=ExtResource("4_8l10n")]
+
+[node name="Camera" type="Node3D" parent="MainAct/FeedingTunnel/CamTriggerArena"]
+script = ExtResource("22_aligo")
+transitionTime = 0.2
+settings = ExtResource("37_1usas")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/FeedingTunnel/CamTriggerArena"]
+shape = SubResource("BoxShape3D_yv2yh")
+
+[node name="EnemyStone" parent="MainAct/FeedingTunnel" instance=ExtResource("28_d3ufo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.01721, 1.31375, -7.59375)
+enemyCount = 3
+
+[node name="Spring" parent="MainAct/FeedingTunnel" instance=ExtResource("27_n236x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.14343, 0.78244, -7.76794)
+"Secondary Settings/Enabled" = false
+distance = 10.0
+launchDirection = 1
+voiceKey = &""
+
+[node name="Teleportation" parent="MainAct/FeedingTunnel" instance=ExtResource("4_8l10n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11835, 0, -8.10547)
+
+[node name="TeleportationTrigger" type="Node3D" parent="MainAct/FeedingTunnel/Teleportation" node_paths=PackedStringArray("warpTarget")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0281982, 0, 0)
+script = ExtResource("38_rrtn0")
+warpTarget = NodePath("../../../SpawnPosition")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/FeedingTunnel/Teleportation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.0458, 0)
+shape = SubResource("SphereShape3D_p8tb8")
+
+[node name="FlowerMajin" parent="MainAct/FeedingTunnel" instance=ExtResource("26_6ufbs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.82025, 0.729523, 0)
+
+[node name="FlowerMajin2" parent="MainAct/FeedingTunnel" instance=ExtResource("26_6ufbs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.104, 0.729523, -5.07556)
+
+[node name="FlowerMajin3" parent="MainAct/FeedingTunnel" instance=ExtResource("26_6ufbs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1828, 2.46161, -7.89148)
+
 [connection signal="Activated" from="MainAct/CullingMap/Cave-L" to="MainAct/Cave" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/Spiral-L" to="MainAct/Spiral" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/Spiral-L" to="MainAct/Spiral" method="Deactivate"]
@@ -2162,6 +1767,11 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 [connection signal="Deactivated" from="MainAct/Crossing/Switch2" to="MainAct/Crossing/Switch2/CullingTrigger2" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Deactivate"]
+[connection signal="JumpFinished" from="MainAct/Cavern/JumpTrigger2/LandJump" to="MainAct/Cavern/JumpTrigger2/LandJump/LandPathTrigger" method="Activate"]
+[connection signal="JumpFinished" from="MainAct/Cavern/JumpTrigger3/Land" to="MainAct/Cavern/JumpTrigger3/Land/Land2" method="Activate"]
+[connection signal="Defeated" from="MainAct/FeedingTunnel/FlowerMajin" to="MainAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/FeedingTunnel/FlowerMajin2" to="MainAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/FeedingTunnel/FlowerMajin3" to="MainAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
