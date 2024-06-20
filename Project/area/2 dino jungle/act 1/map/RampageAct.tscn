@@ -99,7 +99,6 @@ size = Vector3(10, 20, 2.5)
 [node name="Static" parent="." instance=ExtResource("1_15mb8")]
 Data = ExtResource("2_e23ug")
 metadata/_edit_group_ = true
-metadata/_edit_lock_ = true
 
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
@@ -1630,7 +1629,7 @@ saveVisibilityOnCheckpoint = true
 transform = Transform3D(4, 0, 0, 0, 1.5, 0, 0, 0, 4, 0.39447, -19.5, -0.355347)
 
 [node name="JumpPanel" parent="MainAct/FeedingTunnel" instance=ExtResource("35_bnpic")]
-transform = Transform3D(-0.893097, 0, -0.449865, 0, 1, 0, 0.449865, 0, -0.893097, 11.4149, 0, 20.0909)
+transform = Transform3D(-0.893097, 0, -0.449865, 0, 1, 0, 0.449865, 0, -0.893097, 11.695, 0.169373, 20.0171)
 "Secondary Settings/Enabled" = false
 finalHeight = 7.0
 distance = 14.0
@@ -1694,6 +1693,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00311279, -0.78244, -0.337
 script = ExtResource("38_rrtn0")
 warpTarget = NodePath("../../../SpawnPosition")
 
+[node name="PathTrigger" type="Node3D" parent="MainAct/FeedingTunnel/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("18_klrop")
+path = NodePath("../../../../Static/Path/CavePath")
+
 [node name="Wall" type="StaticBody3D" parent="MainAct/FeedingTunnel" groups=["wall"]]
 transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, 9.02826, 0, 22.7471)
 
@@ -1737,6 +1740,7 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Defeated" from="MainAct/FeedingTunnel/FlowerMajin1" to="MainAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/FeedingTunnel/FlowerMajin2" to="MainAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/FeedingTunnel/FlowerMajin3" to="MainAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/FeedingTunnel/Spring" to="MainAct/FeedingTunnel/Spring/PathTrigger" method="Activate"]
 [connection signal="Deactivated" from="MainAct/FeedingTunnel/Spring" to="MainAct/FeedingTunnel/Spring/TeleportationTrigger" method="Activate"]
 
 [editable path="Static"]
