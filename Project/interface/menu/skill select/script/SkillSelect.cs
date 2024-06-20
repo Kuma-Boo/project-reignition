@@ -26,7 +26,7 @@ public partial class SkillSelect : Menu
 	[Export]
 	private Label skillPointLabel;
 
-	private SkillListResource SkillList => Runtime.Instance.completeSkillList;
+	private SkillListResource SkillList => Runtime.Instance.SkillList;
 	private SkillRing ActiveSkillRing => SaveManager.ActiveGameData.skillRing;
 
 	private int cursorPosition;
@@ -140,27 +140,23 @@ public partial class SkillSelect : Menu
 
 	private bool ToggleSkill(SkillKey key)
 	{
-		if (ActiveSkillRing.equippedSkills.Remove(key))
+		if (ActiveSkillRing.UnequipSkill(key))
 		{
-			ActiveSkillRing.TotalCost -= SkillList.GetSkill(key).Cost;
 			animator.Play("unequip");
 			return true;
 		}
 
-		// Ensure the player has enough skill points
-		int targetTotalCost = ActiveSkillRing.TotalCost + SkillList.GetSkill(key).Cost;
-		if (targetTotalCost > ActiveSkillRing.MaxSkillPoints)
-			return false;
+		if (ActiveSkillRing.EquipSkill(key))
+		{
+			animator.Play("equip");
+			return true;
+		}
 
-		ActiveSkillRing.equippedSkills.Add(key);
-		ActiveSkillRing.TotalCost = targetTotalCost;
-		animator.Play("equip");
-		return true;
+		return false; // Something failed
 	}
-
 
 	private void SortMenuByCost()
 	{
-
+		skillOptionList.Sort();
 	}
 }

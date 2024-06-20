@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 using Godot;
 
 namespace Project.Gameplay;
@@ -65,10 +64,4 @@ public partial class SkillResource : Resource
 	public StringName NameKey => $"skill_{NameString}";
 	/// <summary> Returns the localization description key for this skill. </summary>
 	public StringName DescriptionKey => $"skill_{NameString}_description";
-
-	/// <summary> Compares two skill resources based on their key (number). </summary>
-	public class KeyComparer : IComparer<SkillResource>
-	{
-		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
-	}
 }

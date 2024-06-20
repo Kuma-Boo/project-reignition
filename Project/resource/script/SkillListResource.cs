@@ -1,5 +1,7 @@
 using Godot;
 using Godot.Collections;
+using System.Linq;
+using System.Collections.Generic;
 using Project.Core;
 
 namespace Project.Gameplay;
@@ -56,12 +58,12 @@ public partial class SkillListResource : Resource
 	[Export]
 	private string skillResourcePath;
 	[Export]
-	private Array<SkillResource> skillList = [];
+	private Array<SkillResource> skills = [];
 
 	/// <summary> Gets the matching skill based on a SkillKey. </summary>
 	public SkillResource GetSkill(SkillKey key)
 	{
-		foreach (var skill in skillList)
+		foreach (var skill in skills)
 		{
 			if (skill.Key == key)
 				return skill;
@@ -77,9 +79,9 @@ public partial class SkillListResource : Resource
 		if (!Engine.IsEditorHint())
 			return;
 
-		skillList.Clear();
+		skills.Clear();
 
-		// Create missing skills
+		// Load skills from skill directory
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;
@@ -93,13 +95,21 @@ public partial class SkillListResource : Resource
 			Resource resource = ResourceLoader.Load<SkillResource>(targetFile, "SkillResource");
 			GD.PrintT(targetFile, resource, resource is SkillResource);
 			SkillResource skill = (SkillResource)resource;
-			skillList.Add(skill);
+			skills.Add(skill);
 			ResourceSaver.Singleton.Save(skill, targetFile, ResourceSaver.SaverFlags.None);
 
 			if (skill.Key != key)
 				skill.Key = key;
 		}
 
+		// Reorder skill list
+		List<SkillResource> skillList = [.. skills.ToArray()];
+		skillList.Sort(new SkillRing.KeySorter());
+
+		skills.Clear();
+		skills.AddRange(skillList);
+
+		ResourceSaver.Singleton.Save(this, skillResourcePath + "_SkillList.tres", ResourceSaver.SaverFlags.None);
 		GD.Print("Skill List has been rebuilt.");
 	}
 }
@@ -122,13 +132,43 @@ public class SkillRing
 
 		TotalCost = 0;
 		for (int i = 0; i < equippedSkills.Count; i++)
-			TotalCost += Runtime.Instance.completeSkillList.GetSkill(equippedSkills[i]).Cost;
+			TotalCost += Runtime.Instance.SkillList.GetSkill(equippedSkills[i]).Cost;
+	}
+
+	/// <summary> Equips a skill onto the skill ring. </summary>
+	public bool EquipSkill(SkillKey key, bool allowSkillPointOverflow = false)
+	{
+		if (equippedSkills.Contains(key))
+			return false; // Already equipped
+
+		if (!allowSkillPointOverflow) // Check for total cost
+		{
+			int targetTotalCost = TotalCost + Runtime.Instance.SkillList.GetSkill(key).Cost;
+			if (targetTotalCost > MaxSkillPoints)
+				return false; // Too expensive!
+		}
+
+		equippedSkills.Add(key);
+		TotalCost += Runtime.Instance.SkillList.GetSkill(key).Cost; // Take skill points
+		return true;
+	}
+
+	/// <summary> Unequips a skill from the skill ring. </summary>
+	public bool UnequipSkill(SkillKey key)
+	{
+		if (equippedSkills.Remove(key))
+		{
+			TotalCost -= Runtime.Instance.SkillList.GetSkill(key).Cost; // Refund skill points
+			return true;
+		}
+
+		return false;
 	}
 
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
 	public static bool IsSkillUnlocked(SkillKey key)
 	{
-		SkillResource skill = Runtime.Instance.completeSkillList.GetSkill(key);
+		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
 
 		if (SaveManager.ActiveGameData.level < skill.LevelRequirement) // Under-leveled
 			return false;
@@ -153,5 +193,22 @@ public class SkillRing
 
 		// Finish with firesoul requirements
 		return SaveManager.ActiveGameData.fireSoul >= skill.FireSoulRequirement;
+	}
+
+	public void SortByCost()
+	{
+
+	}
+
+	/// <summary> Sorts skill resources based on their key (number). </summary>
+	public class KeySorter : IComparer<SkillResource>
+	{
+		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
+	}
+
+	/// <summary> Sorts skill resources based on their cost. </summary>
+	public class CostSorter : IComparer<SkillResource>
+	{
+		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
 	}
 }
