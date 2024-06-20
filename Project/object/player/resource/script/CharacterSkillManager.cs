@@ -83,13 +83,7 @@ public partial class CharacterSkillManager : Node
 
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveGameData.skillRing;
-	public bool IsSkillEnabled(SkillKey key)
-	{
-		if (key == SkillKey.LandDash) return true;
-		if (key == SkillKey.StompAttack) return true;
-
-		return SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
-	}
+	public bool IsSkillEnabled(SkillKey key) => SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
 
 
 	[ExportCategory("Countdown Skills")]

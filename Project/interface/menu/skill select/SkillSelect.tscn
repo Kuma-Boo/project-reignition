@@ -152,6 +152,20 @@ tracks/0/keys = {
 "method": &"play"
 }]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Description")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShowDescription"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_tf8ok"]
 resource_name = "unequip"
@@ -178,7 +192,7 @@ _data = {
 "unequip": SubResource("Animation_tf8ok")
 }
 
-[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "scrollbar", "skillPointFill", "skillPointLabel", "animator")]
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "cursorAnimator", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -189,9 +203,12 @@ script = ExtResource("1_v1nov")
 skillOption = ExtResource("4_sgi6g")
 optionContainer = NodePath("Content/Clip/Options")
 cursor = NodePath("Content/CursorOrigin/Cursor")
+cursorAnimator = NodePath("Content/CursorOrigin/Cursor/AnimationPlayer")
+description = NodePath("Description")
 scrollbar = NodePath("Content/ScrollBar/ScrollPosition")
 skillPointFill = NodePath("Content/SkillPointBar/Fill")
-skillPointLabel = NodePath("Content/Header/SPLabel")
+levelLabel = NodePath("Content/Header/LevelLabel")
+skillPointLabel = NodePath("Content/Header/SPValue")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
 metadata/_edit_lock_ = true
@@ -233,15 +250,14 @@ region_rect = Rect2(0, 280, 512, 232)
 
 [node name="CursorOrigin" type="Node2D" parent="Content"]
 position = Vector2(624, 232)
-scale = Vector2(2.25, 2.25)
 metadata/_edit_lock_ = true
 
 [node name="Cursor" type="Node2D" parent="Content/CursorOrigin"]
 scale = Vector2(1, 1e-05)
 
 [node name="L" type="Sprite2D" parent="Content/CursorOrigin/Cursor"]
-position = Vector2(0, -24)
-scale = Vector2(-1, 1)
+position = Vector2(0, -54)
+scale = Vector2(-2.25, 2.25)
 texture = ExtResource("4_x4q03")
 centered = false
 flip_h = true
@@ -249,7 +265,8 @@ region_enabled = true
 region_rect = Rect2(264, 0, 248, 48)
 
 [node name="R" type="Sprite2D" parent="Content/CursorOrigin/Cursor"]
-position = Vector2(0, -24)
+position = Vector2(0, -54)
+scale = Vector2(2.25, 2.25)
 texture = ExtResource("4_x4q03")
 centered = false
 flip_h = true
@@ -291,7 +308,7 @@ layout_mode = 0
 offset_left = 256.0
 offset_right = 512.0
 offset_bottom = 64.0
-text = "level:99"
+text = "level:01"
 label_settings = ExtResource("6_4a5gt")
 vertical_alignment = 1
 uppercase = true
@@ -364,9 +381,6 @@ anchor_right = 1.0
 offset_bottom = 883.0
 grow_horizontal = 2
 theme_override_constants/separation = -1
-
-[node name="SkillOption" parent="Content/Clip/Options" instance=ExtResource("4_sgi6g")]
-layout_mode = 2
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 1

@@ -14,11 +14,15 @@ public partial class SkillSelect : Menu
 	[Export]
 	private Node2D cursor;
 	[Export]
+	private AnimationPlayer cursorAnimator;
+	[Export]
 	private Description description;
 	[Export]
 	private Sprite2D scrollbar;
 	[Export]
 	private Sprite2D skillPointFill;
+	[Export]
+	private Label levelLabel;
 	[Export]
 	private Label skillPointLabel;
 
@@ -43,11 +47,19 @@ public partial class SkillSelect : Menu
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;
+
+			if (SkillList.GetSkill(key) == null)
+			{
+				GD.PushWarning($"Couldn't find skill with key {key}.");
+				continue;
+			}
+
 			SkillOption newSkill = skillOption.Instantiate<SkillOption>();
 			newSkill.Key = key;
 			newSkill.Number = i + 1;
 			newSkill.Cost = SkillList.GetSkill(key).Cost;
 			newSkill.RedrawData();
+			newSkill.IsSkillActive = ActiveSkillRing.equippedSkills.Contains(key);
 
 			optionContainer.AddChild(newSkill);
 			skillOptionList.Add(newSkill);
@@ -55,6 +67,7 @@ public partial class SkillSelect : Menu
 
 		description.ShowDescription();
 		description.SetText(skillOptionList[VerticalSelection].DescriptionKey);
+		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
 
 		Redraw();
 		base.SetUp();
@@ -72,28 +85,42 @@ public partial class SkillSelect : Menu
 		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
 		if (inputSign != 0)
 		{
-			VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SkillKey.Max);
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, skillOptionList.Count);
 
-			if (VerticalSelection == 0 || VerticalSelection == (int)SkillKey.Max - 1)
+			if (VerticalSelection == 0 || VerticalSelection == skillOptionList.Count - 1)
 				cursorPosition = scrollAmount = VerticalSelection;
 			else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
 				scrollAmount += inputSign;
 			else
 				cursorPosition += inputSign;
 
-			scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKey.Max - PageSize);
-			scrollRatio = (float)scrollAmount / ((int)SkillKey.Max - PageSize);
+			scrollAmount = Mathf.Clamp(scrollAmount, 0, skillOptionList.Count - PageSize);
+			scrollRatio = (float)scrollAmount / (skillOptionList.Count - PageSize);
 			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
 			cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
 			description.SetText(skillOptionList[VerticalSelection].DescriptionKey);
 
 			animator.Play("select");
+			cursorAnimator.Play("select");
+			cursorAnimator.Advance(0.0);
 			if (!isSelectionScrolling)
 				StartSelectionTimer();
 		}
 
 		// TODO Change sort method when horizontal input is detected
+	}
+
+	public override void ShowMenu()
+	{
+		base.ShowMenu();
+		cursorAnimator.Play("show");
+	}
+
+	public override void HideMenu()
+	{
+		base.HideMenu();
+		cursorAnimator.Play("hide");
 	}
 
 	protected override void Confirm()
