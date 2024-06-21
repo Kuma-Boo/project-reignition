@@ -434,7 +434,6 @@ public partial class SaveManager : Node
 		}
 	}
 
-
 	/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
 	private static void ApplyLocalization()
 	{
@@ -797,9 +796,17 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 				lastPlayedWorld = (WorldEnum)(int)var;
 			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
-				worldsUnlocked = (Array<WorldEnum>)var;
+			{
+				Array<int> worlds = (Array<int>)var;
+				for (int i = 0; i < worlds.Count; i++)
+					worldsUnlocked.Add((WorldEnum)worlds[i]);
+			}
 			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
-				worldRingsCollected = (Array<WorldEnum>)var;
+			{
+				Array<int> worlds = (Array<int>)var;
+				for (int i = 0; i < worlds.Count; i++)
+					worldRingsCollected.Add((WorldEnum)worlds[i]);
+			}
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
 				levelData = (Dictionary<StringName, Dictionary>)var;
@@ -812,7 +819,11 @@ public partial class SaveManager : Node
 				playTime = (float)var;
 
 			if (dictionary.TryGetValue(nameof(ActiveSkillRing), out var))
-				equippedSkills = (Array<SkillKey>)var;
+			{
+				Array<int> skills = (Array<int>)var;
+				for (int i = 0; i < skills.Count; i++)
+					equippedSkills.Add((SkillKey)skills[i]);
+			}
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>

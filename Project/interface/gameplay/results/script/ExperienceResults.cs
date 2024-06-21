@@ -201,8 +201,14 @@ public partial class ExperienceResults : Control
 		startingExp = SaveManager.ActiveGameData.exp;
 		targetExp = startingExp + Stage.TotalScore; // Add exp from score
 		targetExp += Stage.CurrentEXP; // Add exp from skills
+
 		if (useMissionExp) // Add mission bonus
-			targetExp += Stage.Data.FirstClearBonus;
+		{
+			if (Stage.LevelState == StageSettings.LevelStateEnum.Failed) // Don't add mission exp when player fails a level
+				useMissionExp = false;
+			else
+				targetExp += Stage.Data.FirstClearBonus;
+		}
 
 		RedrawData();
 
