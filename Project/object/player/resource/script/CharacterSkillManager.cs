@@ -15,13 +15,7 @@ public partial class CharacterSkillManager : Node
 		normalCollisionMask = Character.CollisionMask;
 
 		// Determine the size of the soul gauge
-		maxSoulPower = SOUL_GAUGE_BASE;
-		if (SaveManager.ActiveGameData != null)
-		{
-			float levelRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio(); // Current ratio (0 -> 10) compared to the soul gauge level cap (50)
-			maxSoulPower += Mathf.FloorToInt(levelRatio * 10f) * 20; // Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
-		}
-
+		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
 		SetUpStats();
 		SetUpSkills();
 	}
@@ -169,7 +163,7 @@ public partial class CharacterSkillManager : Node
 	public void UpdateSoulSkills()
 	{
 		if (DebugManager.Instance.InfiniteSoulGauge) // Max out the soul gauge
-			ModifySoulGauge(SOUL_GAUGE_MAX);
+			ModifySoulGauge(int.MaxValue);
 
 		UpdateTimeBreak();
 		UpdateSpeedBreak();
@@ -323,24 +317,19 @@ public partial class CharacterSkillManager : Node
 	public void DisableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = false;
 
 	public int SoulPower { get; private set; } // Current soul power
-	private int maxSoulPower; // Calculated on start
+	public int MaxSoulPower { get; private set; } // Calculated on start
 
 	private bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
-	private bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MINIMUM_SOUL_POWER;
+	private bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MinimumSoulPower;
 
-	private const int MINIMUM_SOUL_POWER = 50; // Minimum amount of soul power needed to use soul skills.
-	private const int SOUL_GAUGE_BASE = 100; // Starting size of soul gauge
-	private const int SOUL_GAUGE_MAX = 300; // Max size of soul gauge
+	private const int MinimumSoulPower = 50; // Minimum amount of soul power needed to use soul skills.
 	public void ModifySoulGauge(int amount)
 	{
-		SoulPower = Mathf.Clamp(SoulPower + amount, 0, maxSoulPower);
-
-		if (HeadsUpDisplay.instance != null)
-			HeadsUpDisplay.instance.ModifySoulGauge((float)SoulPower / maxSoulPower, IsSoulGaugeCharged);
+		SoulPower = Mathf.Clamp(SoulPower + amount, 0, MaxSoulPower);
+		HeadsUpDisplay.instance?.ModifySoulGauge((float)SoulPower / MaxSoulPower, IsSoulGaugeCharged);
 	}
 
-
 	/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
-	public string TextDisplay => $"{SoulPower}/{maxSoulPower}";
+	public string TextDisplay => $"{SoulPower}/{MaxSoulPower}";
 	#endregion
 }

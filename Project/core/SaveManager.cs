@@ -41,15 +41,12 @@ public partial class SaveManager : Node
 		}
 	}
 
-
 	#region Config
-
 	public static ConfigData Config = new();
 	public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
 	private const string CONFIG_FILE_NAME = "config.cfg";
 
 	#region Enums
-
 	public enum ControllerType
 	{
 		Automatic, // Automatically try to detect controller type
@@ -515,7 +512,17 @@ public partial class SaveManager : Node
 	public static int ActiveSaveSlotIndex = -1;
 
 	/// <summary> Reference to the current save being used. </summary>
-	public static GameData ActiveGameData => ActiveSaveSlotIndex == -1 ? null : GameSaveSlots[ActiveSaveSlotIndex];
+	public static GameData ActiveGameData
+	{
+		get
+		{
+			if (ActiveSaveSlotIndex != -1)
+				return GameSaveSlots[ActiveSaveSlotIndex];
+
+			// Default to save slot 1 when running the game from the editor
+			return OS.IsDebugBuild() ? GameSaveSlots[0] : null;
+		}
+	}
 
 	public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; // List of all saves created.
 	public const int MAX_SAVE_SLOTS = 9; // Maximum number of save slots that can be created.
@@ -545,9 +552,16 @@ public partial class SaveManager : Node
 		/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
 		public bool IsNewFile() => level == 0;
 
-		/// <summary> Calculates the soul gauge's level ratio, normalized from [0 -> 1] </summary>
-		public float CalculateSoulGaugeLevelRatio(int levelCap = 50) =>
-			Mathf.Clamp(level, 0, levelCap) / (float)levelCap;
+		/// <summary> Calculates the player's soul gauge size based on the player's level. </summary>
+		public int CalculateMaxSoulPower()
+		{
+			int maxSoulPower = 100; // Starting soul gauge size
+			maxSoulPower += Mathf.FloorToInt(CalculateSoulGaugeLevelRatio() * 5f) * 20; // Soul Gauge size increases by 20 every 5 levels, so it caps at 300
+			return maxSoulPower;
+		}
+
+		/// <summary> Current ratio (0 -> 1) compared to the soul gauge level cap (50). </summary>
+		public float CalculateSoulGaugeLevelRatio() => Mathf.Clamp(level, 0, 50) / (float)50;
 
 		/// <summary> Checks if a world is unlocked. </summary>
 		public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
@@ -566,28 +580,25 @@ public partial class SaveManager : Node
 			return (WorldFlagEnum)returnIndex;
 		}
 
-
 		#region Level Data
 		/// <summary> Dictionaries for each individual level's data. </summary>
-		public Dictionary<StringName, Dictionary> levelData = new();
+		public Dictionary<StringName, Dictionary> levelData = [];
 
-		private readonly StringName FIRE_SOUL_KEY = "fire_soul";
-
+		private readonly StringName FireSoulKey = "fire_soul";
 		/// <summary> Returns whether a particular fire soul has been collected or not. </summary>
 		public bool IsFireSoulCollected(StringName levelID, int index)
 		{
-			StringName key = FIRE_SOUL_KEY + index.ToString();
+			StringName key = FireSoulKey + index.ToString();
 			if (GetLevelData(levelID).TryGetValue(key, out Variant collected))
 				return (bool)collected;
 
 			return false;
 		}
 
-
 		/// <summary> Sets the save value for whether a particular fire soul is collected or not. </summary>
 		public void SetFireSoulCollected(StringName levelID, int index, bool collected)
 		{
-			StringName key = FIRE_SOUL_KEY + index.ToString();
+			StringName key = FireSoulKey + index.ToString();
 			if (GetLevelData(levelID).ContainsKey(key))
 			{
 				GetLevelData(levelID)[key] = collected;
@@ -597,13 +608,11 @@ public partial class SaveManager : Node
 			GetLevelData(levelID).Add(key, collected);
 		}
 
-
-		private readonly StringName RANK_KEY = "rank";
-
+		private readonly StringName RankKey = "rank";
 		/// <summary> Gets the save value for the player's best rank. </summary>
 		public int GetRank(StringName levelID)
 		{
-			if (GetLevelData(levelID).TryGetValue(RANK_KEY, out Variant rank))
+			if (GetLevelData(levelID).TryGetValue(RankKey, out Variant rank))
 				return (int)rank;
 
 			return -1; // No recorded rank; Return -1 to avoid getting confused with "no medal"
@@ -618,22 +627,20 @@ public partial class SaveManager : Node
 			// Discard lower ranks
 			if (rank <= ActiveGameData.GetRank(levelID)) return;
 
-			if (GetLevelData(levelID).ContainsKey(RANK_KEY))
+			if (GetLevelData(levelID).ContainsKey(RankKey))
 			{
-				GetLevelData(levelID)[RANK_KEY] = rank;
+				GetLevelData(levelID)[RankKey] = rank;
 				return;
 			}
 
-			GetLevelData(levelID).Add(RANK_KEY, rank);
+			GetLevelData(levelID).Add(RankKey, rank);
 		}
 
-
-		private readonly StringName SCORE_KEY = "high_score";
-
+		private readonly StringName ScoreKey = "high_score";
 		/// <summary> Gets the save value for the player's high score. </summary>
 		public int GetHighScore(StringName levelID)
 		{
-			if (GetLevelData(levelID).TryGetValue(SCORE_KEY, out Variant score))
+			if (GetLevelData(levelID).TryGetValue(ScoreKey, out Variant score))
 				return (int)score;
 
 			return 0; // No score recorded
@@ -645,22 +652,20 @@ public partial class SaveManager : Node
 			// Discard lower scores
 			if (score <= ActiveGameData.GetHighScore(levelID)) return;
 
-			if (GetLevelData(levelID).ContainsKey(SCORE_KEY))
+			if (GetLevelData(levelID).ContainsKey(ScoreKey))
 			{
-				GetLevelData(levelID)[SCORE_KEY] = score;
+				GetLevelData(levelID)[ScoreKey] = score;
 				return;
 			}
 
-			GetLevelData(levelID).Add(SCORE_KEY, score);
+			GetLevelData(levelID).Add(ScoreKey, score);
 		}
 
-
-		private readonly StringName TIME_KEY = "best_time";
-
+		private readonly StringName TimeKey = "best_time";
 		/// <summary> Gets the save value for the player's best rank. </summary>
 		public float GetBestTime(StringName levelID)
 		{
-			if (GetLevelData(levelID).TryGetValue(TIME_KEY, out Variant time))
+			if (GetLevelData(levelID).TryGetValue(TimeKey, out Variant time))
 				return (float)time;
 
 			return 0; // No time recorded
@@ -671,34 +676,67 @@ public partial class SaveManager : Node
 		{
 			// Discard lower scores
 			if (!Mathf.IsZeroApprox(ActiveGameData.GetBestTime(levelID)) &&
-				time > ActiveGameData.GetBestTime(levelID)) return;
-
-			if (GetLevelData(levelID).ContainsKey(TIME_KEY))
+				time > ActiveGameData.GetBestTime(levelID))
 			{
-				GetLevelData(levelID)[TIME_KEY] = time;
 				return;
 			}
 
-			GetLevelData(levelID).Add(TIME_KEY, time);
+			if (GetLevelData(levelID).ContainsKey(TimeKey))
+			{
+				GetLevelData(levelID)[TimeKey] = time;
+				return;
+			}
+
+			GetLevelData(levelID).Add(TimeKey, time);
 		}
 
+		private readonly StringName StatusKey = "clear_status";
+		/// <summary> Returns the clear state of a level. </summary>
+		public LevelStatus GetClearStatus(StringName levelID)
+		{
+			if (GetLevelData(levelID).TryGetValue(StatusKey, out Variant status))
+				return (LevelStatus)(int)status;
+
+			return LevelStatus.New;
+		}
+
+		/// <summary> Sets the clear state of a level. </summary>
+		public void SetClearStatus(StringName levelID, LevelStatus clearStatus)
+		{
+			// Return early if the level has already been cleared
+			if (ActiveGameData.GetClearStatus(levelID) == LevelStatus.Cleared)
+				return;
+
+			if (GetLevelData(levelID).ContainsKey(StatusKey))
+			{
+				GetLevelData(levelID)[StatusKey] = (int)clearStatus;
+				return;
+			}
+
+			GetLevelData(levelID).Add(StatusKey, (int)clearStatus);
+		}
+
+		public enum LevelStatus
+		{
+			New, // Player has never touched the level
+			Attempted, // Player played the level, but never cleared it
+			Cleared, // Player has cleared the level
+		}
 
 		/// <summary> Returns the dictionary of a particular level. </summary>
 		public Dictionary GetLevelData(StringName levelID)
 		{
 			if (!levelData.ContainsKey(levelID)) // Create new level data if it's missing
-				levelData.Add(levelID, new());
+				levelData.Add(levelID, []);
 
 			return levelData[levelID];
 		}
-
 		#endregion
-
 
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
-			Dictionary dictionary = new()
+			return new()
 			{
 				// WorldEnum data
 				{ nameof(lastPlayedWorld), (int)lastPlayedWorld },
@@ -713,8 +751,6 @@ public partial class SaveManager : Node
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
 				{ nameof(skillRing), skillRing.equippedSkills },
 			};
-
-			return dictionary;
 		}
 
 		/// <summary> Sets GameData based on dictionary. </summary>
@@ -731,7 +767,6 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(levelData), out var))
 				levelData = (Dictionary<StringName, Dictionary>)var;
 
-
 			if (dictionary.TryGetValue(nameof(level), out var))
 				level = (int)var;
 			if (dictionary.TryGetValue(nameof(exp), out var))
@@ -746,7 +781,6 @@ public partial class SaveManager : Node
 			}
 		}
 
-
 		/// <summary> Creates a new GameData object that contains default values. </summary>
 		public static GameData DefaultData()
 		{
@@ -759,11 +793,10 @@ public partial class SaveManager : Node
 
 			if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
 				data.worldsUnlocked = WorldFlagEnum.All;
-			data.skillRing.RefreshSkillRingData(data.level);
+			data.skillRing.RefreshSkillRingData(1);
 			return data;
 		}
 	}
-
 
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
@@ -784,7 +817,6 @@ public partial class SaveManager : Node
 			// TODO Show an error message to the player? 
 		}
 	}
-
 
 	/// <summary> Preloads game data so it can be displayed on menus. </summary>
 	public static void LoadGameData()

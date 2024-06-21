@@ -106,7 +106,9 @@ namespace Project.Core
 
 		public static void FinishTransition() => instance.FinishFade();
 
-		/// <summary> Queues a scene to load. Be sure to call StartTransition to actually transition to the scene. </summary>
+		/// <summary> The scene to load. Note that the scene only gets applied if queued using QueueSceneChange(). </summary>
+		public string QueuedScene { get; set; }
+		/// <summary> Queues a scene to load and connects the TransitionProcess signal. Be sure to call StartTransition to actually transition to the scene. </summary>
 		public static void QueueSceneChange(string scene)
 		{
 			instance.QueuedScene = scene;
@@ -116,7 +118,6 @@ namespace Project.Core
 				instance.Connect(SignalName.TransitionProcess, call, (uint)ConnectFlags.OneShot);
 		}
 
-		public string QueuedScene { get; private set; }
 		private async void ApplySceneChange()
 		{
 			SoundManager.instance.CancelDialog(); //Cancel any active dialog

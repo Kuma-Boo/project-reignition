@@ -123,12 +123,19 @@ public class SkillRing
 	/// <summary> Amount of available skill points. </summary>
 	public int MaxSkillPoints { get; private set; }
 
+	public static int CalculateMaxSkillPoints(int level)
+	{
+		// Calculates how many skill points the player has based on their level
+		int skillPoints = 10; // Start at 10
+		if (level > 1)
+			skillPoints += (level - 1) * 5; // +5 per level--ends at 500.
+
+		return skillPoints;
+	}
+
 	public void RefreshSkillRingData(int level)
 	{
-		// +5 per level, starts at 10, ends at 500.
-		MaxSkillPoints = 10;
-		if (level > 1)
-			MaxSkillPoints += (level - 1) * 5;
+		MaxSkillPoints = CalculateMaxSkillPoints(level);
 
 		TotalCost = 0;
 		for (int i = 0; i < equippedSkills.Count; i++)

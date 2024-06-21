@@ -317,7 +317,7 @@ public partial class DebugManager : Node2D
 	private LineEdit[] freeCamData;
 	private void RedrawCamData()
 	{
-		if (!IsInstanceValid(CharacterController.instance)) return;
+		if (!IsInstanceValid(CharacterController.instance) || !CharacterController.instance.IsInsideTree()) return;
 
 		for (int i = 0; i < freeCamData.Length; i++)
 		{
