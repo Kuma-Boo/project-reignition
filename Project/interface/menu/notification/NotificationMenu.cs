@@ -8,7 +8,6 @@ namespace Project.Interface;
 /// <summary> The menu that handles notifications. </summary>
 public partial class NotificationMenu : Control
 {
-	private static bool UnlockOccurred => NotificationList.Count != 0;
 	private static NotificationData CurrentNotification => NotificationList[0];
 	private static readonly List<NotificationData> NotificationList = [];
 	public static void AddNotification(NotificationType type, string description)
@@ -80,7 +79,7 @@ public partial class NotificationMenu : Control
 				NotificationList.Add(new NotificationData()
 				{
 					type = NotificationType.Skill,
-					description = Runtime.Instance.SkillList.GetSkill(key)?.NameKey
+					description = "unlock_skill"
 				});
 			}
 		}

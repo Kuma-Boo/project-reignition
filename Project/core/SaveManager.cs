@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
@@ -575,17 +576,23 @@ public partial class SaveManager : Node
 
 		/// <summary> Player level, from 1 -> 99 </summary>
 		public int level;
+		/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
+		public bool IsNewFile() => level == 0;
+
 		/// <summary> How much exp the player currently has. </summary>
 		public int exp;
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
-		/// <summary> Total number of fire souls the player collected. </summary>
-		public int fireSoul;
 
 		public Array<SkillKey> equippedSkills = [];
-
-		/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
-		public bool IsNewFile() => level == 0;
+		/// <summary> Total number of fire souls the player collected. </summary>
+		public int FireSoulCount { get; private set; }
+		/// <summary> Total number of gold medals the player has collected. </summary>
+		public int GoldMedalCount { get; private set; }
+		/// <summary> Total number of silver medals the player has collected. </summary>
+		public int SilverMedalCount { get; private set; }
+		/// <summary> Total number of bronze medals the player has collected. </summary>
+		public int BronzeMedalCount { get; private set; }
 
 		/// <summary> Calculates the player's soul gauge size based on the player's level. </summary>
 		public int CalculateMaxSoulPower()
@@ -652,6 +659,7 @@ public partial class SaveManager : Node
 				return;
 			}
 
+			FireSoulCount++;
 			GetLevelData(levelID).Add(key, collected);
 		}
 
@@ -676,10 +684,12 @@ public partial class SaveManager : Node
 
 			if (GetLevelData(levelID).ContainsKey(RankKey))
 			{
+				UpdateMedals(rank, (int)GetLevelData(levelID)[RankKey]);
 				GetLevelData(levelID)[RankKey] = rank;
 				return;
 			}
 
+			UpdateMedals(rank);
 			GetLevelData(levelID).Add(RankKey, rank);
 		}
 
@@ -837,6 +847,29 @@ public partial class SaveManager : Node
 				for (int i = 0; i < skills.Count; i++)
 					equippedSkills.Add((SkillKey)skills[i]);
 			}
+
+			// Update runtime data based on save data
+			StringName[] keys = levelData.Keys.ToArray();
+			for (int i = 0; i < keys.Length; i++)
+			{
+				UpdateMedals(GetRank(keys[i]));
+
+				for (int j = 1; j < 4; j++) // Check fire souls
+				{
+					if (IsFireSoulCollected(keys[i], j))
+						FireSoulCount++;
+				}
+			}
+		}
+
+		private void UpdateMedals(int rank, int oldRank = 0)
+		{
+			if (rank >= 3 && oldRank < 3)
+				GoldMedalCount++;
+			if (rank >= 2 && oldRank < 2)
+				SilverMedalCount++;
+			if (rank >= 1 && oldRank < 1)
+				BronzeMedalCount++;
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>

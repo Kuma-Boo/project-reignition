@@ -76,7 +76,7 @@ public partial class CharacterSkillManager : Node
 
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
-	public bool IsSkillEnabled(SkillKey key) => SaveManager.ActiveGameData != null && SkillRing.EquippedSkills.Contains(key);
+	public bool IsSkillEnabled(SkillKey key) => SkillRing.IsSkillEnabled(key);
 
 	[ExportCategory("Countdown Skills")]
 	[Export]

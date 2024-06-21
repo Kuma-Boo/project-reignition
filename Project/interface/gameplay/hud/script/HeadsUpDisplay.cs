@@ -89,6 +89,8 @@ namespace Project.Gameplay
 		#region Time and Score
 		[ExportGroup("Time & Score")]
 		[Export]
+		private Node2D rankPreviewerRoot;
+		[Export]
 		private Sprite2D mainRank;
 		[Export]
 		private Sprite2D transitionRank;
@@ -100,12 +102,19 @@ namespace Project.Gameplay
 		private Tween rankTween;
 		private void InitializeRankPreviewer()
 		{
+			rankPreviewerRoot.Visible = SaveManager.ActiveSkillRing.IsSkillEnabled(SkillKey.RankPreview);
+			if (!rankPreviewerRoot.Visible)
+				return;
+
 			CurrentRank = Stage.CalculateRank();
 			mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * CurrentRank * 60), mainRank.RegionRect.Size);
 		}
 
 		private void UpdateRank()
 		{
+			if (!rankPreviewerRoot.Visible)
+				return;
+
 			int rank = Stage.CalculateRank();
 			if (CurrentRank == rank || rankTween?.IsRunning() == true)
 				return;
