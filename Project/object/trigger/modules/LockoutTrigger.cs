@@ -7,7 +7,7 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class LockoutTrigger : StageTriggerModule
 	{
-		[Export]
+		[Export(PropertyHint.ResourceType, "LockoutResource")]
 		public LockoutResource lockoutData;
 
 		public override void Activate() => Character.AddLockoutData(lockoutData);

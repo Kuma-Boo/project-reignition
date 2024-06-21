@@ -10,7 +10,7 @@ namespace Project.Interface
 		private string actionKey;
 		[Export]
 		private string inputKey;
-		[Export]
+		[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 		private ControllerSpriteResource[] controllerResources;
 
 		[ExportCategory("Components")]

@@ -58,7 +58,7 @@ public partial class SkillListResource : Resource
 
 	[Export]
 	private string skillResourcePath;
-	[Export]
+	[Export(PropertyHint.ArrayType, "SkillResource")]
 	private Array<SkillResource> skills = [];
 
 	/// <summary> Gets the matching skill based on a SkillKey. </summary>
@@ -77,7 +77,7 @@ public partial class SkillListResource : Resource
 	// Rebuilds the skill list
 	private void RebuildSkillList()
 	{
-		if (!Engine.IsEditorHint())
+		if (!Engine.IsEditorHint() || string.IsNullOrWhiteSpace(skillResourcePath))
 			return;
 
 		skills.Clear();

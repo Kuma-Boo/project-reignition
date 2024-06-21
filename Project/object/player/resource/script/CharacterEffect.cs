@@ -28,7 +28,7 @@ public partial class CharacterEffect : Node3D
 	#region Actions
 	// Actions (Jumping, sliding, etc)
 	[ExportGroup("Actions")]
-	[Export]
+	[Export(PropertyHint.ResourceType, "SFXLibraryResource")]
 	private SFXLibraryResource actionSFXLibrary;
 	[Export]
 	private AudioStreamPlayer actionChannel; //Channel for playing action sound effects
@@ -87,7 +87,7 @@ public partial class CharacterEffect : Node3D
 	#region Ground
 	[ExportGroup("Ground Interactions")]
 	// SFX for different ground materials (footsteps, landing, etc)
-	[Export]
+	[Export(PropertyHint.ResourceType, "SFXLibraryResource")]
 	private SFXLibraryResource materialSFXLibrary;
 	[Export]
 	private Node3D rightFoot;
@@ -279,7 +279,7 @@ public partial class CharacterEffect : Node3D
 
 
 	[ExportGroup("Voices")]
-	[Export]
+	[Export(PropertyHint.ResourceType, "SFXLibraryResource")]
 	public SFXLibraryResource voiceLibrary;
 	[Export]
 	private AudioStreamPlayer voiceChannel;

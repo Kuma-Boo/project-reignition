@@ -140,7 +140,7 @@ namespace Project.Gameplay
 		public LevelDataResource Data { get; private set; }
 		[Export]
 		public CameraSettingsResource InitialCameraSettings { get; private set; }
-		[Export]
+		[Export(PropertyHint.ResourceType, "SFXLibraryResource")]
 		public SFXLibraryResource dialogLibrary;
 
 		/// <summary>

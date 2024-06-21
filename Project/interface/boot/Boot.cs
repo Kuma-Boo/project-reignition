@@ -5,9 +5,6 @@ namespace Project.Interface
 {
 	public partial class Boot : Node
 	{
-		[Export]
-		private AnimationPlayer animator;
-
 		private void StartTitleTransition()
 		{
 			TransitionManager.QueueSceneChange("res://interface/menu/Menu.tscn");

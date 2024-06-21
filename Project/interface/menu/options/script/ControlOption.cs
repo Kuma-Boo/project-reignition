@@ -21,7 +21,7 @@ namespace Project.Interface.Menus
 		private TextureRect axisTextureRect;
 		[Export]
 		private TextureRect buttonTextureRect;
-		[Export]
+		[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 		private ControllerSpriteResource[] controllerResources;
 
 		[Export]
