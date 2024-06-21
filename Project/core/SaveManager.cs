@@ -849,7 +849,7 @@ public partial class SaveManager : Node
 			};
 
 			// TODO Replace this with the tutorial key
-			data.UnlockStage("so_a1_deathless");
+			data.UnlockStage("so_a1_main");
 			data.UnlockWorld(WorldEnum.SandOasis);
 
 			if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
