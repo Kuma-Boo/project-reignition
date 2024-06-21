@@ -10,7 +10,7 @@ namespace Project.Gameplay;
 /// Important note: DO NOT reorder keys, otherwise stream data will become desynced
 /// </summary>
 [Tool]
-[GlobalClass]
+
 public partial class SFXLibraryResource : Resource
 {
 	#region Editor

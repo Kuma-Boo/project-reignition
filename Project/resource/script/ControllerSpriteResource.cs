@@ -5,7 +5,7 @@ namespace Project.Interface;
 /// <summary>
 /// Contains a list of sprites for controller display purposes.
 /// </summary>
-[GlobalClass]
+
 public partial class ControllerSpriteResource : Resource
 {
 	[Export]

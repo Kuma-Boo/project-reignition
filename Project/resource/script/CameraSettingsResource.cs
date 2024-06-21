@@ -4,7 +4,7 @@ using Godot.Collections;
 namespace Project.Gameplay;
 
 [Tool]
-[GlobalClass]
+
 public partial class CameraSettingsResource : Resource
 {
 	#region Editor

@@ -23,10 +23,10 @@ public partial class CameraTrigger : StageTriggerModule
 	/// <summary> Update static position/rotations every frame? </summary>
 	public bool UpdateEveryFrame { get; private set; }
 
-	[Export(PropertyHint.ResourceType, "CameraSettingsResource")]
+	[Export]
 	/// <summary> Must be assigned to something. </summary>
 	public CameraSettingsResource settings;
-	[Export(PropertyHint.ResourceType, "CameraSettingsResource")]
+	[Export]
 	/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
 	private CameraSettingsResource previousSettings;
 	[Export]

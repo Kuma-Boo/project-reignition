@@ -6,7 +6,7 @@ namespace Project.Gameplay;
 /// <summary>
 /// Contains data of movement settings. Leave values at -1 to ignore (primarily for skill overrides)
 /// </summary>
-[GlobalClass]
+
 public partial class MovementResource : Resource
 {
 	[Export]

@@ -7,7 +7,7 @@ namespace Project.Gameplay;
 
 /// <summary> Master skill list. </summary>
 [Tool]
-[GlobalClass]
+
 public partial class SkillListResource : Resource
 {
 	public override Array<Dictionary> _GetPropertyList() => [ExtensionMethods.CreateProperty("Rebuild", Variant.Type.Bool)];

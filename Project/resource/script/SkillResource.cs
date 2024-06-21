@@ -4,7 +4,7 @@ namespace Project.Gameplay;
 
 /// <summary> A single skill. </summary>
 [Tool]
-[GlobalClass]
+
 public partial class SkillResource : Resource
 {
 	[ExportCategory("General Settings")]
