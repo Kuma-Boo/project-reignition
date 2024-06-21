@@ -1,9 +1,11 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Gameplay;
 
 [Tool]
+[GlobalClass]
 public partial class LevelDataResource : Resource
 {
 	public enum MissionTypes
@@ -54,7 +56,11 @@ public partial class LevelDataResource : Resource
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
 
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,5,.1"));
-		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object));
+		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object, PropertyHint.ResourceType, "LockoutResource"));
+		properties.Add(ExtensionMethods.CreateProperty("Completion/Unlock Stage", Variant.Type.Array, PropertyHint.ArrayType,
+		$"{Variant.Type.Object:D}/{PropertyHint.ResourceType:D}:LevelDataResource"));
+		properties.Add(ExtensionMethods.CreateProperty("Completion/Unlock World", Variant.Type.Int, PropertyHint.Enum,
+		"None, Sand Oasis, Dinosaur Jungle, Evil Foundry, Levitated Ruin, Pirate Storm, Skeleton Dome, Night Palace"));
 
 		return properties;
 	}
@@ -104,6 +110,10 @@ public partial class LevelDataResource : Resource
 				return CompletionDelay;
 			case "Completion/Lockout":
 				return CompletionLockout;
+			case "Completion/Unlock Stage":
+				return UnlockStage;
+			case "Completion/Unlock World":
+				return (int)UnlockWorld;
 		}
 
 		return base._Get(property);
@@ -176,7 +186,12 @@ public partial class LevelDataResource : Resource
 			case "Completion/Lockout":
 				CompletionLockout = (LockoutResource)value;
 				break;
-
+			case "Completion/Unlock Stage":
+				UnlockStage = (Array<LevelDataResource>)value;
+				break;
+			case "Completion/Unlock World":
+				UnlockWorld = (SaveManager.WorldEnum)(int)value;
+				break;
 			default:
 				return false;
 		}
@@ -227,4 +242,8 @@ public partial class LevelDataResource : Resource
 	public float CompletionDelay { get; private set; }
 	/// <summary> Control lockout to apply when the level is completed. Leave null to use Runtime.Instance.StopLockout. </summary>
 	public LockoutResource CompletionLockout { get; private set; }
+	/// <summary> List of stages to unlock when the level is completed. </summary>
+	public Array<LevelDataResource> UnlockStage { get; private set; }
+	/// <summary> World to unlock when the level is completed. </summary>
+	public SaveManager.WorldEnum UnlockWorld { get; private set; }
 }

@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=3 uid="uid://cbt02mctaofmt"]
 
 [ext_resource type="Texture2D" uid="uid://bmwc4e25fnuqd" path="res://interface/gameplay/results/texture/result atlas.png" id="1"]
-[ext_resource type="Script" path="res://interface/gameplay/results/script/ExperienceResults.cs" id="1_xkepa"]
+[ext_resource type="Script" path="res://interface/gameplay/results/script/ExperienceResult.cs" id="1_xkepa"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://bms1u4rvg38nn" path="res://interface/gameplay/results/texture/experience bar background.png" id="5_3fkf3"]
 [ext_resource type="LabelSettings" uid="uid://bd74c653xatd0" path="res://interface/font/ExperienceLabelSettings.tres" id="5_4kecg"]
@@ -331,6 +331,26 @@ tracks/21/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_tuna7"]
+resource_name = "increase"
+length = 0.06667
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/ExpCount")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_qekjh"]
@@ -949,26 +969,6 @@ tracks/1/keys = {
 "values": [Vector2(0, 128), Vector2(0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_tuna7"]
-resource_name = "increase"
-length = 0.06667
-loop_mode = 1
-step = 0.0333333
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SFX/ExpCount")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_y357t"]
 _data = {
 "RESET": SubResource("Animation_anadl"),
@@ -979,7 +979,7 @@ _data = {
 "show-level-up": SubResource("Animation_ktalw")
 }
 
-[node name="ExperienceResults" type="Control" node_paths=PackedStringArray("expFill", "expLabel", "scoreLabel", "skillLabel", "missionLabel", "levelLabel", "levelGainLabel", "skillPointLabel", "skillPointGainLabel", "soulLabel", "soulGainLabel", "animator")]
+[node name="ExperienceResult" type="Control" node_paths=PackedStringArray("expFill", "expLabel", "scoreLabel", "skillLabel", "missionLabel", "levelLabel", "levelGainLabel", "skillPointLabel", "skillPointGainLabel", "soulLabel", "soulGainLabel", "bgm", "animator")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
@@ -999,6 +999,7 @@ skillPointLabel = NodePath("Content/Experience/Result/SP/Value")
 skillPointGainLabel = NodePath("Content/Experience/Result/SP/Value/Amount")
 soulLabel = NodePath("Content/Experience/Result/Soul/Value")
 soulGainLabel = NodePath("Content/Experience/Result/Soul/Value/Amount")
+bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -1504,6 +1505,7 @@ loopEndPosition = 43.0
 
 [node name="LevelUpJingle" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("12_ctc37")
+volume_db = -3.0
 bus = &"SFX"
 
 [node name="LevelUp" type="AudioStreamPlayer" parent="SFX"]
@@ -1513,6 +1515,7 @@ bus = &"SFX"
 
 [node name="ExpCount" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("10_1lyur")
+volume_db = -3.0
 max_polyphony = 5
 bus = &"SFX"
 

@@ -40,6 +40,7 @@ public enum SkillKey
 
 /// <summary> Master skill list. </summary>
 [Tool]
+[GlobalClass]
 public partial class SkillListResource : Resource
 {
 	public override Array<Dictionary> _GetPropertyList() => [ExtensionMethods.CreateProperty("Rebuild", Variant.Type.Bool)];
@@ -181,6 +182,9 @@ public class SkillRing
 	public static bool IsSkillUnlocked(SkillKey key)
 	{
 		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+
+		if (skill == null) // Skill hasn't been created yet...
+			return false;
 
 		if (SaveManager.ActiveGameData.level < skill.LevelRequirement) // Under-leveled
 			return false;

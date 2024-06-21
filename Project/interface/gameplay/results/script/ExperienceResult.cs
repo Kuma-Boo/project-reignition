@@ -3,10 +3,13 @@ using Godot;
 using Project.Core;
 using Project.Gameplay;
 
-namespace Project.Interface;
+namespace Project.Interface.Menus;
 
-public partial class ExperienceResults : Control
+public partial class ExperienceResult : Control
 {
+	[Signal]
+	public delegate void FinishedEventHandler();
+
 	[Export]
 	private Control expFill;
 	[Export]
@@ -32,13 +35,15 @@ public partial class ExperienceResults : Control
 	private Label soulLabel;
 	[Export]
 	private Label soulGainLabel;
-
+	[Export]
+	private BGMPlayer bgm;
 	[Export]
 	private AnimationPlayer animator;
 	private readonly string IncreaseAnimation = "increase";
 	private readonly string LevelUpAnimation = "level-up";
 	private readonly string ShowLevelUpAnimation = "show-level-up";
 
+	private bool isFadingBgm;
 	private bool isProcessing;
 	/// <summary> Amount of experience the player will have after tallying is complete. </summary>
 	private int targetExp;
@@ -46,7 +51,7 @@ public partial class ExperienceResults : Control
 	private int startingExp;
 	private float expInterpolation;
 	private float interpolatedExp;
-	private readonly float ExpSmoothing = 2.0f;
+	private readonly float ExpSmoothing = 0.5f;
 
 	/// <summary> Number to draw on the score label. </summary>
 	private int scoreExp;
@@ -64,19 +69,20 @@ public partial class ExperienceResults : Control
 	/// <summary> Experience points needed for the previous level up. </summary>
 	private int previousLevelupRequirement;
 	/// <summary> Not 100% accurate to the original game, but very close. </summary>
-	private static int CalculateLevelUpRequirement(int level) => (1000 * level) + (1000 * level * (SaveManager.ActiveGameData.level / 10));
+	private static int CalculateLevelUpRequirement(int level) => (8000 * level) + (8000 * level * (SaveManager.ActiveGameData.level / 10));
 
 	private StageSettings Stage => StageSettings.instance;
 
-	public override void _Ready()
-	{
-		useMissionExp = SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
-	}
+	public override void _Ready() => useMissionExp = SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
 
 	public override void _PhysicsProcess(double _)
 	{
 		if (!isProcessing)
+		{
+			if (isFadingBgm)
+				isFadingBgm = SoundManager.FadeAudioPlayer(bgm, 2.0f);
 			return;
+		}
 
 		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("button_action"))
 			SkipResults();
@@ -146,6 +152,7 @@ public partial class ExperienceResults : Control
 		// Skip everything
 		SaveManager.ActiveGameData.exp = targetExp;
 		ProcessLevelUp();
+		expInterpolation = 1.0f;
 	}
 
 	private void ProcessLevelUp()
@@ -188,6 +195,7 @@ public partial class ExperienceResults : Control
 		levelLabel.Text = SaveManager.ActiveGameData.level.ToString("00");
 		skillPointLabel.Text = maxSkillPoints.ToString("000");
 		soulLabel.Text = maxSoulPower.ToString("000");
+		soulLabel.GetParent<Control>().Visible = soulGaugeGain != 0;
 
 		if (animator.CurrentAnimation != ShowLevelUpAnimation)
 			animator.Play(LevelUpAnimation);
@@ -209,6 +217,7 @@ public partial class ExperienceResults : Control
 			else
 				targetExp += Stage.Data.FirstClearBonus;
 		}
+		missionLabel.GetParent<Control>().Visible = useMissionExp;
 
 		RedrawData();
 
@@ -231,20 +240,15 @@ public partial class ExperienceResults : Control
 
 	private void ShowMenu()
 	{
-		animator.Play("show");
+		bgm.Play();
 		isProcessing = true;
+		animator.Play("show");
 	}
 
 	private void FinishMenu()
 	{
-		// Connect the queued scene to transition signals
-		TransitionManager.QueueSceneChange(TransitionManager.instance.QueuedScene);
-		TransitionManager.StartTransition(new()
-		{
-			color = Colors.Black,
-			inSpeed = .5f,
-			loadAsynchronously = true,
-			disableAutoTransition = string.IsNullOrEmpty(TransitionManager.instance.QueuedScene),
-		});
+		// Emit a signal; Transition is handled by UnlockResult.cs
+		isFadingBgm = true;
+		EmitSignal(SignalName.Finished);
 	}
 }

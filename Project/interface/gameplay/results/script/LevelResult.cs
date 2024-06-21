@@ -21,16 +21,24 @@ public partial class LevelResult : Control
 	[Export]
 	private Label total;
 	[Export]
+	private BGMPlayer bgm;
+	[Export]
 	private AnimationPlayer animator;
 
 	private bool isProcessing;
+	private bool isFadingBgm;
 	private StageSettings Stage => StageSettings.instance;
 
 	public override void _Ready() => Stage?.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)));
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (!isProcessing) return;
+		if (!isProcessing)
+		{
+			if (isFadingBgm)
+				isFadingBgm = SoundManager.FadeAudioPlayer(bgm, 2.0f);
+			return;
+		}
 
 		if (animator.IsPlaying())
 		{
@@ -40,6 +48,7 @@ public partial class LevelResult : Control
 		else if (Input.IsActionJustPressed("button_jump") ||
 			Input.IsActionJustPressed("button_action"))
 		{
+			isFadingBgm = true; // Start fading bgm
 			SetInputProcessing(false);
 
 			// Determine which scene to load without connecting it
@@ -78,8 +87,28 @@ public partial class LevelResult : Control
 		bool stageCleared = Stage.LevelState == StageSettings.LevelStateEnum.Success;
 		SaveManager.GameData.LevelStatus clearStatus = stageCleared ? SaveManager.GameData.LevelStatus.Cleared : SaveManager.GameData.LevelStatus.Attempted;
 
+		bgm.Play();
 		animator.Advance(0.0);
 		animator.Play(stageCleared ? "success-start" : "fail-start");
+
+		// Update unlock notifications
+		if (stageCleared)
+		{
+			if (Stage.Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue && !SaveManager.ActiveGameData.IsWorldUnlocked(Stage.Data.UnlockWorld))
+			{
+				SaveManager.ActiveGameData.UnlockWorld(Stage.Data.UnlockWorld);
+				NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Stage.Data.UnlockWorld.ToString().ToSnakeCase()}");
+			}
+
+			foreach (var UnlockStage in Stage.Data.UnlockStage)
+			{
+				if (!SaveManager.ActiveGameData.IsStageUnlocked(UnlockStage.LevelID))
+				{
+					SaveManager.ActiveGameData.UnlockStage(UnlockStage.LevelID);
+					NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
+				}
+			}
+		}
 
 		// Write to file
 		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, clearStatus);

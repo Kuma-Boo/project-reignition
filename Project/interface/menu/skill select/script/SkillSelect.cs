@@ -66,7 +66,7 @@ public partial class SkillSelect : Menu
 		}
 
 		description.ShowDescription();
-		description.SetText(skillOptionList[VerticalSelection].DescriptionKey);
+		description.SetText(SkillList.GetSkill(skillOptionList[VerticalSelection].Key).DescriptionKey);
 		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
 
 		Redraw();
@@ -99,7 +99,7 @@ public partial class SkillSelect : Menu
 			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
 			cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
-			description.SetText(skillOptionList[VerticalSelection].DescriptionKey);
+			description.SetText(SkillList.GetSkill(skillOptionList[VerticalSelection].Key).DescriptionKey);
 
 			animator.Play("select");
 			cursorAnimator.Play("select");

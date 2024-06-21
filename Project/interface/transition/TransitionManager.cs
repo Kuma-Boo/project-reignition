@@ -62,13 +62,15 @@ namespace Project.Core
 
 		private void FinishFade()
 		{
-			if (CurrentTransitionData.outSpeed != 0)
-				animator.SpeedScale = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
-
 			if (CurrentTransitionData.loadAsynchronously)
 				loadingAnimator.Play("hide");
 
 			animator.PlayBackwards("fade");
+			if (Mathf.IsZeroApprox(CurrentTransitionData.outSpeed)) // Cut
+				animator.Seek(animator.CurrentAnimationLength, true);
+			else
+				animator.SpeedScale = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
+
 			animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 		}
 		#endregion

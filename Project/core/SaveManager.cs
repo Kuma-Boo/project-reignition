@@ -568,9 +568,10 @@ public partial class SaveManager : Node
 
 		/// <summary> List of world rings collected. </summary>
 		public Array<WorldEnum> worldRingsCollected = [];
-
 		/// <summary> List of worlds unlocked. </summary>
 		public Array<WorldEnum> worldsUnlocked = [];
+		/// <summary> List of worlds unlocked. </summary>
+		public Array<string> stagesUnlocked = [];
 
 		/// <summary> Player level, from 1 -> 99 </summary>
 		public int level;
@@ -597,12 +598,21 @@ public partial class SaveManager : Node
 		/// <summary> Current ratio (0 -> 1) compared to the soul gauge level cap (50). </summary>
 		public float CalculateSoulGaugeLevelRatio() => Mathf.Clamp(level, 0, 50) / (float)50;
 
+		/// <summary> Checks if a stage has been unlocked. </summary>
+		public bool IsStageUnlocked(string levelID) => stagesUnlocked.Contains(levelID);
+		/// <summary> Unlocks a stage. </summary>
+		public void UnlockStage(string levelID)
+		{
+			if (stagesUnlocked.Contains(levelID))
+				return;
+
+			stagesUnlocked.Add(levelID);
+		}
+
 		/// <summary> Checks if a world is unlocked. </summary>
 		public bool IsWorldUnlocked(WorldEnum world) => worldsUnlocked.Contains(world);
-
 		/// <summary> Checks if a world ring was obtained. </summary>
 		public bool IsWorldRingObtained(WorldEnum world) => worldRingsCollected.Contains(world);
-
 		public void UnlockWorld(WorldEnum world)
 		{
 			if (worldsUnlocked.Contains(world))
@@ -779,6 +789,7 @@ public partial class SaveManager : Node
 				{ nameof(lastPlayedWorld), (int)lastPlayedWorld },
 				{ nameof(worldsUnlocked), worldsUnlocked },
 				{ nameof(worldRingsCollected), worldRingsCollected },
+				{ nameof(stagesUnlocked), stagesUnlocked },
 				{ nameof(levelData), (Dictionary)levelData },
 
 				// Player stats
@@ -807,6 +818,8 @@ public partial class SaveManager : Node
 				for (int i = 0; i < worlds.Count; i++)
 					worldRingsCollected.Add((WorldEnum)worlds[i]);
 			}
+			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+				stagesUnlocked = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
 				levelData = (Dictionary<StringName, Dictionary>)var;
@@ -835,7 +848,9 @@ public partial class SaveManager : Node
 				lastPlayedWorld = WorldEnum.LostPrologue,
 			};
 
-			data.UnlockWorld(WorldEnum.LostPrologue);
+			// TODO Replace this with the tutorial key
+			data.UnlockStage("so_a1_deathless");
+			data.UnlockWorld(WorldEnum.SandOasis);
 
 			if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
 				data.UnlockAllWorlds();

@@ -36,8 +36,7 @@ public partial class LevelOption : Control
 			if (string.IsNullOrEmpty(data.LevelPath)) return false; // Level doesn't exist.
 			if (DebugManager.Instance.UnlockAllStages) return true;
 
-			//TODO Determine by save data
-			return false;
+			return SaveManager.ActiveGameData.IsStageUnlocked(data.LevelID);
 		}
 	}
 

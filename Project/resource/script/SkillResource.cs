@@ -1,10 +1,10 @@
-using System.Text.RegularExpressions;
 using Godot;
 
 namespace Project.Gameplay;
 
 /// <summary> A single skill. </summary>
 [Tool]
+[GlobalClass]
 public partial class SkillResource : Resource
 {
 	[ExportCategory("General Settings")]
@@ -57,9 +57,7 @@ public partial class SkillResource : Resource
 	public int FireSoulRequirement { get; private set; }
 
 	/// <summary> Converts the internal key to snake case for localization. </summary>
-	[GeneratedRegex(@"(\w)([A-Z])")]
-	private static partial Regex SnakeCaseRegex();
-	public string NameString => SnakeCaseRegex().Replace(Key.ToString(), "$1_$2").ToLower();
+	public string NameString => Key.ToString().ToSnakeCase();
 	/// <summary> Returns the localization key for this skill. </summary>
 	public StringName NameKey => $"skill_{NameString}";
 	/// <summary> Returns the localization description key for this skill. </summary>

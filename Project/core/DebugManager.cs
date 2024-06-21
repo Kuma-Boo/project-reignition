@@ -32,7 +32,7 @@ public partial class DebugManager : Node2D
 		Instance = this;
 		ProcessMode = ProcessModeEnum.Always;
 
-		UseDemoSave = true; // Be sure to DISABLE this in the FINAL version of the game
+		UseDemoSave = false; // Be sure to DISABLE this in the FINAL version of the game
 		IsStageCullingEnabled = true;
 		UnlockAllStages = UseDemoSave;
 

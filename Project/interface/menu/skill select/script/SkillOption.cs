@@ -1,49 +1,46 @@
 using Godot;
+using Project.Core;
 using Project.Gameplay;
 
-namespace Project.Interface.Menus
+namespace Project.Interface.Menus;
+
+public partial class SkillOption : Control
 {
-	public partial class SkillOption : Control
+	public SkillKey Key { get; set; }
+
+	public int Number { get; set; }
+	public int Cost { get; set; }
+
+	public bool IsSkillActive
 	{
-		public SkillKey Key { get; set; }
+		get => glow.Visible;
+		set => glow.Visible = value;
+	}
 
-		public int Number { get; set; }
-		public int Cost { get; set; }
+	[Export]
+	private Sprite2D glow;
+	[Export]
+	private Label numberLabel;
+	[Export]
+	private Label nameLabel;
+	[Export]
+	private Label costLabel;
+	[Export]
+	private AnimationPlayer animator;
 
-		public bool IsSkillActive
-		{
-			get => glow.Visible;
-			set => glow.Visible = value;
-		}
+	public State state;
+	public enum State
+	{
+		Locked, // Locked skill
+		Equipable, // Normal
+		Expensive, // Not enough SP
+		Invalid, // Interferes with a different skill
+	}
 
-		public StringName DescriptionKey => NameKey + "_description";
-		private StringName NameKey => "skill_" + Key.ToString().ToSnakeCase();
-
-		[Export]
-		private Sprite2D glow;
-		[Export]
-		private Label numberLabel;
-		[Export]
-		private Label nameLabel;
-		[Export]
-		private Label costLabel;
-		[Export]
-		private AnimationPlayer animator;
-
-		public State state;
-		public enum State
-		{
-			Locked, // Locked skill
-			Equipable, // Normal
-			Expensive, // Not enough SP
-			Invalid, // Interferes with a different skill
-		}
-
-		public void RedrawData()
-		{
-			numberLabel.Text = Number.ToString("00");
-			nameLabel.Text = NameKey;
-			costLabel.Text = Cost.ToString("00");
-		}
+	public void RedrawData()
+	{
+		numberLabel.Text = Number.ToString("00");
+		nameLabel.Text = Runtime.Instance.SkillList.GetSkill(Key).NameKey;
+		costLabel.Text = Cost.ToString("00");
 	}
 }
