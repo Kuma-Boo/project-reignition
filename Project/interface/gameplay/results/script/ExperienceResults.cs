@@ -174,16 +174,16 @@ public partial class ExperienceResults : Control
 			return;
 
 		int maxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
-		int maxSkillPoints = SkillRing.CalculateMaxSkillPoints(SaveManager.ActiveGameData.level);
+		int maxSkillPoints = SkillRing.CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
 
 		int soulGaugeGain = maxSoulPower - CharacterController.instance.Skills.MaxSoulPower;
-		int skillPointGain = maxSkillPoints - SaveManager.ActiveGameData.skillRing.MaxSkillPoints;
+		int skillPointGain = maxSkillPoints - SaveManager.ActiveSkillRing.MaxSkillPoints;
 
 		levelGainLabel.Text = $"+{levelsGained.ToString("00")}";
 		skillPointGainLabel.Text = $"+{skillPointGain.ToString("000")}";
 		soulGainLabel.Text = $"+{soulGaugeGain.ToString("000")}";
 
-		SaveManager.ActiveGameData.skillRing.RefreshSkillRingData(SaveManager.ActiveGameData.level);
+		SaveManager.ActiveSkillRing.UpdateTotalSkillPoints();
 
 		levelLabel.Text = SaveManager.ActiveGameData.level.ToString("00");
 		skillPointLabel.Text = maxSkillPoints.ToString("000");

@@ -298,7 +298,7 @@ public partial class Options : Menu
 	private string FULLSCREEN_EXCLUSIVE_STRING = "option_exclusive_fullscreen";
 	private void UpdateLabels()
 	{
-		Vector2I resolution = SaveManager.WINDOW_SIZES[SaveManager.Config.windowSize];
+		Vector2I resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
 		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
 		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
@@ -325,7 +325,7 @@ public partial class Options : Menu
 		}
 		videoLabels[7].Text = SaveManager.Config.useHDBloom ? HIGH_STRING : LOW_STRING;
 
-		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.DISABLED)
+		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.Disabled)
 			videoLabels[8].Text = "option_hard_shadows";
 		else
 			videoLabels[8].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
@@ -367,11 +367,11 @@ public partial class Options : Menu
 	{
 		switch (setting)
 		{
-			case SaveManager.QualitySetting.LOW:
+			case SaveManager.QualitySetting.Low:
 				return LOW_STRING;
-			case SaveManager.QualitySetting.MEDIUM:
+			case SaveManager.QualitySetting.Medium:
 				return MEDIUM_STRING;
-			case SaveManager.QualitySetting.HIGH:
+			case SaveManager.QualitySetting.High:
 				return HIGH_STRING;
 		}
 
@@ -498,20 +498,20 @@ public partial class Options : Menu
 		else if (VerticalSelection == 8)
 		{
 			int softShadowQuality = (int)SaveManager.Config.softShadowQuality;
-			softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+			softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.softShadowQuality = (SaveManager.QualitySetting)softShadowQuality;
 		}
 		else if (VerticalSelection == 9)
 		{
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
-			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
 			StageSettings.instance.UpdatePostProcessingStatus();
 		}
 		else if (VerticalSelection == 10)
 		{
 			int reflectionQuality = (int)SaveManager.Config.reflectionQuality;
-			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.reflectionQuality = (SaveManager.QualitySetting)reflectionQuality;
 		}
 
@@ -521,9 +521,9 @@ public partial class Options : Menu
 
 	private int FindLargestWindowResolution()
 	{
-		for (int i = SaveManager.WINDOW_SIZES.Length - 1; i >= 0; i--)
+		for (int i = SaveManager.WindowSizes.Length - 1; i >= 0; i--)
 		{
-			if (SaveManager.WINDOW_SIZES[i] >= DisplayServer.ScreenGetSize())
+			if (SaveManager.WindowSizes[i] >= DisplayServer.ScreenGetSize())
 				continue;
 
 			return i;

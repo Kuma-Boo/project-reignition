@@ -247,7 +247,7 @@ public partial class DebugManager : Node2D
 	private void OnSkillSelected(int skillIndex)
 	{
 		SkillKey key = (SkillKey)skillIndex;
-		skillToggleButton.ButtonPressed = SaveManager.ActiveGameData.skillRing.equippedSkills.Contains(key);
+		skillToggleButton.ButtonPressed = SaveManager.ActiveSkillRing.EquippedSkills.Contains(key);
 	}
 
 	private void OnSkillToggled(bool toggled)
@@ -256,11 +256,11 @@ public partial class DebugManager : Node2D
 
 		if (toggled)
 		{
-			SaveManager.ActiveGameData.skillRing.EquipSkill(key, true);
+			SaveManager.ActiveSkillRing.EquipSkill(key, true);
 			return;
 		}
 
-		SaveManager.ActiveGameData.skillRing.UnequipSkill(key);
+		SaveManager.ActiveSkillRing.UnequipSkill(key);
 	}
 	#endregion
 

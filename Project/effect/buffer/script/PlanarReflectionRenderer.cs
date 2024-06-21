@@ -30,16 +30,16 @@ namespace Project.Gameplay
 
 		public override void _EnterTree()
 		{
-			reflectionViewport.Size = SaveManager.WINDOW_SIZES[SaveManager.Config.windowSize];
+			reflectionViewport.Size = SaveManager.WindowSizes[SaveManager.Config.windowSize];
 			switch (SaveManager.Config.reflectionQuality)
 			{
-				case SaveManager.QualitySetting.DISABLED:
+				case SaveManager.QualitySetting.Disabled:
 					reflectionCamera.ClearCurrent();
 					return;
-				case SaveManager.QualitySetting.LOW: // Quarter resolution
+				case SaveManager.QualitySetting.Low: // Quarter resolution
 					reflectionViewport.Size /= 4;
 					break;
-				case SaveManager.QualitySetting.MEDIUM: // Half resolution
+				case SaveManager.QualitySetting.Medium: // Half resolution
 					reflectionViewport.Size /= 2;
 					break;
 			}

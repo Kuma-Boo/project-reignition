@@ -27,7 +27,7 @@ public partial class SkillSelect : Menu
 	private Label skillPointLabel;
 
 	private SkillListResource SkillList => Runtime.Instance.SkillList;
-	private SkillRing ActiveSkillRing => SaveManager.ActiveGameData.skillRing;
+	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
 	private int cursorPosition;
 
@@ -59,7 +59,7 @@ public partial class SkillSelect : Menu
 			newSkill.Number = i + 1;
 			newSkill.Cost = SkillList.GetSkill(key).Cost;
 			newSkill.RedrawData();
-			newSkill.IsSkillActive = ActiveSkillRing.equippedSkills.Contains(key);
+			newSkill.IsSkillActive = ActiveSkillRing.EquippedSkills.Contains(key);
 
 			optionContainer.AddChild(newSkill);
 			skillOptionList.Add(newSkill);
@@ -135,7 +135,7 @@ public partial class SkillSelect : Menu
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-		skillOptionList[VerticalSelection].IsSkillActive = ActiveSkillRing.equippedSkills.Contains(skillOptionList[VerticalSelection].Key);
+		skillOptionList[VerticalSelection].IsSkillActive = ActiveSkillRing.EquippedSkills.Contains(skillOptionList[VerticalSelection].Key);
 	}
 
 	private bool ToggleSkill(SkillKey key)

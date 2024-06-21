@@ -1,7 +1,6 @@
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
-using System;
 
 namespace Project.Core;
 
@@ -9,7 +8,7 @@ public partial class SaveManager : Node
 {
 	public static SaveManager Instance;
 
-	private const string SAVE_DIRECTORY = "user://";
+	private const string SaveDirectory = "user://";
 
 	[Signal]
 	public delegate void ConfigAppliedEventHandler();
@@ -24,19 +23,19 @@ public partial class SaveManager : Node
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
 			// Default debug settings for testing from the editor.
-			Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.MASTER);
-			Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.BGM);
-			Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.SFX);
-			Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.VOICE);
+			Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.Master);
+			Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.Bgm);
+			Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.Sfx);
+			Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.Voice);
 
 			Config.masterVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.MASTER)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Master)) * 100);
 			Config.bgmVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.BGM)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Bgm)) * 100);
 			Config.sfxVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.SFX)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Sfx)) * 100);
 			Config.voiceVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.VOICE)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Voice)) * 100);
 			ApplyConfig();
 		}
 	}
@@ -44,9 +43,9 @@ public partial class SaveManager : Node
 	#region Config
 	public static ConfigData Config = new();
 	public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
-	private const string CONFIG_FILE_NAME = "config.cfg";
+	private const string ConfigFileName = "config.cfg";
 
-	#region Enums
+	#region Config Enums
 	public enum ControllerType
 	{
 		Automatic, // Automatically try to detect controller type
@@ -77,24 +76,24 @@ public partial class SaveManager : Node
 
 	public enum QualitySetting
 	{
-		DISABLED,
-		LOW,
-		MEDIUM,
-		HIGH,
-		COUNT
+		Disabled,
+		Low,
+		Medium,
+		High,
+		Count
 	}
 
 	private enum AudioBuses
 	{
-		MASTER,
-		BGM,
-		SFX,
-		VOICE,
-		COUNT
+		Master,
+		Bgm,
+		Sfx,
+		Voice,
+		Count
 	}
 
-	public static readonly Vector2I[] WINDOW_SIZES =
-	{
+	public static readonly Vector2I[] WindowSizes =
+	[
 		new(640, 360), // 360p
 		new(854, 480), // 480p
 		new(1280, 720), // 720p
@@ -102,7 +101,7 @@ public partial class SaveManager : Node
 		new(1920, 1080), // 1080p
 		new(2560, 1440), // 1440p
 		new(3840, 2160), // 4K
-	};
+	];
 
 	#endregion
 
@@ -118,9 +117,9 @@ public partial class SaveManager : Node
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
 		public int antiAliasing = 1; // Default to FXAA
 		public bool useHDBloom = true;
-		public QualitySetting softShadowQuality = QualitySetting.MEDIUM;
-		public QualitySetting postProcessingQuality = QualitySetting.MEDIUM;
-		public QualitySetting reflectionQuality = QualitySetting.HIGH;
+		public QualitySetting softShadowQuality = QualitySetting.Medium;
+		public QualitySetting postProcessingQuality = QualitySetting.Medium;
+		public QualitySetting reflectionQuality = QualitySetting.High;
 
 		// Audio
 		public bool isMasterMuted;
@@ -161,7 +160,6 @@ public partial class SaveManager : Node
 				{ nameof(softShadowQuality), (int)softShadowQuality },
 				{ nameof(postProcessingQuality), (int)postProcessingQuality },
 				{ nameof(reflectionQuality), (int)reflectionQuality },
-
 
 				// Audio
 				{ nameof(isMasterMuted), isMasterMuted },
@@ -233,14 +231,12 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(voiceVolume), out var))
 				voiceVolume = (int)var;
 
-
 			if (dictionary.TryGetValue(nameof(deadZone), out var))
 				deadZone = (float)var;
 			if (dictionary.TryGetValue(nameof(controllerType), out var))
 				controllerType = (ControllerType)(int)var;
 			if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
 				inputConfiguration = (Dictionary)Json.ParseString((string)var);
-
 
 			if (dictionary.TryGetValue(nameof(subtitlesEnabled), out var))
 				subtitlesEnabled = (bool)var;
@@ -251,11 +247,10 @@ public partial class SaveManager : Node
 		}
 	}
 
-
 	/// <summary> Attempts to load config data from file. </summary>
 	public static void LoadConfig()
 	{
-		FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Read);
+		FileAccess file = FileAccess.Open(SaveDirectory + ConfigFileName, FileAccess.ModeFlags.Read);
 
 		try
 		{
@@ -275,15 +270,13 @@ public partial class SaveManager : Node
 		ApplyConfig();
 	}
 
-
 	/// <summary> Attempts to save config data to file. </summary>
 	public static void SaveConfig()
 	{
-		FileAccess file = FileAccess.Open(SAVE_DIRECTORY + CONFIG_FILE_NAME, FileAccess.ModeFlags.Write);
+		FileAccess file = FileAccess.Open(SaveDirectory + ConfigFileName, FileAccess.ModeFlags.Write);
 		file.StoreString(Json.Stringify(Config.ToDictionary(), "\t"));
 		file.Close();
 	}
-
 
 	/// <summary> Applies active configuration data. </summary>
 	public static void ApplyConfig()
@@ -294,13 +287,16 @@ public partial class SaveManager : Node
 		// Display settings
 		DisplayServer.WindowMode targetMode = DisplayServer.WindowMode.Windowed;
 		if (Config.useFullscreen)
+		{
 			targetMode = Config.useExclusiveFullscreen
 				? DisplayServer.WindowMode.ExclusiveFullscreen
 				: DisplayServer.WindowMode.Fullscreen;
+		}
+
 		if (DisplayServer.WindowGetMode() != targetMode)
 			DisplayServer.WindowSetMode(targetMode);
 		if (!Config.useFullscreen)
-			DisplayServer.WindowSetSize(WINDOW_SIZES[Config.windowSize]);
+			DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
 
 		DisplayServer.VSyncMode targetVSyncMode =
 			Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
@@ -336,18 +332,18 @@ public partial class SaveManager : Node
 		RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.useHDBloom);
 
 		int targetShadowAtlasSize = 4096;
-		bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.HIGH;
+		bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.High;
 		RenderingServer.ShadowQuality targetSoftShadowQuality = RenderingServer.ShadowQuality.Hard;
 		switch (Config.softShadowQuality)
 		{
-			case QualitySetting.LOW:
+			case QualitySetting.Low:
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftLow;
 				break;
-			case QualitySetting.MEDIUM:
+			case QualitySetting.Medium:
 				targetShadowAtlasSize = 4096;
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftMedium;
 				break;
-			case QualitySetting.HIGH:
+			case QualitySetting.High:
 				targetShadowAtlasSize = 8192;
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftHigh;
 				break;
@@ -360,19 +356,19 @@ public partial class SaveManager : Node
 
 		switch (Config.postProcessingQuality)
 		{
-			case QualitySetting.LOW:
+			case QualitySetting.Low:
 				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Low, true, .5f, 2, 50,
 					300);
 				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Low, true, .5f, 2, 50,
 					300);
 				break;
-			case QualitySetting.MEDIUM:
+			case QualitySetting.Medium:
 				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Medium, true, .5f, 2,
 					50, 300);
 				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Medium, true, .5f, 2,
 					50, 300);
 				break;
-			case QualitySetting.HIGH:
+			case QualitySetting.High:
 				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.High, false, .5f, 2,
 					50, 300);
 				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.High, false, .5f, 2,
@@ -380,15 +376,13 @@ public partial class SaveManager : Node
 				break;
 		}
 
-
-		SetAudioBusVolume((int)AudioBuses.MASTER, Config.masterVolume, Config.isMasterMuted);
-		SetAudioBusVolume((int)AudioBuses.BGM, Config.bgmVolume, Config.isBgmMuted);
-		SetAudioBusVolume((int)AudioBuses.SFX, Config.sfxVolume, Config.isSfxMuted);
-		SetAudioBusVolume((int)AudioBuses.VOICE, Config.voiceVolume, Config.isVoiceMuted);
+		SetAudioBusVolume((int)AudioBuses.Master, Config.masterVolume, Config.isMasterMuted);
+		SetAudioBusVolume((int)AudioBuses.Bgm, Config.bgmVolume, Config.isBgmMuted);
+		SetAudioBusVolume((int)AudioBuses.Sfx, Config.sfxVolume, Config.isSfxMuted);
+		SetAudioBusVolume((int)AudioBuses.Voice, Config.voiceVolume, Config.isVoiceMuted);
 
 		Instance.EmitSignal(SignalName.ConfigApplied);
 	}
-
 
 	/// <summary> Applies input map configuration. </summary>
 	public static void ApplyInputMap()
@@ -414,23 +408,29 @@ public partial class SaveManager : Node
 			InputMap.ActionSetDeadzone(actions[i], Config.deadZone);
 
 			if (key != Key.None)
+			{
 				InputMap.ActionAddEvent(actions[i], new InputEventKey()
 				{
 					Keycode = key
 				});
+			}
 
 			if (axis != JoyAxis.Invalid)
+			{
 				InputMap.ActionAddEvent(actions[i], new InputEventJoypadMotion()
 				{
 					Axis = axis,
 					AxisValue = axisSign
 				});
+			}
 
 			if (button != JoyButton.Invalid)
+			{
 				InputMap.ActionAddEvent(actions[i], new InputEventJoypadButton()
 				{
 					ButtonIndex = button
 				});
+			}
 		}
 	}
 
@@ -461,7 +461,6 @@ public partial class SaveManager : Node
 		}
 	}
 
-
 	/// <summary> Changes the volume of an audio bus channel. </summary>
 	public static void SetAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
 	{
@@ -475,25 +474,8 @@ public partial class SaveManager : Node
 	#endregion
 
 	#region Game data
-
 	/// <summary> Longest amount of playtime that can be displayed on the file select. (99:59:59 in seconds) </summary>
 	public const int MAX_PLAY_TIME = 359999;
-
-	[Flags]
-	public enum WorldFlagEnum
-	{
-		LostPrologue = 1,
-		SandOasis = 2,
-		DinosaurJungle = 4,
-		EvilFoundry = 8,
-		LevitatedRuin = 16,
-		PirateStorm = 32,
-		SkeletonDome = 64,
-		NightPalace = 128,
-
-		All = LostPrologue + SandOasis + DinosaurJungle + EvilFoundry + LevitatedRuin + PirateStorm + SkeletonDome +
-			  NightPalace
-	}
 
 	public enum WorldEnum
 	{
@@ -508,9 +490,7 @@ public partial class SaveManager : Node
 		Max
 	}
 
-
 	public static int ActiveSaveSlotIndex = -1;
-
 	/// <summary> Reference to the current save being used. </summary>
 	public static GameData ActiveGameData
 	{
@@ -524,19 +504,74 @@ public partial class SaveManager : Node
 		}
 	}
 
+	/// <summary> Current skill ring. </summary>
+	public static SkillRing ActiveSkillRing = new();
 	public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; // List of all saves created.
 	public const int MAX_SAVE_SLOTS = 9; // Maximum number of save slots that can be created.
+
+	/// <summary> Saves active game data to a file. </summary>
+	public static void SaveGameData()
+	{
+		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
+
+		// TODO Write save data to a file.
+		string saveNumber = ActiveSaveSlotIndex.ToString("00");
+		FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
+
+		if (FileAccess.GetOpenError() == Error.Ok)
+		{
+			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
+			file.Close();
+		}
+		else
+		{
+			// TODO Show an error message to the player? 
+		}
+	}
+
+	/// <summary> Preloads game data so it can be displayed on menus. </summary>
+	public static void LoadGameData()
+	{
+		for (int i = 0; i < GameSaveSlots.Length; i++)
+		{
+			GameSaveSlots[i] = new();
+
+			string saveNumber = i.ToString("00");
+			FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
+			if (FileAccess.GetOpenError() == Error.Ok)
+			{
+				GameSaveSlots[i].FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
+				file.Close();
+			}
+		}
+
+		// Debug game data
+		if (OS.IsDebugBuild()) // For testing
+		{
+			ActiveSaveSlotIndex = 0;
+			GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();
+			ActiveGameData.UnlockAllWorlds();
+			ActiveSkillRing.LoadFromActiveData();
+		}
+	}
+
+	/// <summary> Frees game data at the given index, then creates default data in it's place. </summary>
+	public static void ResetSaveData(int index)
+	{
+		GameSaveSlots[index].Free();
+		GameSaveSlots[index] = GameData.DefaultData();
+	}
 
 	public partial class GameData : GodotObject
 	{
 		/// <summary> Which area was the player in last? (Used for save select) </summary>
 		public WorldEnum lastPlayedWorld;
 
-		/// <summary> Flag representation of world rings collected. </summary>
-		public WorldFlagEnum worldRingsCollected;
+		/// <summary> List of world rings collected. </summary>
+		public Array<WorldEnum> worldRingsCollected = [];
 
-		/// <summary> Flag representation of worlds unlocked. </summary>
-		public WorldFlagEnum worldsUnlocked;
+		/// <summary> List of worlds unlocked. </summary>
+		public Array<WorldEnum> worldsUnlocked = [];
 
 		/// <summary> Player level, from 1 -> 99 </summary>
 		public int level;
@@ -546,8 +581,8 @@ public partial class SaveManager : Node
 		public float playTime;
 		/// <summary> Total number of fire souls the player collected. </summary>
 		public int fireSoul;
-		/// <summary> Current skill ring. </summary>
-		public SkillRing skillRing = new();
+
+		public Array<SkillKey> equippedSkills = [];
 
 		/// <summary> The player's level must be at least one, so a file with level zero is treated as empty. </summary>
 		public bool IsNewFile() => level == 0;
@@ -564,20 +599,23 @@ public partial class SaveManager : Node
 		public float CalculateSoulGaugeLevelRatio() => Mathf.Clamp(level, 0, 50) / (float)50;
 
 		/// <summary> Checks if a world is unlocked. </summary>
-		public bool IsWorldUnlocked(int worldIndex) => worldsUnlocked.HasFlag(ConvertIntToWorldEnum(worldIndex));
+		public bool IsWorldUnlocked(WorldEnum world) => worldsUnlocked.Contains(world);
 
 		/// <summary> Checks if a world ring was obtained. </summary>
-		public bool IsWorldRingObtained(int worldIndex) =>
-			worldRingsCollected.HasFlag(ConvertIntToWorldEnum(worldIndex));
+		public bool IsWorldRingObtained(WorldEnum world) => worldRingsCollected.Contains(world);
 
-		/// <summary> Converts (WorldEnum)worldIndex to WorldFlagEnum. World index starts at zero. </summary>
-		private WorldFlagEnum ConvertIntToWorldEnum(int worldIndex)
+		public void UnlockWorld(WorldEnum world)
 		{
-			int returnIndex = 1;
-			for (int i = 0; i < worldIndex; i++)
-				returnIndex *= 2;
+			if (worldsUnlocked.Contains(world))
+				return;
 
-			return (WorldFlagEnum)returnIndex;
+			worldsUnlocked.Add(world);
+		}
+
+		public void UnlockAllWorlds()
+		{
+			for (int i = 0; i < (int)WorldEnum.Max; i++)
+				UnlockWorld((WorldEnum)i);
 		}
 
 		#region Level Data
@@ -740,16 +778,15 @@ public partial class SaveManager : Node
 			{
 				// WorldEnum data
 				{ nameof(lastPlayedWorld), (int)lastPlayedWorld },
-				{ nameof(worldRingsCollected), (int)worldRingsCollected },
-				{ nameof(worldsUnlocked), (int)worldsUnlocked },
+				{ nameof(worldsUnlocked), worldsUnlocked },
+				{ nameof(worldRingsCollected), worldRingsCollected },
 				{ nameof(levelData), (Dictionary)levelData },
-
 
 				// Player stats
 				{ nameof(level), level },
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
-				{ nameof(skillRing), skillRing.equippedSkills },
+				{ nameof(equippedSkills), equippedSkills },
 			};
 		}
 
@@ -759,10 +796,10 @@ public partial class SaveManager : Node
 			// WorldEnum data
 			if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 				lastPlayedWorld = (WorldEnum)(int)var;
-			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
-				worldRingsCollected = (WorldFlagEnum)(int)var;
 			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
-				worldsUnlocked = (WorldFlagEnum)(int)var;
+				worldsUnlocked = (Array<WorldEnum>)var;
+			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
+				worldRingsCollected = (Array<WorldEnum>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
 				levelData = (Dictionary<StringName, Dictionary>)var;
@@ -774,11 +811,8 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(playTime), out var))
 				playTime = (float)var;
 
-			if (dictionary.TryGetValue(nameof(skillRing), out var))
-			{
-				skillRing.equippedSkills = (Array<SkillKey>)var;
-				skillRing.RefreshSkillRingData(level);
-			}
+			if (dictionary.TryGetValue(nameof(ActiveSkillRing), out var))
+				equippedSkills = (Array<SkillKey>)var;
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>
@@ -787,68 +821,16 @@ public partial class SaveManager : Node
 			GameData data = new()
 			{
 				level = 1,
-				worldsUnlocked = WorldFlagEnum.LostPrologue,
 				lastPlayedWorld = WorldEnum.LostPrologue,
 			};
 
+			data.UnlockWorld(WorldEnum.LostPrologue);
+
 			if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
-				data.worldsUnlocked = WorldFlagEnum.All;
-			data.skillRing.RefreshSkillRingData(1);
+				data.UnlockAllWorlds();
+
 			return data;
 		}
 	}
-
-	/// <summary> Saves active game data to a file. </summary>
-	public static void SaveGameData()
-	{
-		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
-
-		// TODO Write save data to a file.
-		string saveNumber = ActiveSaveSlotIndex.ToString("00");
-		FileAccess file = FileAccess.Open(SAVE_DIRECTORY + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
-
-		if (FileAccess.GetOpenError() == Error.Ok)
-		{
-			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
-			file.Close();
-		}
-		else
-		{
-			// TODO Show an error message to the player? 
-		}
-	}
-
-	/// <summary> Preloads game data so it can be displayed on menus. </summary>
-	public static void LoadGameData()
-	{
-		for (int i = 0; i < GameSaveSlots.Length; i++)
-		{
-			GameSaveSlots[i] = new();
-
-			string saveNumber = i.ToString("00");
-			FileAccess file = FileAccess.Open(SAVE_DIRECTORY + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
-			if (FileAccess.GetOpenError() == Error.Ok)
-			{
-				GameSaveSlots[i].FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
-				file.Close();
-			}
-		}
-
-		// Debug game data
-		if (OS.IsDebugBuild()) // For testing
-		{
-			ActiveSaveSlotIndex = 0;
-			GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();
-			ActiveGameData.worldsUnlocked = WorldFlagEnum.All;
-		}
-	}
-
-	/// <summary> Frees game data at the given index, then creates default data in it's place. </summary>
-	public static void ResetSaveData(int index)
-	{
-		GameSaveSlots[index].Free();
-		GameSaveSlots[index] = GameData.DefaultData();
-	}
-
 	#endregion
 }

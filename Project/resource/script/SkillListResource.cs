@@ -117,15 +117,15 @@ public partial class SkillListResource : Resource
 public class SkillRing
 {
 	/// <summary> List of equipped skills. </summary>
-	public Array<SkillKey> equippedSkills = [];
+	public Array<SkillKey> EquippedSkills => SaveManager.ActiveGameData.equippedSkills;
 	/// <summary> Cost of all equipped skills. </summary>
-	public int TotalCost { get; set; }
+	public int TotalCost { get; private set; }
 	/// <summary> Amount of available skill points. </summary>
 	public int MaxSkillPoints { get; private set; }
 
-	public static int CalculateMaxSkillPoints(int level)
+	/// <summary> Calculates how many skill points the player has based on their level. </summary>
+	public static int CalculateSkillPointsByLevel(int level)
 	{
-		// Calculates how many skill points the player has based on their level
 		int skillPoints = 10; // Start at 10
 		if (level > 1)
 			skillPoints += (level - 1) * 5; // +5 per level--ends at 500.
@@ -133,19 +133,24 @@ public class SkillRing
 		return skillPoints;
 	}
 
-	public void RefreshSkillRingData(int level)
+	/// <summary> Updates how many skill points the player has based on their save data. </summary>
+	public void UpdateTotalSkillPoints()
 	{
-		MaxSkillPoints = CalculateMaxSkillPoints(level);
+		MaxSkillPoints = CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
+	}
 
+	/// <summary> Updates the total cost based on the skills currently equipped on a skill ring. </summary>
+	public void UpdateTotalCost()
+	{
 		TotalCost = 0;
-		for (int i = 0; i < equippedSkills.Count; i++)
-			TotalCost += Runtime.Instance.SkillList.GetSkill(equippedSkills[i]).Cost;
+		for (int i = 0; i < EquippedSkills.Count; i++)
+			TotalCost += Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]).Cost;
 	}
 
 	/// <summary> Equips a skill onto the skill ring. </summary>
 	public bool EquipSkill(SkillKey key, bool allowSkillPointOverflow = false)
 	{
-		if (equippedSkills.Contains(key))
+		if (EquippedSkills.Contains(key))
 			return false; // Already equipped
 
 		if (!allowSkillPointOverflow) // Check for total cost
@@ -155,7 +160,7 @@ public class SkillRing
 				return false; // Too expensive!
 		}
 
-		equippedSkills.Add(key);
+		EquippedSkills.Add(key);
 		TotalCost += Runtime.Instance.SkillList.GetSkill(key).Cost; // Take skill points
 		return true;
 	}
@@ -163,7 +168,7 @@ public class SkillRing
 	/// <summary> Unequips a skill from the skill ring. </summary>
 	public bool UnequipSkill(SkillKey key)
 	{
-		if (equippedSkills.Remove(key))
+		if (EquippedSkills.Remove(key))
 		{
 			TotalCost -= Runtime.Instance.SkillList.GetSkill(key).Cost; // Refund skill points
 			return true;
@@ -200,6 +205,13 @@ public class SkillRing
 
 		// Finish with firesoul requirements
 		return SaveManager.ActiveGameData.fireSoul >= skill.FireSoulRequirement;
+	}
+
+	/// <summary> Updates a skill ring to match the active game data. </summary>
+	public void LoadFromActiveData()
+	{
+		UpdateTotalSkillPoints();
+		UpdateTotalCost();
 	}
 
 	public void SortByCost()

@@ -62,7 +62,7 @@ namespace Project.Gameplay
 
 		public void UpdatePostProcessingStatus()
 		{
-			bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.DISABLED;
+			bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
 			Environment.Environment.SsaoEnabled = postProcessingEnabled;
 			Environment.Environment.SsilEnabled = postProcessingEnabled;
 		}
