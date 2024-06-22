@@ -54,7 +54,7 @@ public partial class CharacterLockon : Node3D
 	public void StartHomingAttack()
 	{
 		IsHomingAttacking = true;
-		IsPerfectHomingAttack = Character.Skills.IsSkillEnabled(SkillKey.PerfectHomingAttack) && monitoringPerfectHomingAttack;
+		IsPerfectHomingAttack = Character.Skills.IsSkillEquipped(SkillKey.PerfectHomingAttack) && monitoringPerfectHomingAttack;
 	}
 
 

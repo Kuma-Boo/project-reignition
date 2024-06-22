@@ -1,3 +1,4 @@
+using Godot;
 using Godot.Collections;
 using Project.Core;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ namespace Project.Gameplay;
 
 public class SkillRing
 {
-	public bool IsSkillEnabled(SkillKey key) => EquippedSkills.Contains(key);
+	public bool IsSkillEquipped(SkillKey key) => EquippedSkills.Contains(key);
 	/// <summary> List of equipped skills. </summary>
 	public Array<SkillKey> EquippedSkills => SaveManager.ActiveGameData.equippedSkills;
 	/// <summary> Cost of all equipped skills. </summary>
@@ -25,10 +26,7 @@ public class SkillRing
 	}
 
 	/// <summary> Updates how many skill points the player has based on their save data. </summary>
-	public void UpdateTotalSkillPoints()
-	{
-		MaxSkillPoints = CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
-	}
+	public void UpdateTotalSkillPoints() => MaxSkillPoints = CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
 
 	/// <summary> Updates the total cost based on the skills currently equipped on a skill ring. </summary>
 	public void UpdateTotalCost()
@@ -38,21 +36,46 @@ public class SkillRing
 			TotalCost += Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]).Cost;
 	}
 
+	/// <summary> Checks whether a conflicting skill is already equipped. </summary>
+	public SkillKey IsConflictingSkillEquipped(SkillResource skill)
+	{
+		if (skill.SkillConflicts == null)
+			return SkillKey.Max;
+
+		foreach (SkillKey conflict in skill.SkillConflicts)
+		{
+			if (!IsSkillEquipped(conflict))
+				continue;
+
+			return conflict;
+		}
+
+		return SkillKey.Max; // No conflicts
+	}
+
 	/// <summary> Equips a skill onto the skill ring. </summary>
 	public bool EquipSkill(SkillKey key, bool allowSkillPointOverflow = false)
 	{
 		if (EquippedSkills.Contains(key))
 			return false; // Already equipped
 
+		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+		SkillResource conflict = Runtime.Instance.SkillList.GetSkill(SaveManager.ActiveSkillRing.IsConflictingSkillEquipped(skill));
+		if (conflict != null)
+		{
+			GD.Print($"You cannot equip {conflict.NameKey} when {skill.NameKey} is active.");
+			return false;
+		}
+
 		if (!allowSkillPointOverflow) // Check for total cost
 		{
-			int targetTotalCost = TotalCost + Runtime.Instance.SkillList.GetSkill(key).Cost;
+			int targetTotalCost = TotalCost + skill.Cost;
 			if (targetTotalCost > MaxSkillPoints)
 				return false; // Too expensive!
 		}
 
 		EquippedSkills.Add(key);
-		TotalCost += Runtime.Instance.SkillList.GetSkill(key).Cost; // Take skill points
+		TotalCost += skill.Cost; // Take skill points
 		return true;
 	}
 
@@ -71,6 +94,9 @@ public class SkillRing
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
 	public static bool IsSkillUnlocked(SkillKey key)
 	{
+		if (DebugManager.Instance.UseDemoSave)
+			return true;
+
 		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
 
 		if (skill == null) // Skill hasn't been created yet...

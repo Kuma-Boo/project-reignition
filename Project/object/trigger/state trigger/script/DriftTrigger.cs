@@ -148,7 +148,7 @@ namespace Project.Gameplay.Triggers
 			float volume = distance / slideDistance;
 			sfx.VolumeDb = Mathf.SmoothStep(startingVolume, -80f, volume);
 
-			bool isManualDrift = Character.Skills.IsSkillEnabled(SkillKey.DriftExperience);
+			bool isManualDrift = Character.Skills.IsSkillEquipped(SkillKey.DriftExperience);
 			bool isAttemptingDrift = (Input.IsActionJustPressed("button_action") && isManualDrift) ||
 				(!isManualDrift && distance <= INPUT_WINDOW_DISTANCE);
 

@@ -1,9 +1,84 @@
-[gd_scene load_steps=10 format=3 uid="uid://b6v3sm1vo8for"]
+[gd_scene load_steps=36 format=3 uid="uid://b6v3sm1vo8for"]
 
-[ext_resource type="Texture2D" uid="uid://n4o8qvki6yi7" path="res://interface/menu/skill select/texture/skill atlas.png" id="1_46y00"]
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillOption.cs" id="1_djcyy"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="2_kayxw"]
+[ext_resource type="Texture2D" uid="uid://t6odc5txfarh" path="res://interface/menu/skill select/texture/light.png" id="2_nywsq"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="3_uxuno"]
+[ext_resource type="Texture2D" uid="uid://sn6871vb7ats" path="res://interface/menu/skill select/texture/glow.png" id="4_ow4gi"]
+[ext_resource type="Texture2D" uid="uid://cdhux01qob8mb" path="res://interface/menu/skill select/texture/wind.png" id="5_e8s7r"]
+[ext_resource type="Texture2D" uid="uid://bx1cy4uyloj7q" path="res://interface/menu/skill select/texture/dark.png" id="5_rmfvq"]
+[ext_resource type="Texture2D" uid="uid://bwm3li2gxuwn8" path="res://interface/menu/skill select/texture/experience.png" id="6_frxog"]
+[ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="8_j35me"]
+[ext_resource type="Texture2D" uid="uid://epdfxhqugwg2" path="res://interface/menu/skill select/texture/fire.png" id="10_jrr8x"]
+[ext_resource type="Texture2D" uid="uid://cyelehkbxtyyb" path="res://interface/menu/skill select/texture/air.png" id="11_82cis"]
+[ext_resource type="Texture2D" uid="uid://djonxolhpgwoo" path="res://interface/menu/skill select/texture/contract.png" id="12_f4jnt"]
+[ext_resource type="Texture2D" uid="uid://0moi5ue4oj" path="res://interface/menu/skill select/texture/combat.png" id="14_563c4"]
+[ext_resource type="Texture2D" uid="uid://dcy5gvo5deiwq" path="res://interface/menu/skill select/texture/crest.png" id="15_8sg8b"]
+[ext_resource type="Texture2D" uid="uid://dde4ae03nv4gp" path="res://interface/menu/skill select/texture/assist.png" id="15_idxrv"]
+
+[sub_resource type="Animation" id="Animation_03o5k"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_gr487"]
+resource_name = "loop"
+length = 0.500003
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.333333),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8gw72"]
+_data = {
+"RESET": SubResource("Animation_03o5k"),
+"loop": SubResource("Animation_gr487")
+}
 
 [sub_resource type="Animation" id="Animation_t3g2o"]
 length = 0.001
@@ -19,21 +94,65 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
-
-[sub_resource type="Animation" id="Animation_jag68"]
-resource_name = "equipable"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Tint:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Light/Glow:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("New:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Element:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_e8s7r")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Element/Category:texture")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("15_8sg8b")]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Element:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_kisbp"]
@@ -51,9 +170,253 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(0.588235, 0.588235, 0.588235, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Light/Glow:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ipjbf"]
+resource_name = "new"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("New:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_st7wf"]
+resource_name = "wind"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_e8s7r")]
+}
+
+[sub_resource type="Animation" id="Animation_262bo"]
+resource_name = "dark"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_rmfvq")]
+}
+
+[sub_resource type="Animation" id="Animation_rdhqn"]
+resource_name = "fire"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_jrr8x")]
+}
+
+[sub_resource type="Animation" id="Animation_vakrw"]
+resource_name = "ground"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element/Category:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_frxog")]
+}
+
+[sub_resource type="Animation" id="Animation_8flb0"]
+resource_name = "air"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element/Category:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_82cis")]
+}
+
+[sub_resource type="Animation" id="Animation_vlr60"]
+resource_name = "contract"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element/Category:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("12_f4jnt")]
+}
+
+[sub_resource type="Animation" id="Animation_a0w52"]
+resource_name = "combat"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element/Category:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_563c4")]
+}
+
+[sub_resource type="Animation" id="Animation_yvlnf"]
+resource_name = "experience"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element/Category:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_frxog")]
+}
+
+[sub_resource type="Animation" id="Animation_jvk5d"]
+resource_name = "crest"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element/Category:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("15_8sg8b")]
+}
+
+[sub_resource type="Animation" id="Animation_86xx0"]
+resource_name = "assist"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Element/Category:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("15_idxrv")]
+}
+
+[sub_resource type="Animation" id="Animation_tcqx0"]
+resource_name = "unequipped"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Light/Glow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tint:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_0dlo8"]
+resource_name = "equipped"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Light/Glow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tint:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_gtrin"]
-resource_name = "locked"
+resource_name = "conflict"
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -67,16 +430,40 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1, 0, 0, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Light/Glow:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lm6e8"]
 _data = {
 "RESET": SubResource("Animation_t3g2o"),
-"equipable": SubResource("Animation_jag68"),
+"air": SubResource("Animation_8flb0"),
+"assist": SubResource("Animation_86xx0"),
+"combat": SubResource("Animation_a0w52"),
+"conflict": SubResource("Animation_gtrin"),
+"contract": SubResource("Animation_vlr60"),
+"crest": SubResource("Animation_jvk5d"),
+"dark": SubResource("Animation_262bo"),
+"equipped": SubResource("Animation_0dlo8"),
 "expensive": SubResource("Animation_kisbp"),
-"locked": SubResource("Animation_gtrin")
+"experience": SubResource("Animation_yvlnf"),
+"fire": SubResource("Animation_rdhqn"),
+"ground": SubResource("Animation_vakrw"),
+"new": SubResource("Animation_ipjbf"),
+"unequipped": SubResource("Animation_tcqx0"),
+"wind": SubResource("Animation_st7wf")
 }
 
-[node name="SkillOption" type="Control" node_paths=PackedStringArray("glow", "numberLabel", "nameLabel", "costLabel")]
+[node name="SkillOption" type="Control" node_paths=PackedStringArray("numberLabel", "nameLabel", "costLabel", "animator")]
 custom_minimum_size = Vector2(1064, 64)
 layout_mode = 3
 anchor_right = 0.554
@@ -86,25 +473,110 @@ offset_bottom = -8.36
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_djcyy")
-glow = NodePath("Light/Glow")
 numberLabel = NodePath("Tint/NumberLabel")
 nameLabel = NodePath("Tint/NameLabel")
 costLabel = NodePath("Tint/CostLabel")
+animator = NodePath("AnimationPlayer")
 
-[node name="Light" type="Sprite2D" parent="."]
-position = Vector2(32, 32)
+[node name="Light" type="TextureRect" parent="."]
+layout_mode = 1
+offset_right = 26.0
+offset_bottom = 26.0
 scale = Vector2(2.5, 2.5)
-texture = ExtResource("1_46y00")
-region_enabled = true
-region_rect = Rect2(152, 112, 24, 24)
+texture = ExtResource("2_nywsq")
+stretch_mode = 5
 
-[node name="Glow" type="Sprite2D" parent="Light"]
+[node name="Glow" type="TextureRect" parent="Light"]
 modulate = Color(0, 1, 0, 1)
 material = ExtResource("3_uxuno")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.2
+offset_top = -3.2
+offset_right = 34.8
+offset_bottom = 34.8
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_46y00")
-region_enabled = true
-region_rect = Rect2(280, 120, 56, 56)
+texture = ExtResource("4_ow4gi")
+
+[node name="Element" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -32.0
+offset_right = -8.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_e8s7r")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Category" type="TextureRect" parent="Element"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_8sg8b")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="New" type="Label" parent="."]
+visible = false
+self_modulate = Color(1, 1, 0, 1)
+layout_mode = 0
+offset_left = 680.0
+offset_top = 8.0
+offset_right = 950.0
+offset_bottom = 68.0
+scale = Vector2(0.8, 0.8)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2_kayxw")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_j35me")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Glow" type="Label" parent="New"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("3_uxuno")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(156, 54)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2_kayxw")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_j35me")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="New"]
+libraries = {
+"": SubResource("AnimationLibrary_8gw72")
+}
+autoplay = "loop"
 
 [node name="Tint" type="Control" parent="."]
 layout_mode = 1
@@ -120,7 +592,7 @@ anchors_preset = -1
 anchor_left = 0.06
 anchor_right = 0.18
 anchor_bottom = 1.0
-offset_left = 0.159996
+offset_left = 0.16
 offset_right = 0.479996
 grow_horizontal = 2
 grow_vertical = 2
@@ -130,17 +602,16 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource("2_kayxw")
 theme_override_font_sizes/font_size = 40
 text = "001"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="Tint"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.18
-anchor_right = 0.722
+anchor_right = 0.662
 anchor_bottom = 1.0
-offset_left = 32.48
-offset_right = -0.208069
+offset_left = 0.479996
+offset_right = -0.368042
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
@@ -158,8 +629,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -168.0
+offset_left = -152.0
 offset_top = -32.0
+offset_right = -88.0
 offset_bottom = 33.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -169,7 +641,7 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource("2_kayxw")
 theme_override_font_sizes/font_size = 40
 text = "01"
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -6,19 +6,10 @@ namespace Project.Interface.Menus;
 
 public partial class SkillOption : Control
 {
-	public SkillKey Key { get; set; }
+	public SkillResource Skill { get; set; }
 
 	public int Number { get; set; }
-	public int Cost { get; set; }
 
-	public bool IsSkillActive
-	{
-		get => glow.Visible;
-		set => glow.Visible = value;
-	}
-
-	[Export]
-	private Sprite2D glow;
 	[Export]
 	private Label numberLabel;
 	[Export]
@@ -27,20 +18,34 @@ public partial class SkillOption : Control
 	private Label costLabel;
 	[Export]
 	private AnimationPlayer animator;
+	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
-	public State state;
-	public enum State
+	public void Initialize()
 	{
-		Locked, // Locked skill
-		Equipable, // Normal
-		Expensive, // Not enough SP
-		Invalid, // Interferes with a different skill
+		// Update all the data that doesn't change
+		animator.Play(Skill.Element.ToString().ToLower());
+		animator.Advance(0);
+		animator.Play(Skill.Category.ToString().ToLower());
+		animator.Advance(0);
+
+		numberLabel.Text = Number.ToString("00");
+		nameLabel.Text = Skill.NameKey;
+		costLabel.Text = Skill.Cost.ToString("00");
+		Redraw();
 	}
 
-	public void RedrawData()
+	public void Redraw()
 	{
-		numberLabel.Text = Number.ToString("00");
-		nameLabel.Text = Runtime.Instance.SkillList.GetSkill(Key).NameKey;
-		costLabel.Text = Cost.ToString("00");
+		// Redraw equip status
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(Skill.Key))
+			animator.Play("equipped");
+		else if (ActiveSkillRing.TotalCost + Skill.Cost > ActiveSkillRing.MaxSkillPoints)
+			animator.Play("expensive");
+		else if (ActiveSkillRing.IsConflictingSkillEquipped(Skill) != SkillKey.Max)
+			animator.Play("conflict");
+		else
+			animator.Play("unequipped");
+
+		animator.Advance(0);
 	}
 }

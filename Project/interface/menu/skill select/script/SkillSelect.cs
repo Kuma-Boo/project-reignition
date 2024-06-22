@@ -49,30 +49,24 @@ public partial class SkillSelect : Menu
 			SkillKey key = (SkillKey)i;
 
 			if (SkillList.GetSkill(key) == null)
-			{
-				GD.PushWarning($"Couldn't find skill with key {key}.");
 				continue;
-			}
 
 			SkillOption newSkill = skillOption.Instantiate<SkillOption>();
-			newSkill.Key = key;
+			newSkill.Skill = SkillList.GetSkill(key);
 			newSkill.Number = i + 1;
-			newSkill.Cost = SkillList.GetSkill(key).Cost;
-			newSkill.RedrawData();
-			newSkill.IsSkillActive = ActiveSkillRing.EquippedSkills.Contains(key);
+			newSkill.Initialize();
 
 			optionContainer.AddChild(newSkill);
 			skillOptionList.Add(newSkill);
 		}
 
 		description.ShowDescription();
-		description.SetText(SkillList.GetSkill(skillOptionList[VerticalSelection].Key).DescriptionKey);
+		description.SetText(skillOptionList[VerticalSelection].Skill.DescriptionKey);
 		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
 
 		Redraw();
 		base.SetUp();
 	}
-
 
 	public override void _Process(double _)
 	{
@@ -99,7 +93,7 @@ public partial class SkillSelect : Menu
 			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
 			cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
-			description.SetText(SkillList.GetSkill(skillOptionList[VerticalSelection].Key).DescriptionKey);
+			description.SetText(skillOptionList[VerticalSelection].Skill.DescriptionKey);
 
 			animator.Play("select");
 			cursorAnimator.Play("select");
@@ -125,7 +119,7 @@ public partial class SkillSelect : Menu
 
 	protected override void Confirm()
 	{
-		if (!ToggleSkill(skillOptionList[VerticalSelection].Key))
+		if (!ToggleSkill())
 			return;
 
 		Redraw();
@@ -135,11 +129,13 @@ public partial class SkillSelect : Menu
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-		skillOptionList[VerticalSelection].IsSkillActive = ActiveSkillRing.EquippedSkills.Contains(skillOptionList[VerticalSelection].Key);
+		foreach (SkillOption option in skillOptionList)
+			option.Redraw();
 	}
 
-	private bool ToggleSkill(SkillKey key)
+	private bool ToggleSkill()
 	{
+		SkillKey key = skillOptionList[VerticalSelection].Skill.Key;
 		if (ActiveSkillRing.UnequipSkill(key))
 		{
 			animator.Play("unequip");

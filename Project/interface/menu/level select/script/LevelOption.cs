@@ -73,7 +73,6 @@ public partial class LevelOption : Control
 			{
 				case SaveManager.GameData.LevelStatus.New:
 					animator.Play(NewAnimation);
-					animator.AnimationSetNext(ShowAnimation, NewAnimation + LoopAnimation);
 					break;
 				case SaveManager.GameData.LevelStatus.Attempted:
 					animator.Play(AttemptAnimation);

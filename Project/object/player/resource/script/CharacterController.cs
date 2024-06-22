@@ -810,7 +810,7 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			canLandingBoost = Skills.IsSkillEnabled(SkillKey.LandDash);
+			canLandingBoost = Skills.IsSkillEquipped(SkillKey.LandDash);
 			SetActionState(ActionStates.Jumping);
 			VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 
@@ -1034,15 +1034,15 @@ namespace Project.Gameplay
 			actionBufferTimer = 0;
 			MoveSpeed = 0; // Kill horizontal speed
 
-			canLandingBoost = Skills.IsSkillEnabled(SkillKey.StompDash);
+			canLandingBoost = Skills.IsSkillEquipped(SkillKey.StompDash);
 
 			Lockon.IsMonitoring = false;
 			if (Lockon.IsHomingAttacking)
 				Lockon.StopHomingAttack();
 			SetActionState(ActionStates.Stomping);
 
-			Skills.IsAttacking = Skills.IsSkillEnabled(SkillKey.StompAttack);
-			Animator.StompAnimation(Skills.IsSkillEnabled(SkillKey.StompAttack));
+			Skills.IsAttacking = Skills.IsSkillEquipped(SkillKey.StompAttack);
+			Animator.StompAnimation(Skills.IsSkillEquipped(SkillKey.StompAttack));
 		}
 		#endregion
 
@@ -1909,7 +1909,7 @@ namespace Project.Gameplay
 
 		public void OnCountdownFinished()
 		{
-			if (Skills.IsSkillEnabled(SkillKey.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
+			if (Skills.IsSkillEquipped(SkillKey.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
 			{
 				Effect.StartWind();
 				MoveSpeed = Skills.countdownBoostSpeed;
@@ -1963,7 +1963,7 @@ namespace Project.Gameplay
 
 			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))
 			{
-				if (Skills.IsSkillEnabled(SkillKey.SplashJump)) // Perform a splash jump
+				if (Skills.IsSkillEquipped(SkillKey.SplashJump)) // Perform a splash jump
 					Skills.SplashJump();
 				else // Cancel HomingAttack
 					Lockon.StopHomingAttack();

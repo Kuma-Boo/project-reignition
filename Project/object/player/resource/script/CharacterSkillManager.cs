@@ -76,16 +76,16 @@ public partial class CharacterSkillManager : Node
 
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
-	public bool IsSkillEnabled(SkillKey key) => SkillRing.IsSkillEnabled(key);
+	public bool IsSkillEquipped(SkillKey key) => SkillRing.IsSkillEquipped(key);
 
 	[ExportCategory("Countdown Skills")]
 	[Export]
 	public float countdownBoostSpeed;
 
 	/// <summary> How many rings to start with when the level starts. </summary>
-	public int StartingRingCount => IsSkillEnabled(SkillKey.RingSpawn) ? 5 : 0;
+	public int StartingRingCount => IsSkillEquipped(SkillKey.RingSpawn) ? 5 : 0;
 	/// <summary> How many rings to start with when respawning. </summary>
-	public int RespawnRingCount => IsSkillEnabled(SkillKey.RingRespawn) ? 5 : 0;
+	public int RespawnRingCount => IsSkillEquipped(SkillKey.RingRespawn) ? 5 : 0;
 
 	public void SplashJump()
 	{
@@ -101,7 +101,7 @@ public partial class CharacterSkillManager : Node
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
-		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKey.PearlRange) ? 5 : 1);
+		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 	}
 	#endregion
 

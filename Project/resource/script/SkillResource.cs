@@ -1,10 +1,11 @@
 using Godot;
+using Godot.Collections;
 
 namespace Project.Gameplay;
 
 /// <summary> A single skill. </summary>
 [Tool]
-
+[GlobalClass]
 public partial class SkillResource : Resource
 {
 	[ExportCategory("General Settings")]
@@ -29,7 +30,7 @@ public partial class SkillResource : Resource
 		Ground,
 		Air,
 		Contract, // Called "hidden" skills in the original game
-		Augment, // Called "assist" skills in the original game
+		Assist,
 		Combat, // Called "damage" skills in the original game
 		Experience,
 		Crest, // Called "special" skills in the original game
@@ -62,4 +63,8 @@ public partial class SkillResource : Resource
 	public StringName NameKey => $"skill_{NameString}";
 	/// <summary> Returns the localization description key for this skill. </summary>
 	public StringName DescriptionKey => $"skill_{NameString}_description";
+
+	/// <summary> Reference to a skill that creates a conflict with the current skill. </summary>
+	[Export]
+	public Array<SkillKey> SkillConflicts { get; set; }
 }

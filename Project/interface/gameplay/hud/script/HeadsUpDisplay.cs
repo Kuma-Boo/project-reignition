@@ -102,7 +102,7 @@ namespace Project.Gameplay
 		private Tween rankTween;
 		private void InitializeRankPreviewer()
 		{
-			rankPreviewerRoot.Visible = SaveManager.ActiveSkillRing.IsSkillEnabled(SkillKey.RankPreview);
+			rankPreviewerRoot.Visible = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview);
 			if (!rankPreviewerRoot.Visible)
 				return;
 
