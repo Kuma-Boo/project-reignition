@@ -23,18 +23,36 @@ public partial class LevelSelect : Menu
 	[Export]
 	private Sprite2D scrollbar;
 
+	public bool ContainsNewStage { get; private set; }
+
 	private int scrollAmount;
 	private float scrollRatio;
 	private Vector2 scrollVelocity;
 	private const float SCROLL_SMOOTHING = .05f;
 	private readonly List<LevelOption> levelOptions = [];
 
+	public bool HasNewLevel()
+	{
+		foreach (Node node in options.GetChildren())
+		{
+			if (node is LevelOption levelOption)
+			{
+				levelOption.UpdateLevelData();
+
+				if (levelOption.IsUnlocked && levelOption.ClearState == Core.SaveManager.GameData.LevelStatus.New)
+					return true;
+			}
+		}
+
+		return false;
+	}
+
 	protected override void SetUp()
 	{
 		foreach (Node node in options.GetChildren())
 		{
-			if (node is LevelOption)
-				levelOptions.Add(node as LevelOption);
+			if (node is LevelOption levelOption)
+				levelOptions.Add(levelOption);
 		}
 
 		base.SetUp();

@@ -6,6 +6,8 @@ namespace Project.Interface.Menus;
 
 public partial class LevelOption : Control
 {
+	[Signal]
+	public delegate void NewLevelEventHandler();
 
 	[Export]
 	/// <summary> Reference to level's settings resource. </summary>
@@ -39,6 +41,8 @@ public partial class LevelOption : Control
 			return SaveManager.ActiveGameData.IsStageUnlocked(data.LevelID);
 		}
 	}
+	public SaveManager.GameData.LevelStatus ClearState { get; private set; }
+
 
 	public string GetDescription() => IsUnlocked ? data.MissionDescriptionKey : "mission_description_locked";
 
@@ -69,9 +73,11 @@ public partial class LevelOption : Control
 	{
 		if (IsUnlocked)
 		{
-			switch (SaveManager.ActiveGameData.GetClearStatus(data.LevelID))
+			ClearState = SaveManager.ActiveGameData.GetClearStatus(data.LevelID);
+			switch (ClearState)
 			{
 				case SaveManager.GameData.LevelStatus.New:
+					EmitSignal(SignalName.NewLevel);
 					animator.Play(NewAnimation);
 					break;
 				case SaveManager.GameData.LevelStatus.Attempted:

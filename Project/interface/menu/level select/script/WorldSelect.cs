@@ -19,7 +19,7 @@ public partial class WorldSelect : Menu
 
 	private Color crossfadeColor;
 	private float videoFadeFactor;
-	private const float VIDEO_CROSSFADE_SPEED = 5.0f;
+	private const float VideoCrossfadeSpeed = 5.0f;
 
 	[ExportGroup("Selection Settings")]
 	[Export]
@@ -32,8 +32,12 @@ public partial class WorldSelect : Menu
 	private Array<NodePath> levelTextSprites = [];
 	[Export]
 	private Array<NodePath> levelGlowSprites = [];
+	[Export]
+	private Array<NodePath> levelNewSprites = [];
+	private Array<int> newLevelList = [];
 	private readonly Array<Sprite2D> _levelTextSprites = [];
 	private readonly Array<Sprite2D> _levelGlowSprites = [];
+	private readonly Array<Control> _levelNewSprites = [];
 	protected override void SetUp()
 	{
 		for (int i = 0; i < levelTextSprites.Count; i++)
@@ -41,6 +45,9 @@ public partial class WorldSelect : Menu
 
 		for (int i = 0; i < levelGlowSprites.Count; i++)
 			_levelGlowSprites.Add(GetNode<Sprite2D>(levelGlowSprites[i]));
+
+		for (int i = 0; i < levelNewSprites.Count; i++)
+			_levelNewSprites.Add(GetNode<Control>(levelNewSprites[i]));
 
 		VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
 		videoStreams = new VideoStream[videoStreamPaths.Count];
@@ -57,6 +64,22 @@ public partial class WorldSelect : Menu
 
 	public override void ShowMenu()
 	{
+		newLevelList.Clear();
+		int levelIndex = 0;
+		foreach (Menu item in _submenus) // Update new level statuses
+		{
+			if (item is LevelSelect levelSelect)
+			{
+				if (levelSelect.HasNewLevel())
+				{
+					GD.Print($"New level registered at index {levelIndex}");
+					newLevelList.Add(levelIndex);
+				}
+
+				levelIndex++;
+			}
+		}
+
 		VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
 
 		if (ActiveVideoPlayer != null &&
@@ -101,7 +124,7 @@ public partial class WorldSelect : Menu
 				if (!ActiveVideoPlayer.IsPlaying())
 					ActiveVideoPlayer.CallDeferred(VideoStreamPlayer.MethodName.Play);
 				else
-					videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VIDEO_CROSSFADE_SPEED * PhysicsManager.normalDelta);
+					videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VideoCrossfadeSpeed * PhysicsManager.normalDelta);
 			}
 
 			ActiveVideoPlayer.Modulate = Colors.Transparent.Lerp(Colors.White, videoFadeFactor);
@@ -190,6 +213,8 @@ public partial class WorldSelect : Menu
 		if (!SaveManager.ActiveGameData.IsWorldUnlocked((SaveManager.WorldEnum)selectionIndex)) // World isn't unlocked.
 			selectionIndex = levelSpriteRegions.Count - 1;
 
+		// Update new notifications
+		_levelNewSprites[spriteIndex].Visible = newLevelList.Contains(selectionIndex);
 		_levelTextSprites[spriteIndex].RegionRect = levelSpriteRegions[selectionIndex];
 
 		if (spriteIndex == 1) // Updating primary selection
