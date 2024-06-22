@@ -96,6 +96,8 @@ public partial class SkillSelect : Menu
 			description.SetText(skillOptionList[VerticalSelection].Skill.DescriptionKey);
 
 			animator.Play("select");
+			animator.Seek(0);
+			animator.Advance(0);
 			if (!isSelectionScrolling)
 				StartSelectionTimer();
 		}
