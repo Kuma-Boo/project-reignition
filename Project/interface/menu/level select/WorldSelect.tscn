@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://cumqwrsj6eqpd"]
+[gd_scene load_steps=41 format=3 uid="uid://cumqwrsj6eqpd"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/WorldSelect.cs" id="1_7vrge"]
 [ext_resource type="Texture2D" uid="uid://df4fllm7a4ue0" path="res://interface/menu/level select/texture/background.png" id="10_p8mo5"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://cb8rxngcco8if" path="res://interface/menu/level select/level lists/PirateStorm.tscn" id="18_dsf0x"]
 [ext_resource type="AudioStream" uid="uid://cruu5h1jr78lr" path="res://sound/sfx/system/menu screen change.wav" id="18_jbekg"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="18_quajg"]
+[ext_resource type="PackedScene" uid="uid://bt32kmhyoo7ec" path="res://interface/menu/skill select/SkillSelect.tscn" id="18_uvxap"]
 [ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="18_w35s5"]
 [ext_resource type="PackedScene" uid="uid://ckdga1wgdrja8" path="res://interface/menu/level select/level lists/SkeletonDome.tscn" id="19_3xa6d"]
 [ext_resource type="PackedScene" uid="uid://bft64s1qkqatm" path="res://interface/menu/level select/level lists/NightPalace.tscn" id="20_y3iyc"]
@@ -2113,11 +2114,18 @@ readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="ReadyMenu" parent="Submenus" node_paths=PackedStringArray("description", "bgm") instance=ExtResource("17_c7rwi")]
-z_index = 100
+z_index = 5
 z_as_relative = false
 layout_mode = 1
 description = NodePath("../../Description")
+submenus = Array[NodePath]([NodePath("../SkillSelect")])
 bgm = NodePath("../../LevelSelectBGM")
+
+[node name="SkillSelect" parent="Submenus" node_paths=PackedStringArray("parentMenu") instance=ExtResource("18_uvxap")]
+z_index = 15
+z_as_relative = false
+layout_mode = 1
+parentMenu = NodePath("../ReadyMenu")
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -2139,7 +2147,7 @@ actionKey = "sys_cancel"
 inputKey = "button_action"
 
 [node name="Description" parent="." instance=ExtResource("18_w35s5")]
-z_index = 100
+z_index = 10
 z_as_relative = false
 layout_mode = 1
 offset_top = 260.0
@@ -2177,4 +2185,4 @@ next/scroll-down = &"reset-scroll"
 next/scroll-up = &"reset-scroll"
 next/show = &"loop"
 next/show-fade-video = &"loop"
-blend_times = [&"loop", &"scroll-down", 0.05, &"loop", &"scroll-up", 0.05, &"show", &"loop", 0.1, &"show-fade-video", &"loop", 0.1]
+blend_times = [&"loop", &"scroll-up", 0.05, &"loop", &"scroll-down", 0.05, &"show", &"loop", 0.1, &"show-fade-video", &"loop", 0.1]

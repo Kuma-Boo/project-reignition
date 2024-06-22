@@ -14,8 +14,6 @@ public partial class SkillSelect : Menu
 	[Export]
 	private Node2D cursor;
 	[Export]
-	private AnimationPlayer cursorAnimator;
-	[Export]
 	private Description description;
 	[Export]
 	private Sprite2D scrollbar;
@@ -60,10 +58,6 @@ public partial class SkillSelect : Menu
 			skillOptionList.Add(newSkill);
 		}
 
-		description.ShowDescription();
-		description.SetText(skillOptionList[VerticalSelection].Skill.DescriptionKey);
-		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
-
 		Redraw();
 		base.SetUp();
 	}
@@ -72,6 +66,12 @@ public partial class SkillSelect : Menu
 	{
 		float targetScrollPosition = (160 * scrollRatio) - 80;
 		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
+	}
+
+	protected override void Cancel()
+	{
+		SaveManager.SaveGameData();
+		animator.Play("hide");
 	}
 
 	protected override void UpdateSelection()
@@ -96,25 +96,17 @@ public partial class SkillSelect : Menu
 			description.SetText(skillOptionList[VerticalSelection].Skill.DescriptionKey);
 
 			animator.Play("select");
-			cursorAnimator.Play("select");
-			cursorAnimator.Advance(0.0);
 			if (!isSelectionScrolling)
 				StartSelectionTimer();
 		}
 
-		// TODO Change sort method when horizontal input is detected
+		// TODO Change sort method when speedbreak is pressed
 	}
 
 	public override void ShowMenu()
 	{
+		Redraw();
 		base.ShowMenu();
-		cursorAnimator.Play("show");
-	}
-
-	public override void HideMenu()
-	{
-		base.HideMenu();
-		cursorAnimator.Play("hide");
 	}
 
 	protected override void Confirm()
@@ -131,6 +123,9 @@ public partial class SkillSelect : Menu
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
 		foreach (SkillOption option in skillOptionList)
 			option.Redraw();
+
+		description.SetText(skillOptionList[VerticalSelection].Skill.DescriptionKey);
+		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
 	}
 
 	private bool ToggleSkill()

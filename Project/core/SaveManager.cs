@@ -841,7 +841,7 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(playTime), out var))
 				playTime = (float)var;
 
-			if (dictionary.TryGetValue(nameof(ActiveSkillRing), out var))
+			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
 			{
 				Array<int> skills = (Array<int>)var;
 				for (int i = 0; i < skills.Count; i++)
