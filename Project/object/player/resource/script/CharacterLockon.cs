@@ -12,9 +12,9 @@ public partial class CharacterLockon : Node3D
 {
 	[Export]
 	private Area3D areaTrigger;
-
 	private CharacterController Character => CharacterController.instance;
 
+	#region Homing Attack Reticle
 	/// <summary> Active lockon target shown on the HUD. </summary>
 	public Node3D Target
 	{
@@ -28,6 +28,8 @@ public partial class CharacterLockon : Node3D
 	private Node3D target;
 	/// <summary> Was lockonTarget changed this frame? </summary>
 	private bool wasTargetChanged;
+	/// <summary> can the current target be attacked? </summary>
+	public bool IsTargetAttackable { get; set; }
 	private enum TargetState
 	{
 		Valid,
@@ -39,7 +41,7 @@ public partial class CharacterLockon : Node3D
 	}
 	/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
 	private readonly float DISTANCE_FUDGE_AMOUNT = 1f;
-	private readonly Array<Node3D> activeTargets = new(); //List of targetable objects
+	private readonly Array<Node3D> activeTargets = []; // List of targetable objects
 
 	/// <summary> Enables detection of new lockonTargets. </summary>
 	public bool IsMonitoring { get; set; }
@@ -54,9 +56,10 @@ public partial class CharacterLockon : Node3D
 	public void StartHomingAttack()
 	{
 		IsHomingAttacking = true;
-		IsPerfectHomingAttack = Character.Skills.IsSkillEquipped(SkillKey.PerfectHomingAttack) && monitoringPerfectHomingAttack;
+		IsPerfectHomingAttack = monitoringPerfectHomingAttack;
+		if (IsPerfectHomingAttack)
+			lockonAnimator.Play("perfect-strike");
 	}
-
 
 	public void StopHomingAttack()
 	{
@@ -65,7 +68,6 @@ public partial class CharacterLockon : Node3D
 		Character.ResetActionState();
 		ResetLockonTarget();
 	}
-
 
 	public void UpdateLockonTargets()
 	{
@@ -97,7 +99,8 @@ public partial class CharacterLockon : Node3D
 				if (currentTarget == activeTargets[i])
 					continue;
 
-				if (IsTargetValid(activeTargets[i]) != TargetState.Valid)
+				TargetState state = IsTargetValid(activeTargets[i]);
+				if (state != TargetState.Valid)
 					continue;
 
 				float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
@@ -117,8 +120,13 @@ public partial class CharacterLockon : Node3D
 
 			if (currentTarget != null && currentTarget != Target) // Target has changed
 				Target = currentTarget;
-			else if (Target != null && IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
-				Target = null;
+
+			if (Target != null)
+			{
+				TargetState state = IsTargetValid(Target);
+				if (IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
+					Target = null;
+			}
 		}
 		else if (IsHomingAttacking) // Validate homing attack target
 		{
@@ -129,8 +137,12 @@ public partial class CharacterLockon : Node3D
 
 		if (Target != null)
 		{
+			// Check Height
+			bool isTargetAttackable = IsHomingAttacking ||
+				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + Character.CollisionRadius &&
+				Character.ActionState != CharacterController.ActionStates.JumpDash);
 			Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
-			UpdateLockonReticle(screenPos, wasTargetChanged);
+			UpdateLockonReticle(screenPos, isTargetAttackable);
 		}
 		else if (wasTargetChanged) // Disable UI
 		{
@@ -149,7 +161,7 @@ public partial class CharacterLockon : Node3D
 		if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalPosition)) // Not visible
 			return TargetState.Invisible;
 
-		//Raycast for obstacles
+		// Raycast for obstacles
 		Vector3 castPosition = Character.GlobalPosition;
 		if (Character.VerticalSpeed < 0)
 			castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
@@ -167,17 +179,40 @@ public partial class CharacterLockon : Node3D
 		return TargetState.Valid;
 	}
 
-
 	public void ResetLockonTarget()
 	{
 		Character.Camera.LockonTarget = null;
 
-		if (Target != null) //Reset Active Target
+		if (Target != null) // Reset Active Target
 		{
 			Target = null;
 			DisableLockonReticle();
 		}
 	}
+
+	[Export]
+	private Node2D lockonReticle;
+	[Export]
+	private AnimationPlayer lockonAnimator;
+
+	public void DisableLockonReticle() => lockonAnimator.Play("disable");
+	public void UpdateLockonReticle(Vector2 screenPosition, bool isTargetAttackable)
+	{
+		lockonReticle.SetDeferred("position", screenPosition);
+		if (!wasTargetChanged && isTargetAttackable == IsTargetAttackable)
+			return;
+
+		IsTargetAttackable = isTargetAttackable;
+		lockonAnimator.Play("RESET");
+		lockonAnimator.Advance(0);
+		if (!IsTargetAttackable)
+			lockonAnimator.Play("preview");
+		else if (Character.Skills.IsSkillEquipped(SkillKey.PerfectHomingAttack))
+			lockonAnimator.Play("perfect-enable");
+		else
+			lockonAnimator.Play("enable");
+	}
+	#endregion
 
 	#region Bouncing
 	[Export]
@@ -193,7 +228,6 @@ public partial class CharacterLockon : Node3D
 	public bool IsBouncingLockoutActive => Character.ActiveLockoutData == bounceLockoutSettings;
 	public bool CanInterruptBounce { get; private set; }
 
-
 	public void UpdateBounce()
 	{
 		bounceInterruptTimer = Mathf.MoveToward(bounceInterruptTimer, 0, PhysicsManager.physicsDelta);
@@ -203,7 +237,6 @@ public partial class CharacterLockon : Node3D
 		Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.friction * PhysicsManager.physicsDelta);
 		Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
 	}
-
 
 	public void StartBounce(bool bounceUpward = true) // Bounce the player
 	{
@@ -229,7 +262,9 @@ public partial class CharacterLockon : Node3D
 				Character.GlobalPosition = Target.GlobalPosition;
 		}
 		else // Only bounce the player backwards if bounceUpward is false
+		{
 			Character.MoveSpeed = -bounceSpeed;
+		}
 
 		if (IsBouncingLockoutActive) return;
 
@@ -242,30 +277,6 @@ public partial class CharacterLockon : Node3D
 		Character.Animator.ResetState(0.1f);
 		Character.Animator.BounceTrick();
 		Character.Effect.PlayActionSFX(Character.Effect.JumpSfx);
-	}
-	#endregion
-
-	#region Homing Attack Reticle
-	[Export]
-	private Node2D lockonReticle;
-	[Export]
-	private AnimationPlayer lockonAnimator;
-
-	public void DisableLockonReticle() => lockonAnimator.Play("disable");
-	public void UpdateLockonReticle(Vector2 screenPosition, bool newTarget)
-	{
-		lockonReticle.SetDeferred("position", screenPosition);
-		if (newTarget)
-		{
-			lockonAnimator.Play("RESET");
-			lockonAnimator.Advance(0);
-			lockonAnimator.Play("enable");
-		}
-	}
-
-	public void PerfectHomingAttack()
-	{
-		//TODO Play animation
 	}
 	#endregion
 

@@ -33,7 +33,7 @@ public partial class PauseMenu : Node
 	[Export]
 	private Label missionDescriptionLabel;
 	[Export]
-	private Sprite2D fireSoulParent;
+	private Control fireSoulParent;
 	[Export]
 	private Sprite2D[] fireSoulSprites;
 	[Export]
@@ -88,7 +88,7 @@ public partial class PauseMenu : Node
 
 		noSkillLabel.Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count == 0;
 		skills = new PauseSkill[SaveManager.ActiveSkillRing.EquippedSkills.Count];
-		skillContainer.Size = new(skillContainer.Size.X, skills.Length * 60);
+		skillContainer.SetDeferred("size", new Vector2(skillContainer.Size.X, skills.Length * 60));
 
 		// Generate skill list
 		foreach (SkillKey key in SaveManager.ActiveSkillRing.EquippedSkills)

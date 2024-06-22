@@ -87,11 +87,6 @@ public partial class CharacterSkillManager : Node
 	/// <summary> How many rings to start with when respawning. </summary>
 	public int RespawnRingCount => IsSkillEquipped(SkillKey.RingRespawn) ? 5 : 0;
 
-	public void SplashJump()
-	{
-		GD.Print("Splash Jump isn't implemented yet.");
-	}
-
 	/// <summary> Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster. </summary>
 	[Export]
 	public float landingDashSpeed;
@@ -153,7 +148,7 @@ public partial class CharacterSkillManager : Node
 	public bool IsSpeedBreakCharging => IsSpeedBreakActive && !Mathf.IsZeroApprox(breakTimer);
 	public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
 
-	private float breakTimer = 0; // Timer for break skills
+	private float breakTimer; // Timer for break skills
 	private const float SPEEDBREAK_DELAY = 0.4f; // Time to say SPEED BREAK!
 	private const float BREAK_SKILLS_COOLDOWN = 1f; // Prevent skill spam
 	public const float TIME_BREAK_RATIO = .6f; // Time scale
@@ -161,7 +156,7 @@ public partial class CharacterSkillManager : Node
 	public void UpdateSoulSkills()
 	{
 		if (DebugManager.Instance.InfiniteSoulGauge) // Max out the soul gauge
-			ModifySoulGauge(int.MaxValue);
+			ModifySoulGauge(MaxSoulPower);
 
 		UpdateTimeBreak();
 		UpdateSpeedBreak();
@@ -218,6 +213,7 @@ public partial class CharacterSkillManager : Node
 				{
 					speedBreakSFX.Stream = speedBreakActivate;
 					speedBreakSFX.Play();
+					ModifySoulGauge(-15); // Instantly lose a bunch of soul power
 				}
 
 				ModifySoulGauge(-1); // Drain soul gauge

@@ -138,7 +138,7 @@ public partial class Enemy : Node3D
 
 	public virtual void TakeHomingAttackDamage()
 	{
-		if (Character.Skills.IsSkillEquipped(SkillKey.PerfectHomingAttack) && Character.Lockon.IsPerfectHomingAttack)
+		if (Character.Lockon.IsPerfectHomingAttack)
 			currentHealth--; // Take an extra point of damage
 
 		Character.Lockon.StopHomingAttack();
