@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://4ku8otmttbdw"]
+[gd_scene load_steps=57 format=3 uid="uid://4ku8otmttbdw"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_15mb8"]
 [ext_resource type="Resource" uid="uid://bfhobpge3ljn2" path="res://resource/level data/dinosaur jungle/Act2Rampage.tres" id="2_e23ug"]
@@ -9,9 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="12_mrc1a"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="13_ymm10"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="14_2lsue"]
-[ext_resource type="Resource" uid="uid://d2mt7vqfjmref" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="15_ktg6k"]
-[ext_resource type="Resource" uid="uid://co45pmssasu4" path="res://area/2 dino jungle/act 1/camera/RampageCaveCatapultCam.tres" id="16_b5lun"]
-[ext_resource type="Resource" uid="uid://cqx3d5ccgroie" path="res://area/2 dino jungle/act 1/camera/RampageCaveCatapultTravelCam.tres" id="16_ht5p4"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="16_rxraj"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="17_khxoo"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="18_klrop"]
@@ -417,21 +414,6 @@ transform = Transform3D(0.893411, 0, -0.449241, 0, 1, 0, 0.449241, 0, 0.893411, 
 "Secondary Settings/Middle Height" = 10.0
 "Secondary Settings/Final Height" = 1.0
 "Secondary Settings/Distance" = 34.0
-
-[node name="Camera" type="Node3D" parent="RampageAct/Cave/Catapult2"]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 3, -6.99991)
-script = ExtResource("22_aligo")
-transitionTime = 0.5
-settings = ExtResource("16_b5lun")
-
-[node name="TravelCamera" type="Node3D" parent="RampageAct/Cave/Catapult2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-script = ExtResource("22_aligo")
-transitionTime = 0.5
-deactivationTransitionTime = 0.5
-transitionType = 1
-settings = ExtResource("16_ht5p4")
-previousSettings = ExtResource("15_ktg6k")
 
 [node name="Rings" type="Node3D" parent="RampageAct/Cave/Catapult2"]
 transform = Transform3D(-1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, -1, 0, 12, 12.0002)
@@ -1826,12 +1808,7 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Activated" from="RampageAct/Cave/Switch/CullingTrigger/Spring" to="RampageAct/Cave/Switch/CullingTrigger/Spring/Path" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/Cave/Switch/CullingTrigger/Spring" to="Static/Collision/CaveRightOneWay" method="Activate"]
 [connection signal="Activated" from="RampageAct/Cave/Catapult2" to="Static/Collision/CaveRightOneWay" method="Deactivate"]
-[connection signal="Activated" from="RampageAct/Cave/Catapult2" to="RampageAct/Cave/Catapult2/TravelCamera" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/Cave/Catapult2" to="Static/Collision/CaveRightOneWay" method="Activate"]
-[connection signal="Deactivated" from="RampageAct/Cave/Catapult2" to="Static/Visuals/02River" method="Deactivate"]
-[connection signal="Deactivated" from="RampageAct/Cave/Catapult2" to="RampageAct/Cave/Catapult2/TravelCamera" method="Deactivate"]
-[connection signal="PlayerEntered" from="RampageAct/Cave/Catapult2" to="Static/Visuals/02River" method="Activate"]
-[connection signal="PlayerEntered" from="RampageAct/Cave/Catapult2" to="RampageAct/Cave/Catapult2/Camera" method="Activate"]
 [connection signal="Defeated" from="RampageAct/Cave/FlowerMajin" to="RampageAct/Cave/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="RampageAct/Spiral/SpiralAutomationTrigger" to="RampageAct/Spiral/SpiralAutomationTrigger/Path" method="Activate"]
 [connection signal="Activated" from="RampageAct/Crossing/Switch2" to="RampageAct/Crossing/Switch2/CullingTrigger2" method="Activate"]
