@@ -9,6 +9,11 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class Catapult : Launcher
 {
+	[Signal]
+	public delegate void PlayerEnteredEventHandler();
+	[Signal]
+	public delegate void PlayerExitedEventHandler();
+
 	private bool isProcessing;
 	private CatapultState currentState;
 	private enum CatapultState
@@ -159,6 +164,7 @@ public partial class Catapult : Launcher
 		settings.IsJump = true;
 		Character.StartLauncher(settings);
 		enterSFX.Play();
+		EmitSignal(SignalName.PlayerExited);
 	}
 
 	public void OnEntered(Area3D a)
@@ -177,6 +183,7 @@ public partial class Catapult : Launcher
 		var settings = LaunchSettings.Create(Character.GlobalPosition, playerPositionNode.GlobalPosition, 2f);
 		settings.IsJump = true;
 		Character.StartLauncher(settings);
+		EmitSignal(SignalName.PlayerEntered);
 	}
 
 	private void StartProcessing() => isProcessing = true;
