@@ -107,7 +107,7 @@ public partial class SidleTrigger : Area3D
 		// Update velocity
 		float targetVelocity = Input.GetAxis("move_left", "move_right") * (isFacingRight ? 1 : -1) * CYCLE_FREQUENCY;
 		if (Mathf.IsZeroApprox(velocity) && !Mathf.IsZeroApprox(targetVelocity)) // Ensure sfx plays when starting to move
-			Character.Effect.PlayActionSFX(Character.Effect.SIDLE_SFX);
+			Character.Effect.PlayActionSFX(Character.Effect.SidleSfx);
 
 		if (Mathf.IsZeroApprox(velocity) || Mathf.Sign(targetVelocity) == Mathf.Sign(velocity))
 			velocity = Mathf.Lerp(velocity, targetVelocity, TRACTION_SMOOTHING);
@@ -127,7 +127,7 @@ public partial class SidleTrigger : Area3D
 			if (Mathf.Abs(cycleTimer - .5f) >= .5f) // Starting a new cycle
 			{
 				cycleTimer -= Mathf.Sign(cycleTimer);
-				Character.Effect.PlayActionSFX(Character.Effect.SIDLE_SFX);
+				Character.Effect.PlayActionSFX(Character.Effect.SidleSfx);
 			}
 
 			Character.Animator.UpdateSidle(cycleTimer);
@@ -228,7 +228,7 @@ public partial class SidleTrigger : Area3D
 					// Jump back to the ledge
 					cycleTimer = 0;
 					damageState = DamageStates.Recovery;
-					Character.Effect.PlayActionSFX(Character.Effect.JUMP_SFX);
+					Character.Effect.PlayActionSFX(Character.Effect.JumpSfx);
 					Character.Effect.PlayVoice("grunt");
 					Character.Animator.SidleRecovery();
 				}

@@ -352,20 +352,22 @@ public partial class Majin : Enemy
 		}
 	}
 
-	public override void TakePlayerDamage()
-	{
-		Stagger();
-		base.TakePlayerDamage();
+
+		public override void TakeHomingAttackDamage()
+		{
+			Stagger();
+			base.TakeHomingAttackDamage();
 
 		if (!IsDefeated)
 			animationPlayer.Play("stagger");
 	}
 
-	public override void TakeExternalDamage(int amount = -1)
-	{
-		Stagger();
-		base.TakeExternalDamage(amount);
-	}
+		public override void TakeDamage(int amount = -1)
+		{
+			Stagger();
+			base.TakeDamage(amount);
+		}
+
 
 	private void Stagger()
 	{
@@ -479,12 +481,12 @@ public partial class Majin : Enemy
 	{
 		if (!IsHitboxEnabled) return;
 
-		if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
-		{
-			Stagger();
-			Character.Lockon.StartBounce(IsDefeated);
-			return;
-		}
+			if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
+			{
+				Stagger();
+				Character.Lockon.StartBounce(true);
+				return;
+			}
 
 		base.UpdateInteraction();
 	}

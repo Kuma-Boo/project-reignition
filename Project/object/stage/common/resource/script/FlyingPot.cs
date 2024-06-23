@@ -122,7 +122,7 @@ namespace Project.Gameplay.Objects
 			Character.CanJumpDash = false;
 			Character.Skills.IsSpeedBreakEnabled = false; //Disable speed break
 
-			Character.Lockon.ResetLockonTarget();
+			Character.Lockon.StopHomingAttack();
 			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
 
 			//Update camera

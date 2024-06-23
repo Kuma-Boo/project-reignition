@@ -99,7 +99,7 @@ namespace Project.Gameplay.Objects
 			animator.Play("detonate");
 
 			for (int i = 0; i < enemyList.Count; i++)
-				enemyList[i].TakeExternalDamage(); // Damage all enemies in range
+				enemyList[i].TakeDamage(); // Damage all enemies in range
 
 			if (isPlayerInExplosion)
 				Character.StartKnockback();
