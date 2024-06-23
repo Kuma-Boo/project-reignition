@@ -147,7 +147,6 @@ namespace Project
 
 			float min = reference - range;
 			float max = reference + range;
-
 			if (value > min && value < max) //Input is between the two angles, no need to clamp
 				return value;
 
