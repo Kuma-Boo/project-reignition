@@ -99,6 +99,11 @@ namespace Project.Gameplay
 				Effect.StopTrailFX();
 				Animator.ResetState();
 			}
+			else if (ActionState == ActionStates.Stomping)
+			{
+				Skills.IsAttacking = false;
+				Effect.StopStompFX();
+			}
 			else if (ActionState == ActionStates.Grindstep)
 				StopGrindstep();
 
@@ -314,7 +319,7 @@ namespace Project.Gameplay
 
 		private bool isRecentered; // Is the recenter complete?
 		private const float MinRecenterPower = .1f;
-		private const float MaxRecenterPower = .2f;
+		private const float MaxRecenterPower = .4f;
 		/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
 		private void UpdateRecenter()
 		{
@@ -328,7 +333,7 @@ namespace Project.Gameplay
 				float inputInfluence = ExtensionMethods.DotAngle(PathFollower.ForwardAngle + (Mathf.Pi * .5f), GetInputAngle());
 				inputInfluence *= Mathf.Sign(PathFollower.LocalPlayerPositionDelta.X);
 				inputInfluence = (inputInfluence + 1) * 0.5f;
-				inputInfluence = Mathf.SmoothStep(MinRecenterPower, MaxRecenterPower, inputInfluence);
+				inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);
 
 				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence * PhysicsManager.physicsDelta;
 				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed);
@@ -655,7 +660,6 @@ namespace Project.Gameplay
 			}
 		}
 
-
 		/// <summary> How much should the steepest slope affect the player? </summary>
 		private const float SLOPE_INFLUENCE_STRENGTH = .2f;
 		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
@@ -667,10 +671,12 @@ namespace Project.Gameplay
 			if (IsLockoutActive && ActiveLockoutData.ignoreSlopes) return; // Lockout is ignoring slopes
 
 			// Calculate slope influence
-			float slopeInfluenceRatio = -PathFollower.Forward().Dot(Vector3.Up);
+			float slopeInfluenceRatio = PathFollower.Forward().Dot(Vector3.Up);
 			if (Mathf.Abs(slopeInfluenceRatio) <= SLOPE_THRESHOLD) return;
 
 			slopeInfluenceRatio = Mathf.Lerp(-SLOPE_INFLUENCE_STRENGTH, SLOPE_INFLUENCE_STRENGTH, slopeInfluenceRatio);
+			if (slopeInfluenceRatio > 0 && Skills.IsSkillEquipped(SkillKey.AllRounder)) // Cancel slope influence when moving upwards
+				slopeInfluenceRatio = 0;
 
 			if (IsHoldingDirection(PathFollower.ForwardAngle)) // Accelerating
 			{
@@ -782,10 +788,11 @@ namespace Project.Gameplay
 			if (MovementState != MovementStates.Normal) return;
 
 			// Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
-			if (IsHoldingDirection(PathFollower.ForwardAngle) && MoveSpeed < Skills.landingDashSpeed)
+			if (IsHoldingDirection(PathFollower.ForwardAngle))
 			{
+				Effect.StartWind();
 				MovementAngle = PathFollower.ForwardAngle;
-				MoveSpeed = Skills.landingDashSpeed;
+				MoveSpeed = Mathf.Max(MoveSpeed, Skills.landingDashSpeed);
 			}
 		}
 
@@ -804,30 +811,25 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			canLandingBoost = Skills.IsSkillEnabled(SkillKeyEnum.LandingDash);
+			canLandingBoost = Skills.IsSkillEquipped(SkillKey.LandDash);
 			SetActionState(ActionStates.Jumping);
 			VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 
 			if (IsMovingBackward || MoveSpeed < 0) // Kill speed when jumping backwards
 				MoveSpeed = 0;
 
-			Effect.PlayActionSFX(Effect.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JumpSfx);
 			Animator.JumpAnimation();
 		}
 
 		private void UpdateJump()
 		{
-			if (isAccelerationJumpQueued && currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
+			if (isAccelerationJumpQueued &&
+				currentJumpTime >= ACCELERATION_JUMP_LENGTH &&
+				IsHoldingDirection(PathFollower.ForwardAngle, true) &&
+				InputVector.Length() > .5f) // Acceleration jump?
 			{
-				if (IsHoldingDirection(PathFollower.ForwardAngle, true) && InputVector.Length() > .5f)
-				{
-					SetActionState(ActionStates.AccelJump);
-					MoveSpeed = Skills.accelerationJumpSpeed;
-					Animator.JumpAccelAnimation();
-				}
-
-				VerticalSpeed = 5f; // Consistant accel jump height
-				isAccelerationJumpQueued = false; // Stop listening for an acceleration jump
+				StartAccelJump();
 			}
 
 			if (!IsJumpClamped)
@@ -840,10 +842,21 @@ namespace Project.Gameplay
 				}
 			}
 			else if (VerticalSpeed > 0f)
+			{
 				VerticalSpeed *= jumpCurve; // Kill jump height
+			}
 
 			currentJumpTime += PhysicsManager.physicsDelta;
 			CheckStomp();
+		}
+
+		private void StartAccelJump()
+		{
+			SetActionState(ActionStates.AccelJump);
+			MoveSpeed = Skills.accelerationJumpSpeed;
+			Animator.JumpAccelAnimation();
+			VerticalSpeed = 5f; // Consistant accel jump height
+			isAccelerationJumpQueued = false; // Stop listening for an acceleration jump
 		}
 		#endregion
 
@@ -886,7 +899,7 @@ namespace Project.Gameplay
 			else // Force MovementAngle to face forward
 				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
-			Effect.PlayActionSFX(Effect.JUMP_DASH_SFX);
+			Effect.PlayActionSFX(Effect.JumpDashSfx);
 			Effect.StartTrailFX();
 
 			CanJumpDash = false;
@@ -896,7 +909,7 @@ namespace Project.Gameplay
 			if (Lockon.IsBouncingLockoutActive) // Interrupt lockout
 				RemoveLockoutData(Lockon.bounceLockoutSettings);
 
-			if (Lockon.Target == null) // Normal jumpdash
+			if (Lockon.Target == null || !Lockon.IsTargetAttackable) // Normal jumpdash
 			{
 				MoveSpeed = jumpDashSpeed;
 				VerticalSpeed = jumpDashPower;
@@ -949,7 +962,7 @@ namespace Project.Gameplay
 				if (MoveSpeed <= Skills.SlideSettings.speed)
 					MoveSpeed = Skills.SlideSettings.speed;
 
-				Effect.PlayActionSFX(Effect.SLIDE_SFX);
+				Effect.PlayActionSFX(Effect.SlideSfx);
 				SetActionState(ActionStates.Sliding);
 			}
 			else
@@ -999,11 +1012,17 @@ namespace Project.Gameplay
 		/// <summary> How fast to fall when stomping </summary>
 		private const int STOMP_SPEED = -32;
 		/// <summary> How much gravity to add each frame. </summary>
-		private const int STOMP_GRAVITY = 180;
+		private const int JUMP_CANCEL_GRAVITY = 180;
+		/// <summary> How much gravity to add each frame. </summary>
+		private const int STOMP_GRAVITY = 540;
 		private void UpdateStomp()
 		{
 			MoveSpeed = 0; // Go STRAIGHT down
-			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
+
+			if (Skills.IsSkillEquipped(SkillKey.StompAttack))
+				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
+			else
+				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, JUMP_CANCEL_GRAVITY * PhysicsManager.physicsDelta);
 		}
 
 		private void CheckStomp()
@@ -1022,13 +1041,15 @@ namespace Project.Gameplay
 			actionBufferTimer = 0;
 			MoveSpeed = 0; // Kill horizontal speed
 
-			canLandingBoost = true;
-			Lockon.ResetLockonTarget();
+			canLandingBoost = Skills.IsSkillEquipped(SkillKey.StompDash);
+
 			Lockon.IsMonitoring = false;
+			if (Lockon.IsHomingAttacking)
+				Lockon.StopHomingAttack();
 			SetActionState(ActionStates.Stomping);
 
-			// TODO Play a separate stomping animation if using a stomp skill
-			Animator.StompAnimation(false);
+			Skills.IsAttacking = Skills.IsSkillEquipped(SkillKey.StompAttack);
+			Animator.StompAnimation(Skills.IsSkillEquipped(SkillKey.StompAttack));
 		}
 		#endregion
 
@@ -1052,7 +1073,7 @@ namespace Project.Gameplay
 			IsOnGround = false;
 			SetActionState(ActionStates.Backflip);
 
-			Effect.PlayActionSFX(Effect.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JumpSfx);
 			Animator.BackflipAnimation();
 		}
 
@@ -1102,7 +1123,7 @@ namespace Project.Gameplay
 
 			CanJumpDash = false; // Disable jumpdashing
 			SetActionState(ActionStates.Grindstep);
-			Effect.PlayActionSFX(Effect.JUMP_SFX);
+			Effect.PlayActionSFX(Effect.JumpSfx);
 			Animator.StartGrindStep();
 		}
 
@@ -1136,6 +1157,15 @@ namespace Project.Gameplay
 		private const float DAMAGE_FRICTION = 20f;
 		private void UpdateDamage()
 		{
+			if (Skills.IsSkillEquipped(SkillKey.DownCancel) && jumpBufferTimer != 0)
+			{
+				ResetActionState(); // End damage
+				Jump();
+				jumpBufferTimer = 0;
+				StartAccelJump(); // Immediately switch to an accel jump
+				return;
+			}
+
 			if (!previousKnockbackSettings.stayOnGround && IsOnGround)
 			{
 				ResetActionState();
@@ -1244,7 +1274,7 @@ namespace Project.Gameplay
 			Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .5f));
 
 			// Lose rings
-			Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Subtract);
+			Stage.UpdateRingCount(Skills.IsSkillEquipped(SkillKey.RingDamage) ? 10 : 20, StageSettings.MathModeEnum.Subtract);
 			Stage.IncrementDamageCount();
 
 			// Level failed
@@ -1384,7 +1414,7 @@ namespace Project.Gameplay
 		/// </summary>
 		private void SnapToGround()
 		{
-			KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 100.0f, true);
+			KinematicCollision3D collision = MoveAndCollide(-UpDirection * 100.0f, true);
 			if (collision == null) return;
 
 			GlobalPosition = collision.GetPosition();
@@ -1440,7 +1470,7 @@ namespace Project.Gameplay
 			{
 				Animator.JumpAnimation();
 				UpDirection = Vector3.Up;
-				Effect.PlayActionSFX(Effect.JUMP_SFX);
+				Effect.PlayActionSFX(Effect.JumpSfx);
 			}
 		}
 
@@ -1586,7 +1616,6 @@ namespace Project.Gameplay
 			Vector3 castVector = this.Down() * castLength;
 			int raysHit = 0;
 
-
 			// Whisker casts (For smoother collision)
 			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
 			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - COLLISION_PADDING);
@@ -1652,23 +1681,29 @@ namespace Project.Gameplay
 				// Calculate reset factor
 				float orientationResetFactor;
 				if (ActionState == ActionStates.Stomping ||
-				ActionState == ActionStates.JumpDash || ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
+					ActionState == ActionStates.JumpDash ||
+					ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
+				{
 					orientationResetFactor = .2f;
+				}
 				else if (VerticalSpeed > 0)
+				{
 					orientationResetFactor = .01f;
+				}
 				else
+				{
 					orientationResetFactor = VerticalSpeed * .2f / Runtime.MAX_GRAVITY;
+				}
 
 				UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 			}
 		}
 
-
 		public void LandOnGround()
 		{
 			// Snap to ground
 			Vector3 originalVelocity = Velocity;
-			Velocity = Vector3.Down * 100.0f;
+			Velocity = UpDirection * VerticalSpeed;
 			MoveAndSlide();
 			Velocity = originalVelocity;
 
@@ -1792,49 +1827,59 @@ namespace Project.Gameplay
 			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
 			DebugManager.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
 
-			if (ValidateWallCast(ref wallHit))
+			if (!ValidateWallCast(ref wallHit))
+				return;
+
+			if (ActionState == ActionStates.Backflip)
+				return;
+
+			float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
+			if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
 			{
-				if (ActionState != ActionStates.Backflip)
+				if (ActionState == ActionStates.JumpDash &&
+					wallHit.collidedObject.IsInGroup("splash jump") &&
+					Skills.IsSkillEquipped(SkillKey.SplashJump))
 				{
-					float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
-					if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
-					{
-						// Cancel speed break
-						if (Skills.IsSpeedBreakActive)
-						{
-							float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
-							if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
-							{
-								MovementAngle = PathFollower.ForwardAngle;
-								return;
-							}
-
-							Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
-						}
-
-						// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
-						if (ActionState == ActionStates.JumpDash && wallHit.collidedObject.IsInGroup("splash jump"))
-						{
-							MoveSpeed = 0;
-							VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
-						}
-
-						// Running into wall head-on
-						if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + COLLISION_PADDING)
-						{
-							IsOnWall = true;
-							MoveSpeed = 0; // Kill speed
-							return;
-						}
-					}
-
-					if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
-					{
-						float speedClamp = Mathf.Clamp(1.0f - wallDelta / Mathf.Pi * .4f, 0f, 1f); // Arbitrary formula that works well
-						if (GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
-							MoveSpeed *= speedClamp;
-					}
+					// Perform a splash jump
+					Lockon.StopHomingAttack();
+					VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight * .5f);
+					return;
 				}
+
+				// Cancel speed break
+				if (Skills.IsSpeedBreakActive)
+				{
+					float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
+					if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
+					{
+						MovementAngle = PathFollower.ForwardAngle;
+						return;
+					}
+
+					Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
+				}
+
+				// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+				if (ActionState == ActionStates.JumpDash && wallHit.collidedObject.IsInGroup("splash jump"))
+				{
+					MoveSpeed = 0;
+					VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
+				}
+
+				// Running into wall head-on
+				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + COLLISION_PADDING)
+				{
+					IsOnWall = true;
+					MoveSpeed = 0; // Kill speed
+					return;
+				}
+			}
+
+			if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
+			{
+				float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi * .4f), 0f, 1f); // Arbitrary formula that works well
+				if (GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
+					MoveSpeed *= speedClamp;
 			}
 		}
 
@@ -1895,26 +1940,26 @@ namespace Project.Gameplay
 
 		public void OnCountdownFinished()
 		{
-			if (Skills.IsSkillEnabled(SkillKeyEnum.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
+			if (Skills.IsSkillEquipped(SkillKey.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
 			{
+				Effect.StartWind();
 				MoveSpeed = Skills.countdownBoostSpeed;
 				AddLockoutData(new LockoutResource()
 				{
 					length = .5f,
 					overrideSpeed = true,
 					speedRatio = Skills.countdownBoostSpeed,
-					resetFlags = LockoutResource.ResetFlags.OnJump
+					resetFlags = LockoutResource.ResetFlags.OnJump,
 				});
-				GD.Print("Successful countdown boost");
 			}
 
 			Animator.CancelOneshot();
 
 			// Snap camera to gameplay
+			Camera.SnapXform();
 			Camera.SnapFlag = true;
 			actionBufferTimer = 0; // Reset action buffer from starting boost
 		}
-
 
 		private void OnLevelCompleted()
 		{
@@ -1929,30 +1974,10 @@ namespace Project.Gameplay
 				AddLockoutData(Stage.Data.CompletionLockout);
 		}
 
-
 		private void OnLevelDemoStarted()
 		{
 			MoveSpeed = 0;
 			AddLockoutData(Runtime.Instance.StopLockout);
-		}
-
-		public void OnObjectCollisionEnter(Node3D body)
-		{
-			/*
-			Note for when I come back wondering why the player is being pushed through the floor
-			Ensure all crushers' animationplayers are using the PHYSICS update mode
-			If this is true, then proceed to panic.
-
-			Crusher check has been moved to CheckCeiling().
-			*/
-
-			if (Lockon.IsHomingAttacking && body.IsInGroup("wall") && body.IsInGroup("splash jump"))
-			{
-				if (Skills.IsSkillEnabled(SkillKeyEnum.SplashJump)) // Perform a splash jump
-					Skills.SplashJump();
-				else // Cancel HomingAttack
-					Lockon.StopHomingAttack();
-			}
 		}
 
 		public void OnObjectCollisionExit(Node3D body)

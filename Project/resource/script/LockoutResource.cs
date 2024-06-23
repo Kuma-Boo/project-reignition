@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace Project.Gameplay;
 
 [Tool]
+
 // Resource for lockouts. Operates on a queue system. When a lockout ends, the next highest priority will be started.
 public partial class LockoutResource : Resource
 {

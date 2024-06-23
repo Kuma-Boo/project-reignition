@@ -1,179 +1,105 @@
 using Godot;
 using Godot.Collections;
-using Project.Core;
+using System.Linq;
+using System.Collections.Generic;
 
-namespace Project.Gameplay
+namespace Project.Gameplay;
+
+/// <summary> Master skill list. </summary>
+[Tool]
+public partial class SkillListResource : Resource
 {
-	/// <summary>
-	/// Dev keys of all possible skills, sorted in the order they appear on the in-game list.
-	/// </summary>
-	public enum SkillKeyEnum
+	public override Array<Dictionary> _GetPropertyList() => [ExtensionMethods.CreateProperty("Rebuild", Variant.Type.Bool)];
+
+	public override bool _Set(StringName property, Variant value)
 	{
-		//Passive skills
-		AllRounder, // Reduces acceleration loss caused by steep terrain
-		PearlCollector, // Makes collecting pearls easier
-		RingSaver, // Reduce the number of rings lost when taking damage
-		RingBonus, // Start with some rings at the game's start
-		RingRespawn, // Respawn with a few rings handy
+		if (property == "Rebuild")
+		{
+			RebuildSkillList();
+			NotifyPropertyListChanged();
+		}
 
-		// Slide skills
-		FlameSlide, // Replace slide with an attack
-		AegisSlide, // Intangible to attacks when sliding
-
-		// Action skills
-		LandingDash, // Gives a speed boost when landing
-		RocketStart, // Press a button during countdown for a speedboost
-		FlameStomp, // Replace jump cancel with an attack
-		SplashJump, // Bounce the player when jump dashing into an obstacle
-		ManualDrift, // Manually perform a drift for more speed and points/exp
-
-		Max, // Number of skills
+		return base._Set(property, value);
 	}
 
+	[Export]
+	private string skillResourcePath;
+	[Export(PropertyHint.ArrayType, "SkillResource")]
+	private Array<SkillResource> skills = [];
 
-	[Tool]
-	/// <summary>
-	/// Master skill list.
-	/// </summary>
-	public partial class SkillListResource : Resource
+	/// <summary> Gets the matching skill based on a SkillKey. </summary>
+	public SkillResource GetSkill(SkillKey key)
 	{
-		private SkillKeyEnum editingSkill;
+		if (key == SkillKey.Max)
+			return null;
 
-		[ExportGroup("DO NOT EDIT!")]
-		[Export]
-		private Array<SkillKeyEnum> skillKeyList = new();
-		[Export]
-		private Array<int> skillCostList = new(); // How much does the skill cost to equip?
-
-
-		#region Editor
-		public override Array<Dictionary> _GetPropertyList()
+		foreach (var skill in skills)
 		{
-			Array<Dictionary> properties = new()
-			{
-				ExtensionMethods.CreateProperty("Rebuild Skill List", Variant.Type.Bool),
-				ExtensionMethods.CreateProperty("Editing Skill", Variant.Type.Int, PropertyHint.Enum, editingSkill.EnumToString()),
-
-				ExtensionMethods.CreateProperty("Skill/Cost", Variant.Type.Int),
-			};
-
-			return properties;
+			if (skill.Key == key)
+				return skill;
 		}
 
-		public override Variant _Get(StringName property)
-		{
-			switch ((string)property)
-			{
-				case "Rebuild Skill List":
-					return false;
-				case "Editing Skill":
-					return (int)editingSkill;
-				case "Skill/Cost":
-					return skillCostList[GetSkillIndex(editingSkill)];
-				default:
-					break;
-			}
-
-			return base._Get(property);
-		}
-
-		public override bool _Set(StringName property, Variant value)
-		{
-			switch ((string)property)
-			{
-				case "Rebuild Skill List":
-					RebuildSkillList();
-					NotifyPropertyListChanged();
-					break;
-				case "Editing Skill":
-					editingSkill = (SkillKeyEnum)(int)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Skill/Cost":
-					skillCostList[GetSkillIndex(editingSkill)] = (int)value;
-					break;
-				default:
-					return false;
-			}
-
-			return true;
-		}
-		#endregion
-
-
-		private int GetSkillIndex(SkillKeyEnum key)
-		{
-			for (int i = 0; i < skillKeyList.Count; i++)
-			{
-				if (skillKeyList[i] == key)
-					return i;
-			}
-
-			CreateSkill(key);
-			return skillKeyList.Count - 1;
-		}
-
-
-		public int GetSkillCost(SkillKeyEnum key) => skillCostList[GetSkillIndex(key)];
-
-
-		/// <summary> Creates a skill. </summary>
-		private void CreateSkill(SkillKeyEnum key)
-		{
-			skillKeyList.Add(key);
-			skillCostList.Add(0);
-		}
-
-
-		/// <summary> Reorders a skill. </summary>
-		private void ReorderSkill(int currentIndex, int targetIndex)
-		{
-			skillKeyList.Insert(targetIndex, skillKeyList[currentIndex]);
-			skillCostList.Insert(targetIndex, skillCostList[currentIndex]);
-
-			// Remove old skill
-			currentIndex++;
-			skillKeyList.RemoveAt(currentIndex);
-			skillCostList.RemoveAt(currentIndex);
-		}
-
-
-		// Rebuilds the skill list
-		private void RebuildSkillList()
-		{
-			// Create missing skills
-			for (int i = 0; i < (int)SkillKeyEnum.Max; i++)
-			{
-				int skillIndex = GetSkillIndex((SkillKeyEnum)i);
-				ReorderSkill(skillIndex, i);
-			}
-
-			// Remove extras
-			skillKeyList.Resize((int)SkillKeyEnum.Max);
-			skillCostList.Resize((int)SkillKeyEnum.Max);
-		}
+		GD.PushWarning($"Couldn't find a skill with the key: {key}!");
+		return null;
 	}
 
-	public class SkillRing
+	// Rebuilds the skill list
+	private void RebuildSkillList()
 	{
-		/// <summary> List of equipped skills. </summary>
-		public Array<SkillKeyEnum> equippedSkills = new();
-		/// <summary> Cost of all equipped skills. </summary>
-		public int TotalCost { get; set; }
-		/// <summary> Amount of available skill points. </summary>
-		public int MaxSkillPoints { get; private set; }
+		if (!Engine.IsEditorHint() || string.IsNullOrWhiteSpace(skillResourcePath))
+			return;
 
-		public void RefreshSkillRingData(int level)
+		skills.Clear();
+
+		// Load skills from skill directory
+		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
-			// +5 per level, starts at 10, ends at 500.
-			MaxSkillPoints = 10;
-			if (level > 1)
-				MaxSkillPoints += (level - 1) * 5;
+			SkillKey key = (SkillKey)i;
+			string targetFile = skillResourcePath + key.ToString() + ".tres";
+			if (!ResourceLoader.Exists(targetFile))
+			{
+				GD.Print($"Couldn't find file {targetFile}.");
+				continue;
+			}
 
-			TotalCost = 0;
-			for (int i = 0; i < equippedSkills.Count; i++)
-				TotalCost += Runtime.Instance.masterSkillList.GetSkillCost(equippedSkills[i]);
+			SkillResource skill = ResourceLoader.Load<SkillResource>(targetFile, "SkillResource");
+			skills.Add(skill);
+			if (skill.Key != key) // Make sure keys are set up correctly
+				skill.Key = key;
+
+			ResourceSaver.Singleton.Save(skill, targetFile, ResourceSaver.SaverFlags.None);
+
+			// Make sure conflicting skills stay in sync with each other
+			if (skill.SkillConflicts != null)
+			{
+				for (int j = skill.SkillConflicts.Count - 1; j >= 0; j--)
+				{
+					if (skill.SkillConflicts[j] == skill.Key)
+					{
+						skill.SkillConflicts.RemoveAt(j);
+						continue;
+					}
+
+					targetFile = skillResourcePath + skill.SkillConflicts[j].ToString() + ".tres";
+					SkillResource conflict = ResourceLoader.Load<SkillResource>(targetFile, "SkillResource");
+					if (conflict.SkillConflicts.Contains(skill.Key)) // Conflicts are synced, continue...
+						continue;
+
+					// Resync conflicts
+					conflict.SkillConflicts.Add(skill.Key);
+					ResourceSaver.Singleton.Save(skill, targetFile, ResourceSaver.SaverFlags.None);
+				}
+			}
 		}
+
+		// Reorder skill list
+		List<SkillResource> skillList = [.. skills.ToArray()];
+		skillList.Sort(new SkillRing.KeySorter());
+
+		skills.Clear();
+		skills.AddRange(skillList);
+
+		ResourceSaver.Singleton.Save(this, skillResourcePath + "_SkillList.tres", ResourceSaver.SaverFlags.None);
+		GD.Print("Skill List has been rebuilt.");
 	}
 }
-

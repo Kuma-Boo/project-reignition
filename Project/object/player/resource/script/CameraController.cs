@@ -281,7 +281,6 @@ namespace Project.Gameplay
 			Camera.Fov = fov; // Update fov
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.GlobalPosition) / Runtime.SCREEN_SIZE);
 
-
 			if (SnapFlag) // Reset flag after camera was updated
 				SnapFlag = false;
 		}
@@ -322,7 +321,7 @@ namespace Project.Gameplay
 			xformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
 		}
 
-		private void SnapXform() => xformBlend = 1;
+		public void SnapXform() => xformBlend = 1;
 
 		private Vector3 AddTrackingOffset(Vector3 position, CameraPositionData data)
 		{

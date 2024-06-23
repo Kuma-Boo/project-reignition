@@ -62,7 +62,7 @@ namespace Project.Gameplay
 
 		public void UpdatePostProcessingStatus()
 		{
-			bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.DISABLED;
+			bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
 			Environment.Environment.SsaoEnabled = postProcessingEnabled;
 			Environment.Environment.SsilEnabled = postProcessingEnabled;
 		}
@@ -223,7 +223,7 @@ namespace Project.Gameplay
 		public void UpdateScore(int amount, MathModeEnum mode)
 		{
 			CurrentScore = CalculateMath(CurrentScore, amount, mode);
-			DisplayScore = ExtensionMethods.FormatScore(CurrentScore);
+			DisplayScore = ExtensionMethods.FormatMenuNumber(CurrentScore);
 			EmitSignal(SignalName.ScoreChanged);
 		}
 

@@ -230,10 +230,10 @@ public partial class LaunchRing : Area3D
 		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
 		Character.Animator.ExternalAngle = Character.MovementAngle;
 
-		//Disable homing reticle
-		Character.Lockon.IsMonitoring = false;
-		Character.Lockon.ResetLockonTarget();
-	}
+			//Disable homing reticle
+			Character.Lockon.IsMonitoring = false;
+			Character.Lockon.StopHomingAttack();
+		}
 
 	private void OnExited(Area3D a)
 	{

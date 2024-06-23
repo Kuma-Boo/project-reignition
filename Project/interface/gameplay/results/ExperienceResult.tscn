@@ -1,0 +1,1537 @@
+[gd_scene load_steps=30 format=3 uid="uid://cbt02mctaofmt"]
+
+[ext_resource type="Texture2D" uid="uid://bmwc4e25fnuqd" path="res://interface/gameplay/results/texture/result atlas.png" id="1"]
+[ext_resource type="Script" path="res://interface/gameplay/results/script/ExperienceResult.cs" id="1_xkepa"]
+[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bms1u4rvg38nn" path="res://interface/gameplay/results/texture/experience bar background.png" id="5_3fkf3"]
+[ext_resource type="LabelSettings" uid="uid://bd74c653xatd0" path="res://interface/font/ExperienceLabelSettings.tres" id="5_4kecg"]
+[ext_resource type="Texture2D" uid="uid://1c0aotu3c14i" path="res://interface/gameplay/results/texture/experience bar frame.png" id="6_wev3a"]
+[ext_resource type="Texture2D" uid="uid://bwjkhgsugxr8p" path="res://interface/gameplay/results/texture/experience bar fill.png" id="7_ag5xt"]
+[ext_resource type="Texture2D" uid="uid://c70ksrlhkhjbl" path="res://interface/gameplay/results/texture/experience bar edge.png" id="8_gkh28"]
+[ext_resource type="LabelSettings" uid="uid://dev3sgr6vxnqv" path="res://interface/font/ExperienceLvlUpSettings.tres" id="9_ncn2u"]
+[ext_resource type="AudioStream" uid="uid://cewf47fflp7io" path="res://sound/sfx/system/exp count.wav" id="10_1lyur"]
+[ext_resource type="Texture2D" uid="uid://dxd64k8bn0v2b" path="res://effect/particle/texture/flame/flame menu small.png" id="10_tdeqs"]
+[ext_resource type="AudioStream" uid="uid://o0xrb2myo3bh" path="res://sound/ost/treasure disc/3 Power of the Ring.mp3" id="10_vlo2b"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="11_7rrrm"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="11_wtsn7"]
+[ext_resource type="AudioStream" uid="uid://c5x3t5nj4k306" path="res://sound/sfx/system/jingle level up.mp3" id="12_ctc37"]
+[ext_resource type="Texture2D" uid="uid://pen6e1hcd7t4" path="res://interface/gameplay/results/texture/experience sparkle.png" id="12_o0ril"]
+[ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="14_8sgvl"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ls4jg"]
+blend_mode = 1
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 8
+particles_anim_v_frames = 8
+particles_anim_loop = true
+
+[sub_resource type="Curve" id="Curve_up66p"]
+_data = [Vector2(0, 0.0655824), 0.0, 25.7595, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.67652, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_3mp1g"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_up66p")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0jmyd"]
+lifetime_randomness = 0.2
+particle_flag_rotate_y = true
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(100, 20, 1)
+angle_min = -45.0
+angle_max = 45.0
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+alpha_curve = SubResource("CurveTexture_3mp1g")
+anim_speed_min = 0.5
+anim_speed_max = 0.8
+anim_offset_max = 1.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_la0mi"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(600, 36, 1)
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.5
+scale_max = 3.0
+alpha_curve = SubResource("CurveTexture_3mp1g")
+
+[sub_resource type="Animation" id="Animation_anadl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EdgeDecal:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Content/SeparationDecal/DecalBottom:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 160)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Content/SeparationDecal/DecalTop:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -160)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Content/SeparationDecal:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("EdgeDecal/TopRight:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(760, -364)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("EdgeDecal/BottomRight:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(760, 364)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("EdgeDecal/TopLeft:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-760, -364)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("EdgeDecal/BottomLeft:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-760, 364)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Content/Experience/Bar:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Content/Experience/Experience/Score:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Content/Experience/Experience/Skill:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Content/Experience/Experience/Mission:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Content/Experience/Result:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Content:position")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Content/Experience/Result/Level/Value/Amount:position")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(300, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Content/Experience/Result/SP/Value/Amount:position")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(300, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Content/Experience/Result/Soul/Value/Amount:position")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(300, 0)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Content/Experience/Result/Level/Value/Amount:self_modulate")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Content/Experience/Result/SP/Value/Amount:self_modulate")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Content/Experience/Result/Soul/Value/Amount:self_modulate")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("SFX/LevelUp:volume_db")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath(".:modulate")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Content:size")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1920, 1080)]
+}
+
+[sub_resource type="Animation" id="Animation_tuna7"]
+resource_name = "increase"
+length = 0.06667
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/ExpCount")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_qekjh"]
+resource_name = "init"
+length = 0.10001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EdgeDecal/TopRight:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("EdgeDecal/BottomRight:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("EdgeDecal/TopLeft:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("EdgeDecal/BottomLeft:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("EdgeDecal:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Content/SeparationDecal/DecalBottom:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Content/SeparationDecal/DecalTop:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Content/SeparationDecal:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Content/Experience/Bar:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Content/Experience/Experience/Score:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Content/Experience/Experience/Skill:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Content/Experience/Experience/Mission:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Content:position")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 128)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Content/Experience/Result:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath(".:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_x8ub0"]
+resource_name = "level-up"
+length = 2.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Content/Experience/Result/Level/Flames")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Content/Experience/Result/Level/Sparkle")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Content/Experience/Result/SP/Flames")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Content/Experience/Result/SP/Sparkle")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Content/Experience/Result/Soul/Flames")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Content/Experience/Result/Soul/Sparkle")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Content/Experience/Result/Level/Value/Amount:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(200, 0), Vector2(300, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Content/Experience/Result/SP/Value/Amount:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3, 0.6),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(200, 0), Vector2(300, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Content/Experience/Result/Soul/Value/Amount:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.6, 0.9),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(200, 0), Vector2(300, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Content/Experience/Result/Level/Value/Amount:self_modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Content/Experience/Result/SP/Value/Amount:self_modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Content/Experience/Result/Soul/Value/Amount:self_modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.6, 0.9, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SFX/LevelUpJingle")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SFX/LevelUp")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0.1, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SFX/LevelUp:volume_db")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0.2, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -3.0, -6.0]
+}
+
+[sub_resource type="Animation" id="Animation_yfi57"]
+resource_name = "show"
+length = 0.833337
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EdgeDecal/TopRight:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(760, -364)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EdgeDecal/BottomRight:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(760, 364)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("EdgeDecal/TopLeft:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-760, -364)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("EdgeDecal/BottomLeft:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-760, 364)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("EdgeDecal:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Content/SeparationDecal/DecalBottom:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.0666667, 0.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 160)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Content/SeparationDecal/DecalTop:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.0666667, 0.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -160)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Content/SeparationDecal:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.0666667, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Content/Experience/Bar:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.266667, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Content/Experience/Experience/Score:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Content/Experience/Experience/Skill:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.533333, 0.666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Content/Experience/Experience/Mission:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.666667, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Content:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 128)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath(".:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Content/Experience/Result:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ktalw"]
+resource_name = "show-level-up"
+length = 0.16667
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Content/Experience/Result:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Content:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 128), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y357t"]
+_data = {
+"RESET": SubResource("Animation_anadl"),
+"increase": SubResource("Animation_tuna7"),
+"init": SubResource("Animation_qekjh"),
+"level-up": SubResource("Animation_x8ub0"),
+"show": SubResource("Animation_yfi57"),
+"show-level-up": SubResource("Animation_ktalw")
+}
+
+[node name="ExperienceResult" type="Control" node_paths=PackedStringArray("expFill", "expLabel", "scoreLabel", "skillLabel", "missionLabel", "levelLabel", "levelGainLabel", "skillPointLabel", "skillPointGainLabel", "soulLabel", "soulGainLabel", "bgm", "animator")]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xkepa")
+expFill = NodePath("Content/Experience/Bar/Frame/Fill")
+expLabel = NodePath("Content/Experience/Bar/Value")
+scoreLabel = NodePath("Content/Experience/Experience/Score/Value")
+skillLabel = NodePath("Content/Experience/Experience/Skill/Value")
+missionLabel = NodePath("Content/Experience/Experience/Mission/Value")
+levelLabel = NodePath("Content/Experience/Result/Level/Value")
+levelGainLabel = NodePath("Content/Experience/Result/Level/Value/Amount")
+skillPointLabel = NodePath("Content/Experience/Result/SP/Value")
+skillPointGainLabel = NodePath("Content/Experience/Result/SP/Value/Amount")
+soulLabel = NodePath("Content/Experience/Result/Soul/Value")
+soulGainLabel = NodePath("Content/Experience/Result/Soul/Value/Amount")
+bgm = NodePath("BGM")
+animator = NodePath("AnimationPlayer")
+
+[node name="Background" type="TextureRect" parent="."]
+self_modulate = Color(0.783523, 0.783523, 0.783523, 1)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("3")
+
+[node name="EdgeDecal" type="Node2D" parent="."]
+position = Vector2(960, 540)
+
+[node name="TopRight" type="Sprite2D" parent="EdgeDecal"]
+position = Vector2(760, -364)
+scale = Vector2(1.12, 1.12)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(24, 496, 168, 168)
+
+[node name="BottomRight" type="Sprite2D" parent="EdgeDecal"]
+position = Vector2(760, 364)
+scale = Vector2(1.12, 1.12)
+texture = ExtResource("1")
+flip_v = true
+region_enabled = true
+region_rect = Rect2(24, 496, 168, 168)
+
+[node name="TopLeft" type="Sprite2D" parent="EdgeDecal"]
+position = Vector2(-760, -364)
+scale = Vector2(1.12, 1.12)
+texture = ExtResource("1")
+flip_h = true
+region_enabled = true
+region_rect = Rect2(24, 496, 168, 168)
+
+[node name="BottomLeft" type="Sprite2D" parent="EdgeDecal"]
+position = Vector2(-760, 364)
+scale = Vector2(1.12, 1.12)
+texture = ExtResource("1")
+flip_h = true
+flip_v = true
+region_enabled = true
+region_rect = Rect2(24, 496, 168, 168)
+
+[node name="Content" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SeparationDecal" type="Node2D" parent="Content"]
+position = Vector2(960, 448)
+
+[node name="DecalTop" type="Sprite2D" parent="Content/SeparationDecal"]
+position = Vector2(0, -160)
+scale = Vector2(1.12, 1.12)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(-8, 0, 1032, 64)
+
+[node name="DecalBottom" type="Sprite2D" parent="Content/SeparationDecal"]
+position = Vector2(0, 160)
+scale = Vector2(1.12, 1.12)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(-8, 0, 1032, 64)
+
+[node name="Experience" type="Control" parent="Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bar" type="NinePatchRect" parent="Content/Experience"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.148148
+anchor_right = 0.766667
+anchor_bottom = 0.207407
+texture = ExtResource("5_3fkf3")
+patch_margin_left = 43
+patch_margin_top = 12
+patch_margin_right = 43
+patch_margin_bottom = 13
+metadata/_edit_use_anchors_ = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="Content/Experience/Bar"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -416.0
+offset_right = 117.0
+offset_bottom = 21.0
+grow_vertical = 2
+scale = Vector2(0.72, 0.72)
+text = "exp"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Frame" type="NinePatchRect" parent="Content/Experience/Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_wev3a")
+patch_margin_left = 43
+patch_margin_top = 12
+patch_margin_right = 43
+patch_margin_bottom = 13
+
+[node name="Fill" type="TextureRect" parent="Content/Experience/Bar/Frame"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 15.0
+offset_right = -25.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_ag5xt")
+expand_mode = 1
+
+[node name="Edge" type="NinePatchRect" parent="Content/Experience/Bar/Frame"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_gkh28")
+patch_margin_left = 43
+patch_margin_top = 12
+patch_margin_right = 43
+patch_margin_bottom = 13
+
+[node name="Value" type="Label" parent="Content/Experience/Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+pivot_offset = Vector2(448, 38)
+text = "0000000/0000000"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Experience" type="VBoxContainer" parent="Content/Experience"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 464.0
+offset_top = 304.0
+offset_right = -448.0
+offset_bottom = -504.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Score" type="Control" parent="Content/Experience/Experience"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Experience/Experience/Score"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 704.0
+offset_bottom = 8.0
+grow_vertical = 2
+text = "exp_score"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Content/Experience/Experience/Score"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0000000"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Skill" type="Control" parent="Content/Experience/Experience"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Experience/Experience/Skill"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 704.0
+offset_bottom = 8.0
+grow_vertical = 2
+text = "exp_skill"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Content/Experience/Experience/Skill"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0000000"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Mission" type="Control" parent="Content/Experience/Experience"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Experience/Experience/Mission"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 704.0
+offset_bottom = 8.0
+grow_vertical = 2
+text = "exp_mission"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Content/Experience/Experience/Mission"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0000000"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Result" type="VBoxContainer" parent="Content/Experience"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 464.0
+offset_top = 640.0
+offset_right = -448.0
+offset_bottom = -184.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Level" type="Control" parent="Content/Experience/Result"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Experience/Result/Level"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 704.0
+offset_bottom = 8.0
+grow_vertical = 2
+text = "exp_level"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Content/Experience/Result/Level"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "99"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Amount" type="Label" parent="Content/Experience/Result/Level/Value"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 25.0
+offset_top = -36.0
+offset_right = 192.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "+99"
+label_settings = ExtResource("9_ncn2u")
+vertical_alignment = 1
+
+[node name="Flames" type="GPUParticles2D" parent="Content/Experience/Result/Level"]
+material = SubResource("CanvasItemMaterial_ls4jg")
+position = Vector2(944, 40)
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_0jmyd")
+texture = ExtResource("10_tdeqs")
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+
+[node name="Sparkle" type="GPUParticles2D" parent="Content/Experience/Result/Level"]
+material = ExtResource("11_wtsn7")
+position = Vector2(496, 36)
+emitting = false
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_la0mi")
+texture = ExtResource("12_o0ril")
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 60
+
+[node name="SP" type="Control" parent="Content/Experience/Result"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Experience/Result/SP"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 704.0
+offset_bottom = 8.0
+grow_vertical = 2
+text = "exp_sp"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Content/Experience/Result/SP"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "500"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Amount" type="Label" parent="Content/Experience/Result/SP/Value"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 25.0
+offset_top = -36.0
+offset_right = 192.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "+99"
+label_settings = ExtResource("9_ncn2u")
+vertical_alignment = 1
+
+[node name="Flames" type="GPUParticles2D" parent="Content/Experience/Result/SP"]
+material = SubResource("CanvasItemMaterial_ls4jg")
+position = Vector2(944, 40)
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_0jmyd")
+texture = ExtResource("10_tdeqs")
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+
+[node name="Sparkle" type="GPUParticles2D" parent="Content/Experience/Result/SP"]
+material = ExtResource("11_wtsn7")
+position = Vector2(496, 36)
+emitting = false
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_la0mi")
+texture = ExtResource("12_o0ril")
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 60
+
+[node name="Soul" type="Control" parent="Content/Experience/Result"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Experience/Result/Soul"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 704.0
+offset_bottom = 8.0
+grow_vertical = 2
+text = "exp_soul"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Content/Experience/Result/Soul"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "300"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Amount" type="Label" parent="Content/Experience/Result/Soul/Value"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 25.0
+offset_top = -36.0
+offset_right = 192.0
+offset_bottom = 36.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "+99"
+label_settings = ExtResource("9_ncn2u")
+vertical_alignment = 1
+
+[node name="Flames" type="GPUParticles2D" parent="Content/Experience/Result/Soul"]
+material = SubResource("CanvasItemMaterial_ls4jg")
+position = Vector2(944, 40)
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_0jmyd")
+texture = ExtResource("10_tdeqs")
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+
+[node name="Sparkle" type="GPUParticles2D" parent="Content/Experience/Result/Soul"]
+material = ExtResource("11_wtsn7")
+position = Vector2(496, 36)
+emitting = false
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_la0mi")
+texture = ExtResource("12_o0ril")
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 60
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_vlo2b")
+bus = &"BGM"
+script = ExtResource("11_7rrrm")
+loopEndPosition = 43.0
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="LevelUpJingle" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("12_ctc37")
+volume_db = -3.0
+bus = &"SFX"
+
+[node name="LevelUp" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("14_8sgvl")
+max_polyphony = 5
+bus = &"SFX"
+
+[node name="ExpCount" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("10_1lyur")
+volume_db = -3.0
+max_polyphony = 5
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_y357t")
+}
+next/show-level-up = &"level-up"

@@ -89,6 +89,8 @@ namespace Project.Gameplay
 		#region Time and Score
 		[ExportGroup("Time & Score")]
 		[Export]
+		private Node2D rankPreviewerRoot;
+		[Export]
 		private Sprite2D mainRank;
 		[Export]
 		private Sprite2D transitionRank;
@@ -100,12 +102,19 @@ namespace Project.Gameplay
 		private Tween rankTween;
 		private void InitializeRankPreviewer()
 		{
+			rankPreviewerRoot.Visible = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview);
+			if (!rankPreviewerRoot.Visible)
+				return;
+
 			CurrentRank = Stage.CalculateRank();
 			mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * CurrentRank * 60), mainRank.RegionRect.Size);
 		}
 
 		private void UpdateRank()
 		{
+			if (!rankPreviewerRoot.Visible)
+				return;
+
 			int rank = Stage.CalculateRank();
 			if (CurrentRank == rank || rankTween?.IsRunning() == true)
 				return;
@@ -238,7 +247,7 @@ namespace Project.Gameplay
 		private void UpdateSoulGauge()
 		{
 			Vector2 end = Vector2.Down * Mathf.Lerp(soulGaugeBackground.Size.Y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
-			soulGaugeFill.Position = ExtensionMethods.SmoothDamp(soulGaugeFill.Position, end, ref soulGaugeVelocity, 0.1f);
+			soulGaugeFill.Position = soulGaugeFill.Position.SmoothDamp(end, ref soulGaugeVelocity, 0.1f);
 		}
 
 		private bool isSoulGaugeCharged;
