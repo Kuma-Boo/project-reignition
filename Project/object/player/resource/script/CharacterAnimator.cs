@@ -538,8 +538,6 @@ namespace Project.Gameplay
 		/// </summary>
 		private void UpdateVisualRotation()
 		{
-			GD.PrintT(Character.Lockon.IsHomingAttacking);
-
 			if (Character.ActionState == CharacterController.ActionStates.Grindstep) return; // Use the same angle as the grindrail
 
 			// Don't update directions when externally controlled or on launchers

@@ -1,4 +1,4 @@
-[gd_scene load_steps=104 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=105 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -93,6 +93,9 @@ size = Vector3(20, 30, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7jbaj"]
 size = Vector3(24.2676, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_74bek"]
+size = Vector3(10, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x053g"]
 size = Vector3(218, 2, 244)
@@ -470,16 +473,29 @@ script = ExtResource("15_1ew2u")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_7jbaj")
 
-[node name="BoatCheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.669533, 0, 0.742783, 0, 1, 0, -0.742783, 0, -0.669533, -468.435, -277.083, -1121.66)
+[node name="BoatLCheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.602248, 0, -0.79831, 0, 1, 0, 0.79831, 0, 0.602248, -460.553, -277.083, -1127.55)
 "Enter Mode" = 0
 
-[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoints/BoatCheckpoint"]
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoints/BoatLCheckpoint"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, -0.242432, 0, 9.84119)
 script = ExtResource("15_1ew2u")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/BoatCheckpoint"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/BoatLCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.13379, 8, -3.05176e-05)
-shape = SubResource("BoxShape3D_7jbaj")
+shape = SubResource("BoxShape3D_74bek")
+
+[node name="BoatRCheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.731723, 0, -0.681603, 0, 1, 0, 0.681603, 0, 0.731723, -464.062, -277.083, -1132.84)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoints/BoatRCheckpoint"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -0.0424805, 0, 9.84122)
+script = ExtResource("15_1ew2u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/BoatRCheckpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.72119, 8, 0)
+shape = SubResource("BoxShape3D_74bek")
 
 [node name="FeedingTunnelCheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.708352, 0, -0.705859, 0, 1, 0, 0.705859, 0, 0.708352, -633.953, -280.789, -1057.09)
@@ -582,6 +598,7 @@ endPoint = 45.0
 transform = Transform3D(0.831954, 0, 0.554845, 0, 1, 0, -0.554845, 0, 0.831954, -30.7302, 43.764, -98.5684)
 script = ExtResource("35_vf0rg")
 path = NodePath("../../../../Path/LogAutomationPath")
+affectCamera = false
 
 [node name="Camera" type="Node3D" parent="Trigger/Object/LogAutomationTrigger"]
 script = ExtResource("36_8t574")
@@ -1014,6 +1031,7 @@ transform = Transform3D(-0.698416, 0, 0.715693, 0, 1, 0, -0.715693, 0, -0.698416
 script = ExtResource("36_8t574")
 transitionTime = 0.5
 settings = ExtResource("35_mtslr")
+previousSettings = ExtResource("34_qb2qj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/LogWallCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
