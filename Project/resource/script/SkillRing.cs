@@ -92,9 +92,12 @@ public class SkillRing
 	}
 
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
-	public static bool IsSkillUnlocked(SkillKey key)
+	public bool IsSkillUnlocked(SkillKey key)
 	{
 		if (DebugManager.Instance.UseDemoSave)
+			return true;
+
+		if (IsSkillEquipped(key)) // Equipped skills should be unlocked automatically to allow the player to unequip them...
 			return true;
 
 		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);

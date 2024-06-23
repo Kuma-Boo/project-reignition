@@ -71,10 +71,7 @@ public partial class WorldSelect : Menu
 			if (item is LevelSelect levelSelect)
 			{
 				if (levelSelect.HasNewLevel())
-				{
-					GD.Print($"New level registered at index {levelIndex}");
 					newLevelList.Add(levelIndex);
-				}
 
 				levelIndex++;
 			}

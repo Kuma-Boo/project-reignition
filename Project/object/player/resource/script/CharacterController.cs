@@ -1019,7 +1019,7 @@ namespace Project.Gameplay
 		{
 			MoveSpeed = 0; // Go STRAIGHT down
 
-			if (SkillRing.IsSkillUnlocked(SkillKey.StompAttack))
+			if (Skills.IsSkillEquipped(SkillKey.StompAttack))
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, STOMP_GRAVITY * PhysicsManager.physicsDelta);
 			else
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, STOMP_SPEED, JUMP_CANCEL_GRAVITY * PhysicsManager.physicsDelta);

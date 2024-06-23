@@ -54,7 +54,7 @@ public partial class NotificationMenu : Control
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;
-			skillUnlockStatus.TryAdd(key, SkillRing.IsSkillUnlocked(key));
+			skillUnlockStatus.TryAdd(key, SaveManager.ActiveSkillRing.IsSkillUnlocked(key));
 		}
 	}
 
@@ -74,7 +74,7 @@ public partial class NotificationMenu : Control
 		{
 			SkillKey key = (SkillKey)i;
 			// Update dictionary so true means the skill was just unlocked while false means its unlock status hasn't changed
-			if (skillUnlockStatus[key] != SkillRing.IsSkillUnlocked(key))
+			if (skillUnlockStatus[key] != SaveManager.ActiveSkillRing.IsSkillUnlocked(key))
 			{
 				NotificationList.Add(new NotificationData()
 				{
