@@ -291,7 +291,7 @@ namespace Project.Gameplay
 				return;
 
 			isFacingRight = isLeadingWithRightFoot;
-			Character.Effect.PlayActionSFX(Character.Effect.SLIDE_SFX);
+			Character.Effect.PlayActionSFX(Character.Effect.SlideSfx);
 			animationTree.Set(BRAKE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			BrakeState.Travel(isFacingRight ? "r" + BRAKE_START_STATE : "l" + BRAKE_START_STATE);
 			IsBrakeAnimationActive = true;
@@ -322,7 +322,7 @@ namespace Project.Gameplay
 		/// <summary> Max amount of turning allowed. </summary>
 		private readonly float MAX_TURN_ANGLE = Mathf.Pi * .4f;
 		/// <summary> How much to visually lean into turns. </summary>
-		private readonly float PATH_TURN_STRENGTH = 5.0f;
+		private readonly float PATH_TURN_STRENGTH = 10f;
 		/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
 		public float CalculateTurnRatio()
 		{
@@ -355,6 +355,7 @@ namespace Project.Gameplay
 			animationTree.Set(ACCEL_JUMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			animationTree.Set(BOUNCE_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 			animationTree.Set(BACKFLIP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			animationTree.Set(STOMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		}
 
 		public void JumpAnimation()
@@ -370,15 +371,20 @@ namespace Project.Gameplay
 		public void LaunchAnimation() => UpdateAirState("launch", false);
 
 
+		private readonly StringName STOMP_STATE = "stomp";
+		private readonly StringName STOMP_TRIGGER = "parameters/air_tree/stomp_trigger/request";
 		public void StompAnimation(bool offensive)
 		{
-			UpdateAirState(FALL_STATE, false);
 			if (offensive)
 			{
-				// TODO Separate stomp animation
+				// Offensive stomp animation
+				Character.Effect.StartStompFX();
+				UpdateAirState(STOMP_STATE, false);
+				animationTree.Set(STOMP_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
 			else
 			{
+				UpdateAirState(FALL_STATE, false);
 				animationTree.Set(FALL_SPEED, 2.5f);
 				animationTree.Set(FALL_TRIGGER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
@@ -542,7 +548,7 @@ namespace Project.Gameplay
 			else if (Character.Lockon.IsHomingAttacking) // Face target
 				targetRotation = ExtensionMethods.CalculateForwardAngle(Character.Lockon.HomingAttackDirection);
 			else if (Character.IsMovingBackward) // Backstepping
-				targetRotation = Character.PathFollower.ForwardAngle + groundTurnRatio * Mathf.Pi * .15f;
+				targetRotation = Character.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
 			else if (Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer)
 				targetRotation = Character.PathFollower.ForwardAngle;
 

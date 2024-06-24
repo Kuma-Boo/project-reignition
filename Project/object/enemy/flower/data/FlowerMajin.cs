@@ -148,9 +148,10 @@ public partial class FlowerMajin : Enemy
 		base.UpdateInteraction();
 	}
 
-	public override void TakePlayerDamage()
-	{
-		base.TakePlayerDamage();
+
+		public override void TakeHomingAttackDamage()
+		{
+			base.TakeHomingAttackDamage();
 
 		if (IsDefeated)
 		{

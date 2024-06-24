@@ -8,7 +8,7 @@ namespace Project.Gameplay.Objects;
 /// Launches the player. Use <see cref="CreateLaunchSettings(Vector3, Vector3, float, bool)"/> to bypass needing a Launcher node.
 /// </summary>
 [Tool]
-public partial class Launcher : Area3D // Jumps between static points w/ custom sfx support
+public partial class Launcher : Node3D // Jumps between static points w/ custom sfx support
 {
 	#region Editor
 	private const string SecondarySettingsEnabled = "Secondary Settings/Enabled";
@@ -134,14 +134,14 @@ public partial class Launcher : Area3D // Jumps between static points w/ custom 
 	public virtual Vector3 GetLaunchDirection()
 	{
 		if (launchDirection == LaunchDirection.Forward)
-			return this.Forward();
+			return LaunchPoint.Forward();
 		else if (launchDirection == LaunchDirection.Flatten)
-			return this.Up().RemoveVertical().Normalized();
+			return LaunchPoint.Up().RemoveVertical().Normalized();
 
-		return this.Up();
+		return LaunchPoint.Up();
 	}
 
-	public Vector3 StartingPoint => GlobalPosition + (Vector3.Up * startingHeight);
+	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * startingHeight);
 
 	public LaunchSettings GetLaunchSettings()
 	{
@@ -149,7 +149,7 @@ public partial class Launcher : Area3D // Jumps between static points w/ custom 
 		float blendedMiddleHeight = Mathf.Lerp(middleHeight, secondaryMiddleHeight, GetLaunchRatio());
 		float blendedFinalHeight = Mathf.Lerp(finalHeight, secondaryFinalHeight, GetLaunchRatio());
 
-		Vector3 startPosition = GlobalPosition + (Vector3.Up * startingHeight);
+		Vector3 startPosition = StartingPoint;
 		Vector3 endPosition = startPosition + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
@@ -158,7 +158,8 @@ public partial class Launcher : Area3D // Jumps between static points w/ custom 
 		return settings;
 	}
 
-	public virtual void Activate(Area3D a)
+	public virtual void Activate(Area3D _) => Activate();
+	public virtual void Activate()
 	{
 		EmitSignal(SignalName.Activated);
 
@@ -198,4 +199,8 @@ public partial class Launcher : Area3D // Jumps between static points w/ custom 
 	[Export]
 	/// <summary> Option voice to play. </summary>
 	private StringName voiceKey;
+	/// <summary> Optional launch point override node. </summary>
+	[Export]
+	public Node3D launchPoint;
+	private Node3D LaunchPoint => launchPoint ?? this;
 }

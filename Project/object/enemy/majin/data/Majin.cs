@@ -352,20 +352,22 @@ public partial class Majin : Enemy
 		}
 	}
 
-	public override void TakePlayerDamage()
+
+	public override void TakeHomingAttackDamage()
 	{
 		Stagger();
-		base.TakePlayerDamage();
+		base.TakeHomingAttackDamage();
 
 		if (!IsDefeated)
 			animationPlayer.Play("stagger");
 	}
 
-	public override void TakeExternalDamage(int amount = -1)
+	public override void TakeDamage(int amount = -1)
 	{
 		Stagger();
-		base.TakeExternalDamage(amount);
+		base.TakeDamage(amount);
 	}
+
 
 	private void Stagger()
 	{
@@ -451,7 +453,7 @@ public partial class Majin : Enemy
 		if (OutsideFlameAggression || !IsInRange)
 		{
 			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
-			if (OutsideFlameAggression && FlameAggressionRadius != 0 && !isFlameActive)
+			if (OutsideFlameAggression && !isFlameActive)
 				flameTimer = flameInactiveTime;
 			return;
 		}
@@ -482,7 +484,7 @@ public partial class Majin : Enemy
 		if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
 		{
 			Stagger();
-			Character.Lockon.StartBounce(IsDefeated);
+			Character.Lockon.StartBounce(true);
 			return;
 		}
 
@@ -579,6 +581,9 @@ public partial class Majin : Enemy
 
 	private bool IsInFlameAggressionRange()
 	{
+		if (FlameAggressionRadius == 0)
+			return true;
+
 		float distance = (GlobalPosition - Character.GlobalPosition).Flatten().LengthSquared();
 		// Because raising to the 2nd power is better than taking a square root...
 		return distance < Mathf.Pow(FlameAggressionRadius, 2);

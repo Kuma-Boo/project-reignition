@@ -1,49 +1,51 @@
 using Godot;
+using Project.Core;
 using Project.Gameplay;
 
-namespace Project.Interface.Menus
+namespace Project.Interface.Menus;
+
+public partial class SkillOption : Control
 {
-	public partial class SkillOption : Control
+	public SkillResource Skill { get; set; }
+
+	public int Number { get; set; }
+
+	[Export]
+	private Label numberLabel;
+	[Export]
+	private Label nameLabel;
+	[Export]
+	private Label costLabel;
+	[Export]
+	private AnimationPlayer animator;
+	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
+
+	public void Initialize()
 	{
-		public SkillKeyEnum Key { get; set; }
+		// Update all the data that doesn't change
+		animator.Play(Skill.Element.ToString().ToLower());
+		animator.Advance(0);
+		animator.Play(Skill.Category.ToString().ToLower());
+		animator.Advance(0);
 
-		public int Number { get; set; }
-		public int Cost { get; set; }
+		numberLabel.Text = Number.ToString("00");
+		nameLabel.Text = Skill.NameKey;
+		costLabel.Text = Skill.Cost.ToString("00");
+		Redraw();
+	}
 
-		public bool IsSkillActive
-		{
-			get => glow.Visible;
-			set => glow.Visible = value;
-		}
+	public void Redraw()
+	{
+		// Redraw equip status
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(Skill.Key))
+			animator.Play("equipped");
+		else if (ActiveSkillRing.TotalCost + Skill.Cost > ActiveSkillRing.MaxSkillPoints)
+			animator.Play("expensive");
+		else if (ActiveSkillRing.IsConflictingSkillEquipped(Skill) != SkillKey.Max)
+			animator.Play("conflict");
+		else
+			animator.Play("unequipped");
 
-		public StringName DescriptionKey => NameKey + "_description";
-		private StringName NameKey => "skill_" + Key.ToString().ToSnakeCase();
-
-		[Export]
-		private Sprite2D glow;
-		[Export]
-		private Label numberLabel;
-		[Export]
-		private Label nameLabel;
-		[Export]
-		private Label costLabel;
-		[Export]
-		private AnimationPlayer animator;
-
-		public State state;
-		public enum State
-		{
-			Locked, // Locked skill
-			Equipable, // Normal
-			Expensive, // Not enough SP
-			Invalid, // Interferes with a different skill
-		}
-
-		public void RedrawData()
-		{
-			numberLabel.Text = Number.ToString("00");
-			nameLabel.Text = NameKey;
-			costLabel.Text = Cost.ToString("00");
-		}
+		animator.Advance(0);
 	}
 }

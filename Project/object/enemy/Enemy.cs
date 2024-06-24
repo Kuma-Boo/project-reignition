@@ -136,36 +136,44 @@ public partial class Enemy : Node3D
 	/// <summary> Override this from an inherited class. </summary>
 	protected virtual void UpdateEnemy() { }
 
-	public virtual void TakePlayerDamage()
+	public virtual void TakeHomingAttackDamage()
 	{
 		if (Character.Lockon.IsPerfectHomingAttack)
-			currentHealth -= 2; // float damage
-		else
-			currentHealth--; // TODO increase player attack based on skills?
+			currentHealth--; // Take an extra point of damage
 
-		if (IsDefeated)
-			Defeat();
-		else
+		Character.Lockon.StopHomingAttack();
+		TakeDamage(1);
+
+		if (!IsDefeated)
 			Character.Camera.SetDeferred("LockonTarget", hurtbox);
 	}
 
-	public virtual void TakeExternalDamage(int amount = -1)
+	public virtual void TakeDamage(int amount = -1)
 	{
 		if (amount == -1)
 			currentHealth = 0;
 		else
 			currentHealth -= amount;
 
-		if (IsDefeated)
-			Defeat();
+		if (!IsDefeated) return;
+
+		Defeat();
+		Character.Lockon.ResetLockonTarget();
 	}
 
-	/// <summary> Called when the enemy is defeated. </summary>
+	/// <summary>
+	/// Called when the enemy is defeated.
+	/// </summary>
 	protected virtual void Defeat()
 	{
 		SetHitboxStatus(false);
 		Character.Camera.LockonTarget = null;
 		BonusManager.instance.AddEnemyChain();
+
+		// Automatically increment objective count
+		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+			StageSettings.instance.IncrementObjective();
+
 		EmitSignal(SignalName.Defeated);
 	}
 
@@ -212,22 +220,18 @@ public partial class Enemy : Node3D
 		}
 
 		if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
-		{
 			Defeat();
-		}
 		else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
-		{
 			Defeat();
-		}
+		else if (Character.Skills.IsAttacking)
+			TakeDamage(1);
 		else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 		{
-			TakePlayerDamage();
+			TakeHomingAttackDamage();
 			Character.Lockon.StartBounce(IsDefeated);
 		}
 		else if (damagePlayer)
-		{
 			Character.StartKnockback();
-		}
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>

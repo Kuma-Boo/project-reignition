@@ -7,9 +7,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_bqhir"]
 size = Vector3(3, 0.5, 3)
 
-[node name="JumpCarpet" type="Area3D" node_paths=PackedStringArray("sfxPlayer")]
-collision_layer = 4
-collision_mask = 2
+[node name="JumpCarpet" type="Node3D" node_paths=PackedStringArray("sfxPlayer")]
 script = ExtResource("1_7j8ed")
 "Secondary Settings/Enabled" = true
 "Secondary Settings/Middle Height" = 0.0
@@ -21,10 +19,14 @@ allowJumpDashing = true
 sfxPlayer = NodePath("SFX")
 voiceKey = &""
 
-[node name="JumpCarpet" parent="." instance=ExtResource("2_vapfi")]
+[node name="ActivationTrigger" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationTrigger"]
 shape = SubResource("BoxShape3D_bqhir")
+
+[node name="JumpCarpet" parent="." instance=ExtResource("2_vapfi")]
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_kgplj")
@@ -34,4 +36,4 @@ max_distance = 100.0
 bus = &"SFX"
 attenuation_filter_cutoff_hz = 20500.0
 
-[connection signal="area_entered" from="." to="." method="Activate"]
+[connection signal="area_entered" from="ActivationTrigger" to="." method="Activate"]
