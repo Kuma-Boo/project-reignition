@@ -1,0 +1,2072 @@
+[gd_scene load_steps=25 format=3 uid="uid://ccmoja6pd1edc"]
+
+[ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_w84df"]
+[ext_resource type="Resource" uid="uid://c3kfxbbywo2dl" path="res://resource/level data/dinosaur jungle/ChainsofRingsAct.tres" id="2_ntskt"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_bq3st"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="5_gf0vc"]
+[ext_resource type="Resource" uid="uid://cmesyjx0jp6ur" path="res://resource/preset/lockout/run/AutorunLockout.tres" id="6_8thj6"]
+[ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="7_jq208"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="8_lxakw"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="10_8wbfr"]
+[ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="13_gipno"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="13_kf546"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="14_1iuca"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="15_q3opu"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="16_ri6io"]
+[ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="17_354a2"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="40_2mxrl"]
+[ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="44_ekl1l"]
+[ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="52_k3glw"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="52_m83up"]
+[ext_resource type="Resource" uid="uid://u1ajlm54dtyt" path="res://area/2 dino jungle/act 1/camera/DinoCrossingFlyingPotCam.tres" id="55_ukj4h"]
+[ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="56_yls7q"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="64_oytxk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1mwhh"]
+size = Vector3(100, 100, 250)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rumy6"]
+size = Vector3(30, 100, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
+size = Vector3(15, 20, 2.5)
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_w84df")]
+Data = ExtResource("2_ntskt")
+dialogLibrary = null
+metadata/_edit_group_ = true
+
+[node name="05Crossing" parent="Static/Visuals" index="7"]
+startEnabled = true
+
+[node name="06CavernEntrance" parent="Static/Visuals" index="8"]
+startEnabled = true
+
+[node name="07Cavern" parent="Static/Visuals" index="9"]
+startEnabled = true
+
+[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
+
+[node name="MainAct" type="Node3D" parent="."]
+
+[node name="Cavern" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
+script = ExtResource("10_8wbfr")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 484.8, 275.5, 1110.7)
+metadata/_edit_lock_ = true
+
+[node name="AutorunLockout" parent="MainAct/Cavern/SpawnPosition" instance=ExtResource("4_bq3st")]
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Autorun" type="Node3D" parent="MainAct/Cavern/SpawnPosition/AutorunLockout"]
+script = ExtResource("5_gf0vc")
+lockoutData = ExtResource("6_8thj6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/SpawnPosition/AutorunLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0, -72)
+shape = SubResource("BoxShape3D_1mwhh")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="MainAct/Cavern/SpawnPosition/AutorunLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -290)
+shape = SubResource("BoxShape3D_1mwhh")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="MainAct/Cavern/SpawnPosition/AutorunLockout"]
+transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -95, 0, -402)
+shape = SubResource("BoxShape3D_1mwhh")
+
+[node name="AutoRecenterLockout" parent="MainAct/Cavern/SpawnPosition" instance=ExtResource("4_bq3st")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -191.607, 0, -469.66)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Autorun" type="Node3D" parent="MainAct/Cavern/SpawnPosition/AutoRecenterLockout"]
+script = ExtResource("5_gf0vc")
+lockoutData = ExtResource("7_jq208")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/SpawnPosition/AutoRecenterLockout"]
+shape = SubResource("BoxShape3D_rumy6")
+
+[node name="CharacterSpawn" parent="MainAct/Cavern" instance=ExtResource("8_lxakw")]
+transform = Transform3D(0.466819, 0, 0.884353, 0, 1, 0, -0.884353, 0, 0.466819, 125.255, 20.493, 144.523)
+
+[node name="MiddleRing" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(-0.414081, 0.269419, -0.869454, -0.0302956, 0.950584, 0.308987, 0.909736, 0.154286, -0.385456, 131.067, 20.7565, 148.083)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.708
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 7.45058e-08, -1.19209e-07, 0, 0.994902, -0.100848, 0, 0.100848, 0.994902, 6.10352e-05, 0.0982971, 0.0100098)
+
+[node name="Child02" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 0, 1, -4.09782e-08, 0, 1.49012e-08, 1, 0.0759277, 0.34137, -2.69464)
+
+[node name="Child03" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 0, 1, -4.09782e-08, 0, 1.49012e-08, 1, 0.210205, 0.625061, -5.40363)
+
+[node name="Child04" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 0, 1, -4.09782e-08, 0, 1.49012e-08, 1, 0.252075, 0.800781, -8.12903)
+
+[node name="Child05" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 0, 1, -4.09782e-08, 0, 1.49012e-08, 1, 0.302734, 0.835083, -10.8546)
+
+[node name="Child06" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.04308e-07, -8.9407e-08, 0, 1, -4.09782e-08, 0, 4.84288e-08, 1, 0.131531, 0.773682, -13.566)
+
+[node name="Child07" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 0, 1, -4.09782e-08, 0, 1.49012e-08, 1, -0.0675049, 0.644348, -16.2573)
+
+[node name="Child08" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 0, 1, -4.09782e-08, 0, 1.49012e-08, 1, -0.424683, 0.513794, -18.9453)
+
+[node name="Child09" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 0, 1, -4.09782e-08, 0, 1.49012e-08, 1, -0.646729, 0.385681, -21.6314)
+
+[node name="Child10" parent="MainAct/Cavern/MiddleRing" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.04308e-07, -8.9407e-08, 0, 1, -4.09782e-08, 0, 2.6077e-08, 1, -0.932495, 0.265076, -23.8932)
+
+[node name="Rings1" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.609752, -0.00435713, -0.79258, 0.00804591, 0.999967, 0.000692684, 0.792551, -0.00679935, 0.609767, 183.651, 13.9229, 151.307)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 0
+Orientation = 1
+Spacing = 1.375
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings1" instance=ExtResource("14_1iuca")]
+
+[node name="Child02" parent="MainAct/Cavern/Rings1" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Rings1" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.75, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Rings1" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 9.31323e-10, -2.98023e-08, -2.79397e-09, 1, 4.65661e-10, -2.98023e-08, -4.65661e-10, 1, -0.00012207, 4.78603, -9.15527e-05)
+
+[node name="Child05" parent="MainAct/Cavern/Rings1" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 9.31323e-10, -2.98023e-08, -2.79397e-09, 1, 4.65661e-10, -2.98023e-08, -4.65661e-10, 1, -0.000183105, 8.84447, -6.10352e-05)
+
+[node name="Child06" parent="MainAct/Cavern/Rings1" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.86265e-09, -2.98023e-08, -7.45058e-09, 1, 4.65661e-10, -2.98023e-08, -4.65661e-10, 1, -0.000305176, 12.2225, -0.000213623)
+
+[node name="Child07" parent="MainAct/Cavern/Rings1" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.39698e-09, -2.98023e-08, -9.31323e-09, 1, 4.65661e-10, -2.98023e-08, -1.39698e-09, 1, -0.000427246, 14.5988, -0.000305176)
+
+[node name="Rings2" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.782329, -0.00435713, -0.62285, 0.00764376, 0.999968, 0.00260564, 0.622819, -0.00679935, 0.782337, 189.15, 19.0214, 144.849)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.433
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings2" instance=ExtResource("14_1iuca")]
+
+[node name="Child02" parent="MainAct/Cavern/Rings2" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.433)
+
+[node name="Child03" parent="MainAct/Cavern/Rings2" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.866)
+
+[node name="Child04" parent="MainAct/Cavern/Rings2" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.299)
+
+[node name="Child05" parent="MainAct/Cavern/Rings2" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.732)
+
+[node name="Rings3" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.782329, -0.00435713, -0.62285, 0.00764376, 0.999968, 0.00260564, 0.622819, -0.00679935, 0.782337, 190.67, 23.7786, 142.881)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.536
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings3" instance=ExtResource("14_1iuca")]
+
+[node name="Child02" parent="MainAct/Cavern/Rings3" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.536, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Rings3" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.072, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Rings3" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.608, 0)
+
+[node name="Rings4" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.782329, -0.00435713, -0.62285, 0.00764376, 0.999968, 0.00260564, 0.622819, -0.00679935, 0.782337, 190.688, 19.6323, 142.91)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("56_yls7q")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings4" instance=ExtResource("56_yls7q")]
+transform = Transform3D(1, -9.31323e-10, 5.96046e-08, 0, 1, 0, -2.98023e-08, -4.65661e-10, 1, 0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 2.5
+"Attack Settings/Flame Aggression Radius" = 3
+metadata/_edit_group_ = true
+
+[node name="Rings5" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.999667, -0.00435713, -0.0254442, 0.00452867, 0.999968, 0.00668637, 0.0254138, -0.00679935, 0.999654, 203.934, 37.7147, 116.877)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings5" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 3.63798e-10, -1.86265e-09, 1.45519e-11, 1, -4.65661e-10, 0, 0, 1, 0, 0, 0)
+
+[node name="Rings6" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.993346, -0.0057162, 0.115029, -0.0749202, 0.726489, 0.683082, -0.0874723, -0.687154, 0.721228, 202.681, 11.8846, 103.865)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.501
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Rings6" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Rings6" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.501)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Rings6" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.002)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Rings6" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.503)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Rings6" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.004)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Rings7" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.999667, -0.00435713, -0.0254442, 0.00452867, 0.999968, 0.00668637, 0.0254138, -0.00679935, 0.999654, 203.336, 25.2632, 119.751)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.23
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings7" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 3.63798e-10, -1.86265e-09, 1.45519e-11, 1, -4.65661e-10, 0, 0, 1, -0.00131226, -0.00492859, -0.0441284)
+
+[node name="Child02" parent="MainAct/Cavern/Rings7" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 3.63798e-10, -1.86265e-09, 1.45519e-11, 1, -4.65661e-10, 0, 0, 1, -0.0810547, -0.259842, -1.92676)
+
+[node name="Child03" parent="MainAct/Cavern/Rings7" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 3.63798e-10, -1.86265e-09, 1.45519e-11, 1, -4.65661e-10, 0, 0, 1, -0.174805, -0.584808, -3.72662)
+
+[node name="Child04" parent="MainAct/Cavern/Rings7" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 3.63798e-10, -1.86265e-09, 1.45519e-11, 1, -4.65661e-10, 0, 0, 1, -0.280396, -0.965866, -5.44696)
+
+[node name="Child05" parent="MainAct/Cavern/Rings7" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 3.63798e-10, -1.86265e-09, 1.45519e-11, 1, -4.65661e-10, 0, 0, 1, -0.39563, -1.39107, -7.0918)
+
+[node name="Rings8" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 200.94, 8.12003, 91.3491)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 0
+Orientation = 1
+Spacing = 2.192
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings8" instance=ExtResource("14_1iuca")]
+
+[node name="Child02" parent="MainAct/Cavern/Rings8" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.192, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Rings8" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.384, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Rings8" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.576, 0)
+
+[node name="Child05" parent="MainAct/Cavern/Rings8" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.768, 0)
+
+[node name="Rings9" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.986358, 0.0235409, 0.162926, -0.0554175, 0.979439, 0.193981, -0.15501, -0.200364, 0.967382, 198.43, 7.39441, 77.4132)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 2.017
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+
+[node name="Child02" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.017)
+
+[node name="Child03" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.034)
+
+[node name="Child04" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.051)
+
+[node name="Child05" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.068)
+
+[node name="Child06" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.085)
+
+[node name="Child07" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.102)
+
+[node name="Child08" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.119)
+
+[node name="Child09" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.136)
+
+[node name="Child10" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 0, 1, -1.49012e-08, -1.49012e-08, -1.49012e-08, 1, 3.05176e-05, -1.52588e-05, -18.1531)
+
+[node name="Child11" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.17)
+
+[node name="Child12" parent="MainAct/Cavern/Rings9" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.187)
+
+[node name="Pearls8" type="Node3D" parent="MainAct/Cavern/Rings9"]
+transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 0, 1, -1.49012e-08, -1.49012e-08, -1.49012e-08, 1, 0, 0, 0)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 2.017
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+
+[node name="Child02" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.017)
+
+[node name="Child03" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.034)
+
+[node name="Child04" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.051)
+
+[node name="Child05" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.068)
+
+[node name="Child06" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.085)
+
+[node name="Child07" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.102)
+
+[node name="Child08" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.119)
+
+[node name="Child09" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.136)
+
+[node name="Child10" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.153)
+
+[node name="Child11" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.17)
+
+[node name="Child12" parent="MainAct/Cavern/Rings9/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.187)
+
+[node name="Rings10" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.984946, 0.0574838, 0.163025, -0.0570541, 0.998345, -0.00731982, -0.163176, -0.0020916, 0.986595, 190.346, -0.710999, 33.319)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 6
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.074
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.074, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.037, 0, 1.79614)
+
+[node name="Child03" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.037, 0, 1.79614)
+
+[node name="Child04" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.074, 0, -1.81315e-07)
+
+[node name="Child05" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.037, 0, -1.79614)
+
+[node name="Child06" parent="MainAct/Cavern/Rings10" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.037, 0, -1.79614)
+
+[node name="Rings11" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.996364, 0.00626679, 0.0849665, -0.0060503, 0.999978, -0.00280479, -0.0849826, 0.00228053, 0.99638, 186.034, 0.789307, 19.9905)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 11
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.987
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.987, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.67157, 0, 1.07425)
+
+[node name="Child03" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.825429, 0, 1.80744)
+
+[node name="Child04" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28278, 0, 1.96678)
+
+[node name="Child05" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30121, 0, 1.50167)
+
+[node name="Child06" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90651, 0, 0.559802)
+
+[node name="Child07" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90651, 0, -0.559803)
+
+[node name="Child08" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30121, 0, -1.50167)
+
+[node name="Child09" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.282779, 0, -1.96678)
+
+[node name="Child10" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82543, 0, -1.80744)
+
+[node name="Child11" parent="MainAct/Cavern/Rings11" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.67157, 0, -1.07425)
+
+[node name="Rings12" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.994725, 0.0574838, 0.0849665, -0.0574534, 0.998345, -0.00280479, -0.0849874, -0.0020916, 0.99638, 174.436, -0.756744, 16.1042)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 6
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.943
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Rings12" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.943, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Rings12" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9715, 0, 1.68269)
+
+[node name="Child03" parent="MainAct/Cavern/Rings12" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9715, 0, 1.68269)
+
+[node name="Child04" parent="MainAct/Cavern/Rings12" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.943, 0, -1.69862e-07)
+
+[node name="Child05" parent="MainAct/Cavern/Rings12" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9715, 0, -1.68269)
+
+[node name="Child06" parent="MainAct/Cavern/Rings12" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9715, 0, -1.68269)
+
+[node name="Rings13" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.850759, 0.0574838, -0.653162, -0.0478894, 0.998345, 0.0398406, 0.523371, -0.0020916, 1.06538, 154.061, -0.45166, 3.4917)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 11
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.987
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.987, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.67157, 0, 1.07425)
+
+[node name="Child03" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.825429, 0, 1.80744)
+
+[node name="Child04" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28278, 0, 1.96678)
+
+[node name="Child05" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30121, 0, 1.50167)
+
+[node name="Child06" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90651, 0, 0.559802)
+
+[node name="Child07" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90651, 0, -0.559803)
+
+[node name="Child08" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30121, 0, -1.50167)
+
+[node name="Child09" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.282779, 0, -1.96678)
+
+[node name="Child10" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82543, 0, -1.80744)
+
+[node name="Child11" parent="MainAct/Cavern/Rings13" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.67157, 0, -1.07425)
+
+[node name="Rings14" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.408482, -0.0150589, 1.14108, -0.0861794, 0.994762, 0.0687491, -0.90869, -0.101112, 0.506427, 128.916, 3.19177, -6.17419)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.419
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings14" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -1.19209e-07, 0, 1, 0, 0, 0, 1, 6.10352e-05, 0, 0.0930786)
+
+[node name="Child02" parent="MainAct/Cavern/Rings14" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -1.49012e-07, 0, 1, -3.72529e-09, 0, 0, 1, 0.00219727, 0.16008, -1.09509)
+
+[node name="Child03" parent="MainAct/Cavern/Rings14" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -1.19209e-07, 0, 1, 0, 0, 0, 1, 0.00500488, 0.243393, -2.19092)
+
+[node name="Child04" parent="MainAct/Cavern/Rings14" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -1.19209e-07, 0, 1, 0, 0, 0, 1, 0.00811768, 0.247253, -3.2876)
+
+[node name="Child05" parent="MainAct/Cavern/Rings14" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -1.19209e-07, 0, 1, 0, 0, 0, 1, 0.0117798, 0.28096, -4.38519)
+
+[node name="Rings15" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.408482, -0.0150589, 1.14108, -0.0861794, 0.994762, 0.0687491, -0.90869, -0.101112, 0.506427, 66.204, 13.0043, -35.2958)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.419
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Rings15" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -5.96046e-08, 7.45058e-09, 1, 0, 2.98023e-08, 0, 1, 0.000183105, 0.00012207, -0.00128174)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Rings15" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -5.96046e-08, 7.45058e-09, 1, 0, 2.98023e-08, 0, 1, 0.024292, 0.115204, -1.15509)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Rings15" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -5.96046e-08, 7.45058e-09, 1, 0, 2.98023e-08, 0, 1, 0.048645, 0.222198, -2.31305)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Rings15" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -5.96046e-08, 7.45058e-09, 1, 0, 2.98023e-08, 0, 1, 0.0732422, 0.319763, -3.47577)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Rings15" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 1.49012e-08, -5.96046e-08, 7.45058e-09, 1, 0, 2.98023e-08, 0, 1, 0.0977173, 0.406342, -4.64362)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("52_m83up")
+animator = NodePath("AnimationPlayer")
+
+[node name="Ring15" parent="MainAct/Cavern" instance=ExtResource("14_1iuca")]
+transform = Transform3D(0.328207, 0, -0.944606, 0, 1, 0, 0.944606, 0, 0.328207, 53.9814, 8.026, -37.467)
+
+[node name="BlueMajin" parent="MainAct/Cavern" instance=ExtResource("44_ekl1l")]
+transform = Transform3D(-0.374445, 0, 0.927249, 0, 1, 0, -0.927249, 0, -0.374445, 47.8199, 8.5, -30.8954)
+
+[node name="BlueMajin2" parent="MainAct/Cavern" node_paths=PackedStringArray("fireRoot", "root", "collider", "hurtbox", "rangeCollider") instance=ExtResource("44_ekl1l")]
+transform = Transform3D(-0.374445, 0, 0.927249, 0, 1, 0, -0.927249, 0, -0.374445, 44.874, 8.5, -28.3864)
+fireRoot = NodePath("../BlueMajin/FX/FireFX")
+root = NodePath("../BlueMajin/Root")
+collider = NodePath("../BlueMajin/CollisionShape3D")
+hurtbox = NodePath("../BlueMajin/Hitbox")
+rangeCollider = NodePath("../BlueMajin/Range/CollisionShape3D")
+
+[node name="Ring16" parent="MainAct/Cavern" instance=ExtResource("14_1iuca")]
+transform = Transform3D(0.328207, 0, -0.944606, 0, 1, 0, 0.944606, 0, 0.328207, 52.162, 7.9563, -30.5223)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Cavern/Ring16"]
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.012
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.012, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.012, 0, -8.84719e-08)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, -0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="MainAct/Cavern/Ring16/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, -0.594838)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Ring17" parent="MainAct/Cavern" instance=ExtResource("14_1iuca")]
+transform = Transform3D(0.328207, 0, -0.944606, 0, 1, 0, 0.944606, 0, 0.328207, 49.3002, 8.27661, -28.5762)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Cavern/Ring17"]
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.012
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.012, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.012, 0, -8.84719e-08)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, -0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="MainAct/Cavern/Ring17/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, -0.594838)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Ring18" parent="MainAct/Cavern" instance=ExtResource("14_1iuca")]
+transform = Transform3D(0.328207, 0, -0.944606, 0, 1, 0, 0.944606, 0, 0.328207, 46.8322, 8.19995, -33.6714)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Cavern/Ring18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.012
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.012, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.012, 0, -8.84719e-08)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, -0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="MainAct/Cavern/Ring18/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, -0.594838)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Ring19" parent="MainAct/Cavern" instance=ExtResource("14_1iuca")]
+transform = Transform3D(0.328207, 0, -0.944606, 0, 1, 0, 0.944606, 0, 0.328207, 43.4337, 8.09921, -32.2813)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Cavern/Ring19"]
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.012
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.012, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.012, 0, -8.84719e-08)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, -0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="MainAct/Cavern/Ring19/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, -0.594838)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Ring20" parent="MainAct/Cavern" instance=ExtResource("14_1iuca")]
+transform = Transform3D(0.328207, 0, -0.944606, 0, 1, 0, 0.944606, 0, 0.328207, 42.4374, 8.19476, -27.4642)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Cavern/Ring20"]
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.012
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.012, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.012, 0, -8.84719e-08)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, -0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="MainAct/Cavern/Ring20/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, -0.594838)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Ring21" parent="MainAct/Cavern" instance=ExtResource("14_1iuca")]
+transform = Transform3D(0.622801, 0, -0.78238, 0, 1, 0, 0.78238, 0, 0.622801, 35.0159, 8.06317, -25.588)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Cavern/Ring21"]
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.012
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.012, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, 0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, 0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.012, 0, -8.84719e-08)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0, -0.594839)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0, -0.962469)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="MainAct/Cavern/Ring21/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0, -0.594838)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_q3opu")
+collider = NodePath("CollisionShape3D")
+
+[node name="Rings22" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(-0.559734, -0.345288, 0.941863, 0.00529921, 0.907546, 0.525028, -0.828656, 0.239036, -0.632845, 21.8536, 2.46918, -17.2788)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.453
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings22" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, -7.45058e-09, 1, 0, 9.15527e-05, 0.000549316)
+
+[node name="Child02" parent="MainAct/Cavern/Rings22" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, -7.45058e-09, 1, -0.0439453, -0.180298, -1.13959)
+
+[node name="Child03" parent="MainAct/Cavern/Rings22" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, -7.45058e-09, 1, -0.0809326, -0.329102, -2.28152)
+
+[node name="Child04" parent="MainAct/Cavern/Rings22" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, -7.45058e-09, 1, -0.112061, -0.435181, -3.42505)
+
+[node name="Child05" parent="MainAct/Cavern/Rings22" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, -7.45058e-09, 1, -0.137939, -0.486359, -4.56934)
+
+[node name="Rings23" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(-0.559734, -0.0428482, 1.0347, 0.00529918, 0.998457, 0.0691173, -0.828656, 0.0353279, -0.698472, 47.6736, 11.6734, -30.8687)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.098
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings23" instance=ExtResource("14_1iuca")]
+
+[node name="Child02" parent="MainAct/Cavern/Rings23" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.098, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Rings23" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.196, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Rings23" instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.294, 0)
+
+[node name="Rings24" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(-0.559734, -0.0428482, 1.0347, 0.00529918, 0.998457, 0.0691173, -0.828656, 0.0353279, -0.698472, 44.7673, 11.4603, -28.3711)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("14_1iuca")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.098
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Rings24" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+animator = NodePath("../../Rings23/Child01/AnimationPlayer")
+
+[node name="Child02" parent="MainAct/Cavern/Rings24" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.098, 0)
+animator = NodePath("../../Rings23/Child02/AnimationPlayer")
+
+[node name="Child03" parent="MainAct/Cavern/Rings24" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.196, 0)
+animator = NodePath("../../Rings23/Child03/AnimationPlayer")
+
+[node name="Child04" parent="MainAct/Cavern/Rings24" node_paths=PackedStringArray("animator") instance=ExtResource("14_1iuca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.294, 0)
+animator = NodePath("../../Rings23/Child04/AnimationPlayer")
+
+[node name="Cactus" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.387642, -0.0639212, 1.14977, 0.0376687, 0.997859, 0.0668696, -0.921041, 0.0139076, 0.486641, 105.782, 5.94711, -16.7858)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("17_354a2")
+Amount = 2
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 6.859
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/Cactus" instance=ExtResource("17_354a2")]
+transform = Transform3D(1, -2.79397e-09, 5.96046e-08, -9.31323e-10, 1, -3.72529e-09, 2.98023e-08, 1.39698e-09, 1, 0.00012207, -0.184845, -0.000183105)
+
+[node name="Child02" parent="MainAct/Cavern/Cactus" instance=ExtResource("17_354a2")]
+transform = Transform3D(1, -6.51926e-09, 8.9407e-08, 2.79397e-09, 1, -4.19095e-09, 2.98023e-08, -1.86265e-09, 1, 0.255432, 0.50531, -5.84375)
+
+[node name="RichRings" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.387642, -0.0639212, 1.14977, 0.0376687, 0.997859, 0.0668696, -0.921041, 0.0139076, 0.486641, 107.238, 9.03674, -16.0464)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("40_2mxrl")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.784
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Cavern/RichRings" instance=ExtResource("40_2mxrl")]
+transform = Transform3D(1, -6.51926e-09, 8.9407e-08, 2.79397e-09, 1, -4.19095e-09, 2.98023e-08, -1.86265e-09, 1, -0.000305176, -0.685455, 0.697937)
+
+[node name="Child02" parent="MainAct/Cavern/RichRings" instance=ExtResource("40_2mxrl")]
+transform = Transform3D(1, -6.51926e-09, 8.9407e-08, 2.79397e-09, 1, -4.19095e-09, 2.98023e-08, -1.86265e-09, 1, 0.169006, 0.161346, -4.18561)
+
+[node name="Child03" parent="MainAct/Cavern/RichRings" instance=ExtResource("40_2mxrl")]
+transform = Transform3D(1, -8.3819e-09, 1.19209e-07, 8.3819e-09, 0.999999, -6.0536e-09, 5.96046e-08, 1.86265e-09, 1, 0.313049, 0.0898743, -9.45782)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.999667, -0.00435713, -0.0254442, 0.00452867, 0.999968, 0.00668637, 0.0254138, -0.00679935, 0.999654, 203.934, 37.744, 116.877)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.646
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.646, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614383, 0.199625, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.522625, 0.379709, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.379709, 0.522625, 0)
+
+[node name="Child05" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.199625, 0.614383, 0)
+
+[node name="Child06" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64751e-08, 0.646, 0)
+
+[node name="Child07" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.199625, 0.614383, 0)
+
+[node name="Child08" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.379709, 0.522625, 0)
+
+[node name="Child09" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.522625, 0.379709, 0)
+
+[node name="Child10" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614383, 0.199625, 0)
+
+[node name="Child11" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.646, -5.64751e-08, 0)
+
+[node name="Child12" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614383, -0.199625, 0)
+
+[node name="Child13" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.522625, -0.379709, 0)
+
+[node name="Child14" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.379709, -0.522625, 0)
+
+[node name="Child15" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.199625, -0.614383, 0)
+
+[node name="Child16" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1295e-07, -0.646, 0)
+
+[node name="Child17" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.199625, -0.614383, 0)
+
+[node name="Child18" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37971, -0.522625, 0)
+
+[node name="Child19" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.522625, -0.379709, 0)
+
+[node name="Child20" parent="MainAct/Cavern/Pearls" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614383, -0.199625, 0)
+
+[node name="Pearls2" type="Node3D" parent="MainAct/Cavern/Pearls"]
+transform = Transform3D(1, -1.30967e-10, -1.86265e-09, 5.82077e-11, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 20
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.527
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.527, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45226, 0, 0.471869)
+
+[node name="Child03" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.23537, 0, 0.897548)
+
+[node name="Child04" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.897548, 0, 1.23537)
+
+[node name="Child05" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.471869, 0, 1.45226)
+
+[node name="Child06" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.33495e-07, 0, 1.527)
+
+[node name="Child07" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.471869, 0, 1.45226)
+
+[node name="Child08" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.897548, 0, 1.23537)
+
+[node name="Child09" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23537, 0, 0.897548)
+
+[node name="Child10" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45226, 0, 0.471869)
+
+[node name="Child11" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.527, 0, -1.33495e-07)
+
+[node name="Child12" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45226, 0, -0.471869)
+
+[node name="Child13" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23537, 0, -0.897548)
+
+[node name="Child14" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.897548, 0, -1.23537)
+
+[node name="Child15" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.471869, 0, -1.45226)
+
+[node name="Child16" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.66989e-07, 0, -1.527)
+
+[node name="Child17" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.471869, 0, -1.45226)
+
+[node name="Child18" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.897549, 0, -1.23537)
+
+[node name="Child19" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.23537, 0, -0.897548)
+
+[node name="Child20" parent="MainAct/Cavern/Pearls/Pearls2" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45226, 0, -0.471869)
+
+[node name="Pearls3" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 200.94, 8.11774, 91.3491)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+
+[node name="Child03" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+
+[node name="Child04" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+
+[node name="Child05" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+
+[node name="Child06" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+
+[node name="Child07" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+
+[node name="Child08" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+
+[node name="Child09" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+
+[node name="Child10" parent="MainAct/Cavern/Pearls3" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+
+[node name="Pearls4" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 201.083, 10.3455, 91.4341)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+collider = NodePath("../../Pearls3/Child01/CollisionShape3D")
+
+[node name="Child02" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child02/CollisionShape3D")
+
+[node name="Child03" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child03/CollisionShape3D")
+
+[node name="Child04" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child04/CollisionShape3D")
+
+[node name="Child05" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child05/CollisionShape3D")
+
+[node name="Child06" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+collider = NodePath("../../Pearls3/Child06/CollisionShape3D")
+
+[node name="Child07" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+collider = NodePath("../../Pearls3/Child07/CollisionShape3D")
+
+[node name="Child08" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child08/CollisionShape3D")
+
+[node name="Child09" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child09/CollisionShape3D")
+
+[node name="Child10" parent="MainAct/Cavern/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+collider = NodePath("../../Pearls3/Child10/CollisionShape3D")
+
+[node name="Pearls5" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 201.219, 12.4681, 91.5151)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+collider = NodePath("../../Pearls3/Child01/CollisionShape3D")
+
+[node name="Child02" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child02/CollisionShape3D")
+
+[node name="Child03" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child03/CollisionShape3D")
+
+[node name="Child04" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child04/CollisionShape3D")
+
+[node name="Child05" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child05/CollisionShape3D")
+
+[node name="Child06" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+collider = NodePath("../../Pearls3/Child06/CollisionShape3D")
+
+[node name="Child07" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+collider = NodePath("../../Pearls3/Child07/CollisionShape3D")
+
+[node name="Child08" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child08/CollisionShape3D")
+
+[node name="Child09" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child09/CollisionShape3D")
+
+[node name="Child10" parent="MainAct/Cavern/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+collider = NodePath("../../Pearls3/Child10/CollisionShape3D")
+
+[node name="Pearls6" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 201.358, 14.6267, 91.5975)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+collider = NodePath("../../Pearls3/Child01/CollisionShape3D")
+
+[node name="Child02" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child02/CollisionShape3D")
+
+[node name="Child03" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child03/CollisionShape3D")
+
+[node name="Child04" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child04/CollisionShape3D")
+
+[node name="Child05" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child05/CollisionShape3D")
+
+[node name="Child06" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+collider = NodePath("../../Pearls3/Child06/CollisionShape3D")
+
+[node name="Child07" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+collider = NodePath("../../Pearls3/Child07/CollisionShape3D")
+
+[node name="Child08" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child08/CollisionShape3D")
+
+[node name="Child09" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child09/CollisionShape3D")
+
+[node name="Child10" parent="MainAct/Cavern/Pearls6" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+collider = NodePath("../../Pearls3/Child10/CollisionShape3D")
+
+[node name="Pearls7" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 201.498, 16.8074, 91.6808)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+collider = NodePath("../../Pearls3/Child01/CollisionShape3D")
+
+[node name="Child02" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child02/CollisionShape3D")
+
+[node name="Child03" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child03/CollisionShape3D")
+
+[node name="Child04" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+collider = NodePath("../../Pearls3/Child04/CollisionShape3D")
+
+[node name="Child05" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+collider = NodePath("../../Pearls3/Child05/CollisionShape3D")
+
+[node name="Child06" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+collider = NodePath("../../Pearls3/Child06/CollisionShape3D")
+
+[node name="Child07" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+collider = NodePath("../../Pearls3/Child07/CollisionShape3D")
+
+[node name="Child08" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child08/CollisionShape3D")
+
+[node name="Child09" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+collider = NodePath("../../Pearls3/Child09/CollisionShape3D")
+
+[node name="Child10" parent="MainAct/Cavern/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+collider = NodePath("../../Pearls3/Child10/CollisionShape3D")
+
+[node name="Pearls8" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.430742, 0.00320087, 0.90247, 0.00677801, 0.999954, -0.00678168, -0.90245, 0.00903809, 0.430701, 108.013, 8.35385, -15.7169)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 15
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.057
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.057, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965618, 0.429921, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707271, 0.785504, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.326631, 1.00527, 0)
+
+[node name="Child05" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110487, 1.05121, 0)
+
+[node name="Child06" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5285, 0.915389, 0)
+
+[node name="Child07" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.855131, 0.621289, 0)
+
+[node name="Child08" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0339, 0.219763, 0)
+
+[node name="Child09" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0339, -0.219763, 0)
+
+[node name="Child10" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.855131, -0.621289, 0)
+
+[node name="Child11" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5285, -0.915389, 0)
+
+[node name="Child12" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110486, -1.05121, 0)
+
+[node name="Child13" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.326631, -1.00527, 0)
+
+[node name="Child14" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707271, -0.785504, 0)
+
+[node name="Child15" parent="MainAct/Cavern/Pearls8" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965618, -0.42992, 0)
+
+[node name="Pearls9" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.430742, 0.00320087, 0.90247, 0.00677801, 0.999954, -0.00678168, -0.90245, 0.00903809, 0.430701, 102.45, 8.85599, -18.2308)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 15
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.057
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.057, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965618, 0.429921, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707271, 0.785504, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.326631, 1.00527, 0)
+
+[node name="Child05" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110487, 1.05121, 0)
+
+[node name="Child06" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5285, 0.915389, 0)
+
+[node name="Child07" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.855131, 0.621289, 0)
+
+[node name="Child08" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0339, 0.219763, 0)
+
+[node name="Child09" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0339, -0.219763, 0)
+
+[node name="Child10" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.855131, -0.621289, 0)
+
+[node name="Child11" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5285, -0.915389, 0)
+
+[node name="Child12" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110486, -1.05121, 0)
+
+[node name="Child13" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.326631, -1.00527, 0)
+
+[node name="Child14" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707271, -0.785504, 0)
+
+[node name="Child15" parent="MainAct/Cavern/Pearls9" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965618, -0.42992, 0)
+
+[node name="Pearls10" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.430742, 0.00320087, 0.90247, 0.00677801, 0.999954, -0.00678168, -0.90245, 0.00903809, 0.430701, 96.4561, 8.52948, -20.955)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 15
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.057
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.057, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965618, 0.429921, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707271, 0.785504, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.326631, 1.00527, 0)
+
+[node name="Child05" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110487, 1.05121, 0)
+
+[node name="Child06" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5285, 0.915389, 0)
+
+[node name="Child07" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.855131, 0.621289, 0)
+
+[node name="Child08" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0339, 0.219763, 0)
+
+[node name="Child09" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0339, -0.219763, 0)
+
+[node name="Child10" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.855131, -0.621289, 0)
+
+[node name="Child11" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5285, -0.915389, 0)
+
+[node name="Child12" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110486, -1.05121, 0)
+
+[node name="Child13" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.326631, -1.00527, 0)
+
+[node name="Child14" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707271, -0.785504, 0)
+
+[node name="Child15" parent="MainAct/Cavern/Pearls10" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965618, -0.42992, 0)
+
+[node name="Pearls11" type="Node3D" parent="MainAct/Cavern"]
+transform = Transform3D(0.430742, -0.902458, -0.0055885, 0.00677804, -0.00295701, 0.999973, -0.90245, -0.430768, 0.0048435, 53.7461, 7.97601, -37.3699)
+script = ExtResource("13_kf546")
+Generate = false
+Source = ExtResource("16_ri6io")
+Amount = 10
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.012
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.012, 0, 0)
+
+[node name="Child02" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, 0.594839, 0)
+
+[node name="Child03" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, 0.962469, 0)
+
+[node name="Child04" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, 0.962469, 0)
+
+[node name="Child05" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, 0.594839, 0)
+
+[node name="Child06" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.012, -8.84719e-08, 0)
+
+[node name="Child07" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818725, -0.594839, 0)
+
+[node name="Child08" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312725, -0.962469, 0)
+
+[node name="Child09" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312725, -0.962469, 0)
+
+[node name="Child10" parent="MainAct/Cavern/Pearls11" instance=ExtResource("16_ri6io")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.818725, -0.594838, 0)
+
+[node name="FlyingPot2" parent="MainAct/Cavern" instance=ExtResource("52_k3glw")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 183.622, 11.4, 151.326)
+travelBounds = Vector2(2, 17)
+customCameraSettings = ExtResource("55_ukj4h")
+
+[node name="Goal" parent="MainAct/Cavern" instance=ExtResource("64_oytxk")]
+transform = Transform3D(-0.565615, 0, 0.82467, 0, 1, 0, -0.82467, 0, -0.565615, 2.71762, 0.912933, -0.0212402)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cavern/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 0, -0.259949)
+shape = SubResource("BoxShape3D_7im1x")
+
+[node name="LotusPlatform" parent="MainAct/Cavern" instance=ExtResource("13_gipno")]
+transform = Transform3D(1.36647, 0, 0, 0, 1, 0, 0, 0, 1.29253, 2.37479, -16.1595, 1.03613)
+
+[connection signal="area_entered" from="MainAct/Cavern/Rings6/Child01" to="MainAct/Cavern/Rings6/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings6/Child02" to="MainAct/Cavern/Rings6/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings6/Child03" to="MainAct/Cavern/Rings6/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings6/Child04" to="MainAct/Cavern/Rings6/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings6/Child05" to="MainAct/Cavern/Rings6/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings15/Child01" to="MainAct/Cavern/Rings15/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings15/Child02" to="MainAct/Cavern/Rings15/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings15/Child03" to="MainAct/Cavern/Rings15/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings15/Child04" to="MainAct/Cavern/Rings15/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Rings15/Child05" to="MainAct/Cavern/Rings15/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child01" to="MainAct/Cavern/Ring16/Pearls/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child02" to="MainAct/Cavern/Ring16/Pearls/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child03" to="MainAct/Cavern/Ring16/Pearls/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child04" to="MainAct/Cavern/Ring16/Pearls/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child05" to="MainAct/Cavern/Ring16/Pearls/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child06" to="MainAct/Cavern/Ring16/Pearls/Child06" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child07" to="MainAct/Cavern/Ring16/Pearls/Child07" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child08" to="MainAct/Cavern/Ring16/Pearls/Child08" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child09" to="MainAct/Cavern/Ring16/Pearls/Child09" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring16/Pearls/Child10" to="MainAct/Cavern/Ring16/Pearls/Child10" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child01" to="MainAct/Cavern/Ring17/Pearls/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child02" to="MainAct/Cavern/Ring17/Pearls/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child03" to="MainAct/Cavern/Ring17/Pearls/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child04" to="MainAct/Cavern/Ring17/Pearls/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child05" to="MainAct/Cavern/Ring17/Pearls/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child06" to="MainAct/Cavern/Ring17/Pearls/Child06" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child07" to="MainAct/Cavern/Ring17/Pearls/Child07" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child08" to="MainAct/Cavern/Ring17/Pearls/Child08" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child09" to="MainAct/Cavern/Ring17/Pearls/Child09" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring17/Pearls/Child10" to="MainAct/Cavern/Ring17/Pearls/Child10" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child01" to="MainAct/Cavern/Ring18/Pearls/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child02" to="MainAct/Cavern/Ring18/Pearls/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child03" to="MainAct/Cavern/Ring18/Pearls/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child04" to="MainAct/Cavern/Ring18/Pearls/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child05" to="MainAct/Cavern/Ring18/Pearls/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child06" to="MainAct/Cavern/Ring18/Pearls/Child06" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child07" to="MainAct/Cavern/Ring18/Pearls/Child07" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child08" to="MainAct/Cavern/Ring18/Pearls/Child08" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child09" to="MainAct/Cavern/Ring18/Pearls/Child09" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring18/Pearls/Child10" to="MainAct/Cavern/Ring18/Pearls/Child10" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child01" to="MainAct/Cavern/Ring19/Pearls/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child02" to="MainAct/Cavern/Ring19/Pearls/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child03" to="MainAct/Cavern/Ring19/Pearls/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child04" to="MainAct/Cavern/Ring19/Pearls/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child05" to="MainAct/Cavern/Ring19/Pearls/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child06" to="MainAct/Cavern/Ring19/Pearls/Child06" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child07" to="MainAct/Cavern/Ring19/Pearls/Child07" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child08" to="MainAct/Cavern/Ring19/Pearls/Child08" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child09" to="MainAct/Cavern/Ring19/Pearls/Child09" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring19/Pearls/Child10" to="MainAct/Cavern/Ring19/Pearls/Child10" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child01" to="MainAct/Cavern/Ring20/Pearls/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child02" to="MainAct/Cavern/Ring20/Pearls/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child03" to="MainAct/Cavern/Ring20/Pearls/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child04" to="MainAct/Cavern/Ring20/Pearls/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child05" to="MainAct/Cavern/Ring20/Pearls/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child06" to="MainAct/Cavern/Ring20/Pearls/Child06" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child07" to="MainAct/Cavern/Ring20/Pearls/Child07" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child08" to="MainAct/Cavern/Ring20/Pearls/Child08" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child09" to="MainAct/Cavern/Ring20/Pearls/Child09" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring20/Pearls/Child10" to="MainAct/Cavern/Ring20/Pearls/Child10" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child01" to="MainAct/Cavern/Ring21/Pearls/Child01" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child02" to="MainAct/Cavern/Ring21/Pearls/Child02" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child03" to="MainAct/Cavern/Ring21/Pearls/Child03" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child04" to="MainAct/Cavern/Ring21/Pearls/Child04" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child05" to="MainAct/Cavern/Ring21/Pearls/Child05" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child06" to="MainAct/Cavern/Ring21/Pearls/Child06" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child07" to="MainAct/Cavern/Ring21/Pearls/Child07" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child08" to="MainAct/Cavern/Ring21/Pearls/Child08" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child09" to="MainAct/Cavern/Ring21/Pearls/Child09" method="OnEntered"]
+[connection signal="area_entered" from="MainAct/Cavern/Ring21/Pearls/Child10" to="MainAct/Cavern/Ring21/Pearls/Child10" method="OnEntered"]
+
+[editable path="Static"]
