@@ -825,11 +825,15 @@ namespace Project.Gameplay
 		private void UpdateJump()
 		{
 			if (isAccelerationJumpQueued &&
-				currentJumpTime >= ACCELERATION_JUMP_LENGTH &&
-				IsHoldingDirection(PathFollower.ForwardAngle, true) &&
-				InputVector.Length() > .5f) // Acceleration jump?
+				currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
 			{
-				StartAccelJump();
+				if (IsHoldingDirection(PathFollower.ForwardAngle, true) &&
+				InputVector.Length() > .5f)
+				{
+					StartAccelJump();
+				}
+
+				isAccelerationJumpQueued = false;
 			}
 
 			if (!IsJumpClamped)
@@ -1454,7 +1458,7 @@ namespace Project.Gameplay
 
 			CanJumpDash = data.AllowJumpDash;
 			Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
-			Lockon.ResetLockonTarget();
+			Lockon.StopHomingAttack();
 
 			if (data.UseAutoAlign)
 			{
@@ -1477,8 +1481,10 @@ namespace Project.Gameplay
 		private void UpdateLauncher()
 		{
 			isCustomPhysicsEnabled = true;
-			if (activeLauncher != null && !activeLauncher.IsCharacterCentered)
+			if (activeLauncher?.IsCharacterCentered == false)
+			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
+			}
 			else
 			{
 				Vector3 targetPosition = LaunchSettings.InterpolatePositionTime(launcherTime);

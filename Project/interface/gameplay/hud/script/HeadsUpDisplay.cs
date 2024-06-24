@@ -193,11 +193,14 @@ namespace Project.Gameplay
 		private Label objectiveValue;
 		[Export]
 		private Label objectiveMaxValue;
+		[Export]
+		private AudioStreamPlayer objectiveSfx;
 		private void InitializeObjectives()
 		{
-			objectiveRoot.Visible = Stage != null && Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective;
-			if (!objectiveRoot.Visible) return; //Don't do anything when objective counter isn't visible
-
+			objectiveRoot.Visible = Stage != null &&
+				(Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy);
+			if (!objectiveRoot.Visible) return; // Don't do anything when objective counter isn't visible
 
 			// TODO Implement proper objective sprites
 			objectiveSprite.Visible = false;
@@ -207,7 +210,15 @@ namespace Project.Gameplay
 			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		}
 
-		private void UpdateObjective() => objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+		private void UpdateObjective()
+		{
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+			{
+				objectiveSfx.Play();
+			}
+			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+		}
 		#endregion
 
 		#region Soul Gauge

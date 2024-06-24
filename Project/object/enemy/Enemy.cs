@@ -144,12 +144,9 @@ public partial class Enemy : Node3D
 		Character.Lockon.StopHomingAttack();
 		TakeDamage(1);
 
-		if (IsDefeated)
-			Defeat();
-		else
+		if (!IsDefeated)
 			Character.Camera.SetDeferred("LockonTarget", hurtbox);
 	}
-
 
 	public virtual void TakeDamage(int amount = -1)
 	{
@@ -164,7 +161,6 @@ public partial class Enemy : Node3D
 		Character.Lockon.ResetLockonTarget();
 	}
 
-
 	/// <summary>
 	/// Called when the enemy is defeated.
 	/// </summary>
@@ -173,6 +169,11 @@ public partial class Enemy : Node3D
 		SetHitboxStatus(false);
 		Character.Camera.LockonTarget = null;
 		BonusManager.instance.AddEnemyChain();
+
+		// Automatically increment objective count
+		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+			StageSettings.instance.IncrementObjective();
+
 		EmitSignal(SignalName.Defeated);
 	}
 
