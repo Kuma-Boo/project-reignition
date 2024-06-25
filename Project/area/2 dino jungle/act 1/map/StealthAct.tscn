@@ -84,12 +84,6 @@ startEnabled = true
 [node name="08FeedingTunnel" parent="Static/Visuals" index="11"]
 startEnabled = true
 
-[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-
-[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
-transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
-
 [node name="StealthAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="StealthAct"]
@@ -248,21 +242,21 @@ finalHeight = 11.315
 distance = 6.675
 voiceKey = &""
 
-[node name="LaunchRing2" parent="StealthAct/Crossing" instance=ExtResource("23_3hwjs")]
-transform = Transform3D(-0.99834, -0.0512463, -0.0262986, -0.0513723, 0.998671, 0.0041354, 0.0260512, 0.00547966, -0.999646, 142.714, 12.6586, -49.9958)
-Settings/Distance = 104.3
-"Settings/Middle Height" = 0.1
-"Settings/End Height" = -19.2
-"Settings/Min Distance" = 100.6
-"Settings/Min Middle Height" = 0.1
-"Settings/Min End Height" = -19.2
-
 [node name="LaunchRing" parent="StealthAct/Crossing" instance=ExtResource("23_3hwjs")]
 transform = Transform3D(-0.767206, -0.277399, 0.578311, -0.0358551, 0.918777, 0.393144, -0.640398, 0.280888, -0.714838, 128.319, 11.6953, -31.008)
-Settings/Distance = 50.0
-"Settings/Middle Height" = 0.7
-"Settings/End Height" = -3.9
-"Settings/Min Distance" = 3.0
+middleHeight = 0.0
+distance = 3.0
+voiceKey = &""
+
+[node name="LaunchRing2" parent="StealthAct/Crossing" instance=ExtResource("23_3hwjs")]
+transform = Transform3D(-0.99834, -0.0512463, -0.0262986, -0.0513723, 0.998671, 0.0041354, 0.0260512, 0.00547966, -0.999646, 144.212, 12.7357, -50.0349)
+"Secondary Settings/Middle Height" = 3.0
+"Secondary Settings/Final Height" = -25.0
+"Secondary Settings/Distance" = 100.0
+middleHeight = 3.0
+finalHeight = -25.0
+distance = 100.0
+voiceKey = &""
 
 [node name="Switch" parent="StealthAct/Crossing" instance=ExtResource("11_k0mch")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 110.12, -11.8788, -182.067)
@@ -646,12 +640,11 @@ transform = Transform3D(-0.761731, 0, 0.647894, 0, 1, 0, -0.647894, 0, -0.761731
 
 [node name="Crate" parent="StealthAct/Cavern" instance=ExtResource("28_vne2s")]
 transform = Transform3D(0.873023, -0.422355, -0.243818, 0.435498, 0.90019, 0, 0.219483, -0.106182, 0.969821, -60.5453, -5.55447, 8.45593)
+gravityScale = 0.0
 
-[node name="Crate2" parent="StealthAct/Cavern" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("28_vne2s")]
+[node name="Crate2" parent="StealthAct/Cavern" instance=ExtResource("28_vne2s")]
 transform = Transform3D(0.809802, 0.388528, -0.439621, -0.550248, 0.76296, -0.339293, 0.203589, 0.516661, 0.831633, -62.7813, -5.44858, 15.2152)
-root = NodePath("../Crate/Root")
-pieceRoot = NodePath("../Crate/CratePieces")
-animator = NodePath("../Crate/AnimationPlayer")
+gravityScale = 0.0
 
 [node name="InvisibleCollision" type="StaticBody3D" parent="StealthAct/Cavern"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.9685, 2.55597, -1.8114)
@@ -711,6 +704,18 @@ transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_c4mxl")
 
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Deactivate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
 [connection signal="Activated" from="StealthAct/CullingMap/Crossing-L" to="StealthAct/Crossing" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/CullingMap/Crossing-L" to="StealthAct/Crossing" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/CullingMap/Cavern-L" to="StealthAct/Cavern" method="Activate"]
@@ -721,6 +726,8 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Deactivated" from="StealthAct/CullingMap/FeedingTunnel-L" to="StealthAct/FeedingTunnel" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/CullingMap/Cavern-U" to="StealthAct/Cavern" method="Deactivate"]
 [connection signal="Deactivated" from="StealthAct/CullingMap/Cavern-U" to="StealthAct/Cavern" method="Activate"]
+[connection signal="Activated" from="StealthAct/Crossing/LaunchRing2" to="Static/Collision/WallDinoOneWay" method="Deactivate"]
+[connection signal="Deactivated" from="StealthAct/Crossing/LaunchRing2" to="Static/Collision/WallDinoOneWay" method="Activate"]
 [connection signal="Activated" from="StealthAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Deactivate"]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2" method="Activate"]
