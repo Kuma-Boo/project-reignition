@@ -1,8 +1,12 @@
-[gd_scene load_steps=21 format=3 uid="uid://bhiih5oodiq1w"]
+[gd_scene load_steps=25 format=3 uid="uid://bhiih5oodiq1w"]
 
 [ext_resource type="PackedScene" uid="uid://kf3gvnm0grys" path="res://area/2 dino jungle/object/model/dino/DinoRex.gltf" id="1_0u7i8"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoRex.cs" id="2_bhtui"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="3_hvxnl"]
+[ext_resource type="AudioStream" uid="uid://ifcpkmnv2jmk" path="res://sound/sfx/stage/dinosaur jungle/dino rex bite.wav" id="4_mo10m"]
+[ext_resource type="AudioStream" uid="uid://bckheu27h7k5i" path="res://sound/sfx/stage/dinosaur jungle/dino rex idle.wav" id="5_qlojd"]
+[ext_resource type="AudioStream" uid="uid://bw4qvlkbw3txi" path="res://sound/sfx/stage/dinosaur jungle/dino rex tail.wav" id="6_ckcwt"]
+[ext_resource type="AudioStream" uid="uid://bw1umu0vr1x0w" path="res://sound/sfx/stage/dinosaur jungle/dino rex stomp.wav" id="7_gbx4p"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6krsp"]
 radius = 2.95079
@@ -135,7 +139,7 @@ visible = false
 script = ExtResource("3_hvxnl")
 
 [node name="Head" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.25778e-07, 9.08175e-07, 9.08164e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98225e-07, 20.1698, 15.4159)
+transform = Transform3D(1, 1.25778e-07, 9.08174e-07, 9.08162e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98236e-07, 20.1698, 15.4159)
 bone_name = "head"
 bone_idx = 8
 use_external_skeleton = true
@@ -150,7 +154,7 @@ transform = Transform3D(1, 2.77112e-13, 6.14619e-13, -2.84217e-14, 0.983593, -0.
 shape = SubResource("CapsuleShape3D_6krsp")
 
 [node name="Tail2" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.53779e-06, -2.1331e-12, -2.14941e-12, 2.77423e-06, 1, 1.53779e-06, -1, 2.77423e-06, 1.63317e-05, 16, -15.8623)
+transform = Transform3D(1, 1.53779e-06, -2.18018e-12, -3.45418e-12, 3.6385e-06, 1, 1.53779e-06, -1, 3.6385e-06, 1.63317e-05, 16.0001, -15.8623)
 bone_name = "tail2"
 bone_idx = 3
 use_external_skeleton = true
@@ -166,7 +170,7 @@ transform = Transform3D(1, 4.65661e-10, 4.22006e-09, 4.65661e-10, 1, 0, -2.67755
 shape = SubResource("CylinderShape3D_pbbs6")
 
 [node name="Tail3" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.62621e-06, -2.55262e-12, -2.56892e-12, 3.13936e-06, 1, 1.62621e-06, -1, 3.13936e-06, 2.92975e-05, 16.0001, -24.2937)
+transform = Transform3D(1, 1.6262e-06, -2.59969e-12, -3.95011e-12, 4.00362e-06, 1, 1.6262e-06, -1, 4.00362e-06, 2.92974e-05, 16.0001, -24.2937)
 bone_name = "tail3"
 bone_idx = 4
 use_external_skeleton = true
@@ -181,7 +185,7 @@ transform = Transform3D(1, 1.86265e-09, 3.72529e-09, -7.45058e-09, 1, -2.98023e-
 shape = SubResource("CylinderShape3D_yxbpx")
 
 [node name="Tail4" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.65701e-06, -2.85612e-12, -2.87243e-12, 3.44733e-06, 1, 1.65701e-06, -1, 3.44733e-06, 3.93689e-05, 16.0001, -30.4869)
+transform = Transform3D(1, 1.657e-06, -2.9032e-12, -4.28024e-12, 4.3116e-06, 1, 1.657e-06, -1, 4.3116e-06, 3.93688e-05, 16.0001, -30.4869)
 bone_name = "tail4"
 bone_idx = 5
 use_external_skeleton = true
@@ -272,6 +276,75 @@ parameters/step_transition/current_index = 0
 parameters/step_trigger/active = false
 parameters/step_trigger/internal_active = false
 parameters/step_trigger/request = 0
+
+[node name="Head" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 1.25778e-07, 9.08174e-07, 9.08162e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98236e-07, 20.1698, 15.4159)
+bone_name = "head"
+bone_idx = 8
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Bite" type="AudioStreamPlayer3D" parent="Head"]
+transform = Transform3D(1, -5.44276e-12, -1.15747e-11, 4.26326e-14, 0.996195, -0.0871543, -3.55271e-15, 0.0871557, 0.996196, -1.81899e-11, 3, 1.4)
+stream = ExtResource("4_mo10m")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+max_polyphony = 2
+bus = &"SFX"
+
+[node name="Idle" type="AudioStreamPlayer3D" parent="Head"]
+transform = Transform3D(1, -5.44276e-12, -1.15747e-11, 4.26326e-14, 0.996195, -0.0871543, -3.55271e-15, 0.0871557, 0.996196, -1.81899e-11, 3, 1.4)
+stream = ExtResource("5_qlojd")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+max_polyphony = 2
+bus = &"SFX"
+
+[node name="Tail" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 1.657e-06, -2.9032e-12, -4.28024e-12, 4.3116e-06, 1, 1.657e-06, -1, 4.3116e-06, 3.93688e-05, 16.0001, -30.4869)
+bone_name = "tail4"
+bone_idx = 5
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Tail" type="AudioStreamPlayer3D" parent="Tail"]
+stream = ExtResource("6_ckcwt")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"SFX"
+
+[node name="LFoot" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.999995, 0.00133534, 0.00293999, 0.00315156, -0.601867, -0.79859, 0.000703092, 0.798595, -0.601868, 3.41146, 4.11659, -1.85302)
+bone_name = "l_foot"
+bone_idx = 19
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Step" type="AudioStreamPlayer3D" parent="LFoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 1)
+stream = ExtResource("7_gbx4p")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"SFX"
+
+[node name="RFoot" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.999988, -0.00183556, -0.00443722, -0.00464863, -0.601656, -0.798742, -0.00120354, 0.798753, -0.601658, -3.40805, 4.11679, -1.85627)
+bone_name = "r_foot"
+bone_idx = 17
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Step" type="AudioStreamPlayer3D" parent="RFoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 1)
+stream = ExtResource("7_gbx4p")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"SFX"
 
 [connection signal="area_entered" from="Hitboxes/Head/Hitbox" to="Hitboxes" method="OnEntered"]
 [connection signal="area_exited" from="Hitboxes/Head/Hitbox" to="Hitboxes" method="OnExited"]

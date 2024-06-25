@@ -1,7 +1,11 @@
-[gd_scene load_steps=23 format=3 uid="uid://cc1ft0jnv1sql"]
+[gd_scene load_steps=31 format=3 uid="uid://cc1ft0jnv1sql"]
 
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoTrio.cs" id="1_6nsvh"]
 [ext_resource type="PackedScene" uid="uid://ctbsi13u4rad0" path="res://area/2 dino jungle/object/model/dino/DinoTrio.gltf" id="1_57frd"]
+[ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="3_p4v8a"]
+[ext_resource type="AudioStream" uid="uid://bcm370ah8g7gf" path="res://sound/sfx/stage/dinosaur jungle/dino trio step.wav" id="4_c8qqv"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_dyp8x"]
+[ext_resource type="AudioStream" uid="uid://dy0q7366tmdiq" path="res://sound/sfx/stage/dinosaur jungle/dino trio windup.wav" id="6_0oefo"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wqtdo"]
 radius = 1.5
@@ -16,6 +20,33 @@ height = 4.08923
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5goga"]
 size = Vector3(2.435, 3.5, 2)
+
+[sub_resource type="Curve" id="Curve_g0qvf"]
+_data = [Vector2(0, 0.0572519), 0.0, 6.68784, 0, 0, Vector2(0.453781, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.63372, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_7a6il"]
+width = 64
+curve = SubResource("Curve_g0qvf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5nn74"]
+emission_shape_offset = Vector3(0, -3, 0)
+emission_shape_scale = Vector3(2, 0.5, 2)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0.5)
+initial_velocity_min = 3.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+damping_min = 5.0
+damping_max = 5.0
+scale_min = 2.0
+scale_max = 5.0
+color = Color(0.422106, 0.30842, 0.240511, 1)
+alpha_curve = SubResource("CurveTexture_7a6il")
+
+[sub_resource type="QuadMesh" id="QuadMesh_c01v3"]
+material = ExtResource("3_p4v8a")
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8caol"]
 animation = &"trio-attack"
@@ -78,7 +109,6 @@ animation = &"trio-fidget-paw"
 animation = &"trio-fidget-shake"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dcn5s"]
-graph_offset = Vector2(-961.813, 96.2167)
 nodes/attack/node = SubResource("AnimationNodeAnimation_8caol")
 nodes/attack/position = Vector2(-160, 368)
 nodes/attack_speed/node = SubResource("AnimationNodeTimeScale_dklgt")
@@ -107,13 +137,15 @@ nodes/shake_anim/node = SubResource("AnimationNodeAnimation_0226d")
 nodes/shake_anim/position = Vector2(-1020, 280)
 node_connections = [&"attack_speed", 0, &"attack", &"attack_trigger", 0, &"movement_transition", &"attack_trigger", 1, &"attack_speed", &"fidget", 0, &"paw_anim", &"fidget", 1, &"shake_anim", &"fidget_trigger", 0, &"idle_seek", &"fidget_trigger", 1, &"fidget", &"idle_seek", 0, &"idle_anim", &"movement_seek", 0, &"movement_speed", &"movement_speed", 0, &"movement_blend", &"movement_transition", 0, &"fidget_trigger", &"movement_transition", 1, &"movement_seek", &"output", 0, &"attack_trigger"]
 
-[node name="DinoTrio" type="PathFollow3D" node_paths=PackedStringArray("animationTree")]
+[node name="DinoTrio" type="PathFollow3D" node_paths=PackedStringArray("stepSfx", "windupSfx", "animationTree")]
 use_model_front = true
 script = ExtResource("1_6nsvh")
 traction = 20.0
 friction = 40.0
 preferredOffset = 5.0
 rubberbandingStrength = 0.8
+stepSfx = NodePath("Step")
+windupSfx = NodePath("Windup")
 speedMultiplier = 1.0
 animationTree = NodePath("AnimationTree")
 
@@ -121,15 +153,27 @@ animationTree = NodePath("AnimationTree")
 
 [node name="Skeleton3D" parent="DinoTrio/DinoTrioRoot" index="0"]
 bones/2/rotation = Quaternion(0.986246, -1.19156e-08, 2.61644e-06, -0.165285)
+bones/2/scale = Vector3(1, 1, 0.999998)
 bones/4/rotation = Quaternion(0.762143, -1.10412e-06, 2.20773e-06, 0.647409)
+bones/4/scale = Vector3(1, 1, 1)
+bones/5/scale = Vector3(1, 1, 1)
 bones/6/rotation = Quaternion(0.762261, 7.26831e-05, -1.01577e-05, 0.64727)
 bones/7/rotation = Quaternion(-0.32846, -9.96382e-06, -3.14188e-05, 0.944518)
+bones/11/scale = Vector3(1, 1, 1)
 bones/13/rotation = Quaternion(1.74276e-05, 3.29326e-12, -4.33084e-07, 1)
+bones/15/rotation = Quaternion(0.959507, 0, 1.30206e-05, -0.281684)
+bones/15/scale = Vector3(1, 1, 1)
 bones/16/rotation = Quaternion(-0.707246, 0.000317547, 0.000317547, 0.706967)
+bones/17/rotation = Quaternion(0.959496, -0.000430705, -0.000939394, -0.281721)
+bones/17/scale = Vector3(1, 1, 1)
+bones/19/rotation = Quaternion(0.957741, 8.91493e-07, -0.000882155, -0.287631)
+bones/19/scale = Vector3(1, 1, 1)
 bones/20/rotation = Quaternion(-0.707108, 0.000270456, 0.000270456, 0.707106)
+bones/21/rotation = Quaternion(0.957741, -0.000367211, 0.000107328, -0.287633)
+bones/21/scale = Vector3(1, 1, 1)
 
 [node name="Head" type="BoneAttachment3D" parent="."]
-transform = Transform3D(1, 1.63549e-07, 5.00357e-07, 5.00376e-07, -0.590619, -0.806948, 1.63551e-07, 0.80695, -0.590619, 1.71783e-06, 2.72624, 1.92318)
+transform = Transform3D(1, 1.63549e-07, 5.00356e-07, 5.00377e-07, -0.590619, -0.806948, 1.63551e-07, 0.80695, -0.590619, 1.71783e-06, 2.72624, 1.92318)
 bone_name = "head"
 bone_idx = 3
 use_external_skeleton = true
@@ -166,9 +210,21 @@ monitorable = false
 transform = Transform3D(1, 5.68434e-14, 7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 1.11666e-12, 0.28457, -0.333864)
 shape = SubResource("CapsuleShape3D_11mds")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Hip/Trigger"]
-transform = Transform3D(1, 5.68434e-14, 7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, -2.085)
+[node name="Trigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.84096e-09, 2.84932, 0.0421269)
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.085)
 shape = SubResource("BoxShape3D_5goga")
+
+[node name="DustFX" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_5nn74")
+draw_pass_1 = SubResource("QuadMesh_c01v3")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
@@ -193,9 +249,26 @@ parameters/movement_transition/current_state = "disabled"
 parameters/movement_transition/transition_request = ""
 parameters/movement_transition/current_index = 0
 
+[node name="Step" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_c8qqv")
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
+script = ExtResource("5_dyp8x")
+groupKey = &"dino_trio_step"
+
+[node name="Windup" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_0oefo")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"SFX"
+
 [connection signal="area_entered" from="Head/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Head/Trigger" to="." method="OnExited"]
 [connection signal="area_entered" from="Hip/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Hip/Trigger" to="." method="OnExited"]
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]
 
 [editable path="DinoTrio"]
