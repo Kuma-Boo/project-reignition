@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://bpt8hkpcf1kv0"]
+
+[ext_resource type="PackedScene" uid="uid://dvoongbmetjfh" path="res://object/stage/common/Grindrail.tscn" id="1_evfwc"]
+[ext_resource type="PackedScene" uid="uid://cpkpjdyr74yim" path="res://area/2 dino jungle/object/model/grindrail/Grindrail06.gltf" id="2_4lfgk"]
+
+[sub_resource type="Curve3D" id="Curve3D_iodlq"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -120),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n265x"]
+size = Vector3(2, 0.5, 120)
+
+[node name="Grindrail" node_paths=PackedStringArray("rail") instance=ExtResource("1_evfwc")]
+rail = NodePath("Path3D")
+
+[node name="Path3D" type="Path3D" parent="." index="0"]
+curve = SubResource("Curve3D_iodlq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -60)
+shape = SubResource("BoxShape3D_n265x")
+
+[node name="Grindrail06" parent="." index="4" instance=ExtResource("2_4lfgk")]
