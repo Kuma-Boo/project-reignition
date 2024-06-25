@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://det1p2qcwxt2r"]
+[gd_scene load_steps=39 format=3 uid="uid://bi635q3i7fmgn"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_lxhj8"]
 [ext_resource type="Resource" uid="uid://du8i3ur77gdww" path="res://resource/level data/dinosaur jungle/Act2Stealth.tres" id="2_boxoa"]
@@ -485,23 +485,21 @@ script = ExtResource("34_dxx84")
 jumpHeight = 1.0
 
 [node name="LandJump4" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3"]
-transform = Transform3D(0.976556, 0, -0.215264, 0, 1, 0, 0.215264, 0, 0.976556, -5.46948, -0.610107, 4.84766)
+transform = Transform3D(0.923412, 0, -0.383812, 0, 1, 0, 0.383812, 0, 0.923412, -5.52722, -1.11011, 4.83411)
 script = ExtResource("34_dxx84")
 jumpHeight = 1.0
-
-[node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3/LandJump4" node_paths=PackedStringArray("path")]
-script = ExtResource("13_q6tnw")
-path = NodePath("../../../../../../../../Static/Path/BoatPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger1"]
 transform = Transform3D(0.916055, 0, 0.401053, 0, 1, 0, -0.401053, 0, 0.916055, 1.90125, -0.83197, -4.77191)
 shape = SubResource("BoxShape3D_a46qn")
 
-[node name="Boat" parent="StealthAct/Cavern/JumpTrigger1" instance=ExtResource("29_c4ebt")]
+[node name="Boat" parent="StealthAct/Cavern/JumpTrigger1" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("29_c4ebt")]
 transform = Transform3D(0.930103, 0, -0.367297, 0, 1, 0, 0.367297, 0, 0.930103, 7.00061, -16.576, 25.6224)
 maxSpeed = 9.0
 turnSpeed = 12.0
 tiltAmount = 45.0
+path = NodePath("../../../../Static/Path/BoatPath")
+pathFollower = NodePath("../../../../Static/Path/BoatPath/CavernBoatPathFollower")
 
 [node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/Boat"]
 script = ExtResource("15_n8lxi")
@@ -643,6 +641,7 @@ path = NodePath("../../../../Static/Path/BoatTopPath")
 transform = Transform3D(0.99414, 0.0452414, 0.0981813, 0, 0.908216, -0.418501, -0.108103, 0.416049, 0.902894, -48.9428, 5.77585, -4.21277)
 finalHeight = 7.375
 distance = 20.0
+voiceKey = &""
 
 [node name="FlowerMajin" parent="StealthAct/Cavern" instance=ExtResource("20_u7d64")]
 transform = Transform3D(-0.761731, 0, 0.647894, 0, 1, 0, -0.647894, 0, -0.761731, -66.6604, -3.31693, 11.8278)
@@ -767,7 +766,7 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2" method="Activate"]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3" method="Activate"]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3/LandJump4" method="Activate"]
-[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3/LandJump4" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3/LandJump4/Path" method="Activate"]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3/LandJump4" to="StealthAct/Cavern/JumpTrigger1/Boat" method="Activate"]
 [connection signal="Activated" from="StealthAct/Cavern/JumpTrigger1/Boat" to="StealthAct/Cavern/JumpTrigger1/Boat/Camera" method="Activate"]
 [connection signal="Activated" from="StealthAct/Cavern/JumpTrigger1/Boat" to="StealthAct/Cavern/JumpTrigger1/Boat/Path" method="Activate"]
 [connection signal="Activated" from="StealthAct/Cavern/Spring" to="StealthAct/Cavern/Spring/Camera" method="Activate"]
