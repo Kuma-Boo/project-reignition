@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://bi635q3i7fmgn"]
+[gd_scene load_steps=37 format=3 uid="uid://det1p2qcwxt2r"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_lxhj8"]
 [ext_resource type="Resource" uid="uid://du8i3ur77gdww" path="res://resource/level data/dinosaur jungle/Act2Stealth.tres" id="2_boxoa"]
@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="12_sey70"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="13_q6tnw"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="15_n8lxi"]
-[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="19_drqlo"]
 [ext_resource type="PackedScene" uid="uid://ctt8k8ju64i3l" path="res://object/enemy/flower/FlowerMajin.tscn" id="20_u7d64"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="23_3hwjs"]
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="24_inqs1"]
@@ -31,7 +30,6 @@
 [ext_resource type="Resource" uid="uid://d3rdm2cjtdkxv" path="res://area/2 dino jungle/act 1/camera/rampage/CavernTopCam.tres" id="40_nhuwo"]
 [ext_resource type="Resource" uid="uid://gp5oyx4iu6wq" path="res://area/2 dino jungle/act 1/camera/rampage/CavernJumpCam.tres" id="41_mbp1a"]
 [ext_resource type="Resource" uid="uid://ysgb4weske7h" path="res://area/2 dino jungle/act 1/camera/rampage/FeedingLotusArenaRampageCam.tres" id="42_3t57n"]
-[ext_resource type="Script" path="res://object/trigger/modules/TeleportTrigger.cs" id="43_vtnxq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
@@ -267,7 +265,7 @@ Settings/Distance = 50.0
 "Settings/Min Distance" = 3.0
 
 [node name="Switch" parent="StealthAct/Crossing" instance=ExtResource("11_k0mch")]
-transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 110.12, -11.7249, -182.067)
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 110.12, -11.8788, -182.067)
 toggleMode = true
 
 [node name="Pearls2" type="Node3D" parent="StealthAct/Crossing"]
@@ -706,44 +704,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
 [node name="Child03" parent="StealthAct/FeedingTunnel/Rings11" instance=ExtResource("9_o0cj8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
 
-[node name="FlowerMajin1" parent="StealthAct/FeedingTunnel" instance=ExtResource("20_u7d64")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.82025, 0.484436, 0)
-rangeOverride = 20
-
-[node name="FlowerMajin2" parent="StealthAct/FeedingTunnel" instance=ExtResource("20_u7d64")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.104, 0.439728, -5.07556)
-rangeOverride = 20
-
-[node name="FlowerMajin3" parent="StealthAct/FeedingTunnel" instance=ExtResource("20_u7d64")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1828, 2.46161, -7.89148)
-rangeOverride = 20
-
-[node name="EnemyStone" parent="StealthAct/FeedingTunnel" instance=ExtResource("19_drqlo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.01721, 1.48056, -7.59375)
-enemyCount = 3
-
-[node name="Spring" parent="StealthAct/FeedingTunnel" instance=ExtResource("12_sey70")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.14343, 0.78244, -7.76794)
-distance = 10.0
-launchDirection = 1
-voiceKey = &""
-
-[node name="Teleport" type="Node3D" parent="StealthAct/FeedingTunnel/Spring" node_paths=PackedStringArray("warpTarget")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00311279, -0.78244, -0.337524)
-script = ExtResource("43_vtnxq")
-enableStartFX = true
-crossfade = true
-warpTarget = NodePath("../../../SpawnPosition")
-
-[node name="Camera" type="Node3D" parent="StealthAct/FeedingTunnel/Spring/Teleport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00311279, 0.78244, 0.337524)
-script = ExtResource("15_n8lxi")
-settings = ExtResource("3_bfs8s")
-
-[node name="Path" type="Node3D" parent="StealthAct/FeedingTunnel/Spring" node_paths=PackedStringArray("path")]
-script = ExtResource("13_q6tnw")
-path = NodePath("../../../../Static/Path/CavePath")
-
 [node name="Wall" type="StaticBody3D" parent="StealthAct/FeedingTunnel" groups=["wall"]]
 transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, 9.02826, 0, 22.7471)
 
@@ -779,12 +739,6 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Activated" from="StealthAct/FeedingTunnel/JumpPanel" to="StealthAct/FeedingTunnel/JumpPanel/Path" method="Activate"]
 [connection signal="Activated" from="StealthAct/FeedingTunnel/JumpPanel" to="StealthAct/FeedingTunnel/JumpPanel/Camera" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/FeedingTunnel/JumpPanel" to="Static/Collision/ArenaOneWay" method="Activate"]
-[connection signal="Defeated" from="StealthAct/FeedingTunnel/FlowerMajin1" to="StealthAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
-[connection signal="Defeated" from="StealthAct/FeedingTunnel/FlowerMajin2" to="StealthAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
-[connection signal="Defeated" from="StealthAct/FeedingTunnel/FlowerMajin3" to="StealthAct/FeedingTunnel/EnemyStone" method="IncrementCounter"]
-[connection signal="Activated" from="StealthAct/FeedingTunnel/Spring" to="StealthAct/FeedingTunnel/Spring/Path" method="Activate"]
-[connection signal="Deactivated" from="StealthAct/FeedingTunnel/Spring" to="StealthAct/FeedingTunnel/Spring/Teleport" method="Activate"]
-[connection signal="Teleport" from="StealthAct/FeedingTunnel/Spring/Teleport" to="StealthAct/FeedingTunnel/Spring/Teleport/Camera" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
