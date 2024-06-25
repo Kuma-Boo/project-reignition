@@ -352,7 +352,6 @@ public partial class Majin : Enemy
 		}
 	}
 
-
 	public override void TakeHomingAttackDamage()
 	{
 		Stagger();
@@ -367,7 +366,6 @@ public partial class Majin : Enemy
 		Stagger();
 		base.TakeDamage(amount);
 	}
-
 
 	private void Stagger()
 	{
@@ -394,7 +392,7 @@ public partial class Majin : Enemy
 
 			Vector3 launchDirection = defeatLaunchDirection;
 			if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
-				launchDirection = (Character.Animator.Back() + Character.Animator.Up() * .2f).Normalized();
+				launchDirection = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
 			else if (isDefeatLocalTransform)
 				launchDirection = GlobalTransform.Basis * launchDirection;
 
@@ -491,10 +489,8 @@ public partial class Majin : Enemy
 		base.UpdateInteraction();
 	}
 
-
 	private float idleFactorVelocity;
 	private const float IDLE_FACTOR_SMOOTHING = 30.0f; // Idle movement strength smoothing
-
 
 	private bool isFidgetActive;
 	private int fidgetIndex; // Index of the current fidget animation.
@@ -682,7 +678,7 @@ public partial class Majin : Enemy
 	{
 		// Calculate tangent (rotation)
 		Vector3 velocity = CalculationBasis.Inverse() * CalculateTravelVelocity(currentTravelRatio).Normalized();
-		if (Mathf.Abs(velocity.Dot(Vector3.Up)) < .9f)
+		if (Mathf.Abs(velocity.Dot(Vector3.Up)) < .9f && !velocity.IsZeroApprox())
 			currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
 
 		Position = CalculateTravelPosition(currentTravelRatio);
