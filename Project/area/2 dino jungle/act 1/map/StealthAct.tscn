@@ -1,11 +1,10 @@
-[gd_scene load_steps=56 format=3 uid="uid://cj653fqoipdkk"]
+[gd_scene load_steps=55 format=3 uid="uid://cj653fqoipdkk"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_lxhj8"]
 [ext_resource type="Resource" uid="uid://du8i3ur77gdww" path="res://resource/level data/dinosaur jungle/Act2Stealth.tres" id="2_boxoa"]
 [ext_resource type="Resource" uid="uid://dcj0tr5757gc3" path="res://area/2 dino jungle/act 1/camera/rampage/StartCam.tres" id="3_bfs8s"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="4_6i1tb"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_f3cg5"]
-[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="6_j326d"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="7_fmk6u"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="8_gauxh"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="9_o0cj8"]
@@ -117,6 +116,18 @@ Data = ExtResource("2_boxoa")
 InitialCameraSettings = ExtResource("3_bfs8s")
 metadata/_edit_group_ = true
 
+[node name="WallDinoRightOneWay" parent="Static/Collision" index="1"]
+startEnabled = true
+
+[node name="WallDinoLeftOneWay" parent="Static/Collision" index="2"]
+startEnabled = false
+
+[node name="FloorDinoRight" parent="Static/Collision" index="7"]
+startEnabled = true
+
+[node name="FloorDinoLeft" parent="Static/Collision" index="8"]
+startEnabled = false
+
 [node name="01Chase" parent="Static/Visuals" index="1"]
 visible = false
 startEnabled = false
@@ -150,6 +161,13 @@ startEnabled = true
 
 [node name="08FeedingTunnel" parent="Static/Visuals" index="11"]
 startEnabled = true
+
+[node name="Event" parent="Static/Trigger/Object/Apatos2" index="3"]
+respawnAnimation = 1
+
+[node name="PathSelectionEvent" parent="Static/Trigger/Object/Apatos2/Event" index="1"]
+"Trigger Settings/Player Stand-in" = NodePath("")
+respawnAnimation = 1
 
 [node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
@@ -200,21 +218,6 @@ transform = Transform3D(-0.238822, 0, -0.971063, 0, 1, 0, 0.971063, 0, -0.238822
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/CullingMap/Cavern-U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="DialogTriggers" type="Node3D" parent="StealthAct"]
-
-[node name="CaveSplitTrigger" parent="StealthAct/DialogTriggers" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
-OneShot = true
-"Respawn Mode" = 3
-
-[node name="Dialog" type="Node3D" parent="StealthAct/DialogTriggers/CaveSplitTrigger"]
-script = ExtResource("6_j326d")
-textKeys = ["din_split_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/DialogTriggers/CaveSplitTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
 [node name="Crossing" type="Node3D" parent="StealthAct"]

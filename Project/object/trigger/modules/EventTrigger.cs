@@ -29,6 +29,17 @@ public partial class EventTrigger : StageTriggerModule
 	[Export]
 	private AnimationPlayer animator;
 
+	[Export]
+	private RespawnAnimation respawnAnimation;
+	private enum RespawnAnimation
+	{
+		Reset,
+		Activate,
+		Deactivate,
+	}
+	[Export]
+	private bool respawnToEnd = true;
+
 	private StringName ResetAnimation = "RESET";
 	private StringName EventAnimation = "event";
 	private StringName DeactivateEventAnimation = "event-deactivate";
@@ -146,7 +157,6 @@ public partial class EventTrigger : StageTriggerModule
 		Respawn();
 	}
 
-
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint()) return;
@@ -162,13 +172,29 @@ public partial class EventTrigger : StageTriggerModule
 
 	public override void Respawn()
 	{
-		EmitSignal(SignalName.Respawned);
-		// Only reset if a RESET animation exists.
-		if (!animator.HasAnimation(ResetAnimation)) return;
-
 		isActivated = false;
-		animator.Play(ResetAnimation);
-		animator.Advance(0);
+
+		switch (respawnAnimation)
+		{
+			case RespawnAnimation.Reset:
+				EmitSignal(SignalName.Respawned);
+				if (animator.HasAnimation(ResetAnimation))
+					animator.Play(ResetAnimation);
+				break;
+			case RespawnAnimation.Activate:
+				EmitSignal(SignalName.Activated);
+				if (animator.HasAnimation(EventAnimation))
+					animator.Play(EventAnimation);
+				break;
+			case RespawnAnimation.Deactivate:
+				EmitSignal(SignalName.Deactivated);
+				if (animator.HasAnimation(DeactivateEventAnimation))
+					animator.Play(DeactivateEventAnimation);
+				break;
+		}
+
+		animator.Advance(respawnToEnd ? animator.CurrentAnimationLength : 0);
+		animator.Stop(true);
 	}
 
 	public override void Activate()
