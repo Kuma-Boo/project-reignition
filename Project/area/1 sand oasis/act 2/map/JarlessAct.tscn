@@ -1,9 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://cpp5a2r0k4fuk"]
+[gd_scene load_steps=5 format=3 uid="uid://cpp5a2r0k4fuk"]
 
 [ext_resource type="PackedScene" uid="uid://dlahdqcelwoq6" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_55rea"]
+[ext_resource type="Resource" uid="uid://cqwbx4ruhjsg2" path="res://resource/level data/sand oasis/Act2Jarless.tres" id="2_l6vbo"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_hxsjx"]
+[ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/1 sand oasis/act 1/camera/InteriorCam.tres" id="3_oijf0"]
 
 [node name="World" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_55rea")]
+Data = ExtResource("2_l6vbo")
+InitialCameraSettings = ExtResource("3_oijf0")
 
 [node name="JarlessAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="JarlessAct"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="JarlessAct/SpawnPosition" instance=ExtResource("3_hxsjx")]
