@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cj653fqoipdkk"]
+[gd_scene load_steps=50 format=3 uid="uid://cj653fqoipdkk"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_lxhj8"]
 [ext_resource type="Resource" uid="uid://du8i3ur77gdww" path="res://resource/level data/dinosaur jungle/Act2Stealth.tres" id="2_boxoa"]
@@ -18,15 +18,15 @@
 [ext_resource type="PackedScene" uid="uid://ctt8k8ju64i3l" path="res://object/enemy/flower/FlowerMajin.tscn" id="20_u7d64"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="23_3hwjs"]
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="24_inqs1"]
+[ext_resource type="Resource" uid="uid://ci5cmmeh1gq4f" path="res://area/2 dino jungle/act 1/camera/stealth/CavernEntranceCam.tres" id="25_a0ioa"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="26_xvs7k"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="27_2dusg"]
-[ext_resource type="Resource" uid="uid://ie2f227m5or" path="res://area/2 dino jungle/act 1/camera/stealth/JumpSectionCavernCam.tres" id="28_mf7cb"]
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="28_vne2s"]
 [ext_resource type="PackedScene" uid="uid://cuplakh6fkalc" path="res://area/2 dino jungle/object/Boat.tscn" id="29_c4ebt"]
 [ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="30_2tvcc"]
-[ext_resource type="Resource" uid="uid://f3ccq0t4wb5i" path="res://area/2 dino jungle/act 1/camera/stealth/LaunchRingCavernCam.tres" id="30_al1ud"]
 [ext_resource type="Resource" uid="uid://bfbyijcgdiudd" path="res://area/2 dino jungle/act 1/camera/BoatCam.tres" id="30_ggi54"]
 [ext_resource type="Resource" uid="uid://j7x86wu11243" path="res://area/2 dino jungle/act 1/camera/CaveRightEndCam.tres" id="31_0k0as"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="31_4areh"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="31_mgvyd"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="32_f3enx"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="34_dxx84"]
@@ -37,7 +37,6 @@
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="36_ub7ac"]
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="37_e03en"]
 [ext_resource type="PackedScene" uid="uid://cnwhks8ciopdd" path="res://area/2 dino jungle/object/rock/WhiteRock.tscn" id="38_4thcc"]
-[ext_resource type="Resource" uid="uid://bgadtcjr4ie0m" path="res://area/2 dino jungle/act 1/camera/stealth/GrindRailCam.tres" id="38_f816j"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="39_fd650"]
 [ext_resource type="Resource" uid="uid://d3rdm2cjtdkxv" path="res://area/2 dino jungle/act 1/camera/rampage/CavernTopCam.tres" id="40_nhuwo"]
 [ext_resource type="Resource" uid="uid://gp5oyx4iu6wq" path="res://area/2 dino jungle/act 1/camera/rampage/CavernJumpCam.tres" id="41_mbp1a"]
@@ -52,14 +51,15 @@ size = Vector3(1, 14.958, 15.1368)
 [sub_resource type="BoxShape3D" id="BoxShape3D_a46qn"]
 size = Vector3(10.658, 19.1455, 2.485)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_c8hdc"]
-size = Vector3(1, 27.1689, 9.77698)
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_gb2p1"]
+height = 8.8
+radius = 1.75404
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nykig"]
 size = Vector3(10, 20, 3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_xy4th"]
-size = Vector3(1.93463, 8.29565, 3.05096)
+[sub_resource type="BoxShape3D" id="BoxShape3D_c8hdc"]
+size = Vector3(1, 27.1689, 9.77698)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c4mxl"]
 size = Vector3(10, 20, 2.5)
@@ -123,42 +123,6 @@ metadata/_edit_lock_ = true
 [node name="CharacterSpawn" parent="StealthAct/SpawnPosition" instance=ExtResource("4_6i1tb")]
 
 [node name="CullingMap" type="Node3D" parent="StealthAct"]
-
-[node name="Spiral-L" parent="StealthAct/CullingMap" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(-4.37114e-08, -0.258819, -0.965926, 0, 0.965926, -0.258819, 1, -1.13133e-08, -4.2222e-08, -401.206, -223.237, -806.195)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/CullingMap/Spiral-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="Cave-U" parent="StealthAct/CullingMap" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -438.628, -220.715, -850.722)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/CullingMap/Cave-U"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="Crossing-L" parent="StealthAct/CullingMap" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(-0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939692, -432.405, -265.007, -913.629)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/CullingMap/Crossing-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
-
-[node name="Spiral-U" parent="StealthAct/CullingMap" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(-0.38647, 0, 0.922302, 0, 1, 0, -0.922302, 0, -0.38647, -422.584, -265.023, -929.051)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/CullingMap/Spiral-U"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_mynxt")
 
 [node name="Cavern-L" parent="StealthAct/CullingMap" instance=ExtResource("5_f3cg5")]
 transform = Transform3D(-0.851982, 0, -0.523569, 0, 1, 0, 0.523569, 0, -0.851982, -299.194, -276.99, -1092.07)
@@ -253,9 +217,9 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.124878
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.144165, -2.78006, -7.50562)
 
 [node name="Spring" parent="StealthAct/Crossing" instance=ExtResource("12_sey70")]
-transform = Transform3D(0.554423, 0.145889, -0.819348, -1.49012e-08, 0.984515, 0.175298, 0.832235, -0.0971893, 0.545838, 124.042, 1.00189, -28.3946)
-finalHeight = 9.925
-distance = 4.0
+transform = Transform3D(0.554423, 0.145889, -0.819348, -1.49012e-08, 0.984515, 0.175298, 0.832235, -0.0971893, 0.545838, 124.027, 0.903442, -28.3849)
+finalHeight = 11.0
+distance = 6.0
 voiceKey = &""
 
 [node name="WhiteRock10" parent="StealthAct/Crossing" instance=ExtResource("38_4thcc")]
@@ -275,22 +239,22 @@ animator = NodePath("../WhiteRock10/AnimationPlayer")
 
 [node name="LaunchRing1" parent="StealthAct/Crossing" instance=ExtResource("23_3hwjs")]
 transform = Transform3D(-0.767206, -0.277399, 0.578311, -0.0358551, 0.918777, 0.393144, -0.640398, 0.280888, -0.714838, 128.319, 11.6953, -31.008)
-"Secondary Settings/Middle Height" = 4.0
+"Secondary Settings/Middle Height" = 1.0
 "Secondary Settings/Final Height" = -10.0
 "Secondary Settings/Distance" = 28.0
-middleHeight = 5.0
-finalHeight = -10.0
-distance = 22.0
+middleHeight = 4.0
+finalHeight = -2.0
+distance = 12.0
 voiceKey = &""
 
 [node name="LaunchRing2" parent="StealthAct/Crossing" instance=ExtResource("23_3hwjs")]
 transform = Transform3D(-0.99834, -0.0512463, -0.0262986, -0.0513723, 0.998671, 0.0041354, 0.0260512, 0.00547966, -0.999646, 144.212, 12.7357, -50.0349)
-"Secondary Settings/Middle Height" = 3.0
+"Secondary Settings/Middle Height" = 0.0
 "Secondary Settings/Final Height" = -25.0
 "Secondary Settings/Distance" = 105.0
-middleHeight = 3.0
+middleHeight = 7.0
 finalHeight = -25.0
-distance = 105.0
+distance = 100.0
 voiceKey = &""
 
 [node name="Camera" type="Node3D" parent="StealthAct/Crossing/LaunchRing2"]
@@ -299,10 +263,49 @@ transitionTime = 0.5
 settings = ExtResource("14_c4p4f")
 previousSettings = ExtResource("15_eo6db")
 
+[node name="RedMajin1" parent="StealthAct/Crossing" instance=ExtResource("30_2tvcc")]
+transform = Transform3D(0.991109, 0, 0.133052, 0, 1, 0, -0.133052, 0, 0.991109, 151.915, 0, -92.597)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 3.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+
+[node name="FireSoul1" parent="StealthAct/Crossing" instance=ExtResource("26_xvs7k")]
+transform = Transform3D(0.988377, 0, 0.15202, 0, 1, 0, -0.15202, 0, 0.988377, 151.915, 5, -92.597)
+
 [node name="Switch" parent="StealthAct/Crossing" instance=ExtResource("11_k0mch")]
 transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 110.12, -11.8788, -182.067)
 startActive = true
 toggleMode = true
+
+[node name="FlowerMajin" parent="StealthAct/Crossing" instance=ExtResource("20_u7d64")]
+transform = Transform3D(0.387483, 0, 0.921877, 0, 1, 0, -0.921877, 0, 0.387483, 110.155, -11.8552, -182.086)
+
+[node name="FireSoul2" parent="StealthAct/Crossing" instance=ExtResource("26_xvs7k")]
+transform = Transform3D(0.364568, 0, 0.931177, 0, 1, 0, -0.931177, 0, 0.364568, 112.577, -5.90668, -181.246)
+fireSoulIndex = 2
+
+[node name="RedMajin2" parent="StealthAct/Crossing" instance=ExtResource("30_2tvcc")]
+transform = Transform3D(0.441114, 0, 0.897451, 0, 1, 0, -0.897451, 0, 0.441114, 49.8544, -3.76147, -207.147)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(50, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+
+[node name="RedMajin3" parent="StealthAct/Crossing" instance=ExtResource("30_2tvcc")]
+transform = Transform3D(0.447447, -0.00015166, 0.894311, 0.000924202, 1, -0.000292819, -0.89431, 0.000957546, 0.447446, 17.8452, -11.6664, -249.863)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 4.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="Pearls2" type="Node3D" parent="StealthAct/Crossing"]
 transform = Transform3D(0.193549, -0.00015166, 0.981091, 0.000968792, 1, -3.65392e-05, -0.98109, 0.000957546, 0.193549, 11.2775, -11.5486, -252.36)
@@ -349,7 +352,7 @@ transform = Transform3D(1, 0, -1.49012e-08, 5.82077e-11, 1, 0, 1.49012e-08, 0, 1
 transform = Transform3D(1, 0, -1.49012e-08, 5.82077e-11, 1, 0, 1.49012e-08, 0, 1, -1.39001, -0.0126648, -10.8077)
 
 [node name="WhiteRock1" parent="StealthAct/Crossing" instance=ExtResource("38_4thcc")]
-transform = Transform3D(-0.812847, -0.000266164, 0.582478, 0.000434472, 1.755, 0.000866676, -0.582477, 0.00168049, -0.812846, -8.04355, -11.9596, -249.375)
+transform = Transform3D(-0.812847, -0.000266164, 0.582478, 0.000434472, 1.755, 0.000866676, -0.582477, 0.00168049, -0.812846, -8.69382, -11.9593, -249.841)
 
 [node name="WhiteRock2" parent="StealthAct/Crossing" instance=ExtResource("38_4thcc")]
 transform = Transform3D(-0.957597, -0.00014711, 0.288112, 0.000130652, 0.97, 0.000960637, -0.288112, 0.000928819, -0.957596, -4.64032, -11.8791, -250.032)
@@ -402,7 +405,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [node name="WhiteRock6" parent="StealthAct/Crossing" instance=ExtResource("38_4thcc")]
-transform = Transform3D(2.19147, -0.00030332, -0.193578, 0.000146998, 2, -0.00212779, 0.193578, 0.00191509, 2.19147, -26.8626, -11.7524, -213.127)
+transform = Transform3D(2.19147, -0.00030332, -0.193578, 0.000146998, 2, -0.00212779, 0.193578, 0.00191509, 2.19147, -26.6822, -11.7528, -212.669)
 
 [node name="WhiteRock3" parent="StealthAct/Crossing" instance=ExtResource("38_4thcc")]
 transform = Transform3D(1.54689, -0.00015166, 0.102029, 0.000386519, 1, -0.000937074, -0.158655, 0.000957545, 0.994781, -14.1652, -11.8921, -237.911)
@@ -412,18 +415,6 @@ transform = Transform3D(-0.291921, -0.00015166, 0.967533, 0.00102578, 1, 0.00038
 root = NodePath("../WhiteRock3/WhiteRock")
 pieceRoot = NodePath("../WhiteRock3/WhiteRockPieces")
 animator = NodePath("../WhiteRock3/AnimationPlayer")
-
-[node name="FireSoul" parent="StealthAct/Crossing" instance=ExtResource("26_xvs7k")]
-transform = Transform3D(-0.468377, 0, 0.883528, 0, 1, 0, -0.883528, 0, -0.468377, -176.715, -4.59122, -155.298)
-fireSoulIndex = 3
-
-[node name="RedMajin3" parent="StealthAct/Crossing" instance=ExtResource("30_2tvcc")]
-transform = Transform3D(0.447447, -0.00015166, 0.894311, 0.000924202, 1, -0.000292819, -0.89431, 0.000957546, 0.447446, 17.8452, -11.6664, -249.863)
-"Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 4.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 1.0
-"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="BlueMajin6" parent="StealthAct/Crossing" instance=ExtResource("37_e03en")]
 transform = Transform3D(-0.607196, -0.00015166, 0.794552, 0.000668732, 1, 0.00070192, -0.794552, 0.000957546, -0.607196, -5.39304, -2.65121, -220.217)
@@ -453,46 +444,6 @@ transform = Transform3D(-1.51799, -0.000379151, 1.98638, 0.00167183, 2.5, 0.0017
 "Movement/Cycle Length" = 3.0
 Movement/Distance = 2.0
 "Vertical Orientation" = true
-
-[node name="LotusPlatform4" parent="StealthAct/Crossing" instance=ExtResource("24_inqs1")]
-transform = Transform3D(1.20692, 0, -1.19723, 0, 1.5, 0, 1.19723, 0, 1.20692, -56.8021, -35.7522, -185.373)
-
-[node name="LotusPlatform6" parent="StealthAct/Crossing" instance=ExtResource("24_inqs1")]
-transform = Transform3D(1.35508, 0, -0.35181, 0, 1.065, 0, 0.35181, 0, 1.35508, -48.2653, -16.0452, -182.735)
-
-[node name="LotusPlatform5" parent="StealthAct/Crossing" instance=ExtResource("24_inqs1")]
-transform = Transform3D(0.257519, 0, -0.153896, 0, 0.825, 0, 0.153896, 0, 0.257519, -66.3725, -24.8632, -186.202)
-
-[node name="FireSoul2" parent="StealthAct/Crossing" instance=ExtResource("26_xvs7k")]
-transform = Transform3D(0.988377, 0, 0.15202, 0, 1, 0, -0.15202, 0, 0.988377, 151.927, 4.00369, -91.7446)
-
-[node name="FlowerMajin" parent="StealthAct/Crossing" instance=ExtResource("20_u7d64")]
-transform = Transform3D(0.387483, 0, 0.921877, 0, 1, 0, -0.921877, 0, 0.387483, 110.155, -11.8552, -182.086)
-
-[node name="FireSoul3" parent="StealthAct/Crossing" instance=ExtResource("26_xvs7k")]
-transform = Transform3D(0.364568, 0, 0.931177, 0, 1, 0, -0.931177, 0, 0.364568, 112.577, -5.90668, -181.246)
-fireSoulIndex = 2
-
-[node name="RedMajin" parent="StealthAct/Crossing" instance=ExtResource("30_2tvcc")]
-transform = Transform3D(0.991109, 0, 0.133052, 0, 1, 0, -0.133052, 0, 0.991109, 151.915, -0.131439, -92.5967)
-"Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 3.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 2.0
-"Attack Settings/Flame Aggression Radius" = 0
-
-[node name="RedMajin2" parent="StealthAct/Crossing" instance=ExtResource("30_2tvcc")]
-transform = Transform3D(0.441114, 0, 0.897451, 0, 1, 0, -0.897451, 0, 0.441114, 49.8544, -3.46146, -207.147)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(50, 0, 0)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-"Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 5.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 1.0
-"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="Pearls" type="Node3D" parent="StealthAct/Crossing"]
 transform = Transform3D(0.799076, 0, -0.601229, 0, 1, 0, 0.601229, 0, 0.799076, -25.7762, -11.56, -215.646)
@@ -535,87 +486,122 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
 [node name="Child10" parent="StealthAct/Crossing/Pearls" instance=ExtResource("27_2dusg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
+[node name="JumpPanel1" parent="StealthAct/Crossing" instance=ExtResource("31_mgvyd")]
+transform = Transform3D(0.655676, 0, -0.755042, 0, 1, 0, 0.755042, 0, 0.655676, -36.3866, -11.9394, -196.299)
+middleHeight = 11.0
+finalHeight = 9.0
+distance = 17.0
+
+[node name="Path" type="Node3D" parent="StealthAct/Crossing/JumpPanel1" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0765381, 13.2526, 18.7069)
+script = ExtResource("13_q6tnw")
+path = NodePath("../../../../Static/Path/BoatPath")
+
+[node name="JumpPanel2" parent="StealthAct/Crossing" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("31_mgvyd")]
+transform = Transform3D(0.635742, 0, -0.771902, 0, 1, 0, 0.771902, 0, 0.635742, -39.1702, -11.9394, -199.622)
+middleHeight = 2.0
+finalHeight = -5.0
+distance = 22.0
+sfxPlayer = NodePath("../JumpPanel1/SFX")
+
+[node name="Path" type="Node3D" parent="StealthAct/Crossing/JumpPanel2" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("13_q6tnw")
+path = NodePath("../../../../Static/Path/BoatPath")
+
+[node name="JumpPanelCamera" type="Node3D" parent="StealthAct/Crossing"]
+transform = Transform3D(0.600336, 0, -0.799748, 0, 1, 0, 0.799748, 0, 0.600336, -36.8079, -11.9394, -195.776)
+script = ExtResource("15_n8lxi")
+transitionTime = 0.5
+settings = ExtResource("25_a0ioa")
+
+[node name="LotusPlatform4" parent="StealthAct/Crossing" instance=ExtResource("24_inqs1")]
+transform = Transform3D(1.20692, 0, -1.19723, 0, 1.5, 0, 1.19723, 0, 1.20692, -56.8021, -35.7522, -185.373)
+
+[node name="LotusPlatform6" parent="StealthAct/Crossing" instance=ExtResource("24_inqs1")]
+transform = Transform3D(1.35508, 0, -0.35181, 0, 1.065, 0, 0.35181, 0, 1.35508, -48.2653, -17.1102, -182.735)
+
+[node name="LotusPlatform5" parent="StealthAct/Crossing" instance=ExtResource("24_inqs1")]
+transform = Transform3D(0.257519, 0, -0.153896, 0, 0.6, 0, 0.153896, 0, 0.257519, -66.5, -22, -186.5)
+
+[node name="Spring2" parent="StealthAct/Crossing" instance=ExtResource("12_sey70")]
+transform = Transform3D(0.825054, -0.339519, 0.451677, 0.10405, 0.876971, 0.469144, -0.555391, -0.340072, 0.758876, -66.5813, -13.6959, -186.572)
+middleHeight = 20.0
+finalHeight = 14.0
+distance = 27.0
+voiceKey = &""
+
+[node name="Camera" type="Node3D" parent="StealthAct/Crossing/Spring2"]
+script = ExtResource("15_n8lxi")
+transitionTime = 0.5
+settings = ExtResource("40_nhuwo")
+
+[node name="Path" type="Node3D" parent="StealthAct/Crossing/Spring2" node_paths=PackedStringArray("path")]
+script = ExtResource("13_q6tnw")
+path = NodePath("../../../../Static/Path/BoatTopPath")
+
 [node name="Cavern" type="Node3D" parent="StealthAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
 script = ExtResource("7_fmk6u")
 saveVisibilityOnCheckpoint = true
 
-[node name="JumpTrigger1" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(0.853569, 0, -0.520979, 0, 1, 0, 0.520979, 0, 0.853569, -63.7734, 11.076, -8.24097)
+[node name="GrindRailGroup" type="Node3D" parent="StealthAct/Cavern"]
+transform = Transform3D(0.118958, 0, 0.992899, 0, 1, 0, -0.992899, 0, 0.118958, 1.16251, 5.55444, 4.89014)
 
-[node name="LandJump" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1"]
-transform = Transform3D(1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, 3.22986, -7.58722, 5.4776)
-script = ExtResource("34_dxx84")
-jumpHeight = 1.0
+[node name="Grindrail1" parent="StealthAct/Cavern/GrindRailGroup" instance=ExtResource("34_w8uhn")]
+startCapPath = NodePath("")
+endCapPath = NodePath("")
 
-[node name="LandJump2" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/LandJump"]
-transform = Transform3D(1, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1, 8.08789, -8.39673, 7.02625)
-script = ExtResource("34_dxx84")
-jumpHeight = 1.0
+[node name="Grindrail2" parent="StealthAct/Cavern/GrindRailGroup" instance=ExtResource("35_8yp8r")]
+transform = Transform3D(0.79181, 0, -0.610767, 0, 1, 0, 0.610767, 0, 0.79181, -5.47632, 0, -13.0527)
+startCapPath = NodePath("")
+endCapPath = NodePath("")
 
-[node name="LandJump3" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 1.71533, 0.184967, 7.10315)
-script = ExtResource("34_dxx84")
-jumpHeight = 1.0
+[node name="Grindrail3" parent="StealthAct/Cavern/GrindRailGroup" instance=ExtResource("35_8yp8r")]
+transform = Transform3D(0.823751, 0, 0.566953, 0, 1, 0, -0.566953, 0, 0.823751, 20.1301, 0, -26.2556)
+startCapPath = NodePath("")
+endCapPath = NodePath("")
 
-[node name="LandJump4" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3"]
-transform = Transform3D(0.923412, 0, -0.383812, 0, 1, 0, 0.383812, 0, 0.923412, -5.54834, -0.346161, 4.82526)
-script = ExtResource("34_dxx84")
-jumpHeight = 1.0
+[node name="ItemBoxFlying" parent="StealthAct/Cavern" instance=ExtResource("32_f3enx")]
+transform = Transform3D(0.086808, 0, 0.996225, 0, 1, 0, -0.996225, 0, 0.086808, -5.6568, 9.92999, 4.13782)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger1"]
-transform = Transform3D(0.916055, 0, 0.401053, 0, 1, 0, -0.401053, 0, 0.916055, 1.90125, -0.83197, -4.77191)
-shape = SubResource("BoxShape3D_a46qn")
+[node name="BlueMajin1" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
+transform = Transform3D(-0.324347, 0, 0.945938, 0, 1, 0, -0.945938, 0, -0.324347, -20.8149, 5.06155, 3.146)
+"Spawn Settings/Spawn Travel Time" = 0.7
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-3.915, 0, 2.22)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0.69, 0, 0)
+rangeOverride = 10
 
-[node name="Boat" parent="StealthAct/Cavern/JumpTrigger1" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("29_c4ebt")]
-transform = Transform3D(0.930103, 0, -0.367297, 0, 1, 0, 0.367297, 0, 0.930103, 7.00061, -16.576, 25.6224)
-maxSpeed = 9.0
-turnSpeed = 12.0
-tiltAmount = 45.0
-path = NodePath("../../../../Static/Path/BoatPath")
-pathFollower = NodePath("../../../../Static/Path/BoatPath/CavernBoatPathFollower")
+[node name="BlueMajin2" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
+transform = Transform3D(0.787796, 0, 0.615937, 0, 1, 0, -0.615937, 0, 0.787796, -35.7469, 5.06155, -13.5714)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-15, 0, -2.5)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 21
 
-[node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/Boat"]
-script = ExtResource("15_n8lxi")
-transitionTime = 0.5
-settings = ExtResource("30_ggi54")
+[node name="BlueMajin3" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
+transform = Transform3D(-0.462724, 0, 0.886503, 0, 1, 0, -0.886503, 0, -0.462724, -50.7716, 5.06155, -3.48914)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 4.62, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 12
 
-[node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1/Boat" node_paths=PackedStringArray("path")]
-script = ExtResource("13_q6tnw")
-path = NodePath("../../../../../Static/Path/BoatPath")
-
-[node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
-script = ExtResource("15_n8lxi")
-settings = ExtResource("28_mf7cb")
-previousSettings = ExtResource("30_ggi54")
-
-[node name="JumpTrigger2" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(0.845933, 0, 0.53329, 0, 1, 0, -0.53329, 0, 0.845933, -118.475, -4.00586, 30.2898)
-
-[node name="Jump" type="Node3D" parent="StealthAct/Cavern/JumpTrigger2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75461, 3.83084, -0.831421)
-script = ExtResource("34_dxx84")
-jumpHeight = 1.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, -7.80811, 0.455933)
-shape = SubResource("BoxShape3D_c8hdc")
-
-[node name="Spring" parent="StealthAct/Cavern" instance=ExtResource("12_sey70")]
-transform = Transform3D(0.825054, -0.421133, 0.376739, 0.10405, 0.768562, 0.631258, -0.555391, -0.481622, 0.677924, -16.5204, -2.96915, 1.51038)
-middleHeight = 16.0
-finalHeight = -10.0
-distance = 33.0
-launchDirection = 1
+[node name="Spring1" parent="StealthAct/Cavern" instance=ExtResource("12_sey70")]
+transform = Transform3D(0.99414, 0.0452414, 0.0981813, 0, 0.908216, -0.418501, -0.108103, 0.416049, 0.902894, -48.9428, 5.77585, -4.21277)
+middleHeight = 7.0
+finalHeight = 4.0
+distance = 20.0
 voiceKey = &""
 
-[node name="Camera" type="Node3D" parent="StealthAct/Cavern/Spring"]
-script = ExtResource("15_n8lxi")
-transitionTime = 0.5
-settings = ExtResource("40_nhuwo")
-
-[node name="Path" type="Node3D" parent="StealthAct/Cavern/Spring" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="StealthAct/Cavern/Spring1" node_paths=PackedStringArray("path")]
 script = ExtResource("13_q6tnw")
 path = NodePath("../../../../Static/Path/BoatTopPath")
 
@@ -669,189 +655,94 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.24731, -3.05176e-05, -14.04
 [node name="Child12" parent="StealthAct/Cavern/Rings10" instance=ExtResource("9_o0cj8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05432, -3.05176e-05, -15.4593)
 
-[node name="JumpPanel5" parent="StealthAct/Cavern" instance=ExtResource("31_mgvyd")]
-transform = Transform3D(-0.536519, 0, -0.843888, 0, 1, 0, 0.843888, 0, -0.536519, -56.9853, 9.90942, 39.6064)
-middleHeight = 4.26
-finalHeight = -76.93
-distance = 51.38
+[node name="JumpTrigger1" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
+transform = Transform3D(0.853569, 0, -0.520979, 0, 1, 0, 0.520979, 0, 0.853569, -63.7734, 11.076, -8.24097)
 
-[node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpPanel5"]
-script = ExtResource("15_n8lxi")
-transitionTime = 0.5
-settings = ExtResource("30_al1ud")
-previousSettings = ExtResource("31_0k0as")
-
-[node name="JumpTrigger4" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(0.996867, 0, 0.0791032, 0, 1, 0, -0.0791032, 0, 0.996867, -136.293, 10.3256, 27.5802)
-"Enter Mode" = 0
-
-[node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpTrigger4"]
-transform = Transform3D(0.969076, 0, 0.246762, 0, 1, 0, -0.246762, 0, 0.969076, 9.1947, 2.28851, -7.68433)
-script = ExtResource("15_n8lxi")
-transitionTime = 0.5
-settings = ExtResource("41_mbp1a")
-
-[node name="Jump1" type="Node3D" parent="StealthAct/Cavern/JumpTrigger4"]
-transform = Transform3D(0.546934, 0, -0.837173, 0, 1, 0, 0.837174, 0, 0.546934, 5.0918, -5.28976, 9.19678)
+[node name="LandJump" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1"]
+transform = Transform3D(1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, 3.22986, -7.58722, 5.4776)
 script = ExtResource("34_dxx84")
 jumpHeight = 1.0
 
-[node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpTrigger4/Jump1" node_paths=PackedStringArray("path")]
-transform = Transform3D(-0.057564, 0, 0.998342, 0, 1, 0, -0.998342, 0, -0.057564, -7.21753, -19.4337, 3.88254)
-script = ExtResource("13_q6tnw")
-path = NodePath("../../../../../Static/Path/BoatPath")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger1"]
+transform = Transform3D(0.916055, 0, 0.401053, 0, 1, 0, -0.401053, 0, 0.916055, 1.90125, -0.83197, -4.77191)
+shape = SubResource("BoxShape3D_a46qn")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_nykig")
-
-[node name="LotusPlatform6" parent="StealthAct/Cavern" instance=ExtResource("24_inqs1")]
-transform = Transform3D(0.670364, 0, -1.22907, 0, 1.18, 0, 1.22907, 0, 0.670364, -130.176, -11.0676, 34.0519)
-
-[node name="LotusPlatform7" parent="StealthAct/Cavern" instance=ExtResource("24_inqs1")]
-transform = Transform3D(0.478831, 0, -0.877907, 0, 1.18, 0, 0.877907, 0, 0.478831, -134.551, -11.8976, 43.6428)
-
-[node name="LotusPlatform8" parent="StealthAct/Cavern" instance=ExtResource("24_inqs1")]
-transform = Transform3D(0.844161, 0, 0.988633, 0, 1.18, 0, -0.988633, 0, 0.844161, -143.427, -20.3208, 46.8965)
-
-[node name="JumpPanel2" parent="StealthAct/Cavern" instance=ExtResource("31_mgvyd")]
-transform = Transform3D(0.600336, 0, -0.799748, 0, 1, 0, 0.799748, 0, 0.600336, 12.9921, -1.43936, -8.07629)
-finalHeight = 11.405
-distance = 17.0
-
-[node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpPanel2" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0765381, 13.2526, 18.7069)
+[node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1" node_paths=PackedStringArray("path")]
+transform = Transform3D(0.930103, 0, -0.367297, 0, 1, 0, 0.367297, 0, 0.930103, 7.00061, -16.576, 25.6224)
 script = ExtResource("13_q6tnw")
 path = NodePath("../../../../Static/Path/BoatPath")
 
-[node name="JumpPanel3" parent="StealthAct/Cavern" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("31_mgvyd")]
-transform = Transform3D(0.579253, 0, -0.815148, 0, 1, 0, 0.815148, 0, 0.579253, 10.6793, -1.43936, -11.2595)
-middleHeight = 2.0
-finalHeight = -5.0
-distance = 22.0
-sfxPlayer = NodePath("../JumpPanel2/SFX")
+[node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 13.9968, -15.8666, 26.0818)
+script = ExtResource("15_n8lxi")
+deactivationTransitionTime = 0.5
+settings = ExtResource("31_4areh")
+previousSettings = ExtResource("30_ggi54")
 
-[node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpPanel3" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
-script = ExtResource("13_q6tnw")
-path = NodePath("../../../../Static/Path/BoatPath")
+[node name="JumpTrigger2" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.9685, -0.944031, -1.8114)
+"Enter Mode" = 0
 
-[node name="Spring2" parent="StealthAct/Cavern" instance=ExtResource("12_sey70")]
-transform = Transform3D(0.99414, 0.0452414, 0.0981813, 0, 0.908216, -0.418501, -0.108103, 0.416049, 0.902894, -48.9428, 5.77585, -4.21277)
-finalHeight = 7.375
-distance = 20.0
-voiceKey = &""
+[node name="LandJump" type="Node3D" parent="StealthAct/Cavern/JumpTrigger2"]
+transform = Transform3D(0.853569, 0, -0.520979, 0, 1, 0, 0.520979, 0, 0.853569, 3.34137, -3.96393, 10.1396)
+script = ExtResource("34_dxx84")
+jumpHeight = 1.0
 
-[node name="Path" type="Node3D" parent="StealthAct/Cavern/Spring2" node_paths=PackedStringArray("path")]
-script = ExtResource("13_q6tnw")
-path = NodePath("../../../../Static/Path/BoatTopPath")
+[node name="LandJump2" type="Node3D" parent="StealthAct/Cavern/JumpTrigger2/LandJump"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.818726, 0.184967, 8.70459)
+script = ExtResource("34_dxx84")
+jumpHeight = 1.0
+
+[node name="LandJump3" type="Node3D" parent="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2"]
+transform = Transform3D(0.923412, 0, -0.383812, 0, 1, 0, 0.383812, 0, 0.923412, -4.1488, -0.519989, 4.88733)
+script = ExtResource("34_dxx84")
+jumpHeight = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger2"]
+shape = SubResource("CylinderShape3D_gb2p1")
+
+[node name="JumpPanel1" parent="StealthAct/Cavern" instance=ExtResource("31_mgvyd")]
+transform = Transform3D(-0.536519, 0, -0.843888, 0, 1, 0, 0.843888, 0, -0.536519, -56.9853, 9.90942, 39.6064)
+middleHeight = 5.0
+finalHeight = -12.0
+distance = 29.0
+
+[node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpPanel1"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -9.99994, 7, 9.99951)
+script = ExtResource("15_n8lxi")
+transitionTime = 0.5
+transitionType = 1
+UpdateEveryFrame = true
+settings = ExtResource("31_4areh")
 
 [node name="FlowerMajin" parent="StealthAct/Cavern" instance=ExtResource("20_u7d64")]
 transform = Transform3D(-0.761731, 0, 0.647894, 0, 1, 0, -0.647894, 0, -0.761731, -66.4299, -3.31693, 12.0641)
 rangeOverride = 10
 
-[node name="Crate" parent="StealthAct/Cavern" instance=ExtResource("28_vne2s")]
-transform = Transform3D(0.873023, -0.422355, -0.243818, 0.435498, 0.90019, 0, 0.219483, -0.106182, 0.969821, -60.5453, -5.55447, 8.45593)
+[node name="Crate1" parent="StealthAct/Cavern" instance=ExtResource("28_vne2s")]
+transform = Transform3D(0.873023, -0.422355, -0.243818, 0.435498, 0.90019, 0, 0.219483, -0.106182, 0.969821, -60.6925, -5.55447, 8.42444)
 gravityScale = 0.0
 
 [node name="Crate2" parent="StealthAct/Cavern" instance=ExtResource("28_vne2s")]
-transform = Transform3D(0.809802, 0.388528, -0.439621, -0.550248, 0.76296, -0.339293, 0.203589, 0.516661, 0.831633, -62.7813, -5.44858, 15.2152)
+transform = Transform3D(0.857751, 0.501127, 0.114608, -0.514066, 0.836163, 0.19123, -7.45058e-09, -0.222944, 0.974831, -64.3814, -5.44858, 16.2152)
 gravityScale = 0.0
 
-[node name="InvisibleCollision" type="StaticBody3D" parent="StealthAct/Cavern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.9685, 2.55597, -1.8114)
+[node name="Boat" parent="StealthAct/Cavern" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("29_c4ebt")]
+transform = Transform3D(0.602553, 0, -0.798077, 0, 1, 0, 0.798077, 0, 0.602553, -71.6466, -5.5, 18.9767)
+maxSpeed = 15.0
+tiltAmount = 45.0
+path = NodePath("../../../Static/Path/BoatPath")
+pathFollower = NodePath("../../../Static/Path/BoatPath/CavernBoatPathFollower")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/InvisibleCollision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0189819, -3.08191, 0.335327)
-shape = SubResource("BoxShape3D_xy4th")
-
-[node name="ItemBoxFlying" parent="StealthAct/Cavern" instance=ExtResource("32_f3enx")]
-transform = Transform3D(0.086808, 0, 0.996225, 0, 1, 0, -0.996225, 0, 0.086808, -5.6568, 9.92999, 4.13782)
-"Spawn Settings/Spawn Pearls" = true
-"Spawn Settings/Amount" = 50
-
-[node name="GrindRail" type="Node3D" parent="StealthAct/Cavern"]
-transform = Transform3D(0.118958, 0, 0.992899, 0, 1, 0, -0.992899, 0, 0.118958, 1.16251, 5.55444, 4.89014)
-
-[node name="Grindrail2" parent="StealthAct/Cavern/GrindRail" instance=ExtResource("34_w8uhn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 0, -0.0955811)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
-
-[node name="Grindrail3" parent="StealthAct/Cavern/GrindRail" instance=ExtResource("35_8yp8r")]
-transform = Transform3D(0.79181, 0, -0.610767, 0, 1, 0, 0.610767, 0, 0.79181, -5.47632, 0, -13.0527)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
-
-[node name="Grindrail" parent="StealthAct/Cavern/GrindRail" instance=ExtResource("35_8yp8r")]
-transform = Transform3D(0.823751, 0, 0.566953, 0, 1, 0, -0.566953, 0, 0.823751, 20.1301, 0, -26.2556)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
-
-[node name="Cam" type="Node3D" parent="StealthAct/Cavern/GrindRail"]
-script = ExtResource("15_n8lxi")
-transitionTime = 0.1
-settings = ExtResource("38_f816j")
-
-[node name="LaunchRing" parent="StealthAct/Cavern" instance=ExtResource("23_3hwjs")]
-transform = Transform3D(0.99999, -0.00111196, -0.00433997, 0.00435386, 0.0128151, 0.999908, -0.00105625, -0.999917, 0.0128198, -80.675, 0.0169067, 24.3898)
-"Secondary Settings/Middle Height" = 0.0
-"Secondary Settings/Distance" = 21.0
-middleHeight = 0.0
-distance = 2.0
+[node name="LaunchRing1" parent="StealthAct/Cavern" instance=ExtResource("23_3hwjs")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -80.67, 0, 24.356)
+"Secondary Settings/Middle Height" = 21.0
+"Secondary Settings/Distance" = 0.0
+middleHeight = 10.0
+finalHeight = 2.0
+distance = 0.0
+launchDirection = 1
 voiceKey = &""
-
-[node name="LaunchRing2" parent="StealthAct/Cavern" instance=ExtResource("23_3hwjs")]
-transform = Transform3D(0.629917, 0, -0.776662, 0, 1, 0, 0.776662, 0, 0.629917, -122.122, 0, 31.743)
-"Secondary Settings/Middle Height" = 0.0
-"Secondary Settings/Final Height" = -1.46
-"Secondary Settings/Distance" = 32.22
-middleHeight = 0.0
-finalHeight = -2.3
-distance = 18.485
-voiceKey = &""
-
-[node name="BlueMajin" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
-transform = Transform3D(-0.737301, 0, 0.675565, 0, 1, 0, -0.675565, 0, -0.737301, -139.696, -3.98578, 46.0812)
-
-[node name="GreenMajin3" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
-transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -132.736, 12.6663, 19.1882)
-
-[node name="GreenMajin2" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
-transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -130.787, 12.6663, 21.9543)
-
-[node name="GreenMajin4" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
-transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -130.786, 10.9605, 21.9556)
-
-[node name="GreenMajin" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
-transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -132.74, 10.9605, 19.1832)
-
-[node name="BlueMajin3" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
-transform = Transform3D(-0.462724, 0, 0.886503, 0, 1, 0, -0.886503, 0, -0.462724, -50.7716, 5.06155, -3.48914)
-"Spawn Settings/Spawn Travel Time" = 0.5
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(0, 4.62, 0)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-rangeOverride = 12
-
-[node name="BlueMajin4" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
-transform = Transform3D(0.787796, 0, 0.615937, 0, 1, 0, -0.615937, 0, 0.787796, -35.7469, 5.06155, -13.5714)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(-15, 0, -2.5)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-rangeOverride = 21
-
-[node name="BlueMajin2" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
-transform = Transform3D(-0.324347, 0, 0.945938, 0, 1, 0, -0.945938, 0, -0.324347, -20.8149, 5.06155, 3.146)
-"Spawn Settings/Spawn Travel Time" = 0.7
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(-3.915, 0, 2.22)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0.69, 0, 0)
-rangeOverride = 10
 
 [node name="RichRing" parent="StealthAct/Cavern" instance=ExtResource("36_1osa2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.6697, 20.6405, 24.3563)
@@ -866,6 +757,11 @@ middleHeight = 18.695
 finalHeight = 15.28
 distance = 32.125
 voiceKey = &""
+
+[node name="Camera" type="Node3D" parent="StealthAct/Cavern/RingSpring/Spring3"]
+script = ExtResource("15_n8lxi")
+transitionTime = 0.5
+settings = ExtResource("31_0k0as")
 
 [node name="Rings4" type="Node3D" parent="StealthAct/Cavern/RingSpring"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00787354, -18.3116, -0.00598145)
@@ -935,6 +831,124 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, 0)
 [node name="BlueMajin5" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
 transform = Transform3D(0.0636962, 0, 0.997969, 0, 1, 0, -0.997969, 0, 0.0636962, -80.6668, 21.9143, 24.3899)
 
+[node name="GreenMajin3" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
+transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -132.736, 12.6663, 19.1882)
+
+[node name="GreenMajin2" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
+transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -130.787, 12.6663, 21.9543)
+
+[node name="GreenMajin4" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
+transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -130.786, 10.9605, 21.9556)
+
+[node name="GreenMajin" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
+transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -132.74, 10.9605, 19.1832)
+
+[node name="JumpTrigger3" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
+transform = Transform3D(0.996867, 0, 0.0791032, 0, 1, 0, -0.0791032, 0, 0.996867, -136.293, 10.3256, 27.5802)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpTrigger3"]
+transform = Transform3D(0.969076, 0, 0.246762, 0, 1, 0, -0.246762, 0, 0.969076, 9.1947, 2.28851, -7.68433)
+script = ExtResource("15_n8lxi")
+transitionTime = 0.5
+settings = ExtResource("41_mbp1a")
+
+[node name="Jump1" type="Node3D" parent="StealthAct/Cavern/JumpTrigger3"]
+transform = Transform3D(0.546934, 0, -0.837173, 0, 1, 0, 0.837174, 0, 0.546934, 5.0918, -5.28976, 9.19678)
+script = ExtResource("34_dxx84")
+jumpHeight = 1.0
+
+[node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpTrigger3/Jump1" node_paths=PackedStringArray("path")]
+transform = Transform3D(-0.057564, 0, 0.998342, 0, 1, 0, -0.998342, 0, -0.057564, -7.21753, -19.4337, 3.88254)
+script = ExtResource("13_q6tnw")
+path = NodePath("../../../../../Static/Path/BoatPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_nykig")
+
+[node name="Pearls1" type="Node3D" parent="StealthAct/Cavern"]
+transform = Transform3D(-0.0865993, 0, 0.996243, 0, 1, 0, -0.996243, 0, -0.0865993, -87.509, -4.80576, 26.5931)
+script = ExtResource("8_gauxh")
+Generate = false
+Source = ExtResource("27_2dusg")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+
+[node name="Child02" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="StealthAct/Cavern/Pearls1" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Pearls2" type="Node3D" parent="StealthAct/Cavern"]
+transform = Transform3D(-0.0865993, 0, 0.996243, 0, 1, 0, -0.996243, 0, -0.0865993, -87.5588, -4.80576, 25.2805)
+script = ExtResource("8_gauxh")
+Generate = false
+Source = ExtResource("27_2dusg")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+
+[node name="Child02" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
 [node name="Rings6" type="Node3D" parent="StealthAct/Cavern"]
 transform = Transform3D(-0.307888, 0, 0.951423, 0, 1, 0, -0.951423, 0, -0.307888, -111.085, -4.89932, 28.9843)
 script = ExtResource("8_gauxh")
@@ -993,97 +1007,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
 [node name="Child06" parent="StealthAct/Cavern/Rings7" instance=ExtResource("9_o0cj8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Pearls" type="Node3D" parent="StealthAct/Cavern"]
-transform = Transform3D(-0.0865993, 0, 0.996243, 0, 1, 0, -0.996243, 0, -0.0865993, -87.509, -4.80576, 26.5931)
-script = ExtResource("8_gauxh")
-Generate = false
-Source = ExtResource("27_2dusg")
-Amount = 10
-Shape = 0
-Orientation = 0
-Spacing = 1.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
+[node name="JumpTrigger4" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
+transform = Transform3D(0.845933, 0, 0.53329, 0, 1, 0, -0.53329, 0, 0.845933, -118.475, -4.00586, 30.2898)
 
-[node name="Child01" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
+[node name="Jump" type="Node3D" parent="StealthAct/Cavern/JumpTrigger4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75461, 3.83084, -0.831421)
+script = ExtResource("34_dxx84")
+jumpHeight = 1.0
 
-[node name="Child02" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, -7.80811, 0.455933)
+shape = SubResource("BoxShape3D_c8hdc")
 
-[node name="Child03" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="Child04" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="Child05" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="Child06" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
-[node name="Child07" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="Child08" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
-
-[node name="Child09" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="Child10" parent="StealthAct/Cavern/Pearls" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-
-[node name="Pearls2" type="Node3D" parent="StealthAct/Cavern"]
-transform = Transform3D(-0.0865993, 0, 0.996243, 0, 1, 0, -0.996243, 0, -0.0865993, -87.5588, -4.80576, 25.2805)
-script = ExtResource("8_gauxh")
-Generate = false
-Source = ExtResource("27_2dusg")
-Amount = 10
-Shape = 0
-Orientation = 0
-Spacing = 1.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-
-[node name="Child02" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="Child03" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="Child04" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="Child05" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="Child06" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
-[node name="Child07" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="Child08" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
-
-[node name="Child09" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="Child10" parent="StealthAct/Cavern/Pearls2" instance=ExtResource("27_2dusg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-
-[node name="ItemBoxFlying2" parent="StealthAct/Cavern" instance=ExtResource("32_f3enx")]
-transform = Transform3D(-0.740734, 0, 0.671798, 0, 1, 0, -0.671798, 0, -0.740734, -134.005, 5.07507, 43.0372)
-"Spawn Settings/Spawn Pearls" = true
-"Spawn Settings/Amount" = 20
-
-[node name="ItemBoxFlying3" parent="StealthAct/Cavern" instance=ExtResource("32_f3enx")]
-transform = Transform3D(-0.819752, 0, 0.572718, 0, 1, 0, -0.572718, 0, -0.819752, -144.705, -1.0022, 46.338)
-"Spawn Settings/Spawn Pearls" = true
-"Spawn Settings/Amount" = 20
+[node name="LaunchRing2" parent="StealthAct/Cavern" instance=ExtResource("23_3hwjs")]
+transform = Transform3D(0.629917, 0, -0.776662, 0, 1, 0, 0.776662, 0, 0.629917, -122.122, 0, 31.743)
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = -6.0
+"Secondary Settings/Distance" = 37.0
+middleHeight = 1.0
+finalHeight = -5.0
+distance = 27.0
+voiceKey = &""
 
 [node name="SpikeBall1" parent="StealthAct/Cavern" instance=ExtResource("39_fd650")]
 transform = Transform3D(0.830275, 0, 0.557354, 0, 1, 0, -0.557354, 0, 0.830275, -136.767, -4.86499, 45.1499)
@@ -1100,29 +1044,37 @@ transform = Transform3D(0.833712, 0, 0.552199, 0, 1, 0, -0.552199, 0, 0.833712, 
 [node name="SpikeBall5" parent="StealthAct/Cavern" instance=ExtResource("39_fd650")]
 transform = Transform3D(0.833712, 0, 0.552199, 0, 1, 0, -0.552199, 0, 0.833712, -141.278, -4.8804, 38.4509)
 
+[node name="LotusPlatform6" parent="StealthAct/Cavern" instance=ExtResource("24_inqs1")]
+transform = Transform3D(0.670364, 0, -1.22907, 0, 1.18, 0, 1.22907, 0, 0.670364, -130.176, -11.0676, 34.0519)
+
+[node name="FireSoul3" parent="StealthAct/Cavern" instance=ExtResource("26_xvs7k")]
+transform = Transform3D(-0.468377, 0, 0.883528, 0, 1, 0, -0.883528, 0, -0.468377, -126.915, 5.90878, 32.402)
+fireSoulIndex = 3
+
+[node name="LotusPlatform7" parent="StealthAct/Cavern" instance=ExtResource("24_inqs1")]
+transform = Transform3D(0.478831, 0, -0.877907, 0, 1.18, 0, 0.877907, 0, 0.478831, -134.551, -11.8976, 43.6428)
+
+[node name="ItemBoxFlying2" parent="StealthAct/Cavern" instance=ExtResource("32_f3enx")]
+transform = Transform3D(-0.740734, 0, 0.671798, 0, 1, 0, -0.671798, 0, -0.740734, -134.677, 5.07507, 43.778)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 20
+
+[node name="LotusPlatform8" parent="StealthAct/Cavern" instance=ExtResource("24_inqs1")]
+transform = Transform3D(0.844161, 0, 0.988633, 0, 1.18, 0, -0.988633, 0, 0.844161, -143.427, -20.3208, 46.8965)
+
+[node name="BlueMajin6" parent="StealthAct/Cavern" instance=ExtResource("37_e03en")]
+transform = Transform3D(-0.737301, 0, 0.675565, 0, 1, 0, -0.675565, 0, -0.737301, -139.696, -3.98578, 46.0812)
+
+[node name="ItemBoxFlying3" parent="StealthAct/Cavern" instance=ExtResource("32_f3enx")]
+transform = Transform3D(-0.819752, 0, 0.572718, 0, 1, 0, -0.572718, 0, -0.819752, -144.705, -1.0022, 46.338)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 20
+
 [node name="FeedingTunnel" type="Node3D" parent="StealthAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
 script = ExtResource("7_fmk6u")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
-
-[node name="JumpPanel" parent="StealthAct/FeedingTunnel" instance=ExtResource("31_mgvyd")]
-transform = Transform3D(-0.893097, 0, -0.449865, 0, 1, 0, 0.449865, 0, -0.893097, 11.695, 0.169373, 20.0171)
-finalHeight = 7.0
-distance = 14.0
-
-[node name="Path" type="Node3D" parent="StealthAct/FeedingTunnel/JumpPanel" node_paths=PackedStringArray("path")]
-script = ExtResource("13_q6tnw")
-path = NodePath("../../../../Static/Path/ArenaPath")
-affectCamera = false
-
-[node name="Camera" type="Node3D" parent="StealthAct/FeedingTunnel/JumpPanel"]
-script = ExtResource("15_n8lxi")
-transitionTime = 1.0
-settings = ExtResource("42_3t57n")
-
-[node name="LotusPlatform" parent="StealthAct/FeedingTunnel" instance=ExtResource("24_inqs1")]
-transform = Transform3D(4, 0, 0, 0, 1.5, 0, 0, 0, 4, 0.39447, -19.5, -0.355347)
 
 [node name="Rings11" type="Node3D" parent="StealthAct/FeedingTunnel"]
 transform = Transform3D(-0.499894, 0, 0.866086, 0, 1, 0, -0.866086, 0, -0.499894, 17.9733, 0.829529, 18.199)
@@ -1144,6 +1096,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
 [node name="Child03" parent="StealthAct/FeedingTunnel/Rings11" instance=ExtResource("9_o0cj8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
 
+[node name="JumpPanel" parent="StealthAct/FeedingTunnel" instance=ExtResource("31_mgvyd")]
+transform = Transform3D(-0.893097, 0, -0.449865, 0, 1, 0, 0.449865, 0, -0.893097, 11.695, 0.169373, 20.0171)
+middleHeight = 2.0
+finalHeight = -1.0
+distance = 25.0
+
+[node name="Path" type="Node3D" parent="StealthAct/FeedingTunnel/JumpPanel" node_paths=PackedStringArray("path")]
+script = ExtResource("13_q6tnw")
+path = NodePath("../../../../Static/Path/ArenaPath")
+affectCamera = false
+
+[node name="Camera" type="Node3D" parent="StealthAct/FeedingTunnel/JumpPanel"]
+script = ExtResource("15_n8lxi")
+transitionTime = 1.0
+settings = ExtResource("42_3t57n")
+
 [node name="Wall" type="StaticBody3D" parent="StealthAct/FeedingTunnel" groups=["wall"]]
 transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, 9.02826, 0, 22.7471)
 
@@ -1151,15 +1119,16 @@ transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_c4mxl")
 
+[node name="LotusPlatform" parent="StealthAct/FeedingTunnel" instance=ExtResource("24_inqs1")]
+transform = Transform3D(4, 0, 0, 0, 1.5, 0, 0, 0, 4, 0.39447, -19.5, -0.355347)
+
 [node name="Goal" parent="StealthAct/FeedingTunnel" instance=ExtResource("36_ub7ac")]
-transform = Transform3D(0.871325, 0, 0.490706, 0, 1, 0, -0.490706, 0, 0.871325, -1.84937, 7.80374, -3.28381)
+transform = Transform3D(0.871325, 0, 0.490706, 0, 1, 0, -0.490706, 0, 0.871325, -1.47845, 7.80374, -4.66064)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/FeedingTunnel/Goal"]
-transform = Transform3D(1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 1, 1.01471, -4.69907, 4.80396)
+transform = Transform3D(1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, 1, 0, -3, 0)
 shape = SubResource("BoxShape3D_3wcby")
 
-[connection signal="Activated" from="StealthAct/CullingMap/Crossing-L" to="StealthAct/Crossing" method="Activate"]
-[connection signal="Deactivated" from="StealthAct/CullingMap/Crossing-L" to="StealthAct/Crossing" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/CullingMap/Cavern-L" to="StealthAct/Cavern" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/CullingMap/Cavern-L" to="StealthAct/Cavern" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/CullingMap/Crossing-U" to="StealthAct/Crossing" method="Deactivate"]
@@ -1175,22 +1144,24 @@ shape = SubResource("BoxShape3D_3wcby")
 [connection signal="Exited" from="StealthAct/Crossing/LaunchRing2" to="StealthAct/Crossing/LaunchRing2/Camera" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Deactivate"]
 [connection signal="Deactivated" from="StealthAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Activate"]
-[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2" method="Activate"]
-[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3" method="Activate"]
-[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3" to="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3/LandJump4" method="Activate"]
-[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump/LandJump2/LandJump3/LandJump4" to="StealthAct/Cavern/JumpTrigger1/Boat" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/JumpTrigger1/Boat" to="StealthAct/Cavern/JumpTrigger1/Boat/Camera" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/JumpTrigger1/Boat" to="StealthAct/Cavern/JumpTrigger1/Boat/Path" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/Spring" to="StealthAct/Cavern/Spring/Camera" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/Spring" to="StealthAct/Cavern/Spring/Path" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/JumpPanel5" to="StealthAct/Cavern/JumpPanel5/Camera" method="Activate"]
-[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger4/Jump1" to="StealthAct/Cavern/JumpTrigger4/Jump1/Path" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/JumpPanel2" to="StealthAct/Cavern/JumpPanel2/Path" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/JumpPanel3" to="StealthAct/Cavern/JumpPanel3/Path" method="Activate"]
-[connection signal="Activated" from="StealthAct/Cavern/Spring2" to="StealthAct/Cavern/Spring2/Path" method="Activate"]
+[connection signal="Activated" from="StealthAct/Crossing/JumpPanel1" to="StealthAct/Crossing/JumpPanel1/Path" method="Activate"]
+[connection signal="Activated" from="StealthAct/Crossing/JumpPanel1" to="StealthAct/Crossing/JumpPanelCamera" method="Activate"]
+[connection signal="Activated" from="StealthAct/Crossing/JumpPanel2" to="StealthAct/Crossing/JumpPanel2/Path" method="Activate"]
+[connection signal="Activated" from="StealthAct/Crossing/JumpPanel2" to="StealthAct/Crossing/JumpPanelCamera" method="Activate"]
+[connection signal="Activated" from="StealthAct/Crossing/Spring2" to="StealthAct/Crossing/Spring2/Camera" method="Activate"]
+[connection signal="Deactivated" from="StealthAct/Crossing/Spring2" to="StealthAct/Crossing/Spring2/Path" method="Activate"]
+[connection signal="Activated" from="StealthAct/Cavern/Spring1" to="StealthAct/Cavern/Spring1/Path" method="Activate"]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump" to="StealthAct/Cavern/JumpTrigger2/LandJump" method="Activate" flags=3]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump" to="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2" method="Activate" flags=3]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2" to="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2/LandJump3" method="Activate" flags=3]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2/LandJump3" to="StealthAct/Cavern/JumpTrigger1/Camera" method="Deactivate"]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2/LandJump3" to="StealthAct/Cavern/Boat" method="Activate"]
+[connection signal="Activated" from="StealthAct/Cavern/JumpPanel1" to="StealthAct/Cavern/JumpPanel1/Camera" method="Activate"]
 [connection signal="Collected" from="StealthAct/Cavern/RichRing" to="StealthAct/Cavern/RingSpring" method="Activate"]
 [connection signal="Respawned" from="StealthAct/Cavern/RichRing" to="StealthAct/Cavern/RingSpring" method="Deactivate"]
-[connection signal="Activated" from="StealthAct/Cavern/RingSpring/Spring3" to="StealthAct/FeedingTunnel/JumpPanel/Camera" method="Deactivate"]
+[connection signal="Activated" from="StealthAct/Cavern/RingSpring/Spring3" to="StealthAct/Cavern/RingSpring/Spring3/Camera" method="Activate"]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger3/Jump1" to="StealthAct/Cavern/JumpTrigger3/Jump1/Path" method="Activate"]
+[connection signal="Activated" from="StealthAct/Cavern/JumpTrigger4" to="StealthAct/Cavern/Boat" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/FeedingTunnel/JumpPanel" to="Static/Collision/ArenaOneWay" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/FeedingTunnel/JumpPanel" to="Static/Trigger/Object/FeedingRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/FeedingTunnel/JumpPanel" to="StealthAct/FeedingTunnel/JumpPanel/Path" method="Activate"]

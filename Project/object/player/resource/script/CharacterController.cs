@@ -946,7 +946,7 @@ namespace Project.Gameplay
 				Velocity = Lockon.HomingAttackDirection.Normalized() * MoveSpeed;
 				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
-
+				UpdateUpDirection();
 				PathFollower.Resync();
 			}
 			else // Normal Jump dash; Apply gravity
@@ -1677,32 +1677,37 @@ namespace Project.Gameplay
 					Animator.IsFallTransitionEnabled = true;
 				}
 
-				// Calculate target up direction
-				Vector3 targetUpDirection = Vector3.Up;
-				if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
-					targetUpDirection = PathFollower.Up();
-				else if (ActionState == ActionStates.Backflip)
-					targetUpDirection = PathFollower.HeightAxis;
-
-				// Calculate reset factor
-				float orientationResetFactor;
-				if (ActionState == ActionStates.Stomping ||
-					ActionState == ActionStates.JumpDash ||
-					ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
-				{
-					orientationResetFactor = .2f;
-				}
-				else if (VerticalSpeed > 0)
-				{
-					orientationResetFactor = .01f;
-				}
-				else
-				{
-					orientationResetFactor = VerticalSpeed * .2f / Runtime.MAX_GRAVITY;
-				}
-
-				UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
+				UpdateUpDirection();
 			}
+		}
+
+		private void UpdateUpDirection()
+		{
+			// Calculate target up direction
+			Vector3 targetUpDirection = Vector3.Up;
+			if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
+				targetUpDirection = PathFollower.Up();
+			else if (ActionState == ActionStates.Backflip)
+				targetUpDirection = PathFollower.HeightAxis;
+
+			// Calculate reset factor
+			float orientationResetFactor;
+			if (ActionState == ActionStates.Stomping ||
+				ActionState == ActionStates.JumpDash ||
+				ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
+			{
+				orientationResetFactor = .2f;
+			}
+			else if (VerticalSpeed > 0)
+			{
+				orientationResetFactor = .01f;
+			}
+			else
+			{
+				orientationResetFactor = VerticalSpeed * .2f / Runtime.MAX_GRAVITY;
+			}
+
+			UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 		}
 
 		public void LandOnGround()

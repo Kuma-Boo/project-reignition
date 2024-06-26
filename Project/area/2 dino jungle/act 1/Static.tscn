@@ -124,7 +124,7 @@ size = Vector3(14, 50, 88)
 size = Vector3(30, 50, 74)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_betid"]
-size = Vector3(5, 5, 2.5)
+size = Vector3(5, 3, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1o6c3"]
 size = Vector3(53, 50, 60)
@@ -160,6 +160,8 @@ Environment = NodePath("WorldEnvironment")
 visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
 
@@ -764,19 +766,34 @@ shape = SubResource("BoxShape3D_u63uw")
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 15)
 shape = SubResource("BoxShape3D_skfpg")
 
-[node name="JumpTrigger" parent="Trigger/Object/Apatos2" instance=ExtResource("15_86eng")]
+[node name="JumpTrigger1" parent="Trigger/Object/Apatos2" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.81815, 0, 0.575005, 0, 1, 0, -0.575005, 0, 0.81815, -0.0928955, 27.3072, 45.4746)
 "Trigger Mode" = 1
 "Exit Mode" = 1
 
-[node name="JumpTrigger" type="Node3D" parent="Trigger/Object/Apatos2/JumpTrigger"]
+[node name="JumpTrigger" type="Node3D" parent="Trigger/Object/Apatos2/JumpTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 7)
 script = ExtResource("22_vku8w")
 jumpHeight = 2.0
 autoAlign = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos2/JumpTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.10001, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos2/JumpTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.10001, 0)
+shape = SubResource("BoxShape3D_betid")
+
+[node name="JumpTrigger2" parent="Trigger/Object/Apatos2" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.966376, 0, -0.257133, 0, 1, 0, 0.257133, 0, 0.966376, -22.1998, 19.3072, 35.7511)
+"Trigger Mode" = 1
+"Exit Mode" = 1
+
+[node name="JumpTrigger" type="Node3D" parent="Trigger/Object/Apatos2/JumpTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 7)
+script = ExtResource("22_vku8w")
+jumpHeight = 2.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos2/JumpTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.10001, 0)
 shape = SubResource("BoxShape3D_betid")
 
 [node name="Event" type="Node3D" parent="Trigger/Object/Apatos2" node_paths=PackedStringArray("animator")]
@@ -1106,21 +1123,6 @@ settings = ExtResource("36_hewn5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
-[node name="DinoCrossingCam2" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.986856, 0, -0.161604, 0, 1, 0, 0.161604, 0, -0.986856, -288.608, -273.597, -1044.23)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="Camera" type="Node3D" parent="Trigger/Camera/DinoCrossingCam2"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
-script = ExtResource("36_8t574")
-transitionTime = 0.5
-settings = ExtResource("36_hewn5")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/DinoCrossingCam2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_c5pbm")
-
 [node name="LogCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.397148, 0, 0.917755, 0, 1, 0, -0.917755, 0, 0.397148, -343.562, -258.964, -957.714)
 "Trigger Mode" = 2
@@ -1130,9 +1132,7 @@ transform = Transform3D(0.397148, 0, 0.917755, 0, 1, 0, -0.917755, 0, 0.397148, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/LogCam"]
 script = ExtResource("36_8t574")
 transitionTime = 0.5
-deactivationTransitionTime = 1.0
 settings = ExtResource("29_jpgcf")
-previousSettings = ExtResource("36_hewn5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/LogCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1153,6 +1153,21 @@ previousSettings = ExtResource("36_hewn5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FlyingPotCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_1y700")
+
+[node name="DinoCrossingCam2" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.986856, 0, -0.161604, 0, 1, 0, 0.161604, 0, -0.986856, -288.608, -273.597, -1044.23)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/DinoCrossingCam2"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("36_8t574")
+transitionTime = 0.5
+settings = ExtResource("36_hewn5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/DinoCrossingCam2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_c5pbm")
 
 [node name="SidleCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.0993197, 0, -0.995056, 0, 1, 0, 0.995056, 0, -0.0993197, -649.659, -277.297, -1057.45)

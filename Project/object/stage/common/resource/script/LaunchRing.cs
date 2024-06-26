@@ -54,13 +54,24 @@ public partial class LaunchRing : Launcher
 			if (IsCharacterCentered) // Close enough; Allow inputs
 			{
 				if (Input.IsActionJustPressed("button_jump")) // Disable launcher
+				{
 					DropPlayer(false);
+					Character.CanJumpDash = true;
+				}
 				else if (Input.IsActionJustPressed("button_action"))
+				{
 					LaunchPlayer();
+				}
 			}
 
 			Character.Animator.SetSpinSpeed(1.5f + launchRatio);
 		}
+	}
+
+	protected override void LaunchAnimation()
+	{
+		// Keep the same animation as charging (i.e. do nothing)
+		Character.Animator.SetSpinSpeed(5); // Speed up spin animation just because
 	}
 
 	private void DropPlayer(bool launched = false)
