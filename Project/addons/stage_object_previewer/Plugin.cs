@@ -48,8 +48,6 @@ namespace Project.Editor.StageObjectPreviewer
 				DrawLaunchSettings((target as Launcher).GetLaunchSettings(), DefaultDrawColor.Lerp(SpecialDrawColor, (target as Launcher).GetLaunchRatio()));
 			else if (target is JumpTrigger)
 				DrawLaunchSettings((target as JumpTrigger).GetLaunchSettings(), DefaultDrawColor);
-			else if (target is LaunchRing)
-				DrawLaunchSettings((target as LaunchRing).GetLaunchSettings(), DefaultDrawColor.Lerp(SpecialDrawColor, (target as LaunchRing).LaunchRatio));
 			else if (target is GasTank)
 				DrawLaunchSettings((target as GasTank).GetLaunchSettings(), DefaultDrawColor);
 			else if (target is ItemBox)

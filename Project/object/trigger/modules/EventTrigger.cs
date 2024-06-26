@@ -29,9 +29,20 @@ public partial class EventTrigger : StageTriggerModule
 	[Export]
 	private AnimationPlayer animator;
 
-	private readonly StringName RESET_ANIMATION = "RESET";
-	private readonly StringName EVENT_ANIMATION = "event";
-	private readonly StringName DEACTIVATE_EVENT_ANIMATION = "event-deactivate";
+	[Export]
+	private RespawnAnimation respawnAnimation;
+	private enum RespawnAnimation
+	{
+		Reset,
+		Activate,
+		Deactivate,
+	}
+	[Export]
+	private bool respawnToEnd = true;
+
+	private readonly StringName ResetAnimation = "RESET";
+	private readonly StringName EventAnimation = "event";
+	private readonly StringName DeactivateEventAnimation = "event-deactivate";
 
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
@@ -146,7 +157,6 @@ public partial class EventTrigger : StageTriggerModule
 		Respawn();
 	}
 
-
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint()) return;
@@ -162,20 +172,36 @@ public partial class EventTrigger : StageTriggerModule
 
 	public override void Respawn()
 	{
-		EmitSignal(SignalName.Respawned);
-		// Only reset if a RESET animation exists.
-		if (!animator.HasAnimation(RESET_ANIMATION)) return;
-
 		isActivated = false;
-		animator.Play(RESET_ANIMATION);
-		animator.Advance(0);
+
+		switch (respawnAnimation)
+		{
+			case RespawnAnimation.Reset:
+				EmitSignal(SignalName.Respawned);
+				if (animator.HasAnimation(ResetAnimation))
+					animator.Play(ResetAnimation);
+				break;
+			case RespawnAnimation.Activate:
+				EmitSignal(SignalName.Activated);
+				if (animator.HasAnimation(EventAnimation))
+					animator.Play(EventAnimation);
+				break;
+			case RespawnAnimation.Deactivate:
+				EmitSignal(SignalName.Deactivated);
+				if (animator.HasAnimation(DeactivateEventAnimation))
+					animator.Play(DeactivateEventAnimation);
+				break;
+		}
+
+		animator.Advance(respawnToEnd ? animator.CurrentAnimationLength : 0);
+		animator.Stop(true);
 	}
 
 	public override void Activate()
 	{
 		if (isOneShot && isActivated) return;
 
-		PlayAnimation(EVENT_ANIMATION);
+		PlayAnimation(EventAnimation);
 		EmitSignal(SignalName.Activated);
 	}
 
@@ -183,7 +209,7 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && isActivated) return;
 
-		PlayAnimation(DEACTIVATE_EVENT_ANIMATION);
+		PlayAnimation(DeactivateEventAnimation);
 		EmitSignal(SignalName.Deactivated);
 	}
 
