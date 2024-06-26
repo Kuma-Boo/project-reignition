@@ -1852,8 +1852,8 @@ namespace Project.Gameplay
 					return;
 				}
 
-				// Cancel speed break
-				if (Skills.IsSpeedBreakActive)
+				// Cancel speed break (only when recenter lockout ISN'T active)
+				if (Skills.IsSpeedBreakActive && !(IsLockoutActive && ActiveLockoutData.recenterPlayer))
 				{
 					float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
 					if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction

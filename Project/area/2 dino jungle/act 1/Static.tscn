@@ -1,4 +1,4 @@
-[gd_scene load_steps=106 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=108 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -30,7 +30,6 @@
 [ext_resource type="Curve3D" uid="uid://uyy1x2hj58jb" path="res://area/2 dino jungle/act 1/environment/path/LogAutomationPath.tres" id="19_p1hyv"]
 [ext_resource type="Curve3D" uid="uid://bjvkgbw6pqfdl" path="res://area/2 dino jungle/act 1/environment/path/BoatPath.tres" id="22_dpojg"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="22_vku8w"]
-[ext_resource type="Curve3D" uid="uid://cnwbwd5e8hbh7" path="res://area/2 dino jungle/act 1/environment/path/EndPath.tres" id="23_d4n23"]
 [ext_resource type="Resource" uid="uid://c4uve00dlpv2n" path="res://area/2 dino jungle/act 1/camera/LogAutomationCam.tres" id="23_pnpt3"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="23_rku1n"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="24_0y0cf"]
@@ -84,12 +83,18 @@
 [ext_resource type="Curve3D" uid="uid://b14xxxrcpxq0j" path="res://area/2 dino jungle/act 1/environment/path/EndIslandPath.tres" id="60_xhla3"]
 [ext_resource type="Curve3D" uid="uid://yiqn26fm6vq" path="res://area/2 dino jungle/act 1/environment/path/BoatTopPath.tres" id="71_xrrh0"]
 [ext_resource type="Curve3D" uid="uid://dwbkww17xa7gl" path="res://area/2 dino jungle/act 1/environment/path/ArenaPath.tres" id="72_fs21q"]
+[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/EndBottomPath.tres" id="79_0fv0i"]
+[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/EndMiddlePath.tres" id="80_4h07x"]
+[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/EndTopPath.tres" id="81_vy7ml"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3fp3q"]
 size = Vector3(20, 30, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c5pbm"]
+size = Vector3(5, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7jbaj"]
 size = Vector3(24.2676, 20, 2.5)
@@ -120,9 +125,6 @@ size = Vector3(30, 50, 74)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_betid"]
 size = Vector3(5, 5, 2.5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_c5pbm"]
-size = Vector3(11, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1o6c3"]
 size = Vector3(53, 50, 60)
@@ -428,18 +430,45 @@ path = NodePath("../../../../Path/EndIslandPath")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
-[node name="EndPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.170966, 0, -0.985276, 0, 1, 0, 0.985276, 0, -0.170966, -853.784, -277.228, -1106.86)
+[node name="EndBottomPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.170966, 0, -0.985276, 0, 1, 0, 0.985276, 0, -0.170966, -853.562, -277.228, -1108.14)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Trigger/Path/EndPath" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Trigger/Path/EndBottomPath" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/EndPath")
+path = NodePath("../../../../Path/EndBottomPath")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndPath"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndBottomPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
+
+[node name="EndMiddlePath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.509786, -0.191861, 0.838634, 0.0189384, 0.972076, 0.233901, -0.860092, 0.135122, -0.491917, -887.62, -257.972, -1097.25)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Path" type="Node3D" parent="Trigger/Path/EndMiddlePath" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.0317383, 0, 0)
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/EndMiddlePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndMiddlePath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_c5pbm")
+
+[node name="EndTopPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.101056, 0.340269, -0.934881, 1.86265e-09, 0.939693, 0.34202, 0.99488, 0.0345633, -0.0949618, -882.946, -252.083, -1087.98)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Path" type="Node3D" parent="Trigger/Path/EndTopPath" node_paths=PackedStringArray("path")]
+script = ExtResource("35_vf0rg")
+path = NodePath("../../../../Path/EndTopPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndTopPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_c5pbm")
 
 [node name="Checkpoints" type="Node3D" parent="Trigger"]
 
@@ -804,7 +833,7 @@ transform = Transform3D(-0.997424, 0, 0.0717237, 0, 1, 0, -0.0717237, 0, -0.9974
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/IslandRecenterTrigger/StopTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_c5pbm")
+shape = SubResource("BoxShape3D_ibe76")
 
 [node name="Lockout" type="Node3D" parent="Trigger/Object/IslandRecenterTrigger"]
 transform = Transform3D(0.831954, 0, 0.554845, 0, 1, 0, -0.554845, 0, 0.831954, -30.7302, 43.764, -98.5685)
@@ -1231,7 +1260,7 @@ transitionTime = 0.5
 settings = ExtResource("47_6j2j6")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/EndCam"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50012, 8, -6.10352e-05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_c5pbm")
 
 [node name="EndFollowCam2" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
@@ -1242,6 +1271,7 @@ transform = Transform3D(-0.315368, 0, 0.94897, 0, 1, 0, -0.94897, 0, -0.315368, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/EndFollowCam2"]
 script = ExtResource("36_8t574")
 transitionTime = 0.5
+deactivationTransitionTime = 0.2
 settings = ExtResource("47_cd0o2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/EndFollowCam2"]
@@ -1344,9 +1374,17 @@ curve = ExtResource("59_mdw42")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -803.328, -279.996, -1092.31)
 curve = ExtResource("60_xhla3")
 
-[node name="EndPath" type="Path3D" parent="Path"]
+[node name="EndBottomPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -835.123, -277.225, -1103.11)
-curve = ExtResource("23_d4n23")
+curve = ExtResource("79_0fv0i")
+
+[node name="EndMiddlePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -890.978, -259.542, -1091.83)
+curve = ExtResource("80_4h07x")
+
+[node name="EndTopPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -877.841, -254.575, -1092.6)
+curve = ExtResource("81_vy7ml")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("4_gsi68")
