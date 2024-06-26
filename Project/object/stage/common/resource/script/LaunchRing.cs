@@ -6,6 +6,11 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class LaunchRing : Launcher
 {
+	[Signal]
+	public delegate void EnteredEventHandler();
+	[Signal]
+	public delegate void ExitedEventHandler();
+
 	[ExportGroup("Editor")]
 	[Export]
 	private Array<NodePath> pieces;
@@ -49,28 +54,34 @@ public partial class LaunchRing : Launcher
 			if (IsCharacterCentered) // Close enough; Allow inputs
 			{
 				if (Input.IsActionJustPressed("button_jump")) // Disable launcher
-				{
-					DropPlayer();
-					Character.Animator.ResetState();
-					Character.Effect.StopSpinFX();
-					Character.CanJumpDash = false;
-				}
+					DropPlayer(false);
 				else if (Input.IsActionJustPressed("button_action"))
-				{
-					DropPlayer();
-					Character.Effect.StartTrailFX();
-					Character.StartLauncher(GetLaunchSettings());
-				}
+					LaunchPlayer();
 			}
 
 			Character.Animator.SetSpinSpeed(1.5f + launchRatio);
 		}
 	}
 
-	private void DropPlayer()
+	private void DropPlayer(bool launched = false)
 	{
 		isActive = false;
 		Character.ResetMovementState();
+
+		if (!launched)
+		{
+			EmitSignal(SignalName.Exited);
+			Character.Animator.ResetState();
+			Character.Effect.StopSpinFX();
+			Character.CanJumpDash = false;
+		}
+	}
+
+	private void LaunchPlayer()
+	{
+		DropPlayer(true);
+		Character.Effect.StartTrailFX();
+		base.Activate();
 	}
 
 	private void InitializePieces()
@@ -109,6 +120,7 @@ public partial class LaunchRing : Launcher
 		// Disable homing reticle
 		Character.Lockon.IsMonitoring = false;
 		Character.Lockon.StopHomingAttack();
+		EmitSignal(SignalName.Entered);
 	}
 
 	private void OnExited(Area3D a)
@@ -122,7 +134,6 @@ public partial class LaunchRing : Launcher
 		DropPlayer();
 		Character.StartKnockback(new CharacterController.KnockbackSettings()
 		{
-			stayOnGround = true,
 			ignoreMovementState = true,
 		});
 	}
