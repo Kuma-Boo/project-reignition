@@ -29,9 +29,9 @@ public partial class EventTrigger : StageTriggerModule
 	[Export]
 	private AnimationPlayer animator;
 
-	private readonly StringName RESET_ANIMATION = "RESET";
-	private readonly StringName EVENT_ANIMATION = "event";
-	private readonly StringName DEACTIVATE_EVENT_ANIMATION = "event-deactivate";
+	private StringName ResetAnimation = "RESET";
+	private StringName EventAnimation = "event";
+	private StringName DeactivateEventAnimation = "event-deactivate";
 
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
@@ -164,10 +164,10 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		EmitSignal(SignalName.Respawned);
 		// Only reset if a RESET animation exists.
-		if (!animator.HasAnimation(RESET_ANIMATION)) return;
+		if (!animator.HasAnimation(ResetAnimation)) return;
 
 		isActivated = false;
-		animator.Play(RESET_ANIMATION);
+		animator.Play(ResetAnimation);
 		animator.Advance(0);
 	}
 
@@ -175,7 +175,7 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && isActivated) return;
 
-		PlayAnimation(EVENT_ANIMATION);
+		PlayAnimation(EventAnimation);
 		EmitSignal(SignalName.Activated);
 	}
 
@@ -183,7 +183,7 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && isActivated) return;
 
-		PlayAnimation(DEACTIVATE_EVENT_ANIMATION);
+		PlayAnimation(DeactivateEventAnimation);
 		EmitSignal(SignalName.Deactivated);
 	}
 

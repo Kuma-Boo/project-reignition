@@ -28,7 +28,6 @@ public partial class LaunchRing : Launcher
 	private bool isActive;
 
 	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, launchRatio);
-	private CharacterController Character => CharacterController.instance;
 
 	public override void _Ready()
 	{
