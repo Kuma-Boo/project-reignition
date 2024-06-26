@@ -40,9 +40,9 @@ public partial class EventTrigger : StageTriggerModule
 	[Export]
 	private bool respawnToEnd = true;
 
-	private StringName ResetAnimation = "RESET";
-	private StringName EventAnimation = "event";
-	private StringName DeactivateEventAnimation = "event-deactivate";
+	private readonly StringName ResetAnimation = "RESET";
+	private readonly StringName EventAnimation = "event";
+	private readonly StringName DeactivateEventAnimation = "event-deactivate";
 
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
