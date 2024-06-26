@@ -169,10 +169,15 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 			Character.Effect.PlayVoice(voiceKey);
 
 		IsCharacterCentered = recenterSpeed == 0;
-		LaunchSettings LaunchSettings = GetLaunchSettings();
-		Character.StartLauncher(LaunchSettings, this);
+		Character.StartLauncher(GetLaunchSettings(), this);
 
-		if (LaunchSettings.InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
+		LaunchAnimation();
+	}
+
+	/// <summary> Sets the player's launch animation based on launchsettings. Override as needed. </summary>
+	protected virtual void LaunchAnimation()
+	{
+		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 			Character.Animator.JumpAnimation();
 		else
 			Character.Animator.LaunchAnimation();
