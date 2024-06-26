@@ -1,4 +1,4 @@
-[gd_scene load_steps=112 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=114 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -52,7 +52,7 @@
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="33_q44ch"]
 [ext_resource type="AnimationLibrary" uid="uid://dkn0qsuhlfgge" path="res://area/2 dino jungle/object/model/animation/apato/DinoApato2AnimationLibrary.gltf" id="34_7qy8o"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="34_eyh5k"]
-[ext_resource type="AudioStream" uid="uid://cg8yyh0hyqxho" path="res://sound/sfx/stage/dinosaur jungle/dino apatos activate.wav" id="34_id1gy"]
+[ext_resource type="AudioStream" path="res://sound/sfx/stage/dinosaur jungle/dino apatos activate.wav" id="34_id1gy"]
 [ext_resource type="Resource" uid="uid://beferl7qs7k41" path="res://area/2 dino jungle/act 1/camera/CaveExitCam.tres" id="34_qb2qj"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="35_c15gk"]
 [ext_resource type="Resource" uid="uid://bxshvuvtt3i28" path="res://area/2 dino jungle/act 1/camera/ChaseCam.tres" id="35_ib3lh"]
@@ -65,7 +65,7 @@
 [ext_resource type="Resource" uid="uid://cnhb6111uxifw" path="res://area/2 dino jungle/act 1/camera/ChaseReverseCam.tres" id="36_mti58"]
 [ext_resource type="Resource" uid="uid://d2mt7vqfjmref" path="res://area/2 dino jungle/act 1/camera/CaveCam.tres" id="37_lloeo"]
 [ext_resource type="Resource" uid="uid://cha3usfe6mq68" path="res://area/2 dino jungle/act 1/camera/ChaseFollowCam.tres" id="37_wq224"]
-[ext_resource type="AudioStream" uid="uid://vp7cbqph4dww" path="res://sound/sfx/stage/dinosaur jungle/dino apatos grunt.wav" id="38_cyjyi"]
+[ext_resource type="AudioStream" path="res://sound/sfx/stage/dinosaur jungle/dino apatos grunt.wav" id="38_cyjyi"]
 [ext_resource type="Resource" uid="uid://u1ajlm54dtyt" path="res://area/2 dino jungle/act 1/camera/DinoCrossingFlyingPotCam.tres" id="38_j47cl"]
 [ext_resource type="Curve3D" uid="uid://bq2rhjpto2h67" path="res://area/2 dino jungle/act 1/environment/path/CaveExitPath.tres" id="42_rkm8b"]
 [ext_resource type="Resource" uid="uid://b4w3fufkjv3x8" path="res://area/2 dino jungle/act 1/camera/SidleCam.tres" id="44_d1e8a"]
@@ -831,24 +831,6 @@ previousSettings = ExtResource("29_eqruc")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos1/ActivateTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="GruntTrigger" parent="Trigger/Object/Apatos1" instance=ExtResource("15_86eng")]
-transform = Transform3D(-1, 0, -3.42727e-07, 0, 1, 0, 3.42727e-07, 0, -1, 0.0437317, 23.0302, -17.7755)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="Grunt" type="AudioStreamPlayer3D" parent="Trigger/Object/Apatos1/GruntTrigger"]
-transform = Transform3D(-0.156288, 0.982843, 0.0979446, 0.00640267, 0.100169, -0.99495, -0.98769, -0.154872, -0.0219481, 13.9014, -6.76373, -48.6816)
-stream = ExtResource("38_cyjyi")
-attenuation_model = 3
-max_db = 0.0
-max_distance = 200.0
-bus = &"SFX"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos1/GruntTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_qrtnt")
 
 [node name="GruntTrigger" parent="Trigger/Object/Apatos1" instance=ExtResource("15_86eng")]
@@ -955,22 +937,7 @@ libraries = {
 }
 
 [node name="Head" type="BoneAttachment3D" parent="Trigger/Object/Apatos2/Event"]
-transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 19.7418, 38.5259)
-bone_name = "head"
-bone_idx = 1
-use_external_skeleton = true
-external_skeleton = NodePath("../DinoApatos/DinoApatoRoot/GeneralSkeleton")
-
-[node name="Grunt" type="AudioStreamPlayer3D" parent="Trigger/Object/Apatos2/Event/Head"]
-transform = Transform3D(1, -2.98023e-08, -4.65661e-10, 0, 1, -2.32831e-10, 0, 2.32831e-10, 1, 6.10352e-05, 4.99988, 0)
-stream = ExtResource("38_cyjyi")
-attenuation_model = 3
-max_db = 0.0
-max_distance = 200.0
-bus = &"SFX"
-
-[node name="Head" type="BoneAttachment3D" parent="Trigger/Object/Apatos2/Event"]
-transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 19.7418, 38.5259)
+transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 29.7625, 37.3079)
 bone_name = "head"
 bone_idx = 1
 use_external_skeleton = true
@@ -1691,13 +1658,13 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/Head/Grunt" method="play"]
-[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/RightPath" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/Head/Grunt" method="play"]
-[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/LeftPath" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
