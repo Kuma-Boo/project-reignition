@@ -1,14 +1,14 @@
-[gd_scene load_steps=46 format=3 uid="uid://skx536edn7yd"]
+[gd_scene load_steps=49 format=3 uid="uid://skx536edn7yd"]
 
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
+[ext_resource type="PackedScene" uid="uid://g7vhevg8ipxh" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/act 2/environment/02Islands.tscn" id="2_6nnkp"]
+[ext_resource type="PackedScene" uid="uid://b3ywiq8hj525h" path="res://area/1 sand oasis/act 2/environment/02Islands.tscn" id="2_6nnkp"]
 [ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/1 sand oasis/act 1/camera/InteriorCam.tres" id="2_57nsp"]
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/act 2/environment/03Forest.tscn" id="3_2hkcl"]
+[ext_resource type="PackedScene" uid="uid://cndqbo16qru3q" path="res://area/1 sand oasis/act 2/environment/03Forest.tscn" id="3_2hkcl"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_i2fbd"]
 [ext_resource type="PackedScene" uid="uid://ulwu7thf2lga" path="res://area/1 sand oasis/act 2/environment/collision/Collision.tscn" id="3_we3ty"]
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/act 2/environment/04Oasis.tscn" id="4_yda5x"]
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/act 2/environment/05Slope.tscn" id="5_c5ona"]
+[ext_resource type="PackedScene" uid="uid://djfx1n8sukn0x" path="res://area/1 sand oasis/act 2/environment/04Oasis.tscn" id="4_yda5x"]
+[ext_resource type="PackedScene" uid="uid://d0qnlfq8f7nfg" path="res://area/1 sand oasis/act 2/environment/05Slope.tscn" id="5_c5ona"]
 [ext_resource type="PackedScene" path="res://area/1 sand oasis/act 2/environment/06End.tscn" id="6_2ngjg"]
 [ext_resource type="Curve3D" uid="uid://dny4rc3cmd8ss" path="res://area/1 sand oasis/act 2/environment/path/BeachPath.tres" id="9_28qpb"]
 [ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="9_f1xur"]
@@ -31,6 +31,8 @@
 [ext_resource type="Resource" uid="uid://cq4xg8hr8diav" path="res://area/1 sand oasis/act 2/camera/HallCam.tres" id="16_nyn0u"]
 [ext_resource type="Resource" uid="uid://cgukfohc8s0wh" path="res://area/1 sand oasis/act 2/camera/OasisCam.tres" id="17_dd3sk"]
 [ext_resource type="Resource" uid="uid://dqgebfmms4iqa" path="res://area/1 sand oasis/act 2/camera/FieldCam.tres" id="18_tep6q"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="20_662ia"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="21_tnfaf"]
 [ext_resource type="AudioStream" uid="uid://bmkg2n6r0wy3f" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_50thi"]
@@ -42,6 +44,9 @@ size = Vector3(15, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rbfsu"]
 size = Vector3(30, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sa337"]
+size = Vector3(41.5543, 46.4347, 37.4077)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_apnef"]
 radius = 2.0
@@ -121,12 +126,21 @@ visible = false
 [node name="CullingMap" type="Node3D" parent="Visuals"]
 visible = false
 
-[node name="0203L" parent="Visuals/CullingMap" instance=ExtResource("3_i2fbd")]
+[node name="02L" parent="Visuals/CullingMap" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -284.186, -65, -419.619)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/02L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_50thi")
+
+[node name="03L" parent="Visuals/CullingMap" instance=ExtResource("3_i2fbd")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -150.833, -65, -364.774)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/0203L"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03L"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_50thi")
 
@@ -359,6 +373,21 @@ settings = ExtResource("13_awkcy")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_50thi")
 
+[node name="Hall" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -82.7172, -40.0347, -325.603)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("12_ar5h4")
+transitionTime = 0.5
+settings = ExtResource("16_nyn0u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_50thi")
+
 [node name="Island" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
 transform = Transform3D(-4.37114e-08, 0.0436194, 0.999048, 0, 0.999048, -0.0436194, -1, -1.90666e-09, -4.36698e-08, 48.1404, -45.8957, -435.921)
 
@@ -428,6 +457,20 @@ shape = SubResource("BoxShape3D_50thi")
 
 [node name="Object" type="Node3D" parent="Trigger"]
 
+[node name="ZipperLockout" parent="Trigger/Object" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -97.2107, -44.0347, -330.612)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Lockout" type="Node3D" parent="Trigger/Object/ZipperLockout"]
+script = ExtResource("20_662ia")
+lockoutData = ExtResource("21_tnfaf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/ZipperLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.124, 0, -8.546)
+shape = SubResource("BoxShape3D_sa337")
+
 [node name="UTurn" parent="Trigger/Object" instance=ExtResource("11_x36jr")]
 transform = Transform3D(0.986943, 0, -0.16107, 0, 1, 0, 0.16107, 0, 0.986943, -87.5717, -39.3286, -298.784)
 endPoint = 70.0
@@ -438,7 +481,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
 script = ExtResource("12_ar5h4")
 UpdateEveryFrame = true
 settings = ExtResource("15_eo781")
-previousSettings = ExtResource("16_nyn0u")
+
+[node name="DeactivateCamera" type="Node3D" parent="Trigger/Object/UTurn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+script = ExtResource("12_ar5h4")
+transitionTime = 0.5
+transitionType = 1
+UpdateEveryFrame = true
+settings = ExtResource("16_nyn0u")
 
 [node name="ActivatePath" type="Node3D" parent="Trigger/Object/UTurn" node_paths=PackedStringArray("path")]
 script = ExtResource("12_lmyha")
@@ -525,10 +575,10 @@ loopEndPosition = 90.7
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_raoto")
 
-[connection signal="Activated" from="Visuals/CullingMap/0203L" to="Visuals/02Islands" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/0203L" to="Visuals/03Forest" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/0203L" to="Visuals/02Islands" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/0203L" to="Visuals/03Forest" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/02L" to="Visuals/02Islands" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/02L" to="Visuals/02Islands" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/03L" to="Visuals/03Forest" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03L" to="Visuals/03Forest" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/01U" to="Visuals/01Opening" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/01U" to="Visuals/01Opening" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/04L" to="Visuals/04Oasis" method="Activate"]
@@ -547,7 +597,7 @@ environment = SubResource("Environment_raoto")
 [connection signal="Deactivated" from="Visuals/CullingMap/06L" to="Visuals/06End" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/ActivatePath" method="Activate"]
-[connection signal="Deactivated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/DeactivatePath" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/DeactivateCamera" method="Activate"]
 [connection signal="DriftCompleted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/Camera" method="Deactivate"]
 [connection signal="DriftStarted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/Camera" method="Activate"]

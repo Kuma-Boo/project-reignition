@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cpp5a2r0k4fuk"]
+[gd_scene load_steps=19 format=3 uid="uid://cpp5a2r0k4fuk"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_55rea"]
 [ext_resource type="Resource" uid="uid://cqwbx4ruhjsg2" path="res://resource/level data/sand oasis/Act2Jarless.tres" id="2_l6vbo"]
@@ -18,16 +18,16 @@
 [ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="15_da3od"]
 [ext_resource type="PackedScene" uid="uid://cyabnlg7vd3v6" path="res://area/1 sand oasis/object/grindrail/Grindrail04.tscn" id="16_j2bv4"]
 
+[sub_resource type="Curve" id="Curve_l6fmj"]
+min_value = -1.5
+max_value = 1.5
+_data = [Vector2(0, 2.98023e-08), 0.0, 0.0, 0, 0, Vector2(0.2, -1.5), 0.0, 0.0, 0, 0, Vector2(0.4, 1.5), 0.0, 0.0, 0, 0, Vector2(0.6, -1.5), 0.0, 0.0, 0, 0, Vector2(0.8, 1.5), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 0.0, 0.0, 0, 0]
+point_count = 6
+
 [node name="World" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_55rea")]
 Data = ExtResource("2_l6vbo")
-
-[node name="02Islands" parent="Static/Visuals" index="2"]
-startEnabled = true
-
-[node name="03Forest" parent="Static/Visuals" index="3"]
-startEnabled = true
 
 [node name="JarlessAct" type="Node3D" parent="."]
 
@@ -36,7 +36,6 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="JarlessAct/SpawnPosition" instance=ExtResource("3_hxsjx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 193.455, 23, 304.239)
 
 [node name="Interior" type="Node3D" parent="JarlessAct"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
@@ -44,7 +43,7 @@ script = ExtResource("4_2wjwd")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
-[node name="Rings" type="Node3D" parent="JarlessAct/Interior"]
+[node name="Rings1" type="Node3D" parent="JarlessAct/Interior"]
 transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 0, 0.699997, 14.7)
 script = ExtResource("5_j0en8")
 Generate = false
@@ -56,21 +55,21 @@ Spacing = 3.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+[node name="Child01" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_ydamc")]
 
-[node name="Child02" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+[node name="Child02" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_ydamc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
-[node name="Child03" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+[node name="Child03" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_ydamc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Child04" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+[node name="Child04" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_ydamc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
-[node name="Child05" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+[node name="Child05" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_ydamc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
-[node name="Child06" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+[node name="Child06" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_ydamc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 
 [node name="JarL" parent="JarlessAct/Interior" instance=ExtResource("7_2yk7n")]
@@ -82,10 +81,214 @@ transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 25.0001,
 [node name="FlameShooter1" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 5, 12.1999)
 
-[node name="FlameShooter2" parent="JarlessAct/Interior" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("8_s432p")]
+[node name="FlameShooter2" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 4, 12.1999)
+
+[node name="FlameShooter3" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(3.09086e-08, 0.707107, -0.707107, 1, 4.37114e-08, 8.74228e-08, 9.27259e-08, -0.707107, -0.707107, 41.7781, 1, 21.3922)
+"State Lengths/inactive" = 4.0
+"State Lengths/active" = 0.8
+stateLengths = [4.0, 0.8]
+
+[node name="FlameShooter4" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(3.09086e-08, 0.707107, -0.707107, 1, 4.37114e-08, 8.74228e-08, 9.27259e-08, -0.707107, -0.707107, 41.7781, 2, 21.3922)
+"State Lengths/inactive" = 4.0
+"State Lengths/active" = 0.8
+stateLengths = [4.0, 0.8]
+
+[node name="Rings2" type="Node3D" parent="JarlessAct/Interior"]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 44.5804, 0.700203, 20.5695)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("6_ydamc")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_l6fmj")
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, 0)
+
+[node name="Child02" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.388889, 0, -2.5)
+
+[node name="Child03" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11111, 0, -5)
+
+[node name="Child04" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -7.5)
+
+[node name="Child05" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03125, 0, -10)
+
+[node name="Child06" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03125, 0, -15)
+
+[node name="Child08" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -17.5)
+
+[node name="Child09" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11111, 0, -20)
+
+[node name="Child10" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.388889, 0, -22.5)
+
+[node name="Child11" parent="JarlessAct/Interior/Rings2" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, -25)
+
+[node name="FlameShooter5" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 49.2733, 0.000205994, 25.7761)
+
+[node name="FlameShooter6" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 48.5663, 0.000152588, 26.4832)
+
+[node name="FlameShooter7" parent="JarlessAct/Interior" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("8_s432p")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 57.9, 0.000205994, 31.8571)
 animator = NodePath("../FlameShooter1/AnimationPlayer")
 timer = NodePath("../FlameShooter1/Timer")
+
+[node name="FlameShooter8" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 57.193, 0.000152588, 32.5643)
+
+[node name="PearlRing" type="Node3D" parent="JarlessAct/Interior"]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 71.0499, 2.50015, 46.9917)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("13_o6ubr")
+Amount = 10
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0.587785, 0)
+
+[node name="Child03" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
+
+[node name="Child04" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0.951057, 0)
+
+[node name="Child05" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
+
+[node name="Child06" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
+
+[node name="Child07" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
+
+[node name="Child08" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, -0.951057, 0)
+
+[node name="Child09" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
+
+[node name="Child10" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
+
+[node name="FlameShooter9" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(8.74228e-08, -1, 5.96046e-08, -1, -1.31134e-07, -8.47033e-22, 0, -5.96046e-08, -1, 74.7707, 1.80018, 52.5888)
+"State Lengths/inactive" = 3.0
+"State Lengths/active" = 2.0
+stateLengths = [3.0, 2.0]
+
+[node name="FlameShooter10" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(8.74228e-08, -1, 5.96046e-08, -1, -1.31134e-07, -8.47033e-22, 0, -5.96046e-08, -1, 74.7709, 0.800186, 52.589)
+"State Lengths/inactive" = 3.0
+"State Lengths/active" = 2.0
+stateLengths = [3.0, 2.0]
+
+[node name="FlameShooter11" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 71.0215, -6.10352e-05, 72.7255)
+"Current State" = 1
+
+[node name="FlameShooter12" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 73.6215, -6.10352e-05, 97.4254)
+
+[node name="FlameShooter13" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 71.0215, -6.10352e-05, 124.925)
+
+[node name="Rings3" type="Node3D" parent="JarlessAct/Interior"]
+transform = Transform3D(-1, -1.03964e-07, 0, -1.03964e-07, 1, 1.96704e-08, 0, 1.96704e-08, -1, 72.282, 0.700203, 61.8816)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("6_ydamc")
+Amount = 20
+Shape = 0
+Orientation = 0
+Spacing = 5.4
+"Horizontal Offset" = SubResource("Curve_l6fmj")
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, 0)
+
+[node name="Child02" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.256962, 0, -5.4)
+
+[node name="Child03" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809156, 0, -10.8)
+
+[node name="Child04" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32855, 0, -16.2)
+
+[node name="Child05" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47594, 0, -21.6)
+
+[node name="Child06" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.791442, 0, -27)
+
+[node name="Child07" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.352311, 0, -32.4)
+
+[node name="Child08" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29924, 0, -37.8)
+
+[node name="Child09" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.40728, 0, -43.2)
+
+[node name="Child10" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.578437, 0, -48.6)
+
+[node name="Child11" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.578437, 0, -54)
+
+[node name="Child12" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40727, 0, -59.4)
+
+[node name="Child13" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29924, 0, -64.8)
+
+[node name="Child14" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.352311, 0, -70.2)
+
+[node name="Child15" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.791442, 0, -75.6)
+
+[node name="Child16" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47594, 0, -81)
+
+[node name="Child17" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32855, 0, -86.4)
+
+[node name="Child18" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809156, 0, -91.8)
+
+[node name="Child19" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.256961, 0, -97.2)
+
+[node name="Child20" parent="JarlessAct/Interior/Rings3" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, -102.6)
 
 [node name="UTurn" type="Node3D" parent="JarlessAct"]
 script = ExtResource("4_2wjwd")
@@ -488,5 +691,3 @@ saveVisibilityOnCheckpoint = true
 [connection signal="Shattered" from="JarlessAct/Islands/JarR2" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="JarlessAct/Islands/JarL2" to="Static" method="IncrementObjective"]
 [connection signal="Deactivated" from="JarlessAct/Islands/JumpPanel" to="JarlessAct/Islands/JumpPanel/Path" method="Activate"]
-
-[editable path="Static"]
