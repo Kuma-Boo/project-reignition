@@ -1,7 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cuplakh6fkalc"]
+[gd_scene load_steps=10 format=3 uid="uid://cuplakh6fkalc"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/PathTraveller.cs" id="1_712du"]
+[ext_resource type="AudioStream" path="res://sound/sfx/stage/dinosaur jungle/boat obstacle.wav" id="3_054if"]
 [ext_resource type="PackedScene" uid="uid://basm3ynnw1lsn" path="res://area/2 dino jungle/object/model/Boat.gltf" id="3_tcnkk"]
+[ext_resource type="AudioStream" path="res://sound/sfx/stage/dinosaur jungle/boat activation.wav" id="4_6u5lf"]
+
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_4arkh"]
 radius = 0.3
@@ -151,6 +154,17 @@ libraries = {
 "": SubResource("AnimationLibrary_e4dfs")
 }
 
+[node name="Damage" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_054if")
+bus = &"SFX"
+
+[node name="Activate" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_6u5lf")
+bus = &"SFX"
+
+[connection signal="Activated" from="." to="Activate" method="play"]
+[connection signal="Damaged" from="." to="Damage" method="play"]
+[connection signal="Staggered" from="." to="Damage" method="play"]
 [connection signal="body_entered" from="Boat/Trigger" to="." method="OnBodyEntered"]
 
 [editable path="Boat"]

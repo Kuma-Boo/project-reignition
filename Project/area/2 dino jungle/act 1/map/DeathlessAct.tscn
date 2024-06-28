@@ -75,17 +75,11 @@ metadata/_edit_group_ = true
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
 
-[node name="05Crossing" parent="Static/Visuals" index="7"]
+[node name="05Crossing" parent="Static/Visuals" index="8"]
 startEnabled = true
 
-[node name="06CavernEntrance" parent="Static/Visuals" index="8"]
+[node name="06CavernEntrance" parent="Static/Visuals" index="9"]
 startEnabled = true
-
-[node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-
-[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
-transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -544,13 +538,11 @@ transform = Transform3D(-1.20533, 0, 0.892844, 0, 1.5, 0, -0.892844, 0, -1.20533
 
 [node name="Spring1" parent="MainAct/FeedingTunnel" instance=ExtResource("27_jalqt")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 27.6446, 5.10001, -4.49023)
-"Secondary Settings/Enabled" = false
 finalHeight = 4.0
 voiceKey = &""
 
 [node name="Spring2" parent="MainAct/FeedingTunnel" instance=ExtResource("27_jalqt")]
 transform = Transform3D(0.991681, 0, -0.128727, 0, 1, 0, 0.128727, 0, 0.991681, 27.6848, 7.70001, 5.92664)
-"Secondary Settings/Enabled" = false
 finalHeight = 5.0
 voiceKey = &""
 
@@ -681,13 +673,11 @@ transform = Transform3D(0.0484041, 0.0774188, -0.995823, -0.00521537, 0.996997, 
 
 [node name="Spring" parent="MainAct/End" instance=ExtResource("27_jalqt")]
 transform = Transform3D(0.744929, 0, -0.667144, 0, 1, 0, 0.667144, 0, 0.744929, -18.3423, -7.70001, 17.2202)
-"Secondary Settings/Enabled" = false
 finalHeight = 5.0
 voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("35_6bbv0")]
 transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
-"Secondary Settings/Enabled" = false
 middleHeight = 2.0
 finalHeight = -12.0
 distance = 31.0
@@ -1021,6 +1011,18 @@ transform = Transform3D(0.333494, 0, -0.942752, 0, 1, 0, 0.942752, 0, 0.333494, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000244141, 0, -4.00003)
 shape = SubResource("BoxShape3D_7im1x")
 
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Deactivate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Deactivated" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoRightOneWay" method="Deactivate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/WallDinoLeftOneWay" method="Activate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoRight" method="Deactivate"]
+[connection signal="Respawned" from="Static/Trigger/Object/Apatos2/Event" to="Static/Collision/FloorDinoLeft" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/FeedingTunnel-L" to="MainAct/FeedingTunnel" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/FeedingTunnel-L" to="MainAct/FeedingTunnel" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/Cavern-U" to="MainAct/Cavern" method="Deactivate"]

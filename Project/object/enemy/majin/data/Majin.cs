@@ -220,6 +220,7 @@ public partial class Majin : Enemy
 	private float spawnIntervalDelay;
 	/// <summary> How long should spawning be delayed? </summary>
 	private float despawnIntervalDelay;
+	private bool finishedTraveling;
 	public bool SpawnTravelEnabled => !Mathf.IsZeroApprox(spawnTravelTime);
 	public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
 	private Basis calculationBasis;
@@ -319,6 +320,7 @@ public partial class Majin : Enemy
 		timer?.Stop();
 
 		isSpawning = false;
+		finishedTraveling = false;
 
 		animationPlayer.Play("RESET");
 		animationPlayer.Advance(0);
@@ -352,22 +354,20 @@ public partial class Majin : Enemy
 		}
 	}
 
-
-		public override void TakeHomingAttackDamage()
-		{
-			Stagger();
-			base.TakeHomingAttackDamage();
+	public override void TakeHomingAttackDamage()
+	{
+		Stagger();
+		base.TakeHomingAttackDamage();
 
 		if (!IsDefeated)
 			animationPlayer.Play("stagger");
 	}
 
-		public override void TakeDamage(int amount = -1)
-		{
-			Stagger();
-			base.TakeDamage(amount);
-		}
-
+	public override void TakeDamage(int amount = -1)
+	{
+		Stagger();
+		base.TakeDamage(amount);
+	}
 
 	private void Stagger()
 	{
@@ -394,7 +394,7 @@ public partial class Majin : Enemy
 
 			Vector3 launchDirection = defeatLaunchDirection;
 			if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
-				launchDirection = (Character.Animator.Back() + Character.Animator.Up() * .2f).Normalized();
+				launchDirection = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
 			else if (isDefeatLocalTransform)
 				launchDirection = GlobalTransform.Basis * launchDirection;
 
@@ -453,7 +453,7 @@ public partial class Majin : Enemy
 		if (OutsideFlameAggression || !IsInRange)
 		{
 			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
-			if (OutsideFlameAggression && FlameAggressionRadius != 0 && !isFlameActive)
+			if (OutsideFlameAggression && !isFlameActive)
 				flameTimer = flameInactiveTime;
 			return;
 		}
@@ -481,20 +481,18 @@ public partial class Majin : Enemy
 	{
 		if (!IsHitboxEnabled) return;
 
-			if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
-			{
-				Stagger();
-				Character.Lockon.StartBounce(true);
-				return;
-			}
+		if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
+		{
+			Stagger();
+			Character.Lockon.StartBounce(true);
+			return;
+		}
 
 		base.UpdateInteraction();
 	}
 
-
 	private float idleFactorVelocity;
 	private const float IDLE_FACTOR_SMOOTHING = 30.0f; // Idle movement strength smoothing
-
 
 	private bool isFidgetActive;
 	private int fidgetIndex; // Index of the current fidget animation.
@@ -581,6 +579,9 @@ public partial class Majin : Enemy
 
 	private bool IsInFlameAggressionRange()
 	{
+		if (FlameAggressionRadius == 0)
+			return true;
+
 		float distance = (GlobalPosition - Character.GlobalPosition).Flatten().LengthSquared();
 		// Because raising to the 2nd power is better than taking a square root...
 		return distance < Mathf.Pow(FlameAggressionRadius, 2);
@@ -611,7 +612,7 @@ public partial class Majin : Enemy
 
 	protected override void Spawn()
 	{
-		if (isSpawning || IsActive) return;
+		if (isSpawning || IsActive || IsDefeated) return;
 
 		isSpawning = true;
 		SetDeferred("visible", true);
@@ -621,7 +622,7 @@ public partial class Majin : Enemy
 
 		animationTree.Set(StateRequestParameter, IdleState); // Idle
 
-		if (SpawnTravelEnabled) // Travel
+		if (SpawnTravelEnabled && !finishedTraveling) // Travel
 		{
 			currentTravelRatio = 0;
 			Position = SpawnPosition;
@@ -679,7 +680,7 @@ public partial class Majin : Enemy
 	{
 		// Calculate tangent (rotation)
 		Vector3 velocity = CalculationBasis.Inverse() * CalculateTravelVelocity(currentTravelRatio).Normalized();
-		if (Mathf.Abs(velocity.Dot(Vector3.Up)) < .9f)
+		if (Mathf.Abs(velocity.Dot(Vector3.Up)) < .9f && !velocity.IsZeroApprox())
 			currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
 
 		Position = CalculateTravelPosition(currentTravelRatio);
@@ -704,6 +705,7 @@ public partial class Majin : Enemy
 	{
 		IsActive = true;
 		isSpawning = false;
+		finishedTraveling = true;
 		SetHitboxStatus(true);
 
 		if (SpawnTravelEnabled)

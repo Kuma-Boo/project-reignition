@@ -56,7 +56,7 @@ public partial class LevelDataResource : Resource
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
 
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,5,.1"));
-		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object, PropertyHint.ResourceType, "LockoutResource"));
+		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object)); //, PropertyHint.ResourceType, "LockoutResource"));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Unlock Stage", Variant.Type.Array, PropertyHint.ArrayType,
 		$"{Variant.Type.Object:D}/{PropertyHint.ResourceType:D}:LevelDataResource"));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Unlock World", Variant.Type.Int, PropertyHint.Enum,

@@ -1,8 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://bhiih5oodiq1w"]
+[gd_scene load_steps=25 format=3 uid="uid://bhiih5oodiq1w"]
 
 [ext_resource type="PackedScene" uid="uid://kf3gvnm0grys" path="res://area/2 dino jungle/object/model/dino/DinoRex.gltf" id="1_0u7i8"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoRex.cs" id="2_bhtui"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="3_hvxnl"]
+[ext_resource type="AudioStream" uid="uid://ifcpkmnv2jmk" path="res://sound/sfx/stage/dinosaur jungle/dino rex bite.wav" id="4_mo10m"]
+[ext_resource type="AudioStream" uid="uid://bckheu27h7k5i" path="res://sound/sfx/stage/dinosaur jungle/dino rex idle.wav" id="5_qlojd"]
+[ext_resource type="AudioStream" uid="uid://bw4qvlkbw3txi" path="res://sound/sfx/stage/dinosaur jungle/dino rex tail.wav" id="6_ckcwt"]
+[ext_resource type="AudioStream" uid="uid://bw1umu0vr1x0w" path="res://sound/sfx/stage/dinosaur jungle/dino rex stomp.wav" id="7_gbx4p"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6krsp"]
 radius = 2.95079
@@ -26,41 +30,75 @@ radius = 8.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_7ppqm"]
 size = Vector3(45, 25, 20)
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b1pal"]
-animation = &"RESET"
-
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_n5c84"]
 allow_transition_to_self = true
 input_0/name = "lower_bite"
 input_0/auto_advance = false
 input_0/reset = true
-input_1/name = "upper_bite"
+input_1/name = "tail_attack"
 input_1/auto_advance = false
 input_1/reset = true
+input_2/name = "upper_bite"
+input_2/auto_advance = false
+input_2/reset = true
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_m5hed"]
-fadein_time = 0.2
-fadeout_time = 0.2
+fadein_time = 0.4
+fadeout_time = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ucx3h"]
+animation = &"rex-idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qgafs"]
+animation = &"rex-step-left"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dqsj5"]
 animation = &"rex-lower-bite"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6m6q7"]
+animation = &"rex-step-right"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6rjm8"]
+input_0/name = "left"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "right"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_o5i7g"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r5k77"]
+animation = &"rex-tail-attack"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7uejp"]
 animation = &"rex-upper-bite"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k1n0y"]
-graph_offset = Vector2(-746.502, 168.062)
-nodes/RESET/node = SubResource("AnimationNodeAnimation_b1pal")
-nodes/RESET/position = Vector2(-351.073, 94.1884)
+graph_offset = Vector2(-814.232, 20.9299)
 nodes/attack_transition/node = SubResource("AnimationNodeTransition_n5c84")
-nodes/attack_transition/position = Vector2(-220, 200)
+nodes/attack_transition/position = Vector2(-200, 360)
 nodes/attack_trigger/node = SubResource("AnimationNodeOneShot_m5hed")
 nodes/attack_trigger/position = Vector2(100, 100)
+nodes/idle_anim/node = SubResource("AnimationNodeAnimation_ucx3h")
+nodes/idle_anim/position = Vector2(-700, 0)
+nodes/left_anim/node = SubResource("AnimationNodeAnimation_qgafs")
+nodes/left_anim/position = Vector2(-900, 160)
 nodes/lower_bite_anim/node = SubResource("AnimationNodeAnimation_dqsj5")
-nodes/lower_bite_anim/position = Vector2(-440, 220)
+nodes/lower_bite_anim/position = Vector2(-420, 320)
+nodes/right_anim/node = SubResource("AnimationNodeAnimation_6m6q7")
+nodes/right_anim/position = Vector2(-900, 280)
+nodes/step_transition/node = SubResource("AnimationNodeTransition_6rjm8")
+nodes/step_transition/position = Vector2(-660, 220)
+nodes/step_trigger/node = SubResource("AnimationNodeOneShot_o5i7g")
+nodes/step_trigger/position = Vector2(-440, 60)
+nodes/tail_anim/node = SubResource("AnimationNodeAnimation_r5k77")
+nodes/tail_anim/position = Vector2(-420, 440)
 nodes/upper_bite_anim/node = SubResource("AnimationNodeAnimation_7uejp")
-nodes/upper_bite_anim/position = Vector2(-440, 340)
-node_connections = [&"attack_transition", 0, &"lower_bite_anim", &"attack_transition", 1, &"upper_bite_anim", &"attack_trigger", 0, &"RESET", &"attack_trigger", 1, &"attack_transition", &"output", 0, &"attack_trigger"]
+nodes/upper_bite_anim/position = Vector2(-420, 560)
+node_connections = [&"attack_transition", 0, &"lower_bite_anim", &"attack_transition", 1, &"tail_anim", &"attack_transition", 2, &"upper_bite_anim", &"attack_trigger", 0, &"step_trigger", &"attack_trigger", 1, &"attack_transition", &"output", 0, &"attack_trigger", &"step_transition", 0, &"left_anim", &"step_transition", 1, &"right_anim", &"step_trigger", 0, &"idle_anim", &"step_trigger", 1, &"step_transition"]
 
 [node name="DinoRex" type="Node3D" node_paths=PackedStringArray("root", "animationTree")]
 script = ExtResource("2_bhtui")
@@ -70,22 +108,38 @@ animationTree = NodePath("AnimationTree")
 [node name="DinoRex" parent="." instance=ExtResource("1_0u7i8")]
 
 [node name="Skeleton3D" parent="DinoRex/DinoRexRoot" index="0"]
+bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
 bones/1/rotation = Quaternion(-0.136616, 1.78713e-16, -2.12389e-08, 0.990624)
+bones/1/scale = Vector3(1, 1, 1)
 bones/2/rotation = Quaternion(0.136618, 9.62658e-08, -6.76797e-07, 0.990624)
+bones/2/scale = Vector3(1, 1, 1)
 bones/6/rotation = Quaternion(0.994978, 1.8094e-07, -1.15734e-06, -0.100095)
+bones/6/scale = Vector3(1, 1, 0.999998)
 bones/8/rotation = Quaternion(0.444314, 5.77426e-07, 1.25657e-07, 0.895871)
 bones/10/rotation = Quaternion(0.534226, -0.0328457, -0.00120932, 0.844703)
 bones/11/rotation = Quaternion(0.534248, 0.032794, 0.00120617, 0.844691)
 bones/12/rotation = Quaternion(-0.712323, 0.000613061, 0.000188463, 0.701851)
+bones/12/scale = Vector3(1, 1, 1)
 bones/13/rotation = Quaternion(0.377214, 0.000599359, -0.000688351, 0.926126)
+bones/13/scale = Vector3(1, 1, 1)
+bones/14/scale = Vector3(1, 1, 1)
 bones/15/rotation = Quaternion(0.377222, -0.000604594, 0.000788858, 0.926122)
+bones/15/scale = Vector3(1, 1, 1)
+bones/17/rotation = Quaternion(0.948352, -0.000166611, -0.00239517, -0.317212)
+bones/17/scale = Vector3(1, 1, 1)
 bones/18/rotation = Quaternion(2.58474e-05, -2.31289e-17, 0.000426274, 1)
+bones/19/rotation = Quaternion(0.94832, -0.000237522, 0.00174116, -0.317311)
+bones/20/rotation = Quaternion(0.707107, -0.000452151, -0.000452151, 0.707107)
+bones/20/scale = Vector3(1, 1, 1)
+bones/21/rotation = Quaternion(0.707107, 0.000452151, 0.000452151, 0.707107)
+bones/21/scale = Vector3(1, 1, 1)
 
 [node name="Hitboxes" type="Node3D" parent="."]
+visible = false
 script = ExtResource("3_hvxnl")
 
 [node name="Head" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.25778e-07, 9.08176e-07, 9.08163e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98224e-07, 20.1698, 15.4159)
+transform = Transform3D(1, 1.25778e-07, 9.08175e-07, 9.08164e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98225e-07, 20.1698, 15.4159)
 bone_name = "head"
 bone_idx = 8
 use_external_skeleton = true
@@ -100,7 +154,7 @@ transform = Transform3D(1, 2.77112e-13, 6.14619e-13, -2.84217e-14, 0.983593, -0.
 shape = SubResource("CapsuleShape3D_6krsp")
 
 [node name="Tail2" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.53779e-06, -2.13399e-12, -2.11332e-12, 2.71463e-06, 1, 1.5378e-06, -1, 2.77423e-06, 1.63317e-05, 16, -15.8623)
+transform = Transform3D(1, 1.53779e-06, -2.1331e-12, -2.14941e-12, 2.77423e-06, 1, 1.53779e-06, -1, 2.77423e-06, 1.63317e-05, 16, -15.8623)
 bone_name = "tail2"
 bone_idx = 3
 use_external_skeleton = true
@@ -116,7 +170,7 @@ transform = Transform3D(1, 4.65661e-10, 4.22006e-09, 4.65661e-10, 1, 0, -2.67755
 shape = SubResource("CylinderShape3D_pbbs6")
 
 [node name="Tail3" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.62621e-06, -2.55351e-12, -2.52757e-12, 3.07975e-06, 1, 1.62621e-06, -1, 3.13936e-06, 2.92975e-05, 16.0001, -24.2937)
+transform = Transform3D(1, 1.62621e-06, -2.55262e-12, -2.56892e-12, 3.13936e-06, 1, 1.62621e-06, -1, 3.13936e-06, 2.92975e-05, 16.0001, -24.2937)
 bone_name = "tail3"
 bone_idx = 4
 use_external_skeleton = true
@@ -131,7 +185,7 @@ transform = Transform3D(1, 1.86265e-09, 3.72529e-09, -7.45058e-09, 1, -2.98023e-
 shape = SubResource("CylinderShape3D_yxbpx")
 
 [node name="Tail4" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.65701e-06, -2.85701e-12, -2.82924e-12, 3.38773e-06, 1, 1.65701e-06, -1, 3.44733e-06, 3.93689e-05, 16.0001, -30.4869)
+transform = Transform3D(1, 1.65701e-06, -2.85612e-12, -2.87243e-12, 3.44733e-06, 1, 1.65701e-06, -1, 3.44733e-06, 3.93689e-05, 16.0001, -30.4869)
 bone_name = "tail4"
 bone_idx = 5
 use_external_skeleton = true
@@ -187,6 +241,10 @@ monitorable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 3.5)
 shape = SubResource("BoxShape3D_7ppqm")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="AttackTrigger/TailAttack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 10, 13.5)
+shape = SubResource("BoxShape3D_7ppqm")
+
 [node name="Upper" type="Area3D" parent="AttackTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.23987, 11.5, 30.8579)
 collision_layer = 0
@@ -206,12 +264,87 @@ active = false
 root_node = NodePath("../DinoRex")
 tree_root = SubResource("AnimationNodeBlendTree_k1n0y")
 anim_player = NodePath("../DinoRex/AnimationPlayer")
-parameters/attack_transition/current_state = "bite"
+parameters/attack_transition/current_state = "upper_bite"
 parameters/attack_transition/transition_request = ""
-parameters/attack_transition/current_index = 0
+parameters/attack_transition/current_index = 2
 parameters/attack_trigger/active = false
 parameters/attack_trigger/internal_active = false
 parameters/attack_trigger/request = 0
+parameters/step_transition/current_state = "left"
+parameters/step_transition/transition_request = ""
+parameters/step_transition/current_index = 0
+parameters/step_trigger/active = false
+parameters/step_trigger/internal_active = false
+parameters/step_trigger/request = 0
+
+[node name="Head" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 1.25778e-07, 9.08175e-07, 9.08164e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98225e-07, 20.1698, 15.4159)
+bone_name = "head"
+bone_idx = 8
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Bite" type="AudioStreamPlayer3D" parent="Head"]
+transform = Transform3D(1, -5.44276e-12, -1.15747e-11, 4.26326e-14, 0.996195, -0.0871543, -3.55271e-15, 0.0871557, 0.996196, -1.81899e-11, 3, 1.4)
+stream = ExtResource("4_mo10m")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+max_polyphony = 2
+bus = &"SFX"
+
+[node name="Idle" type="AudioStreamPlayer3D" parent="Head"]
+transform = Transform3D(1, -5.44276e-12, -1.15747e-11, 4.26326e-14, 0.996195, -0.0871543, -3.55271e-15, 0.0871557, 0.996196, -1.81899e-11, 3, 1.4)
+stream = ExtResource("5_qlojd")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+max_polyphony = 2
+bus = &"SFX"
+
+[node name="Tail" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 1.65701e-06, -2.85612e-12, -2.87243e-12, 3.44733e-06, 1, 1.65701e-06, -1, 3.44733e-06, 3.93689e-05, 16.0001, -30.4869)
+bone_name = "tail4"
+bone_idx = 5
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Tail" type="AudioStreamPlayer3D" parent="Tail"]
+stream = ExtResource("6_ckcwt")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"SFX"
+
+[node name="LFoot" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.999995, 0.00133534, 0.00293999, 0.00315156, -0.601867, -0.79859, 0.000703092, 0.798595, -0.601868, 3.41146, 4.11659, -1.85302)
+bone_name = "l_foot"
+bone_idx = 19
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Step" type="AudioStreamPlayer3D" parent="LFoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 1)
+stream = ExtResource("7_gbx4p")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"SFX"
+
+[node name="RFoot" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.999988, -0.00183556, -0.00443722, -0.00464863, -0.601656, -0.798742, -0.00120354, 0.798753, -0.601658, -3.40805, 4.11679, -1.85627)
+bone_name = "r_foot"
+bone_idx = 17
+use_external_skeleton = true
+external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
+
+[node name="Step" type="AudioStreamPlayer3D" parent="RFoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 1)
+stream = ExtResource("7_gbx4p")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"SFX"
 
 [connection signal="area_entered" from="Hitboxes/Head/Hitbox" to="Hitboxes" method="OnEntered"]
 [connection signal="area_exited" from="Hitboxes/Head/Hitbox" to="Hitboxes" method="OnExited"]
@@ -224,6 +357,7 @@ parameters/attack_trigger/request = 0
 [connection signal="area_entered" from="AttackTrigger/Rock1" to="." method="OnLowerBiteEnter" binds= [29.0]]
 [connection signal="area_entered" from="AttackTrigger/Rock2" to="." method="OnLowerBiteEnter" binds= [-14.0]]
 [connection signal="area_entered" from="AttackTrigger/Rock3" to="." method="OnLowerBiteEnter" binds= [-58.0]]
+[connection signal="area_entered" from="AttackTrigger/TailAttack" to="." method="OnTailAttackEnter"]
 [connection signal="area_exited" from="AttackTrigger/TailAttack" to="." method="OnReturnToIdle"]
 [connection signal="area_entered" from="AttackTrigger/Upper" to="." method="OnUpperBiteEnter"]
 [connection signal="area_exited" from="AttackTrigger/Upper" to="." method="OnReturnToIdle"]

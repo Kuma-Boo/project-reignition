@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cfnw72eh8em4c"]
+[gd_scene load_steps=9 format=3 uid="uid://cfnw72eh8em4c"]
 
 [ext_resource type="PackedScene" uid="uid://c74h3ip5ctgjr" path="res://area/2 dino jungle/object/model/rock/GrayRock.gltf" id="1_jc5qu"]
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_qtdad"]
 [ext_resource type="PackedScene" uid="uid://unu76q6wih5k" path="res://area/2 dino jungle/object/model/rock/GrayRockPieces.gltf" id="3_e7jtb"]
+[ext_resource type="AudioStream" path="res://sound/sfx/stage/dinosaur jungle/shatter rock gray.wav" id="4_dotnm"]
+
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_uji0q"]
 points = PackedVector3Array(-3.11689, -0.36696, 0.624132, -2.58668, -0.36696, -2.42384, -2.44151, -0.36696, 2.30843, -2.90381, 2.87749, 0.694728, -1.3736, -0.36696, -2.93272, -2.13933, 3.95318, -1.85319, -1.00039, -0.36696, 3.07734, -0.982326, 1.71386, 3.05263, -1.62718, 4.16097, 2.28431, -2.05335, 4.92255, 1.84132, -2.1711, 4.96218, 1.07006, -1.01722, 7.3629, -1.49139, 1.64632, -0.36696, -1.9838, 0.589003, 6.20023, -1.40785, 2.79958, -0.36696, 2.34255, 1.26875, 2.26668, 2.74201, 1.44196, 4.76308, 2.37903, 0.646323, 6.82167, 1.86309, -0.991049, 5.93348, 1.95428, -1.40288, 5.85906, 1.80014, -1.69073, 5.88226, 1.40127, -0.236537, 9.1615, 0.134667, -0.0577216, 9.20983, -0.0482936, 0.642585, 9.50653, 0.067013, 2.34787, 2.12364, -0.881325, 2.60394, -0.36696, -1.10958, 1.40956, 2.45804, -1.6167, 1.86189, 6.47857, -0.439512, 1.08806, 6.03399, -1.14547, 3.24755, -0.36696, 1.52952, 2.56656, 5.06655, 1.74543, 2.39896, 4.76791, 1.9478, 1.78401, 8.35643, 1.50599, 0.567196, 9.10738, 0.980641, 0.373428, 9.43115, 0.499413, 0.873736, 9.36543, 0.80474, 2.08868, 8.1844, 0.8771, 2.64444, 3.81884, -0.0253499, 2.91796, -0.36696, -0.460691, 2.51111, 5.63774, 0.656488)
@@ -48,6 +50,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_r7x6a"]
 resource_name = "shatter"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -84,6 +87,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Shatter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j0yat"]
 _data = {
@@ -93,7 +110,7 @@ _data = {
 
 [node name="GrayRock" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("1_qtdad")
-pieceMass = 0.5
+pieceMass = 0.2
 root = NodePath("Root")
 pieceRoot = NodePath("GrayRockPieces")
 animator = NodePath("AnimationPlayer")
@@ -106,7 +123,6 @@ collision_layer = 8
 collision_mask = 0
 
 [node name="GrayRockPieces" parent="." instance=ExtResource("3_e7jtb")]
-visible = false
 
 [node name="Trigger" type="Area3D" parent="."]
 collision_layer = 0
@@ -120,6 +136,13 @@ shape = SubResource("ConvexPolygonShape3D_uji0q")
 libraries = {
 "": SubResource("AnimationLibrary_j0yat")
 }
+
+[node name="Shatter" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_dotnm")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"SFX"
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Trigger" to="." method="OnExited"]

@@ -558,21 +558,28 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Backflip ||
 				ActionState == ActionStates.Stomping ||
-				ActionState == ActionStates.Crouching)
+				ActionState == ActionStates.Crouching ||
+				ActionState == ActionStates.Sliding)
 			{
-				return;
+				return; // Exit early during certain actions
 			}
 
-			float targetMovementAngle = GetTargetMovementAngle();
 			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+			if (IsLockoutActive &&
+				(ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Global ||
+				ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Local))
+			{
+				pathControlAmount = 0; // Don't use path influence if space mode is supposed to be relative to the player
+			}
 
-			bool overrideFacingDirection = IsLockoutActive &&
-			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace;
-			if (overrideFacingDirection) // Direction is being overridden
-				MovementAngle = targetMovementAngle + pathControlAmount;
+			float targetMovementAngle = GetTargetMovementAngle() + pathControlAmount;
+			if (IsLockoutActive &&
+				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+			{
+				MovementAngle = targetMovementAngle;
+			}
 
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
-			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Sliding) return;
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) // Check for turning around
 			{
 				if (!IsLockoutActive || ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
@@ -582,7 +589,7 @@ namespace Project.Gameplay
 			if (turnInstantly) // Instantly set movement angle to target movement angle
 			{
 				turningVelocity = 0;
-				MovementAngle = targetMovementAngle + pathControlAmount;
+				MovementAngle = targetMovementAngle;
 				return;
 			}
 
@@ -594,7 +601,7 @@ namespace Project.Gameplay
 				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount)) // Remap controls to provide more analog detail
 					targetMovementAngle -= inputDeltaAngle * .5f;
 
-				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle + pathControlAmount, Mathf.Pi * .25f);
+				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
 			}
 
 			float maxTurnAmount = MAX_TURN_AMOUNT;
@@ -825,11 +832,15 @@ namespace Project.Gameplay
 		private void UpdateJump()
 		{
 			if (isAccelerationJumpQueued &&
-				currentJumpTime >= ACCELERATION_JUMP_LENGTH &&
-				IsHoldingDirection(PathFollower.ForwardAngle, true) &&
-				InputVector.Length() > .5f) // Acceleration jump?
+				currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
 			{
-				StartAccelJump();
+				if (IsHoldingDirection(PathFollower.ForwardAngle, true) &&
+				InputVector.Length() > .5f)
+				{
+					StartAccelJump();
+				}
+
+				isAccelerationJumpQueued = false;
 			}
 
 			if (!IsJumpClamped)
@@ -942,7 +953,7 @@ namespace Project.Gameplay
 				Velocity = Lockon.HomingAttackDirection.Normalized() * MoveSpeed;
 				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
-
+				UpdateUpDirection();
 				PathFollower.Resync();
 			}
 			else // Normal Jump dash; Apply gravity
@@ -1454,7 +1465,7 @@ namespace Project.Gameplay
 
 			CanJumpDash = data.AllowJumpDash;
 			Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
-			Lockon.ResetLockonTarget();
+			Lockon.StopHomingAttack();
 
 			if (data.UseAutoAlign)
 			{
@@ -1477,8 +1488,10 @@ namespace Project.Gameplay
 		private void UpdateLauncher()
 		{
 			isCustomPhysicsEnabled = true;
-			if (activeLauncher != null && !activeLauncher.IsCharacterCentered)
+			if (activeLauncher?.IsCharacterCentered == false)
+			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
+			}
 			else
 			{
 				Vector3 targetPosition = LaunchSettings.InterpolatePositionTime(launcherTime);
@@ -1671,32 +1684,37 @@ namespace Project.Gameplay
 					Animator.IsFallTransitionEnabled = true;
 				}
 
-				// Calculate target up direction
-				Vector3 targetUpDirection = Vector3.Up;
-				if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
-					targetUpDirection = PathFollower.Up();
-				else if (ActionState == ActionStates.Backflip)
-					targetUpDirection = PathFollower.HeightAxis;
-
-				// Calculate reset factor
-				float orientationResetFactor;
-				if (ActionState == ActionStates.Stomping ||
-					ActionState == ActionStates.JumpDash ||
-					ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
-				{
-					orientationResetFactor = .2f;
-				}
-				else if (VerticalSpeed > 0)
-				{
-					orientationResetFactor = .01f;
-				}
-				else
-				{
-					orientationResetFactor = VerticalSpeed * .2f / Runtime.MAX_GRAVITY;
-				}
-
-				UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
+				UpdateUpDirection();
 			}
+		}
+
+		private void UpdateUpDirection()
+		{
+			// Calculate target up direction
+			Vector3 targetUpDirection = Vector3.Up;
+			if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
+				targetUpDirection = PathFollower.Up();
+			else if (ActionState == ActionStates.Backflip)
+				targetUpDirection = PathFollower.HeightAxis;
+
+			// Calculate reset factor
+			float orientationResetFactor;
+			if (ActionState == ActionStates.Stomping ||
+				ActionState == ActionStates.JumpDash ||
+				ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
+			{
+				orientationResetFactor = .2f;
+			}
+			else if (VerticalSpeed > 0)
+			{
+				orientationResetFactor = .01f;
+			}
+			else
+			{
+				orientationResetFactor = VerticalSpeed * .2f / Runtime.MAX_GRAVITY;
+			}
+
+			UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
 		}
 
 		public void LandOnGround()
@@ -1846,8 +1864,8 @@ namespace Project.Gameplay
 					return;
 				}
 
-				// Cancel speed break
-				if (Skills.IsSpeedBreakActive)
+				// Cancel speed break (only when recenter lockout ISN'T active)
+				if (Skills.IsSpeedBreakActive && !(IsLockoutActive && ActiveLockoutData.recenterPlayer))
 				{
 					float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
 					if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction

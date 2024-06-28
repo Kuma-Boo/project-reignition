@@ -141,15 +141,12 @@ public partial class Enemy : Node3D
 		if (Character.Lockon.IsPerfectHomingAttack)
 			currentHealth--; // Take an extra point of damage
 
-		Character.Lockon.StopHomingAttack();
 		TakeDamage(1);
+		Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
-		if (IsDefeated)
-			Defeat();
-		else
+		if (!IsDefeated)
 			Character.Camera.SetDeferred("LockonTarget", hurtbox);
 	}
-
 
 	public virtual void TakeDamage(int amount = -1)
 	{
@@ -161,9 +158,7 @@ public partial class Enemy : Node3D
 		if (!IsDefeated) return;
 
 		Defeat();
-		Character.Lockon.ResetLockonTarget();
 	}
-
 
 	/// <summary>
 	/// Called when the enemy is defeated.
@@ -172,7 +167,13 @@ public partial class Enemy : Node3D
 	{
 		SetHitboxStatus(false);
 		Character.Camera.LockonTarget = null;
+		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
+
+		// Automatically increment objective count
+		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+			StageSettings.instance.IncrementObjective();
+
 		EmitSignal(SignalName.Defeated);
 	}
 
@@ -219,18 +220,26 @@ public partial class Enemy : Node3D
 		}
 
 		if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
+		{
 			Defeat();
+		}
 		else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
+		{
 			Defeat();
+		}
 		else if (Character.Skills.IsAttacking)
+		{
 			TakeDamage(1);
+		}
 		else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 		{
 			TakeHomingAttackDamage();
 			Character.Lockon.StartBounce(IsDefeated);
 		}
 		else if (damagePlayer)
+		{
 			Character.StartKnockback();
+		}
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>

@@ -139,6 +139,7 @@ public partial class DestructableObject : Node3D
 		{
 			RigidBody3D rb = root as RigidBody3D;
 			rb.LinearVelocity = rb.AngularVelocity = Vector3.Zero;
+			rb.GravityScale = gravityScale;
 		}
 
 		// Wait an extra physics frame for rigidbody to freeze to allow updating transforms

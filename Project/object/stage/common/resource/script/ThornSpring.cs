@@ -69,7 +69,6 @@ public partial class ThornSpring : Launcher
 		}
 	}
 
-	public override Vector3 GetLaunchDirection() => Vector3.Up;
 	public override void Activate(Area3D a)
 	{
 		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this) // Pause time break rotation temporarily

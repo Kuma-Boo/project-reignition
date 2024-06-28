@@ -120,7 +120,6 @@ public partial class ControlOption : Control
 		Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId);
 		InputEvent swapEvent = null;
 
-		GD.Print(e);
 		for (int i = 0; i < eventList.Count; i++)
 		{
 			if (e.GetType() != eventList[i].GetType())

@@ -7,18 +7,21 @@
 [sub_resource type="SphereShape3D" id="3"]
 radius = 0.65
 
-[node name="Spring" type="Area3D" node_paths=PackedStringArray("sfxPlayer")]
-collision_layer = 4
-collision_mask = 2
+[node name="Spring" type="Node3D" node_paths=PackedStringArray("sfxPlayer")]
 script = ExtResource("1")
+"Secondary Settings/Enabled" = false
 allowJumpDashing = true
 launchDirection = 2
 sfxPlayer = NodePath("SFX")
 
-[node name="Spring" parent="." instance=ExtResource("2")]
+[node name="ActivationTrigger" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationTrigger"]
 shape = SubResource("3")
+
+[node name="Spring" parent="." instance=ExtResource("2")]
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_pvl70")
@@ -27,4 +30,4 @@ max_distance = 100.0
 bus = &"SFX"
 attenuation_filter_cutoff_hz = 10000.0
 
-[connection signal="area_entered" from="." to="." method="Activate"]
+[connection signal="area_entered" from="ActivationTrigger" to="." method="Activate"]
