@@ -194,7 +194,8 @@ public partial class EventTrigger : StageTriggerModule
 		}
 
 		animator.Advance(respawnToEnd ? animator.CurrentAnimationLength : 0);
-		animator.Stop(true);
+		if (!respawnToEnd)
+			animator.Stop(true);
 	}
 
 	public override void Activate()

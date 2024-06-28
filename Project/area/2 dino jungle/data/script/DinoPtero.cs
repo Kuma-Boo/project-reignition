@@ -22,7 +22,6 @@ public partial class DinoPtero : Node3D
 	private void UpdateAnimation()
 	{
 		float nextAnimation = Runtime.randomNumberGenerator.Randf();
-		GD.Print(nextAnimation);
 
 		if (nextAnimation < .5f)
 			return;
