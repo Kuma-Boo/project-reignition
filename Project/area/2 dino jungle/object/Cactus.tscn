@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dhb5ti1oiktuk"]
+[gd_scene load_steps=9 format=3 uid="uid://dhb5ti1oiktuk"]
 
 [ext_resource type="PackedScene" uid="uid://c0lo56q5efgix" path="res://area/2 dino jungle/object/model/Cactus.gltf" id="1_ak5kj"]
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_jgpvl"]
+[ext_resource type="AudioStream" path="res://sound/sfx/stage/dinosaur jungle/shatter cactus.wav" id="3_4bbtf"]
+[ext_resource type="PackedScene" uid="uid://dedeevpox2rih" path="res://area/2 dino jungle/object/model/CactusPieces.gltf" id="3_865ei"]
+
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_717xn"]
 radius = 1.0
@@ -47,6 +50,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_r5e3u"]
 resource_name = "shatter"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -83,6 +87,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Shatter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xs2lq"]
 _data = {
@@ -109,7 +127,7 @@ collision_mask = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("SphereShape3D_717xn")
 
-[node name="CactusPieces" type="Node3D" parent="."]
+[node name="CactusPieces" parent="." instance=ExtResource("3_865ei")]
 visible = false
 
 [node name="Trigger" type="Area3D" parent="."]
@@ -125,6 +143,12 @@ shape = SubResource("SphereShape3D_717xn")
 libraries = {
 "": SubResource("AnimationLibrary_xs2lq")
 }
+
+[node name="Shatter" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_4bbtf")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Trigger" to="." method="OnExited"]

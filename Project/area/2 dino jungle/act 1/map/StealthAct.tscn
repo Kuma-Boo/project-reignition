@@ -128,6 +128,9 @@ startEnabled = true
 [node name="FloorDinoLeft" parent="Static/Collision" index="8"]
 startEnabled = false
 
+[node name="CollisionShape3D" parent="Static/Visuals/CullingMap/02-L" index="0"]
+visible = false
+
 [node name="01Chase" parent="Static/Visuals" index="1"]
 visible = false
 startEnabled = false
@@ -162,10 +165,16 @@ startEnabled = true
 [node name="08FeedingTunnel" parent="Static/Visuals" index="11"]
 startEnabled = true
 
+[node name="Head" parent="Static/Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" index="1"]
+transform = Transform3D(-0.984788, -0.173647, -0.0063563, 0.00640272, 0.000292879, -0.999979, 0.173645, -0.984808, 0.000823389, -4.24603, -18.4884, 3.43817)
+
 [node name="Event" parent="Static/Trigger/Object/Apatos2" index="3"]
 respawnAnimation = 1
 
-[node name="PathSelectionEvent" parent="Static/Trigger/Object/Apatos2/Event" index="1"]
+[node name="Head" parent="Static/Trigger/Object/Apatos2/Event" index="1"]
+transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 19.7418, 38.5259)
+
+[node name="PathSelectionEvent" parent="Static/Trigger/Object/Apatos2/Event" index="2"]
 respawnAnimation = 1
 
 [node name="RiverBoatPathFollower" parent="Static/Path/RiverPath" index="0"]
@@ -943,7 +952,7 @@ spawnMode = 1
 [node name="GreenMajin3" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
 transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -132.275, 12.6663, 19.8422)
 "Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 1.0
+"Spawn Settings/Spawn Delay" = 2.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
@@ -955,7 +964,7 @@ spawnMode = 1
 [node name="GreenMajin4" parent="StealthAct/Cavern" instance=ExtResource("35_rkupp")]
 transform = Transform3D(-0.576033, 0, 0.817427, 0, 1, 0, -0.817427, 0, -0.576033, -131.132, 10.9605, 21.4651)
 "Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 1.0
+"Spawn Settings/Spawn Delay" = 2.0
 "Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
@@ -1285,6 +1294,8 @@ shape = SubResource("BoxShape3D_3wcby")
 [connection signal="Activated" from="StealthAct/Cavern/Spring1" to="StealthAct/Cavern/Spring1/Camera" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/Cavern/Spring1" to="StealthAct/Cavern/Spring1/Path" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/Cavern/Spring1" to="StealthAct/Cavern/Spring1/Camera" method="Deactivate"]
+[connection signal="Activated" from="StealthAct/Cavern/JumpTrigger1" to="Static/Collision/CaveTopOneWay" method="Deactivate"]
+[connection signal="Deactivated" from="StealthAct/Cavern/JumpTrigger1" to="Static/Collision/CaveTopOneWay" method="Activate"]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump" to="StealthAct/Cavern/JumpTrigger2/LandJump" method="Activate" flags=3]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump" to="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2" method="Activate" flags=3]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump" to="StealthAct/Cavern/Crate1Event" method="Activate"]
