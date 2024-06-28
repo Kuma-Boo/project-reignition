@@ -7,10 +7,12 @@ namespace Project.Gameplay.Triggers;
 /// </summary>
 public partial class CameraTrigger : StageTriggerModule
 {
+	/// <summary> How long the transition is (in seconds). Use a transition time of 0 to perform an instant cut. </summary>
 	[Export(PropertyHint.Range, "0,2,0.1")]
-	public float transitionTime; // How long the transition is (in seconds). Use a transition time of 0 to perform an instant cut.
+	public float transitionTime;
+	/// <summary> Override to have a different blend time during deactivation. </summary>
 	[Export(PropertyHint.Range, "-1,2,0.1")]
-	public float deactivationTransitionTime = -1; // Override for deactivation
+	public float deactivationTransitionTime = -1;
 	[Export]
 	public TransitionType transitionType;
 	public enum TransitionType
@@ -19,15 +21,18 @@ public partial class CameraTrigger : StageTriggerModule
 		Crossfade, // Crossfade states
 	}
 
-	[Export]
 	/// <summary> Update static position/rotations every frame? </summary>
+	[Export]
 	public bool UpdateEveryFrame { get; private set; }
 
 	[Export]
+	public bool enableInputBlending;
+
 	/// <summary> Must be assigned to something. </summary>
-	public CameraSettingsResource settings;
 	[Export]
+	public CameraSettingsResource settings;
 	/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
+	[Export]
 	private CameraSettingsResource previousSettings;
 	[Export]
 	private Camera3D referenceCamera;
@@ -55,7 +60,6 @@ public partial class CameraTrigger : StageTriggerModule
 			data.Fov = referenceCamera.Fov;
 	}
 
-
 	public override void Activate()
 	{
 		if (settings == null)
@@ -72,7 +76,10 @@ public partial class CameraTrigger : StageTriggerModule
 		}
 
 		if (Camera.ActiveSettings == settings &&
-			!(settings.copyPosition || settings.copyRotation)) return;
+			!(settings.copyPosition || settings.copyRotation))
+		{
+			return;
+		}
 
 		Camera.UpdateCameraSettings(new()
 		{
@@ -80,11 +87,10 @@ public partial class CameraTrigger : StageTriggerModule
 			SettingsResource = settings,
 			IsCrossfadeEnabled = transitionType == TransitionType.Crossfade,
 			Trigger = this
-		});
+		}, enableInputBlending);
 
 		UpdateStaticData(Camera.ActiveBlendData);
 	}
-
 
 	public override void Deactivate()
 	{
@@ -98,6 +104,6 @@ public partial class CameraTrigger : StageTriggerModule
 			SettingsResource = previousSettings,
 			StaticPosition = previousStaticPosition, // Restore cached static position
 			RotationBasis = previousStaticRotation // Restore cached static rotation
-		});
+		}, enableInputBlending);
 	}
 }

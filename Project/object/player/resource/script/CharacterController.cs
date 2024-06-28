@@ -558,21 +558,28 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Backflip ||
 				ActionState == ActionStates.Stomping ||
-				ActionState == ActionStates.Crouching)
+				ActionState == ActionStates.Crouching ||
+				ActionState == ActionStates.Sliding)
 			{
-				return;
+				return; // Exit early during certain actions
 			}
 
-			float targetMovementAngle = GetTargetMovementAngle();
 			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+			if (IsLockoutActive &&
+				(ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Global ||
+				ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Local))
+			{
+				pathControlAmount = 0; // Don't use path influence if space mode is supposed to be relative to the player
+			}
 
-			bool overrideFacingDirection = IsLockoutActive &&
-			ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace;
-			if (overrideFacingDirection) // Direction is being overridden
-				MovementAngle = targetMovementAngle + pathControlAmount;
+			float targetMovementAngle = GetTargetMovementAngle() + pathControlAmount;
+			if (IsLockoutActive &&
+				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+			{
+				MovementAngle = targetMovementAngle;
+			}
 
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
-			if (ActionState == ActionStates.Backflip || ActionState == ActionStates.Sliding) return;
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) // Check for turning around
 			{
 				if (!IsLockoutActive || ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
@@ -582,7 +589,7 @@ namespace Project.Gameplay
 			if (turnInstantly) // Instantly set movement angle to target movement angle
 			{
 				turningVelocity = 0;
-				MovementAngle = targetMovementAngle + pathControlAmount;
+				MovementAngle = targetMovementAngle;
 				return;
 			}
 
@@ -594,7 +601,7 @@ namespace Project.Gameplay
 				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount)) // Remap controls to provide more analog detail
 					targetMovementAngle -= inputDeltaAngle * .5f;
 
-				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle + pathControlAmount, Mathf.Pi * .25f);
+				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
 			}
 
 			float maxTurnAmount = MAX_TURN_AMOUNT;

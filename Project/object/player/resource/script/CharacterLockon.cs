@@ -121,12 +121,8 @@ public partial class CharacterLockon : Node3D
 			if (currentTarget != null && currentTarget != Target) // Target has changed
 				Target = currentTarget;
 
-			if (Target != null)
-			{
-				TargetState state = IsTargetValid(Target);
-				if (IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
-					Target = null;
-			}
+			if (Target != null && IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
+				Target = null;
 		}
 		else if (IsHomingAttacking) // Validate homing attack target
 		{
@@ -170,7 +166,10 @@ public partial class CharacterLockon : Node3D
 		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
 
 		if (h && h.collidedObject != t)
-			return TargetState.HitObstacle;
+		{
+			if (!h.collidedObject.IsInGroup("level wall") || Mathf.Abs(h.normal.Dot(castVector)) < .5f)
+				return TargetState.HitObstacle;
+		}
 
 		float distance = t.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 		if (distance < DISTANCE_FUDGE_AMOUNT && Character.IsHoldingDirection(Character.PathFollower.ForwardAngle))
