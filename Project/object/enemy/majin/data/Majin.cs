@@ -220,6 +220,7 @@ public partial class Majin : Enemy
 	private float spawnIntervalDelay;
 	/// <summary> How long should spawning be delayed? </summary>
 	private float despawnIntervalDelay;
+	private bool finishedTraveling;
 	public bool SpawnTravelEnabled => !Mathf.IsZeroApprox(spawnTravelTime);
 	public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
 	private Basis calculationBasis;
@@ -319,6 +320,7 @@ public partial class Majin : Enemy
 		timer?.Stop();
 
 		isSpawning = false;
+		finishedTraveling = false;
 
 		animationPlayer.Play("RESET");
 		animationPlayer.Advance(0);
@@ -610,7 +612,7 @@ public partial class Majin : Enemy
 
 	protected override void Spawn()
 	{
-		if (isSpawning || IsActive) return;
+		if (isSpawning || IsActive || IsDefeated) return;
 
 		isSpawning = true;
 		SetDeferred("visible", true);
@@ -620,7 +622,7 @@ public partial class Majin : Enemy
 
 		animationTree.Set(StateRequestParameter, IdleState); // Idle
 
-		if (SpawnTravelEnabled) // Travel
+		if (SpawnTravelEnabled && !finishedTraveling) // Travel
 		{
 			currentTravelRatio = 0;
 			Position = SpawnPosition;
@@ -703,6 +705,7 @@ public partial class Majin : Enemy
 	{
 		IsActive = true;
 		isSpawning = false;
+		finishedTraveling = true;
 		SetHitboxStatus(true);
 
 		if (SpawnTravelEnabled)

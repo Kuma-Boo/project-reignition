@@ -198,6 +198,7 @@ namespace Project.Gameplay
 		private void InitializeObjectives()
 		{
 			objectiveRoot.Visible = Stage != null &&
+				Stage.Data.MissionObjectiveCount != 0 &&
 				(Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
 				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy);
 			if (!objectiveRoot.Visible) return; // Don't do anything when objective counter isn't visible

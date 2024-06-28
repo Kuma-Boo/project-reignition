@@ -15,6 +15,10 @@ public partial class PathTraveller : Node3D
 	public delegate void ActivatedEventHandler();
 	[Signal]
 	public delegate void DeactivatedEventHandler();
+	[Signal]
+	public delegate void StaggeredEventHandler();
+	[Signal]
+	public delegate void DamagedEventHandler();
 
 	/// <summary> How fast to move. </summary>
 	[ExportGroup("Settings")]
@@ -229,15 +233,14 @@ public partial class PathTraveller : Node3D
 		Character.Animator.ResetState(0.1f);
 	}
 
-
 	private void Stagger()
 	{
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 
 		// TODO Play stagger animation
+		EmitSignal(SignalName.Staggered);
 	}
-
 
 	public void OnBodyEntered(PhysicsBody3D b)
 	{
@@ -248,5 +251,6 @@ public partial class PathTraveller : Node3D
 		}
 
 		TakeDamage();
+		EmitSignal(SignalName.Damaged);
 	}
 }
