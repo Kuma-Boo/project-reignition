@@ -167,10 +167,6 @@ public partial class CharacterLockon : Node3D
 
 		if (h && h.collidedObject != t)
 		{
-			if (h.collidedObject.IsInGroup("level wall"))
-			{
-				GD.Print(h.normal.Dot(castVector));
-			}
 			if (!h.collidedObject.IsInGroup("level wall") || Mathf.Abs(h.normal.Dot(castVector)) < .5f)
 				return TargetState.HitObstacle;
 		}
