@@ -200,7 +200,8 @@ namespace Project.Gameplay
 			objectiveRoot.Visible = Stage != null &&
 				Stage.Data.MissionObjectiveCount != 0 &&
 				(Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
-				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy);
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain);
 			if (!objectiveRoot.Visible) return; // Don't do anything when objective counter isn't visible
 
 			// TODO Implement proper objective sprites
@@ -208,18 +209,22 @@ namespace Project.Gameplay
 			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 			objectiveMaxValue.Text = Stage.Data.MissionObjectiveCount.ToString("00");
 
-			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+			Stage.Connect(nameof(StageSettings.SignalName.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+			Stage.Connect(nameof(StageSettings.SignalName.ObjectiveReset), new Callable(this, nameof(ResetObjective)));
 		}
 
 		private void UpdateObjective()
 		{
 			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
-				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain)
 			{
 				objectiveSfx.Play();
 			}
 			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		}
+
+		private void ResetObjective() => objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		#endregion
 
 		#region Soul Gauge

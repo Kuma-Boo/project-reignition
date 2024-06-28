@@ -288,15 +288,28 @@ namespace Project.Gameplay
 		public int CurrentObjectiveCount { get; private set; } // How much has the player currently completed?
 		[Signal]
 		public delegate void ObjectiveChangedEventHandler(); // Progress towards the objective has changed
+		[Signal]
+		public delegate void ObjectiveResetEventHandler(); // Progress towards the objective has changed
 		public void IncrementObjective()
 		{
 			CurrentObjectiveCount++;
 			EmitSignal(SignalName.ObjectiveChanged);
 
 			if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
+			{
 				FinishLevel(false);
-			else if (CurrentObjectiveCount >= Data.MissionObjectiveCount)
+			}
+			else if (CurrentObjectiveCount >= Data.MissionObjectiveCount &&
+							Data.MissionType != LevelDataResource.MissionTypes.Chain)
+			{
 				FinishLevel(true);
+			}
+		}
+
+		public void ResetObjective(int progress = 0)
+		{
+			CurrentObjectiveCount = progress;
+			EmitSignal(SignalName.ObjectiveReset);
 		}
 
 		// Rings
@@ -320,7 +333,6 @@ namespace Project.Gameplay
 
 			EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 		}
-
 
 		public int CurrentEXP { get; private set; } // How much exp is the player earning from this stage?
 
