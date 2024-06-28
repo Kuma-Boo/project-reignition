@@ -29,7 +29,7 @@ public partial class LevelResult : Control
 	private bool isFadingBgm;
 	private StageSettings Stage => StageSettings.instance;
 
-	public override void _Ready() => Stage?.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)));
+	public override void _Ready() => Stage?.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)), (uint)ConnectFlags.Deferred);
 
 	public override void _PhysicsProcess(double _)
 	{
