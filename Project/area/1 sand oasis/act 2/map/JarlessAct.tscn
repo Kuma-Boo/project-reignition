@@ -1,15 +1,33 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpp5a2r0k4fuk"]
+[gd_scene load_steps=18 format=3 uid="uid://cpp5a2r0k4fuk"]
 
-[ext_resource type="PackedScene" uid="uid://dlahdqcelwoq6" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_55rea"]
+[ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_55rea"]
 [ext_resource type="Resource" uid="uid://cqwbx4ruhjsg2" path="res://resource/level data/sand oasis/Act2Jarless.tres" id="2_l6vbo"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_hxsjx"]
-[ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/1 sand oasis/act 1/camera/InteriorCam.tres" id="3_oijf0"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_2wjwd"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_j0en8"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_ydamc"]
+[ext_resource type="PackedScene" uid="uid://dsms0ivmnpaq8" path="res://area/1 sand oasis/object/Jar.tscn" id="7_2yk7n"]
+[ext_resource type="PackedScene" uid="uid://dnfwvf2akhf1v" path="res://area/1 sand oasis/object/FlameShooter.tscn" id="8_s432p"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="9_w4kvl"]
+[ext_resource type="PackedScene" uid="uid://c0wwow83r4jry" path="res://object/enemy/majin/data/sand oasis/BlueMajin.tscn" id="10_v4jja"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="11_o7fjp"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="12_0o6jf"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="13_o6ubr"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="13_thc7h"]
+[ext_resource type="Resource" uid="uid://cm5dcqw8kt7d1" path="res://area/1 sand oasis/act 2/camera/IslandCam.tres" id="14_6hjj3"]
+[ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="15_da3od"]
+[ext_resource type="PackedScene" uid="uid://cyabnlg7vd3v6" path="res://area/1 sand oasis/object/grindrail/Grindrail04.tscn" id="16_j2bv4"]
 
 [node name="World" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_55rea")]
 Data = ExtResource("2_l6vbo")
-InitialCameraSettings = ExtResource("3_oijf0")
+
+[node name="02Islands" parent="Static/Visuals" index="2"]
+startEnabled = true
+
+[node name="03Forest" parent="Static/Visuals" index="3"]
+startEnabled = true
 
 [node name="JarlessAct" type="Node3D" parent="."]
 
@@ -18,3 +36,456 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="JarlessAct/SpawnPosition" instance=ExtResource("3_hxsjx")]
+
+[node name="Interior" type="Node3D" parent="JarlessAct"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
+script = ExtResource("4_2wjwd")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Rings" type="Node3D" parent="JarlessAct/Interior"]
+transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 0, 0.699997, 14.7)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("6_ydamc")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+
+[node name="Child02" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child06" parent="JarlessAct/Interior/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="JarL" parent="JarlessAct/Interior" instance=ExtResource("7_2yk7n")]
+transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 25, 0, 13.1)
+
+[node name="JarR" parent="JarlessAct/Interior" instance=ExtResource("7_2yk7n")]
+transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 25.0001, 0, 16.3999)
+
+[node name="FlameShooter1" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
+transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 5, 12.1999)
+
+[node name="FlameShooter2" parent="JarlessAct/Interior" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("8_s432p")]
+transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 4, 12.1999)
+animator = NodePath("../FlameShooter1/AnimationPlayer")
+timer = NodePath("../FlameShooter1/Timer")
+
+[node name="UTurn" type="Node3D" parent="JarlessAct"]
+script = ExtResource("4_2wjwd")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Islands" type="Node3D" parent="JarlessAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -44.998, -436)
+script = ExtResource("4_2wjwd")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="JumpPanelL" parent="JarlessAct/Islands" instance=ExtResource("9_w4kvl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+middleHeight = 6.0
+distance = 50.0
+
+[node name="JumpPanelR" parent="JarlessAct/Islands" instance=ExtResource("9_w4kvl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+middleHeight = 6.0
+distance = 50.0
+
+[node name="Rings1" type="Node3D" parent="JarlessAct/Islands"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -1.58995, 77)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("6_ydamc")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarlessAct/Islands/Rings1" instance=ExtResource("6_ydamc")]
+
+[node name="Child02" parent="JarlessAct/Islands/Rings1" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="JarlessAct/Islands/Rings1" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="JarlessAct/Islands/Rings1" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="JarlessAct/Islands/Rings1" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="BlueMajin1" parent="JarlessAct/Islands" instance=ExtResource("10_v4jja")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 100)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 15)
+"Defeat Settings/Local Transform" = true
+
+[node name="BlueMajin2" parent="JarlessAct/Islands" instance=ExtResource("10_v4jja")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 4, 109)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 10)
+"Defeat Settings/Local Transform" = true
+rangeOverride = 30
+
+[node name="Spring" parent="JarlessAct/Islands" instance=ExtResource("11_o7fjp")]
+transform = Transform3D(0.203395, -0.759079, -0.618408, 0.965926, 0.258819, 0, 0.160056, -0.597337, 0.785857, -2.27866, 9.1, 118.006)
+middleHeight = 3.0
+finalHeight = -14.0
+distance = 50.0
+voiceKey = &""
+
+[node name="Path" type="Node3D" parent="JarlessAct/Islands/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("12_0o6jf")
+path = NodePath("../../../../Static/Paths/IslandPath")
+
+[node name="Camera" type="Node3D" parent="JarlessAct/Islands/Spring"]
+script = ExtResource("13_thc7h")
+transitionTime = 0.5
+settings = ExtResource("14_6hjj3")
+
+[node name="PearlsL" type="Node3D" parent="JarlessAct/Islands"]
+transform = Transform3D(0.599024, 0.073964, 0.797308, 0, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -43.8849, -3.81526, 86.7211)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("13_o6ubr")
+Amount = 30
+Shape = 0
+Orientation = 0
+Spacing = 0.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+
+[node name="Child02" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+
+[node name="Child03" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
+
+[node name="Child04" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child05" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
+
+[node name="Child06" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child07" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child08" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child09" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
+
+[node name="Child10" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child11" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child12" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.8)
+
+[node name="Child13" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child14" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
+
+[node name="Child15" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
+
+[node name="Child16" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child17" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.8)
+
+[node name="Child18" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.6)
+
+[node name="Child19" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child20" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.2)
+
+[node name="Child21" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child22" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child23" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
+
+[node name="Child24" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.4)
+
+[node name="Child25" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child26" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child27" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.8)
+
+[node name="Child28" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="Child29" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.4)
+
+[node name="Child30" parent="JarlessAct/Islands/PearlsL" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.2)
+
+[node name="PearlsR" type="Node3D" parent="JarlessAct/Islands"]
+transform = Transform3D(0.599024, 0.073964, 0.797308, 0, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -42.4473, -3.81526, 84.7993)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("13_o6ubr")
+Amount = 30
+Shape = 0
+Orientation = 0
+Spacing = 0.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+
+[node name="Child02" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+
+[node name="Child03" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
+
+[node name="Child04" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child05" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
+
+[node name="Child06" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child07" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child08" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child09" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
+
+[node name="Child10" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child11" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child12" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.8)
+
+[node name="Child13" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child14" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
+
+[node name="Child15" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
+
+[node name="Child16" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child17" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.8)
+
+[node name="Child18" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.6)
+
+[node name="Child19" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child20" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.2)
+
+[node name="Child21" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child22" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child23" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
+
+[node name="Child24" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.4)
+
+[node name="Child25" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child26" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child27" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.8)
+
+[node name="Child28" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="Child29" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.4)
+
+[node name="Child30" parent="JarlessAct/Islands/PearlsR" instance=ExtResource("13_o6ubr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.2)
+
+[node name="Jar1" parent="JarlessAct/Islands" instance=ExtResource("7_2yk7n")]
+transform = Transform3D(0.595839, 0.0667652, 0.800324, 0.00522963, 0.996195, -0.0869987, -0.803087, 0.0560226, 0.593223, -98.2552, 1.83345, 47.5666)
+
+[node name="BlueMajin3" parent="JarlessAct/Islands" instance=ExtResource("10_v4jja")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -109.715, 4, 37.0255)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.0
+spawnMode = 1
+
+[node name="BlueMajin4" parent="JarlessAct/Islands" instance=ExtResource("10_v4jja")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, -115.266, 5, 42.7106)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.0
+spawnMode = 1
+
+[node name="RedMajin" parent="JarlessAct/Islands" instance=ExtResource("15_da3od")]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -121.127, 7, 51.4852)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 20
+
+[node name="BlueMajin5" parent="JarlessAct/Islands" instance=ExtResource("10_v4jja")]
+transform = Transform3D(2.98023e-08, 0, 1, 0, 1, 0, -1, 0, 2.98023e-08, -129.487, 8, 59.1811)
+
+[node name="BlueMajin6" parent="JarlessAct/Islands" instance=ExtResource("10_v4jja")]
+transform = Transform3D(2.98023e-08, 0, 1, 0, 1, 0, -1, 0, 2.98023e-08, -138.487, 11, 60.1811)
+rangeOverride = 20
+
+[node name="Grindrail" parent="JarlessAct/Islands" instance=ExtResource("16_j2bv4")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -136.611, 7.22079, 60.1415)
+startCapPath = NodePath("")
+endCapPath = NodePath("")
+
+[node name="Rings" type="Node3D" parent="JarlessAct/Islands/Grindrail"]
+transform = Transform3D(1, 2.66454e-15, 0, 0, 1, 0, 0, 7.45058e-09, 1, 0, 0.700001, -30)
+script = ExtResource("5_j0en8")
+Generate = false
+Source = ExtResource("6_ydamc")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+
+[node name="Child02" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="JarlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ydamc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="JarR1" parent="JarlessAct/Islands" instance=ExtResource("7_2yk7n")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -174.54, 3.6013, 58.1415)
+
+[node name="JarL1" parent="JarlessAct/Islands" instance=ExtResource("7_2yk7n")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -174.54, 3.6013, 62.1415)
+
+[node name="JarR2" parent="JarlessAct/Islands" instance=ExtResource("7_2yk7n")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -210.403, 0.463692, 58.1415)
+
+[node name="JarL2" parent="JarlessAct/Islands" instance=ExtResource("7_2yk7n")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -210.403, 0.463692, 62.1415)
+
+[node name="JumpPanel" parent="JarlessAct/Islands" instance=ExtResource("9_w4kvl")]
+transform = Transform3D(1.30801e-07, -0.0871557, -0.996195, 7.6194e-09, 0.996195, -0.0871557, 1, 3.8097e-09, 1.30968e-07, -219.296, -0.0131378, 60.1415)
+middleHeight = 10.0
+finalHeight = 6.5
+distance = 30.0
+
+[node name="Path" type="Node3D" parent="JarlessAct/Islands/JumpPanel" node_paths=PackedStringArray("path")]
+script = ExtResource("12_0o6jf")
+path = NodePath("../../../../Static/Paths/ForestPath")
+
+[node name="Forest" type="Node3D" parent="JarlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.205, -40, -180.756)
+script = ExtResource("4_2wjwd")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Oasis" type="Node3D" parent="JarlessAct"]
+transform = Transform3D(-0.446198, 0, -0.894934, 0, 1, 0, 0.894934, 0, -0.446198, -51.1268, -40, -159.728)
+script = ExtResource("4_2wjwd")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[connection signal="Shattered" from="JarlessAct/Interior/JarL" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="JarlessAct/Interior/JarR" to="Static" method="IncrementObjective"]
+[connection signal="Activated" from="JarlessAct/Islands/Spring" to="JarlessAct/Islands/Spring/Path" method="Activate"]
+[connection signal="Activated" from="JarlessAct/Islands/Spring" to="JarlessAct/Islands/Spring/Camera" method="Activate"]
+[connection signal="Shattered" from="JarlessAct/Islands/Jar1" to="Static" method="IncrementObjective"]
+[connection signal="Spawned" from="JarlessAct/Islands/RedMajin" to="JarlessAct/Islands/BlueMajin3" method="Spawn"]
+[connection signal="Spawned" from="JarlessAct/Islands/RedMajin" to="JarlessAct/Islands/BlueMajin4" method="Spawn"]
+[connection signal="Shattered" from="JarlessAct/Islands/JarR1" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="JarlessAct/Islands/JarL1" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="JarlessAct/Islands/JarR2" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="JarlessAct/Islands/JarL2" to="Static" method="IncrementObjective"]
+[connection signal="Deactivated" from="JarlessAct/Islands/JumpPanel" to="JarlessAct/Islands/JumpPanel/Path" method="Activate"]
+
+[editable path="Static"]
