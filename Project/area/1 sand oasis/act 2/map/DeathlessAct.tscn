@@ -1,13 +1,17 @@
-[gd_scene load_steps=23 format=3 uid="uid://csk16ecqhgu0"]
+[gd_scene load_steps=30 format=3 uid="uid://csk16ecqhgu0"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_g3p2j"]
 [ext_resource type="Resource" uid="uid://c33qynkecblg1" path="res://resource/level data/sand oasis/Act2Deathless.tres" id="2_xpmxs"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_k0a7d"]
+[ext_resource type="Resource" uid="uid://cq4xg8hr8diav" path="res://area/1 sand oasis/act 2/camera/HallCam.tres" id="3_yg4tl"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_qgpdx"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_a6p2w"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_ejpqb"]
 [ext_resource type="PackedScene" uid="uid://dsms0ivmnpaq8" path="res://area/1 sand oasis/object/Jar.tscn" id="7_ab0t7"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="7_fhxd2"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9_sy7aq"]
+[ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="10_4ufss"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="10_v852x"]
 [ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="11_04wic"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="12_idu5x"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="12_t6xqb"]
@@ -18,9 +22,18 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="17_7t7nl"]
 [ext_resource type="Resource" uid="uid://cm5dcqw8kt7d1" path="res://area/1 sand oasis/act 2/camera/IslandCam.tres" id="18_psr7x"]
 [ext_resource type="PackedScene" uid="uid://cyabnlg7vd3v6" path="res://area/1 sand oasis/object/grindrail/Grindrail04.tscn" id="19_vb0a2"]
-[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="20_ck01c"]
+[ext_resource type="PackedScene" uid="uid://chwt62jenntgq" path="res://area/1 sand oasis/object/grindrail/Grindrail03.tscn" id="21_rip7j"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="21_tort4"]
 [ext_resource type="PackedScene" uid="uid://k2xbli7x0pwd" path="res://area/1 sand oasis/object/pillar/SquarePillarShort.tscn" id="22_apcmi"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_0ll21"]
+
+[sub_resource type="Curve" id="Curve_6kl04"]
+_data = [Vector2(0, 0), 0.0, -0.0213279, 0, 0, Vector2(1, 0.973631), 3.1643, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7y1jy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.73225, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hqpy5"]
 size = Vector3(36.9868, 12.769, 4.60156)
@@ -29,6 +42,7 @@ size = Vector3(36.9868, 12.769, 4.60156)
 
 [node name="Static" parent="." instance=ExtResource("1_g3p2j")]
 Data = ExtResource("2_xpmxs")
+InitialCameraSettings = ExtResource("3_yg4tl")
 
 [node name="02Islands" parent="Static/Visuals" index="2"]
 startEnabled = true
@@ -45,7 +59,8 @@ startEnabled = true
 [node name="DeathlessAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="DeathlessAct"]
-transform = Transform3D(-0.99067, 0, 0.136286, 0, 1, 0, -0.136286, 0, -0.99067, -73.7934, -44.9925, -299.564)
+transform = Transform3D(-0.99067, 0, 0.136286, 0, 1, 0, -0.136286, 0, -0.99067, -73.423, -44.9925, -304.476)
+metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("3_k0a7d")]
 
@@ -56,7 +71,7 @@ startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Pearls" type="Node3D" parent="DeathlessAct/UTurn"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.281, -11.5461, 25.8762)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.281, -11.7859, 25.8761)
 script = ExtResource("5_a6p2w")
 Generate = false
 Source = ExtResource("9_sy7aq")
@@ -85,7 +100,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 
 [node name="Pearls2" type="Node3D" parent="DeathlessAct/UTurn"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8757, -11.5616, 25.8286)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8757, -11.8014, 25.8285)
 script = ExtResource("5_a6p2w")
 Generate = false
 Source = ExtResource("9_sy7aq")
@@ -143,73 +158,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 
 [node name="RedMajin2" parent="DeathlessAct/UTurn" instance=ExtResource("11_04wic")]
-transform = Transform3D(0.9894, 0, -0.14522, 0, 1, 0, 0.14522, 0, 0.9894, 13.473, -12.2747, -52.3363)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.5
+transform = Transform3D(0.996821, 0, -0.0796773, 0, 1, 0, 0.0796773, 0, 0.996821, 13.473, -12.2747, -52.3364)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 20, 0)
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 "Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 3.0
+"Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 2.0
-"Attack Settings/Flame Aggression Radius" = 8
+"Attack Settings/Flame Aggression Radius" = 0
+rangeOverride = 55
 
-[node name="Rings3" type="Node3D" parent="DeathlessAct/UTurn"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.3498, -11.574, -86.914)
-script = ExtResource("5_a6p2w")
-Generate = false
-Source = ExtResource("6_ejpqb")
-Amount = 12
-Shape = 2
-Path = NodePath("../../../Static/Paths/IslandEndPath")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 3.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
+[node name="SpikeBallStatic" parent="DeathlessAct/UTurn" instance=ExtResource("10_4ufss")]
+transform = Transform3D(1.3878, 0, 0.184457, 0, 1.4, 0, -0.184457, 0, 1.3878, 17.1184, -12.1205, -23.2944)
 
-[node name="Child01" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8147e-05, 0, 3.05176e-05)
-
-[node name="Child02" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97865, 0.00141907, -2.25732)
-
-[node name="Child03" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.02121, 0.00293732, -4.45676)
-
-[node name="Child04" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.12344, 0.0045166, -6.59924)
-
-[node name="Child05" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.28368, 0.0061264, -8.68329)
-
-[node name="Child06" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5024, 0.00774765, -10.7052)
-
-[node name="Child07" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.7813, 0.00935364, -12.6589)
-
-[node name="Child08" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1242, 0.0109253, -14.5359)
-
-[node name="Child09" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5361, 0.0124321, -16.3239)
-
-[node name="Child10" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.024, 0.0138474, -18.0052)
-
-[node name="Child11" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5965, 0.0151291, -19.5549)
-
-[node name="Child12" parent="DeathlessAct/UTurn/Rings3" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.2643, 0.0162239, -20.9357)
-
-[node name="SpikeBall" parent="DeathlessAct/UTurn" instance=ExtResource("12_idu5x")]
-transform = Transform3D(1.3878, 0, 0.184456, 0, 1.4, 0, -0.184456, 0, 1.3878, 17.1184, -12.1205, -23.2943)
-
-[node name="SpikeBall2" parent="DeathlessAct/UTurn" instance=ExtResource("12_idu5x")]
-transform = Transform3D(1.39998, 0, 0.00659732, 0, 1.4, 0, -0.00659732, 0, 1.39998, 10.9361, -12.1205, -36.9452)
+[node name="SpikeBallStatic2" parent="DeathlessAct/UTurn" instance=ExtResource("10_4ufss")]
+transform = Transform3D(1.38401, 0, -0.210968, 0, 1.4, 0, 0.210968, 0, 1.38401, 10.8709, -12.1205, -36.9144)
 
 [node name="Jar" parent="DeathlessAct/UTurn" instance=ExtResource("7_ab0t7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2376, -12.2794, -32.2133)
@@ -219,6 +185,176 @@ transform = Transform3D(0.961703, -0.273838, -0.0118315, 0.274094, 0.960807, 0.0
 
 [node name="Jar2" parent="DeathlessAct/UTurn" instance=ExtResource("7_ab0t7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.531, -12.2745, -34.0731)
+
+[node name="Pearls3" type="Node3D" parent="DeathlessAct/UTurn"]
+transform = Transform3D(0.658046, 0, -0.752977, 0, 1, 0, 0.752977, 0, 0.658046, 33.5374, -11.7596, -90.9925)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.3
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+
+[node name="Child02" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.3)
+
+[node name="Child03" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6)
+
+[node name="Child04" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.9)
+
+[node name="Child05" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.2)
+
+[node name="Child06" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
+
+[node name="Child07" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.8)
+
+[node name="Child08" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.1)
+
+[node name="Child09" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
+
+[node name="Child10" parent="DeathlessAct/UTurn/Pearls3" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.7)
+
+[node name="Pearls3R" type="Node3D" parent="DeathlessAct/UTurn"]
+transform = Transform3D(0.658046, 0, -0.752977, 0, 1, 0, 0.752977, 0, 0.658046, 33.9025, -11.7596, -90.5748)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.3
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+
+[node name="Child02" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.3)
+
+[node name="Child03" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6)
+
+[node name="Child04" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.9)
+
+[node name="Child05" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.2)
+
+[node name="Child06" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
+
+[node name="Child07" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.8)
+
+[node name="Child08" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.1)
+
+[node name="Child09" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
+
+[node name="Child10" parent="DeathlessAct/UTurn/Pearls3R" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.7)
+
+[node name="Pearls4" type="Node3D" parent="DeathlessAct/UTurn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.5657, -11.7376, -99.4275)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Paths/IslandEndPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000152588, 0, -0.00012207)
+
+[node name="Child02" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55147, 0.00105667, -1.2735)
+
+[node name="Child03" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.13264, 0.00209045, -2.51056)
+
+[node name="Child04" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.74548, 0.00309753, -3.70731)
+
+[node name="Child05" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.39211, 0.00406647, -4.85873)
+
+[node name="Child06" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.07519, 0.00498581, -5.95828)
+
+[node name="Child07" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79269, 0.0058403, -6.99484)
+
+[node name="Child08" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5633, 0.00662231, -7.96637)
+
+[node name="Child09" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3757, 0.00730133, -8.84979)
+
+[node name="Child10" parent="DeathlessAct/UTurn/Pearls4" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2389, 0.00785446, -9.62878)
+
+[node name="Pearls5" type="Node3D" parent="DeathlessAct/UTurn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.9031, -11.7376, -98.9911)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Paths/IslandEndPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.86646e-05, 0, 6.10352e-05)
+
+[node name="Child02" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.54134, 0.00105667, -1.2659)
+
+[node name="Child03" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.11162, 0.00209045, -2.49506)
+
+[node name="Child04" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.71224, 0.00309753, -3.68356)
+
+[node name="Child05" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.34508, 0.00406647, -4.82614)
+
+[node name="Child06" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.01231, 0.00498581, -5.91626)
+
+[node name="Child07" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.7142, 0.00584412, -6.94427)
+
+[node name="Child08" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4601, 0.00662231, -7.90329)
+
+[node name="Child09" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.246, 0.00730515, -8.77512)
+
+[node name="Child10" parent="DeathlessAct/UTurn/Pearls5" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.0766, 0.00786209, -9.54208)
 
 [node name="FireSoul" parent="DeathlessAct/UTurn" instance=ExtResource("12_t6xqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1121, -11.8833, -40.1171)
@@ -240,30 +376,81 @@ middleHeight = 6.0
 distance = 50.0
 
 [node name="Rings1" type="Node3D" parent="DeathlessAct/Islands"]
-transform = Transform3D(-1, -4.63326e-09, 8.72999e-08, 0, 0.998595, 0.0529983, -8.74228e-08, 0.0529983, -0.998595, 0, -1.58995, 77)
+transform = Transform3D(-1, -4.63326e-09, 8.72999e-08, 0, 0.998595, 0.0529983, -8.74228e-08, 0.0529983, -0.998595, 1.65103, -0.657402, 59.4289)
 script = ExtResource("5_a6p2w")
 Generate = false
 Source = ExtResource("6_ejpqb")
-Amount = 5
+Amount = 9
 Shape = 0
 Orientation = 0
-Spacing = 2.5
-"Horizontal Offset" = null
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_6kl04")
 "Vertical Offset" = null
 
 [node name="Child01" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
 
 [node name="Child02" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00346736, 0, -3)
 
 [node name="Child03" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000804018, 0, -6)
 
 [node name="Child04" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0268264, 0, -9)
 
 [node name="Child05" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0886119, 0, -12)
+
+[node name="Child06" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.200173, 0, -15)
+
+[node name="Child07" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.375522, 0, -18)
+
+[node name="Child08" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62867, 0, -21)
+
+[node name="Child09" parent="DeathlessAct/Islands/Rings1" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.973631, 0, -24)
+
+[node name="Rings2" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-1, -4.63326e-09, 8.72999e-08, -6.65198e-16, 0.998595, 0.0529983, -8.74228e-08, 0.0529983, -0.998595, -0.593201, -0.657402, 59.4289)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_7y1jy")
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="Child02" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00806, 0, -3)
+
+[node name="Child03" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0187, 0, -6)
+
+[node name="Child04" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01162, 0, -9)
+
+[node name="Child05" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.966532, 0, -12)
+
+[node name="Child06" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.863123, 0, -15)
+
+[node name="Child07" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.681098, 0, -18)
+
+[node name="Child08" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.400157, 0, -21)
+
+[node name="Child09" parent="DeathlessAct/Islands/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
 
 [node name="BlueMajin1" parent="DeathlessAct/Islands" instance=ExtResource("14_nmw8u")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 100)
@@ -296,210 +483,213 @@ script = ExtResource("17_7t7nl")
 transitionTime = 0.5
 settings = ExtResource("18_psr7x")
 
+[node name="Grindrail2" parent="DeathlessAct/Islands" instance=ExtResource("21_rip7j")]
+transform = Transform3D(0.599024, 0.073964, 0.797308, -6.46222e-09, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -41.9359, -4.30241, 88.1791)
+
+[node name="Grindrail3" parent="DeathlessAct/Islands" instance=ExtResource("19_vb0a2")]
+transform = Transform3D(0.599024, 0.073964, 0.797308, 1.21072e-08, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -42.1457, -4.0631, 84.1528)
+
 [node name="PearlsL" type="Node3D" parent="DeathlessAct/Islands"]
-transform = Transform3D(0.599024, 0.073964, 0.797308, 0, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -43.8849, -3.81526, 86.7211)
+transform = Transform3D(0.599024, 0.073964, 0.797308, 0, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -43.9765, -3.7879, 86.8478)
 script = ExtResource("5_a6p2w")
 Generate = false
 Source = ExtResource("9_sy7aq")
 Amount = 30
 Shape = 0
 Orientation = 0
-Spacing = 0.8
+Spacing = 1.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
 [node name="Child01" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
 
 [node name="Child02" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
 [node name="Child03" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="Child04" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [node name="Child05" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
-
-[node name="Child06" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
+[node name="Child06" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
 [node name="Child07" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
 [node name="Child08" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
 
 [node name="Child09" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
-
-[node name="Child10" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
-
-[node name="Child11" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
+[node name="Child10" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
 [node name="Child12" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
 
 [node name="Child13" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
-
-[node name="Child14" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
-
-[node name="Child15" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
-
-[node name="Child16" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
+[node name="Child14" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+
+[node name="Child15" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child16" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
 [node name="Child17" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.8)
-
-[node name="Child18" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.6)
-
-[node name="Child19" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
-
-[node name="Child20" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.2)
-
-[node name="Child21" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
 
-[node name="Child22" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+[node name="Child18" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
 
-[node name="Child23" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
+[node name="Child19" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 
-[node name="Child24" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.4)
+[node name="Child20" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
 
-[node name="Child25" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
-
-[node name="Child26" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+[node name="Child21" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 
+[node name="Child22" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+
+[node name="Child23" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="Child24" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
+
+[node name="Child25" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Child26" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
 [node name="Child27" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
 
 [node name="Child28" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
 
 [node name="Child29" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
 [node name="Child30" parent="DeathlessAct/Islands/PearlsL" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
 
 [node name="PearlsR" type="Node3D" parent="DeathlessAct/Islands"]
-transform = Transform3D(0.599024, 0.073964, 0.797308, 0, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -42.4473, -3.81526, 84.7993)
+transform = Transform3D(0.599024, 0.073964, 0.797308, 0, 0.995725, -0.0923706, -0.800731, 0.0553322, 0.596463, -43.7998, -3.7879, 86.6115)
 script = ExtResource("5_a6p2w")
 Generate = false
 Source = ExtResource("9_sy7aq")
 Amount = 30
 Shape = 0
 Orientation = 0
-Spacing = 0.8
+Spacing = 1.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
 [node name="Child01" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
 
 [node name="Child02" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
 [node name="Child03" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="Child04" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [node name="Child05" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.2)
-
-[node name="Child06" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
+[node name="Child06" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
 [node name="Child07" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
 [node name="Child08" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
 
 [node name="Child09" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.4)
-
-[node name="Child10" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
-
-[node name="Child11" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
+[node name="Child10" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
 [node name="Child12" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
 
 [node name="Child13" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
-
-[node name="Child14" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
-
-[node name="Child15" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
-
-[node name="Child16" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
+[node name="Child14" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+
+[node name="Child15" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child16" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
 [node name="Child17" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.8)
-
-[node name="Child18" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.6)
-
-[node name="Child19" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
-
-[node name="Child20" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.2)
-
-[node name="Child21" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
 
-[node name="Child22" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+[node name="Child18" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
 
-[node name="Child23" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
+[node name="Child19" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 
-[node name="Child24" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.4)
+[node name="Child20" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
 
-[node name="Child25" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
-
-[node name="Child26" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+[node name="Child21" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 
+[node name="Child22" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+
+[node name="Child23" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="Child24" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
+
+[node name="Child25" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Child26" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
 [node name="Child27" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
 
 [node name="Child28" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
 
 [node name="Child29" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
 [node name="Child30" parent="DeathlessAct/Islands/PearlsR" instance=ExtResource("9_sy7aq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.2)
-
-[node name="Jar1" parent="DeathlessAct/Islands" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(0.595839, 0.0667652, 0.800324, 0.00522963, 0.996195, -0.0869987, -0.803087, 0.0560226, 0.593223, -98.2552, 1.83345, 47.5666)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
 
 [node name="BlueMajin3" parent="DeathlessAct/Islands" instance=ExtResource("14_nmw8u")]
 transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -109.715, 4, 37.0255)
@@ -524,66 +714,492 @@ transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 
 transform = Transform3D(2.98023e-08, 0, 1, 0, 1, 0, -1, 0, 2.98023e-08, -129.487, 8, 59.1811)
 
 [node name="BlueMajin6" parent="DeathlessAct/Islands" instance=ExtResource("14_nmw8u")]
-transform = Transform3D(2.98023e-08, 0, 1, 0, 1, 0, -1, 0, 2.98023e-08, -138.487, 11, 60.1811)
+transform = Transform3D(2.98023e-08, 0, 1, 0, 1, 0, -1, 0, 2.98023e-08, -138.487, 11, 58.5026)
 rangeOverride = 20
 
-[node name="Grindrail" parent="DeathlessAct/Islands" instance=ExtResource("19_vb0a2")]
-transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -136.611, 7.22079, 60.1415)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+[node name="Grindrail" parent="DeathlessAct/Islands" instance=ExtResource("21_rip7j")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 1.76475e-16, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -169.85, 4.31277, 61.6404)
 
-[node name="Rings" type="Node3D" parent="DeathlessAct/Islands/Grindrail"]
-transform = Transform3D(1, 2.66454e-15, 0, 0, 1, 0, 0, 7.45058e-09, 1, 0, 0.700001, -30)
+[node name="Pearls4" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, 6.63478e-15, 0.996195, 0.0871557, -1, 3.8097e-09, -4.3545e-08, -182.469, 3.52114, 61.7954)
 script = ExtResource("5_a6p2w")
 Generate = false
-Source = ExtResource("6_ejpqb")
-Amount = 10
+Source = ExtResource("9_sy7aq")
+Amount = 8
 Shape = 0
 Orientation = 0
-Spacing = 2.5
+Spacing = 3.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
+[node name="Child01" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="Child02" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+[node name="Child02" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="Child03" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+[node name="Child03" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="Child04" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+[node name="Child04" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="Child05" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+[node name="Child05" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="Child06" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
-
-[node name="Child07" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-
-[node name="Child08" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
+[node name="Child06" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="Child09" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+[node name="Child07" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="Child10" parent="DeathlessAct/Islands/Grindrail/Rings" instance=ExtResource("6_ejpqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+[node name="Child08" type="Area3D" parent="DeathlessAct/Islands/Pearls4" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="JarR1" parent="DeathlessAct/Islands" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -174.54, 3.6013, 58.1415)
+[node name="Pearls5" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, 6.0155e-15, 0.996195, 0.0871557, -1, 3.8097e-09, -4.3545e-08, -182.469, 3.52114, 61.4764)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 3.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
 
-[node name="JarL1" parent="DeathlessAct/Islands" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -174.54, 3.6013, 62.1415)
+[node name="Child01" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="JarR2" parent="DeathlessAct/Islands" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -210.403, 0.463692, 58.1415)
+[node name="Child02" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
-[node name="JarL2" parent="DeathlessAct/Islands" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -210.403, 0.463692, 62.1415)
+[node name="Child03" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="DeathlessAct/Islands/Pearls5" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="SpikeBall" parent="DeathlessAct/Islands" instance=ExtResource("12_idu5x")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, -4.42803e-16, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -171.707, 5.51997, 58.3804)
+
+[node name="FireSoul" parent="DeathlessAct/Islands" instance=ExtResource("12_t6xqb")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 8.82376e-17, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -166.508, 5.22729, 58.3804)
+fireSoulIndex = 2
+
+[node name="Rings3" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, 5.30233e-16, 0.996195, 0.0871557, -1, 3.8097e-09, -4.3545e-08, -179.112, 3.97427, 60.0965)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Islands/Rings3" instance=ExtResource("6_ejpqb")]
+
+[node name="Child02" parent="DeathlessAct/Islands/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="DeathlessAct/Islands/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="DeathlessAct/Islands/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings5" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, -8.90452e-17, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -160.495, 5.60307, 60.0965)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Islands/Rings5" instance=ExtResource("6_ejpqb")]
+
+[node name="Child02" parent="DeathlessAct/Islands/Rings5" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="DeathlessAct/Islands/Rings5" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="DeathlessAct/Islands/Rings5" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings4" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, 2.65359e-15, 0.996195, 0.0871557, -1, 3.8097e-09, -4.3545e-08, -196.745, 2.43157, 60.0965)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Islands/Rings4" instance=ExtResource("6_ejpqb")]
+
+[node name="Child02" parent="DeathlessAct/Islands/Rings4" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="DeathlessAct/Islands/Rings4" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="DeathlessAct/Islands/Rings4" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Spikepanel" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 1.76475e-16, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -145.807, 6.19444, 60.0008)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("23_0ll21")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child02" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child03" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child04" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child05" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child06" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child07" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child08" parent="DeathlessAct/Islands/Spikepanel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Spikepanel2" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, -3.54565e-16, 0.996195, 0.0871557, -1, 3.8097e-09, -4.3545e-08, -187.175, 2.56944, 60.1301)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("23_0ll21")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child02" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child03" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child04" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child05" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child06" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child07" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child08" parent="DeathlessAct/Islands/Spikepanel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Grindrail4" parent="DeathlessAct/Islands" instance=ExtResource("21_rip7j")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 6.19278e-16, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -136.611, 7.22079, 58.3804)
+
+[node name="Pearls" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, -8.07646e-19, 0.996195, 0.0871557, -1, 3.8097e-09, -4.3545e-08, -139.289, 7.38549, 58.5506)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 3.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="DeathlessAct/Islands/Pearls" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Pearls2" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(-4.37113e-08, -0.0871557, 0.996195, 1.23775e-15, 0.996195, 0.0871557, -1, 3.8097e-09, -4.3545e-08, -139.289, 7.38549, 58.2103)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 3.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="DeathlessAct/Islands/Pearls2" node_paths=PackedStringArray("collider") instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_fhxd2")
+collider = NodePath("CollisionShape3D")
 
 [node name="JumpPanel" parent="DeathlessAct/Islands" instance=ExtResource("13_kdcma")]
 transform = Transform3D(1.30801e-07, -0.0871557, -0.996195, 7.6194e-09, 0.996195, -0.0871557, 1, 3.8097e-09, 1.30968e-07, -219.27, -0.311996, 60.1415)
@@ -595,9 +1211,72 @@ distance = 30.0
 script = ExtResource("16_lie6p")
 path = NodePath("../../../../Static/Paths/ForestPath")
 
-[node name="FireSoul" parent="DeathlessAct/Islands" instance=ExtResource("12_t6xqb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.26744, 89.7127)
-fireSoulIndex = 2
+[node name="DashPanel" parent="DeathlessAct/Islands" instance=ExtResource("10_v852x")]
+transform = Transform3D(1, 0, 0, 0, 0.998281, -0.0586095, 0, 0.0586095, 0.998281, 1.61942, -1.25437, 54.2827)
+speedRatio = 1.0
+length = 0.1
+
+[node name="DashPanel2" parent="DeathlessAct/Islands" instance=ExtResource("10_v852x")]
+transform = Transform3D(1, 0, 0, 0, 0.998281, -0.0586095, 0, 0.0586095, 0.998281, -1.49844, -1.25437, 54.2827)
+speedRatio = 1.0
+length = 0.1
+
+[node name="BlueMajin7" parent="DeathlessAct/Islands" instance=ExtResource("14_nmw8u")]
+transform = Transform3D(0.613017, 0, 0.790069, 0, 1, 0, -0.790069, 0, 0.613017, -85.9534, 1.06192, 55.8057)
+
+[node name="BlueMajin" parent="DeathlessAct/Islands" instance=ExtResource("14_nmw8u")]
+transform = Transform3D(0.613017, 0, 0.790069, 0, 1, 0, -0.790069, 0, 0.613017, -67.0773, -0.862919, 67.367)
+
+[node name="SpringSpawner" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(0.808441, -0.481306, -0.338774, 0.481681, 0.871803, -0.0891262, 0.338241, -0.0911278, 0.936637, -89.712, 1.73869, 48.6335)
+script = ExtResource("4_qgpdx")
+
+[node name="Spring2" parent="DeathlessAct/Islands/SpringSpawner" instance=ExtResource("15_30ath")]
+transform = Transform3D(1, 0, 0, 2.98023e-08, 1, 0, -2.98023e-08, 1.49012e-08, 1, 0, 0, 0)
+middleHeight = 10.365
+finalHeight = 7.7
+distance = 20.0
+
+[node name="Rings" type="Node3D" parent="DeathlessAct/Islands"]
+transform = Transform3D(0.604112, 0.0728622, 0.793561, -4.65661e-10, 0.995811, -0.0914321, -0.796899, 0.0552353, 0.601582, -74.5267, 0.348789, 59.9349)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+
+[node name="Child02" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="DeathlessAct/Islands/Rings" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 
 [node name="Forest" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.205, -39.438, -180.756)
@@ -719,18 +1398,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6707, 0, -8.71283)
 
 [node name="Child20" parent="DeathlessAct/Forest/Pearls" instance=ExtResource("9_sy7aq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.8819, 0, -9.67641)
-
-[node name="Jar" parent="DeathlessAct/Forest" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.2053, -0.551861, 8.00342)
-
-[node name="Jar2" parent="DeathlessAct/Forest" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(0.984121, 0, 0.177497, 0, 1, 0, -0.177497, 0, 0.984121, -52.0228, -0.568695, 36.8947)
-
-[node name="Jar3" parent="DeathlessAct/Forest" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(0.996535, 0, 0.0831734, 0, 1, 0, -0.0831734, 0, 0.996535, -71.4745, -0.568695, 15.3515)
-
-[node name="Jar4" parent="DeathlessAct/Forest" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(0.990927, 0, -0.134401, 0, 1, 0, 0.134401, 0, 0.990927, -89.6253, -0.568695, 28.419)
 
 [node name="Pearls2" type="Node3D" parent="DeathlessAct/Forest"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.3197, 0, 10.7046)
@@ -971,61 +1638,21 @@ Spacing = 4.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="DeathlessAct/Forest/Jar5" instance=ExtResource("7_ab0t7")]
-
-[node name="Child02" parent="DeathlessAct/Forest/Jar5" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="Child03" parent="DeathlessAct/Forest/Jar5" instance=ExtResource("7_ab0t7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="EnemyStone" parent="DeathlessAct/Forest" instance=ExtResource("20_ck01c")]
-transform = Transform3D(1.42553, 0, -0.74893, 0, 1.61029, 0, 0.74893, 0, 1.42553, -122.109, 0.0906982, 13.8389)
-enemyCount = 1
-
-[node name="EnemyStone2" parent="DeathlessAct/Forest" instance=ExtResource("20_ck01c")]
-transform = Transform3D(1.42553, 0, -0.74893, 0, 1.61029, 0, 0.74893, 0, 1.42553, -123.618, 0.0906982, 16.7115)
-enemyCount = 1
-
-[node name="EnemyStone3" parent="DeathlessAct/Forest" instance=ExtResource("20_ck01c")]
-transform = Transform3D(1.42553, 0, -0.74893, 0, 1.61029, 0, 0.74893, 0, 1.42553, -122.109, 3.24249, 13.8389)
-enemyCount = 1
-
-[node name="EnemyStone4" parent="DeathlessAct/Forest" instance=ExtResource("20_ck01c")]
-transform = Transform3D(1.42553, 0, -0.74893, 0, 1.61029, 0, 0.74893, 0, 1.42553, -123.618, 3.24249, 16.7115)
-enemyCount = 1
-
-[node name="EnemyStone5" parent="DeathlessAct/Forest" instance=ExtResource("20_ck01c")]
-transform = Transform3D(1.42553, 0, -0.74893, 0, 1.61029, 0, 0.74893, 0, 1.42553, -122.109, 6.48356, 13.8389)
-enemyCount = 1
-
-[node name="EnemyStone6" parent="DeathlessAct/Forest" instance=ExtResource("20_ck01c")]
-transform = Transform3D(1.42553, 0, -0.74893, 0, 1.61029, 0, 0.74893, 0, 1.42553, -123.618, 6.48356, 16.7115)
-enemyCount = 1
-
-[node name="BlueMajin" parent="DeathlessAct/Forest" instance=ExtResource("14_nmw8u")]
-transform = Transform3D(0.440347, 0, 0.897828, 0, 1, 0, -0.897828, 0, 0.440347, -108.244, 1.9439, 22.2478)
-
-[node name="BlueMajin2" parent="DeathlessAct/Forest" instance=ExtResource("14_nmw8u")]
-transform = Transform3D(0.43185, 0, 0.901946, 0, 1, 0, -0.901946, 0, 0.43185, -111.907, 1.89797, 20.6666)
-
 [node name="RedMajin" parent="DeathlessAct/Forest" instance=ExtResource("11_04wic")]
-transform = Transform3D(0.418913, 0, 0.908026, 0, 1, 0, -0.908026, 0, 0.418913, -115.534, 2.17348, 18.9829)
+transform = Transform3D(0.418913, 0, 0.908026, 0, 1, 0, -0.908026, 0, 0.418913, -116.447, -0.216293, 18.5615)
 "Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 3.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 4.0
-"Attack Settings/Flame Aggression Radius" = 5
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="Goal" parent="DeathlessAct/Forest" instance=ExtResource("21_tort4")]
-transform = Transform3D(0.472182, 0, 0.881501, 0, 1, 0, -0.881501, 0, 0.472182, -131.897, 6.72942, 11.1987)
+transform = Transform3D(0.853132, 0, -0.521695, 0, 1, 0, 0.521695, 0, 0.853132, -320.045, -1.92037, 32.9539)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Forest/Goal"]
 transform = Transform3D(0.999989, 0, 1.49012e-07, 0, 1, 0, -1.49012e-07, 0, 0.999989, 1.53224, -2.95197, 3.07141)
 shape = SubResource("BoxShape3D_hqpy5")
 
 [node name="FireSoul" parent="DeathlessAct/Forest" instance=ExtResource("12_t6xqb")]
-transform = Transform3D(0.394584, 0, 0.91886, 0, 1, 0, -0.91886, 0, 0.394584, -122.76, 3.26587, 15.4417)
+transform = Transform3D(0.205214, 0, 0.978717, 0, 1, 0, -0.978717, 0, 0.205214, -385.692, -9.31485, 62.584)
 fireSoulIndex = 3
 
 [node name="Oasis" type="Node3D" parent="DeathlessAct"]
@@ -1054,26 +1681,44 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -5.221, 
 
 [connection signal="Activated" from="DeathlessAct/Islands/Spring" to="DeathlessAct/Islands/Spring/Path" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Islands/Spring" to="DeathlessAct/Islands/Spring/Camera" method="Activate"]
-[connection signal="Shattered" from="DeathlessAct/Islands/Jar1" to="Static" method="IncrementObjective"]
 [connection signal="Spawned" from="DeathlessAct/Islands/RedMajin" to="DeathlessAct/Islands/BlueMajin3" method="Spawn"]
 [connection signal="Spawned" from="DeathlessAct/Islands/RedMajin" to="DeathlessAct/Islands/BlueMajin4" method="Spawn"]
-[connection signal="Shattered" from="DeathlessAct/Islands/JarR1" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Islands/JarL1" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Islands/JarR2" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Islands/JarL2" to="Static" method="IncrementObjective"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child01" to="DeathlessAct/Islands/Pearls4/Child01" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child02" to="DeathlessAct/Islands/Pearls4/Child02" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child03" to="DeathlessAct/Islands/Pearls4/Child03" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child04" to="DeathlessAct/Islands/Pearls4/Child04" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child05" to="DeathlessAct/Islands/Pearls4/Child05" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child06" to="DeathlessAct/Islands/Pearls4/Child06" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child07" to="DeathlessAct/Islands/Pearls4/Child07" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls4/Child08" to="DeathlessAct/Islands/Pearls4/Child08" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child01" to="DeathlessAct/Islands/Pearls5/Child01" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child02" to="DeathlessAct/Islands/Pearls5/Child02" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child03" to="DeathlessAct/Islands/Pearls5/Child03" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child04" to="DeathlessAct/Islands/Pearls5/Child04" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child05" to="DeathlessAct/Islands/Pearls5/Child05" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child06" to="DeathlessAct/Islands/Pearls5/Child06" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child07" to="DeathlessAct/Islands/Pearls5/Child07" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls5/Child08" to="DeathlessAct/Islands/Pearls5/Child08" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child01" to="DeathlessAct/Islands/Pearls/Child01" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child02" to="DeathlessAct/Islands/Pearls/Child02" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child03" to="DeathlessAct/Islands/Pearls/Child03" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child04" to="DeathlessAct/Islands/Pearls/Child04" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child05" to="DeathlessAct/Islands/Pearls/Child05" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child06" to="DeathlessAct/Islands/Pearls/Child06" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child07" to="DeathlessAct/Islands/Pearls/Child07" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls/Child08" to="DeathlessAct/Islands/Pearls/Child08" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child01" to="DeathlessAct/Islands/Pearls2/Child01" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child02" to="DeathlessAct/Islands/Pearls2/Child02" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child03" to="DeathlessAct/Islands/Pearls2/Child03" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child04" to="DeathlessAct/Islands/Pearls2/Child04" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child05" to="DeathlessAct/Islands/Pearls2/Child05" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child06" to="DeathlessAct/Islands/Pearls2/Child06" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child07" to="DeathlessAct/Islands/Pearls2/Child07" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Islands/Pearls2/Child08" to="DeathlessAct/Islands/Pearls2/Child08" method="OnEntered"]
 [connection signal="Deactivated" from="DeathlessAct/Islands/JumpPanel" to="DeathlessAct/Islands/JumpPanel/Path" method="Activate"]
-[connection signal="Shattered" from="DeathlessAct/Forest/Jar" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Forest/Jar2" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Forest/Jar3" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Forest/Jar4" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Forest/Jar5/Child01" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Forest/Jar5/Child02" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="DeathlessAct/Forest/Jar5/Child03" to="Static" method="IncrementObjective"]
-[connection signal="Defeated" from="DeathlessAct/Forest/BlueMajin" to="DeathlessAct/Forest/EnemyStone5" method="IncrementCounter"]
-[connection signal="Defeated" from="DeathlessAct/Forest/BlueMajin" to="DeathlessAct/Forest/EnemyStone6" method="IncrementCounter"]
-[connection signal="Defeated" from="DeathlessAct/Forest/BlueMajin2" to="DeathlessAct/Forest/EnemyStone3" method="IncrementCounter"]
-[connection signal="Defeated" from="DeathlessAct/Forest/BlueMajin2" to="DeathlessAct/Forest/EnemyStone4" method="IncrementCounter"]
-[connection signal="Defeated" from="DeathlessAct/Forest/RedMajin" to="DeathlessAct/Forest/EnemyStone" method="IncrementCounter"]
-[connection signal="Defeated" from="DeathlessAct/Forest/RedMajin" to="DeathlessAct/Forest/EnemyStone2" method="IncrementCounter"]
+[connection signal="Collected" from="DeathlessAct/Islands/Rings/Child09" to="DeathlessAct/Islands/SpringSpawner" method="Activate"]
+[connection signal="Respawned" from="DeathlessAct/Islands/Rings/Child09" to="DeathlessAct/Islands/SpringSpawner" method="Deactivate"]
+[connection signal="Collected" from="DeathlessAct/Islands/Rings/Child10" to="DeathlessAct/Islands/SpringSpawner" method="Activate"]
+[connection signal="Respawned" from="DeathlessAct/Islands/Rings/Child10" to="DeathlessAct/Islands/SpringSpawner" method="Deactivate"]
 
 [editable path="Static"]
