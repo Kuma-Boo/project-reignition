@@ -247,7 +247,7 @@ public partial class ExperienceResult : Control
 
 	private void FinishMenu()
 	{
-		// Emit a signal; Transition is handled by UnlockResult.cs
+		// Emit a signal; Transition is handled by NotificationMenu.cs
 		isFadingBgm = true;
 		EmitSignal(SignalName.Finished);
 	}

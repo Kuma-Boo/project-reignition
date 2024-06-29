@@ -24,19 +24,19 @@ public partial class SaveManager : Node
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
 			// Default debug settings for testing from the editor.
-			Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.Master);
-			Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.Bgm);
-			Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.Sfx);
-			Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.Voice);
+			Config.isMasterMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Master);
+			Config.isBgmMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Bgm);
+			Config.isSfxMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Sfx);
+			Config.isVoiceMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Voice);
 
 			Config.masterVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Master)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Master)) * 100);
 			Config.bgmVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Bgm)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Bgm)) * 100);
 			Config.sfxVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Sfx)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Sfx)) * 100);
 			Config.voiceVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Voice)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Voice)) * 100);
 			ApplyConfig();
 		}
 	}
@@ -81,15 +81,6 @@ public partial class SaveManager : Node
 		Low,
 		Medium,
 		High,
-		Count
-	}
-
-	private enum AudioBuses
-	{
-		Master,
-		Bgm,
-		Sfx,
-		Voice,
 		Count
 	}
 
@@ -377,10 +368,10 @@ public partial class SaveManager : Node
 				break;
 		}
 
-		SetAudioBusVolume((int)AudioBuses.Master, Config.masterVolume, Config.isMasterMuted);
-		SetAudioBusVolume((int)AudioBuses.Bgm, Config.bgmVolume, Config.isBgmMuted);
-		SetAudioBusVolume((int)AudioBuses.Sfx, Config.sfxVolume, Config.isSfxMuted);
-		SetAudioBusVolume((int)AudioBuses.Voice, Config.voiceVolume, Config.isVoiceMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Master, Config.masterVolume, Config.isMasterMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Bgm, Config.bgmVolume, Config.isBgmMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Sfx, Config.sfxVolume, Config.isSfxMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Voice, Config.voiceVolume, Config.isVoiceMuted);
 
 		Instance.EmitSignal(SignalName.ConfigApplied);
 	}
@@ -459,16 +450,6 @@ public partial class SaveManager : Node
 				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
 				break;
 		}
-	}
-
-	/// <summary> Changes the volume of an audio bus channel. </summary>
-	public static void SetAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
-	{
-		if (volumePercentage == 0)
-			isMuted = true;
-
-		AudioServer.SetBusMute(bus, isMuted); // Mute or unmute
-		AudioServer.SetBusVolumeDb(bus, Mathf.LinearToDb(volumePercentage * .01f));
 	}
 
 	#endregion
