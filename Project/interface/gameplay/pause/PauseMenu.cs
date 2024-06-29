@@ -102,7 +102,7 @@ public partial class PauseMenu : Node
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!AllowPausing || !Stage.IsLevelIngame) return;
+		if (!AllowPausing || !Stage.IsLevelIngame || TransitionManager.IsTransitionActive) return;
 
 		if (Input.IsActionJustPressed("button_pause"))
 		{

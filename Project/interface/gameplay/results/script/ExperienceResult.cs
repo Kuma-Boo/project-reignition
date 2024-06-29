@@ -69,7 +69,7 @@ public partial class ExperienceResult : Control
 	/// <summary> Experience points needed for the previous level up. </summary>
 	private int previousLevelupRequirement;
 	/// <summary> Not 100% accurate to the original game, but very close. </summary>
-	private static int CalculateLevelUpRequirement(int level) => (8000 * level) + (8000 * level * (SaveManager.ActiveGameData.level / 10));
+	private static int CalculateLevelUpRequirement(int level) => (8000 * level) + (8000 * (level / 10));
 
 	private StageSettings Stage => StageSettings.instance;
 
@@ -106,9 +106,7 @@ public partial class ExperienceResult : Control
 
 		if (SaveManager.ActiveGameData.exp >= levelupRequirement) // Level up
 		{
-			SaveManager.ActiveGameData.exp = levelupRequirement;
 			ProcessLevelUp();
-			RedrawData();
 			return;
 		}
 
@@ -126,14 +124,15 @@ public partial class ExperienceResult : Control
 	private void RedrawData()
 	{
 		float expRatio = (SaveManager.ActiveGameData.exp - previousLevelupRequirement) / ((float)levelupRequirement - previousLevelupRequirement);
+		expRatio = Mathf.Clamp(expRatio, 0, 1);
 		expFill.Scale = new(expRatio, 1);
 		expLabel.Text = $"{ExtensionMethods.FormatMenuNumber(SaveManager.ActiveGameData.exp)}/{ExtensionMethods.FormatMenuNumber(levelupRequirement)}";
 
 		int addedExp = Mathf.CeilToInt(interpolatedExp) - startingExp;
 		scoreExp = Mathf.CeilToInt(Math.Clamp(Stage.TotalScore - addedExp, 0, Stage.TotalScore));
-		skillExp = Mathf.CeilToInt(Math.Clamp((Stage.CurrentEXP + Stage.TotalScore) - addedExp, 0, Stage.CurrentEXP));
+		skillExp = Mathf.CeilToInt(Math.Clamp(Stage.CurrentEXP + Stage.TotalScore - addedExp, 0, Stage.CurrentEXP));
 		if (useMissionExp)
-			missionExp = Mathf.CeilToInt(Math.Clamp((Stage.CurrentEXP + Stage.TotalScore + Stage.Data.FirstClearBonus) - addedExp, 0, Stage.Data.FirstClearBonus));
+			missionExp = Mathf.CeilToInt(Math.Clamp(Stage.CurrentEXP + Stage.TotalScore + Stage.Data.FirstClearBonus - addedExp, 0, Stage.Data.FirstClearBonus));
 
 		scoreLabel.Text = ExtensionMethods.FormatMenuNumber(scoreExp);
 		skillLabel.Text = ExtensionMethods.FormatMenuNumber(skillExp);
@@ -197,6 +196,9 @@ public partial class ExperienceResult : Control
 		soulLabel.Text = maxSoulPower.ToString("000");
 		soulLabel.GetParent<Control>().Visible = soulGaugeGain != 0;
 
+		expFill.Scale = Vector2.One; // Ensure exp bar is full
+		expLabel.Text = $"{ExtensionMethods.FormatMenuNumber(previousLevelupRequirement)}/{ExtensionMethods.FormatMenuNumber(previousLevelupRequirement)}";
+
 		if (animator.CurrentAnimation != ShowLevelUpAnimation)
 			animator.Play(LevelUpAnimation);
 	}
@@ -247,7 +249,7 @@ public partial class ExperienceResult : Control
 
 	private void FinishMenu()
 	{
-		// Emit a signal; Transition is handled by UnlockResult.cs
+		// Emit a signal; Transition is handled by NotificationMenu.cs
 		isFadingBgm = true;
 		EmitSignal(SignalName.Finished);
 	}
