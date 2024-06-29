@@ -1,0 +1,314 @@
+[gd_scene load_steps=8 format=3 uid="uid://qg0ey5nh2jq5"]
+
+[ext_resource type="PackedScene" uid="uid://7kcasi6v1odv" path="res://area/1 sand oasis/act 3/Static.tscn" id="1_w71ik"]
+[ext_resource type="Resource" uid="uid://c4vvig16yhvtu" path="res://resource/level data/sand oasis/Act3Jar.tres" id="2_shuvj"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_5vni7"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5_ggq65"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="6_21wud"]
+[ext_resource type="Script" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="7_bmevn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wbgfo"]
+size = Vector3(15, 20, 2.5)
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_w71ik")]
+Data = ExtResource("2_shuvj")
+metadata/_edit_lock_ = true
+
+[node name="CORAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="CORAct"]
+metadata/_edit_lock_ = true
+
+[node name="CullingMap" type="Node3D" parent="CORAct"]
+visible = false
+
+[node name="DescentTopL" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(0.933549, 0, 0.358449, 0, 1, 0, -0.358449, 0, 0.933549, 2.50915, 0, 6.53484)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/DescentTopL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="UpperHallU" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(0.933549, 0, 0.358449, 0, 1, 0, -0.358449, 0, 0.933549, 39.4237, -9.87319, 101.621)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/UpperHallU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="DescentBottomL" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(-0.907154, 0, -0.420798, 0, 1, 0, 0.420798, 0, -0.907154, -45.2199, -21.6, 160.9)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/DescentBottomL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="DescentTopU" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.139388, -30, 90.1186)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/DescentTopU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="LowerHallL" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(-0.410226, 0, -0.911984, 0, 1, 0, 0.911984, 0, -0.410226, -20.3303, -45.1, 185.538)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/LowerHallL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="DescentBottomU" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(-0.93477, 0, 0.355254, 0, 1, 0, -0.355254, 0, -0.93477, -33.8835, -50, 86.8478)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/DescentBottomU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="AscentBottomL" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(-0.93477, 0, 0.355254, 0, 1, 0, -0.355254, 0, -0.93477, 21.8725, -50, -55.6391)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/AscentBottomL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="LowerHallU" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(-0.410226, 0, -0.911984, 0, 1, 0, 0.911984, 0, -0.410226, 20.4321, -45.1, -185.765)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/LowerHallU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="AscentTopL" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(0.257251, 0, 0.966345, 0, 1, 0, -0.966345, 0, 0.257251, -13.5611, -31.1, -91.9826)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/AscentTopL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="AscentBottomU" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 49.9177, -23.3814, -139.312)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/AscentBottomU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="UpperHallL" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -1.0823, -16.5814, -189.812)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/UpperHallL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="AscentTopU" parent="CORAct/CullingMap" instance=ExtResource("5_5vni7")]
+transform = Transform3D(0.932261, 0, 0.361787, 0, 1, 0, -0.361787, 0, 0.932261, -12.9885, 0, -33.4141)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/CullingMap/AscentTopU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="Lap01" type="Node3D" parent="CORAct"]
+script = ExtResource("5_ggq65")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="DescentTop" type="Node3D" parent="CORAct/Lap01"]
+transform = Transform3D(0.931692, 0, 0.363251, 0, 1, 0, -0.363251, 0, 0.931692, 43.986, -10.029, 113.33)
+script = ExtResource("5_ggq65")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="DescentBottom" type="Node3D" parent="CORAct/Lap01"]
+transform = Transform3D(-0.395658, 4.02262e-11, 0.918398, 3.29245e-09, 1, 1.37463e-09, -0.918398, 3.56767e-09, -0.395658, -22.2946, -28.0261, 95.5331)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="LowerHall" type="Node3D" parent="CORAct/Lap01"]
+transform = Transform3D(-0.932324, -1.11022e-16, 0.361625, 1.11022e-16, 1, -1.11022e-16, -0.361625, 0, -0.932324, -41.0216, -50.0001, 105.663)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="AscentBottom" type="Node3D" parent="CORAct/Lap01"]
+transform = Transform3D(-0.9349, -1.11022e-16, 0.354911, 0, 1, -3.33067e-16, -0.354911, 0, -0.9349, 43.6927, -50, -112.669)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="AscentTop" type="Node3D" parent="CORAct/Lap01"]
+transform = Transform3D(-0.827081, -1.11022e-16, 0.562084, 1.11022e-16, 1, 2.22045e-16, -0.562084, 0, -0.827082, 41.3489, -25.8326, -111.892)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="UpperHall" type="Node3D" parent="CORAct/Lap01"]
+transform = Transform3D(0.932325, -1.11022e-16, 0.361625, 1.73472e-17, 1, -2.22045e-16, -0.361625, 0, 0.932324, -34.8011, -9.24389, -89.8716)
+script = ExtResource("5_ggq65")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Lap02" type="Node3D" parent="CORAct"]
+visible = false
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="DescentTop" type="Node3D" parent="CORAct/Lap02"]
+transform = Transform3D(0.931692, 0, 0.363251, 0, 1, 0, -0.363251, 0, 0.931692, 44, -10.029, 113.33)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="DescentBottom" type="Node3D" parent="CORAct/Lap02"]
+transform = Transform3D(-0.395658, 4.02262e-11, 0.918398, 3.29245e-09, 1, 1.37463e-09, -0.918398, 3.56767e-09, -0.395658, -22.2946, -28.0261, 95.5331)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="LowerHall" type="Node3D" parent="CORAct/Lap02"]
+transform = Transform3D(-0.932324, -1.11022e-16, 0.361625, 1.11022e-16, 1, -1.11022e-16, -0.361625, 0, -0.932324, -41.0216, -50.0001, 105.663)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="AscentBottom" type="Node3D" parent="CORAct/Lap02"]
+transform = Transform3D(-0.9349, -1.11022e-16, 0.354911, 0, 1, -3.33067e-16, -0.354911, 0, -0.9349, 43.6927, -50, -112.669)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="AscentTop" type="Node3D" parent="CORAct/Lap02"]
+transform = Transform3D(-0.827081, -1.11022e-16, 0.562084, 1.11022e-16, 1, 2.22045e-16, -0.562084, 0, -0.827082, 41.3489, -25.8326, -111.892)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="UpperHall" type="Node3D" parent="CORAct/Lap02"]
+transform = Transform3D(0.932325, -1.11022e-16, 0.361625, 1.73472e-17, 1, -2.22045e-16, -0.361625, 0, 0.932324, -34.8011, -9.24389, -89.8716)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="Lap03" type="Node3D" parent="CORAct"]
+visible = false
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="AscentBottom" type="Node3D" parent="CORAct/Lap03"]
+transform = Transform3D(-0.9349, -1.11022e-16, 0.354911, 0, 1, -3.33067e-16, -0.354911, 0, -0.9349, 43.6927, -50, -112.669)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="AscentTop" type="Node3D" parent="CORAct/Lap03"]
+transform = Transform3D(-0.827081, -1.11022e-16, 0.562084, 1.11022e-16, 1, 2.22045e-16, -0.562084, 0, -0.827082, 41.3489, -25.8326, -111.892)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="UpperHall" type="Node3D" parent="CORAct/Lap03"]
+transform = Transform3D(0.932325, -1.11022e-16, 0.361625, 1.73472e-17, 1, -2.22045e-16, -0.361625, 0, 0.932324, -34.8011, -9.24389, -89.8716)
+script = ExtResource("5_ggq65")
+saveVisibilityOnCheckpoint = true
+
+[node name="Goal" parent="CORAct/Lap03/UpperHall" instance=ExtResource("6_21wud")]
+transform = Transform3D(-0.999993, 1.03509e-16, -0.0032635, 1.80718e-17, 1, -2.21987e-16, 0.00326389, 4.01484e-17, -0.999994, -0.0702306, 16.2439, 91.3743)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/Lap03/UpperHall/Goal"]
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="LapCycle" parent="CORAct" instance=ExtResource("5_5vni7")]
+transform = Transform3D(0.93358, 0, 0.358368, 0, 1, 0, -0.358368, 0, 0.93358, 5.109, 0, 13.219)
+
+[node name="Cycle" type="Node3D" parent="CORAct/LapCycle" node_paths=PackedStringArray("checkpointTrigger")]
+script = ExtResource("7_bmevn")
+checkpointTrigger = NodePath("../Checkpoint")
+itemCycles = [NodePath("../../Lap01"), NodePath("../../Lap02"), NodePath("../../Lap03")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/LapCycle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="Checkpoint" type="Area3D" parent="CORAct/LapCycle"]
+transform = Transform3D(-0.740523, 0, 0.672031, 0, 1, 0, -0.672031, 0, -0.740523, -8.40966, -50, -4.96902)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CORAct/LapCycle/Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[connection signal="Activated" from="CORAct/CullingMap/DescentTopL" to="CORAct/Lap01/DescentTop" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/DescentTopL" to="CORAct/Lap02/DescentTop" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentTopL" to="CORAct/Lap01/DescentTop" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentTopL" to="CORAct/Lap02/DescentTop" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/UpperHallU" to="CORAct/Lap01/UpperHall" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/UpperHallU" to="CORAct/Lap02/UpperHall" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/UpperHallU" to="CORAct/Lap03/UpperHall" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/UpperHallU" to="CORAct/Lap01/UpperHall" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/UpperHallU" to="CORAct/Lap02/UpperHall" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/UpperHallU" to="CORAct/Lap03/UpperHall" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/DescentBottomL" to="CORAct/Lap01/DescentBottom" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/DescentBottomL" to="CORAct/Lap02/DescentBottom" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentBottomL" to="CORAct/Lap01/DescentBottom" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentBottomL" to="CORAct/Lap02/DescentBottom" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/DescentTopU" to="CORAct/Lap01/DescentTop" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/DescentTopU" to="CORAct/Lap02/DescentTop" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentTopU" to="CORAct/Lap01/DescentTop" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentTopU" to="CORAct/Lap02/DescentTop" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/LowerHallL" to="CORAct/Lap01/LowerHall" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/LowerHallL" to="CORAct/Lap02/LowerHall" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/LowerHallL" to="CORAct/Lap01/LowerHall" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/LowerHallL" to="CORAct/Lap02/LowerHall" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/DescentBottomU" to="CORAct/Lap01/DescentBottom" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/DescentBottomU" to="CORAct/Lap02/DescentBottom" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentBottomU" to="CORAct/Lap01/DescentBottom" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/DescentBottomU" to="CORAct/Lap02/DescentBottom" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentBottomL" to="CORAct/Lap01/AscentBottom" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentBottomL" to="CORAct/Lap02/AscentBottom" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentBottomL" to="CORAct/Lap03/AscentBottom" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentBottomL" to="CORAct/Lap01/AscentBottom" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentBottomL" to="CORAct/Lap02/AscentBottom" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentBottomL" to="CORAct/Lap03/AscentBottom" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/LowerHallU" to="CORAct/Lap01/LowerHall" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/LowerHallU" to="CORAct/Lap02/LowerHall" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/LowerHallU" to="CORAct/Lap01/LowerHall" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/LowerHallU" to="CORAct/Lap02/LowerHall" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentTopL" to="CORAct/Lap01/AscentTop" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentTopL" to="CORAct/Lap02/AscentTop" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentTopL" to="CORAct/Lap03/AscentTop" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentTopL" to="CORAct/Lap01/AscentTop" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentTopL" to="CORAct/Lap02/AscentTop" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentTopL" to="CORAct/Lap03/AscentTop" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentBottomU" to="CORAct/Lap01/AscentBottom" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentBottomU" to="CORAct/Lap02/AscentBottom" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentBottomU" to="CORAct/Lap03/AscentBottom" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentBottomU" to="CORAct/Lap01/AscentBottom" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentBottomU" to="CORAct/Lap02/AscentBottom" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentBottomU" to="CORAct/Lap03/AscentBottom" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/UpperHallL" to="CORAct/Lap01/UpperHall" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/UpperHallL" to="CORAct/Lap02/UpperHall" method="Activate"]
+[connection signal="Activated" from="CORAct/CullingMap/UpperHallL" to="CORAct/Lap03/UpperHall" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/UpperHallL" to="CORAct/Lap01/UpperHall" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/UpperHallL" to="CORAct/Lap02/UpperHall" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/UpperHallL" to="CORAct/Lap03/UpperHall" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentTopU" to="CORAct/Lap01/AscentTop" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentTopU" to="CORAct/Lap02/AscentTop" method="Deactivate"]
+[connection signal="Activated" from="CORAct/CullingMap/AscentTopU" to="CORAct/Lap03/AscentTop" method="Deactivate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentTopU" to="CORAct/Lap01/AscentTop" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentTopU" to="CORAct/Lap02/AscentTop" method="Activate"]
+[connection signal="Deactivated" from="CORAct/CullingMap/AscentTopU" to="CORAct/Lap03/AscentTop" method="Activate"]
