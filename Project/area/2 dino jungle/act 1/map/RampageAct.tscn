@@ -1,9 +1,10 @@
-[gd_scene load_steps=58 format=3 uid="uid://4ku8otmttbdw"]
+[gd_scene load_steps=63 format=3 uid="uid://4ku8otmttbdw"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_15mb8"]
 [ext_resource type="Resource" uid="uid://bfhobpge3ljn2" path="res://resource/level data/dinosaur jungle/Act2Rampage.tres" id="2_e23ug"]
 [ext_resource type="Resource" uid="uid://dcj0tr5757gc3" path="res://area/2 dino jungle/act 1/camera/rampage/StartCam.tres" id="3_qnd66"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_8l10n"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="7_kv7h2"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="8_aa84t"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="9_3ulwd"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="10_tx4o8"]
@@ -46,6 +47,47 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 1)
+
+[sub_resource type="Animation" id="Animation_b3v57"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_130o8"]
+resource_name = "event"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l8rqa"]
+_data = {
+"RESET": SubResource("Animation_b3v57"),
+"event": SubResource("Animation_130o8")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7xudv"]
+size = Vector3(12, 2, 1)
 
 [sub_resource type="Curve" id="Curve_j4nlx"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.506494, 0.489064), 0.0, 0.0, 0, 0, Vector2(1, 0.00922775), 0.0, 0.0, 0, 0]
@@ -112,13 +154,13 @@ metadata/_edit_group_ = true
 [node name="01Chase" parent="Static/Visuals" index="1"]
 startEnabled = false
 
+[node name="02RiverReverse" parent="Static/Visuals" index="3"]
+startEnabled = true
+
 [node name="03Cave" parent="Static/Visuals" index="4"]
 startEnabled = true
 
 [node name="03CaveSky" parent="Static/Visuals" index="5"]
-startEnabled = true
-
-[node name="03CaveReverse" parent="Static/Visuals" index="6"]
 startEnabled = true
 
 [node name="Head" parent="Static/Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" index="1"]
@@ -249,16 +291,69 @@ shape = SubResource("BoxShape3D_mynxt")
 
 [node name="DialogTriggers" type="Node3D" parent="RampageAct"]
 
-[node name="CaveSplitTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
+[node name="FlowerPickingTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362.675, -222.686, -621.829)
 OneShot = true
-"Respawn Mode" = 3
+"Respawn Mode" = 0
 
-[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/CaveSplitTrigger"]
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/FlowerPickingTrigger"]
 script = ExtResource("9_3ulwd")
-textKeys = ["din_split_sh"]
+textKeys = ["din_flowers_so", "din_flowers_sh"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/CaveSplitTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/FlowerPickingTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="PositioningTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -373.305, -215.486, -748.775)
+OneShot = true
+"Respawn Mode" = 2
+
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/PositioningTrigger"]
+script = ExtResource("9_3ulwd")
+textKeys = Array[String](["din_positioning_hint_so", "din_positioning_hint_sh"])
+
+[node name="DisableEvent" type="Node3D" parent="RampageAct/DialogTriggers/PositioningTrigger" node_paths=PackedStringArray("animator")]
+script = ExtResource("7_kv7h2")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RampageAct/DialogTriggers/PositioningTrigger/DisableEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_l8rqa")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/PositioningTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_7xudv")
+
+[node name="AttackHintTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
+transform = Transform3D(-2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, -314.674, -264.358, -950.988)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/AttackHintTrigger"]
+script = ExtResource("9_3ulwd")
+randomize = true
+textKeys = ["din_attack_hint_sh", "din_attack_hint2_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/AttackHintTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="FlowerbedTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
+transform = Transform3D(-0.885556, 0, -0.464533, 0, 1, 0, 0.464533, 0, -0.885556, -662.203, -276.358, -1062.8)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/FlowerbedTrigger"]
+script = ExtResource("9_3ulwd")
+textKeys = ["din_flowerbed_so", "din_flowerbed_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/FlowerbedTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
@@ -454,23 +549,14 @@ transform = Transform3D(0.884133, 0, -0.467236, 0, 1, 0, 0.467236, 0, 0.884133, 
 [node name="Cactus" parent="RampageAct/Cave" instance=ExtResource("17_khxoo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.8542, 6.35295, -63.4445)
 
-[node name="Cactus2" parent="RampageAct/Cave" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("17_khxoo")]
+[node name="Cactus2" parent="RampageAct/Cave" instance=ExtResource("17_khxoo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60.8307, -4.01382, -187.04)
-root = NodePath("../Cactus/Root")
-pieceRoot = NodePath("../Cactus/CactusPieces")
-animator = NodePath("../Cactus/AnimationPlayer")
 
-[node name="Cactus3" parent="RampageAct/Cave" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("17_khxoo")]
+[node name="Cactus3" parent="RampageAct/Cave" instance=ExtResource("17_khxoo")]
 transform = Transform3D(0.990085, 0.140084, -0.0104002, -0.140469, 0.987368, -0.0733048, 0, 0.0740389, 0.997255, -70.4784, -2.90988, -191.38)
-root = NodePath("../Cactus/Root")
-pieceRoot = NodePath("../Cactus/CactusPieces")
-animator = NodePath("../Cactus/AnimationPlayer")
 
-[node name="Cactus4" parent="RampageAct/Cave" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("17_khxoo")]
+[node name="Cactus4" parent="RampageAct/Cave" instance=ExtResource("17_khxoo")]
 transform = Transform3D(0.990085, 0.140084, -0.0104002, -0.140469, 0.987368, -0.0733048, 0, 0.0740389, 0.997255, -75.3195, -2.53073, -187.276)
-root = NodePath("../Cactus/Root")
-pieceRoot = NodePath("../Cactus/CactusPieces")
-animator = NodePath("../Cactus/AnimationPlayer")
 
 [node name="Rings3" type="Node3D" parent="RampageAct/Cave"]
 transform = Transform3D(0.761294, -0.0735161, 0.644226, -0.00462325, 0.992911, 0.11877, -0.64839, -0.0933972, 0.755557, -12.4463, 6.53961, -67.7587)
@@ -511,10 +597,10 @@ launchDirection = 0
 transform = Transform3D(1.74966, 0, -0.422737, 0, 1, 0, 0.422737, 0, 1.74966, -16.78, -8.26894, -114.995)
 
 [node name="LotusPlatform4" parent="RampageAct/Cave" instance=ExtResource("20_imscf")]
-transform = Transform3D(0.777625, 0, -0.187883, 0, 1, 0, 0.187883, 0, 0.777625, -4.11407, -2.77341, -132.529)
+transform = Transform3D(0.486015, 0, -0.117427, 0, 1, 0, 0.117427, 0, 0.486015, -4.114, -2, -132.529)
 
-[node name="FlowerMajin2" parent="RampageAct/Cave/LotusPlatform4" instance=ExtResource("26_6ufbs")]
-transform = Transform3D(1.14751, 0, -0.495694, 0, 1, 0, 0.495694, 0, 1.14751, -0.0235596, 13.3551, 0.138184)
+[node name="FlowerMajin2" parent="RampageAct/Cave" instance=ExtResource("26_6ufbs")]
+transform = Transform3D(0.7992, 0, -0.601062, 0, 1, 0, 0.601062, 0, 0.7992, -4.15799, 11.3, -132.426)
 rangeOverride = 20
 
 [node name="LotusPlatform5" parent="RampageAct/Cave" instance=ExtResource("20_imscf")]
@@ -527,7 +613,7 @@ transform = Transform3D(-0.137509, 0, 1.1921, 0, 1, 0, -1.1921, 0, -0.137509, -1
 transform = Transform3D(-0.156989, 0, 1.64907, 0, 1, 0, -1.36098, 0, -0.19022, 1.759, -4.13846, -165.453)
 
 [node name="LotusPlatform8" parent="RampageAct/Cave" instance=ExtResource("20_imscf")]
-transform = Transform3D(0.752021, 0, 1.38755, 0, 1, 0, -1.14515, 0, 0.911208, -6.7666, -2.36778, -170.981)
+transform = Transform3D(0.752021, 0, 1.38755, 0, 1, 0, -1.14515, 0, 0.911208, -6.99222, -2.36778, -170.637)
 
 [node name="LotusPlatform3" parent="RampageAct/Cave" instance=ExtResource("20_imscf")]
 transform = Transform3D(2.03154, 0, -0.470882, 0, 1, 0, 0.490844, 0, 1.94892, -12.8236, -5.76169, -128.211)
@@ -756,7 +842,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95, 0, -16.2)
 [node name="Spiral" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
 script = ExtResource("10_tx4o8")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JumpPanel" parent="RampageAct/Spiral" instance=ExtResource("35_bnpic")]
@@ -1201,12 +1286,15 @@ fireSoulIndex = 2
 [node name="Crossing" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
 script = ExtResource("10_tx4o8")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="FlowerMajin1" parent="RampageAct/Crossing" instance=ExtResource("26_6ufbs")]
-transform = Transform3D(0.329872, 0, -0.944026, 0, 1, 0, 0.944026, 0, 0.329872, 30.9495, 0.327972, -9.21747)
+transform = Transform3D(0.329872, 0, -0.944026, 0, 1, 0, 0.944026, 0, 0.329872, 32.9695, -0.0720215, -9.49957)
 disableAttacking = true
+passiveLength = 0.0
+preAttackLength = 0.0
+postAttackLength = 1.0
+weakDefense = true
 
 [node name="RingsM2" type="Node3D" parent="RampageAct/Crossing"]
 transform = Transform3D(0.0871561, -0.00015166, -0.996195, -0.000940684, 1, -0.000234539, 0.996194, 0.000957546, 0.087156, 44.0679, 3.11417, -15.2391)
@@ -1590,7 +1678,6 @@ transform = Transform3D(1.11592, 0, -0.666883, 0, 1, 0, 0.666883, 0, 1.11592, -6
 [node name="Cavern" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
 script = ExtResource("10_tx4o8")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JumpTrigger1" parent="RampageAct/Cavern" instance=ExtResource("4_8l10n")]
@@ -1775,7 +1862,6 @@ transform = Transform3D(0.622481, 0, -1.14128, 0, 1.18, 0, 1.14128, 0, 0.622481,
 [node name="FeedingTunnel" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
 script = ExtResource("10_tx4o8")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JumpPanel" parent="RampageAct/FeedingTunnel" instance=ExtResource("35_bnpic")]
@@ -1889,6 +1975,8 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="PlayerEntered" from="RampageAct/Cave/Catapult2" to="RampageAct/Cave/Catapult2/Camera" method="Activate"]
 [connection signal="PlayerExited" from="RampageAct/Cave/Catapult2" to="RampageAct/Cave/Catapult2/Camera" method="Deactivate"]
 [connection signal="Defeated" from="RampageAct/Cave/FlowerMajin" to="RampageAct/Cave/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Cave/FlowerMajin2" to="RampageAct/DialogTriggers/PositioningTrigger/DisableEvent" method="Activate"]
+[connection signal="Respawned" from="RampageAct/Cave/FlowerMajin2" to="RampageAct/DialogTriggers/PositioningTrigger/DisableEvent" method="Respawn"]
 [connection signal="Spawned" from="RampageAct/Cave/RedMajin1" to="RampageAct/Cave/RedMajin2" method="Spawn"]
 [connection signal="Activated" from="RampageAct/Spiral/JumpPanel" to="RampageAct/Spiral/JumpPanel/Camera" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/Spiral/JumpPanel" to="RampageAct/Spiral/JumpPanel/Camera" method="Deactivate"]
