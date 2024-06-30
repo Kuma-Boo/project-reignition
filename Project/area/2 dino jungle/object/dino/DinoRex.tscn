@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bhiih5oodiq1w"]
+[gd_scene load_steps=26 format=3 uid="uid://bhiih5oodiq1w"]
 
 [ext_resource type="PackedScene" uid="uid://kf3gvnm0grys" path="res://area/2 dino jungle/object/model/dino/DinoRex.gltf" id="1_0u7i8"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoRex.cs" id="2_bhtui"]
@@ -29,6 +29,9 @@ radius = 8.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7ppqm"]
 size = Vector3(45, 25, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w2st2"]
+size = Vector3(5, 25, 20)
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_n5c84"]
 allow_transition_to_self = true
@@ -77,7 +80,6 @@ animation = &"rex-tail-attack"
 animation = &"rex-upper-bite"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k1n0y"]
-graph_offset = Vector2(-814.232, 20.9299)
 nodes/attack_transition/node = SubResource("AnimationNodeTransition_n5c84")
 nodes/attack_transition/position = Vector2(-200, 360)
 nodes/attack_trigger/node = SubResource("AnimationNodeOneShot_m5hed")
@@ -245,6 +247,10 @@ shape = SubResource("BoxShape3D_7ppqm")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 10, 13.5)
 shape = SubResource("BoxShape3D_7ppqm")
 
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="AttackTrigger/TailAttack"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24, 10, 16.5)
+shape = SubResource("BoxShape3D_7ppqm")
+
 [node name="Upper" type="Area3D" parent="AttackTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.23987, 11.5, 30.8579)
 collision_layer = 0
@@ -258,6 +264,19 @@ shape = SubResource("BoxShape3D_7ppqm")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="AttackTrigger/Upper"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -27.4, 10, -11.3)
 shape = SubResource("BoxShape3D_7ppqm")
+
+[node name="Idle" type="Area3D" parent="AttackTrigger"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackTrigger/Idle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.3861, 10, 23.1744)
+shape = SubResource("BoxShape3D_w2st2")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="AttackTrigger/Idle"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -42.7, 21, 1.49012e-07)
+shape = SubResource("BoxShape3D_w2st2")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
@@ -358,8 +377,7 @@ bus = &"GAME SFX"
 [connection signal="area_entered" from="AttackTrigger/Rock2" to="." method="OnLowerBiteEnter" binds= [-14.0]]
 [connection signal="area_entered" from="AttackTrigger/Rock3" to="." method="OnLowerBiteEnter" binds= [-58.0]]
 [connection signal="area_entered" from="AttackTrigger/TailAttack" to="." method="OnTailAttackEnter"]
-[connection signal="area_exited" from="AttackTrigger/TailAttack" to="." method="OnReturnToIdle"]
 [connection signal="area_entered" from="AttackTrigger/Upper" to="." method="OnUpperBiteEnter"]
-[connection signal="area_exited" from="AttackTrigger/Upper" to="." method="OnReturnToIdle"]
+[connection signal="area_entered" from="AttackTrigger/Idle" to="." method="OnReturnToIdle"]
 
 [editable path="DinoRex"]
