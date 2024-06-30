@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=118 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -91,6 +91,7 @@
 [ext_resource type="Curve3D" uid="uid://b6l8a5bxarxwb" path="res://area/2 dino jungle/act 1/environment/path/EndBottomPath.tres" id="79_0fv0i"]
 [ext_resource type="Curve3D" uid="uid://d1cd8xa7wprvy" path="res://area/2 dino jungle/act 1/environment/path/EndMiddlePath.tres" id="80_4h07x"]
 [ext_resource type="Curve3D" uid="uid://dkof5hnvrvbuu" path="res://area/2 dino jungle/act 1/environment/path/EndTopPath.tres" id="81_vy7ml"]
+[ext_resource type="PackedScene" uid="uid://6cdlojevxvu7" path="res://area/2 dino jungle/act 1/completion/CompletionDemo.gltf" id="89_i1ci7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 2.5)
@@ -245,10 +246,11 @@ size = Vector3(8, 10, 15)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hyom4"]
 size = Vector3(5.72754, 10.5288, 1)
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_hpjme")
 dialogLibrary = ExtResource("2_2vrnn")
 pathParent = NodePath("Path")
+completionAnimator = NodePath("CompletionDemo/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("1_0crfa")]
@@ -996,7 +998,7 @@ shape = SubResource("BoxShape3D_ibe76")
 transform = Transform3D(-0.155292, 0, -0.579555, 0, 0.6, 0, 0.579555, 0, -0.155292, -550.331, -279.5, -1079.29)
 
 [node name="Startle" parent="Trigger/Object/DinoParaGroup" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -59.2087, -2.5, 2.14722)
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -64.6466, -2.5, -0.38855)
 "Enter Mode" = 0
 
 [node name="Event" type="Node3D" parent="Trigger/Object/DinoParaGroup/Startle" node_paths=PackedStringArray("animator")]
@@ -1676,6 +1678,12 @@ environment = ExtResource("4_gsi68")
 
 [node name="BGM" parent="." instance=ExtResource("36_8otvo")]
 
+[node name="CompletionDemo" parent="." instance=ExtResource("89_i1ci7")]
+
+[node name="Camera" type="Camera3D" parent="CompletionDemo/CompletionDemo" index="0"]
+cull_mask = 1086
+fov = 60.0
+
 [node name="DepthRenderer" parent="." instance=ExtResource("58_vm1cj")]
 
 [node name="PlanarReflectionRenderer" parent="." instance=ExtResource("35_c15gk")]
@@ -1753,3 +1761,4 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 
 [editable path="Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Trigger/Object/DinoParaGroup/DinoPara2"]
+[editable path="CompletionDemo"]

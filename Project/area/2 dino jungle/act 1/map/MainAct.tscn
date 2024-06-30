@@ -2329,27 +2329,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -11.5427, 1.74072,
 [node name="Child10" parent="MainAct/Chase/RingsM5" instance=ExtResource("40_m082x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -1.49012e-08, 0, 1, -12.8808, 1.82914, -3.20444)
 
-[node name="RiverEvent" parent="MainAct" instance=ExtResource("3_bw6cf")]
+[node name="RiverEvent" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -193.347, -39.102, -495.023)
+script = ExtResource("9_uj3dw")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Event" parent="MainAct/RiverEvent" instance=ExtResource("3_bw6cf")]
 OneShot = true
 "Respawn Mode" = 2
 "Enter Mode" = 0
 
-[node name="Path" type="Node3D" parent="MainAct/RiverEvent" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="MainAct/RiverEvent/Event" node_paths=PackedStringArray("path")]
 script = ExtResource("27_l6k7w")
-path = NodePath("../../../Static/Path/RiverPath")
+path = NodePath("../../../../Static/Path/RiverPath")
 
-[node name="Dialog" type="Node3D" parent="MainAct/RiverEvent"]
+[node name="Dialog" type="Node3D" parent="MainAct/RiverEvent/Event"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
 script = ExtResource("7_ys7sj")
 delays = [0.0, 0.4, 4.0, 0.0]
 displayLength = [2.0, 0.5, 0.0, null]
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
-[node name="RiverEvent" parent="MainAct/RiverEvent" instance=ExtResource("19_rr5sk")]
+[node name="RiverEvent" parent="MainAct/RiverEvent/Event" instance=ExtResource("19_rr5sk")]
 "Player Event Settings/Exit Lockout" = ExtResource("20_gl5qy")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/RiverEvent"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/RiverEvent/Event"]
 transform = Transform3D(-0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, -0.996195, 0.464157, 10.9, 18.6349)
 shape = SubResource("BoxShape3D_7im1x")
 
@@ -5753,7 +5758,7 @@ transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 
 toggleMode = true
 
 [node name="EnemyStone" parent="MainAct/Crossing" instance=ExtResource("49_g35os")]
-transform = Transform3D(1.26785, 0, 1.81262, 0, 2, 0, -2.71892, 0, 0.845236, 97.3905, -9.99435, -184.763)
+transform = Transform3D(1.69047, 0, 1.81262, 0, 2, 0, -3.62523, 0, 0.845235, 97.5595, -9.99435, -185.125)
 enemyCount = 3
 disableEnvironmentCollision = false
 
@@ -6951,6 +6956,7 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Deactivated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Activate"]
 [connection signal="Activated" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Activate"]
 [connection signal="Respawned" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Deactivate"]
+[connection signal="EventFinished" from="MainAct/RiverEvent/Event/RiverEvent" to="MainAct/RiverEvent" method="Deactivate"]
 [connection signal="Activated" from="MainAct/River/BoatStartTrigger" to="MainAct/River/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/River/BoatEndTrigger" to="MainAct/River/Boat" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]
@@ -7005,3 +7011,4 @@ shape = SubResource("BoxShape3D_7im1x")
 [editable path="Static"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]
+[editable path="Static/CompletionDemo"]
