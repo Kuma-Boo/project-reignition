@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://csk16ecqhgu0"]
+[gd_scene load_steps=34 format=3 uid="uid://csk16ecqhgu0"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_g3p2j"]
 [ext_resource type="Resource" uid="uid://c33qynkecblg1" path="res://resource/level data/sand oasis/Act2Deathless.tres" id="2_xpmxs"]
@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_0ll21"]
 [ext_resource type="PackedScene" uid="uid://rn3uo7tgdchl" path="res://area/1 sand oasis/object/pillar/SquarePillarMid.tscn" id="28_dqm0q"]
 [ext_resource type="PackedScene" uid="uid://cp32qqdvukmxh" path="res://area/1 sand oasis/object/grindrail/Grindrail05.tscn" id="28_dw367"]
+[ext_resource type="PackedScene" uid="uid://b6ilbxxvqailo" path="res://area/1 sand oasis/object/pillar/CircularPillar.tscn" id="31_qotte"]
 
 [sub_resource type="Curve" id="Curve_6kl04"]
 _data = [Vector2(0, 0), 0.0, -0.0213279, 0, 0, Vector2(1, 0.973631), 3.1643, 0.0, 0, 0]
@@ -37,6 +38,11 @@ point_count = 2
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.73225, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Curve" id="Curve_l1qfk"]
+max_value = 2.2
+_data = [Vector2(0, 0), 0.0, 23.5282, 0, 0, Vector2(0.25964, 2.18588), 0.0, 0.0, 0, 0, Vector2(0.496144, 0.0825272), 0.0, 0.0, 0, 0, Vector2(0.766169, 2.2), 0.0, 0.0, 0, 0, Vector2(0.994859, 0), -25.6462, 0.0, 0, 0]
+point_count = 5
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_hqpy5"]
 size = Vector3(36.9868, 12.769, 4.60156)
 
@@ -45,6 +51,7 @@ size = Vector3(36.9868, 12.769, 4.60156)
 [node name="Static" parent="." instance=ExtResource("1_g3p2j")]
 Data = ExtResource("2_xpmxs")
 InitialCameraSettings = ExtResource("3_yg4tl")
+metadata/_edit_lock_ = true
 
 [node name="02Islands" parent="Static/Visuals" index="2"]
 startEnabled = true
@@ -1512,7 +1519,7 @@ startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Rings" type="Node3D" parent="DeathlessAct/Oasis"]
-transform = Transform3D(0.999909, 0, 0.0135085, 0, 1, 0, -0.0135085, 0, 0.999909, 0.491219, 0.924374, 53.3282)
+transform = Transform3D(0.999909, 0, 0.0135085, 0, 1, 0, -0.0135085, 0, 0.999909, 0.491234, 0.756435, 53.3282)
 script = ExtResource("5_a6p2w")
 Generate = false
 Source = ExtResource("6_ejpqb")
@@ -1523,60 +1530,378 @@ Spacing = 5.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="DeathlessAct/Oasis/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("9_h0nk2")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="DeathlessAct/Oasis/Rings" instance=ExtResource("6_ejpqb")]
 
-[node name="Child02" type="Area3D" parent="DeathlessAct/Oasis/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child02" parent="DeathlessAct/Oasis/Rings" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("9_h0nk2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="DeathlessAct/Oasis/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child03" parent="DeathlessAct/Oasis/Rings" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("9_h0nk2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="DeathlessAct/Oasis/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child04" parent="DeathlessAct/Oasis/Rings" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("9_h0nk2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="DeathlessAct/Oasis/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child05" parent="DeathlessAct/Oasis/Rings" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("9_h0nk2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="DeathlessAct/Oasis/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child06" parent="DeathlessAct/Oasis/Rings" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("9_h0nk2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="DeathlessAct/Oasis/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child07" parent="DeathlessAct/Oasis/Rings" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("9_h0nk2")
-animator = NodePath("AnimationPlayer")
+
+[node name="Pearls" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, 1.96644, 0.599476, 99.3525)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 15
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+
+[node name="Child02" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child11" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child12" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="Child13" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Child14" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+
+[node name="Child15" parent="DeathlessAct/Oasis/Pearls" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+
+[node name="Spikepannel" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.999873, 0, -0.015899, 0, 1, 0, 0.015899, 0, -0.999873, 4.95544, 0.0360756, 111.179)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("23_0ll21")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child02" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child03" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child04" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child05" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child06" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child07" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child08" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child09" parent="DeathlessAct/Oasis/Spikepannel" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Spikepannel2" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.999873, 0, -0.015899, 0, 1, 0, 0.015899, 0, -0.999873, -0.396614, 0.0360756, 111.264)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("23_0ll21")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child02" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child03" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child04" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child05" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child06" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child07" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child08" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child09" parent="DeathlessAct/Oasis/Spikepannel2" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Spikepannel3" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.999873, 0, -0.015899, 0, 1, 0, 0.015899, 0, -0.999873, 5.56675, 0.0360756, 149.624)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("23_0ll21")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child02" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child03" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child04" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child05" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child06" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child07" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child08" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, -7)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child09" parent="DeathlessAct/Oasis/Spikepannel3" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.62939e-06, 0, -8)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Spikepannel4" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.999873, 0, -0.015899, 0, 1, 0, 0.015899, 0, -0.999873, 0.29567, 0.0360756, 149.417)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("23_0ll21")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child02" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child03" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child04" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child05" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child06" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child07" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 0, -6)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child08" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Child09" parent="DeathlessAct/Oasis/Spikepannel4" instance=ExtResource("23_0ll21")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 7.62939e-06, 0, -8)
+"State Lengths/inactive" = 1.0
+"State Lengths/active" = 1.0
+
+[node name="Rings2" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, -2.44979, 0.753788, 139.093)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+
+[node name="Child02" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child07" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Child08" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+
+[node name="Child09" parent="DeathlessAct/Oasis/Rings2" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32)
+
+[node name="Rings3" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, 7.64981, 0.753788, 138.933)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+
+[node name="Child02" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child07" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Child08" parent="DeathlessAct/Oasis/Rings3" instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
 [node name="Grindrail2" parent="DeathlessAct/Oasis" instance=ExtResource("28_dw367")]
 transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, -3.34252, 0.154205, 82.9519)
@@ -1586,6 +1911,21 @@ transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.9998
 
 [node name="Grindrail4" parent="DeathlessAct/Oasis" instance=ExtResource("28_dw367")]
 transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, 1.70434, 0.154205, 82.8716)
+
+[node name="SpikeBall" parent="DeathlessAct/Oasis" instance=ExtResource("12_idu5x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.10701, 1.35156, 103.662)
+
+[node name="SpikeBall2" parent="DeathlessAct/Oasis" instance=ExtResource("12_idu5x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.00843, 1.41225, 103.671)
+
+[node name="SpikeBall3" parent="DeathlessAct/Oasis" instance=ExtResource("12_idu5x")]
+transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, 2.48049, 1.39161, 131.68)
+
+[node name="SpikeBall4" parent="DeathlessAct/Oasis" instance=ExtResource("12_idu5x")]
+transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, -1.91456, 1.39167, 172.751)
+
+[node name="SpikeBall5" parent="DeathlessAct/Oasis" instance=ExtResource("12_idu5x")]
+transform = Transform3D(-0.999873, 0, -0.0158991, 0, 1, 0, 0.0158991, 0, -0.999873, 8.16704, 1.39167, 172.591)
 
 [node name="SquarePillarMid1" parent="DeathlessAct/Oasis" groups=["crusher"] instance=ExtResource("28_dqm0q")]
 transform = Transform3D(0.909758, 0, -0.415138, 0, 1, 0, 0.415138, 0, 0.909758, -0.692207, 0, 81.3238)
@@ -1610,6 +1950,172 @@ transform = Transform3D(0.998788, 0, -0.0492159, 0, 1, 0, 0.0492159, 0, 0.998788
 
 [node name="SquarePillarMid8" parent="DeathlessAct/Oasis" groups=["crusher"] instance=ExtResource("28_dqm0q")]
 transform = Transform3D(0.998788, 0, -0.0492159, 0, 1, 0, 0.0492159, 0, 0.998788, -0.0759964, 0, 176.506)
+
+[node name="Circular Pillars" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(0.00664961, 0, 0.999977, 0, 1, 0, -0.999977, 0, 0.00664961, 10.7141, -1.3373, 221.565)
+
+[node name="CircularPillarL2" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+
+[node name="CircularPillarL3" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 7.75333, 0, -0.0921555)
+
+[node name="CircularPillarL4" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 20.6852, 0, 0.0438919)
+
+[node name="CircularPillarR2" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(1, 0, 3.8743e-07, 0, 1, 0, -3.8743e-07, 0, 1, 8.90753, 0, -13.7214)
+
+[node name="CircularPillarR6" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(0.978043, 0, 0.208407, 0, 1, 0, -0.208407, 0, 0.978043, -8.06995, -0.828331, -12.4497)
+
+[node name="CircularPillarR3" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(1, 0, 3.8743e-07, 0, 1, 0, -3.8743e-07, 0, 1, 15.9643, 0, -13.4223)
+
+[node name="CircularPillarR4" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(1, 0, 3.8743e-07, 0, 1, 0, -3.8743e-07, 0, 1, 23.1761, 0, -13.5669)
+
+[node name="CircularPillarR5" parent="DeathlessAct/Oasis/Circular Pillars" instance=ExtResource("31_qotte")]
+transform = Transform3D(1, 0, 3.8743e-07, 0, 1, 0, -3.8743e-07, 0, 1, 30.1762, 0, -13.567)
+
+[node name="PearlsZigzag" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.38618, 0.904446, 192.919)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/ForestPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.5
+"Horizontal Offset" = SubResource("Curve_l1qfk")
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.62939e-06, 0, -3.05176e-05)
+
+[node name="Child02" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05512, -0.00362015, 1.4762)
+
+[node name="Child03" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.73233, -0.00844955, 2.96109)
+
+[node name="Child04" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.11834, -0.0147057, 4.45276)
+
+[node name="Child05" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.30007, -0.0226212, 5.9494)
+
+[node name="Child06" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.36292, -0.0324669, 7.44904)
+
+[node name="Child07" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10179, -0.044548, 8.95688)
+
+[node name="Child08" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.51281, -0.0592003, 10.473)
+
+[node name="Child09" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.874123, -0.0768089, 11.991)
+
+[node name="Child10" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.463837, -0.0978127, 13.5037)
+
+[node name="Child11" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.521957, -0.122696, 15.0048)
+
+[node name="Child12" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.961922, -0.152008, 16.4965)
+
+[node name="Child13" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58879, -0.186367, 17.9835)
+
+[node name="Child14" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.21436, -0.226452, 19.4707)
+
+[node name="Child15" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65057, -0.273033, 20.9631)
+
+[node name="Child16" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75009, -0.326946, 22.4645)
+
+[node name="Child17" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.664, -0.389111, 23.9712)
+
+[node name="Child18" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.34557, -0.460529, 25.4844)
+
+[node name="Child19" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68761, -0.54224, 27.0064)
+
+[node name="Child20" parent="DeathlessAct/Oasis/PearlsZigzag" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.717415, -0.635365, 28.5366)
+
+[node name="Pearls curved" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(0.949469, 0, 0.31386, 0, 1, 0, -0.31386, 0, 0.949469, 7.27227, -4.67958, 260.21)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("9_sy7aq")
+Amount = 11
+Shape = 2
+Path = NodePath("../../../Static/Paths/ForestPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Child02" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.458038, -0.400646, 2.93036)
+
+[node name="Child03" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.838409, -0.789696, 5.87204)
+
+[node name="Child04" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13496, -1.16505, 8.82404)
+
+[node name="Child05" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34244, -1.52484, 11.7844)
+
+[node name="Child06" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45688, -1.86747, 14.7509)
+
+[node name="Child07" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47511, -2.19152, 17.7205)
+
+[node name="Child08" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.39482, -2.49589, 20.6911)
+
+[node name="Child09" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.22585, -2.76723, 23.6577)
+
+[node name="Child10" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.976944, -2.9962, 26.6226)
+
+[node name="Child11" parent="DeathlessAct/Oasis/Pearls curved" instance=ExtResource("9_sy7aq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.645584, -3.18557, 29.5819)
+
+[node name="BlueMajin" parent="DeathlessAct/Oasis" instance=ExtResource("14_nmw8u")]
+transform = Transform3D(0.806209, 0, -0.591635, 0, 1, 0, 0.591635, 0, 0.806209, 155.641, -7.64157, 292.381)
+"Spawn Settings/Spawn Travel Time" = 0.1
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(-10, 0, 12)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 35
+
+[node name="BlueMajin2" parent="DeathlessAct/Oasis" instance=ExtResource("14_nmw8u")]
+transform = Transform3D(0.792696, 0, -0.609621, 0, 1, 0, 0.609621, 0, 0.792696, 158.755, -6.96822, 290.458)
+"Spawn Settings/Spawn Travel Time" = 0.1
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(-10, 0, 12)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 35
 
 [node name="SpikePanel" parent="DeathlessAct/Oasis" instance=ExtResource("23_0ll21")]
 transform = Transform3D(0.762708, 0.364038, 0.534559, -0.430747, 0.902472, 1.67638e-08, -0.482425, -0.23026, 0.845131, 19.3692, -7.99216, 298.771)
@@ -1667,7 +2173,7 @@ transform = Transform3D(-0.435329, -0.533681, 0.725036, -0.797785, 0.60187, -0.0
 "State Lengths/active" = 1.0
 
 [node name="SpikePanel13" parent="DeathlessAct/Oasis" instance=ExtResource("23_0ll21")]
-transform = Transform3D(-0.79122, -0.495467, -0.358454, -0.526606, 0.850021, -0.012541, 0.310905, 0.178841, -0.933468, 159.173, -9.58604, 228.941)
+transform = Transform3D(-0.819649, -0.446869, -0.358454, -0.474407, 0.88022, -0.012541, 0.32112, 0.159774, -0.933468, 159.158, -9.63746, 228.948)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 1.0
 
@@ -1692,14 +2198,90 @@ transform = Transform3D(-0.78189, -0.41104, -0.46872, -0.451789, 0.89168, -0.028
 "State Lengths/active" = 1.0
 
 [node name="SpikePanel17" parent="DeathlessAct/Oasis" instance=ExtResource("23_0ll21")]
-transform = Transform3D(-0.771483, -0.399683, -0.495048, -0.451538, 0.892103, -0.0165695, 0.448253, 0.210751, -0.868712, 156.516, -8.83614, 218.874)
+transform = Transform3D(-0.771483, -0.399683, -0.495048, -0.451538, 0.892103, -0.0165695, 0.448253, 0.210751, -0.868712, 155.927, -9.17543, 219.141)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 1.0
 
 [node name="SpikePanel18" parent="DeathlessAct/Oasis" instance=ExtResource("23_0ll21")]
-transform = Transform3D(-0.771483, -0.399683, -0.495048, -0.451538, 0.892103, -0.0165695, 0.448253, 0.210751, -0.868712, 157.634, -8.1819, 218.224)
+transform = Transform3D(-0.771483, -0.399683, -0.495048, -0.451538, 0.892103, -0.0165695, 0.448253, 0.210751, -0.868712, 157.045, -8.52119, 218.491)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 1.0
+
+[node name="Ringx3" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.324941, 0, 0.945734, 0, 1, 0, -0.945734, 0, -0.324941, 103.936, -7.5427, 333.908)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../Static/Paths/ForestPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="DeathlessAct/Oasis/Ringx3" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 3.05176e-05, 0, -0.000244141)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_h0nk2")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="DeathlessAct/Oasis/Ringx3" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, -0.183563, 0.000492096, 1.98123)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_h0nk2")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="DeathlessAct/Oasis/Ringx3" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, -0.314545, 0.000808716, 3.96686)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_h0nk2")
+animator = NodePath("AnimationPlayer")
+
+[node name="Ringx3(2)" type="Node3D" parent="DeathlessAct/Oasis"]
+transform = Transform3D(-0.716156, 0, 0.69794, 0, 1, 0, -0.69794, 0, -0.716156, 145.056, -7.39953, 308.795)
+script = ExtResource("5_a6p2w")
+Generate = false
+Source = ExtResource("6_ejpqb")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../Static/Paths/ForestPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="DeathlessAct/Oasis/Ringx3(2)" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -3.05176e-05, 0, -0.000213623)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_h0nk2")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="DeathlessAct/Oasis/Ringx3(2)" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.132477, -0.000545502, 1.98367)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_h0nk2")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="DeathlessAct/Oasis/Ringx3(2)" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.303955, -0.00131607, 3.96512)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_h0nk2")
+animator = NodePath("AnimationPlayer")
 
 [node name="Goal" parent="DeathlessAct/Oasis" instance=ExtResource("21_tort4")]
 transform = Transform3D(0.0896946, 0, 0.99597, 0, 1, 0, -0.99597, 0, 0.0896946, 107.778, -1.35837, 182.24)
@@ -1717,12 +2299,11 @@ shape = SubResource("BoxShape3D_hqpy5")
 [connection signal="Respawned" from="DeathlessAct/Islands/Rings/Child09" to="DeathlessAct/Islands/SpringSpawner" method="Deactivate"]
 [connection signal="Collected" from="DeathlessAct/Islands/Rings/Child10" to="DeathlessAct/Islands/SpringSpawner" method="Activate"]
 [connection signal="Respawned" from="DeathlessAct/Islands/Rings/Child10" to="DeathlessAct/Islands/SpringSpawner" method="Deactivate"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Rings/Child01" to="DeathlessAct/Oasis/Rings/Child01" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Rings/Child02" to="DeathlessAct/Oasis/Rings/Child02" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Rings/Child03" to="DeathlessAct/Oasis/Rings/Child03" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Rings/Child04" to="DeathlessAct/Oasis/Rings/Child04" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Rings/Child05" to="DeathlessAct/Oasis/Rings/Child05" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Rings/Child06" to="DeathlessAct/Oasis/Rings/Child06" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Rings/Child07" to="DeathlessAct/Oasis/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Oasis/Ringx3/Child01" to="DeathlessAct/Oasis/Ringx3/Child01" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Oasis/Ringx3/Child02" to="DeathlessAct/Oasis/Ringx3/Child02" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Oasis/Ringx3/Child03" to="DeathlessAct/Oasis/Ringx3/Child03" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Oasis/Ringx3(2)/Child01" to="DeathlessAct/Oasis/Ringx3(2)/Child01" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Oasis/Ringx3(2)/Child02" to="DeathlessAct/Oasis/Ringx3(2)/Child02" method="OnEntered"]
+[connection signal="area_entered" from="DeathlessAct/Oasis/Ringx3(2)/Child03" to="DeathlessAct/Oasis/Ringx3(2)/Child03" method="OnEntered"]
 
 [editable path="Static"]
