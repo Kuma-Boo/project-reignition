@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bhiih5oodiq1w"]
+[gd_scene load_steps=33 format=3 uid="uid://bhiih5oodiq1w"]
 
 [ext_resource type="PackedScene" uid="uid://kf3gvnm0grys" path="res://area/2 dino jungle/object/model/dino/DinoRex.gltf" id="1_0u7i8"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoRex.cs" id="2_bhtui"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://ifcpkmnv2jmk" path="res://sound/sfx/stage/dinosaur jungle/dino rex bite.wav" id="4_mo10m"]
 [ext_resource type="AudioStream" uid="uid://bckheu27h7k5i" path="res://sound/sfx/stage/dinosaur jungle/dino rex idle.wav" id="5_qlojd"]
 [ext_resource type="AudioStream" uid="uid://bw4qvlkbw3txi" path="res://sound/sfx/stage/dinosaur jungle/dino rex tail.wav" id="6_ckcwt"]
+[ext_resource type="Material" uid="uid://cqly2cta75k4b" path="res://effect/particle/material/object/Dino Rex Splatter.tres" id="6_pkepj"]
 [ext_resource type="AudioStream" uid="uid://bw1umu0vr1x0w" path="res://sound/sfx/stage/dinosaur jungle/dino rex stomp.wav" id="7_gbx4p"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6krsp"]
@@ -101,6 +102,39 @@ nodes/tail_anim/position = Vector2(-420, 440)
 nodes/upper_bite_anim/node = SubResource("AnimationNodeAnimation_7uejp")
 nodes/upper_bite_anim/position = Vector2(-420, 560)
 node_connections = [&"attack_transition", 0, &"lower_bite_anim", &"attack_transition", 1, &"tail_anim", &"attack_transition", 2, &"upper_bite_anim", &"attack_trigger", 0, &"step_trigger", &"attack_trigger", 1, &"attack_transition", &"output", 0, &"attack_trigger", &"step_transition", 0, &"left_anim", &"step_transition", 1, &"right_anim", &"step_trigger", 0, &"idle_anim", &"step_trigger", 1, &"step_transition"]
+
+[sub_resource type="Curve" id="Curve_okfln"]
+_data = [Vector2(0, 0), 0.0, 22.5883, 0, 0, Vector2(0.128755, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_f4wp2"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_okfln")
+
+[sub_resource type="Curve" id="Curve_n0p37"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.0787, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_bux4g"]
+width = 64
+curve = SubResource("Curve_n0p37")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lto8l"]
+lifetime_randomness = 0.4
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+flatness = 0.6
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_bux4g")
+alpha_curve = SubResource("CurveTexture_f4wp2")
+
+[sub_resource type="QuadMesh" id="QuadMesh_aceec"]
+material = ExtResource("6_pkepj")
 
 [node name="DinoRex" type="Node3D" node_paths=PackedStringArray("root", "animationTree")]
 script = ExtResource("2_bhtui")
@@ -320,6 +354,21 @@ max_db = 0.0
 max_distance = 150.0
 max_polyphony = 2
 bus = &"GAME SFX"
+
+[node name="SplatterVFX" type="GPUParticles3D" parent="Head"]
+transform = Transform3D(-4.46136e-08, 0, 1, -5.96046e-08, 1, -2.98024e-08, -1, -2.98023e-08, -4.42644e-08, -5.96046e-08, 7, 1.19999)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_lto8l")
+draw_pass_1 = SubResource("QuadMesh_aceec")
 
 [node name="Tail" type="BoneAttachment3D" parent="."]
 transform = Transform3D(1, 1.65701e-06, -2.85612e-12, -2.87243e-12, 3.44733e-06, 1, 1.65701e-06, -1, 3.44733e-06, 3.93689e-05, 16.0001, -30.4869)

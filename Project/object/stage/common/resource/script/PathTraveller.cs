@@ -199,6 +199,12 @@ public partial class PathTraveller : Node3D
 	{
 		isActive = true;
 
+		if (animator.HasAnimation("activate"))
+		{
+			animator.Play("activate");
+			animator.Advance(0.0);
+		}
+
 		Character.StartExternal(this, playerPosition, .1f);
 		Character.Animator.StartBalancing(); // Carpet uses balancing animations
 		Character.Animator.UpdateBalanceSpeed(1.0f);
@@ -210,6 +216,12 @@ public partial class PathTraveller : Node3D
 	{
 		EmitSignal(SignalName.Deactivated);
 		isActive = false;
+
+		if (animator.HasAnimation("deactivate"))
+		{
+			animator.Play("deactivate");
+			animator.Advance(0.0);
+		}
 
 		// Reset damping values
 		currentSpeed = speedVelocity = 0;
