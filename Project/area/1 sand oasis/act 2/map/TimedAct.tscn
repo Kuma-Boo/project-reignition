@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://rd424odd6vog"]
+[gd_scene load_steps=27 format=3 uid="uid://rd424odd6vog"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_bisxc"]
 [ext_resource type="Resource" uid="uid://dvnuufmf05gc4" path="res://resource/level data/sand oasis/Act2Timed.tres" id="2_82tvw"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://chwt62jenntgq" path="res://area/1 sand oasis/object/grindrail/Grindrail03.tscn" id="7_0gntm"]
 [ext_resource type="PackedScene" uid="uid://dsms0ivmnpaq8" path="res://area/1 sand oasis/object/Jar.tscn" id="7_4ap88"]
 [ext_resource type="PackedScene" uid="uid://cayultvy710ro" path="res://area/1 sand oasis/object/grindrail/Grindrail02.tscn" id="7_8vblg"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="8_2peb2"]
 [ext_resource type="PackedScene" uid="uid://dnfwvf2akhf1v" path="res://area/1 sand oasis/object/FlameShooter.tscn" id="8_w0q67"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9_vkfck"]
 [ext_resource type="PackedScene" uid="uid://sqgtk20ye5tc" path="res://area/1 sand oasis/object/grindrail/Grindrail01.tscn" id="10_akqhi"]
@@ -57,19 +56,26 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Grindrail" parent="JarlessAct/Interior" instance=ExtResource("7_0gntm")]
 transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, -1.92896, 0.262207, 15.5078)
+startCapPath = NodePath("")
+endCapPath = NodePath("")
 
 [node name="Grindrail2" parent="JarlessAct/Interior" instance=ExtResource("10_akqhi")]
 transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74229e-08, 1, -5.96046e-08, 0.707107, 1.96705e-08, -0.707107, 40.3936, 0.244736, 14.9318)
+startCapPath = NodePath("")
+endCapPath = NodePath("")
 
-[node name="Grindrail" parent="JarlessAct/Interior/Grindrail2" instance=ExtResource("7_8vblg")]
-transform = Transform3D(1, 3.55271e-14, 0, -3.55271e-14, 1, 0, 0, -4.55543e-22, 1, 1.96695, 0, -14.8772)
+[node name="Grindrail3" parent="JarlessAct/Interior" instance=ExtResource("7_8vblg")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74229e-08, 1, -5.96046e-08, 0.707107, 1.96705e-08, -0.707107, 49.5225, 0.244736, 26.8424)
+startCapPath = NodePath("")
+endCapPath = NodePath("")
 
 [node name="Spring" parent="JarlessAct/Interior" instance=ExtResource("15_uj0tw")]
 transform = Transform3D(0.885174, 0.0442072, -0.463157, -0.102757, 0.989469, -0.101944, 0.453772, 0.13783, 0.880395, 52.7204, 0.455307, 27.2587)
-middleHeight = 4.905
-finalHeight = 1.82
-distance = 1.8
+middleHeight = 5.105
+finalHeight = 0.27
+distance = 2.045
 launchDirection = 0
+voiceKey = &""
 
 [node name="Rings1" type="Node3D" parent="JarlessAct/Interior"]
 transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 16.1235, 1.06942, 15.3939)
@@ -83,44 +89,19 @@ Spacing = 4.8
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="JarlessAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("6_a2050")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("8_2peb2")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_a2050")]
 
-[node name="Child02" type="Area3D" parent="JarlessAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("6_a2050")]
+[node name="Child02" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_a2050")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("8_2peb2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="JarlessAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("6_a2050")]
+[node name="Child03" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_a2050")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("8_2peb2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="JarlessAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("6_a2050")]
+[node name="Child04" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_a2050")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("8_2peb2")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="JarlessAct/Interior/Rings1" node_paths=PackedStringArray("animator") instance=ExtResource("6_a2050")]
+[node name="Child05" parent="JarlessAct/Interior/Rings1" instance=ExtResource("6_a2050")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("8_2peb2")
-animator = NodePath("AnimationPlayer")
 
 [node name="Jar" parent="JarlessAct/Interior" instance=ExtResource("7_4ap88")]
 transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 33.4258, 0.262207, 13.6343)
@@ -162,47 +143,6 @@ timer = NodePath("../FlameShooter1/Timer")
 
 [node name="FlameShooter8" parent="JarlessAct/Interior" instance=ExtResource("8_w0q67")]
 transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 57.193, 0.000152588, 32.5643)
-
-[node name="PearlRing" type="Node3D" parent="JarlessAct/Interior"]
-transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 71.0499, 2.50015, 46.9917)
-script = ExtResource("5_hejx8")
-Generate = false
-Source = ExtResource("9_vkfck")
-Amount = 10
-Shape = 1
-Orientation = 1
-"Ring Size" = 1.0
-"Ring Ratio" = 1.0
-
-[node name="Child01" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-
-[node name="Child02" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0.587785, 0)
-
-[node name="Child03" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
-
-[node name="Child04" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0.951057, 0)
-
-[node name="Child05" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
-
-[node name="Child06" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
-
-[node name="Child07" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
-
-[node name="Child08" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, -0.951057, 0)
-
-[node name="Child09" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
-
-[node name="Child10" parent="JarlessAct/Interior/PearlRing" instance=ExtResource("9_vkfck")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
 
 [node name="FlameShooter9" parent="JarlessAct/Interior" instance=ExtResource("8_w0q67")]
 transform = Transform3D(8.74228e-08, -1, 5.96046e-08, -1, -1.31134e-07, -8.47033e-22, 0, -5.96046e-08, -1, 74.7707, 1.80018, 52.5888)
@@ -1269,18 +1209,8 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -1.738, 
 [node name="SquarePillarShort8" parent="JarlessAct/Oasis" instance=ExtResource("22_ku1ay")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -5.221, 0, 79.056)
 
-[connection signal="area_entered" from="JarlessAct/Interior/Rings1/Child01" to="JarlessAct/Interior/Rings1/Child01" method="OnEntered"]
-[connection signal="area_entered" from="JarlessAct/Interior/Rings1/Child02" to="JarlessAct/Interior/Rings1/Child02" method="OnEntered"]
-[connection signal="area_entered" from="JarlessAct/Interior/Rings1/Child03" to="JarlessAct/Interior/Rings1/Child03" method="OnEntered"]
-[connection signal="area_entered" from="JarlessAct/Interior/Rings1/Child04" to="JarlessAct/Interior/Rings1/Child04" method="OnEntered"]
-[connection signal="area_entered" from="JarlessAct/Interior/Rings1/Child05" to="JarlessAct/Interior/Rings1/Child05" method="OnEntered"]
-[connection signal="Shattered" from="JarlessAct/Interior/JarL" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="JarlessAct/Interior/JarR" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="JarlessAct/UTurn/JarL" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="JarlessAct/UTurn/JarR" to="Static" method="IncrementObjective"]
 [connection signal="Activated" from="JarlessAct/Islands/Spring" to="JarlessAct/Islands/Spring/Path" method="Activate"]
 [connection signal="Activated" from="JarlessAct/Islands/Spring" to="JarlessAct/Islands/Spring/Camera" method="Activate"]
-[connection signal="Shattered" from="JarlessAct/Islands/Jar1" to="Static" method="IncrementObjective"]
 [connection signal="Spawned" from="JarlessAct/Islands/RedMajin" to="JarlessAct/Islands/BlueMajin3" method="Spawn"]
 [connection signal="Spawned" from="JarlessAct/Islands/RedMajin" to="JarlessAct/Islands/BlueMajin4" method="Spawn"]
 [connection signal="Deactivated" from="JarlessAct/Islands/JumpPanel" to="JarlessAct/Islands/JumpPanel/Path" method="Activate"]
