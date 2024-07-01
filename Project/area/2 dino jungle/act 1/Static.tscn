@@ -1,4 +1,4 @@
-[gd_scene load_steps=124 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=127 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -79,6 +79,8 @@
 [ext_resource type="Resource" uid="uid://1lxslegkn5y5" path="res://area/2 dino jungle/act 1/camera/EndFollowCam.tres" id="47_cd0o2"]
 [ext_resource type="Resource" uid="uid://cdt773y1qarnf" path="res://area/2 dino jungle/act 1/camera/1stEndIslandCam.tres" id="47_q66r8"]
 [ext_resource type="Resource" uid="uid://ca2ipaacx4q2q" path="res://area/2 dino jungle/act 1/camera/1stEndIslandWallCam.tres" id="48_brq7k"]
+[ext_resource type="AudioStream" uid="uid://blikv1niphsd0" path="res://sound/sfx/stage/dinosaur jungle/spiral leaves.wav" id="48_o61la"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="49_05yra"]
 [ext_resource type="Resource" uid="uid://bsj7mi64dl786" path="res://area/2 dino jungle/act 1/camera/2ndEndIslandFieldCam.tres" id="51_3eohj"]
 [ext_resource type="Resource" uid="uid://cgs27a8s7oemd" path="res://area/2 dino jungle/act 1/camera/DinoFeedingRockBitesCam.tres" id="52_tpulw"]
 [ext_resource type="Curve3D" uid="uid://b48t3qogkoufq" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelEntrancePath.tres" id="56_hmb1c"]
@@ -249,6 +251,8 @@ _data = {
 "event": SubResource("Animation_kg4in"),
 "event-deactivate": SubResource("Animation_m8ghy")
 }
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_quiap"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1o6c3"]
 size = Vector3(53, 50, 60)
@@ -1040,6 +1044,169 @@ path = NodePath("../../../../../../Path/DinoRightPath")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
+[node name="Spiral" type="Node3D" parent="Trigger/Object"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.147, -221.6, -848.37)
+
+[node name="SpiralLeaf1" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.986569, 0, 0.163343, 0, 1, 0, -0.163343, 0, -0.986569, 1.95145, 0, -10.0081)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf1"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf1"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf2" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.376337, 0, -0.926483, 0, 1, 0, 0.926483, 0, -0.376337, -1.98969, -1.3, -18.6178)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf2"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf2"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf3" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.984038, 0, 0.177961, 0, 1, 0, -0.177961, 0, 0.984038, -10.7978, -3, -11.4346)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf3"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf3"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf4" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.996574, 0, 0.0827039, 0, 1, 0, -0.0827039, 0, -0.996574, 2.26169, -5.2, -11.7791)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf4"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf4"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf5" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.996574, 0, 0.0827039, 0, 1, 0, -0.0827039, 0, -0.996574, -1.31152, -6.2, -18.2969)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf5"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf5"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf6" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.951374, 0, -0.308038, 0, 1, 0, 0.308038, 0, 0.951374, -10.5955, -7.52614, -14.3832)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf6"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf6"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf7" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.947098, 0, 0.320944, 0, 1, 0, -0.320944, 0, -0.947098, 1.96262, -9.92613, -10.3171)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf7"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf7"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf8" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.871154, 0, 0.49101, 0, 1, 0, -0.49101, 0, 0.871154, -10.0281, -13.0865, -9.20673)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf8"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf8"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf9" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.157176, 0, -0.987571, 0, 1, 0, 0.987571, 0, 0.157176, -5.03845, -16.4722, -19.091)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf9"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf9"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="SpiralLeaf10" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.47481, 0, 0.880088, 0, 1, 0, -0.880088, 0, 0.47481, -7.1897, -18.4809, -6.5918)
+"Enter Mode" = 0
+
+[node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf10"]
+stream = ExtResource("48_o61la")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("49_05yra")
+groupKey = &"spiral_leaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf10"]
+shape = SubResource("SphereShape3D_quiap")
+
 [node name="DinoParaGroup" type="Node3D" parent="Trigger/Object"]
 transform = Transform3D(-0.155292, 0, -0.579555, 0, 0.6, 0, 0.579555, 0, -0.155292, -550.331, -279.5, -1079.29)
 
@@ -1353,7 +1520,7 @@ transitionType = 1
 settings = ExtResource("29_omkni")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam1"]
-shape = SubResource("SphereShape3D_iq0gp")
+shape = SubResource("SphereShape3D_quiap")
 
 [node name="SpiralCam2" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.978267, 0, 0.207348, 0, 1, 0, -0.207348, 0, -0.978267, -429.357, -246.215, -880.484)
@@ -1364,17 +1531,17 @@ script = ExtResource("36_8t574")
 settings = ExtResource("29_omkni")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam2"]
-shape = SubResource("SphereShape3D_iq0gp")
+shape = SubResource("SphereShape3D_quiap")
 
 [node name="SpiralCam3" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.982862, 0, -0.184346, 0, 1, 0, 0.184346, 0, -0.982862, -429.289, -263.315, -886.476)
+transform = Transform3D(-0.964193, 0, -0.265203, 0, 1, 0, 0.265203, 0, -0.964193, -429.377, -263.415, -887.172)
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralCam3"]
 script = ExtResource("36_8t574")
 settings = ExtResource("30_ju7m7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam3"]
-shape = SubResource("SphereShape3D_iq0gp")
+shape = SubResource("SphereShape3D_quiap")
 
 [node name="CaveExitCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.920723, 0, -0.390217, 0, 1, 0, 0.390217, 0, -0.920723, -431.757, -264.915, -912.091)
@@ -1797,6 +1964,16 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf1" to="Trigger/Object/Spiral/SpiralLeaf1/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf2" to="Trigger/Object/Spiral/SpiralLeaf2/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf3" to="Trigger/Object/Spiral/SpiralLeaf3/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf4" to="Trigger/Object/Spiral/SpiralLeaf4/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf5" to="Trigger/Object/Spiral/SpiralLeaf5/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf6" to="Trigger/Object/Spiral/SpiralLeaf6/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf7" to="Trigger/Object/Spiral/SpiralLeaf7/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf8" to="Trigger/Object/Spiral/SpiralLeaf8/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf9" to="Trigger/Object/Spiral/SpiralLeaf9/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf10" to="Trigger/Object/Spiral/SpiralLeaf10/LeafSFX" method="play"]
 [connection signal="Activated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/FeedingRecenterTrigger/StopTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
