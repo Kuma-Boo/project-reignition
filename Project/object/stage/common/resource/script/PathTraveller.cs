@@ -89,6 +89,7 @@ public partial class PathTraveller : Node3D
 		spawnData = new SpawnData(GetParent(), Transform); // Create spawn data
 
 		StageSettings.instance.ConnectRespawnSignal(this);
+		Respawn();
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -187,6 +188,9 @@ public partial class PathTraveller : Node3D
 		spawnData.Respawn(this);
 		pathFollower.Progress = startingProgress;
 		pathFollower.HOffset = pathFollower.VOffset = 0;
+		Vector3 startingOffset = pathFollower.GlobalBasis.Inverse() * (GlobalPosition - pathFollower.GlobalPosition);
+		pathFollower.HOffset = startingOffset.X;
+		pathFollower.VOffset = startingOffset.Y;
 
 		if (root != null) // Reset root transform
 			root.Transform = Transform3D.Identity;
