@@ -1,4 +1,4 @@
-[gd_scene load_steps=127 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=133 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -29,10 +29,13 @@
 [ext_resource type="Curve3D" uid="uid://b450opvokjmsg" path="res://area/2 dino jungle/act 1/environment/path/SpiralAutomationPath.tres" id="17_sttw3"]
 [ext_resource type="Curve3D" uid="uid://uyy1x2hj58jb" path="res://area/2 dino jungle/act 1/environment/path/LogAutomationPath.tres" id="19_p1hyv"]
 [ext_resource type="Curve3D" uid="uid://bjvkgbw6pqfdl" path="res://area/2 dino jungle/act 1/environment/path/BoatPath.tres" id="22_dpojg"]
+[ext_resource type="AudioStream" uid="uid://b316jqdh6kjlr" path="res://sound/sfx/stage/dinosaur jungle/river.wav" id="22_fryr4"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="22_vku8w"]
+[ext_resource type="AudioStream" uid="uid://dgupmlpi6ewiq" path="res://sound/sfx/stage/dinosaur jungle/river bg.wav" id="23_7x2ul"]
 [ext_resource type="Resource" uid="uid://c4uve00dlpv2n" path="res://area/2 dino jungle/act 1/camera/LogAutomationCam.tres" id="23_pnpt3"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="23_rku1n"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="24_0y0cf"]
+[ext_resource type="AudioStream" uid="uid://d4ggauostdewa" path="res://sound/sfx/stage/dinosaur jungle/water cavern.wav" id="24_rs3ip"]
 [ext_resource type="PackedScene" uid="uid://7nr1lmccsbg6" path="res://area/2 dino jungle/object/dino/DinoApatos.tscn" id="25_s85nr"]
 [ext_resource type="Script" path="res://object/trigger/state trigger/script/SidleTrigger.cs" id="25_sf384"]
 [ext_resource type="Resource" uid="uid://duxi5ucuhx7qa" path="res://resource/preset/lockout/SidleLockout.tres" id="26_dq6cl"]
@@ -73,9 +76,12 @@
 [ext_resource type="Resource" uid="uid://b4w3fufkjv3x8" path="res://area/2 dino jungle/act 1/camera/SidleCam.tres" id="44_d1e8a"]
 [ext_resource type="PackedScene" uid="uid://patwyflqfa5c" path="res://area/2 dino jungle/object/dino/DinoAro.tscn" id="45_oux1e"]
 [ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="45_r78fw"]
+[ext_resource type="AudioStream" uid="uid://rt6cixehknx6" path="res://sound/sfx/stage/dinosaur jungle/falls soft.wav" id="46_a0ry4"]
 [ext_resource type="Resource" uid="uid://c20ks1cmjcsls" path="res://area/2 dino jungle/act 1/camera/EndIslandCam.tres" id="46_oc3qf"]
 [ext_resource type="PackedScene" uid="uid://bn03mw7udgltk" path="res://area/2 dino jungle/object/dino/DinoPteroGroup.tscn" id="46_wqcdd"]
+[ext_resource type="AudioStream" uid="uid://baunwgkbhhqhc" path="res://sound/sfx/stage/dinosaur jungle/falls bg.wav" id="46_xm64r"]
 [ext_resource type="Resource" uid="uid://dwmlhdwq5btkp" path="res://area/2 dino jungle/act 1/camera/EndCam.tres" id="47_6j2j6"]
+[ext_resource type="AudioStream" uid="uid://4j3xdx45dabt" path="res://sound/sfx/stage/dinosaur jungle/falls loud.wav" id="47_61hv6"]
 [ext_resource type="Resource" uid="uid://1lxslegkn5y5" path="res://area/2 dino jungle/act 1/camera/EndFollowCam.tres" id="47_cd0o2"]
 [ext_resource type="Resource" uid="uid://cdt773y1qarnf" path="res://area/2 dino jungle/act 1/camera/1stEndIslandCam.tres" id="47_q66r8"]
 [ext_resource type="Resource" uid="uid://ca2ipaacx4q2q" path="res://area/2 dino jungle/act 1/camera/1stEndIslandWallCam.tres" id="48_brq7k"]
@@ -124,7 +130,7 @@ radius = 2.0
 size = Vector3(4, 30, 30)
 
 [sub_resource type="Curve" id="Curve_7td2p"]
-_data = [Vector2(0, 0.1), 0.0, 26.072, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.1), 0.0, 27.0013, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_w0yt8"]
@@ -133,8 +139,9 @@ texture_mode = 1
 curve = SubResource("Curve_7td2p")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vwbdu"]
+lifetime_randomness = 0.4
 emission_shape = 3
-emission_box_extents = Vector3(1, 2, 1)
+emission_box_extents = Vector3(2, 5, 1)
 angle_max = 360.0
 direction = Vector3(0, 1, 0)
 initial_velocity_min = 5.0
@@ -694,6 +701,164 @@ shape = SubResource("BoxShape3D_7jbaj")
 
 [node name="Object" type="Node3D" parent="Trigger"]
 
+[node name="RiverSFX" parent="Trigger/Object" instance=ExtResource("15_86eng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -168.112, -96.3, -491.728)
+"Enter Mode" = 0
+
+[node name="RiverSFX1" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44128, 5, 7.6434)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverSFX2" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.9851, -9, 40.9033)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverSFX3" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.428, -24, 14.8035)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverSFX4" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.8779, -38.8, -17.8007)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverSFX5" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5481, -55, -60.276)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverSFX6" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.7012, -75, -105.438)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverSFX7" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.6293, -97, -158.391)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverSFX8" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.2319, -101, -219.822)
+stream = ExtResource("22_fryr4")
+attenuation_model = 3
+max_db = -9.0
+max_distance = 50.0
+max_polyphony = 3
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverBGSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 102.789, -113.7, -194.937)
+stream = ExtResource("23_7x2ul")
+attenuation_model = 3
+max_db = 0.0
+autoplay = true
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13, 9)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CollisionShape3D1" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1.39091e-08, 1.48943e-09, 1, -1.13133e-08, 1, -1.48943e-09, -1, -1.13133e-08, 1.39091e-08, 24.2072, -1, 42.2384)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(-1, 1.48943e-09, -2.98023e-08, 1.48943e-09, 1, -1.13133e-08, 2.98023e-08, -1.13133e-08, -1, 53.2072, -14, 25.2385)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(-1, 1.48943e-09, -2.98023e-08, 1.48943e-09, 1, -1.13133e-08, 2.98023e-08, -1.13133e-08, -1, 67.9866, -34, -18.6584)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(-1, 1.48943e-09, -2.98023e-08, 1.48943e-09, 1, -1.13133e-08, 2.98023e-08, -1.13133e-08, -1, 42.4842, -59, -76.9391)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(-0.984808, 1.48943e-09, -0.173648, 3.43135e-09, 1, -1.08828e-08, 0.173648, -1.13133e-08, -0.984808, 49.911, -90, -155.26)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="Trigger/Object/RiverSFX"]
+transform = Transform3D(1.49012e-08, 1.48943e-09, 1, -1.13133e-08, 1, -1.48943e-09, -1, -1.13133e-08, 1.49012e-08, 51.062, -101, -213.807)
+shape = SubResource("BoxShape3D_7jbaj")
+
+[node name="CavernSFX" parent="Trigger/Object" instance=ExtResource("15_86eng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -552.803, -280.9, -1094.96)
+"Enter Mode" = 0
+
+[node name="RiverBGSFX1" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
+stream = ExtResource("24_rs3ip")
+attenuation_model = 3
+max_db = 0.0
+autoplay = true
+max_distance = 50.0
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverBGSFX2" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.0256, 0, 35.348)
+stream = ExtResource("24_rs3ip")
+attenuation_model = 3
+max_db = 0.0
+autoplay = true
+max_distance = 50.0
+panning_strength = 0.0
+bus = &"GAME SFX"
+
+[node name="RiverBGSFX3" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.626, 0, -44.6625)
+stream = ExtResource("24_rs3ip")
+attenuation_model = 3
+max_db = 0.0
+autoplay = true
+max_distance = 50.0
+panning_strength = 0.0
+bus = &"GAME SFX"
+
 [node name="CaveRejoinTrigger" parent="Trigger/Object" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.999182, 0, 0.0404277, 0, 1, 0, -0.0404277, 0, -0.999182, -362.983, -218.815, -776.465)
 "Enter Mode" = 0
@@ -856,8 +1021,8 @@ transform = Transform3D(1, -2.98023e-08, -7.45058e-09, 0, 1, -6.51926e-09, 7.450
 layers = 32
 cast_shadow = 0
 emitting = false
-amount = 16
-lifetime = 0.5
+amount = 32
+lifetime = 0.8
 fixed_fps = 0
 interpolate = false
 process_material = SubResource("ParticleProcessMaterial_vwbdu")
@@ -1207,6 +1372,66 @@ groupKey = &"spiral_leaf"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/SpiralLeaf10"]
 shape = SubResource("SphereShape3D_quiap")
 
+[node name="FallsBG" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.918121, 0, 0.396298, 0, 1, 0, -0.396298, 0, -0.918121, 5.5535, -22.1809, -20.7955)
+"Enter Mode" = 0
+
+[node name="FallsBGSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsBG"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("46_xm64r")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"GAME SFX"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsBG"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="FallsSoft" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.0583827, 0, 0.998294, 0, 1, 0, -0.998294, 0, 0.0583827, -5.01605, -13.7809, -5.98737)
+"Enter Mode" = 0
+
+[node name="FallsSoftSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsSoft"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("46_a0ry4")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"GAME SFX"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsSoft"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="FallsLoud1" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.0583827, 0, 0.998294, 0, 1, 0, -0.998294, 0, 0.0583827, -5.01605, -18.6809, -5.98737)
+"Enter Mode" = 0
+
+[node name="FallsLoudSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsLoud1"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("47_61hv6")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"GAME SFX"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsLoud1"]
+shape = SubResource("SphereShape3D_quiap")
+
+[node name="FallsLoud2" parent="Trigger/Object/Spiral" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.47481, 0, 0.880088, 0, 1, 0, -0.880088, 0, 0.47481, 2.06534, -19.8809, -10.6887)
+"Enter Mode" = 0
+
+[node name="FallsLoudSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsLoud2"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+stream = ExtResource("47_61hv6")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
+bus = &"GAME SFX"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsLoud2"]
+shape = SubResource("SphereShape3D_quiap")
+
 [node name="DinoParaGroup" type="Node3D" parent="Trigger/Object"]
 transform = Transform3D(-0.155292, 0, -0.579555, 0, 0.6, 0, 0.579555, 0, -0.155292, -550.331, -279.5, -1079.29)
 
@@ -1399,6 +1624,7 @@ transform = Transform3D(-1, -1.51808e-08, -8.60946e-08, 0, 0.984808, -0.173648, 
 script = ExtResource("36_8t574")
 transitionTime = 0.5
 transitionType = 1
+enableInputBlending = true
 settings = ExtResource("36_mti58")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/ChaseReverseCam"]
@@ -1416,6 +1642,7 @@ script = ExtResource("36_8t574")
 transitionTime = 0.5
 transitionType = 1
 UpdateEveryFrame = true
+enableInputBlending = true
 settings = ExtResource("28_7w0ww")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/ChaseStaticCam"]
@@ -1939,6 +2166,14 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Visuals/CullingMap/09-L" to="Visuals/09End" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX1" method="play"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX2" method="play"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX3" method="play"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX4" method="play"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX5" method="play"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX6" method="play"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX7" method="play"]
+[connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX8" method="play"]
 [connection signal="Activated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
@@ -1974,6 +2209,10 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf8" to="Trigger/Object/Spiral/SpiralLeaf8/LeafSFX" method="play"]
 [connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf9" to="Trigger/Object/Spiral/SpiralLeaf9/LeafSFX" method="play"]
 [connection signal="Activated" from="Trigger/Object/Spiral/SpiralLeaf10" to="Trigger/Object/Spiral/SpiralLeaf10/LeafSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/FallsBG" to="Trigger/Object/Spiral/FallsBG/FallsBGSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/FallsSoft" to="Trigger/Object/Spiral/FallsSoft/FallsSoftSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/FallsLoud1" to="Trigger/Object/Spiral/FallsLoud1/FallsLoudSFX" method="play"]
+[connection signal="Activated" from="Trigger/Object/Spiral/FallsLoud2" to="Trigger/Object/Spiral/FallsLoud2/FallsLoudSFX" method="play"]
 [connection signal="Activated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/FeedingRecenterTrigger/StopTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
