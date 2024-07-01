@@ -1,10 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://b7v442l7gekei"]
+[gd_scene load_steps=17 format=3 uid="uid://b7v442l7gekei"]
 
 [ext_resource type="PackedScene" uid="uid://7kcasi6v1odv" path="res://area/1 sand oasis/act 3/Static.tscn" id="1_8np51"]
 [ext_resource type="Resource" uid="uid://bdgy0ftwjlvif" path="res://resource/level data/sand oasis/Act3Chain.tres" id="2_uw5mm"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_spuoe"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_hw2vm"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5_xaw0y"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="6_wjeyr"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="7_f833s"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="8_goqva"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="9_f0jof"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="10_7hisc"]
+[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="11_38e2a"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="12_jso4h"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="15_8xmwh"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="20_dchnv"]
 [ext_resource type="Script" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="21_7g1t0"]
 
@@ -145,15 +153,3084 @@ script = ExtResource("5_xaw0y")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
+[node name="DashPanel" parent="JarAct/Lap01/DescentTop" instance=ExtResource("6_wjeyr")]
+transform = Transform3D(0.999722, -0.000473216, -0.0235486, -0.00564993, 0.965789, -0.259268, 0.0228657, 0.259329, 0.965518, -0.0559826, 1.20109, -48.5175)
+
+[node name="Ring" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.945831, 0, -0.32466, 0, 1, 0, 0.32466, 0, -0.945831, 31.4522, -9.39242, 79.7976)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.019
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring" instance=ExtResource("8_goqva")]
+
+[node name="Child02" parent="JarAct/Lap01/Ring" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.019)
+
+[node name="Child03" parent="JarAct/Lap01/Ring" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.038)
+
+[node name="Child04" parent="JarAct/Lap01/Ring" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.057)
+
+[node name="Child05" parent="JarAct/Lap01/Ring" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.076)
+
+[node name="Ring2" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.939286, 0, -0.343135, 0, 1, 0, 0.343135, 0, -0.939286, 30.3305, -9.39242, 80.1787)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.019
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring2" instance=ExtResource("8_goqva")]
+
+[node name="Child02" parent="JarAct/Lap01/Ring2" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.019)
+
+[node name="Child03" parent="JarAct/Lap01/Ring2" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.038)
+
+[node name="Child04" parent="JarAct/Lap01/Ring2" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.057)
+
+[node name="Child05" parent="JarAct/Lap01/Ring2" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.076)
+
+[node name="Ring3" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.787785, 0, 0.61595, 0, 1, 0, -0.61595, 0, -0.787785, 37.1285, -12.0889, 168.434)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.491
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 3.05176e-05, 0.000234604, 0.00327301)
+
+[node name="Child02" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.0419769, -0.179656, -2.32058)
+
+[node name="Child03" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.201233, -0.362846, -4.63973)
+
+[node name="Child04" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.476944, -0.549209, -6.9483)
+
+[node name="Child05" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.867996, -0.738612, -9.24056)
+
+[node name="Child06" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 1.37292, -0.930946, -11.5109)
+
+[node name="Child07" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 1.99008, -1.12608, -13.7536)
+
+[node name="Child08" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 2.71761, -1.32391, -15.9631)
+
+[node name="Child09" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 3.55342, -1.5243, -18.1341)
+
+[node name="Child10" parent="JarAct/Lap01/Ring3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 4.49525, -1.72715, -20.2612)
+
+[node name="Ring4" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(0.298791, 0, 0.954319, 0, 1, 0, -0.954319, 0, 0.298791, -4.71314, -16.4478, 192.308)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.925
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.000732422, -0.000301361, -0.00330353)
+
+[node name="Child02" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.399384, -0.171469, -1.97865)
+
+[node name="Child03" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.723221, -0.342976, -3.96891)
+
+[node name="Child04" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.97081, -0.514715, -5.97129)
+
+[node name="Child05" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.14072, -0.686577, -7.98272)
+
+[node name="Child06" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.23193, -0.858437, -10.0001)
+
+[node name="Child07" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.24374, -1.03019, -12.02)
+
+[node name="Child08" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.1756, -1.20173, -14.0393)
+
+[node name="Child09" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.02737, -1.37294, -16.0545)
+
+[node name="Child10" parent="JarAct/Lap01/Ring4" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.799118, -1.54375, -18.0624)
+
+[node name="PearlsRing" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(0.81561, 0.00741362, 0.578554, -0.00618699, 0.999973, -0.00409166, -0.578569, -0.000242308, 0.815634, -34.1391, -18.4796, 177.098)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.793
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.793, 0, 0)
+
+[node name="Child02" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, 0.245051, 0)
+
+[node name="Child03" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, 0.466114, 0)
+
+[node name="Child04" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, 0.64155, 0)
+
+[node name="Child05" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24505, 0.754188, 0)
+
+[node name="Child06" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.93263e-08, 0.793, 0)
+
+[node name="Child07" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, 0.754188, 0)
+
+[node name="Child08" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, 0.641551, 0)
+
+[node name="Child09" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, 0.466114, 0)
+
+[node name="Child10" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, 0.24505, 0)
+
+[node name="Child11" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.793, -6.93263e-08, 0)
+
+[node name="Child12" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, -0.24505, 0)
+
+[node name="Child13" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, -0.466114, 0)
+
+[node name="Child14" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, -0.641551, 0)
+
+[node name="Child15" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, -0.754188, 0)
+
+[node name="Child16" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38653e-07, -0.793, 0)
+
+[node name="Child17" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245051, -0.754188, 0)
+
+[node name="Child18" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, -0.64155, 0)
+
+[node name="Child19" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, -0.466113, 0)
+
+[node name="Child20" parent="JarAct/Lap01/PearlsRing" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, -0.24505, 0)
+
+[node name="ObjectGenerator" type="Node3D" parent="JarAct/Lap01/PearlsRing"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/PearlsRing/ObjectGenerator" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_f0jof")
+animator = NodePath("AnimationPlayer")
+
+[node name="PearlsRing2" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(0.81561, 0.00741362, 0.578554, -0.00618699, 0.999973, -0.00409166, -0.578569, -0.000242308, 0.815634, -35.1793, -18.5599, 176.028)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.793
+"Ring Ratio" = 1.0
+
+[node name="Child21" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.793, 0, 0)
+collider = NodePath("../../PearlsRing/Child01/CollisionShape3D")
+
+[node name="Child22" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, 0.245051, 0)
+collider = NodePath("../../PearlsRing/Child02/CollisionShape3D")
+
+[node name="Child23" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, 0.466114, 0)
+collider = NodePath("../../PearlsRing/Child03/CollisionShape3D")
+
+[node name="Child24" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, 0.64155, 0)
+collider = NodePath("../../PearlsRing/Child04/CollisionShape3D")
+
+[node name="Child25" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24505, 0.754188, 0)
+collider = NodePath("../../PearlsRing/Child05/CollisionShape3D")
+
+[node name="Child26" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.93263e-08, 0.793, 0)
+collider = NodePath("../../PearlsRing/Child06/CollisionShape3D")
+
+[node name="Child27" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, 0.754188, 0)
+collider = NodePath("../../PearlsRing/Child07/CollisionShape3D")
+
+[node name="Child28" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, 0.641551, 0)
+collider = NodePath("../../PearlsRing/Child08/CollisionShape3D")
+
+[node name="Child29" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, 0.466114, 0)
+collider = NodePath("../../PearlsRing/Child09/CollisionShape3D")
+
+[node name="Child30" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, 0.24505, 0)
+collider = NodePath("../../PearlsRing/Child10/CollisionShape3D")
+
+[node name="Child31" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.793, -6.93263e-08, 0)
+collider = NodePath("../../PearlsRing/Child11/CollisionShape3D")
+
+[node name="Child32" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, -0.24505, 0)
+collider = NodePath("../../PearlsRing/Child12/CollisionShape3D")
+
+[node name="Child33" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, -0.466114, 0)
+collider = NodePath("../../PearlsRing/Child13/CollisionShape3D")
+
+[node name="Child34" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, -0.641551, 0)
+collider = NodePath("../../PearlsRing/Child14/CollisionShape3D")
+
+[node name="Child35" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, -0.754188, 0)
+collider = NodePath("../../PearlsRing/Child15/CollisionShape3D")
+
+[node name="Child36" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38653e-07, -0.793, 0)
+collider = NodePath("../../PearlsRing/Child16/CollisionShape3D")
+
+[node name="Child37" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245051, -0.754188, 0)
+collider = NodePath("../../PearlsRing/Child17/CollisionShape3D")
+
+[node name="Child38" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, -0.64155, 0)
+collider = NodePath("../../PearlsRing/Child18/CollisionShape3D")
+
+[node name="Child39" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, -0.466113, 0)
+collider = NodePath("../../PearlsRing/Child19/CollisionShape3D")
+
+[node name="Child40" parent="JarAct/Lap01/PearlsRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, -0.24505, 0)
+collider = NodePath("../../PearlsRing/Child20/CollisionShape3D")
+
+[node name="Child01" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.793, 0, 0)
+
+[node name="Child02" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, 0.245051, 0)
+
+[node name="Child03" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, 0.466114, 0)
+
+[node name="Child04" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, 0.64155, 0)
+
+[node name="Child05" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24505, 0.754188, 0)
+
+[node name="Child06" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.93263e-08, 0.793, 0)
+
+[node name="Child07" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, 0.754188, 0)
+
+[node name="Child08" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, 0.641551, 0)
+
+[node name="Child09" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, 0.466114, 0)
+
+[node name="Child10" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, 0.24505, 0)
+
+[node name="Child11" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.793, -6.93263e-08, 0)
+
+[node name="Child12" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, -0.24505, 0)
+
+[node name="Child13" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, -0.466114, 0)
+
+[node name="Child14" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, -0.641551, 0)
+
+[node name="Child15" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, -0.754188, 0)
+
+[node name="Child16" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38653e-07, -0.793, 0)
+
+[node name="Child17" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245051, -0.754188, 0)
+
+[node name="Child18" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, -0.64155, 0)
+
+[node name="Child19" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, -0.466113, 0)
+
+[node name="Child20" parent="JarAct/Lap01/PearlsRing2" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -2.6339e-09, -4.47035e-07, -2.47383e-10, 1, 1.74623e-09, -2.98023e-08, -2.18279e-09, 1, 0.0353394, 0.0805416, 0.00770569)
+
+[node name="Ring5" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(0.987535, 0, 0.1574, -0.0028294, 0.999839, 0.0177519, -0.157374, -0.0179759, 0.987375, -44.7332, -21.4606, 153.411)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.812
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.000473022, -0.00021553, -0.00337219)
+
+[node name="Child02" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.203415, -0.116434, -1.6871)
+
+[node name="Child03" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.345825, -0.232006, -3.3763)
+
+[node name="Child04" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.427109, -0.346996, -5.06874)
+
+[node name="Child05" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.446747, -0.46147, -6.76213)
+
+[node name="Child06" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.404266, -0.575485, -8.45419)
+
+[node name="Child07" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.299248, -0.689098, -10.1425)
+
+[node name="Child08" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, -0.131348, -0.802353, -11.8246)
+
+[node name="Child09" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, 0.0997086, -0.91531, -13.4982)
+
+[node name="Child10" parent="JarAct/Lap01/Ring5" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, 0, -1.49012e-08, -1.86265e-09, 1, 0.394112, -1.02839, -15.162)
+
+[node name="SpikePanel" parent="JarAct/Lap01" instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.829399, 0, -0.558657, 0, 1, 0, 0.558657, 0, 0.829399, -37.9184, -25.9231, 112.646)
+"State Lengths/active" = 1.0
+stateLengths = [0.0, 0.0, 1.0]
+
+[node name="SpikePanel2" parent="JarAct/Lap01" instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.829399, 0, -0.558657, 0, 1, 0, 0.558657, 0, 0.829399, -41.9704, -25.9231, 109.635)
+"State Lengths/active" = 1.0
+stateLengths = [0.0, 0.0, 1.0]
+
+[node name="SpikePanel3" parent="JarAct/Lap01" instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.829399, 0, -0.558657, 0, 1, 0, 0.558657, 0, 0.829399, -43.1494, -25.9231, 108.864)
+"State Lengths/active" = 1.0
+stateLengths = [0.0, 0.0, 1.0]
+
+[node name="Ring6" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(0.656985, 0.0152418, -0.753749, -0.0028294, 0.999838, 0.0177518, 0.753898, -0.00953005, 0.656922, -39.1089, -25.7053, 105.942)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.492
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring6" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.39698e-09, 0, 0, 1, 0.000572205, 0.000282288, 0.00408936)
+
+[node name="Child02" parent="JarAct/Lap01/Ring6" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.39698e-09, 0, 0, 1, -0.295067, -0.16641, -2.56866)
+
+[node name="Child03" parent="JarAct/Lap01/Ring6" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.39698e-09, 0, 0, 1, -0.465733, -0.333614, -5.15303)
+
+[node name="Child04" parent="JarAct/Lap01/Ring6" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.39698e-09, 0, 0, 1, -0.510513, -0.501432, -7.74306)
+
+[node name="Child05" parent="JarAct/Lap01/Ring6" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.39698e-09, 0, 0, 1, -0.428623, -0.66996, -10.3327)
+
 [node name="DescentBottom" type="Node3D" parent="JarAct/Lap01"]
 transform = Transform3D(-0.395658, 4.02262e-11, 0.918398, 3.29245e-09, 1, 1.37463e-09, -0.918398, 3.56767e-09, -0.395658, -22.2946, -28.0261, 95.5331)
 script = ExtResource("5_xaw0y")
 saveVisibilityOnCheckpoint = true
 
+[node name="PearlsRing3" type="Node3D" parent="JarAct/Lap01/DescentBottom"]
+transform = Transform3D(-0.997041, -0.00585531, 0.0766268, -0.00618699, 0.999973, -0.00409166, -0.0766009, -0.00455365, -0.99705, 0.757957, 1.76531, -1.29951)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.793
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.793, 0, 0)
+
+[node name="Child02" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, 0.245051, 0)
+
+[node name="Child03" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, 0.466114, 0)
+
+[node name="Child04" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, 0.64155, 0)
+
+[node name="Child05" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24505, 0.754188, 0)
+
+[node name="Child06" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.93263e-08, 0.793, 0)
+
+[node name="Child07" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, 0.754188, 0)
+
+[node name="Child08" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, 0.641551, 0)
+
+[node name="Child09" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, 0.466114, 0)
+
+[node name="Child10" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, 0.24505, 0)
+
+[node name="Child11" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.793, -6.93263e-08, 0)
+
+[node name="Child12" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, -0.24505, 0)
+
+[node name="Child13" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, -0.466114, 0)
+
+[node name="Child14" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, -0.641551, 0)
+
+[node name="Child15" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, -0.754188, 0)
+
+[node name="Child16" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38653e-07, -0.793, 0)
+
+[node name="Child17" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245051, -0.754188, 0)
+
+[node name="Child18" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, -0.64155, 0)
+
+[node name="Child19" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, -0.466113, 0)
+
+[node name="Child20" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, -0.24505, 0)
+
+[node name="Child21" parent="JarAct/Lap01/DescentBottom/PearlsRing3" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, -2.38419e-07, 0, 1, 3.25963e-09, 0, 6.0536e-09, 0.999999, -0.0591202, -0.0121784, 0.0185242)
+
+[node name="Child22" parent="JarAct/Lap01/DescentBottom" instance=ExtResource("8_goqva")]
+transform = Transform3D(-0.997041, -0.00585531, 0.0766271, -0.00618699, 0.999973, -0.00409165, -0.0766009, -0.00455365, -0.997049, 1.06142, 1.67731, 1.29594)
+
+[node name="Pearl ring" type="Node3D" parent="JarAct/Lap01/DescentBottom/Child22"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 4.65661e-10, 0, 2.32831e-10, 1, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.793
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.793, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, 0.245051, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, 0.466114, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, 0.64155, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24505, 0.754188, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.93263e-08, 0.793, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, 0.754188, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, 0.641551, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, 0.466114, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, 0.24505, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.793, -6.93263e-08, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.754188, -0.24505, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64155, -0.466114, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.466114, -0.641551, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24505, -0.754188, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38653e-07, -0.793, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245051, -0.754188, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466114, -0.64155, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.641551, -0.466113, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/DescentBottom/Child22/Pearl ring" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.754188, -0.24505, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Ring7" type="Node3D" parent="JarAct/Lap01/DescentBottom"]
+transform = Transform3D(-0.893505, -0.0104991, 0.44893, -0.0028294, 0.999838, 0.0177518, -0.449043, 0.0145912, -0.89339, -0.113831, -0.872124, 20.0745)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.379
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/DescentBottom/Ring7" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, -6.54836e-10, 3.72529e-09, -9.02219e-10, 1, 0, 0, 2.71797e-05)
+
+[node name="Child02" parent="JarAct/Lap01/DescentBottom/Ring7" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, -6.54836e-10, 3.72529e-09, -9.02219e-10, 1, -0.266006, -0.166166, -2.47959)
+
+[node name="Child03" parent="JarAct/Lap01/DescentBottom/Ring7" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, -6.54836e-10, 3.72529e-09, -9.02219e-10, 1, -0.416016, -0.331139, -4.9649)
+
+[node name="Child04" parent="JarAct/Lap01/DescentBottom/Ring7" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, -6.54836e-10, 3.72529e-09, -9.02219e-10, 1, -0.454506, -0.495342, -7.45276)
+
+[node name="Child05" parent="JarAct/Lap01/DescentBottom/Ring7" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, -6.54836e-10, 3.72529e-09, -9.02219e-10, 1, -0.380066, -0.658762, -9.94222)
+
+[node name="Ring8" type="Node3D" parent="JarAct/Lap01/DescentBottom"]
+transform = Transform3D(-0.343568, -0.0176432, 0.938958, -0.0028294, 0.999838, 0.0177519, -0.939122, 0.00344224, -0.343561, -21.6778, -3.70826, 47.4259)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.209
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/DescentBottom/Ring8" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 9.31323e-10, 0, -9.31323e-10, 1, -1.86265e-09, 0, -9.31323e-10, 1, 0.000335693, 0.000106812, 0.00159454)
+
+[node name="Child02" parent="JarAct/Lap01/DescentBottom/Ring8" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 9.31323e-10, 0, -9.31323e-10, 1, -1.86265e-09, 0, -9.31323e-10, 1, -0.42202, -0.143642, -2.28271)
+
+[node name="Child03" parent="JarAct/Lap01/DescentBottom/Ring8" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 9.31323e-10, 0, -9.31323e-10, 1, -1.86265e-09, 0, -9.31323e-10, 1, -0.741653, -0.286064, -4.58311)
+
+[node name="Child04" parent="JarAct/Lap01/DescentBottom/Ring8" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 9.31323e-10, 0, -9.31323e-10, 1, -1.86265e-09, 0, -9.31323e-10, 1, -0.958565, -0.427355, -6.89486)
+
+[node name="Child05" parent="JarAct/Lap01/DescentBottom/Ring8" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 9.31323e-10, 0, -9.31323e-10, 1, -1.86265e-09, 0, -9.31323e-10, 1, -1.07302, -0.567698, -9.21333)
+
+[node name="Ring9" type="Node3D" parent="JarAct/Lap01/DescentBottom"]
+transform = Transform3D(0.0477948, -0.0175964, 0.998697, -0.00282941, 0.999838, 0.0177519, -0.99885, -0.00367419, 0.0477374, -43.0402, -5.83778, 55.2074)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.209
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/DescentBottom/Ring9" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, 0, -2.98023e-08, 1.86265e-09, 1, -0.000682831, -0.000257492, -0.00388336)
+
+[node name="Child02" parent="JarAct/Lap01/DescentBottom/Ring9" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, 0, -2.98023e-08, 1.86265e-09, 1, -0.348488, -0.142111, -2.30734)
+
+[node name="Child03" parent="JarAct/Lap01/DescentBottom/Ring9" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, 0, -2.98023e-08, 1.86265e-09, 1, -0.597187, -0.284271, -4.62385)
+
+[node name="Child04" parent="JarAct/Lap01/DescentBottom/Ring9" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, 0, -2.98023e-08, 1.86265e-09, 1, -0.746216, -0.426989, -6.94913)
+
+[node name="Child05" parent="JarAct/Lap01/DescentBottom/Ring9" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, 0, -2.98023e-08, 1.86265e-09, 1, -0.795063, -0.57053, -9.27911)
+
+[node name="SpikePanel4" parent="JarAct/Lap01/DescentBottom" instance=ExtResource("12_jso4h")]
+transform = Transform3D(-0.327184, 3.29244e-09, 0.944959, 2.37621e-09, 1, -2.66147e-09, -0.944959, 1.37463e-09, -0.327184, -37.6317, -5.83014, 47.9342)
+"State Lengths/active" = 1.0
+stateLengths = [0.0, 0.0, 1.0]
+
+[node name="SpikePanel5" parent="JarAct/Lap01/DescentBottom" instance=ExtResource("12_jso4h")]
+transform = Transform3D(-0.327184, 3.29244e-09, 0.944959, 2.37621e-09, 1, -2.66147e-09, -0.944959, 1.37463e-09, -0.327184, -36.2028, -5.80639, 52.7763)
+"State Lengths/active" = 1.0
+stateLengths = [0.0, 0.0, 1.0]
+
+[node name="SpikePanel6" parent="JarAct/Lap01/DescentBottom" instance=ExtResource("12_jso4h")]
+transform = Transform3D(-0.327184, 3.29244e-09, 0.944959, 2.37621e-09, 1, -2.66147e-09, -0.944959, 1.37463e-09, -0.327184, -35.7237, -5.80639, 54.101)
+"State Lengths/active" = 1.0
+stateLengths = [0.0, 0.0, 1.0]
+
+[node name="Ring10" type="Node3D" parent="JarAct/Lap01/DescentBottom"]
+transform = Transform3D(0.834191, -0.00742957, 0.551414, -0.0028294, 0.999838, 0.0177518, -0.551458, -0.0163686, 0.834033, -60.2594, -7.23485, 54.3501)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.265
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, 0.00101471, 0.000137329, 0.00157928)
+
+[node name="Child02" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -1.21274, -0.164181, -1.98379)
+
+[node name="Child03" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -2.33533, -0.329502, -4.02261)
+
+[node name="Child04" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -3.36359, -0.496052, -6.11121)
+
+[node name="Child05" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -4.29447, -0.664032, -8.24568)
+
+[node name="Child06" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -5.12473, -0.833603, -10.4213)
+
+[node name="Child07" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -5.85741, -1.00429, -12.6194)
+
+[node name="Child08" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -6.50431, -1.17459, -14.8452)
+
+[node name="Child09" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -7.06121, -1.34438, -17.0976)
+
+[node name="Child10" parent="JarAct/Lap01/DescentBottom/Ring10" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 1.39698e-09, 1, 2.79397e-09, 0, -9.31323e-10, 1, -7.52363, -1.51348, -19.3735)
+
+[node name="Pearls Ring1" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, 33.6469, -39.6516, 173.557)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.358
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.358, 0, 0)
+
+[node name="Child02" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, 0.400278)
+
+[node name="Child03" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, 0.764989)
+
+[node name="Child04" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846699, 0, 1.06173)
+
+[node name="Child05" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, 1.26413)
+
+[node name="Child06" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101483, 0, 1.3542)
+
+[node name="Child07" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, 1.32395)
+
+[node name="Child08" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, 1.17606)
+
+[node name="Child09" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, 0.923675)
+
+[node name="Child10" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, 0.589214)
+
+[node name="Child11" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, 0.202399)
+
+[node name="Child12" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, -0.2024)
+
+[node name="Child13" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, -0.589214)
+
+[node name="Child14" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, -0.923675)
+
+[node name="Child15" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, -1.17606)
+
+[node name="Child16" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, -1.32395)
+
+[node name="Child17" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101484, 0, -1.3542)
+
+[node name="Child18" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, -1.26413)
+
+[node name="Child19" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8467, 0, -1.06173)
+
+[node name="Child20" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, -0.764989)
+
+[node name="Child21" parent="JarAct/Lap01/Pearls Ring1" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, -0.400277)
+
+[node name="Ring" type="Node3D" parent="JarAct/Lap01/Pearls Ring1"]
+transform = Transform3D(1, 4.65661e-10, 5.96046e-08, 4.65661e-10, 1, -1.86265e-09, 5.96046e-08, -9.31323e-10, 1, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Pearls Ring1/Ring" instance=ExtResource("8_goqva")]
+
+[node name="Ring7" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, 30.3014, -40.1948, 178.236)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring7" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 9.31323e-10, -2.98023e-08, 0, 1, -0.000366211, 0.129982, 0.00230408)
+
+[node name="Pearl Ring 3" type="Node3D" parent="JarAct/Lap01/Ring7/Child01"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.213
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.213, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15911, 0, 0.357538)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00223, 0, 0.683307)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.756293, 0, 0.948362)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.443159, 0, 1.12915)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0906475, 0, 1.20961)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269918, 0, 1.18259)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6065, 0, 1.05049)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889192, 0, 0.82505)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09288, 0, 0.526301)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19945, 0, 0.180788)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19945, 0, -0.180789)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09288, 0, -0.526301)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889192, 0, -0.82505)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6065, 0, -1.05049)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269917, 0, -1.18259)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.090648, 0, -1.20961)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.443159, 0, -1.12915)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.756294, 0, -0.948361)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00223, 0, -0.683307)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Ring7/Child01/Pearl Ring 3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15911, 0, -0.357538)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Pearls Ring 2" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, 23.7626, -40.7194, 183.852)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.213
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.213, 0, 0)
+
+[node name="Child02" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15911, 0, 0.357538)
+
+[node name="Child03" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00223, 0, 0.683307)
+
+[node name="Child04" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.756293, 0, 0.948362)
+
+[node name="Child05" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.443159, 0, 1.12915)
+
+[node name="Child06" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0906475, 0, 1.20961)
+
+[node name="Child07" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269918, 0, 1.18259)
+
+[node name="Child08" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6065, 0, 1.05049)
+
+[node name="Child09" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889192, 0, 0.82505)
+
+[node name="Child10" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09288, 0, 0.526301)
+
+[node name="Child11" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19945, 0, 0.180788)
+
+[node name="Child12" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19945, 0, -0.180789)
+
+[node name="Child13" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09288, 0, -0.526301)
+
+[node name="Child14" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889192, 0, -0.82505)
+
+[node name="Child15" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6065, 0, -1.05049)
+
+[node name="Child16" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269917, 0, -1.18259)
+
+[node name="Child17" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.090648, 0, -1.20961)
+
+[node name="Child18" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.443159, 0, -1.12915)
+
+[node name="Child19" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.756294, 0, -0.948361)
+
+[node name="Child20" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00223, 0, -0.683307)
+
+[node name="Child21" parent="JarAct/Lap01/Pearls Ring 2" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15911, 0, -0.357538)
+
+[node name="Child02" parent="JarAct/Lap01" instance=ExtResource("8_goqva")]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, 23.7626, -40.7194, 183.852)
+
+[node name="Ring8" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, 17.0329, -41.486, 187.566)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/Ring8" instance=ExtResource("8_goqva")]
+
+[node name="Pearl ring3" type="Node3D" parent="JarAct/Lap01/Ring8"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.213
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.213, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15911, 0, 0.357538)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00223, 0, 0.683307)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.756293, 0, 0.948362)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.443159, 0, 1.12915)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0906475, 0, 1.20961)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269918, 0, 1.18259)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6065, 0, 1.05049)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889192, 0, 0.82505)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09288, 0, 0.526301)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19945, 0, 0.180788)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19945, 0, -0.180789)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09288, 0, -0.526301)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889192, 0, -0.82505)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6065, 0, -1.05049)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269917, 0, -1.18259)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.090648, 0, -1.20961)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.443159, 0, -1.12915)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.756294, 0, -0.948361)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00223, 0, -0.683307)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Ring8/Pearl ring3" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15911, 0, -0.357538)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Pearls Ring5" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, 7.52949, -42.2657, 191.303)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.358
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.358, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, 0.400278)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, 0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846699, 0, 1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, 1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101483, 0, 1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, 1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, 1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, 0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, 0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, 0.202399)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, -0.2024)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, -0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, -0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, -1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, -1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101484, 0, -1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, -1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8467, 0, -1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, -0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Pearls Ring5" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, -0.400277)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="ObjectGenerator" type="Node3D" parent="JarAct/Lap01/Pearls Ring5"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring5/ObjectGenerator" instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_f0jof")
+
+[node name="Pearls Ring6" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, 0.503647, -42.8376, 189.468)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.358
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.358, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, 0.400278)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, 0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846699, 0, 1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, 1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101483, 0, 1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, 1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, 1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, 0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, 0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, 0.202399)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, -0.2024)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, -0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, -0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, -1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, -1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101484, 0, -1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, -1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8467, 0, -1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, -0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Pearls Ring6" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, -0.400277)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="ObjectGenerator" type="Node3D" parent="JarAct/Lap01/Pearls Ring6"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring6/ObjectGenerator" instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_f0jof")
+
+[node name="Pearls Ring7" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, -6.51905, -43.3211, 189.729)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.358
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.358, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, 0.400278)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, 0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846699, 0, 1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, 1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101483, 0, 1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, 1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, 1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, 0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, 0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, 0.202399)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, -0.2024)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, -0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, -0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, -1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, -1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101484, 0, -1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, -1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8467, 0, -1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, -0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Pearls Ring7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, -0.400277)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="ObjectGenerator" type="Node3D" parent="JarAct/Lap01/Pearls Ring7"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring7/ObjectGenerator" instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_f0jof")
+
+[node name="Pearls Ring8" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, -16.1088, -44.0991, 185.981)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.358
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.358, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, 0.400278)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, 0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846699, 0, 1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, 1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101483, 0, 1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, 1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, 1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, 0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, 0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, 0.202399)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, -0.2024)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, -0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, -0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, -1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, -1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101484, 0, -1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, -1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8467, 0, -1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, -0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Pearls Ring8" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, -0.400277)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="ObjectGenerator" type="Node3D" parent="JarAct/Lap01/Pearls Ring8"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring8/ObjectGenerator" instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_f0jof")
+
+[node name="Pearls Ring9" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, -25.3632, -44.8006, 184.639)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.358
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.358, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, 0.400278)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, 0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846699, 0, 1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, 1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101483, 0, 1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, 1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, 1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, 0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, 0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, 0.202399)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, -0.2024)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, -0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, -0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, -1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, -1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101484, 0, -1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, -1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8467, 0, -1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, -0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Pearls Ring9" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, -0.400277)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="ObjectGenerator" type="Node3D" parent="JarAct/Lap01/Pearls Ring9"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring9/ObjectGenerator" instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_f0jof")
+
+[node name="Pearls Ring10" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(-0.836512, -0.0120934, 0.547802, -0.0028294, 0.999838, 0.0177518, -0.54793, 0.0132997, -0.83641, -31.4815, -45.818, 177.648)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 21
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.358
+"Ring Ratio" = 1.0
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.358, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, 0.400278)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, 0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846699, 0, 1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, 1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101483, 0, 1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, 1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, 1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, 0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, 0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child11" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, 0.202399)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child12" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34283, 0, -0.2024)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child13" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22352, 0, -0.589214)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child14" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.995485, 0, -0.923675)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child15" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679, 0, -1.17606)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child16" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302183, 0, -1.32395)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child17" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.101484, 0, -1.3542)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child18" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496133, 0, -1.26413)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child19" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8467, 0, -1.06173)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child20" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12203, 0, -0.764989)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child21" type="Area3D" parent="JarAct/Lap01/Pearls Ring10" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29767, 0, -0.400277)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="ObjectGenerator" type="Node3D" parent="JarAct/Lap01/Pearls Ring10"]
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 1
+Shape = 0
+Orientation = 0
+Spacing = 0.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/Pearls Ring10/ObjectGenerator" instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("9_f0jof")
+
+[node name="SpikeBall" parent="JarAct/Lap01" instance=ExtResource("15_8xmwh")]
+transform = Transform3D(0.496368, 0, -0.868112, 0, 1, 0, 0.868112, 0, 0.496368, -47.7106, -46.7916, 163.987)
+"Movement/Cycle Length" = 3.1
+"Movement/Starting Offset" = 0.28
+Movement/Distance = 5.9
+
+[node name="SpikeBall2" parent="JarAct/Lap01" instance=ExtResource("15_8xmwh")]
+transform = Transform3D(0.440488, 0, -0.897759, 0, 1, 0, 0.897759, 0, 0.440488, -42.57, -45.7701, 172.521)
+"Movement/Cycle Length" = 4.7
+"Movement/Starting Offset" = 0.34
+Movement/Distance = 5.9
+
 [node name="LowerHall" type="Node3D" parent="JarAct/Lap01"]
-transform = Transform3D(-0.932324, -1.11022e-16, 0.361625, 1.11022e-16, 1, -1.11022e-16, -0.361625, 0, -0.932324, -41.0216, -50.0001, 105.663)
+transform = Transform3D(-0.932324, -1.11022e-16, 0.361625, 1.11022e-16, 1, -1.11022e-16, -0.361625, 0, -0.932324, -41.0216, -49.684, 105.663)
 script = ExtResource("5_xaw0y")
 saveVisibilityOnCheckpoint = true
+
+[node name="Ring11" type="Node3D" parent="JarAct/Lap01/LowerHall"]
+transform = Transform3D(-0.984729, -0.00587522, 0.173957, -0.00282941, 0.999838, 0.0177519, -0.174033, 0.0169886, -0.984582, -0.487759, 0.582344, -15.0384)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.129
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/LowerHall/Ring11" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -9.31323e-10, 2.98023e-08, -9.31323e-10, 1, -6.51926e-09, 0, -7.45058e-09, 1, -0.000270844, 0.0951385, 0.00164795)
+
+[node name="Child02" parent="JarAct/Lap01/LowerHall/Ring11" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.39698e-09, 2.98023e-08, 0, 1, 9.31323e-10, 0, 0, 1, -0.634171, 0.0277252, -2.3028)
+
+[node name="Child03" parent="JarAct/Lap01/LowerHall/Ring11" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.39698e-09, 2.98023e-08, 0, 1, 9.31323e-10, 0, 0, 1, -1.19247, 0.0648727, -4.62807)
+
+[node name="Child04" parent="JarAct/Lap01/LowerHall/Ring11" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.39698e-09, 2.98023e-08, 0, 1, 9.31323e-10, 0, 0, 1, -1.68784, 0.10741, -6.96973)
+
+[node name="Child05" parent="JarAct/Lap01/LowerHall/Ring11" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.39698e-09, 2.98023e-08, 0, 1, 9.31323e-10, 0, 0, 1, -2.13088, 0.15271, -9.3232)
+
+[node name="DashPanel" parent="JarAct/Lap01/LowerHall" instance=ExtResource("6_wjeyr")]
+transform = Transform3D(0.999738, 3.67084e-16, -0.0228789, -1.08453e-16, 1, 1.13533e-16, 0.0228789, -1.68539e-16, 0.999738, 0.0524826, -0.316101, 1.90908)
+speedRatio = 1.234
+
+[node name="Ring12" type="Node3D" parent="JarAct/Lap01/LowerHall"]
+transform = Transform3D(-0.999963, -0.00296071, 0.00737551, -0.00282941, 0.999838, 0.0177519, -0.00742659, 0.0177303, -0.999805, 0.0442543, 0.599819, 8.50516)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.466
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/LowerHall/Ring12" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 9.31323e-10, 1, 9.31323e-10, -2.98023e-08, -9.31323e-10, 1, 0, 0, 3.05176e-05)
+
+[node name="Child02" parent="JarAct/Lap01/LowerHall/Ring12" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 9.31323e-10, 1, 9.31323e-10, -2.98023e-08, -9.31323e-10, 1, -0.0203247, 0.0437088, -2.46532)
+
+[node name="Child03" parent="JarAct/Lap01/LowerHall/Ring12" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 9.31323e-10, 1, 9.31323e-10, -2.98023e-08, -9.31323e-10, 1, -0.0407906, 0.0874329, -4.93093)
+
+[node name="Child04" parent="JarAct/Lap01/LowerHall/Ring12" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 9.31323e-10, 1, 9.31323e-10, -2.98023e-08, -9.31323e-10, 1, -0.061348, 0.131145, -7.39637)
+
+[node name="Child05" parent="JarAct/Lap01/LowerHall/Ring12" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 9.31323e-10, 1, 9.31323e-10, -2.98023e-08, -9.31323e-10, 1, -0.0819798, 0.174866, -9.86188)
+
+[node name="Ring13" type="Node3D" parent="JarAct/Lap01/LowerHall"]
+transform = Transform3D(-0.999956, -0.00298083, 0.00850967, -0.00282941, 0.999838, 0.0177519, -0.00856096, 0.017727, -0.999797, -0.130053, 0.582344, 38.1568)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.276
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/LowerHall/Ring13" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, 0, 0, -8.39233e-05)
+
+[node name="Child02" parent="JarAct/Lap01/LowerHall/Ring13" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0313015, 0.0580635, -3.27539)
+
+[node name="Child03" parent="JarAct/Lap01/LowerHall/Ring13" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0625381, 0.116127, -6.55074)
+
+[node name="Child04" parent="JarAct/Lap01/LowerHall/Ring13" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0936775, 0.174194, -9.82614)
+
+[node name="Child05" parent="JarAct/Lap01/LowerHall/Ring13" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.124683, 0.232258, -13.1014)
+
+[node name="Ring14" type="Node3D" parent="JarAct/Lap01/LowerHall"]
+transform = Transform3D(-0.999956, -0.00298083, 0.00850967, -0.00282941, 0.999838, 0.0177519, -0.00856096, 0.017727, -0.999797, 0.0706034, 0.582344, 73.8127)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 34
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.44
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, 9.53674e-07, 0, 0.00012207)
+
+[node name="Child02" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0161381, 0.0432739, -2.43946)
+
+[node name="Child03" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0321436, 0.0865364, -4.879)
+
+[node name="Child04" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.048049, 0.12981, -7.31859)
+
+[node name="Child05" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0638752, 0.17308, -9.75821)
+
+[node name="Child06" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0796442, 0.216347, -12.1976)
+
+[node name="Child07" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.0953617, 0.259609, -14.6372)
+
+[node name="Child08" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.111043, 0.302883, -17.0769)
+
+[node name="Child09" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.12669, 0.346157, -19.5164)
+
+[node name="Child10" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.142311, 0.389423, -21.956)
+
+[node name="Child11" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.157908, 0.432697, -24.3956)
+
+[node name="Child12" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.173487, 0.475964, -26.8352)
+
+[node name="Child13" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.189052, 0.519241, -29.2749)
+
+[node name="Child14" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.204604, 0.562515, -31.7146)
+
+[node name="Child15" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.220149, 0.605782, -34.1542)
+
+[node name="Child16" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.235687, 0.649048, -36.5938)
+
+[node name="Child17" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.25122, 0.692326, -39.0335)
+
+[node name="Child18" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.266752, 0.735596, -41.4731)
+
+[node name="Child19" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.282286, 0.778873, -43.9127)
+
+[node name="Child20" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.297822, 0.822136, -46.3523)
+
+[node name="Child21" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.313366, 0.86541, -48.7919)
+
+[node name="Child22" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.328917, 0.908669, -51.2314)
+
+[node name="Child23" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.34448, 0.951942, -53.671)
+
+[node name="Child24" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.36006, 0.995213, -56.1105)
+
+[node name="Child25" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.375658, 1.03849, -58.5502)
+
+[node name="Child26" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.391276, 1.08175, -60.9896)
+
+[node name="Child27" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.406924, 1.12502, -63.4292)
+
+[node name="Child28" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.42261, 1.16829, -65.8689)
+
+[node name="Child29" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.438338, 1.21156, -68.3085)
+
+[node name="Child30" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.45412, 1.25484, -70.7483)
+
+[node name="Child31" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.469966, 1.29811, -73.1879)
+
+[node name="Child32" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.485898, 1.34137, -75.6274)
+
+[node name="Child33" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.501951, 1.38464, -78.0668)
+
+[node name="Child34" parent="JarAct/Lap01/LowerHall/Ring14" instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -4.65661e-10, 2.98023e-08, -4.65661e-10, 1, -9.31323e-10, 2.98023e-08, 1.86265e-09, 1, -0.518173, 1.42791, -80.5065)
+
+[node name="Pearlring11" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(0.929604, 0.00917206, -0.368431, -0.00282941, 0.999838, 0.0177519, 0.368536, -0.0154597, 0.929475, -31.6496, -48.3238, 81.2289)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.809
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809, 0, 0)
+
+[node name="Child02" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.769405, 0.249995, 0)
+
+[node name="Child03" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.654495, 0.475518, 0)
+
+[node name="Child04" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475518, 0.654495, 0)
+
+[node name="Child05" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.249995, 0.769405, 0)
+
+[node name="Child06" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0725e-08, 0.809, 0)
+
+[node name="Child07" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.249995, 0.769405, 0)
+
+[node name="Child08" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475518, 0.654495, 0)
+
+[node name="Child09" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.654495, 0.475518, 0)
+
+[node name="Child10" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.769405, 0.249995, 0)
+
+[node name="Child11" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809, -7.0725e-08, 0)
+
+[node name="Child12" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.769405, -0.249995, 0)
+
+[node name="Child13" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.654495, -0.475518, 0)
+
+[node name="Child14" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475518, -0.654495, 0)
+
+[node name="Child15" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.249995, -0.769405, 0)
+
+[node name="Child16" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4145e-07, -0.809, 0)
+
+[node name="Child17" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.249995, -0.769405, 0)
+
+[node name="Child18" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475519, -0.654495, 0)
+
+[node name="Child19" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.654495, -0.475518, 0)
+
+[node name="Child20" parent="JarAct/Lap01/Pearlring11" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.769405, -0.249995, 0)
+
+[node name="Pearlring12" type="Node3D" parent="JarAct/Lap01"]
+transform = Transform3D(0.929604, 0.00917206, -0.368431, -0.00282941, 0.999838, 0.0177519, 0.368536, -0.0154597, 0.929475, -31.2231, -48.3238, 80.0564)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.809
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809, 0, 0)
+
+[node name="Child02" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.769405, 0.249995, 0)
+
+[node name="Child03" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.654495, 0.475518, 0)
+
+[node name="Child04" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475518, 0.654495, 0)
+
+[node name="Child05" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.249995, 0.769405, 0)
+
+[node name="Child06" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0725e-08, 0.809, 0)
+
+[node name="Child07" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.249995, 0.769405, 0)
+
+[node name="Child08" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475518, 0.654495, 0)
+
+[node name="Child09" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.654495, 0.475518, 0)
+
+[node name="Child10" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.769405, 0.249995, 0)
+
+[node name="Child11" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809, -7.0725e-08, 0)
+
+[node name="Child12" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.769405, -0.249995, 0)
+
+[node name="Child13" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.654495, -0.475518, 0)
+
+[node name="Child14" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475518, -0.654495, 0)
+
+[node name="Child15" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.249995, -0.769405, 0)
+
+[node name="Child16" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4145e-07, -0.809, 0)
+
+[node name="Child17" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.249995, -0.769405, 0)
+
+[node name="Child18" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475519, -0.654495, 0)
+
+[node name="Child19" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.654495, -0.475518, 0)
+
+[node name="Child20" parent="JarAct/Lap01/Pearlring12" instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.769405, -0.249995, 0)
+
+[node name="SpikeBall3" parent="JarAct/Lap01" instance=ExtResource("15_8xmwh")]
+transform = Transform3D(-0.370087, 0, -0.928997, 0, 1, 0, 0.928997, 0, -0.370087, -15.6458, -48.3647, 32.5958)
+"Movement/Cycle Length" = 4.4
+"Movement/Starting Offset" = 0.08
+Movement/Distance = 7.7
+
+[node name="SpikeBall4" parent="JarAct/Lap01" instance=ExtResource("15_8xmwh")]
+transform = Transform3D(0.35207, 0, 0.935974, 0, 1, 0, -0.935974, 0, 0.35207, -4.99349, -48.3647, 29.0002)
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.12
+Movement/Distance = 11.8
+
+[node name="SpikeBall5" parent="JarAct/Lap01" instance=ExtResource("15_8xmwh")]
+transform = Transform3D(-0.409023, -0.000394665, -0.912524, -0.00167791, 0.999999, 0.000319605, 0.912523, 0.00166185, -0.409023, -10.1182, -48.3647, 17.7691)
+"Movement/Cycle Length" = 4.7
+"Movement/Starting Offset" = 0.07
+Movement/Distance = 7.3
+
+[node name="SpikeBall6" parent="JarAct/Lap01" instance=ExtResource("15_8xmwh")]
+transform = Transform3D(-0.367954, -0.000320219, -0.929844, -0.00167791, 0.999999, 0.000319605, 0.929843, 0.00167779, -0.367954, -5.63989, -48.3647, 5.86915)
+"Movement/Cycle Length" = 3.1
+Movement/Distance = 10.0
+
+[node name="Pearls7" type="Node3D" parent="JarAct/Lap01/SpikeBall6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.2469, -0.788456, -2.74988)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("10_7hisc")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 0.876
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.19617e-05, 0, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child02" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875797, -0.00146484, 0.00697899)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child03" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75172, -0.00294113, 0.0139847)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child04" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.62758, -0.00440979, 0.0210171)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child05" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.50354, -0.00588226, 0.0280724)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child06" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.37954, -0.00735474, 0.0351486)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child07" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25555, -0.00882339, 0.042244)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child08" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1315, -0.0102997, 0.0493546)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child09" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.00751, -0.0117683, 0.0564861)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
+
+[node name="Child10" type="Area3D" parent="JarAct/Lap01/SpikeBall6/Pearls7" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.88344, -0.013237, 0.0636215)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_38e2a")
+collider = NodePath("CollisionShape3D")
 
 [node name="AscentBottom" type="Node3D" parent="JarAct/Lap01"]
 transform = Transform3D(-0.9349, -1.11022e-16, 0.354911, 0, 1, -3.33067e-16, -0.354911, 0, -0.9349, 43.6927, -50, -112.669)
@@ -341,3 +3418,210 @@ shape = SubResource("BoxShape3D_wbgfo")
 [connection signal="Deactivated" from="JarAct/CullingMap/AscentTopU" to="JarAct/Lap01/AscentTop" method="Activate"]
 [connection signal="Deactivated" from="JarAct/CullingMap/AscentTopU" to="JarAct/Lap02/AscentTop" method="Activate"]
 [connection signal="Deactivated" from="JarAct/CullingMap/AscentTopU" to="JarAct/Lap03/AscentTop" method="Activate"]
+[connection signal="area_entered" from="JarAct/Lap01/PearlsRing/ObjectGenerator/Child01" to="JarAct/Lap01/PearlsRing/ObjectGenerator/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child01" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child02" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child03" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child04" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child05" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child06" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child07" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child08" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child09" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child10" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child11" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child12" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child13" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child14" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child15" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child16" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child17" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child18" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child19" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child20" to="JarAct/Lap01/DescentBottom/Child22/Pearl ring/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child01" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child02" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child03" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child04" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child05" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child06" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child07" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child08" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child09" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child10" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child11" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child12" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child13" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child14" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child15" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child16" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child17" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child18" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child19" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child20" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child21" to="JarAct/Lap01/Ring7/Child01/Pearl Ring 3/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child01" to="JarAct/Lap01/Ring8/Pearl ring3/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child02" to="JarAct/Lap01/Ring8/Pearl ring3/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child03" to="JarAct/Lap01/Ring8/Pearl ring3/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child04" to="JarAct/Lap01/Ring8/Pearl ring3/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child05" to="JarAct/Lap01/Ring8/Pearl ring3/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child06" to="JarAct/Lap01/Ring8/Pearl ring3/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child07" to="JarAct/Lap01/Ring8/Pearl ring3/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child08" to="JarAct/Lap01/Ring8/Pearl ring3/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child09" to="JarAct/Lap01/Ring8/Pearl ring3/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child10" to="JarAct/Lap01/Ring8/Pearl ring3/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child11" to="JarAct/Lap01/Ring8/Pearl ring3/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child12" to="JarAct/Lap01/Ring8/Pearl ring3/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child13" to="JarAct/Lap01/Ring8/Pearl ring3/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child14" to="JarAct/Lap01/Ring8/Pearl ring3/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child15" to="JarAct/Lap01/Ring8/Pearl ring3/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child16" to="JarAct/Lap01/Ring8/Pearl ring3/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child17" to="JarAct/Lap01/Ring8/Pearl ring3/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child18" to="JarAct/Lap01/Ring8/Pearl ring3/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child19" to="JarAct/Lap01/Ring8/Pearl ring3/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child20" to="JarAct/Lap01/Ring8/Pearl ring3/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Ring8/Pearl ring3/Child21" to="JarAct/Lap01/Ring8/Pearl ring3/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child01" to="JarAct/Lap01/Pearls Ring5/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child02" to="JarAct/Lap01/Pearls Ring5/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child03" to="JarAct/Lap01/Pearls Ring5/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child04" to="JarAct/Lap01/Pearls Ring5/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child05" to="JarAct/Lap01/Pearls Ring5/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child06" to="JarAct/Lap01/Pearls Ring5/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child07" to="JarAct/Lap01/Pearls Ring5/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child08" to="JarAct/Lap01/Pearls Ring5/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child09" to="JarAct/Lap01/Pearls Ring5/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child10" to="JarAct/Lap01/Pearls Ring5/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child11" to="JarAct/Lap01/Pearls Ring5/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child12" to="JarAct/Lap01/Pearls Ring5/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child13" to="JarAct/Lap01/Pearls Ring5/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child14" to="JarAct/Lap01/Pearls Ring5/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child15" to="JarAct/Lap01/Pearls Ring5/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child16" to="JarAct/Lap01/Pearls Ring5/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child17" to="JarAct/Lap01/Pearls Ring5/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child18" to="JarAct/Lap01/Pearls Ring5/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child19" to="JarAct/Lap01/Pearls Ring5/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child20" to="JarAct/Lap01/Pearls Ring5/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/Child21" to="JarAct/Lap01/Pearls Ring5/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring5/ObjectGenerator/Child01" to="JarAct/Lap01/Pearls Ring5/ObjectGenerator/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child01" to="JarAct/Lap01/Pearls Ring6/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child02" to="JarAct/Lap01/Pearls Ring6/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child03" to="JarAct/Lap01/Pearls Ring6/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child04" to="JarAct/Lap01/Pearls Ring6/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child05" to="JarAct/Lap01/Pearls Ring6/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child06" to="JarAct/Lap01/Pearls Ring6/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child07" to="JarAct/Lap01/Pearls Ring6/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child08" to="JarAct/Lap01/Pearls Ring6/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child09" to="JarAct/Lap01/Pearls Ring6/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child10" to="JarAct/Lap01/Pearls Ring6/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child11" to="JarAct/Lap01/Pearls Ring6/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child12" to="JarAct/Lap01/Pearls Ring6/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child13" to="JarAct/Lap01/Pearls Ring6/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child14" to="JarAct/Lap01/Pearls Ring6/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child15" to="JarAct/Lap01/Pearls Ring6/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child16" to="JarAct/Lap01/Pearls Ring6/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child17" to="JarAct/Lap01/Pearls Ring6/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child18" to="JarAct/Lap01/Pearls Ring6/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child19" to="JarAct/Lap01/Pearls Ring6/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child20" to="JarAct/Lap01/Pearls Ring6/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/Child21" to="JarAct/Lap01/Pearls Ring6/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring6/ObjectGenerator/Child01" to="JarAct/Lap01/Pearls Ring6/ObjectGenerator/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child01" to="JarAct/Lap01/Pearls Ring7/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child02" to="JarAct/Lap01/Pearls Ring7/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child03" to="JarAct/Lap01/Pearls Ring7/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child04" to="JarAct/Lap01/Pearls Ring7/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child05" to="JarAct/Lap01/Pearls Ring7/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child06" to="JarAct/Lap01/Pearls Ring7/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child07" to="JarAct/Lap01/Pearls Ring7/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child08" to="JarAct/Lap01/Pearls Ring7/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child09" to="JarAct/Lap01/Pearls Ring7/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child10" to="JarAct/Lap01/Pearls Ring7/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child11" to="JarAct/Lap01/Pearls Ring7/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child12" to="JarAct/Lap01/Pearls Ring7/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child13" to="JarAct/Lap01/Pearls Ring7/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child14" to="JarAct/Lap01/Pearls Ring7/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child15" to="JarAct/Lap01/Pearls Ring7/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child16" to="JarAct/Lap01/Pearls Ring7/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child17" to="JarAct/Lap01/Pearls Ring7/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child18" to="JarAct/Lap01/Pearls Ring7/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child19" to="JarAct/Lap01/Pearls Ring7/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child20" to="JarAct/Lap01/Pearls Ring7/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/Child21" to="JarAct/Lap01/Pearls Ring7/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring7/ObjectGenerator/Child01" to="JarAct/Lap01/Pearls Ring7/ObjectGenerator/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child01" to="JarAct/Lap01/Pearls Ring8/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child02" to="JarAct/Lap01/Pearls Ring8/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child03" to="JarAct/Lap01/Pearls Ring8/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child04" to="JarAct/Lap01/Pearls Ring8/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child05" to="JarAct/Lap01/Pearls Ring8/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child06" to="JarAct/Lap01/Pearls Ring8/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child07" to="JarAct/Lap01/Pearls Ring8/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child08" to="JarAct/Lap01/Pearls Ring8/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child09" to="JarAct/Lap01/Pearls Ring8/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child10" to="JarAct/Lap01/Pearls Ring8/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child11" to="JarAct/Lap01/Pearls Ring8/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child12" to="JarAct/Lap01/Pearls Ring8/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child13" to="JarAct/Lap01/Pearls Ring8/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child14" to="JarAct/Lap01/Pearls Ring8/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child15" to="JarAct/Lap01/Pearls Ring8/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child16" to="JarAct/Lap01/Pearls Ring8/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child17" to="JarAct/Lap01/Pearls Ring8/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child18" to="JarAct/Lap01/Pearls Ring8/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child19" to="JarAct/Lap01/Pearls Ring8/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child20" to="JarAct/Lap01/Pearls Ring8/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/Child21" to="JarAct/Lap01/Pearls Ring8/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring8/ObjectGenerator/Child01" to="JarAct/Lap01/Pearls Ring8/ObjectGenerator/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child01" to="JarAct/Lap01/Pearls Ring9/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child02" to="JarAct/Lap01/Pearls Ring9/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child03" to="JarAct/Lap01/Pearls Ring9/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child04" to="JarAct/Lap01/Pearls Ring9/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child05" to="JarAct/Lap01/Pearls Ring9/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child06" to="JarAct/Lap01/Pearls Ring9/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child07" to="JarAct/Lap01/Pearls Ring9/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child08" to="JarAct/Lap01/Pearls Ring9/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child09" to="JarAct/Lap01/Pearls Ring9/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child10" to="JarAct/Lap01/Pearls Ring9/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child11" to="JarAct/Lap01/Pearls Ring9/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child12" to="JarAct/Lap01/Pearls Ring9/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child13" to="JarAct/Lap01/Pearls Ring9/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child14" to="JarAct/Lap01/Pearls Ring9/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child15" to="JarAct/Lap01/Pearls Ring9/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child16" to="JarAct/Lap01/Pearls Ring9/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child17" to="JarAct/Lap01/Pearls Ring9/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child18" to="JarAct/Lap01/Pearls Ring9/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child19" to="JarAct/Lap01/Pearls Ring9/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child20" to="JarAct/Lap01/Pearls Ring9/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/Child21" to="JarAct/Lap01/Pearls Ring9/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring9/ObjectGenerator/Child01" to="JarAct/Lap01/Pearls Ring9/ObjectGenerator/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child01" to="JarAct/Lap01/Pearls Ring10/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child02" to="JarAct/Lap01/Pearls Ring10/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child03" to="JarAct/Lap01/Pearls Ring10/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child04" to="JarAct/Lap01/Pearls Ring10/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child05" to="JarAct/Lap01/Pearls Ring10/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child06" to="JarAct/Lap01/Pearls Ring10/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child07" to="JarAct/Lap01/Pearls Ring10/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child08" to="JarAct/Lap01/Pearls Ring10/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child09" to="JarAct/Lap01/Pearls Ring10/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child10" to="JarAct/Lap01/Pearls Ring10/Child10" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child11" to="JarAct/Lap01/Pearls Ring10/Child11" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child12" to="JarAct/Lap01/Pearls Ring10/Child12" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child13" to="JarAct/Lap01/Pearls Ring10/Child13" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child14" to="JarAct/Lap01/Pearls Ring10/Child14" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child15" to="JarAct/Lap01/Pearls Ring10/Child15" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child16" to="JarAct/Lap01/Pearls Ring10/Child16" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child17" to="JarAct/Lap01/Pearls Ring10/Child17" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child18" to="JarAct/Lap01/Pearls Ring10/Child18" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child19" to="JarAct/Lap01/Pearls Ring10/Child19" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child20" to="JarAct/Lap01/Pearls Ring10/Child20" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/Child21" to="JarAct/Lap01/Pearls Ring10/Child21" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/Pearls Ring10/ObjectGenerator/Child01" to="JarAct/Lap01/Pearls Ring10/ObjectGenerator/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child01" to="JarAct/Lap01/SpikeBall6/Pearls7/Child01" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child02" to="JarAct/Lap01/SpikeBall6/Pearls7/Child02" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child03" to="JarAct/Lap01/SpikeBall6/Pearls7/Child03" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child04" to="JarAct/Lap01/SpikeBall6/Pearls7/Child04" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child05" to="JarAct/Lap01/SpikeBall6/Pearls7/Child05" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child06" to="JarAct/Lap01/SpikeBall6/Pearls7/Child06" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child07" to="JarAct/Lap01/SpikeBall6/Pearls7/Child07" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child08" to="JarAct/Lap01/SpikeBall6/Pearls7/Child08" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child09" to="JarAct/Lap01/SpikeBall6/Pearls7/Child09" method="OnEntered"]
+[connection signal="area_entered" from="JarAct/Lap01/SpikeBall6/Pearls7/Child10" to="JarAct/Lap01/SpikeBall6/Pearls7/Child10" method="OnEntered"]
+
+[editable path="Static"]
