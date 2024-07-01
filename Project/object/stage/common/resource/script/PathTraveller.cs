@@ -128,7 +128,7 @@ public partial class PathTraveller : Node3D
 
 		currentSpeed = ExtensionMethods.SmoothDamp(currentSpeed, maxSpeed, ref speedVelocity, SPEED_SMOOTHING);
 		currentTurnAmount = currentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TURN_SMOOTHING);
-		Character.Animator.UpdateBalancing(inputVector.X / turnSpeed);
+		Character.Animator.UpdateBalancing((inputVector.X / turnSpeed) - (Character.PathFollower.DeltaAngle * 20.0f));
 	}
 
 	/// <summary> Check for walls. </summary>
@@ -174,12 +174,15 @@ public partial class PathTraveller : Node3D
 
 		// Sync transforms
 		GlobalTransform = pathFollower.GlobalTransform;
-		Character.UpdateExternalControl();
+		Character.UpdateExternalControl(true);
 	}
 
 	public void Respawn()
 	{
 		Deactivate();
+
+		if (animator.HasAnimation("respawn"))
+			animator.Play("respawn");
 
 		spawnData.Respawn(this);
 		pathFollower.Progress = startingProgress;
@@ -234,24 +237,29 @@ public partial class PathTraveller : Node3D
 
 	private void TakeDamage()
 	{
+		EmitSignal(SignalName.Damaged);
+
 		Deactivate();
 		isRespawning = true;
 
 		// Bump the player off
 		LaunchSettings launchSettings = LaunchSettings.Create(Character.GlobalPosition, Character.GlobalPosition, 2);
 		Character.StartLauncher(launchSettings);
-		Character.Effect.StartSpinFX();
-		Character.Animator.StartSpin(3.0f);
 		Character.Animator.ResetState(0.1f);
+		Character.Animator.StartSpin(3.0f);
+		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
+
+		if (animator.HasAnimation("despawn"))
+			animator.Play("despawn");
 	}
 
 	private void Stagger()
 	{
-		currentSpeed = speedVelocity = 0;
-		currentTurnAmount = turnVelocity = Vector2.Zero;
+		EmitSignal(SignalName.Staggered);
 
 		// TODO Play stagger animation
-		EmitSignal(SignalName.Staggered);
+		currentSpeed = speedVelocity = 0;
+		currentTurnAmount = turnVelocity = Vector2.Zero;
 	}
 
 	public void OnBodyEntered(PhysicsBody3D b)
