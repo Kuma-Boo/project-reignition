@@ -125,15 +125,17 @@ public partial class CharacterLockon : Node3D
 
 			if (currentTarget != null && currentTarget != Target) // Target has changed
 				Target = currentTarget;
-
-			if (Target != null && IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
-				Target = null;
 		}
-		else if (IsHomingAttacking) // Validate homing attack target
+
+		if (Target != null) // Validate current lockon target
 		{
-			TargetState state = IsTargetValid(Target);
-			if (state == TargetState.NotInList)
+			TargetState targetState = IsTargetValid(Target);
+
+			if ((IsHomingAttacking && targetState == TargetState.NotInList) ||
+				(!IsHomingAttacking && targetState != TargetState.Valid)) // Validate homing attack target
+			{
 				Target = null;
+			}
 		}
 
 		if (Target != null)
