@@ -481,7 +481,7 @@ public partial class SaveManager : Node
 				return GameSaveSlots[ActiveSaveSlotIndex];
 
 			// Default to save slot 1 when running the game from the editor
-			return OS.IsDebugBuild() ? GameSaveSlots[0] : null;
+			return GameData.DefaultData;
 		}
 	}
 
@@ -526,12 +526,20 @@ public partial class SaveManager : Node
 			}
 		}
 
-		// Debug game data
-		if (OS.IsDebugBuild()) // For testing
+		// Set up default game data/menu game data
+		GameData.DefaultData = new()
 		{
-			ActiveSaveSlotIndex = 0;
-			GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();
-			ActiveGameData.UnlockAllWorlds();
+			level = 1,
+			lastPlayedWorld = WorldEnum.LostPrologue,
+		};
+
+		// TODO Replace this with the tutorial key
+		GameData.DefaultData.UnlockStage("so_a1_main");
+		GameData.DefaultData.UnlockWorld(WorldEnum.SandOasis);
+
+		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
+		{
+			GameData.DefaultData.UnlockAllWorlds();
 			ActiveSkillRing.LoadFromActiveData();
 		}
 	}
@@ -540,7 +548,7 @@ public partial class SaveManager : Node
 	public static void ResetSaveData(int index)
 	{
 		GameSaveSlots[index].Free();
-		GameSaveSlots[index] = GameData.DefaultData();
+		GameSaveSlots[index] = GameData.DefaultData;
 	}
 
 	public partial class GameData : GodotObject
@@ -854,23 +862,7 @@ public partial class SaveManager : Node
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>
-		public static GameData DefaultData()
-		{
-			GameData data = new()
-			{
-				level = 1,
-				lastPlayedWorld = WorldEnum.LostPrologue,
-			};
-
-			// TODO Replace this with the tutorial key
-			data.UnlockStage("so_a1_main");
-			data.UnlockWorld(WorldEnum.SandOasis);
-
-			if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
-				data.UnlockAllWorlds();
-
-			return data;
-		}
+		public static GameData DefaultData;
 	}
 	#endregion
 }
