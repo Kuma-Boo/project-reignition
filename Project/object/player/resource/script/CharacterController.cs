@@ -209,7 +209,6 @@ namespace Project.Gameplay
 			return GetInputAngle();
 		}
 
-
 		private float GetStrafeAngle()
 		{
 			float targetAngle = GetInputAngle();
@@ -584,6 +583,9 @@ namespace Project.Gameplay
 				MovementAngle = targetMovementAngle;
 			}
 
+			if (ActionState == ActionStates.AccelJump)
+				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .1f);
+
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) // Check for turning around
 			{
@@ -839,8 +841,7 @@ namespace Project.Gameplay
 			if (isAccelerationJumpQueued &&
 				currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
 			{
-				float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), PathFollower.ForwardAngle);
-				if (delta < Mathf.Pi * .25f &&
+				if (IsHoldingDirection(PathFollower.ForwardAngle, true) &&
 				InputVector.Length() > .5f)
 				{
 					StartAccelJump();

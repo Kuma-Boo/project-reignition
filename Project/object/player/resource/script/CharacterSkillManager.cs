@@ -32,6 +32,8 @@ public partial class CharacterSkillManager : Node
 	[Export]
 	public float homingAttackSpeed;
 	[Export]
+	public float perfectHomingAttackSpeed;
+	[Export]
 	public float homingAttackAcceleration;
 
 	[Export]
