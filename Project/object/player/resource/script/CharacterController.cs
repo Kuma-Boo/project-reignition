@@ -839,7 +839,8 @@ namespace Project.Gameplay
 			if (isAccelerationJumpQueued &&
 				currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
 			{
-				if (IsHoldingDirection(PathFollower.ForwardAngle, true) &&
+				float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), PathFollower.ForwardAngle);
+				if (delta < Mathf.Pi * .25f &&
 				InputVector.Length() > .5f)
 				{
 					StartAccelJump();
