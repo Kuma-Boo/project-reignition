@@ -955,7 +955,10 @@ namespace Project.Gameplay
 
 				isCustomPhysicsEnabled = true;
 				VerticalSpeed = 0;
-				MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
+				if (Lockon.IsPerfectHomingAttack)
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.perfectHomingAttackSpeed, Skills.homingAttackAcceleration * 2.0f * PhysicsManager.physicsDelta);
+				else
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
 				Velocity = Lockon.HomingAttackDirection.Normalized() * MoveSpeed;
 				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
@@ -963,7 +966,9 @@ namespace Project.Gameplay
 				PathFollower.Resync();
 			}
 			else // Normal Jump dash; Apply gravity
+			{
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
+			}
 
 			CheckStomp();
 		}
