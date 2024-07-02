@@ -1509,9 +1509,6 @@ namespace Project.Gameplay
 		{
 			isCustomPhysicsEnabled = true;
 
-			if (activeLauncher?.IsInsideTree() == false) // Fix launchers being removed from the scene tree
-				FinishLauncher();
-
 			if (activeLauncher?.IsCharacterCentered == false)
 			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
