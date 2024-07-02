@@ -24,10 +24,9 @@ public partial class CharacterEffect : Node3D
 	private readonly StringName StompSfx = "stomp";
 	private readonly StringName WindSfx = "wind";
 
-
 	#region Actions
 	// Actions (Jumping, sliding, etc)
-	[ExportGroup("Actions")]
+	[ExportCategory("Actions")]
 	[Export]
 	private SFXLibraryResource actionSFXLibrary;
 	[Export]
@@ -83,9 +82,8 @@ public partial class CharacterEffect : Node3D
 	public void StopStompFX() => stompFX.SetEmitting(false);
 	#endregion
 
-
 	#region Ground
-	[ExportGroup("Ground Interactions")]
+	[ExportCategory("Ground Interactions")]
 	// SFX for different ground materials (footsteps, landing, etc)
 	[Export]
 	private SFXLibraryResource materialSFXLibrary;
@@ -119,8 +117,7 @@ public partial class CharacterEffect : Node3D
 		}
 	}
 
-
-	[ExportSubgroup("Landing VFX")]
+	[ExportGroup("Landing VFX")]
 	/// <summary> Sand landing VFX. </summary>
 	[Export]
 	private GpuParticles3D landingSandParticle;
@@ -130,7 +127,6 @@ public partial class CharacterEffect : Node3D
 		landingChannel.Play();
 		landingSandParticle.Restart();
 	}
-
 
 	/// <summary>
 	/// Plays water splash sfx and vfx.
@@ -143,7 +139,6 @@ public partial class CharacterEffect : Node3D
 		landingWaterParticle.RestartGroup();
 	}
 
-
 	/// <summary> VFX for landing with a dust cloud. </summary>
 	[Export]
 	private GpuParticles3D landingDustParticle;
@@ -154,8 +149,7 @@ public partial class CharacterEffect : Node3D
 		landingDustParticle.Restart();
 	}
 
-
-	[ExportSubgroup("Step VFX")]
+	[ExportGroup("Step VFX")]
 	[Export]
 	/// <summary> Emitters responsible for dust when moving on the ground. </summary>
 	private GroupGpuParticles3D[] stepEmitters;
@@ -190,7 +184,6 @@ public partial class CharacterEffect : Node3D
 		}
 	}
 
-
 	/// <summary> Plays FXs that occur the moment a foot strikes the ground (i.e. SFX, Footprints, etc.). </summary>
 	public void PlayFootstepFX(bool isRightFoot)
 	{
@@ -211,14 +204,12 @@ public partial class CharacterEffect : Node3D
 			case 6: // Water
 				CreateSplashFootFX(isRightFoot); // Create a ripple at the player's foot
 				break;
-			default:
-				break;
 		}
 	}
 
 	[Export]
 	private PackedScene footprintDecal;
-	private readonly List<Node3D> footprintDecalList = new();
+	private readonly List<Node3D> footprintDecalList = [];
 	private void CreateSandFootFX(Transform3D spawnTransform)
 	{
 		Node3D activeFootprintDecal = null;
@@ -253,10 +244,9 @@ public partial class CharacterEffect : Node3D
 	{
 		waterStep.GlobalPosition = isRightFoot ? rightFoot.GlobalPosition : leftFoot.GlobalPosition;
 
-		uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
+		const uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
 		waterStep.EmitParticle(waterStep.GlobalTransform, CharacterController.instance.Velocity * .2f, Colors.White, Colors.White, flags);
 	}
-
 
 	public void UpdateGroundType(Node collision)
 	{
@@ -277,8 +267,7 @@ public partial class CharacterEffect : Node3D
 	}
 	#endregion
 
-
-	[ExportGroup("Voices")]
+	[ExportCategory("Voices")]
 	[Export]
 	public SFXLibraryResource voiceLibrary;
 	[Export]
@@ -289,13 +278,15 @@ public partial class CharacterEffect : Node3D
 		voiceChannel.Play();
 	}
 
-	private void MuteGameplayVoice() //Kills channel
+	/// <summary> Stops any currently active voice clip and mutes the voice channel. </summary>
+	private void MuteGameplayVoice()
 	{
 		voiceChannel.Stop();
 		voiceChannel.VolumeDb = -80f;
 	}
 
-	private void UnmuteGameplayVoice() //Stops any currently active voice clip and resets channel volume
+	/// <summary> Stops any currently active voice clip and resets channel volume. </summary>
+	private void UnmuteGameplayVoice()
 	{
 		voiceChannel.Stop();
 		voiceChannel.VolumeDb = 0f;

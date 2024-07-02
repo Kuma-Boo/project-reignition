@@ -193,7 +193,7 @@ public partial class EventTrigger : StageTriggerModule
 				break;
 		}
 
-		animator.Advance(respawnToEnd ? animator.CurrentAnimationLength : 0);
+		animator.Seek(respawnToEnd ? animator.CurrentAnimationLength : 0, true, true);
 		if (!respawnToEnd)
 			animator.Stop(true);
 	}

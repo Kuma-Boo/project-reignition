@@ -76,7 +76,7 @@ public partial class SoundManager : Node
 		currentDialog = dialog;
 		currentDialogIndex = 0;
 		if (currentDialog.randomize)
-			currentDialogIndex = Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount);
+			currentDialogIndex = Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1);
 		UpdateDialog(true);
 	}
 

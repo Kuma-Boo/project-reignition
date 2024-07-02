@@ -473,6 +473,7 @@ public partial class StageSettings : Node3D
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
 	[Export]
 	private AnimationPlayer completionAnimator;
+	private int completionAnimationIndex = 1;
 	private void StartCompletionDemo()
 	{
 		EmitSignal(SignalName.LevelDemoStarted);
@@ -486,9 +487,10 @@ public partial class StageSettings : Node3D
 	/// <summary> Completion demo advanced, play a crossfade. </summary>
 	public void OnCameraDemoAdvance()
 	{
-		StringName nextAnimation = completionAnimator.AnimationGetNext(completionAnimator.CurrentAnimation);
-		if (completionAnimator.HasAnimation(nextAnimation))
-			completionAnimator.Play(nextAnimation);
+		completionAnimationIndex++;
+		if (completionAnimationIndex > 3)
+			completionAnimationIndex = 1;
+		completionAnimator.Play($"demo{completionAnimationIndex}");
 		CharacterController.instance.Camera.StartCrossfade();
 	}
 
