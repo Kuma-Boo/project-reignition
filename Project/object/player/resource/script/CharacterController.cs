@@ -209,7 +209,6 @@ namespace Project.Gameplay
 			return GetInputAngle();
 		}
 
-
 		private float GetStrafeAngle()
 		{
 			float targetAngle = GetInputAngle();
@@ -584,6 +583,9 @@ namespace Project.Gameplay
 				MovementAngle = targetMovementAngle;
 			}
 
+			if (ActionState == ActionStates.AccelJump)
+				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .1f);
+
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) // Check for turning around
 			{
@@ -601,7 +603,7 @@ namespace Project.Gameplay
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			// Reduce sensitivity when player is running
-			if (speedRatio > CharacterAnimator.RUN_RATIO)
+			if (speedRatio > CharacterAnimator.RunRatio)
 			{
 				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount)) // Remap controls to provide more analog detail
 					targetMovementAngle -= inputDeltaAngle * .5f;
@@ -954,7 +956,10 @@ namespace Project.Gameplay
 
 				isCustomPhysicsEnabled = true;
 				VerticalSpeed = 0;
-				MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
+				if (Lockon.IsPerfectHomingAttack)
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.perfectHomingAttackSpeed, Skills.homingAttackAcceleration * 2.0f * PhysicsManager.physicsDelta);
+				else
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
 				Velocity = Lockon.HomingAttackDirection.Normalized() * MoveSpeed;
 				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
@@ -962,7 +967,9 @@ namespace Project.Gameplay
 				PathFollower.Resync();
 			}
 			else // Normal Jump dash; Apply gravity
+			{
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
+			}
 
 			CheckStomp();
 		}
@@ -1501,6 +1508,7 @@ namespace Project.Gameplay
 		private void UpdateLauncher()
 		{
 			isCustomPhysicsEnabled = true;
+
 			if (activeLauncher?.IsCharacterCentered == false)
 			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
