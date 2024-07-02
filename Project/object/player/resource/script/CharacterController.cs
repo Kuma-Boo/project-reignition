@@ -603,7 +603,7 @@ namespace Project.Gameplay
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			// Reduce sensitivity when player is running
-			if (speedRatio > CharacterAnimator.RUN_RATIO)
+			if (speedRatio > CharacterAnimator.RunRatio)
 			{
 				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount)) // Remap controls to provide more analog detail
 					targetMovementAngle -= inputDeltaAngle * .5f;
