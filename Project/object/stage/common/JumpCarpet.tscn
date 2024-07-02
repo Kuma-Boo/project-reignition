@@ -1,11 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1o8jxmiiryrj"]
+[gd_scene load_steps=11 format=3 uid="uid://c1o8jxmiiryrj"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/JumpCarpet.cs" id="1_7j8ed"]
 [ext_resource type="PackedScene" uid="uid://7jb7tlxafgo8" path="res://object/stage/common/resource/model/JumpCarpet.gltf" id="2_vapfi"]
 [ext_resource type="AudioStream" uid="uid://4w7opf8u4m2r" path="res://sound/sfx/objects/jump carpet.wav" id="3_kgplj"]
+[ext_resource type="Material" uid="uid://dtyv06bt3q7mw" path="res://object/stage/common/resource/model/material/Flying Pot Shine Process Material.tres" id="4_kikgc"]
+[ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="5_64pno"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bqhir"]
 size = Vector3(3, 0.5, 3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_47mcu"]
+material = ExtResource("5_64pno")
+size = Vector2(1, 1)
+orientation = 2
 
 [sub_resource type="Animation" id="Animation_qc8ai"]
 length = 0.001
@@ -157,6 +164,20 @@ tracks/5/keys = {
 "update": 0,
 "values": [0.4, 0.6, 0.0]
 }
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("VFX")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ymtvi"]
 _data = {
@@ -203,6 +224,19 @@ max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
+
+[node name="VFX" type="GPUParticles3D" parent="."]
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.95
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -2, 4, 4, 4)
+process_material = ExtResource("4_kikgc")
+draw_pass_1 = SubResource("PlaneMesh_47mcu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
