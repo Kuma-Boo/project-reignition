@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://skx536edn7yd"]
+[gd_scene load_steps=52 format=3 uid="uid://skx536edn7yd"]
 
 [ext_resource type="PackedScene" uid="uid://g7vhevg8ipxh" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
@@ -34,6 +34,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="20_662ia"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="21_tnfaf"]
 [ext_resource type="AudioStream" uid="uid://bmkg2n6r0wy3f" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
+[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="28_s8f82"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_50thi"]
 size = Vector3(15, 20, 2.5)
@@ -53,6 +54,12 @@ radius = 2.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n46k6"]
 size = Vector3(150, 2, 300)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1aoqq"]
+size = Vector3(1, 19.4123, 32.3037)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7x33n"]
+size = Vector3(21.605, 21.115, 1)
 
 [sub_resource type="Gradient" id="Gradient_lbers"]
 offsets = PackedFloat32Array(0.791045)
@@ -542,6 +549,27 @@ triggerType = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
 shape = SubResource("BoxShape3D_n46k6")
+
+[node name="Checkpoints" type="Node3D" parent="Trigger"]
+
+[node name="Islandcheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(0.839838, 0, 0.542837, 0, 1, 0, -0.542837, 0, 0.839838, -21.9976, -44.9301, -428.013)
+
+[node name="checkpoint" type="Node3D" parent="Trigger/Checkpoints/Islandcheckpoint"]
+script = ExtResource("28_s8f82")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/Islandcheckpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.57764e-05, 4.01767, 0.364777)
+shape = SubResource("BoxShape3D_1aoqq")
+
+[node name="Forestcheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.2811, -40.1248, -184.963)
+
+[node name="checkpoint" type="Node3D" parent="Trigger/Checkpoints/Forestcheckpoint"]
+script = ExtResource("28_s8f82")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/Forestcheckpoint"]
+shape = SubResource("BoxShape3D_7x33n")
 
 [node name="Paths" type="Node3D" parent="."]
 
