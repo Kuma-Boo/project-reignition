@@ -517,7 +517,9 @@ namespace Project.Gameplay
 			}
 
 			if (Mathf.IsZeroApprox(inputLength) && !Animator.IsBrakeAnimationActive) // Basic slow down
+			{
 				MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, 0);
+			}
 			else
 			{
 				float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, inputAngle);
@@ -537,7 +539,10 @@ namespace Project.Gameplay
 					if (MoveSpeed < BackstepSettings.speed) // Accelerate faster when at low speeds
 						MoveSpeed = Mathf.Lerp(MoveSpeed, ActiveMovementSettings.speed * ActiveMovementSettings.GetSpeedRatio(BackstepSettings.speed), .05f * inputLength);
 
-					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
+					if (ActionState == ActionStates.AccelJump)
+						MoveSpeed = GroundSettings.Interpolate(MoveSpeed, inputLength);
+					else
+						MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
 				}
 			}
 
