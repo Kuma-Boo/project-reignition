@@ -1,12 +1,18 @@
-[gd_scene load_steps=15 format=3 uid="uid://dq4rt7vk6a7kv"]
+[gd_scene load_steps=18 format=3 uid="uid://dq4rt7vk6a7kv"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterLockon.cs" id="1_7v3xt"]
 [ext_resource type="Resource" uid="uid://dsp0ckshdhlnr" path="res://resource/preset/lockout/action/BounceLockout.tres" id="2_a5isc"]
 [ext_resource type="Texture2D" uid="uid://di8vc3ik6r4a1" path="res://object/player/resource/component/lockon/Lockon.png" id="3_w4j6b"]
 [ext_resource type="AudioStream" uid="uid://cxgc0jnakrbdo" path="res://sound/sfx/system/lockon.wav" id="4_giby1"]
+[ext_resource type="Shader" uid="uid://rocx3mu1sulb" path="res://effect/shader/interface/Lockon.tres" id="4_k8nyg"]
+[ext_resource type="AudioStream" uid="uid://d4inds2qntnj8" path="res://sound/sfx/system/perfect strike.wav" id="7_xqrlx"]
 
 [sub_resource type="ConvexPolygonShape3D" id="130"]
 points = PackedVector3Array(1, 20, 0, -1, 20, 0, -1, -20, 0, 1, -20, 0, 10, 20, 5, -10, 20, 5, -10, -20, 5, 10, -20, 5, 30, 20, 25, -30, 20, 25, -30, -20, 25, 30, -20, 25)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tq0uy"]
+shader = ExtResource("4_k8nyg")
+shader_parameter/white_amount = 0.0
 
 [sub_resource type="Animation" id="131"]
 length = 0.001
@@ -201,6 +207,18 @@ tracks/15/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0.588235)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Main:material:shader_parameter/white_amount")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="132"]
@@ -406,10 +424,22 @@ tracks/13/keys = {
 "method": &"play"
 }]
 }
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Main:material:shader_parameter/white_amount")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_y2ff2"]
 resource_name = "perfect-enable"
-length = 0.600003
+length = 0.666669
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -550,7 +580,7 @@ tracks/11/path = NodePath("..")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.333333),
+"times": PackedFloat32Array(0, 0.266667, 0.466667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
@@ -601,10 +631,22 @@ tracks/14/keys = {
 "method": &"play"
 }]
 }
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Main:material:shader_parameter/white_amount")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_8q6ur"]
 resource_name = "perfect-strike"
-length = 0.26667
+length = 0.500003
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -661,7 +703,7 @@ tracks/4/path = NodePath(".:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.26667),
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -673,10 +715,10 @@ tracks/5/path = NodePath("PerfectHomingAttack/1:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.166667),
-"transitions": PackedFloat32Array(0.5, 1),
+"times": PackedFloat32Array(0, 0.166667, 0.266666),
+"transitions": PackedFloat32Array(0.5, 1, 1),
 "update": 0,
-"values": [Vector2(-32, -32), Vector2(-56, -56)]
+"values": [Vector2(-16, -16), Vector2(-64, -64), Vector2(-56, -56)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -685,10 +727,10 @@ tracks/6/path = NodePath("PerfectHomingAttack/2:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.166667),
-"transitions": PackedFloat32Array(0.5, 1),
+"times": PackedFloat32Array(0, 0.166667, 0.266666),
+"transitions": PackedFloat32Array(0.5, 1, 1),
 "update": 0,
-"values": [Vector2(-32, 32), Vector2(-56, 56)]
+"values": [Vector2(-16, 16), Vector2(-64, 64), Vector2(-56, 56)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -697,10 +739,10 @@ tracks/7/path = NodePath("PerfectHomingAttack/3:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.166667),
-"transitions": PackedFloat32Array(0.5, 1),
+"times": PackedFloat32Array(0, 0.166667, 0.266666),
+"transitions": PackedFloat32Array(0.5, 1, 1),
 "update": 0,
-"values": [Vector2(32, -32), Vector2(56, -56)]
+"values": [Vector2(16, -16), Vector2(64, -64), Vector2(56, -56)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -709,10 +751,10 @@ tracks/8/path = NodePath("PerfectHomingAttack/4:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.166667),
-"transitions": PackedFloat32Array(0.5, 1),
+"times": PackedFloat32Array(0, 0.166667, 0.266666),
+"transitions": PackedFloat32Array(0.5, 1, 1),
 "update": 0,
-"values": [Vector2(32, 32), Vector2(56, 56)]
+"values": [Vector2(16, 16), Vector2(64, 64), Vector2(56, 56)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -721,7 +763,7 @@ tracks/9/path = NodePath("PerfectHomingAttack:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.166667, 0.266667),
+"times": PackedFloat32Array(0, 0.166667, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -775,6 +817,18 @@ tracks/13/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0.588235), Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Main:material:shader_parameter/white_amount")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.2664),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [1.0, 0.0]
 }
 
 [sub_resource type="Animation" id="Animation_sq08k"]
@@ -937,12 +991,13 @@ _data = {
 "loop": SubResource("134")
 }
 
-[node name="Lockon" type="Area3D" node_paths=PackedStringArray("lockonReticle", "lockonAnimator")]
+[node name="Lockon" type="Area3D" node_paths=PackedStringArray("perfectSFX", "lockonReticle", "lockonAnimator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 0
 collision_mask = 4
 monitorable = false
 script = ExtResource("1_7v3xt")
+perfectSFX = NodePath("PerfectStrike")
 lockonReticle = NodePath("LockonReticle")
 lockonAnimator = NodePath("LockonReticle/LockonAnimator")
 bounceLockoutSettings = ExtResource("2_a5isc")
@@ -958,6 +1013,7 @@ visible = false
 scale = Vector2(2, 2)
 
 [node name="Main" type="Sprite2D" parent="LockonReticle"]
+material = SubResource("ShaderMaterial_tq0uy")
 texture = ExtResource("3_w4j6b")
 region_enabled = true
 region_rect = Rect2(280, 50, 21, 22)
@@ -970,6 +1026,7 @@ region_enabled = true
 region_rect = Rect2(128, 0, 128, 128)
 
 [node name="Reticle" type="Sprite2D" parent="LockonReticle/Main"]
+use_parent_material = true
 scale = Vector2(1.3, 1.3)
 texture = ExtResource("3_w4j6b")
 region_enabled = true
@@ -1019,6 +1076,7 @@ libraries = {
 "": SubResource("AnimationLibrary_r77q1")
 }
 next/enable = &"loop"
+blend_times = [&"perfect-enable", &"perfect-strike", 0.1]
 
 [node name="RotationAnimator" type="AnimationPlayer" parent="LockonReticle"]
 libraries = {
@@ -1028,6 +1086,11 @@ autoplay = "loop"
 
 [node name="Lockon" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_giby1")
+bus = &"GAME SFX"
+
+[node name="PerfectStrike" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_xqrlx")
+volume_db = 6.0
 bus = &"GAME SFX"
 
 [connection signal="area_entered" from="." to="." method="OnTargetTriggerEnter"]

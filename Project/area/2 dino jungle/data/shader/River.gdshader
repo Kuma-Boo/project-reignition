@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, specular_disabled, depth_prepass_alpha, depth_draw_opaque, shadows_disabled;
+render_mode unshaded, specular_disabled, depth_prepass_alpha, depth_draw_opaque, cull_disabled;
 
 global uniform float time;
 uniform sampler2D albedo : source_color;

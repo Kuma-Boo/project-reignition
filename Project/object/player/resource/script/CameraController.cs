@@ -136,6 +136,9 @@ public partial class CameraController : Node3D
 		crossfadeAnimator.Play("activate");// Start crossfade animation
 		crossfadeAnimator.SpeedScale = speed;
 
+		if (!StageSettings.instance.IsLevelIngame)
+			return;
+
 		// Warp the camera
 		SnapFlag = true;
 		UpdateGameplayCamera();

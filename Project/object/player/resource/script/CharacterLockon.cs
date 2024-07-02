@@ -49,6 +49,8 @@ public partial class CharacterLockon : Node3D
 	public bool IsHomingAttacking { get; set; }
 	public bool IsPerfectHomingAttack { get; private set; }
 	private bool monitoringPerfectHomingAttack;
+	[Export]
+	private AudioStreamPlayer perfectSFX;
 	public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
 	public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 	public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
@@ -58,7 +60,10 @@ public partial class CharacterLockon : Node3D
 		IsHomingAttacking = true;
 		IsPerfectHomingAttack = monitoringPerfectHomingAttack;
 		if (IsPerfectHomingAttack)
+		{
+			perfectSFX.Play();
 			lockonAnimator.Play("perfect-strike");
+		}
 	}
 
 	public void StopHomingAttack()
@@ -120,15 +125,17 @@ public partial class CharacterLockon : Node3D
 
 			if (currentTarget != null && currentTarget != Target) // Target has changed
 				Target = currentTarget;
-
-			if (Target != null && IsTargetValid(Target) != TargetState.Valid) // Validate current lockon target
-				Target = null;
 		}
-		else if (IsHomingAttacking) // Validate homing attack target
+
+		if (Target != null) // Validate current lockon target
 		{
-			TargetState state = IsTargetValid(Target);
-			if (state == TargetState.NotInList)
+			TargetState targetState = IsTargetValid(Target);
+
+			if ((IsHomingAttacking && targetState == TargetState.NotInList) ||
+				(!IsHomingAttacking && targetState != TargetState.Valid)) // Validate homing attack target
+			{
 				Target = null;
+			}
 		}
 
 		if (Target != null)

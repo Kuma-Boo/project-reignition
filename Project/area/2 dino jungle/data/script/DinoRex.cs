@@ -127,7 +127,7 @@ public partial class DinoRex : Node3D
 	public void OnTailAttackEnter(Area3D _)
 	{
 		targetState = RexStates.Tail;
-		playerRotation = Mathf.DegToRad(0);
+		playerRotation = Mathf.DegToRad(-25);
 
 		if (currentState == RexStates.Idle)
 			targetRotation = playerRotation;
