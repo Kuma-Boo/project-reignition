@@ -66,9 +66,6 @@ public partial class LevelResult : Control
 
 	public void StartResults()
 	{
-		// Mute the gameplay sfx audio channel
-		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
-
 		score.Text = Stage.DisplayScore;
 		time.Text = Stage.DisplayTime;
 
@@ -121,4 +118,6 @@ public partial class LevelResult : Control
 	}
 
 	public void SetInputProcessing(bool value) => isProcessing = value;
+	/// <summary> Mutes the gameplay sfx audio channel. </summary>
+	public void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
 }

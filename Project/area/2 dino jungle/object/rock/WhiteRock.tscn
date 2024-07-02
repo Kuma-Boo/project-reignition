@@ -1,13 +1,49 @@
-[gd_scene load_steps=9 format=3 uid="uid://cnwhks8ciopdd"]
+[gd_scene load_steps=16 format=3 uid="uid://cnwhks8ciopdd"]
 
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_45nuq"]
 [ext_resource type="PackedScene" uid="uid://dg1hjwb52rbkk" path="res://area/2 dino jungle/object/model/rock/WhiteRock.gltf" id="1_wso5u"]
 [ext_resource type="PackedScene" uid="uid://c0ph8vi1nx1vs" path="res://area/2 dino jungle/object/model/rock/WhiteRockPieces.gltf" id="3_uwb6q"]
-[ext_resource type="AudioStream" path="res://sound/sfx/stage/dinosaur jungle/shatter rock white.wav" id="4_v2do2"]
-
+[ext_resource type="AudioStream" uid="uid://k3juybfwnibs" path="res://sound/sfx/stage/dinosaur jungle/shatter rock white.wav" id="4_v2do2"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="5_styx5"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_1pber"]
 points = PackedVector3Array(-0.893225, -0.165048, 0.12305, -0.690553, -0.165048, -0.730945, -0.731123, -0.165048, 0.611405, -0.83412, 0.758097, 0.146623, -0.338194, -0.165048, -0.853995, -0.573742, 1.0416, -0.561584, -0.336446, -0.165048, 0.853994, -0.33085, 0.451602, 0.847307, -0.500122, 1.09621, 0.618594, -0.613087, 1.29688, 0.485847, -0.633197, 1.30707, 0.265493, -0.262302, 1.9394, -0.439871, 0.500297, -0.165048, -0.533329, 0.191131, 1.63343, -0.388545, 0.752282, -0.165048, 0.71155, 0.311789, 0.597141, 0.798153, 0.367223, 1.25455, 0.69851, 0.150911, 1.797, 0.538678, -0.314412, 1.56288, 0.53617, -0.428251, 1.54354, 0.485512, -0.502745, 1.54955, 0.367645, -0.0694225, 2.41338, 0.0339385, -0.0155632, 2.42593, -0.0147131, 0.180639, 2.50431, 0.0300932, 0.679886, 0.559254, -0.208985, 0.756304, -0.165048, -0.269173, 0.427027, 0.647571, -0.433351, 0.534746, 1.70659, -0.0922882, 0.327877, 1.58953, -0.305452, 0.893225, -0.165048, 0.489023, 0.696499, 1.33451, 0.538344, 0.645612, 1.25612, 0.592847, 0.478963, 2.20148, 0.457091, 0.143741, 2.39901, 0.287562, 0.0970517, 2.48446, 0.147793, 0.197251, 2.46695, 0.201962, 0.250761, 2.43403, 0.187918, 0.259854, 2.43559, 0.128734, 0.57619, 2.15601, 0.284218, 0.749134, 1.0058, 0.0384526, 0.83412, -0.165048, -0.0800835, 0.699646, 1.48501, 0.229214)
+
+[sub_resource type="Curve" id="Curve_itmuy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ecucp"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_itmuy")
+
+[sub_resource type="Curve" id="Curve_vl2c5"]
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 8.12046, 0, 0, Vector2(0.3, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2wthk"]
+width = 64
+curve = SubResource("Curve_vl2c5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2o86k"]
+lifetime_randomness = 0.4
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+damping_min = 15.0
+damping_max = 15.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_2wthk")
+alpha_curve = SubResource("CurveTexture_ecucp")
+
+[sub_resource type="QuadMesh" id="QuadMesh_w7x81"]
+material = ExtResource("5_styx5")
 
 [sub_resource type="Animation" id="Animation_rcpcg"]
 length = 0.001
@@ -101,6 +137,20 @@ tracks/3/keys = {
 "method": &"play"
 }]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ShatterVFX")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rshkq"]
 _data = {
@@ -131,17 +181,31 @@ shape = SubResource("ConvexPolygonShape3D_1pber")
 [node name="WhiteRockPieces" parent="." instance=ExtResource("3_uwb6q")]
 visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_rshkq")
-}
-
 [node name="Shatter" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_v2do2")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+
+[node name="ShatterVFX" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+process_material = SubResource("ParticleProcessMaterial_2o86k")
+draw_pass_1 = SubResource("QuadMesh_w7x81")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rshkq")
+}
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Trigger" to="." method="OnExited"]

@@ -13,7 +13,7 @@ width = 64
 
 [sub_resource type="Curve" id="Curve_nk4bs"]
 max_value = 2.0
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 2), 1.77481, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_aepcf"]
@@ -22,19 +22,20 @@ curve = SubResource("Curve_nk4bs")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k03e6"]
 lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 0.3, 0)
 angle_min = -180.0
 angle_max = 180.0
-direction = Vector3(0, 0, -1)
+direction = Vector3(0, 0.1, -1)
 spread = 5.0
-initial_velocity_min = 1.0
-initial_velocity_max = 3.0
+initial_velocity_min = 3.0
+initial_velocity_max = 6.0
 gravity = Vector3(0, 0, 0)
 damping_min = 4.0
 damping_max = 8.0
 attractor_interaction_enabled = false
 scale_min = 0.5
 scale_curve = SubResource("CurveTexture_aepcf")
-color = Color(1, 1, 1, 0.478431)
+color = Color(1, 1, 1, 0.196078)
 color_ramp = SubResource("GradientTexture1D_bs7mh")
 
 [sub_resource type="QuadMesh" id="QuadMesh_gwbmp"]
@@ -46,7 +47,7 @@ cast_shadow = 0
 gi_mode = 0
 emitting = false
 amount = 16
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 process_material = SubResource("ParticleProcessMaterial_k03e6")
 draw_pass_1 = SubResource("QuadMesh_gwbmp")

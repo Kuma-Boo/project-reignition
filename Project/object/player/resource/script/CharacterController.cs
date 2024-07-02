@@ -1290,16 +1290,37 @@ namespace Project.Gameplay
 
 			// Level failed
 			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+			{
+				DefeatPlayer();
 				Stage.FinishLevel(false);
+			}
 		}
 
 		/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
-		/// <summary>
-		/// Called when the player is returning to a checkpoint.
-		/// </summary>
+		private void DefeatPlayer()
+		{
+			if (IsDefeated) return;
+
+			IsDefeated = true;
+
+			Lockon.IsMonitoring = false;
+			areaTrigger.Disabled = true;
+
+			// Disable break skills
+			if (Skills.IsTimeBreakActive)
+				Skills.ToggleTimeBreak();
+			if (Skills.IsSpeedBreakActive)
+				Skills.ToggleSpeedBreak();
+		}
+
+		/// <summary> Called when the player is returning to a checkpoint. </summary>
 		public void StartRespawn(bool debugRespawn = false)
 		{
+			if (ActionState == ActionStates.Teleport || IsDefeated) return;
+
+			DefeatPlayer();
+
 			if (!debugRespawn)
 			{
 				// Level failed
@@ -1311,21 +1332,8 @@ namespace Project.Gameplay
 				}
 			}
 
-			if (ActionState == ActionStates.Teleport || IsDefeated) return;
-
-			// Fade screen out, enable respawn flag, and connect signals
-			IsDefeated = true;
-
-			Lockon.IsMonitoring = false;
-			areaTrigger.Disabled = true;
+			// Fade screen out, update respawn count, and connect signals
 			Stage.IncrementRespawnCount();
-
-			// Disable break skills
-			if (Skills.IsTimeBreakActive)
-				Skills.ToggleTimeBreak();
-			if (Skills.IsSpeedBreakActive)
-				Skills.ToggleSpeedBreak();
-
 			TransitionManager.StartTransition(new()
 			{
 				inSpeed = .5f,
@@ -1981,7 +1989,9 @@ namespace Project.Gameplay
 
 		private void OnLevelCompleted()
 		{
-			ResetActionState();
+			if (ActionState != ActionStates.Damaged)
+				ResetActionState();
+
 			// Disable everything
 			Lockon.IsMonitoring = false;
 			Skills.DisableBreakSkills();
