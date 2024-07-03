@@ -10,7 +10,7 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class CameraController : Node3D
 {
-	public const float DefaultFov = 60;
+	public const float DefaultFov = 70;
 
 	[ExportGroup("Components")]
 	[Export]
