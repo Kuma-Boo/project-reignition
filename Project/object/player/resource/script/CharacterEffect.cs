@@ -90,20 +90,10 @@ public partial class CharacterEffect : Node3D
 	private GpuParticles3D chargeFX;
 	[Export]
 	private GpuParticles3D fullChargeFX;
-	[Export]
-	private GpuParticles3D fullChargeBurstFX;
 	public void StartChargeFX()
 	{
 		chargeFX.Emitting = true;
 		chargeFX.Visible = true;
-	}
-
-	public void FullChargeFX()
-	{
-		chargeFX.Emitting = false;
-		chargeFX.Visible = false;
-		fullChargeFX.Emitting = true;
-		fullChargeBurstFX.Restart();
 	}
 
 	public void StopChargeFX()
@@ -115,6 +105,8 @@ public partial class CharacterEffect : Node3D
 	[Export]
 	private GpuParticles3D grindrailVfx;
 	[Export]
+	private GpuParticles3D grindrailBurstVfx;
+	[Export]
 	private AudioStreamPlayer grindrailSfx;
 	private bool isFadingRailSFX;
 	public void StartGrindFX()
@@ -123,6 +115,14 @@ public partial class CharacterEffect : Node3D
 		isFadingRailSFX = false;
 		grindrailSfx.VolumeDb = 0f;
 		grindrailSfx.Play();
+	}
+
+	public void FullGrindChargeFX()
+	{
+		chargeFX.Emitting = false;
+		chargeFX.Visible = false;
+		fullChargeFX.Emitting = true;
+		grindrailBurstVfx.Restart();
 	}
 
 	public void UpdateGrindFX(float speedRatio)

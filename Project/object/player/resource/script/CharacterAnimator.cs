@@ -653,20 +653,14 @@ public partial class CharacterAnimator : Node3D
 	private const float BalanceTurnSmoothing = .15f;
 	public void UpdateBalancing(float balanceRatio)
 	{
-		StringName currentNode = BalanceStatePlayback.GetCurrentNode();
-		StringName fadingNode = BalanceStatePlayback.GetFadingFromNode();
-
-		IsBalanceShuffleActive = currentNode == ShuffleLeft ||
-			currentNode == ShuffleRight ||
-			fadingNode == ShuffleLeft ||
-			fadingNode == ShuffleRight;
-
 		if (IsBalanceShuffleActive)
 		{
+			StringName currentNode = BalanceStatePlayback.GetCurrentNode();
 			if ((isFacingRight && currentNode == BalanceRight) ||
-			(!isFacingRight && currentNode == BalanceLeft))
+				(!isFacingRight && currentNode == BalanceLeft))
 			{
 				IsBalanceShuffleActive = false;
+				animationTree.Set(BalanceDirectionTransition, isFacingRight ? RightConstant : LeftConstant);
 			}
 
 			balanceRatio = 0;

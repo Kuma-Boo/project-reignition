@@ -309,7 +309,6 @@ public partial class GrindRail : Area3D
 		pathFollower.Progress += movementDelta;
 		pathFollower.ProgressRatio = Mathf.Clamp(pathFollower.ProgressRatio, 0.0f, 1.0f);
 		Character.UpdateExternalControl(true);
-		Character.Animator.UpdateBalancing(Character.Animator.CalculateTurnRatio());
 		Character.Animator.UpdateBalanceSpeed(Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed));
 		if (Mathf.IsEqualApprox(pathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Character.MoveSpeed)) // Disconnect from the rail
 			Deactivate();
@@ -318,7 +317,7 @@ public partial class GrindRail : Area3D
 	private float currentCharge;
 	private float perfectChargeTimer;
 	private readonly float PerfectChargeLength = .2f;
-	private readonly float ChargeSpeed = 5.0f;
+	private readonly float ChargeSpeed = 3.0f;
 	private void UpdateCharge()
 	{
 		bool isCharging = Input.IsActionPressed("button_action");
@@ -328,9 +327,6 @@ public partial class GrindRail : Area3D
 
 		if (isCharging)
 		{
-			if (Mathf.IsZeroApprox(currentCharge))
-				Character.Effect.StartChargeFX();
-
 			currentCharge = Mathf.MoveToward(currentCharge, 1.0f, ChargeSpeed * PhysicsManager.physicsDelta);
 			if (Mathf.IsEqualApprox(currentCharge, 1.0f))
 			{
@@ -342,8 +338,12 @@ public partial class GrindRail : Area3D
 				else if (!isCharged) // Fully charged
 				{
 					perfectChargeTimer = PerfectChargeLength;
-					Character.Effect.FullChargeFX();
+					Character.Effect.FullGrindChargeFX();
 				}
+			}
+			else if (!Character.Animator.IsBalanceShuffleActive)
+			{
+				Character.Effect.StartChargeFX();
 			}
 		}
 		else if (!Mathf.IsZeroApprox(currentCharge))
@@ -351,16 +351,24 @@ public partial class GrindRail : Area3D
 			// Update shuffling
 			if (!Character.Animator.IsBalanceShuffleActive && isCharged)
 				StartShuffle();
+			else
+				allowBonuses = false;
 
 			currentCharge = 0.0f;
 			Character.Effect.StopChargeFX();
 		}
 
-		float speedRatio = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
-		Character.Effect.UpdateGrindFX(speedRatio);
-		Character.Animator.UpdateBalanceCrouch(isCharging);
-		if (!Character.Animator.IsBalanceShuffleActive && Mathf.IsZeroApprox(perfectChargeTimer)) // Only slow down when not shuffling
-			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
+		Character.Animator.UpdateBalanceCrouch(isCharging && !Character.Animator.IsBalanceShuffleActive);
+		if (!Character.Animator.IsBalanceShuffleActive) // Only slow down when not shuffling
+		{
+			float speedRatio = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
+			Character.Effect.UpdateGrindFX(speedRatio);
+
+			if (Mathf.IsZeroApprox(perfectChargeTimer))
+				Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
+		}
+
+		Character.Animator.UpdateBalancing(isCharging ? 0.0f : Character.Animator.CalculateTurnRatio());
 	}
 
 	private void StartShuffle()
@@ -373,6 +381,7 @@ public partial class GrindRail : Area3D
 		}
 
 		Character.MoveSpeed = targetSpeed;
+		Character.Effect.StartGrindFX();
 		Character.Animator.StartGrindShuffle();
 
 		if (allowBonuses)

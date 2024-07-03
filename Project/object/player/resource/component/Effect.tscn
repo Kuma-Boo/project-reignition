@@ -35,6 +35,40 @@ material = ExtResource("7_8immp")
 size = Vector2(0.05, 1)
 center_offset = Vector3(0, 0.4, 0)
 
+[sub_resource type="Curve" id="Curve_awull"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_q4mit"]
+_data = [Vector2(0, 0.6), 0.0, 3.84665, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.33785, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_2goyq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_rr6dn"]
+width = 64
+curve_x = SubResource("Curve_awull")
+curve_y = SubResource("Curve_q4mit")
+curve_z = SubResource("Curve_2goyq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d5h6o"]
+lifetime_randomness = 0.4
+direction = Vector3(0, 0, 1)
+spread = 180.0
+flatness = 0.8
+initial_velocity_min = 1.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveXYZTexture_rr6dn")
+
+[sub_resource type="QuadMesh" id="QuadMesh_dlv4t"]
+material = ExtResource("7_8immp")
+size = Vector2(0.1, 1)
+center_offset = Vector3(0, 0.25, 0)
+
 [sub_resource type="Curve" id="Curve_bi8dp"]
 _data = [Vector2(0, 1), 0.0, -0.0371234, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -602,24 +636,6 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[sub_resource type="Curve" id="Curve_awull"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_q4mit"]
-_data = [Vector2(0, 0.6), 0.0, 3.84665, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.33785, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_2goyq"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_rr6dn"]
-width = 64
-curve_x = SubResource("Curve_awull")
-curve_y = SubResource("Curve_q4mit")
-curve_z = SubResource("Curve_2goyq")
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q1f2b"]
 lifetime_randomness = 0.4
 direction = Vector3(0, 1, 0)
@@ -640,23 +656,7 @@ material = ExtResource("7_8immp")
 size = Vector2(0.05, 0.5)
 center_offset = Vector3(0, 0.25, 0)
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d5h6o"]
-lifetime_randomness = 0.4
-direction = Vector3(0, 0, 1)
-spread = 180.0
-flatness = 0.8
-initial_velocity_min = 1.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, 0, 0)
-scale_max = 2.0
-scale_curve = SubResource("CurveXYZTexture_rr6dn")
-
-[sub_resource type="QuadMesh" id="QuadMesh_dlv4t"]
-material = ExtResource("7_8immp")
-size = Vector2(0.1, 1)
-center_offset = Vector3(0, 0.25, 0)
-
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "windParticle", "stompFX", "chargeFX", "fullChargeFX", "fullChargeBurstFX", "grindrailVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "windParticle", "stompFX", "chargeFX", "fullChargeFX", "grindrailVfx", "grindrailBurstVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -669,8 +669,8 @@ windParticle = NodePath("VFX/ActionFX/Wind")
 stompFX = NodePath("VFX/ActionFX/Stomp")
 chargeFX = NodePath("VFX/ChargeFX/ChargeParticles")
 fullChargeFX = NodePath("VFX/ChargeFX/FullChargeParticles")
-fullChargeBurstFX = NodePath("VFX/ChargeFX/ChargeBurstParticles")
 grindrailVfx = NodePath("VFX/GrindrailSparksParticle")
+grindrailBurstVfx = NodePath("VFX/GrindrailBurstParticle")
 grindrailSfx = NodePath("SFX/GrindrailSFX")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
@@ -722,6 +722,21 @@ local_coords = true
 transform_align = 2
 process_material = ExtResource("6_v3ger")
 draw_pass_1 = SubResource("QuadMesh_mnxd4")
+
+[node name="GrindrailBurstParticle" type="GPUParticles3D" parent="VFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_d5h6o")
+draw_pass_1 = SubResource("QuadMesh_dlv4t")
 
 [node name="ActionFX" type="Node3D" parent="VFX"]
 
@@ -919,18 +934,3 @@ local_coords = true
 transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_q1f2b")
 draw_pass_1 = SubResource("QuadMesh_bhy5y")
-
-[node name="ChargeBurstParticles" type="GPUParticles3D" parent="VFX/ChargeFX"]
-layers = 32
-cast_shadow = 0
-emitting = false
-amount = 32
-lifetime = 0.3
-one_shot = true
-explosiveness = 1.0
-fixed_fps = 0
-interpolate = false
-local_coords = true
-transform_align = 3
-process_material = SubResource("ParticleProcessMaterial_d5h6o")
-draw_pass_1 = SubResource("QuadMesh_dlv4t")
