@@ -410,8 +410,7 @@ public partial class CameraController : Node3D
 			{
 				// Negative number -> Concave, Positive number -> Convex.
 				float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
-				if (Mathf.Abs(slopeDifference) > .05f) // Deadzone to prevent jittering
-					data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
+				data.blendData.SampleBlend = Mathf.Lerp(data.blendData.SampleBlend, slopeDifference < 0 ? 1.0f : 0.0f, .1f);
 			}
 			else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)
 			{
