@@ -1,11 +1,12 @@
-[gd_scene load_steps=22 format=3 uid="uid://ctht326ugrail"]
+[gd_scene load_steps=23 format=3 uid="uid://ctht326ugrail"]
 
+[ext_resource type="Resource" uid="uid://c1so6lm4litfn" path="res://resource/level data/dinosaur jungle/Act3DinoEgg.tres" id="2_rdr8o"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_d4xxv"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/PteroEggManager.cs" id="3_sb6wl"]
 [ext_resource type="PackedScene" uid="uid://dp60xb12an0s2" path="res://area/2 dino jungle/act 2/Static.tscn" id="20_8sfob"]
 [ext_resource type="PackedScene" uid="uid://cxbowmxqmvhbd" path="res://area/2 dino jungle/object/egg/PteroEgg.tscn" id="22_00ptn"]
 [ext_resource type="PackedScene" uid="uid://krnj2r3cdn5m" path="res://area/2 dino jungle/object/egg/EggNest.tscn" id="23_xhqyv"]
-[ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="24_0cv4e"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="24_0cv4e"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="25_wc55u"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="26_76jx5"]
 [ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="27_lu3gx"]
@@ -31,10 +32,7 @@ size = Vector3(9.4, 11.5, 2)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("20_8sfob")]
-"Level ID" = "dj_a2_ptero_egg"
-"Mission Type" = 1
-"Objective Count" = 4
-"Item Cycling/Activation Trigger" = NodePath("")
+Data = ExtResource("2_rdr8o")
 
 [node name="PteroEggAct" type="Node3D" parent="."]
 
@@ -293,12 +291,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.73205)
 
 [node name="RedMajin" parent="PteroEggAct/LotusGroup" instance=ExtResource("27_lu3gx")]
 transform = Transform3D(-0.918218, 0, -0.396075, 0, 1, 0, 0.396075, 0, -0.918218, 23.1692, 4.45383, 65.2806)
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="RedMajin2" parent="PteroEggAct/LotusGroup" instance=ExtResource("27_lu3gx")]
 transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.999577, 24.3009, 3.57783, 82.5364)
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="RedMajin3" parent="PteroEggAct/LotusGroup" instance=ExtResource("27_lu3gx")]
 transform = Transform3D(-0.984806, 0, 0.173654, 0, 1, 0, -0.173654, 0, -0.984806, 20.8096, 2.51883, 99.0893)
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="Rings" type="Node3D" parent="PteroEggAct/LotusGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008)
@@ -372,11 +373,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41421, 0, -1.41421)
 
 [node name="Catapult" parent="PteroEggAct" instance=ExtResource("28_4k1cr")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 5.20006, 17.873, 133.459)
-distance = 14.0
+"Secondary Settings/Middle Height" = 6.0
+"Secondary Settings/Distance" = 26.0
 middleHeight = 8.0
 finalHeight = -8.0
-"Secondary Settings/Distance" = 26.0
-"Secondary Settings/Middle Height" = 6.0
+distance = 14.0
 
 [node name="Boat1" type="Node3D" parent="PteroEggAct"]
 
@@ -930,12 +931,12 @@ transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, 
 
 [node name="Catapult" parent="PteroEggAct/RightPath" instance=ExtResource("28_4k1cr")]
 transform = Transform3D(0.690882, 0, 0.722967, 0, 1, 0, -0.722967, 0, 0.690882, -128.18, 6.98, -46.0578)
-distance = 16.0
-middleHeight = 14.0
-finalHeight = -2.0
-"Secondary Settings/Distance" = 44.0
 "Secondary Settings/Middle Height" = 8.0
 "Secondary Settings/Final Height" = -2.0
+"Secondary Settings/Distance" = 44.0
+middleHeight = 14.0
+finalHeight = -2.0
+distance = 16.0
 
 [node name="Ring" type="Node3D" parent="PteroEggAct/RightPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -116.6, 5.69, -34.93)
