@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=70 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -19,7 +19,11 @@
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/time break.png" id="15_p7iiw"]
 [ext_resource type="PackedScene" uid="uid://bwy4awbkt5ftv" path="res://object/player/resource/effect/step/SandStepParticle.tscn" id="16_m0x2c"]
 [ext_resource type="Texture2D" uid="uid://ch2re1xkc00aj" path="res://object/player/resource/effect/texture/speed break streak.png" id="17_u6bvm"]
+[ext_resource type="Texture2D" uid="uid://dq1ukj4ghqehr" path="res://object/player/resource/effect/texture/grass step.png" id="20_ia6lg"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="20_o3oog"]
+[ext_resource type="Material" uid="uid://cih8b8t0vf1hh" path="res://object/player/resource/effect/material/Attack Aura.tres" id="20_rtch5"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="21_nenuf"]
+[ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="22_gd0vj"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 
 [sub_resource type="Curve" id="Curve_bi8dp"]
@@ -32,11 +36,165 @@ height = 0.8
 radial_segments = 32
 rings = 16
 
+[sub_resource type="Curve" id="Curve_yun2k"]
+_data = [Vector2(0.158392, 0.00608158), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.858156, 0.0173762), -3.83366, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_5h5ag"]
+width = 64
+curve = SubResource("Curve_yun2k")
+
+[sub_resource type="Curve" id="Curve_0lom1"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.47709, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mak0a"]
+width = 64
+curve = SubResource("Curve_0lom1")
+
+[sub_resource type="Curve" id="Curve_lyf18"]
+_data = [Vector2(0, 0), 0.0, 2.42837, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_igv8y"]
+width = 64
+curve_x = SubResource("Curve_lyf18")
+curve_y = SubResource("Curve_yun2k")
+curve_z = SubResource("Curve_lyf18")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bhvq3"]
+emission_shape_offset = Vector3(0, 0, 2)
+direction = Vector3(0, 0, -1)
+spread = 80.0
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -40.0
+radial_accel_max = -40.0
+radial_accel_curve = SubResource("CurveTexture_mak0a")
+scale_max = 2.0
+scale_curve = SubResource("CurveXYZTexture_igv8y")
+color = Color(1, 0.458824, 0.0901961, 1)
+alpha_curve = SubResource("CurveTexture_5h5ag")
+
+[sub_resource type="QuadMesh" id="QuadMesh_xguqr"]
+material = ExtResource("20_rtch5")
+size = Vector2(1, 5)
+center_offset = Vector3(0, 2.5, 0)
+
+[sub_resource type="Curve" id="Curve_do0kd"]
+_data = [Vector2(0, 0), 0.0, 7.35034, 0, 0, Vector2(0.20331, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_o0jhf"]
+width = 64
+curve = SubResource("Curve_do0kd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qktwv"]
+lifetime_randomness = 0.4
+emission_shape = 2
+emission_sphere_radius = 1.0
+angle_min = -45.0
+angle_max = 45.0
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -25.0
+radial_accel_max = -25.0
+alpha_curve = SubResource("CurveTexture_o0jhf")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+anim_offset_max = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ixb4p"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("22_gd0vj")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 4
+particles_anim_loop = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_y03cx"]
+material = SubResource("StandardMaterial3D_ixb4p")
+
+[sub_resource type="Curve" id="Curve_vncbq"]
+_data = [Vector2(0, 0), 0.0, 3.17666, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jv5es"]
+width = 64
+curve = SubResource("Curve_vncbq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c4e0w"]
+emission_shape_offset = Vector3(0, 0, 2)
+direction = Vector3(0, 0, -1)
+spread = 80.0
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -40.0
+radial_accel_max = -40.0
+radial_accel_curve = SubResource("CurveTexture_mak0a")
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_jv5es")
+alpha_curve = SubResource("CurveTexture_5h5ag")
+
+[sub_resource type="QuadMesh" id="QuadMesh_6vbwi"]
+material = ExtResource("20_rtch5")
+size = Vector2(0.5, 5)
+center_offset = Vector3(0, 3, 0)
+
+[sub_resource type="Curve" id="Curve_cmo43"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_a67i7"]
+width = 64
+curve = SubResource("Curve_cmo43")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ftu1e"]
+lifetime_randomness = 0.5
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 3.0
+angular_velocity_min = 100.0
+angular_velocity_max = 500.0
+gravity = Vector3(0, -4, 0)
+damping_min = 1.0
+damping_max = 2.0
+scale_min = 0.05
+scale_max = 0.15
+scale_curve = SubResource("CurveTexture_a67i7")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lb1ny"]
+transparency = 1
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("20_ia6lg")
+texture_repeat = false
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_vbyha"]
+material = SubResource("StandardMaterial3D_lb1ny")
+
 [sub_resource type="Curve" id="Curve_fi1cr"]
 _data = [Vector2(0.1, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 0), -7.04173, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="CurveTexture" id="CurveTexture_j21f5"]
+width = 64
 curve = SubResource("Curve_fi1cr")
 
 [sub_resource type="Curve" id="Curve_yynal"]
@@ -435,7 +593,7 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "windParticle", "stompFX", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -444,13 +602,15 @@ spinFX = NodePath("VFX/ActionFX/SpinMesh")
 timeBreakAnimator = NodePath("VFX/TimeBreak/AnimationPlayer")
 speedBreakAnimator = NodePath("VFX/SpeedBreak/AnimationPlayer")
 dustParticle = NodePath("VFX/ActionFX/DustParticle")
+windParticle = NodePath("VFX/ActionFX/Wind")
+stompFX = NodePath("VFX/ActionFX/Stomp")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
 landingSandParticle = NodePath("VFX/LandingFX/LandingSandParticle")
 landingWaterParticle = NodePath("VFX/LandingFX/LandingWaterParticle")
 landingDustParticle = NodePath("VFX/LandingFX/LandingDustParticle")
-stepEmitters = [NodePath("VFX/StepFX/PavementStepParticle"), NodePath("VFX/StepFX/SandStepParticle"), null, null, null, null, NodePath("VFX/StepFX/WaterStepParticle")]
+stepEmitters = [NodePath("VFX/StepFX/PavementStepParticle"), NodePath("VFX/StepFX/SandStepParticle"), NodePath("VFX/StepFX/GrassStepParticle"), null, null, null, NodePath("VFX/StepFX/WaterStepParticle")]
 footprintDecal = ExtResource("4_8hf43")
 waterStep = NodePath("VFX/StepFX/WaterStepRing")
 voiceLibrary = ExtResource("33_pyanb")
@@ -462,14 +622,14 @@ voiceChannel = NodePath("SFX/VoiceChannel")
 bus = &"VOICE"
 
 [node name="ActionChannel" type="AudioStreamPlayer" parent="SFX"]
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="LandingChannel" type="AudioStreamPlayer" parent="SFX"]
 volume_db = 3.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="FootstepChannel" type="AudioStreamPlayer" parent="SFX"]
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="VFX" type="Node3D" parent="."]
 
@@ -495,6 +655,54 @@ cast_shadow = 0
 mesh = SubResource("SphereMesh_0nuab")
 skeleton = NodePath("../..")
 
+[node name="Stomp" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 128
+lifetime = 0.2
+randomness = 0.5
+fixed_fps = 60
+interpolate = false
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_bhvq3")
+draw_pass_1 = SubResource("QuadMesh_xguqr")
+script = ExtResource("21_nenuf")
+subSystems = [NodePath("Flame")]
+
+[node name="Flame" type="GPUParticles3D" parent="VFX/ActionFX/Stomp"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.5)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+randomness = 0.3
+fixed_fps = 60
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_qktwv")
+draw_pass_1 = SubResource("QuadMesh_y03cx")
+
+[node name="Wind" type="GPUParticles3D" parent="VFX/ActionFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.450349, 0.5)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.8
+randomness = 0.5
+fixed_fps = 60
+interpolate = false
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_c4e0w")
+draw_pass_1 = SubResource("QuadMesh_6vbwi")
+
 [node name="LandingFX" type="Node3D" parent="VFX"]
 
 [node name="LandingWaterParticle" parent="VFX/LandingFX" instance=ExtResource("10_8wlk5")]
@@ -512,6 +720,19 @@ skeleton = NodePath("../..")
 [node name="PavementStepParticle" parent="VFX/StepFX" instance=ExtResource("15_gkso8")]
 
 [node name="SandStepParticle" parent="VFX/StepFX" instance=ExtResource("16_m0x2c")]
+
+[node name="GrassStepParticle" type="GPUParticles3D" parent="VFX/StepFX" node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+emitting = false
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_ftu1e")
+draw_pass_1 = SubResource("QuadMesh_vbyha")
+script = ExtResource("21_nenuf")
+subSystems = []
 
 [node name="SpeedBreak" type="Node3D" parent="VFX"]
 

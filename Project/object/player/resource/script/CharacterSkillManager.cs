@@ -15,13 +15,7 @@ public partial class CharacterSkillManager : Node
 		normalCollisionMask = Character.CollisionMask;
 
 		// Determine the size of the soul gauge
-		maxSoulPower = SOUL_GAUGE_BASE;
-		if (SaveManager.ActiveGameData != null)
-		{
-			float levelRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio(); // Current ratio (0 -> 10) compared to the soul gauge level cap (50)
-			maxSoulPower += Mathf.FloorToInt(levelRatio * 10f) * 20; // Soul Gauge size increases by 20 every 5 levels, caps at 300 (level 50).
-		}
-
+		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
 		SetUpStats();
 		SetUpSkills();
 	}
@@ -37,6 +31,8 @@ public partial class CharacterSkillManager : Node
 	public float accelerationJumpSpeed;
 	[Export]
 	public float homingAttackSpeed;
+	[Export]
+	public float perfectHomingAttackSpeed;
 	[Export]
 	public float homingAttackAcceleration;
 
@@ -80,24 +76,18 @@ public partial class CharacterSkillManager : Node
 
 	#endregion
 
-
 	#region Skills
-	private SkillRing SkillRing => SaveManager.ActiveGameData.skillRing;
-	public bool IsSkillEnabled(SkillKeyEnum key) => SaveManager.ActiveGameData != null && SkillRing.equippedSkills.Contains(key);
-
+	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
+	public bool IsSkillEquipped(SkillKey key) => SkillRing.IsSkillEquipped(key);
 
 	[ExportCategory("Countdown Skills")]
 	[Export]
 	public float countdownBoostSpeed;
-	/// <summary> How many rings to start with when the level starts. </summary>
-	public int StartingRingCount => 0;
-	/// <summary> How many rings to start with when respawning. </summary>
-	public int RespawnRingCount => 0;
 
-	public void SplashJump()
-	{
-		GD.Print("Splash Jump isn't implemented yet.");
-	}
+	/// <summary> How many rings to start with when the level starts. </summary>
+	public int StartingRingCount => IsSkillEquipped(SkillKey.RingSpawn) ? 5 : 0;
+	/// <summary> How many rings to start with when respawning. </summary>
+	public int RespawnRingCount => IsSkillEquipped(SkillKey.RingRespawn) ? 5 : 0;
 
 	/// <summary> Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster. </summary>
 	[Export]
@@ -108,7 +98,7 @@ public partial class CharacterSkillManager : Node
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
-		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEnabled(SkillKeyEnum.PearlCollector) ? 5 : 1);
+		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 	}
 	#endregion
 
@@ -160,7 +150,7 @@ public partial class CharacterSkillManager : Node
 	public bool IsSpeedBreakCharging => IsSpeedBreakActive && !Mathf.IsZeroApprox(breakTimer);
 	public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
 
-	private float breakTimer = 0; // Timer for break skills
+	private float breakTimer; // Timer for break skills
 	private const float SPEEDBREAK_DELAY = 0.4f; // Time to say SPEED BREAK!
 	private const float BREAK_SKILLS_COOLDOWN = 1f; // Prevent skill spam
 	public const float TIME_BREAK_RATIO = .6f; // Time scale
@@ -168,7 +158,7 @@ public partial class CharacterSkillManager : Node
 	public void UpdateSoulSkills()
 	{
 		if (DebugManager.Instance.InfiniteSoulGauge) // Max out the soul gauge
-			ModifySoulGauge(SOUL_GAUGE_MAX);
+			ModifySoulGauge(MaxSoulPower);
 
 		UpdateTimeBreak();
 		UpdateSpeedBreak();
@@ -225,6 +215,7 @@ public partial class CharacterSkillManager : Node
 				{
 					speedBreakSFX.Stream = speedBreakActivate;
 					speedBreakSFX.Play();
+					ModifySoulGauge(-15); // Instantly lose a bunch of soul power
 				}
 
 				ModifySoulGauge(-1); // Drain soul gauge
@@ -322,24 +313,19 @@ public partial class CharacterSkillManager : Node
 	public void DisableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = false;
 
 	public int SoulPower { get; private set; } // Current soul power
-	private int maxSoulPower; // Calculated on start
+	public int MaxSoulPower { get; private set; } // Calculated on start
 
 	private bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
-	private bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MINIMUM_SOUL_POWER;
+	private bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MinimumSoulPower;
 
-	private const int MINIMUM_SOUL_POWER = 50; // Minimum amount of soul power needed to use soul skills.
-	private const int SOUL_GAUGE_BASE = 100; // Starting size of soul gauge
-	private const int SOUL_GAUGE_MAX = 300; // Max size of soul gauge
+	private const int MinimumSoulPower = 50; // Minimum amount of soul power needed to use soul skills.
 	public void ModifySoulGauge(int amount)
 	{
-		SoulPower = Mathf.Clamp(SoulPower + amount, 0, maxSoulPower);
-
-		if (HeadsUpDisplay.instance != null)
-			HeadsUpDisplay.instance.ModifySoulGauge((float)SoulPower / maxSoulPower, IsSoulGaugeCharged);
+		SoulPower = Mathf.Clamp(SoulPower + amount, 0, MaxSoulPower);
+		HeadsUpDisplay.instance?.ModifySoulGauge((float)SoulPower / MaxSoulPower, IsSoulGaugeCharged);
 	}
 
-
 	/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
-	public string TextDisplay => $"{SoulPower}/{maxSoulPower}";
+	public string TextDisplay => $"{SoulPower}/{MaxSoulPower}";
 	#endregion
 }

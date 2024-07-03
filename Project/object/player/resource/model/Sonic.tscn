@@ -20,10 +20,9 @@
 [ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
-min_value = 1.0
 max_value = 2.0
-_data = [Vector2(0, 1.2), 0.0, 0.0, 0, 0, Vector2(0.5, 1.7), 1.5, 1.5, 0, 0, Vector2(0.8, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.4), -6.5, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 0.4), 0.0, 6.66444, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_6pc5r"]
 _data = [Vector2(0, 0), 0.0, 5.05237, 0, 0, Vector2(0.621993, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), -6.37551, 0.0, 0, 0]
@@ -365,7 +364,7 @@ emitting = false
 amount = 1
 lifetime = 0.2
 one_shot = true
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_gjsgy")
@@ -379,7 +378,7 @@ amount = 1
 lifetime = 0.2
 one_shot = true
 explosiveness = 1.0
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_gjsgy")
@@ -394,7 +393,7 @@ lifetime = 0.5
 one_shot = true
 explosiveness = 0.3
 randomness = 0.2
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_bddv2")
@@ -402,11 +401,11 @@ draw_pass_1 = SubResource("QuadMesh_2872x")
 
 [node name="TeleportStartSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="3"]
 stream = ExtResource("7_wb174")
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="TeleportEndSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="4"]
 stream = ExtResource("7_wb174")
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="GeneralSkeleton" parent="SonicRoot" index="0"]
 bones/2/rotation = Quaternion(0.00897831, -5.98702e-12, 1.91381e-09, 0.99996)
@@ -497,7 +496,7 @@ amount = 16
 lifetime = 0.8
 one_shot = true
 explosiveness = 1.0
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 process_material = SubResource("ParticleProcessMaterial_ny081")
 draw_pass_1 = SubResource("QuadMesh_vcbic")
@@ -538,7 +537,7 @@ transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
 [node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" index="0"]
 stream = ExtResource("12_3lyoq")
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="CountdownPosition" type="Node3D" parent="CountdownRoot" index="1"]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
@@ -570,6 +569,9 @@ parameters/air_tree/jump_accel_trigger/request = 0
 parameters/air_tree/state_transition/current_state = "fall"
 parameters/air_tree/state_transition/transition_request = ""
 parameters/air_tree/state_transition/current_index = 0
+parameters/air_tree/stomp_trigger/active = false
+parameters/air_tree/stomp_trigger/internal_active = false
+parameters/air_tree/stomp_trigger/request = 0
 parameters/balance_tree/balance_speed/scale = 1.0
 parameters/balance_tree/balance_state/balance_left_blend/blend_position = 0
 parameters/balance_tree/balance_state/balance_right_blend/blend_position = 0

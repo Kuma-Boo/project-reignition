@@ -15,8 +15,7 @@ namespace Project.Gameplay
 		{
 			instance = this;
 
-
-			CurrentRank = Stage.CalculateRank();
+			InitializeRankPreviewer();
 			InitializeRings();
 			InitializeObjectives();
 			InitializeSoulGauge();
@@ -90,6 +89,8 @@ namespace Project.Gameplay
 		#region Time and Score
 		[ExportGroup("Time & Score")]
 		[Export]
+		private Node2D rankPreviewerRoot;
+		[Export]
 		private Sprite2D mainRank;
 		[Export]
 		private Sprite2D transitionRank;
@@ -99,8 +100,21 @@ namespace Project.Gameplay
 		private AudioStreamPlayer rankDownSFX;
 		private int CurrentRank { get; set; }
 		private Tween rankTween;
+		private void InitializeRankPreviewer()
+		{
+			rankPreviewerRoot.Visible = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview);
+			if (!rankPreviewerRoot.Visible)
+				return;
+
+			CurrentRank = Stage.CalculateRank();
+			mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * CurrentRank * 60), mainRank.RegionRect.Size);
+		}
+
 		private void UpdateRank()
 		{
+			if (!rankPreviewerRoot.Visible)
+				return;
+
 			int rank = Stage.CalculateRank();
 			if (CurrentRank == rank || rankTween?.IsRunning() == true)
 				return;
@@ -114,7 +128,6 @@ namespace Project.Gameplay
 			CurrentRank = rank;
 		}
 
-
 		private void StartRankDownTween(int amount)
 		{
 			rankDownSFX.Play();
@@ -126,7 +139,6 @@ namespace Project.Gameplay
 			rankTween.TweenProperty(transitionRank, "position", Vector2.Down * 128, .5f).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.In);
 			rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankDownTween)).SetDelay(.5f);
 		}
-
 
 		private void StartRankUpTween(int amount)
 		{
@@ -181,21 +193,38 @@ namespace Project.Gameplay
 		private Label objectiveValue;
 		[Export]
 		private Label objectiveMaxValue;
+		[Export]
+		private AudioStreamPlayer objectiveSfx;
 		private void InitializeObjectives()
 		{
-			objectiveRoot.Visible = Stage != null && Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective;
-			if (!objectiveRoot.Visible) return; //Don't do anything when objective counter isn't visible
-
+			objectiveRoot.Visible = Stage != null &&
+				Stage.Data.MissionObjectiveCount != 0 &&
+				(Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain);
+			if (!objectiveRoot.Visible) return; // Don't do anything when objective counter isn't visible
 
 			// TODO Implement proper objective sprites
 			objectiveSprite.Visible = false;
 			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 			objectiveMaxValue.Text = Stage.Data.MissionObjectiveCount.ToString("00");
 
-			Stage.Connect(nameof(StageSettings.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+			Stage.Connect(nameof(StageSettings.SignalName.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+			Stage.Connect(nameof(StageSettings.SignalName.ObjectiveReset), new Callable(this, nameof(ResetObjective)));
 		}
 
-		private void UpdateObjective() => objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+		private void UpdateObjective()
+		{
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy ||
+				Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain)
+			{
+				objectiveSfx.Play();
+			}
+			objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
+		}
+
+		private void ResetObjective() => objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		#endregion
 
 		#region Soul Gauge
@@ -234,7 +263,7 @@ namespace Project.Gameplay
 		private void UpdateSoulGauge()
 		{
 			Vector2 end = Vector2.Down * Mathf.Lerp(soulGaugeBackground.Size.Y + SOUL_GAUGE_FILL_OFFSET, 0, targetSoulGaugeRatio);
-			soulGaugeFill.Position = ExtensionMethods.SmoothDamp(soulGaugeFill.Position, end, ref soulGaugeVelocity, 0.1f);
+			soulGaugeFill.Position = soulGaugeFill.Position.SmoothDamp(end, ref soulGaugeVelocity, 0.1f);
 		}
 
 		private bool isSoulGaugeCharged;

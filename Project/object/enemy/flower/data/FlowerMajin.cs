@@ -4,6 +4,7 @@ using Project.Core;
 namespace Project.Gameplay;
 
 /// <summary> Flower Majin that spits out seeds to attack the player. </summary>
+[Tool]
 public partial class FlowerMajin : Enemy
 {
 	[Signal]
@@ -14,7 +15,6 @@ public partial class FlowerMajin : Enemy
 	public delegate void StaggerEventHandler();
 	[Signal]
 	public delegate void AttackEventHandler();
-
 
 	/// <summary> Skip passive phase when activated? </summary>
 	[ExportGroup("Enemy Settings")]
@@ -44,6 +44,9 @@ public partial class FlowerMajin : Enemy
 		PostAttack
 	}
 
+	/// <summary> Allow the player to force the flower majin out of it's passive state? </summary>
+	[Export]
+	private bool weakDefense;
 	[Export]
 	private PackedScene seed;
 	private int seedIndex;
@@ -58,6 +61,7 @@ public partial class FlowerMajin : Enemy
 
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
 	private readonly StringName ShowState = "show";
+	private readonly StringName AggressiveState = "aggressive";
 	private readonly StringName PassiveState = "passive";
 	private readonly StringName HideState = "hide";
 
@@ -71,9 +75,10 @@ public partial class FlowerMajin : Enemy
 	private readonly StringName EnabledConstant = "enabled";
 	private readonly StringName DisabledConstant = "disabled";
 
-
 	protected override void SetUp()
 	{
+		if (Engine.IsEditorHint()) return; // In Editor
+
 		animationTree.Active = true;
 		defeatTransition = (animationTree.TreeRoot as AnimationNodeBlendTree).GetNode("defeat_transition") as AnimationNodeTransition;
 
@@ -83,7 +88,6 @@ public partial class FlowerMajin : Enemy
 		base.SetUp();
 	}
 
-
 	public override void Unload()
 	{
 		for (int i = 0; i < seedPool.Length; i++) // Clear memory
@@ -92,7 +96,6 @@ public partial class FlowerMajin : Enemy
 		base.Unload();
 	}
 
-
 	protected override void Spawn()
 	{
 		if (skipPassive && !IsOpen) // Skip passive phase
@@ -100,7 +103,6 @@ public partial class FlowerMajin : Enemy
 
 		base.Spawn();
 	}
-
 
 	public override void Respawn()
 	{
@@ -129,33 +131,40 @@ public partial class FlowerMajin : Enemy
 		}
 	}
 
-
 	protected override void UpdateInteraction()
 	{
-		if (!Character.Skills.IsAttacking && !Character.Lockon.IsHomingAttacking) // Skill damage
-		{
-			if (IsOpen)
-				StartStaggerState();
-
-			return;
-		}
-
-
 		if (!IsOpen)
 		{
 			if (Character.Lockon.IsHomingAttacking)
+			{
 				Character.Lockon.StartBounce(false);
+
+				if (weakDefense)
+					StartStaggerState();
+			}
 
 			return;
 		}
 
-		base.UpdateInteraction();
+		if (Character.Lockon.IsHomingAttacking)
+		{
+			base.UpdateInteraction();
+			return;
+		}
+
+		if (Character.Skills.IsAttacking) // Skill damage
+		{
+			StartStaggerState();
+			return;
+		}
+
+		Character.Lockon.StartBounce(false);
+		// TODO light stagger
 	}
 
-
-	public override void TakePlayerDamage()
+	public override void TakeHomingAttackDamage()
 	{
-		base.TakePlayerDamage();
+		base.TakeHomingAttackDamage();
 
 		if (IsDefeated)
 		{
@@ -166,9 +175,9 @@ public partial class FlowerMajin : Enemy
 		StartStaggerState();
 	}
 
-
 	protected override void UpdateEnemy()
 	{
+		if (Engine.IsEditorHint()) return; // In Editor
 		if (IsDefeated) return;
 
 		if (IsInRange || currentState != State.Passive)
@@ -178,19 +187,16 @@ public partial class FlowerMajin : Enemy
 		}
 	}
 
-
 	private void UpdateRotation()
 	{
 		if (!IsOpen) return;
 
 		// TODO Update movement
 
-
 		// Rotate towards the player
 		TrackPlayer();
 		root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z); // Apply rotation
 	}
-
 
 	private void UpdateState()
 	{
@@ -204,7 +210,7 @@ public partial class FlowerMajin : Enemy
 		switch (currentState)
 		{
 			case State.Passive:
-				if (stateTimer >= passiveLength)
+				if (!Mathf.IsZeroApprox(passiveLength) && stateTimer >= passiveLength)
 					StartAggressiveState();
 				break;
 			case State.PreAttack:
@@ -223,7 +229,6 @@ public partial class FlowerMajin : Enemy
 		}
 	}
 
-
 	private void StartPassiveState()
 	{
 		stateTimer = 0;
@@ -231,7 +236,6 @@ public partial class FlowerMajin : Enemy
 		animationTree.Set(StateTransition, HideState);
 		EmitSignal(SignalName.Passive);
 	}
-
 
 	private void StartAggressiveState()
 	{
@@ -241,7 +245,6 @@ public partial class FlowerMajin : Enemy
 		EmitSignal(SignalName.Aggressive);
 	}
 
-
 	private void StartAttackState()
 	{
 		stateTimer = 0;
@@ -249,7 +252,6 @@ public partial class FlowerMajin : Enemy
 		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		EmitSignal(SignalName.Attack);
 	}
-
 
 	private void IncrementAttack()
 	{
@@ -261,7 +263,6 @@ public partial class FlowerMajin : Enemy
 
 		StopAttackState();
 	}
-
 
 	/// <summary> Launches a seed at the player. </summary>
 	private void FireAttack()
@@ -277,28 +278,23 @@ public partial class FlowerMajin : Enemy
 		seedIndex++; // Increment counter
 	}
 
-
 	private void StopAttackState()
 	{
+		if (!IsOpen)
+			animationTree.Set(StateTransition, AggressiveState);
+
 		seedIndex = 0;
 		stateTimer = 0;
 		currentState = State.PostAttack;
 	}
 
-
 	private void StartStaggerState()
 	{
 		animationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-		if (currentState != State.Attack)
-		{
-			EmitSignal(SignalName.Stagger);
-			return;
-		}
-
-		StopAttackState();
 		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		StopAttackState();
+		EmitSignal(SignalName.Stagger);
 	}
-
 
 	private void StartDefeatState() => animationTree.Set(DefeatTransition, EnabledConstant);
 }

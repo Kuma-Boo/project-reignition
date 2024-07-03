@@ -56,6 +56,7 @@ public partial class Options : Menu
 		Language, // Menu for localization and language
 		Control, // Menu for configuring general control settings
 		Mapping, // Control submenu for configuring input mappings
+		Unbind, // Control sub-submenu for unbinding inputs
 		Test // Control submenu for testing controls
 	}
 
@@ -86,7 +87,6 @@ public partial class Options : Menu
 		VerticalSelection = selection;
 	}
 
-
 	protected override void ProcessMenu()
 	{
 		UpdateScrolling();
@@ -115,7 +115,6 @@ public partial class Options : Menu
 		lockPosition.Z = lockNode.GlobalPosition.Z;
 		character.GlobalPosition = lockPosition;
 	}
-
 
 	protected override void Confirm()
 	{
@@ -153,7 +152,6 @@ public partial class Options : Menu
 		SaveManager.ApplyConfig();
 	}
 
-
 	protected override void Cancel()
 	{
 		switch (currentSubmenu)
@@ -186,7 +184,6 @@ public partial class Options : Menu
 		}
 	}
 
-
 	private void Select()
 	{
 		if (currentSubmenu == Submenus.Test) // Cancel test
@@ -197,11 +194,8 @@ public partial class Options : Menu
 			CharacterController.instance.Skills.DisableBreakSkills();
 		}
 		else
-		{
 			Confirm();
-		}
 	}
-
 
 	protected override void UpdateSelection()
 	{
@@ -227,7 +221,6 @@ public partial class Options : Menu
 		cursorAnimator.AnimationSetNext("show", "loop");
 		cursorAnimator.Seek(0, true);
 	}
-
 
 	[Export]
 	private Control scrollBar;
@@ -255,17 +248,17 @@ public partial class Options : Menu
 			scrollBar.Position = targetPosition;
 		}
 		else
+		{
 			scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
+		}
 	}
-
 
 	private void UpdateCursor()
 	{
 		int offset = VerticalSelection - scrollOffset;
 		contentContainer.Position = Vector2.Up * scrollOffset * 60;
-		cursor.Position = new(cursor.Position.X, 300 + offset * 60);
+		cursor.Position = new(cursor.Position.X, 300 + (offset * 60));
 	}
-
 
 	/// <summary> Changes the visible submenu. Called from the page flip animation. </summary>
 	private void UpdateSubmenuVisibility()
@@ -298,7 +291,7 @@ public partial class Options : Menu
 	private string FULLSCREEN_EXCLUSIVE_STRING = "option_exclusive_fullscreen";
 	private void UpdateLabels()
 	{
-		Vector2I resolution = SaveManager.WINDOW_SIZES[SaveManager.Config.windowSize];
+		Vector2I resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
 		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
 		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
@@ -325,7 +318,7 @@ public partial class Options : Menu
 		}
 		videoLabels[7].Text = SaveManager.Config.useHDBloom ? HIGH_STRING : LOW_STRING;
 
-		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.DISABLED)
+		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.Disabled)
 			videoLabels[8].Text = "option_hard_shadows";
 		else
 			videoLabels[8].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
@@ -362,22 +355,20 @@ public partial class Options : Menu
 		controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
 	}
 
-
 	private string CalculateQualityString(SaveManager.QualitySetting setting)
 	{
 		switch (setting)
 		{
-			case SaveManager.QualitySetting.LOW:
+			case SaveManager.QualitySetting.Low:
 				return LOW_STRING;
-			case SaveManager.QualitySetting.MEDIUM:
+			case SaveManager.QualitySetting.Medium:
 				return MEDIUM_STRING;
-			case SaveManager.QualitySetting.HIGH:
+			case SaveManager.QualitySetting.High:
 				return HIGH_STRING;
 		}
 
 		return DISABLED_STRING;
 	}
-
 
 	[Export]
 	private ControlOption[] controlMappingOptions;
@@ -386,7 +377,6 @@ public partial class Options : Menu
 		foreach (ControlOption controlOption in controlMappingOptions)
 			controlOption.Connect(ControlOption.SignalName.SwapMapping, new(this, MethodName.RedrawControlOptions));
 	}
-
 
 	private void RedrawControlOptions(StringName id, InputEvent e)
 	{
@@ -404,7 +394,6 @@ public partial class Options : Menu
 				controlOption.ReceiveInput(e, true);
 		}
 	}
-
 
 	private void UpdateHorizontalSelection()
 	{
@@ -436,7 +425,6 @@ public partial class Options : Menu
 		UpdateLabels();
 		SaveManager.ApplyConfig();
 	}
-
 
 	private bool SlideVideoOption(int direction)
 	{
@@ -474,9 +462,13 @@ public partial class Options : Menu
 			}
 		}
 		else if (VerticalSelection == 2)
+		{
 			SaveManager.Config.useExclusiveFullscreen = !SaveManager.Config.useExclusiveFullscreen;
+		}
 		else if (VerticalSelection == 3)
+		{
 			SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
+		}
 		else if (VerticalSelection == 4)
 		{
 			SaveManager.Config.renderScale += direction * 10;
@@ -492,38 +484,41 @@ public partial class Options : Menu
 			SaveManager.Config.resizeMode = (RenderingServer.ViewportScaling3DMode)resizeMode;
 		}
 		else if (VerticalSelection == 6) // TODO Change this to 5 when upgrading to godot v4.3
+		{
 			SaveManager.Config.antiAliasing = WrapSelection(SaveManager.Config.antiAliasing + direction, 3);
+		}
 		else if (VerticalSelection == 7)
+		{
 			SaveManager.Config.useHDBloom = !SaveManager.Config.useHDBloom;
+		}
 		else if (VerticalSelection == 8)
 		{
 			int softShadowQuality = (int)SaveManager.Config.softShadowQuality;
-			softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+			softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.softShadowQuality = (SaveManager.QualitySetting)softShadowQuality;
 		}
 		else if (VerticalSelection == 9)
 		{
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
-			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
 			StageSettings.instance.UpdatePostProcessingStatus();
 		}
 		else if (VerticalSelection == 10)
 		{
 			int reflectionQuality = (int)SaveManager.Config.reflectionQuality;
-			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.COUNT);
+			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.reflectionQuality = (SaveManager.QualitySetting)reflectionQuality;
 		}
 
 		return true;
 	}
 
-
 	private int FindLargestWindowResolution()
 	{
-		for (int i = SaveManager.WINDOW_SIZES.Length - 1; i >= 0; i--)
+		for (int i = SaveManager.WindowSizes.Length - 1; i >= 0; i--)
 		{
-			if (SaveManager.WINDOW_SIZES[i] >= DisplayServer.ScreenGetSize())
+			if (SaveManager.WindowSizes[i] >= DisplayServer.ScreenGetSize())
 				continue;
 
 			return i;
@@ -531,7 +526,6 @@ public partial class Options : Menu
 
 		return -1;
 	}
-
 
 	private bool SlideAudioOption(int direction)
 	{
@@ -574,7 +568,6 @@ public partial class Options : Menu
 	private int SlideVolume(int current, int direction) => Mathf.Clamp(current + direction * 5, 0, 100);
 	private bool IsSlideVolumeValid(int current, int direction) => (current > 0 && direction == -1) || (current < 100 && direction == 1);
 
-
 	private bool SlideLanguageOption(int direction)
 	{
 		if (VerticalSelection == 0)
@@ -600,7 +593,6 @@ public partial class Options : Menu
 		return false;
 	}
 
-
 	private bool SlideControlOption(int direction)
 	{
 		if (VerticalSelection == 0)
@@ -612,7 +604,7 @@ public partial class Options : Menu
 		else if (VerticalSelection == 1)
 		{
 			float deadZone = SaveManager.Config.deadZone;
-			deadZone = Mathf.Clamp(deadZone + .1f * direction, 0f, .9f);
+			deadZone = Mathf.Clamp(deadZone + (.1f * direction), 0f, .9f);
 			SaveManager.Config.deadZone = deadZone;
 			SaveManager.ApplyInputMap();
 			return true;
@@ -629,11 +621,12 @@ public partial class Options : Menu
 			SaveManager.Config.windowSize = FindLargestWindowResolution();
 		}
 		else
+		{
 			SlideVideoOption(1);
+		}
 
 		ConfirmSFX();
 	}
-
 
 	private void ConfirmAudioOption()
 	{
@@ -649,7 +642,6 @@ public partial class Options : Menu
 		ConfirmSFX();
 	}
 
-
 	private void ConfirmControlOption()
 	{
 		if (VerticalSelection == 1) return;
@@ -664,13 +656,11 @@ public partial class Options : Menu
 		ConfirmSFX();
 	}
 
-
 	private void ConfirmSFX()
 	{
 		animator.Play("confirm");
 		animator.Advance(0.0);
 	}
-
 
 	private void CancelSFX()
 	{

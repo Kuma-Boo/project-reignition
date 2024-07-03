@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=44 format=3 uid="uid://chn7ckbhlrr2g"]
 
 [ext_resource type="Script" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
 [ext_resource type="Texture2D" uid="uid://btu2qfmfefcpo" path="res://interface/gameplay/hud/rings/ring atlas.png" id="2_8yr5f"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/soul gauge/sprite atlas.png" id="4_63n04"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/rings/ring.png" id="7_ggxti"]
 [ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/soul gauge/gradient.png" id="8"]
+[ext_resource type="AudioStream" uid="uid://dk0nbt6u6r65r" path="res://sound/sfx/system/objective.wav" id="8_2ws5b"]
 [ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="8_4xdo7"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="8_rl1c5"]
 [ext_resource type="Material" uid="uid://duq3egwjfpmil" path="res://interface/gameplay/hud/material/Soul Gauge Fill.tres" id="8_t3t32"]
@@ -438,7 +439,7 @@ tracks/5/path = NodePath("../Bonuses")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 1.998),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -1000,7 +1001,7 @@ _data = {
 "charged": SubResource("55")
 }
 
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveSfx", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1013,6 +1014,7 @@ maxRingLabel = NodePath("Rings/Current/RingMax")
 ringLossLabel = NodePath("Rings/Loss/LossAmount")
 ringDividerSprite = NodePath("Rings/Current/Divider")
 ringAnimator = NodePath("Rings/AnimationTree")
+rankPreviewerRoot = NodePath("Values/Rank")
 mainRank = NodePath("Values/Rank/MainRank")
 transitionRank = NodePath("Values/Rank/TransitionRank")
 rankUpSFX = NodePath("Values/Rank/RankUp")
@@ -1023,6 +1025,7 @@ objectiveRoot = NodePath("Objectives")
 objectiveSprite = NodePath("Objectives/ObjectiveSprite")
 objectiveValue = NodePath("Objectives/Value")
 objectiveMaxValue = NodePath("Objectives/MaxValue")
+objectiveSfx = NodePath("Objectives/Sfx")
 soulGauge = NodePath("SoulGauge/SoulGauge")
 soulGaugeRoot = NodePath("SoulGauge")
 soulGaugeFill = NodePath("SoulGauge/SoulGauge/Gradient/Fill")
@@ -1286,6 +1289,10 @@ text = "/"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Sfx" type="AudioStreamPlayer" parent="Objectives"]
+stream = ExtResource("8_2ws5b")
+bus = &"SFX"
+
 [node name="Values" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 1
@@ -1323,13 +1330,13 @@ scale = Vector2(2, 2)
 [node name="MainRank" type="Sprite2D" parent="Values/Rank"]
 texture = ExtResource("8_4xdo7")
 region_enabled = true
-region_rect = Rect2(420, 170, 60, 60)
+region_rect = Rect2(420, 110, 60, 60)
 
 [node name="TransitionRank" type="Sprite2D" parent="Values/Rank"]
 self_modulate = Color(1, 1, 1, 0)
 texture = ExtResource("8_4xdo7")
 region_enabled = true
-region_rect = Rect2(420, 170, 60, 60)
+region_rect = Rect2(420, 110, 60, 60)
 
 [node name="RankUp" type="AudioStreamPlayer" parent="Values/Rank"]
 stream = ExtResource("9_52u7d")

@@ -77,7 +77,7 @@ namespace Project.Gameplay.Triggers
 		#endregion
 
 		/// <summary> Only activate this StageTrigger once per respawn? </summary>
-		private bool isOneShot = false;
+		private bool isOneShot;
 		/// <summary> For keeping track of oneshot triggers. </summary>
 		private bool wasTriggered;
 		private RespawnModes respawnMode = RespawnModes.CheckpointBefore;

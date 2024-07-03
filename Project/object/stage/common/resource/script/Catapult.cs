@@ -7,21 +7,12 @@ namespace Project.Gameplay.Objects;
 /// Launches the player a variable amount, using <see cref="launchPower"/> as the blend of close and far settings
 /// </summary>
 [Tool]
-public partial class Catapult : Node3D
+public partial class Catapult : Launcher
 {
-	[ExportGroup("Launch Settings")]
-	[Export]
-	private float closeDistance;
-	[Export]
-	private float closeMidHeight;
-	[Export]
-	private float closeEndHeight;
-	[Export]
-	private float farDistance;
-	[Export]
-	private float farMidHeight;
-	[Export]
-	private float farEndHeight;
+	[Signal]
+	public delegate void PlayerEnteredEventHandler();
+	[Signal]
+	public delegate void PlayerExitedEventHandler();
 
 	private bool isProcessing;
 	private CatapultState currentState;
@@ -33,23 +24,8 @@ public partial class Catapult : Node3D
 		Eject,
 	}
 
-	/// <summary> The strength of the shot, between 0 and 1. Exported for easier editing in the editor. </summary>
-	[Export(PropertyHint.Range, "0, 1")]
-	public float launchPower;
 	private float targetLaunchPower;
 	private float launchPowerVelocity;
-	public LaunchSettings GetLaunchSettings()
-	{
-		float distance = Mathf.Lerp(closeDistance, farDistance, launchPower);
-		float midHeight = Mathf.Lerp(closeMidHeight, farMidHeight, launchPower);
-		float endHeight = Mathf.Lerp(closeEndHeight, farEndHeight, launchPower);
-		Vector3 startPoint = GlobalPosition + (this.Up() * 3.5f);
-		Vector3 endPoint = startPoint + (this.Forward() * distance) + (Vector3.Up * endHeight);
-
-		LaunchSettings settings = LaunchSettings.Create(startPoint, endPoint, midHeight);
-		settings.UseAutoAlign = true;
-		return settings;
-	}
 	/// <summary> How much to change launchPower per-frame. </summary>
 	private readonly float PowerAdjustmentSpeed = .14f; // How fast to adjust the power
 	/// <summary> The strength of the shot, between 0 and 1. Exported for easier editing in the editor. </summary>
@@ -57,22 +33,22 @@ public partial class Catapult : Node3D
 
 	[ExportGroup("Components")]
 	[Export]
-	private Node3D launchNode;
+	private Node3D playerPositionNode;
 	[Export]
 	private Node3D armNode;
 	[Export]
 	private AudioStreamPlayer3D enterSFX;
 	[Export]
 	private AudioStreamPlayer3D aimSFX;
-	[Export]
-	private AudioStreamPlayer3D launchSFX;
 	private Tween tweener;
-	public CharacterController Character => CharacterController.instance;
 
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint())
+		{
+			UpdateArmRotation();
 			return;
+		}
 
 		if (!isProcessing)
 		{
@@ -86,7 +62,7 @@ public partial class Catapult : Node3D
 		{
 			if (armNode.Rotation.X > Mathf.Pi * .5f)
 			{
-				LaunchPlayer();
+				Activate();
 				return;
 			}
 
@@ -116,26 +92,30 @@ public partial class Catapult : Node3D
 		// Update launch power
 		targetLaunchPower += Character.InputVertical * PowerAdjustmentSpeed;
 		targetLaunchPower = Mathf.Clamp(targetLaunchPower, 0, 1);
-		launchPower = ExtensionMethods.SmoothDamp(launchPower, targetLaunchPower, ref launchPowerVelocity, PowerAdjustmentSmoothing);
+		launchRatio = ExtensionMethods.SmoothDamp(launchRatio, targetLaunchPower, ref launchPowerVelocity, PowerAdjustmentSmoothing);
 
-		aimSFX.VolumeDb = Mathf.LinearToDb(Mathf.Abs(launchPower - targetLaunchPower) / .1f);
+		aimSFX.VolumeDb = Mathf.LinearToDb(Mathf.Abs(launchRatio - targetLaunchPower) / .1f);
 		if (!aimSFX.Playing)
 			aimSFX.Play();
 
-		float targetRotation = Mathf.Lerp(Mathf.Pi * .25f, 0, launchPower);
-		armNode.Rotation = Vector3.Right * targetRotation;
-
+		UpdateArmRotation();
 		Character.UpdateExternalControl();
+	}
+
+	private void UpdateArmRotation()
+	{
+		float targetRotation = Mathf.Lerp(Mathf.Pi * .25f, 0, launchRatio);
+		armNode.Rotation = Vector3.Right * targetRotation;
 	}
 
 	private void OnEnteredCatapult()
 	{
 		currentState = CatapultState.Control;
-		Character.StartExternal(this, launchNode);
+		Character.StartExternal(this, playerPositionNode);
 		Character.Effect.StartSpinFX();
 		Character.Animator.StartSpin(3f);
 
-		launchPower = 1f;
+		launchRatio = 1f;
 		targetLaunchPower = 0f;
 		launchPowerVelocity = 0f;
 
@@ -151,25 +131,24 @@ public partial class Catapult : Node3D
 		if (isCancel)
 		{
 			Character.Effect.StopSpinFX();
-			tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .2f * (1 - launchPower)).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+			tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .2f * (1 - launchRatio)).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
 			tweener.TweenCallback(new Callable(this, MethodName.CancelCatapult));
 		}
 		else
 		{
-			tweener.TweenProperty(armNode, "rotation", Vector3.Right * Mathf.Pi, .25f * (launchPower + 1)).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			tweener.TweenProperty(armNode, "rotation", Vector3.Right * Mathf.Pi, .25f * (launchRatio + 1)).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .4f).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
 		}
 
 		tweener.TweenCallback(new Callable(this, MethodName.StopProcessing));
 	}
 
-	private void LaunchPlayer()
+	public override void Activate()
 	{
 		// Cheat launch power slightly towards extremes
-		launchPower = Mathf.SmoothStep(0, 1, launchPower);
+		launchRatio = Mathf.SmoothStep(0, 1, launchRatio);
 		currentState = CatapultState.Disabled;
-		Character.StartLauncher(GetLaunchSettings(), null);
-		launchSFX.Play();
+		base.Activate();
 	}
 
 	private void CancelCatapult()
@@ -185,6 +164,7 @@ public partial class Catapult : Node3D
 		settings.IsJump = true;
 		Character.StartLauncher(settings);
 		enterSFX.Play();
+		EmitSignal(SignalName.PlayerExited);
 	}
 
 	public void OnEntered(Area3D a)
@@ -200,9 +180,10 @@ public partial class Catapult : Node3D
 		Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
 
 		// Have the player jump into the catapult
-		var settings = LaunchSettings.Create(Character.GlobalPosition, launchNode.GlobalPosition, 2f);
+		var settings = LaunchSettings.Create(Character.GlobalPosition, playerPositionNode.GlobalPosition, 2f);
 		settings.IsJump = true;
 		Character.StartLauncher(settings);
+		EmitSignal(SignalName.PlayerEntered);
 	}
 
 	private void StartProcessing() => isProcessing = true;
