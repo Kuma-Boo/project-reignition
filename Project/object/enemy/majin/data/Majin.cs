@@ -282,7 +282,8 @@ public partial class Majin : Enemy
 	private readonly StringName DisabledState = "disabled";
 	private readonly StringName MoveTransitionParameter = "parameters/move_transition/transition_request";
 	private readonly StringName MoveBlendParameter = "parameters/move_blend/blend_position";
-	private readonly StringName TeleportParameter = "parameters/teleport_trigger/request";
+	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
+	private readonly StringName DespawnTrigger = "parameters/despawn_trigger/request";
 
 	private const float MOVE_TRANSITION_LENGTH = .4f;
 
@@ -501,6 +502,7 @@ public partial class Majin : Enemy
 	private readonly StringName[] FidgetAnimations = [
 			"flip",
 			"fight",
+			"survey",
 		];
 
 	private readonly StringName HitTriggerParameter = "parameters/hit_trigger/request";
@@ -512,9 +514,7 @@ public partial class Majin : Enemy
 	private readonly StringName FidgetTriggerStateParameter = "parameters/fidget_trigger/active"; // Get StringName
 	private const float FidgetFrequency = 3f; // How often to fidget
 
-	/// <summary>
-	/// Updates fidgets and idle movement.
-	/// </summary>
+	/// <summary> Updates fidgets and idle movement. </summary>
 	private void UpdateFidgets()
 	{
 		if (attackType == AttackTypes.Spin) return; // No need to process fidgets when in AttackTypes.Spin
@@ -637,7 +637,7 @@ public partial class Majin : Enemy
 		else // Spawn instantly
 		{
 			animationPlayer.Play("spawn");
-			animationTree.Set(TeleportParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			animationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
 		}
 
@@ -659,8 +659,7 @@ public partial class Majin : Enemy
 
 		SetHitboxStatus(false);
 		animationPlayer.Play("despawn");
-		// TODO replace with despawn animation
-		animationTree.Set(TeleportParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(DespawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		tweener.TweenCallback(new Callable(this, MethodName.FinishDespawning)).SetDelay(.5f); // Delay by length of teleport animation
 		EmitSignal(SignalName.Despawned);
 	}
