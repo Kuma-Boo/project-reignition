@@ -142,7 +142,7 @@ public partial class CharacterLockon : Node3D
 		{
 			// Check Height
 			bool isTargetAttackable = IsHomingAttacking ||
-				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + Character.CollisionRadius &&
+				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionRadius * 2.0f) &&
 				Character.ActionState != CharacterController.ActionStates.JumpDash);
 			Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 			UpdateLockonReticle(screenPos, isTargetAttackable);
@@ -165,7 +165,7 @@ public partial class CharacterLockon : Node3D
 			return TargetState.Invisible;
 
 		// Raycast for obstacles
-		Vector3 castPosition = Character.GlobalPosition;
+		Vector3 castPosition = Character.CenterPosition;
 		if (Character.VerticalSpeed < 0)
 			castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
 		Vector3 castVector = t.GlobalPosition - castPosition;
