@@ -517,7 +517,7 @@ jumpHeight = 1.0
 shape = SubResource("23")
 
 [node name="FlyingPot" parent="Common/Objects/BoatSection1" instance=ExtResource("13_0pim3")]
-transform = Transform3D(0.727378, 0, -0.686237, 0, 1, 0, 0.686237, 0, 0.727378, -19.2578, 3.13, 66.804)
+transform = Transform3D(-0.730568, 0, 0.68284, 0, 1, 0, -0.68284, 0, -0.730568, -19.2578, 3.13, 66.804)
 travelBounds = Vector2(2.5, 30)
 
 [node name="SpringPath" type="Node3D" parent="Common/Objects"]
@@ -585,9 +585,10 @@ pathFollower = NodePath("../../../../Path/RightPath/BoatRightPath")
 [node name="End" parent="Common/Objects/BoatSection2" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(-0.90217, 0, -0.431382, 0, 1, 0, 0.431382, 0, -0.90217, 77.3081, 1.7, 58.3825)
 
-[node name="PathTrigger" type="Node3D" parent="Common/Objects/BoatSection2/End"]
+[node name="PathTrigger" type="Node3D" parent="Common/Objects/BoatSection2/End" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, -2.23517e-08, 0, 1, 0, 2.23517e-08, 0, 1, -10.8199, 2.52, 1.52588e-05)
 script = ExtResource("14_nk68g")
+path = NodePath("../../../../../Path/MainPath")
 
 [node name="JumpTrigger" type="Node3D" parent="Common/Objects/BoatSection2/End"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.7076, 3.90519, -1.33321)
@@ -684,8 +685,9 @@ transform = Transform3D(0.972006, -1.35515e-08, -0.234955, 1.70625e-08, 1, 1.291
 [node name="Lockout" type="Node3D" parent="Common/Objects/DinoBridge/DinoLockout"]
 transform = Transform3D(1, -4.44089e-16, 2.98023e-08, -4.44089e-16, 1, -2.22045e-16, -2.98023e-08, -2.22045e-16, 1, 0, 0, 0)
 
-[node name="PathChanger" type="Node3D" parent="Common/Objects/DinoBridge/DinoLockout"]
+[node name="PathChanger" type="Node3D" parent="Common/Objects/DinoBridge/DinoLockout" node_paths=PackedStringArray("path")]
 script = ExtResource("14_nk68g")
+path = NodePath("../../../../../Path/MainPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Objects/DinoBridge/DinoLockout"]
 transform = Transform3D(1, 8.88178e-16, -2.98023e-08, -1.77636e-15, 1, -2.22045e-15, 2.98023e-08, -1.55431e-15, 1, 0, 0, 0)
