@@ -70,7 +70,7 @@ public partial class LevelResult : Control
 		time.Text = Stage.DisplayTime;
 
 		ring.Text = Stage.RingBonus.ToString();
-		technical.Text = "x" + Stage.TechnicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
+		technical.Text = "×" + Stage.TechnicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
 		total.Text = Stage.TotalScore.ToString();
 
 		// Calculate rank AFTER tallying final score
@@ -118,4 +118,6 @@ public partial class LevelResult : Control
 	}
 
 	public void SetInputProcessing(bool value) => isProcessing = value;
+	/// <summary> Mutes the gameplay sfx audio channel. </summary>
+	public void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
 }

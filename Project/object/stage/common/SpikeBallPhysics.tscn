@@ -1,10 +1,43 @@
-[gd_scene load_steps=13 format=3 uid="uid://c61jp8ke67ib7"]
+[gd_scene load_steps=17 format=3 uid="uid://c61jp8ke67ib7"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/SpikeBallPhysics.cs" id="1_qqj0m"]
-[ext_resource type="Material" uid="uid://dtk7d65l8yb7y" path="res://object/stage/common/resource/model/material/Spike Ball Despawn Process Material.tres" id="1_y7drw"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="2_1imd6"]
 [ext_resource type="PackedScene" uid="uid://bpd06h3747m1d" path="res://object/stage/common/resource/model/SpikeBall.gltf" id="3_1adac"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="4_0wlt3"]
+
+[sub_resource type="Curve" id="Curve_o1fqs"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ecucp"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_o1fqs")
+
+[sub_resource type="Curve" id="Curve_27asc"]
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 8.12046, 0, 0, Vector2(0.3, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2wthk"]
+width = 64
+curve = SubResource("Curve_27asc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8f0vy"]
+lifetime_randomness = 0.4
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+damping_min = 15.0
+damping_max = 15.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_2wthk")
+alpha_curve = SubResource("CurveTexture_ecucp")
 
 [sub_resource type="QuadMesh" id="QuadMesh_udrot"]
 material = ExtResource("2_1imd6")
@@ -238,16 +271,13 @@ animator = NodePath("AnimationPlayer")
 [node name="DespawnParticle" type="GPUParticles3D" parent="."]
 layers = 32
 cast_shadow = 0
-gi_mode = 0
 emitting = false
 one_shot = true
 explosiveness = 1.0
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
-fract_delta = false
 visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
-local_coords = true
-process_material = ExtResource("1_y7drw")
+process_material = SubResource("ParticleProcessMaterial_8f0vy")
 draw_pass_1 = SubResource("QuadMesh_udrot")
 
 [node name="Root" parent="." instance=ExtResource("3_1adac")]

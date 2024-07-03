@@ -10,6 +10,8 @@ public partial class JumpCarpet : Launcher
 	private int maxBounceCount = 3; // Set this to 0 if you only want to use the launcher's primary launch settings.
 	private int currentBounceCount;
 	private float ratioIncrement;
+	[Export]
+	private AnimationPlayer animator;
 
 	public override void _Ready()
 	{
@@ -23,7 +25,7 @@ public partial class JumpCarpet : Launcher
 		if (currentBounceCount == 0)
 			return;
 
-		// TODO Refactor CharacterController to have a LandedOnGround signal and use that instead
+		// TODO Refactor CharacterController to have a LandedOnGround signal and use that instead?
 		// Reset Jump Carpet when the player lands on ground
 		if (Character.IsOnGround)
 			Reset();
@@ -31,6 +33,9 @@ public partial class JumpCarpet : Launcher
 
 	public override void Activate(Area3D a)
 	{
+		animator.Play("launch");
+		animator.Seek(0.0);
+
 		launchRatio = ratioIncrement * currentBounceCount;
 		base.Activate(a);
 

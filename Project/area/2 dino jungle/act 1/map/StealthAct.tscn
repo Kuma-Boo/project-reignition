@@ -43,7 +43,7 @@
 [ext_resource type="Resource" uid="uid://ysgb4weske7h" path="res://area/2 dino jungle/act 1/camera/rampage/FeedingLotusArenaRampageCam.tres" id="42_3t57n"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
-size = Vector3(12, 20, 1)
+size = Vector3(12, 20, 3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bkexm"]
 size = Vector3(15, 20, 2.5)
@@ -132,26 +132,7 @@ startEnabled = false
 visible = false
 
 [node name="01Chase" parent="Static/Visuals" index="1"]
-visible = false
 startEnabled = false
-
-[node name="02River" parent="Static/Visuals" index="2"]
-visible = false
-
-[node name="02RiverReverse" parent="Static/Visuals" index="3"]
-visible = false
-
-[node name="03Cave" parent="Static/Visuals" index="4"]
-visible = false
-
-[node name="03CaveSky" parent="Static/Visuals" index="5"]
-visible = false
-
-[node name="03CaveReverse" parent="Static/Visuals" index="6"]
-visible = false
-
-[node name="04Spiral" parent="Static/Visuals" index="7"]
-visible = false
 
 [node name="05Crossing" parent="Static/Visuals" index="8"]
 startEnabled = true
@@ -752,31 +733,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.24731, -3.05176e-05, -14.04
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05432, -3.05176e-05, -15.4593)
 
 [node name="JumpTrigger1" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
-transform = Transform3D(0.853569, 0, -0.520979, 0, 1, 0, 0.520979, 0, 0.853569, -60.6034, 11.076, -8.89233)
+transform = Transform3D(0.853569, 0, -0.520979, 0, 1, 0, 0.520979, 0, 0.853569, -60.2034, 10.3841, -8.89233)
 
 [node name="LandJump" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1"]
-transform = Transform3D(1, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 1, 0.863403, -7.58722, 7.68506)
+transform = Transform3D(1, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 1, 0.521973, -6.89532, 7.89343)
 script = ExtResource("34_dxx84")
 jumpHeight = 1.0
 
 [node name="Path" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1" node_paths=PackedStringArray("path")]
-transform = Transform3D(0.930103, 0, -0.367297, 0, 1, 0, 0.367297, 0, 0.930103, 7.00061, -16.576, 25.6224)
+transform = Transform3D(0.930103, 0, -0.367297, 0, 1, 0, 0.367297, 0, 0.930103, 6.65918, -15.8841, 25.8308)
 script = ExtResource("13_q6tnw")
 path = NodePath("../../../../Static/Path/BoatPath")
 
 [node name="Camera" type="Node3D" parent="StealthAct/Cavern/JumpTrigger1"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 13.9968, -15.8666, 26.0818)
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 13.6554, -15.1747, 26.2902)
 script = ExtResource("15_n8lxi")
 deactivationTransitionTime = 0.5
 settings = ExtResource("31_4areh")
 previousSettings = ExtResource("30_ggi54")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger1"]
-transform = Transform3D(0.5928, 0, 0.80535, 0, 1, 0, -0.80535, 0, 0.5928, 0, 8, 0)
+transform = Transform3D(0.5928, 0, 0.80535, 0, 1, 0, -0.80535, 0, 0.5928, -0.341431, 8.69189, 0.208374)
 shape = SubResource("BoxShape3D_a46qn")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StealthAct/Cavern/JumpTrigger1"]
-transform = Transform3D(0.577858, 0.242658, 0.77923, 1.49012e-08, 0.954777, -0.297325, -0.816138, 0.171812, 0.551725, -1.15527, -3.44275, -0.614258)
+transform = Transform3D(0.577858, 0.242658, 0.77923, 1.49012e-08, 0.954777, -0.297325, -0.816138, 0.171812, 0.551725, -1.4967, -2.75085, -0.405884)
 shape = SubResource("BoxShape3D_cbbwc")
 
 [node name="JumpTrigger2" parent="StealthAct/Cavern" instance=ExtResource("5_f3cg5")]
@@ -1323,7 +1304,7 @@ shape = SubResource("BoxShape3D_3wcby")
 [connection signal="Deactivated" from="StealthAct/Cavern/Spring1" to="StealthAct/Cavern/Spring1/Path" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/Cavern/Spring1" to="StealthAct/Cavern/Spring1/Camera" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/Cavern/JumpTrigger1" to="Static/Collision/CaveTopOneWay" method="Deactivate"]
-[connection signal="Deactivated" from="StealthAct/Cavern/JumpTrigger1" to="Static/Collision/CaveTopOneWay" method="Activate"]
+[connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump" to="Static/Collision/CaveTopOneWay" method="Activate"]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger1/LandJump" to="StealthAct/Cavern/JumpTrigger2/LandJump" method="Activate" flags=3]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump" to="StealthAct/Cavern/JumpTrigger2/LandJump/LandJump2" method="Activate" flags=3]
 [connection signal="JumpFinished" from="StealthAct/Cavern/JumpTrigger2/LandJump" to="StealthAct/Cavern/Crate1Event" method="Activate"]
@@ -1352,3 +1333,4 @@ shape = SubResource("BoxShape3D_3wcby")
 [editable path="Static/Collision"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]
+[editable path="Static/CompletionDemo"]

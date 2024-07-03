@@ -24,19 +24,19 @@ public partial class SaveManager : Node
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
 			// Default debug settings for testing from the editor.
-			Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.Master);
-			Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.Bgm);
-			Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.Sfx);
-			Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.Voice);
+			Config.isMasterMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Master);
+			Config.isBgmMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Bgm);
+			Config.isSfxMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Sfx);
+			Config.isVoiceMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Voice);
 
 			Config.masterVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Master)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Master)) * 100);
 			Config.bgmVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Bgm)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Bgm)) * 100);
 			Config.sfxVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Sfx)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Sfx)) * 100);
 			Config.voiceVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Voice)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Voice)) * 100);
 			ApplyConfig();
 		}
 	}
@@ -81,15 +81,6 @@ public partial class SaveManager : Node
 		Low,
 		Medium,
 		High,
-		Count
-	}
-
-	private enum AudioBuses
-	{
-		Master,
-		Bgm,
-		Sfx,
-		Voice,
 		Count
 	}
 
@@ -377,10 +368,10 @@ public partial class SaveManager : Node
 				break;
 		}
 
-		SetAudioBusVolume((int)AudioBuses.Master, Config.masterVolume, Config.isMasterMuted);
-		SetAudioBusVolume((int)AudioBuses.Bgm, Config.bgmVolume, Config.isBgmMuted);
-		SetAudioBusVolume((int)AudioBuses.Sfx, Config.sfxVolume, Config.isSfxMuted);
-		SetAudioBusVolume((int)AudioBuses.Voice, Config.voiceVolume, Config.isVoiceMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Master, Config.masterVolume, Config.isMasterMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Bgm, Config.bgmVolume, Config.isBgmMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Sfx, Config.sfxVolume, Config.isSfxMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Voice, Config.voiceVolume, Config.isVoiceMuted);
 
 		Instance.EmitSignal(SignalName.ConfigApplied);
 	}
@@ -461,16 +452,6 @@ public partial class SaveManager : Node
 		}
 	}
 
-	/// <summary> Changes the volume of an audio bus channel. </summary>
-	public static void SetAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
-	{
-		if (volumePercentage == 0)
-			isMuted = true;
-
-		AudioServer.SetBusMute(bus, isMuted); // Mute or unmute
-		AudioServer.SetBusVolumeDb(bus, Mathf.LinearToDb(volumePercentage * .01f));
-	}
-
 	#endregion
 
 	#region Game data
@@ -500,7 +481,7 @@ public partial class SaveManager : Node
 				return GameSaveSlots[ActiveSaveSlotIndex];
 
 			// Default to save slot 1 when running the game from the editor
-			return OS.IsDebugBuild() ? GameSaveSlots[0] : null;
+			return GameData.DefaultData;
 		}
 	}
 
@@ -545,12 +526,20 @@ public partial class SaveManager : Node
 			}
 		}
 
-		// Debug game data
-		if (OS.IsDebugBuild()) // For testing
+		// Set up default game data/menu game data
+		GameData.DefaultData = new()
 		{
-			ActiveSaveSlotIndex = 0;
-			GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();
-			ActiveGameData.UnlockAllWorlds();
+			level = 1,
+			lastPlayedWorld = WorldEnum.LostPrologue,
+		};
+
+		// TODO Replace this with the tutorial key
+		GameData.DefaultData.UnlockStage("so_a1_main");
+		GameData.DefaultData.UnlockWorld(WorldEnum.SandOasis);
+
+		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
+		{
+			GameData.DefaultData.UnlockAllWorlds();
 			ActiveSkillRing.LoadFromActiveData();
 		}
 	}
@@ -559,7 +548,7 @@ public partial class SaveManager : Node
 	public static void ResetSaveData(int index)
 	{
 		GameSaveSlots[index].Free();
-		GameSaveSlots[index] = GameData.DefaultData();
+		GameSaveSlots[index] = GameData.DefaultData;
 	}
 
 	public partial class GameData : GodotObject
@@ -873,23 +862,7 @@ public partial class SaveManager : Node
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>
-		public static GameData DefaultData()
-		{
-			GameData data = new()
-			{
-				level = 1,
-				lastPlayedWorld = WorldEnum.LostPrologue,
-			};
-
-			// TODO Replace this with the tutorial key
-			data.UnlockStage("so_a1_main");
-			data.UnlockWorld(WorldEnum.SandOasis);
-
-			if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
-				data.UnlockAllWorlds();
-
-			return data;
-		}
+		public static GameData DefaultData;
 	}
 	#endregion
 }

@@ -209,7 +209,6 @@ namespace Project.Gameplay
 			return GetInputAngle();
 		}
 
-
 		private float GetStrafeAngle()
 		{
 			float targetAngle = GetInputAngle();
@@ -517,7 +516,9 @@ namespace Project.Gameplay
 			}
 
 			if (Mathf.IsZeroApprox(inputLength) && !Animator.IsBrakeAnimationActive) // Basic slow down
+			{
 				MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, 0);
+			}
 			else
 			{
 				float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, inputAngle);
@@ -537,7 +538,10 @@ namespace Project.Gameplay
 					if (MoveSpeed < BackstepSettings.speed) // Accelerate faster when at low speeds
 						MoveSpeed = Mathf.Lerp(MoveSpeed, ActiveMovementSettings.speed * ActiveMovementSettings.GetSpeedRatio(BackstepSettings.speed), .05f * inputLength);
 
-					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
+					if (ActionState == ActionStates.AccelJump)
+						MoveSpeed = GroundSettings.Interpolate(MoveSpeed, inputLength);
+					else
+						MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
 				}
 			}
 
@@ -579,6 +583,9 @@ namespace Project.Gameplay
 				MovementAngle = targetMovementAngle;
 			}
 
+			if (ActionState == ActionStates.AccelJump)
+				MovementAngle = ExtensionMethods.ClampAngleRange(MovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .1f);
+
 			float deltaAngle = ExtensionMethods.DeltaAngleRad(MovementAngle, targetMovementAngle);
 			if (!turnInstantly && deltaAngle > MAX_TURNAROUND_ANGLE) // Check for turning around
 			{
@@ -596,7 +603,7 @@ namespace Project.Gameplay
 			float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
 			float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.ForwardAngle);
 			// Reduce sensitivity when player is running
-			if (speedRatio > CharacterAnimator.RUN_RATIO)
+			if (speedRatio > CharacterAnimator.RunRatio)
 			{
 				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount)) // Remap controls to provide more analog detail
 					targetMovementAngle -= inputDeltaAngle * .5f;
@@ -949,7 +956,10 @@ namespace Project.Gameplay
 
 				isCustomPhysicsEnabled = true;
 				VerticalSpeed = 0;
-				MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
+				if (Lockon.IsPerfectHomingAttack)
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.perfectHomingAttackSpeed, Skills.homingAttackAcceleration * 2.0f * PhysicsManager.physicsDelta);
+				else
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, Skills.homingAttackSpeed, Skills.homingAttackAcceleration * PhysicsManager.physicsDelta);
 				Velocity = Lockon.HomingAttackDirection.Normalized() * MoveSpeed;
 				MovementAngle = ExtensionMethods.CalculateForwardAngle(Lockon.HomingAttackDirection);
 				MoveAndSlide();
@@ -957,7 +967,9 @@ namespace Project.Gameplay
 				PathFollower.Resync();
 			}
 			else // Normal Jump dash; Apply gravity
+			{
 				VerticalSpeed = Mathf.MoveToward(VerticalSpeed, jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
+			}
 
 			CheckStomp();
 		}
@@ -1290,16 +1302,37 @@ namespace Project.Gameplay
 
 			// Level failed
 			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+			{
+				DefeatPlayer();
 				Stage.FinishLevel(false);
+			}
 		}
 
 		/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
-		/// <summary>
-		/// Called when the player is returning to a checkpoint.
-		/// </summary>
+		private void DefeatPlayer()
+		{
+			if (IsDefeated) return;
+
+			IsDefeated = true;
+
+			Lockon.IsMonitoring = false;
+			areaTrigger.Disabled = true;
+
+			// Disable break skills
+			if (Skills.IsTimeBreakActive)
+				Skills.ToggleTimeBreak();
+			if (Skills.IsSpeedBreakActive)
+				Skills.ToggleSpeedBreak();
+		}
+
+		/// <summary> Called when the player is returning to a checkpoint. </summary>
 		public void StartRespawn(bool debugRespawn = false)
 		{
+			if (ActionState == ActionStates.Teleport || IsDefeated) return;
+
+			DefeatPlayer();
+
 			if (!debugRespawn)
 			{
 				// Level failed
@@ -1311,21 +1344,8 @@ namespace Project.Gameplay
 				}
 			}
 
-			if (ActionState == ActionStates.Teleport || IsDefeated) return;
-
-			// Fade screen out, enable respawn flag, and connect signals
-			IsDefeated = true;
-
-			Lockon.IsMonitoring = false;
-			areaTrigger.Disabled = true;
+			// Fade screen out, update respawn count, and connect signals
 			Stage.IncrementRespawnCount();
-
-			// Disable break skills
-			if (Skills.IsTimeBreakActive)
-				Skills.ToggleTimeBreak();
-			if (Skills.IsSpeedBreakActive)
-				Skills.ToggleSpeedBreak();
-
 			TransitionManager.StartTransition(new()
 			{
 				inSpeed = .5f,
@@ -1488,6 +1508,7 @@ namespace Project.Gameplay
 		private void UpdateLauncher()
 		{
 			isCustomPhysicsEnabled = true;
+
 			if (activeLauncher?.IsCharacterCentered == false)
 			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
@@ -1981,7 +2002,9 @@ namespace Project.Gameplay
 
 		private void OnLevelCompleted()
 		{
-			ResetActionState();
+			if (ActionState != ActionStates.Damaged)
+				ResetActionState();
+
 			// Disable everything
 			Lockon.IsMonitoring = false;
 			Skills.DisableBreakSkills();
