@@ -1,5 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://byovecvbub7lf"]
+[gd_scene load_steps=22 format=3 uid="uid://byovecvbub7lf"]
 
+[ext_resource type="Resource" uid="uid://pe2kawmnuf4i" path="res://resource/level data/dinosaur jungle/Act3MajinEgg.tres" id="2_07gul"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="3"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_asuc3"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5"]
@@ -17,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://e43vdgi280co" path="res://area/2 dino jungle/object/rock/WaterRock.tscn" id="17"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="18"]
 [ext_resource type="PackedScene" uid="uid://dp60xb12an0s2" path="res://area/2 dino jungle/act 2/Static.tscn" id="18_547h0"]
+[ext_resource type="PackedScene" uid="uid://bjkwrplubhwil" path="res://area/2 dino jungle/object/platform/CactusPlatform.tscn" id="18_sbx2f"]
 
 [sub_resource type="Curve" id="Curve_sbtd2"]
 max_value = 3.0
@@ -29,6 +31,7 @@ size = Vector3(9.4, 11.5, 2)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("18_547h0")]
+Data = ExtResource("2_07gul")
 
 [node name="MajinEggAct" type="Node3D" parent="."]
 
@@ -980,6 +983,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90211, 0, -0.618034)
 
 [node name="Ring10" parent="MajinEggAct/RightPath/Ring2" instance=ExtResource("8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17557, 0, -1.61803)
+
+[node name="CactusPlatform" parent="." instance=ExtResource("18_sbx2f")]
+transform = Transform3D(2, 0, -2.23517e-07, 0, 2, 0, 2.23517e-07, 0, 2, -14.224, 23.7, 150.362)
 
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg2" to="Static" method="IncrementObjective"]
