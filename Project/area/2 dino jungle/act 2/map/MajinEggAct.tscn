@@ -9,13 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="11"]
-[ext_resource type="PackedScene" path="res://area/2 dino jungle/object/egg/MajinEgg.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://b3f5ifmjlskc1" path="res://area/2 dino jungle/object/egg/MajinEgg.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="14"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="15"]
 [ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="16"]
 [ext_resource type="PackedScene" uid="uid://e43vdgi280co" path="res://area/2 dino jungle/object/rock/WaterRock.tscn" id="17"]
-[ext_resource type="Script" path="res://addons/stage_object_generator/ObjectGenerator.cs" id="18"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="18"]
 [ext_resource type="PackedScene" uid="uid://dp60xb12an0s2" path="res://area/2 dino jungle/act 2/Static.tscn" id="18_547h0"]
 
 [sub_resource type="Curve" id="Curve_sbtd2"]
@@ -29,10 +29,6 @@ size = Vector3(9.4, 11.5, 2)
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("18_547h0")]
-"Level ID" = "dj_a2_majin_egg"
-"Mission Type" = 1
-"Objective Count" = 5
-"Item Cycling/Activation Trigger" = NodePath("")
 
 [node name="MajinEggAct" type="Node3D" parent="."]
 
@@ -255,12 +251,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.65327, -1.25, 7.62659)
 
 [node name="RedMajin" parent="MajinEggAct/LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.920298, 0, -0.391218, 0, 1, 0, 0.391218, 0, -0.920298, 23.171, 4.46462, 65.2765)
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="RedMajin2" parent="MajinEggAct/LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.999577, 24.3009, 3.57783, 82.5364)
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="RedMajin3" parent="MajinEggAct/LotusGroup" instance=ExtResource("16")]
 transform = Transform3D(-0.983294, 0, 0.182024, 0, 1, 0, -0.182024, 0, -0.983294, 20.8068, 2.52471, 99.0963)
+"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="Rings" type="Node3D" parent="MajinEggAct/LotusGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008)
@@ -334,11 +333,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41421, 0, -1.41421)
 
 [node name="Catapult" parent="MajinEggAct" instance=ExtResource("15")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 5.20006, 17.873, 133.459)
-distance = 14.0
+"Secondary Settings/Middle Height" = 6.0
+"Secondary Settings/Distance" = 26.0
 middleHeight = 8.0
 finalHeight = -8.0
-"Secondary Settings/Distance" = 26.0
-"Secondary Settings/Middle Height" = 6.0
+distance = 14.0
 
 [node name="Boat1" type="Node3D" parent="MajinEggAct"]
 
@@ -891,12 +890,12 @@ transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, 
 
 [node name="Catapult" parent="MajinEggAct/RightPath" instance=ExtResource("15")]
 transform = Transform3D(0.690882, 0, 0.722967, 0, 1, 0, -0.722967, 0, 0.690882, -128.18, 6.98, -46.0578)
-distance = 16.0
-middleHeight = 14.0
-finalHeight = -2.0
-"Secondary Settings/Distance" = 44.0
 "Secondary Settings/Middle Height" = 8.0
 "Secondary Settings/Final Height" = -2.0
+"Secondary Settings/Distance" = 44.0
+middleHeight = 14.0
+finalHeight = -2.0
+distance = 16.0
 
 [node name="Ring" type="Node3D" parent="MajinEggAct/RightPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -116.6, 5.69, -34.93)
