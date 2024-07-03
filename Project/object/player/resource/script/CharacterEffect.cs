@@ -16,6 +16,12 @@ public partial class CharacterEffect : Node3D
 		SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
 	}
 
+	public override void _PhysicsProcess(double _)
+	{
+		if (isFadingRailSFX)
+			isFadingRailSFX = SoundManager.FadeAudioPlayer(grindrailSfx);
+	}
+
 	public readonly StringName JumpSfx = "jump";
 	public readonly StringName JumpDashSfx = "jump dash";
 	public readonly StringName SlideSfx = "slide";
@@ -77,9 +83,59 @@ public partial class CharacterEffect : Node3D
 	{
 		stompFX.SetEmitting(true);
 		PlayActionSFX(StompSfx);
-
 	}
 	public void StopStompFX() => stompFX.SetEmitting(false);
+
+	[Export]
+	private GpuParticles3D chargeFX;
+	[Export]
+	private GpuParticles3D fullChargeFX;
+	[Export]
+	private GpuParticles3D fullChargeBurstFX;
+	public void StartChargeFX()
+	{
+		chargeFX.Emitting = true;
+		chargeFX.Visible = true;
+	}
+
+	public void FullChargeFX()
+	{
+		chargeFX.Emitting = false;
+		chargeFX.Visible = false;
+		fullChargeFX.Emitting = true;
+		fullChargeBurstFX.Restart();
+	}
+
+	public void StopChargeFX()
+	{
+		chargeFX.Emitting = false;
+		fullChargeFX.Emitting = false;
+	}
+
+	[Export]
+	private GpuParticles3D grindrailVfx;
+	[Export]
+	private AudioStreamPlayer grindrailSfx;
+	private bool isFadingRailSFX;
+	public void StartGrindFX()
+	{
+		grindrailVfx.Emitting = true;
+		isFadingRailSFX = false;
+		grindrailSfx.VolumeDb = 0f;
+		grindrailSfx.Play();
+	}
+
+	public void UpdateGrindFX(float speedRatio)
+	{
+		grindrailSfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - speedRatio); // Set sfx volume based on speed
+	}
+
+	public void StopGrindFX()
+	{
+		isFadingRailSFX = true; // Start fading sound effect
+		grindrailVfx.Emitting = false;
+		StopChargeFX();
+	}
 	#endregion
 
 	#region Ground

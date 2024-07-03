@@ -1,9 +1,11 @@
-[gd_scene load_steps=70 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=84 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
 [ext_resource type="PackedScene" uid="uid://cupcp1cgd17wh" path="res://object/player/resource/effect/step/FootprintDecal.tscn" id="4_8hf43"]
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
+[ext_resource type="Material" uid="uid://3j0tx2hxvynp" path="res://object/stage/common/resource/model/material/Grindrail Sparks Process Material.tres" id="6_v3ger"]
+[ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="7_8immp"]
 [ext_resource type="PackedScene" uid="uid://bls68nf485o5s" path="res://object/player/resource/effect/DustParticle.tscn" id="8_svcok"]
 [ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Trail3D.cs" id="10_1mog6"]
@@ -24,7 +26,14 @@
 [ext_resource type="Material" uid="uid://cih8b8t0vf1hh" path="res://object/player/resource/effect/material/Attack Aura.tres" id="20_rtch5"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="21_nenuf"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="22_gd0vj"]
+[ext_resource type="AudioStream" uid="uid://n4glservh4l2" path="res://sound/sfx/objects/grind rail.wav" id="28_elah2"]
+[ext_resource type="Material" uid="uid://ca62uiedbfw5x" path="res://effect/particle/material/Ember Blue.tres" id="29_j5i12"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_mnxd4"]
+material = ExtResource("7_8immp")
+size = Vector2(0.05, 1)
+center_offset = Vector3(0, 0.4, 0)
 
 [sub_resource type="Curve" id="Curve_bi8dp"]
 _data = [Vector2(0, 1), 0.0, -0.0371234, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
@@ -593,7 +602,61 @@ _data = {
 "stop": SubResource("Animation_hc4f1")
 }
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "windParticle", "stompFX", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
+[sub_resource type="Curve" id="Curve_awull"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_q4mit"]
+_data = [Vector2(0, 0.6), 0.0, 3.84665, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.33785, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_2goyq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_rr6dn"]
+width = 64
+curve_x = SubResource("Curve_awull")
+curve_y = SubResource("Curve_q4mit")
+curve_z = SubResource("Curve_2goyq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q1f2b"]
+lifetime_randomness = 0.4
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 0.01
+initial_velocity_max = 0.01
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveXYZTexture_rr6dn")
+
+[sub_resource type="QuadMesh" id="QuadMesh_fco1t"]
+material = ExtResource("29_j5i12")
+size = Vector2(0.05, 0.5)
+center_offset = Vector3(0, 0.25, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_bhy5y"]
+material = ExtResource("7_8immp")
+size = Vector2(0.05, 0.5)
+center_offset = Vector3(0, 0.25, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d5h6o"]
+lifetime_randomness = 0.4
+direction = Vector3(0, 0, 1)
+spread = 180.0
+flatness = 0.8
+initial_velocity_min = 1.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveXYZTexture_rr6dn")
+
+[sub_resource type="QuadMesh" id="QuadMesh_dlv4t"]
+material = ExtResource("7_8immp")
+size = Vector2(0.1, 1)
+center_offset = Vector3(0, 0.25, 0)
+
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "windParticle", "stompFX", "chargeFX", "fullChargeFX", "fullChargeBurstFX", "grindrailVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -604,6 +667,11 @@ speedBreakAnimator = NodePath("VFX/SpeedBreak/AnimationPlayer")
 dustParticle = NodePath("VFX/ActionFX/DustParticle")
 windParticle = NodePath("VFX/ActionFX/Wind")
 stompFX = NodePath("VFX/ActionFX/Stomp")
+chargeFX = NodePath("VFX/ChargeFX/ChargeParticles")
+fullChargeFX = NodePath("VFX/ChargeFX/FullChargeParticles")
+fullChargeBurstFX = NodePath("VFX/ChargeFX/ChargeBurstParticles")
+grindrailVfx = NodePath("VFX/GrindrailSparksParticle")
+grindrailSfx = NodePath("SFX/GrindrailSFX")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
@@ -616,7 +684,7 @@ waterStep = NodePath("VFX/StepFX/WaterStepRing")
 voiceLibrary = ExtResource("33_pyanb")
 voiceChannel = NodePath("SFX/VoiceChannel")
 
-[node name="SFX" type="Node" parent="."]
+[node name="SFX" type="Node3D" parent="."]
 
 [node name="VoiceChannel" type="AudioStreamPlayer" parent="SFX"]
 bus = &"VOICE"
@@ -631,7 +699,29 @@ bus = &"GAME SFX"
 [node name="FootstepChannel" type="AudioStreamPlayer" parent="SFX"]
 bus = &"GAME SFX"
 
+[node name="GrindrailSFX" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("28_elah2")
+pitch_scale = 1.2
+bus = &"GAME SFX"
+
 [node name="VFX" type="Node3D" parent="."]
+
+[node name="GrindrailSparksParticle" type="GPUParticles3D" parent="VFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 32
+lifetime = 0.4
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = ExtResource("6_v3ger")
+draw_pass_1 = SubResource("QuadMesh_mnxd4")
 
 [node name="ActionFX" type="Node3D" parent="VFX"]
 
@@ -801,3 +891,46 @@ metadata/_edit_lock_ = true
 libraries = {
 "": SubResource("AnimationLibrary_m0ixc")
 }
+
+[node name="ChargeFX" type="Node3D" parent="VFX"]
+
+[node name="ChargeParticles" type="GPUParticles3D" parent="VFX/ChargeFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.3
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_q1f2b")
+draw_pass_1 = SubResource("QuadMesh_fco1t")
+
+[node name="FullChargeParticles" type="GPUParticles3D" parent="VFX/ChargeFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.3
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_q1f2b")
+draw_pass_1 = SubResource("QuadMesh_bhy5y")
+
+[node name="ChargeBurstParticles" type="GPUParticles3D" parent="VFX/ChargeFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_d5h6o")
+draw_pass_1 = SubResource("QuadMesh_dlv4t")

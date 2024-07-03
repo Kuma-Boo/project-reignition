@@ -3,9 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay;
 
-/// <summary>
-/// Handles grinding. Backwards grinding isn't supported.
-/// </summary>
+/// <summary> Handles grindrails. Backwards grinding isn't supported. </summary>
 [Tool]
 public partial class GrindRail : Area3D
 {
@@ -17,11 +15,6 @@ public partial class GrindRail : Area3D
 	[ExportGroup("Components")]
 	[Export]
 	private Path3D rail;
-	[Export]
-	private AudioStreamPlayer sfx;
-	private bool isFadingSFX;
-	[Export]
-	private GpuParticles3D grindParticles;
 	/// <summary> Reference to the grindrail's pathfollower. </summary>
 	private PathFollow3D pathFollower;
 	private CharacterController Character => CharacterController.instance;
@@ -118,10 +111,6 @@ public partial class GrindRail : Area3D
 			UpdateInvisibleRailLength();
 			return;
 		}
-
-		if (isFadingSFX)
-			isFadingSFX = SoundManager.FadeAudioPlayer(sfx);
-
 		if (isActive)
 			UpdateRail();
 		else if (isInteractingWithPlayer)
@@ -130,16 +119,13 @@ public partial class GrindRail : Area3D
 
 	/// <summary> Is a jump currently being buffered? </summary>
 	private float jumpBufferTimer;
-	/// <summary> Is a shuffle currently being buffered? </summary>
-	private float shuffleBufferTimer;
 	/// <summary> Basic measure for attaching at the end of the rail. </summary>
-	private float RAIL_FUDGE_FACTOR => Skills.grindSettings.speed * PhysicsManager.physicsDelta;
-	private const float JUMP_BUFFER_LENGTH = .2f;
-	private const float SHUFFLE_BUFFER_LENGTH = .4f;
+	private float RailFudgeFactor => Skills.grindSettings.speed * PhysicsManager.physicsDelta;
+	private const float JumpbufferLength = .2f;
 	/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
-	private const float GRIND_RAIL_SNAPPING = 1.0f;
+	private const float GrindrailSnapping = 1.0f;
 	/// <summary> Rail snapping is more generous when performing a grind step. </summary>
-	private const float GRINDSTEP_RAIL_SNAPPING = 1.4f;
+	private const float GrindstepRailSnapping = 1.4f;
 	private Vector3 closestPoint;
 	private void CheckRailActivation()
 	{
@@ -153,8 +139,8 @@ public partial class GrindRail : Area3D
 		// Sync rail pathfollower
 		Vector3 delta = rail.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - rail.GlobalPosition);
 		pathFollower.Progress = rail.Curve.GetClosestOffset(delta);
-		pathFollower.Progress = Mathf.Clamp(pathFollower.Progress, 0, rail.Curve.GetBakedLength() - RAIL_FUDGE_FACTOR);
-		if (pathFollower.Progress >= rail.Curve.GetBakedLength() - RAIL_FUDGE_FACTOR) // Too close to the end of the rail; skip smoothing
+		pathFollower.Progress = Mathf.Clamp(pathFollower.Progress, 0, rail.Curve.GetBakedLength() - RailFudgeFactor);
+		if (pathFollower.Progress >= rail.Curve.GetBakedLength() - RailFudgeFactor) // Too close to the end of the rail; skip smoothing
 			return;
 
 		// Ignore grinds that would immediately put the player into a wall
@@ -166,9 +152,9 @@ public partial class GrindRail : Area3D
 			return;
 
 		// Horizontal validation
-		if (Mathf.Abs(delta.X) > GRIND_RAIL_SNAPPING &&
+		if (Mathf.Abs(delta.X) > GrindrailSnapping &&
 			!(Character.ActionState == CharacterController.ActionStates.Grindstep &&
-			Mathf.Abs(delta.X) > GRINDSTEP_RAIL_SNAPPING))
+			Mathf.Abs(delta.X) > GrindstepRailSnapping))
 		{
 			return;
 		}
@@ -189,13 +175,8 @@ public partial class GrindRail : Area3D
 
 		// Reset buffer timers
 		jumpBufferTimer = 0;
-		shuffleBufferTimer = 0;
-
-		// Reset FX
-		isFadingSFX = false;
-		sfx.VolumeDb = 0f;
-		sfx.Play();
-		grindParticles.Emitting = true; // Start emitting sparks
+		perfectChargeTimer = 0;
+		currentCharge = 0;
 
 		// Show invisible grindrail
 		if (isInvisibleRail)
@@ -205,7 +186,7 @@ public partial class GrindRail : Area3D
 		}
 
 		float positionSmoothing = .2f;
-		float smoothFactor = RAIL_FUDGE_FACTOR * 5f;
+		float smoothFactor = RailFudgeFactor * 5f;
 		if (pathFollower.Progress >= rail.Curve.GetBakedLength() - smoothFactor) // Calculate smoothing when activating at the end of the rail
 		{
 			float progressFactor = Mathf.Abs(pathFollower.Progress - rail.Curve.GetBakedLength());
@@ -223,6 +204,9 @@ public partial class GrindRail : Area3D
 		Character.Animator.StartBalancing();
 		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 
+		// Reset FX
+		Character.Effect.StartGrindFX();
+
 		Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
 		Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
 
@@ -237,8 +221,7 @@ public partial class GrindRail : Area3D
 		isInteractingWithPlayer = false;
 		allowBonuses = false;
 
-		isFadingSFX = true; // Start fading sound effect
-		grindParticles.Emitting = false; // Stop emitting particles
+		Character.Effect.StopGrindFX();
 		if (isInvisibleRail) // Hide rail model
 			railModel.Visible = false;
 
@@ -279,32 +262,16 @@ public partial class GrindRail : Area3D
 
 		Character.UpDirection = pathFollower.Up();
 		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(pathFollower.Forward(), Character.PathFollower.Up());
-		Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, 0f); //Slow down due to friction
 
-		sfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed)); //Fade volume based on speed
-
-		// Update shuffling
-		if (Input.IsActionJustPressed("button_action"))
-		{
-			if (!Character.Animator.IsBalanceShuffleActive)
-				StartShuffle(false); // Shuffle was performed slightly late
-			else if (Mathf.IsZeroApprox(shuffleBufferTimer))
-				shuffleBufferTimer = SHUFFLE_BUFFER_LENGTH;
-			else // Don't allow button mashers
-				shuffleBufferTimer = -SHUFFLE_BUFFER_LENGTH;
-		}
+		UpdateCharge();
 
 		if (Input.IsActionJustPressed("button_jump"))
-			jumpBufferTimer = JUMP_BUFFER_LENGTH;
+			jumpBufferTimer = JumpbufferLength;
 
-		shuffleBufferTimer = Mathf.MoveToward(shuffleBufferTimer, 0, PhysicsManager.physicsDelta);
 		jumpBufferTimer = Mathf.MoveToward(jumpBufferTimer, 0, PhysicsManager.physicsDelta);
 
 		if (!Character.Animator.IsBalanceShuffleActive)
 		{
-			if (shuffleBufferTimer > 0) // Shuffle was buffered perfectly
-				StartShuffle(true);
-
 			if (jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
 			{
 				jumpBufferTimer = 0;
@@ -344,21 +311,69 @@ public partial class GrindRail : Area3D
 		Character.UpdateExternalControl(true);
 		Character.Animator.UpdateBalancing(Character.Animator.CalculateTurnRatio());
 		Character.Animator.UpdateBalanceSpeed(Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed));
-		grindParticles.GlobalTransform = Character.GlobalTransform; // Sync particle position with player
-
 		if (Mathf.IsEqualApprox(pathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Character.MoveSpeed)) // Disconnect from the rail
 			Deactivate();
 	}
 
-	private void StartShuffle(bool isPerfectShuffle)
+	private float currentCharge;
+	private float perfectChargeTimer;
+	private readonly float PerfectChargeLength = .2f;
+	private readonly float ChargeSpeed = 5.0f;
+	private void UpdateCharge()
 	{
-		shuffleBufferTimer = 0; // Reset input buffer
+		bool isCharging = Input.IsActionPressed("button_action");
+		bool isCharged = Mathf.IsEqualApprox(currentCharge, 1.0f);
 
-		Character.MoveSpeed = isPerfectShuffle ? Skills.perfectShuffleSpeed : Skills.grindSettings.speed;
-		Character.Animator.StartGrindShuffle();
+		perfectChargeTimer = Mathf.MoveToward(perfectChargeTimer, 0, PhysicsManager.physicsDelta);
 
-		if (!isPerfectShuffle)
+		if (isCharging)
+		{
+			if (Mathf.IsZeroApprox(currentCharge))
+				Character.Effect.StartChargeFX();
+
+			currentCharge = Mathf.MoveToward(currentCharge, 1.0f, ChargeSpeed * PhysicsManager.physicsDelta);
+			if (Mathf.IsEqualApprox(currentCharge, 1.0f))
+			{
+				if (Character.Animator.IsBalanceShuffleActive)
+				{
+					// Prevent fully charging during a grind shuffle
+					currentCharge -= 0.0001f;
+				}
+				else if (!isCharged) // Fully charged
+				{
+					perfectChargeTimer = PerfectChargeLength;
+					Character.Effect.FullChargeFX();
+				}
+			}
+		}
+		else if (!Mathf.IsZeroApprox(currentCharge))
+		{
+			// Update shuffling
+			if (!Character.Animator.IsBalanceShuffleActive && isCharged)
+				StartShuffle();
+
+			currentCharge = 0.0f;
+			Character.Effect.StopChargeFX();
+		}
+
+		float speedRatio = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
+		Character.Effect.UpdateGrindFX(speedRatio);
+		Character.Animator.UpdateBalanceCrouch(isCharging);
+		if (!Character.Animator.IsBalanceShuffleActive && Mathf.IsZeroApprox(perfectChargeTimer)) // Only slow down when not shuffling
+			Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
+	}
+
+	private void StartShuffle()
+	{
+		float targetSpeed = Skills.perfectShuffleSpeed;
+		if (Mathf.IsZeroApprox(perfectChargeTimer))
+		{
+			targetSpeed = Skills.grindSettings.speed;
 			allowBonuses = false;
+		}
+
+		Character.MoveSpeed = targetSpeed;
+		Character.Animator.StartGrindShuffle();
 
 		if (allowBonuses)
 			BonusManager.instance.QueueBonus(new(BonusType.GrindShuffle));

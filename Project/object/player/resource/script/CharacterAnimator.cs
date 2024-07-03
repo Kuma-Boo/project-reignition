@@ -242,7 +242,10 @@ public partial class CharacterAnimator : Node3D
 				}
 			}
 
-			groundTurnRatio = CalculateTurnRatio();
+			if (Character.MovementState == CharacterController.MovementStates.External)
+				groundTurnRatio = 0; // Disable turning when controlled externally
+			else
+				groundTurnRatio = CalculateTurnRatio();
 		}
 		else
 		{
@@ -324,9 +327,6 @@ public partial class CharacterAnimator : Node3D
 	/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
 	public float CalculateTurnRatio()
 	{
-		if (Character.MovementState == CharacterController.MovementStates.External)
-			return 0; // Disable turning when controlled externally
-
 		float referenceAngle = Character.IsMovingBackward ? Character.PathFollower.ForwardAngle : Character.MovementAngle;
 		float inputAngle = Character.GetInputAngle() + (Character.PathFollower.DeltaAngle * PathTurnStrength);
 		float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
@@ -604,6 +604,9 @@ public partial class CharacterAnimator : Node3D
 	private readonly StringName BalanceRightLean = "parameters/balance_tree/balance_state/balance_right_blend/blend_position";
 	private readonly StringName BalanceLeftLean = "parameters/balance_tree/balance_state/balance_left_blend/blend_position";
 
+	private readonly StringName BalanceCrouchAdd = "parameters/balance_tree/crouch_add/add_amount";
+	private readonly StringName BalanceDirectionTransition = "parameters/balance_tree/direction_transition/transition_request";
+
 	public void StartBalancing()
 	{
 		IsBalanceShuffleActive = true;
@@ -617,6 +620,14 @@ public partial class CharacterAnimator : Node3D
 		SetStateXfade(0.05f);
 		animationTree.Set(StateTransition, BalanceState); // Turn on balancing animations
 		animationTree.Set(BalanceGrindstepTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut); // Disable any grindstepping
+	}
+
+	public void UpdateBalanceCrouch(bool isCrouching)
+	{
+		float current = (float)animationTree.Get(BalanceCrouchAdd);
+		float target = isCrouching ? 1.0f : 0.0f;
+		current = Mathf.Lerp(current, target, .2f);
+		animationTree.Set(BalanceCrouchAdd, current);
 	}
 
 	private readonly StringName BalanceGrindstepTrigger = "parameters/balance_tree/grindstep_trigger/request";
@@ -643,7 +654,13 @@ public partial class CharacterAnimator : Node3D
 	public void UpdateBalancing(float balanceRatio)
 	{
 		StringName currentNode = BalanceStatePlayback.GetCurrentNode();
-		IsBalanceShuffleActive = currentNode == ShuffleLeft || currentNode == ShuffleRight;
+		StringName fadingNode = BalanceStatePlayback.GetFadingFromNode();
+
+		IsBalanceShuffleActive = currentNode == ShuffleLeft ||
+			currentNode == ShuffleRight ||
+			fadingNode == ShuffleLeft ||
+			fadingNode == ShuffleRight;
+
 		if (IsBalanceShuffleActive)
 		{
 			if ((isFacingRight && currentNode == BalanceRight) ||
