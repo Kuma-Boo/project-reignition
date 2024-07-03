@@ -165,7 +165,7 @@ public partial class CharacterLockon : Node3D
 			return TargetState.Invisible;
 
 		// Raycast for obstacles
-		Vector3 castPosition = Character.GlobalPosition;
+		Vector3 castPosition = Character.CenterPosition;
 		if (Character.VerticalSpeed < 0)
 			castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
 		Vector3 castVector = t.GlobalPosition - castPosition;
