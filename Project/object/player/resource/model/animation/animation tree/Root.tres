@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=229 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=224 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8m3pk"]
 animation = &"ActionLibrary/backflip"
@@ -268,7 +268,23 @@ states/balance_left_blend/position = Vector2(648.28, 175.04)
 states/balance_right_blend/node = SubResource("AnimationNodeBlendSpace1D_81403")
 states/balance_right_blend/position = Vector2(380.768, 175.6)
 transitions = ["Start", "balance-right-shuffle", SubResource("AnimationNodeStateMachineTransition_ia40e"), "balance-right-shuffle", "balance_right_blend", SubResource("AnimationNodeStateMachineTransition_o1o3s"), "balance-left-shuffle", "balance_left_blend", SubResource("AnimationNodeStateMachineTransition_q61bm"), "balance_left_blend", "balance-right-shuffle", SubResource("AnimationNodeStateMachineTransition_h0t73"), "balance_right_blend", "balance-left-shuffle", SubResource("AnimationNodeStateMachineTransition_8l6xv")]
-graph_offset = Vector2(129, 132)
+graph_offset = Vector2(-233, 47)
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_2itfh"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6ylqp"]
+animation = &"BalanceLibrary/balance-left-crouch"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ih48q"]
+animation = &"BalanceLibrary/balance-right-crouch"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_hfyyt"]
+input_0/name = "right"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "left"
+input_1/auto_advance = false
+input_1/reset = true
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_mxq4g"]
 
@@ -364,61 +380,11 @@ states/step-right-03/position = Vector2(413.702, 421.8)
 states/step-right-03-loop/node = SubResource("AnimationNodeAnimation_0gbux")
 states/step-right-03-loop/position = Vector2(687.703, 421.819)
 transitions = ["step-left-01", "step-left-01-loop", SubResource("AnimationNodeStateMachineTransition_kb06q"), "step-right-01", "step-right-01-loop", SubResource("AnimationNodeStateMachineTransition_hld8j"), "step-left-02", "step-left-02-loop", SubResource("AnimationNodeStateMachineTransition_c3up7"), "step-right-02", "step-right-02-loop", SubResource("AnimationNodeStateMachineTransition_h30a1"), "step-left-03", "step-left-03-loop", SubResource("AnimationNodeStateMachineTransition_tk1a8"), "step-right-03", "step-right-03-loop", SubResource("AnimationNodeStateMachineTransition_q3vqt")]
-graph_offset = Vector2(122, 66)
-
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_wxfkv"]
-input_0/name = "step-left-01"
-input_0/auto_advance = false
-input_0/reset = true
-input_1/name = "step-left-02"
-input_1/auto_advance = false
-input_1/reset = true
-input_2/name = "step-left-03"
-input_2/auto_advance = false
-input_2/reset = true
-input_3/name = "step-left-04"
-input_3/auto_advance = false
-input_3/reset = true
-input_4/name = "step-right-01"
-input_4/auto_advance = false
-input_4/reset = true
-input_5/name = "step-right-02"
-input_5/auto_advance = false
-input_5/reset = true
-input_6/name = "step-right-03"
-input_6/auto_advance = false
-input_6/reset = true
-input_7/name = "step-right-04"
-input_7/auto_advance = false
-input_7/reset = true
+graph_offset = Vector2(43, -21)
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ol5o1"]
 fadein_time = 0.05
 fadeout_time = 0.05
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g5kak"]
-animation = &"BalanceLibrary/balance-step-left-01"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ol7ug"]
-animation = &"BalanceLibrary/balance-step-left-02"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qqn4i"]
-animation = &"BalanceLibrary/balance-step-left-03"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lfmap"]
-animation = &"BalanceLibrary/balance-step-left-04"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uiyur"]
-animation = &"BalanceLibrary/balance-step-right-01"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cb71v"]
-animation = &"BalanceLibrary/balance-step-right-02"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_donnc"]
-animation = &"BalanceLibrary/balance-step-right-03"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_18eam"]
-animation = &"BalanceLibrary/balance-step-right-04"
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_vhnku"]
 
@@ -437,40 +403,30 @@ min_space = 0.0
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gi378"]
-graph_offset = Vector2(-612.705, 111.557)
+graph_offset = Vector2(-1331.94, 67.2504)
 nodes/balance_speed/node = SubResource("AnimationNodeTimeScale_f60fx")
 nodes/balance_speed/position = Vector2(-256, 160)
 nodes/balance_state/node = SubResource("AnimationNodeStateMachine_3cou6")
-nodes/balance_state/position = Vector2(-656, 160)
+nodes/balance_state/position = Vector2(-1100, 80)
+nodes/crouch_add/node = SubResource("AnimationNodeAdd2_2itfh")
+nodes/crouch_add/position = Vector2(-680, 80)
+nodes/crouch_left_anim/node = SubResource("AnimationNodeAnimation_6ylqp")
+nodes/crouch_left_anim/position = Vector2(-1420, 320)
+nodes/crouch_right_anim/node = SubResource("AnimationNodeAnimation_ih48q")
+nodes/crouch_right_anim/position = Vector2(-1420, 200)
+nodes/direction_transition/node = SubResource("AnimationNodeTransition_hfyyt")
+nodes/direction_transition/position = Vector2(-900, 200)
 nodes/grindstep_speed/node = SubResource("AnimationNodeTimeScale_mxq4g")
 nodes/grindstep_speed/position = Vector2(-256, 320)
 nodes/grindstep_state/node = SubResource("AnimationNodeStateMachine_t1m22")
 nodes/grindstep_state/position = Vector2(-432, 384)
-nodes/grindstep_transition/node = SubResource("AnimationNodeTransition_wxfkv")
-nodes/grindstep_transition/position = Vector2(-912, 576)
 nodes/grindstep_trigger/node = SubResource("AnimationNodeOneShot_ol5o1")
 nodes/grindstep_trigger/position = Vector2(48, 144)
-nodes/step-left-01-anim/node = SubResource("AnimationNodeAnimation_g5kak")
-nodes/step-left-01-anim/position = Vector2(-2080, 608)
-nodes/step-left-02-anim/node = SubResource("AnimationNodeAnimation_ol7ug")
-nodes/step-left-02-anim/position = Vector2(-2080, 720)
-nodes/step-left-03-anim/node = SubResource("AnimationNodeAnimation_qqn4i")
-nodes/step-left-03-anim/position = Vector2(-2080, 832)
-nodes/step-left-04-anim/node = SubResource("AnimationNodeAnimation_lfmap")
-nodes/step-left-04-anim/position = Vector2(-2080, 944)
-nodes/step-right-01-anim/node = SubResource("AnimationNodeAnimation_uiyur")
-nodes/step-right-01-anim/position = Vector2(-1440, 944)
-nodes/step-right-02-anim/node = SubResource("AnimationNodeAnimation_cb71v")
-nodes/step-right-02-anim/position = Vector2(-1440, 1056)
-nodes/step-right-03-anim/node = SubResource("AnimationNodeAnimation_donnc")
-nodes/step-right-03-anim/position = Vector2(-1440, 1168)
-nodes/step-right-04-anim/node = SubResource("AnimationNodeAnimation_18eam")
-nodes/step-right-04-anim/position = Vector2(-1440, 1280)
 nodes/wind_add/node = SubResource("AnimationNodeAdd2_vhnku")
 nodes/wind_add/position = Vector2(-432, 160)
 nodes/wind_blend/node = SubResource("AnimationNodeBlendSpace1D_pnwm8")
-nodes/wind_blend/position = Vector2(-656, 288)
-node_connections = [&"balance_speed", 0, &"wind_add", &"grindstep_speed", 0, &"grindstep_state", &"grindstep_transition", 0, &"step-left-01-anim", &"grindstep_transition", 1, &"step-left-02-anim", &"grindstep_transition", 2, &"step-left-03-anim", &"grindstep_transition", 3, &"step-left-04-anim", &"grindstep_transition", 4, &"step-right-01-anim", &"grindstep_transition", 5, &"step-right-02-anim", &"grindstep_transition", 6, &"step-right-03-anim", &"grindstep_transition", 7, &"step-right-04-anim", &"grindstep_trigger", 0, &"balance_speed", &"grindstep_trigger", 1, &"grindstep_speed", &"output", 0, &"grindstep_trigger", &"wind_add", 0, &"balance_state", &"wind_add", 1, &"wind_blend"]
+nodes/wind_blend/position = Vector2(-1000, 380)
+node_connections = [&"balance_speed", 0, &"wind_add", &"crouch_add", 0, &"balance_state", &"crouch_add", 1, &"direction_transition", &"direction_transition", 0, &"crouch_right_anim", &"direction_transition", 1, &"crouch_left_anim", &"grindstep_speed", 0, &"grindstep_state", &"grindstep_trigger", 0, &"balance_speed", &"grindstep_trigger", 1, &"grindstep_speed", &"output", 0, &"grindstep_trigger", &"wind_add", 0, &"crouch_add", &"wind_add", 1, &"wind_blend"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ktt7m"]
 input_0/name = "left"
@@ -1161,7 +1117,7 @@ input_4/auto_advance = false
 input_4/reset = true
 
 [resource]
-graph_offset = Vector2(-958.62, 120.43)
+graph_offset = Vector2(-1090.11, 42.5833)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1120, 112)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
