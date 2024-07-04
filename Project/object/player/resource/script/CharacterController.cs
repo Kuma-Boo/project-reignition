@@ -540,6 +540,8 @@ namespace Project.Gameplay
 
 					if (ActionState == ActionStates.AccelJump)
 						MoveSpeed = GroundSettings.Interpolate(MoveSpeed, inputLength);
+					else if (ActionState == ActionStates.JumpDash)
+						MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, AirSettings.friction * PhysicsManager.physicsDelta);
 					else
 						MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
 				}
