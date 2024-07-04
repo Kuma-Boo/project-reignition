@@ -37,17 +37,17 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="28_s8f82"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_50thi"]
-size = Vector3(34.5322, 28.2, 2.5)
+size = Vector3(20, 30, 2.5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vii8o"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_txqy7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rbfsu"]
-size = Vector3(30, 20, 2.5)
+size = Vector3(40, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sa337"]
-size = Vector3(41.5543, 46.4347, 37.4077)
+size = Vector3(40, 46, 30)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_apnef"]
 radius = 2.0
@@ -237,6 +237,7 @@ startEnabled = true
 [node name="06End" parent="Visuals" instance=ExtResource("6_2ngjg")]
 
 [node name="Skybox" parent="Visuals" instance=ExtResource("9_hrwu5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.171, -40, -190)
 
 [node name="Lighting" type="Node3D" parent="Visuals"]
 
@@ -367,7 +368,7 @@ mesh = SubResource("PlaneMesh_txqy7")
 [node name="Camera" type="Node3D" parent="Trigger"]
 
 [node name="Zipper" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -131.212, -63.7347, -344.881)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -118.396, -51.9074, -332.365)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -407,7 +408,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_50thi")
 
 [node name="IslandTransition" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
-transform = Transform3D(0.976339, 0.0499905, 0.210389, -0.0638018, 0.996195, 0.0593755, -0.20662, -0.0713938, 0.975813, 35.4082, -41.4085, -324.705)
+transform = Transform3D(0.976339, 0.0499905, 0.210389, -0.0638018, 0.996195, 0.0593755, -0.20662, -0.0713938, 0.975813, 38.5325, -41.6127, -325.366)
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/IslandTransition"]
 script = ExtResource("12_ar5h4")
@@ -474,7 +475,7 @@ script = ExtResource("20_662ia")
 lockoutData = ExtResource("21_tnfaf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/ZipperLockout"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.124, 0, -8.546)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12401, 0, -4.84219)
 shape = SubResource("BoxShape3D_sa337")
 
 [node name="UTurn" parent="Trigger/Object" instance=ExtResource("11_x36jr")]
@@ -570,6 +571,19 @@ script = ExtResource("28_s8f82")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/Forestcheckpoint"]
 shape = SubResource("BoxShape3D_7x33n")
+
+[node name="ForestPath" parent="Trigger" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.171, -40, -190)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/ForestPath" node_paths=PackedStringArray("path")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -151.299, 51.9074, 318.736)
+script = ExtResource("12_lmyha")
+path = NodePath("../../../Paths/ForestPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/ForestPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_50thi")
 
 [node name="Paths" type="Node3D" parent="."]
 
