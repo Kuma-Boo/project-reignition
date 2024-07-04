@@ -160,6 +160,9 @@ public partial class PathTraveller : Node3D
 		DebugManager.DrawRay(GlobalPosition, castVector, wallCast ? Colors.Green : Colors.White);
 		if (wallCast)
 			bounds.X = Mathf.Abs(pathFollower.HOffset) + (wallCast.distance - pathTravellerCollisionSize);
+
+		if (bounds.X < 0)
+			bounds.X *= -1;
 	}
 
 	private void ApplyMovement()
@@ -204,8 +207,8 @@ public partial class PathTraveller : Node3D
 		pathFollower.HOffset = startingOffset.X;
 		pathFollower.VOffset = startingOffset.Y;
 
-		if (root != null) // Reset root transform
-			root.Transform = Transform3D.Identity;
+		if (root != null) // Reset root basis
+			root.Basis = Basis.Identity;
 
 		if (animator != null) // Reset speed scale
 			animator.SpeedScale = 1.0f;
@@ -247,8 +250,10 @@ public partial class PathTraveller : Node3D
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 
 		if (Character.ExternalParent == this)
+		{
 			Character.StopExternal();
-		Character.Animator.ResetState();
+			Character.Animator.ResetState();
+		}
 	}
 
 	private void TakeDamage()
