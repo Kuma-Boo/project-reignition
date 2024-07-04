@@ -84,6 +84,18 @@ public partial class PathTraveller : Node3D
 
 	public override void _Ready()
 	{
+		if (pathFollower == null) // Create a pathfollower if needed
+		{
+			pathFollower = new()
+			{
+				UseModelFront = true,
+				Loop = false,
+				CubicInterp = false,
+			};
+
+			path.AddChild(pathFollower);
+		}
+
 		pathFollower.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition);
 		startingProgress = pathFollower.Progress;
 		spawnData = new SpawnData(GetParent(), Transform); // Create spawn data
