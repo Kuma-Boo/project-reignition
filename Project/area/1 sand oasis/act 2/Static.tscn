@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://skx536edn7yd"]
+[gd_scene load_steps=53 format=3 uid="uid://skx536edn7yd"]
 
 [ext_resource type="PackedScene" uid="uid://g7vhevg8ipxh" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
@@ -35,6 +35,7 @@
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="21_tnfaf"]
 [ext_resource type="AudioStream" uid="uid://bmkg2n6r0wy3f" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="28_s8f82"]
+[ext_resource type="PackedScene" uid="uid://bxso4ejxqcm4k" path="res://area/1 sand oasis/act 2/completion/CompletionDemo.gltf" id="34_7u7yr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_50thi"]
 size = Vector3(20, 30, 2.5)
@@ -119,10 +120,11 @@ fog_sky_affect = 0.0
 adjustment_enabled = true
 adjustment_saturation = 1.2
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_yumdi")
 InitialCameraSettings = ExtResource("2_57nsp")
 pathParent = NodePath("Paths")
+completionAnimator = NodePath("CompletionDemo/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("3_we3ty")]
@@ -237,7 +239,6 @@ startEnabled = true
 [node name="06End" parent="Visuals" instance=ExtResource("6_2ngjg")]
 
 [node name="Skybox" parent="Visuals" instance=ExtResource("9_hrwu5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.171, -40, -190)
 
 [node name="Lighting" type="Node3D" parent="Visuals"]
 
@@ -607,6 +608,12 @@ curve = ExtResource("13_u061t")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.176, -39.999, -299.788)
 curve = ExtResource("14_5rbnr")
 
+[node name="CompletionDemo" parent="." instance=ExtResource("34_7u7yr")]
+
+[node name="Camera" type="Camera3D" parent="CompletionDemo/Completion" index="0"]
+cull_mask = 1054
+fov = 45.0
+
 [node name="BGM" parent="." instance=ExtResource("9_f1xur")]
 stream = ExtResource("21_yo7ty")
 volume_db = 12.0
@@ -642,3 +649,5 @@ environment = SubResource("Environment_raoto")
 [connection signal="Deactivated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/DeactivatePath" method="Activate"]
 [connection signal="DriftCompleted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/Camera" method="Deactivate"]
 [connection signal="DriftStarted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/Camera" method="Activate"]
+
+[editable path="CompletionDemo"]
