@@ -1125,7 +1125,7 @@ namespace Project.Gameplay
 
 		#region GrindStep
 		/// <summary> Will the player get a grindstep bonus when landing on a rail? </summary>
-		public bool IsGrindstepBonusActive { get; private set; }
+		public bool IsGrindstepBonusActive { get; set; }
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
@@ -1152,10 +1152,9 @@ namespace Project.Gameplay
 			Animator.StartGrindStep();
 		}
 
-		public void StopGrindstep()
+		private void StopGrindstep()
 		{
 			MovementAngle = Animator.VisualAngle;
-			IsGrindstepBonusActive = false;
 			Animator.ResetState(.1f);
 		}
 		#endregion

@@ -168,10 +168,12 @@ public partial class GrindRail : Area3D
 	private void Activate()
 	{
 		isActive = true;
-		isGrindstepping = false;
 
 		if (allowBonuses && Character.IsGrindstepBonusActive)
 			BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
+
+		isGrindstepping = false;
+		Character.IsGrindstepBonusActive = false;
 
 		// Reset buffer timers
 		jumpBufferTimer = 0;
@@ -318,7 +320,7 @@ public partial class GrindRail : Area3D
 
 	private float currentCharge;
 	private float perfectChargeTimer;
-	private readonly float PerfectChargeLength = .2f;
+	private readonly float PerfectChargeInputWindow = .3f;
 	private readonly float ChargeSpeed = 3.0f;
 	private void UpdateCharge()
 	{
@@ -339,11 +341,11 @@ public partial class GrindRail : Area3D
 				}
 				else if (!isCharged) // Fully charged
 				{
-					perfectChargeTimer = PerfectChargeLength;
+					perfectChargeTimer = PerfectChargeInputWindow;
 					Character.Effect.FullGrindChargeFX();
 				}
 			}
-			else if (!Character.Animator.IsBalanceShuffleActive)
+			else
 			{
 				Character.Effect.StartChargeFX();
 			}
@@ -352,11 +354,16 @@ public partial class GrindRail : Area3D
 		{
 			// Update shuffling
 			if (!Character.Animator.IsBalanceShuffleActive && isCharged)
+			{
 				StartShuffle();
-			else
+				currentCharge = 0;
+			}
+			else if (Mathf.IsZeroApprox(currentCharge))
+			{
 				allowBonuses = false;
+			}
 
-			currentCharge = 0.0f;
+			currentCharge = Mathf.MoveToward(currentCharge, 0f, ChargeSpeed * PhysicsManager.physicsDelta);
 			Character.Effect.StopChargeFX();
 		}
 
