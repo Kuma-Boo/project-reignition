@@ -318,7 +318,7 @@ namespace Project.Gameplay
 
 		private bool isRecentered; // Is the recenter complete?
 		private const float MinRecenterPower = .1f;
-		private const float MaxRecenterPower = .4f;
+		private const float MaxRecenterPower = .2f;
 		/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
 		private void UpdateRecenter()
 		{
@@ -334,8 +334,8 @@ namespace Project.Gameplay
 				inputInfluence = (inputInfluence + 1) * 0.5f;
 				inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);
 
-				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence * PhysicsManager.physicsDelta;
-				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed);
+				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence;
+				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed * PhysicsManager.physicsDelta);
 				if (Mathf.IsZeroApprox(movementOffset))
 					isRecentered = true;
 				movementOffset = currentOffset - movementOffset;
