@@ -1,9 +1,10 @@
-[gd_scene load_steps=27 format=3 uid="uid://dvocdjfcm6ay6"]
+[gd_scene load_steps=29 format=3 uid="uid://dvocdjfcm6ay6"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_f8dpa"]
 [ext_resource type="Resource" uid="uid://b0akc7rq165e7" path="res://resource/level data/sand oasis/Act2Perfect.tres" id="2_lv78e"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_81sck"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_needb"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_sdg87"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_fdxyl"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_cxw1e"]
 [ext_resource type="PackedScene" uid="uid://dnfwvf2akhf1v" path="res://area/1 sand oasis/object/FlameShooter.tscn" id="8_ty8p7"]
@@ -24,6 +25,9 @@
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="21_jddly"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_caf7v"]
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="25_wfjv3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w4bkj"]
+size = Vector3(20, 20, 2.5)
 
 [sub_resource type="Curve" id="Curve_l6fmj"]
 min_value = -1.5
@@ -47,6 +51,53 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="PerfectAct/SpawnPosition" instance=ExtResource("3_81sck")]
+
+[node name="CullingMap" type="Node3D" parent="PerfectAct"]
+
+[node name="InteriorU" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(0.658886, -0.280516, 0.697982, -1.49012e-08, 0.927869, 0.372907, -0.752243, -0.245703, 0.61136, -117.416, -51.2954, -331.515)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/InteriorU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="IslandL" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(-0.988899, 0, 0.148586, 0, 1, 0, -0.148586, 0, -0.988899, -64.4923, -45, -362.604)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/IslandL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="UTurnU" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 41.4448, -45.7, -435.951)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/UTurnU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="ForestL" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(0.801752, 0.0532696, -0.595278, -0.000346532, 0.996061, 0.0886678, 0.597656, -0.0708833, 0.798613, 77.2675, -47.9872, -381.458)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/ForestL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="IslandU" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -186.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/IslandU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
 
 [node name="Interior" type="Node3D" parent="PerfectAct"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
@@ -301,7 +352,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29924, 0, -37.8)
 [node name="UTurn" type="Node3D" parent="PerfectAct"]
 transform = Transform3D(0.986323, 0, -0.164824, 0, 1, 0, 0.164824, 0, 0.986323, -82.5785, -32.7045, -338.245)
 script = ExtResource("4_needb")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Pearls" type="Node3D" parent="PerfectAct/UTurn"]
@@ -529,7 +579,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.838, 0.0157356, -19.9171)
 [node name="Islands" type="Node3D" parent="PerfectAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -44.998, -436)
 script = ExtResource("4_needb")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JumpPanelL" parent="PerfectAct/Islands" instance=ExtResource("13_g3owe")]
@@ -1027,7 +1076,6 @@ transform = Transform3D(-0.0632956, 0, 0.997995, 0, 1, 0, -0.997995, 0, -0.06329
 [node name="Forest" type="Node3D" parent="PerfectAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.205, -39.438, -180.756)
 script = ExtResource("4_needb")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Goal" parent="PerfectAct/Forest" instance=ExtResource("21_jddly")]
@@ -1041,9 +1089,17 @@ shape = SubResource("BoxShape3D_hqpy5")
 transform = Transform3D(0.484932, 0, 0.874552, 0, 1, 0, -0.874552, 0, 0.484932, -122.721, 3.26587, 15.3719)
 fireSoulIndex = 3
 
+[connection signal="Activated" from="PerfectAct/CullingMap/InteriorU" to="PerfectAct/Interior" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/InteriorU" to="PerfectAct/Interior" method="Activate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/IslandL" to="PerfectAct/Islands" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/IslandL" to="PerfectAct/Islands" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/UTurnU" to="PerfectAct/UTurn" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/UTurnU" to="PerfectAct/UTurn" method="Activate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/ForestL" to="PerfectAct/Forest" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/ForestL" to="PerfectAct/Forest" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/IslandU" to="PerfectAct/Islands" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/IslandU" to="PerfectAct/Islands" method="Activate"]
 [connection signal="Activated" from="PerfectAct/Islands/Spring" to="PerfectAct/Islands/Spring/Path" method="Activate"]
 [connection signal="Activated" from="PerfectAct/Islands/Spring" to="PerfectAct/Islands/Spring/Camera" method="Activate"]
 [connection signal="Spawned" from="PerfectAct/Islands/RedMajin" to="PerfectAct/Islands/BlueMajin3" method="Spawn"]
 [connection signal="Deactivated" from="PerfectAct/Islands/JumpPanel" to="PerfectAct/Islands/JumpPanel/Path" method="Activate"]
-
-[editable path="Static"]

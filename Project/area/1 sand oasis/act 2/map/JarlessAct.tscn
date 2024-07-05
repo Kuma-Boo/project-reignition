@@ -1,9 +1,10 @@
-[gd_scene load_steps=25 format=3 uid="uid://cpp5a2r0k4fuk"]
+[gd_scene load_steps=28 format=3 uid="uid://cpp5a2r0k4fuk"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_55rea"]
 [ext_resource type="Resource" uid="uid://cqwbx4ruhjsg2" path="res://resource/level data/sand oasis/Act2Jarless.tres" id="2_l6vbo"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_hxsjx"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_2wjwd"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_ixlpu"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_j0en8"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_ydamc"]
 [ext_resource type="PackedScene" uid="uid://dsms0ivmnpaq8" path="res://area/1 sand oasis/object/Jar.tscn" id="7_2yk7n"]
@@ -22,6 +23,12 @@
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="22_lh7v0"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_thiw1"]
 [ext_resource type="PackedScene" uid="uid://k2xbli7x0pwd" path="res://area/1 sand oasis/object/pillar/SquarePillarShort.tscn" id="24_npsoo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4tft5"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jilyw"]
+size = Vector3(40, 20, 2.5)
 
 [sub_resource type="Curve" id="Curve_l6fmj"]
 min_value = -1.5
@@ -44,6 +51,71 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="JarlessAct/SpawnPosition" instance=ExtResource("3_hxsjx")]
+
+[node name="CullingMap" type="Node3D" parent="JarlessAct"]
+
+[node name="InteriorU" parent="JarlessAct/CullingMap" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(0.658886, -0.280516, 0.697982, -1.49012e-08, 0.927869, 0.372907, -0.752243, -0.245703, 0.61136, -117.416, -51.2954, -331.515)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarlessAct/CullingMap/InteriorU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4tft5")
+
+[node name="IslandL" parent="JarlessAct/CullingMap" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(-0.988899, 0, 0.148586, 0, 1, 0, -0.148586, 0, -0.988899, -64.4923, -45, -362.604)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarlessAct/CullingMap/IslandL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4tft5")
+
+[node name="UTurnU" parent="JarlessAct/CullingMap" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 41.4448, -45.7, -435.951)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarlessAct/CullingMap/UTurnU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4tft5")
+
+[node name="ForestL" parent="JarlessAct/CullingMap" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(0.801752, 0.0532696, -0.595278, -0.000346532, 0.996061, 0.0886678, 0.597656, -0.0708833, 0.798613, 77.2675, -47.9872, -381.458)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarlessAct/CullingMap/ForestL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4tft5")
+
+[node name="IslandU" parent="JarlessAct/CullingMap" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -186.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarlessAct/CullingMap/IslandU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4tft5")
+
+[node name="OasisL" parent="JarlessAct/CullingMap" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -167.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarlessAct/CullingMap/OasisL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4tft5")
+
+[node name="ForestU" parent="JarlessAct/CullingMap" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -93.0002, -40, -179.612)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarlessAct/CullingMap/ForestU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jilyw")
 
 [node name="Interior" type="Node3D" parent="JarlessAct"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
@@ -301,7 +373,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, -102.6)
 [node name="UTurn" type="Node3D" parent="JarlessAct"]
 transform = Transform3D(0.986323, 0, -0.164824, 0, 1, 0, 0.164824, 0, 0.986323, -82.5785, -32.7045, -338.245)
 script = ExtResource("4_2wjwd")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JarL" parent="JarlessAct/UTurn" instance=ExtResource("7_2yk7n")]
@@ -544,7 +615,6 @@ transform = Transform3D(0.611238, 0, 0.791448, 0, 1, 0, -0.791448, 0, 0.611238, 
 [node name="Islands" type="Node3D" parent="JarlessAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -44.998, -436)
 script = ExtResource("4_2wjwd")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JumpPanelL" parent="JarlessAct/Islands" instance=ExtResource("9_w4kvl")]
@@ -919,7 +989,6 @@ fireSoulIndex = 2
 [node name="Forest" type="Node3D" parent="JarlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.205, -39.438, -180.756)
 script = ExtResource("4_2wjwd")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Rings" type="Node3D" parent="JarlessAct/Forest"]
@@ -1349,7 +1418,6 @@ fireSoulIndex = 3
 [node name="Oasis" type="Node3D" parent="JarlessAct"]
 transform = Transform3D(-0.443071, 0, -0.896486, 0, 1, 0, 0.896486, 0, -0.443071, -51.1268, -40, -159.728)
 script = ExtResource("4_2wjwd")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SquarePillarShort3" parent="JarlessAct/Oasis" instance=ExtResource("24_npsoo")]
@@ -1370,6 +1438,20 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -1.738, 
 [node name="SquarePillarShort8" parent="JarlessAct/Oasis" instance=ExtResource("24_npsoo")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -5.221, 0, 79.056)
 
+[connection signal="Activated" from="JarlessAct/CullingMap/InteriorU" to="JarlessAct/Interior" method="Deactivate"]
+[connection signal="Deactivated" from="JarlessAct/CullingMap/InteriorU" to="JarlessAct/Interior" method="Activate"]
+[connection signal="Activated" from="JarlessAct/CullingMap/IslandL" to="JarlessAct/Islands" method="Activate"]
+[connection signal="Deactivated" from="JarlessAct/CullingMap/IslandL" to="JarlessAct/Islands" method="Deactivate"]
+[connection signal="Activated" from="JarlessAct/CullingMap/UTurnU" to="JarlessAct/UTurn" method="Deactivate"]
+[connection signal="Deactivated" from="JarlessAct/CullingMap/UTurnU" to="JarlessAct/UTurn" method="Activate"]
+[connection signal="Activated" from="JarlessAct/CullingMap/ForestL" to="JarlessAct/Forest" method="Activate"]
+[connection signal="Deactivated" from="JarlessAct/CullingMap/ForestL" to="JarlessAct/Forest" method="Deactivate"]
+[connection signal="Activated" from="JarlessAct/CullingMap/IslandU" to="JarlessAct/Islands" method="Deactivate"]
+[connection signal="Deactivated" from="JarlessAct/CullingMap/IslandU" to="JarlessAct/Islands" method="Activate"]
+[connection signal="Activated" from="JarlessAct/CullingMap/OasisL" to="JarlessAct/Oasis" method="Activate"]
+[connection signal="Deactivated" from="JarlessAct/CullingMap/OasisL" to="JarlessAct/Oasis" method="Deactivate"]
+[connection signal="Activated" from="JarlessAct/CullingMap/ForestU" to="JarlessAct/Forest" method="Deactivate"]
+[connection signal="Deactivated" from="JarlessAct/CullingMap/ForestU" to="JarlessAct/Forest" method="Activate"]
 [connection signal="Shattered" from="JarlessAct/Interior/JarL" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="JarlessAct/Interior/JarR" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="JarlessAct/UTurn/JarL" to="Static" method="IncrementObjective"]

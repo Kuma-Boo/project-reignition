@@ -1,9 +1,10 @@
-[gd_scene load_steps=32 format=3 uid="uid://rd424odd6vog"]
+[gd_scene load_steps=35 format=3 uid="uid://rd424odd6vog"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_bisxc"]
 [ext_resource type="Resource" uid="uid://dvnuufmf05gc4" path="res://resource/level data/sand oasis/Act2Timed.tres" id="2_82tvw"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_fyywe"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_j40le"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_kds4s"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_hejx8"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_a2050"]
 [ext_resource type="PackedScene" uid="uid://chwt62jenntgq" path="res://area/1 sand oasis/object/grindrail/Grindrail03.tscn" id="7_0gntm"]
@@ -31,6 +32,12 @@
 [ext_resource type="PackedScene" uid="uid://b6ilbxxvqailo" path="res://area/1 sand oasis/object/pillar/CircularPillar.tscn" id="30_xf8hm"]
 [ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="31_3brx1"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_4x85i"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4n2y"]
+size = Vector3(40, 20, 2.5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_hqpy5"]
 size = Vector3(36.9868, 12.769, 2.27792)
 
@@ -47,6 +54,71 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="TimedAct/SpawnPosition" instance=ExtResource("3_fyywe")]
+
+[node name="CullingMap" type="Node3D" parent="TimedAct"]
+
+[node name="InteriorU" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(0.658886, -0.280516, 0.697982, -1.49012e-08, 0.927869, 0.372907, -0.752243, -0.245703, 0.61136, -117.416, -51.2954, -331.515)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/InteriorU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4x85i")
+
+[node name="IslandL" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(-0.988899, 0, 0.148586, 0, 1, 0, -0.148586, 0, -0.988899, -64.4923, -45, -362.604)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/IslandL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4x85i")
+
+[node name="UTurnU" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 41.4448, -45.7, -435.951)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/UTurnU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4x85i")
+
+[node name="ForestL" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(0.801752, 0.0532696, -0.595278, -0.000346532, 0.996061, 0.0886678, 0.597656, -0.0708833, 0.798613, 77.2675, -47.9872, -381.458)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/ForestL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4x85i")
+
+[node name="IslandU" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -186.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/IslandU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4x85i")
+
+[node name="OasisL" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -167.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/OasisL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4x85i")
+
+[node name="ForestU" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -93.0002, -40, -179.612)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/ForestU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_g4n2y")
 
 [node name="Interior" type="Node3D" parent="TimedAct"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
@@ -184,7 +256,6 @@ transform = Transform3D(0.711696, 0, -0.702489, 0, 1, 0, 0.702489, 0, 0.711696, 
 [node name="UTurn" type="Node3D" parent="TimedAct"]
 transform = Transform3D(0.986323, 0, -0.164824, 0, 1, 0, 0.164824, 0, 0.986323, -82.5785, -32.7045, -338.245)
 script = ExtResource("4_j40le")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Grindrail1" parent="TimedAct/UTurn" instance=ExtResource("19_db57d")]
@@ -346,7 +417,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99847, -0.00497437, -9.8928
 [node name="Islands" type="Node3D" parent="TimedAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -44.998, -436)
 script = ExtResource("4_j40le")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JumpPanelL" parent="TimedAct/Islands" instance=ExtResource("13_lhs2t")]
@@ -535,7 +605,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 7.02397)
 [node name="Forest" type="Node3D" parent="TimedAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.205, -39.438, -180.756)
 script = ExtResource("4_j40le")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Rings" type="Node3D" parent="TimedAct/Forest"]
@@ -922,7 +991,6 @@ transform = Transform3D(0.418913, 0, 0.908026, 0, 1, 0, -0.908026, 0, 0.418913, 
 [node name="Oasis" type="Node3D" parent="TimedAct"]
 transform = Transform3D(-0.443071, 0, -0.896486, 0, 1, 0, 0.896486, 0, -0.443071, -51.1268, -40, -159.728)
 script = ExtResource("4_j40le")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SquarePilarsMID" type="Node3D" parent="TimedAct/Oasis"]
@@ -1277,6 +1345,20 @@ transform = Transform3D(-0.991135, 0, -0.132861, 0, 1, 0, 0.132861, 0, -0.991135
 transform = Transform3D(0.992064, 0, 0.125697, 0, 1, 0, -0.125697, 0, 0.992064, 1.52628, -2.95197, 1.50128)
 shape = SubResource("BoxShape3D_hqpy5")
 
+[connection signal="Activated" from="TimedAct/CullingMap/InteriorU" to="TimedAct/Interior" method="Deactivate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/InteriorU" to="TimedAct/Interior" method="Activate"]
+[connection signal="Activated" from="TimedAct/CullingMap/IslandL" to="TimedAct/Islands" method="Activate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/IslandL" to="TimedAct/Islands" method="Deactivate"]
+[connection signal="Activated" from="TimedAct/CullingMap/UTurnU" to="TimedAct/UTurn" method="Deactivate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/UTurnU" to="TimedAct/UTurn" method="Activate"]
+[connection signal="Activated" from="TimedAct/CullingMap/ForestL" to="TimedAct/Forest" method="Activate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/ForestL" to="TimedAct/Forest" method="Deactivate"]
+[connection signal="Activated" from="TimedAct/CullingMap/IslandU" to="TimedAct/Islands" method="Deactivate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/IslandU" to="TimedAct/Islands" method="Activate"]
+[connection signal="Activated" from="TimedAct/CullingMap/OasisL" to="TimedAct/Oasis" method="Activate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/OasisL" to="TimedAct/Oasis" method="Deactivate"]
+[connection signal="Activated" from="TimedAct/CullingMap/ForestU" to="TimedAct/Forest" method="Deactivate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/ForestU" to="TimedAct/Forest" method="Activate"]
 [connection signal="Activated" from="TimedAct/Islands/Spring" to="TimedAct/Islands/Spring/Path" method="Activate"]
 [connection signal="Activated" from="TimedAct/Islands/Spring" to="TimedAct/Islands/Spring/Camera" method="Activate"]
 [connection signal="Spawned" from="TimedAct/Islands/RedMajin" to="TimedAct/Islands/BlueMajin3" method="Spawn"]
@@ -1288,5 +1370,3 @@ shape = SubResource("BoxShape3D_hqpy5")
 [connection signal="Defeated" from="TimedAct/Forest/RedMajin" to="TimedAct/Forest/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="TimedAct/Forest/RedMajin" to="TimedAct/Forest/EnemyStone5" method="IncrementCounter"]
 [connection signal="Defeated" from="TimedAct/Forest/RedMajin" to="TimedAct/Forest/EnemyStone6" method="IncrementCounter"]
-
-[editable path="Static"]

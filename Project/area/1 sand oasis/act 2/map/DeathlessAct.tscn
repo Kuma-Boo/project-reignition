@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bhxidbh6hhcxv"]
+[gd_scene load_steps=36 format=3 uid="uid://bhxidbh6hhcxv"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_g3p2j"]
 [ext_resource type="Resource" uid="uid://c33qynkecblg1" path="res://resource/level data/sand oasis/Act2Deathless.tres" id="2_xpmxs"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://cq4xg8hr8diav" path="res://area/1 sand oasis/act 2/camera/HallCam.tres" id="3_yg4tl"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_qgpdx"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_a6p2w"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_pgt8c"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_ejpqb"]
 [ext_resource type="PackedScene" uid="uid://dsms0ivmnpaq8" path="res://area/1 sand oasis/object/Jar.tscn" id="7_ab0t7"]
 [ext_resource type="PackedScene" uid="uid://dnfwvf2akhf1v" path="res://area/1 sand oasis/object/FlameShooter.tscn" id="8_mirb5"]
@@ -25,10 +26,15 @@
 [ext_resource type="PackedScene" uid="uid://chwt62jenntgq" path="res://area/1 sand oasis/object/grindrail/Grindrail03.tscn" id="21_rip7j"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="21_tort4"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_0ll21"]
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="26_nvd48"]
 [ext_resource type="PackedScene" uid="uid://rn3uo7tgdchl" path="res://area/1 sand oasis/object/pillar/SquarePillarMid.tscn" id="28_dqm0q"]
 [ext_resource type="PackedScene" uid="uid://cp32qqdvukmxh" path="res://area/1 sand oasis/object/grindrail/Grindrail05.tscn" id="28_dw367"]
 [ext_resource type="PackedScene" uid="uid://b6ilbxxvqailo" path="res://area/1 sand oasis/object/pillar/CircularPillar.tscn" id="31_qotte"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gaj7j"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rbfsu"]
+size = Vector3(40, 20, 2.5)
 
 [sub_resource type="Curve" id="Curve_6kl04"]
 _data = [Vector2(0, 0), 0.0, -0.0213279, 0, 0, Vector2(1, 0.973631), 3.1643, 0.0, 0, 0]
@@ -73,6 +79,62 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("3_k0a7d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0716934, 0.00519943, 0.0192566)
+
+[node name="CullingMap" type="Node3D" parent="DeathlessAct"]
+
+[node name="IslandL" parent="DeathlessAct/CullingMap" instance=ExtResource("5_pgt8c")]
+transform = Transform3D(-0.988899, 0, 0.148586, 0, 1, 0, -0.148586, 0, -0.988899, -64.4923, -45, -362.604)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/IslandL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gaj7j")
+
+[node name="UTurnU" parent="DeathlessAct/CullingMap" instance=ExtResource("5_pgt8c")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 41.4448, -45.7, -435.951)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/UTurnU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gaj7j")
+
+[node name="ForestL" parent="DeathlessAct/CullingMap" instance=ExtResource("5_pgt8c")]
+transform = Transform3D(0.801752, 0.0532696, -0.595278, -0.000346532, 0.996061, 0.0886678, 0.597656, -0.0708833, 0.798613, 77.2675, -47.9872, -381.458)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/ForestL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gaj7j")
+
+[node name="IslandU" parent="DeathlessAct/CullingMap" instance=ExtResource("5_pgt8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -186.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/IslandU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gaj7j")
+
+[node name="OasisL" parent="DeathlessAct/CullingMap" instance=ExtResource("5_pgt8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -167.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/OasisL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gaj7j")
+
+[node name="ForestU" parent="DeathlessAct/CullingMap" instance=ExtResource("5_pgt8c")]
+transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -93.0002, -40, -179.612)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/ForestU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_rbfsu")
 
 [node name="UTurn" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(0.986323, 0, -0.164824, 0, 1, 0, 0.164824, 0, 0.986323, -82.5785, -32.7045, -338.245)
@@ -373,7 +435,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1121, -11.8833, -40.1171)
 [node name="Islands" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -44.998, -436)
 script = ExtResource("4_qgpdx")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="JumpPanelL" parent="DeathlessAct/Islands" instance=ExtResource("13_kdcma")]
@@ -1176,7 +1237,6 @@ transform = Transform3D(0.613017, 0, 0.790069, 0, 1, 0, -0.790069, 0, 0.613017, 
 [node name="Forest" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.205, -39.438, -180.756)
 script = ExtResource("4_qgpdx")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Rings" type="Node3D" parent="DeathlessAct/Forest"]
@@ -1528,7 +1588,6 @@ transform = Transform3D(1, 1.78814e-07, 3.25963e-09, 2.08616e-07, -0.99968, -0.0
 [node name="Oasis" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(-0.443071, 0, -0.896486, 0, 1, 0, 0.896486, 0, -0.443071, -51.1268, -40, -159.728)
 script = ExtResource("4_qgpdx")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Rings" type="Node3D" parent="DeathlessAct/Oasis"]
@@ -1798,68 +1857,28 @@ Spacing = 4.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
+[node name="Child01" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 
-[node name="Child02" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child02" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child03" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child04" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child05" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child06" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child07" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="DeathlessAct/Oasis/Grindrail2/Rings2" node_paths=PackedStringArray("animator") instance=ExtResource("6_ejpqb")]
+[node name="Child08" parent="DeathlessAct/Oasis/Grindrail2/Rings2" instance=ExtResource("6_ejpqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-script = ExtResource("26_nvd48")
-animator = NodePath("AnimationPlayer")
 
 [node name="Grindrail3" parent="DeathlessAct/Oasis" instance=ExtResource("28_dw367")]
 transform = Transform3D(-0.999873, 0, -0.0158992, 0, 1, 0, 0.0158992, 0, -0.999873, 6.74509, 0.154205, 82.7915)
@@ -2276,19 +2295,23 @@ transform = Transform3D(0.0896946, 0, 0.99597, 0, 1, 0, -0.99597, 0, 0.0896946, 
 transform = Transform3D(0.999989, 0, 1.49012e-07, 0, 1, 0, -1.49012e-07, 0, 0.999989, 1.53224, -2.95197, 3.07141)
 shape = SubResource("BoxShape3D_hqpy5")
 
+[connection signal="Activated" from="DeathlessAct/CullingMap/IslandL" to="DeathlessAct/Islands" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/IslandL" to="DeathlessAct/Islands" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/UTurnU" to="DeathlessAct/UTurn" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/UTurnU" to="DeathlessAct/UTurn" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/ForestL" to="DeathlessAct/Forest" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/ForestL" to="DeathlessAct/Forest" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/IslandU" to="DeathlessAct/Islands" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/IslandU" to="DeathlessAct/Islands" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/OasisL" to="DeathlessAct/Oasis" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/OasisL" to="DeathlessAct/Oasis" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/ForestU" to="DeathlessAct/Forest" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/ForestU" to="DeathlessAct/Forest" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Islands/Spring" to="DeathlessAct/Islands/Spring/Path" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Islands/Spring" to="DeathlessAct/Islands/Spring/Camera" method="Activate"]
 [connection signal="Collected" from="DeathlessAct/Islands/Grindrail3/Rings/Child09" to="DeathlessAct/Islands/Grindrail3/SpringSpawner" method="Activate"]
 [connection signal="Respawned" from="DeathlessAct/Islands/Grindrail3/Rings/Child09" to="DeathlessAct/Islands/Grindrail3/SpringSpawner" method="Deactivate"]
 [connection signal="Collected" from="DeathlessAct/Islands/Grindrail3/Rings/Child10" to="DeathlessAct/Islands/Grindrail3/SpringSpawner" method="Activate"]
 [connection signal="Respawned" from="DeathlessAct/Islands/Grindrail3/Rings/Child10" to="DeathlessAct/Islands/Grindrail3/SpringSpawner" method="Deactivate"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child01" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child01" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child02" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child02" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child03" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child03" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child04" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child04" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child05" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child05" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child06" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child06" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child07" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child07" method="OnEntered"]
-[connection signal="area_entered" from="DeathlessAct/Oasis/Grindrail2/Rings2/Child08" to="DeathlessAct/Oasis/Grindrail2/Rings2/Child08" method="OnEntered"]
 
 [editable path="Static"]
