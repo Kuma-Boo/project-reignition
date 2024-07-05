@@ -99,7 +99,7 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
-		if (!Character.IsOnGround) return; // Chain is never counted when the player is in the air
+		if (Character.JustLandedOnGround || !Character.IsOnGround) return; // Chain is never counted when the player is in the air
 		if (Character.MovementState != CharacterController.MovementStates.Normal) return; // Chains only end during normal movement
 		if (Character.Skills.IsSpeedBreakActive)
 		{
@@ -156,7 +156,7 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 				// 10 rings -> 100 pts
 				return 100;
 			case BonusType.Enemy:
-				return Mathf.Clamp(Amount, 2, 10) * 50; // +50 pts per enemy up to 10 (500 pts)
+				return Mathf.Clamp(Amount, 2, 10) * 200; // +200 pts per enemy up to 10 (2000 pts)
 			case BonusType.Drift:
 				return 500;
 			case BonusType.Grindstep:
@@ -175,7 +175,6 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 			case BonusType.Ring:
 				return "bonus_ring";
 			case BonusType.Enemy:
-				return "bonus_enemy";
 			case BonusType.Boss:
 				return "bonus_enemy";
 			case BonusType.Drift:

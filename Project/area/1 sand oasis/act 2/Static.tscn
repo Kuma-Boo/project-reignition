@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://skx536edn7yd"]
+[gd_scene load_steps=53 format=3 uid="uid://skx536edn7yd"]
 
 [ext_resource type="PackedScene" uid="uid://g7vhevg8ipxh" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ulwu7thf2lga" path="res://area/1 sand oasis/act 2/environment/collision/Collision.tscn" id="3_we3ty"]
 [ext_resource type="PackedScene" uid="uid://djfx1n8sukn0x" path="res://area/1 sand oasis/act 2/environment/04Oasis.tscn" id="4_yda5x"]
 [ext_resource type="PackedScene" uid="uid://d0qnlfq8f7nfg" path="res://area/1 sand oasis/act 2/environment/05Slope.tscn" id="5_c5ona"]
-[ext_resource type="PackedScene" path="res://area/1 sand oasis/act 2/environment/06End.tscn" id="6_2ngjg"]
+[ext_resource type="PackedScene" uid="uid://cwtjamqykuvwt" path="res://area/1 sand oasis/act 2/environment/06End.tscn" id="6_2ngjg"]
 [ext_resource type="Curve3D" uid="uid://dny4rc3cmd8ss" path="res://area/1 sand oasis/act 2/environment/path/BeachPath.tres" id="9_28qpb"]
 [ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="9_f1xur"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="9_hrwu5"]
@@ -34,25 +34,33 @@
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="20_662ia"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="21_tnfaf"]
 [ext_resource type="AudioStream" uid="uid://bmkg2n6r0wy3f" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
+[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="28_s8f82"]
+[ext_resource type="PackedScene" uid="uid://bxso4ejxqcm4k" path="res://area/1 sand oasis/act 2/completion/CompletionDemo.gltf" id="34_7u7yr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_50thi"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(20, 30, 2.5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vii8o"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_txqy7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rbfsu"]
-size = Vector3(30, 20, 2.5)
+size = Vector3(40, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sa337"]
-size = Vector3(41.5543, 46.4347, 37.4077)
+size = Vector3(40, 46, 30)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_apnef"]
 radius = 2.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n46k6"]
 size = Vector3(150, 2, 300)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1aoqq"]
+size = Vector3(1, 19.4123, 32.3037)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7x33n"]
+size = Vector3(21.605, 21.115, 1)
 
 [sub_resource type="Gradient" id="Gradient_lbers"]
 offsets = PackedFloat32Array(0.791045)
@@ -112,10 +120,11 @@ fog_sky_affect = 0.0
 adjustment_enabled = true
 adjustment_saturation = 1.2
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_yumdi")
 InitialCameraSettings = ExtResource("2_57nsp")
 pathParent = NodePath("Paths")
+completionAnimator = NodePath("CompletionDemo/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("3_we3ty")]
@@ -360,7 +369,7 @@ mesh = SubResource("PlaneMesh_txqy7")
 [node name="Camera" type="Node3D" parent="Trigger"]
 
 [node name="Zipper" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -131.212, -63.7347, -344.881)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -118.396, -51.9074, -332.365)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -379,7 +388,6 @@ transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Hall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("12_ar5h4")
 transitionTime = 0.5
 settings = ExtResource("16_nyn0u")
@@ -401,7 +409,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_50thi")
 
 [node name="IslandTransition" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
-transform = Transform3D(0.819152, 0.0499905, -0.571394, 0, 0.996195, 0.0871557, 0.573576, -0.0713938, 0.816035, 43.2405, -42.6032, -335.891)
+transform = Transform3D(0.976339, 0.0499905, 0.210389, -0.0638018, 0.996195, 0.0593755, -0.20662, -0.0713938, 0.975813, 38.5325, -41.6127, -325.366)
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/IslandTransition"]
 script = ExtResource("12_ar5h4")
@@ -409,7 +417,7 @@ transitionTime = 0.5
 settings = ExtResource("15_d2psw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/IslandTransition"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+transform = Transform3D(1, -1.58325e-07, 0, -2.79397e-09, 1, 0, 0, -5.96046e-08, 1, 0.0211029, 3.9, -3.05176e-05)
 shape = SubResource("BoxShape3D_50thi")
 
 [node name="Forest" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
@@ -468,7 +476,7 @@ script = ExtResource("20_662ia")
 lockoutData = ExtResource("21_tnfaf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/ZipperLockout"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.124, 0, -8.546)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12401, 0, -4.84219)
 shape = SubResource("BoxShape3D_sa337")
 
 [node name="UTurn" parent="Trigger/Object" instance=ExtResource("11_x36jr")]
@@ -544,6 +552,40 @@ triggerType = 1
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
 shape = SubResource("BoxShape3D_n46k6")
 
+[node name="Checkpoints" type="Node3D" parent="Trigger"]
+
+[node name="Islandcheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(0.839838, 0, 0.542837, 0, 1, 0, -0.542837, 0, 0.839838, -21.9976, -44.9301, -428.013)
+
+[node name="checkpoint" type="Node3D" parent="Trigger/Checkpoints/Islandcheckpoint"]
+script = ExtResource("28_s8f82")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/Islandcheckpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.57764e-05, 4.01767, 0.364777)
+shape = SubResource("BoxShape3D_1aoqq")
+
+[node name="Forestcheckpoint" parent="Trigger/Checkpoints" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.2811, -40.1248, -184.963)
+
+[node name="checkpoint" type="Node3D" parent="Trigger/Checkpoints/Forestcheckpoint"]
+script = ExtResource("28_s8f82")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/Forestcheckpoint"]
+shape = SubResource("BoxShape3D_7x33n")
+
+[node name="ForestPath" parent="Trigger" instance=ExtResource("3_i2fbd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.171, -40, -190)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/ForestPath" node_paths=PackedStringArray("path")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -151.299, 51.9074, 318.736)
+script = ExtResource("12_lmyha")
+path = NodePath("../../../Paths/ForestPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/ForestPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_50thi")
+
 [node name="Paths" type="Node3D" parent="."]
 
 [node name="BeachPath" type="Path3D" parent="Paths"]
@@ -565,6 +607,12 @@ curve = ExtResource("13_u061t")
 [node name="ForestPath" type="Path3D" parent="Paths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.176, -39.999, -299.788)
 curve = ExtResource("14_5rbnr")
+
+[node name="CompletionDemo" parent="." instance=ExtResource("34_7u7yr")]
+
+[node name="Camera" type="Camera3D" parent="CompletionDemo/Completion" index="0"]
+cull_mask = 1054
+fov = 45.0
 
 [node name="BGM" parent="." instance=ExtResource("9_f1xur")]
 stream = ExtResource("21_yo7ty")
@@ -597,7 +645,9 @@ environment = SubResource("Environment_raoto")
 [connection signal="Deactivated" from="Visuals/CullingMap/06L" to="Visuals/06End" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/ActivatePath" method="Activate"]
-[connection signal="Deactivated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/DeactivatePath" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/DeactivateCamera" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/DeactivatePath" method="Activate"]
 [connection signal="DriftCompleted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/Camera" method="Deactivate"]
 [connection signal="DriftStarted" from="Trigger/Object/DriftTrigger2" to="Trigger/Object/DriftTrigger2/Camera" method="Activate"]
+
+[editable path="CompletionDemo"]

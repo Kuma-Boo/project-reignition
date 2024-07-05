@@ -168,10 +168,12 @@ public partial class GrindRail : Area3D
 	private void Activate()
 	{
 		isActive = true;
-		isGrindstepping = false;
 
 		if (allowBonuses && Character.IsGrindstepBonusActive)
 			BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
+
+		isGrindstepping = false;
+		Character.IsGrindstepBonusActive = false;
 
 		// Reset buffer timers
 		jumpBufferTimer = 0;
@@ -217,6 +219,13 @@ public partial class GrindRail : Area3D
 	private void Deactivate()
 	{
 		if (!isActive) return;
+
+		if (jumpBufferTimer > 0) // Player buffered a jump; allow cyote time
+		{
+			ProcessJump(); // Process Jump calls Deactivate() so we can return early
+			return;
+		}
+
 		isActive = false;
 		isInteractingWithPlayer = false;
 		allowBonuses = false;
@@ -242,12 +251,6 @@ public partial class GrindRail : Area3D
 		Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
 		Character.Disconnect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
 
-		if (jumpBufferTimer > 0) // Player buffered a jump; allow cyote time
-		{
-			jumpBufferTimer = 0;
-			Character.Jump(true);
-		}
-
 		EmitSignal(SignalName.GrindCompleted);
 	}
 
@@ -270,24 +273,10 @@ public partial class GrindRail : Area3D
 
 		jumpBufferTimer = Mathf.MoveToward(jumpBufferTimer, 0, PhysicsManager.physicsDelta);
 
-		if (!Character.Animator.IsBalanceShuffleActive)
+		if (!Character.Animator.IsBalanceShuffleActive && jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
 		{
-			if (jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
-			{
-				jumpBufferTimer = 0;
-
-				//Check if the player is holding a direction parallel to rail and start a grindstep
-				isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + (Mathf.Pi * .5f)) ||
-					Character.IsHoldingDirection(Character.MovementAngle - (Mathf.Pi * .5f));
-
-				Deactivate();
-				if (isGrindstepping) // Grindstepping
-					Character.StartGrindstep();
-				else // Jump normally
-					Character.Jump(true);
-
-				return;
-			}
+			ProcessJump();
+			return;
 		}
 
 		if (isInvisibleRail)
@@ -314,9 +303,24 @@ public partial class GrindRail : Area3D
 			Deactivate();
 	}
 
+	private void ProcessJump()
+	{
+		jumpBufferTimer = 0;
+
+		//Check if the player is holding a direction parallel to rail and start a grindstep
+		isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + (Mathf.Pi * .5f)) ||
+			Character.IsHoldingDirection(Character.MovementAngle - (Mathf.Pi * .5f));
+
+		Deactivate();
+		if (isGrindstepping) // Grindstepping
+			Character.StartGrindstep();
+		else // Jump normally
+			Character.Jump(true);
+	}
+
 	private float currentCharge;
 	private float perfectChargeTimer;
-	private readonly float PerfectChargeLength = .2f;
+	private readonly float PerfectChargeInputWindow = .3f;
 	private readonly float ChargeSpeed = 3.0f;
 	private void UpdateCharge()
 	{
@@ -337,11 +341,11 @@ public partial class GrindRail : Area3D
 				}
 				else if (!isCharged) // Fully charged
 				{
-					perfectChargeTimer = PerfectChargeLength;
+					perfectChargeTimer = PerfectChargeInputWindow;
 					Character.Effect.FullGrindChargeFX();
 				}
 			}
-			else if (!Character.Animator.IsBalanceShuffleActive)
+			else
 			{
 				Character.Effect.StartChargeFX();
 			}
@@ -350,11 +354,16 @@ public partial class GrindRail : Area3D
 		{
 			// Update shuffling
 			if (!Character.Animator.IsBalanceShuffleActive && isCharged)
+			{
 				StartShuffle();
-			else
+				currentCharge = 0;
+			}
+			else if (Mathf.IsZeroApprox(currentCharge))
+			{
 				allowBonuses = false;
+			}
 
-			currentCharge = 0.0f;
+			currentCharge = Mathf.MoveToward(currentCharge, 0f, ChargeSpeed * PhysicsManager.physicsDelta);
 			Character.Effect.StopChargeFX();
 		}
 

@@ -46,6 +46,7 @@ public partial class Majin : Enemy
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Aggression Radius", Variant.Type.Int, PropertyHint.Range, "0,100,1"));
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Instantly", Variant.Type.Bool));
 		}
 
 		properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
@@ -96,6 +97,8 @@ public partial class Majin : Enemy
 				return flameInactiveTime;
 			case "Attack Settings/Flame Aggression Radius":
 				return FlameAggressionRadius;
+			case "Attack Settings/Attack Instantly":
+				return isInstantFlame;
 
 			case "Defeat Settings/Enable Enemy Launching":
 				return isDefeatLaunchEnabled;
@@ -168,6 +171,9 @@ public partial class Majin : Enemy
 				break;
 			case "Attack Settings/Flame Aggression Radius":
 				FlameAggressionRadius = (int)value;
+				break;
+			case "Attack Settings/Attack Instantly":
+				isInstantFlame = (bool)value;
 				break;
 
 			case "Defeat Settings/Enable Enemy Launching":
@@ -265,6 +271,8 @@ public partial class Majin : Enemy
 	private bool isFlameActive;
 	private float flameActiveTime = 1.0f;
 	private float flameInactiveTime;
+	/// <summary> Should the fire majin attack instantly when its range is entered? </summary>
+	private bool isInstantFlame;
 	/// <summary> Timer to keep track of flame cycles. </summary>
 	private float flameTimer;
 
@@ -343,8 +351,11 @@ public partial class Majin : Enemy
 		staggerTimer = 0;
 
 		// Reset flame attack
-		flameTimer = (IsRedMajin && FlameAggressionRadius != 0) ? flameInactiveTime : 0;
-		isFlameActive = false;
+		if (IsRedMajin)
+		{
+			isFlameActive = false;
+			flameTimer = (FlameAggressionRadius != 0 || isInstantFlame) ? flameInactiveTime : 0;
+		}
 
 		base.Respawn();
 

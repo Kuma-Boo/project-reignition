@@ -1,0 +1,1105 @@
+[gd_scene load_steps=29 format=3 uid="uid://dvocdjfcm6ay6"]
+
+[ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_f8dpa"]
+[ext_resource type="Resource" uid="uid://b0akc7rq165e7" path="res://resource/level data/sand oasis/Act2Perfect.tres" id="2_lv78e"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_81sck"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_needb"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_sdg87"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_fdxyl"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_cxw1e"]
+[ext_resource type="PackedScene" uid="uid://dnfwvf2akhf1v" path="res://area/1 sand oasis/object/FlameShooter.tscn" id="8_ty8p7"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9_jf0xp"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="10_w74c5"]
+[ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="11_f7xo3"]
+[ext_resource type="PackedScene" uid="uid://ckdbjdh4kah38" path="res://object/enemy/majin/data/sand oasis/RedMajin.tscn" id="11_vjbwn"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="12_q7qog"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="13_g3owe"]
+[ext_resource type="PackedScene" uid="uid://c0wwow83r4jry" path="res://object/enemy/majin/data/sand oasis/BlueMajin.tscn" id="14_cet3p"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="15_51nfi"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="16_epu00"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="17_nitr8"]
+[ext_resource type="Resource" uid="uid://cm5dcqw8kt7d1" path="res://area/1 sand oasis/act 2/camera/IslandCam.tres" id="18_t6mqc"]
+[ext_resource type="PackedScene" uid="uid://d4bv4ulvmin0y" path="res://object/enemy/majin/data/sand oasis/GreenMajin.tscn" id="19_avf1e"]
+[ext_resource type="PackedScene" uid="uid://cyabnlg7vd3v6" path="res://area/1 sand oasis/object/grindrail/Grindrail04.tscn" id="19_cxxrs"]
+[ext_resource type="PackedScene" uid="uid://ceu8n7e4dff41" path="res://area/1 sand oasis/object/platform/BridgeOneLeg.tscn" id="21_emdc3"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="21_jddly"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_caf7v"]
+[ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="25_wfjv3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w4bkj"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="Curve" id="Curve_l6fmj"]
+min_value = -1.5
+max_value = 1.5
+_data = [Vector2(0, 2.98023e-08), 0.0, 0.0, 0, 0, Vector2(0.2, -1.5), 0.0, 0.0, 0, 0, Vector2(0.4, 1.5), 0.0, 0.0, 0, 0, Vector2(0.6, -1.5), 0.0, 0.0, 0, 0, Vector2(0.8, 1.5), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hqpy5"]
+size = Vector3(36.9868, 12.769, 4.60156)
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_f8dpa")]
+Data = ExtResource("2_lv78e")
+metadata/_edit_lock_ = true
+
+[node name="PerfectAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="PerfectAct/SpawnPosition" instance=ExtResource("3_81sck")]
+
+[node name="CullingMap" type="Node3D" parent="PerfectAct"]
+
+[node name="InteriorU" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(0.658886, -0.280516, 0.697982, -1.49012e-08, 0.927869, 0.372907, -0.752243, -0.245703, 0.61136, -117.416, -51.2954, -331.515)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/InteriorU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="IslandL" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(-0.988899, 0, 0.148586, 0, 1, 0, -0.148586, 0, -0.988899, -64.4923, -45, -362.604)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/IslandL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="UTurnU" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 41.4448, -45.7, -435.951)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/UTurnU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="ForestL" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(0.801752, 0.0532696, -0.595278, -0.000346532, 0.996061, 0.0886678, 0.597656, -0.0708833, 0.798613, 77.2675, -47.9872, -381.458)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/ForestL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="IslandU" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.1679, -40, -186.971)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/IslandU"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
+[node name="Interior" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -306.5, -65, -418)
+script = ExtResource("4_needb")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Rings1" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 0, 0.699997, 14.7)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_cxw1e")]
+
+[node name="Child02" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child06" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="FlameShooter1" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 5, 12.1999)
+
+[node name="FlameShooter2" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 4, 12.1999)
+
+[node name="FlameShooter3" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(3.09086e-08, 0.707107, -0.707107, 1, 4.37114e-08, 8.74228e-08, 9.27259e-08, -0.707107, -0.707107, 41.7781, 1, 21.3922)
+"State Lengths/inactive" = 4.0
+"State Lengths/active" = 0.8
+stateLengths = [4.0, 0.8]
+
+[node name="FlameShooter4" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(3.09086e-08, 0.707107, -0.707107, 1, 4.37114e-08, 8.74228e-08, 9.27259e-08, -0.707107, -0.707107, 41.7781, 2, 21.3922)
+"State Lengths/inactive" = 4.0
+"State Lengths/active" = 0.8
+stateLengths = [4.0, 0.8]
+
+[node name="Rings2" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 44.5804, 0.700203, 20.5695)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_l6fmj")
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, 0)
+
+[node name="Child02" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.388889, 0, -2.5)
+
+[node name="Child03" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11111, 0, -5)
+
+[node name="Child04" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -7.5)
+
+[node name="Child05" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03125, 0, -10)
+
+[node name="Child06" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03125, 0, -15)
+
+[node name="Child08" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -17.5)
+
+[node name="Child09" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11111, 0, -20)
+
+[node name="Child10" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.388889, 0, -22.5)
+
+[node name="Child11" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, -25)
+
+[node name="FlameShooter5" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 49.2733, 0.000205994, 25.7761)
+
+[node name="FlameShooter6" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 48.5663, 0.000152588, 26.4832)
+
+[node name="FlameShooter7" parent="PerfectAct/Interior" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 57.9, 0.000205994, 31.8571)
+animator = NodePath("../FlameShooter1/AnimationPlayer")
+timer = NodePath("../FlameShooter1/Timer")
+
+[node name="FlameShooter8" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 57.193, 0.000152588, 32.5643)
+
+[node name="PearlRing" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 71.0499, 2.50015, 46.9917)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("9_jf0xp")
+Amount = 10
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0.587785, 0)
+
+[node name="Child03" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
+
+[node name="Child04" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0.951057, 0)
+
+[node name="Child05" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
+
+[node name="Child06" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
+
+[node name="Child07" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
+
+[node name="Child08" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, -0.951057, 0)
+
+[node name="Child09" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
+
+[node name="Child10" parent="PerfectAct/Interior/PearlRing" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
+
+[node name="FlameShooter9" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(8.74228e-08, -1, 8.9407e-08, -1, -1.31134e-07, -8.47033e-22, 0, -8.9407e-08, -1, 74.7707, 4.37218, 52.5888)
+"State Lengths/inactive" = 3.0
+"State Lengths/active" = 2.0
+stateLengths = [3.0, 2.0]
+
+[node name="FlameShooter10" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(8.74228e-08, -1, 5.96046e-08, -1, -1.31134e-07, -8.47033e-22, 0, -5.96046e-08, -1, 74.7709, 0.800186, 52.589)
+"State Lengths/inactive" = 3.0
+"State Lengths/active" = 2.0
+stateLengths = [3.0, 2.0]
+
+[node name="FlameShooter11" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 71.0215, -6.10352e-05, 72.7255)
+"Current State" = 1
+
+[node name="FlameShooter12" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 73.6215, -6.10352e-05, 97.4254)
+
+[node name="FlameShooter13" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 71.186, -6.10352e-05, 171.398)
+"Current State" = 1
+"State Lengths/inactive" = 0.0
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 9.0]
+
+[node name="FlameShooter14" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 73.3419, -6.10352e-05, 171.398)
+"Current State" = 1
+"State Lengths/inactive" = 0.0
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 9.0]
+
+[node name="FlameShooter15" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 73.6071, -6.10352e-05, 170.605)
+"Current State" = 1
+"State Lengths/inactive" = 0.0
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 9.0]
+
+[node name="FlameShooter16" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 70.9162, -6.10352e-05, 170.494)
+"Current State" = 1
+"State Lengths/inactive" = 0.0
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 9.0]
+
+[node name="FlameShooter17" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 70.7796, -6.10352e-05, 169.541)
+"Current State" = 1
+"State Lengths/inactive" = 0.0
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 9.0]
+
+[node name="FlameShooter18" parent="PerfectAct/Interior" instance=ExtResource("8_ty8p7")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 73.8758, -6.10352e-05, 169.717)
+"Current State" = 1
+"State Lengths/inactive" = 0.0
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 9.0]
+
+[node name="Rings3" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-1, -1.03964e-07, 0, -1.03964e-07, 1, 1.96704e-08, 0, 1.96704e-08, -1, 72.282, 0.700203, 61.8816)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 20
+Shape = 0
+Orientation = 0
+Spacing = 5.4
+"Horizontal Offset" = SubResource("Curve_l6fmj")
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, 0)
+
+[node name="Child02" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.256962, 0, -5.4)
+
+[node name="Child03" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809156, 0, -10.8)
+
+[node name="Child04" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32855, 0, -16.2)
+
+[node name="Child05" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47594, 0, -21.6)
+
+[node name="Child06" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.791442, 0, -27)
+
+[node name="Child07" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.352311, 0, -32.4)
+
+[node name="Child08" parent="PerfectAct/Interior/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29924, 0, -37.8)
+
+[node name="UTurn" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(0.986323, 0, -0.164824, 0, 1, 0, 0.164824, 0, 0.986323, -82.5785, -32.7045, -338.245)
+script = ExtResource("4_needb")
+saveVisibilityOnCheckpoint = true
+
+[node name="Pearls" type="Node3D" parent="PerfectAct/UTurn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.2253, -15.8812, 14.7431)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("9_jf0xp")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/BeachPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, -3.8147e-05, -3.05176e-05)
+
+[node name="Child02" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.927582, 0.269325, 0.267853)
+
+[node name="Child03" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.86996, 0.531387, 0.47226)
+
+[node name="Child04" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.82288, 0.789688, 0.607269)
+
+[node name="Child05" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.78111, 1.04733, 0.668549)
+
+[node name="Child06" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.73883, 1.30685, 0.6539)
+
+[node name="Child07" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.69016, 1.57021, 0.563293)
+
+[node name="Child08" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.62828, 1.83852, 0.399017)
+
+[node name="Child09" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.54068, 2.11828, 0.170349)
+
+[node name="Child10" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.43124, 2.41573, -0.119568)
+
+[node name="Child11" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.29617, 2.72887, -0.470398)
+
+[node name="Child12" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.1324, 3.05532, -0.880371)
+
+[node name="Child13" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9377, 3.39222, -1.34631)
+
+[node name="Child14" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.7108, 3.73662, -1.86392)
+
+[node name="Child15" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4521, 4.08551, -2.42822)
+
+[node name="Child16" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.1629, 4.43608, -3.03372)
+
+[node name="Child17" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8461, 4.78559, -3.67477)
+
+[node name="Child18" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5053, 5.13152, -4.34598)
+
+[node name="Child19" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1451, 5.47144, -5.04199)
+
+[node name="Child20" parent="PerfectAct/UTurn/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.7712, 5.80297, -5.75766)
+
+[node name="DashPanel" parent="PerfectAct/UTurn" instance=ExtResource("10_w74c5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.76233, -7.28638, 24.6955)
+speedRatio = 1.3
+
+[node name="DashPanel3" parent="PerfectAct/UTurn" instance=ExtResource("10_w74c5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.754, -7.286, 24.695)
+speedRatio = 1.3
+
+[node name="DashPanel2" parent="PerfectAct/UTurn" instance=ExtResource("10_w74c5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.232, -7.286, 24.695)
+speedRatio = 1.3
+
+[node name="Rings" type="Node3D" parent="PerfectAct/UTurn"]
+transform = Transform3D(0.999936, 0, 0.0113444, 0, 1, 0, -0.0113444, 0, 0.999936, 14.4658, -11.4206, 17.9195)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 15
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+
+[node name="Child02" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child11" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child12" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="Child13" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="Child14" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+
+[node name="Child15" parent="PerfectAct/UTurn/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+
+[node name="SpikeBallStatic" parent="PerfectAct/UTurn" instance=ExtResource("11_f7xo3")]
+transform = Transform3D(0.843142, 0.265808, -0.467395, -0.230959, 0.964021, 0.131609, 0.485561, -0.00301563, 0.874198, 15.4119, -11.9806, -29.1968)
+
+[node name="SpikeBallStatic2" parent="PerfectAct/UTurn" instance=ExtResource("11_f7xo3")]
+transform = Transform3D(0.817297, 0.336998, -0.467395, -0.312623, 0.940716, 0.131609, 0.484038, 0.038555, 0.874198, 12.0695, -11.9256, -35.9539)
+
+[node name="SpikeBallStatic3" parent="PerfectAct/UTurn" instance=ExtResource("11_f7xo3")]
+transform = Transform3D(0.976264, 0.216289, 0.0113446, -0.216303, 0.976326, 2.32831e-10, -0.011076, -0.00245386, 0.999937, 21.4091, -11.8286, -73.4211)
+
+[node name="SpikeBallStatic4" parent="PerfectAct/UTurn" instance=ExtResource("11_f7xo3")]
+transform = Transform3D(0.950082, 0.0921163, 0.298096, -7.45058e-09, 0.955423, -0.295242, -0.312004, 0.280503, 0.90773, 33.6332, -11.8442, -84.166)
+
+[node name="SpikeBallStatic5" parent="PerfectAct/UTurn" instance=ExtResource("11_f7xo3")]
+transform = Transform3D(0.968102, -0.250327, 0.0108741, 0.24296, 0.927229, -0.284986, 0.061257, 0.278537, 0.958471, 33.9198, -11.7651, -90.7104)
+
+[node name="RedMajin" parent="PerfectAct/UTurn" instance=ExtResource("11_vjbwn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9717, -12.0714, -20.2989)
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="RedMajin2" parent="PerfectAct/UTurn" instance=ExtResource("11_vjbwn")]
+transform = Transform3D(0.9894, 0, -0.14522, 0, 1, 0, 0.14522, 0, 0.9894, 16.009, -12.0138, -35.6824)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 3.0
+"Attack Settings/Flame Active Time" = 4.0
+"Attack Settings/Flame Inactive Time" = 3.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="Rings3" type="Node3D" parent="PerfectAct/UTurn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.2716, -11.574, -88.6812)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 12
+Shape = 2
+Path = NodePath("../../../Static/Paths/IslandEndPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 0, 9.15527e-05)
+
+[node name="Child02" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02882, 0.00150681, -2.20114)
+
+[node name="Child03" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11774, 0.00307846, -4.34576)
+
+[node name="Child04" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.26457, 0.00468445, -6.43222)
+
+[node name="Child05" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.46925, 0.00630569, -8.45724)
+
+[node name="Child06" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7332, 0.0079155, -10.4147)
+
+[node name="Child07" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0596, 0.00949097, -12.2965)
+
+[node name="Child08" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.4529, 0.0110092, -14.0905)
+
+[node name="Child09" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.9192, 0.0124397, -15.7799)
+
+[node name="Child10" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.4646, 0.0137405, -17.3399)
+
+[node name="Child11" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1028, 0.0148659, -18.7377)
+
+[node name="Child12" parent="PerfectAct/UTurn/Rings3" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.838, 0.0157356, -19.9171)
+
+[node name="Islands" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -44.998, -436)
+script = ExtResource("4_needb")
+saveVisibilityOnCheckpoint = true
+
+[node name="JumpPanelL" parent="PerfectAct/Islands" instance=ExtResource("13_g3owe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+middleHeight = 6.0
+distance = 50.0
+
+[node name="JumpPanelR" parent="PerfectAct/Islands" instance=ExtResource("13_g3owe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+middleHeight = 6.0
+distance = 50.0
+
+[node name="Rings1" type="Node3D" parent="PerfectAct/Islands"]
+transform = Transform3D(-1, -4.63326e-09, 8.72999e-08, 0, 0.998595, 0.0529983, -8.74228e-08, 0.0529983, -0.998595, 0, -1.58995, 77)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/Rings1" instance=ExtResource("6_cxw1e")]
+
+[node name="Child02" parent="PerfectAct/Islands/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="PerfectAct/Islands/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="PerfectAct/Islands/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="PerfectAct/Islands/Rings1" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Pearls" type="Node3D" parent="PerfectAct/Islands/Rings1"]
+transform = Transform3D(0.71334, -0.0282921, -0.700246, 0.000564022, 0.999207, -0.0397964, 0.700816, 0.0279934, 0.712791, 43.8256, -31.4376, 254.176)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("9_jf0xp")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/Rings1/Pearls" instance=ExtResource("9_jf0xp")]
+
+[node name="Child02" parent="PerfectAct/Islands/Rings1/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="PerfectAct/Islands/Rings1/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="PerfectAct/Islands/Rings1/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="PerfectAct/Islands/Rings1/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child06" parent="PerfectAct/Islands/Rings1/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child07" parent="PerfectAct/Islands/Rings1/Pearls" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="RedMajin2" parent="PerfectAct/Islands" instance=ExtResource("11_vjbwn")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0986633, -1.21929, 109.409)
+"Spawn Settings/Spawn Travel Time" = 0.7
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 13.005, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = false
+
+[node name="Spring" parent="PerfectAct/Islands" instance=ExtResource("15_51nfi")]
+transform = Transform3D(0.607248, -0.574343, -0.548982, 0.711986, 0.700021, 0.0551924, 0.352599, -0.424384, 0.83401, -1.89297, -0.209705, 117.174)
+middleHeight = 10.215
+finalHeight = -4.565
+distance = 50.0
+voiceKey = &""
+
+[node name="Path" type="Node3D" parent="PerfectAct/Islands/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("16_epu00")
+path = NodePath("../../../../Static/Paths/IslandPath")
+
+[node name="Camera" type="Node3D" parent="PerfectAct/Islands/Spring"]
+script = ExtResource("17_nitr8")
+transitionTime = 0.5
+settings = ExtResource("18_t6mqc")
+
+[node name="PearlsL" type="Node3D" parent="PerfectAct/Islands"]
+transform = Transform3D(-0.00613138, -0.0833126, 0.996505, 0.0558375, 0.99494, 0.0835253, -0.998421, 0.0561545, -0.00144853, -186.585, 3.15472, 61.6678)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("9_jf0xp")
+Amount = 21
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+
+[node name="Child02" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child11" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child12" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.2)
+
+[node name="Child13" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child14" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.6)
+
+[node name="Child15" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child16" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child17" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child18" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.4)
+
+[node name="Child19" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="Child20" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.8)
+
+[node name="Child21" parent="PerfectAct/Islands/PearlsL" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="PearlsR" type="Node3D" parent="PerfectAct/Islands"]
+transform = Transform3D(0.000460379, -0.0833126, 0.996524, 0.0563888, 0.99494, 0.0831541, -0.998409, 0.0561545, 0.00515581, -186.626, 3.13807, 60.4693)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("9_jf0xp")
+Amount = 21
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+
+[node name="Child02" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child11" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child12" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.2)
+
+[node name="Child13" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child14" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.6)
+
+[node name="Child15" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.8)
+
+[node name="Child16" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child17" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.2)
+
+[node name="Child18" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.4)
+
+[node name="Child19" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.6)
+
+[node name="Child20" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.8)
+
+[node name="Child21" parent="PerfectAct/Islands/PearlsR" instance=ExtResource("9_jf0xp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="BlueMajin3" parent="PerfectAct/Islands" instance=ExtResource("14_cet3p")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -109.715, 4.76907, 37.0255)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.0
+spawnMode = 1
+
+[node name="GreenMajin" parent="PerfectAct/Islands" instance=ExtResource("19_avf1e")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, -115.266, 4.73909, 42.7106)
+
+[node name="RedMajin" parent="PerfectAct/Islands" instance=ExtResource("11_vjbwn")]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -121.127, 7, 51.4852)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.8
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = false
+
+[node name="GreenMajin2" parent="PerfectAct/Islands" instance=ExtResource("19_avf1e")]
+transform = Transform3D(2.98023e-08, 0, 1, 0, 1, 0, -1, 0, 2.98023e-08, -129.487, 7.3741, 59.1811)
+
+[node name="BlueMajin6" parent="PerfectAct/Islands" instance=ExtResource("14_cet3p")]
+transform = Transform3D(2.98023e-08, 0, 1, 0, 1, 0, -1, 0, 2.98023e-08, -138.487, 10.216, 57.8506)
+rangeOverride = 20
+
+[node name="Grindrail" parent="PerfectAct/Islands" instance=ExtResource("19_cxxrs")]
+transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, -136.611, 7.22079, 57.9122)
+
+[node name="Rings" type="Node3D" parent="PerfectAct/Islands/Grindrail"]
+transform = Transform3D(1, 2.66454e-15, -2.84217e-14, 0, 1, 0, 2.84217e-14, 7.45058e-09, 1, 0, 1.1, -17.256)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/Grindrail/Rings" instance=ExtResource("6_cxw1e")]
+
+[node name="Child02" parent="PerfectAct/Islands/Grindrail/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="PerfectAct/Islands/Grindrail/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="PerfectAct/Islands/Grindrail/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Grindrail2" parent="PerfectAct/Islands/Grindrail" instance=ExtResource("19_cxxrs")]
+transform = Transform3D(1, 0, -6.39488e-14, 8.88178e-16, 1, 0, 6.39488e-14, 0, 1, -3.16027, 0, -21.248)
+
+[node name="JumpPanel" parent="PerfectAct/Islands" instance=ExtResource("13_g3owe")]
+transform = Transform3D(1.30801e-07, -0.0871557, -0.996195, 7.6194e-09, 0.996195, -0.0871557, 1, 3.8097e-09, 1.30968e-07, -219.27, -0.311996, 60.1415)
+middleHeight = 10.0
+finalHeight = 6.5
+distance = 30.0
+
+[node name="Path" type="Node3D" parent="PerfectAct/Islands/JumpPanel" node_paths=PackedStringArray("path")]
+script = ExtResource("16_epu00")
+path = NodePath("../../../../Static/Paths/ForestPath")
+
+[node name="BridgeOneLeg" parent="PerfectAct/Islands" instance=ExtResource("21_emdc3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.40811, 104.375)
+
+[node name="BridgeOneLeg2" parent="PerfectAct/Islands" instance=ExtResource("21_emdc3")]
+transform = Transform3D(0.600239, 0, 0.799821, 0, 1, 0, -0.799821, 0, 0.600239, -55.8226, 0.0960007, 76.2686)
+
+[node name="BlueMajin" parent="PerfectAct/Islands/BridgeOneLeg2" instance=ExtResource("14_cet3p")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -3.05176e-05, 0, -4.69101)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.7
+"Defeat Settings/Launch Direction" = Vector3(0, 2, 25)
+"Defeat Settings/Local Transform" = true
+
+[node name="BridgeOneLeg3" parent="PerfectAct/Islands" instance=ExtResource("21_emdc3")]
+transform = Transform3D(-0.595258, 0, -0.803535, 0, 1, 0, 0.803535, 0, -0.595258, -77.1288, 2.33904, 60.489)
+
+[node name="BridgeOneLeg4" parent="PerfectAct/Islands" instance=ExtResource("21_emdc3")]
+transform = Transform3D(0.615662, 0, 0.788011, 0, 1, 0, -0.788011, 0, 0.615662, -85.0918, 6.3188, 54.671)
+
+[node name="Spikepanel" type="Node3D" parent="PerfectAct/Islands"]
+transform = Transform3D(-0.015471, 0.79419, -0.607473, -0.99981, -0.0194766, 6.51926e-09, -0.0118315, 0.607358, 0.794341, -53.0502, -2.24927, 80.8685)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("23_caf7v")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 1.3
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/Spikepanel" instance=ExtResource("23_caf7v")]
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="Child02" parent="PerfectAct/Islands/Spikepanel" instance=ExtResource("23_caf7v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.3)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="Child03" parent="PerfectAct/Islands/Spikepanel" instance=ExtResource("23_caf7v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="Child04" parent="PerfectAct/Islands/Spikepanel" instance=ExtResource("23_caf7v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.9)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="Rings" type="Node3D" parent="PerfectAct/Islands"]
+transform = Transform3D(0.60201, 0.0737152, 0.795079, 0, 0.99573, -0.0923184, -0.798488, 0.0555766, 0.599439, -63.4493, -1.12076, 70.7721)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/Rings" instance=ExtResource("6_cxw1e")]
+
+[node name="Child02" parent="PerfectAct/Islands/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PerfectAct/Islands/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PerfectAct/Islands/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PerfectAct/Islands/Rings" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Rings2" type="Node3D" parent="PerfectAct/Islands"]
+transform = Transform3D(0.605815, -0.0400801, 0.794595, 0.0737054, 0.997263, -0.00589161, -0.792184, 0.0621352, 0.607111, -82.1145, 7.08104, 57.0388)
+script = ExtResource("5_fdxyl")
+Generate = false
+Source = ExtResource("6_cxw1e")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/Islands/Rings2" instance=ExtResource("6_cxw1e")]
+
+[node name="Child02" parent="PerfectAct/Islands/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PerfectAct/Islands/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PerfectAct/Islands/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PerfectAct/Islands/Rings2" instance=ExtResource("6_cxw1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="SpikePanel" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(3.46786e-08, 0.793353, 0.608761, 1, -4.37114e-08, 0, 2.66098e-08, 0.608761, -0.793353, -81.0895, 3.07611, 57.6076)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="SpikePanel7" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(-0.788505, 0.0979549, 0.607178, 0.116241, 0.993178, -0.00927183, -0.603944, 0.0632684, -0.794512, -101.189, 2.3584, 44.1352)
+"Current State" = 2
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 0.0, 9.0]
+
+[node name="SpikePanel8" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(-0.788505, 0.0979549, 0.607178, 0.116241, 0.993178, -0.00927183, -0.603944, 0.0632684, -0.794512, -100.31, 2.34499, 42.9854)
+"Current State" = 2
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 0.0, 9.0]
+
+[node name="SpikePanel9" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(-0.788505, 0.0979549, 0.607178, 0.116241, 0.993178, -0.00927183, -0.603944, 0.0632684, -0.794512, -99.4093, 2.33123, 41.8063)
+"Current State" = 2
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 0.0, 9.0]
+
+[node name="SpikePanel10" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(-0.788505, 0.0979549, 0.607178, 0.116241, 0.993178, -0.00927183, -0.603944, 0.0632684, -0.794512, -98.5265, 2.31775, 40.6511)
+"Current State" = 2
+"State Lengths/active" = 9.0
+stateLengths = [0.0, 0.0, 9.0]
+
+[node name="SpikePanel2" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(3.46786e-08, 0.793353, 0.608761, 1, -4.37114e-08, 0, 2.66098e-08, 0.608761, -0.793353, -80.2333, 3.07611, 56.4919)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="SpikePanel3" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(3.46786e-08, 0.793353, 0.608761, 1, -4.37114e-08, 0, 2.66098e-08, 0.608761, -0.793353, -81.9767, 3.07611, 58.7638)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="SpikePanel4" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(3.46786e-08, 0.793353, 0.608761, 1, -4.37114e-08, 0, 2.66098e-08, 0.608761, -0.793353, -81.0895, 4.47138, 57.6076)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="SpikePanel5" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(3.46786e-08, 0.793353, 0.608761, 1, -4.37114e-08, 0, 2.66098e-08, 0.608761, -0.793353, -80.2333, 4.47138, 56.4919)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="SpikePanel6" parent="PerfectAct/Islands" instance=ExtResource("23_caf7v")]
+transform = Transform3D(3.46786e-08, 0.793353, 0.608761, 1, -4.37114e-08, 0, 2.66098e-08, 0.608761, -0.793353, -81.9767, 4.47138, 58.7638)
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 6.0
+stateLengths = [0.1, 0.0, 6.0]
+
+[node name="Crate" parent="PerfectAct/Islands" instance=ExtResource("25_wfjv3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.8203, 2.91306, 61.8972)
+
+[node name="Crate2" parent="PerfectAct/Islands" instance=ExtResource("25_wfjv3")]
+transform = Transform3D(0.446932, 0, 0.894568, 0, 1, 0, -0.894568, 0, 0.446932, -75.6273, 2.91306, 62.1489)
+
+[node name="Crate5" parent="PerfectAct/Islands" instance=ExtResource("25_wfjv3")]
+transform = Transform3D(0.446932, 0, 0.894568, 0, 1, 0, -0.894568, 0, 0.446932, -76.4185, 3.90657, 61.7836)
+
+[node name="Crate6" parent="PerfectAct/Islands" instance=ExtResource("25_wfjv3")]
+transform = Transform3D(0.446932, 0, 0.894568, 0, 1, 0, -0.894568, 0, 0.446932, -76.3863, 3.90657, 60.6567)
+
+[node name="Crate3" parent="PerfectAct/Islands" instance=ExtResource("25_wfjv3")]
+transform = Transform3D(0.729339, 0, 0.684152, 0, 1, 0, -0.684152, 0, 0.729339, -75.8224, 2.91306, 60.9209)
+
+[node name="Crate4" parent="PerfectAct/Islands" instance=ExtResource("25_wfjv3")]
+transform = Transform3D(-0.0632956, 0, 0.997995, 0, 1, 0, -0.997995, 0, -0.0632956, -77.0679, 2.91306, 60.7484)
+
+[node name="Forest" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.205, -39.438, -180.756)
+script = ExtResource("4_needb")
+saveVisibilityOnCheckpoint = true
+
+[node name="Goal" parent="PerfectAct/Forest" instance=ExtResource("21_jddly")]
+transform = Transform3D(-0.999996, 0, -0.00280932, 0, 1, 0, 0.00280932, 0, -0.999996, -0.0415077, 8.23323, -0.484695)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/Forest/Goal"]
+transform = Transform3D(0.999989, 0, 1.49012e-07, 0, 1, 0, -1.49012e-07, 0, 0.999989, 1.53224, -5.18402, 3.07141)
+shape = SubResource("BoxShape3D_hqpy5")
+
+[node name="FireSoul" parent="PerfectAct/Forest" instance=ExtResource("12_q7qog")]
+transform = Transform3D(0.484932, 0, 0.874552, 0, 1, 0, -0.874552, 0, 0.484932, -122.721, 3.26587, 15.3719)
+fireSoulIndex = 3
+
+[connection signal="Activated" from="PerfectAct/CullingMap/InteriorU" to="PerfectAct/Interior" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/InteriorU" to="PerfectAct/Interior" method="Activate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/IslandL" to="PerfectAct/Islands" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/IslandL" to="PerfectAct/Islands" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/UTurnU" to="PerfectAct/UTurn" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/UTurnU" to="PerfectAct/UTurn" method="Activate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/ForestL" to="PerfectAct/Forest" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/ForestL" to="PerfectAct/Forest" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/IslandU" to="PerfectAct/Islands" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/IslandU" to="PerfectAct/Islands" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Islands/Spring" to="PerfectAct/Islands/Spring/Path" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Islands/Spring" to="PerfectAct/Islands/Spring/Camera" method="Activate"]
+[connection signal="Spawned" from="PerfectAct/Islands/RedMajin" to="PerfectAct/Islands/BlueMajin3" method="Spawn"]
+[connection signal="Deactivated" from="PerfectAct/Islands/JumpPanel" to="PerfectAct/Islands/JumpPanel/Path" method="Activate"]
