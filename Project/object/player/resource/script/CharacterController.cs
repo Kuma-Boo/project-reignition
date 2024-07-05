@@ -318,7 +318,7 @@ namespace Project.Gameplay
 
 		private bool isRecentered; // Is the recenter complete?
 		private const float MinRecenterPower = .1f;
-		private const float MaxRecenterPower = .4f;
+		private const float MaxRecenterPower = .2f;
 		/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
 		private void UpdateRecenter()
 		{
@@ -334,8 +334,8 @@ namespace Project.Gameplay
 				inputInfluence = (inputInfluence + 1) * 0.5f;
 				inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);
 
-				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence * PhysicsManager.physicsDelta;
-				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed);
+				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence;
+				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed * PhysicsManager.physicsDelta);
 				if (Mathf.IsZeroApprox(movementOffset))
 					isRecentered = true;
 				movementOffset = currentOffset - movementOffset;
@@ -540,6 +540,8 @@ namespace Project.Gameplay
 
 					if (ActionState == ActionStates.AccelJump)
 						MoveSpeed = GroundSettings.Interpolate(MoveSpeed, inputLength);
+					else if (ActionState == ActionStates.JumpDash)
+						MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, AirSettings.friction * PhysicsManager.physicsDelta);
 					else
 						MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
 				}
@@ -1123,7 +1125,7 @@ namespace Project.Gameplay
 
 		#region GrindStep
 		/// <summary> Will the player get a grindstep bonus when landing on a rail? </summary>
-		public bool IsGrindstepBonusActive { get; private set; }
+		public bool IsGrindstepBonusActive { get; set; }
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
@@ -1150,7 +1152,7 @@ namespace Project.Gameplay
 			Animator.StartGrindStep();
 		}
 
-		public void StopGrindstep()
+		private void StopGrindstep()
 		{
 			MovementAngle = Animator.VisualAngle;
 			Animator.ResetState(.1f);

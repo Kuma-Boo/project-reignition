@@ -35,8 +35,9 @@ public partial class Enemy : Node3D
 	[Export]
 	protected int maxHealth = 1;
 	protected int currentHealth;
+	/// <summary> Does this enemy damage the player when it is touched? </summary>
 	[Export]
-	protected bool damagePlayer; // Does this enemy hurt the player on touch?
+	protected bool damagePlayer;
 
 	[ExportGroup("Components")]
 	[Export]
@@ -169,6 +170,7 @@ public partial class Enemy : Node3D
 		Character.Camera.LockonTarget = null;
 		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
+		StageSettings.instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
 		// Automatically increment objective count
 		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
