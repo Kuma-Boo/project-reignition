@@ -63,6 +63,15 @@ transform = Transform3D(0.658886, -0.280516, 0.697982, -1.49012e-08, 0.927869, 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_w4bkj")
 
+[node name="UTurnL" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
+transform = Transform3D(0.688924, 0, 0.724833, 0, 1, 0, -0.724833, 0, 0.688924, -164.516, -65, -378.451)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/UTurnL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_w4bkj")
+
 [node name="IslandL" parent="PerfectAct/CullingMap" instance=ExtResource("4_sdg87")]
 transform = Transform3D(-0.988899, 0, 0.148586, 0, 1, 0, -0.148586, 0, -0.988899, -64.4923, -45, -362.604)
 "Trigger Mode" = 2
@@ -1091,6 +1100,8 @@ fireSoulIndex = 3
 
 [connection signal="Activated" from="PerfectAct/CullingMap/InteriorU" to="PerfectAct/Interior" method="Deactivate"]
 [connection signal="Deactivated" from="PerfectAct/CullingMap/InteriorU" to="PerfectAct/Interior" method="Activate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/UTurnL" to="PerfectAct/UTurn" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/UTurnL" to="PerfectAct/UTurn" method="Deactivate"]
 [connection signal="Activated" from="PerfectAct/CullingMap/IslandL" to="PerfectAct/Islands" method="Activate"]
 [connection signal="Deactivated" from="PerfectAct/CullingMap/IslandL" to="PerfectAct/Islands" method="Deactivate"]
 [connection signal="Activated" from="PerfectAct/CullingMap/UTurnU" to="PerfectAct/UTurn" method="Deactivate"]

@@ -66,6 +66,15 @@ transform = Transform3D(0.658886, -0.280516, 0.697982, -1.49012e-08, 0.927869, 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_4x85i")
 
+[node name="UTurnL" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
+transform = Transform3D(0.688924, 0, 0.724833, 0, 1, 0, -0.724833, 0, 0.688924, -164.516, -65, -378.451)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/CullingMap/UTurnL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4x85i")
+
 [node name="IslandL" parent="TimedAct/CullingMap" instance=ExtResource("4_kds4s")]
 transform = Transform3D(-0.988899, 0, 0.148586, 0, 1, 0, -0.148586, 0, -0.988899, -64.4923, -45, -362.604)
 "Trigger Mode" = 2
@@ -1347,6 +1356,8 @@ shape = SubResource("BoxShape3D_hqpy5")
 
 [connection signal="Activated" from="TimedAct/CullingMap/InteriorU" to="TimedAct/Interior" method="Deactivate"]
 [connection signal="Deactivated" from="TimedAct/CullingMap/InteriorU" to="TimedAct/Interior" method="Activate"]
+[connection signal="Activated" from="TimedAct/CullingMap/UTurnL" to="TimedAct/UTurn" method="Activate"]
+[connection signal="Deactivated" from="TimedAct/CullingMap/UTurnL" to="TimedAct/UTurn" method="Deactivate"]
 [connection signal="Activated" from="TimedAct/CullingMap/IslandL" to="TimedAct/Islands" method="Activate"]
 [connection signal="Deactivated" from="TimedAct/CullingMap/IslandL" to="TimedAct/Islands" method="Deactivate"]
 [connection signal="Activated" from="TimedAct/CullingMap/UTurnU" to="TimedAct/UTurn" method="Deactivate"]
