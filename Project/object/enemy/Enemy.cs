@@ -40,20 +40,29 @@ public partial class Enemy : Node3D
 	protected bool damagePlayer;
 
 	[ExportGroup("Components")]
-	[Export]
-	protected Node3D root;
-	[Export]
-	protected CollisionShape3D collider; // Environmental collider. Disabled when defeated (For death animations, etc)
-	[Export]
-	protected Area3D hurtbox; // Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
-	[Export]
-	protected CollisionShape3D rangeCollider; // Range trigger
-	[Export]
+	[Export(PropertyHint.NodeType, "Node3D")]
+	private NodePath root;
+	protected Node3D Root { get; private set; }
+	[Export(PropertyHint.NodeType, "Area3D")]
+	private NodePath hurtbox;
+	/// <summary> Lockon/Hitbox collider. Disabled when defeated (For death animations, etc). </summary>
+	protected Area3D Hurtbox { get; private set; }
+	[Export(PropertyHint.NodeType, "CollisionShape3D")]
+	private NodePath collider;
+	/// <summary> Environmental collider. Disabled when defeated (For death animations, etc). </summary>
+	protected CollisionShape3D Collider { get; private set; }
+	[Export(PropertyHint.NodeType, "CollisionShape3D")]
+	private NodePath rangeCollider;
+	/// <summary> Reference to the enemy's range collider. </summary>
+	protected CollisionShape3D RangeCollider { get; private set; }
+	[Export(PropertyHint.NodeType, "AnimationTree")]
+	private NodePath animationTree;
 	/// <summary> Animation tree for enemy character. </summary>
-	protected AnimationTree animationTree;
-	[Export]
+	protected AnimationTree AnimationTree { get; private set; }
+	[Export(PropertyHint.NodeType, "AnimationPlayer")]
+	private NodePath animationPlayer;
 	/// <summary> Animator for event animations. </summary>
-	protected AnimationPlayer animationPlayer;
+	protected AnimationPlayer AnimationPlayer { get; private set; }
 
 	protected SpawnData SpawnData { get; private set; }
 	protected CharacterController Character => CharacterController.instance;
@@ -63,24 +72,37 @@ public partial class Enemy : Node3D
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
+		// Get components
+		Root = GetNodeOrNull<Node3D>(root);
+		Hurtbox = GetNodeOrNull<Area3D>(hurtbox);
+		Collider = GetNodeOrNull<CollisionShape3D>(collider);
+		RangeCollider = GetNodeOrNull<CollisionShape3D>(rangeCollider);
+		AnimationTree = GetNodeOrNull<AnimationTree>(animationTree);
+		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
+
 		SpawnData = new(GetParent(), Transform);
 		StageSettings.instance.ConnectRespawnSignal(this);
 		StageSettings.instance.ConnectUnloadSignal(this);
 		Respawn();
 
-		if (rangeCollider == null)
+		InitializeRangeCollider();
+	}
+
+	private void InitializeRangeCollider()
+	{
+		if (RangeCollider == null)
 			return;
 
 		if (rangeOverride == 0) // Disable range collider
 		{
-			rangeCollider.Disabled = true;
+			RangeCollider.Disabled = true;
 			return;
 		}
 
 		// Resize range trigger
 		if (CollisionShapeList.TryGetValue(rangeOverride, out CylinderShape3D shape))
 		{
-			rangeCollider.Shape = shape;
+			RangeCollider.Shape = shape;
 			return;
 		}
 
@@ -90,7 +112,7 @@ public partial class Enemy : Node3D
 			Radius = rangeOverride,
 			Height = 30
 		};
-		rangeCollider.Shape = cylinderShape;
+		RangeCollider.Shape = cylinderShape;
 		CollisionShapeList.Add(rangeOverride, cylinderShape);
 	}
 
@@ -146,7 +168,7 @@ public partial class Enemy : Node3D
 		Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 		if (!IsDefeated)
-			Character.Camera.SetDeferred("LockonTarget", hurtbox);
+			Character.Camera.SetDeferred("LockonTarget", Hurtbox);
 	}
 
 	public virtual void TakeDamage(int amount = -1)
@@ -190,12 +212,12 @@ public partial class Enemy : Node3D
 		IsHitboxEnabled = isEnabled;
 
 		// Update environment collider
-		if (collider != null)
-			collider.Disabled = !IsHitboxEnabled;
+		if (Collider != null)
+			Collider.Disabled = !IsHitboxEnabled;
 
 		// Update hurtbox
-		if (hurtbox != null)
-			hurtbox.Monitorable = hurtbox.Monitoring = IsHitboxEnabled;
+		if (Hurtbox != null)
+			Hurtbox.Monitorable = Hurtbox.Monitoring = IsHitboxEnabled;
 	}
 
 	/// <summary> Is the enemy currently active? </summary>
@@ -247,7 +269,7 @@ public partial class Enemy : Node3D
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
 	protected float rotationVelocity;
-	protected const float TRACKING_SMOOTHING = .2f;
+	protected const float TrackingSmoothing = .2f;
 	/// <summary>
 	/// Updates current rotation to track the player.
 	/// </summary>
@@ -255,7 +277,7 @@ public partial class Enemy : Node3D
 	{
 		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
 		targetRotation -= GlobalRotation.Y; // Rotation is in local space
-		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TRACKING_SMOOTHING);
+		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
 	}
 
 	public void OnEntered(Area3D a)
