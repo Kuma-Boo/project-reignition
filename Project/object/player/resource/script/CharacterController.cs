@@ -1155,6 +1155,7 @@ namespace Project.Gameplay
 		public void StopGrindstep()
 		{
 			MovementAngle = Animator.VisualAngle;
+			IsGrindstepBonusActive = false;
 			Animator.ResetState(.1f);
 		}
 		#endregion
