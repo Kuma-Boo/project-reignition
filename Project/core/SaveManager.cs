@@ -125,7 +125,7 @@ public partial class SaveManager : Node
 
 		// Controls
 		public float deadZone = .5f;
-		public ControllerType controllerType = ControllerType.PlayStation;
+		public ControllerType controllerType = ControllerType.Automatic;
 		public Dictionary inputConfiguration = new();
 
 		// Language
