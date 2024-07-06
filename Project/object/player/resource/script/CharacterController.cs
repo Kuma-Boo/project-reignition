@@ -1588,7 +1588,7 @@ namespace Project.Gameplay
 			get => GlobalPosition + UpDirection * CollisionRadius;
 			set => GlobalPosition = value - UpDirection * CollisionRadius;
 		}
-		private const float COLLISION_PADDING = .02f;
+		private const float CollisionPadding = .02f;
 
 		/// <summary> Character's primary movement speed. </summary>
 		public float MoveSpeed { get; set; }
@@ -1641,7 +1641,7 @@ namespace Project.Gameplay
 				JustLandedOnGround = false;
 
 			Vector3 castOrigin = CenterPosition;
-			float castLength = CollisionRadius + COLLISION_PADDING * 2.0f;
+			float castLength = CollisionRadius + CollisionPadding * 2.0f;
 			if (IsOnGround)
 				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; // Attempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpeed < 0)
@@ -1654,7 +1654,7 @@ namespace Project.Gameplay
 
 			// Whisker casts (For smoother collision)
 			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
-			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - COLLISION_PADDING);
+			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - CollisionPadding);
 			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 			{
 				castOffset = castOffset.Rotated(this.Down(), interval);
@@ -1775,15 +1775,16 @@ namespace Project.Gameplay
 		{
 			if (hit)
 			{
-				if (!hit.collidedObject.IsInGroup("floor"))
-					hit = new RaycastHit();
-				else if (MovementState != MovementStates.External && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) // Limit angle collision
-					hit = new RaycastHit();
-				else if (!IsOnGround &&
-					hit.collidedObject.IsInGroup("wall")) // Use Vector3.Up for objects tagged as a wall
+				if (!hit.collidedObject.IsInGroup("floor") ||
+					(MovementState != MovementStates.External && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f)) // Limit angle collision
 				{
-					if (hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .2f)
-						hit = new RaycastHit();
+					hit = new RaycastHit();
+				}
+				else if (!IsOnGround &&
+						hit.collidedObject.IsInGroup("wall") &&
+						hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .2f) // Use Vector3.Up for objects tagged as a wall
+				{
+					hit = new RaycastHit();
 				}
 			}
 
@@ -1800,8 +1801,9 @@ namespace Project.Gameplay
 
 		public void CheckCeiling() // Checks the ceiling.
 		{
-			Vector3 castOrigin = GlobalPosition + UpDirection * CollisionRadius;
-			float castLength = CollisionRadius + COLLISION_PADDING;
+			// Start check slightly BELOW the floor to ensure object detection
+			Vector3 castOrigin = GlobalPosition - (UpDirection * CollisionPadding);
+			float castLength = (CollisionRadius + CollisionPadding) * 2.0f;
 			if (VerticalSpeed > 0)
 				castLength += VerticalSpeed * PhysicsManager.physicsDelta;
 
@@ -1828,7 +1830,7 @@ namespace Project.Gameplay
 
 				if (!ceilingHit.collidedObject.IsInGroup("ceiling")) return;
 
-				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * CollisionRadius));
+				GlobalTranslate(ceilingHit.point - (CenterPosition + (UpDirection * CollisionRadius)));
 
 				float maxVerticalSpeed = 0;
 				// Workaround for backflipping into slanted ceilings
@@ -1863,7 +1865,7 @@ namespace Project.Gameplay
 			}
 
 			castVector *= Mathf.Sign(MoveSpeed);
-			float castLength = CollisionRadius + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
+			float castLength = CollisionRadius + CollisionPadding + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
 
 			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
 			DebugManager.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
@@ -1908,7 +1910,7 @@ namespace Project.Gameplay
 				}
 
 				// Running into wall head-on
-				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + COLLISION_PADDING)
+				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + CollisionPadding)
 				{
 					IsOnWall = true;
 					MoveSpeed = 0; // Kill speed
