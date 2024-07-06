@@ -152,7 +152,7 @@ public partial class PathTraveller : Node3D
 		if (!autosetBounds)
 			return;
 
-		float pathTravellerCollisionSize = Character.CollisionRadius;
+		float pathTravellerCollisionSize = Character.CollisionSize.X;
 		float castDistance = pathTravellerCollisionSize + CollisionSmoothingDistance;
 		if (Mathf.Sign(currentTurnAmount.X) == direction)
 			castDistance += Mathf.Abs(currentTurnAmount.X * PhysicsManager.physicsDelta);

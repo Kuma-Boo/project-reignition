@@ -69,6 +69,16 @@ namespace Project.Gameplay
 			Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 		}
 
+		/// <summary> Keeps track of how much attack the player will deal. </summary>
+		public AttackStates AttackState { get; set; }
+		public enum AttackStates
+		{
+			None, // Player is not attacking
+			Weak, // Player will deal a single point of damage 
+			Strong, // Double Damage -- Perfect homing attacks
+			OneShot, // Destroy enemies immediately (i.e. Speedbreak and Crest of Fire)
+		}
+
 		public ActionStates ActionState { get; private set; }
 		public enum ActionStates // Actions that can happen in the Normal MovementState
 		{
@@ -90,7 +100,7 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 			{
-				// TODO Alter hitbox
+				ChangeHitbox("RESET");
 				Animator.StopCrouching();
 			}
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
@@ -101,11 +111,14 @@ namespace Project.Gameplay
 			}
 			else if (ActionState == ActionStates.Stomping)
 			{
-				Skills.IsAttacking = false;
+				ChangeHitbox("RESET");
+				AttackState = AttackStates.None;
 				Effect.StopStompFX();
 			}
 			else if (ActionState == ActionStates.Grindstep)
+			{
 				StopGrindstep();
+			}
 
 			ActionState = newState;
 
@@ -989,9 +1002,14 @@ namespace Project.Gameplay
 
 				Effect.PlayActionSFX(Effect.SlideSfx);
 				SetActionState(ActionStates.Sliding);
+				ChangeHitbox("slide");
 			}
 			else
+			{
 				SetActionState(ActionStates.Crouching);
+				ChangeHitbox("crouch");
+			}
+
 			Animator.StartCrouching();
 		}
 
@@ -1005,6 +1023,7 @@ namespace Project.Gameplay
 				{
 					ActionState = ActionStates.Crouching;
 					Animator.ToggleSliding();
+					ChangeHitbox("crouch");
 				}
 			}
 			else
@@ -1025,7 +1044,9 @@ namespace Project.Gameplay
 						MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -InputVector.Length());
 				}
 				else if (ActionState == ActionStates.Crouching)
+				{
 					MoveSpeed *= .5f;
+				}
 			}
 
 			if (!Input.IsActionPressed("button_action") && !Animator.IsSlideTransitionActive)
@@ -1056,8 +1077,10 @@ namespace Project.Gameplay
 
 			// Don't allow instant stomps
 			if ((ActionState == ActionStates.Jumping || ActionState == ActionStates.AccelJump) &&
-			currentJumpTime < .1f)
+				currentJumpTime < .1f)
+			{
 				return;
+			}
 
 			if (ActionState == ActionStates.Grindstep)
 				Animator.ResetState(.1f);
@@ -1073,8 +1096,13 @@ namespace Project.Gameplay
 				Lockon.StopHomingAttack();
 			SetActionState(ActionStates.Stomping);
 
-			Skills.IsAttacking = Skills.IsSkillEquipped(SkillKey.StompAttack);
-			Animator.StompAnimation(Skills.IsSkillEquipped(SkillKey.StompAttack));
+			bool attackStomp = Skills.IsSkillEquipped(SkillKey.StompAttack);
+			if (attackStomp)
+			{
+				AttackState = AttackStates.Weak;
+				ChangeHitbox("stomp");
+			}
+			Animator.StompAnimation(attackStomp);
 		}
 		#endregion
 
@@ -1319,7 +1347,7 @@ namespace Project.Gameplay
 			IsDefeated = true;
 
 			Lockon.IsMonitoring = false;
-			areaTrigger.Disabled = true;
+			ChangeHitbox("disable");
 
 			// Disable break skills
 			if (Skills.IsTimeBreakActive)
@@ -1375,7 +1403,6 @@ namespace Project.Gameplay
 			IsMovingBackward = false;
 			ResetVelocity();
 
-
 			// Clear any collision exceptions
 			foreach (Node exception in GetCollisionExceptions())
 				RemoveCollisionExceptionWith(exception);
@@ -1395,7 +1422,7 @@ namespace Project.Gameplay
 			ResetOrientation();
 
 			SnapToGround();
-			areaTrigger.Disabled = false;
+			ChangeHitbox("RESET");
 
 			Stage.RespawnObjects();
 			Stage.IncrementRespawnCount();
@@ -1488,6 +1515,7 @@ namespace Project.Gameplay
 			CanJumpDash = data.AllowJumpDash;
 			Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
 			Lockon.StopHomingAttack();
+			AttackState = AttackStates.OneShot; // Launchers always oneshot all enemies
 
 			if (data.UseAutoAlign)
 			{
@@ -1562,31 +1590,36 @@ namespace Project.Gameplay
 			Animator.ResetState();
 			ResetMovementState();
 
+			AttackState = AttackStates.None;
 			Lockon.IsMonitoring = CanJumpDash;
+
 			EmitSignal(SignalName.LaunchFinished);
 		}
 		#endregion
 
 		#region Physics
-		/// <summary> Collision shape used for colliding with the environment. </summary>
+		/// <summary> Size to use for collision checks. </summary>
 		[Export]
-		private CollisionShape3D environmentCollider;
+		public Vector2 CollisionSize;
 		/// <summary> Collision shape used for triggering objects. </summary>
 		[Export]
-		private CollisionShape3D areaTrigger;
-		/// <summary> Size to use for collision checks. </summary>
-		public float CollisionRadius => (environmentCollider.Shape as SphereShape3D).Radius;
-		public bool IsEnvironmentColliderEnabled
+		private AnimationPlayer hitboxAnimator;
+		public void ChangeHitbox(StringName hitboxAnimation)
 		{
-			get => !environmentCollider.Disabled;
-			set => environmentCollider.Disabled = !value;
+			hitboxAnimator.Play(hitboxAnimation);
+			hitboxAnimator.Advance(0);
 		}
 
 		/// <summary> Center of collision calculations </summary>
 		public Vector3 CenterPosition
 		{
-			get => GlobalPosition + UpDirection * CollisionRadius;
-			set => GlobalPosition = value - UpDirection * CollisionRadius;
+			get => GlobalPosition + (UpDirection * .4f);
+			set => GlobalPosition = value - (UpDirection * .4f);
+		}
+		public Vector3 CollisionPosition
+		{
+			get => GlobalPosition + (UpDirection * CollisionSize.Y);
+			set => GlobalPosition = value - (UpDirection * CollisionSize.Y);
 		}
 		private const float CollisionPadding = .02f;
 
@@ -1640,8 +1673,8 @@ namespace Project.Gameplay
 			if (JustLandedOnGround) // RESET FLAG
 				JustLandedOnGround = false;
 
-			Vector3 castOrigin = CenterPosition;
-			float castLength = CollisionRadius + CollisionPadding * 2.0f;
+			Vector3 castOrigin = CollisionPosition;
+			float castLength = CollisionSize.Y + (CollisionPadding * 2.0f);
 			if (IsOnGround)
 				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; // Attempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpeed < 0)
@@ -1654,7 +1687,7 @@ namespace Project.Gameplay
 
 			// Whisker casts (For smoother collision)
 			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
-			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - CollisionPadding);
+			Vector3 castOffset = this.Forward() * ((CollisionSize.Y * .5f) - CollisionPadding);
 			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 			{
 				castOffset = castOffset.Rotated(this.Down(), interval);
@@ -1694,9 +1727,9 @@ namespace Project.Gameplay
 					if (JustLandedOnGround)
 						IsGrindstepBonusActive = false;
 
-					float snapDistance = groundHit.distance - CollisionRadius;
+					float snapDistance = groundHit.distance - CollisionSize.Y;
 					GlobalPosition -= UpDirection * snapDistance; // Remain snapped to the ground
-					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + .4f * GroundSettings.GetSpeedRatio(MoveSpeed)).Normalized(); // Update world direction
+					UpDirection = UpDirection.Lerp(groundHit.normal, .2f + (.4f * GroundSettings.GetSpeedRatio(MoveSpeed))).Normalized(); // Update world direction
 				}
 			}
 			else
@@ -1803,7 +1836,7 @@ namespace Project.Gameplay
 		{
 			// Start check slightly BELOW the floor to ensure object detection
 			Vector3 castOrigin = GlobalPosition - (UpDirection * CollisionPadding);
-			float castLength = (CollisionRadius + CollisionPadding) * 2.0f;
+			float castLength = (CollisionSize.Y + CollisionPadding) * 2.0f;
 			if (VerticalSpeed > 0)
 				castLength += VerticalSpeed * PhysicsManager.physicsDelta;
 
@@ -1830,7 +1863,7 @@ namespace Project.Gameplay
 
 				if (!ceilingHit.collidedObject.IsInGroup("ceiling")) return;
 
-				GlobalTranslate(ceilingHit.point - (CenterPosition + (UpDirection * CollisionRadius)));
+				GlobalTranslate(ceilingHit.point - (CollisionPosition + (UpDirection * CollisionSize.Y)));
 
 				float maxVerticalSpeed = 0;
 				// Workaround for backflipping into slanted ceilings
@@ -1860,15 +1893,15 @@ namespace Project.Gameplay
 			IsOnWall = false;
 			if (Mathf.IsZeroApprox(MoveSpeed)) // No movement
 			{
-				DebugManager.DrawRay(CenterPosition, castVector * CollisionRadius, Colors.White);
+				DebugManager.DrawRay(CollisionPosition, castVector * CollisionSize.X, Colors.White);
 				return;
 			}
 
 			castVector *= Mathf.Sign(MoveSpeed);
-			float castLength = CollisionRadius + CollisionPadding + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
+			float castLength = CollisionSize.X + CollisionPadding + (Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta);
 
-			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
-			DebugManager.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
+			RaycastHit wallHit = this.CastRay(CollisionPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
+			DebugManager.DrawRay(CollisionPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
 
 			if (!ValidateWallCast(ref wallHit))
 				return;
@@ -1910,7 +1943,7 @@ namespace Project.Gameplay
 				}
 
 				// Running into wall head-on
-				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + CollisionPadding)
+				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionSize.X + CollisionPadding)
 				{
 					IsOnWall = true;
 					MoveSpeed = 0; // Kill speed
