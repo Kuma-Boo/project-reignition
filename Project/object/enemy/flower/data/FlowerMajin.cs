@@ -143,28 +143,30 @@ public partial class FlowerMajin : Enemy
 					StartStaggerState();
 			}
 
-			return;
+			if (Character.AttackState == CharacterController.AttackStates.None ||
+				Character.AttackState == CharacterController.AttackStates.Weak)
+			{
+				return;
+			}
 		}
 
-		if (Character.Lockon.IsHomingAttacking)
-		{
-			base.UpdateInteraction();
-			return;
-		}
-
-		if (Character.Skills.IsAttacking) // Skill damage
+		// TODO light stagger
+		if (!Character.Lockon.IsHomingAttacking &&
+			Character.AttackState != CharacterController.AttackStates.None) // Skill damage
 		{
 			StartStaggerState();
-			return;
+		}
+		else if (!Character.IsOnGround)
+		{
+			Character.Lockon.StartBounce(false);
 		}
 
-		Character.Lockon.StartBounce(false);
-		// TODO light stagger
+		base.UpdateInteraction();
 	}
 
-	public override void TakeHomingAttackDamage()
+	public override void UpdateLockon()
 	{
-		base.TakeHomingAttackDamage();
+		base.UpdateLockon();
 
 		if (IsDefeated)
 		{

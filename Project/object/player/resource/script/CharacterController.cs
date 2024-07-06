@@ -69,6 +69,16 @@ namespace Project.Gameplay
 			Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 		}
 
+		/// <summary> Keeps track of how much attack the player will deal. </summary>
+		public AttackStates AttackState { get; set; }
+		public enum AttackStates
+		{
+			None, // Player is not attacking
+			Weak, // Player will deal a single point of damage 
+			Strong, // Double Damage -- Perfect homing attacks
+			OneShot, // Destroy enemies immediately (i.e. Speedbreak and Crest of Fire)
+		}
+
 		public ActionStates ActionState { get; private set; }
 		public enum ActionStates // Actions that can happen in the Normal MovementState
 		{
@@ -101,11 +111,13 @@ namespace Project.Gameplay
 			}
 			else if (ActionState == ActionStates.Stomping)
 			{
-				Skills.IsAttacking = false;
+				AttackState = AttackStates.None;
 				Effect.StopStompFX();
 			}
 			else if (ActionState == ActionStates.Grindstep)
+			{
 				StopGrindstep();
+			}
 
 			ActionState = newState;
 
@@ -991,7 +1003,10 @@ namespace Project.Gameplay
 				SetActionState(ActionStates.Sliding);
 			}
 			else
+			{
 				SetActionState(ActionStates.Crouching);
+			}
+
 			Animator.StartCrouching();
 		}
 
@@ -1056,8 +1071,10 @@ namespace Project.Gameplay
 
 			// Don't allow instant stomps
 			if ((ActionState == ActionStates.Jumping || ActionState == ActionStates.AccelJump) &&
-			currentJumpTime < .1f)
+				currentJumpTime < .1f)
+			{
 				return;
+			}
 
 			if (ActionState == ActionStates.Grindstep)
 				Animator.ResetState(.1f);
@@ -1073,8 +1090,10 @@ namespace Project.Gameplay
 				Lockon.StopHomingAttack();
 			SetActionState(ActionStates.Stomping);
 
-			Skills.IsAttacking = Skills.IsSkillEquipped(SkillKey.StompAttack);
-			Animator.StompAnimation(Skills.IsSkillEquipped(SkillKey.StompAttack));
+			bool attackStomp = Skills.IsSkillEquipped(SkillKey.StompAttack);
+			if (attackStomp)
+				AttackState = AttackStates.Weak;
+			Animator.StompAnimation(attackStomp);
 		}
 		#endregion
 
@@ -1488,6 +1507,7 @@ namespace Project.Gameplay
 			CanJumpDash = data.AllowJumpDash;
 			Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
 			Lockon.StopHomingAttack();
+			AttackState = AttackStates.OneShot; // Launchers always oneshot all enemies
 
 			if (data.UseAutoAlign)
 			{
@@ -1562,7 +1582,9 @@ namespace Project.Gameplay
 			Animator.ResetState();
 			ResetMovementState();
 
+			AttackState = AttackStates.None;
 			Lockon.IsMonitoring = CanJumpDash;
+
 			EmitSignal(SignalName.LaunchFinished);
 		}
 		#endregion

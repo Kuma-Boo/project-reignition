@@ -258,7 +258,6 @@ public partial class DestructableObject : Node3D
 			isInteractingWithPlayer = false;
 	}
 
-
 	private void ProcessPlayerCollision()
 	{
 		// Prioritize Jump Dash
@@ -272,7 +271,7 @@ public partial class DestructableObject : Node3D
 		{
 			Shatter();
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
+		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.AttackState != CharacterController.AttackStates.None)
 		{
 			Shatter();
 		}
@@ -285,7 +284,6 @@ public partial class DestructableObject : Node3D
 			Character.StartKnockback();
 		}
 	}
-
 
 	public void OnBodyEntered(Node3D b)
 	{

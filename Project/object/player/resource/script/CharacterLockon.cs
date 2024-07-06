@@ -59,15 +59,19 @@ public partial class CharacterLockon : Node3D
 	{
 		IsHomingAttacking = true;
 		IsPerfectHomingAttack = monitoringPerfectHomingAttack;
+		Character.AttackState = CharacterController.AttackStates.Weak;
+
 		if (IsPerfectHomingAttack)
 		{
 			perfectSFX.Play();
 			lockonAnimator.Play("perfect-strike");
+			Character.AttackState = CharacterController.AttackStates.Strong;
 		}
 	}
 
 	public void StopHomingAttack()
 	{
+		Character.AttackState = CharacterController.AttackStates.None;
 		IsHomingAttacking = false;
 		IsPerfectHomingAttack = false;
 		Character.ResetActionState();
