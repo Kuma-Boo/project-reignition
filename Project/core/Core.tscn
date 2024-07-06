@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cx75joue8tyuv"]
+[gd_scene load_steps=8 format=3 uid="uid://cx75joue8tyuv"]
 
 [ext_resource type="Script" path="res://core/PhysicsManager.cs" id="2_phpky"]
 [ext_resource type="Script" path="res://core/DebugManager.cs" id="3_exwps"]
@@ -7,14 +7,6 @@
 [ext_resource type="Script" path="res://core/SaveManager.cs" id="4_au3sm"]
 [ext_resource type="Resource" uid="uid://xatl072kgtjs" path="res://resource/skills/_SkillList.tres" id="5_32mxc"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="7_wy237"]
-[ext_resource type="Script" path="res://core/ShaderManager.cs" id="8_toy1n"]
-
-
-[sub_resource type="World3D" id="World3D_5uqmk"]
-
-[sub_resource type="QuadMesh" id="QuadMesh_d2p60"]
-
-[sub_resource type="QuadMesh" id="QuadMesh_nm6s7"]
 
 [node name="Core" type="Node"]
 process_mode = 3
@@ -311,109 +303,6 @@ script = ExtResource("4_au3sm")
 
 [node name="PhysicsManager" type="Node3D" parent="."]
 script = ExtResource("2_phpky")
-
-[node name="ShaderCache" type="Control" parent="." node_paths=PackedStringArray("shaderCompilationViewport", "shaderParent", "meshInstances", "particles")]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("8_toy1n")
-shaderCompilationViewport = NodePath("SubViewportContainer/SubViewport")
-shaderParent = NodePath("SubViewportContainer/SubViewport/ShaderWorld")
-meshInstances = [NodePath("SubViewportContainer/SubViewport/ShaderWorld/SolidShadow"), NodePath("SubViewportContainer/SubViewport/ShaderWorld/TransparentNoShadow"), NodePath("SubViewportContainer/SubViewport/ShaderWorld/SolidNoShadow"), NodePath("SubViewportContainer/SubViewport/ShaderWorld/TransparentShadow")]
-particles = [NodePath("SubViewportContainer/SubViewport/ShaderWorld/Particles"), NodePath("SubViewportContainer/SubViewport/ShaderWorld/ParticlesNoShadow")]
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="ShaderCache"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1984.0
-offset_right = -1984.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SubViewport" type="SubViewport" parent="ShaderCache/SubViewportContainer"]
-world_3d = SubResource("World3D_5uqmk")
-handle_input_locally = false
-mesh_lod_threshold = 0.0
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
-
-[node name="ShaderWorld" type="Node3D" parent="ShaderCache/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-shadow_enabled = true
-
-[node name="OmniLight3D" type="OmniLight3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0)
-
-[node name="SolidShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, -0.65, 0.375, 0.649519)
-layers = 1048575
-mesh = SubResource("QuadMesh_d2p60")
-skeleton = NodePath("../../../../..")
-
-[node name="TransparentNoShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0.65, -0.375, -0.649519)
-layers = 1048575
-transparency = 0.5
-cast_shadow = 0
-mesh = SubResource("QuadMesh_d2p60")
-skeleton = NodePath("../../../../..")
-
-[node name="SolidNoShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, -0.65, -0.375, -0.649519)
-layers = 1048575
-cast_shadow = 0
-mesh = SubResource("QuadMesh_d2p60")
-skeleton = NodePath("../../../../..")
-
-[node name="TransparentShadow" type="MeshInstance3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0.65, 0.375, 0.649519)
-layers = 1048575
-transparency = 0.5
-mesh = SubResource("QuadMesh_d2p60")
-skeleton = NodePath("../../../../..")
-
-[node name="Particles" type="GPUParticles3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0)
-layers = 1048575
-emitting = false
-preprocess = 10.0
-fixed_fps = 0
-fract_delta = false
-draw_pass_1 = SubResource("QuadMesh_nm6s7")
-
-[node name="ParticlesNoShadow" type="GPUParticles3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0)
-layers = 1048575
-cast_shadow = 0
-emitting = false
-preprocess = 10.0
-fixed_fps = 0
-fract_delta = false
-draw_pass_1 = SubResource("QuadMesh_nm6s7")
-
-[node name="ShaderCamera" type="Camera3D" parent="ShaderCache/SubViewportContainer/SubViewport/ShaderWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, -3.4641, 2)
-current = true
-
-[node name="ProgressLabel" type="Label" parent="ShaderCache"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -67.0
-offset_right = 315.0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 48
-text = "shader_cache_load"
-vertical_alignment = 1
 
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/DebugRays" to="DebugManager" method="ToggleRays"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/ShaderCompilation" to="DebugManager" method="SetShaderCompilation"]
