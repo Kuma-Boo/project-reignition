@@ -1,9 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://cexusptfk1osy"]
+[gd_scene load_steps=35 format=3 uid="uid://cexusptfk1osy"]
 
 [ext_resource type="Resource" uid="uid://bvgmr6otpd1o0" path="res://resource/level data/sand oasis/Act1Race.tres" id="2_6245g"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_jytk8"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_f3m4h"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_ncewo"]
 [ext_resource type="Curve3D" uid="uid://bevndmu5as3ck" path="res://area/1 sand oasis/act 1/environment/path/OasisPath.tres" id="4_pv4fg"]
 [ext_resource type="PackedScene" uid="uid://dc1ik7p6xlh0a" path="res://object/stage/genie/Uhu.tscn" id="5_l41di"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_nopxn"]
@@ -1247,12 +1246,8 @@ animator = NodePath("../AnimationPlayer")
 libraries = {
 "": SubResource("AnimationLibrary_sdxff")
 }
-speed_scale = 5.0
 
 [node name="Start" type="Node3D" parent="RaceAct"]
-script = ExtResource("4_ncewo")
-startEnabled = true
-saveVisibilityOnCheckpoint = true
 
 [node name="RingM1" type="Node3D" parent="RaceAct/Start"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 64.935, 76, -62.11)
@@ -1766,9 +1761,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.703845, -0.511373, 0)
 
 [node name="Oasis" type="Node3D" parent="RaceAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
-script = ExtResource("4_ncewo")
-startEnabled = true
-saveVisibilityOnCheckpoint = true
 
 [node name="DashPanelM1" parent="RaceAct/Oasis" instance=ExtResource("6_ckw71")]
 transform = Transform3D(0.883737, -0.0118025, -0.467835, -0.0455648, 0.992762, -0.111117, 0.46576, 0.119515, 0.876803, 64.3456, -4.28308, 50.9162)
@@ -1823,7 +1815,7 @@ animator = NodePath("AnimationPlayer")
 [node name="Pillar1" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
 transform = Transform3D(0.256992, 0.47172, 0.843468, -0.00484295, 0.873398, -0.486984, -0.966402, 0.121066, 0.226741, -0.399963, 0.990498, -23.112)
 
-[node name="SquarePillar1" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1" instance=ExtResource("11_evogq")]
+[node name="SquarePillar1" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1" groups=["crusher"] instance=ExtResource("11_evogq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="FallingSFX1" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1/SquarePillar1"]
@@ -1853,7 +1845,7 @@ visible = false
 [node name="Pillar2" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
 transform = Transform3D(0.480024, 0.4608, 0.746488, -0.0167351, 0.855588, -0.517388, -0.877097, 0.235865, 0.418415, 4.14017, 0.909695, -34.6519)
 
-[node name="SquarePillar2" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2" instance=ExtResource("11_evogq")]
+[node name="SquarePillar2" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2" groups=["crusher"] instance=ExtResource("11_evogq")]
 
 [node name="FallingSFX2" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2/SquarePillar2"]
 stream = ExtResource("20_fnrur")
@@ -1881,7 +1873,7 @@ visible = false
 [node name="Pillar3" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
 transform = Transform3D(0.554901, 0.457852, 0.694594, -0.00126469, 0.835394, -0.549653, -0.831918, 0.304124, 0.464139, 11.3092, 0.739349, -45.5965)
 
-[node name="SquarePillar3" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3" instance=ExtResource("11_evogq")]
+[node name="SquarePillar3" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3" groups=["crusher"] instance=ExtResource("11_evogq")]
 
 [node name="FallingSFX3" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3/SquarePillar3"]
 stream = ExtResource("20_fnrur")
@@ -1909,7 +1901,7 @@ visible = false
 [node name="Pillar4" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
 transform = Transform3D(0.717857, 0.382887, 0.581448, -0.0357083, 0.854334, -0.518501, -0.695276, 0.351446, 0.626962, 20.3762, 0.73996, -55.4239)
 
-[node name="SquarePillar4" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4" instance=ExtResource("11_evogq")]
+[node name="SquarePillar4" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4" groups=["crusher"] instance=ExtResource("11_evogq")]
 
 [node name="FallingSFX4" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4/SquarePillar4"]
 stream = ExtResource("20_fnrur")
@@ -1957,7 +1949,7 @@ Movement/Angle = 0.0
 root = NodePath("ItemBoxFlying")
 
 [node name="ItemBoxFlying" parent="RaceAct/Oasis/ItemBoxMover" instance=ExtResource("23_x8plt")]
-transform = Transform3D(1.00001, -8.9407e-08, -1.24127e-05, -1.3411e-06, 1.00001, 1.47372e-05, 1.05798e-06, -2.68221e-07, 1, 0, 0, 0)
+transform = Transform3D(1.00001, -8.9407e-08, -1.24723e-05, -1.3411e-06, 1.00001, 1.48118e-05, 1.05798e-06, -2.68221e-07, 1, 0, 0, 0)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 100
 
