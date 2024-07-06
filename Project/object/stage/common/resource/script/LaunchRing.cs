@@ -116,7 +116,7 @@ public partial class LaunchRing : Launcher
 
 	private void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		animator.Play("charge");
 		Character.StartExternal(this);
@@ -135,7 +135,7 @@ public partial class LaunchRing : Launcher
 
 	private void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 		animator.Play("RESET", .2 * (1 + launchRatio));
 	}
 

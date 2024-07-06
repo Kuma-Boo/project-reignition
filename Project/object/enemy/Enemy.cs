@@ -159,12 +159,8 @@ public partial class Enemy : Node3D
 	/// <summary> Override this from an inherited class. </summary>
 	protected virtual void UpdateEnemy() { }
 
-	public virtual void TakeHomingAttackDamage()
+	public virtual void UpdateLockon()
 	{
-		if (Character.Lockon.IsPerfectHomingAttack)
-			currentHealth--; // Take an extra point of damage
-
-		TakeDamage(1);
 		Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 		if (!IsDefeated)
@@ -243,24 +239,25 @@ public partial class Enemy : Node3D
 			return;
 		}
 
-		if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
+		switch (Character.AttackState)
 		{
-			Defeat();
+			case CharacterController.AttackStates.OneShot:
+				Defeat();
+				break;
+			case CharacterController.AttackStates.Weak:
+				TakeDamage(1);
+				break;
+			case CharacterController.AttackStates.Strong:
+				TakeDamage(2);
+				break;
 		}
-		else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
+
+		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 		{
-			Defeat();
-		}
-		else if (Character.Skills.IsAttacking)
-		{
-			TakeDamage(1);
-		}
-		else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-		{
-			TakeHomingAttackDamage();
+			UpdateLockon();
 			Character.Lockon.StartBounce(IsDefeated);
 		}
-		else if (damagePlayer)
+		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
 		{
 			Character.StartKnockback();
 		}

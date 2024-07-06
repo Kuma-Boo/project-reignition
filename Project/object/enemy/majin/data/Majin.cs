@@ -376,10 +376,10 @@ public partial class Majin : Enemy
 		}
 	}
 
-	public override void TakeHomingAttackDamage()
+	public override void UpdateLockon()
 	{
 		Stagger();
-		base.TakeHomingAttackDamage();
+		base.UpdateLockon();
 
 		if (!IsDefeated)
 			AnimationPlayer.Play("stagger");

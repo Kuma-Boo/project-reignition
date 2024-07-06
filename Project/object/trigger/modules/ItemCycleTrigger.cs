@@ -78,7 +78,7 @@ namespace Project.Gameplay.Triggers
 
 		private void OnCheckpointEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 			isCycleFlagSet = true;
 		}
 	}

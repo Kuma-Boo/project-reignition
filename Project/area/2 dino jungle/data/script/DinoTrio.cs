@@ -225,7 +225,7 @@ public partial class DinoTrio : PathFollow3D
 	private bool isInteractingWithPlayer;
 	public void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player"))
+		if (!a.IsInGroup("player detection"))
 			return;
 
 		isInteractingWithPlayer = true;
@@ -234,7 +234,7 @@ public partial class DinoTrio : PathFollow3D
 
 	public void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player"))
+		if (!a.IsInGroup("player detection"))
 			return;
 
 		isInteractingWithPlayer = false;

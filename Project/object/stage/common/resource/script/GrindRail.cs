@@ -399,7 +399,7 @@ public partial class GrindRail : Area3D
 
 	private RaycastHit CheckWall(float movementDelta)
 	{
-		float castLength = movementDelta + Character.CollisionRadius;
+		float castLength = movementDelta + Character.CollisionSize.X;
 		RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Character.CollisionMask);
 		DebugManager.DrawRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, hit ? Colors.Red : Colors.White);
 
@@ -412,7 +412,7 @@ public partial class GrindRail : Area3D
 
 	public void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		isInteractingWithPlayer = true;
 		CheckRailActivation();
@@ -420,7 +420,7 @@ public partial class GrindRail : Area3D
 
 	public void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 		isInteractingWithPlayer = false;
 
 		Deactivate();
