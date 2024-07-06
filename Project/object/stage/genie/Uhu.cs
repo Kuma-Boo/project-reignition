@@ -20,7 +20,7 @@ public partial class Uhu : PathFollow3D
 	private Vector2 positionVelocity;
 	private readonly float PositionSmoothing = 50f;
 	private readonly float PositionDeadzone = .5f;
-	private readonly float IdlePositionRadius = 3f;
+	private readonly float IdlePositionRadius = 2f;
 
 	public override void _Ready() => Countdown.Instance.Connect(Countdown.SignalName.CountdownFinished, new(this, MethodName.StartRace));
 
