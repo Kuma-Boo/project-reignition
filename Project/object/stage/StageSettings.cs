@@ -287,6 +287,7 @@ public partial class StageSettings : Node3D
 	public void IncrementObjective()
 	{
 		CurrentObjectiveCount++;
+		CurrentObjectiveCount = Mathf.Clamp(CurrentObjectiveCount, 0, Data.MissionObjectiveCount);
 		EmitSignal(SignalName.ObjectiveChanged);
 
 		if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.

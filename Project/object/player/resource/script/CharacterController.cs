@@ -318,7 +318,7 @@ namespace Project.Gameplay
 
 		private bool isRecentered; // Is the recenter complete?
 		private const float MinRecenterPower = .1f;
-		private const float MaxRecenterPower = .4f;
+		private const float MaxRecenterPower = .2f;
 		/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
 		private void UpdateRecenter()
 		{
@@ -334,8 +334,8 @@ namespace Project.Gameplay
 				inputInfluence = (inputInfluence + 1) * 0.5f;
 				inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);
 
-				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence * PhysicsManager.physicsDelta;
-				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed);
+				float recenterSpeed = Mathf.Abs(MoveSpeed) * inputInfluence;
+				movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed * PhysicsManager.physicsDelta);
 				if (Mathf.IsZeroApprox(movementOffset))
 					isRecentered = true;
 				movementOffset = currentOffset - movementOffset;
@@ -540,6 +540,8 @@ namespace Project.Gameplay
 
 					if (ActionState == ActionStates.AccelJump)
 						MoveSpeed = GroundSettings.Interpolate(MoveSpeed, inputLength);
+					else if (ActionState == ActionStates.JumpDash)
+						MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, AirSettings.friction * PhysicsManager.physicsDelta);
 					else
 						MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
 				}
@@ -1123,7 +1125,7 @@ namespace Project.Gameplay
 
 		#region GrindStep
 		/// <summary> Will the player get a grindstep bonus when landing on a rail? </summary>
-		public bool IsGrindstepBonusActive { get; private set; }
+		public bool IsGrindstepBonusActive { get; set; }
 		/// <summary> How high to jump during a grindstep. </summary>
 		private readonly float GRIND_STEP_HEIGHT = 1.6f;
 		/// <summary> How fast to move during a grindstep. </summary>
@@ -1150,7 +1152,7 @@ namespace Project.Gameplay
 			Animator.StartGrindStep();
 		}
 
-		public void StopGrindstep()
+		private void StopGrindstep()
 		{
 			MovementAngle = Animator.VisualAngle;
 			Animator.ResetState(.1f);
@@ -1586,7 +1588,7 @@ namespace Project.Gameplay
 			get => GlobalPosition + UpDirection * CollisionRadius;
 			set => GlobalPosition = value - UpDirection * CollisionRadius;
 		}
-		private const float COLLISION_PADDING = .02f;
+		private const float CollisionPadding = .02f;
 
 		/// <summary> Character's primary movement speed. </summary>
 		public float MoveSpeed { get; set; }
@@ -1639,7 +1641,7 @@ namespace Project.Gameplay
 				JustLandedOnGround = false;
 
 			Vector3 castOrigin = CenterPosition;
-			float castLength = CollisionRadius + COLLISION_PADDING * 2.0f;
+			float castLength = CollisionRadius + CollisionPadding * 2.0f;
 			if (IsOnGround)
 				castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; // Attempt to remain stuck to the ground when moving quickly
 			else if (VerticalSpeed < 0)
@@ -1652,7 +1654,7 @@ namespace Project.Gameplay
 
 			// Whisker casts (For smoother collision)
 			float interval = Mathf.Tau / GROUND_CHECK_AMOUNT;
-			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - COLLISION_PADDING);
+			Vector3 castOffset = this.Forward() * (CollisionRadius * .5f - CollisionPadding);
 			for (int i = 0; i < GROUND_CHECK_AMOUNT; i++)
 			{
 				castOffset = castOffset.Rotated(this.Down(), interval);
@@ -1773,15 +1775,16 @@ namespace Project.Gameplay
 		{
 			if (hit)
 			{
-				if (!hit.collidedObject.IsInGroup("floor"))
-					hit = new RaycastHit();
-				else if (MovementState != MovementStates.External && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f) // Limit angle collision
-					hit = new RaycastHit();
-				else if (!IsOnGround &&
-					hit.collidedObject.IsInGroup("wall")) // Use Vector3.Up for objects tagged as a wall
+				if (!hit.collidedObject.IsInGroup("floor") ||
+					(MovementState != MovementStates.External && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f)) // Limit angle collision
 				{
-					if (hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .2f)
-						hit = new RaycastHit();
+					hit = new RaycastHit();
+				}
+				else if (!IsOnGround &&
+						hit.collidedObject.IsInGroup("wall") &&
+						hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .2f) // Use Vector3.Up for objects tagged as a wall
+				{
+					hit = new RaycastHit();
 				}
 			}
 
@@ -1798,8 +1801,9 @@ namespace Project.Gameplay
 
 		public void CheckCeiling() // Checks the ceiling.
 		{
-			Vector3 castOrigin = GlobalPosition + UpDirection * CollisionRadius;
-			float castLength = CollisionRadius + COLLISION_PADDING;
+			// Start check slightly BELOW the floor to ensure object detection
+			Vector3 castOrigin = GlobalPosition - (UpDirection * CollisionPadding);
+			float castLength = (CollisionRadius + CollisionPadding) * 2.0f;
 			if (VerticalSpeed > 0)
 				castLength += VerticalSpeed * PhysicsManager.physicsDelta;
 
@@ -1826,7 +1830,7 @@ namespace Project.Gameplay
 
 				if (!ceilingHit.collidedObject.IsInGroup("ceiling")) return;
 
-				GlobalTranslate(ceilingHit.point - (CenterPosition + UpDirection * CollisionRadius));
+				GlobalTranslate(ceilingHit.point - (CenterPosition + (UpDirection * CollisionRadius)));
 
 				float maxVerticalSpeed = 0;
 				// Workaround for backflipping into slanted ceilings
@@ -1861,7 +1865,7 @@ namespace Project.Gameplay
 			}
 
 			castVector *= Mathf.Sign(MoveSpeed);
-			float castLength = CollisionRadius + COLLISION_PADDING + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
+			float castLength = CollisionRadius + CollisionPadding + Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta;
 
 			RaycastHit wallHit = this.CastRay(CenterPosition, castVector * castLength, CollisionMask, false, GetCollisionExceptions());
 			DebugManager.DrawRay(CenterPosition, castVector * castLength, wallHit ? Colors.Red : Colors.White);
@@ -1906,7 +1910,7 @@ namespace Project.Gameplay
 				}
 
 				// Running into wall head-on
-				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + COLLISION_PADDING)
+				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionRadius + CollisionPadding)
 				{
 					IsOnWall = true;
 					MoveSpeed = 0; // Kill speed
