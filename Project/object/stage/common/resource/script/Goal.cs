@@ -20,6 +20,12 @@ namespace Project.Gameplay.Objects
 				return;
 			}
 
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Race)
+			{
+				Stage.FinishLevel(Stage.IsRaceActive); // Mission was simply to reach the goal
+				return;
+			}
+
 			if (Stage.Data.MissionObjectiveCount == 0) // For no pearls, ringless, stealth, etc.
 			{
 				Stage.FinishLevel(Stage.CurrentObjectiveCount == 0);
