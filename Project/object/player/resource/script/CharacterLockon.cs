@@ -146,7 +146,7 @@ public partial class CharacterLockon : Node3D
 		{
 			// Check Height
 			bool isTargetAttackable = IsHomingAttacking ||
-				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionRadius * 2.0f) &&
+				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionSize.Y * 2.0f) &&
 				Character.ActionState != CharacterController.ActionStates.JumpDash);
 			Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 			UpdateLockonReticle(screenPos, isTargetAttackable);

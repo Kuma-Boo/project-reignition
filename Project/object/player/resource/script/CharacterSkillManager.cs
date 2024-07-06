@@ -295,6 +295,7 @@ public partial class CharacterSkillManager : Node
 			Character.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
 			Character.Animator.SpeedBreak();
 			Character.Effect.StartSpeedBreak();
+			Character.ChangeHitbox("speed break");
 
 			Character.AttackState = CharacterController.AttackStates.OneShot;
 		}
@@ -307,6 +308,7 @@ public partial class CharacterSkillManager : Node
 			Character.CollisionMask = normalCollisionMask; // Reset collision layer
 			Character.Effect.StopSpeedBreak();
 			Character.AttackState = CharacterController.AttackStates.None;
+			Character.ChangeHitbox("RESET");
 		}
 
 		HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);

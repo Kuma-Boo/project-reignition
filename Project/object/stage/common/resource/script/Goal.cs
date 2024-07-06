@@ -12,7 +12,7 @@ namespace Project.Gameplay.Objects
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 
 			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.None)
 			{

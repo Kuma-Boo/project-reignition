@@ -240,7 +240,7 @@ public partial class DestructableObject : Node3D
 	{
 		if (isShattered) return;
 
-		if (!a.IsInGroup("player") && !a.IsInGroup("stackable"))
+		if (!a.IsInGroup("player") && !a.IsInGroup("player detection") && !a.IsInGroup("stackable"))
 		{
 			if (FlagSetting.HasFlag(ShatterFlags.ObjectCollision))
 				Shatter();
@@ -250,7 +250,6 @@ public partial class DestructableObject : Node3D
 
 		isInteractingWithPlayer = true;
 	}
-
 
 	public void OnExited(Area3D a)
 	{
