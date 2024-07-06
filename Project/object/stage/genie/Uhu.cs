@@ -55,7 +55,6 @@ public partial class Uhu : PathFollow3D
 	/// <summary> Call this from an animator when the race is finished. </summary>
 	public void FinishRace()
 	{
-		GD.PrintT("Race finished.");
 		Stage.IsRaceActive = false;
 		trail.IsEmitting = false;
 	}
