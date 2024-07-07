@@ -9,46 +9,43 @@ namespace Project.Gameplay
 		private PathFollow3D pathFollower;
 		private float startingProgress;
 
-
 		private Vector3 velocity;
-		private const float ROTATION_RESET_SPEED = 5f;
-		private const float WALK_SPEED = 2f;
+		private const float RotationResetSpeed = 5f;
+		private const float WalkSpeed = 2f;
 
-		private readonly StringName STATE_TRANSITION = "parameters/state_transition/transition_request";
-		private readonly StringName DEFEAT_TRANSITION = "parameters/defeat_transition/transition_request";
+		private readonly StringName StateTransition = "parameters/state_transition/transition_request";
+		private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
 
-		private readonly StringName ENABLED_CONSTANT = "enabled";
-		private readonly StringName DISABLED_CONSTANT = "disabled";
+		private readonly StringName EnabledConstant = "enabled";
+		private readonly StringName DisabledConstant = "disabled";
 
 		protected override void SetUp()
 		{
 			if (pathFollower != null)
 				startingProgress = pathFollower.Progress;
-			animationTree.Active = true;
+			AnimationTree.Active = true;
 			base.SetUp();
 		}
-
 
 		public override void Respawn()
 		{
 			if (pathFollower != null)
 				pathFollower.Progress = startingProgress;
-			animationTree.Set(STATE_TRANSITION, "idle");
+			AnimationTree.Set(StateTransition, "idle");
 			base.Respawn();
 		}
 
 		protected override void EnterRange()
 		{
 			IsActive = true;
-			animationTree.Set(STATE_TRANSITION, "walk");
+			AnimationTree.Set(StateTransition, "walk");
 		}
 
 		protected override void Defeat()
 		{
 			base.Defeat();
-			animationTree.Set(STATE_TRANSITION, "defeat");
+			AnimationTree.Set(StateTransition, "defeat");
 		}
-
 
 		protected override void UpdateEnemy()
 		{
@@ -57,11 +54,11 @@ namespace Project.Gameplay
 
 			if (IsDefeated)
 			{
-				pathFollower.Rotation = pathFollower.Rotation.Lerp(Vector3.Zero, ROTATION_RESET_SPEED * PhysicsManager.physicsDelta);
+				pathFollower.Rotation = pathFollower.Rotation.Lerp(Vector3.Zero, RotationResetSpeed * PhysicsManager.physicsDelta);
 				return;
 			}
 
-			pathFollower.Progress += WALK_SPEED * PhysicsManager.physicsDelta;
+			pathFollower.Progress += WalkSpeed * PhysicsManager.physicsDelta;
 		}
 	}
 }

@@ -78,6 +78,7 @@ input_3/auto_advance = true
 input_3/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_efgxh"]
+graph_offset = Vector2(-1101.01, -3.77692)
 nodes/aggressive_anim/node = SubResource("AnimationNodeAnimation_4gv11")
 nodes/aggressive_anim/position = Vector2(-820, 180)
 nodes/attack_anim/node = SubResource("AnimationNodeAnimation_k515p")
@@ -107,7 +108,7 @@ node_connections = [&"attack_trigger", 0, &"state_transition", &"attack_trigger"
 height = 15.0
 radius = 30.0
 
-[node name="FlowerMajin" type="StaticBody3D" node_paths=PackedStringArray("root", "collider", "hurtbox", "rangeCollider", "animationTree")]
+[node name="FlowerMajin" type="StaticBody3D"]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("2_14l8s")
@@ -116,11 +117,11 @@ passiveLength = 2.0
 preAttackLength = 3.0
 postAttackLength = 3.0
 seed = ExtResource("3_xwrdv")
-pearlAmount = 20
+pearlAmount = 25
 maxHealth = 3
 root = NodePath("FlowerMajin")
-collider = NodePath("CollisionShape3D")
 hurtbox = NodePath("HeadAttachment/Hitbox")
+collider = NodePath("CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 
@@ -207,32 +208,32 @@ stream = ExtResource("4_rhe6s")
 volume_db = -6.0
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="Aggressive" type="AudioStreamPlayer3D" parent="SFX"]
 stream = ExtResource("4_wnk87")
 volume_db = -12.0
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="Attack" type="AudioStreamPlayer3D" parent="SFX"]
 stream = ExtResource("5_6oumr")
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="Hit" type="AudioStreamPlayer3D" parent="SFX"]
 stream = ExtResource("5_qbppd")
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="Defeated" type="AudioStreamPlayer3D" parent="SFX"]
 stream = ExtResource("5_ijj0t")
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [connection signal="area_entered" from="HeadAttachment/Hitbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="HeadAttachment/Hitbox" to="." method="OnExited"]

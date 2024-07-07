@@ -7,6 +7,8 @@ public partial class DinoTrio : PathFollow3D
 {
 	[Signal]
 	public delegate void DamagedPlayerEventHandler();
+	[Signal]
+	public delegate void WindupEventHandler();
 
 	private DinoTrioProcessor Processor => DinoTrioProcessor.Instance;
 	private CharacterController Character => CharacterController.instance;
@@ -21,6 +23,11 @@ public partial class DinoTrio : PathFollow3D
 	private float preferredOffset;
 	[Export(PropertyHint.Range, "0, 1")]
 	private float rubberbandingStrength;
+
+	[Export]
+	private GroupAudioStreamPlayer3D stepSfx;
+	[Export]
+	private AudioStreamPlayer3D windupSfx;
 
 	/// <summary> Base movespeed (without rubberbanding). </summary>
 	private float moveSpeed;
@@ -102,6 +109,7 @@ public partial class DinoTrio : PathFollow3D
 			// Dino is slowing down
 			moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
 			rubberbandingSpeed = 0;
+			SoundManager.FadeAudioPlayer(stepSfx, 2.0f);
 			return;
 		}
 
@@ -122,6 +130,10 @@ public partial class DinoTrio : PathFollow3D
 
 		// Rubberbanding
 		rubberbandingSpeed = (DeltaProgress - preferredOffset) * rubberbandingStrength;
+
+		stepSfx.VolumeDb = 0;
+		if (!stepSfx.Playing)
+			stepSfx.PlayInGroup();
 	}
 
 	[Export]
@@ -170,7 +182,11 @@ public partial class DinoTrio : PathFollow3D
 		animationTree.Set(FidgetTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
-	public void StartAttack() => animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	public void StartAttack()
+	{
+		animationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		windupSfx.Play();
+	}
 
 	private bool tossedPlayer; // Last state we processed damage in
 	private void DamagePlayer()
@@ -209,7 +225,7 @@ public partial class DinoTrio : PathFollow3D
 	private bool isInteractingWithPlayer;
 	public void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player"))
+		if (!a.IsInGroup("player detection"))
 			return;
 
 		isInteractingWithPlayer = true;
@@ -218,7 +234,7 @@ public partial class DinoTrio : PathFollow3D
 
 	public void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player"))
+		if (!a.IsInGroup("player detection"))
 			return;
 
 		isInteractingWithPlayer = false;

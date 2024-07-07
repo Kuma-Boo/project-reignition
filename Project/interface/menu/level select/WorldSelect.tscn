@@ -1,6 +1,9 @@
-[gd_scene load_steps=40 format=3 uid="uid://cumqwrsj6eqpd"]
+[gd_scene load_steps=47 format=3 uid="uid://cumqwrsj6eqpd"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/WorldSelect.cs" id="1_7vrge"]
+[ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="7_6bdak"]
+[ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="8_gn3y1"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="9_scvou"]
 [ext_resource type="Texture2D" uid="uid://df4fllm7a4ue0" path="res://interface/menu/level select/texture/background.png" id="10_p8mo5"]
 [ext_resource type="Texture2D" uid="uid://c0j6hn525tqn5" path="res://interface/menu/level select/texture/world text/level en.png" id="12_yu6gp"]
 [ext_resource type="Texture2D" uid="uid://bpdv8t52iadwx" path="res://interface/menu/level select/texture/world text/glow en.png" id="13_qthhn"]
@@ -20,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://cb8rxngcco8if" path="res://interface/menu/level select/level lists/PirateStorm.tscn" id="18_dsf0x"]
 [ext_resource type="AudioStream" uid="uid://cruu5h1jr78lr" path="res://sound/sfx/system/menu screen change.wav" id="18_jbekg"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="18_quajg"]
+[ext_resource type="PackedScene" uid="uid://bt32kmhyoo7ec" path="res://interface/menu/skill select/SkillSelect.tscn" id="18_uvxap"]
 [ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="18_w35s5"]
 [ext_resource type="PackedScene" uid="uid://ckdga1wgdrja8" path="res://interface/menu/level select/level lists/SkeletonDome.tscn" id="19_3xa6d"]
 [ext_resource type="PackedScene" uid="uid://bft64s1qkqatm" path="res://interface/menu/level select/level lists/NightPalace.tscn" id="20_y3iyc"]
@@ -28,6 +32,70 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2vkkl"]
 shader = ExtResource("17_uyu6q")
 shader_parameter/flash_amount = 1.0
+
+[sub_resource type="Animation" id="Animation_03o5k"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_gr487"]
+resource_name = "loop"
+length = 0.500003
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.333333),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8gw72"]
+_data = {
+"RESET": SubResource("Animation_03o5k"),
+"loop": SubResource("Animation_gr487")
+}
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7at8s"]
 shader = ExtResource("17_61ktb")
@@ -102,7 +170,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("AreaSelection/Text/Top/Glow:modulate")
+tracks/5/path = NodePath("AreaSelection/Text/Top/Sprite/Glow:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -114,7 +182,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("AreaSelection/Text/Bottom/Glow:modulate")
+tracks/6/path = NodePath("AreaSelection/Text/Bottom/Sprite/Glow:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -174,14 +242,14 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("AreaSelection/Text/Center/Glow:modulate")
+tracks/11/path = NodePath("AreaSelection/Text/Bottom:scale")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1.12, 1.12)]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
@@ -198,14 +266,14 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("AreaSelection/Text/Bottom:scale")
+tracks/13/path = NodePath("AreaSelection/Text/Center/Sprite/Glow:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1.12, 1.12)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
@@ -234,19 +302,19 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("AreaSelection/Cursor/CursorTop:material:shader_parameter/flash_amount")
+tracks/16/path = NodePath("AreaSelection/Text/Bottom:modulate")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("AreaSelection/Cursor/CursorBottom:material:shader_parameter/flash_amount")
+tracks/17/path = NodePath("AreaSelection/Cursor/CursorTop:material:shader_parameter/flash_amount")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -258,19 +326,19 @@ tracks/17/keys = {
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("AreaSelection/Text/Top:modulate")
+tracks/18/path = NodePath("AreaSelection/Cursor/CursorBottom:material:shader_parameter/flash_amount")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [0.0]
 }
 tracks/19/type = "value"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("AreaSelection/Text/Bottom:modulate")
+tracks/19/path = NodePath("AreaSelection/Text/Top:modulate")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
@@ -294,7 +362,7 @@ tracks/20/keys = {
 tracks/21/type = "value"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("AreaSelection/Text/Center/Glow/Flames:scale")
+tracks/21/path = NodePath("AreaSelection/Text/Center/Sprite/Glow/Flames:scale")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
@@ -578,7 +646,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("AreaSelection/Text/Center/Glow/Flames:scale")
+tracks/5/path = NodePath("AreaSelection/Text/Center/Sprite/Glow/Flames:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -727,7 +795,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("AreaSelection/Text/Center/Glow/Flames:scale")
+tracks/5/path = NodePath("AreaSelection/Text/Center/Sprite/Glow/Flames:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -897,7 +965,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("AreaSelection/Text/Top/Glow:modulate")
+tracks/2/path = NodePath("AreaSelection/Text/Top/Sprite/Glow:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -933,7 +1001,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("AreaSelection/Text/Center/Glow:modulate")
+tracks/5/path = NodePath("AreaSelection/Text/Center/Sprite/Glow:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -945,14 +1013,14 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("AreaSelection/Text/Bottom:position")
+tracks/6/path = NodePath("AreaSelection/Text/Bottom/Sprite/Glow:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 144)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -969,14 +1037,14 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("AreaSelection/Text/Bottom/Glow:modulate")
+tracks/8/path = NodePath("AreaSelection/Text/Bottom:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Vector2(0, 144)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -1110,7 +1178,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("AreaSelection/Text/Center/Glow:modulate")
+tracks/6/path = NodePath("AreaSelection/Text/Center/Sprite/Glow:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -1122,14 +1190,14 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("AreaSelection/Text/Bottom:position")
+tracks/7/path = NodePath("AreaSelection/Text/Bottom/Sprite/Glow:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0, 0.233333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 144), Vector2(0, 0)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -1146,14 +1214,14 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("AreaSelection/Text/Bottom/Glow:modulate")
+tracks/9/path = NodePath("AreaSelection/Text/Bottom:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0, 0.233333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+"values": [Vector2(0, 144), Vector2(0, 0)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
@@ -1275,7 +1343,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("AreaSelection/Text/Top/Glow:modulate")
+tracks/4/path = NodePath("AreaSelection/Text/Top/Sprite/Glow:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -1311,7 +1379,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("AreaSelection/Text/Center/Glow:modulate")
+tracks/7/path = NodePath("AreaSelection/Text/Center/Sprite/Glow:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1323,26 +1391,26 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("AreaSelection/Text/Bottom:position")
+tracks/8/path = NodePath("AreaSelection/Text/Bottom:scale")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0, 0.233333),
-"transitions": PackedFloat32Array(1, 1),
+"transitions": PackedFloat32Array(2, 1),
 "update": 0,
-"values": [Vector2(0, 144), Vector2(0, 216)]
+"values": [Vector2(1.12, 1.12), Vector2(1.12, 0)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("AreaSelection/Text/Bottom:scale")
+tracks/9/path = NodePath("AreaSelection/Text/Bottom:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0, 0.233333),
-"transitions": PackedFloat32Array(2, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(1.12, 1.12), Vector2(1.12, 0)]
+"values": [Vector2(0, 144), Vector2(0, 216)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
@@ -1567,7 +1635,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("AreaSelection/Text/Center/Glow/Flames:scale")
+tracks/12/path = NodePath("AreaSelection/Text/Center/Sprite/Glow/Flames:scale")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -1799,7 +1867,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("AreaSelection/Text/Center/Glow/Flames:scale")
+tracks/12/path = NodePath("AreaSelection/Text/Center/Sprite/Glow/Flames:scale")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -1924,8 +1992,9 @@ videoStreamPaths = [&"res://video/demo/demo0.ogv", &"res://video/demo/demo1.ogv"
 description = NodePath("Description")
 levelSpriteRegions = [Rect2(0, 400, 512, 60), Rect2(0, 0, 512, 60), Rect2(0, 230, 512, 60), Rect2(0, 290, 512, 50), Rect2(0, 350, 512, 50), Rect2(0, 120, 512, 50), Rect2(0, 63, 512, 50), Rect2(0, 180, 512, 50), Rect2(0, 460, 512, 50)]
 levelDescriptionKeys = ["lost_prologue_description", "sand_oasis_description", "dinosaur_jungle_description", "evil_foundry_description", "levitated_ruin_description", "pirate_storm_description", "skeleton_dome_description", "night_palace_description", "sys_world_locked"]
-levelTextSprites = [NodePath("AreaSelection/Text/Top"), NodePath("AreaSelection/Text/Center"), NodePath("AreaSelection/Text/Bottom"), NodePath("AreaSelection/Text/TransitionText")]
-levelGlowSprites = [NodePath("AreaSelection/Text/Top/Glow"), NodePath("AreaSelection/Text/Center/Glow"), NodePath("AreaSelection/Text/Bottom/Glow")]
+levelTextSprites = [NodePath("AreaSelection/Text/Top/Sprite"), NodePath("AreaSelection/Text/Center/Sprite"), NodePath("AreaSelection/Text/Bottom/Sprite"), NodePath("AreaSelection/Text/TransitionText/Sprite")]
+levelGlowSprites = [NodePath("AreaSelection/Text/Top/Sprite/Glow"), NodePath("AreaSelection/Text/Center/Sprite/Glow"), NodePath("AreaSelection/Text/Bottom/Sprite/Glow")]
+levelNewSprites = [NodePath("AreaSelection/Text/Top/New"), NodePath("AreaSelection/Text/Center/New"), NodePath("AreaSelection/Text/Bottom/New"), NodePath("AreaSelection/Text/TransitionText/New")]
 submenus = Array[NodePath]([NodePath("Submenus/LostPrologue"), NodePath("Submenus/SandOasis"), NodePath("Submenus/DinosaurJungle"), NodePath("Submenus/EvilFoundry"), NodePath("Submenus/LevitatedRuin"), NodePath("Submenus/PirateStorm"), NodePath("Submenus/SkeletonDome"), NodePath("Submenus/NightPalace")])
 bgm = NodePath("LevelSelectBGM")
 animator = NodePath("AnimationPlayer")
@@ -1982,57 +2051,249 @@ position = Vector2(960, 456)
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
-[node name="Top" type="Sprite2D" parent="AreaSelection/Text"]
+[node name="Top" type="Node2D" parent="AreaSelection/Text"]
 position = Vector2(0, -144)
 scale = Vector2(1.12, 1.12)
+
+[node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/Top"]
 texture = ExtResource("12_yu6gp")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
 
-[node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Top"]
+[node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Top/Sprite"]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("ShaderMaterial_2vkkl")
 texture = ExtResource("13_qthhn")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
 
-[node name="Flames" parent="AreaSelection/Text/Top/Glow" instance=ExtResource("16_hpwaj")]
+[node name="Flames" parent="AreaSelection/Text/Top/Sprite/Glow" instance=ExtResource("16_hpwaj")]
 
-[node name="Center" type="Sprite2D" parent="AreaSelection/Text"]
+[node name="New" type="Label" parent="AreaSelection/Text/Top"]
+self_modulate = Color(1, 1, 0, 1)
+offset_left = -160.0
+offset_top = -40.0
+offset_right = 152.0
+offset_bottom = 14.0
+scale = Vector2(0.4, 0.4)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Glow" type="Label" parent="AreaSelection/Text/Top/New"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("9_scvou")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(156, 54)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/Top/New"]
+libraries = {
+"": SubResource("AnimationLibrary_8gw72")
+}
+autoplay = "loop"
+
+[node name="Center" type="Node2D" parent="AreaSelection/Text"]
 scale = Vector2(2.25, 2.25)
+
+[node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/Center"]
 texture = ExtResource("12_yu6gp")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
 
-[node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Center"]
+[node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Center/Sprite"]
 material = SubResource("ShaderMaterial_2vkkl")
 texture = ExtResource("13_qthhn")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
 
-[node name="Flames" parent="AreaSelection/Text/Center/Glow" instance=ExtResource("16_hpwaj")]
+[node name="Flames" parent="AreaSelection/Text/Center/Sprite/Glow" instance=ExtResource("16_hpwaj")]
 
-[node name="Bottom" type="Sprite2D" parent="AreaSelection/Text"]
+[node name="New" type="Label" parent="AreaSelection/Text/Center"]
+self_modulate = Color(1, 1, 0, 1)
+offset_left = -160.0
+offset_top = -40.0
+offset_right = 152.0
+offset_bottom = 14.0
+scale = Vector2(0.4, 0.4)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Glow" type="Label" parent="AreaSelection/Text/Center/New"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("9_scvou")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(156, 54)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/Center/New"]
+libraries = {
+"": SubResource("AnimationLibrary_8gw72")
+}
+autoplay = "loop"
+
+[node name="Bottom" type="Node2D" parent="AreaSelection/Text"]
 position = Vector2(0, 144)
 scale = Vector2(1.12, 1.12)
+
+[node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/Bottom"]
 texture = ExtResource("12_yu6gp")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
 
-[node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Bottom"]
+[node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Bottom/Sprite"]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("ShaderMaterial_2vkkl")
 texture = ExtResource("13_qthhn")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
 
-[node name="Flames" parent="AreaSelection/Text/Bottom/Glow" instance=ExtResource("16_hpwaj")]
+[node name="Flames" parent="AreaSelection/Text/Bottom/Sprite/Glow" instance=ExtResource("16_hpwaj")]
 
-[node name="TransitionText" type="Sprite2D" parent="AreaSelection/Text"]
+[node name="New" type="Label" parent="AreaSelection/Text/Bottom"]
+self_modulate = Color(1, 1, 0, 1)
+offset_left = -160.0
+offset_top = -40.0
+offset_right = 152.0
+offset_bottom = 14.0
+scale = Vector2(0.4, 0.4)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Glow" type="Label" parent="AreaSelection/Text/Bottom/New"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("9_scvou")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(156, 54)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/Bottom/New"]
+libraries = {
+"": SubResource("AnimationLibrary_8gw72")
+}
+autoplay = "loop"
+
+[node name="TransitionText" type="Node2D" parent="AreaSelection/Text"]
 position = Vector2(0, -520)
+
+[node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/TransitionText"]
 texture = ExtResource("12_yu6gp")
 region_enabled = true
 region_rect = Rect2(0, 460, 512, 50)
+
+[node name="New" type="Label" parent="AreaSelection/Text/TransitionText"]
+self_modulate = Color(1, 1, 0, 1)
+offset_left = -160.0
+offset_top = -40.0
+offset_right = 152.0
+offset_bottom = 14.0
+scale = Vector2(0.4, 0.4)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Glow" type="Label" parent="AreaSelection/Text/TransitionText/New"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("9_scvou")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(156, 54)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_6bdak")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_gn3y1")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/TransitionText/New"]
+libraries = {
+"": SubResource("AnimationLibrary_8gw72")
+}
+autoplay = "loop"
 
 [node name="Cursor" type="Node2D" parent="AreaSelection"]
 position = Vector2(960, 456)
@@ -2113,11 +2374,18 @@ readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="ReadyMenu" parent="Submenus" node_paths=PackedStringArray("description", "bgm") instance=ExtResource("17_c7rwi")]
-z_index = 100
+z_index = 5
 z_as_relative = false
 layout_mode = 1
 description = NodePath("../../Description")
+submenus = Array[NodePath]([NodePath("../SkillSelect")])
 bgm = NodePath("../../LevelSelectBGM")
+
+[node name="SkillSelect" parent="Submenus" node_paths=PackedStringArray("parentMenu") instance=ExtResource("18_uvxap")]
+z_index = 15
+z_as_relative = false
+layout_mode = 1
+parentMenu = NodePath("../ReadyMenu")
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -2139,7 +2407,7 @@ actionKey = "sys_cancel"
 inputKey = "button_action"
 
 [node name="Description" parent="." instance=ExtResource("18_w35s5")]
-z_index = 100
+z_index = 10
 z_as_relative = false
 layout_mode = 1
 offset_top = 260.0
@@ -2177,4 +2445,4 @@ next/scroll-down = &"reset-scroll"
 next/scroll-up = &"reset-scroll"
 next/show = &"loop"
 next/show-fade-video = &"loop"
-blend_times = [&"loop", &"scroll-down", 0.05, &"loop", &"scroll-up", 0.05, &"show", &"loop", 0.1, &"show-fade-video", &"loop", 0.1]
+blend_times = [&"show", &"loop", 0.1, &"loop", &"scroll-down", 0.05, &"loop", &"scroll-up", 0.05, &"show-fade-video", &"loop", 0.1]

@@ -170,7 +170,7 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!Character.IsOnGround) return; // Player isn't on the ground
 
-			float checkLength = Mathf.Abs(Character.GlobalPosition.Y - floorCalculationRoot.GlobalPosition.Y) + Character.CollisionRadius * 2.0f;
+			float checkLength = Mathf.Abs(Character.GlobalPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Character.CollisionSize.Y * 2.0f);
 			KinematicCollision3D collision = Character.MoveAndCollide(Vector3.Down * checkLength, true);
 			if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 				return;
@@ -178,17 +178,15 @@ namespace Project.Gameplay.Triggers
 			Character.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Character.GlobalPosition.Y));
 		}
 
-
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 			isInteractingWithPlayer = true;
 		}
 
-
 		public void OnExited(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 
 			isInteractingWithPlayer = false;
 			isActive = false;

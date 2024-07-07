@@ -3,145 +3,175 @@ using Godot.Collections;
 using Project.Core;
 using Project.Gameplay;
 
-namespace Project.Interface.Menus
+namespace Project.Interface.Menus;
+
+public partial class SkillSelect : Menu
 {
-	public partial class SkillSelect : Menu
+	[Export]
+	private PackedScene skillOption;
+	[Export]
+	private VBoxContainer optionContainer;
+	[Export]
+	private Node2D cursor;
+	[Export]
+	private Description description;
+	[Export]
+	private Sprite2D scrollbar;
+	[Export]
+	private Sprite2D skillPointFill;
+	[Export]
+	private Label levelLabel;
+	[Export]
+	private Label skillPointLabel;
+
+	private SkillListResource SkillList => Runtime.Instance.SkillList;
+	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
+
+	private int cursorPosition;
+
+	private int scrollAmount;
+	private float scrollRatio;
+	private Vector2 scrollVelocity;
+	private const float ScrollSmoothing = .05f;
+	/// <summary> How much to scroll per skill. </summary>
+	private readonly int ScrollInterval = 63;
+	/// <summary> Number of skills on a single page. </summary>
+	private readonly int PageSize = 8;
+
+	private Array<SkillOption> skillOptionList = [];
+	private Array<SkillOption> currentSkillOptionList = [];
+
+	protected override void SetUp()
 	{
-		[Export]
-		private PackedScene skillOption;
-		[Export]
-		private VBoxContainer optionContainer;
-		[Export]
-		private Node2D cursor;
-		[Export]
-		private Description description;
-		[Export]
-		private Sprite2D scrollbar;
-		[Export]
-		private Sprite2D skillPointFill;
-		[Export]
-		private Label skillPointLabel;
-
-		private SkillListResource MasterSkillList => Runtime.Instance.masterSkillList;
-		private SkillRing ActiveSkillRing => SaveManager.ActiveGameData.skillRing;
-
-		private int cursorPosition;
-
-
-		private int scrollAmount;
-		private float scrollRatio;
-		private Vector2 scrollVelocity;
-		private const float SCROLL_SMOOTHING = .05f;
-		/// <summary> How much to scroll per skill. </summary>
-		private readonly int SCROLL_INTERVAL = 63;
-		/// <summary> Number of skills on a single page. </summary>
-		private readonly int PAGE_SIZE = 8;
-
-		private Array<SkillOption> skillList = new();
-
-		protected override void SetUp()
+		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
-			for (int i = 0; i < (int)SkillKeyEnum.Max; i++)
-			{
-				SkillOption newSkill = skillOption.Instantiate<SkillOption>();
-				newSkill.Key = (SkillKeyEnum)i;
-				newSkill.Number = i + 1;
-				newSkill.Cost = MasterSkillList.GetSkillCost(newSkill.Key);
-				newSkill.IsSkillActive = ActiveSkillRing.equippedSkills.Contains(newSkill.Key);
-				newSkill.RedrawData();
+			SkillKey key = (SkillKey)i;
 
-				optionContainer.AddChild(newSkill);
-				skillList.Add(newSkill);
+			if (SkillList.GetSkill(key) == null)
+				continue;
+
+			SkillOption newSkill = skillOption.Instantiate<SkillOption>();
+			newSkill.Skill = SkillList.GetSkill(key);
+			newSkill.Number = i + 1;
+			newSkill.Initialize();
+
+			optionContainer.AddChild(newSkill);
+			skillOptionList.Add(newSkill);
+		}
+
+		base.SetUp();
+	}
+
+	public override void _Process(double _)
+	{
+		float targetScrollPosition = (160 * scrollRatio) - 80;
+		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
+	}
+
+	protected override void Cancel()
+	{
+		SaveManager.SaveGameData();
+		animator.Play("hide");
+	}
+
+	protected override void UpdateSelection()
+	{
+		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		if (inputSign != 0)
+		{
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, currentSkillOptionList.Count);
+
+			if (currentSkillOptionList.Count <= PageSize)
+			{
+				// Disable scrolling
+				scrollAmount = 0;
+				scrollRatio = 0;
+				cursorPosition = VerticalSelection;
 			}
-
-			description.ShowDescription();
-			description.SetText(skillList[VerticalSelection].DescriptionKey);
-
-			Redraw();
-			base.SetUp();
-		}
-
-
-		public override void _Process(double _)
-		{
-			scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * (160 * scrollRatio - 80), ref scrollVelocity, SCROLL_SMOOTHING);
-		}
-
-
-		protected override void UpdateSelection()
-		{
-			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
-			if (inputSign != 0)
+			else
 			{
-				VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SkillKeyEnum.Max);
-
-				if (VerticalSelection == 0 || VerticalSelection == (int)SkillKeyEnum.Max - 1)
+				// Update scroll
+				if (VerticalSelection == 0 || VerticalSelection == skillOptionList.Count - 1)
 					cursorPosition = scrollAmount = VerticalSelection;
 				else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
 					scrollAmount += inputSign;
 				else
 					cursorPosition += inputSign;
 
-				scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKeyEnum.Max - PAGE_SIZE);
-				scrollRatio = (float)scrollAmount / ((int)SkillKeyEnum.Max - PAGE_SIZE);
-				cursorPosition = Mathf.Clamp(cursorPosition, 0, PAGE_SIZE - 1);
-				optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * SCROLL_INTERVAL);
-				cursor.Position = Vector2.Up * -cursorPosition * SCROLL_INTERVAL;
-				description.SetText(skillList[VerticalSelection].DescriptionKey);
-
-				animator.Play("select");
-				if (!isSelectionScrolling)
-					StartSelectionTimer();
-
-				return;
+				scrollAmount = Mathf.Clamp(scrollAmount, 0, currentSkillOptionList.Count - PageSize);
+				scrollRatio = (float)scrollAmount / (currentSkillOptionList.Count - PageSize);
+				cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 			}
 
-			// TODO Change sort method when horizontal input is detected
+			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
+			cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
+			description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
+
+			animator.Play("select");
+			animator.Seek(0);
+			animator.Advance(0);
+			if (!isSelectionScrolling)
+				StartSelectionTimer();
 		}
 
+		// TODO Change sort method when speedbreak is pressed
+	}
 
-		protected override void Confirm()
+	public override void ShowMenu()
+	{
+		// Update visible skill list to account for multiple save files
+		currentSkillOptionList.Clear();
+		for (int i = 0; i < skillOptionList.Count; i++)
 		{
-			if (!ToggleSkill(skillList[VerticalSelection].Key))
-				return;
-
-			Redraw();
+			SkillKey key = (SkillKey)i;
+			skillOptionList[i].Visible = SaveManager.ActiveSkillRing.IsSkillUnlocked(key);
+			if (skillOptionList[i].Visible)
+				currentSkillOptionList.Add(skillOptionList[i]);
 		}
 
+		Redraw();
+		base.ShowMenu();
+	}
 
-		private void Redraw()
+	protected override void Confirm()
+	{
+		if (!ToggleSkill())
+			return;
+
+		Redraw();
+	}
+
+	private void Redraw()
+	{
+		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
+		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
+		foreach (SkillOption option in currentSkillOptionList)
+			option.Redraw();
+
+		description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
+		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
+	}
+
+	private bool ToggleSkill()
+	{
+		SkillKey key = currentSkillOptionList[VerticalSelection].Skill.Key;
+		if (ActiveSkillRing.UnequipSkill(key))
 		{
-			skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
-			skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-			skillList[VerticalSelection].IsSkillActive = ActiveSkillRing.equippedSkills.Contains(skillList[VerticalSelection].Key);
+			animator.Play("unequip");
+			return true;
 		}
 
-
-		private bool ToggleSkill(SkillKeyEnum key)
+		if (ActiveSkillRing.EquipSkill(key))
 		{
-			if (ActiveSkillRing.equippedSkills.Contains(key))
-			{
-				ActiveSkillRing.equippedSkills.Remove(key);
-				ActiveSkillRing.TotalCost -= MasterSkillList.GetSkillCost(key);
-				animator.Play("unequip");
-				return true;
-			}
-
-			// Ensure the player has enough skill points
-			int targetTotalCost = ActiveSkillRing.TotalCost + MasterSkillList.GetSkillCost(key);
-			if (targetTotalCost > ActiveSkillRing.MaxSkillPoints)
-				return false;
-
-			ActiveSkillRing.equippedSkills.Add(key);
-			ActiveSkillRing.TotalCost = targetTotalCost;
 			animator.Play("equip");
 			return true;
 		}
 
+		return false; // Something failed
+	}
 
-		private void SortMenuByCost()
-		{
-
-		}
+	private void SortMenuByCost()
+	{
+		currentSkillOptionList.Sort();
 	}
 }

@@ -15,6 +15,10 @@ public partial class PathTraveller : Node3D
 	public delegate void ActivatedEventHandler();
 	[Signal]
 	public delegate void DeactivatedEventHandler();
+	[Signal]
+	public delegate void StaggeredEventHandler();
+	[Signal]
+	public delegate void DamagedEventHandler();
 
 	/// <summary> How fast to move. </summary>
 	[ExportGroup("Settings")]
@@ -85,6 +89,7 @@ public partial class PathTraveller : Node3D
 		spawnData = new SpawnData(GetParent(), Transform); // Create spawn data
 
 		StageSettings.instance.ConnectRespawnSignal(this);
+		Respawn();
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -124,7 +129,7 @@ public partial class PathTraveller : Node3D
 
 		currentSpeed = ExtensionMethods.SmoothDamp(currentSpeed, maxSpeed, ref speedVelocity, SPEED_SMOOTHING);
 		currentTurnAmount = currentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TURN_SMOOTHING);
-		Character.Animator.UpdateBalancing(inputVector.X / turnSpeed);
+		Character.Animator.UpdateBalancing((inputVector.X / turnSpeed) - (Character.PathFollower.DeltaAngle * 20.0f));
 	}
 
 	/// <summary> Check for walls. </summary>
@@ -133,7 +138,7 @@ public partial class PathTraveller : Node3D
 		if (!autosetBounds)
 			return;
 
-		float pathTravellerCollisionSize = Character.CollisionRadius;
+		float pathTravellerCollisionSize = Character.CollisionSize.X;
 		float castDistance = pathTravellerCollisionSize + COLLISION_SMOOTHING_DISTANCE;
 		if (Mathf.Sign(currentTurnAmount.X) == direction)
 			castDistance += Mathf.Abs(currentTurnAmount.X * PhysicsManager.physicsDelta);
@@ -170,16 +175,22 @@ public partial class PathTraveller : Node3D
 
 		// Sync transforms
 		GlobalTransform = pathFollower.GlobalTransform;
-		Character.UpdateExternalControl();
+		Character.UpdateExternalControl(true);
 	}
 
 	public void Respawn()
 	{
 		Deactivate();
 
+		if (animator.HasAnimation("respawn"))
+			animator.Play("respawn");
+
 		spawnData.Respawn(this);
 		pathFollower.Progress = startingProgress;
 		pathFollower.HOffset = pathFollower.VOffset = 0;
+		Vector3 startingOffset = pathFollower.GlobalBasis.Inverse() * (GlobalPosition - pathFollower.GlobalPosition);
+		pathFollower.HOffset = startingOffset.X;
+		pathFollower.VOffset = startingOffset.Y;
 
 		if (root != null) // Reset root transform
 			root.Transform = Transform3D.Identity;
@@ -195,6 +206,12 @@ public partial class PathTraveller : Node3D
 	{
 		isActive = true;
 
+		if (animator.HasAnimation("activate"))
+		{
+			animator.Play("activate");
+			animator.Advance(0.0);
+		}
+
 		Character.StartExternal(this, playerPosition, .1f);
 		Character.Animator.StartBalancing(); // Carpet uses balancing animations
 		Character.Animator.UpdateBalanceSpeed(1.0f);
@@ -207,6 +224,12 @@ public partial class PathTraveller : Node3D
 		EmitSignal(SignalName.Deactivated);
 		isActive = false;
 
+		if (animator.HasAnimation("deactivate"))
+		{
+			animator.Play("deactivate");
+			animator.Advance(0.0);
+		}
+
 		// Reset damping values
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
@@ -218,26 +241,30 @@ public partial class PathTraveller : Node3D
 
 	private void TakeDamage()
 	{
+		EmitSignal(SignalName.Damaged);
+
 		Deactivate();
 		isRespawning = true;
 
 		// Bump the player off
 		LaunchSettings launchSettings = LaunchSettings.Create(Character.GlobalPosition, Character.GlobalPosition, 2);
 		Character.StartLauncher(launchSettings);
-		Character.Effect.StartSpinFX();
-		Character.Animator.StartSpin(3.0f);
 		Character.Animator.ResetState(0.1f);
-	}
+		Character.Animator.StartSpin(3.0f);
+		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 
+		if (animator.HasAnimation("despawn"))
+			animator.Play("despawn");
+	}
 
 	private void Stagger()
 	{
-		currentSpeed = speedVelocity = 0;
-		currentTurnAmount = turnVelocity = Vector2.Zero;
+		EmitSignal(SignalName.Staggered);
 
 		// TODO Play stagger animation
+		currentSpeed = speedVelocity = 0;
+		currentTurnAmount = turnVelocity = Vector2.Zero;
 	}
-
 
 	public void OnBodyEntered(PhysicsBody3D b)
 	{
@@ -248,5 +275,6 @@ public partial class PathTraveller : Node3D
 		}
 
 		TakeDamage();
+		EmitSignal(SignalName.Damaged);
 	}
 }

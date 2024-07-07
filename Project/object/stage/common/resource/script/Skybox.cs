@@ -11,6 +11,9 @@ namespace Project.Gameplay.Objects
 
 		public override void _Process(double _)
 		{
+			if (Character.IsDefeated)
+				return;
+
 			GlobalPosition = Character.GlobalPosition;
 		}
 	}

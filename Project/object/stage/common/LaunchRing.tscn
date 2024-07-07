@@ -7,30 +7,29 @@
 
 [sub_resource type="Animation" id="Animation_n5j51"]
 resource_name = "RESET"
-length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:launchPower")
+tracks/0/path = NodePath("LaunchRing:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("LaunchRing:rotation")
+tracks/1/path = NodePath(".:Secondary Settings/Blend")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0)]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_lguue"]
@@ -40,7 +39,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:launchPower")
+tracks/0/path = NodePath(".:Secondary Settings/Blend")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -77,15 +76,18 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("1_17ata")
-"Editor/Spike Variant" = false
-Settings/Distance = 0.0
-"Settings/Middle Height" = 0.0
-"Settings/End Height" = 0.0
-"Settings/Min Distance" = 0.0
-"Settings/Min Middle Height" = 0.0
-"Settings/Min End Height" = 0.0
+"Secondary Settings/Enabled" = true
+"Secondary Settings/Middle Height" = 5.0
+"Secondary Settings/Final Height" = 2.0
+"Secondary Settings/Distance" = 20.0
+"Secondary Settings/Blend" = 0.0
 pieces = [NodePath("LaunchRing/LaunchRing1"), NodePath("LaunchRing/LaunchRing2"), NodePath("LaunchRing/LaunchRing3"), NodePath("LaunchRing/LaunchRing4"), NodePath("LaunchRing/LaunchRing5"), NodePath("LaunchRing/LaunchRing6"), NodePath("LaunchRing/LaunchRing7"), NodePath("LaunchRing/LaunchRing8"), NodePath("LaunchRing/LaunchRing9"), NodePath("LaunchRing/LaunchRing10"), NodePath("LaunchRing/LaunchRing11"), NodePath("LaunchRing/LaunchRing12"), NodePath("LaunchRing/LaunchRing13"), NodePath("LaunchRing/LaunchRing14"), NodePath("LaunchRing/LaunchRing15"), NodePath("LaunchRing/LaunchRing16")]
 animator = NodePath("AnimationPlayer")
+middleHeight = 2.0
+distance = 10.0
+allowJumpDashing = true
+recenterSpeed = 128
+voiceKey = &""
 
 [node name="LaunchRing" parent="." instance=ExtResource("2_gkfym")]
 
@@ -93,19 +95,20 @@ animator = NodePath("AnimationPlayer")
 libraries = {
 "": SubResource("AnimationLibrary_tk06v")
 }
+blend_times = [&"charge", &"RESET", 0.5]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CylinderShape3D_eaqjp")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="Loop" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_lq4d6")
 pitch_scale = 0.85
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_wmq7e")
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="area_exited" from="." to="." method="OnExited"]

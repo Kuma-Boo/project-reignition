@@ -7,6 +7,7 @@ namespace Project.Interface
 	public partial class Countdown : Control
 	{
 		public static bool IsCountdownActive { get; private set; }
+		public static Countdown Instance { get; private set; }
 
 		[Signal]
 		public delegate void CountdownStartedEventHandler();
@@ -18,12 +19,8 @@ namespace Project.Interface
 		[Export]
 		private AnimationPlayer animator;
 
-
-		public override void _Ready()
-		{
-			StageSettings.instance.Connect(StageSettings.SignalName.ReflectionProbesCalculated, new(this, MethodName.StartCountdown));
-		}
-
+		public override void _EnterTree() => Instance = this;
+		public override void _Ready() => StageSettings.instance.Connect(StageSettings.SignalName.ReflectionProbesCalculated, new(this, MethodName.StartCountdown));
 
 		public void StartCountdown()
 		{

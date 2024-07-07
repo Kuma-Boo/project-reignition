@@ -96,7 +96,11 @@ public struct LaunchSettings
 		};
 
 		if (relativeToEnd)
+		{
 			data.middleHeight += delta.Y;
+			if (data.middleHeight < 0)
+				data.middleHeight = 0;
+		}
 
 		data.Initialize();
 		return data;

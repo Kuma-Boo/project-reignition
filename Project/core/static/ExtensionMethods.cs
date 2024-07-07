@@ -147,7 +147,6 @@ namespace Project
 
 			float min = reference - range;
 			float max = reference + range;
-
 			if (value > min && value < max) //Input is between the two angles, no need to clamp
 				return value;
 
@@ -271,11 +270,8 @@ namespace Project
 			return output;
 		}
 
-
-		/// <summary> Formats exp into the typical format displayed on menus. </summary>
-		public static string FormatEXP(int exp) => exp.ToString("0000000") + "e";
-		/// <summary> Formats a score into the typical format displayed on menus. </summary>
-		public static string FormatScore(int score) => score.ToString("00000000");
+		/// <summary> Formats a number to eight digits. The typical format displayed on menus. </summary>
+		public static string FormatMenuNumber(int score) => score.ToString("00000000");
 		/// <summary> Formats a number of seconds into the typical format displayed on menus. </summary>
 		public static string FormatTime(float time)
 		{
