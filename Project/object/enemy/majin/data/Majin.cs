@@ -404,6 +404,7 @@ public partial class Majin : Enemy
 	protected override void Defeat()
 	{
 		base.Defeat();
+		SetHitboxStatus(false, true);
 
 		AnimationPlayer.Play("strike");
 		if (isDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))

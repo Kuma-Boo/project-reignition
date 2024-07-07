@@ -202,12 +202,12 @@ public partial class Enemy : Node3D
 	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
-	protected void SetHitboxStatus(bool isEnabled)
+	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)
 	{
 		IsHitboxEnabled = isEnabled;
 
 		// Update environment collider
-		if (Collider != null)
+		if (Collider != null && !hurtboxOnly)
 			Collider.Disabled = !IsHitboxEnabled;
 
 		// Update hurtbox
