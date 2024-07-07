@@ -19,6 +19,7 @@ namespace Project.Gameplay
 			InitializeRings();
 			InitializeObjectives();
 			InitializeSoulGauge();
+			InitializeRace();
 
 			if (Stage != null) // Decouple from level settings
 			{
@@ -282,6 +283,35 @@ namespace Project.Gameplay
 				soulGaugeAnimator.Play("RESET"); //Revert to blue
 			}
 		}
+		#endregion
+
+		#region Race
+		[ExportGroup("Race")]
+		[Export]
+		private Control raceRoot;
+		[Export]
+		private Control raceUhu;
+		[Export]
+		private Control racePlayer;
+		private readonly float RaceStartPoint = 0;
+		private readonly float RaceEndPoint = 512;
+		private void InitializeRace()
+		{
+			if (Stage == null)
+				return;
+
+			raceRoot.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Race;
+		}
+
+		public void UpdateRace(float playerRatio, float uhuRatio)
+		{
+			raceUhu.Position = new(Mathf.Lerp(RaceStartPoint, RaceEndPoint, uhuRatio), raceUhu.Position.Y);
+			racePlayer.Position = new(Mathf.Lerp(RaceStartPoint, RaceEndPoint, playerRatio), racePlayer.Position.Y);
+
+			raceUhu.ZIndex = playerRatio >= uhuRatio ? 0 : 1;
+			racePlayer.ZIndex = playerRatio >= uhuRatio ? 1 : 0;
+		}
+
 		#endregion
 
 		public void OnLevelCompleted() => SetVisibility(false); // Ignore parameter
