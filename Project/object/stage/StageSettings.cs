@@ -452,6 +452,8 @@ public partial class StageSettings : Node3D
 	}
 	public LevelStateEnum LevelState { get; private set; }
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
+	/// <summary> Flag for keeping track of Uhu's race status. </summary>
+	public bool IsRaceActive { get; set; }
 	private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 	public void FinishLevel(bool wasSuccessful)
 	{

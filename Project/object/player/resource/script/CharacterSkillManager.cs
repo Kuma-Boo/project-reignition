@@ -93,8 +93,6 @@ public partial class CharacterSkillManager : Node
 	[Export]
 	public float landingDashSpeed;
 
-	public bool IsAttacking { get; set; } // Is the player using an attack skill? (i.e Any of the fire skills)
-
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
@@ -284,6 +282,7 @@ public partial class CharacterSkillManager : Node
 	public void ToggleSpeedBreak()
 	{
 		Character.ResetActionState();
+
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
 		breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
@@ -296,6 +295,9 @@ public partial class CharacterSkillManager : Node
 			Character.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
 			Character.Animator.SpeedBreak();
 			Character.Effect.StartSpeedBreak();
+			Character.ChangeHitbox("speed break");
+
+			Character.AttackState = CharacterController.AttackStates.OneShot;
 		}
 		else
 		{
@@ -305,6 +307,8 @@ public partial class CharacterSkillManager : Node
 			Character.MoveSpeed = Character.GroundSettings.speed; // Override speed
 			Character.CollisionMask = normalCollisionMask; // Reset collision layer
 			Character.Effect.StopSpeedBreak();
+			Character.AttackState = CharacterController.AttackStates.None;
+			Character.ChangeHitbox("RESET");
 		}
 
 		HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);

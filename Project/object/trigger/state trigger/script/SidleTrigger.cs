@@ -93,7 +93,7 @@ public partial class SidleTrigger : Area3D
 	private void UpdateSidle()
 	{
 		// Check ground
-		Vector3 castVector = Vector3.Down * Character.CollisionRadius * 2.0f;
+		Vector3 castVector = Vector3.Down * Character.CollisionSize.X * 2.0f;
 		RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 		if (!hit) // No ground - Fall and respawn
@@ -115,11 +115,11 @@ public partial class SidleTrigger : Area3D
 			velocity = Mathf.Lerp(velocity, targetVelocity, FRICTION_SMOOTHING);
 
 		// Check walls
-		castVector = Character.PathFollower.Forward() * Mathf.Sign(velocity) * (Character.CollisionRadius + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
+		castVector = Character.PathFollower.Forward() * Mathf.Sign(velocity) * (Character.CollisionSize.X + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
 		hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 		if (hit && hit.collidedObject.IsInGroup("sidle wall")) // Kill speed
-			velocity = (hit.distance - Character.CollisionRadius) * Mathf.Sign(velocity);
+			velocity = (hit.distance - Character.CollisionSize.X) * Mathf.Sign(velocity);
 
 		if (!Mathf.IsZeroApprox(velocity))
 		{
@@ -302,7 +302,7 @@ public partial class SidleTrigger : Area3D
 
 	public void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		isInteractingWithPlayer = true;
 
@@ -313,7 +313,7 @@ public partial class SidleTrigger : Area3D
 
 	public void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		isInteractingWithPlayer = false;
 		Character.RemoveLockoutData(lockout);

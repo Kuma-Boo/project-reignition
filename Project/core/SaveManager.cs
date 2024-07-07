@@ -125,7 +125,7 @@ public partial class SaveManager : Node
 
 		// Controls
 		public float deadZone = .5f;
-		public ControllerType controllerType = ControllerType.PlayStation;
+		public ControllerType controllerType = ControllerType.Automatic;
 		public Dictionary inputConfiguration = new();
 
 		// Language
@@ -535,6 +535,7 @@ public partial class SaveManager : Node
 
 		// TODO Replace this with the tutorial key
 		GameData.DefaultData.UnlockStage("so_a1_main");
+		GameData.DefaultData.UnlockWorld(WorldEnum.LostPrologue);
 		GameData.DefaultData.UnlockWorld(WorldEnum.SandOasis);
 
 		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo

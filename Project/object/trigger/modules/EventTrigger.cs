@@ -271,6 +271,7 @@ public partial class EventTrigger : StageTriggerModule
 		Character.Animator.SnapRotation(Character.MovementAngle);
 		Character.Animator.CancelOneshot(characterFadeoutTime);
 		Character.Animator.DisabledSpeedSmoothing = true;
+		Character.Animator.ResetState(0);
 		Character.ResetMovementState();
 
 		if (characterExitLockout != null)

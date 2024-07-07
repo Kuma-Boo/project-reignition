@@ -34,13 +34,13 @@ namespace Project.Gameplay
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 			isInteractingWithPlayer = true;
 		}
 
 		public void OnExited(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 			isInteractingWithPlayer = false;
 		}
 	}

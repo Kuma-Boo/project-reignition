@@ -46,6 +46,7 @@ public partial class Majin : Enemy
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Aggression Radius", Variant.Type.Int, PropertyHint.Range, "0,100,1"));
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Instantly", Variant.Type.Bool));
 		}
 
 		properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
@@ -96,6 +97,8 @@ public partial class Majin : Enemy
 				return flameInactiveTime;
 			case "Attack Settings/Flame Aggression Radius":
 				return FlameAggressionRadius;
+			case "Attack Settings/Attack Instantly":
+				return isInstantFlame;
 
 			case "Defeat Settings/Enable Enemy Launching":
 				return isDefeatLaunchEnabled;
@@ -169,6 +172,9 @@ public partial class Majin : Enemy
 			case "Attack Settings/Flame Aggression Radius":
 				FlameAggressionRadius = (int)value;
 				break;
+			case "Attack Settings/Attack Instantly":
+				isInstantFlame = (bool)value;
+				break;
 
 			case "Defeat Settings/Enable Enemy Launching":
 				isDefeatLaunchEnabled = (bool)value;
@@ -192,8 +198,12 @@ public partial class Majin : Enemy
 	}
 	#endregion
 
-	[Export]
-	private Node3D fireRoot;
+	[Export(PropertyHint.NodeType, "Node3D")]
+	private NodePath flameRoot;
+	private Node3D FlameRoot { get; set; }
+	[Export(PropertyHint.NodeType, "BoneAttachment3D")]
+	private NodePath hitboxAttachment;
+	private BoneAttachment3D HitboxAttachment { get; set; }
 	private AnimationNodeBlendTree animatorRoot;
 	private AnimationNodeTransition moveTransition;
 	private AnimationNodeTransition stateTransition;
@@ -265,6 +275,8 @@ public partial class Majin : Enemy
 	private bool isFlameActive;
 	private float flameActiveTime = 1.0f;
 	private float flameInactiveTime;
+	/// <summary> Should the fire majin attack instantly when its range is entered? </summary>
+	private bool isInstantFlame;
 	/// <summary> Timer to keep track of flame cycles. </summary>
 	private float flameTimer;
 
@@ -285,20 +297,15 @@ public partial class Majin : Enemy
 	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
 	private readonly StringName DespawnTrigger = "parameters/despawn_trigger/request";
 
-	private const float MOVE_TRANSITION_LENGTH = .4f;
+	private const float MovementTransitionLength = .4f;
 
 	protected override void SetUp()
 	{
 		if (Engine.IsEditorHint()) return; // In Editor
 
+		FlameRoot = GetNodeOrNull<Node3D>(flameRoot);
+		HitboxAttachment = GetNodeOrNull<BoneAttachment3D>(hitboxAttachment);
 		calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
-		animationTree.Active = true;
-		animatorRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
-		moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
-		stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
-		fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
-		spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
-
 		if (SpawnIntervalEnabled)
 		{
 			timer = new()
@@ -312,6 +319,17 @@ public partial class Majin : Enemy
 		}
 
 		base.SetUp();
+
+		AnimationTree.Active = true;
+		animatorRoot = AnimationTree.TreeRoot as AnimationNodeBlendTree;
+		moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
+		stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
+		fireState = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/fire_state/playback");
+		spinState = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/spin_state/playback");
+
+		// Skeleton3D node is always 3 nodes away from the root node
+		HitboxAttachment.SetExternalSkeleton(HitboxAttachment.GetPathTo(Root.GetChild(0).GetChild(0).GetChild(0)));
+		HitboxAttachment.BoneIdx = 0;
 	}
 
 	public override void Respawn()
@@ -323,8 +341,8 @@ public partial class Majin : Enemy
 		isSpawning = false;
 		finishedTraveling = false;
 
-		animationPlayer.Play("RESET");
-		animationPlayer.Advance(0);
+		AnimationPlayer.Play("RESET");
+		AnimationPlayer.Advance(0);
 
 		// Reset rotation
 		if (!trackPlayer && !Mathf.IsZeroApprox(rotationTime)) // Precalculate rotation amount
@@ -336,15 +354,18 @@ public partial class Majin : Enemy
 
 		// Reset idle movement
 		idleFactorVelocity = 0;
-		animationTree.Set(IdleFactorParameter, 0);
-		animationTree.Set(DefeatTransitionParameter, DisabledState);
+		AnimationTree.Set(IdleFactorParameter, 0);
+		AnimationTree.Set(DefeatTransitionParameter, DisabledState);
 
 		// Reset stagger
 		staggerTimer = 0;
 
 		// Reset flame attack
-		flameTimer = (IsRedMajin && FlameAggressionRadius != 0) ? flameInactiveTime : 0;
-		isFlameActive = false;
+		if (IsRedMajin)
+		{
+			isFlameActive = false;
+			flameTimer = (FlameAggressionRadius != 0 || isInstantFlame) ? flameInactiveTime : 0;
+		}
 
 		base.Respawn();
 
@@ -355,13 +376,13 @@ public partial class Majin : Enemy
 		}
 	}
 
-	public override void TakeHomingAttackDamage()
+	public override void UpdateLockon()
 	{
 		Stagger();
-		base.TakeHomingAttackDamage();
+		base.UpdateLockon();
 
 		if (!IsDefeated)
-			animationPlayer.Play("stagger");
+			AnimationPlayer.Play("stagger");
 	}
 
 	public override void TakeDamage(int amount = -1)
@@ -377,21 +398,21 @@ public partial class Majin : Enemy
 		if (isFlameActive)
 			ToggleFlameAttack();
 
-		animationTree.Set(HitTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		AnimationTree.Set(HitTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	protected override void Defeat()
 	{
 		base.Defeat();
 
-		animationPlayer.Play("strike");
+		AnimationPlayer.Play("strike");
 		if (isDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 		{
 			// Kill any existing tween
 			tweener?.Kill();
 
-			animationTree.Set(DefeatTransitionParameter, EnabledState);
-			animationTree.Set(HitTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+			AnimationTree.Set(DefeatTransitionParameter, EnabledState);
+			AnimationTree.Set(HitTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
 			Vector3 launchDirection = defeatLaunchDirection;
 			if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
@@ -412,12 +433,12 @@ public partial class Majin : Enemy
 			tweener = CreateTween().SetParallel();
 			tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
 			tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
-			tweener.TweenCallback(Callable.From(() => animationPlayer.Play("launch-end"))).SetDelay(defeatLaunchTime * .5f);
+			tweener.TweenCallback(Callable.From(() => AnimationPlayer.Play("launch-end"))).SetDelay(defeatLaunchTime * .5f);
 		}
 		else
 		{
-			animationPlayer.Advance(0.0);
-			animationPlayer.Play("explode");
+			AnimationPlayer.Advance(0.0);
+			AnimationPlayer.Play("explode");
 		}
 	}
 
@@ -453,7 +474,7 @@ public partial class Majin : Enemy
 		bool OutsideFlameAggression = IsRedMajin && !isFlameActive && !IsInFlameAggressionRange();
 		if (OutsideFlameAggression || !IsInRange)
 		{
-			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
+			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing);
 			if (OutsideFlameAggression && !isFlameActive)
 				flameTimer = flameInactiveTime;
 			return;
@@ -467,15 +488,15 @@ public partial class Majin : Enemy
 
 		if (!Mathf.IsZeroApprox(rotationTime))
 		{
-			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TRACKING_SMOOTHING);
+			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing);
 			currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
 		}
 	}
 
 	private void ApplyRotation()
 	{
-		root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z);
-		fireRoot.Rotation = Vector3.Up * currentRotation;
+		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
+		FlameRoot.Rotation = Vector3.Up * currentRotation;
 	}
 
 	protected override void UpdateInteraction()
@@ -527,7 +548,7 @@ public partial class Majin : Enemy
 			else if (fidgetIndex == 1)
 				targetIdleFactor = 0.5f;
 
-			isFidgetActive = (bool)animationTree.Get(FidgetTriggerStateParameter);
+			isFidgetActive = (bool)AnimationTree.Get(FidgetTriggerStateParameter);
 		}
 		else if (attackType != AttackTypes.Fire || !IsInRange) // Wait for fidget to start
 		{
@@ -536,15 +557,15 @@ public partial class Majin : Enemy
 			{
 				fidgetTimer = 0; // Reset timer
 				fidgetIndex = Runtime.randomNumberGenerator.RandiRange(0, FidgetAnimations.Length - 1);
-				animationTree.Set(FidgetTransitionParameter, FidgetAnimations[fidgetIndex]);
-				animationTree.Set(FidgetTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				AnimationTree.Set(FidgetTransitionParameter, FidgetAnimations[fidgetIndex]);
+				AnimationTree.Set(FidgetTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				isFidgetActive = true;
 			}
 		}
 
-		float idleFactor = (float)animationTree.Get(IdleFactorParameter);
+		float idleFactor = (float)AnimationTree.Get(IdleFactorParameter);
 		idleFactor = ExtensionMethods.SmoothDamp(idleFactor, targetIdleFactor, ref idleFactorVelocity, IDLE_FACTOR_SMOOTHING * PhysicsManager.physicsDelta);
-		animationTree.Set(IdleFactorParameter, idleFactor);
+		AnimationTree.Set(IdleFactorParameter, idleFactor);
 	}
 
 	private void UpdateFlameAttack()
@@ -593,18 +614,18 @@ public partial class Majin : Enemy
 
 		if (isFlameActive) // Start fire attack
 		{
-			animationPlayer.Play("fire-start");
+			AnimationPlayer.Play("fire-start");
 			fireState.Travel("attack-fire-start");
 			stateTransition.XfadeTime = 0.1;
-			animationTree.Set(StateRequestParameter, FireState);
+			AnimationTree.Set(StateRequestParameter, FireState);
 		}
 		else // Stop flame attack
 		{
-			animationPlayer.Play("fire-end");
-			animationPlayer.Advance(0.0);
+			AnimationPlayer.Play("fire-end");
+			AnimationPlayer.Advance(0.0);
 			fireState.Travel("attack-fire-end");
 			stateTransition.XfadeTime = 0.4;
-			animationTree.Set(StateRequestParameter, IdleState);
+			AnimationTree.Set(StateRequestParameter, IdleState);
 		}
 
 		flameTimer = 0; // Reset timer
@@ -620,28 +641,28 @@ public partial class Majin : Enemy
 		tweener?.Kill();
 		tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
 
-		animationTree.Set(StateRequestParameter, IdleState); // Idle
+		AnimationTree.Set(StateRequestParameter, IdleState); // Idle
 
 		if (SpawnTravelEnabled && !finishedTraveling) // Travel
 		{
 			currentTravelRatio = 0;
 			Position = SpawnPosition;
 
-			animationPlayer.Play("travel");
+			AnimationPlayer.Play("travel");
 			tweener.TweenProperty(this, nameof(currentTravelRatio), 1, spawnTravelTime).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut).SetDelay(spawnDelay);
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning));
 
 			moveTransition.XfadeTime = 0;
-			animationTree.Set(MoveTransitionParameter, EnabledState); // Travel animation
+			AnimationTree.Set(MoveTransitionParameter, EnabledState); // Travel animation
 		}
 		else // Spawn instantly
 		{
-			animationPlayer.Play("spawn");
-			animationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			AnimationPlayer.Play("spawn");
+			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
 		}
 
-		animationPlayer.Advance(0.0);
+		AnimationPlayer.Advance(0.0);
 		base.Spawn();
 	}
 
@@ -658,8 +679,8 @@ public partial class Majin : Enemy
 		tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
 
 		SetHitboxStatus(false);
-		animationPlayer.Play("despawn");
-		animationTree.Set(DespawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		AnimationPlayer.Play("despawn");
+		AnimationTree.Set(DespawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		tweener.TweenCallback(new Callable(this, MethodName.FinishDespawning)).SetDelay(.5f); // Delay by length of teleport animation
 		EmitSignal(SignalName.Despawned);
 	}
@@ -690,7 +711,7 @@ public partial class Majin : Enemy
 		Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));
 		if (Mathf.IsZeroApprox(acceleration.X))
 			moveBlend.Y = velocity.Y;
-		animationTree.Set(MoveBlendParameter, moveBlend);
+		AnimationTree.Set(MoveBlendParameter, moveBlend);
 	}
 
 	/// <summary> Use Bezier interpolation to get the majin's position. </summary>
@@ -709,14 +730,14 @@ public partial class Majin : Enemy
 
 		if (SpawnTravelEnabled)
 		{
-			moveTransition.XfadeTime = MOVE_TRANSITION_LENGTH;
-			animationTree.Set(MoveTransitionParameter, DisabledState); // Stopped moving
+			moveTransition.XfadeTime = MovementTransitionLength;
+			AnimationTree.Set(MoveTransitionParameter, DisabledState); // Stopped moving
 		}
 
 		if (attackType == AttackTypes.Spin)
 		{
 			spinState.Travel("attack-spin-start");
-			animationTree.Set(StateRequestParameter, SpinState);
+			AnimationTree.Set(StateRequestParameter, SpinState);
 
 			tweener?.Kill();
 			tweener = CreateTween();
@@ -738,7 +759,7 @@ public partial class Majin : Enemy
 	/// <summary> Called after spin attack's windup animation. </summary>
 	public void OnSpinActivated()
 	{
-		animationPlayer.Play("spin");
+		AnimationPlayer.Play("spin");
 		EmitSignal(SignalName.SpinStarted);
 	}
 }

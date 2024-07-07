@@ -86,21 +86,21 @@ public partial class CameraController : Node3D
 	private float lockonBlend;
 	private float lockonBlendVelocity;
 	/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
-	private const float LOCKON_BLEND_IN_SMOOTHING = .2f;
+	private const float LockonBlendInSmoothing = .2f;
 	/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
-	private const float LOCKON_BLEND_OUT_SMOOTHING = .4f;
+	private const float LockonBlendOutSmoothing = .4f;
 	/// <summary> How much extra distance to add when performing a homing attack. </summary>
-	private const float LOCKON_DISTANCE = 2.5f;
+	private const float LockonDistance = 3f;
 	private void UpdateLockonTarget()
 	{
 		float targetBlend = 0;
-		float smoothing = LOCKON_BLEND_OUT_SMOOTHING;
+		float smoothing = LockonBlendOutSmoothing;
 
 		// Lockon is active
 		if (IsLockonCameraActive)
 		{
 			targetBlend = 1;
-			smoothing = LOCKON_BLEND_IN_SMOOTHING;
+			smoothing = LockonBlendInSmoothing;
 		}
 
 		if (LockonTarget?.IsInsideTree() == false) // Invalid LockonTarget
@@ -372,16 +372,15 @@ public partial class CameraController : Node3D
 			// Calculate distance
 			float targetDistance = settings.distance;
 			if (Character.IsMovingBackward)
-			{
-				if (PathFollower.Progress < settings.backstepDistance && !PathFollower.Loop)
-					targetDistance += settings.backstepDistance - (settings.backstepDistance - PathFollower.Progress);
-				else
-					targetDistance += settings.backstepDistance;
-			}
+				targetDistance += settings.backstepDistance;
 
 			if (!settings.ignoreHomingAttackDistance && IsLockonCameraActive)
-				targetDistance += LOCKON_DISTANCE;
-			data.blendData.DistanceSmoothDamp(targetDistance, SnapFlag);
+				targetDistance += LockonDistance;
+
+			if (PathFollower.Progress < targetDistance && !PathFollower.Loop)
+				targetDistance = PathFollower.Progress;
+
+			data.blendData.DistanceSmoothDamp(targetDistance, Character.IsMovingBackward, SnapFlag);
 
 			// Calculate targetAngles when DistanceMode is set to Sample.
 			float sampledTargetYawAngle = targetYawAngle;
@@ -740,18 +739,18 @@ public partial class CameraBlendData : GodotObject
 	public float distance;
 	/// <summary> Distance smoothdamp velocity. </summary>
 	private float distanceVelocity;
-	public const float DISTANCE_SMOOTHING = 20.0f;
+	public const float DistanceSmoothing = 10.0f;
 
-	public void DistanceSmoothDamp(float target, bool snap)
+	public void DistanceSmoothDamp(float target, bool movingBackwards, bool snap)
 	{
-		if (snap || !WasInitialized)
+		if (snap || !WasInitialized || (movingBackwards && target < distance))
 		{
 			distance = target;
 			distanceVelocity = 0;
 			return;
 		}
 
-		distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DISTANCE_SMOOTHING * PhysicsManager.physicsDelta);
+		distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DistanceSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	/// <summary> Has this blend data been processed before? </summary>
