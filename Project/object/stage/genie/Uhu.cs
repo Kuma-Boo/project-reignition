@@ -11,6 +11,11 @@ public partial class Uhu : PathFollow3D
 	private AnimationPlayer animator;
 	[Export]
 	private Node3D root;
+	/// <summary> How long the race path is -- used to calculate the race positions. </summary>
+	[Export]
+	private float maxProgress;
+	private float startingProgress;
+	private Path3D path;
 	[Export]
 	private Trail3D trail;
 	private StageSettings Stage => StageSettings.instance;
@@ -22,7 +27,12 @@ public partial class Uhu : PathFollow3D
 	private readonly float PositionDeadzone = .5f;
 	private readonly float IdlePositionRadius = 2f;
 
-	public override void _Ready() => Countdown.Instance.Connect(Countdown.SignalName.CountdownFinished, new(this, MethodName.StartRace));
+	public override void _Ready()
+	{
+		startingProgress = Progress;
+		path = GetParent<Path3D>();
+		Countdown.Instance.Connect(Countdown.SignalName.CountdownFinished, new(this, MethodName.StartRace));
+	}
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -31,6 +41,8 @@ public partial class Uhu : PathFollow3D
 
 		currentPosition = currentPosition.SmoothDamp(targetPosition, ref positionVelocity, PositionSmoothing * PhysicsManager.physicsDelta);
 		root.Position = new(currentPosition.X, currentPosition.Y, 0);
+
+		UpdateRacePositions();
 	}
 
 	private void CalculateNewPosition()
@@ -43,6 +55,14 @@ public partial class Uhu : PathFollow3D
 
 		targetPosition = Vector2.Up.Rotated(Mathf.Tau * Runtime.randomNumberGenerator.Randf());
 		targetPosition *= Runtime.randomNumberGenerator.RandfRange(0, IdlePositionRadius);
+	}
+
+	private void UpdateRacePositions()
+	{
+		float uhuRatio = (Progress - startingProgress) / (maxProgress - startingProgress);
+		float playerRatio = path.Curve.GetClosestOffset(path.ToLocal(CharacterController.instance.GlobalPosition));
+		playerRatio = (playerRatio - startingProgress) / (maxProgress - startingProgress);
+		HeadsUpDisplay.instance.UpdateRace(playerRatio, uhuRatio);
 	}
 
 	private void StartRace()
