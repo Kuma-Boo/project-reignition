@@ -71,7 +71,7 @@ public partial class ExperienceResult : Control
 	/// <summary> More exp is granted in PR, so the levelup requirements are higher than the original game. </summary>
 	private static int CalculateLevelUpRequirement(int level) => level == MaxLevel ? 99999999 : (LevelInterval * level) + (LevelInterval * (level / 10));
 	/// <summary> Converts exp amount to level amount. Mostly used to fix corrupt save data. </summary>
-	private static int CalculateLevel(int exp) => (exp * 10) / (11 * LevelInterval); // Equivalent of level requirement formula, solved for level.
+	private static int CalculateLevel(int exp) => ((exp * 10) / (11 * LevelInterval)) + 1; // Equivalent of level requirement formula, solved for level.
 	private const int MaxLevel = 99;
 	private const int LevelInterval = 10000;
 
@@ -80,6 +80,7 @@ public partial class ExperienceResult : Control
 	public override void _Ready()
 	{
 		SaveManager.ActiveGameData.level = CalculateLevel(SaveManager.ActiveGameData.exp); // Update from old save data, just in case
+		SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level, MaxLevel);
 		useMissionExp = SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
 	}
 
