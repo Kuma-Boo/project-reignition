@@ -40,26 +40,26 @@ public partial class Enemy : Node3D
 	protected bool damagePlayer;
 
 	[ExportGroup("Components")]
-	[Export(PropertyHint.NodeType, "Node3D")]
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
 	private NodePath root;
 	protected Node3D Root { get; private set; }
-	[Export(PropertyHint.NodeType, "Area3D")]
+	[Export(PropertyHint.NodePathValidTypes, "Area3D")]
 	private NodePath hurtbox;
 	/// <summary> Lockon/Hitbox collider. Disabled when defeated (For death animations, etc). </summary>
 	protected Area3D Hurtbox { get; private set; }
-	[Export(PropertyHint.NodeType, "CollisionShape3D")]
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
 	private NodePath collider;
 	/// <summary> Environmental collider. Disabled when defeated (For death animations, etc). </summary>
 	protected CollisionShape3D Collider { get; private set; }
-	[Export(PropertyHint.NodeType, "CollisionShape3D")]
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
 	private NodePath rangeCollider;
 	/// <summary> Reference to the enemy's range collider. </summary>
 	protected CollisionShape3D RangeCollider { get; private set; }
-	[Export(PropertyHint.NodeType, "AnimationTree")]
+	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")]
 	private NodePath animationTree;
 	/// <summary> Animation tree for enemy character. </summary>
 	protected AnimationTree AnimationTree { get; private set; }
-	[Export(PropertyHint.NodeType, "AnimationPlayer")]
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
 	private NodePath animationPlayer;
 	/// <summary> Animator for event animations. </summary>
 	protected AnimationPlayer AnimationPlayer { get; private set; }
