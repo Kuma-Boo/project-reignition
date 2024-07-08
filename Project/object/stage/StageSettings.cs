@@ -390,13 +390,24 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void TriggeredCheckpointEventHandler();
 	public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
+	private int CheckpointScore { get; set; }
+	private int CheckpointObjectiveCount { get; set; }
+	private int SavedScore { get; set; }
+	private int SavedObjectiveCount { get; set; }
 	public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 	{
 		if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 		CurrentCheckpoint = checkpoint;
-		checkpoint.UpdateCheckpointData();
+		SavedScore = CurrentScore;
+		SavedObjectiveCount = CurrentObjectiveCount;
 		EmitSignal(SignalName.TriggeredCheckpoint);
+	}
+
+	public void RevertToCheckpointData()
+	{
+		ResetObjective(SavedObjectiveCount);
+		UpdateScore(SavedScore, MathModeEnum.Replace);
 	}
 
 	[Signal]

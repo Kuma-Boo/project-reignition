@@ -1374,8 +1374,7 @@ namespace Project.Gameplay
 				}
 			}
 
-			// Fade screen out, update respawn count, and connect signals
-			Stage.IncrementRespawnCount();
+			// Fade screen out and connect signals
 			TransitionManager.StartTransition(new()
 			{
 				inSpeed = .5f,
@@ -1396,6 +1395,8 @@ namespace Project.Gameplay
 
 			invincibilityTimer = 0;
 			Teleport(Stage.CurrentCheckpoint);
+			BonusManager.instance.CancelBonuses();
+			Stage.RevertToCheckpointData();
 			PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
 			Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
 
