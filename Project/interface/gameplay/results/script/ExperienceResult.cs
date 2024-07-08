@@ -69,8 +69,8 @@ public partial class ExperienceResult : Control
 	/// <summary> Experience points needed for the previous level up. </summary>
 	private int previousLevelupRequirement;
 	/// <summary> More exp is granted in PR, so the levelup requirements are higher than the original game. </summary>
-	private static int CalculateLevelUpRequirement(int level) => (10000 * level) + (10000 * (level / 10));
-	private readonly int MaxLevel = 99;
+	private static int CalculateLevelUpRequirement(int level) => level == MaxLevel ? 99999999 : (10000 * level) + (10000 * (level / 10));
+	private const int MaxLevel = 99;
 
 	private StageSettings Stage => StageSettings.instance;
 
