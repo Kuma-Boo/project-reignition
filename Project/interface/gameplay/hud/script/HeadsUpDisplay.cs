@@ -293,8 +293,10 @@ namespace Project.Gameplay
 		private Control raceUhu;
 		[Export]
 		private Control racePlayer;
-		private readonly float RaceStartPoint = 0;
+		private float uhuVelocity;
+		private float playerVelocity;
 		private readonly float RaceEndPoint = 512;
+		private readonly float RaceSmoothing = 20.0f;
 		private void InitializeRace()
 		{
 			if (Stage == null)
@@ -305,8 +307,13 @@ namespace Project.Gameplay
 
 		public void UpdateRace(float playerRatio, float uhuRatio)
 		{
-			raceUhu.Position = new(Mathf.Lerp(RaceStartPoint, RaceEndPoint, uhuRatio), raceUhu.Position.Y);
-			racePlayer.Position = new(Mathf.Lerp(RaceStartPoint, RaceEndPoint, playerRatio), racePlayer.Position.Y);
+			float uhuPosition = raceUhu.Position.X;
+			float playerPosition = racePlayer.Position.X;
+			uhuPosition = ExtensionMethods.SmoothDamp(uhuPosition, Mathf.Lerp(0, RaceEndPoint, uhuRatio), ref uhuVelocity, RaceSmoothing * PhysicsManager.physicsDelta);
+			playerPosition = ExtensionMethods.SmoothDamp(playerPosition, Mathf.Lerp(0, RaceEndPoint, playerRatio), ref playerVelocity, RaceSmoothing * PhysicsManager.physicsDelta);
+
+			raceUhu.Position = new(uhuPosition, raceUhu.Position.Y);
+			racePlayer.Position = new(playerPosition, racePlayer.Position.Y);
 
 			raceUhu.ZIndex = playerRatio >= uhuRatio ? 0 : 1;
 			racePlayer.ZIndex = playerRatio >= uhuRatio ? 1 : 0;

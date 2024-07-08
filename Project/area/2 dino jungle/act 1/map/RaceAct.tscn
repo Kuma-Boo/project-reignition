@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://b0ere5nw3ioq3"]
+[gd_scene load_steps=35 format=3 uid="uid://b0ere5nw3ioq3"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_07rmt"]
 [ext_resource type="Resource" uid="uid://dkgpftu1txklj" path="res://resource/level data/dinosaur jungle/Act2Race.tres" id="2_wpd7y"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="17_djk1t"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="18_mtiqb"]
 [ext_resource type="Resource" uid="uid://8acd6iahw45g" path="res://area/2 dino jungle/act 1/camera/WhiteRockRaceAct2Cam.tres" id="19_jd5a0"]
+[ext_resource type="Resource" uid="uid://ci5cmmeh1gq4f" path="res://area/2 dino jungle/act 1/camera/stealth/CavernEntranceCam.tres" id="21_ylubj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="22_er5c1"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="22_si71f"]
 [ext_resource type="PackedScene" uid="uid://dc1ik7p6xlh0a" path="res://object/stage/genie/Uhu.tscn" id="24_4l8w6"]
@@ -133,6 +134,9 @@ size = Vector3(12, 20, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hpf2h"]
 size = Vector3(16.8638, 26.19, 22.8381)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sb2ww"]
+size = Vector3(15, 20, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0schr"]
 size = Vector3(1, 15.53, 29.065)
@@ -480,8 +484,22 @@ transitionTime = 0.3
 settings = ExtResource("19_jd5a0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Crossing/RockCam"]
-transform = Transform3D(-0.76121, 0, 0.648505, 0, 1, 0, -0.648505, 0, -0.76121, 4.58603, 0.0910645, -2.57373)
+transform = Transform3D(-0.76121, 0, 0.648505, 0, 1, 0, -0.648505, 0, -0.76121, 4.586, 10, -2.574)
 shape = SubResource("BoxShape3D_hpf2h")
+
+[node name="JumpPanelCamera" parent="MainAct/Crossing" instance=ExtResource("4_edlvo")]
+transform = Transform3D(0.452341, 0, -0.891845, 0, 1, 0, 0.891845, 0, 0.452341, -54.3842, -12.1394, -185.322)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Crossing/JumpPanelCamera"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("22_er5c1")
+transitionTime = 0.5
+settings = ExtResource("21_ylubj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Crossing/JumpPanelCamera"]
+transform = Transform3D(0.984805, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984805, -0.317749, 4, -5.89133)
+shape = SubResource("BoxShape3D_sb2ww")
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
