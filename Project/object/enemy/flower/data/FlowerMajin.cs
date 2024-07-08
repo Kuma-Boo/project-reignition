@@ -57,7 +57,7 @@ public partial class FlowerMajin : Enemy
 	/// <summary> Flower is only considered be damaged while not in a passive state. </summary>
 	private bool IsOpen => currentState != State.Passive;
 	/// <summary> Returns true if the flower's stagger animation is active. </summary>
-	private bool IsStaggered => (bool)AnimationTree.Get(StaggerActive);
+	private bool IsStaggered => (bool)AnimationTree.Get(HitActive);
 
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
 	private readonly StringName ShowState = "show";
@@ -66,8 +66,11 @@ public partial class FlowerMajin : Enemy
 	private readonly StringName HideState = "hide";
 
 	private readonly StringName AttackTrigger = "parameters/attack_trigger/request";
-	private readonly StringName StaggerTrigger = "parameters/stagger_trigger/request";
-	private readonly StringName StaggerActive = "parameters/stagger_trigger/active";
+	private readonly StringName HitTrigger = "parameters/hit_trigger/request";
+	private readonly StringName HitActive = "parameters/hit_trigger/active";
+	private readonly StringName HitTransition = "parameters/hit_transition/transition_request";
+	private readonly StringName StaggerState = "stagger";
+	private readonly StringName BoopState = "boop";
 
 	/// <summary> Reference to AnimationTree's defeat_transition node. Required to change transition fade. </summary>
 	private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
@@ -108,7 +111,7 @@ public partial class FlowerMajin : Enemy
 		// Reset animations
 		AnimationTree.Set(DefeatTransition, DisabledConstant);
 		AnimationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-		AnimationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		// Reset to passive state
 		currentState = State.Passive;
@@ -146,7 +149,13 @@ public partial class FlowerMajin : Enemy
 			}
 		}
 
-		// TODO light stagger
+		if (!IsStaggered && Character.AttackState == CharacterController.AttackStates.None)
+		{
+			StartStaggerState();
+			Character.Lockon.StartBounce(false);
+			return;
+		}
+
 		base.UpdateInteraction();
 	}
 
@@ -279,7 +288,11 @@ public partial class FlowerMajin : Enemy
 
 	private void StartStaggerState()
 	{
-		AnimationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		if (Character.AttackState == CharacterController.AttackStates.None)
+			AnimationTree.Set(HitTransition, BoopState);
+		else
+			AnimationTree.Set(HitTransition, StaggerState);
+		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		AnimationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		if (currentState == State.Passive || currentState == State.Attack)

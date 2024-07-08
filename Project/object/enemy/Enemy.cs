@@ -135,7 +135,7 @@ public partial class Enemy : Node3D
 		currentHealth = maxHealth;
 
 		SetHitboxStatus(true);
-		ResetInteractionProcess();
+		ResetInteractionProcessed();
 
 		if (spawnMode == SpawnModes.Always ||
 			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
@@ -233,17 +233,15 @@ public partial class Enemy : Node3D
 	protected bool IsInteractionProcessed { get; private set; }
 	protected virtual void UpdateInteraction()
 	{
+		if (IsInteractionProcessed)
+			return;
+
 		if ((Character.Lockon.IsBouncingLockoutActive &&
 			Character.ActionState == CharacterController.ActionStates.Normal) ||
-			!IsHitboxEnabled ||
-			IsInteractionProcessed)
+			!IsHitboxEnabled)
 		{
 			return;
 		}
-
-		IsInteractionProcessed = true;
-		// Connect a signal
-		Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcess), (uint)ConnectFlags.OneShot);
 
 		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 		{
@@ -254,7 +252,6 @@ public partial class Enemy : Node3D
 		{
 			Character.StartKnockback();
 		}
-
 		switch (Character.AttackState)
 		{
 			case CharacterController.AttackStates.OneShot:
@@ -267,9 +264,17 @@ public partial class Enemy : Node3D
 				TakeDamage(2);
 				break;
 		}
+
+		SetInteractionProcessed();
 	}
 
-	private void ResetInteractionProcess() => IsInteractionProcessed = false;
+	protected void SetInteractionProcessed()
+	{
+		IsInteractionProcessed = true;
+		// Connect a signal
+		Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot);
+	}
+	protected void ResetInteractionProcessed() => IsInteractionProcessed = false;
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
