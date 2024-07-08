@@ -379,15 +379,6 @@ public partial class Majin : Enemy
 		}
 	}
 
-	public override void UpdateLockon()
-	{
-		Stagger();
-		base.UpdateLockon();
-
-		if (!IsDefeated)
-			AnimationPlayer.Play("stagger");
-	}
-
 	public override void TakeDamage(int amount = -1)
 	{
 		Stagger();
@@ -402,9 +393,14 @@ public partial class Majin : Enemy
 			ToggleFlameAttack();
 
 		if (Character.AttackState == CharacterController.AttackStates.None)
+		{
 			AnimationTree.Set(HitTransition, BoopState);
+		}
 		else
+		{
 			AnimationTree.Set(HitTransition, StaggerState);
+			AnimationPlayer.Play("stagger");
+		}
 		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -504,20 +500,6 @@ public partial class Majin : Enemy
 	{
 		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
 		FlameRoot.Rotation = Vector3.Up * currentRotation;
-	}
-
-	protected override void UpdateInteraction()
-	{
-		if (!IsHitboxEnabled) return;
-
-		if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
-		{
-			Stagger();
-			Character.Lockon.StartBounce(true);
-			return;
-		}
-
-		base.UpdateInteraction();
 	}
 
 	private float idleFactorVelocity;
