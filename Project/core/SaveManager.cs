@@ -561,7 +561,7 @@ public partial class SaveManager : Node
 		public Array<WorldEnum> worldRingsCollected = [];
 		/// <summary> List of worlds unlocked. </summary>
 		public Array<WorldEnum> worldsUnlocked = [];
-		/// <summary> List of worlds unlocked. </summary>
+		/// <summary> List of stages unlocked. </summary>
 		public Array<string> stagesUnlocked = [];
 
 		/// <summary> Player level, from 1 -> 99 </summary>
@@ -806,19 +806,26 @@ public partial class SaveManager : Node
 			// WorldEnum data
 			if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 				lastPlayedWorld = (WorldEnum)(int)var;
-			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
 				for (int i = 0; i < worlds.Count; i++)
 					worldsUnlocked.Add((WorldEnum)worlds[i]);
 			}
-			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
+			else
+			{
+				// Update save data from old format (unlock everything to prevent softlocks)
+				for (int i = 0; i < (int)WorldEnum.Max; i++)
+					worldsUnlocked.Add((WorldEnum)i);
+			}
+
+			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
 				for (int i = 0; i < worlds.Count; i++)
 					worldRingsCollected.Add((WorldEnum)worlds[i]);
 			}
-			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+			if (dictionary.TryGetValue(nameof(stagesUnlocked), out var) && var.VariantType == Variant.Type.Array)
 				stagesUnlocked = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
