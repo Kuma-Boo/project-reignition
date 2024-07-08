@@ -70,7 +70,6 @@ public partial class FlowerMajin : Enemy
 	private readonly StringName StaggerActive = "parameters/stagger_trigger/active";
 
 	/// <summary> Reference to AnimationTree's defeat_transition node. Required to change transition fade. </summary>
-	private AnimationNodeTransition defeatTransition;
 	private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
 	private readonly StringName EnabledConstant = "enabled";
 	private readonly StringName DisabledConstant = "disabled";
@@ -79,13 +78,11 @@ public partial class FlowerMajin : Enemy
 	{
 		if (Engine.IsEditorHint()) return; // In Editor
 
-		AnimationTree.Active = true;
-		defeatTransition = (AnimationTree.TreeRoot as AnimationNodeBlendTree).GetNode("defeat_transition") as AnimationNodeTransition;
-
 		for (int i = 0; i < MaxSeedCount; i++) // Initialize seeds
 			seedPool[i] = seed.Instantiate<Seed>();
 
 		base.SetUp();
+		AnimationTree.Active = true;
 	}
 
 	public override void Unload()
@@ -109,7 +106,6 @@ public partial class FlowerMajin : Enemy
 		base.Respawn();
 
 		// Reset animations
-		defeatTransition.XfadeTime = 0;
 		AnimationTree.Set(DefeatTransition, DisabledConstant);
 		AnimationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		AnimationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
@@ -151,16 +147,6 @@ public partial class FlowerMajin : Enemy
 		}
 
 		// TODO light stagger
-		if (!Character.Lockon.IsHomingAttacking &&
-			Character.AttackState != CharacterController.AttackStates.None) // Skill damage
-		{
-			StartStaggerState();
-		}
-		else if (!Character.IsOnGround)
-		{
-			Character.Lockon.StartBounce(false);
-		}
-
 		base.UpdateInteraction();
 	}
 
@@ -168,13 +154,15 @@ public partial class FlowerMajin : Enemy
 	{
 		base.UpdateLockon();
 
-		if (IsDefeated)
-		{
-			StartDefeatState();
-			return;
-		}
+		if (IsDefeated) return;
 
 		StartStaggerState();
+	}
+
+	protected override void Defeat()
+	{
+		AnimationTree.Set(DefeatTransition, EnabledConstant);
+		base.Defeat();
 	}
 
 	protected override void UpdateEnemy()
@@ -297,6 +285,4 @@ public partial class FlowerMajin : Enemy
 		StopAttackState();
 		EmitSignal(SignalName.Stagger);
 	}
-
-	private void StartDefeatState() => AnimationTree.Set(DefeatTransition, EnabledConstant);
 }
