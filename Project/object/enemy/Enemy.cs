@@ -135,6 +135,7 @@ public partial class Enemy : Node3D
 		currentHealth = maxHealth;
 
 		SetHitboxStatus(true);
+		ResetInteractionProcessed();
 
 		if (spawnMode == SpawnModes.Always ||
 			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
@@ -161,7 +162,8 @@ public partial class Enemy : Node3D
 
 	public virtual void UpdateLockon()
 	{
-		Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
+		if (Character.Lockon.IsHomingAttacking)
+			Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 		if (!IsDefeated)
 			Character.Camera.SetDeferred("LockonTarget", Hurtbox);
@@ -174,9 +176,8 @@ public partial class Enemy : Node3D
 		else
 			currentHealth -= amount;
 
-		if (!IsDefeated) return;
-
-		Defeat();
+		if (IsDefeated)
+			Defeat();
 	}
 
 	/// <summary>
@@ -226,11 +227,15 @@ public partial class Enemy : Node3D
 	}
 	protected virtual void ExitRange() { }
 
-	// True when colliding with the player
-	protected bool IsInteracting => interactionCounter != 0;
-	protected int interactionCounter;
+	/// <summary> True when colliding with the player. </summary>
+	protected bool IsInteracting { get; set; }
+	/// <summary> True when a particular interaction has already been processed. </summary>
+	protected bool IsInteractionProcessed { get; private set; }
 	protected virtual void UpdateInteraction()
 	{
+		if (IsInteractionProcessed)
+			return;
+
 		if ((Character.Lockon.IsBouncingLockoutActive &&
 			Character.ActionState == CharacterController.ActionStates.Normal) ||
 			!IsHitboxEnabled)
@@ -247,7 +252,6 @@ public partial class Enemy : Node3D
 		{
 			Character.StartKnockback();
 		}
-
 		switch (Character.AttackState)
 		{
 			case CharacterController.AttackStates.OneShot:
@@ -260,7 +264,17 @@ public partial class Enemy : Node3D
 				TakeDamage(2);
 				break;
 		}
+
+		SetInteractionProcessed();
 	}
+
+	protected void SetInteractionProcessed()
+	{
+		IsInteractionProcessed = true;
+		// Connect a signal
+		Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot);
+	}
+	protected void ResetInteractionProcessed() => IsInteractionProcessed = false;
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
@@ -287,18 +301,18 @@ public partial class Enemy : Node3D
 		}
 
 		if (!a.IsInGroup("player")) return;
-		interactionCounter++;
+		IsInteracting = true;
 	}
 
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player")) return;
-		interactionCounter--;
+		IsInteracting = false;
 	}
 
 	public void OnRangeEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		EnterRange();
 		IsInRange = true;
@@ -306,7 +320,7 @@ public partial class Enemy : Node3D
 
 	public void OnRangeExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		ExitRange();
 		IsInRange = false;

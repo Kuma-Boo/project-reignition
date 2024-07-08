@@ -126,6 +126,13 @@ public partial class BonusManager : VBoxContainer
 		FinishRingChain();
 		FinishEnemyChain();
 	}
+
+	public void CancelBonuses()
+	{
+		ringChain = 0;
+		enemyChain = 0;
+		enemyChainTimer = 0;
+	}
 }
 
 public enum BonusType

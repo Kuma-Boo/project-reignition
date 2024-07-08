@@ -69,8 +69,19 @@ namespace Project.Gameplay
 			Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 		}
 
+		[Signal]
+		public delegate void AttackStateChangeEventHandler();
 		/// <summary> Keeps track of how much attack the player will deal. </summary>
-		public AttackStates AttackState { get; set; }
+		public AttackStates AttackState
+		{
+			get => attackState;
+			set
+			{
+				attackState = value;
+				EmitSignal(SignalName.AttackStateChange);
+			}
+		}
+		private AttackStates attackState;
 		public enum AttackStates
 		{
 			None, // Player is not attacking
@@ -1374,8 +1385,7 @@ namespace Project.Gameplay
 				}
 			}
 
-			// Fade screen out, update respawn count, and connect signals
-			Stage.IncrementRespawnCount();
+			// Fade screen out and connect signals
 			TransitionManager.StartTransition(new()
 			{
 				inSpeed = .5f,
@@ -1396,6 +1406,8 @@ namespace Project.Gameplay
 
 			invincibilityTimer = 0;
 			Teleport(Stage.CurrentCheckpoint);
+			BonusManager.instance.CancelBonuses();
+			Stage.RevertToCheckpointData();
 			PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
 			Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
 
