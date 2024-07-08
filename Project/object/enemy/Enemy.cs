@@ -277,8 +277,16 @@ public partial class Enemy : Node3D
 		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
 	}
 
+	protected virtual void StartUhuBounce() { }
+
 	public void OnEntered(Area3D a)
 	{
+		if (a.IsInGroup("uhu"))
+		{
+			StartUhuBounce();
+			return;
+		}
+
 		if (!a.IsInGroup("player")) return;
 		interactionCounter++;
 	}
