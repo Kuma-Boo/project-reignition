@@ -282,7 +282,9 @@ public partial class FlowerMajin : Enemy
 	{
 		AnimationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		AnimationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-		StopAttackState();
+
+		if (currentState == State.Attack)
+			StopAttackState();
 		EmitSignal(SignalName.Stagger);
 	}
 }
