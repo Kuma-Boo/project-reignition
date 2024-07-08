@@ -135,6 +135,7 @@ public partial class Enemy : Node3D
 		currentHealth = maxHealth;
 
 		SetHitboxStatus(true);
+		ResetInteractionProcess();
 
 		if (spawnMode == SpawnModes.Always ||
 			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
@@ -174,9 +175,8 @@ public partial class Enemy : Node3D
 		else
 			currentHealth -= amount;
 
-		if (!IsDefeated) return;
-
-		Defeat();
+		if (IsDefeated)
+			Defeat();
 	}
 
 	/// <summary>
@@ -227,17 +227,23 @@ public partial class Enemy : Node3D
 	}
 	protected virtual void ExitRange() { }
 
-	// True when colliding with the player
-	protected bool IsInteracting => interactionCounter != 0;
-	protected int interactionCounter;
+	/// <summary> True when colliding with the player. </summary>
+	protected bool IsInteracting { get; set; }
+	/// <summary> True when a particular interaction has already been processed. </summary>
+	protected bool IsInteractionProcessed { get; private set; }
 	protected virtual void UpdateInteraction()
 	{
 		if ((Character.Lockon.IsBouncingLockoutActive &&
 			Character.ActionState == CharacterController.ActionStates.Normal) ||
-			!IsHitboxEnabled)
+			!IsHitboxEnabled ||
+			IsInteractionProcessed)
 		{
 			return;
 		}
+
+		IsInteractionProcessed = true;
+		// Connect a signal
+		Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcess), (uint)ConnectFlags.OneShot);
 
 		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 		{
@@ -262,6 +268,8 @@ public partial class Enemy : Node3D
 				break;
 		}
 	}
+
+	private void ResetInteractionProcess() => IsInteractionProcessed = false;
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
@@ -288,18 +296,18 @@ public partial class Enemy : Node3D
 		}
 
 		if (!a.IsInGroup("player")) return;
-		interactionCounter++;
+		IsInteracting = true;
 	}
 
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player")) return;
-		interactionCounter--;
+		IsInteracting = false;
 	}
 
 	public void OnRangeEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		EnterRange();
 		IsInRange = true;
@@ -307,7 +315,7 @@ public partial class Enemy : Node3D
 
 	public void OnRangeExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		ExitRange();
 		IsInRange = false;

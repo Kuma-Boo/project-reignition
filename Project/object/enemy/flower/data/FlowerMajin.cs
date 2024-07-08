@@ -140,7 +140,7 @@ public partial class FlowerMajin : Enemy
 			}
 
 			if (Character.AttackState == CharacterController.AttackStates.None ||
-				Character.AttackState == CharacterController.AttackStates.Weak)
+				(Character.AttackState == CharacterController.AttackStates.Weak && !weakDefense))
 			{
 				return;
 			}
@@ -150,13 +150,12 @@ public partial class FlowerMajin : Enemy
 		base.UpdateInteraction();
 	}
 
-	public override void UpdateLockon()
+	public override void TakeDamage(int amount = -1)
 	{
-		base.UpdateLockon();
+		base.TakeDamage(amount);
 
-		if (IsDefeated) return;
-
-		StartStaggerState();
+		if (!IsDefeated)
+			StartStaggerState();
 	}
 
 	protected override void Defeat()
@@ -283,7 +282,7 @@ public partial class FlowerMajin : Enemy
 		AnimationTree.Set(StaggerTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		AnimationTree.Set(AttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
-		if (currentState == State.Attack)
+		if (currentState == State.Passive || currentState == State.Attack)
 			StopAttackState();
 		EmitSignal(SignalName.Stagger);
 	}
