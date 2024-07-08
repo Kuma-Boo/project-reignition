@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dns1xkjh5bx64"]
+[gd_scene load_steps=19 format=3 uid="uid://dns1xkjh5bx64"]
 
 [ext_resource type="PackedScene" uid="uid://7kcasi6v1odv" path="res://area/1 sand oasis/act 3/Static.tscn" id="1_8np51"]
 [ext_resource type="Resource" uid="uid://bdgy0ftwjlvif" path="res://resource/level data/sand oasis/Act3Chain.tres" id="2_uw5mm"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Pearl.cs" id="14_j4367"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="15_8xmwh"]
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="15_qe14v"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="16_e6hkr"]
 [ext_resource type="PackedScene" uid="uid://dnfwvf2akhf1v" path="res://area/1 sand oasis/object/FlameShooter.tscn" id="18_8uxup"]
 [ext_resource type="Script" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="21_7g1t0"]
 
@@ -9817,10 +9818,10 @@ timer = NodePath("../../../Lap02/LowerHall/FlameShooter4/Timer")
 transform = Transform3D(0.999904, -1.03508e-16, -0.0138397, -1.09475e-16, 1, 1.12548e-16, 0.0138397, 4.01483e-17, 0.999904, -0.0292892, -1.52588e-05, 4.04058)
 speedRatio = 1.231
 
-[node name="Ringsmiddle" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+[node name="HallwayRings" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
 transform = Transform3D(-0.932324, -1.03508e-16, -0.361625, 1.43657e-16, 1, -6.33601e-17, 0.361625, 4.01483e-17, -0.932324, -5.21608, -0.0633011, -39.1535)
 
-[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle"]
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings"]
 transform = Transform3D(0.999602, 0, -0.0282012, 8.48025e-30, 1, -3.15544e-30, 0.0282012, 1.26218e-29, 0.999602, 0.00122833, 0.744038, -0.218048)
 script = ExtResource("7_f833s")
 Generate = false
@@ -9832,18 +9833,18 @@ Spacing = 1.579
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle/Rings" instance=ExtResource("8_goqva")]
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/HallwayRings/Rings" instance=ExtResource("8_goqva")]
 
-[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle/Rings" instance=ExtResource("8_goqva")]
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/HallwayRings/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.579)
 
-[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle/Rings" instance=ExtResource("8_goqva")]
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/HallwayRings/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.158)
 
-[node name="Ringsmiddle2" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+[node name="HallwayRings2" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
 transform = Transform3D(-0.875229, -1.03508e-16, -0.48371, 1.50872e-16, 1, -4.34671e-17, 0.48371, 4.01483e-17, -0.875229, -2.15676, -0.0633011, -29.6198)
 
-[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle2"]
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings2"]
 transform = Transform3D(0.964433, 0, -0.264328, 0, 1, 0, 0.264328, 0, 0.964433, 0.324287, 0.744038, -0.200562)
 script = ExtResource("7_f833s")
 Generate = false
@@ -9857,19 +9858,19 @@ Spacing = 1.579
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle2/Rings" instance=ExtResource("8_goqva")]
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/HallwayRings2/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 2.52435e-29, 0, -1.57772e-30, 1, 0, 0, 0, 1, 3.8147e-06, 7.62939e-06, 0.000396729)
 
-[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle2/Rings" instance=ExtResource("8_goqva")]
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/HallwayRings2/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 2.52435e-29, 0, -1.57772e-30, 1, 0, 0, 0, 1, 0.0147686, -0.0252953, -1.57014)
 
-[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle2/Rings" instance=ExtResource("8_goqva")]
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/HallwayRings2/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 2.52435e-29, 0, -1.57772e-30, 1, 0, 0, 0, 1, 0.0765743, -0.0414085, -3.14098)
 
-[node name="Ringsmiddle3" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+[node name="HallwayRings3" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
 transform = Transform3D(-0.946034, -1.03508e-16, -0.324066, 1.41009e-16, 1, -6.90521e-17, 0.324066, 4.01483e-17, -0.946034, -0.629627, -0.0633011, -18.9047)
 
-[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle3"]
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings3"]
 transform = Transform3D(0.964433, 2.2877e-29, -0.264328, -1.57772e-30, 1, -3.15544e-30, 0.264328, -1.26218e-29, 0.964433, 0.0799713, 0.744038, -0.505363)
 script = ExtResource("7_f833s")
 Generate = false
@@ -9883,19 +9884,19 @@ Spacing = 1.579
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle3/Rings" instance=ExtResource("8_goqva")]
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/HallwayRings3/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 9.46633e-30, 2.98023e-08, -7.88861e-31, 1, 0, -2.98023e-08, 1.26218e-29, 1, 0, 0, 0.00012207)
 
-[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle3/Rings" instance=ExtResource("8_goqva")]
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/HallwayRings3/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 9.46633e-30, 2.98023e-08, -7.88861e-31, 1, 0, -2.98023e-08, 1.26218e-29, 1, -0.0287209, 0.00308228, -1.5786)
 
-[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle3/Rings" instance=ExtResource("8_goqva")]
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/HallwayRings3/Rings" instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 9.46633e-30, 2.98023e-08, -7.88861e-31, 1, 0, -2.98023e-08, 1.26218e-29, 1, -0.0372467, 0.00668716, -3.15746)
 
-[node name="Ringsmiddle4" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+[node name="HallwayRings4" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
 transform = Transform3D(-0.946034, -1.03508e-16, -0.324066, 1.41009e-16, 1, -6.90521e-17, 0.324066, 4.01483e-17, -0.946034, 0.00674438, 0.480053, 5.78391)
 
-[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4"]
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4"]
 transform = Transform3D(0.964433, -7.9675e-29, -0.264328, 7.88861e-31, 1, 3.15544e-30, 0.264328, -2.52435e-29, 0.964433, 0.723392, 0.00167847, -1.97106)
 script = ExtResource("7_f833s")
 Generate = false
@@ -9909,7 +9910,7 @@ Spacing = 1.579
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, -3.8147e-06, 0, 2.28882e-05)
 collision_layer = 0
 collision_mask = 2
@@ -9917,7 +9918,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.0973988, 0, -1.57591)
 collision_layer = 0
 collision_mask = 2
@@ -9925,7 +9926,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.194731, 0, -3.15177)
 collision_layer = 0
 collision_mask = 2
@@ -9933,7 +9934,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.292017, 3.8147e-06, -4.72779)
 collision_layer = 0
 collision_mask = 2
@@ -9941,7 +9942,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.389259, -3.8147e-06, -6.30376)
 collision_layer = 0
 collision_mask = 2
@@ -9949,7 +9950,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.48646, 0, -7.87968)
 collision_layer = 0
 collision_mask = 2
@@ -9957,7 +9958,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.583635, 0, -9.45562)
 collision_layer = 0
 collision_mask = 2
@@ -9965,7 +9966,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.680788, 0, -11.0317)
 collision_layer = 0
 collision_mask = 2
@@ -9973,7 +9974,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.777918, -3.8147e-06, -12.6076)
 collision_layer = 0
 collision_mask = 2
@@ -9981,7 +9982,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, 3.15544e-30, 2.98023e-08, 1.57772e-30, 1, -6.31089e-30, -2.98023e-08, 0, 1, 0.875031, 0, -14.1836)
 collision_layer = 0
 collision_mask = 2
@@ -9989,10 +9990,10 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="FloatingPearls" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+[node name="HallwayRings5" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
 transform = Transform3D(-0.997877, 0.00227791, -0.0651144, 0.00169273, 0.999958, 0.00904064, 0.0651324, 0.00891121, -0.997838, 0.213737, 1.81946, 30.229)
 
-[node name="PearlRing" type="Node3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls"]
+[node name="PearlRing" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5"]
 transform = Transform3D(0.996758, -0.00449694, -0.0803224, 0.00206548, 0.999538, -0.0303287, 0.0804218, 0.0300645, 0.996307, 0.0863876, -0.121044, 0.0520401)
 script = ExtResource("7_f833s")
 Generate = false
@@ -10003,7 +10004,7 @@ Orientation = 1
 "Ring Size" = 1.089
 "Ring Ratio" = 1.0
 
-[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.089, 0, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10011,7 +10012,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0357, 0.33652, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10019,7 +10020,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88102, 0.640098, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10027,7 +10028,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.640098, 0.88102, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10035,7 +10036,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.336519, 1.0357, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10043,7 +10044,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.52034e-08, 1.089, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10051,7 +10052,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33652, 1.0357, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10059,7 +10060,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.640098, 0.88102, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10067,7 +10068,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88102, 0.640098, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10075,7 +10076,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0357, 0.336519, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10083,7 +10084,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child11" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child11" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.089, -9.52034e-08, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10091,7 +10092,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child12" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child12" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0357, -0.33652, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10099,7 +10100,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child13" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child13" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.881019, -0.640098, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10107,7 +10108,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child14" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child14" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.640098, -0.88102, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10115,7 +10116,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child15" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child15" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.336519, -1.0357, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10123,7 +10124,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child16" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child16" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.90407e-07, -1.089, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10131,7 +10132,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child17" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child17" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33652, -1.0357, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10139,7 +10140,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child18" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child18" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.640099, -0.881019, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10147,7 +10148,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child19" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child19" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88102, -0.640098, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10155,7 +10156,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="Child20" type="Area3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child20" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0357, -0.336519, 0)
 collision_layer = 0
 collision_mask = 2
@@ -10163,7 +10164,7 @@ monitorable = false
 script = ExtResource("14_j4367")
 collider = NodePath("CollisionShape3D")
 
-[node name="PearlRing2" type="Node3D" parent="RingChainAct/Lap03/LowerHall/FloatingPearls"]
+[node name="PearlRing2" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings5"]
 transform = Transform3D(0.996758, -0.00449694, -0.0803225, 0.00206547, 0.999538, -0.0303287, 0.0804218, 0.0300645, 0.996307, 0.226133, -0.0695724, -1.63855)
 script = ExtResource("7_f833s")
 Generate = false
@@ -10174,90 +10175,90 @@ Orientation = 1
 "Ring Size" = 1.089
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.089, 0, 0)
 collider = NodePath("../../PearlRing/Child01/CollisionShape3D")
 
-[node name="Child02" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0357, 0.33652, 0)
 collider = NodePath("../../PearlRing/Child02/CollisionShape3D")
 
-[node name="Child03" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88102, 0.640098, 0)
 collider = NodePath("../../PearlRing/Child03/CollisionShape3D")
 
-[node name="Child04" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child04" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.640098, 0.88102, 0)
 collider = NodePath("../../PearlRing/Child04/CollisionShape3D")
 
-[node name="Child05" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child05" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.336519, 1.0357, 0)
 collider = NodePath("../../PearlRing/Child05/CollisionShape3D")
 
-[node name="Child06" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child06" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.52034e-08, 1.089, 0)
 collider = NodePath("../../PearlRing/Child06/CollisionShape3D")
 
-[node name="Child07" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child07" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33652, 1.0357, 0)
 collider = NodePath("../../PearlRing/Child07/CollisionShape3D")
 
-[node name="Child08" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child08" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.640098, 0.88102, 0)
 collider = NodePath("../../PearlRing/Child08/CollisionShape3D")
 
-[node name="Child09" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child09" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88102, 0.640098, 0)
 collider = NodePath("../../PearlRing/Child09/CollisionShape3D")
 
-[node name="Child10" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child10" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0357, 0.336519, 0)
 collider = NodePath("../../PearlRing/Child10/CollisionShape3D")
 
-[node name="Child11" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child11" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.089, -9.52034e-08, 0)
 collider = NodePath("../../PearlRing/Child11/CollisionShape3D")
 
-[node name="Child12" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child12" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0357, -0.33652, 0)
 collider = NodePath("../../PearlRing/Child12/CollisionShape3D")
 
-[node name="Child13" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child13" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.881019, -0.640098, 0)
 collider = NodePath("../../PearlRing/Child13/CollisionShape3D")
 
-[node name="Child14" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child14" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.640098, -0.88102, 0)
 collider = NodePath("../../PearlRing/Child14/CollisionShape3D")
 
-[node name="Child15" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child15" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.336519, -1.0357, 0)
 collider = NodePath("../../PearlRing/Child15/CollisionShape3D")
 
-[node name="Child16" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child16" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.90407e-07, -1.089, 0)
 collider = NodePath("../../PearlRing/Child16/CollisionShape3D")
 
-[node name="Child17" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child17" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33652, -1.0357, 0)
 collider = NodePath("../../PearlRing/Child17/CollisionShape3D")
 
-[node name="Child18" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child18" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.640099, -0.881019, 0)
 collider = NodePath("../../PearlRing/Child18/CollisionShape3D")
 
-[node name="Child19" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child19" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88102, -0.640098, 0)
 collider = NodePath("../../PearlRing/Child19/CollisionShape3D")
 
-[node name="Child20" parent="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
+[node name="Child20" parent="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing2" node_paths=PackedStringArray("collider") instance=ExtResource("10_7hisc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0357, -0.336519, 0)
 collider = NodePath("../../PearlRing/Child20/CollisionShape3D")
 
-[node name="Ringsmiddle5" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+[node name="HallwayRings6" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
 transform = Transform3D(-0.946034, -1.03508e-16, -0.324066, 1.41009e-16, 1, -6.90521e-17, 0.324066, 4.01483e-17, -0.946034, 0.116472, 0.480053, 35.9152)
 
-[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5"]
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6"]
 transform = Transform3D(0.964433, -8.13294e-24, -0.264328, 1.05443e-23, 1, -1.59083e-24, 0.264328, 3.63674e-24, 0.964433, 0.323172, 0.00167847, -0.773018)
 script = ExtResource("7_f833s")
 Generate = false
@@ -10271,7 +10272,7 @@ Spacing = 1.579
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 1.90735e-06, 0, -1.52588e-05)
 collision_layer = 0
 collision_mask = 2
@@ -10279,7 +10280,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.0970821, -3.8147e-06, -1.57612)
 collision_layer = 0
 collision_mask = 2
@@ -10287,7 +10288,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.194153, 0, -3.15209)
 collision_layer = 0
 collision_mask = 2
@@ -10295,7 +10296,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.291241, 0, -4.72803)
 collision_layer = 0
 collision_mask = 2
@@ -10303,7 +10304,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.388346, 0, -6.30402)
 collision_layer = 0
 collision_mask = 2
@@ -10311,7 +10312,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.485474, 0, -7.87997)
 collision_layer = 0
 collision_mask = 2
@@ -10319,7 +10320,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.582611, 0, -9.45594)
 collision_layer = 0
 collision_mask = 2
@@ -10327,7 +10328,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.679787, 0, -11.032)
 collision_layer = 0
 collision_mask = 2
@@ -10335,7 +10336,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.776991, 0, -12.608)
 collision_layer = 0
 collision_mask = 2
@@ -10343,7 +10344,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, 0, 1, 0.874229, 0, -14.184)
 collision_layer = 0
 collision_mask = 2
@@ -10351,10 +10352,10 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Ringsmiddle6" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+[node name="HallwayRings7" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
 transform = Transform3D(-0.946034, -1.03508e-16, -0.324066, 1.41009e-16, 1, -6.90521e-17, 0.324066, 4.01484e-17, -0.946034, 0.0431023, 0.480053, 68.4069)
 
-[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6"]
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7"]
 transform = Transform3D(0.964432, -8.13294e-24, -0.264328, 1.05443e-23, 1, -1.59082e-24, 0.264328, 3.6368e-24, 0.964432, 0.319735, -0.0262718, -0.757435)
 script = ExtResource("7_f833s")
 Generate = false
@@ -10368,7 +10369,7 @@ Spacing = 2.481
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, -8.58307e-06, 0, 0.000125885)
 collision_layer = 0
 collision_mask = 2
@@ -10376,7 +10377,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 0.159355, 0, -2.47583)
 collision_layer = 0
 collision_mask = 2
@@ -10384,7 +10385,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 0.319017, -3.8147e-06, -4.95167)
 collision_layer = 0
 collision_mask = 2
@@ -10392,7 +10393,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 0.478873, 0, -7.42759)
 collision_layer = 0
 collision_mask = 2
@@ -10400,7 +10401,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 0.638851, 0, -9.90334)
 collision_layer = 0
 collision_mask = 2
@@ -10408,7 +10409,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 0.798925, 3.8147e-06, -12.3791)
 collision_layer = 0
 collision_mask = 2
@@ -10416,7 +10417,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 0.959081, 0, -14.8549)
 collision_layer = 0
 collision_mask = 2
@@ -10424,7 +10425,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 1.11929, -3.8147e-06, -17.3307)
 collision_layer = 0
 collision_mask = 2
@@ -10432,7 +10433,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 1.27956, 7.62939e-06, -19.8066)
 collision_layer = 0
 collision_mask = 2
@@ -10440,7 +10441,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 1.43986, -3.8147e-06, -22.2824)
 collision_layer = 0
 collision_mask = 2
@@ -10448,7 +10449,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child11" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child11" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 1.60019, 0, -24.7581)
 collision_layer = 0
 collision_mask = 2
@@ -10456,7 +10457,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child12" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child12" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 1.76055, 0, -27.234)
 collision_layer = 0
 collision_mask = 2
@@ -10464,7 +10465,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child13" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child13" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 1.92094, -3.8147e-06, -29.7099)
 collision_layer = 0
 collision_mask = 2
@@ -10472,7 +10473,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child14" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child14" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 2.08134, 0, -32.1857)
 collision_layer = 0
 collision_mask = 2
@@ -10480,7 +10481,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child15" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child15" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 2.24177, 0, -34.6618)
 collision_layer = 0
 collision_mask = 2
@@ -10488,7 +10489,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child16" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child16" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 2.40219, 0, -37.1376)
 collision_layer = 0
 collision_mask = 2
@@ -10496,7 +10497,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child17" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child17" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 2.56263, 0, -39.6134)
 collision_layer = 0
 collision_mask = 2
@@ -10504,7 +10505,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child18" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child18" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 2.72307, -3.8147e-06, -42.0893)
 collision_layer = 0
 collision_mask = 2
@@ -10512,7 +10513,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child19" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child19" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 2.88351, 0, -44.5652)
 collision_layer = 0
 collision_mask = 2
@@ -10520,7 +10521,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child20" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child20" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 3.04396, 0, -47.041)
 collision_layer = 0
 collision_mask = 2
@@ -10528,7 +10529,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child21" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child21" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 3.2044, 0, -49.5168)
 collision_layer = 0
 collision_mask = 2
@@ -10536,7 +10537,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child22" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child22" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 3.36484, -3.8147e-06, -51.9927)
 collision_layer = 0
 collision_mask = 2
@@ -10544,7 +10545,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child23" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child23" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 3.52526, -3.8147e-06, -54.4685)
 collision_layer = 0
 collision_mask = 2
@@ -10552,7 +10553,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child24" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child24" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 3.68567, 0, -56.9443)
 collision_layer = 0
 collision_mask = 2
@@ -10560,7 +10561,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child25" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child25" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 3.84608, -3.8147e-06, -59.4201)
 collision_layer = 0
 collision_mask = 2
@@ -10568,7 +10569,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child26" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child26" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 4.00646, 0, -61.8959)
 collision_layer = 0
 collision_mask = 2
@@ -10576,7 +10577,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child27" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child27" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 4.16682, 0, -64.3716)
 collision_layer = 0
 collision_mask = 2
@@ -10584,7 +10585,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child28" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child28" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 4.32715, 0, -66.8474)
 collision_layer = 0
 collision_mask = 2
@@ -10592,7 +10593,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child29" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child29" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 4.48746, -3.8147e-06, -69.3233)
 collision_layer = 0
 collision_mask = 2
@@ -10600,7 +10601,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child30" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child30" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 4.64772, -3.8147e-06, -71.7991)
 collision_layer = 0
 collision_mask = 2
@@ -10608,7 +10609,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child31" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child31" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 4.80794, -3.8147e-06, -74.2751)
 collision_layer = 0
 collision_mask = 2
@@ -10616,7 +10617,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child32" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child32" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 4.9681, 0, -76.7511)
 collision_layer = 0
 collision_mask = 2
@@ -10624,7 +10625,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child33" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child33" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 5.12816, 0, -79.2268)
 collision_layer = 0
 collision_mask = 2
@@ -10632,7 +10633,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child34" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child34" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 5.28812, 0, -81.7027)
 collision_layer = 0
 collision_mask = 2
@@ -10640,7 +10641,7 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
-[node name="Child35" type="Area3D" parent="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+[node name="Child35" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
 transform = Transform3D(1, -3.15544e-30, -2.98023e-08, -7.88861e-31, 1, 0, 2.98023e-08, -1.26218e-29, 1, 5.44793, 0, -84.1786)
 collision_layer = 0
 collision_mask = 2
@@ -10648,8 +10649,46 @@ monitorable = false
 script = ExtResource("15_qe14v")
 animator = NodePath("AnimationPlayer")
 
+[node name="HallwayRings8" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.999984, -1.03508e-16, -0.00574246, 1.50942e-16, 1, -2.3807e-17, 0.00574246, 4.01484e-17, -0.999984, 0.0397091, -0.0633011, 177.156)
+
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings8"]
+transform = Transform3D(0.999602, -6.31089e-29, -0.0282012, -6.61744e-24, 1, -6.61744e-24, 0.0282012, 8.83524e-29, 0.999602, -0.0720463, 0.579525, 2.37928)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 1.028
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.028)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.056)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
 [node name="SpikeBall1" parent="RingChainAct/Lap03/LowerHall" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
-transform = Transform3D(0.00909248, -1.03508e-16, 0.999958, -1.12027e-16, 1, -1.10008e-16, -0.999958, 4.01483e-17, 0.00909248, 4.71636, 0.938511, 79.573)
+transform = Transform3D(0.00909248, -1.03508e-16, 0.999958, -1.12027e-16, 1, -1.10008e-16, -0.999958, 4.01484e-17, 0.00909248, 3.471, 0.938511, 78.2076)
 "Movement/Cycle Length" = 4.4
 "Movement/Starting Offset" = 0.08
 Movement/Distance = 7.7
@@ -10657,20 +10696,12 @@ root = NodePath("../../../Lap01/LowerHall/SpikeBall3/Root")
 animator = NodePath("../../../Lap01/LowerHall/SpikeBall3/Root/AnimationPlayer")
 
 [node name="SpikeBall2" parent="RingChainAct/Lap03/LowerHall" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
-transform = Transform3D(0.00909248, -1.03508e-16, 0.999958, -1.12027e-16, 1, -1.10008e-16, -0.999958, 4.01483e-17, 0.00909248, 4.88163, 0.938511, 85.2599)
+transform = Transform3D(0.00909248, -1.03508e-16, 0.999958, -1.12027e-16, 1, -1.10008e-16, -0.999958, 4.01484e-17, 0.00909248, 3.63627, 0.938511, 83.8945)
 "Movement/Cycle Length" = 4.4
 "Movement/Starting Offset" = 0.08
 Movement/Distance = 7.7
 root = NodePath("../../../Lap01/LowerHall/SpikeBall3/Root")
 animator = NodePath("../../../Lap01/LowerHall/SpikeBall3/Root/AnimationPlayer")
-
-[node name="SpikeBall3" parent="RingChainAct/Lap03/LowerHall" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
-transform = Transform3D(0.0102282, -1.03508e-16, -0.999948, 1.09881e-16, 1, 1.12152e-16, 0.999948, 4.01483e-17, 0.0102282, -5.86668, 0.938511, 84.5032)
-"Movement/Cycle Length" = 4.0
-"Movement/Starting Offset" = 0.12
-Movement/Distance = 11.8
-root = NodePath("../../../Lap01/LowerHall/SpikeBall4/Root")
-animator = NodePath("../../../Lap01/LowerHall/SpikeBall4/Root/AnimationPlayer")
 
 [node name="SpikeBall4" parent="RingChainAct/Lap03/LowerHall" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
 transform = Transform3D(0.0513508, -0.000233011, 0.99868, -0.00167791, 0.999999, 0.000319605, -0.998679, -0.0016921, 0.0513504, 2.97274, 0.938511, 93.1217)
@@ -10694,10 +10725,930 @@ Movement/Distance = 10.0
 root = NodePath("../../../Lap01/LowerHall/SpikeBall6/Root")
 animator = NodePath("../../../Lap01/LowerHall/SpikeBall6/Root/AnimationPlayer")
 
+[node name="SpikeBall7" parent="RingChainAct/Lap03/LowerHall" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
+transform = Transform3D(0.0329199, -0.000308183, -0.999458, 0.00168927, 0.999999, -0.000252701, 0.999457, -0.00168004, 0.0329202, -5.28419, 0.9958, 141.477)
+"Movement/Cycle Length" = 3.1
+Movement/Distance = 10.0
+root = NodePath("../../../Lap01/LowerHall/SpikeBall6/Root")
+animator = NodePath("../../../Lap01/LowerHall/SpikeBall6/Root/AnimationPlayer")
+
+[node name="Flameshooterline" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.0376337, 0.999279, -0.00520816, 0.999291, 0.0376276, -0.00123559, -0.00103859, -0.00525093, -0.999987, -1.79657, 0.544643, 178.912)
+
+[node name="Flameshooters" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline"]
+transform = Transform3D(0.999829, -9.31323e-10, -0.0185169, -4.07454e-09, 1, 2.98023e-08, 0.0185169, 0, 0.999829, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("18_8uxup")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 0.956
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+script = ExtResource("16_e6hkr")
+"Current State" = 0
+"Auto Advance" = true
+"Start Time" = 0.0
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 1.0
+stateNames = [&"inactive", &"active"]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
+
+[node name="Child02" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.956)
+script = ExtResource("16_e6hkr")
+"Current State" = 0
+"Auto Advance" = true
+"Start Time" = 0.0
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 1.0
+stateNames = [&"inactive", &"active"]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
+
+[node name="Child03" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.912)
+script = ExtResource("16_e6hkr")
+"Current State" = 0
+"Auto Advance" = true
+"Start Time" = 0.0
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 1.0
+stateNames = [&"inactive", &"active"]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
+
+[node name="Child04" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.868)
+script = ExtResource("16_e6hkr")
+"Current State" = 0
+"Auto Advance" = true
+"Start Time" = 0.0
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 1.0
+stateNames = [&"inactive", &"active"]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
+
+[node name="Child05" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.824)
+script = ExtResource("16_e6hkr")
+"Current State" = 0
+"Auto Advance" = true
+"Start Time" = 0.0
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 1.0
+stateNames = [&"inactive", &"active"]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
+
+[node name="Flameshooterline2" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.0376337, 0.99928, -0.00520813, 0.999291, 0.0376276, -0.00123559, -0.00103859, -0.00525096, -0.999987, -1.76937, 0.552593, 185.573)
+
+[node name="Flameshooters" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline2"]
+transform = Transform3D(0.999829, -9.31323e-10, -0.0185169, -4.07454e-09, 1, 2.98023e-08, 0.0185169, 0, 0.999829, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("18_8uxup")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 0.956
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Flameshooterline2/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child01/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child01/Timer")
+
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Flameshooterline2/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.956)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child02/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child02/Timer")
+
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Flameshooterline2/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.912)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child03/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child03/Timer")
+
+[node name="Child04" parent="RingChainAct/Lap03/LowerHall/Flameshooterline2/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.868)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child04/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child04/Timer")
+
+[node name="Child05" parent="RingChainAct/Lap03/LowerHall/Flameshooterline2/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.824)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child05/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child05/Timer")
+
+[node name="Flameshooterline3" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.0376337, -0.99928, -0.00539604, 0.999291, -0.037639, 0.000835964, -0.00103859, -0.00536063, 0.999988, 1.83777, 1.92431, 195.668)
+
+[node name="Flameshooters" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline3"]
+transform = Transform3D(0.999829, -9.31323e-10, -0.0185169, -4.07454e-09, 1, 2.98023e-08, 0.0185169, 0, 0.999829, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("18_8uxup")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 0.956
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Flameshooterline3/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child01/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child01/Timer")
+
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Flameshooterline3/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.956)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child02/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child02/Timer")
+
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Flameshooterline3/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.912)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child03/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child03/Timer")
+
+[node name="Child04" parent="RingChainAct/Lap03/LowerHall/Flameshooterline3/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.868)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child04/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child04/Timer")
+
+[node name="Child05" parent="RingChainAct/Lap03/LowerHall/Flameshooterline3/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.824)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child05/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child05/Timer")
+
+[node name="Flameshooterline4" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.0376337, 0.999054, -0.0220019, 0.999292, 0.0376016, -0.0018678, -0.00103859, -0.0220567, -0.999761, -1.89729, 0.418022, 205.09)
+
+[node name="Flameshooters" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline4"]
+transform = Transform3D(0.999829, -9.31323e-10, -0.0185169, -4.07454e-09, 1, 2.98023e-08, 0.0185169, 0, 0.999829, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("18_8uxup")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 0.956
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Flameshooterline4/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child01/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child01/Timer")
+
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Flameshooterline4/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.956)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child02/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child02/Timer")
+
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Flameshooterline4/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.912)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child03/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child03/Timer")
+
+[node name="Child04" parent="RingChainAct/Lap03/LowerHall/Flameshooterline4/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.868)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child04/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child04/Timer")
+
+[node name="Child05" parent="RingChainAct/Lap03/LowerHall/Flameshooterline4/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.824)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child05/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child05/Timer")
+
+[node name="Flameshooterline5" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.0376337, 0.999267, -0.00770187, 0.999292, 0.0376245, -0.00132948, -0.00103859, -0.00774664, -0.999974, -2.11622, 0.416435, 211.499)
+
+[node name="Flameshooters" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline5"]
+transform = Transform3D(0.999829, -9.31323e-10, -0.0185169, -4.07454e-09, 1, 2.98023e-08, 0.0185169, 0, 0.999829, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("18_8uxup")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 0.956
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Flameshooterline5/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child01/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child01/Timer")
+
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Flameshooterline5/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.956)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child02/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child02/Timer")
+
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Flameshooterline5/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.912)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child03/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child03/Timer")
+
+[node name="Child04" parent="RingChainAct/Lap03/LowerHall/Flameshooterline5/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.868)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child04/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child04/Timer")
+
+[node name="Child05" parent="RingChainAct/Lap03/LowerHall/Flameshooterline5/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.824)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child05/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child05/Timer")
+
+[node name="Flameshooterline6" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.0376338, -0.999193, 0.0144161, 0.999292, -0.0376152, 0.00158202, -0.00103859, 0.0144656, 0.9999, 2.15235, 2.21206, 228.355)
+
+[node name="Flameshooters" type="Node3D" parent="RingChainAct/Lap03/LowerHall/Flameshooterline6"]
+transform = Transform3D(0.999829, -9.31323e-10, -0.0185169, -4.07454e-09, 1, 2.98023e-08, 0.0185169, 0, 0.999829, 0, 0, 0)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("18_8uxup")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 0.956
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingChainAct/Lap03/LowerHall/Flameshooterline6/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child01/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child01/Timer")
+
+[node name="Child02" parent="RingChainAct/Lap03/LowerHall/Flameshooterline6/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.956)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child02/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child02/Timer")
+
+[node name="Child03" parent="RingChainAct/Lap03/LowerHall/Flameshooterline6/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.912)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child03/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child03/Timer")
+
+[node name="Child04" parent="RingChainAct/Lap03/LowerHall/Flameshooterline6/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.868)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child04/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child04/Timer")
+
+[node name="Child05" parent="RingChainAct/Lap03/LowerHall/Flameshooterline6/Flameshooters" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.824)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../../../Flameshooterline/Flameshooters/Child05/AnimationPlayer")
+timer = NodePath("../../../Flameshooterline/Flameshooters/Child05/Timer")
+
+[node name="HallwayRings9" type="Node3D" parent="RingChainAct/Lap03/LowerHall"]
+transform = Transform3D(-0.999985, -1.03508e-16, -0.00574252, 1.50942e-16, 1, -2.3807e-17, 0.00574252, 4.01484e-17, -0.999985, 0.194904, -0.0633011, 204.181)
+
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9"]
+transform = Transform3D(0.999602, 5.04871e-29, -0.0282012, 1.32349e-23, 1, 1.32349e-23, 0.0282012, 8.83524e-29, 0.999602, -0.0348358, 0.579525, 1.06026)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.11
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -1.90735e-06, 0, -2.28882e-05)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -0.0743618, 7.62939e-06, -3.10909)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -0.148634, 1.14441e-05, -6.21815)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -0.222795, 1.52588e-05, -9.32715)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -0.296785, 2.28882e-05, -12.4362)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -0.37055, 2.67029e-05, -15.5454)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -0.44393, 2.67029e-05, -18.6545)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 1.89327e-29, 0, 0, 1, 0, 0, 0, 1, -0.516726, 3.43323e-05, -21.7637)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
 [node name="AscentBottom" type="Node3D" parent="RingChainAct/Lap03"]
 transform = Transform3D(-0.9349, -1.11022e-16, 0.354911, 0, 1, -3.33067e-16, -0.354911, 0, -0.9349, 43.6927, -50, -112.669)
 script = ExtResource("5_xaw0y")
 saveVisibilityOnCheckpoint = true
+
+[node name="SpikePannels" type="Node3D" parent="RingChainAct/Lap03/AscentBottom"]
+transform = Transform3D(-0.900845, -0.0885404, 0.425017, -0.0932748, 0.995593, 0.00970319, -0.424003, -0.0309024, -0.905133, 30.3806, 3.22522, 52.1642)
+
+[node name="SpikePanel" parent="RingChainAct/Lap03/AscentBottom/SpikePannels" instance=ExtResource("12_jso4h")]
+transform = Transform3D(1, -7.45058e-09, 0, -1.11759e-08, 1, 3.72529e-09, 2.98023e-08, -3.72529e-09, 1, 0, 0, 0)
+
+[node name="SpikePanel2" parent="RingChainAct/Lap03/AscentBottom/SpikePannels" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.999843, -1.11759e-08, -0.0177141, -3.72529e-09, 1, 3.72529e-09, 0.0177141, -3.72529e-09, 0.999843, -0.00642395, 0.0427589, -2.76271)
+animator = NodePath("../SpikePanel/SpikePanel/AnimationPlayer")
+timer = NodePath("../SpikePanel/Timer")
+
+[node name="SpikePanel3" parent="RingChainAct/Lap03/AscentBottom/SpikePannels" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.999422, -0.0314132, -0.0129988, 0.0311058, 0.999247, -0.0232108, 0.0137182, 0.022793, 0.999646, -0.0239868, 0.0972481, -4.12167)
+animator = NodePath("../SpikePanel/SpikePanel/AnimationPlayer")
+timer = NodePath("../SpikePanel/Timer")
+
+[node name="SpikePanel4" parent="RingChainAct/Lap03/AscentBottom/SpikePannels" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.999422, -0.0314132, -0.0129988, 0.0311058, 0.999247, -0.0232108, 0.0137182, 0.022793, 0.999646, 0.00893402, 0.0930138, -6.51051)
+animator = NodePath("../SpikePanel/SpikePanel/AnimationPlayer")
+timer = NodePath("../SpikePanel/Timer")
+
+[node name="SpikePannels2" type="Node3D" parent="RingChainAct/Lap03/AscentBottom"]
+transform = Transform3D(-0.96659, -0.121298, -0.225814, -0.112784, 0.992347, -0.0502793, 0.230185, -0.0231312, -0.972873, 63.7659, 6.2921, 58.3099)
+
+[node name="SpikePanel" parent="RingChainAct/Lap03/AscentBottom/SpikePannels2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.999999, 7.27596e-10, -4.47035e-08, 1.67638e-08, 0.998285, 0.0585223, -1.04308e-07, -0.0585223, 0.998285, -0.674801, -0.094326, -0.749832)
+animator = NodePath("../../SpikePannels/SpikePanel/SpikePanel/AnimationPlayer")
+timer = NodePath("../../SpikePannels/SpikePanel/Timer")
+
+[node name="SpikePanel2" parent="RingChainAct/Lap03/AscentBottom/SpikePannels2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.999509, -0.0258485, -0.0177031, 0.0264573, 0.999034, 0.0350565, 0.0167799, -0.0355076, 0.999228, 0.746349, -0.001091, 0.677734)
+animator = NodePath("../../SpikePannels/SpikePanel/SpikePanel/AnimationPlayer")
+timer = NodePath("../../SpikePannels/SpikePanel/Timer")
+
+[node name="SpikePanel3" parent="RingChainAct/Lap03/AscentBottom/SpikePannels2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.999422, -0.0301473, -0.015713, 0.0311059, 0.997411, 0.0648206, 0.0137179, -0.0652719, 0.997773, 0.770906, -0.0833588, -0.761887)
+animator = NodePath("../../SpikePannels/SpikePanel/SpikePanel/AnimationPlayer")
+timer = NodePath("../../SpikePannels/SpikePanel/Timer")
+
+[node name="SpikePanel4" parent="RingChainAct/Lap03/AscentBottom/SpikePannels2" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("12_jso4h")]
+transform = Transform3D(0.999422, -0.0306296, -0.0147508, 0.0311059, 0.998964, 0.0332151, 0.013718, -0.0336547, 0.999339, -0.675249, -0.0190811, 0.683273)
+animator = NodePath("../../SpikePannels/SpikePanel/SpikePanel/AnimationPlayer")
+timer = NodePath("../../SpikePannels/SpikePanel/Timer")
+
+[node name="HallwayRings10" type="Node3D" parent="RingChainAct/Lap03/AscentBottom"]
+transform = Transform3D(-0.353475, -1.03794e-16, -0.935446, 3.5085e-16, 1, -3.11551e-17, 0.935446, 3.9403e-17, -0.353475, 33.8973, 4.12428, 57.5365)
+
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10"]
+transform = Transform3D(0.999601, 2.52435e-29, -0.0282012, -4.96308e-24, 1, -8.27181e-24, 0.0282012, 1.51461e-28, 0.999601, -0.238861, 0.314522, -0.677216)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.314
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -2.52435e-29, 1.19209e-07, 4.96308e-24, 1, -3.30872e-24, -1.19209e-07, -1.26218e-29, 1, -1.52588e-05, -3.8147e-06, 5.34058e-05)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -0.158813, 0.194225, -2.30266)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -0.42952, 0.390175, -4.59477)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -0.812561, 0.587788, -6.87077)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -1.3078, 0.786961, -9.1249)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -1.91446, 0.987553, -11.3516)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -2.63103, 1.1894, -13.5453)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -3.45532, 1.39231, -15.7009)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -4.38446, 1.59605, -17.8133)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 5.96046e-08, 3.30872e-24, 1, 3.30872e-24, -5.96046e-08, -3.78653e-29, 1, -5.41495, 1.80039, -19.8782)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="HallwayRings11" type="Node3D" parent="RingChainAct/Lap03/AscentBottom"]
+transform = Transform3D(0.430575, -1.03794e-16, -0.902557, 4.33526e-16, 1, -5.86353e-17, 0.902557, 3.9403e-17, 0.430575, 71.1626, 7.18548, 55.7319)
+
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11"]
+transform = Transform3D(0.999602, -1.00974e-28, -0.0282012, -1.32349e-23, 1, 1.21596e-22, 0.0282012, 1.9406e-28, 0.999602, -0.32196, 0.0913849, 2.26585)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.844
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, 0, 3.8147e-06, -5.34058e-05)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, 0.0145874, 0.337509, -3.82925)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -0.249664, 0.675606, -7.64936)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -0.801041, 1.01355, -11.4387)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -1.6441, 1.35061, -15.1742)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -2.77904, 1.6861, -18.8318)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -4.20168, 2.01944, -22.3877)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -5.90395, 2.3502, -25.8189)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -7.87402, 2.67808, -29.1041)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 3.72529e-09, 0, 1, -2.44018e-23, -3.72529e-09, -6.31089e-30, 1, -10.0972, 3.00298, -32.2235)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="HallwayRings12" type="Node3D" parent="RingChainAct/Lap03/AscentBottom"]
+transform = Transform3D(0.943341, -1.03794e-16, -0.331832, 5.09236e-16, 1, -1.96018e-17, 0.331832, 3.9403e-17, 0.943341, 98.4957, 11.1008, 25.0463)
+
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12"]
+transform = Transform3D(0.999602, -1.00974e-28, -0.0282012, -1.03087e-22, 1, 1.53339e-22, 0.0282012, 2.01948e-28, 0.999602, -0.169296, 0.0913849, -3.14594)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.478
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, 3.05176e-05, -1.14441e-05, 0.000160217)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -0.577576, 0.285439, -3.44498)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -1.38586, 0.570374, -6.84293)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -2.42061, 0.855385, -10.1787)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -3.67751, 1.14113, -13.4373)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -5.15205, 1.42823, -16.6036)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -6.83951, 1.71729, -19.6617)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -8.73485, 2.00895, -22.5956)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -10.8324, 2.30376, -25.3887)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, -1.26218e-29, 0, -3.39144e-23, 1, 5.94536e-23, 0, -1.26218e-29, 1, -13.1249, 2.60209, -28.024)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="HallwayRings13" type="Node3D" parent="RingChainAct/Lap03/AscentBottom"]
+transform = Transform3D(0.776598, -1.03794e-16, 0.63, 5.29828e-16, 1, 8.68012e-17, -0.63, 3.9403e-17, 0.776598, 91.1035, 15.0451, -18.8809)
+
+[node name="Rings" type="Node3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13"]
+transform = Transform3D(0.999602, -5.99534e-29, -0.0282012, -1.98523e-22, 1, 1.58819e-22, 0.0282012, 1.89327e-28, 0.999602, 0.0332375, 0.166168, -2.74507)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.172
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, 3.8147e-06, -1.52588e-05, 0.000152588)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -0.172398, 0.275455, -3.14613)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -0.543823, 0.550659, -6.27507)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child04" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -1.11213, 0.825478, -9.37444)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child05" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -1.87452, 1.0998, -12.4321)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child06" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -2.82752, 1.37355, -15.436)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child07" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -3.96685, 1.64658, -18.3738)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child08" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -5.28863, 1.91901, -21.2354)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child09" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -6.78699, 2.19059, -24.0077)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child10" type="Area3D" parent="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 3.15544e-30, 0, 7.94093e-23, 1, 2.64698e-23, 0, 0, 1, -8.45678, 2.46136, -26.6804)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="SpikeBall1" parent="RingChainAct/Lap03" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.7115, -38.3689, -174.577)
+root = NodePath("")
+animator = NodePath("")
+
+[node name="SpikeBall2" parent="RingChainAct/Lap03" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7191, -38.3689, -170.74)
+root = NodePath("")
+animator = NodePath("")
+
+[node name="SpikeBall3" parent="RingChainAct/Lap03" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.3157, -34.781, -133.395)
+root = NodePath("")
+animator = NodePath("")
+
+[node name="SpikeBall4" parent="RingChainAct/Lap03" node_paths=PackedStringArray("root", "animator") instance=ExtResource("15_8xmwh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.8458, -34.781, -133.395)
+root = NodePath("")
+animator = NodePath("")
+
+[node name="FlameShooter" parent="RingChainAct/Lap03" instance=ExtResource("18_8uxup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.9056, -32.5297, -98.294)
+stateLengths = PackedFloat32Array(0.5, 1)
+
+[node name="Hallway Rings6" type="Node3D" parent="RingChainAct/Lap03"]
+transform = Transform3D(-0.387081, 0, -0.922046, 0, 1, 0, 0.922046, 0, -0.387081, -24.4549, -31.5375, -96.3588)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 2
+Shape = 0
+Orientation = 0
+Spacing = 1.714
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/Hallway Rings6" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/Hallway Rings6" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.714)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Hallway Rings7" type="Node3D" parent="RingChainAct/Lap03"]
+transform = Transform3D(-0.387081, 0, -0.922046, 0, 1, 0, 0.922046, 0, -0.387081, -15.4764, -30.8666, -92.5896)
+script = ExtResource("7_f833s")
+Generate = false
+Source = ExtResource("8_goqva")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../Static/Path/MainPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.714
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" type="Area3D" parent="RingChainAct/Lap03/Hallway Rings7" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, -1.14441e-05, 0.00012207)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child02" type="Area3D" parent="RingChainAct/Lap03/Hallway Rings7" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.170235, 0.14172, -1.69877)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="Child03" type="Area3D" parent="RingChainAct/Lap03/Hallway Rings7" node_paths=PackedStringArray("animator") instance=ExtResource("8_goqva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.399193, 0.282871, -3.39077)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_qe14v")
+animator = NodePath("AnimationPlayer")
+
+[node name="FlameShooter2" parent="RingChainAct/Lap03" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(0.997998, -0.0632434, 0, 0.0632434, 0.997998, 0, 0, 0, 1, -19.5154, -31.8036, -94.2456)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../FlameShooter/AnimationPlayer")
+timer = NodePath("../FlameShooter/Timer")
+
+[node name="FlameShooter3" parent="RingChainAct/Lap03" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("18_8uxup")]
+transform = Transform3D(0.994547, -0.104285, 0, 0.104285, 0.994547, 0, 0, 0, 1, -7.6251, -30.893, -90.5507)
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("../FlameShooter/AnimationPlayer")
+timer = NodePath("../FlameShooter/Timer")
 
 [node name="AscentTop" type="Node3D" parent="RingChainAct/Lap03"]
 transform = Transform3D(-0.827081, -1.11022e-16, 0.562084, 1.11022e-16, 1, 2.22045e-16, -0.562084, 0, -0.827082, 41.3489, -25.8326, -111.892)
@@ -10811,80 +11762,136 @@ shape = SubResource("BoxShape3D_wbgfo")
 [connection signal="Deactivated" from="RingChainAct/Lap02/AscentBottom/Switch" to="RingChainAct/Lap02/AscentBottom/Ring Switch4" method="Deactivate"]
 [connection signal="Activated" from="RingChainAct/Lap02/AscentTop/Switch" to="RingChainAct/Lap02/AscentTop/Ring Switc5" method="Activate"]
 [connection signal="Deactivated" from="RingChainAct/Lap02/AscentTop/Switch" to="RingChainAct/Lap02/AscentTop/Ring Switc5" method="Deactivate"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child01" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child01" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child02" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child02" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child03" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child03" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child04" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child04" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child05" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child05" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child06" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child06" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child07" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child07" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child08" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child08" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child09" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child09" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child10" to="RingChainAct/Lap03/LowerHall/Ringsmiddle4/Rings/Child10" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child01" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child01" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child02" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child02" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child03" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child03" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child04" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child04" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child05" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child05" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child06" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child06" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child07" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child07" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child08" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child08" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child09" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child09" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child10" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child10" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child11" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child11" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child12" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child12" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child13" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child13" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child14" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child14" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child15" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child15" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child16" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child16" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child17" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child17" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child18" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child18" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child19" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child19" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child20" to="RingChainAct/Lap03/LowerHall/FloatingPearls/PearlRing/Child20" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child01" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child01" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child02" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child02" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child03" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child03" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child04" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child04" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child05" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child05" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child06" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child06" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child07" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child07" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child08" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child08" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child09" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child09" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child10" to="RingChainAct/Lap03/LowerHall/Ringsmiddle5/Rings/Child10" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child01" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child01" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child02" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child02" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child03" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child03" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child04" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child04" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child05" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child05" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child06" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child06" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child07" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child07" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child08" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child08" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child09" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child09" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child10" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child10" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child11" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child11" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child12" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child12" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child13" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child13" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child14" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child14" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child15" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child15" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child16" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child16" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child17" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child17" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child18" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child18" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child19" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child19" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child20" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child20" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child21" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child21" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child22" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child22" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child23" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child23" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child24" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child24" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child25" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child25" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child26" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child26" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child27" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child27" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child28" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child28" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child29" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child29" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child30" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child30" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child31" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child31" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child32" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child32" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child33" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child33" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child34" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child34" method="OnEntered"]
-[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child35" to="RingChainAct/Lap03/LowerHall/Ringsmiddle6/Rings/Child35" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child01" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child02" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child03" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child04" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child05" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child06" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child07" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child08" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child09" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child10" to="RingChainAct/Lap03/LowerHall/HallwayRings4/Rings/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child01" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child02" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child03" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child04" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child05" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child06" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child07" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child08" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child09" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child10" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child11" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child11" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child12" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child12" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child13" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child13" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child14" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child14" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child15" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child15" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child16" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child16" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child17" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child17" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child18" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child18" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child19" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child19" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child20" to="RingChainAct/Lap03/LowerHall/HallwayRings5/PearlRing/Child20" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child01" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child02" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child03" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child04" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child05" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child06" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child07" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child08" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child09" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child10" to="RingChainAct/Lap03/LowerHall/HallwayRings6/Rings/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child01" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child02" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child03" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child04" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child05" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child06" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child07" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child08" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child09" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child10" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child11" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child11" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child12" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child12" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child13" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child13" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child14" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child14" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child15" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child15" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child16" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child16" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child17" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child17" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child18" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child18" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child19" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child19" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child20" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child20" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child21" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child21" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child22" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child22" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child23" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child23" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child24" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child24" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child25" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child25" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child26" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child26" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child27" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child27" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child28" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child28" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child29" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child29" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child30" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child30" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child31" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child31" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child32" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child32" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child33" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child33" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child34" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child34" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child35" to="RingChainAct/Lap03/LowerHall/HallwayRings7/Rings/Child35" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings/Child01" to="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings/Child02" to="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings/Child03" to="RingChainAct/Lap03/LowerHall/HallwayRings8/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child01" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child02" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child03" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child04" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child05" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child06" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child07" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child08" to="RingChainAct/Lap03/LowerHall/HallwayRings9/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child01" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child02" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child03" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child04" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child05" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child06" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child07" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child08" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child09" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child10" to="RingChainAct/Lap03/AscentBottom/HallwayRings10/Rings/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child01" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child02" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child03" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child04" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child05" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child06" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child07" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child08" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child09" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child10" to="RingChainAct/Lap03/AscentBottom/HallwayRings11/Rings/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child01" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child02" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child03" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child04" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child05" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child06" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child07" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child08" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child09" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child10" to="RingChainAct/Lap03/AscentBottom/HallwayRings12/Rings/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child01" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child02" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child03" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child03" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child04" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child04" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child05" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child05" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child06" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child06" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child07" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child07" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child08" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child08" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child09" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child09" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child10" to="RingChainAct/Lap03/AscentBottom/HallwayRings13/Rings/Child10" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/Hallway Rings6/Child01" to="RingChainAct/Lap03/Hallway Rings6/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/Hallway Rings6/Child02" to="RingChainAct/Lap03/Hallway Rings6/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/Hallway Rings7/Child01" to="RingChainAct/Lap03/Hallway Rings7/Child01" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/Hallway Rings7/Child02" to="RingChainAct/Lap03/Hallway Rings7/Child02" method="OnEntered"]
+[connection signal="area_entered" from="RingChainAct/Lap03/Hallway Rings7/Child03" to="RingChainAct/Lap03/Hallway Rings7/Child03" method="OnEntered"]
 
 [editable path="Static"]
