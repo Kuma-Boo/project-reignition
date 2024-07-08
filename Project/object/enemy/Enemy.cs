@@ -239,6 +239,16 @@ public partial class Enemy : Node3D
 			return;
 		}
 
+		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+		{
+			UpdateLockon();
+			Character.Lockon.StartBounce(IsDefeated);
+		}
+		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
+		{
+			Character.StartKnockback();
+		}
+
 		switch (Character.AttackState)
 		{
 			case CharacterController.AttackStates.OneShot:
@@ -250,16 +260,6 @@ public partial class Enemy : Node3D
 			case CharacterController.AttackStates.Strong:
 				TakeDamage(2);
 				break;
-		}
-
-		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-		{
-			UpdateLockon();
-			Character.Lockon.StartBounce(IsDefeated);
-		}
-		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
-		{
-			Character.StartKnockback();
 		}
 	}
 
@@ -277,8 +277,16 @@ public partial class Enemy : Node3D
 		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
 	}
 
+	protected virtual void StartUhuBounce() { }
+
 	public void OnEntered(Area3D a)
 	{
+		if (a.IsInGroup("uhu"))
+		{
+			StartUhuBounce();
+			return;
+		}
+
 		if (!a.IsInGroup("player")) return;
 		interactionCounter++;
 	}

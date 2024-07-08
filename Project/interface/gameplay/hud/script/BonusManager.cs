@@ -121,7 +121,11 @@ public partial class BonusManager : VBoxContainer
 	}
 
 	/// <summary> Called when the level is completed. Forces all bonuses to be counted. </summary>
-	private void OnLevelCompleted() => FinishRingChain();
+	private void OnLevelCompleted()
+	{
+		FinishRingChain();
+		FinishEnemyChain();
+	}
 }
 
 public enum BonusType
