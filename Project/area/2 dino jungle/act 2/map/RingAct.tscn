@@ -40,6 +40,15 @@ size = Vector3(15.147, 13.9202, 1)
 [node name="Static" parent="." instance=ExtResource("1_i1hhe")]
 Data = ExtResource("2_qs2u6")
 
+[node name="Head" parent="Static/Common/Dino" index="2"]
+transform = Transform3D(0.999979, -8.9407e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -1.01328e-06, 1, 0.000292879, 1.33514e-05, 19.7418, 38.526)
+
+[node name="DemoCamera" parent="Static" index="5"]
+transform = Transform3D(-0.748955, 0, 0.662621, 0, 1, 0, -0.662621, 0, -0.748955, 119.668, 35.9585, -70.5782)
+
+[node name="Camera" parent="Static/DemoCamera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 0, 0)
+
 [node name="RingAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="RingAct"]
@@ -161,6 +170,7 @@ transform = Transform3D(0.990637, 0.134274, 0.024659, -0.127337, 0.843683, 0.521
 middleHeight = 8.0
 finalHeight = 4.0
 distance = 18.0
+voiceKey = &""
 
 [node name="WaterFall" type="Node3D" parent="RingAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3003, 23.3747, 119.404)
@@ -424,7 +434,7 @@ Movement/Radius = 2.3
 transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -111.295, -5.65945, 128.289)
 
 [node name="Rings2" type="Node3D" parent="RingAct/Boat2"]
-transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -110.982, -5.65945, 111.854)
+transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -110.982, -5.37335, 111.854)
 script = ExtResource("5_5qgkc")
 Generate = false
 Source = ExtResource("6_m7ns5")
@@ -450,7 +460,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32408, 0, -5.80515)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.67903, 0, -8.83371)
 
 [node name="Rings" type="Node3D" parent="RingAct/Boat2"]
-transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -121.604, -5.65945, 116.6)
+transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -121.604, -5.37335, 116.6)
 script = ExtResource("5_5qgkc")
 Generate = false
 Source = ExtResource("6_m7ns5")
@@ -666,7 +676,7 @@ Movement/Angle = -90.0
 root = NodePath("ItemBoxFlying2")
 
 [node name="ItemBoxFlying2" parent="RingAct/Island/MovingObjects/MovingITBOXF2" instance=ExtResource("20_cyl5y")]
-transform = Transform3D(0.999999, 0, 2.08616e-07, 0, 1, 0, -2.08616e-07, 0, 0.999999, 0, 0, 0)
+transform = Transform3D(0.999999, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 0.999999, 0, 0, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../../RichRing")
 
 [node name="RichRing" parent="RingAct/Island/MovingObjects" instance=ExtResource("11_5mjed")]
@@ -1091,26 +1101,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8147e-06, -4.01477, -28.278
 [node name="CactusPlatform" parent="." instance=ExtResource("20_4d8pg")]
 transform = Transform3D(2, 0, -2.23517e-07, 0, 2, 0, 2.23517e-07, 0, 2, -14.224, 23.7, 150.362)
 
-[connection signal="Activated" from="Static/Common/Object/Spring" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Common/Object/Spring" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat2" to="Static/Collision/BoatWallMainOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat2" to="Static/Collision/BoatWallReverseOneWay" method="Deactivate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat3" to="Static/Collision/BoatWallMainOneWay" method="Deactivate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat3" to="Static/Collision/BoatWallReverseOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/End" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Object/DoubleBoatSection/End/Jump" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/EndingBoatSection/EndR" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Object/EndingBoatSection/EndR/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/EndingBoatSection/EndL" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Object/EndingBoatSection/EndL/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/SpringPath/Spring1" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/SpringPath/JumpPanel" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Common/SpringPath/JumpPanel/Spring" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Dino/DinoBridge/DinoTransitionJump" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Dino/DinoBridge/DinoTransitionJump/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Dino/DinoBridge/DinoTailJump" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Dino/DinoBridge/DinoTailJump/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
 [connection signal="Defeated" from="RingAct/LotusGroup/RedMajin2" to="RingAct/LotusGroup/EnemyStone3" method="IncrementCounter"]
 [connection signal="Defeated" from="RingAct/LotusGroup/RedMajin3" to="RingAct/LotusGroup/EnemyStone3" method="IncrementCounter"]
 [connection signal="Defeated" from="RingAct/LotusGroup/RedMajin" to="RingAct/LotusGroup/EnemyStone" method="IncrementCounter"]
