@@ -153,6 +153,7 @@ public partial class FlowerMajin : Enemy
 		{
 			StartStaggerState();
 			Character.Lockon.StartBounce(false);
+			UpdateLockon();
 			return;
 		}
 

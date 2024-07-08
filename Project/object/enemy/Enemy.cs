@@ -162,7 +162,8 @@ public partial class Enemy : Node3D
 
 	public virtual void UpdateLockon()
 	{
-		Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
+		if (Character.Lockon.IsHomingAttacking)
+			Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 		if (!IsDefeated)
 			Character.Camera.SetDeferred("LockonTarget", Hurtbox);
