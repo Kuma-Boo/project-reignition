@@ -292,10 +292,13 @@ public partial class Majin : Enemy
 
 	private readonly StringName EnabledState = "enabled";
 	private readonly StringName DisabledState = "disabled";
-	private readonly StringName MoveTransitionParameter = "parameters/move_transition/transition_request";
-	private readonly StringName MoveBlendParameter = "parameters/move_blend/blend_position";
+	private readonly StringName MoveTransition = "parameters/move_transition/transition_request";
+	private readonly StringName MoveBlend = "parameters/move_blend/blend_position";
 	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
 	private readonly StringName DespawnTrigger = "parameters/despawn_trigger/request";
+	private readonly StringName HitTransition = "parameters/hit_transition/transition_request";
+	private readonly StringName StaggerState = "stagger";
+	private readonly StringName BoopState = "boop";
 
 	private const float MovementTransitionLength = .4f;
 
@@ -398,7 +401,11 @@ public partial class Majin : Enemy
 		if (isFlameActive)
 			ToggleFlameAttack();
 
-		AnimationTree.Set(HitTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		if (Character.AttackState == CharacterController.AttackStates.None)
+			AnimationTree.Set(HitTransition, BoopState);
+		else
+			AnimationTree.Set(HitTransition, StaggerState);
+		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	protected override void Defeat()
@@ -413,7 +420,7 @@ public partial class Majin : Enemy
 			tweener?.Kill();
 
 			AnimationTree.Set(DefeatTransitionParameter, EnabledState);
-			AnimationTree.Set(HitTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+			AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
 			Vector3 launchDirection = defeatLaunchDirection;
 			if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
@@ -527,13 +534,13 @@ public partial class Majin : Enemy
 			"survey",
 		];
 
-	private readonly StringName HitTriggerParameter = "parameters/hit_trigger/request";
+	private readonly StringName HitTrigger = "parameters/hit_trigger/request";
 	private readonly StringName DefeatTransitionParameter = "parameters/defeat_transition/transition_request";
 
 	private readonly StringName IdleFactorParameter = "parameters/idle_movement_factor/add_amount";
-	private readonly StringName FidgetTransitionParameter = "parameters/fidget_transition/transition_request"; // Sets the fidget animation
-	private readonly StringName FidgetTriggerParameter = "parameters/fidget_trigger/request"; // Currently fidgeting? Set StringName
-	private readonly StringName FidgetTriggerStateParameter = "parameters/fidget_trigger/active"; // Get StringName
+	private readonly StringName FidgetTransition = "parameters/fidget_transition/transition_request"; // Sets the fidget animation
+	private readonly StringName FidgetTrigger = "parameters/fidget_trigger/request"; // Currently fidgeting? Set StringName
+	private readonly StringName FidgetTriggerState = "parameters/fidget_trigger/active"; // Get StringName
 	private const float FidgetFrequency = 3f; // How often to fidget
 
 	/// <summary> Updates fidgets and idle movement. </summary>
@@ -549,7 +556,7 @@ public partial class Majin : Enemy
 			else if (fidgetIndex == 1)
 				targetIdleFactor = 0.5f;
 
-			isFidgetActive = (bool)AnimationTree.Get(FidgetTriggerStateParameter);
+			isFidgetActive = (bool)AnimationTree.Get(FidgetTriggerState);
 		}
 		else if (attackType != AttackTypes.Fire || !IsInRange) // Wait for fidget to start
 		{
@@ -558,8 +565,8 @@ public partial class Majin : Enemy
 			{
 				fidgetTimer = 0; // Reset timer
 				fidgetIndex = Runtime.randomNumberGenerator.RandiRange(0, FidgetAnimations.Length - 1);
-				AnimationTree.Set(FidgetTransitionParameter, FidgetAnimations[fidgetIndex]);
-				AnimationTree.Set(FidgetTriggerParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				AnimationTree.Set(FidgetTransition, FidgetAnimations[fidgetIndex]);
+				AnimationTree.Set(FidgetTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				isFidgetActive = true;
 			}
 		}
@@ -654,7 +661,7 @@ public partial class Majin : Enemy
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning));
 
 			moveTransition.XfadeTime = 0;
-			AnimationTree.Set(MoveTransitionParameter, EnabledState); // Travel animation
+			AnimationTree.Set(MoveTransition, EnabledState); // Travel animation
 		}
 		else // Spawn instantly
 		{
@@ -686,6 +693,12 @@ public partial class Majin : Enemy
 		EmitSignal(SignalName.Despawned);
 	}
 
+	protected override void StartUhuBounce()
+	{
+		AnimationTree.Set(HitTransition, BoopState);
+		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
 	public void ToggleSpawnState()
 	{
 		if (IsDefeated)
@@ -712,7 +725,7 @@ public partial class Majin : Enemy
 		Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));
 		if (Mathf.IsZeroApprox(acceleration.X))
 			moveBlend.Y = velocity.Y;
-		AnimationTree.Set(MoveBlendParameter, moveBlend);
+		AnimationTree.Set(MoveBlend, moveBlend);
 	}
 
 	/// <summary> Use Bezier interpolation to get the majin's position. </summary>
@@ -732,7 +745,7 @@ public partial class Majin : Enemy
 		if (SpawnTravelEnabled)
 		{
 			moveTransition.XfadeTime = MovementTransitionLength;
-			AnimationTree.Set(MoveTransitionParameter, DisabledState); // Stopped moving
+			AnimationTree.Set(MoveTransition, DisabledState); // Stopped moving
 		}
 
 		if (attackType == AttackTypes.Spin)

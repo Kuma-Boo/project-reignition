@@ -11,6 +11,8 @@ namespace Project.CustomNodes
 		private MeshInstance3D trailMeshInstance;
 		private ImmediateMesh trailMesh;
 		private Vector3 previousPosition;
+		[Export]
+		public bool IsPlayerTrail;
 
 		[Export]
 		private float radius = .3f; // Radius of the trail
@@ -49,9 +51,7 @@ namespace Project.CustomNodes
 			previousPosition = GlobalPosition;
 		}
 
-
 		public override void _PhysicsProcess(double delta) => CallDeferred(MethodName.UpdateTrail, delta);
-
 
 		private void UpdateTrail(double delta)
 		{
@@ -70,7 +70,6 @@ namespace Project.CustomNodes
 			RenderTrail();
 		}
 
-
 		private void RenderTrail()
 		{
 			trailMesh.ClearSurfaces();
@@ -80,8 +79,11 @@ namespace Project.CustomNodes
 
 			float angleIncrement = Mathf.Tau / resolution;
 
-			for (int i = 0; i < points.Count; i++)
-				points[i].position += Gameplay.CharacterController.instance.Animator.Back() * Gameplay.CharacterController.instance.MoveSpeed * PhysicsManager.physicsDelta;
+			if (IsPlayerTrail)
+			{
+				for (int i = 0; i < points.Count; i++)
+					points[i].position += Gameplay.CharacterController.instance.Animator.Back() * Gameplay.CharacterController.instance.MoveSpeed * PhysicsManager.physicsDelta;
+			}
 
 			previousPosition = points[points.Count - 1].position;
 
