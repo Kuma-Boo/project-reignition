@@ -136,7 +136,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (!a.IsInGroup("player")) return;
 
-			interactionCounter++;
+			IsInteracting = true;
 			isHurtboxInteraction = true;
 		}
 
@@ -144,7 +144,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (!a.IsInGroup("player")) return;
 
-			interactionCounter--;
+			IsInteracting = false;
 			isHurtboxInteraction = false;
 		}
 	}

@@ -69,8 +69,19 @@ namespace Project.Gameplay
 			Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 		}
 
+		[Signal]
+		public delegate void AttackStateChangeEventHandler();
 		/// <summary> Keeps track of how much attack the player will deal. </summary>
-		public AttackStates AttackState { get; set; }
+		public AttackStates AttackState
+		{
+			get => attackState;
+			set
+			{
+				attackState = value;
+				EmitSignal(SignalName.AttackStateChange);
+			}
+		}
+		private AttackStates attackState;
 		public enum AttackStates
 		{
 			None, // Player is not attacking
