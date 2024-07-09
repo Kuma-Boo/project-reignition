@@ -17,35 +17,58 @@ public partial class PteroEgg : Area3D
 	private NodePath animator;
 	private AnimationPlayer Animator { get; set; }
 
-	/// <summary> How close is this egg to the player? </summary>
-	public int EggIndex { get; set; }
-	/// <summary> Egg is sleeping, and can no longer be interacted with. </summary>
-	private bool isSleeping;
+	public bool IsHeld => PteroEggManager.heldEggs.Contains(this);
+	/// <summary> Is this egg on its way back to its nest? </summary>
+	public bool IsReturningToNest { get; private set; }
 	/// <summary> Has the egg been returned to the nest successfully? </summary>
-	private bool isReturnedToNest;
+	public bool IsReturnedToNest { get; private set; }
+	/// <summary> Has this egg been saved at a checkpoint? </summary>
+	private bool ignoreRespawn;
+
+	private float followDistance;
+	private Vector3 followVelocity;
+	private readonly float MinDistance = .5f;
+	private readonly float FollowDistanceIncrement = 1.5f;
+	private readonly float FollowSmoothing = 10.0f;
 
 	private float returnTravelRatio;
 	private SpawnData spawnData;
 	private LaunchSettings returnArc; // The path to follow when returning to the nest
 	private CharacterController Character => CharacterController.instance;
-	private readonly float FollowDistance = 1f;
 
 	public override void _Ready()
 	{
+		Root = GetNodeOrNull<Node3D>(root);
+		Animator = GetNodeOrNull<AnimationPlayer>(animator);
+
 		spawnData = new SpawnData(GetParent(), Transform);
 		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveNestStatus));
+		Character.Connect(CharacterController.SignalName.Knockback, new(this, MethodName.Frighten));
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (isSleeping) return;
+		if (IsReturnedToNest) return;
 
-		if (EggIndex != 0)
+		if (IsHeld)
 		{
+			float smoothing = FollowSmoothing;
+			Vector3 targetPosition = Character.GlobalPosition + (Character.PathFollower.Back() * followDistance);
+
+			int eggIndex = PteroEggManager.heldEggs.IndexOf(this);
+			Vector3 referencePosition = eggIndex == 0 ? Character.GlobalPosition : PteroEggManager.heldEggs[eggIndex - 1].GlobalPosition;
+			float distanceSquared = GlobalPosition.DistanceSquaredTo(referencePosition);
+			if (distanceSquared < Mathf.Pow(MinDistance, 2.0f)) // Extra snappy when things are too close
+			{
+				smoothing = 5.0f;
+				targetPosition = GlobalPosition - (GlobalPosition.DirectionTo(referencePosition) * MinDistance);
+			}
+
 			// Update position to trail player
-			GlobalPosition = Character.GlobalPosition + (Character.PathFollower.Back() * FollowDistance);
+			GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref followVelocity, smoothing * PhysicsManager.physicsDelta);
 		}
-		else if (isReturnedToNest)
+		else if (IsReturningToNest)
 		{
 			if (Mathf.IsZeroApprox(returnTravelRatio))
 				Animator.Play("returned", .2f);
@@ -55,56 +78,62 @@ public partial class PteroEgg : Area3D
 
 			if (Mathf.IsEqualApprox(returnTravelRatio, 1))
 			{
-				isSleeping = true;
+				Animator.Play("sleep", .1f);
+				IsReturnedToNest = true;
+				IsReturningToNest = false;
 				EmitSignal(SignalName.Returned);
 			}
 		}
 	}
 
-	public void Frighten() // Called when the player takes damage, dies, or a third egg is picked up.
+	private void SaveNestStatus() => ignoreRespawn = IsReturnedToNest;
+
+	public void Frighten() // Called when the player takes damage or respawns
 	{
-		EggIndex = 0;
-		Animator.Play("frighten");
+		if (!IsHeld) return;
+		if (PteroEggManager.heldEggs.IndexOf(this) == 0)
+			Animator.Play("frighten");
+
+		followDistance -= FollowDistanceIncrement;
 	}
 
 	private void Respawn()
 	{
-		if (isReturnedToNest) return; // Don't respawn if we're already at the nest. Don't force the player to redo stuff they already did.
+		if (ignoreRespawn) return; // Don't respawn if we're already at the nest. Don't force the player to redo stuff they already did.
 
-		if (EggIndex != 0)
-			PteroEggManager.DropEgg(this);
+		if (IsHeld)
+			PteroEggManager.heldEggs.Remove(this);
 
+		followVelocity = Vector3.Zero;
 		spawnData.Respawn(this);
 		Animator.Play("idle");
 	}
 
 	public void SetType(Node3D model) // Adds the egg model as a child
 	{
-		Root.CallDeferred("add_child", model);
-		model.SetDeferred("global_transform", GlobalTransform);
-		model.SetDeferred("global_transform", GlobalTransform);
+		Root.AddChild(model);
+		model.GlobalTransform = GlobalTransform;
+		model.Position += Vector3.Up * .5f;
 	}
 
 	public void OnEntered(Area3D a)
 	{
 		if (!a.IsInGroup("player detection")) return;
+		if (IsReturningToNest || IsReturnedToNest) return;
+		if (IsHeld) return;
 
-		Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Frighten), (uint)ConnectFlags.OneShot);
-		PteroEggManager.PickUpEgg(this);
+		PteroEggManager.heldEggs.Add(this);
+		followDistance = FollowDistanceIncrement * PteroEggManager.heldEggs.Count;
 	}
 
 	public void ReturnToNest(PteroNest nest)
 	{
-		PteroEggManager.DropEgg(this);
-		isReturnedToNest = true;
+		if (IsHeld)
+			PteroEggManager.heldEggs.Remove(this);
 
-		Vector3 delta = GlobalPosition - nest.GlobalPosition;
-
-		GetParent().CallDeferred("remove_child", this);
-		nest.CallDeferred("add_child", this);
-		SetDeferred("global_position", nest.GlobalPosition + delta);
+		IsReturningToNest = true;
 
 		returnTravelRatio = 0f;
-		returnArc = LaunchSettings.Create(GlobalPosition, nest.GlobalPosition + (Vector3.Up * 0.6f), 4f, true);
+		returnArc = LaunchSettings.Create(GlobalPosition, nest.GlobalPosition, 4f, true);
 	}
 }
