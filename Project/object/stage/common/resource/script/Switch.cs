@@ -46,7 +46,12 @@ public partial class Switch : Area3D
 		EmitSignal(SignalName.Respawned);
 	}
 
-	private void OnEntered(Area3D _) => Activate();
+	private void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+
+		Activate();
+	}
 	private void Activate()
 	{
 		// Check if switch was already toggled.
