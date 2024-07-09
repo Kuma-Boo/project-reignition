@@ -64,14 +64,14 @@ size = Vector3(22.7426, 34.1944, 2.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_68mnv"]
 size = Vector3(36.1627, 8.67139, 2.729)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_sfidh"]
+size = Vector3(35.9123, 12.0185, 1)
+
 [sub_resource type="BoxShape3D" id="92"]
 size = Vector3(2.42, 2.76, 12.44)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ow8ka"]
 size = Vector3(1, 5.03516, 16.2185)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_sfidh"]
-size = Vector3(35.9123, 12.0185, 1)
 
 [sub_resource type="BoxShape3D" id="60"]
 size = Vector3(25, 50, 90)
@@ -541,30 +541,54 @@ transform = Transform3D(-0.984809, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984809
 script = ExtResource("14_nk68g")
 path = NodePath("../../../../../Path/Boat3Path")
 
-[node name="End" parent="Common/Object/DoubleBoatSection" instance=ExtResource("11_3ntm7")]
+[node name="End2" parent="Common/Object/DoubleBoatSection" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(-0.474093, 0, 0.880475, 0, 1, 0, -0.880475, 0, -0.474093, 77.5814, 0.0999999, 58.9539)
 "Enter Mode" = 0
 
-[node name="Jump" type="Node3D" parent="Common/Object/DoubleBoatSection/End"]
+[node name="Jump" type="Node3D" parent="Common/Object/DoubleBoatSection/End2"]
 transform = Transform3D(0.998141, 0, 0.0609441, 0, 1, 0, -0.0609441, 0, 0.998141, 0.30159, 3.905, 10.9033)
 script = ExtResource("12_t28j3")
 jumpHeight = 4.0
 autoAlign = true
 forceConsistentHeight = true
 
-[node name="Path" type="Node3D" parent="Common/Object/DoubleBoatSection/End/Jump" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Common/Object/DoubleBoatSection/End2/Jump" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, -2.23517e-08, 0, 1, 0, 2.23517e-08, 0, 1, 2.8877, -1.38519, 1.33322)
 script = ExtResource("14_nk68g")
 path = NodePath("../../../../../../Path/LongIslandPath")
 
-[node name="Camera" type="Node3D" parent="Common/Object/DoubleBoatSection/End/Jump"]
+[node name="Camera" type="Node3D" parent="Common/Object/DoubleBoatSection/End2/Jump"]
 script = ExtResource("8_srgif")
 transitionTime = 0.5
 settings = ExtResource("30_iftkg")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Object/DoubleBoatSection/End"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Object/DoubleBoatSection/End2"]
 transform = Transform3D(0.998176, 0, 0.0609475, 0, 1, 0, -0.0609475, 0, 0.998176, 0.82653, -0.787842, 0.815674)
 shape = SubResource("BoxShape3D_68mnv")
+
+[node name="End3" parent="Common/Object/DoubleBoatSection" instance=ExtResource("11_3ntm7")]
+transform = Transform3D(-0.772445, 0, 0.635082, 0, 1, 0, -0.635082, 0, -0.772445, 57.6334, -0.0996599, 76.8219)
+
+[node name="Land" type="Node3D" parent="Common/Object/DoubleBoatSection/End3"]
+transform = Transform3D(0.939692, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939692, -7.921, 5, 36.852)
+script = ExtResource("12_t28j3")
+jumpHeight = 1.0
+autoAlign = true
+forceConsistentHeight = true
+
+[node name="Path" type="Node3D" parent="Common/Object/DoubleBoatSection/End3/Land" node_paths=PackedStringArray("path")]
+transform = Transform3D(0.595145, 0, 0.803618, 0, 1, 0, -0.803618, 0, 0.595145, 3.92916, -5.10256, 37.6475)
+script = ExtResource("14_nk68g")
+path = NodePath("../../../../../../Path/LongIslandPath")
+
+[node name="Camera" type="Node3D" parent="Common/Object/DoubleBoatSection/End3/Land"]
+transform = Transform3D(0.999774, 0, 0.0212975, 0, 1, 0, -0.0212975, 0, 0.999774, -0.0547256, -0.89534, -0.168732)
+script = ExtResource("8_srgif")
+transitionTime = 0.5
+settings = ExtResource("30_iftkg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Object/DoubleBoatSection/End3"]
+shape = SubResource("BoxShape3D_sfidh")
 
 [node name="Spring" parent="Common/Object/DoubleBoatSection" instance=ExtResource("7_t54v7")]
 transform = Transform3D(0.819156, 0, 0.573572, 0, 1, 0, -0.573572, 0, 0.819156, 112.923, 4.501, 49.032)
@@ -670,24 +694,6 @@ jumpHeight = 1.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Object/WaterfallJumpTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-05, -1.50488, 0.561928)
 shape = SubResource("BoxShape3D_ow8ka")
-
-[node name="BoatRightJump" parent="Common/Object" instance=ExtResource("11_3ntm7")]
-transform = Transform3D(0.50865, 0, -0.860973, 0, 1, 0, 0.860973, 0, 0.50865, -116.103, -6.09966, 95.1893)
-
-[node name="Land" type="Node3D" parent="Common/Object/BoatRightJump"]
-transform = Transform3D(0.939692, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939692, -7.921, 5, 36.852)
-script = ExtResource("12_t28j3")
-jumpHeight = 1.0
-autoAlign = true
-forceConsistentHeight = true
-
-[node name="Path" type="Node3D" parent="Common/Object/BoatRightJump/Land" node_paths=PackedStringArray("path")]
-transform = Transform3D(0.595145, 0, 0.803618, 0, 1, 0, -0.803618, 0, 0.595145, 3.92916, -5.10256, 37.6475)
-script = ExtResource("14_nk68g")
-path = NodePath("../../../../../Path/LongIslandPath")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Common/Object/BoatRightJump"]
-shape = SubResource("BoxShape3D_sfidh")
 
 [node name="LotusGroup" type="Node3D" parent="Common"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.14, 0, 73.86)
@@ -1148,12 +1154,16 @@ environment = ExtResource("36_vlkax")
 [connection signal="Activated" from="Common/Object/DoubleBoatSection/Boat3" to="Collision/BoatWallMainOneWay" method="Deactivate"]
 [connection signal="Activated" from="Common/Object/DoubleBoatSection/Boat3" to="Collision/BoatWallReverseOneWay" method="Activate"]
 [connection signal="Activated" from="Common/Object/DoubleBoatSection/Boat3" to="Common/Object/DoubleBoatSection/Boat3/Path" method="Activate"]
-[connection signal="Activated" from="Common/Object/DoubleBoatSection/End" to="Collision/IslandOneWay" method="Deactivate"]
-[connection signal="Activated" from="Common/Object/DoubleBoatSection/End" to="Common/Object/DoubleBoatSection/Boat2" method="Despawn"]
-[connection signal="Activated" from="Common/Object/DoubleBoatSection/End" to="Common/Object/DoubleBoatSection/Boat3" method="Despawn"]
-[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End/Jump" to="Collision/IslandOneWay" method="Activate"]
-[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End/Jump" to="Common/Object/DoubleBoatSection/End/Jump/Path" method="Activate"]
-[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End/Jump" to="Common/Object/DoubleBoatSection/End/Jump/Camera" method="Activate"]
+[connection signal="Activated" from="Common/Object/DoubleBoatSection/End2" to="Collision/IslandOneWay" method="Deactivate"]
+[connection signal="Activated" from="Common/Object/DoubleBoatSection/End2" to="Common/Object/DoubleBoatSection/Boat2" method="Despawn"]
+[connection signal="Activated" from="Common/Object/DoubleBoatSection/End2" to="Common/Object/DoubleBoatSection/Boat3" method="Despawn"]
+[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End2/Jump" to="Collision/IslandOneWay" method="Activate"]
+[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End2/Jump" to="Common/Object/DoubleBoatSection/End2/Jump/Path" method="Activate"]
+[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End2/Jump" to="Common/Object/DoubleBoatSection/End2/Jump/Camera" method="Activate"]
+[connection signal="Activated" from="Common/Object/DoubleBoatSection/End3" to="Collision/IslandOneWay" method="Deactivate"]
+[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End3/Land" to="Collision/IslandOneWay" method="Deactivate"]
+[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End3/Land" to="Common/Object/DoubleBoatSection/End3/Land/Path" method="Activate"]
+[connection signal="JumpFinished" from="Common/Object/DoubleBoatSection/End3/Land" to="Common/Object/DoubleBoatSection/End3/Land/Camera" method="Activate"]
 [connection signal="Activated" from="Common/Object/EndingBoatSection/Boat4" to="Common/Object/EndingBoatSection/Boat4/Path" method="Activate"]
 [connection signal="Activated" from="Common/Object/EndingBoatSection/Boat4" to="Common/Object/EndingBoatSection/Boat4/Camera" method="Activate"]
 [connection signal="JumpFinished" from="Common/Object/EndingBoatSection/Start/JumpTrigger" to="Common/Object/EndingBoatSection/Boat4" method="Activate"]
@@ -1165,9 +1175,6 @@ environment = ExtResource("36_vlkax")
 [connection signal="Activated" from="Common/Object/EndingBoatSection/EndL" to="Common/Object/EndingBoatSection/Boat4" method="Despawn"]
 [connection signal="JumpFinished" from="Common/Object/EndingBoatSection/EndL/JumpTrigger" to="Collision/IslandOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Common/Object/EndingBoatSection/EndL/JumpTrigger" to="Common/Object/EndingBoatSection/EndL/JumpTrigger/Path" method="Activate"]
-[connection signal="Activated" from="Common/Object/BoatRightJump" to="Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Common/Object/BoatRightJump/Land" to="Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Common/Object/BoatRightJump/Land" to="Common/Object/BoatRightJump/Land/Path" method="Activate"]
 [connection signal="Activated" from="Common/SpringPath/Spring1" to="Collision/IslandOneWay" method="Deactivate"]
 [connection signal="Deactivated" from="Common/SpringPath/Spring3" to="Common/SpringPath/JumpTriggers/Jump1" method="Activate" flags=3]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1" to="Common/SpringPath/JumpTriggers/Jump1/Jump2" method="Activate" flags=3]
