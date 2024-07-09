@@ -9,41 +9,42 @@ namespace Project.Gameplay.Objects
 		[Export]
 		private AnimationPlayer animator;
 
+		private bool isShattered;
+		private bool permanentlyDestroyed;
+		private bool interactingWithPlayer;
 		private float currentHealth;
-		private readonly int MAX_HEALTH = 3;
+		private readonly int MaxHealth = 3;
 		private CharacterController Character => CharacterController.instance;
 
 		public override void _Ready()
 		{
-			currentHealth = MAX_HEALTH;
+			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveDestructionStatus));
+
+			Respawn();
 		}
 
-		private void Shatter()
+		public override void _PhysicsProcess(double _)
 		{
-			GD.Print("Egg Shattered");
-			EmitSignal(SignalName.Shattered);
+			if (!interactingWithPlayer)
+				return;
 
-			animator.Play("shatter");
-
-			//TODO Play an animation that plays sfx, disables environment colliders, and disables hurtbox
+			UpdateInteraction();
 		}
 
-		public void PlayerEntered(Area3D a)
+		private void UpdateInteraction()
 		{
-			if (!a.IsInGroup("player")) return;
-
-			if (Character.Skills.IsSpeedBreakActive) //Instantly shatter
+			if (Character.Skills.IsSpeedBreakActive) // Instantly shatter
 			{
 				Shatter();
 				return;
 			}
 
-			if (Character.Lockon.IsHomingAttacking)
+			// TODO Rework to allow attack skills
+			if (Character.Lockon.IsHomingAttacking) // Take Damage
 			{
-				GD.Print(Character.Lockon.IsPerfectHomingAttack);
-				//Take Damage
 				currentHealth--;
-				if (Character.Lockon.IsPerfectHomingAttack) //Double damage
+				if (Character.Lockon.IsPerfectHomingAttack) // Double damage
 					currentHealth--;
 
 				if (currentHealth <= 0)
@@ -55,6 +56,35 @@ namespace Project.Gameplay.Objects
 
 				Character.Lockon.StartBounce(false);
 			}
+		}
+
+		private void SaveDestructionStatus() => permanentlyDestroyed = isShattered;
+
+		private void Respawn()
+		{
+			if (permanentlyDestroyed)
+				return;
+
+			currentHealth = MaxHealth;
+		}
+
+		private void Shatter()
+		{
+			isShattered = true;
+			EmitSignal(SignalName.Shattered);
+		}
+
+		public void AreaEntered(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			interactingWithPlayer = true;
+			UpdateInteraction();
+		}
+
+		public void AreaExited(Area3D a)
+		{
+			if (!a.IsInGroup("player")) return;
+			interactingWithPlayer = false;
 		}
 	}
 }

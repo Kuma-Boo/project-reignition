@@ -18,8 +18,8 @@ public partial class Enemy : Node3D
 	public delegate void DefeatedEventHandler();
 
 	[Export]
-	protected SpawnModes spawnMode;
-	protected enum SpawnModes
+	public SpawnModes SpawnMode { get; protected set; }
+	public enum SpawnModes
 	{
 		Range, // Use Range trigger
 		Signal, // External Signal
@@ -40,26 +40,26 @@ public partial class Enemy : Node3D
 	protected bool damagePlayer;
 
 	[ExportGroup("Components")]
-	[Export(PropertyHint.NodeType, "Node3D")]
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
 	private NodePath root;
 	protected Node3D Root { get; private set; }
-	[Export(PropertyHint.NodeType, "Area3D")]
+	[Export(PropertyHint.NodePathValidTypes, "Area3D")]
 	private NodePath hurtbox;
 	/// <summary> Lockon/Hitbox collider. Disabled when defeated (For death animations, etc). </summary>
 	protected Area3D Hurtbox { get; private set; }
-	[Export(PropertyHint.NodeType, "CollisionShape3D")]
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
 	private NodePath collider;
 	/// <summary> Environmental collider. Disabled when defeated (For death animations, etc). </summary>
 	protected CollisionShape3D Collider { get; private set; }
-	[Export(PropertyHint.NodeType, "CollisionShape3D")]
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
 	private NodePath rangeCollider;
 	/// <summary> Reference to the enemy's range collider. </summary>
 	protected CollisionShape3D RangeCollider { get; private set; }
-	[Export(PropertyHint.NodeType, "AnimationTree")]
+	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")]
 	private NodePath animationTree;
 	/// <summary> Animation tree for enemy character. </summary>
 	protected AnimationTree AnimationTree { get; private set; }
-	[Export(PropertyHint.NodeType, "AnimationPlayer")]
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
 	private NodePath animationPlayer;
 	/// <summary> Animator for event animations. </summary>
 	protected AnimationPlayer AnimationPlayer { get; private set; }
@@ -137,8 +137,8 @@ public partial class Enemy : Node3D
 		SetHitboxStatus(true);
 		ResetInteractionProcessed();
 
-		if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
+		if (SpawnMode == SpawnModes.Always ||
+			(SpawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
 		{
 			EnterRange();
 		}
@@ -185,7 +185,6 @@ public partial class Enemy : Node3D
 	/// </summary>
 	protected virtual void Defeat()
 	{
-		SetHitboxStatus(false);
 		Character.Camera.LockonTarget = null;
 		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
@@ -204,12 +203,12 @@ public partial class Enemy : Node3D
 	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
-	protected void SetHitboxStatus(bool isEnabled)
+	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)
 	{
 		IsHitboxEnabled = isEnabled;
 
 		// Update environment collider
-		if (Collider != null)
+		if (Collider != null && !hurtboxOnly)
 			Collider.Disabled = !IsHitboxEnabled;
 
 		// Update hurtbox
@@ -223,7 +222,7 @@ public partial class Enemy : Node3D
 	protected bool IsInRange { get; set; }
 	protected virtual void EnterRange()
 	{
-		if (spawnMode == SpawnModes.Signal) return;
+		if (SpawnMode == SpawnModes.Signal) return;
 		Spawn();
 	}
 	protected virtual void ExitRange() { }
