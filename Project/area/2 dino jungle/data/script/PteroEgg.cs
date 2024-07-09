@@ -91,12 +91,8 @@ public partial class PteroEgg : Area3D
 
 	private void SaveNestStatus() => IgnoreRespawn = IsReturnedToNest;
 
-	public void Frighten() // Called when the player takes damage or respawns
-	{
-		if (!IsHeld) return;
-		if (PteroEggManager.heldEggs.IndexOf(this) == 0)
-			Animator.Play("frighten");
-	}
+	// Called when the player takes damage or respawns
+	public void Frighten() => Animator.Play("frighten");
 
 	private void Respawn()
 	{

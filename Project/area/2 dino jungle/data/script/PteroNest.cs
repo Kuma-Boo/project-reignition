@@ -10,6 +10,7 @@ public partial class PteroNest : Node3D
 	private AnimationPlayer Animator { get; set; }
 	public PteroEgg AssignedEgg { get; set; }
 	private CharacterController Character => CharacterController.instance;
+	private bool isInteractingWithPlayer;
 
 	public override void _Ready()
 	{
@@ -25,15 +26,11 @@ public partial class PteroNest : Node3D
 		Animator.Play("RESET");
 	}
 
-	public void SetType(Node3D model) // Adds the sign model as a child
+	public override void _PhysicsProcess(double _)
 	{
-		AddChild(model);
-		model.Transform = Transform3D.Identity;
-	}
+		if (!isInteractingWithPlayer)
+			return;
 
-	public void OnEntered(Area3D a)
-	{
-		if (!a.IsInGroup("player detection")) return;
 		if (Character.Lockon.IsHomingAttacking) // Bounce the player
 			Character.Lockon.StartBounce();
 
@@ -46,5 +43,24 @@ public partial class PteroNest : Node3D
 			AssignedEgg.ReturnToNest(this);
 			Animator.Play("returned");
 		}
+	}
+
+	public void SetType(Node3D model) // Adds the sign model as a child
+	{
+		AddChild(model);
+		model.Transform = Transform3D.Identity;
+	}
+
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+
+		isInteractingWithPlayer = true;
+	}
+
+	public void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+		isInteractingWithPlayer = false;
 	}
 }
