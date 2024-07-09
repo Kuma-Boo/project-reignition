@@ -178,13 +178,32 @@ public partial class CharacterLockon : Node3D
 
 		if (h && h.collidedObject != t)
 		{
-			if (!h.collidedObject.IsInGroup("level wall") || Mathf.Abs(h.normal.Dot(castVector)) < .5f)
+			if (!h.collidedObject.IsInGroup("level wall") ||
+				Mathf.Abs(h.normal.Dot(castVector)) < .5f)
+			{
+				// Hit an obstacle
 				return TargetState.HitObstacle;
+			}
+
+			if (h.collidedObject.IsInGroup("level wall")) // Cast a new ray from the collision point
+			{
+				castPosition = h.point + (h.direction.Normalized() * .1f);
+				castVector = t.GlobalPosition - castPosition;
+				h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+				DebugManager.DrawRay(castPosition, castVector, Colors.Red);
+
+				if (h && h.collidedObject != t)
+					return TargetState.HitObstacle;
+			}
 		}
 
 		float distance = t.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
-		if (distance < DISTANCE_FUDGE_AMOUNT && Character.IsHoldingDirection(Character.PathFollower.ForwardAngle))
+		if (distance < DISTANCE_FUDGE_AMOUNT &&
+			Character.IsHoldingDirection(Character.PathFollower.ForwardAngle) &&
+			!IsBouncingLockoutActive)
+		{
 			return TargetState.PlayerIgnored;
+		}
 
 		return TargetState.Valid;
 	}

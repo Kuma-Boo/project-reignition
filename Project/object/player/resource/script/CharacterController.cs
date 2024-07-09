@@ -25,7 +25,7 @@ namespace Project.Gameplay
 			PathFollower.SetActivePath(startingPath); // Attempt to autoload the stage's default path
 			Camera.PathFollower.SetActivePath(startingPath);
 
-			Stage.SetCheckpoint(GetParent<Triggers.CheckpointTrigger>()); // Initial checkpoint configuration
+			GetParent<Triggers.CheckpointTrigger>().Activate(); // Save initial checkpoint
 			Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); // Start with the proper ring count
 			Stage.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
 			Stage.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
@@ -69,8 +69,19 @@ namespace Project.Gameplay
 			Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 		}
 
+		[Signal]
+		public delegate void AttackStateChangeEventHandler();
 		/// <summary> Keeps track of how much attack the player will deal. </summary>
-		public AttackStates AttackState { get; set; }
+		public AttackStates AttackState
+		{
+			get => attackState;
+			set
+			{
+				attackState = value;
+				EmitSignal(SignalName.AttackStateChange);
+			}
+		}
+		private AttackStates attackState;
 		public enum AttackStates
 		{
 			None, // Player is not attacking

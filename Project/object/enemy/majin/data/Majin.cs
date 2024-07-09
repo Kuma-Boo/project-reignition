@@ -51,7 +51,7 @@ public partial class Majin : Enemy
 
 		properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
 
-		if (isDefeatLaunchEnabled)
+		if (IsDefeatLaunchEnabled)
 		{
 			properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Time", Variant.Type.Float, PropertyHint.Range, "0.1,1,0.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Direction", Variant.Type.Vector3));
@@ -101,7 +101,7 @@ public partial class Majin : Enemy
 				return isInstantFlame;
 
 			case "Defeat Settings/Enable Enemy Launching":
-				return isDefeatLaunchEnabled;
+				return IsDefeatLaunchEnabled;
 			case "Defeat Settings/Launch Time":
 				return defeatLaunchTime;
 			case "Defeat Settings/Launch Direction":
@@ -177,7 +177,7 @@ public partial class Majin : Enemy
 				break;
 
 			case "Defeat Settings/Enable Enemy Launching":
-				isDefeatLaunchEnabled = (bool)value;
+				IsDefeatLaunchEnabled = (bool)value;
 				NotifyPropertyListChanged();
 				break;
 			case "Defeat Settings/Launch Time":
@@ -235,19 +235,32 @@ public partial class Majin : Enemy
 	public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
 	private Basis calculationBasis;
 	/// <summary> Local Position to be after spawning is complete. </summary>
-	private Vector3 OriginalPosition => Engine.IsEditorHint() ? GlobalPosition : SpawnData.spawnTransform.Origin;
+	public Vector3 OriginalPosition => Engine.IsEditorHint() ? GlobalPosition : SpawnData.spawnTransform.Origin;
 	public Vector3 SpawnPosition => OriginalPosition + (CalculationBasis * spawnOffset);
 	public Vector3 InHandle => SpawnPosition + (CalculationBasis * spawnInOffset);
 	public Vector3 OutHandle => OriginalPosition + (CalculationBasis * spawnOutOffset);
 
 	/// <summary> Use this to launch the enemy when defeated. </summary>
-	private bool isDefeatLaunchEnabled;
+	public bool IsDefeatLaunchEnabled { get; private set; }
 	/// <summary> Use local transform for launch direction? </summary>
 	private bool isDefeatLocalTransform = true;
 	/// <summary> How long should the enemy be launched?  </summary>
 	private float defeatLaunchTime = .5f;
 	/// <summary> Direction to launch. Leave at Vector3.Zero to automatically calculate. </summary>
 	private Vector3 defeatLaunchDirection;
+	public Vector3 CalculateLaunchPosition()
+	{
+		Vector3 launchVector = defeatLaunchDirection;
+		if (launchVector.IsEqualApprox(Vector3.Zero) && !Engine.IsEditorHint()) // Calculate launch direction
+			launchVector = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
+		else if (isDefeatLocalTransform)
+			launchVector = GlobalTransform.Basis * launchVector;
+
+		launchVector = launchVector.Rotated(Vector3.Up, Mathf.Pi); // Fix forward direction
+		if (!Engine.IsEditorHint())
+			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
+		return OriginalPosition + launchVector;
+	}
 
 	/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>
 	private Tween tweener;
@@ -379,15 +392,6 @@ public partial class Majin : Enemy
 		}
 	}
 
-	public override void UpdateLockon()
-	{
-		Stagger();
-		base.UpdateLockon();
-
-		if (!IsDefeated)
-			AnimationPlayer.Play("stagger");
-	}
-
 	public override void TakeDamage(int amount = -1)
 	{
 		Stagger();
@@ -402,33 +406,30 @@ public partial class Majin : Enemy
 			ToggleFlameAttack();
 
 		if (Character.AttackState == CharacterController.AttackStates.None)
+		{
 			AnimationTree.Set(HitTransition, BoopState);
+		}
 		else
+		{
 			AnimationTree.Set(HitTransition, StaggerState);
+			AnimationPlayer.Play("stagger");
+		}
 		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	protected override void Defeat()
 	{
 		base.Defeat();
+		SetHitboxStatus(false, true);
 
-		AnimationPlayer.Play("strike");
-		if (isDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
+		AnimationPlayer.Play("defeat");
+		if (IsDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 		{
 			// Kill any existing tween
 			tweener?.Kill();
 
 			AnimationTree.Set(DefeatTransitionParameter, EnabledState);
 			AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
-
-			Vector3 launchDirection = defeatLaunchDirection;
-			if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
-				launchDirection = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
-			else if (isDefeatLocalTransform)
-				launchDirection = GlobalTransform.Basis * launchDirection;
-
-			launchDirection = launchDirection.Rotated(Vector3.Up, Mathf.Pi); // Fix forward direction
-			launchDirection = launchDirection.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
 
 			Vector3 targetRotation = Vector3.Up * Mathf.Tau * 2.0f;
 			if (Runtime.randomNumberGenerator.Randf() > .5f)
@@ -438,7 +439,7 @@ public partial class Majin : Enemy
 
 			// Get knocked back
 			tweener = CreateTween().SetParallel();
-			tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
+			tweener.TweenProperty(this, "global_position", CalculateLaunchPosition(), defeatLaunchTime);
 			tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
 			tweener.TweenCallback(Callable.From(() => AnimationPlayer.Play("launch-end"))).SetDelay(defeatLaunchTime * .5f);
 		}
@@ -504,20 +505,6 @@ public partial class Majin : Enemy
 	{
 		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
 		FlameRoot.Rotation = Vector3.Up * currentRotation;
-	}
-
-	protected override void UpdateInteraction()
-	{
-		if (!IsHitboxEnabled) return;
-
-		if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
-		{
-			Stagger();
-			Character.Lockon.StartBounce(true);
-			return;
-		}
-
-		base.UpdateInteraction();
 	}
 
 	private float idleFactorVelocity;

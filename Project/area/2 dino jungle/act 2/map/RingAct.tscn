@@ -1,0 +1,1130 @@
+[gd_scene load_steps=28 format=3 uid="uid://byovecvbub7lf"]
+
+[ext_resource type="PackedScene" uid="uid://gnw1drjjo5gi" path="res://area/2 dino jungle/act 2/Static.tscn" id="1_i1hhe"]
+[ext_resource type="Resource" uid="uid://d1mf7v1fq3kh7" path="res://resource/level data/dinosaur jungle/Act3Ring.tres" id="2_qs2u6"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_t0vpa"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_5qgkc"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_m7ns5"]
+[ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="8_g3ynl"]
+[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="10_hgi5c"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_uaccj"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="11_5mjed"]
+[ext_resource type="PackedScene" uid="uid://e43vdgi280co" path="res://area/2 dino jungle/object/rock/WaterRock.tscn" id="12_tybq2"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="12_xowlw"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="13_i30wa"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="13_pbwnh"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="14_4sxsl"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="15_ojd7p"]
+[ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="16_vv7l1"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="17_oc0to"]
+[ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="18_7rfl2"]
+[ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="19_37g7b"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="19_aiunq"]
+[ext_resource type="Resource" uid="uid://x3j0chytjj1w" path="res://area/2 dino jungle/act 2/camera/RightCatapultCam.tres" id="19_hhytg"]
+[ext_resource type="PackedScene" uid="uid://bjkwrplubhwil" path="res://area/2 dino jungle/object/platform/CactusPlatform.tscn" id="20_4d8pg"]
+[ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="20_cyl5y"]
+[ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="24_w4kk3"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="25_fc3np"]
+
+[sub_resource type="Curve" id="Curve_nmtwb"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0.00497512, 0.0475287), 0.0, -17.032, 0, 0, Vector2(1, -0.0513306), -18.9889, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n6p6d"]
+size = Vector3(15.147, 13.9202, 1)
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_i1hhe")]
+Data = ExtResource("2_qs2u6")
+
+[node name="Head" parent="Static/Common/Dino" index="2"]
+transform = Transform3D(0.999979, -8.9407e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -1.01328e-06, 1, 0.000292879, 1.33514e-05, 19.7418, 38.526)
+
+[node name="DemoCamera" parent="Static" index="5"]
+transform = Transform3D(-0.748955, 0, 0.662621, 0, 1, 0, -0.662621, 0, -0.748955, 119.668, 35.9585, -70.5782)
+
+[node name="Camera" parent="Static/DemoCamera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 0, 0)
+
+[node name="RingAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="RingAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, -2, -5.5)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="RingAct/SpawnPosition" instance=ExtResource("3_t0vpa")]
+
+[node name="Start" type="Node3D" parent="RingAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.385, 0, 4.639)
+
+[node name="Rings1" type="Node3D" parent="RingAct/Start"]
+transform = Transform3D(-0.94137, 0, -0.337375, 0, 1, 0, 0.337375, 0, -0.94137, 13.5292, -1.48715, 18.1981)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 4
+Shape = 2
+Path = NodePath("../../../Static/Path/LeftPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Start/Rings1" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.86102e-06, 0, 0.000152588)
+
+[node name="Child02" parent="RingAct/Start/Rings1" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0617828, 0, -3.47473)
+
+[node name="Child03" parent="RingAct/Start/Rings1" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00960875, 0, -6.95724)
+
+[node name="Child04" parent="RingAct/Start/Rings1" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.120389, 0, -10.4436)
+
+[node name="LotusGroup" type="Node3D" parent="RingAct"]
+
+[node name="RedMajin2" parent="RingAct/LotusGroup" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.999577, 23.7652, 2.50296, 97.3331)
+"Spawn Settings/Spawn Travel Time" = 1.3
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 18, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 43
+
+[node name="RedMajin3" parent="RingAct/LotusGroup" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(-0.983294, 0, 0.182024, 0, 1, 0, -0.182024, 0, -0.983294, 19.0817, 2.52471, 98.777)
+"Spawn Settings/Spawn Travel Time" = 1.3
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(18, 0, -3.86)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 60
+
+[node name="EnemyStone3" parent="RingAct/LotusGroup" instance=ExtResource("17_oc0to")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.3376, 4.2323, 80.9208)
+enemyCount = 2
+
+[node name="RedMajin" parent="RingAct/LotusGroup" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(-0.920298, 0, -0.391218, 0, 1, 0, 0.391218, 0, -0.920298, 23.1569, 4.46796, 65.276)
+"Spawn Settings/Spawn Travel Time" = 1.3
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(19, 0, 9)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 25
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 28
+
+[node name="GreenMajin2" parent="RingAct/LotusGroup" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.963952, 0, -0.266078, 0, 1, 0, 0.266078, 0, -0.963952, 18.9133, 3.88721, 63.9741)
+
+[node name="GreenMajin" parent="RingAct/LotusGroup" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.963952, 0, -0.266078, 0, 1, 0, 0.266078, 0, -0.963952, 22.0904, 3.88721, 60.9353)
+
+[node name="EnemyStone" parent="RingAct/LotusGroup" instance=ExtResource("17_oc0to")]
+transform = Transform3D(0.998535, 0, -0.0541137, 0, 1, 0, 0.0541137, 0, 0.998535, 15.2848, 9.20529, 72.2952)
+enemyCount = 3
+
+[node name="EnemyStone2" parent="RingAct/LotusGroup" instance=ExtResource("17_oc0to")]
+transform = Transform3D(0.998535, 0, -0.0541137, 0, 1, 0, 0.0541137, 0, 0.998535, 15.2848, 11.21, 72.2952)
+enemyCount = 3
+
+[node name="ItemBox" parent="RingAct/LotusGroup" instance=ExtResource("10_hgi5c")]
+transform = Transform3D(-0.998372, 0, 0.0570413, 0, 1, 0, -0.0570413, 0, -0.998372, 15.2765, 8.738, 72.3007)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="RingAct/LotusGroup/ItemBox" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.90735e-06, 0.261232, -3.01436)
+
+[node name="ItemBox2" parent="RingAct/LotusGroup" instance=ExtResource("10_hgi5c")]
+transform = Transform3D(-0.9996, 0, 0.0282881, 0, 1, 0, -0.0282881, 0, -0.9996, 21.3056, 3.73295, 81.1676)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="RingAct/LotusGroup/ItemBox2" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1, 0, -5.58794e-09, 0, 1, 0, 5.58794e-09, 0, 1, -5.72205e-06, 0.288082, -3.87142)
+
+[node name="Spring" parent="RingAct/LotusGroup" instance=ExtResource("12_xowlw")]
+transform = Transform3D(0.990637, 0.134274, 0.024659, -0.127337, 0.843683, 0.521521, 0.0492223, -0.519778, 0.852882, 21.3452, 2.41112, 99.6501)
+middleHeight = 8.0
+finalHeight = 4.0
+distance = 18.0
+voiceKey = &""
+
+[node name="WaterFall" type="Node3D" parent="RingAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3003, 23.3747, 119.404)
+
+[node name="BlueMajin" parent="RingAct/WaterFall" instance=ExtResource("16_vv7l1")]
+transform = Transform3D(0.706057, 0, -0.708155, 0, 1, 0, 0.708155, 0, 0.706057, -10.7893, -4.08512, 17.783)
+
+[node name="Movementscript" type="Node3D" parent="RingAct/WaterFall" node_paths=PackedStringArray("root")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.0637, -10.9149, 25.7309)
+script = ExtResource("13_pbwnh")
+Movement/Mode = 1
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 13.0
+Movement/Angle = 0.0
+"Vertical Orientation" = true
+root = NodePath("GreenMajin")
+
+[node name="GreenMajin" parent="RingAct/WaterFall/Movementscript" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.680273, 0, 0.732959, 0, 1, 0, -0.732959, 0, -0.680273, 0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 2.0
+"Attack Settings/Attack Type" = 1
+
+[node name="ItemBox" parent="RingAct/WaterFall" instance=ExtResource("10_hgi5c")]
+transform = Transform3D(-0.197349, 0, 0.980333, 0, 1, 0, -0.980333, 0, -0.197349, -26.1714, 1.49658, 30.6651)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="RingAct/WaterFall/ItemBox" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.227472, -3.55307)
+
+[node name="Boat1" type="Node3D" parent="RingAct"]
+
+[node name="Rings" type="Node3D" parent="RingAct/Boat1"]
+transform = Transform3D(-0.99908, 0, 0.042887, 0, 1, 0, -0.042887, 0, -0.99908, -55.8414, -5.187, 161.448)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Boat1/Rings" instance=ExtResource("6_m7ns5")]
+
+[node name="Child02" parent="RingAct/Boat1/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, -7.45058e-09, 0, 1, 0.957275, 0, -2.04112)
+
+[node name="Child03" parent="RingAct/Boat1/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, -7.45058e-09, 0, 1, 0.957275, 0, -4.04115)
+
+[node name="Child04" parent="RingAct/Boat1/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="WaterRock" parent="RingAct/Boat1" instance=ExtResource("12_tybq2")]
+transform = Transform3D(0.851116, 0, 0.524978, 0, 1, 0, -0.524978, 0, 0.851116, -54.7454, -3.30876, 164.618)
+
+[node name="RichRing" parent="RingAct/Boat1/WaterRock" instance=ExtResource("11_5mjed")]
+transform = Transform3D(0.789716, 0, -0.613472, 0, 1, 0, 0.613472, 0, 0.789716, 2.28014, -1.89542, 0.396133)
+
+[node name="Rings2" type="Node3D" parent="RingAct/Boat1"]
+transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -58.4699, -5.187, 193.28)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Boat1/Rings2" instance=ExtResource("6_m7ns5")]
+
+[node name="Child02" parent="RingAct/Boat1/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="RingAct/Boat1/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="RingAct/Boat1/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="RingAct/Boat1/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Rings3" type="Node3D" parent="RingAct/Boat1"]
+transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -55.2776, -5.187, 177.952)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Boat1/Rings3" instance=ExtResource("6_m7ns5")]
+
+[node name="Child02" parent="RingAct/Boat1/Rings3" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="RingAct/Boat1/Rings3" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="RingAct/Boat1/Rings3" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="RingAct/Boat1/Rings3" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="SpikeBall2" parent="RingAct/Boat1" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -49.2946, -5.187, 179.514)
+"Movement/Cycle Length" = 5.0
+Movement/Distance = 14.0
+Movement/Angle = -90.0
+
+[node name="SpikeBall3" parent="RingAct/Boat1" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -49.9371, -5.187, 184.603)
+"Movement/Cycle Length" = 5.0
+Movement/Distance = 14.0
+Movement/Angle = -90.0
+
+[node name="SpikeBall" parent="RingAct/Boat1/SpikeBall3" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6814, 0, -13.5355)
+"Movement/Cycle Length" = 4.0
+Movement/Distance = 13.0
+Movement/Angle = 90.0
+
+[node name="Rings4" type="Node3D" parent="RingAct/Boat1"]
+transform = Transform3D(-0.727377, 0, 0.686238, 0, 1, 0, -0.686238, 0, -0.727377, -59.825, 0, 214.293)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 8
+Shape = 0
+Orientation = 1
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_nmtwb")
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0475287, 0, 0)
+
+[node name="Child02" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38776, 4, 0)
+
+[node name="Child03" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35595, 8, 0)
+
+[node name="Child04" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.403886, 12, 0)
+
+[node name="Child05" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.835519, 16, 0)
+
+[node name="Child06" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.72935, 20, 0)
+
+[node name="Child07" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.64471, 24, 0)
+
+[node name="Child08" parent="RingAct/Boat1/Rings4" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0513306, 28, 0)
+
+[node name="Switch" parent="RingAct/Boat1" instance=ExtResource("13_i30wa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87.0892, -1.54498, 219.034)
+
+[node name="CullingTrigger" type="Node3D" parent="RingAct/Boat1/Switch"]
+script = ExtResource("14_4sxsl")
+respawnOnActivation = true
+
+[node name="ItemBox" parent="RingAct/Boat1/Switch/CullingTrigger" instance=ExtResource("10_hgi5c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.94492, 0.395303, -6.38875)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="RingAct/Boat1/Switch/CullingTrigger/ItemBox" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.644325, 0.285222, -11.6936)
+
+[node name="GreenMajin" parent="RingAct/Boat1/Switch" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.270312, 0)
+rangeOverride = 10
+
+[node name="SpikeBall" parent="RingAct/Boat1" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.7651, -5.4822, 164.847)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.2
+
+[node name="SpringPath" type="Node3D" parent="RingAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.1046, 18.5121, 83.8569)
+
+[node name="GreenMajin" parent="RingAct/SpringPath" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(0.993138, 0, -0.116948, 0, 1, 0, 0.116948, 0, 0.993138, -1.66539, -3.7205, 1.34948)
+
+[node name="RedMajin" parent="RingAct/SpringPath" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(0.998134, 0, -0.061066, 0, 1, 0, 0.061066, 0, 0.998134, -0.161163, -1.46323, -0.904526)
+"Attack Settings/Flame Active Time" = 7.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="EnemyStone" parent="RingAct/SpringPath" instance=ExtResource("17_oc0to")]
+transform = Transform3D(0.983553, 0, -0.180622, 0, 1, 0, 0.180622, 0, 0.983553, -0.00967216, -2.85863, -0.708801)
+enemyCount = 2
+
+[node name="ItemBox" parent="RingAct/SpringPath" instance=ExtResource("10_hgi5c")]
+transform = Transform3D(0.989706, 0, -0.143113, 0, 1, 0, 0.143113, 0, 0.989706, 0, -3.30291, -0.650978)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+"Spawn Settings/Travel Height" = 3.5
+
+[node name="RichRing" parent="RingAct/SpringPath/ItemBox" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.62939e-06, 0.12422, -3.30341)
+
+[node name="Boat2" type="Node3D" parent="RingAct"]
+
+[node name="WaterRock" parent="RingAct/Boat2" instance=ExtResource("12_tybq2")]
+transform = Transform3D(1.00418, 0, 0.717358, 0, 1.28474, 0, -0.717358, 0, 1.00418, -110.205, -5.65945, 130.503)
+
+[node name="WaterRock7" parent="RingAct/Boat2" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("12_tybq2")]
+transform = Transform3D(1.0109, 0, 0.707844, 0, 1.28474, 0, -0.707844, 0, 1.0109, -116.532, -5.65945, 134.912)
+root = NodePath("../WaterRock/Root")
+pieceRoot = NodePath("../WaterRock/WhiteRockPieces")
+animator = NodePath("../WaterRock/AnimationPlayer")
+
+[node name="WaterRock6" parent="RingAct/Boat2" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("12_tybq2")]
+transform = Transform3D(1.0109, 0, 0.707844, 0, 1.28474, 0, -0.707844, 0, 1.0109, -104.66, -5.65945, 126.6)
+root = NodePath("../WaterRock/Root")
+pieceRoot = NodePath("../WaterRock/WhiteRockPieces")
+animator = NodePath("../WaterRock/AnimationPlayer")
+
+[node name="SpikeBall" parent="RingAct/Boat2" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(0.612599, 0, 0.790394, 0, 1, 0, -0.790394, 0, 0.612599, -98.5681, -5.875, 145.687)
+"Movement/Cycle Length" = 6.0
+Movement/Distance = 10.0
+Movement/Angle = -90.0
+
+[node name="SpikeBall2" parent="RingAct/Boat2" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(0.727373, 0, 0.686243, 0, 1, 0, -0.686243, 0, 0.727373, -110.256, -5.875, 130.403)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.3
+
+[node name="SpikeBall3" parent="RingAct/Boat2" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(0.929347, 0, 0.369207, 0, 1, 0, -0.369207, 0, 0.929347, -110.256, -5.875, 130.403)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.56
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.3
+
+[node name="RichRing" parent="RingAct/Boat2" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -111.295, -5.65945, 128.289)
+
+[node name="Rings2" type="Node3D" parent="RingAct/Boat2"]
+transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -110.982, -5.37335, 111.854)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 4
+Shape = 2
+Path = NodePath("../../../Static/Path/Boat2Path")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Boat2/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000167847, 0, 0.00126648)
+
+[node name="Child02" parent="RingAct/Boat2/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.485001, 0, -2.81455)
+
+[node name="Child03" parent="RingAct/Boat2/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32408, 0, -5.80515)
+
+[node name="Child04" parent="RingAct/Boat2/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.67903, 0, -8.83371)
+
+[node name="Rings" type="Node3D" parent="RingAct/Boat2"]
+transform = Transform3D(1.11992, 0, 0.518404, 0, 1.28474, 0, -0.518404, 0, 1.11992, -121.604, -5.37335, 116.6)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 4
+Shape = 2
+Path = NodePath("../../../Static/Path/Boat2Path")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Boat2/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-05, 0, 0.000415802)
+
+[node name="Child02" parent="RingAct/Boat2/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.648651, 0, -2.54388)
+
+[node name="Child03" parent="RingAct/Boat2/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65891, 0, -4.66919)
+
+[node name="Child04" parent="RingAct/Boat2/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.12399, 0, -6.4782)
+
+[node name="WaterRock2" parent="RingAct/Boat2" instance=ExtResource("12_tybq2")]
+transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -94.2378, -5.99945, 73.2432)
+
+[node name="WaterRock3" parent="RingAct/Boat2" instance=ExtResource("12_tybq2")]
+transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -98.8644, -5.99945, 70.4888)
+
+[node name="WaterRock4" parent="RingAct/Boat2" instance=ExtResource("12_tybq2")]
+transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -105.43, -6.00945, 88.7103)
+
+[node name="WaterRock5" parent="RingAct/Boat2" instance=ExtResource("12_tybq2")]
+transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -121.978, -5.54945, 90.9335)
+
+[node name="Ring" type="Node3D" parent="RingAct/Boat2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -96.31, -5.56, 71.1)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = null
+Amount = 20
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Ring" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0199432, 0, 0.00623322)
+
+[node name="Ring2" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.393646, 0, 1.45882)
+
+[node name="Ring3" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.806976, 0, 2.91628)
+
+[node name="Ring4" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25586, 0, 4.36347)
+
+[node name="Ring5" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.77451, 0, 5.78185)
+
+[node name="Ring6" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39533, 0, 7.1496)
+
+[node name="Ring7" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.17373, 0, 8.46347)
+
+[node name="Ring8" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.16702, 0, 9.65011)
+
+[node name="Ring9" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3354, 0, 10.7014)
+
+[node name="Ring10" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.63029, 0, 11.6357)
+
+[node name="Ring11" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0034, 0, 12.4735)
+
+[node name="Ring12" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.40937, 0, 13.2399)
+
+[node name="Ring13" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8045, 0, 13.9631)
+
+[node name="Ring14" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.155, 0, 14.6834)
+
+[node name="Ring15" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.4263, 0, 15.4392)
+
+[node name="Ring16" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6197, 0, 16.3182)
+
+[node name="Ring17" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.676, 0, 17.3408)
+
+[node name="Ring18" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.6177, 0, 18.4476)
+
+[node name="Ring19" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5054, 0, 19.5942)
+
+[node name="Ring20" parent="RingAct/Boat2/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4015, 0, 20.7474)
+
+[node name="Ring2" type="Node3D" parent="RingAct/Boat2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -85.867, -5.49737, 152.073)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/Boat2Path")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RingAct/Boat2/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05176e-05, 0, 4.57764e-05)
+
+[node name="Child02" parent="RingAct/Boat2/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.39301, 0, -3.66898)
+
+[node name="Child03" parent="RingAct/Boat2/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.01508, 0, -7.11543)
+
+[node name="Child04" parent="RingAct/Boat2/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.665, 0, -10.5329)
+
+[node name="Child05" parent="RingAct/Boat2/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2473, 0, -14.0208)
+
+[node name="Island" type="Node3D" parent="RingAct"]
+
+[node name="RedMajin" parent="RingAct/Island" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(-0.0290879, 0, 0.999577, 0, 1, 0, -0.999577, 0, -0.0290879, -165.788, -1.221, 111.46)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 3.0
+"Attack Settings/Flame Active Time" = 4.0
+"Attack Settings/Flame Inactive Time" = 3.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 15
+
+[node name="RedMajin2" parent="RingAct/Island" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(0.422616, 0, 0.906309, 0, 1, 0, -0.906309, 0, 0.422616, -170.812, -1.221, 106.319)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 3.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 20
+
+[node name="RedMajin3" parent="RingAct/Island" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(0.906307, 0, 0.422619, 0, 1, 0, -0.422619, 0, 0.906307, -177.562, -1.221, 105.495)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 6.0
+"Attack Settings/Flame Inactive Time" = 3.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 10
+
+[node name="EnemyStone" parent="RingAct/Island" instance=ExtResource("17_oc0to")]
+transform = Transform3D(0.957989, 0, 0.286804, 0, 1, 0, -0.286804, 0, 0.957989, -177.571, -0.716, 102.281)
+enemyCount = 3
+
+[node name="EnemyStone2" parent="RingAct/Island" instance=ExtResource("17_oc0to")]
+transform = Transform3D(-0.28736, 0, 0.957822, 0, 1, 0, -0.957822, 0, -0.28736, -177.571, 1.284, 102.281)
+enemyCount = 3
+
+[node name="EnemyStone3" parent="RingAct/Island" instance=ExtResource("17_oc0to")]
+transform = Transform3D(-0.957822, 0, -0.28736, 0, 1, 0, 0.28736, 0, -0.957822, -177.571, 3.284, 102.281)
+enemyCount = 3
+
+[node name="EnemyStone4" parent="RingAct/Island" instance=ExtResource("17_oc0to")]
+transform = Transform3D(0.28736, 0, -0.957822, 0, 1, 0, 0.957822, 0, 0.28736, -177.571, 5.284, 102.281)
+enemyCount = 3
+
+[node name="MovingObjects" type="Node3D" parent="RingAct/Island"]
+
+[node name="MovingITBOXF" type="Node3D" parent="RingAct/Island/MovingObjects" node_paths=PackedStringArray("root")]
+transform = Transform3D(0.949661, 0, -0.31328, 0, 1, 0, 0.31328, 0, 0.949661, -177.939, 18.6185, 79.5156)
+script = ExtResource("13_pbwnh")
+Movement/Mode = 1
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 5.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+root = NodePath("ItemBoxFlying")
+
+[node name="ItemBoxFlying" parent="RingAct/Island/MovingObjects/MovingITBOXF" instance=ExtResource("20_cyl5y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="MovingITBOXF2" type="Node3D" parent="RingAct/Island/MovingObjects" node_paths=PackedStringArray("root")]
+transform = Transform3D(0.949661, 0, -0.31328, 0, 1, 0, 0.31328, 0, 0.949661, -172.528, 18.6185, 70.0313)
+script = ExtResource("13_pbwnh")
+Movement/Mode = 1
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 5.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+root = NodePath("ItemBoxFlying2")
+
+[node name="ItemBoxFlying2" parent="RingAct/Island/MovingObjects/MovingITBOXF2" instance=ExtResource("20_cyl5y")]
+transform = Transform3D(0.999999, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 0.999999, 0, 0, 0)
+"Spawn Settings/Pickup Parent" = NodePath("../../RichRing")
+
+[node name="RichRing" parent="RingAct/Island/MovingObjects" instance=ExtResource("11_5mjed")]
+transform = Transform3D(0.685348, 0, -0.728215, 0, 1, 0, 0.728215, 0, 0.685348, -159.204, 6.64722, 50.1125)
+
+[node name="FlyingPot" parent="RingAct" instance=ExtResource("19_37g7b")]
+transform = Transform3D(0.988899, 0, -0.148586, 0, 1, 0, 0.148586, 0, 0.988899, -178.495, 6.615, 85.8676)
+travelBounds = Vector2(0, 10)
+
+[node name="Boat3" type="Node3D" parent="RingAct"]
+
+[node name="WaterRock" parent="RingAct/Boat3" instance=ExtResource("12_tybq2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -135.72, -6.02245, 23.84)
+
+[node name="WaterRock2" parent="RingAct/Boat3" instance=ExtResource("12_tybq2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -145.538, -6.02245, 14.3452)
+
+[node name="Ring" type="Node3D" parent="RingAct/Boat3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -141.49, -5.25, 32.07)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = null
+Amount = 15
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Ring" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259216, 0, -0.136353)
+
+[node name="Ring2" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.321259, 0, -1.19081)
+
+[node name="Ring3" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.373322, 0, -2.18536)
+
+[node name="Ring4" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.380371, 0, -3.12389)
+
+[node name="Ring5" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.305084, 0, -4.02351)
+
+[node name="Ring6" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0364685, 0, -4.88568)
+
+[node name="Ring7" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.505157, 0, -5.7697)
+
+[node name="Ring8" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18832, 0, -6.70602)
+
+[node name="Ring9" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.87718, 0, -7.72079)
+
+[node name="Ring10" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.43665, 0, -8.78488)
+
+[node name="Ring11" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7339, 0, -9.87328)
+
+[node name="Ring12" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66663, 0, -10.9187)
+
+[node name="Ring28" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.42584, 0, -11.9358)
+
+[node name="Ring29" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02481, 0, -12.9056)
+
+[node name="Ring30" parent="RingAct/Boat3/Ring" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38461, 0, -13.8016)
+
+[node name="Ring2" type="Node3D" parent="RingAct/Boat3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -156.7, -5.25, -3.22)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = null
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Ring" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269211, 0, -0.421148)
+
+[node name="Ring2" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.787582, 0, -0.661108)
+
+[node name="Ring3" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.83653, 0, -0.893508)
+
+[node name="Ring4" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7914, 0, -1.24526)
+
+[node name="Ring5" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.61351, 0, -1.81155)
+
+[node name="Ring6" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35837, 0, -2.51351)
+
+[node name="Ring7" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.06224, 0, -3.27848)
+
+[node name="Ring8" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.77316, 0, -4.04575)
+
+[node name="Ring9" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.52992, 0, -4.7493)
+
+[node name="Ring10" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.36546, 0, -5.32078)
+
+[node name="Ring11" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.26678, 0, -5.76192)
+
+[node name="Ring12" parent="RingAct/Boat3/Ring2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.21396, 0, -6.10972)
+
+[node name="SpikeBall" parent="RingAct/Boat3" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -149.833, -5.52036, 0)
+
+[node name="SpikeBall2" parent="RingAct/Boat3" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -164.676, -5.52036, -11.1707)
+
+[node name="SpikeBall4" parent="RingAct/Boat3" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(0.538164, 0, -0.290632, 0, 0.611627, 0, 0.290632, 0, 0.538164, -173.352, -5.7923, -19.1564)
+
+[node name="SpikeBall5" parent="RingAct/Boat3" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(0.538164, 0, -0.290632, 0, 0.611627, 0, 0.290632, 0, 0.538164, -169.592, -5.7923, -16.4959)
+
+[node name="RightPath" type="Node3D" parent="RingAct"]
+
+[node name="BlueMajin" parent="RingAct/RightPath" instance=ExtResource("16_vv7l1")]
+transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -141.723, 6.981, -41.146)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(10, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 25
+
+[node name="BlueMajin2" parent="RingAct/RightPath" instance=ExtResource("16_vv7l1")]
+transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -137.485, 6.981, -40.307)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(10, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 25
+
+[node name="BlueMajin3" parent="RingAct/RightPath" instance=ExtResource("16_vv7l1")]
+transform = Transform3D(0.549507, 0, -0.835489, 0, 1, 0, 0.835489, 0, 0.549507, -135.989, 6.981, -44.3279)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(10, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 25
+
+[node name="JumpPanel" parent="RingAct/RightPath" instance=ExtResource("19_aiunq")]
+transform = Transform3D(0.641141, 0, 0.767422, 0, 1, 0, -0.767422, 0, 0.641141, -128.328, 6.98, -45.8803)
+middleHeight = 5.635
+finalHeight = -1.395
+distance = 30.245
+
+[node name="Camera" type="Node3D" parent="RingAct/RightPath/JumpPanel"]
+script = ExtResource("10_uaccj")
+transitionTime = 0.5
+settings = ExtResource("19_hhytg")
+
+[node name="ItemBox" parent="RingAct/RightPath" instance=ExtResource("10_hgi5c")]
+transform = Transform3D(-0.999985, 0, 0.00541056, 0, 1, 0, -0.00541056, 0, -0.999985, -95.1184, 4.42674, -9.14604)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="RingAct/RightPath/ItemBox" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1, 0, -9.31323e-10, 0, 1, 0, 9.31323e-10, 0, 1, -3.0845, 0.172104, -6.07411)
+
+[node name="ItemBox2" parent="RingAct/RightPath" instance=ExtResource("10_hgi5c")]
+transform = Transform3D(-0.999986, 0, 0.00541056, 0, 1, 0, -0.00541056, 0, -0.999986, -88.7714, 2.81141, 5.94325)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="RingAct/RightPath/ItemBox2" instance=ExtResource("11_5mjed")]
+transform = Transform3D(1, 0, 4.65661e-10, 0, 1, 0, -4.65661e-10, 0, 1, 1.52588e-05, 0.22801, -5.22357)
+
+[node name="SpikeBall" parent="RingAct/RightPath" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(-0.999985, 0, 0.00541056, 0, 1, 0, -0.00541056, 0, -0.999985, -95.1184, 4.95575, -9.14604)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall2" parent="RingAct/RightPath" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(-0.999986, 0, 0.00541056, 0, 1, 0, -0.00541056, 0, -0.999986, -88.7714, 3.34042, 5.94325)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall3" parent="RingAct/RightPath" instance=ExtResource("15_ojd7p")]
+transform = Transform3D(-0.999986, 0, 0.00541056, 0, 1, 0, -0.00541056, 0, -0.999986, -88.7714, 3.34042, 5.94325)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="GreenMajin" parent="RingAct/RightPath" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -90.7695, -0.436825, 30.3828)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, -1, 0)
+"Defeat Settings/Local Transform" = true
+
+[node name="GreenMajin2" parent="RingAct/RightPath" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -87.9481, -0.641672, 32.5429)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, -1, 38)
+"Defeat Settings/Local Transform" = true
+
+[node name="RichRing" parent="RingAct/RightPath" instance=ExtResource("11_5mjed")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -90.5074, -1.01556, 39.2216)
+
+[node name="Crate" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -90.5074, -1.01556, 39.2216)
+
+[node name="Crate2" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -91.5305, -1.01556, 39.2161)
+
+[node name="Crate3" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -89.4925, -1.01556, 39.2272)
+
+[node name="Crate4" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -90.5074, 0.00190449, 39.2216)
+
+[node name="Crate5" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -91.5305, 0.00190449, 39.2161)
+
+[node name="Crate6" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -89.4925, 0.00190449, 39.2272)
+
+[node name="Crate7" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -90.5074, 1.0099, 39.2216)
+
+[node name="Crate8" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -91.5305, 1.0099, 39.2161)
+
+[node name="Crate9" parent="RingAct/RightPath" instance=ExtResource("24_w4kk3")]
+transform = Transform3D(-0.999985, 0, 0.00546277, 0, 1, 0, -0.00546277, 0, -0.999985, -89.4925, 1.0099, 39.2272)
+
+[node name="Goal" parent="RingAct" instance=ExtResource("25_fc3np")]
+transform = Transform3D(-0.425874, 0, -0.904782, 0, 1, 0, 0.904782, 0, -0.425874, -39.6119, 6.28113, -9.01515)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.416253, -2.43396, 0.436794)
+shape = SubResource("BoxShape3D_n6p6d")
+
+[node name="LeftPath" type="Node3D" parent="."]
+
+[node name="GreenMajin" parent="LeftPath" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -75.7799, 5.03875, -26.3612)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-30, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin2" parent="LeftPath" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -70.6576, 3.52151, -23.999)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin3" parent="LeftPath" instance=ExtResource("18_7rfl2")]
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -66.6849, 1.99189, -22.0171)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="BlueMajin" parent="LeftPath" instance=ExtResource("16_vv7l1")]
+transform = Transform3D(0.708044, 0, -0.706168, 0, 1, 0, 0.706168, 0, 0.708044, -162.283, -1.80837, -35.8953)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(1, 0, 1)
+"Defeat Settings/Local Transform" = true
+
+[node name="BlueMajin2" parent="LeftPath" instance=ExtResource("16_vv7l1")]
+transform = Transform3D(0.708044, 0, -0.706168, 0, 1, 0, 0.706168, 0, 0.708044, -157.616, -1.80837, -40.7045)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(1, 0, 1)
+"Defeat Settings/Local Transform" = true
+
+[node name="BlueMajin3" parent="LeftPath" instance=ExtResource("16_vv7l1")]
+transform = Transform3D(0.919273, 0, -0.393621, 0, 1, 0, 0.393621, 0, 0.919273, -147.067, -1.80837, -63.6651)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 1)
+"Defeat Settings/Local Transform" = true
+
+[node name="RedMajin" parent="LeftPath" instance=ExtResource("8_g3ynl")]
+transform = Transform3D(-0.471474, 0, -0.88188, 0, 1, 0, 0.88188, 0, -0.471474, -125.696, -1.82419, -76.3675)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 10.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 10
+"Attack Settings/Attack Instantly" = true
+
+[node name="Rings" type="Node3D" parent="LeftPath"]
+transform = Transform3D(0.708044, 0, -0.706168, 0, 1, 0, 0.706168, 0, 0.708044, -160.541, -1.52417, -37.0442)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 13
+Shape = 2
+Path = NodePath("../../Static/Path/LeftPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.57764e-05, 1.19209e-07, -0.000190735)
+
+[node name="Child02" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95787, 0.00078249, -3.83243)
+
+[node name="Child03" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.01228, 0.00142682, -7.65559)
+
+[node name="Child04" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.13396, 0.00188565, -11.4698)
+
+[node name="Child05" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.30399, 0.00212574, -15.2764)
+
+[node name="Child06" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.53673, 0.00215542, -18.957)
+
+[node name="Child07" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.10152, 0.00215542, -22.4897)
+
+[node name="Child08" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8849, 0.00215542, -26.0324)
+
+[node name="Child09" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6745, 0.00215542, -29.6961)
+
+[node name="Child10" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1905, 0.00215542, -33.6398)
+
+[node name="Child11" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9524, 0.00215542, -38)
+
+[node name="Child12" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3164, 0.00215542, -42.5311)
+
+[node name="Child13" parent="LeftPath/Rings" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.2439, 0.00215542, -46.5299)
+
+[node name="Rings2" type="Node3D" parent="LeftPath"]
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -85.3668, 6.52249, -30.8316)
+script = ExtResource("5_5qgkc")
+Generate = false
+Source = ExtResource("6_m7ns5")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.72205e-06, 0, -2.67779)
+
+[node name="Child02" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8147e-06, 0, -4.67778)
+
+[node name="Child03" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.90735e-06, 0, -6.67779)
+
+[node name="Child04" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.72205e-06, 0, -8.67779)
+
+[node name="Child05" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.874814, -12.1247)
+
+[node name="Child06" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.72205e-06, -1.62802, -14.1247)
+
+[node name="Child07" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8147e-06, -2.68488, -17.2686)
+
+[node name="Child08" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.19767, -19.2686)
+
+[node name="Child09" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.01477, -22.2788)
+
+[node name="Child10" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8147e-06, -4.01477, -24.2788)
+
+[node name="Child11" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90735e-06, -4.01477, -26.2788)
+
+[node name="Child12" parent="LeftPath/Rings2" instance=ExtResource("6_m7ns5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8147e-06, -4.01477, -28.2788)
+
+[node name="CactusPlatform" parent="." instance=ExtResource("20_4d8pg")]
+transform = Transform3D(2, 0, -2.23517e-07, 0, 2, 0, 2.23517e-07, 0, 2, -14.224, 23.7, 150.362)
+
+[connection signal="Defeated" from="RingAct/LotusGroup/RedMajin2" to="RingAct/LotusGroup/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/LotusGroup/RedMajin3" to="RingAct/LotusGroup/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/LotusGroup/RedMajin" to="RingAct/LotusGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/LotusGroup/RedMajin" to="RingAct/LotusGroup/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/LotusGroup/GreenMajin2" to="RingAct/LotusGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/LotusGroup/GreenMajin2" to="RingAct/LotusGroup/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/LotusGroup/GreenMajin" to="RingAct/LotusGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/LotusGroup/GreenMajin" to="RingAct/LotusGroup/EnemyStone2" method="IncrementCounter"]
+[connection signal="Activated" from="RingAct/Boat1/Switch" to="RingAct/Boat1/Switch/CullingTrigger" method="Activate"]
+[connection signal="Respawned" from="RingAct/Boat1/Switch" to="RingAct/Boat1/Switch/CullingTrigger" method="Deactivate"]
+[connection signal="Defeated" from="RingAct/SpringPath/GreenMajin" to="RingAct/SpringPath/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/SpringPath/RedMajin" to="RingAct/SpringPath/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin" to="RingAct/Island/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin" to="RingAct/Island/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin" to="RingAct/Island/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin" to="RingAct/Island/EnemyStone4" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin2" to="RingAct/Island/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin2" to="RingAct/Island/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin2" to="RingAct/Island/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin2" to="RingAct/Island/EnemyStone4" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin3" to="RingAct/Island/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin3" to="RingAct/Island/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin3" to="RingAct/Island/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RingAct/Island/RedMajin3" to="RingAct/Island/EnemyStone4" method="IncrementCounter"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
