@@ -7,8 +7,9 @@ public partial class Pearl : Pickup
 {
 	[Export]
 	private bool isRichPearl;
-	[Export]
-	private CollisionShape3D collider;
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
+	private NodePath collider;
+	private CollisionShape3D Collider { get; set; }
 	private bool isCollected;
 
 	private Tween tweener;
@@ -16,7 +17,8 @@ public partial class Pearl : Pickup
 
 	protected override void SetUp()
 	{
-		collider.Shape = isRichPearl ? Runtime.Instance.RichPearlCollisionShape : Runtime.Instance.PearlCollisionShape;
+		Collider = GetNodeOrNull<CollisionShape3D>(collider);
+		Collider.Shape = isRichPearl ? Runtime.Instance.RichPearlCollisionShape : Runtime.Instance.PearlCollisionShape;
 		base.SetUp();
 	}
 
