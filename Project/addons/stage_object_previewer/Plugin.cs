@@ -152,25 +152,32 @@ namespace Project.Editor.StageObjectPreviewer
 		private void DrawMajinPath(Majin majin)
 		{
 			// Draw each of the handles
-			if (!editorCam.IsPositionBehind(majin.SpawnPosition))
+			if (editorCam.IsPositionInFrustum(majin.SpawnPosition))
 				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.SpawnPosition), 5f, SpecialDrawColor);
-			if (!editorCam.IsPositionBehind(majin.InHandle))
+			if (editorCam.IsPositionInFrustum(majin.InHandle))
 				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.InHandle), 5f, SpecialDrawColor);
-			if (!editorCam.IsPositionBehind(majin.OutHandle))
+			if (editorCam.IsPositionInFrustum(majin.OutHandle))
 				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.OutHandle), 5f, SpecialDrawColor);
 
+			if (majin.IsDefeatLaunchEnabled &&
+				editorCam.IsPositionInFrustum(majin.OriginalPosition) &&
+				editorCam.IsPositionInFrustum(majin.CalculateLaunchPosition()))
+			{
+				viewportOverlay.DrawLine(editorCam.UnprojectPosition(majin.OriginalPosition), editorCam.UnprojectPosition(majin.CalculateLaunchPosition()), SpecialDrawColor, 1, true);
+			}
+
 			// Draw the spawn curve
-			Array<Vector2> points = new();
+			Array<Vector2> points = [];
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
 				float simulationRatio = i / ((float)PREVIEW_RESOLUTION - 1);
 				Vector3 position = majin.CalculateTravelPosition(simulationRatio);
-				if (!editorCam.IsPositionBehind(position))
+				if (editorCam.IsPositionInFrustum(position))
 					points.Add(editorCam.UnprojectPosition(position));
 			}
 
-			if (points.Count < 2) return; //Can't draw!!!
+			if (points.Count < 2) return; // Can't draw!!!
 
 			Vector2[] pointsList = new Vector2[points.Count];
 			points.CopyTo(pointsList, 0);
