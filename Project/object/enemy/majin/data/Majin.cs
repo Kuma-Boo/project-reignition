@@ -422,7 +422,7 @@ public partial class Majin : Enemy
 		base.Defeat();
 		SetHitboxStatus(false, true);
 
-		AnimationPlayer.Play("strike");
+		AnimationPlayer.Play("defeat");
 		if (IsDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 		{
 			// Kill any existing tween
