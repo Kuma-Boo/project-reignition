@@ -18,8 +18,8 @@ public partial class Enemy : Node3D
 	public delegate void DefeatedEventHandler();
 
 	[Export]
-	protected SpawnModes spawnMode;
-	protected enum SpawnModes
+	public SpawnModes SpawnMode { get; protected set; }
+	public enum SpawnModes
 	{
 		Range, // Use Range trigger
 		Signal, // External Signal
@@ -137,8 +137,8 @@ public partial class Enemy : Node3D
 		SetHitboxStatus(true);
 		ResetInteractionProcessed();
 
-		if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
+		if (SpawnMode == SpawnModes.Always ||
+			(SpawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
 		{
 			EnterRange();
 		}
@@ -222,7 +222,7 @@ public partial class Enemy : Node3D
 	protected bool IsInRange { get; set; }
 	protected virtual void EnterRange()
 	{
-		if (spawnMode == SpawnModes.Signal) return;
+		if (SpawnMode == SpawnModes.Signal) return;
 		Spawn();
 	}
 	protected virtual void ExitRange() { }

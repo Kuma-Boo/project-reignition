@@ -133,7 +133,7 @@ namespace Project.Editor.StageObjectPreviewer
 		private void DrawEnemy()
 		{
 			Enemy enemy = target as Enemy;
-			if (enemy.rangeOverride == -1)
+			if (enemy.rangeOverride == -1 || enemy.SpawnMode != Enemy.SpawnModes.Range)
 				return;
 
 			DrawPerspectiveCircle(enemy.GlobalPosition, Basis.Identity, enemy.rangeOverride, Vector3.Forward, Vector3.Up, DefaultDrawColor);
