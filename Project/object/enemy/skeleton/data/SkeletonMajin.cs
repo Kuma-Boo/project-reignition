@@ -59,7 +59,7 @@ namespace Project.Gameplay.Objects
 
 			wasSpawned = false;
 
-			if (spawnMode != SpawnModes.Always)
+			if (SpawnMode != SpawnModes.Always)
 			{
 				Spawn();
 			}
@@ -72,7 +72,7 @@ namespace Project.Gameplay.Objects
 
 		protected override void EnterRange()
 		{
-			if (wasSpawned || spawnMode == SpawnModes.Signal) return;
+			if (wasSpawned || SpawnMode == SpawnModes.Signal) return;
 			Spawn();
 		}
 

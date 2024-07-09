@@ -332,7 +332,7 @@ public partial class ObjectGenerator : Node3D
 
 	private void SpawnNode(Vector3 pos, bool globalPosition = default)
 	{
-		Node3D obj = source.Instantiate<Node3D>();
+		Node3D obj = source.Instantiate<Node3D>(PackedScene.GenEditState.Instance);
 		obj.Name = "Child" + currentChildCount.ToString("00"); //Set name
 		currentChildCount++;
 		AddChild(obj);

@@ -8,12 +8,15 @@ namespace Project.Gameplay.Objects
 		[Export(PropertyHint.Range, "1, 3")]
 		public int fireSoulIndex = 1; // Which fire soul is this?
 		private bool isCollected; // Determined by save data
-		[Export]
-		private AnimationPlayer animator;
+		[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+		private NodePath animator;
+		private AnimationPlayer Animator;
 
 		protected override void SetUp()
 		{
 			base.SetUp();
+
+			Animator = GetNodeOrNull<AnimationPlayer>(animator);
 
 			// Check save data
 			isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
@@ -25,7 +28,7 @@ namespace Project.Gameplay.Objects
 		{
 			// Write save data
 			SaveManager.ActiveGameData.SetFireSoulCollected(Stage.Data.LevelID, fireSoulIndex, true);
-			animator.Play("collect");
+			Animator.Play("collect");
 		}
 	}
 }
